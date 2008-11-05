@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { showSnackbar } from './snackbarActions';
-import { getHeaderJson } from '../../utils/server/getHeaders';
+import { getHeaderJson, getHeaderToken } from '../../utils/server/getHeaders';
 import { setLoadingProgress } from './globalActions';
 // import { tokenConfig } from './authActions';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
@@ -98,8 +98,11 @@ export const changePrizeStatus = async (userId, options = {}) => { // n1
 // END PURCHASE HISTORY
 
 // LISTS
-export const readUserList = async (dispatch, skip = 0, role = "", search = "", bizId) => {
+// note: requires JWT token
+export const readUserList = async (dispatch, bizId, options = {}) => {
+    let { role, skip, search, token } = options;
     if(!bizId) throw new Error("You should specify the bizId argument");
+    if(!skip) skip = 0;
     bizId = `&bizId=${bizId}`;
 
     const searchQuery = search ? `&search=${search}` : "";
@@ -108,7 +111,7 @@ export const readUserList = async (dispatch, skip = 0, role = "", search = "", b
     // display the current status of loading in RecordedClientsList...
     setLoadingProgress(dispatch, true);
     try {
-        const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}${bizId}`, getHeaderJson);
+        const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}${bizId}`, getHeaderToken(token));
         setLoadingProgress(dispatch, false);
         console.log('==ALL USERS UPDATED==');
         dispatch({ type: 'USER_READ_LIST', payload: res.data.list });

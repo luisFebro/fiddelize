@@ -21,7 +21,6 @@ import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions
 import animateCSS from '../../../../../../../utils/animateCSS';
 import { fluidTextAlign } from '../../../../../../../utils/string/fluidTextAlign';
 import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
-import { readUserList } from '../../../../../../../redux/actions/userActions';
 import { useAppSystem, useClientAdmin } from '../../../../../../../hooks/useRoleData';
 import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
 import { setRun } from '../../../../../../../redux/actions/globalActions';

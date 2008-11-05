@@ -15,14 +15,27 @@ const dataTempAuthUserToken = {
 const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // END TEMP AUTH USER ID
 // GENERAL SCHEMAS
-const enumCliAdmin = ["cliAdmin_birthday", "cliAdmin_newClients", "cliAdmin_clientWonChall"];
+const enumTypes = [
+    // pattern: (role_desc);
+    "system",
+    "chatRequest", // future implementations...
+    "cliAdmin_birthdays",
+    "cliAdmin_newClients",
+    "cliAdmin_clientWonChall",
+    "cliUser_prizeStatus",
+];
 const notificationsData = {
-    type: { type: String, enum: [...enumCliAdmin] }, // pattern: (role_desc);
-    sent: { type: Boolean, default: false },
-    checked: { type: Boolean, default: false },
+    // recipient: { id: String, role: { type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
+    senderId: { type: String, trim: true, lowercase: true },
+    senderName: { type: String, trim: true, lowercase: true }, // business name... for cliAdmin will be Fiddelize's name
+    msg: { type: String, maxlength: 3000 },
+    cardType: { type: String, enum: [...enumTypes] },
+    isCardNew: { type: Boolean, default: true }, // When user visualize notif page, a new badge will be show and then it will be update as false
+    clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
+    isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead
     createdAt: { type: Date, default: new Date() },
 }
-const NotificationsSchema = new Schema(notificationsData, { _id: false });
+const NotificationsSchema = new Schema(notificationsData, { _id: true });
 // END GENERAL SCHEMAS
 
 // USER'S ROLES
@@ -59,6 +72,7 @@ const clientUserData = {
     totalGeneralScore: { type: Number, default: 0 }, // it is the general accumative scoring from all challenges.
     totalVisits: { type: Number, default: 0 },
     purchaseHistory: [HistorySchema],
+    notifications: [NotificationsSchema],
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 // End Client-User
@@ -136,7 +150,7 @@ const clientAdminData = {
     regulation: RegulationSchema,
 
     onceChecked: OnceCheckedSchema, // NOT IMPLEMENTED YET
-    notifications: [NotificationsSchema], // NOT IMPLEMENTED YET
+    notifications: [NotificationsSchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {

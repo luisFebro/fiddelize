@@ -18,7 +18,7 @@ import ClientUserAppContent from './content/ClientUserAppContent';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import isThisApp from '../../utils/window/isThisApp';
-import BadaloBell from '../../components/buttons/bells/badalo/BadaloBell';
+import BellNotifBtn from '../../components/notification/BellNotifBtn';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
@@ -176,7 +176,7 @@ function ClientMobileApp({ location, history }) {
 
     const showNotificationBell = () => (
         <div className="container-center">
-            <BadaloBell
+            <BellNotifBtn
                 position="relative"
                 top={-60}
                 left={0}

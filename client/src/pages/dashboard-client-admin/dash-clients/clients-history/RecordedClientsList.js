@@ -16,7 +16,7 @@ import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
 import Spinner from '../../../../components/loadingIndicators/Spinner';
 import LoadMoreItemsButton from '../../../../components/buttons/LoadMoreItemsButton';
 import Title from '../../../../components/Title';
-import { useAppSystem, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
+import { useAppSystem, useToken, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
 import PremiumButton from '../../../../components/buttons/PremiumButton';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -29,6 +29,8 @@ export default function RecordedClientsList() {
     const { name } = useProfile();
     const { bizPlan, totalClientUsers } = useClientAdmin();
     const { limitFreePlanNewUsers } = useCentralAdmin();
+
+    const token = useToken();
 
     const [clientsData, setClientsData] = useState({
         list: [],
@@ -64,7 +66,8 @@ export default function RecordedClientsList() {
 
     useEffect(() => {
         if(init || runName === "registered") {
-            readUserList(dispatch, initialSkip, "cliente", "", businessId)
+            const listOptions = { token, role: "cliente", skip: initialSkip}
+            readUserList(dispatch, businessId, listOptions)
             .then(res => {
                 if(res.status !== 200) return console.log("Something went wrong with readUserList");
                 setClientsData({
@@ -86,7 +89,8 @@ export default function RecordedClientsList() {
         const querySearched = e.target.value;
         searchTerm = querySearched;
 
-        readUserList(dispatch, initialSkip, "cliente", querySearched, businessId)
+        const listOptions = { token, role: "cliente", skip: initialSkip, search: querySearched}
+        readUserList(dispatch, businessId, listOptions)
         .then(res => {
 
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')

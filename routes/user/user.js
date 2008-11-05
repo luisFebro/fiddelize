@@ -24,10 +24,10 @@ const {
     gotUsersInThisChallenge,
 } = require("../../controllers/user");
 
-const { mwIsAdmin } = require("../../controllers/auth");
+const { mwIsCliAdmin, mwIsAuth, } = require("../../controllers/auth");
 // @route  api/user
 // RUD
-router.get("/:userId", read); //  mwIsAuth
+router.get("/:userId", read); // mwIsAuth JWT ERROR: jwt must be provided when log it
 router.put("/:userId", update); // mwIsAuth
 router.delete('/:userId', mwBackup, remove);
 // END RUD
@@ -41,9 +41,9 @@ router.get("/list/purchase-history/:userId", readHistoryList);
 // end purchase history
 
 // LISTS
-router.get("/list/all", getList);
+router.get("/list/all", mwIsAuth, getList); // list with all clients
 router.get("/list/highest-scores", getHighestScores);
-router.get("/:userId/backup/list", mwIsAdmin, readBackup);
+router.get("/:userId/backup/list", mwIsCliAdmin, readBackup); // mwIsAuth
 
 router.put("/count/field/:userId", countField);
 router.get("/redirect/url-link", redirectUrlLink);

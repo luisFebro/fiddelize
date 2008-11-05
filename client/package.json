@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^4.9.0",
     "fs": "0.0.1-security",
     "gulp": "^4.0.2",
     "path": "^0.12.7",

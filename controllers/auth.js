@@ -7,8 +7,10 @@ const getFirstName = require("../utils/string/getFirstName");
 
 // MIDDLEWARES
 exports.mwIsAuth = (req, res, next) => {
+    const profile = req.profile; const query = req.profile; const body = req.body;
+    const _id = profile && profile._id || query && query.bizId || body && body.senderId; // add here all means to get id to compare against the JWT verification
     let token = req.header('x-auth-token') || req.header("authorization"); // authrization for postman tests
-    if(token.includes("Bearer ")) {
+    if(token && token.includes("Bearer ")) {
         token = token.slice(7);
     }
 
@@ -16,8 +18,9 @@ exports.mwIsAuth = (req, res, next) => {
         token,
         process.env.JWT_SECRET,
         (err, decoded) => {
-            let user = req.profile && decoded && req.profile._id.toString() === decoded.id;
-            if(err || !user) return res.status(403).json(msg('error.notAuthorized'));
+            let isAuthUser = Boolean(_id && decoded && decoded.id === _id.toString());
+            if(err) console.log(`JWT ERROR: ${err.message}`);
+            if(err || !isAuthUser) return res.status(403).json(msg('error.notAuthorized'));  // n4 401 and 403 http code difference
 
             next();
         })
@@ -25,7 +28,14 @@ exports.mwIsAuth = (req, res, next) => {
 
 exports.mwIsAdmin = (req, res, next) => {
     if(req.profile.role !== "admin") {
-        return res.status(403).json(msg('error.accessDenied'));
+        return res.status(403).json(msg('error.accessDenied')); // n4 401 and 403 http code difference
+    }
+    next();
+};
+
+exports.mwIsCliAdmin = (req, res, next) => {
+    if(req.profile.role !== "cliente-admin") {
+        return res.status(403).json(msg('error.accessDenied')); // n4 401 and 403 http code difference
     }
     next();
 };
@@ -199,5 +209,8 @@ n3: Salted hashing — Generating random bytes (the salt) and combining it with 
 e.g
 salt - $2a$10$qggYRlcaPWU296DD7M3Ryu
 hash - $2a$10$qggYRlcaPWU296DD7M3RyujYuDVnKKxo91rAHIKJKMXCmsnQVGn/2
+
+n4:
+a 401 Unauthorized response should be used for missing or bad authentication, and a 403 Forbidden response should be used afterwards, when the user is authenticated but isn’t authorized to perform the requested operation on the given resource.
 */
 

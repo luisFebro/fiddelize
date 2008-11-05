@@ -7,6 +7,7 @@ export default function BadaloBell({
     position,
     notifBorderColor,
     notifBackColor,
+    onClick,
     badgeValue,
     top,
     right,
@@ -57,7 +58,14 @@ export default function BadaloBell({
         <section
             className="badalo-bell--audio"
             style={{ position, top, right, left, cursor: "pointer" }}
-            onClick={() => playAnima({callback: () => setbadgeInvisible(true)})}
+            onClick={() => {
+                playAnima({callback: () => {
+                    setbadgeInvisible(true)
+                    if(typeof onClick === "function") {
+                        onClick();
+                    }
+                }});
+            }}
         >
             <NotificationBadge
                 badgeValue={badgeValue}

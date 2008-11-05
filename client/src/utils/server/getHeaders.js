@@ -6,6 +6,9 @@ export const getHeaderJson = {
 };
 
 export const getHeaderToken = token => {
+    if(!token) {
+        token = localStorage.getItem("token");
+    }
 
     const config = {
         headers: {

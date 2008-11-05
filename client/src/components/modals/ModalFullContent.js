@@ -5,14 +5,13 @@ import Dialog from '@material-ui/core/Dialog';
 
 ModalFullContent.propTypes = {
     contentComp: PropTypes.node,
-    fullOpen: PropTypes.bool,
     setFullOpen: PropTypes.func,
     style: PropTypes.object,
 }
 
 export default function ModalFullContent({
     contentComp,
-    fullOpen = false,
+    fullOpen,
     setFullOpen,
     style,
     animatedClass, }) {

@@ -12,6 +12,15 @@ export const appSystem = {
     businessId: systemBizId,
 }
 
+export const useToken = () => {
+    const { tokenWhenLogin } = useStoreState(state => ({
+        tokenWhenLogin: state.authReducer.cases.tokenWhenLogin,
+    }));
+    const storageToken = localStorage.getItem("token");
+
+    return tokenWhenLogin || storageToken;
+}
+
 export const useAppSystem = () => {
     const { clientUser, profile, role } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,

@@ -115,7 +115,7 @@ export const registerFacebook = (dispatch, body, resFacebook) => {
 };
 // Register Social Networks
 
-export const logout = (dispatch, opts = {   }) => {
+export const logout = (dispatch, opts = {}) => {
     const { needSnackbar = true, needReload = false } = opts;
 
     setRun(dispatch, "logout");

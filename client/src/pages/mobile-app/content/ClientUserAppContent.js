@@ -9,7 +9,7 @@ import "../ellipse.css";
 import { setRun } from '../../../hooks/useRunComp';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
-import BadaloBell from '../../../components/buttons/bells/badalo/BadaloBell';
+import BellNotifBtn from '../../../components/notification/BellNotifBtn';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
@@ -61,8 +61,6 @@ function ClientUserAppContent({
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
     let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
-    console.log("totalPurchasePrize", totalPurchasePrize);
-    console.log("rewardList", rewardList);
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
@@ -101,7 +99,7 @@ function ClientUserAppContent({
             <section className="position-relative">
                 <div className="ellipse" style={{backgroundColor: "var(--themePLight--" + colorP + ")", width: needAppForPreview && '21.8em',}}></div>
                 <div className={`${needAppForPreview && "enabledLink"}`}>
-                    <BadaloBell
+                    <BellNotifBtn
                         position="absolute"
                         top={5}
                         left={needAppForPreview ? 258 : 270}
