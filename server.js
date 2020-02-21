@@ -22,8 +22,6 @@ const options = {
     keepAlive: true,
 }
 
-console.log(process.env.MONGO_KEY);
-
 mongoose
     .connect(process.env.MONGO_KEY, options)
     .then(() => console.log(`MongoDB Connected...`))
