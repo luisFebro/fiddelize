@@ -41,8 +41,8 @@ const msg = (typeAndMsgName, customized = 'NeedCustomWord', options) => {
     error.invalidPhone = "Formato telefone inválido. Digita de 10 a 11 dígitos com DDD. ex: 95977779999"
     error.invalidCpf = "O CPF informado não é válido.";
     error.userAlreadyRegistered = 'Esse Nome de usuário já foi registrado. Tente um outro.';
-    error.emailAlreadyRegistered = 'Esse Email já foi registrado. Tente um outro.';
-    error.cpfAlreadyRegistered = 'Esse CPF já foi registrado. Tente um outro.';
+    error.emailAlreadyRegistered = 'Ocorreu um problema em um dos campos. Tente novamente';
+    error.cpfAlreadyRegistered = 'Ocorreu um problema em um dos campos. Tente novamente'; // Security Vulnability - do not narrow down about each issue was rejected: Esse CPF já foi registrado. Tente um outro.
     // END MESSAGES
 
     foundMsg = authMsgs[type][msgName];

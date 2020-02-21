@@ -6,12 +6,12 @@ const Footer = () => {
             <div className="row">
                 <div className="col-10 mx-auto text-center p-1 pt-3">
                     <strong>
-                        New Project
+                        Fiddelize
+                    </strong>
+                        <br />
+                        Sistema de Pontos de Fidelidade
                         <br />
                         {new Date().getFullYear()}
-                        <br />
-                    </strong>
-                    City
                 </div>
             </div>
         </footer>

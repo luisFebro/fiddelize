@@ -1,16 +1,16 @@
 :root {
     /*PALETTE COLORS n2
     /*primary colors - name: deep purple 500*/
-    --themeP: #673ab7;
-    --themePLight: #7953d2;
-    --themePDark: #000070;
+    --themeP: #546e7a;
+    --themePLight: #819ca9;
+    --themePDark: #29434e;
     /*secondary colors - name: cyan (greenish-blue) 800*/
-    --themeS: #00838f;
-    --themeSLight: #4fb3bf;
-    --themeSDark: #005662;
+    --themeS: #18ffff;
+    --themeSLight: #76ffff;
+    --themeSDark: #00cbcc;
     /*surface (such as cards, sheets, and menus) and background*/
-    --themeSurface: #f7f1e3; /*white variant*/
-    --themeBackground: #648897; /*variant dark cyan*/
+    --themeSurface: #f7f1e3; /**/
+    --themeBackground: #546e7a; /*same as primary*/
     /*on colors - text*/
     --mainBlack: "black";
     --mainWhite: #ecf0f1;
@@ -586,6 +586,5 @@ Progress bars
 Links and headlines
 
 To see interfaces:
-https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=673AB7&secondary.color=00BCD4
-;
+https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=546E7A&secondary.color=18FFFF
 */

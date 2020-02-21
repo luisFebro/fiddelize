@@ -10,27 +10,41 @@ export default function Home() {
     // }
     const showMainContent = () => (
         <div className="ml-md-4">
-            <div className="my-4 text-subtitle text-center">Amigo cliente, faça já o seu cadastro <br /> e <br />participe de nosso plano de fidelidade</div>
-            <span className="text-right for-version-test">{"TESTING NETLIFY AGAIN"}</span>
+            <span className="text-right for-version-test">{""}</span>
             <div className="center-small">
                 <Register />
             </div>
-            <div className="mt-3 text-subtitle text-center">Acumule pontos e ganhe produtos e serviços</div>
-            <Link to="/regulamento">
-                <div
-                    className="my-5 text-subtitle font-weight-italic text-center"
-                    style={{color: "var(--mainPink)", cursor: "pointer"}}
-                >
-                    Consulte<br />as Regras Aqui
-                </div>
-            </Link>
         </div>
     );
 
     return(
-        <div style={{color: 'white'}} className="d-flex flex-column-reverse flex-md-row justify-content-center">
-            {showMainContent()}
-            <img className="svg-elevation" src="/icons/logo-inkscape.svg" alt="logo" width={300} height={300}/>
-        </div>
+        <Fragment>
+            <h1 className="text-center text-title mt-4 text-white">Pontos de Fidelidade Online para seus Clientes</h1>
+            <div style={{color: 'white'}} className="d-flex flex-column-reverse flex-md-row justify-content-center">
+                {showMainContent()}
+                <div className="container-center align-items-start mt-5">
+                    <img
+                        className="svg-elevation"
+                        src="/img/official-logo-white.svg"
+                        alt="logo"
+                        width={300}
+                        height={300}
+                    />
+                </div>
+            </div>
+        </Fragment>
     );
 };
+
+
+/* ARCHIVES
+<div className="mt-3 text-subtitle text-center">Acumule pontos e ganhe produtos e serviços</div>
+<Link to="/regulamento">
+    <div
+        className="my-5 text-subtitle font-weight-italic text-center"
+        style={{color: "var(--mainPink)", cursor: "pointer"}}
+    >
+        Consulte<br />as Regras Aqui
+    </div>
+</Link>
+*/

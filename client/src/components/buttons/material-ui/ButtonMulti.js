@@ -9,7 +9,7 @@ ButtonMulti.propTypes = buttonMultiType;
 
 const useStyles = makeStyles(theme => ({ // n1
     sText: {
-        textShadow: '1px 1px 3px black',
+        textShadow: props => props.textShadow || '1px 1px 3px black',
         fontWeight: 'bold',
         textTransform: props => props.textTransform || 'uppercase',
     },

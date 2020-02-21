@@ -62,9 +62,9 @@ function Login({ history }) {
 
     const showTitle = () => (
         <Title
-            title="ACESSAR CONTA"
+            title="Acessar Conta"
             color="var(--mainWhite)"
-            backgroundColor="var(--themeP)"
+            backgroundColor="var(--themePDark)"
         />
     );
 

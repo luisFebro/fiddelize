@@ -69,7 +69,7 @@ function Navbar({ history, location }) {
                     {locationNow === "/"
                     ? (
                         <span className="text-subtitle text-s">
-                            Gerenciamento <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                            Acesso <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
                         </span>
                     ) : null}
                 </Link>
@@ -113,10 +113,10 @@ function Navbar({ history, location }) {
     const showLogo = () => (
         <Link to="/">
             <img
-                style={{position: 'absolute', top: '-1px', left: '10px'}}
-                src={CLIENT_URL + "/img/official-logo.svg"}
+                style={{position: 'absolute', top: '5px', left: '10px'}}
+                src={CLIENT_URL + "/img/official-logo-name.svg.png"}
                 alt="Logomarca Principal"
-                width="250px"
+                width="200px"
                 height="70px"
             />
         </Link>
@@ -125,8 +125,7 @@ function Navbar({ history, location }) {
     // Render
     return (
         <NavWrapper
-            style={{background: "var(--mainWhite)"}}
-            className="navbar navbar-expand-sm text-nav-items"
+            className="navbar navbar-expand-sm text-nav-items theme-p-dark"
         >
             {showLogo()}
             {showManagingBtn()}
@@ -144,7 +143,7 @@ const DivWrapper = styled.div`
 `;
 const NavWrapper = styled.nav`
     & {
-        min-height: 65px;
+        min-height: 60px;
     }
     .store-container {
         position: relative;
@@ -180,7 +179,6 @@ const NavWrapper = styled.nav`
         font-size: 2.1rem;
         filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
     }
-    background: var(--mainDark);
     .nav-link,
     #searchIcon {
         text-transform: capitalize;

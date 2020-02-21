@@ -136,7 +136,7 @@ function Register() {
             title="Cadastre-se"
             subTitle="É rápido e fácil"
             color="var(--mainWhite)"
-            backgroundColor="var(--themeP)"
+            backgroundColor="var(--themePDark)"
         />
     );
 
@@ -281,9 +281,10 @@ function Register() {
                 onClick={() => {
                     registerThisUser();
                 }}
-                color="var(--mainWhite)"
-                backgroundColor="var(--mainPink)"
-                backColorOnHover="var(--mainPink)"
+                color="var(--mainDark)"
+                textShadow="none"
+                backgroundColor="var(--themeSDark)"
+                backColorOnHover="var(--themeSDark)"
                 iconFontAwesome="fas fa-save"
                 textTransform='uppercase'
             >
