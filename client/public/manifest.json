@@ -1,0 +1,28 @@
+{
+  "name": "Fiddelize - Pontos de Fidelidade",
+  "short_name": "Fiddelize",
+  "description": "Sistema para verificação de pontos fidelidade e valorização do consumo de clientes",
+  "start_url": "/mobile-app",
+  "display": "standalone",
+  "scope": ".",
+  "categories": ["business", "lifestyle", "utilities"],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon/mobile-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/favicon/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Register from '../components/auth/Register';
 import { Link } from 'react-router-dom';
-// import ModalForPermission from '../<componen></componen>ts/pwa-push-notification/ModalForPermission';
+// import ModalForPermission from '../components/pwa-push-notification/ModalForPermission';
 // import showVanillaToast from '../components/vanilla-js/toastify/showVanillaToast'
 
 export default function Home() {

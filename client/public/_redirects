@@ -1,0 +1,3 @@
+#netlify settings to run heroku APIs.
+/api/* https://fiddelize.herokuapp.com/api/:splat  200
+/*  /index.html  200
