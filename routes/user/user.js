@@ -11,19 +11,17 @@ const {
     removeField,
     readBackup,
     createBooking,
-    getStaffClientList,
     getHighestScores,
     mwUserId,
     mwBackup
 } = require("../../controllers/user");
 
-const { mwRemoveAllBookingsFromAStaff } = require("../../controllers/staffBooking");
 const { mwIsAdmin } = require("../../controllers/auth");
 // @route  api/user
 // RUD
 router.get("/:userId", read); //  mwIsAuth
 router.put("/:userId", update); // mwIsAuth
-router.delete('/:userId', mwRemoveAllBookingsFromAStaff, mwBackup, remove);
+router.delete('/:userId', mwBackup, remove);
 // END RUD
 
 router.get("/confirm-account/:authUserId", confirmUserAccount);
@@ -32,8 +30,6 @@ router.get("/confirm-account/:authUserId", confirmUserAccount);
 router.get("/list/all", getList);
 router.get("/list/highest-scores", getHighestScores);
 router.get("/:userId/backup/list", mwIsAdmin, readBackup);
-router.get("/staff-booking/list/:userId", getStaffClientList);
-
 
 // FIELDS
 // Array Fields handled: none
@@ -42,6 +38,18 @@ router.put('/field/array/pull/:id', removeElementArray);
 router.put('/field/remove/:id', removeField);
 
 router.param("userId", mwUserId); // n1
+
+module.exports = router;
+
+/* ARCHIVES
+router.get("/staff-booking/list/:userId", getStaffClientList);
+router.delete('/:userId', mwRemoveAllBookingsFromAStaff, mwBackup, remove);
+
+const { mwRemoveAllBookingsFromAStaff } = require("../../controllers/staffBooking");
+ */
+
+
+
 
 // THIS WILL REFACTORATED TO RECEIVE IDS LIKE I DID WITH FAVORITES AND UPDATE WITH FIELD ROUTES.
 // NOTIFICATION SYSTEM
@@ -78,7 +86,6 @@ router.param("userId", mwUserId); // n1
 // });
 // // END NOTIFICATION SYSTEM
 
-module.exports = router;
 
 
 /* COMMENTS

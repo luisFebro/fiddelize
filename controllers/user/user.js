@@ -1,5 +1,4 @@
 const User = require("../../models/user");
-// const StaffBooking = require("../../models/user/StaffBooking");
 const BackupUser = require('../../models/backup/BackupUser');
 const bcrypt = require('bcryptjs');
 const mongoose = require("mongoose");
@@ -206,44 +205,46 @@ exports.readBackup = (req, res) => {
     });
 }
 
-exports.getStaffClientList = (req, res) => {
-    // const bookingArrayIds = req.profile.staffBookingList;
-    // const docsToSkip = parseInt(req.query.skip);
-
-    // let query;
-    // let limit;
-    // if(req.query.search) {
-    //     query = {'clientName': { $regex: `${req.query.search}`, $options: "i" }}
-    //     limit = 10;
-    // } else {
-    //     query = {'_id': {$in: bookingArrayIds }}
-    //     limit = 5;
-    // }
-
-    // StaffBooking.find(query)
-    // .exec((err, docs) => {
-    //     const totalOfDocs = docs.length;
-
-    //     StaffBooking.find(query)
-    //     .sort({ 'status': -1, 'bookingDate': 1 })
-    //     .skip(docsToSkip)
-    //     .limit(limit)
-    //     .exec((err, docs) => {
-    //         if(err) return res.status(500).json(msgG('error.systemError', err));
-    //         res.json({
-    //             size: docs.length,
-    //             totalSize: totalOfDocs,
-    //             docs
-    //         });
-    //     });
-    // })
-}
-
 // END LISTS
-
 
 /* COMMENTS
 n1: Only for objects with no default value. Need fix validation and it does not remove keys with default values.
 n2: only update one specific key in the document, including objects like "key.prop".targetField. If you update an element of array, all the rest will be gone, updated.
 In order to add/remove arrays use add/removeElementArray instead;
+*/
+
+
+/* ARCHIVES
+exports.getStaffClientList = (req, res) => {
+    const bookingArrayIds = req.profile.staffBookingList;
+    const docsToSkip = parseInt(req.query.skip);
+
+    let query;
+    let limit;
+    if(req.query.search) {
+        query = {'clientName': { $regex: `${req.query.search}`, $options: "i" }}
+        limit = 10;
+    } else {
+        query = {'_id': {$in: bookingArrayIds }}
+        limit = 5;
+    }
+
+    StaffBooking.find(query)
+    .exec((err, docs) => {
+        const totalOfDocs = docs.length;
+
+        StaffBooking.find(query)
+        .sort({ 'status': -1, 'bookingDate': 1 })
+        .skip(docsToSkip)
+        .limit(limit)
+        .exec((err, docs) => {
+            if(err) return res.status(500).json(msgG('error.systemError', err));
+            res.json({
+                size: docs.length,
+                totalSize: totalOfDocs,
+                docs
+            });
+        });
+    })
+}
 */

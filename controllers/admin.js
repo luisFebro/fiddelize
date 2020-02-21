@@ -1,6 +1,5 @@
 const Admin = require('../models/admin');
 const User = require("../models/user");
-const StaffBooking = require("../models/user/StaffBooking");
 const BusinessInfo = require("../models/admin/BusinessInfo");
 const Service = require("../models/admin/Service");
 const formidable = require('formidable');
@@ -27,15 +26,6 @@ exports.mwPhoto = (req, res, next) => {
     }
     next();
 };
-
-exports.mwUniqueStaffIds = (req, res, next) => {
-    StaffBooking.distinct("staffId")
-    .exec((err, ids) => {
-        if(err) return res.status(400).json({ msg: "Nenhuma categoria foi encontrada."})
-        req.uniqueStaffIds = ids;
-        next();
-    })
-}
 // END MIDDLEWARES
 
 exports.createOrUpdate = (req, res) => {
@@ -208,6 +198,17 @@ exports.countAppDownloads = (req, res) => {
         res.json(update);
     })
 }
+
+/* ARCHIVES
+exports.mwUniqueStaffIds = (req, res, next) => {
+    StaffBooking.distinct("staffId")
+    .exec((err, ids) => {
+        if(err) return res.status(400).json({ msg: "Nenhuma categoria foi encontrada."})
+        req.uniqueStaffIds = ids;
+        next();
+    })
+}
+ */
 
 /* COMMENTS
 n1: You can add or remove any field from businessInfo according to the client needs.

@@ -15,8 +15,6 @@ const {
     updateService,
     deleteService,
     // End
-    mwUniqueStaffIds,
-    getStaffWithBookings,
     checkVerificationPass,
     readVerificationPass,
     createOrUpdateRegText,
@@ -45,8 +43,6 @@ router.get("/service/list/all", readServicesList);
 router.put("/service/:userId", mwIsAdmin, updateService);
 router.delete("/service/:userId", mwIsAdmin, deleteService);
 // End Services CRUD
-
-router.get("/list/staff-with-bookings", mwUniqueStaffIds, getStaffWithBookings);
 
 router.put("/app/downloads", countAppDownloads);
 
