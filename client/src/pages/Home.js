@@ -11,7 +11,7 @@ export default function Home() {
     const showMainContent = () => (
         <div className="ml-md-4">
             <div className="my-4 text-subtitle text-center">Amigo cliente, faça já o seu cadastro <br /> e <br />participe de nosso plano de fidelidade</div>
-            <span className="text-right for-version-test">{""}</span>
+            <span className="text-right for-version-test">{"TESTING NETLIFY"}</span>
             <div className="center-small">
                 <Register />
             </div>
