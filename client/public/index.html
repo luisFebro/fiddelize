@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>New Project</title>
+    <meta charset="utf-8" />
+    <meta
+        name='viewport'
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <!-- META SEO -->
+    <link rel="canonical" href="https://newproject.com.br"/>
+    <meta name="generator" content="www.newsite.com.br" />
+    <meta name="author" content="New Project" />
+    <meta name="description" content="New Project - description" />
+    <meta name="Keywords" content="new, project" />
+    <!-- END META SEO -->
+    <!-- TOOLBAR COLOR - requires valid HTTPS certification to work -->
+    <meta name="theme-color" content="#232528" />
+    <meta name="msapplication-TileColor" content="#232528">
+    <meta name="msapplication-navbutton-color" content="#232528">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#232528">
+    <!-- END TOOLBAR COLOR -->
+
+    <!-- GOOGLE WEBMASTERS -->
+    <!-- search console -->
+    <meta name="google-site-verification" content="nAosncHFtMApONJPqtLZWwDLLuNJesQukVcbAKazoUw" />
+    <!-- END GOOGLE WEBMASTERS -->
+
+    <!-- HOMESCREEN MANIFEST -->
+    <link rel="manifest" href="/manifest.json" />
+    <!-- END HOMESCREEN MANIFEST -->
+
+
+    <!-- FACEBOOK OPEN GRAPHS - TESTING -->
+    <meta property="og:site_name" content="New Project">
+    <meta property="og:title" content="New Project">
+    <meta property="og:image:secure_url" itemprop="image" content="https://newproject.com/img/favicon.png">
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="alguma descrição" />
+    <meta property="og:updated_time" content="1440432930" />
+    <!-- END FACEBOOK OPEN GRAPHS - TESTING -->
+
+    <!-- BEGIN - FAVICON -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="manifest" href="/icons/site.webmanifest">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="msapplication-config" content="/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- END - FAVICON -->
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Tomorrow|Philosopher&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tomorrow|Philosopher&display=swap" /></noscript>
+    <!-- END GOOGLE FONTS -->
+
+    <!-- PREFETCHING -->
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo.svg">
+    <link rel="prefetch" href="https://archive.org/download/tock_20191221/Tock.mp3">
+    <link rel="prefetch" href="/sounds/app-btn-sound.wav">
+    <link rel="prefetch" href="https://ia601500.us.archive.org/29/items/confirmation-keypad-sound/confirmation-keypad-sound.wav">
+    <!-- END PREFETCHING -->
+
+    <!-- FONT AWESOME -->
+    <!-- reference for deferring non-critical css: -->
+    <!-- https://web.dev/defer-non-critical-css/ -->
+    <link rel="preload" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" /></noscript>
+    <style>
+       .fa,.fab,.fal,.far,.fas {
+         -moz-osx-font-smoothing: grayscale;
+         -webkit-font-smoothing: antialiased;
+         display: inline-block;
+         font-style: normal;
+         font-variant: normal;
+         text-rendering: auto;
+         line-height: 1
+       }
+    </style>
+    <!-- END - FONT AWESOME -->
+
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+
+    <!-- SCRIPTS -->
+    <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js"
+        integrity="sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh"
+        crossorigin="anonymous">
+    </script>
+
+    <!-- <script>
+        const loadStyleSheet = path => {
+            if (document.createStyleSheet) {
+                 document.createStyleSheet(path);
+            } else {
+                 const stylesheet = document.createElement('link');
+                 stylesheet.href = path;
+                 stylesheet.rel = 'stylesheet';
+                 // stylesheet.type = 'text/css';
+                 stylesheet.integrity = 'sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ';
+                 stylesheet.crossOrigin = 'anonymous';
+                 document.getElementsByTagName('head')[0].appendChild(stylesheet)
+            }
+        }
+          // All of the objects are in the DOM, and all the images, scripts, links have finished loading.
+        window.onload = function () {
+            //FONT AWESOME
+            loadStyleSheet('https://use.fontawesome.com/releases/v5.7.0/css/all.css');
+        };
+    </script> -->
+
+    <script>
+        // this disable mini-bar from browser. the custom banner is set in download page....
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+        })
+        window.addEventListener('offline', () => {
+            alert("Você está sem internet. Tente Novamente!");
+        })
+    </script>
+  </body>
+</html>
+
+
+<!-- /* COMMENTS
+n1:
+Above the fold, as it applies to Web design, is the portion of a Web page that is visible in a browser window when the page first loads. The portion of the page that requires scrolling in order to see content is called "below the fold."
+*/ -->

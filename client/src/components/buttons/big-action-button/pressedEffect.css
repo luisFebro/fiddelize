@@ -1,0 +1,29 @@
+.pressed-effect {
+    display: inline-block;
+
+    padding: 15px 25px;
+
+    border: none;
+    border-radius: 15px;
+    background-color: #663399;
+    box-shadow: 0 9px #999;
+    outline: none;
+    color: #fff;
+
+    text-align: center;
+    text-decoration: none;
+    font-size: 24px;
+
+    cursor: pointer;
+}
+
+.pressed-effect:hover {
+    background-color: var(--mainDark);
+}
+
+.pressed-effect:active {
+    background-color: var(--mainDark);
+    box-shadow: 0 5px #666;
+
+    transform: translateY(4.5px);
+}

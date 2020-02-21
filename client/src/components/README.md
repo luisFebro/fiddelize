@@ -1,0 +1,2 @@
+##Changelog Updates
+- modal components are now handling in their local folders due to their high level of data changing. REASON: The index code was getting to complex to branch conditions for each customized case.

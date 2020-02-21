@@ -1,0 +1,41 @@
+.add-to-home-banner {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  background: linear-gradient(120deg, #FF0000 0%, #2400FF 100%), linear-gradient(120deg, #FA00FF 0%, #208200 100%), linear-gradient(130deg, #00F0FF 0%, #000000 100%), radial-gradient(110% 140% at 15% 90%, #ffffff 0%, #1700A4 100%), radial-gradient(100% 100% at 50% 0%, #AD00FF 0%, #00FFE0 100%), radial-gradient(100% 100% at 50% 0%, #00FFE0 0%, #7300A9 80%), linear-gradient(30deg, #7ca304 0%, #2200AA 100%);
+  background-blend-mode: overlay, color, overlay, difference, color-dodge, difference, normal;
+  cursor: pointer;
+  text-align: left;
+  -webkit-user-select: none;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-to-home-content {
+    display: flex;
+    align-items: center;
+}
+
+.add-to-home-icon {
+    width: 60px;
+    height: 65px;
+    padding: 10px;
+    padding-right: 0;
+}
+
+.add-to-home-text {
+    display: inline-block;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.add-to-home-close-btn {
+    display: inline-block;
+    position: relative;
+    padding: 0 2px;
+    right: 4px;
+    float: right;
+    font-size: 32px;
+}

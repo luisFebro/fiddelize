@@ -1,0 +1,36 @@
+{
+  "name": "name-project",
+  "version": "1.0.0",
+  "description": "new project description",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm run start --prefix ../client",
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+    "client-install": "cd client && npm install",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "keywords": [],
+  "author": "Luis Febro",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "formidable": "^1.2.1",
+    "heroku-ssl-redirect": "0.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.0",
+    "nodemailer": "^6.4.1",
+    "path": "^0.12.7",
+    "uuid": "^3.3.3",
+    "web-push": "^3.4.3"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.1",
+    "nodemon": "^2.0.1"
+  }
+}
