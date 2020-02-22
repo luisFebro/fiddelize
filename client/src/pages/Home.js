@@ -47,10 +47,9 @@ export default function Home() {
             <div
                 data-aos="fade-up-right"
                 data-aos-duration="1500"
-                className=""
-                style={{position: 'relative', left: isSmall ? '-120px' : '-215px'}}
+                style={{maxWidth: 800, position: 'relative', left: isSmall ? '-100px' : '-230px'}}
             >
-                <img className="img-fluid" src="/img/illustrations/one-hand-held-mobile.png" width={600} height="auto" alt="app do celular"/>
+                <img className="img-fluid" src="/img/illustrations/one-hand-held-mobile.png" height="auto" alt="app do celular"/>
             </div>
         </section>
     );
