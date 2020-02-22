@@ -47,7 +47,7 @@ export default function Home() {
             <div
                 data-aos="fade-up-right"
                 data-aos-duration="1500"
-                style={{position: 'relative', left: isSmall ? '-50px' : '-280px'}}
+                style={{position: 'relative', left: isSmall ? '-50px' : '-215px'}}
             >
                 <img src="/img/illustrations/one-hand-held-mobile.png" width={600} height={600} alt="app do celular"/>
             </div>

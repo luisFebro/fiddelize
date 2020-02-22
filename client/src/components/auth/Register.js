@@ -224,7 +224,7 @@ function Register() {
                         margin="dense"
                         error={errorBirthday ? true : false}
                         openTo="month"
-                        autoOk={true}
+                        autoOk={false}
                         placeholder="Dia e Mês"
                         views={["month", "date"]}
                         name="birthday"
