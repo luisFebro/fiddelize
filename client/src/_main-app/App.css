@@ -32,6 +32,8 @@
     /*END GALLERY OF BEST COLORS*/
 }
 
+/*WARNING: replace all font families from the projects after new one insertion in the HTML */
+
 *, :after, :before{
     -webkit-box-sizing:inherit;
     box-sizing:inherit
@@ -164,20 +166,20 @@ sub,sup {
 .text-hero { font: normal 60px 'Tomorrow', cursive; letter-spacing: .01em; }
 .text-title { font: bolder 30px 'Tomorrow', cursive; letter-spacing: .01em; }
 .text-large, .text-subtitle { font: normal 25px 'Tomorrow', cursive; letter-spacing: .01em; }
-.text-normal { font: normal 20px 'Philosopher', sans-serif; letter-spacing: .01em;}
+.text-normal { font: normal 20px 'Tomorrow', sans-serif; letter-spacing: .01em;}
 .text-small, .text-helper { font: normal 14px 'Tomorrow', cursive; letter-spacing: .01em; }
 @media screen and (min-width: 320px) {
   .text-hero { font: normal calc(60px + (90 - 60) * ((100vw - 300px) / (1000 - 300))) 'Tomorrow', cursive; letter-spacing: .01em; }
   .text-title { font: bolder calc(30px + (45 - 30) * ((100vw - 300px) / (1000 - 300))) 'Tomorrow', cursive; letter-spacing: .01em; }
   .text-large, .text-subtitle { font: normal calc(25px + (30 - 25) * ((100vw - 300px) / (1000 - 300))) 'Tomorrow', cursive; letter-spacing: .01em; }
-  .text-normal { font: normal calc(20px + (26 - 20) * ((100vw - 300px) / (1000 - 300))) 'Philosopher', sans-serif; letter-spacing: .01em;}
+  .text-normal { font: normal calc(20px + (26 - 20) * ((100vw - 300px) / (1000 - 300))) 'Tomorrow', sans-serif; letter-spacing: .01em;}
   .text-small { font: normal calc(14px + (16 - 14) * ((100vw - 300px) / (1000 - 300))) 'Tomorrow', sans-serif; letter-spacing: .01em;}
 }
 @media screen and (min-width: 1000px) {
   .text-hero { font: normal 90px 'Tomorrow', cursive; letter-spacing: .01em; }
   .text-title { font: bolder 45px 'Tomorrow', cursive; letter-spacing: .01em; }
   .text-large, .text-subtitle { font: normal 30px 'Tomorrow', cursive; letter-spacing: .01em; }
-  .text-normal { font: normal 26px 'Philosopher', sans-serif; letter-spacing: .01em;}
+  .text-normal { font: normal 26px 'Tomorrow', sans-serif; letter-spacing: .01em;}
   .text-small, .text-helper { font: normal 16px 'Tomorrow', cursive; letter-spacing: .01em; }
 }
 

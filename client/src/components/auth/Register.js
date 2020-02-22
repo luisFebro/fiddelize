@@ -28,8 +28,11 @@ import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
 import ButtonMulti from '../buttons/material-ui/ButtonMulti';
+import moment from 'moment';
+import 'moment/locale/pt-br';
+moment.updateLocale('pt-BR');
 
-// moment.locale = "pt-br";
+const isSmall = window.Helper.isSmallScreen();
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -69,7 +72,7 @@ function Register() {
     const dispatch = useStoreDispatch();
 
     const classes = useStyles();
-
+    console.log(birthday)
     useEffect(() => {
         setData({ ...data, birthday: getDayMonthBr(selectedDate) })
     }, [selectedDate])
@@ -133,138 +136,176 @@ function Register() {
 
     const showTitle = () => (
         <Title
-            title="Cadastre-se"
-            subTitle="É rápido e fácil"
+            title="Comece Hoje!"
+            subTitle="Cadastre-se aqui."
             color="var(--mainWhite)"
             backgroundColor="var(--themePDark)"
         />
     );
 
+    const styles = {
+        fieldForm: {
+            backgroundColor: 'var(--mainWhite)',
+            zIndex: 2000,
+            fontSize: '1em'
+        },
+        helperFromField: {
+            color: 'grey',
+            fontFamily: 'Tomorrow, sans-serif',
+            fontSize: isSmall ? '.8em' : '.6em',
+        }
+    }
+
     const showForm = () => (
         <form
             style={{margin: 'auto', width: '80%'}}
+            className="text-p-dark text-normal"
             onBlur={() => setFieldError(null)}
         >
-            <TextField
-                required
-                margin="dense"
-                onChange={handleChange(setData, data)}
-                error={errorCpf ? true : false}
-                name="cpf"
-                onBlur={() => setData({ ...data, cpf: cpfMaskBr(cpf)})}
-                value={cpf}
-                type="text"
-                label="Insira seu CPF"
-                autoComplete="off"
-                helperText="Digite apenas números."
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MoneyIcon />
-                    </InputAdornment>
-                  ),
-                }}
-            />
-            <TextField
-                required
-                onChange={handleChange(setData, data)}
-                error={errorName ? true : false}
-                margin="dense"
-                id="name"
-                name="name"
-                autoComplete="off"
-                value={name}
-                type="name"
-                label="Qual é o seu nome e sobrenome?"
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                }}
-            />
-            <MuiPickersUtilsProvider utils={MomentUtils} locale={"pt-br"}> {/*TODO: Do a component for pickers*/}
-                <DatePicker
+            <div className="mt-3 font-weight-bold">
+                Insira seu CPF
+                <TextField
                     required
-                    variant="inline"
                     margin="dense"
-                    error={errorBirthday ? true : false}
-                    openTo="month"
-                    autoOk={true}
-                    placeholder="Dia e Mês"
-                    views={["month", "date"]}
-                    label="Quando é o seu aniversário?"
-                    name="birthday"
-                    value={selectedDate}
-                    onChange={handleDateChange}
+                    onChange={handleChange(setData, data)}
+                    error={errorCpf ? true : false}
+                    name="cpf"
+                    variant="outlined"
+                    cancelLabel={"Cancelar"}
+                    okLabel={"Continuar"}
+                    autoOk={false}
+                    onBlur={() => setData({ ...data, cpf: cpfMaskBr(cpf)})}
+                    value={cpf}
+                    type="text"
+                    autoComplete="off"
+                    helperText="Digite apenas números."
+                    FormHelperTextProps={{ style: styles.helperFromField }}
+                    fullWidth
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <CakeIcon />
+                          <MoneyIcon />
                         </InputAdornment>
                       ),
+                      style: styles.fieldForm
                     }}
                 />
-            </MuiPickersUtilsProvider>
-            <TextField
-                required
-                margin="dense"
-                onChange={handleChange(setData, data)}
-                error={errorEmail ? true : false}
-                name="email"
-                value={email}
-                type="email"
-                label="Email"
-                autoComplete="off"
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon />
-                    </InputAdornment>
-                  ),
-                }}
-            />
-            <TextField
-                required
-                margin="dense"
-                onChange={handleChange(setData, data)}
-                error={errorPhone ? true : false}
-                onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
-                name="phone"
-                helperText={"Digite apenas números com DDD"}
-                value={phone}
-                type="tel"
-                label="Contato"
-                autoComplete="off"
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PhoneIphoneIcon />
-                    </InputAdornment>
-                  ),
-                }}
-            />
-            <Select
-              style={{ margin: '9px 0' }}
-              labelId="maritalStatus"
-              onChange={handleChange(setData, data)}
-              name="maritalStatus"
-              value={maritalStatus}
-              error={errorMaritalStatus ? true : false}
-            >
-              <MenuItem value={maritalStatus}>
-                selecione estado civil:
-              </MenuItem>
-              <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
-              <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
-              <MenuItem value={"Divorciado(a)"}>Divorciado(a)</MenuItem>
-              <MenuItem value={"Viúvo(a)"}>Viúvo(a)</MenuItem>
-            </Select>
+            </div>
+            <div className="mt-3 font-weight-bold">
+                Qual é o seu nome e sobrenome?
+                <TextField
+                    required
+                    onChange={handleChange(setData, data)}
+                    error={errorName ? true : false}
+                    variant="outlined"
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    autoComplete="off"
+                    value={name}
+                    type="name"
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
+                      style: styles.fieldForm
+                    }}
+                />
+            </div>
+            <div className="mt-3 font-weight-bold">
+                Quando é o seu aniversário?
+                <MuiPickersUtilsProvider utils={MomentUtils} locale={"pt-br"}> {/*TODO: Do a component for pickers*/}
+                    <DatePicker
+                        required
+                        variant="outlined"
+                        margin="dense"
+                        error={errorBirthday ? true : false}
+                        openTo="month"
+                        autoOk={true}
+                        placeholder="Dia e Mês"
+                        views={["month", "date"]}
+                        name="birthday"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CakeIcon />
+                            </InputAdornment>
+                          ),
+                            style: styles.fieldForm
+                        }}
+                    />
+                </MuiPickersUtilsProvider>
+            </div>
+            <div className="mt-3 font-weight-bold">
+                Email
+                <TextField
+                    required
+                    margin="dense"
+                    onChange={handleChange(setData, data)}
+                    error={errorEmail ? true : false}
+                    name="email"
+                    value={email}
+                    type="email"
+                    autoComplete="off"
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailIcon />
+                        </InputAdornment>
+                      ),
+                      style: styles.fieldForm
+                    }}
+                />
+            </div>
+            <div className="mt-3 font-weight-bold">
+                Contato
+                <TextField
+                    required
+                    margin="dense"
+                    onChange={handleChange(setData, data)}
+                    error={errorPhone ? true : false}
+                    onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
+                    name="phone"
+                    helperText={"Digite apenas números com DDD"}
+                    FormHelperTextProps={{ style: styles.helperFromField }}
+                    value={phone}
+                    type="tel"
+                    autoComplete="off"
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PhoneIphoneIcon />
+                        </InputAdornment>
+                      ),
+                      style: styles.fieldForm
+                    }}
+                />
+            </div>
+            <div className="mt-3 font-weight-bold">
+                <Select
+                  style={{ margin: '9px 0' }}
+                  labelId="maritalStatus"
+                  onChange={handleChange(setData, data)}
+                  name="maritalStatus"
+                  value={maritalStatus}
+                  error={errorMaritalStatus ? true : false}
+                >
+                  <MenuItem value={maritalStatus}>
+                    <span style={{fontFamily: 'Tomorrow, sans-serif', fontSize: '1.5em'}}>selecione estado civil:</span>
+                  </MenuItem>
+                  <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
+                  <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
+                  <MenuItem value={"Divorciado(a)"}>Divorciado(a)</MenuItem>
+                  <MenuItem value={"Viúvo(a)"}>Viúvo(a)</MenuItem>
+                </Select>
+            </div>
             <SafeEnvironmentMsg />
         </form>
     );
@@ -294,17 +335,14 @@ function Register() {
     );
 
     return (
-        <div
-            className="animated zoomIn fast m-5 svg-elevation"
+        <Card
+            className="animated zoomIn fast svg-elevation"
+            style={{margin: 'auto', width: '97%',  maxWidth: isSmall ? "" : 465, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
         >
-            <Card
-                style={{maxWidth: 465, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
-            >
-                {showTitle()}
-                {showForm()}
-                {showButtonActions()}
-            </Card>
-        </div>
+            {showTitle()}
+            {showForm()}
+            {showButtonActions()}
+        </Card>
     );
 }
 

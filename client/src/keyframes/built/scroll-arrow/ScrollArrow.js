@@ -3,12 +3,12 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-ScrollArray.propTypes = {
+ScrollArrow.propTypes = {
     margin: PropTypes.number,
     id: PropTypes.string,
 }
 
-export default function ScrollArray({ color, margin, id }) {
+export default function ScrollArrow({ color, margin, id }) {
     const styles = { // NOT WORKING. Need alter chevron:after backgroud...
         array: {
             background: color || "black",
@@ -20,10 +20,10 @@ export default function ScrollArray({ color, margin, id }) {
 
     return (
         <div id={id} style={styles.margin}>
-            <div class="container">
-                <div class="chevron"></div>
-                <div class="chevron"></div>
-                <div class="chevron"></div>
+            <div className="container">
+                <div className="chevron"></div>
+                <div className="chevron"></div>
+                <div className="chevron"></div>
             </div>
         </div>
     );

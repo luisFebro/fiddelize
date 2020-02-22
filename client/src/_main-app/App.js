@@ -8,7 +8,7 @@ import { loadUser } from '../redux/actions/authActions';
 import '../utils/globalHelpers';
 //STYLING
 import './App.css';
-import 'aos/dist/aos.css';
+import 'aos/dist/aos.css'; // take a look in these libraries to reduce bundle and improve performance.
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css/animate.min.css';
 //END STYLING

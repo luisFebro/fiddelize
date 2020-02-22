@@ -6,6 +6,8 @@ import { CLIENT_URL } from '../../../config/clientUrl';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+const isSmall = window.Helper.isSmallScreen();
+
 function Navbar({ history, location }) {
     // const [showSkeleton, setShowSkeleton] = useState(true);
     const [isSearchOpen, setSearchOpen] = useState(false);
@@ -68,7 +70,7 @@ function Navbar({ history, location }) {
                 >
                     {locationNow === "/"
                     ? (
-                        <span className="text-subtitle text-s">
+                        <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
                             Acesso <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
                         </span>
                     ) : null}
@@ -113,8 +115,9 @@ function Navbar({ history, location }) {
     const showLogo = () => (
         <Link to="/">
             <img
-                style={{position: 'absolute', top: '5px', left: '10px'}}
-                src={CLIENT_URL + "/img/official-logo-name.svg.png"}
+                className="animated zoomIn slow"
+                style={{position: 'absolute', top: '10px', left: isSmall ? '5px' : '20px'}}
+                src={CLIENT_URL + "/img/official-logo-name.png"}
                 alt="Logomarca Principal"
                 width="200px"
                 height="70px"
