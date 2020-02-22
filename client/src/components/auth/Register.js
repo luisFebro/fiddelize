@@ -171,8 +171,6 @@ function Register() {
                     error={errorCpf ? true : false}
                     name="cpf"
                     variant="outlined"
-                    cancelLabel={"Cancelar"}
-                    okLabel={"Continuar"}
                     autoOk={false}
                     onBlur={() => setData({ ...data, cpf: cpfMaskBr(cpf)})}
                     value={cpf}
@@ -220,7 +218,7 @@ function Register() {
                 <MuiPickersUtilsProvider utils={MomentUtils} locale={"pt-br"}> {/*TODO: Do a component for pickers*/}
                     <DatePicker
                         required
-                        variant="outlined"
+                        inputVariant="outlined"
                         margin="dense"
                         error={errorBirthday ? true : false}
                         openTo="month"
@@ -249,6 +247,7 @@ function Register() {
                     onChange={handleChange(setData, data)}
                     error={errorEmail ? true : false}
                     name="email"
+                    variant="outlined"
                     value={email}
                     type="email"
                     autoComplete="off"
@@ -278,6 +277,7 @@ function Register() {
                     type="tel"
                     autoComplete="off"
                     fullWidth
+                    variant="outlined"
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -288,13 +288,14 @@ function Register() {
                     }}
                 />
             </div>
-            <div className="mt-3 font-weight-bold">
+            <div className="my-3 font-weight-bold">
                 <Select
-                  style={{ margin: '9px 0' }}
+                  margin="dense"
                   labelId="maritalStatus"
                   onChange={handleChange(setData, data)}
                   name="maritalStatus"
                   value={maritalStatus}
+                  variant="outlined"
                   error={errorMaritalStatus ? true : false}
                 >
                   <MenuItem value={maritalStatus}>
