@@ -147,11 +147,11 @@ function Register() {
         fieldForm: {
             backgroundColor: 'var(--mainWhite)',
             zIndex: 2000,
-            fontSize: '1em'
+            font: 'normal 1em Poppins, sans-serif',
         },
         helperFromField: {
             color: 'grey',
-            fontFamily: 'Tomorrow, sans-serif',
+            fontFamily: 'Poppins, sans-serif',
             fontSize: isSmall ? '.8em' : '.6em',
         }
     }
@@ -299,7 +299,7 @@ function Register() {
                   error={errorMaritalStatus ? true : false}
                 >
                   <MenuItem value={maritalStatus}>
-                    <span style={{fontFamily: 'Tomorrow, sans-serif', fontSize: '1.5em'}}>selecione estado civil:</span>
+                    <span style={{fontFamily: 'Poppins, sans-serif', fontSize: '1.5em'}}>selecione estado civil:</span>
                   </MenuItem>
                   <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
                   <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>

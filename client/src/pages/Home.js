@@ -39,7 +39,7 @@ export default function Home() {
             <p
                 data-aos="fade-up"
                 data-aos-duration="1500"
-                className="text-title text-white text-align"
+                className="text-title text-white ml-5"
                 style={{maxWidth: '700px'}}
             >
                 Conquiste seus clientes com um sistema flexível<br />onde eles acessam seus pontos com<br />um clique pelo App.
@@ -49,7 +49,7 @@ export default function Home() {
                 data-aos-duration="1500"
                 style={{maxWidth: 800, position: 'relative', left: isSmall ? '-100px' : '-230px'}}
             >
-                <img className="img-fluid" src="/img/illustrations/one-hand-held-mobile.png" height="auto" alt="app do celular"/>
+                <img className="img-fluid shape-elevation" src="/img/illustrations/one-hand-held-mobile.png" height="auto" alt="app do celular"/>
             </div>
         </section>
     );
