@@ -1,7 +1,7 @@
 {
-  "name": "name-project",
+  "name": "Fiddelize",
   "version": "1.0.0",
-  "description": "new project description",
+  "description": "Fiddelize - customer loyalty scores system",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

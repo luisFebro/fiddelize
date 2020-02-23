@@ -40,7 +40,6 @@ export default function Home() {
                 data-aos="fade-up"
                 data-aos-duration="1500"
                 className="text-title text-white ml-5"
-                style={{maxWidth: '700px'}}
             >
                 Conquiste seus clientes com um sistema flexível<br />onde eles acessam seus pontos com<br />um clique pelo App.
             </p>

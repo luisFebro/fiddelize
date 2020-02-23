@@ -72,7 +72,7 @@ function Register() {
     const dispatch = useStoreDispatch();
 
     const classes = useStyles();
-    console.log(birthday)
+
     useEffect(() => {
         setData({ ...data, birthday: getDayMonthBr(selectedDate) })
     }, [selectedDate])
@@ -215,7 +215,10 @@ function Register() {
             </div>
             <div className="mt-3">
                 Quando é o seu aniversário?
-                <MuiPickersUtilsProvider utils={MomentUtils} locale={"pt-br"}> {/*TODO: Do a component for pickers*/}
+                <MuiPickersUtilsProvider
+                    utils={MomentUtils}
+                    locale={"pt-br"}
+                >
                     <DatePicker
                         required
                         inputVariant="outlined"
