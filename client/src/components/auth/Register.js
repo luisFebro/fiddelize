@@ -159,10 +159,10 @@ function Register() {
     const showForm = () => (
         <form
             style={{margin: 'auto', width: '80%'}}
-            className="text-p-dark text-normal"
+            className="text-p text-normal"
             onBlur={() => setFieldError(null)}
         >
-            <div className="mt-3 font-weight-bold">
+            <div className="mt-3">
                 Insira seu CPF
                 <TextField
                     required
@@ -189,7 +189,7 @@ function Register() {
                     }}
                 />
             </div>
-            <div className="mt-3 font-weight-bold">
+            <div className="mt-3">
                 Qual é o seu nome e sobrenome?
                 <TextField
                     required
@@ -213,7 +213,7 @@ function Register() {
                     }}
                 />
             </div>
-            <div className="mt-3 font-weight-bold">
+            <div className="mt-3">
                 Quando é o seu aniversário?
                 <MuiPickersUtilsProvider utils={MomentUtils} locale={"pt-br"}> {/*TODO: Do a component for pickers*/}
                     <DatePicker
@@ -239,7 +239,7 @@ function Register() {
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <div className="mt-3 font-weight-bold">
+            <div className="mt-3">
                 Email
                 <TextField
                     required
@@ -262,7 +262,7 @@ function Register() {
                     }}
                 />
             </div>
-            <div className="mt-3 font-weight-bold">
+            <div className="mt-3">
                 Contato
                 <TextField
                     required
@@ -288,7 +288,7 @@ function Register() {
                     }}
                 />
             </div>
-            <div className="my-3 font-weight-bold">
+            <div className="my-3">
                 <Select
                   margin="dense"
                   labelId="maritalStatus"
@@ -299,7 +299,7 @@ function Register() {
                   error={errorMaritalStatus ? true : false}
                 >
                   <MenuItem value={maritalStatus}>
-                    <span style={{fontFamily: 'Poppins, sans-serif', fontSize: '1.5em'}}>selecione estado civil:</span>
+                    <span className="text-p" style={{fontFamily: 'Poppins, sans-serif', fontSize: '1.5em'}}>selecione estado civil:</span>
                   </MenuItem>
                   <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
                   <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
