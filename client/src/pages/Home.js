@@ -57,7 +57,7 @@ export default function Home() {
         <Fragment>
             <span className="text-right for-version-test">{""}</span>
             {showSlogon()}
-            <div style={{margin: isSmall ? '20px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
+            <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />
             </div>
             {showAppShowCase()}
