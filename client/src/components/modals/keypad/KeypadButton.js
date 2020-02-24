@@ -38,12 +38,11 @@ export default function KeypadButton({
     <div>
       <ButtonMulti
           onClick={onOpen}
-          color="var(--mainDark)"
+          color="var(--mainWhite)"
           backgroundColor="var(--themeSDark)"
-          backColorOnHover="var(--mainSDark)"
+          backColorOnHover="var(--themeSDark)"
           iconFontAwesome="fas fa-keyboard"
           textTransform='uppercase'
-          textShadow="none"
       >
           Abrir Teclado
       </ButtonMulti>

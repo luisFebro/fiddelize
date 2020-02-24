@@ -15,7 +15,8 @@ const useStyles = makeStyles(theme => ({ // n1
     },
     sIcon: {
         marginLeft: '5px',
-        fontSize: '1.9em'
+        fontSize: '1.9em',
+        textShadow: '.5px .5px 3px black',
     },
     sBtnColors: {
         color: props => props.color || 'var(--mainWhite)',

@@ -34,7 +34,7 @@ export default function DownloadApp({ match, location }) {
     const showMainText = () => (
         <div className="text-left text-title">
             <p
-                className={`pl-3 ${isSmall ? "text-center" : "text-left"} text-hero`}
+                className={`pl-3 text-center text-hero`}
                 style={{lineHeight: 1}}
             >
                 Oi,<br /> {truncate(userName.cap(), isSmall ? 22 : 30)}
@@ -78,7 +78,7 @@ export default function DownloadApp({ match, location }) {
             {showMainText()}
             <PwaInstaller
                 title={`<strong>${userName.cap()},<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`}
-                icon={`${CLIENT_URL}/icons/android-chrome-256x256.png`}
+                icon={`${CLIENT_URL}/img/official-logo-white.svg`}
                 run={run}
             />
         </div>

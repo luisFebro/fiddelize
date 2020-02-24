@@ -25,7 +25,6 @@ function closeWindow() {
 let deferredPrompt = null;
 export default function PwaInstaller({ title, icon, run = true }) { // A2HS = App to HomeScreen
     const [bannerVisible, setBannerVisible] = useState(false);
-    console.log("bannerVisible", bannerVisible);
 
     const shouldRender = run && bannerVisible && !isThisApp();
 
@@ -106,8 +105,8 @@ export default function PwaInstaller({ title, icon, run = true }) { // A2HS = Ap
                 title="baixar"
                 onClick={handlePwaInstall}
                 color="var(--mainWhite)"
-                backgroundColor="var(--mainPink)"
-                backColorOnHover="pink"
+                backgroundColor="var(--themeSDark)"
+                backColorOnHover="var(--themeSDark)"
             />
         </div>
     );

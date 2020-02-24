@@ -12,7 +12,7 @@ export default function LoginPage() {
     return (
         <div className="container-center mt-5">
             <div>
-                {currentComp === "login"
+            {currentComp === "login"
                 ? (
                     <Login />
                 ) : (

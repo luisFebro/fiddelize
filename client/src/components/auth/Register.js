@@ -327,8 +327,7 @@ function Register() {
                 onClick={() => {
                     registerThisUser();
                 }}
-                color="var(--mainDark)"
-                textShadow="none"
+                color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"
                 iconFontAwesome="fas fa-save"
