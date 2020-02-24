@@ -25,6 +25,11 @@
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
    id="defs101"><linearGradient
+     id="linearGradient853"
+     osb:paint="solid"><stop
+       style="stop-color:#000000;stop-opacity:1;"
+       offset="0"
+       id="stop851" /></linearGradient><linearGradient
      id="linearGradient6136"
      osb:paint="solid"><stop
        style="stop-color:#8823ec;stop-opacity:1;"
@@ -36,8 +41,8 @@
        offset="0"
        id="stop6010" /></linearGradient><linearGradient
      inkscape:collect="always"
-     xlink:href="#linearGradient6136"
-     id="linearGradient6138"
+     xlink:href="#linearGradient853"
+     id="linearGradient855"
      x1="0.826446"
      y1="130.24793"
      x2="263.63635"
@@ -56,7 +61,7 @@
    id="namedview99"
    showgrid="false"
    inkscape:zoom="1.21"
-   inkscape:cx="-133.71901"
+   inkscape:cx="4.2646084"
    inkscape:cy="87.276142"
    inkscape:window-x="-11"
    inkscape:window-y="-11"
@@ -66,7 +71,7 @@
 
 
 <rect
-   style="fill:url(#linearGradient6138);stroke-width:1.31936574;fill-opacity:1"
+   style="fill:url(#linearGradient855);stroke-width:1.31936574;fill-opacity:1"
    id="rect319"
    width="262.80991"
    height="262.80991"
@@ -224,6 +229,7 @@
      sodipodi:role="line">F<tspan
    id="tspan213"
    style="font-size:96px;fill:#00ffff" /></tspan></text>
+
 
 
 </g></svg>
