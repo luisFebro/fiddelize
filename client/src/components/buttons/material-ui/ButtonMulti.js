@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({ // n1
         textShadow: props => props.textShadow || '1px 1px 3px black',
         fontWeight: 'bold',
         textTransform: props => props.textTransform || 'uppercase',
+        fontFamily: 'var(--mainFont)',
     },
     sIcon: {
         marginLeft: '5px',

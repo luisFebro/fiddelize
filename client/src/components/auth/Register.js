@@ -298,12 +298,14 @@ function Register() {
                   labelId="maritalStatus"
                   onChange={handleChange(setData, data)}
                   name="maritalStatus"
+                  fullWidth
                   value={maritalStatus}
                   variant="outlined"
                   error={errorMaritalStatus ? true : false}
+                  style={{backgroundColor: 'var(--mainWhite)'}}
                 >
                   <MenuItem value={maritalStatus}>
-                    <span className="text-p" style={{fontFamily: 'Poppins, sans-serif', fontSize: '1.5em'}}>selecione estado civil:</span>
+                    <span className="text-p" style={{fontFamily: 'Poppins, sans-serif', fontSize: '1.2em'}}>selecione estado civil:</span>
                   </MenuItem>
                   <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
                   <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
