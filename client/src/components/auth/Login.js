@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Title from '../../components/Title';
 import { withRouter } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import { useStoreDispatch } from 'easy-peasy';
 import Card from '@material-ui/core/Card';
 import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
@@ -14,16 +13,9 @@ import KeypadButton from '../modals/keypad';
 import isThisApp from '../../utils/window/isThisApp';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 
-const useStyles = makeStyles(theme => ({
-  card: {
-    maxWidth: 400,
-  }
-}));
-
 function Login({ history }) {
     const [cpf, setData] = useState("0");
 
-    const classes = useStyles();
     const dispatch = useStoreDispatch();
 
     const signInThisUser = value => {
@@ -64,6 +56,7 @@ function Login({ history }) {
         <Title
             title="Acessar Conta"
             color="var(--mainWhite)"
+            padding="p-2"
             backgroundColor="var(--themePDark)"
         />
     );
@@ -81,17 +74,13 @@ function Login({ history }) {
     );
 
     return (
-        <div
-            className='animated zoomIn fast container-center'
-        >
-            <Card className={classes.card}>
-                {showTitle()}
-                {showKeypadButton()}
-                <div className="mx-2 mb-4 text-center">
-                    <SafeEnvironmentMsg />
-                </div>
-            </Card>
-        </div>
+        <Card style={{maxWidth: 330}} className="animated zoomIn fast">
+            {showTitle()}
+            {showKeypadButton()}
+            <div className="mx-2 mb-4 text-left">
+                <SafeEnvironmentMsg />
+            </div>
+        </Card>
     );
 }
 

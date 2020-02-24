@@ -2,11 +2,13 @@
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 
 <svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
@@ -21,8 +23,26 @@
    height="260"><metadata
    id="metadata103"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-   id="defs101" /><sodipodi:namedview
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
+   id="defs101"><linearGradient
+     id="linearGradient6136"
+     osb:paint="solid"><stop
+       style="stop-color:#8823ec;stop-opacity:1;"
+       offset="0"
+       id="stop6134" /></linearGradient><linearGradient
+     id="linearGradient6012"
+     osb:paint="solid"><stop
+       style="stop-color:#e914c9;stop-opacity:0;"
+       offset="0"
+       id="stop6010" /></linearGradient><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient6136"
+     id="linearGradient6138"
+     x1="0.826446"
+     y1="130.24793"
+     x2="263.63635"
+     y2="130.24793"
+     gradientUnits="userSpaceOnUse" /></defs><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -32,21 +52,21 @@
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
    inkscape:window-width="1440"
-   inkscape:window-height="900"
+   inkscape:window-height="858"
    id="namedview99"
    showgrid="false"
    inkscape:zoom="1.21"
-   inkscape:cx="99.79121"
-   inkscape:cy="297.27273"
-   inkscape:window-x="0"
-   inkscape:window-y="0"
+   inkscape:cx="-60.952592"
+   inkscape:cy="87.276142"
+   inkscape:window-x="-11"
+   inkscape:window-y="-11"
    inkscape:window-maximized="1"
    inkscape:current-layer="Capa_1"
    inkscape:pagecheckerboard="false" />
 
 
 <rect
-   style="fill:#333333;stroke-width:1.31936574"
+   style="fill:url(#linearGradient6138);stroke-width:1.31936574;fill-opacity:1"
    id="rect319"
    width="262.80991"
    height="262.80991"
@@ -80,20 +100,7 @@
 </g>
 
 
-<g
-   id="g66"
-   transform="matrix(1,0,0,0.50301541,-688.43866,105.18978)"
-   style="display:inline;fill:#00ff00">
-	<g
-   id="g64"
-   style="fill:#00ff00">
-		<path
-   d="m 448.003,152.006 h -56 c -4.418,0 -8,3.582 -8,8 v 280 c 0,4.418 3.582,8 8,8 h 56 c 4.418,0 8,-3.582 8,-8 v -280 c 0,-4.418 -3.582,-8 -8,-8 z m -8,280 h -40 v -264 h 40 z"
-   id="path62"
-   inkscape:connector-curvature="0"
-   style="fill:#00ff00" />
-	</g>
-</g>
+
 <g
    id="g68"
    transform="translate(-146.28989,-110.85073)">
@@ -202,16 +209,17 @@
    id="g224"
    style="fill:#00ffff"
    transform="translate(-114.05848,-108.37139)"><text
-     id="text125"
+   id="text125"
+   y="319.67545"
+   x="162.80991"
+   style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#00ffff;fill-opacity:1;stroke:none"
+   xml:space="preserve"><tspan
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:306.66665649px;font-family:Cambria;-inkscape-font-specification:'Cambria, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#00ffff"
      y="319.67545"
      x="162.80991"
-     style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#00ffff;fill-opacity:1;stroke:none"
-     xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:306.66665649px;font-family:Cambria;-inkscape-font-specification:'Cambria, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#00ffff"
-       y="319.67545"
-       x="162.80991"
-       id="tspan123"
-       sodipodi:role="line">F<tspan
+     id="tspan123"
+     sodipodi:role="line">F<tspan
    id="tspan213"
    style="font-size:96px;fill:#00ffff" /></tspan></text>
+
 </g></svg>
