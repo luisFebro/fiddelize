@@ -3,8 +3,8 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer className="container-fluid mt-5 theme-p-dark text-s">
-            <div className="row">
+        <footer className="mt-5 theme-p-dark text-s">
+            <div className="container-center">
                 <div className="col-10 mx-auto text-small text-center py-2 pt-3">
                     <strong>
                         Fiddelize
