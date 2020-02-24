@@ -4,7 +4,6 @@ import AOS from 'aos';
 import parse from 'html-react-parser';
 import PwaInstaller from '../components/pwa-installer/PwaInstaller';
 import { CLIENT_URL } from '../config/clientUrl';
-import { Link } from 'react-router-dom';
 import checkIfElemIsVisible from '../utils/window/checkIfElemIsVisible';
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -33,14 +32,14 @@ export default function DownloadApp({ match, location }) {
     }
 
     const showMainText = () => (
-        <div className="text-left container-center text-title">
+        <div className="text-left text-title">
             <p
                 className={`pl-3 ${isSmall ? "text-center" : "text-left"} text-hero`}
                 style={{lineHeight: 1}}
             >
                 Oi,<br /> {truncate(userName.cap(), isSmall ? 22 : 30)}
             </p>
-            <div className="mx-2">
+            <div className="ml-2">
                 {isFromRegister
                 ? (
                     <Fragment>
@@ -57,11 +56,17 @@ export default function DownloadApp({ match, location }) {
                     </Fragment>
                 ) : (
                     <Fragment>
-                        <p>Para baixar o app da Love Beauty Love</p>
+                        <p>Você foi indicado(a) para baixar o App de pontos de fidelidade da varempresa</p>
                         <ScrollArrow margin={20}/>
-                        <br/>
-                        <br/>
-                        <p>Primeiro faça seu cadastro <Link to="/" style={{fontWeight: 'bold'}}>AQUI.</Link></p>
+                        <p style={styles.margin} data-aos="fade-up">Acompanhe seus pontos em tempo real com um clique!</p>
+                        <ScrollArrow margin={20}/>
+                        <p style={styles.margin} data-aos="fade-up">Deslize e Baixe o app. Você faz seu cadastro por lá.</p>
+                        <div style={{margin: '0 0 500px'}}>
+                            <ScrollArrow margin={30} />
+                            <div id="target">
+                                <ScrollArrow margin={30} />
+                            </div>
+                        </div>
                     </Fragment>
                 )}
             </div>
@@ -73,7 +78,7 @@ export default function DownloadApp({ match, location }) {
             {showMainText()}
             <PwaInstaller
                 title={`<strong>${userName.cap()},<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`}
-                icon={`${CLIENT_URL}/favicon/android-chrome-256x256.png`}
+                icon={`${CLIENT_URL}/icons/android-chrome-256x256.png`}
                 run={run}
             />
         </div>
