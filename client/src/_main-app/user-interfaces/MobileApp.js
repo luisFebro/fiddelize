@@ -31,7 +31,7 @@ export default function Mobile() {
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />
             </Switch>
-            {role === "colaborador" || role === "admin"
+            {role === "admin"
             ? (
                 <SnackbarMulti />
             ) : null}

@@ -1,0 +1,27 @@
+.ellipse {
+    position: relative;
+    top: -20px;
+    left: -50px;
+    height: 7em;
+    width: 24em;
+    z-index: -1;
+
+    border-radius: 50%;
+    background-color: #e84393;
+    border: 3px solid white;
+    box-shadow: inset 0 0 .7em #000;
+}
+
+.ellipse2 {
+    position: relative;
+    top: -20px;
+    left: 190px;
+    height: 1.8em;
+    width: 6em;
+    z-index: -1;
+
+    border-radius: 50%;
+    background-color: #fff;
+    border: 3px solid white;
+    box-shadow: inset 0 0 .3em #000;
+}

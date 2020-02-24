@@ -56,7 +56,7 @@
    id="namedview99"
    showgrid="false"
    inkscape:zoom="1.21"
-   inkscape:cx="-60.952592"
+   inkscape:cx="-133.71901"
    inkscape:cy="87.276142"
    inkscape:window-x="-11"
    inkscape:window-y="-11"
@@ -71,7 +71,10 @@
    width="262.80991"
    height="262.80991"
    x="0.826446"
-   y="-1.1570247" /><g
+   y="-1.1570247"
+   inkscape:export-filename="C:\_github-projects\systems\fiddelize\client\public\icons\mobile-icon-512.png"
+   inkscape:export-xdpi="187.02492"
+   inkscape:export-ydpi="187.02492" /><g
    id="g18"
    transform="translate(-146.28989,-110.85073)">
 	<g
@@ -221,5 +224,6 @@
      sodipodi:role="line">F<tspan
    id="tspan213"
    style="font-size:96px;fill:#00ffff" /></tspan></text>
+
 
 </g></svg>
