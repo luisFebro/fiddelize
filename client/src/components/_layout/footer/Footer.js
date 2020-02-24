@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <footer className="mt-5 theme-p-dark text-s">
             <div className="container-center"> {/*n1*/}
-                <div className="col-12 mx-auto text-small text-center py-2 pt-3">
+                <div className="text-small text-center py-2 pt-3">
                     <strong>
                         Fiddelize
                     </strong>
