@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react';
 import Login from '../components/auth/Login';
 import LoyaltyScoreHandler from './client/loyalty-client-scores';
 import { useStoreState } from 'easy-peasy';
+import { CLIENT_URL } from '../config/clientUrl';
 
 export default function LoginPage() {
     const { currentComp } = useStoreState(state => ({
@@ -36,7 +37,13 @@ export default function LoginPage() {
     return (
         <div style={{color: 'white'}} className="d-flex flex-column-reverse flex-md-row justify-content-center">
             {showMainContent()}
-            <img src="/img/logo.svg" alt="logo" width={300} height={300}/>
+            <img
+                className="img-fluid"
+                src={`${CLIENT_URL}/img/official-logo-white.svg`}
+                alt="logo"
+                width={300}
+                height="auto"
+            />
         </div>
     );
 }

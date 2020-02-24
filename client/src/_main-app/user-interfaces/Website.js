@@ -7,6 +7,11 @@ import Navbar from '../../components/_layout/navbar';
 import Footer from '../../components/_layout/footer/Footer';
 // END LAYOUT
 
+// COMPONENTS
+import SnackbarMulti from '../../components/Snackbar';
+import LinearProgress from '../../components/loadingIndicators/LinearProgress';
+import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
+
 // PAGES
 // import Home from '../../pages/Home';
 // import LoginPage from '../../pages/LoginPage';
@@ -14,14 +19,9 @@ import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import Loadable from 'react-loadable';
-//END PAGES
-
-// COMPONENTS
-import SnackbarMulti from '../../components/Snackbar';
-import LinearProgress from '../../components/loadingIndicators/LinearProgress';
-import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
-
-// it is not working properly...
+import RegulationPage from '../../pages/RegulationPage';
+import DownloadApp from '../../pages/DownloadApp';
+// it is not working properly... Try implement a solution with switch and match to check the current param of the page...
 const Home = Loadable({
     loader: () => import(/* webpackChunkName: "home" */ '../../pages/Home'),
     loading() {
@@ -34,7 +34,7 @@ const LoginPage = Loadable({
         return <div>Loading...</div>
     }
 })
-
+//END PAGES
 
 export default function  Website() {
     const { role } = useStoreState(state => ({
@@ -49,6 +49,8 @@ export default function  Website() {
                 <Route path="/" exact component={Home} />
                 <Route path="/acesso/verificacao" exact component={LoginPage} />
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
+                <Route path="/regulamento/" exact component={RegulationPage} />
+                <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />
             </Switch>

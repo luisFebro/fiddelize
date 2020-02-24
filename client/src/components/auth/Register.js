@@ -199,6 +199,7 @@ function Register() {
                     margin="dense"
                     id="name"
                     name="name"
+                    onBlur={() => setData({ ...data, name: name.cap()})}
                     autoComplete="off"
                     value={name}
                     type="name"

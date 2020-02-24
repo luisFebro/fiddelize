@@ -22,7 +22,7 @@ export default function showVanillaToast(
       className: "toastify",
       fontWeight: 'bolder',
       positionLeft: true,
-      avatar: !options.avatar ? `${CLIENT_URL}/favicon/android-chrome-256x256.png` : options.avatar.includes(".") ? options.avatar : "",
+      avatar: !options.avatar ? `${CLIENT_URL}/icons/android-chrome-256x256.png` : options.avatar.includes(".") ? options.avatar : "",
       close: !options.close ? true : false,
       gravity: options.gravity || "bottom",
       position: options.position || 'left',

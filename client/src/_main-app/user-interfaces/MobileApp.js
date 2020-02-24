@@ -9,6 +9,7 @@ import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import ClientMobileApp from '../../pages/mobile-app/ClientMobileApp';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
+import RegulationPage from '../../pages/RegulationPage';
 //END PAGES
 
 // COMPONENTS
