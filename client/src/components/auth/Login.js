@@ -74,7 +74,7 @@ function Login({ history }) {
     );
 
     return (
-        <Card style={{maxWidth: 330}} className="animated zoomIn fast">
+        <Card style={{maxWidth: 330}} className="animated zoomIn fast mb-5">
             {showTitle()}
             {showKeypadButton()}
             <div className="mx-2 mb-4 text-left">

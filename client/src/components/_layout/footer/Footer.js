@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer style={{position: 'relative', bottom: 0}} className="mt-5 theme-p-dark text-s">
+        <footer style={{position: 'relative', bottom: 0}} className="theme-p-dark text-s">
             <div className="container-center"> {/*n1*/}
                 <div className="text-small text-center py-2 pt-3">
                     <strong>
