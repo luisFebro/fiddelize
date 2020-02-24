@@ -7,7 +7,7 @@
   "scope": ".",
   "categories": ["business", "lifestyle", "utilities"],
   "theme_color": "#000000",
-  "background_color": "#8823ec",
+  "background_color": "#000000",
   "icons": [
     {
       "src": "/icons/android-chrome-192x192.png",
