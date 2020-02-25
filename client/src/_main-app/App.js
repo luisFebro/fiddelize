@@ -30,7 +30,7 @@ export default function App() {
     return (
         <BrowserRouter>
             <ScrollToTop>
-                {isThisApp() ? <MobileApp /> : <Website />}
+                {true ? <MobileApp /> : <Website />}
             </ScrollToTop>
         </BrowserRouter>
     );

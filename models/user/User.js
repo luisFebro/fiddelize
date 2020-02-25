@@ -37,7 +37,7 @@ const data = {
     role: {
         type: String,
         default: "cliente",
-        enum: ["admin", "colaborador", "cliente"]
+        enum: ["admin", "cliente-admin", "cliente"]
     },
     loyaltyScores: LoyaltyScoresSchema,
     staffBookingList: Array, // L

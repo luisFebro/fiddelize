@@ -26,10 +26,10 @@ export default function Home() {
                 />
             </div>
             <h1
-                className="align-item-center text-center text-md-left text-title text-white"
+                className="text-center align-item-center text-md-left text-title text-white"
                 style={{ maxWidth: '700px'}}
             >
-                Pontos de Fidelidade Online<br />para seus Clientes
+                Pontos de Fidelidade Online para seus Clientes
             </h1>
         </section>
     );
@@ -39,7 +39,7 @@ export default function Home() {
             <p
                 data-aos="fade-up"
                 data-aos-duration="1500"
-                className="text-title text-white ml-5"
+                className="ml-4 text-title text-white"
             >
                 Conquiste seus clientes com um sistema flexível<br />onde eles acessam seus pontos com<br />um clique pelo App.
             </p>
@@ -55,7 +55,7 @@ export default function Home() {
 
     return(
         <Fragment>
-            <span className="text-right text-white for-version-test">{"T2"}</span>
+            <span className="text-right text-white for-version-test">{"T3"}</span>
             {showSlogon()}
             <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />

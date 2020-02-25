@@ -1,7 +1,7 @@
 import React, { Fragment, useRef, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Tilt from 'react-tilt'
-import RatingStars from './RatingStars';
+import RatingIcons from './RatingIcons';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { logout } from '../../redux/actions/authActions';
 import { showComponent } from '../../redux/actions/componentActions';
@@ -25,7 +25,6 @@ import "./ellipse.css";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const maxScore = 500;
 function ClientMobileApp({ history }) {
     const userScoreRef = useRef(null);
 
@@ -39,12 +38,22 @@ function ClientMobileApp({ history }) {
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
     }))
 
+    const styles = {
+        percentageCircle: {
+            fontFamily: 'var(--mainFont)',
+            fontSize: 'text-em-1-2',
+            color: 'var(--themeSDark)'
+        }
+    }
+
+    const maxScore = 500;
+
     checkIfElemIsVisible("#rules", setShowMoreBtn)
 
     const dispatch = useStoreDispatch();
 
-    const userScore = loyaltyScores && loyaltyScores.currentScore;
-    const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
+    const userScore = 250; // loyaltyScores && loyaltyScores.currentScore;
+    const userLastScore = "50";//loyaltyScores && loyaltyScores.cashCurrentScore;
 
     useEffect(() => {
         if(isUserAuth && role === "cliente") {
@@ -65,23 +74,20 @@ function ClientMobileApp({ history }) {
     }
 
     const showLogin = () => (
-        <div className="my-5">
-            <div className="mb-3 text-white text-em-2-5 text-center text-default">
-                Faça seu acesso.
-            </div>
-            <div className="margin-auto-60">
+        <div>
+            <div className="container-center">
                 <Login />
             </div>
         </div>
     );
 
     const showGreeting = () => (
-        <section className="position-relative animated slideInLeft slow">
-            <div className="ellipse"></div>
+        <section className="mt-3 position-relative animated slideInLeft slow">
+            <div className="ellipse" style={{backgroundColor: 'var(--themePLight)'}}></div>
             <div
-                style={{position: 'absolute', top: '-5px'}}
-                className="ml-2 mb-2 text-white text-shadow text-em-1-4 text-left text-default">
-                {getDayGreetingBr()},<br/> <span className="text-em-1-8">{userName.cap() + "!"}</span>
+                style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
+                className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
+                {getDayGreetingBr()},<br/> <span className="text-title">{userName.cap() + "!"}</span>
             </div>
         </section>
     );
@@ -89,35 +95,36 @@ function ClientMobileApp({ history }) {
     const showScores = () => {
 
         const displayAllScores = () => (
-            <Fragment>
-                Fidelidômetro:<br/>
+            <div className="text-subtitle">
+                <span className="text-title">Fidelidômetro:</span><br/>
                 <div className="d-flex justify-content-center">
-                    <p ref={userScoreRef}>...</p>
-                    <p className="ml-3">Pontos</p>
+                    <p className="text-title" ref={userScoreRef}>...</p>
+                    <span className="ml-2">Pontos</span>
                 </div>
                 {/*LAST SCORE*/}
                 {userScore === 0 || !userScore || !showPercentage
                  ? null
                  : (
-                    <section className="position-relative animated slideInLeft slow">
+                    <section className="text-normal position-relative animated slideInLeft slow">
                         <div className="ellipse2"></div>
                         <div
                             style={{
                                 zIndex: 10,
-                                color: 'var(--mainPink)',
+                                lineHeight: '1.2em',
+                                color: 'var(--themeP)',
                                 position: 'absolute',
-                                top: '-5px',
-                                left: '220px'}}
-                            className="text-em-0-5 text-nowrap"
+                                top: '-18px',
+                                left: '205px'}}
+                            className="text-em-0-6 text-nowrap"
                         >
-                            Última pontuação:<br />
-                            <span className="text-em-1">
+                            Sua<br />última pontuação:<br />
+                            <span className="text-em-1-3">
                                 <strong>{convertDotToComma(userLastScore)}</strong>
                             </span>
                         </div>
                     </section>
                 )}
-            </Fragment>
+            </div>
         );
 
 
@@ -126,14 +133,26 @@ function ClientMobileApp({ history }) {
                 {userScore >= maxScore
                 ? (
                     <div>
-                        <p>Parabéns!<br />Você ganhou um prêmio.</p>
-                        <img className="animated bounce" style={{animationIterationCount: 20}} src="/img/icons/pink-gift-box.png" alt="presente" width={100} height="auto"/>
+                        <p className="text-title">Parabéns!<br />Você ganhou um prêmio.</p>
+                        <img
+                            className="animated bounce"
+                            style={{animationIterationCount: 20}}
+                            src="/img/icons/pink-gift-box.png"
+                            alt="presente"
+                            width={100}
+                            height="auto"
+                        />
                     </div>
                 ) : (
                     <div>
                         <div className="position-relative mt-4">
                             <img style={{opacity: '.5'}} className="animated bounce" src="/img/icons/pink-gift-box.png" alt="presente" width={100} height="auto"/>
-                            <p className="text-em-2" style={{position: 'absolute', top: '10px', left: '48%'}}>?</p>
+                            <p
+                                className="text-em-2"
+                                style={{position: 'absolute', top: '-10px', left: '45%'}}
+                            >
+                                ?
+                            </p>
                         </div>
                     </div>
                 )}
@@ -152,10 +171,10 @@ function ClientMobileApp({ history }) {
                             <div className="container-center animated zoomIn">
                                 <ReactjsPercentageCircle
                                     percent={getPercentage(maxScore, userScore)}
-                                    color="var(--mainPink)"
-                                    radius={70}
-                                    borderWidth={10}
-                                    textStyle="text-pink text-em-1-2"
+                                    radius={70} /*circle size*/
+                                    borderWidth={16}
+                                    color="var(--themeS)" /*external line color*/
+                                    textStyle={styles.percentageCircle}
                                 />
                             </div>
                         </Tilt>
@@ -179,10 +198,10 @@ function ClientMobileApp({ history }) {
             <div
                 onClick={playBeep}
                 id="rules"
-                className="text-container font-weight-italic text-center"
-                style={{color: "var(--mainPink)", cursor: "pointer"}}
+                className="text-normal font-weight-italic text-center"
+                style={{color: "var(--mainWhite)", cursor: "pointer"}}
             >
-                Consulte<br />as Regras Aqui
+                Consulte<br />Regras Aqui
             </div>
         </Link>
     );
@@ -194,7 +213,7 @@ function ClientMobileApp({ history }) {
                 {
                     icon: <ExitToAppIcon />,
                     name: 'Desconectar',
-                    backColor: 'var(--mainPink)',
+                    backColor: 'var(--themeSDark)',
                     onClick: () => {
                         logout(dispatch);
                         playBeep();
@@ -203,7 +222,7 @@ function ClientMobileApp({ history }) {
                 {
                     icon: <LoyaltyIcon />,
                     name: 'Adicionar Pontos',
-                    backColor: 'var(--mainPink)',
+                    backColor: 'var(--themeSDark)',
                     onClick: () => {
                         showComponent(dispatch, "purchaseValue");
                         history.push("/cliente/pontos-fidelidade");
@@ -219,8 +238,9 @@ function ClientMobileApp({ history }) {
                 tooltipOpen={true}
                 size="large"
                 FabProps={{
-                    backgroundColor: 'var(--mainPink)',
+                    backgroundColor: 'var(--themeSDark)',
                     size: 'medium',
+                    boxShadow: '.5px .5px 3px black', // not working
                 }}
                 root={{
                     bottom: '30px',
@@ -233,24 +253,24 @@ function ClientMobileApp({ history }) {
 
     return (
         <div>
-            <div className="margin-auto-90">
+            <div className="container-center">
                 <img
                     className="animated zoomIn slow"
-                    style={{position: 'absolute', top: '10px', left: isSmall ? '5px' : '20px'}}
+                    style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
                     src={CLIENT_URL + "/img/official-logo-name.png"}
                     alt="Logomarca Principal"
-                    />
+                    width={190}
+                    height="auto"
+                />
             </div>
             <section>
                 {isUserAuth && role === "cliente"
                 ? (
                     <Fragment>
-                        <br/>
-                        <br/>
                         {showGreeting()}
                         {showScores()}
                         <div className="mb-4">
-                            <RatingStars score={userScore} />
+                            <RatingIcons score={userScore} />
                         </div>
                         <div className="mb-4">
                             {showRules()}

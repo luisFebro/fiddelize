@@ -3,11 +3,85 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-RatingStars.propTypes = {
+RatingIcons.propTypes = {
     score: PropTypes.number,
 }
 
-export default function RatingStars({ score }) {
+export default function RatingIcons({ score }) {
+
+    const selectedIcon = "musicalNote";
+
+    const milestoneIcons = {
+        star: {
+            icon: "★"
+        },
+        sun : {
+            icon: "☀",
+        },
+        cake: {
+            icon: "🎂",
+        },
+        halloween: {
+            icon: "🎃",
+        },
+        scissor: {
+            icon: "✂️",
+        },
+        heart: {
+            icon: "❤",
+            fontSize: '45px',
+        },
+        heartValentine: {
+            icon: "💘",
+        },
+        heartWithRibbon: {
+            icon: "💝",
+        },
+        barberPole: {
+            icon: "💈",
+        },
+        bell: {
+            icon: "🔔",
+        },
+        musicalNote: {
+            icon: "🎵",
+        },
+        santa: {
+            icon: "🎅",
+        },
+        circle: {
+            icon: "🌑",
+        },
+        square: {
+            icon: "⬛",
+        },
+        moon: {
+            icon: "🌙",
+        },
+        crown: {
+            icon: "👑",
+        },
+        lightBulb: {
+            icon: "💡",
+        },
+        fire: {
+            icon: "🔥",
+        },
+        smilingFace: {
+            icon: "😊",
+        },
+        smilingFaceHeart: {
+            icon: "😍",
+        },
+        gemStone: {
+            icon: "💎",
+        },
+        rabbit: {
+            icon: "🐰",
+        },
+    }
+
+    const { icon, fontSize } = milestoneIcons[selectedIcon];
 
     const paintStarsForScore = score => {
         let indScore;
@@ -29,7 +103,10 @@ export default function RatingStars({ score }) {
             if(count++ <= indScore) {
                 let selectedStar = document.querySelector("#" + star);
                 const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-                setTimeout(() => selectedStar.style.cssText = "color: #ff0; opacity: 1; transform: rotateX(0deg); text-shadow: 0 0 30px #ffc;", delayToAnimated);
+                setTimeout(() => {
+                        selectedStar.style.fontSize = "80px";
+                        selectedStar.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); text-shadow: 0 0 30px #ffc;`;
+                }, delayToAnimated);
             }
         }
     }
@@ -40,28 +117,30 @@ export default function RatingStars({ score }) {
 
     return (
         <RatingDiv>
-          <span id="star-100">★</span>
-          <span id="star-200">★</span>
-          <span id="star-300">★</span>
-          <span id="star-400">★</span>
-          <span id="star-500">★</span>
+          <span id="star-100">{icon}</span>
+          <span id="star-200">{icon}</span>
+          <span id="star-300">{icon}</span>
+          <span id="star-400">{icon}</span>
+          <span id="star-500">{icon}</span>
         </RatingDiv>
     );
 }
 
 const RatingDiv = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-flow: row nowrap;
     text-align: center;
     perspective: 250px;
     width: 100%;
 
     & span {
+      font-size: 50px;
       cursor: pointer;
-      font-size: 55px;
-      padding: 0 10px;
+      padding: 0 5px;
       color: #fff;
       opacity: .5;
       transition: all 150ms;
-      display: inline-block;
       transform: rotateX(45deg);
       transform-origin: center bottom;
     }

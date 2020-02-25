@@ -18,8 +18,8 @@ export default function HomeButton() {
                         !isThisApp() && logout(dispatch);
                     }}
                     color="var(--mainWhite)"
-                    backgroundColor="var(--mainPink)"
-                    backColorOnHover="var(--mainPink)"
+                    backgroundColor="var(--themeS)"
+                    backColorOnHover="var(--themeS)"
                     textTransform='uppercase'
                 >
                     Voltar

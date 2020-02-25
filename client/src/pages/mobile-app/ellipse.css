@@ -3,7 +3,7 @@
     top: -20px;
     left: -50px;
     height: 7em;
-    width: 24em;
+    width: 23em;
     z-index: -1;
 
     border-radius: 50%;
@@ -16,12 +16,12 @@
     position: relative;
     top: -20px;
     left: 190px;
-    height: 1.8em;
-    width: 6em;
+    height: 2.5em;
+    width: 7em;
     z-index: -1;
 
     border-radius: 50%;
     background-color: #fff;
     border: 3px solid white;
-    box-shadow: inset 0 0 .3em #000;
+    box-shadow: inset 0 0 .15em #000;
 }

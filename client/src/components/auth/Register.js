@@ -305,7 +305,7 @@ function Register() {
                   style={{backgroundColor: 'var(--mainWhite)'}}
                 >
                   <MenuItem value={maritalStatus}>
-                    <span className="text-p" style={{fontFamily: 'Poppins, sans-serif', fontSize: '1.2em'}}>selecione estado civil:</span>
+                    <span className="text-p text-normal" style={{fontSize: isSmall ? '1.1em' : "", fontFamily: 'Poppins, sans-serif'}}>selecione estado civil:</span>
                   </MenuItem>
                   <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
                   <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
@@ -316,12 +316,6 @@ function Register() {
             <SafeEnvironmentMsg />
         </form>
     );
-
-    // const showReCaptcha = () => (
-    //     <div className="container-center mt-3">
-    //         <ReCaptchaCheckbox setToken={setData} data={data} />
-    //     </div>
-    // );
 
     const showButtonActions = () => (
         <div className="container-center">
@@ -343,7 +337,7 @@ function Register() {
     return (
         <Card
             className="animated zoomIn fast svg-elevation"
-            style={{margin: 'auto', width: '97%',  maxWidth: isSmall ? "" : 465, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
+            style={{margin: 'auto', width: '90%',  maxWidth: isSmall ? "" : 465, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
         >
             {showTitle()}
             {showForm()}
@@ -353,10 +347,17 @@ function Register() {
 }
 
 export default React.memo(Register);
-/*
+
+/* ARCHIVES
 <div style={{whiteSpace: 'wrap'}}>
     {JSON.stringify(data)}
 </div>
+
+const showReCaptcha = () => (
+    <div className="container-center mt-3">
+        <ReCaptchaCheckbox setToken={setData} data={data} />
+    </div>
+);
  */
 
 /*

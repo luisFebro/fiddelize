@@ -94,7 +94,7 @@ class ReactjsPercentageCircle extends Component {
             filter: 'drop-shadow(.001em .001em .1em var(--mainDark))'
           }}
         >
-          {this.props.children ? this.props.children : <span className={'text ' + this.props.textStyle}>{this.props.percent}%</span>}
+          {this.props.children ? this.props.children : <span style={this.props.textStyle}>{this.props.percent}%</span>}
         </div>
       </div>
     );
@@ -108,7 +108,7 @@ ReactjsPercentageCircle.propTypes = {
   radius: PropTypes.number,
   percent: PropTypes.number,
   borderWidth: PropTypes.number,
-  textStyle: PropTypes.string,
+  textStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 ReactjsPercentageCircle.defaultProps = {

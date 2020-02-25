@@ -92,7 +92,7 @@ export const logout = (dispatch, needSnackbar = true) => {
     dispatch({ type: 'LOGOUT_SUCCESS' });
     dispatch({ type: 'USER_CLEARED' });
     dispatch({ type: 'ALL_COMPONENTS_CLEARED' });
-    setTimeout(() => needSnackbar && showSnackbar(dispatch, 'Sua sessão foi finalizada com sucesso!', 4000), 2000);
+    setTimeout(() => needSnackbar && showSnackbar(dispatch, 'Sua sessão foi finalizada com sucesso!', 'warning', 4000), 2000);
 };
 
 export const changePassword = async (dispatch, bodyPass, userId) => {

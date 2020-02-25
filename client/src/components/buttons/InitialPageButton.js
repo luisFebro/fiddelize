@@ -12,8 +12,8 @@ export default function InitialPageButton() {
                     title="Voltar"
                     color="var(--mainWhite)"
                     iconFontAwesome="fas fa-home"
-                    backgroundColor="var(--mainPink)"
-                    backColorOnHover="var(--mainPink)"
+                    backgroundColor="var(--themeSDark)"
+                    backColorOnHover="var(--themeSDark)"
                     textTransform='uppercase'
                 />
             </Link>

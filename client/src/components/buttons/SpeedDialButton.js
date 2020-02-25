@@ -24,8 +24,14 @@ const useStyles = makeStyles({
         color: 'var(--mainWhite)',
         backgroundColor: 'var(--mainDark)',
         fontSize: '150px',
-    }
+    },
 });
+
+const styles = {
+    fabIcon: {
+        textShadow: '.5px .5px 3px black',
+    }
+}
 
 export default function SpeedDialButton({
     actions,
@@ -87,7 +93,7 @@ export default function SpeedDialButton({
                               key={action.name}
                               icon={<MultiIconButton backColor={action.backColor} buttonIcon={action.icon} />}
                               tooltipTitle={action.name}
-                              TooltipClasses={classes}
+                              TooltipClasses={classes.tooltip}
                               tooltipPlacement="left"
                               tooltipOpen={tooltipOpen || false}
                               onClick={() => {
