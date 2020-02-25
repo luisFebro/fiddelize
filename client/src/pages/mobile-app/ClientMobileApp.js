@@ -1,7 +1,9 @@
+// 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
 import React, { Fragment, useRef, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Tilt from 'react-tilt'
 import RatingIcons from './RatingIcons';
+import ProgressMsg from './ProgressMsg';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { logout } from '../../redux/actions/authActions';
 import { showComponent } from '../../redux/actions/componentActions';
@@ -52,7 +54,7 @@ function ClientMobileApp({ history }) {
 
     const dispatch = useStoreDispatch();
 
-    const userScore = 250; // loyaltyScores && loyaltyScores.currentScore;
+    const userScore = 805; // loyaltyScores && loyaltyScores.currentScore;
     const userLastScore = "50";//loyaltyScores && loyaltyScores.cashCurrentScore;
 
     useEffect(() => {
@@ -67,11 +69,18 @@ function ClientMobileApp({ history }) {
         }
     }, [role, isUserAuth])
 
-    const playBeep = () => {
-        // Not working
-        const elem = document.querySelector("#appBtn");
-        elem.play();
-    }
+    const showLogo = () => (
+        <div className="container-center">
+            <img
+                className="animated zoomIn slow"
+                style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
+                src={CLIENT_URL + "/img/official-logo-name.png"}
+                alt="Logomarca Principal"
+                width={190}
+                height="auto"
+            />
+        </div>
+    );
 
     const showLogin = () => (
         <div>
@@ -114,19 +123,18 @@ function ClientMobileApp({ history }) {
                                 color: 'var(--themeP)',
                                 position: 'absolute',
                                 top: '-18px',
-                                left: '205px'}}
-                            className="text-em-0-6 text-nowrap"
+                                left: '200px'}}
+                            className="text-em-0-7 text-nowrap font-weight-bold"
                         >
                             Sua<br />última pontuação:<br />
                             <span className="text-em-1-3">
-                                <strong>{convertDotToComma(userLastScore)}</strong>
+                                {convertDotToComma(userLastScore)}
                             </span>
                         </div>
                     </section>
                 )}
             </div>
         );
-
 
         const displayGift = () => (
             <Fragment>
@@ -193,10 +201,19 @@ function ClientMobileApp({ history }) {
 
     };
 
+    const showRatingIcons = () => (
+        <div style={{margin: '40px 0 90px'}}>
+            <RatingIcons score={userScore} />
+            <div>
+                <ProgressMsg userScore={userScore} maxScore={maxScore} />
+            </div>
+        </div>
+    );
+
     const showRules = () => (
         <Link to="/regulamento">
             <div
-                onClick={playBeep}
+                onClick={null} //playBeep
                 id="rules"
                 className="text-normal font-weight-italic text-center"
                 style={{color: "var(--mainWhite)", cursor: "pointer"}}
@@ -232,6 +249,12 @@ function ClientMobileApp({ history }) {
             ]
         }
 
+        function playBeep() {
+            // Not working
+            const elem = document.querySelector("#appBtn");
+            elem.play();
+        }
+
         return(
             <SpeedDialButton
                 actions={speedDial.actions}
@@ -253,32 +276,25 @@ function ClientMobileApp({ history }) {
 
     return (
         <div>
-            <div className="container-center">
-                <img
-                    className="animated zoomIn slow"
-                    style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                    src={CLIENT_URL + "/img/official-logo-name.png"}
-                    alt="Logomarca Principal"
-                    width={190}
-                    height="auto"
-                />
-            </div>
+            {showLogo()}
             <section>
                 {isUserAuth && role === "cliente"
                 ? (
                     <Fragment>
                         {showGreeting()}
                         {showScores()}
-                        <div className="mb-4">
-                            <RatingIcons score={userScore} />
-                        </div>
+                        {showRatingIcons()}
                         <div className="mb-4">
                             {showRules()}
                         </div>
                         {showMoreOptionsBtn()}
                         <audio id="appBtn" src="https://ia601500.us.archive.org/29/items/confirmation-keypad-sound/confirmation-keypad-sound.wav"></audio>
                     </Fragment>
-                ) : showLogin()}
+                ) : (
+                    <div style={{margin: '120px 0 0'}}>
+                        {showLogin()}
+                    </div>
+                )}
             </section>
         </div>
     );

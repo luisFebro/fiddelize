@@ -13,7 +13,7 @@ export default function RatingIcons({ score }) {
 
     const milestoneIcons = {
         star: {
-            icon: "★"
+            icon: "fas fa-star" // n1
         },
         sun : {
             icon: "☀",
@@ -28,7 +28,7 @@ export default function RatingIcons({ score }) {
             icon: "✂️",
         },
         heart: {
-            icon: "❤",
+            icon: "fas fa-heart",
             fontSize: '45px',
         },
         heartValentine: {
@@ -44,7 +44,7 @@ export default function RatingIcons({ score }) {
             icon: "🔔",
         },
         musicalNote: {
-            icon: "🎵",
+            icon: "fas fa-music",
         },
         santa: {
             icon: "🎅",
@@ -95,7 +95,7 @@ export default function RatingIcons({ score }) {
         else if(score >= 400 && score <= 499.95) { indScore = 3 }
         else if(score >= 500) { indScore = 4 }
 
-        let arrayStarIds = ["star-100", "star-200", "star-300", "star-400", "star-500"];
+        let arrayStarIds = ["icon-100", "icon-200", "icon-300", "icon-400", "icon-500"];
 
         let star;
         let count = 0;
@@ -117,11 +117,11 @@ export default function RatingIcons({ score }) {
 
     return (
         <RatingDiv>
-          <span id="star-100">{icon}</span>
-          <span id="star-200">{icon}</span>
-          <span id="star-300">{icon}</span>
-          <span id="star-400">{icon}</span>
-          <span id="star-500">{icon}</span>
+          <span className={`${icon}`} id="icon-100"></span>
+          <span className={`${icon}`} id="icon-200"></span>
+          <span className={`${icon}`} id="icon-300"></span>
+          <span className={`${icon}`} id="icon-400"></span>
+          <span className={`${icon}`} id="icon-500"></span>
         </RatingDiv>
     );
 }
@@ -153,6 +153,11 @@ const RatingDiv = styled.div`
     }
 `;
 
+
+/* COMMENTS
+n1: the native icons sometimes can demonstrate faitures on displaying the colors in mobile phones.
+Font Awesome is a cross-platform solution for that.
+*/
 
 /* COMMENTS
 LESSON: don't use switch if you are using numbers span. If else if instead.
