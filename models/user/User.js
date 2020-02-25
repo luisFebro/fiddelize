@@ -27,6 +27,10 @@ const dataLoyaltyScores = {
     lastScore: { // backup purpose.
         type: String,
         default: "0"
+    },
+    maxScore: { // this will change to user-admin
+        type: Number,
+        default: 500,
     }
 }
 

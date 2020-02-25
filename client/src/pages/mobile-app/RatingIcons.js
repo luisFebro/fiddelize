@@ -1,5 +1,5 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -7,7 +7,32 @@ RatingIcons.propTypes = {
     score: PropTypes.number,
 }
 
+const Tooltip = ({ target, showLevel, levelNum }) => {
+    const styles = {
+        tooltip: {
+            position: 'absolute',
+            top: '-45px',
+            left: '10px',
+            fontSize: '15px',
+            backgroundColor: 'var(--themeSDark)',
+            fontWeight: 'bold',
+            borderRadius: '15px 15px',
+            padding: '4px 8px',
+            whiteSpace: 'nowrap',
+        }
+    }
+    return(
+        <div
+            className={`animated zoomIn slow text-white text-shadow ${showLevel === target ? 'd-block' : 'd-none'}`}
+            style={styles.tooltip}
+        >
+            Nível {levelNum}
+        </div>
+    );
+};
+
 export default function RatingIcons({ score }) {
+    const [showLevel, setShowLevel] = useState("");
 
     const selectedIcon = "musicalNote";
 
@@ -115,13 +140,16 @@ export default function RatingIcons({ score }) {
         paintStarsForScore(score);
     }, []);
 
+    const levels = [100, 200, 300, 400, 500];
+
     return (
         <RatingDiv>
-          <span className={`${icon}`} id="icon-100"></span>
-          <span className={`${icon}`} id="icon-200"></span>
-          <span className={`${icon}`} id="icon-300"></span>
-          <span className={`${icon}`} id="icon-400"></span>
-          <span className={`${icon}`} id="icon-500"></span>
+            {levels.map(level => (
+                <section className="position-relative">
+                    <Tooltip target={`icon-${level}`} showLevel={showLevel} levelNum={level.toString().charAt(0)} />
+                    <span className={`${icon}`} onClick={() => setShowLevel(`icon-${level}`)} id={`icon-${level}`}></span>
+                </section>
+            ))}
         </RatingDiv>
     );
 }
@@ -146,7 +174,7 @@ const RatingDiv = styled.div`
     }
 
     & span:hover {
-      color: grey;
+      color: white;
       opacity: 1;
       transform: rotateX(0deg);
       text-shadow: 0 0 30px grey;

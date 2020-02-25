@@ -48,14 +48,14 @@ function ClientMobileApp({ history }) {
         }
     }
 
-    const maxScore = 500;
 
     checkIfElemIsVisible("#rules", setShowMoreBtn)
 
     const dispatch = useStoreDispatch();
 
-    const userScore = 805; // loyaltyScores && loyaltyScores.currentScore;
-    const userLastScore = "50";//loyaltyScores && loyaltyScores.cashCurrentScore;
+    const maxScore = loyaltyScores && loyaltyScores.maxScore;
+    const userScore = loyaltyScores && loyaltyScores.currentScore;
+    const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
     useEffect(() => {
         if(isUserAuth && role === "cliente") {
@@ -202,10 +202,10 @@ function ClientMobileApp({ history }) {
     };
 
     const showRatingIcons = () => (
-        <div style={{margin: '40px 0 90px'}}>
+        <div style={{margin: '40px 0 50px'}}>
             <RatingIcons score={userScore} />
             <div>
-                <ProgressMsg userScore={userScore} maxScore={maxScore} />
+                <ProgressMsg userScore={userScore || 0} maxScore={maxScore || 0} />
             </div>
         </div>
     );

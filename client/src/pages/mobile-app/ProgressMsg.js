@@ -12,7 +12,7 @@ export default function ProgressMsg({ userScore, maxScore }) {
     const currMilestone = getRemainder("tens", userScore);
     const milestoneLeft = eachMilestone - currMilestone;
 
-    const maxLevel = Math.floor(maxScore / 100) + 1;
+    const maxLevel = Math.floor(maxScore / 100);
     let nextLevel = Math.floor(userScore / 100) + 1;
 
     const styles = {
@@ -21,7 +21,7 @@ export default function ProgressMsg({ userScore, maxScore }) {
             transform: 'rotate(18deg)'
         },
         confettiIcon: {
-            fontSize: '25pc',
+            fontSize: '20px',
             fontWeight: 'normal',
         }
     }
@@ -33,13 +33,16 @@ export default function ProgressMsg({ userScore, maxScore }) {
 
 
     return (
-        <div style={{maxWidth: '280px'}} className="ml-5 mt-3 text-normal text-white">
+        <div style={{maxWidth: '290px'}} className="text-center ml-4 mt-3 text-normal text-white">
             <i
                 style={styles.flagIcon}
                 className="fas fa-flag-checkered mr-2"></i>
             {userScore > maxScore
             ? (
-                <span>Linha de chegada alcançada! <i style={styles.confettiIcon}>🎉</i></span>
+                <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
+            ) : !userScore
+            ? (
+              <span></span>
             ) : (
                 <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
             )}
