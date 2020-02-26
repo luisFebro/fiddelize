@@ -9,6 +9,10 @@ import { convertDotToComma, convertCommaToDot } from '../../../utils/numbers/con
 import isInteger from '../../../utils/numbers/isInteger';
 import getMonthNowBr from '../../../utils/dates/getMonthNowBr';
 import { CLIENT_URL } from '../../../config/clientUrl';
+import isThisApp from '../../../utils/window/isThisApp';
+import { showComponent } from "../../../redux/actions/componentActions";
+import { logout } from "../../../redux/actions/authActions";
+import { Link } from 'react-router-dom';
 
 
 ClientScoresPanel.propTypes = {
@@ -17,16 +21,34 @@ ClientScoresPanel.propTypes = {
     valuePaid: PropTypes.string
 }
 
+const styles = {
+    finishButton: {
+        border: 'none',
+        fontWeight: 'bold',
+        fontSize: '1.5em',
+        padding: '25px 35px',
+        borderRadius: '20px',
+        backgroundColor: 'var(--themeSDark)',
+        color: 'var(--mainWhite)',
+        outline: 'none',
+    },
+    crownIcon: {
+        position: 'absolute',
+        top: '185px',
+        left: '218px',
+        fontSize: '2em',
+        transform: 'rotate(20deg)',
+    }
+}
+
 export default function ClientScoresPanel({ success, valuePaid, verification }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
-    const [gotBirthday, setGotBirthday] = useState(false);
     const animatedNumber = useRef(null);
 
-    const { name, userId, loyaltyScores, birthday } = useStoreState(state => ({
+    const { name, userId, loyaltyScores } = useStoreState(state => ({
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
         name: state.userReducer.cases.currentUser.name,
         userId: state.userReducer.cases.currentUser._id,
-        birthday: state.userReducer.cases.currentUser.birthday,
     }))
 
     const dispatch = useStoreDispatch();
@@ -48,7 +70,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     const currentScore = (parseFloat(lastScore) + parseFloat(cashCurrentScore)).toFixed(1);
 
     useEffect(() => {
-        if(success && verification) {
+        if(true) { // success && verification
             animateNumber(
                 animatedNumber.current,
                 0,
@@ -57,9 +79,9 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 setShowTotalPoints
             );
 
-            if(birthday.includes(getMonthNowBr())) {
-                setGotBirthday(true);
-            }
+            // if(birthday.includes(getMonthNowBr())) {
+            //     setGotBirthday(true);
+            // }
 
             const objToSend = {
                 "loyaltyScores.cashCurrentScore": cashCurrentScore,
@@ -72,54 +94,101 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 setTimeout(() => showSnackbar(dispatch, "Opa, sua pontuação foi efetuada com sucesso!", 'success', 11000), 5000);
             })
         }
-    }, [success, verification, birthday])
+    }, [success, verification])
 
-    const showBirthdayMsg = () => (
-        <div className="container-center text-center flex-column">
-            O cliente faz aniversário este mês
-            <img
-                src={`${CLIENT_URL}/img/icons/birthday-cake.svg`}
-                width="128px"
-                height="120px"
-                alt="aniversariante"
+    // This will be moved to client-admin soon.
+    // const showBirthdayMsg = () => (
+    //     <div className="container-center text-center flex-column">
+    //         O cliente faz aniversário este mês
+    //         <img
+    //             src={`${CLIENT_URL}/img/icons/birthday-cake.svg`}
+    //             width="128px"
+    //             height="120px"
+    //             alt="aniversariante"
+    //         />
+    //         <p className="text-default">em: {birthday}</p>
+    //     </div>
+    // );
+
+    // RENDER
+    const showHeader = () => (
+        <div>
+            <span className="text-hero">
+                {name && name.cap()},
+            </span>
+            <Title
+                title="Sua nova pontuação"
+                color="var(--mainWhite)"
+                backgroundColor="var(--themePDark)"
             />
-            <p className="text-default">em: {birthday}</p>
         </div>
     );
 
-    return (
-        success &&
-        <div className="mr-md-5 ml-md-4 mt-5 animated slideInLeft fast">
-            <div style={{minWidth: 300}} className="mx-2">
-                <span className="text-main-container text-em-2-3">
-                    {name && name.cap()},
-                </span>
-                <Title
-                    title="Veja aqui seus Pontos"
-                />
-                <div
-                    className="text-weight-bold text-center text-main-container px-3 pt-5 pb-1"
-                    style={{ color: "var(--mainPink)", backgroundColor: "var(--mainDark)" }}
-                >
-                    <p>Pontuação Anterior:<br />{convertDotToComma(lastScore)}</p>
-                    <p>
-                        <span>Você Ganhou: </span>
-                        <span ref={animatedNumber}>...</span>
-                    </p>
-                    <div
-                        className="animated bounce slow"
-                        style={{
-                            fontSize: '2.0rem',
-                            display: showTotalPoints ? "block" : "none",
-                            animationIterationCount: 4
-                        }}
-                    >
-                        <p>Pontuação Atual:<br />{convertDotToComma(currentScore)}</p>
-                        <p>Volte sempre!</p>
-                        <p>{gotBirthday ? showBirthdayMsg() : null}</p>
-                    </div>
+    const showScores = () => (
+        <div
+            className="text-shadow text-white theme-p-light text-weight-bold text-center text-title pt-5 pb-1"
+        >
+            <section>
+                <p className="ml-2 text-left text-nowrap">&#187; Pontuação Anterior:</p>
+                <p className="text-center text-hero">{convertDotToComma(lastScore)}</p>
+            </section>
+            <section>
+                <p className="ml-2 text-left">&#187; Você Ganhou:</p>
+                <p className="text-center text-hero" ref={animatedNumber}>...</p>
+            </section>
+            <div
+                className="animated bounce slow"
+                style={{
+                    fontSize: '2.0rem',
+                    display: showTotalPoints ? "block" : "none",
+                    animationIterationCount: 4
+                }}
+            >
+                <div>
+                    <p className="ml-2 text-left">&#187; Pontuação Atual:</p>
+                    <p className="text-center text-hero">{convertDotToComma(currentScore)}</p>
                 </div>
+                <section className="postion-relative" style={{margin: '90px 0 20px'}}>
+                    <i className="fas fa-crown" style={styles.crownIcon}></i>
+                    <p className="text-hero">Volte sempre!</p>
+                </section>
             </div>
         </div>
     );
+
+    const showHomeBtn = () => {
+        const title = "Finalizar";
+        const backColorOnHover = "var(--themeSLight)";
+        const backgroundColor = "var(--themeSDark)";
+        return(
+            <Link to={isThisApp() ? "/mobile-app" : "/acesso/verificacao"} style={{textDecoration: "none"}}>
+                <button
+                    className="text-shadow mt-5 pressed-to-left"
+                    style={styles.finishButton}
+                    onClick={() => {
+                        showComponent(dispatch, "login")
+                        !isThisApp() && logout(dispatch);
+                        if(isThisApp()) { window.location.href = `/mobile-app` }
+                    }}
+                    onMouseOver={e => e.target.style.backgroundColor=backColorOnHover}
+                    onMouseOut={e => e.target.style.backgroundColor=backgroundColor}
+                >
+                    {title}
+                </button>
+            </Link>
+        );
+    };
+
+    return (
+        success &&
+            <div style={{maxWidth: 330}} className=" container-center mt-5 animated slideInLeft fast">
+                {showHeader()}
+                {showScores()}
+                {showHomeBtn()}
+        </div>
+    );
 }
+
+/* COMMENTS
+LESSON: <p> is better for aligning texts instead of <span>
+*/

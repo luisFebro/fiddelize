@@ -34,6 +34,8 @@ export default function AsyncAutoCompleteSearch({
     onValueChange,
     noOptionsText,
     backgroundColor,
+    color,
+    fontSize,
     clearOnEscape = false,
     needUserValueFunc = false,
     freeSolo = false,
@@ -87,15 +89,16 @@ export default function AsyncAutoCompleteSearch({
     const styles = {
         asyncAutoSearch: {
             backgroundColor: backgroundColor || 'var(--mainWhite)',
-            color: 'black',
-            fontSize: '1.4em'
+            color: color || 'black',
+            fontSize: fontSize || '1.4em',
+            fontFamily: 'var(--mainFont)',
         },
         icon: {
-            color: "var(--mainPink)",
+            color: color || 'black',
             transform: 'scale(1.4)'
         },
         loadingIcon: {
-            color: "var(--mainPink)",
+            color: color || "var(--mainPink)",
         }
     }
 

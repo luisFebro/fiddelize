@@ -42,7 +42,7 @@ function Login({ history }) {
                 setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
             if(role === "cliente") {
-                if(true) {
+                if(isThisApp()) {
                     history.push("/mobile-app");
                 } else {
                     showComponent(dispatch, "purchaseValue");
@@ -74,7 +74,7 @@ function Login({ history }) {
     );
 
     return (
-        <Card style={{maxWidth: 330}} className="animated zoomIn fast">
+        <Card style={{maxWidth: 330}} className="animated zoomIn fast card-elevation">
             {showTitle()}
             {showKeypadButton()}
             <div className="mx-2 mb-4 text-left">

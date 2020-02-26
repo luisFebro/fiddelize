@@ -52,7 +52,7 @@ function Navbar({ history, location }) {
                 color: "white",
                 padding: '2px 5px',
                 borderRadius: '20px',
-                backgroundColor: 'var(--mainPink)',
+                backgroundColor: 'var(--themeSDark)',
                 outline: "none"
             }}
             onClick={() => logout(dispatch)}
@@ -76,7 +76,7 @@ function Navbar({ history, location }) {
                     ) : null}
                 </Link>
             ) : (
-                <Fragment>
+                <div className="text-white">
                     {role === "admin" &&
                     <Fragment>
                         <Link to="/admin/painel-de-controle">
@@ -88,15 +88,20 @@ function Navbar({ history, location }) {
                     {role === "colaborador" &&
                     <Fragment>
                         <Link to={`/colaborador/quadro-administrativo/${_idStaff}`}>
-                            Usuário: Colaborador <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                            C-Admin <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
                         </Link>
                         {btnLogout()}
                     </Fragment>}
 
-                    {role === "cliente" && locationNow !== "/" &&
-                        <span>Usuário: Cliente <i className="fas fa-user" style={{fontSize: '1.9rem'}}></i></span>
+                    {role === "cliente" &&
+                        <Fragment>
+                            <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
+                                Cliente <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                            </span>
+                            {btnLogout()}
+                        </Fragment>
                     }
-                </Fragment>
+                </div>
             )}
         </Fragment>
     );

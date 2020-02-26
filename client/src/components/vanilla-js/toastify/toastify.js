@@ -102,7 +102,7 @@
       // Adding an action button to the text.
       if(this.options.needActionBtn) {
         const p = document.createElement("p");
-        p.style.textAlign = 'justify';
+        p.style.textAlign = 'left';
         p.innerHTML = this.options.text
         divElement.appendChild(p);
         const br = document.createElement("br");

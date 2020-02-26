@@ -1,7 +1,7 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
 import React, { Fragment, useRef, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Tilt from 'react-tilt'
+import Tilt from 'react-tilt';
 import RatingIcons from './RatingIcons';
 import ProgressMsg from './ProgressMsg';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';

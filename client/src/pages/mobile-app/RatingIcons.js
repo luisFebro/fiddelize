@@ -147,7 +147,7 @@ export default function RatingIcons({ score }) {
             {levels.map(level => (
                 <section className="position-relative">
                     <Tooltip target={`icon-${level}`} showLevel={showLevel} levelNum={level.toString().charAt(0)} />
-                    <span className={`${icon}`} onClick={() => setShowLevel(`icon-${level}`)} id={`icon-${level}`}></span>
+                    <span className={`${icon} icon`} onClick={() => setShowLevel(`icon-${level}`)} id={`icon-${level}`}></span>
                 </section>
             ))}
         </RatingDiv>
@@ -162,10 +162,10 @@ const RatingDiv = styled.div`
     perspective: 250px;
     width: 100%;
 
-    & span {
+    .icon {
       font-size: 50px;
       cursor: pointer;
-      padding: 0 5px;
+      padding: 0 8px;
       color: #fff;
       opacity: .5;
       transition: all 150ms;
@@ -173,7 +173,7 @@ const RatingDiv = styled.div`
       transform-origin: center bottom;
     }
 
-    & span:hover {
+    .icon:hover {
       color: white;
       opacity: 1;
       transform: rotateX(0deg);

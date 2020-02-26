@@ -336,7 +336,7 @@ function Register() {
 
     return (
         <Card
-            className="animated zoomIn fast svg-elevation"
+            className="animated zoomIn fast card-elevation"
             style={{margin: 'auto', width: '90%',  maxWidth: isSmall ? "" : 465, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
         >
             {showTitle()}
