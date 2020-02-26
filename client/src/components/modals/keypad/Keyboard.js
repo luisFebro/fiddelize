@@ -118,16 +118,15 @@ const GridContainer = styled.div`
         background-color: var(--mainDark);
         padding: 10px;
         font-size: 100%;
-        font-family: var(--mainFont);
     }
 
     & > div {
         background: ${({ myGradient }) => myGradient || `linear-gradient(to right, #16222a, #3a6073)`};
         color: white;
-        font-weight: bolder;
         text-align: center;
         text-shadow: 1px 1px 3px black;
         padding: 10px 0;
+        font-weight: bolder;
         font-size: 2em;
         border-radius: 15px;
     }
