@@ -12,7 +12,7 @@ export default function IconAndTitle({
     return (
         <div
             style={{
-                background: 'linear-gradient(to right, #3a7bd5, #3a6073)',
+                background: 'linear-gradient(to right, var(--themePLight), var(--themePDark))',
                 border: 'solid 4px var(--mainDark)',
                 textAlign: 'center'
             }}
@@ -20,21 +20,19 @@ export default function IconAndTitle({
         >
             <div
                 style={{
-                    borderRight: 'solid 4px var(--mainDark)',
                     width: '15%',
                     margin: '0 5px'
                 }}
-                className="d-flex justify-content-center p-2 mr-2"
+                className="d-flex align-items-center justify-content-center p-2 mr-2"
             >
                 <i
-                    style={{fontSize: '2.8em'}}
+                    style={{fontSize: '2.8em', marginLeft: '5px'}}
                     className={titleIcon}>
                 </i>
             </div>
             <div
                 style={{
-                    fontSize: '2.1em',
-                    fontWeight: 'bolder',
+                    font: 'bolder 2.1em var(--mainFont)',
                     margin: 'auto',
                     width: '80%'
                 }}

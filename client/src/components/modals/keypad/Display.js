@@ -8,8 +8,8 @@ export default function Display({ display }) {
 
     return (
         <div
-            style={{background: 'linear-gradient(to right, #16222a, #3a6073)', fontSize: '2.5em'}}
-            className="text-center text-white font-weight-bold py-1"
+            style={{fontSize: '2.35em', background: 'linear-gradient(to right, var(--themeP), var(--themePDark))'}}
+            className="text-center text-white text-title text-nowrap font-weight-bold py-3"
         >
          {display}
         </div>

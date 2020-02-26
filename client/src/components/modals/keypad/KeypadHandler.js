@@ -20,7 +20,7 @@ NumericKeypad.propTypes = {
 
 const defaultValue = {
     numeric: "0,0",
-    cpf: "Digite 11 dígitos..."
+    cpf: "Digite 11 dígitos"
 }
 export default function NumericKeypad({
     title,
@@ -43,7 +43,7 @@ export default function NumericKeypad({
     };
 
     const handleConfirm = () => {
-      if(display === "Digite 11 dígitos...") return showSnackbar(dispatch, "Por favor, insira seu CPF para acesso", 'error', 6000)
+      if(display === "Digite 11 dígitos") return showSnackbar(dispatch, "Por favor, insira seu CPF para acesso", 'error', 6000)
       if(checkDataBeforeClose(display) && confirmFunction(display)) {
           onClose(display);
       }
