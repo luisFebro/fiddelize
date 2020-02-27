@@ -183,7 +183,7 @@ function ClientMobileApp({ history }) {
                                 <ReactjsPercentageCircle
                                     percent={getPercentage(maxScore, userScore)}
                                     radius={70} /*circle size*/
-                                    borderWidth={16}
+                                    borderWidth={20}
                                     color="var(--themeS)" /*external line color*/
                                     textStyle={styles.percentageCircle}
                                 />
@@ -253,7 +253,7 @@ function ClientMobileApp({ history }) {
                 },
                 {
                     icon: <LocalMallIcon />,
-                    name: 'Histórico ►',
+                    name: 'Seu Histórico ►',
                     backColor: 'var(--themeSDark)',
                     onClick: () => {
                         history.push("/mobile-app");
