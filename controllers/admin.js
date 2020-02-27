@@ -28,7 +28,7 @@ exports.mwPhoto = (req, res, next) => {
 };
 // END MIDDLEWARES
 
-exports.createOrUpdate = (req, res) => {
+exports.createOrUpdate = (req, res) => { // n4
     Admin.findOneAndUpdate(
         { _id: adminId },
         { $set: req.body }, // n3
@@ -215,6 +215,7 @@ n1: You can add or remove any field from businessInfo according to the client ne
 */
 // n1a this is a random id which will be created at first, then just be updated
 // n2 upsert - insert a new doc, if not declared returns null || new - immediately updated! this send the most recently updated response/doc from database to app
+// n4 it is recommendaded to create businessInfo collection at first, then create admin in the first setting.
 // n3 req.body - can update primary keys, if in an object, you need update all other keys, otherwise this happens:
 /*
 "bizDev": {

@@ -19,12 +19,16 @@ SpeedDialButton.propTypes = {
 };
 
 const useStyles = makeStyles({
-    tooltip: {
-        padding: '5px 10px',
+    staticTooltipLabel: {
         color: 'var(--mainWhite)',
-        backgroundColor: 'var(--mainDark)',
-        fontSize: '150px',
+        width: '245px',
+        textAlign: 'center',
+        backgroundColor: 'var(--themeSDark)',
+        font: 'bold 17px var(--mainFont)',
     },
+    staticTooltip: {
+        textShadow: '1px 1px 3px black',
+    }
 });
 
 const styles = {
@@ -65,7 +69,7 @@ export default function SpeedDialButton({
             // justifyContent: 'center',
             // alignItems: 'center',
             // height: 300, // this makes the button to be reallocated
-        }
+        },
     }
 
     return (
@@ -88,21 +92,29 @@ export default function SpeedDialButton({
                 open={isOpen}
             >
                 {isOpen
-                    ? actions.map(action => (
-                          <SpeedDialAction
-                              key={action.name}
-                              icon={<MultiIconButton backColor={action.backColor} buttonIcon={action.icon} />}
-                              tooltipTitle={action.name}
-                              TooltipClasses={classes.tooltip}
-                              tooltipPlacement="left"
-                              tooltipOpen={tooltipOpen || false}
-                              onClick={() => {
-                                  action.onClick();
-                                  handleClose();
-                              }}
-                          />
-                      ))
-                    : null}
+                ? actions.map(action => (
+                    <SpeedDialAction
+                        key={action.name}
+                        icon={<MultiIconButton backColor={action.backColor} buttonIcon={action.icon} />}
+                        tooltipPlacement="left"
+                        tooltipTitle={action.name}
+                        classes={{
+                            staticTooltipLabel: classes.staticTooltipLabel,
+                            staticTooltip: classes.staticTooltip
+                        }}
+                        tooltipOpen={tooltipOpen || false}
+                        delay={0}
+                        onClick={() => {
+                            action.onClick();
+                            handleClose();
+                        }}
+                        FabProps={{
+                            style: {
+                                textShadow: '1px 1px 3px black',
+                            },
+                        }}
+                    />
+                )) : null}
             </SpeedDial>
         </div>
     );

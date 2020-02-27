@@ -36,13 +36,16 @@ function Login({ history }) {
                 setTimeout(() => history.push("/admin/painel-de-controle"), 5000);
                 setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
-            if(role === "colaborador") {
-                setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                setTimeout(() => history.push(`/colaborador/quadro-administrativo/${authUserId}`), 5000);
-                setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
+            if(role === "cliente-admin") {
+
             }
+            // if(role === "colaborador") {
+            //     setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+            //     setTimeout(() => history.push(`/colaborador/quadro-administrativo/${authUserId}`), 5000);
+            //     setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
+            // }
             if(role === "cliente") {
-                if(isThisApp()) {
+                if(true) {
                     history.push("/mobile-app");
                 } else {
                     showComponent(dispatch, "purchaseValue");

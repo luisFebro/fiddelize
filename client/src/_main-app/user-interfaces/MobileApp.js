@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import { useStoreState } from 'easy-peasy';
+
+// LAYOUT
+import Navbar from '../../components/_layout/navbar';
 
 // PAGES
 import Home from '../../pages/Home';
@@ -17,17 +20,25 @@ import SnackbarMulti from '../../components/Snackbar';
 import LinearProgress from '../../components/loadingIndicators/LinearProgress';
 import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 
-export default function Mobile() {
+function Mobile({ location }) {
     const { role } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
     }));
 
+    const locationNow = location.pathname;
+
     return (
         <Fragment>
             <LinearProgress />
+            {!(["/mobile-app", "/acesso/verificacao"]).includes(locationNow)
+            ? (
+                <Navbar />
+            ) : null}
             <Switch>
                 <Route path="/acesso/verificacao" exact component={LoginPage} />
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
+                <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
+                <Route path="/regulamento/" exact component={RegulationPage} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />
             </Switch>
@@ -38,6 +49,8 @@ export default function Mobile() {
         </Fragment>
     );
 }
+
+export default withRouter(Mobile);
 
 /* ARCHIVES
 import ChangePassword from '../../pages/client/ChangePassword';

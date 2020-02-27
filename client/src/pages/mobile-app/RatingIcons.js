@@ -34,7 +34,7 @@ const Tooltip = ({ target, showLevel, levelNum }) => {
 export default function RatingIcons({ score }) {
     const [showLevel, setShowLevel] = useState("");
 
-    const selectedIcon = "musicalNote";
+    const selectedIcon = "heart";
 
     const milestoneIcons = {
         star: {
@@ -145,7 +145,7 @@ export default function RatingIcons({ score }) {
     return (
         <RatingDiv>
             {levels.map(level => (
-                <section className="position-relative">
+                <section className="position-relative" key={level}>
                     <Tooltip target={`icon-${level}`} showLevel={showLevel} levelNum={level.toString().charAt(0)} />
                     <span className={`${icon} icon`} onClick={() => setShowLevel(`icon-${level}`)} id={`icon-${level}`}></span>
                 </section>

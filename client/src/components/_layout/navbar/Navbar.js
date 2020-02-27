@@ -5,6 +5,7 @@ import { logout } from '../../../redux/actions/authActions';
 import { CLIENT_URL } from '../../../config/clientUrl';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import isThisApp from '../../../utils/window/isThisApp';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -45,6 +46,7 @@ function Navbar({ history, location }) {
 
     const btnLogout = () => (
         <button
+            className="text-small text-shadow"
             style={{
                 position: 'absolute',
                 top: '45px',
@@ -95,10 +97,15 @@ function Navbar({ history, location }) {
 
                     {role === "cliente" &&
                         <Fragment>
-                            <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
-                                Cliente <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
-                            </span>
-                            {btnLogout()}
+                            {!isThisApp()
+                            ? (
+                                <div>
+                                    <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
+                                        Cliente <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                                    </span>
+                                    {btnLogout()}
+                                </div>
+                            ) : null}
                         </Fragment>
                     }
                 </div>

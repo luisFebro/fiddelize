@@ -21,6 +21,8 @@ import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import SpeedDialButton from '../../components/buttons/SpeedDialButton';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
+import LocalMallIcon from '@material-ui/icons/LocalMall';
+import ChatIcon from '@material-ui/icons/Chat';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // End SpeedDial and Incons
 import "./ellipse.css";
@@ -229,7 +231,7 @@ function ClientMobileApp({ history }) {
                 //the order rendered is inverse from the bottom to top
                 {
                     icon: <ExitToAppIcon />,
-                    name: 'Desconectar',
+                    name: 'Desconectar ►',
                     backColor: 'var(--themeSDark)',
                     onClick: () => {
                         logout(dispatch);
@@ -237,8 +239,26 @@ function ClientMobileApp({ history }) {
                     }
                 },
                 {
+                    icon: <ChatIcon />,
+                    name: 'Fale Conosco ►',
+                    backColor: 'var(--themeSDark)',
+                    onClick: () => {
+                        history.push("/mobile-app");
+                        playBeep();
+                    },
+                },
+                {
+                    icon: <LocalMallIcon />,
+                    name: 'Histórico de Compras ►',
+                    backColor: 'var(--themeSDark)',
+                    onClick: () => {
+                        history.push("/mobile-app");
+                        playBeep();
+                    },
+                },
+                {
                     icon: <LoyaltyIcon />,
-                    name: 'Adicionar Pontos',
+                    name: 'Adicionar Pontos ►',
                     backColor: 'var(--themeSDark)',
                     onClick: () => {
                         showComponent(dispatch, "purchaseValue");

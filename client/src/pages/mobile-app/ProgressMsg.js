@@ -33,7 +33,7 @@ export default function ProgressMsg({ userScore, maxScore }) {
 
 
     return (
-        <div style={{maxWidth: '290px'}} className="text-center ml-4 mt-3 text-normal text-white">
+        <div style={{maxWidth: '290px'}} className="text-left ml-4 mt-3 text-normal text-white">
             <i
                 style={styles.flagIcon}
                 className="fas fa-flag-checkered mr-2"></i>

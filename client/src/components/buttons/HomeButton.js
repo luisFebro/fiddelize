@@ -21,6 +21,7 @@ export default function HomeButton() {
                     backgroundColor="var(--themeS)"
                     backColorOnHover="var(--themeS)"
                     textTransform='uppercase'
+                    iconFontAwesome={isThisApp() ? "fas fa-home" : ""}
                 >
                     Voltar
                 </ButtonMulti>

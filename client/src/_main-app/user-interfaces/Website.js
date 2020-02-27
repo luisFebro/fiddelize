@@ -17,8 +17,8 @@ import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 // import LoginPage from '../../pages/LoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
-import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import Loadable from 'react-loadable';
+import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
 import DownloadApp from '../../pages/DownloadApp';
 // it is not working properly... Try implement a solution with switch and match to check the current param of the page...

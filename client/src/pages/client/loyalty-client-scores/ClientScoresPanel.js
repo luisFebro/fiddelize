@@ -91,7 +91,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
             updateUser(dispatch, objToSend, userId, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                setTimeout(() => showSnackbar(dispatch, "Opa, sua pontuação foi efetuada com sucesso!", 'success', 11000), 5000);
+                setTimeout(() => showSnackbar(dispatch, "Pontuação registrada!", 'success', 4000), 5000);
             })
         }
     }, [success, verification])
