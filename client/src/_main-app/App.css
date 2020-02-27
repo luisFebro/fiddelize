@@ -184,9 +184,13 @@ sub,sup {
   .text-normal { font: normal 26px 'Poppins', sans-serif; letter-spacing: .01em;}
   .text-small, .text-helper { font: normal 16px 'Poppins', sans-serif; letter-spacing: .01em; }
 }
-
-
 /*end typography*/
+
+/*UTILS*/
+.c-pointer {
+    cursor: pointer;
+}
+
 .text-align {
     text-align: left;
     /*word-spacing: 4px;*/

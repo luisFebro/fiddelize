@@ -55,7 +55,7 @@ function ClientMobileApp({ history }) {
 
     const dispatch = useStoreDispatch();
 
-    const maxScore = loyaltyScores && loyaltyScores.maxScore;
+    const maxScore = 300; //loyaltyScores && loyaltyScores.maxScore;
     const userScore = loyaltyScores && loyaltyScores.currentScore;
     const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
@@ -205,7 +205,6 @@ function ClientMobileApp({ history }) {
 
     const showRatingIcons = () => (
         <div style={{margin: '40px 0 50px'}}>
-            <RatingIcons score={userScore} />
             <div>
                 <ProgressMsg userScore={userScore || 0} maxScore={maxScore || 0} />
             </div>
@@ -322,7 +321,9 @@ function ClientMobileApp({ history }) {
 
 export default withRouter(ClientMobileApp);
 
-/*
+/* ARCHIVES
+<RatingIcons score={userScore} />
+
 {loading
 ? (
     <LoadingThreeDots color="white" />

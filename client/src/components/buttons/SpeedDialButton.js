@@ -103,7 +103,6 @@ export default function SpeedDialButton({
                             staticTooltip: classes.staticTooltip
                         }}
                         tooltipOpen={tooltipOpen || false}
-                        delay={0}
                         onClick={() => {
                             action.onClick();
                             handleClose();

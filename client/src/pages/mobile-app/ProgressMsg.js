@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import getRemainder from '../../utils/numbers/getRemainder';
+import Tooltip from './Tooltip';
 
 ProgressMsg.propTypes = {
     userScore: PropTypes.number,
@@ -8,6 +9,8 @@ ProgressMsg.propTypes = {
 }
 
 export default function ProgressMsg({ userScore, maxScore }) {
+    const [tooltipOpen, setTooltipOpen] = useState(false);
+
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", userScore);
     const milestoneLeft = eachMilestone - currMilestone;
@@ -30,13 +33,21 @@ export default function ProgressMsg({ userScore, maxScore }) {
         nextLevel = maxLevel;
     }
 
-
+    const showFlagWithGoals = () => (
+            <Tooltip
+                title={`Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br />No total, são 5 níveis indicado pelos ícones:<br />${eachMilestone} pontos cada`}
+                element={
+                    <i
+                        style={styles.flagIcon}
+                        className="fas fa-flag-checkered mr-2"
+                    ></i>
+                }
+            />
+    );
 
     return (
-        <div style={{maxWidth: '290px'}} className="text-left ml-4 mt-3 text-normal text-white">
-            <i
-                style={styles.flagIcon}
-                className="fas fa-flag-checkered mr-2"></i>
+        <div style={{maxWidth: '290px'}} className="container-center ml-4 mt-3 text-normal text-white">
+            {showFlagWithGoals()}
             {userScore > maxScore
             ? (
                 <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>

@@ -2,34 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Tooltip from './Tooltip';
 
 RatingIcons.propTypes = {
     score: PropTypes.number,
 }
-
-const Tooltip = ({ target, showLevel, levelNum }) => {
-    const styles = {
-        tooltip: {
-            position: 'absolute',
-            top: '-45px',
-            left: '10px',
-            fontSize: '15px',
-            backgroundColor: 'var(--themeSDark)',
-            fontWeight: 'bold',
-            borderRadius: '15px 15px',
-            padding: '4px 8px',
-            whiteSpace: 'nowrap',
-        }
-    }
-    return(
-        <div
-            className={`animated zoomIn slow text-white text-shadow ${showLevel === target ? 'd-block' : 'd-none'}`}
-            style={styles.tooltip}
-        >
-            Nível {levelNum}
-        </div>
-    );
-};
 
 export default function RatingIcons({ score }) {
     const [showLevel, setShowLevel] = useState("");
@@ -146,7 +123,11 @@ export default function RatingIcons({ score }) {
         <RatingDiv>
             {levels.map(level => (
                 <section className="position-relative" key={level}>
-                    <Tooltip target={`icon-${level}`} showLevel={showLevel} levelNum={level.toString().charAt(0)} />
+                    <Tooltip
+                        title={`Nível ${level.toString()}`}
+                        elemToOpen={`icon-${level}`}
+                        showLevel={showLevel}
+                    />
                     <span className={`${icon} icon`} onClick={() => setShowLevel(`icon-${level}`)} id={`icon-${level}`}></span>
                 </section>
             ))}
