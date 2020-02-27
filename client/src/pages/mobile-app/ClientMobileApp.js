@@ -2,19 +2,17 @@
 import React, { Fragment, useRef, useEffect, useState } from 'react';
 import Login from '../../components/auth/Login';
 import { Link, withRouter } from 'react-router-dom';
-import Tilt from 'react-tilt';
-import ReactjsPercentageCircle from '../../components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle';
+import { useStoreState } from 'easy-peasy';
 // APP COMPONENTS
 import RatingIcons from './RatingIcons';
 import ProgressMsg from './ProgressMsg';
 import MoreOptionsBtn from './MoreOptionsBtn';
 import AllScores from './AllScores';
+import PercCircleAndGift from './PercCircleAndGift';
 // END APP COMPONENTS
-import { useStoreState } from 'easy-peasy';
 // UTILS
 import {CLIENT_URL} from '../../config/clientUrl';
 import animateNumber from '../../utils/numbers/animateNumber';
-import getPercentage from '../../utils/numbers/getPercentage';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
@@ -38,15 +36,6 @@ function ClientMobileApp({ history }) {
         userName: state.userReducer.cases.currentUser.name,
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
     }))
-
-    const styles = {
-        percentageCircle: {
-            fontFamily: 'var(--mainFont)',
-            fontSize: 'text-em-1-2',
-            color: 'var(--themeSDark)'
-        }
-    }
-
 
     checkIfElemIsVisible("#rules", setShowMoreBtn)
 
@@ -117,63 +106,13 @@ function ClientMobileApp({ history }) {
         />
     );
 
-    const showPercCircleAndGift = () => {
-        const displayGift = () => (
-            <div className="shake-it">
-                {userScore >= maxScore
-                ? (
-                    <div>
-                        <p className="mt-3 text-title">Parabéns!<br />Você ganhou um prêmio.</p>
-                        <img
-                            className="animated bounce"
-                            style={{animationIterationCount: 20}}
-                            src="/img/icons/pink-gift-box.png"
-                            alt="presente"
-                            width={100}
-                            height="auto"
-                        />
-                    </div>
-                ) : (
-                    <div>
-                        <div className="position-relative mt-4">
-                            <img style={{opacity: '.5'}} className="animated bounce" src="/img/icons/pink-gift-box.png" alt="presente" width={100} height="auto"/>
-                            <p
-                                className="text-em-2"
-                                style={{position: 'absolute', top: '-10px', left: '45%'}}
-                            >
-                                ?
-                            </p>
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
-
-        return(
-            <div className="my-3 text-white text-center">
-                {showPercentage
-                ? (
-                    <Fragment>
-                        <Tilt
-                            className="Tilt"
-                            options={{ max : 90, reverse: true }}
-                        >
-                            <div className="container-center text-em-2-5 animated zoomIn">
-                                <ReactjsPercentageCircle
-                                    percent={getPercentage(maxScore, userScore)}
-                                    radius={70} /*circle size*/
-                                    borderWidth={20}
-                                    color="var(--themeS)" /*external line color*/
-                                    textStyle={styles.percentageCircle}
-                                />
-                            </div>
-                        </Tilt>
-                        {displayGift()}
-                    </Fragment>
-                ) : null}
-            </div>
-        );
-    };
+    const showPercCircleAndGift = () => (
+        <PercCircleAndGift
+            userScore={userScore}
+            maxScore={maxScore}
+            showPercentage={showPercentage}
+        />
+    );
 
     const showRatingIcons = () => (
         <div style={{margin: '40px 0 50px'}}>
