@@ -163,7 +163,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
         return(
             <Link to={isThisApp() ? "/mobile-app" : "/acesso/verificacao"} style={{textDecoration: "none"}}>
                 <button
-                    className="text-shadow mt-5 pressed-to-left"
+                    className="text-shadow my-5 pressed-to-left"
                     style={styles.finishButton}
                     onClick={() => {
                         showComponent(dispatch, "login")

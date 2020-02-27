@@ -66,17 +66,17 @@ export default function InsertValue({ success, setValuePaid }) {
             <Card className={classes.card}>
                 {showTitle()}
                 <section className="text-p text-normal">
-                    <div className="ml-5 mt-3">
+                    <div className="ml-2 font-weight-bold mt-2">
                         Informe Descrição:
                     </div>
-                    <div className="margin-auto-95">
+                    <div className="mt-3 margin-auto-95">
                         <AddOrSearch
                             autoCompleteUrl= "CHANGE/api/finance/staff/list/names?role=cliente"
                             setSearchData= {setSearchData}
                             searchData= {searchData}
                         />
                     </div>
-                    <div className="ml-5 mt-3">
+                    <div className="ml-2 font-weight-bold mt-5">
                         Insira Valor da Compra:
                     </div>
                     {showKeypadButton()}
