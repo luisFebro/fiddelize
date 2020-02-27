@@ -105,10 +105,7 @@ export default function RatingIcons({ score }) {
             if(count++ <= indScore) {
                 let selectedStar = document.querySelector("#" + star);
                 const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-                setTimeout(() => {
-                        selectedStar.style.fontSize = "80px";
-                        selectedStar.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); text-shadow: 0 0 30px #ffc;`;
-                }, delayToAnimated);
+                setTimeout(() => selectedStar.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); text-shadow: 0 0 30px #ffc;`, delayToAnimated);
             }
         }
     }
@@ -123,11 +120,6 @@ export default function RatingIcons({ score }) {
         <RatingDiv>
             {levels.map(level => (
                 <section className="position-relative" key={level}>
-                    <Tooltip
-                        title={`Nível ${level.toString()}`}
-                        elemToOpen={`icon-${level}`}
-                        showLevel={showLevel}
-                    />
                     <span className={`${icon} icon`} onClick={() => setShowLevel(`icon-${level}`)} id={`icon-${level}`}></span>
                 </section>
             ))}
@@ -162,7 +154,14 @@ const RatingDiv = styled.div`
     }
 `;
 
-
+/*
+<Tooltip
+                        title={`Nível ${level.toString()}`}
+                        elemToOpen={`icon-${level}`}
+                        showLevel={showLevel}
+                    >
+                    </Tooltip>
+ */
 /* COMMENTS
 n1: the native icons sometimes can demonstrate faitures on displaying the colors in mobile phones.
 Font Awesome is a cross-platform solution for that.

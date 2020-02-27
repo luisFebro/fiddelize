@@ -26,6 +26,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // End SpeedDial and Incons
 import "./ellipse.css";
+import "../../keyframes/shake.css";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -139,7 +140,7 @@ function ClientMobileApp({ history }) {
         );
 
         const displayGift = () => (
-            <Fragment>
+            <div className="shake-it">
                 {userScore >= maxScore
                 ? (
                     <div>
@@ -166,7 +167,7 @@ function ClientMobileApp({ history }) {
                         </div>
                     </div>
                 )}
-            </Fragment>
+            </div>
         );
 
         const displayPercentageCircleAndGift = () => (
@@ -205,9 +206,13 @@ function ClientMobileApp({ history }) {
 
     const showRatingIcons = () => (
         <div style={{margin: '40px 0 50px'}}>
-            <div>
-                <ProgressMsg userScore={userScore || 0} maxScore={maxScore || 0} />
-            </div>
+            <RatingIcons score={userScore} />
+            {showPercentage
+            ? (
+                <div>
+                    <ProgressMsg userScore={userScore || 0} maxScore={maxScore || 0} />
+                </div>
+            ) :  null}
         </div>
     );
 
@@ -294,7 +299,7 @@ function ClientMobileApp({ history }) {
     }
 
     return (
-        <div>
+        <div style={{overflowX: 'hidden'}}>
             {showLogo()}
             <section>
                 {isUserAuth && role === "cliente"
@@ -322,8 +327,6 @@ function ClientMobileApp({ history }) {
 export default withRouter(ClientMobileApp);
 
 /* ARCHIVES
-<RatingIcons score={userScore} />
-
 {loading
 ? (
     <LoadingThreeDots color="white" />

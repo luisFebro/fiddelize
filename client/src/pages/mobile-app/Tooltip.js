@@ -23,8 +23,9 @@ const radiusTooltipStyle = makeStyles(theme => ({
         backgroundColor: 'var(--themeSDark)',
         fontWeight: 'bold',
         borderRadius: '15px 15px',
-        padding: '4px 8px',
+        padding: '4px auto',
         whiteSpace: 'nowrap',
+        textShadow: '1px 1px 3px black',
     },
 }));
 

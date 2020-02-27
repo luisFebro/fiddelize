@@ -20,11 +20,14 @@ SpeedDialButton.propTypes = {
 
 const useStyles = makeStyles({
     staticTooltipLabel: {
+        padding: '5px',
         color: 'var(--mainWhite)',
-        width: '245px',
-        textAlign: 'center',
+        width: 'auto',
+        minWidth: '170px',
+        textAlign: 'right',
         backgroundColor: 'var(--themeSDark)',
         font: 'bold 17px var(--mainFont)',
+        borderRadius: '30px',
     },
     staticTooltip: {
         textShadow: '1px 1px 3px black',
