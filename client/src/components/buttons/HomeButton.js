@@ -18,8 +18,8 @@ export default function HomeButton() {
                         !isThisApp() && logout(dispatch);
                     }}
                     color="var(--mainWhite)"
-                    backgroundColor="var(--themeS)"
-                    backColorOnHover="var(--themeS)"
+                    backgroundColor="var(--themeSDark)"
+                    backColorOnHover="var(--themeSDark)"
                     textTransform='uppercase'
                     iconFontAwesome={isThisApp() ? "fas fa-home" : ""}
                 >

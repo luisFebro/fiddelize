@@ -35,7 +35,7 @@ export default function ProgressMsg({ userScore, maxScore }) {
 
     const showFlagWithGoals = () => (
             <Tooltip
-                title={`Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br />No total, são 5 níveis indicado pelos ícones:<br />${eachMilestone} pontos cada`}
+                title={`>► Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
                     <i
                         style={styles.flagIcon}
