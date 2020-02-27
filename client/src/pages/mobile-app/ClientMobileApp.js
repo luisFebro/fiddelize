@@ -253,7 +253,7 @@ function ClientMobileApp({ history }) {
                 },
                 {
                     icon: <LocalMallIcon />,
-                    name: 'Histórico de Compras ►',
+                    name: 'Histórico ►',
                     backColor: 'var(--themeSDark)',
                     onClick: () => {
                         history.push("/mobile-app");
