@@ -342,7 +342,6 @@ function Register() {
             {showTitle()}
             {showForm()}
             {showButtonActions()}
-            {JSON.stringify(data)}
         </Card>
     );
 }
