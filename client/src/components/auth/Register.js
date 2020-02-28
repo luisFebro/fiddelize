@@ -101,6 +101,7 @@ function Register() {
         .then(res => {
             if (res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
             // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
+            clearData();
         });
     };
 
@@ -125,7 +126,6 @@ function Register() {
                     return;
                 }
                 sendEmail(res.data.authUserId);
-                clearData();
 
                 showSnackbar(dispatch, 'Registrando...')
                 // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
@@ -342,6 +342,7 @@ function Register() {
             {showTitle()}
             {showForm()}
             {showButtonActions()}
+            {JSON.stringify(data)}
         </Card>
     );
 }
