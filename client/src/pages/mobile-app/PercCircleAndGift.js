@@ -58,7 +58,7 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage 
             ? (
                 <Fragment>
                     <Tooltip
-                        title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% (${userScore} pontos)</strong> do<br />objetivo até agora.`}
+                        title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}</strong> do<br />objetivo até agora.`}
                         element={
                             <div className="container-center text-em-2-5 animated zoomIn">
                                 <ReactjsPercentageCircle

@@ -98,14 +98,7 @@ function Navbar({ history, location }) {
                     {role === "cliente" &&
                         <Fragment>
                             {!isThisApp()
-                            ? (
-                                <div>
-                                    <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
-                                        Cliente <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
-                                    </span>
-                                    {btnLogout()}
-                                </div>
-                            ) : null}
+                            ? null : null}
                         </Fragment>
                     }
                 </div>
@@ -149,6 +142,16 @@ function Navbar({ history, location }) {
 }
 
 export default withRouter(Navbar); // n1
+
+/* ARCHIVES
+This is not wokring right... I cant seem to log out when clicked i the btn.
+<div>
+    <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
+        Cliente <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+    </span>
+    {btnLogout()}
+</div>
+*/
 
 // STYLES
 const DivWrapper = styled.div`
