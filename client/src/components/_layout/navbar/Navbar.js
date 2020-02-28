@@ -118,7 +118,7 @@ function Navbar({ history, location }) {
     );
 
     const showLogo = () => (
-        <Link to="/">
+        <Link to={isThisApp() ? "/mobile-app" : "/"}>
             <img
                 className="animated zoomIn slow"
                 style={{position: 'absolute', top: '10px', left: isSmall ? '5px' : '20px'}}
