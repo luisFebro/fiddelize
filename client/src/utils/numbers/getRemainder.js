@@ -1,6 +1,6 @@
 // reference: https://stackoverflow.com/questions/20015462/find-out-how-many-thousands-and-hundreds-and-tens-are-there-in-a-amount/38807562
 // get remainder from multiple of ten
-export default function getRemainder(type, targetNumber) {
+export default function getRemainder(type, targetNumber, eachMilestone) {
     //validation
     if(typeof targetNumber !== "number") {
         throw new Error("The second argument should be a number");
@@ -12,7 +12,7 @@ export default function getRemainder(type, targetNumber) {
 
     const metrics = {
         hundreds: 1000,
-        tens: 100,
+        tens: eachMilestone || 100,
         units: 10,
     }
 

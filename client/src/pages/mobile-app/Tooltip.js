@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+// import this to component later!!!
 import {default as TooltipMU} from '@material-ui/core/Tooltip';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Zoom from '@material-ui/core/Zoom';
@@ -75,6 +76,10 @@ export default function Tooltip({
         </ClickAwayListener>
     );
 }
+
+/* COMMENTS
+n1: element only accepts one html tag. If nested, it won't work...
+*/
 
 /* ARCHIVES
  let selectedLogic;

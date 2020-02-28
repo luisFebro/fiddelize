@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import Tilt from 'react-tilt';
 import getPercentage from '../../utils/numbers/getPercentage';
 import { CLIENT_URL } from '../../config/clientUrl';
+import Tooltip from './Tooltip';
 
 const styles = {
     percentageCircle: {
@@ -56,22 +57,22 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage 
             {showPercentage
             ? (
                 <Fragment>
-                    <Tilt
-                        className="Tilt"
-                        options={{ max : 90, reverse: true }}
-                    >
-                        <div className="container-center text-em-2-5 animated zoomIn">
-                            <ReactjsPercentageCircle
-                                percent={getPercentage(maxScore, userScore)}
-                                radius={70} /*circle size*/
-                                borderWidth={20}
-                                color="var(--themeS)" /*external line color*/
-                                textStyle={styles.percentageCircle}
-                            />
-                        </div>
-                    </Tilt>
+                    <Tooltip
+                        title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% (${userScore} pontos)</strong> do<br />objetivo até agora.`}
+                        element={
+                            <div className="container-center text-em-2-5 animated zoomIn">
+                                <ReactjsPercentageCircle
+                                    percent={getPercentage(maxScore, userScore)}
+                                    radius={70} /*circle size*/
+                                    borderWidth={20}
+                                    color="var(--themeS)" /*external line color*/
+                                    textStyle={styles.percentageCircle}
+                                />
+                            </div>
+                        }
+                    />
                     {displayGift()}
-                </Fragment>
+                 </Fragment>
             ) : null}
         </div>
     );

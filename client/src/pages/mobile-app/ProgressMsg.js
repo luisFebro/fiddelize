@@ -16,14 +16,13 @@ const options = {
 }
 
 const attentionBtnChecked = lStorage("getItem", options);
-console.log("attentionBtnChecked", attentionBtnChecked);
 export default function ProgressMsg({ userScore, maxScore }) {
     const eachMilestone = maxScore / 5;
-    const currMilestone = getRemainder("tens", userScore);
+    const currMilestone = getRemainder("tens", userScore, eachMilestone);
     const milestoneLeft = eachMilestone - currMilestone;
 
-    const maxLevel = Math.floor(maxScore / 100);
-    let nextLevel = Math.floor(userScore / 100) + 1;
+    const maxLevel = Math.floor(maxScore / eachMilestone);
+    let nextLevel = Math.floor(userScore / eachMilestone) + 1;
 
     const styles = {
         flagIcon: {

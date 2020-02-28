@@ -6,9 +6,10 @@ import Tooltip from './Tooltip';
 
 RatingIcons.propTypes = {
     score: PropTypes.number,
+    maxScore: PropTypes.number,
 }
 
-export default function RatingIcons({ score }) {
+export default function RatingIcons({ score, maxScore }) {
     const selectedIcon = "heart";
 
     const milestoneIcons = {
@@ -81,17 +82,34 @@ export default function RatingIcons({ score }) {
         },
     }
 
-    const paintStarsForScore = score => {
+    const paintStarsForScore = (score, maxScore) => {
         let indScore;
         if(!score) {
             indScore = -1;
         }
 
-        if(score >= 100 && score <= 199.95) { indScore = 0 } // L
-        else if(score >= 200 && score <= 299.95) { indScore = 1 }
-        else if(score >= 300 && score <= 399.95) { indScore = 2 }
-        else if(score >= 400 && score <= 499.95) { indScore = 3 }
+        const eachMilestone = maxScore / 5;
+        const level1 = eachMilestone;
+        const level2 = eachMilestone * 2;
+        const level3 = eachMilestone * 3;
+        const level4 = eachMilestone * 4;
+        const level5 = eachMilestone * 5;
+        const toLevel2 = level2 - 0.05;
+        const toLevel3 = level3 - 0.05;
+        const toLevel4 = level4 - 0.05;
+        const toLevel5 = level5 - 0.05;
+
+        if(score >= level1 && score <= toLevel2) { indScore = 0 } // L
+        else if(score >= level2 && score <= toLevel3) { indScore = 1 }
+        else if(score >= level3 && score <= toLevel4) { indScore = 2 }
+        else if(score >= level4 && score <= toLevel5) { indScore = 3 }
         else if(score >= 500) { indScore = 4 }
+
+        // if(score >= 100 && score <= 199.95) { indScore = 0 } // L
+        // else if(score >= 200 && score <= 299.95) { indScore = 1 }
+        // else if(score >= 300 && score <= 399.95) { indScore = 2 }
+        // else if(score >= 400 && score <= 499.95) { indScore = 3 }
+        // else if(score >= 500) { indScore = 4 }
 
         let arrayStarIds = ["icon-100", "icon-200", "icon-300", "icon-400", "icon-500"];
 
@@ -107,7 +125,7 @@ export default function RatingIcons({ score }) {
     }
 
     useEffect(() => {
-        paintStarsForScore(score);
+        paintStarsForScore(score, maxScore);
     }, []);
 
     const levels = [100, 200, 300, 400, 500];

@@ -116,7 +116,7 @@ function ClientMobileApp({ history }) {
 
     const showRatingIcons = () => (
         <div style={{margin: '40px 0 50px'}}>
-            <RatingIcons score={userScore} />
+            <RatingIcons score={userScore} maxScore={maxScore || 0} />
             {showPercentage
             ? (
                 <div>
@@ -128,14 +128,17 @@ function ClientMobileApp({ history }) {
 
     const showRules = () => (
         <Link to="/regulamento">
-            <div
-                onClick={playBeep}
-                id="rules"
-                className="text-normal font-weight-italic text-center"
-                style={{color: "var(--mainWhite)", cursor: "pointer"}}
-            >
-                Consulte<br />Regras Aqui
-            </div>
+            {showPercentage
+            ? (
+                <div
+                    onClick={playBeep}
+                    id="rules"
+                    className="text-normal font-weight-italic text-center"
+                    style={{color: "var(--mainWhite)", cursor: "pointer"}}
+                >
+                    Consulte<br />Regras Aqui
+                </div>
+            ) : null}
         </Link>
     );
 
