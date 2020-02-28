@@ -9,16 +9,13 @@ import  '../../keyframes/pulseWaves.css';
 
 Tooltip.propTypes = {
     title: PropTypes.string.isRequired,
-    elemToOpen: PropTypes.any,
-    showLevel: PropTypes.any,
     element: PropTypes.element,
+    needAttentionWaves: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    placement: PropTypes.string,
 }
 
 const radiusTooltipStyle = makeStyles(theme => ({
     tooltip: {
-        position: 'absolute',
-        top: '-85px',
-        left: '-10px',
         fontSize: '15px',
         backgroundColor: 'var(--themeSDark)',
         fontWeight: 'bold',
@@ -29,7 +26,11 @@ const radiusTooltipStyle = makeStyles(theme => ({
     },
 }));
 
-export default function Tooltip({ title, isOpen, elemToOpen, showLevel, element }) {
+export default function Tooltip({
+    title,
+    element,
+    needAttentionWaves,
+    placement }) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
 
@@ -42,21 +43,17 @@ export default function Tooltip({ title, isOpen, elemToOpen, showLevel, element 
     };
 
     const classes = radiusTooltipStyle();
-    let selectedLogic;
-    const logic1 = showLevel === elemToOpen ? 'd-block' : 'd-none';
-    const logic2 = isOpen ? 'd-block' : 'd-none';
-
-    selectedLogic = logic1;
-    if(typeof isOpen === 'boolean') {
-        selectedLogic = logic2;
-    }
 
     return(
         <ClickAwayListener onClickAway={handleTooltipClose}>
             <div className="position-relative c-pointer" onClick={() => setStopWave(true)}>
-                <div className={`${stopWave ? "" : "pulse-waves"}`}>
-                    <span style={{visibility: 'hidden'}}>.</span>
-                </div>
+                {needAttentionWaves
+                ? (
+                    <div className={`${stopWave ? "" : "pulse-waves"}`}>
+                        <span style={{visibility: 'hidden'}}>.</span>
+                    </div>
+                ) : null}
+
                 <TooltipMU
                     title={parse(title)}
                     classes={classes}
@@ -65,10 +62,9 @@ export default function Tooltip({ title, isOpen, elemToOpen, showLevel, element 
                     disableHoverListener
                     disableTouchListener
                     interactive
-                    arrow
                     onClose={handleTooltipClose}
                     open={open}
-                    placement="top"
+                    placement={placement || "top"}
                     TransitionComponent={Zoom}
                     TransitionProps={{ timeout: 200 }}
                     PopperProps={{ disablePortal: true }}
@@ -76,11 +72,17 @@ export default function Tooltip({ title, isOpen, elemToOpen, showLevel, element 
                     {element}
                 </TooltipMU>
             </div>
-
         </ClickAwayListener>
     );
 }
 
 /* ARCHIVES
+ let selectedLogic;
+    const logic1 = showLevel === elemToOpen ? 'd-block' : 'd-none';
+    const logic2 = isOpen ? 'd-block' : 'd-none';
 
+    selectedLogic = logic1;
+    if(typeof isOpen === 'boolean') {
+        selectedLogic = logic2;
+    }
  */

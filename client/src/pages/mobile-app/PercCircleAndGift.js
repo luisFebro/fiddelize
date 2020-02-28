@@ -40,8 +40,8 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage 
                             height="auto"
                         />
                         <p
-                            className="text-em-2"
-                            style={{position: 'absolute', top: '-10px', left: '45%'}}
+                            className="text-hero"
+                            style={{position: 'absolute', top: '5px', left: '45%'}}
                         >
                             ?
                         </p>

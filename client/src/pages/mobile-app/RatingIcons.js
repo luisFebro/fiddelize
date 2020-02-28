@@ -1,5 +1,5 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Tooltip from './Tooltip';
@@ -9,8 +9,6 @@ RatingIcons.propTypes = {
 }
 
 export default function RatingIcons({ score }) {
-    const [showLevel, setShowLevel] = useState("");
-
     const selectedIcon = "heart";
 
     const milestoneIcons = {
@@ -83,8 +81,6 @@ export default function RatingIcons({ score }) {
         },
     }
 
-    const { icon, fontSize } = milestoneIcons[selectedIcon];
-
     const paintStarsForScore = score => {
         let indScore;
         if(!score) {
@@ -116,11 +112,18 @@ export default function RatingIcons({ score }) {
 
     const levels = [100, 200, 300, 400, 500];
 
+    const { icon } = milestoneIcons[selectedIcon];
+
     return (
         <RatingDiv>
             {levels.map(level => (
                 <section className="position-relative" key={level}>
-                    <span className={`${icon} icon`} onClick={() => setShowLevel(`icon-${level}`)} id={`icon-${level}`}></span>
+                    <Tooltip
+                        title={`Nível ${level.toString().charAt(0)}`}
+                        element={
+                            <span className={`${icon} icon`} id={`icon-${level}`}></span>
+                        }
+                    />
                 </section>
             ))}
         </RatingDiv>
@@ -154,14 +157,6 @@ const RatingDiv = styled.div`
     }
 `;
 
-/*
-<Tooltip
-                        title={`Nível ${level.toString()}`}
-                        elemToOpen={`icon-${level}`}
-                        showLevel={showLevel}
-                    >
-                    </Tooltip>
- */
 /* COMMENTS
 n1: the native icons sometimes can demonstrate faitures on displaying the colors in mobile phones.
 Font Awesome is a cross-platform solution for that.

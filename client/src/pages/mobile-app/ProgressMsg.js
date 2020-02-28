@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import getRemainder from '../../utils/numbers/getRemainder';
 import Tooltip from './Tooltip';
+import lStorage from '../../utils/storage/lStorage';
 
 ProgressMsg.propTypes = {
     userScore: PropTypes.number,
     maxScore: PropTypes.number,
 }
 
-export default function ProgressMsg({ userScore, maxScore }) {
-    const [tooltipOpen, setTooltipOpen] = useState(false);
+const options = {
+    collection: "onceChecked",
+    property: "tooltipState",
+    value: true,
+}
 
+const attentionBtnChecked = lStorage("getItem", options);
+console.log("attentionBtnChecked", attentionBtnChecked);
+export default function ProgressMsg({ userScore, maxScore }) {
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", userScore);
     const milestoneLeft = eachMilestone - currMilestone;
@@ -34,7 +41,9 @@ export default function ProgressMsg({ userScore, maxScore }) {
     }
 
     const showFlagWithGoals = () => (
+        <span onClick={() => lStorage("setItem", options)}>
             <Tooltip
+                needAttentionWaves={attentionBtnChecked ? false : true }
                 title={`► Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
                     <i
@@ -43,10 +52,11 @@ export default function ProgressMsg({ userScore, maxScore }) {
                     ></i>
                 }
             />
+        </span>
     );
 
     return (
-        <div style={{maxWidth: '290px'}} className="container-center ml-4 mt-3 text-normal text-white">
+        <div className="container-center mt-3 text-normal text-white">
             {showFlagWithGoals()}
             {userScore > maxScore
             ? (
