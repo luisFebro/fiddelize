@@ -37,6 +37,14 @@ function ClientMobileApp({ history }) {
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
     }))
 
+    const styles = {
+        rulesBtn: {
+            width: '130px',
+            color: "var(--mainWhite)",
+            cursor: "pointer",
+        }
+    }
+
     checkIfElemIsVisible("#rules", setShowMoreBtn)
 
     // const dispatch = useStoreDispatch();
@@ -131,19 +139,24 @@ function ClientMobileApp({ history }) {
     );
 
     const showRules = () => (
-        <Link to="/regulamento">
+        <div>
             {showPercentage
             ? (
                 <div
-                    onClick={playBeep}
                     id="rules"
-                    className="text-normal font-weight-italic text-center"
-                    style={{color: "var(--mainWhite)", cursor: "pointer"}}
+                    className="container-center"
                 >
-                    Consulte<br />Regras Aqui
+                    <Link to="/regulamento">
+                        <div
+                            className="no-text-decoration text-normal text-center pressed-to-left"
+                            onClick={playBeep}
+                            style={styles.rulesBtn}>
+                            Consulte<br />Regras Aqui
+                        </div>
+                    </Link>
                 </div>
             ) : null}
-        </Link>
+        </div>
     );
 
     const showMoreOptionsBtn = () => (
