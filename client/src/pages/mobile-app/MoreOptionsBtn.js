@@ -61,6 +61,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn }) {
     return(
         <SpeedDialButton
             actions={speedDial.actions}
+            onClick={playBeep}
             tooltipOpen={true}
             size="large"
             FabProps={{

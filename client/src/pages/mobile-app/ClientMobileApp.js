@@ -28,7 +28,7 @@ function ClientMobileApp({ history }) {
     const userScoreRef = useRef(null);
 
     const [showMoreBtn, setShowMoreBtn] = useState(false);
-    const [showPercentage, setShowPercentage] = useState(false);
+    const [showPercentage, setShowPercentage] = useState(true);
 
     let { isUserAuth, role, loyaltyScores, userName } = useStoreState(state => ({
         isUserAuth: state.authReducer.cases.isUserAuthenticated,
@@ -59,7 +59,6 @@ function ClientMobileApp({ history }) {
 
     // UTILS
     function playBeep() {
-        // Not working
         const elem = document.querySelector("#appBtn");
         elem.play();
     }
@@ -92,7 +91,7 @@ function ClientMobileApp({ history }) {
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
                 className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
-                {getDayGreetingBr()},<br/> <span className="text-title">{userName.cap() + "!"}</span>
+                {getDayGreetingBr()},<br/> <span className="text-title">{userName && userName.cap() + "!"}</span>
             </div>
         </section>
     );
@@ -111,6 +110,7 @@ function ClientMobileApp({ history }) {
             userScore={userScore}
             maxScore={maxScore}
             showPercentage={showPercentage}
+            playBeep={playBeep}
         />
     );
 
@@ -120,7 +120,11 @@ function ClientMobileApp({ history }) {
             {showPercentage
             ? (
                 <div>
-                    <ProgressMsg userScore={userScore || 0} maxScore={maxScore || 0} />
+                    <ProgressMsg
+                        userScore={userScore || 0}
+                        maxScore={maxScore || 0}
+                        playBeep={playBeep}
+                    />
                 </div>
             ) :  null}
         </div>
@@ -153,7 +157,7 @@ function ClientMobileApp({ history }) {
         <div style={{overflowX: 'hidden'}}>
             {showLogo()}
             <section>
-                {isUserAuth && role === "cliente"
+                {true//isUserAuth && role === "cliente"
                 ? (
                     <Fragment>
                         {showGreeting()}
@@ -164,7 +168,7 @@ function ClientMobileApp({ history }) {
                             {showRules()}
                         </div>
                         {showMoreOptionsBtn()}
-                        <audio id="appBtn" src="https://ia601500.us.archive.org/29/items/confirmation-keypad-sound/confirmation-keypad-sound.wav"></audio>
+                        <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
                     </Fragment>
                 ) : (
                     <div style={{margin: '120px 0 0'}}>

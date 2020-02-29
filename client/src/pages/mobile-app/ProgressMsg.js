@@ -7,6 +7,7 @@ import lStorage from '../../utils/storage/lStorage';
 ProgressMsg.propTypes = {
     userScore: PropTypes.number,
     maxScore: PropTypes.number,
+    playBeep: PropTypes.func,
 }
 
 const options = {
@@ -16,7 +17,8 @@ const options = {
 }
 
 const attentionBtnChecked = lStorage("getItem", options);
-export default function ProgressMsg({ userScore, maxScore }) {
+
+export default function ProgressMsg({ userScore, maxScore, playBeep }) {
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", userScore, eachMilestone);
     const milestoneLeft = eachMilestone - currMilestone;
@@ -40,7 +42,10 @@ export default function ProgressMsg({ userScore, maxScore }) {
     }
 
     const showFlagWithGoals = () => (
-        <span onClick={() => lStorage("setItem", options)}>
+        <span onClick={() => {
+            lStorage("setItem", options);
+            playBeep();
+        }}>
             <Tooltip
                 needAttentionWaves={attentionBtnChecked ? false : true }
                 title={`► Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}

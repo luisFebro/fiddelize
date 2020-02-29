@@ -4,6 +4,7 @@ import Tilt from 'react-tilt';
 import getPercentage from '../../utils/numbers/getPercentage';
 import { CLIENT_URL } from '../../config/clientUrl';
 import Tooltip from './Tooltip';
+import '../../keyframes/zoom.css';
 
 const styles = {
     percentageCircle: {
@@ -13,7 +14,7 @@ const styles = {
     }
 }
 
-export default function PercCircleAndGift({ userScore, maxScore, showPercentage }) {
+export default function PercCircleAndGift({ userScore, maxScore, showPercentage, playBeep }) {
     const displayGift = () => (
         <div className="shake-it">
             {userScore >= maxScore
@@ -56,11 +57,13 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage 
         <div className="my-3 text-white text-center">
             {showPercentage
             ? (
-                <Fragment>
+                <div onClick={playBeep}>
                     <Tooltip
                         title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}</strong> do<br />objetivo até agora.`}
                         element={
-                            <div className="container-center text-em-2-5 animated zoomIn">
+                            <div
+                                className="zoom container-center text-em-2-5 animated zoomIn"
+                            >
                                 <ReactjsPercentageCircle
                                     percent={getPercentage(maxScore, userScore)}
                                     radius={70} /*circle size*/
@@ -72,7 +75,7 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage 
                         }
                     />
                     {displayGift()}
-                 </Fragment>
+                 </div>
             ) : null}
         </div>
     );

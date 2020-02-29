@@ -1,0 +1,39 @@
+.zoom:hover, .zoom:active {
+    z-index: 3000;
+
+    /*-webkit-transition: transform 2s;
+        -ms-transition: transform 2s;
+            transition: transform 2s;*/
+
+    -webkit-transform: scale(1.3);
+        -ms-transform: scale(1.3);
+            transform: scale(1.3);
+}
+
+/*REFERENCE FROM 300 HUNDREDS PROJECT*/
+/*.zoomBeatAnimation, .zoomBeatAnimation {
+    -webkit-animation-name: zoom;
+            animation-name: zoom;
+    -webkit-animation-duration: .6s;
+            animation-duration: .6s;
+}
+
+@-webkit-keyframes zoom {
+    from {
+        -webkit-transform: scale(0);
+    }
+
+    to {
+        -webkit-transform: scale(1);
+    }
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}*/

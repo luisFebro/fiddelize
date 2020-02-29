@@ -16,7 +16,7 @@ export default function lStorage(type, options) {
 
     // Validation
     if(!collection) throw new Error("Insert a collection's name");
-    if(!(["setItem", "getItem"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem or getItem. Check also for typos...")
+    if(!(["setItem", "getItem", "removeItens"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, getItem, removeItens (remove all itens from a collection). Check also for typos...")
     if(!value && type === "setItem" && typeof value !== 'boolean') throw new Error("Insert a value");
     if(notInCollection && type === "getItem") throw new Error("This collection does not exists. You can not get anything...")
     // End Validation
@@ -45,6 +45,11 @@ export default function lStorage(type, options) {
         }
 
         return valueRes;
+    }
+
+    if(type === "removeItens") {
+        localStorage.setItem(collection, JSON.stringify({}))
+        return;
     }
 }
 

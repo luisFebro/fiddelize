@@ -17,6 +17,7 @@ import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
 import detectErrorField from '../../utils/validation/detectErrorField';
 import handleChange from '../../utils/form/use-state/handleChange';
+import lStorage from '../../utils/storage/lStorage';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -130,6 +131,11 @@ function Register() {
                 showSnackbar(dispatch, 'Registrando...')
                 // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
                 setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
+
+                const removalOptions = {
+                    collection: "onceChecked",
+                }
+                lStorage("removeItens", removalOptions);
             })
 
     };
