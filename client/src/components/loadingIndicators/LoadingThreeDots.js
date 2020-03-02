@@ -20,7 +20,7 @@ export default function LoadingThreeDots({ color }) {
         <div className="col-10 mx-auto">
             <DivWrapper>
                 <section className="loading-container" style={styles.text}>
-                    <h2 className="">Carregando</h2>
+                    <h2 className="main-font">Carregando</h2>
                     <div className="spinner">
                         <div style={styles.spinner} className="bounce1"></div>
                         <div style={styles.spinner} className="bounce2"></div>
@@ -41,12 +41,6 @@ const bounceDots = keyframes`
 `;
 
 const DivWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    z-index: 999;
-
     //Three-dot bouncing loading effect
     //Resource: https://codepen.io/danielmorosan/pen/XmYBVx
     .loading-container {

@@ -12,13 +12,13 @@ import PercCircleAndGift from './PercCircleAndGift';
 // END APP COMPONENTS
 // UTILS
 import {CLIENT_URL} from '../../config/clientUrl';
-import animateNumber from '../../utils/numbers/animateNumber';
+import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import "./ellipse.css";
 import "../../keyframes/shake.css";
-// import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
+import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -28,7 +28,7 @@ function ClientMobileApp({ history }) {
     const userScoreRef = useRef(null);
 
     const [showMoreBtn, setShowMoreBtn] = useState(false);
-    const [showPercentage, setShowPercentage] = useState(true);
+    const [showPercentage, setShowPercentage] = useState(false);
 
     let { isUserAuth, role, loyaltyScores, userName } = useStoreState(state => ({
         isUserAuth: state.authReducer.cases.isUserAuthenticated,
@@ -36,6 +36,8 @@ function ClientMobileApp({ history }) {
         userName: state.userReducer.cases.currentUser.name,
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
     }))
+
+    const gotToken = localStorage.getItem("token");
 
     const styles = {
         rulesBtn: {
@@ -49,7 +51,7 @@ function ClientMobileApp({ history }) {
 
     // const dispatch = useStoreDispatch();
 
-    const maxScore = 300; //loyaltyScores && loyaltyScores.maxScore;
+    const maxScore = 630; //loyaltyScores && loyaltyScores.maxScore;
     const userScore = loyaltyScores && loyaltyScores.currentScore;
     const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
@@ -59,7 +61,7 @@ function ClientMobileApp({ history }) {
                 userScoreRef.current,
                 0,
                 userScore,
-                3000,
+                getAnimationDuration(userScore),
                 setShowPercentage
             );
         }
@@ -169,26 +171,34 @@ function ClientMobileApp({ history }) {
     return (
         <div style={{overflowX: 'hidden'}}>
             {showLogo()}
-            <section>
-                {true//isUserAuth && role === "cliente"
-                ? (
-                    <Fragment>
-                        {showGreeting()}
-                        {showAllScores()}
-                        {showPercCircleAndGift()}
-                        {showRatingIcons()}
-                        <div className="mb-4">
-                            {showRules()}
-                        </div>
-                        {showMoreOptionsBtn()}
-                        <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
-                    </Fragment>
-                ) : (
-                    <div style={{margin: '120px 0 0'}}>
-                        {showLogin()}
-                    </div>
-                )}
-            </section>
+            {!gotToken && (
+                <div style={{margin: '120px 0 0'}}>
+                    {showLogin()}
+                </div>
+            )}
+
+            {gotToken && !userName
+            ? (
+                <div style={{margin: '200px 0 0'}}>
+                    <LoadingThreeDots color="white" />
+                </div>
+            ) : (
+                <section>
+                    {role === "cliente" && (
+                        <Fragment>
+                            {showGreeting()}
+                            {showAllScores()}
+                            {showPercCircleAndGift()}
+                            {showRatingIcons()}
+                            <div className="mb-4">
+                                {showRules()}
+                            </div>
+                            {showMoreOptionsBtn()}
+                            <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
+                        </Fragment>
+                    )}
+                </section>
+            )}
         </div>
     );
 }
@@ -196,12 +206,6 @@ function ClientMobileApp({ history }) {
 export default withRouter(ClientMobileApp);
 
 /* ARCHIVES
-{loading
-? (
-    <LoadingThreeDots color="white" />
-) : (
-
-)}
  */
 
 /*

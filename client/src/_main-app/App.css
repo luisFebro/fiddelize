@@ -306,6 +306,14 @@ sub,sup {
 /*END TEXTS*/
 
 /*CONTAINERS*/
+.center-to-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 989;
+}
 .container-center {
     display: flex;
     justify-content: center;

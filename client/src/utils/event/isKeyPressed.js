@@ -3,7 +3,7 @@
 export default function isKeyPressed(event, keyName) {
     const keyTypedNow = event.key;
     const charNumericCode = event.which || event.keyCode; // e.g 13 for Enter.
-    console.log(`The code for ${keyTypedNow.toUpperCase()} is ${charNumericCode}`);
+    //console.log(`The code for ${keyTypedNow.toUpperCase()} is ${charNumericCode}`);
 
     if(!keyName) throw new Error("Oops! It is required a keyName");
 

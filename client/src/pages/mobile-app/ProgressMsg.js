@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import getRemainder from '../../utils/numbers/getRemainder';
 import Tooltip from './Tooltip';
 import lStorage from '../../utils/storage/lStorage';
+import { convertDotToComma } from '../../utils/numbers/convertDotComma';
 
 ProgressMsg.propTypes = {
     userScore: PropTypes.number,
@@ -21,7 +22,7 @@ const attentionBtnChecked = lStorage("getItem", options);
 export default function ProgressMsg({ userScore, maxScore, playBeep }) {
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", userScore, eachMilestone);
-    const milestoneLeft = eachMilestone - currMilestone;
+    const milestoneLeft = convertDotToComma(eachMilestone - currMilestone);
 
     const maxLevel = Math.floor(maxScore / eachMilestone);
     let nextLevel = Math.floor(userScore / eachMilestone) + 1;
@@ -59,9 +60,8 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
         </span>
     );
 
-    return (
-        <div className="container-center mt-3 text-normal text-white">
-            {showFlagWithGoals()}
+    const showMsg = () => (
+        <div className="text-center">
             {userScore > maxScore
             ? (
                 <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
@@ -69,8 +69,20 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
             ? (
               <span></span>
             ) : (
-                <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
+                <span>
+                    {nextLevel === 5
+                    ? <span className="text-left ml-2">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
+                    : <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
+                    }
+                </span>
             )}
+        </div>
+    );
+
+    return (
+        <div className="container-center mt-3 text-normal text-white">
+            {showFlagWithGoals()}
+            {showMsg()}
         </div>
     );
 }
