@@ -6,7 +6,7 @@ import ClientScoresPanel from './ClientScoresPanel';
 import HomeButton from '../../../components/buttons/HomeButton';
 
 export default function LoyaltyScoreHandler() {
-    const [valuePaid, setValuePaid]  = useState("1050");
+    const [valuePaid, setValuePaid]  = useState("0");
     const [verification, setVerification]  = useState(false);
 
     const dispatch = useStoreDispatch();

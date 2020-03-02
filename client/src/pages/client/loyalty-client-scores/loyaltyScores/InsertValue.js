@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import Title from '../../../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStoreDispatch } from 'easy-peasy';
@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const plan = "free";
 export default function InsertValue({ success, setValuePaid }) {
     const [valuePaid, setData] = useState("0,0");
     const [searchData, setSearchData] = useState({
@@ -66,24 +67,29 @@ export default function InsertValue({ success, setValuePaid }) {
             <Card className={classes.card}>
                 {showTitle()}
                 <section className="text-p text-normal">
-                    <div className="ml-2 font-weight-bold mt-2">
-                        Informe Descrição:
-                    </div>
-                    <div className="mt-3 margin-auto-95">
-                        <AddOrSearch
-                            autoCompleteUrl= "CHANGE/api/finance/staff/list/names?role=cliente"
-                            setSearchData= {setSearchData}
-                            searchData= {searchData}
-                        />
-                    </div>
-                    <div className="ml-2 font-weight-bold mt-5">
+                    {plan !== "free" && (
+                        <Fragment>
+                            <div className="ml-2 font-weight-bold mt-2">
+                                Informe Descrição:
+                            </div>
+                            <div className="mt-3 margin-auto-95">
+                                <AddOrSearch
+                                    autoCompleteUrl= "CHANGE/api/finance/staff/list/names?role=cliente"
+                                    setSearchData= {setSearchData}
+                                    searchData= {searchData}
+                                />
+                            </div>
+                        </Fragment>
+                    )}
+                    <div className={`ml-2 font-weight-bold ${plan !== "free" ? "mt-5" : "mt-2"}`}>
                         Insira Valor da Compra:
                     </div>
                     {showKeypadButton()}
-
-                    <div className="text-small ml-2">
-                        *valores serão registrados após validação.
-                    </div>
+                    {plan !== "free" && (
+                        <div className="text-small ml-2">
+                            *valores serão registrados após validação.
+                        </div>
+                    )}
                 </section>
             </Card>
         </div>
