@@ -77,7 +77,8 @@ export default function StaffConf({ success, setVerification }) {
                 error={null}
                 name="pass"
                 value={pass}
-                type="password"
+                type="text"
+                className="dot-font"
                 fullWidth
                 InputProps={{
                   startAdornment: (

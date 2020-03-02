@@ -34,6 +34,22 @@
     /*END GALLERY OF BEST COLORS*/
 }
 
+/*Disable browser password manager especially on Firefox/Chrome*/
+@font-face {
+  font-family: 'dotsfont';
+  src: url('./css/font-faces/dotsfont/dotsfont.eot');
+  src: url('./css/font-faces/dotsfont/dotsfont.eot?#iefix') format('embedded-opentype'),
+       url('./css/font-faces/dotsfont/dotsfont.woff') format('woff'),
+       url('./css/font-faces/dotsfont/dotsfont.ttf') format('truetype'),
+       url('./css/font-faces/dotsfont/dotsfont.svg#dotsfontregular') format('svg');
+}
+
+.dot-font {
+    text-security: disc;
+    -webkit-text-security: disc;
+    font-family: dotsfont;
+}
+
 /*WARNING: replace all font families from the projects after new one insertion in the HTML */
 
 *, :after, :before{
