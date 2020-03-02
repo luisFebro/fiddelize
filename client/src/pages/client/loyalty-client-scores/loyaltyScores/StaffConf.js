@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import Title from '../../../../components/Title';
 import { useStoreDispatch } from 'easy-peasy';
 import TextField from '@material-ui/core/TextField';
@@ -19,9 +19,10 @@ import showVanillaToast from '../../../../components/vanilla-js/toastify/showVan
 StaffConf.propTypes = {
     success: PropTypes.bool,
     setVerification: PropTypes.func,
+    valuePaid: PropTypes.number,
 }
 
-export default function StaffConf({ success, setVerification }) {
+export default function StaffConf({ success, setVerification, valuePaid, desc }) {
     const [data, setData] = useState({
         pass: '',
     })
@@ -53,6 +54,22 @@ export default function StaffConf({ success, setVerification }) {
             showComponent(dispatch, 'clientScoresPanel')
         })
     };
+
+    const showCheckSummary = () => (
+        <div className="d-flex align-content-start ml-3">
+            <p className="text-subtitle">&#187; <strong>Conferir:</strong>
+                {desc
+                ? (
+                    <Fragment>
+                        <br />
+                        <span className="text-normal text-break"><strong>• Descrição: </strong>{!desc ? "Nenhuma" : desc}</span>
+                    </Fragment>
+                ) : null}
+                <br />
+                <span className="text-normal"><strong>• Valor da Compra: </strong><span className="text-title">R$ {valuePaid}</span></span>
+            </p>
+        </div>
+    );
 
     const showTitle = () => (
         <Title
@@ -111,10 +128,11 @@ export default function StaffConf({ success, setVerification }) {
 
     return (
         <div
-            className='animated slideInLeft fast container-center mt-5'
+            className='container-center mt-4'
         >
+            {showCheckSummary()}
             <Card
-                className="text-normal align-self-center"
+                className="animated slideInLeft fast text-normal align-self-center"
                 style={{ maxWidth: 330, backgroundColor: 'var(--themePDark)' }}
             >
                 {showTitle()}

@@ -156,6 +156,7 @@ sub,sup {
 /*TEXT*/
 /*palette colors for texts*/
 /*primary colors*/
+.main-font { font-family: var(--mainFont); }
 .text-p { color: var(--themeP); }
 .text-p-light { color: var(--themePLight); }
 .text-p-dark { color: var(--themePDark); }
