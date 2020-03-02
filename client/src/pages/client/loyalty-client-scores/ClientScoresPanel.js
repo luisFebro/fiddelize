@@ -44,7 +44,6 @@ const styles = {
 
 export default function ClientScoresPanel({ success, valuePaid, verification }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
-    console.log("showTotalPoints", showTotalPoints);
     const animatedNumber = useRef(null);
 
     const { name, userId, loyaltyScores } = useStoreState(state => ({

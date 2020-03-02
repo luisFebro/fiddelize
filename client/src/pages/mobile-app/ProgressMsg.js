@@ -62,7 +62,7 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
 
     const showMsg = () => (
         <div className="text-center">
-            {userScore > maxScore
+            {userScore >= maxScore
             ? (
                 <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
             ) : !userScore

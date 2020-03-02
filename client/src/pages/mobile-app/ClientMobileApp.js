@@ -13,12 +13,14 @@ import PercCircleAndGift from './PercCircleAndGift';
 // UTILS
 import {CLIENT_URL} from '../../config/clientUrl';
 import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
-import getDayGreetingBr from '../../utils/getDayGreetingBr';
-import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import "./ellipse.css";
 import "../../keyframes/shake.css";
 import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
+import { confetti } from '../../keyframes/animations-js/confetti/confetti';
+import getDayGreetingBr from '../../utils/getDayGreetingBr';
+import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
+import lStorage from '../../utils/storage/lStorage';
 // import ImageLogo from '../../components/ImageLogo';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -28,7 +30,7 @@ function ClientMobileApp({ history }) {
     const userScoreRef = useRef(null);
 
     const [showMoreBtn, setShowMoreBtn] = useState(false);
-    const [showPercentage, setShowPercentage] = useState(false);
+    const [showMoreComps, setShowMoreComps] = useState(false);
 
     let { isUserAuth, role, loyaltyScores, userName } = useStoreState(state => ({
         isUserAuth: state.authReducer.cases.isUserAuthenticated,
@@ -55,6 +57,29 @@ function ClientMobileApp({ history }) {
     const userScore = loyaltyScores && loyaltyScores.currentScore;
     const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
+    const options = {
+        collection: "onceChecked",
+        property: "confettiPlay",
+        value: true,
+    }
+
+    useEffect(() => {
+        const playConfettiAgain = lStorage("getItem", options)
+        if(!playConfettiAgain && userScore >= maxScore) {
+            confetti.start();
+            lStorage("setItem", options);
+        } else {
+            if(confetti.isRunning && showMoreComps) {
+                setTimeout(() => confetti.stop(), 5000)
+            }
+        }
+
+        if(playConfettiAgain && userScore <= maxScore) {
+            lStorage("removeOneItem", options); // returns null if no keys were found.
+        }
+
+    }, [maxScore, userScore, showMoreComps]);
+
     useEffect(() => {
         if(isUserAuth && role === "cliente") {
             animateNumber(
@@ -62,7 +87,7 @@ function ClientMobileApp({ history }) {
                 0,
                 userScore,
                 getAnimationDuration(userScore),
-                setShowPercentage
+                setShowMoreComps
             );
         }
     }, [role, isUserAuth])
@@ -110,7 +135,7 @@ function ClientMobileApp({ history }) {
         <AllScores
             userScoreRef={userScoreRef}
             userScore={userScore}
-            showPercentage={showPercentage}
+            showPercentage={showMoreComps}
             userLastScore={userLastScore}
         />
     );
@@ -119,7 +144,7 @@ function ClientMobileApp({ history }) {
         <PercCircleAndGift
             userScore={userScore}
             maxScore={maxScore}
-            showPercentage={showPercentage}
+            showPercentage={showMoreComps}
             playBeep={playBeep}
         />
     );
@@ -127,7 +152,7 @@ function ClientMobileApp({ history }) {
     const showRatingIcons = () => (
         <div style={{margin: '40px 0 50px'}}>
             <RatingIcons score={userScore} maxScore={maxScore || 0} />
-            {showPercentage
+            {showMoreComps
             ? (
                 <div>
                     <ProgressMsg
@@ -142,7 +167,7 @@ function ClientMobileApp({ history }) {
 
     const showRules = () => (
         <div>
-            {showPercentage
+            {showMoreComps
             ? (
                 <div
                     id="rules"

@@ -16,7 +16,7 @@ export default function lStorage(type, options) {
 
     // Validation
     if(!collection) throw new Error("Insert a collection's name");
-    if(!(["setItem", "getItem", "removeItens"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, getItem, removeItens (remove all itens from a collection). Check also for typos...")
+    if(!(["setItem", "getItem", "removeItens", "removeOneItem"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, getItem, removeItens (remove all itens from a collection), removeOneItem (One specific property from a collection). Check also for typos...")
     if(!value && type === "setItem" && typeof value !== 'boolean') throw new Error("Insert a value");
     if(notInCollection && type === "getItem") throw new Error("This collection does not exists. You can not get anything...")
     // End Validation
@@ -50,6 +50,20 @@ export default function lStorage(type, options) {
     if(type === "removeItens") {
         localStorage.setItem(collection, JSON.stringify({}))
         return;
+    }
+
+    if(type === "removeOneItem") {
+        if(notInProperty) {
+            //console.warn(`Property key not found. The ${collection.toUpperCase()} collection got not ${property.toUpperCase()} property`)
+            return null;
+        } else {
+            const objInCollection = JSON.parse(localStorage.getItem(collection));
+
+            delete objInCollection[property];
+
+            localStorage.setItem(collection, JSON.stringify(objInCollection));
+            return;
+        }
     }
 }
 
