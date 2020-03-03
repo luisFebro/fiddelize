@@ -53,7 +53,7 @@ function ClientMobileApp({ history }) {
 
     // const dispatch = useStoreDispatch();
 
-    const maxScore = 500; //loyaltyScores && loyaltyScores.maxScore;
+    const maxScore = loyaltyScores && loyaltyScores.maxScore;
     const userScore = loyaltyScores && loyaltyScores.currentScore;
     const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 

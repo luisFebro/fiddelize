@@ -165,7 +165,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 className="text-shadow my-5 pressed-to-left"
                 style={styles.finishButton}
                 onClick={() => {
-                    if(true) {
+                    if(isThisApp()) {
                         window.location.href = `/mobile-app`
                     } else {
                         showComponent(dispatch, "login")
