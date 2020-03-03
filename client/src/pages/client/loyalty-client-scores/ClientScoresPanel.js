@@ -35,7 +35,7 @@ const styles = {
     },
     crownIcon: {
         position: 'absolute',
-        top: '185px',
+        top: '-45px',
         left: '218px',
         fontSize: '2em',
         transform: 'rotate(20deg)',
@@ -66,9 +66,8 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     let currentScore = parseFloat(lastScore) + parseFloat(cashCurrentScore);
     currentScore = getIntOrFloat(currentScore);
 
-
     useEffect(() => {
-        if(true) { // success && verification
+        if(success && verification) {
             animateNumber(
                 animatedNumber.current,
                 0,
@@ -138,19 +137,18 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 style={{
                     fontSize: '2.0rem',
                     display: showTotalPoints ? "block" : "none",
-                    animationIterationCount: 2
                 }}
             >
                 <div
                     className="animated bounce slow"
                     style={{
-                        animationIterationCount: 2
+                        animationIterationCount: 3
                     }}
                 >
                     <p className="ml-2 text-left">&#187; Pontuação Atual:</p>
                     <p className="text-center text-hero">{convertDotToComma(currentScore)}</p>
                 </div>
-                <section className="postion-relative" style={{margin: '90px 0 20px'}}>
+                <section className="position-relative" style={{margin: '90px 0 20px'}}>
                     <i className="fas fa-crown" style={styles.crownIcon}></i>
                     <p className="text-hero">Volte sempre!</p>
                 </section>
