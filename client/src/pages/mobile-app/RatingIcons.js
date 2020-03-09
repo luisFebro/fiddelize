@@ -11,7 +11,7 @@ RatingIcons.propTypes = {
 }
 
 export default function RatingIcons({ score, maxScore }) {
-    const selectedIcon = "heart";
+    const selectedIcon = "star";
 
     const milestoneIcons = {
         star: {
@@ -120,7 +120,7 @@ export default function RatingIcons({ score, maxScore }) {
             if(count++ <= indScore) {
                 let selectedIcon = document.querySelector("#" + iconInArray);
                 const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-                setTimeout(() => selectedIcon.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); text-shadow: 0 0 30px #ffc;`, delayToAnimated);
+                setTimeout(() => selectedIcon.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); filter: drop-shadow(0 0 30px #ffc);`, delayToAnimated);
             }
         }
     }

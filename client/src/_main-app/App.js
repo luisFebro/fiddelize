@@ -7,7 +7,6 @@ import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
 import '../utils/globalHelpers';
 //STYLING
-// import './App.css';
 import './scss/App.scss';
 import 'aos/dist/aos.css'; // take a look in these libraries to reduce bundle and improve performance.
 import 'bootstrap/dist/css/bootstrap.min.css';

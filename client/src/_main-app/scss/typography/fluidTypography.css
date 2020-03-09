@@ -1,5 +1,5 @@
 /*reference: https://css-tricks.com/snippets/css/fluid-typography - for understanding the math part*/
-/*reference: https://css-tricks.com/snippets/css/fluid-typography - for understanding the math part*/
+.main-font { font-family: 'Poppins', sans-serif; }
 .text-hero { font: normal 60px 'Poppins', sans-serif; letter-spacing: .01em; line-height: 1.2em; }
 .text-title { font: bolder 30px 'Poppins', sans-serif; letter-spacing: .01em; }
 .text-large, .text-subtitle { font: normal 25px 'Poppins', sans-serif; letter-spacing: .01em; }
@@ -25,7 +25,6 @@ LESSON: if you not include the outermost parentheses here: ((100vw - 300px) / (1
  */
 /*ARCHIVES
 $mainFont: 'Poppins', sans-serif;
-.main-font { font-family: $mainFont }
 .text-hero { font: normal 60px; font-family: $mainFont; letter-spacing: .01em; line-height: 1.2em; }
 .text-title { font: bolder 30px; font-family: $mainFont; letter-spacing: .01em; }
 .text-large, .text-subtitle { font: normal 25px; font-family: $mainFont; letter-spacing: .01em; }

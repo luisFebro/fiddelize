@@ -16,7 +16,7 @@ export default function IconAndTitle({
                 border: 'solid 4px var(--mainDark)',
                 textAlign: 'center'
             }}
-            className="d-flex flex-row text-white"
+            className="d-flex flex-row text-white align-items-center"
         >
             <div
                 style={{
@@ -31,13 +31,16 @@ export default function IconAndTitle({
                 </i>
             </div>
             <div
-                style={{
-                    font: 'bolder 2.1em var(--mainFont)',
-                    margin: 'auto',
-                    width: '80%'
-                }}
+                className="text-subtitle font-weight-bold"
             >
-                {title}
+                <span
+                    style={{
+                        margin: 'auto',
+                        width: '80%'
+                    }}
+                >
+                    {title}
+                </span>
             </div>
         </div>
     );

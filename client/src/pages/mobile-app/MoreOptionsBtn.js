@@ -49,6 +49,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                 name: 'Desconectar ►',
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
+                    window.location.href = "/mobile-app";
                     logout(dispatch);
                     playBeep();
                 }
@@ -86,6 +87,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                     element={
                         <Fab
                             style={styles.fabTooltip}
+                            className="float-it-5"
                             size="small"
                             onClick={() => {
                                 showComponent(dispatch, "purchaseValue");

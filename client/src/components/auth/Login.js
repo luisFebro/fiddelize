@@ -82,9 +82,6 @@ function Login({ history }) {
             <div className="my-5">
                 {showKeypadButton()}
             </div>
-             <div style={{font: 'bolder 100px var(--mainFont)'}}>
-                Testing
-            </div>
         </Card>
     );
 }
