@@ -1,0 +1,14 @@
+:root, [primary-theme="default"] {
+    /*purple 900*/
+    --themeP: #4a148c;
+    --themePLight: #7c43bd;
+    --themePDark: #12005e;
+    /*surface (such as cards, sheets, and menus) and background*/
+    --themeSurface: #f7f1e3; /*white variant*/
+    --themeBackground: #4a148c; /*same as primary*/
+    /*on colors - text*/
+    --mainBlack: "black";
+    --mainWhite: #ecf0f1;
+
+}
+

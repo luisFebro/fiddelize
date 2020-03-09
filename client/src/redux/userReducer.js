@@ -1,18 +1,54 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
+import lStorage from '../utils/storage/lStorage';
+import setDbValuesIfOnline from '../utils/storage/setDbValuesIfOnline';
 // You can use only one isntance of object like 'cases' for each object.
 // Check for mispellings in case of one action not being dispatched properly.
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
+let newCollOption = {
+    collection: "userProfile",
+    property: ["role", "name", "maxScore", "currentScore", "lastScore"],
+    value: ["cliente", "Visitante", 500, 0, 0]
+}
+
+lStorage("setItems", newCollOption);
+const userProfile = lStorage("getItems", newCollOption);
+
+const currUserData = {
+    role: null || userProfile.role,
+    name: null || userProfile.name,
+    loyaltyScores: {
+        currentScore: null || userProfile.currentScore,
+        cashCurrentScore: null || userProfile.lastScore,
+    },
+    clientAdminData: {
+        reward: {
+            score: null || userProfile.maxScore, // this will be moved to clientAdminData collection
+        }
+    }
+}
+
 // REDUCERS
 const initialState = {
-    currentUser: {},
+    currentUser: currUserData,
     allUsers: [],
     highestScores: [],
 };
 
 export const userReducer = {
     cases: reducer((state = initialState, action) => {
+        const { role, name, clientAdminData, loyaltyScores } = state.currentUser;
+        const valuesArray = [
+            role,
+            name,
+            clientAdminData.reward.score,
+            loyaltyScores.currentScore,
+            loyaltyScores.cashCurrentScore
+        ];
+
+        setDbValuesIfOnline(newCollOption, valuesArray);
+
         switch (action.type) {
             case 'USER_READ':
                 //Check if user have coupons (If so, the maskot with discount will not appear when user log in)

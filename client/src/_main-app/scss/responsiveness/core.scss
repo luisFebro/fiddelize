@@ -1,0 +1,98 @@
+.center-to-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 989;
+}
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+}
+.container-center-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column wrap;
+}
+.item-align-center {
+    display: flex;
+    align-items: center;
+}
+
+.margin-auto-95 {
+    margin: auto;
+    width: 95%;
+}
+
+.margin-auto-90 {
+    margin: 0 20px;
+    width: 90%;
+}
+.margin-auto-80 {
+    margin: auto;
+    width: 80%;
+}
+.margin-auto-70 {
+    margin: auto;
+    width: 07%;
+}
+.margin-auto-60 {
+    margin: auto;
+    width: 60%;
+}
+@media screen and (min-width: 600px) {
+    .margin-auto-90 {
+        margin: auto;
+        width: 90%;
+    }
+}
+/*END CONTAINERS*/
+
+/*IMAGES*/
+.image-center {
+    max-width: 80%;
+    height: auto;
+}
+
+.image-apresentation {
+    width: 100%;
+    height: auto;
+}
+
+.image-responsive-80 {
+    width: 80%;
+    height: auto;
+}
+/*END IMAGES*/
+
+/*MOBILE FIRST RESPONSIVE MEDIA QUERIES*/
+/*media portrait tablets and large phones || for large devices, use min-width: 992px and up*/
+@media screen and (min-width: 768px) { /*n1*/
+    .image-center {
+        max-width: 60%;
+    }
+
+    .image-apresentation {
+        width: "200px";
+        height: "100px";
+    }
+}
+
+/* COMMENTS
+n1: Bootstrap Reference
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/

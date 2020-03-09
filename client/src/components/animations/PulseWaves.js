@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function CreationPage() {
+export default function PulseWaves() {
     return (
         <div>
-            I am the Creation Page.
+
         </div>
     );
 }

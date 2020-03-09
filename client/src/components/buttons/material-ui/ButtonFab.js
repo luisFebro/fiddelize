@@ -7,6 +7,18 @@ import { buttonFabType } from '../../../types';
 
 ButtonFab.propTypes = buttonFabType;
 
+const handleBtnShadow = (shadowColor, custom) => {
+    if(shadowColor) {
+        return `drop-shadow(.001em .15em .2em ${shadowColor})`;
+    }
+
+    if(custom) {
+        return `drop-shadow(${custom})`;
+    }
+
+    return '';
+}
+
 // NEED CHANGE ICON TO FONT AWESOME TOBE MORE FLEXIBLE
 export default function ButtonFab({
     variant,
@@ -19,6 +31,7 @@ export default function ButtonFab({
     fontSize,
     fontWeight,
     backgroundColor,
+    iconMu,
     iconFontAwesome,
     iconAfterClick,
     iconMarginLeft,
@@ -26,6 +39,7 @@ export default function ButtonFab({
     actionAfterClick,
     onClick,
     shadowColor,
+    shadowColorCustom,
     title }) {
     const [toggle, setToggle] = useState(false);
 
@@ -43,13 +57,17 @@ export default function ButtonFab({
             outline: 'none',
             color: color || 'var(--mainWhite)',
             backgroundColor:  backgroundColor || "#4834d4",
-            filter: shadowColor ? `drop-shadow(.001em .15em .2em ${shadowColor})` : '',
+            filter: handleBtnShadow(shadowColor, shadowColorCustom),
         }
     }
 
     const showIcon = iconFontAwesome => (
         iconFontAwesome &&
         <i style={styles.icon} className={toggle ? iconAfterClick : iconFontAwesome}></i>
+    );
+
+    const showMuIcon = iconMu => (
+        iconMu && (iconMu)
     );
 
     const handleToggle = () => {
@@ -72,6 +90,7 @@ export default function ButtonFab({
             <span className="text-shadow">
                 {title}
                 {showIcon(iconFontAwesome)}
+                {showMuIcon(iconMu)}
             </span>
         </Fab>
     );

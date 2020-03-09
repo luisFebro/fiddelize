@@ -21,7 +21,7 @@ import Loadable from 'react-loadable';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
 import DownloadApp from '../../pages/DownloadApp';
-import CreationPage from '../../pages/app-creation';
+import CreationPage from '../../pages/new-app';
 // it is not working properly... Try implement a solution with switch and match to check the current param of the page...
 const Home = Loadable({
     loader: () => import(/* webpackChunkName: "home" */ '../../pages/Home'),

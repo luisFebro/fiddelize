@@ -7,7 +7,8 @@ import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
 import '../utils/globalHelpers';
 //STYLING
-import './App.css';
+// import './App.css';
+import './scss/App.scss';
 import 'aos/dist/aos.css'; // take a look in these libraries to reduce bundle and improve performance.
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css/animate.min.css';
@@ -30,7 +31,9 @@ export default function App() {
     return (
         <BrowserRouter>
             <ScrollToTop>
-                {isThisApp() ? <MobileApp /> : <Website />}
+                <div primary-theme="default">
+                    {isThisApp() ? <MobileApp /> : <Website />}
+                </div>
             </ScrollToTop>
         </BrowserRouter>
     );

@@ -1,0 +1,16 @@
+/*Disable browser password manager especially on Firefox/Chrome*/
+@font-face {
+  font-family: 'dotsfont';
+  src: url('./types/dotsfont.eot');
+  src: url('./types/dotsfont.eot?#iefix') format('embedded-opentype'),
+       url('./types/dotsfont.woff') format('woff'),
+       url('./types/dotsfont.ttf') format('truetype'),
+       url('./types/dotsfont.svg#dotsfontregular') format('svg');
+}
+
+.dot-font {
+    text-security: disc;
+    -webkit-text-security: disc;
+    font-family: dotsfont;
+}
+/* ????WARNING: replace all font families from the projects after new one insertion in the HTML */

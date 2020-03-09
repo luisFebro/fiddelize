@@ -14,8 +14,32 @@ const dataTempAuthUserToken = {
 const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // END TEMP AUTH USER ID
 
-// TEMP AUTH USER ID
+// LOYALTY SCORES- this will be moved to client
 const dataLoyaltyScores = {
+    cashCurrentScore: {
+        type: String,
+        default: "0"
+    },
+    currentScore: {
+        type: Number,
+        default: 0
+    },
+    lastScore: {
+        type: String,
+        default: "0"
+    },
+    maxScore: {
+        type: Number,
+        default: 500,
+    }
+}
+
+const LoyaltyScoresSchema = new Schema(dataLoyaltyScores, { _id: false });
+// END LOYALTY SCORES
+
+// USER'S ROLES
+// Client User
+const clientUserData = {
     cashCurrentScore: {
         type: String,
         default: "0"
@@ -28,14 +52,72 @@ const dataLoyaltyScores = {
         type: String,
         default: "0"
     },
-    maxScore: { // this will change to user-admin
+    maxScore: { // this will change to client-admin reward: score
         type: Number,
         default: 500,
     }
 }
+const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 
-const LoyaltyScoresSchema = new Schema(dataLoyaltyScores, { _id: false });
-// END TEMP AUTH USER ID
+// Client Admin
+const regulationData = {
+    text: {
+        type: String,
+        trim: true,
+    }
+}
+const RegulationSchema = new Schema(regulationData, { _id: false, timestamps: true });
+const clientAdminData = {
+    biz: {
+        name: {
+            type: String,
+            required: true,
+        },
+        cnpj: String,
+        whatsapp: Number,
+    },
+    reward: {
+        score: {
+            type: Number, // prior maxScore
+            required: true
+        },
+        list: {
+            type: Array,
+            required: true
+        },
+    },
+    regulation: RegulationSchema,
+    theming: {
+        themePColor: String,
+        themeSColor: String,
+    },
+    logoImg: {
+        url: String
+    },
+    app: {
+        downloads: {
+            type: Number,
+            default: 0,
+        }
+    },
+}
+const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
+
+// Client Admin
+const adminData = {
+    subRole: {
+        type: String,
+        default: "salesRep",
+        enum: ["dev", "salesRep", "salesOps"]
+    },
+    payments: {
+        grossIncome: Number,
+        liquidIncome: Number,
+        transitionTax: Number,
+    },
+}
+const AdminDataSchema = new Schema(adminData, { _id: false });
+// END USER'S ROLES
 
 const data = {
     role: {
@@ -43,8 +125,6 @@ const data = {
         default: "cliente",
         enum: ["admin", "cliente-admin", "cliente"]
     },
-    loyaltyScores: LoyaltyScoresSchema,
-    staffBookingList: Array, // L
     name: {
         type: String,
         trim: true,
@@ -76,7 +156,12 @@ const data = {
             type: Boolean,
             default: false,
         }
-    }
+    },
+    loyaltyScores: LoyaltyScoresSchema, // this will be moved to clientUserData...
+    clientUserData: ClientUserDataSchema,
+    clientAdminData: ClientAdminDataSchema,
+    adminData: AdminDataSchema,
+    // staffBookingList: Array, // L
 }
 
 const UserSchema = new Schema(data, { timestamps: true });

@@ -15,12 +15,13 @@ import {CLIENT_URL} from '../../config/clientUrl';
 import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import "./ellipse.css";
-import "../../keyframes/shake.css";
 import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage from '../../utils/storage/lStorage';
+import { confettiPlay } from './lStorageStore';
+
 // import ImageLogo from '../../components/ImageLogo';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -32,12 +33,16 @@ function ClientMobileApp({ history }) {
     const [showMoreBtn, setShowMoreBtn] = useState(false);
     const [showMoreComps, setShowMoreComps] = useState(false);
 
-    let { isUserAuth, role, loyaltyScores, userName } = useStoreState(state => ({
-        isUserAuth: state.authReducer.cases.isUserAuthenticated,
+    let { role, loyaltyScores, userName, clientAdmin } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
         userName: state.userReducer.cases.currentUser.name,
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
+        clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }))
+
+    let maxScore = clientAdmin.reward.score;
+    let userScore = loyaltyScores.currentScore;
+    let userLastScore = loyaltyScores.cashCurrentScore;
 
     const gotToken = localStorage.getItem("token");
 
@@ -53,15 +58,8 @@ function ClientMobileApp({ history }) {
 
     // const dispatch = useStoreDispatch();
 
-    const maxScore = loyaltyScores && loyaltyScores.maxScore;
-    const userScore = loyaltyScores && loyaltyScores.currentScore;
-    const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
-    const options = {
-        collection: "onceChecked",
-        property: "confettiPlay",
-        value: true,
-    }
+    const options = confettiPlay;
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", options)
@@ -81,7 +79,7 @@ function ClientMobileApp({ history }) {
     }, [maxScore, userScore, showMoreComps]);
 
     useEffect(() => {
-        if(isUserAuth && role === "cliente") {
+        if(gotToken && role === "cliente") {
             animateNumber(
                 userScoreRef.current,
                 0,
@@ -90,7 +88,7 @@ function ClientMobileApp({ history }) {
                 setShowMoreComps
             );
         }
-    }, [role, isUserAuth])
+    }, [role, gotToken])
 
     // UTILS
     function playBeep() {
@@ -150,7 +148,7 @@ function ClientMobileApp({ history }) {
     );
 
     const showRatingIcons = () => (
-        <div style={{margin: '40px 0 50px'}}>
+        <div style={{margin: '40px 0 80px'}}>
             <RatingIcons score={userScore} maxScore={maxScore || 0} />
             {showMoreComps
             ? (
@@ -190,6 +188,7 @@ function ClientMobileApp({ history }) {
         <MoreOptionsBtn
             playBeep={playBeep}
             showMoreBtn={showMoreBtn}
+            userName={userName}
         />
     );
 

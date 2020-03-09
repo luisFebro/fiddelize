@@ -121,7 +121,7 @@ function Navbar({ history, location }) {
         <Link to={isThisApp() ? "/mobile-app" : "/"}>
             <img
                 className="animated zoomIn slow"
-                style={{position: 'absolute', top: '10px', left: isSmall ? '5px' : '20px'}}
+                style={{position: 'absolute', top: '12px', left: isSmall ? '5px' : '20px'}}
                 src={CLIENT_URL + "/img/official-logo-name.png"}
                 alt="Logomarca Principal"
                 width="200px"

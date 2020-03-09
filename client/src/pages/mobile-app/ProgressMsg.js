@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import getRemainder from '../../utils/numbers/getRemainder';
 import Tooltip from './Tooltip';
 import lStorage from '../../utils/storage/lStorage';
 import { convertDotToComma } from '../../utils/numbers/convertDotComma';
+import { tooltip1 } from './lStorageStore';
+import { useStoreDispatch } from 'easy-peasy';
+// import { setRun } from '../../redux/actions/globalActions';
 
 ProgressMsg.propTypes = {
     userScore: PropTypes.number,
@@ -11,18 +14,14 @@ ProgressMsg.propTypes = {
     playBeep: PropTypes.func,
 }
 
-const options = {
-    collection: "onceChecked",
-    property: "tooltipState",
-    value: true,
-}
-
+const options = tooltip1;
 const attentionBtnChecked = lStorage("getItem", options);
 
 export default function ProgressMsg({ userScore, maxScore, playBeep }) {
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", userScore, eachMilestone);
     const milestoneLeft = convertDotToComma(eachMilestone - currMilestone);
+    const dispatch = useStoreDispatch();
 
     const maxLevel = Math.floor(maxScore / eachMilestone);
     let nextLevel = Math.floor(userScore / eachMilestone) + 1;
@@ -54,7 +53,7 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
                     <i
                         style={styles.flagIcon}
                         className="fas fa-flag-checkered mr-2"
-                    ></i>
+                    >O</i>
                 }
             />
         </span>
@@ -62,19 +61,22 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
 
     const showMsg = () => (
         <div className="text-center">
-            {userScore >= maxScore
-            ? (
-                <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
-            ) : !userScore
-            ? (
-              <span></span>
-            ) : (
-                <span>
-                    {nextLevel === 5
-                    ? <span className="text-left ml-2">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
-                    : <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
-                    }
-                </span>
+            {!userScore
+            ? null
+            : (
+                <Fragment>
+                    {userScore >= maxScore
+                    ? (
+                        <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
+                    )  : (
+                        <span>
+                            {nextLevel === 5
+                            ? <span className="text-left ml-2">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
+                            : <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
+                            }
+                        </span>
+                    )}
+                </Fragment>
             )}
         </div>
     );
@@ -86,3 +88,6 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
         </div>
     );
 }
+
+/* ARCHIVES
+*/

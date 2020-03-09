@@ -6,7 +6,7 @@ import HomeButton from '../../../components/buttons/HomeButton';
 StaffConfirmation.propTypes = {
     success: PropTypes.bool,
     setVerification: PropTypes.func,
-    valuePaid: PropTypes.number,
+    valuePaid: PropTypes.string,
 }
 
 export default function StaffConfirmation({ success, setVerification, valuePaid }) {

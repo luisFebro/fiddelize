@@ -4,7 +4,6 @@ import Tilt from 'react-tilt';
 import getPercentage from '../../utils/numbers/getPercentage';
 import { CLIENT_URL } from '../../config/clientUrl';
 import Tooltip from './Tooltip';
-import '../../keyframes/zoom.css';
 
 const styles = {
     percentageCircle: {
@@ -63,7 +62,7 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage,
                             title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}</strong> do<br />objetivo até agora.`}
                             element={
                                 <div
-                                    className="zoom container-center text-em-2-5 animated zoomIn"
+                                    className="zoom-it container-center text-em-2-5 animated zoomIn"
                                 >
                                     <ReactjsPercentageCircle
                                         percent={getPercentage(maxScore, userScore)}

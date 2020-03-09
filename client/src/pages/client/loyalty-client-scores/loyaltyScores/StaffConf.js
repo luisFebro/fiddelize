@@ -19,7 +19,7 @@ import showVanillaToast from '../../../../components/vanilla-js/toastify/showVan
 StaffConf.propTypes = {
     success: PropTypes.bool,
     setVerification: PropTypes.func,
-    valuePaid: PropTypes.number,
+    valuePaid: PropTypes.string,
 }
 
 export default function StaffConf({ success, setVerification, valuePaid, desc }) {

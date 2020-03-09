@@ -62,7 +62,6 @@ const getAnimationDuration = score => {
         animaDuration = 1000;
     }
 
-    console.log("animaDuration", animaDuration);
     return animaDuration;
 }
 
