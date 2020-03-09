@@ -1,26 +1,4 @@
 @import 'textUtils';
 @import 'fontSizeEm';
+@import 'fluidTypography';
 
-$mainFont: 'Poppins', sans-serif;
-
-/*reference: https://css-tricks.com/snippets/css/fluid-typography - for understanding the math part*/
-.main-font { font-family: $mainFont }
-.text-hero { font: normal 60px; font-family: $mainFont; letter-spacing: .01em; line-height: 1.2em; }
-.text-title { font: bolder 30px; font-family: $mainFont; letter-spacing: .01em; }
-.text-large, .text-subtitle { font: normal 25px; font-family: $mainFont; letter-spacing: .01em; }
-.text-normal { font: normal 20px; font-family: $mainFont; letter-spacing: .01em;}
-.text-small, .text-helper { font: normal 14px; font-family: $mainFont; letter-spacing: .01em; }
-@media screen and (min-width: 320px) {
-  .text-hero { font: normal calc(60px + (90 - 60) * (100vw - 300px) / (1000 - 300)) $mainFont; letter-spacing: .01em; line-height: 1.2em; }
-  .text-title { font: bolder calc(30px + (45 - 30) * (100vw - 300px) / (1000 - 300)) $mainFont; letter-spacing: .01em; }
-  .text-large, .text-subtitle { font: normal calc(25px + (30 - 25) * (100vw - 300px) / (1000 - 300)) $mainFont; letter-spacing: .01em; }
-  .text-normal { font: normal calc(20px + (26 - 20) * (100vw - 300px) / (1000 - 300)) $mainFont; letter-spacing: .01em;}
-  .text-small { font: normal calc(14px + (16 - 14) * (100vw - 300px) / (1000 - 300)) $mainFont; letter-spacing: .01em;}
-}
-@media screen and (min-width: 1000px) {
-  .text-hero { font: normal 90px; font-family: $mainFont; letter-spacing: .01em; line-height: 1.2em; }
-  .text-title { font: bolder 45px; font-family: $mainFont; letter-spacing: .01em; }
-  .text-large, .text-subtitle { font: normal 30px; font-family: $mainFont; letter-spacing: .01em; }
-  .text-normal { font: normal 26px; font-family: $mainFont; letter-spacing: .01em;}
-  .text-small, .text-helper { font: normal 16px; font-family: $mainFont; letter-spacing: .01em; }
-}
