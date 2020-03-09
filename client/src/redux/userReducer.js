@@ -9,22 +9,22 @@ import { userProfileOp } from '../pages/mobile-app/lStorageStore';
 
 let collOption = userProfileOp;
 if(!isOffline()) {
-    if(lStorage("getItems", collOption) && lStorage("getItems", collOption).role) {
-        lStorage("setItems", collOption);
-    }
+    lStorage("setItems", collOption);
+    // if(lStorage("getItems", collOption) && lStorage("getItems", collOption).role) {
+    // }
 }
 const userData = lStorage("getItems", collOption);
 
 const currUserData = {
-    role: null || userData.role,
-    name: null || userData.name,
+    role: undefined || userData.role,
+    name: undefined || userData.name,
     loyaltyScores: {
-        currentScore: null || userData.currentScore,
-        cashCurrentScore: null || userData.lastScore,
+        currentScore: undefined || userData.currentScore,
+        cashCurrentScore: undefined || userData.lastScore,
     },
     clientAdminData: {
         reward: {
-            score: null || userData.maxScore, // this will be moved to clientAdminData collection
+            score: undefined || userData.maxScore, // this will be moved to clientAdminData collection
         }
     }
 }
