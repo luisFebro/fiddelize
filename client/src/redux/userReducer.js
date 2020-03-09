@@ -8,22 +8,23 @@ import { userProfileOp } from '../pages/mobile-app/lStorageStore';
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
 let collOption = userProfileOp;
-console.log("!lStorage(getItems, collOption).role", !lStorage("getItems", collOption).role)
-if(!lStorage("getItems", collOption).role) {
-    lStorage("setItems", collOption);
+if(!isOffline()) {
+    if(lStorage("getItems", collOption) && lStorage("getItems", collOption).role) {
+        lStorage("setItems", collOption);
+    }
 }
 const userData = lStorage("getItems", collOption);
 
 const currUserData = {
-    role: undefined || userData.role,
-    name: undefined || userData.name,
+    role: null || userData.role,
+    name: null || userData.name,
     loyaltyScores: {
-        currentScore: undefined || userData.currentScore,
-        cashCurrentScore: undefined || userData.lastScore,
+        currentScore: null || userData.currentScore,
+        cashCurrentScore: null || userData.lastScore,
     },
     clientAdminData: {
         reward: {
-            score: undefined || userData.maxScore, // this will be moved to clientAdminData collection
+            score: null || userData.maxScore, // this will be moved to clientAdminData collection
         }
     }
 }
