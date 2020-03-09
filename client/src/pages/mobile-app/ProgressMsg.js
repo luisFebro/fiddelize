@@ -6,6 +6,8 @@ import lStorage from '../../utils/storage/lStorage';
 import { convertDotToComma } from '../../utils/numbers/convertDotComma';
 import { tooltip1 } from './lStorageStore';
 import { useStoreDispatch } from 'easy-peasy';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 // import { setRun } from '../../redux/actions/globalActions';
 
 ProgressMsg.propTypes = {
@@ -50,10 +52,10 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
                 needAttentionWaves={attentionBtnChecked ? false : true }
                 title={`► Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
-                    <i
+                    <FontAwesomeIcon
+                        icon="flag-checkered"
                         style={styles.flagIcon}
-                        className="fas fa-flag-checkered mr-2"
-                    >O</i>
+                    />
                 }
             />
         </span>

@@ -20,7 +20,8 @@ import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage from '../../utils/storage/lStorage';
-import { confettiPlay } from './lStorageStore';
+import { confettiPlay, userProfileOp } from './lStorageStore';
+import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 
 // import ImageLogo from '../../components/ImageLogo';
 
@@ -40,11 +41,14 @@ function ClientMobileApp({ history }) {
         clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }))
 
-    let maxScore = clientAdmin.reward.score;
+    let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
     let userScore = loyaltyScores.currentScore;
     let userLastScore = loyaltyScores.cashCurrentScore;
 
+    setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
+
     const gotToken = localStorage.getItem("token");
+    console.log("gotToken", gotToken);
 
     const styles = {
         rulesBtn: {
@@ -201,12 +205,7 @@ function ClientMobileApp({ history }) {
                 </div>
             )}
 
-            {gotToken && !userName
-            ? (
-                <div style={{margin: '200px 0 0'}}>
-                    <LoadingThreeDots color="white" />
-                </div>
-            ) : (
+            {gotToken && (
                 <section>
                     {role === "cliente" && (
                         <Fragment>
@@ -230,6 +229,12 @@ function ClientMobileApp({ history }) {
 export default withRouter(ClientMobileApp);
 
 /* ARCHIVES
+{gotToken && !userName
+? (
+    <div style={{margin: '200px 0 0'}}>
+        <LoadingThreeDots color="white" />
+    </div>
+)
  */
 
 /*

@@ -1,4 +1,4 @@
-export default function isValidName(name) {
+function isValidName(name) {
     const gotSurname = name.trim().split(" ").length >= 2;
 
     if(gotSurname) {
@@ -7,3 +7,5 @@ export default function isValidName(name) {
 
     return false;
 }
+
+module.exports = isValidName;

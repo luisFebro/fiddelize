@@ -107,8 +107,8 @@ const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 const adminData = {
     subRole: {
         type: String,
-        default: "salesRep",
-        enum: ["dev", "salesRep", "salesOps"]
+        default: "rep-vendas",
+        enum: ["dev", "rep-vendas", "ops-vendas"]
     },
     payments: {
         grossIncome: Number,

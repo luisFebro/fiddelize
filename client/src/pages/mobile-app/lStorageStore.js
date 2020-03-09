@@ -3,20 +3,24 @@ function combine(...objs) {
 }
 
 // COLLECTIONS - different collections receives different numbers at the very end in the order of execution
-const coll1 = { collection: "onceChecked" };
-const val1 = { value: true };
-const collVal1 = combine(coll1, val1);
+const collVal1 = { collection: "onceChecked", value: true };
+const collVal2 = { collection: "userProfile", value: Array(5).fill(undefined) } // same as [undefined, undefined, undefined, undefined, undefined] };
 // END COLLECTIONS
 
 // PROPERTIES
 const confettiPlay = combine(collVal1, { property: "confettiPlay" })
 const tooltip1 = combine(collVal1, { property: "tooltipState" });
 const yellowBtn2 = combine(collVal1, { property: "yellowBtnState" });
+
+const userProfileOp = combine(collVal2, { property: ["role", "name", "maxScore", "currentScore", "lastScore"], })
 // END PROPERTIES
+
+// OPTIONS - collection, properties, values
 export {
     confettiPlay,
     tooltip1,
     yellowBtn2,
+    userProfileOp,
 }
 
 export const needSetTrueLocalKey = (lastChecked, currChecked) => {
