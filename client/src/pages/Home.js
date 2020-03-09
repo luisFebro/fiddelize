@@ -3,6 +3,8 @@ import Register from '../components/auth/Register';
 import ScrollArrow from '../keyframes/built/scroll-arrow/ScrollArrow';
 import { Link } from 'react-router-dom';
 import AOS from 'aos';
+import isOffline from '../utils/window/isOffline';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import ModalForPermission from '../components/pwa-push-notification/ModalForPermission';
 // import showVanillaToast from '../components/vanilla-js/toastify/showVanillaToast'
 
@@ -10,6 +12,7 @@ const isSmall = window.Helper.isSmallScreen();
 
 export default function Home() {
     AOS.init();
+    isOffline();
     // const showToast = () => {
     //     showVanillaToast("Testing", 10000, {avatar: ' '});
     // }
@@ -62,6 +65,9 @@ export default function Home() {
             </div>
             {showAppShowCase()}
             <Register />
+            <div className="container-center">
+                <FontAwesomeIcon icon="heart" flip="horizontal" style={{color: 'white', marginTop: '60px'}} size="6x"/>
+            </div>
         </Fragment>
     );
 };
