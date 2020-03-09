@@ -40,6 +40,7 @@ function ClientMobileApp({ history }) {
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
         clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }))
+    console.log("role", role);
 
     let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
     let userScore = loyaltyScores.currentScore;
@@ -48,7 +49,6 @@ function ClientMobileApp({ history }) {
     setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
 
     const gotToken = localStorage.getItem("token");
-    console.log("gotToken", gotToken);
 
     const styles = {
         rulesBtn: {

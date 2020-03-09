@@ -11,6 +11,7 @@ const collVal2 = { collection: "userProfile", value: Array(5).fill(undefined) } 
 const confettiPlay = combine(collVal1, { property: "confettiPlay" })
 const tooltip1 = combine(collVal1, { property: "tooltipState" });
 const yellowBtn2 = combine(collVal1, { property: "yellowBtnState" });
+const needInitialStateOp = combine(collVal1, { property: "needInitialState" });
 
 const userProfileOp = combine(collVal2, { property: ["role", "name", "maxScore", "currentScore", "lastScore"], })
 // END PROPERTIES
@@ -21,6 +22,7 @@ export {
     tooltip1,
     yellowBtn2,
     userProfileOp,
+    needInitialStateOp,
 }
 
 export const needSetTrueLocalKey = (lastChecked, currChecked) => {

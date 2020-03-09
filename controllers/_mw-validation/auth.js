@@ -16,6 +16,7 @@ exports.mwValidateRegister = (req, res, next) => {
         if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
         if(!name) return res.status(400).json(msg('error.noName'));
         if(!isValidName) return res.status(400).json(msg('error.invalidLengthName'));
+        if(user && user.name === name) return res.status(400).json(msg('error.userAlreadyRegistered'));
         if(user && user.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
         if(!cpf) return res.status(400).json(msg('error.noCpf'));
         if(!email) return res.status(400).json(msg('error.noEmail'));

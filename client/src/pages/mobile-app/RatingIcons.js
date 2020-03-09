@@ -140,12 +140,14 @@ export default function RatingIcons({ score, maxScore }) {
                     <Tooltip
                         title={`Nível ${level.toString().charAt(0)}`}
                         element={
-                            <FontAwesomeIcon
-                                icon={icon}
-                                className="icon"
-                                style={{fontSize: fontSize}}
-                                id={`icon-${level}`}
-                            />
+                            <i>
+                                <FontAwesomeIcon
+                                    icon={icon}
+                                    className="icon"
+                                    style={{fontSize: fontSize}}
+                                    id={`icon-${level}`}
+                                />
+                            </i>
                         }
                     />
                 </section>

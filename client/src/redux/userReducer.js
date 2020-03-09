@@ -2,16 +2,16 @@ import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
 import lStorage from '../utils/storage/lStorage';
 import isOffline from '../utils/window/isOffline';
-import { userProfileOp } from '../pages/mobile-app/lStorageStore';
+import { userProfileOp, needInitialStateOp } from '../pages/mobile-app/lStorageStore';
 // You can use only one isntance of object like 'cases' for each object.
 // Check for mispellings in case of one action not being dispatched properly.
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
 let collOption = userProfileOp;
-if(!isOffline()) {
+let collOption2 = needInitialStateOp;
+if(needInitialStateOp.value) {
     lStorage("setItems", collOption);
-    // if(lStorage("getItems", collOption) && lStorage("getItems", collOption).role) {
-    // }
+    lStorage("setItem", { ...collOption2, value: false })
 }
 const userData = lStorage("getItems", collOption);
 
