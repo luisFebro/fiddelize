@@ -182,7 +182,7 @@ function Register() {
 
     const showForm = () => (
         <form
-            style={{margin: 'auto', width: '80%'}}
+            style={{margin: 'auto', width: '90%'}}
             className="text-p text-normal"
             onBlur={() => setFieldError(null)}
         >

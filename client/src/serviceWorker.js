@@ -81,7 +81,7 @@ function registerValidSW(swUrl, config) {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-              isToastActivated && showVanillaToast(`Novo conteúdo da  <strong>versão ${currentVersion}</strong>  foi baixado`, 7000)
+              isToastActivated && showVanillaToast(`Novo conteúdo da versão ${currentVersion} foi baixado`, 7000)
               console.log('Content is cached for offline use.');
 
               // Execute callback

@@ -20,6 +20,9 @@
   .text-small, .text-helper { font: normal 16px 'Poppins', sans-serif; letter-spacing: .01em; }
 }
 
+/*
+LESSON: if you not include the outermost parentheses here: ((100vw - 300px) / (1000 - 300))) it will not work on production env, only on dev;
+ */
 /*ARCHIVES
 $mainFont: 'Poppins', sans-serif;
 .main-font { font-family: $mainFont }
