@@ -16,15 +16,15 @@ if(needInitialStateOp.value) {
 const userData = lStorage("getItems", collOption);
 
 const currUserData = {
-    role: undefined || userData.role,
-    name: undefined || userData.name,
+    role: null || userData.role,
+    name: null || userData.name,
     loyaltyScores: {
-        currentScore: undefined || userData.currentScore,
-        cashCurrentScore: undefined || userData.lastScore,
+        currentScore: null || userData.currentScore,
+        cashCurrentScore: null || userData.lastScore,
     },
     clientAdminData: {
         reward: {
-            score: undefined || userData.maxScore, // this will be moved to clientAdminData collection
+            score: null || userData.maxScore, // this will be moved to clientAdminData collection
         }
     }
 }

@@ -4,7 +4,7 @@ function combine(...objs) {
 
 // COLLECTIONS - different collections receives different numbers at the very end in the order of execution
 const collVal1 = { collection: "onceChecked", value: true };
-const collVal2 = { collection: "userProfile", value: Array(5).fill(undefined) } // same as [undefined, undefined, undefined, undefined, undefined] };
+const collVal2 = { collection: "userProfile", value: ["cliente", undefined, 500, 0, 0] } // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 // END COLLECTIONS
 
 // PROPERTIES

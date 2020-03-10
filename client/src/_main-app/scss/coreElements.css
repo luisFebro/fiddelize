@@ -21,12 +21,12 @@ body {
     /* Disables pull-to-refresh and overscroll glow effect for PWA.
          Still keeps swipe navigations. Try contain value for only disable pull to refresh */
     overscroll-behavior-y: none;
-}
-
-html, body {
     max-width: 100%;
     overflow-x: hidden;
 }
+
+/*html, body {
+}*/
 
 article, aside, footer, header, nav, section, figcaption, figure, main {
     display: block;

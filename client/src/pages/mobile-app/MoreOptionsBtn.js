@@ -49,7 +49,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                 name: 'Desconectar ►',
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
-                    window.location.href = "/mobile-app";
+                    // window.location.href = "/mobile-app";
                     logout(dispatch);
                     playBeep();
                 }
@@ -83,7 +83,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
             >
                 <Tooltip
                     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
-                    title={`♦ Sugestão: ${userName}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
+                    title={`♦ Sugestão: ${userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
                     element={
                         <Fab
                             style={styles.fabTooltip}

@@ -43,8 +43,8 @@ function ClientMobileApp({ history }) {
     console.log("role", role);
 
     let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
-    let userScore = loyaltyScores.currentScore;
-    let userLastScore = loyaltyScores.cashCurrentScore;
+    let userScore = loyaltyScores && loyaltyScores.currentScore;
+    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
     setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
 
