@@ -165,7 +165,7 @@ const RatingDiv = styled.div`
     width: 100%;
 
     .icon {
-      font-size: 70px;
+      font-size: 65px;
       cursor: pointer;
       padding: 0 8px;
       color: #fff;
