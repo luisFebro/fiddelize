@@ -11,20 +11,22 @@ exports.mwValidateRegister = (req, res, next) => {
     const { name, email, cpf, birthday, phone } = req.body;
     const isCpfValid = new CPF().validate(cpf);
 
-    User.findOne({ cpf })
-    .then(user => {
-        if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
-        if(!name) return res.status(400).json(msg('error.noName'));
-        if(!isValidName) return res.status(400).json(msg('error.invalidLengthName'));
-        if(user && user.name === name) return res.status(400).json(msg('error.userAlreadyRegistered'));
-        if(user && user.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
-        if(!cpf) return res.status(400).json(msg('error.noCpf'));
-        if(!email) return res.status(400).json(msg('error.noEmail'));
-        if(!phone) return res.status(400).json(msg('error.noPhone'));
-        if(!birthday) return res.status(400).json(msg('error.noBirthday'));
-        if(!validateEmail(email)) return res.status(400).json(msg('error.invalidEmail'));
-        if(!isCpfValid) return res.status(400).json(msg('error.invalidCpf'));
-        if(!validatePhone(phone)) return res.status(400).json(msg('error.invalidPhone'));
+    User.findOne({ name }).then(user2 => { // the search should includename and business to narrow down
+        if(user2 && user2.name === name.toLowerCase()) return res.status(400).json(msg('error.userAlreadyRegistered'));
+        User.findOne({ cpf })
+        .then(user => {
+            if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
+            if(!name) return res.status(400).json(msg('error.noName'));
+            if(!isValidName(name)) return res.status(400).json(msg('error.invalidLengthName'));
+            if(user && user.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
+            if(!cpf) return res.status(400).json(msg('error.noCpf'));
+            if(!email) return res.status(400).json(msg('error.noEmail'));
+            if(!phone) return res.status(400).json(msg('error.noPhone'));
+            if(!birthday) return res.status(400).json(msg('error.noBirthday'));
+            if(!validateEmail(email)) return res.status(400).json(msg('error.invalidEmail'));
+            if(!isCpfValid) return res.status(400).json(msg('error.invalidCpf'));
+            if(!validatePhone(phone)) return res.status(400).json(msg('error.invalidPhone'));
+        })
         //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
         next();
     })

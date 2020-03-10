@@ -41,7 +41,7 @@ const msg = (typeAndMsgName, customized = 'NeedCustomWord', options) => {
     error.invalidCredentials = "Credenciais Inválidas. Se for o caso, tente colocar em minúsculas";
     error.invalidPhone = "Formato telefone inválido. Digita de 10 a 11 dígitos com DDD. ex: 95977779999"
     error.invalidCpf = "O CPF informado não é válido.";
-    error.userAlreadyRegistered = 'Esse Nome de usuário já foi registrado. Tente um outro.';
+    error.userAlreadyRegistered = 'Esse Nome de usuário já foi registrado. Tente outro sobrenome.';
     error.emailAlreadyRegistered = 'Esse Email já foi registrado. Tente um outro.';
     error.cpfAlreadyRegistered = 'Esse CPF já foi cadastrado.'; // Security Vulnability - do not narrow down about each issue was rejected: Esse CPF já foi registrado. Tente um outro.
     // END MESSAGES

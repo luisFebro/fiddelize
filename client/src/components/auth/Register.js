@@ -285,6 +285,7 @@ function Register() {
                 </MuiPickersUtilsProvider>
             </div>
             <section className={`animated slideInLeft fast ${handleShowFields("otherFields")  ? "d-block" : "d-none"}`}>
+                <p className="text-center my-1">Para finalizar seu cadastro...</p>
                 <div className="mt-3">
                     Email
                     <TextField
