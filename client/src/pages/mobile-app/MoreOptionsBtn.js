@@ -83,7 +83,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
             >
                 <Tooltip
                     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
-                    title={`♦ Sugestão: ${userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
+                    title={`♦ Sugestão: ${userName && userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
                     element={
                         <Fab
                             style={styles.fabTooltip}
