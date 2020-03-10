@@ -16,7 +16,7 @@ export default function RatingIcons({ score, maxScore }) {
     const milestoneIcons = {
         star: {
             icon: "star", // n1
-            fontSize: "60px",
+            fontSize: "52px",
         },
         sun : {
             icon: "☀",
