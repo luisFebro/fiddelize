@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Register() {
+function Register({ isClientUser = false }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [data, setData] = useState({
@@ -164,8 +164,8 @@ function Register() {
 
     const showTitle = () => (
         <Title
-            title="Comece Hoje!"
-            subTitle="Cadastre-se aqui."
+            title={!isClientUser ? "Comece Hoje!" : "Cadastre-se!"}
+            subTitle={!isClientUser ? "Cadastre-se aqui." : "É rápido e fácil."}
             color="var(--mainWhite)"
             backgroundColor="var(--themePDark)"
         />

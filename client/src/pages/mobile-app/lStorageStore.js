@@ -8,12 +8,15 @@ const collVal2 = { collection: "userProfile", value: ["cliente", undefined, 500,
 // END COLLECTIONS
 
 // PROPERTIES
-const confettiPlay = combine(collVal1, { property: "confettiPlay" })
+// sequentials
 const tooltip1 = combine(collVal1, { property: "tooltipState" });
 const yellowBtn2 = combine(collVal1, { property: "yellowBtnState" });
-const needInitialStateOp = combine(collVal1, { property: "needInitialState" });
 
+// non-sequentials
+const confettiPlay = combine(collVal1, { property: "confettiPlay" })
+const needInitialStateOp = combine(collVal1, { property: "needInitialState" });
 const userProfileOp = combine(collVal2, { property: ["role", "name", "maxScore", "currentScore", "lastScore"], })
+const needAppRegisterOp = combine(collVal1, { property: "needAppRegister", value: true});
 // END PROPERTIES
 
 // OPTIONS - collection, properties, values
@@ -23,6 +26,7 @@ export {
     yellowBtn2,
     userProfileOp,
     needInitialStateOp,
+    needAppRegisterOp,
 }
 
 export const needSetTrueLocalKey = (lastChecked, currChecked) => {

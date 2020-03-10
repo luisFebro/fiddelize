@@ -10,6 +10,7 @@ import Home from '../../pages/Home';
 import LoginPage from '../../pages/LoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
+import DashboardClientAdmin from '../../pages/dashboard-client-admin';
 import ClientMobileApp from '../../pages/mobile-app/ClientMobileApp';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
@@ -19,6 +20,7 @@ import RegulationPage from '../../pages/RegulationPage';
 import SnackbarMulti from '../../components/Snackbar';
 import LinearProgress from '../../components/loadingIndicators/LinearProgress';
 import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
+import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
 
 function Mobile({ location }) {
     const { role } = useStoreState(state => ({
@@ -40,6 +42,7 @@ function Mobile({ location }) {
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
                 <Route path="/regulamento/" exact component={RegulationPage} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
+                <PrivateRouteClientAdm path="/admin/painel-de-controle-c-adm" exact component={DashboardClientAdmin} />
                 <Route component={Default} />
             </Switch>
             {role === "admin"

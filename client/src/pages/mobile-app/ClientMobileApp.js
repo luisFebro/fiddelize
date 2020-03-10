@@ -20,10 +20,20 @@ import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage from '../../utils/storage/lStorage';
-import { confettiPlay, userProfileOp, needInitialStateOp } from './lStorageStore';
+import { confettiPlay, userProfileOp, needInitialStateOp, needAppRegisterOp } from './lStorageStore';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
+import Register from '../../components/auth/Register';
 
 // import ImageLogo from '../../components/ImageLogo';
+
+// This following logic will inserted in the client-user's download button.
+lStorage("setItem", needAppRegisterOp);
+//
+
+const needAppRegister = lStorage("getItem", needAppRegisterOp);
+console.log("needAppRegister", needAppRegister);
+
+// const options1 = {...needAppRegisterOp, value: }
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -207,7 +217,8 @@ function ClientMobileApp({ history }) {
     return (
         <div style={{overflowX: 'hidden'}}>
             {showLogo()}
-            {!gotToken && (
+            {!gotToken && needAppRegister && <Register isClientUser={true} />}
+            {!gotToken && !needAppRegister && (
                 <div style={{margin: '120px 0 0'}}>
                     {showLogin()}
                 </div>
