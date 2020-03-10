@@ -27,12 +27,11 @@ import Register from '../../components/auth/Register';
 // import ImageLogo from '../../components/ImageLogo';
 
 // This following logic will inserted in the client-user's download button.
-lStorage("setItem", needAppRegisterOp);
+// lStorage("setItem", needAppRegisterOp);
 //
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 console.log("needAppRegister", needAppRegister);
-
 // const options1 = {...needAppRegisterOp, value: }
 
 const isSmall = window.Helper.isSmallScreen();
@@ -43,6 +42,8 @@ function ClientMobileApp({ history }) {
 
     const [showMoreBtn, setShowMoreBtn] = useState(false);
     const [showMoreComps, setShowMoreComps] = useState(false);
+    const [loginOrRegister, setLoginOrRegister] = useState("register");
+    console.log("loginOrRegister", loginOrRegister);
 
     let { role, loyaltyScores, userName, clientAdmin } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
@@ -132,14 +133,6 @@ function ClientMobileApp({ history }) {
         </div>
     );
 
-    const showLogin = () => (
-        <div>
-            <div className="container-center">
-                <Login />
-            </div>
-        </div>
-    );
-
     const showGreeting = () => (
         <section className="mt-3 position-relative animated slideInLeft slow">
             <div className="ellipse" style={{backgroundColor: 'var(--themePLight)'}}></div>
@@ -214,15 +207,35 @@ function ClientMobileApp({ history }) {
         />
     );
 
+    const showLogin = () => (
+        <div className="container-center" style={{margin: '120px 0 0'}}>
+            <Login isClientUser={role === "cliente" ? true : false} setLoginOrRegister={setLoginOrRegister} />
+        </div>
+    );
+
+    // const conditionRegister1 = !gotToken && needAppRegister === true && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
+
+    // const conditionLogin1 = !gotToken && needAppRegister !== true && showLogin()
+    const conditionRegister = loginOrRegister === "register" && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
+    const conditionLogin = loginOrRegister === "login" && showLogin()
+
     return (
         <div style={{overflowX: 'hidden'}}>
             {showLogo()}
-            {!gotToken && needAppRegister && <Register isClientUser={true} />}
-            {!gotToken && !needAppRegister && (
-                <div style={{margin: '120px 0 0'}}>
-                    {showLogin()}
-                </div>
-            )}
+            <section>
+                {needAppRegister
+                ? (
+                    <Fragment>
+                        <Register />
+                        {lStorage("setItem", {...needAppRegisterOp, value: false})}
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        {conditionRegister}
+                        {conditionLogin}
+                    </Fragment>
+                )}
+            </section>
 
             {gotToken && (
                 <section>

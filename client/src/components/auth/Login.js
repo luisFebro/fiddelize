@@ -12,8 +12,9 @@ import PropTypes from 'prop-types';
 import KeypadButton from '../modals/keypad';
 import isThisApp from '../../utils/window/isThisApp';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
+import RadiusBtn from '../../components/buttons/RadiusBtn';
 
-function Login({ history }) {
+function Login({ history, setLoginOrRegister }) {
     const [cpf, setData] = useState("0");
 
     const dispatch = useStoreDispatch();
@@ -37,7 +38,9 @@ function Login({ history }) {
                 setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
             if(role === "cliente-admin") {
-
+                    setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                    setTimeout(() => history.push(`/colaborador/quadro-administrativo/${authUserId}`), 5000);
+                    setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
             // if(role === "colaborador") {
             //     setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
@@ -65,7 +68,7 @@ function Login({ history }) {
     );
 
     const showKeypadButton = () => (
-        <div className="animated jackInTheBox slow delay-1s d-flex justify-content-center my-4">
+        <div className="mt-3 mb-2 animated jackInTheBox slow delay-1s d-flex justify-content-center">
             <KeypadButton
                 title="Informe o seu CPF"
                 titleIcon="fas fa-list-ol"
@@ -76,12 +79,20 @@ function Login({ history }) {
         </div>
     );
 
+    const showRegisterForm = () => (
+        <p
+            className="text-small text-center font-weight-bold  p-2"
+        >
+            Novo Usuário?<br/>Faça seu cadastro{" "}
+            <RadiusBtn title="aqui" onClick={() => setLoginOrRegister("register")} />
+        </p>
+    );
+
     return (
-        <Card style={{maxWidth: 330}} className="animated zoomIn fast card-elevation">
+        <Card style={{ maxWidth: 330 }} className="animated zoomIn fast card-elevation">
             {showTitle()}
-            <div className="my-5">
-                {showKeypadButton()}
-            </div>
+            {showKeypadButton()}
+            {showRegisterForm()}
         </Card>
     );
 }

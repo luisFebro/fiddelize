@@ -17,7 +17,7 @@ export default function lStorage(type, options, next) {
 
     // Validation
     if(!collection) throw new Error("Insert a collection's name");
-    if(!(["setItem", "setItems", "getItem", "getItems", "removeItems", "removeOneItem"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, setItems, getItem, getItems, removeItems (remove all items from a collection), removeOneItem (One specific property from a collection). Check also for typos...")
+    if(!(["setItem", "setItems", "getItem", "getItems", "removeItems", "removeItem"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, setItems, getItem, getItems, removeItems (remove all items from a collection), removeItem (One specific property from a collection). Check also for typos...")
     if(!value && type === "setItem" && typeof value !== 'boolean') throw new Error("Insert a value");
     if(notInCollection && type === "getItem") throw new Error("This collection does not exists. You can not get anything...")
     // End Validation
@@ -68,7 +68,7 @@ export default function lStorage(type, options, next) {
     }
 
 
-    if(type === "removeOneItem") {
+    if(type === "removeItem") {
         if(notInProperty) {
             //console.warn(`Property key not found. The ${collection.toUpperCase()} collection got not ${property.toUpperCase()} property`)
             return null;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment,useEffect, useState } from 'react';
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import Title from '../Title';
@@ -8,6 +8,7 @@ import phoneMaskBr from '../../utils/validation/masks/phoneMaskBr';
 import cpfMaskBr from '../../utils/validation/masks/cpfMaskBr';
 import getDayMonthBr from '../../utils/dates/getDayMonthBr';
 import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
+import RadiusBtn from '../../components/buttons/RadiusBtn';
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
@@ -43,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Register({ isClientUser = false }) {
+function Register({ isClientUser = false, setLoginOrRegister }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [data, setData] = useState({
@@ -162,13 +163,28 @@ function Register({ isClientUser = false }) {
         setTimeout(() => document.getElementById(nextFieldToFocusId).focus(), timeInSec);
     }
 
+    const showLoginForm = isClientUser => (
+        isClientUser && (
+            <div
+                className="text-white position-absolute text-small font-weight-bold p-2"
+                style={{top: '105px', left: '50px'}}
+            >
+                <p style={{whiteSpace: 'nowrap'}}>Já é cadastrado?{" "}
+                <RadiusBtn title="Faça login" onClick={() => setLoginOrRegister("login")} /></p>
+            </div>
+        )
+    );
+
     const showTitle = () => (
-        <Title
-            title={!isClientUser ? "Comece Hoje!" : "Cadastre-se!"}
-            subTitle={!isClientUser ? "Cadastre-se aqui." : "É rápido e fácil."}
-            color="var(--mainWhite)"
-            backgroundColor="var(--themePDark)"
-        />
+        <div className="position-relative">
+            <Title
+                title={!isClientUser ? "Comece Hoje!" : "Cadastre-se!"}
+                subTitle={!isClientUser ? "Cadastre-se aqui." : "É rápido e fácil."}
+                color="var(--mainWhite)"
+                backgroundColor="var(--themePDark)"
+            />
+            {showLoginForm(isClientUser)}
+        </div>
     );
 
     const styles = {
@@ -181,6 +197,12 @@ function Register({ isClientUser = false }) {
             color: 'grey',
             fontFamily: 'Poppins, sans-serif',
             fontSize: isSmall ? '.8em' : '.6em',
+        },
+        card: {
+            margin: 'auto',
+            width: '90%',
+            maxWidth: isSmall ? "" : 360,
+            boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
         }
     }
 
@@ -392,7 +414,7 @@ function Register({ isClientUser = false }) {
     return (
         <Card
             className="animated zoomIn fast card-elevation"
-            style={{margin: 'auto', width: '90%',  maxWidth: isSmall ? "" : 360, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
+            style={styles.card}
         >
             {showTitle()}
             {showForm()}
