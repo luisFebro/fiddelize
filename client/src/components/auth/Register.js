@@ -158,6 +158,10 @@ function Register() {
         }
     }
 
+    const handleFocus = (nextFieldToFocusId, timeInSec = 0) => {
+        setTimeout(() => document.getElementById(nextFieldToFocusId).focus(), timeInSec);
+    }
+
     const showTitle = () => (
         <Title
             title="Comece Hoje!"
@@ -197,10 +201,11 @@ function Register() {
                     id="name"
                     name="name"
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field2"); setData({ ...data, name: name.cap()});}
+                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field2", 1500); setData({ ...data, name: name.cap()}); handleFocus("field2");}
                     }}
                     onBlur={() => {
-                        setShowMoreFields("field2");
+                        setShowMoreFields("field2", 1500);
+                        handleFocus("field2");
                         setData({ ...data, name: name.cap()})
                     }}
                     autoComplete="off"
@@ -220,6 +225,7 @@ function Register() {
             <div className={`animated slideInDown fast mt-3 ${handleShowFields("field2") ? "d-block" : "d-none"}`}>
                 Ok, informe seu CPF
                 <TextField
+                    id="field2"
                     required
                     margin="dense"
                     onChange={handleChange(setData, data)}
@@ -228,12 +234,9 @@ function Register() {
                     variant="outlined"
                     autoOk={false}
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field3"); setData({ ...data, cpf: cpfMaskBr(cpf)});}
+                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)});}
                     }}
-                    onBlur={() => {
-                        setShowMoreFields("field3");
-                        setData({ ...data, cpf: cpfMaskBr(cpf)})
-                    }}
+                    onBlur={() => { setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}) }}
                     value={cpf}
                     type="text"
                     autoComplete="off"
@@ -272,6 +275,7 @@ function Register() {
                         onChange={() => {
                             handleDateChange()
                             setShowMoreFields("otherFields")
+                            handleFocus("field4", 1500)
                         }}
                         InputProps={{
                           startAdornment: (
@@ -280,6 +284,7 @@ function Register() {
                             </InputAdornment>
                           ),
                           style: styles.fieldForm,
+                          id: "field3"
                         }}
                     />
                 </MuiPickersUtilsProvider>
@@ -289,9 +294,11 @@ function Register() {
                 <div className="mt-3">
                     Email
                     <TextField
+                        id="field4"
                         required
                         margin="dense"
                         onChange={handleChange(setData, data)}
+                        onKeyPress={e => isKeyPressed(e, "Enter") && handleFocus("field5")}
                         error={errorEmail ? true : false}
                         name="email"
                         variant="outlined"
@@ -313,11 +320,12 @@ function Register() {
                     Contato
                     <TextField
                         required
+                        id="field5"
                         margin="dense"
                         onChange={handleChange(setData, data)}
                         error={errorPhone ? true : false}
                         onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
-                        onKeyPress={e => isKeyPressed(e, "Enter") && setData({ ...data, phone: phoneMaskBr(phone)})}
+                        onKeyPress={e => isKeyPressed(e, "Enter") && setData({ ...data, phone: phoneMaskBr(phone)}) && handleFocus("field6")}
                         name="phone"
                         helperText={"Digite apenas números com DDD"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
@@ -338,6 +346,8 @@ function Register() {
                 </div>
                 <div className="my-3">
                     <Select
+                      id="field6"
+                      tabIndex="0"
                       margin="dense"
                       labelId="maritalStatus"
                       onChange={handleChange(setData, data)}
@@ -382,7 +392,7 @@ function Register() {
     return (
         <Card
             className="animated zoomIn fast card-elevation"
-            style={{margin: 'auto', width: '90%',  maxWidth: isSmall ? "" : 465, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
+            style={{margin: 'auto', width: '90%',  maxWidth: isSmall ? "" : 360, boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'}}
         >
             {showTitle()}
             {showForm()}
@@ -397,6 +407,16 @@ export default React.memo(Register);
 <div style={{whiteSpace: 'wrap'}}>
     {JSON.stringify(data)}
 </div>
+
+handleFocus()
+while (next = next.nextElementSibling) {
+            console.log(next.tagName.toLowerCase());
+            if(next === null){ break; }
+            if(next.tagName.toLowerCase() === "fieldset") {
+                console.log('next', next.children[0])
+                break;
+            }
+        }
 
 const showReCaptcha = () => (
     <div className="container-center mt-3">

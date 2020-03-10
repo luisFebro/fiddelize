@@ -6,8 +6,11 @@ export default function SafeEnviromentMsg() {
             <span>
                 <i className="fas fa-lock"></i>
             </span>   Ambiente seguro!<br />
-            Envio de dados encriptografados
-            <br />e mantidos de forma privada.
+            <span className="text-left text-nowrap">
+                Envio de dados encriptografados
+            </span>
+            <br />
+            e mantidos de forma privada.
         </div>
     );
 }
