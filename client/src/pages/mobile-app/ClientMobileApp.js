@@ -48,12 +48,10 @@ function ClientMobileApp({ history }) {
         lStorage("setItem", { ...collOption2, value: false })
     }
     const userData = lStorage("getItems", collOption);
-    console.log("userData", userData);
     role = role || userData.role;
     userName = userName || userData.name;
     let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
     let userScore = loyaltyScores && loyaltyScores.currentScore || userData.currentScore;
-    console.log("userScore", userScore);
     let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore || userData.lastScore;
 
     setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);

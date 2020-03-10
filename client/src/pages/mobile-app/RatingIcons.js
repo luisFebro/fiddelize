@@ -159,13 +159,13 @@ export default function RatingIcons({ score, maxScore }) {
 const RatingDiv = styled.div`
     display: flex;
     justify-content: center;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     text-align: center;
     perspective: 250px;
     width: 100%;
 
     .icon {
-      font-size: 65px;
+      font-size: 60px;
       cursor: pointer;
       padding: 0 8px;
       color: #fff;

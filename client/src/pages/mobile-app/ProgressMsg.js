@@ -30,8 +30,9 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
 
     const styles = {
         flagIcon: {
-            fontSize: '25px',
-            transform: 'rotate(18deg)'
+            fontSize: '35px',
+            transform: 'rotate(18deg)',
+            padding: '0 5px',
         },
         confettiIcon: {
             fontSize: '20px',

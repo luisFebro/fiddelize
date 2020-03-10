@@ -14,6 +14,8 @@ import isThisApp from '../../../utils/window/isThisApp';
 import { showComponent } from "../../../redux/actions/componentActions";
 import { logout } from "../../../redux/actions/authActions";
 import { Link } from 'react-router-dom';
+import lStorage from '../../../utils/storage/lStorage';
+import { userProfileOp } from '../../../pages/mobile-app/lStorageStore';
 
 
 ClientScoresPanel.propTypes = {
@@ -40,6 +42,13 @@ const styles = {
         fontSize: '2em',
         transform: 'rotate(20deg)',
     }
+}
+
+function manageSetItem(collection, ...values) {
+    const options1 = { collection, property: "currentScore", value: values[0]}
+    const options2 = { collection, property: "lastScoreScore", value: values[1]}
+    lStorage("setItem", options1);
+    lStorage("setItem", options2);
 }
 
 export default function ClientScoresPanel({ success, valuePaid, verification }) {
@@ -85,9 +94,12 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 "loyaltyScores.currentScore": currentScore, // need to be Number to ranking in DB properly
                 "loyaltyScores.lastScore": lastScore,
             }
+
             updateUser(dispatch, objToSend, userId, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                manageSetItem("userProfile", currentScore, cashCurrentScore)
+
                 setTimeout(() => showSnackbar(dispatch, "Pontuação registrada!", 'success', 4000), 5000);
             })
         }
