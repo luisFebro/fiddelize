@@ -20,7 +20,7 @@ import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage from '../../utils/storage/lStorage';
-import { confettiPlay, userProfileOp } from './lStorageStore';
+import { confettiPlay, userProfileOp, needInitialStateOp } from './lStorageStore';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 
 // import ImageLogo from '../../components/ImageLogo';
@@ -41,9 +41,20 @@ function ClientMobileApp({ history }) {
         clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }))
 
+    let collOption = userProfileOp;
+    let collOption2 = needInitialStateOp;
+    if(lStorage("getItem", collOption2)) {
+        lStorage("setItems", collOption);
+        lStorage("setItem", { ...collOption2, value: false })
+    }
+    const userData = lStorage("getItems", collOption);
+    console.log("userData", userData);
+    role = role || userData.role;
+    userName = userName || userData.name;
     let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
-    let userScore = loyaltyScores && loyaltyScores.currentScore;
-    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
+    let userScore = loyaltyScores && loyaltyScores.currentScore || userData.currentScore;
+    console.log("userScore", userScore);
+    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore || userData.lastScore;
 
     setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
 
