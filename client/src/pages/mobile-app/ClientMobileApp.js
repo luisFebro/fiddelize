@@ -42,8 +42,7 @@ function ClientMobileApp({ history }) {
 
     const [showMoreBtn, setShowMoreBtn] = useState(false);
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const [loginOrRegister, setLoginOrRegister] = useState("register");
-    console.log("loginOrRegister", loginOrRegister);
+    const [loginOrRegister, setLoginOrRegister] = useState("login");
 
     let { role, loyaltyScores, userName, clientAdmin } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
@@ -216,8 +215,8 @@ function ClientMobileApp({ history }) {
     // const conditionRegister1 = !gotToken && needAppRegister === true && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
 
     // const conditionLogin1 = !gotToken && needAppRegister !== true && showLogin()
-    const conditionRegister = loginOrRegister === "register" && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
-    const conditionLogin = loginOrRegister === "login" && showLogin()
+    const conditionRegister = !gotToken && loginOrRegister === "register" && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
+    const conditionLogin = !gotToken && loginOrRegister === "login" && showLogin()
 
     return (
         <div style={{overflowX: 'hidden'}}>

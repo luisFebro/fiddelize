@@ -48,7 +48,7 @@ function Login({ history, setLoginOrRegister }) {
             //     setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             // }
             if(role === "cliente") {
-                if(isThisApp()) {
+                if(true) {
                     history.push("/mobile-app");
                 } else {
                     showComponent(dispatch, "purchaseValue");
