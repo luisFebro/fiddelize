@@ -41,16 +41,10 @@ export const userReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
             case 'USER_READ':
-                if(!needInitialStateOp.value) {
-                    return {
-                        ...state,
-                    }
-                } else {
-                    return {
-                        ...state,
-                        currentUser: action.payload,
-                    };
-                }
+                return {
+                    ...state,
+                    currentUser: action.payload,
+                };
             case 'USER_DELETED':
                 return {
                     ...state,
