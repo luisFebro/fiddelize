@@ -4,8 +4,9 @@ import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { updateUser } from "../../../redux/actions/userActions";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import Title from '../../../components/Title';
-import animateNumber from '../../../utils/numbers/animateNumber';
+import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
 import { convertDotToComma, convertCommaToDot } from '../../../utils/numbers/convertDotComma';
+import getIntOrFloat from '../../../utils/numbers/getIntOrFloat';
 import isInteger from '../../../utils/numbers/isInteger';
 import getMonthNowBr from '../../../utils/dates/getMonthNowBr';
 import { CLIENT_URL } from '../../../config/clientUrl';
@@ -34,7 +35,7 @@ const styles = {
     },
     crownIcon: {
         position: 'absolute',
-        top: '185px',
+        top: '-45px',
         left: '218px',
         fontSize: '2em',
         transform: 'rotate(20deg)',
@@ -57,25 +58,21 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     if(typeof lastScore === "undefined") {
         lastScore = "0";
     }
-    let cashCurrentScore = convertCommaToDot(valuePaid);
-    lastScore =
-    isInteger(lastScore)
-    ? parseInt(lastScore)
-    : parseFloat(lastScore).toFixed(1);
+    lastScore = getIntOrFloat(lastScore);
 
-    cashCurrentScore =
-    isInteger(cashCurrentScore)
-    ? parseInt(cashCurrentScore)
-    : parseFloat(cashCurrentScore).toFixed(1);
-    const currentScore = (parseFloat(lastScore) + parseFloat(cashCurrentScore)).toFixed(1);
+    let cashCurrentScore = convertCommaToDot(valuePaid);
+    cashCurrentScore = getIntOrFloat(cashCurrentScore);
+
+    let currentScore = parseFloat(lastScore) + parseFloat(cashCurrentScore);
+    currentScore = getIntOrFloat(currentScore);
 
     useEffect(() => {
-        if(true) { // success && verification
+        if(success && verification) {
             animateNumber(
                 animatedNumber.current,
                 0,
                 cashCurrentScore,
-                3000,
+                getAnimationDuration(Number(cashCurrentScore)),
                 setShowTotalPoints
             );
 
@@ -137,18 +134,21 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 <p className="text-center text-hero" ref={animatedNumber}>...</p>
             </section>
             <div
-                className="animated bounce slow"
                 style={{
                     fontSize: '2.0rem',
                     display: showTotalPoints ? "block" : "none",
-                    animationIterationCount: 4
                 }}
             >
-                <div>
+                <div
+                    className="animated bounce slow"
+                    style={{
+                        animationIterationCount: 3
+                    }}
+                >
                     <p className="ml-2 text-left">&#187; Pontuação Atual:</p>
                     <p className="text-center text-hero">{convertDotToComma(currentScore)}</p>
                 </div>
-                <section className="postion-relative" style={{margin: '90px 0 20px'}}>
+                <section className="position-relative" style={{margin: '90px 0 20px'}}>
                     <i className="fas fa-crown" style={styles.crownIcon}></i>
                     <p className="text-hero">Volte sempre!</p>
                 </section>
@@ -161,21 +161,23 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
         const backColorOnHover = "var(--themeSLight)";
         const backgroundColor = "var(--themeSDark)";
         return(
-            <Link to={isThisApp() ? "/mobile-app" : "/acesso/verificacao"} style={{textDecoration: "none"}}>
-                <button
-                    className="text-shadow my-5 pressed-to-left"
-                    style={styles.finishButton}
-                    onClick={() => {
+            <button
+                className="text-shadow my-5 pressed-to-left"
+                style={styles.finishButton}
+                onClick={() => {
+                    if(isThisApp()) {
+                        window.location.href = `/mobile-app`
+                    } else {
                         showComponent(dispatch, "login")
-                        !isThisApp() && logout(dispatch);
-                        if(isThisApp()) { window.location.href = `/mobile-app` }
-                    }}
-                    onMouseOver={e => e.target.style.backgroundColor=backColorOnHover}
-                    onMouseOut={e => e.target.style.backgroundColor=backgroundColor}
-                >
-                    {title}
-                </button>
-            </Link>
+                        window.location.href = `/acesso/verificacao`
+                        logout(dispatch);
+                    }
+                }}
+                onMouseOver={e => e.target.style.backgroundColor=backColorOnHover}
+                onMouseOut={e => e.target.style.backgroundColor=backgroundColor}
+            >
+                {title}
+            </button>
         );
     };
 

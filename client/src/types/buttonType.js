@@ -55,6 +55,7 @@ export const buttonFabType = {
     fontSize: string,
     fontWeight: string,
     backgroundColor: string,
+    iconMu: element,
     iconFontAwesome: string,
     iconMarginLeft: string,
     iconFontSize: string,

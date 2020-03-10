@@ -13,7 +13,7 @@ const styles = {
     }
 }
 
-export default function PercCircleAndGift({ userScore, maxScore, showPercentage }) {
+export default function PercCircleAndGift({ userScore, maxScore, showPercentage, playBeep }) {
     const displayGift = () => (
         <div className="shake-it">
             {userScore >= maxScore
@@ -57,22 +57,26 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage 
             {showPercentage
             ? (
                 <Fragment>
-                    <Tooltip
-                        title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}</strong> do<br />objetivo até agora.`}
-                        element={
-                            <div className="container-center text-em-2-5 animated zoomIn">
-                                <ReactjsPercentageCircle
-                                    percent={getPercentage(maxScore, userScore)}
-                                    radius={70} /*circle size*/
-                                    borderWidth={20}
-                                    color="var(--themeS)" /*external line color*/
-                                    textStyle={styles.percentageCircle}
-                                />
-                            </div>
-                        }
-                    />
+                    <div onClick={playBeep}>
+                        <Tooltip
+                            title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}</strong> do<br />objetivo até agora.`}
+                            element={
+                                <div
+                                    className="zoom-it container-center text-em-2-5 animated zoomIn"
+                                >
+                                    <ReactjsPercentageCircle
+                                        percent={getPercentage(maxScore, userScore)}
+                                        radius={70} /*circle size*/
+                                        borderWidth={20}
+                                        color="var(--themeS)" /*external line color*/
+                                        textStyle={styles.percentageCircle}
+                                    />
+                                </div>
+                            }
+                        />
+                     </div>
                     {displayGift()}
-                 </Fragment>
+                </Fragment>
             ) : null}
         </div>
     );

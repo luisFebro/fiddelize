@@ -3,7 +3,7 @@ import Title from '../../components/Title';
 import { withRouter } from 'react-router-dom';
 import { useStoreDispatch } from 'easy-peasy';
 import Card from '@material-ui/core/Card';
-import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
+// import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import { showComponent } from '../../redux/actions/componentActions';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { loginEmail } from '../../redux/actions/authActions';
@@ -45,7 +45,7 @@ function Login({ history }) {
             //     setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             // }
             if(role === "cliente") {
-                if(isThisApp()) {
+                if(true) {
                     history.push("/mobile-app");
                 } else {
                     showComponent(dispatch, "purchaseValue");
@@ -79,15 +79,21 @@ function Login({ history }) {
     return (
         <Card style={{maxWidth: 330}} className="animated zoomIn fast card-elevation">
             {showTitle()}
-            {showKeypadButton()}
-            <div className="mx-2 mb-4 text-left">
-                <SafeEnvironmentMsg />
+            <div className="my-5">
+                {showKeypadButton()}
             </div>
         </Card>
     );
 }
 
 export default withRouter(Login);
+
+
+/*ARCHIVES
+<div className="mx-2 mb-4 text-left">
+    <SafeEnvironmentMsg />
+</div>
+*/
 
 
 /* COMMENTS

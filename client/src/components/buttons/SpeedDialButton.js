@@ -45,6 +45,7 @@ export default function SpeedDialButton({
     direction,
     tooltipOpen,
     FabProps,
+    onClick,
     root,
     hidden }) {
     const classes = useStyles();
@@ -82,6 +83,7 @@ export default function SpeedDialButton({
                 ariaLabel="SpeedDial tooltip example"
                 hidden={hidden || false}
                 icon={<SpeedDialIcon openIcon={null} />}
+                onClick={onClick}
                 onClose={handleClose}
                 direction={direction || "up"}
                 FabProps={{

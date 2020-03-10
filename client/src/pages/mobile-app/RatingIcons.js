@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Tooltip from './Tooltip';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 RatingIcons.propTypes = {
     score: PropTypes.number,
@@ -10,11 +11,12 @@ RatingIcons.propTypes = {
 }
 
 export default function RatingIcons({ score, maxScore }) {
-    const selectedIcon = "heart";
+    const selectedIcon = "star";
 
     const milestoneIcons = {
         star: {
-            icon: "fas fa-star" // n1
+            icon: "star", // n1
+            fontSize: "52px",
         },
         sun : {
             icon: "☀",
@@ -29,8 +31,7 @@ export default function RatingIcons({ score, maxScore }) {
             icon: "✂️",
         },
         heart: {
-            icon: "fas fa-heart",
-            fontSize: '45px',
+            icon: "heart",
         },
         heartValentine: {
             icon: "💘",
@@ -111,15 +112,15 @@ export default function RatingIcons({ score, maxScore }) {
         // else if(score >= 400 && score <= 499.95) { indScore = 3 }
         // else if(score >= 500) { indScore = 4 }
 
-        let arrayStarIds = ["icon-100", "icon-200", "icon-300", "icon-400", "icon-500"];
+        let arrayIconIds = ["icon-100", "icon-200", "icon-300", "icon-400", "icon-500"];
 
-        let star;
+        let iconInArray;
         let count = 0;
-        for(star of arrayStarIds) {
+        for(iconInArray of arrayIconIds) {
             if(count++ <= indScore) {
-                let selectedStar = document.querySelector("#" + star);
+                let selectedIcon = document.querySelector("#" + iconInArray);
                 const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-                setTimeout(() => selectedStar.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); text-shadow: 0 0 30px #ffc;`, delayToAnimated);
+                setTimeout(() => selectedIcon.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); filter: drop-shadow(0 0 30px #ffc);`, delayToAnimated);
             }
         }
     }
@@ -130,7 +131,7 @@ export default function RatingIcons({ score, maxScore }) {
 
     const levels = [100, 200, 300, 400, 500];
 
-    const { icon } = milestoneIcons[selectedIcon];
+    const { icon, fontSize } = milestoneIcons[selectedIcon];
 
     return (
         <RatingDiv>
@@ -139,7 +140,14 @@ export default function RatingIcons({ score, maxScore }) {
                     <Tooltip
                         title={`Nível ${level.toString().charAt(0)}`}
                         element={
-                            <span className={`${icon} icon`} id={`icon-${level}`}></span>
+                            <i>
+                                <FontAwesomeIcon
+                                    icon={icon}
+                                    className="icon"
+                                    style={{fontSize: fontSize}}
+                                    id={`icon-${level}`}
+                                />
+                            </i>
                         }
                     />
                 </section>
@@ -157,7 +165,7 @@ const RatingDiv = styled.div`
     width: 100%;
 
     .icon {
-      font-size: 50px;
+      font-size: 70px;
       cursor: pointer;
       padding: 0 8px;
       color: #fff;

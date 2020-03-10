@@ -1,0 +1,86 @@
+*, :after, :before{
+    -webkit-box-sizing:inherit;
+    box-sizing:inherit
+}
+/** {
+    box-sizing: border-box;
+}*/
+
+html {
+    line-height: 1.15;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background: var(--themeBackground) !important; /* !important;*/
+    color: var(--mainDark) !important;
+    user-select: none;
+    height: 100%;
+    margin: 0;
+    /* Disables pull-to-refresh and overscroll glow effect for PWA.
+         Still keeps swipe navigations. Try contain value for only disable pull to refresh */
+    overscroll-behavior-y: none;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/*html, body {
+}*/
+
+article, aside, footer, header, nav, section, figcaption, figure, main {
+    display: block;
+}
+
+figure {
+    margin: 1em 40px
+}
+
+hr {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible
+}
+
+pre {
+    font-family: monospace,monospace;
+    font-size: 1em
+}
+
+a {
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects
+}
+
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted
+}
+
+code,kbd,samp {
+    font-family: monospace,monospace;
+    font-size: 1em
+}
+
+dfn {
+    font-style: italic
+}
+
+mark {
+    background-color: #ff0;
+    color: #000
+}
+
+small {
+    font-size: 80%
+}
+
+sub,sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}

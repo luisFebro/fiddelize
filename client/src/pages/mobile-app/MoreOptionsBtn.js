@@ -9,10 +9,37 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import ChatIcon from '@material-ui/icons/Chat';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Tooltip from './Tooltip';
+import lStorage from '../../utils/storage/lStorage';
+import Fab from '@material-ui/core/Fab';
+import { tooltip1, yellowBtn2, needSetTrueLocalKey } from './lStorageStore';
 // End SpeedDial and Icons
-//
-function MoreOptionsBtn({ history, playBeep, showMoreBtn }) {
+
+const lastOption = tooltip1;
+const currOption = yellowBtn2;
+
+const lastChecked = lStorage("getItem", lastOption);
+const currChecked = lStorage("getItem", currOption);
+
+function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
+    // const { run, runName } = useStoreState(state => ({
+    //     run: state.globalReducer.cases.run,
+    //     runName: state.globalReducer.cases.runName,
+    // }))
+    // const needRun = run && runName === "appIntro";
     const dispatch = useStoreDispatch();
+
+    const styles = {
+        fabRoot: {
+            bottom: '70px',
+            right: '80px',
+        },
+        fabTooltip: {
+            backgroundColor: "var(--mainYellow)",
+            color: "var(--mainDark)",
+            filter: `drop-shadow(0 0 15px #ffc)`,
+        }
+    }
 
     const speedDial = {
         actions: [
@@ -22,13 +49,14 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn }) {
                 name: 'Desconectar ►',
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
+                    // window.location.href = "/mobile-app";
                     logout(dispatch);
                     playBeep();
                 }
             },
             {
                 icon: <ChatIcon />,
-                name: 'Fale Conosco ►',
+                name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
                     history.push("/mobile-app");
@@ -43,38 +71,58 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn }) {
                     history.push("/mobile-app");
                     playBeep();
                 },
-            },
-            {
-                icon: <LoyaltyIcon />,
-                name: 'Adicionar Pontos ►',
-                backColor: 'var(--themeSDark)',
-                onClick: () => {
-                    showComponent(dispatch, "purchaseValue");
-                    history.push("/cliente/pontos-fidelidade");
-                    playBeep();
-                },
-            },
+            }
         ]
     }
 
-
     return(
-        <SpeedDialButton
-            actions={speedDial.actions}
-            tooltipOpen={true}
-            size="large"
-            FabProps={{
-                backgroundColor: 'var(--themeSDark)',
-                size: 'medium',
-                boxShadow: '.5px .5px 3px black', // not working
-            }}
-            root={{
-                bottom: '30px',
-                right: '40px',
-            }}
-            hidden={!showMoreBtn}
-        />
+        <div className="position-relative">
+            <div
+                style={styles.fabRoot}
+                className={`position-fixed ${!showMoreBtn  ? 'd-none' : 'd-block'}`}
+            >
+                <Tooltip
+                    needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
+                    title={`♦ Sugestão: ${userName && userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
+                    element={
+                        <Fab
+                            style={styles.fabTooltip}
+                            className="float-it-5"
+                            size="small"
+                            onClick={() => {
+                                showComponent(dispatch, "purchaseValue");
+                                history.push("/cliente/pontos-fidelidade");
+                                playBeep();
+                                lStorage("setItem", currOption);
+                            }}
+                        >
+                            <LoyaltyIcon />
+                        </Fab>
+                    }
+                />
+            </div>
+            <SpeedDialButton
+                actions={speedDial.actions}
+                onClick={playBeep}
+                tooltipOpen={true}
+                size="large"
+                FabProps={{
+                    backgroundColor: 'var(--themeSDark)',
+                    size: 'medium',
+                    filter: `drop-shadow(.5px .5px 3px black)`, // still not working
+                }}
+                root={{
+                    bottom: '30px',
+                    right: '40px',
+                }}
+                hidden={!showMoreBtn}
+            />
+        </div>
     );
 }
 
 export default withRouter(MoreOptionsBtn);
+
+/*ARCHIVES
+
+*/

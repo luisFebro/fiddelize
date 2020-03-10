@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import getRemainder from '../../utils/numbers/getRemainder';
 import Tooltip from './Tooltip';
 import lStorage from '../../utils/storage/lStorage';
+import { convertDotToComma } from '../../utils/numbers/convertDotComma';
+import { tooltip1 } from './lStorageStore';
+import { useStoreDispatch } from 'easy-peasy';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// import { setRun } from '../../redux/actions/globalActions';
 
 ProgressMsg.propTypes = {
     userScore: PropTypes.number,
     maxScore: PropTypes.number,
+    playBeep: PropTypes.func,
 }
 
-const options = {
-    collection: "onceChecked",
-    property: "tooltipState",
-    value: true,
-}
-
+const options = tooltip1;
 const attentionBtnChecked = lStorage("getItem", options);
-export default function ProgressMsg({ userScore, maxScore }) {
+
+export default function ProgressMsg({ userScore, maxScore, playBeep }) {
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", userScore, eachMilestone);
-    const milestoneLeft = eachMilestone - currMilestone;
+    const milestoneLeft = convertDotToComma(eachMilestone - currMilestone);
+    const dispatch = useStoreDispatch();
 
     const maxLevel = Math.floor(maxScore / eachMilestone);
     let nextLevel = Math.floor(userScore / eachMilestone) + 1;
@@ -40,32 +44,54 @@ export default function ProgressMsg({ userScore, maxScore }) {
     }
 
     const showFlagWithGoals = () => (
-        <span onClick={() => lStorage("setItem", options)}>
+        <span onClick={() => {
+            lStorage("setItem", options);
+            playBeep();
+        }}>
             <Tooltip
                 needAttentionWaves={attentionBtnChecked ? false : true }
                 title={`► Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
-                    <i
-                        style={styles.flagIcon}
-                        className="fas fa-flag-checkered mr-2"
-                    ></i>
+                    <i>
+                        <FontAwesomeIcon
+                            icon="flag-checkered"
+                            style={styles.flagIcon}
+                        />
+                    </i>
                 }
             />
         </span>
     );
 
-    return (
-        <div className="container-center mt-3 text-normal text-white">
-            {showFlagWithGoals()}
-            {userScore > maxScore
-            ? (
-                <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
-            ) : !userScore
-            ? (
-              <span></span>
-            ) : (
-                <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
+    const showMsg = () => (
+        <div className="text-center">
+            {!userScore
+            ? null
+            : (
+                <Fragment>
+                    {userScore >= maxScore
+                    ? (
+                        <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
+                    )  : (
+                        <span>
+                            {nextLevel === 5
+                            ? <span className="text-left ml-2">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
+                            : <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
+                            }
+                        </span>
+                    )}
+                </Fragment>
             )}
         </div>
     );
+
+    return (
+        <div className="container-center mt-3 text-normal text-white">
+            {showFlagWithGoals()}
+            {showMsg()}
+        </div>
+    );
 }
+
+/* ARCHIVES
+*/

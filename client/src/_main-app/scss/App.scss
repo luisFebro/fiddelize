@@ -1,0 +1,165 @@
+@import 'coreElements';
+@import 'color-palettes/core';
+@import 'font-faces/core'; // This will be in the typography folder soon
+@import 'typography/core';
+@import 'responsiveness/core';
+@import 'styling-utils/core';
+@import 'effects/core';
+@import 'customization/core';
+
+/*CART BUTTON*/
+.btn-black {
+    background: transparent;
+    text-transform: capitalize;
+    font-size: 1.1rem !important;
+    color: var(--mainDark);
+    border-radius: 0 !important;
+    border: .1rem solid var(--mainDark) !important;
+}
+
+.btn-black:hover {
+    cursor: pointer;
+    background: var(--mainDark) !important;
+    color: var(--mainWhite) !important;
+}
+
+.cart-icon {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--mainYellow);
+}
+
+/*BACKDROPS*/
+.backdrop-strong {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .8);
+    z-index: 989;
+}
+
+.backdrop-medium {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .4);
+    z-index: 989;
+}
+
+/*MAIN SHADOW AND HOVER*/
+.shadow-elevation-white {
+    filter: drop-shadow(.001em .1em .1em var(--mainWhite));
+}
+
+.shadow-elevation-black { /*recommended*/
+    filter: drop-shadow(.001em .001em .15em var(--mainDark))
+}
+
+.shadow-elevation { /*recommendaded only squared pictures, cards and static square shapes*/
+    z-index: -1;
+    box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
+}
+
+.shape-elevation,
+.card-elevation,
+.svg-elevation { /*recommended*/
+    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+}
+
+.shadow-elevation-soft {
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.20), 0 10px 8px rgba(0, 0, 0, 0.12);
+}
+
+.tranparent-img-shadow,
+.main-letters-shadow {
+    font-size: 1.9rem;
+    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+}
+
+.main-letters-shadow:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(.001em .1em .1em var(--mainYellow));
+}
+
+/*END MAIN SHADOW AND HOVER*/
+
+/*ICON DEFAULT*/
+/*Material UI icon*/
+.icon-svg {
+    transform: scale(2);
+}
+.icon-default {
+    color: var(--mainWhite);
+    cursor: pointer;
+    font-size: 2.1rem;
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
+}
+
+.icon-default:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainYellow));
+}
+
+/*END ICON DEFAULT*/
+
+
+/*BUTTONS*/
+.btn {
+    text-decoration: none;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.btn-icon {
+    width: 15px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.btn-txt {
+    color: var(--mainWhite);
+    padding-left: 10px;
+    vertical-align: middle;
+}
+
+.menu-btn {
+    padding: 12px 15px;
+    display: inline-block;
+}
+
+.menu-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+}
+
+.login-btn {
+    width: 95%;
+    margin: auto;
+    /*padding: 5px 20px;*/
+    border-radius: 3px;
+}
+
+// .menu-bar {
+//     overflow: hidden;
+//     background-color: var(--primary-red);
+//     box-shadow: -5px -7px 15px 1px rgba(0, 0, 0, 0.8);
+//     padding-left: 20%;
+//     padding-right: 20%;
+// }
+
+.app-icon-container {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    font-size: 1.5rem;
+    border-radius: 50%;
+}
+
+/*END MENU DROPDOWN*/
+

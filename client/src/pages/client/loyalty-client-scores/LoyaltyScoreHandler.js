@@ -43,6 +43,7 @@ export default function LoyaltyScoreHandler() {
             />
             <StaffConfirmation
                 success={staffConfirmation}
+                valuePaid={valuePaid}
                 setVerification={setVerification}
             />
             <ClientScoresPanel

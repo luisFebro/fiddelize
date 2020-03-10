@@ -17,6 +17,7 @@ import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
 import detectErrorField from '../../utils/validation/detectErrorField';
 import handleChange from '../../utils/form/use-state/handleChange';
+import lStorage from '../../utils/storage/lStorage';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -28,6 +29,7 @@ import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
 import ButtonMulti from '../buttons/material-ui/ButtonMulti';
+import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 moment.updateLocale('pt-BR');
@@ -43,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 function Register() {
     const [selectedDate, handleDateChange] = useState(new Date());
+    const [showMoreFields, setShowMoreFields] = useState(false);
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -130,9 +133,30 @@ function Register() {
                 showSnackbar(dispatch, 'Registrando...')
                 // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
                 setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
+
+                const removalOptions = {
+                    collection: "onceChecked",
+                }
+                lStorage("removeItems", removalOptions);
             })
 
     };
+
+    const handleShowFields = field => {
+        const field2 =  showMoreFields === "field2" && name.length >= 1 || showMoreFields === "field3" || showMoreFields === "otherFields";
+        const field3 = showMoreFields === "field3" && cpf.length >= 1 || showMoreFields === "otherFields";
+
+        switch(field) {
+            case "field2":
+                return field2;
+            case "field3":
+                return field3;
+            case "otherFields":
+                return showMoreFields === "otherFields";
+            default:
+                console.log("something went wrong with handleShowFields...")
+        }
+    }
 
     const showTitle = () => (
         <Title
@@ -158,12 +182,43 @@ function Register() {
 
     const showForm = () => (
         <form
-            style={{margin: 'auto', width: '80%'}}
+            style={{margin: 'auto', width: '90%'}}
             className="text-p text-normal"
             onBlur={() => setFieldError(null)}
         >
             <div className="mt-3">
-                Insira seu CPF
+                Qual é o seu nome?
+                <TextField
+                    required
+                    onChange={handleChange(setData, data)}
+                    error={errorName ? true : false}
+                    variant="outlined"
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    onKeyPress={e => {
+                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field2"); setData({ ...data, name: name.cap()});}
+                    }}
+                    onBlur={() => {
+                        setShowMoreFields("field2");
+                        setData({ ...data, name: name.cap()})
+                    }}
+                    autoComplete="off"
+                    value={name}
+                    type="name"
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
+                      style: styles.fieldForm
+                    }}
+                />
+            </div>
+            <div className={`animated slideInDown fast mt-3 ${handleShowFields("field2") ? "d-block" : "d-none"}`}>
+                Ok, informe seu CPF
                 <TextField
                     required
                     margin="dense"
@@ -172,7 +227,13 @@ function Register() {
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
-                    onBlur={() => setData({ ...data, cpf: cpfMaskBr(cpf)})}
+                    onKeyPress={e => {
+                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field3"); setData({ ...data, cpf: cpfMaskBr(cpf)});}
+                    }}
+                    onBlur={() => {
+                        setShowMoreFields("field3");
+                        setData({ ...data, cpf: cpfMaskBr(cpf)})
+                    }}
                     value={cpf}
                     type="text"
                     autoComplete="off"
@@ -189,33 +250,10 @@ function Register() {
                     }}
                 />
             </div>
-            <div className="mt-3">
-                Qual é o seu nome e sobrenome?
-                <TextField
-                    required
-                    onChange={handleChange(setData, data)}
-                    error={errorName ? true : false}
-                    variant="outlined"
-                    margin="dense"
-                    id="name"
-                    name="name"
-                    onBlur={() => setData({ ...data, name: name.cap()})}
-                    autoComplete="off"
-                    value={name}
-                    type="name"
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      style: styles.fieldForm
-                    }}
-                />
-            </div>
-            <div className="mt-3">
-                Quando é o seu aniversário?
+            <div className={`animated slideInDown fast mt-3 ${handleShowFields("field3") ? "d-block" : "d-none"}`}>
+                {name
+                ? <span>{name.cap()}, quando é o seu aniversário?</span>
+                : <span>Quando é o seu aniversário?</span>}
                 <MuiPickersUtilsProvider
                     utils={MomentUtils}
                     locale={"pt-br"}
@@ -231,88 +269,94 @@ function Register() {
                         views={["month", "date"]}
                         name="birthday"
                         value={selectedDate}
-                        onChange={handleDateChange}
+                        onChange={() => {
+                            handleDateChange()
+                            setShowMoreFields("otherFields")
+                        }}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
                               <CakeIcon />
                             </InputAdornment>
                           ),
-                            style: styles.fieldForm
+                          style: styles.fieldForm,
                         }}
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <div className="mt-3">
-                Email
-                <TextField
-                    required
-                    margin="dense"
-                    onChange={handleChange(setData, data)}
-                    error={errorEmail ? true : false}
-                    name="email"
-                    variant="outlined"
-                    value={email}
-                    type="email"
-                    autoComplete="off"
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailIcon />
-                        </InputAdornment>
-                      ),
-                      style: styles.fieldForm
-                    }}
-                />
-            </div>
-            <div className="mt-3">
-                Contato
-                <TextField
-                    required
-                    margin="dense"
-                    onChange={handleChange(setData, data)}
-                    error={errorPhone ? true : false}
-                    onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
-                    name="phone"
-                    helperText={"Digite apenas números com DDD"}
-                    FormHelperTextProps={{ style: styles.helperFromField }}
-                    value={phone}
-                    type="tel"
-                    autoComplete="off"
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PhoneIphoneIcon />
-                        </InputAdornment>
-                      ),
-                      style: styles.fieldForm
-                    }}
-                />
-            </div>
-            <div className="my-3">
-                <Select
-                  margin="dense"
-                  labelId="maritalStatus"
-                  onChange={handleChange(setData, data)}
-                  name="maritalStatus"
-                  fullWidth
-                  value={maritalStatus}
-                  variant="outlined"
-                  error={errorMaritalStatus ? true : false}
-                  style={{backgroundColor: 'var(--mainWhite)'}}
-                >
-                  <MenuItem value={maritalStatus}>
-                    <span className="text-p text-normal" style={{fontSize: isSmall ? '1.1em' : "", fontFamily: 'Poppins, sans-serif'}}>selecione estado civil:</span>
-                  </MenuItem>
-                  <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
-                  <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
-                  <MenuItem value={"Divorciado(a)"}>Divorciado(a)</MenuItem>
-                  <MenuItem value={"Viúvo(a)"}>Viúvo(a)</MenuItem>
-                </Select>
-            </div>
+            <section className={`animated slideInLeft fast ${handleShowFields("otherFields")  ? "d-block" : "d-none"}`}>
+                <div className="mt-3">
+                    Email
+                    <TextField
+                        required
+                        margin="dense"
+                        onChange={handleChange(setData, data)}
+                        error={errorEmail ? true : false}
+                        name="email"
+                        variant="outlined"
+                        value={email}
+                        type="email"
+                        autoComplete="off"
+                        fullWidth
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <EmailIcon />
+                            </InputAdornment>
+                          ),
+                          style: styles.fieldForm
+                        }}
+                    />
+                </div>
+                <div className="mt-3">
+                    Contato
+                    <TextField
+                        required
+                        margin="dense"
+                        onChange={handleChange(setData, data)}
+                        error={errorPhone ? true : false}
+                        onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
+                        onKeyPress={e => isKeyPressed(e, "Enter") && setData({ ...data, phone: phoneMaskBr(phone)})}
+                        name="phone"
+                        helperText={"Digite apenas números com DDD"}
+                        FormHelperTextProps={{ style: styles.helperFromField }}
+                        value={phone}
+                        type="tel"
+                        autoComplete="off"
+                        fullWidth
+                        variant="outlined"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <PhoneIphoneIcon />
+                            </InputAdornment>
+                          ),
+                          style: styles.fieldForm
+                        }}
+                    />
+                </div>
+                <div className="my-3">
+                    <Select
+                      margin="dense"
+                      labelId="maritalStatus"
+                      onChange={handleChange(setData, data)}
+                      name="maritalStatus"
+                      fullWidth
+                      value={maritalStatus}
+                      variant="outlined"
+                      error={errorMaritalStatus ? true : false}
+                      style={{backgroundColor: 'var(--mainWhite)'}}
+                    >
+                      <MenuItem value={maritalStatus}>
+                        <span className="text-p text-normal" style={{fontSize: isSmall ? '1.1em' : "", fontFamily: 'Poppins, sans-serif'}}>selecione estado civil:</span>
+                      </MenuItem>
+                      <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
+                      <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
+                      <MenuItem value={"Divorciado(a)"}>Divorciado(a)</MenuItem>
+                      <MenuItem value={"Viúvo(a)"}>Viúvo(a)</MenuItem>
+                    </Select>
+                </div>
+            </section>
             <SafeEnvironmentMsg />
         </form>
     );

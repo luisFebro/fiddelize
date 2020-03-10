@@ -1,25 +1,56 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
+import lStorage from '../utils/storage/lStorage';
+import isOffline from '../utils/window/isOffline';
+import { userProfileOp, needInitialStateOp } from '../pages/mobile-app/lStorageStore';
 // You can use only one isntance of object like 'cases' for each object.
 // Check for mispellings in case of one action not being dispatched properly.
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
+let collOption = userProfileOp;
+let collOption2 = needInitialStateOp;
+if(needInitialStateOp.value) {
+    lStorage("setItems", collOption);
+    lStorage("setItem", { ...collOption2, value: false })
+}
+const userData = lStorage("getItems", collOption);
+
+const currUserData = {
+    role: null || userData.role,
+    name: null || userData.name,
+    loyaltyScores: {
+        currentScore: null || userData.currentScore,
+        cashCurrentScore: null || userData.lastScore,
+    },
+    clientAdminData: {
+        reward: {
+            score: null || userData.maxScore, // this will be moved to clientAdminData collection
+        }
+    }
+}
+
 // REDUCERS
 const initialState = {
-    currentUser: {},
+    currentUser: currUserData,
     allUsers: [],
     highestScores: [],
 };
+
 
 export const userReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
             case 'USER_READ':
-                //Check if user have coupons (If so, the maskot with discount will not appear when user log in)
-                return {
-                    ...state,
-                    currentUser: action.payload,
-                };
+                if(!needInitialStateOp.value) {
+                    return {
+                        ...state,
+                    }
+                } else {
+                    return {
+                        ...state,
+                        currentUser: action.payload,
+                    };
+                }
             case 'USER_DELETED':
                 return {
                     ...state,

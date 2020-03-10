@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// cómponents should be pure without intermidiate components handling props. Otherwise it will pop up some ref errors.
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 // import this to component later!!!
@@ -31,9 +32,16 @@ export default function Tooltip({
     title,
     element,
     needAttentionWaves,
-    placement }) {
+    placement,
+    needOpen }) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
+    // this useEffect solves the problem with uncontrolled vs controlled components handling.
+    useEffect(() => {
+        if(needOpen) {
+            setOpen(true);
+        }
+    }, [needOpen])
 
     const handleTooltipClose = () => {
       setOpen(false);
@@ -79,6 +87,7 @@ export default function Tooltip({
 
 /* COMMENTS
 n1: element only accepts one html tag. If nested, it won't work...
+LESSON: empty elements like <i> without an online icon will prevent the tooltip to work properly...
 */
 
 /* ARCHIVES

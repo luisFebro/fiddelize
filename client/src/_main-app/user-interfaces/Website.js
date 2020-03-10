@@ -21,6 +21,7 @@ import Loadable from 'react-loadable';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
 import DownloadApp from '../../pages/DownloadApp';
+import CreationPage from '../../pages/new-app';
 // it is not working properly... Try implement a solution with switch and match to check the current param of the page...
 const Home = Loadable({
     loader: () => import(/* webpackChunkName: "home" */ '../../pages/Home'),
@@ -49,8 +50,9 @@ export default function  Website() {
                 <Route path="/" exact component={Home} />
                 <Route path="/acesso/verificacao" exact component={LoginPage} />
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
-                <Route path="/regulamento/" exact component={RegulationPage} />
+                <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
+                <Route path="/novo-app" exact component={CreationPage} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />
             </Switch>

@@ -203,26 +203,8 @@
     color: black;
 }
 
-/*.card-carousel {
-    margin: 0 0 10px;
-}*/
-
-.categoryBtn {
-  cursor: pointer;
-  border: none;
-  background: linear-gradient(to right, #e52d27, #b31217);
-  color: var(--mainWhite);
-  font-size: 36px;
-  line-height: 100px;
-  padding: 20px;
-  margin: 0;
-  position: relative;
-  text-align: center;
-  transition: .9s;
-}
-
-.categoryBtn:focus {
-    outline: none;
+.card-carousel {
+    margin: 10px 10px 10px;
 }
 
 .title-carousel {

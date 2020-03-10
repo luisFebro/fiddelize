@@ -12,13 +12,17 @@ import PercCircleAndGift from './PercCircleAndGift';
 // END APP COMPONENTS
 // UTILS
 import {CLIENT_URL} from '../../config/clientUrl';
-import animateNumber from '../../utils/numbers/animateNumber';
-import getDayGreetingBr from '../../utils/getDayGreetingBr';
-import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
+import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import "./ellipse.css";
-import "../../keyframes/shake.css";
-// import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
+import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
+import { confetti } from '../../keyframes/animations-js/confetti/confetti';
+import getDayGreetingBr from '../../utils/getDayGreetingBr';
+import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
+import lStorage from '../../utils/storage/lStorage';
+import { confettiPlay, userProfileOp } from './lStorageStore';
+import setDataIfOnline from '../../utils/storage/setDataIfOnline';
+
 // import ImageLogo from '../../components/ImageLogo';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -28,38 +32,70 @@ function ClientMobileApp({ history }) {
     const userScoreRef = useRef(null);
 
     const [showMoreBtn, setShowMoreBtn] = useState(false);
-    const [showPercentage, setShowPercentage] = useState(false);
+    const [showMoreComps, setShowMoreComps] = useState(false);
 
-    let { isUserAuth, role, loyaltyScores, userName } = useStoreState(state => ({
-        isUserAuth: state.authReducer.cases.isUserAuthenticated,
+    let { role, loyaltyScores, userName, clientAdmin } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
         userName: state.userReducer.cases.currentUser.name,
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
+        clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }))
+    console.log("role", role);
+
+    let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
+    let userScore = loyaltyScores && loyaltyScores.currentScore;
+    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
+
+    setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
+
+    const gotToken = localStorage.getItem("token");
+
+    const styles = {
+        rulesBtn: {
+            width: '130px',
+            color: "var(--mainWhite)",
+            cursor: "pointer",
+        }
+    }
 
     checkIfElemIsVisible("#rules", setShowMoreBtn)
 
     // const dispatch = useStoreDispatch();
 
-    const maxScore = 300; //loyaltyScores && loyaltyScores.maxScore;
-    const userScore = loyaltyScores && loyaltyScores.currentScore;
-    const userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
+
+    const options = confettiPlay;
 
     useEffect(() => {
-        if(isUserAuth && role === "cliente") {
+        const playConfettiAgain = lStorage("getItem", options)
+        if(!playConfettiAgain && userScore >= maxScore) {
+            confetti.start();
+            lStorage("setItem", options);
+        } else {
+            if(confetti.isRunning && showMoreComps) {
+                setTimeout(() => confetti.stop(), 5000)
+            }
+        }
+
+        if(playConfettiAgain && userScore <= maxScore) {
+            lStorage("removeOneItem", options); // returns null if no keys were found.
+        }
+
+    }, [maxScore, userScore, showMoreComps]);
+
+    useEffect(() => {
+        if(gotToken && role === "cliente") {
             animateNumber(
                 userScoreRef.current,
                 0,
                 userScore,
-                3000,
-                setShowPercentage
+                getAnimationDuration(userScore),
+                setShowMoreComps
             );
         }
-    }, [role, isUserAuth])
+    }, [role, gotToken])
 
     // UTILS
     function playBeep() {
-        // Not working
         const elem = document.querySelector("#appBtn");
         elem.play();
     }
@@ -92,7 +128,7 @@ function ClientMobileApp({ history }) {
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
                 className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
-                {getDayGreetingBr()},<br/> <span className="text-title">{userName.cap() + "!"}</span>
+                {getDayGreetingBr()},<br/> <span className="text-title">{userName && userName.cap() + "!"}</span>
             </div>
         </section>
     );
@@ -101,7 +137,7 @@ function ClientMobileApp({ history }) {
         <AllScores
             userScoreRef={userScoreRef}
             userScore={userScore}
-            showPercentage={showPercentage}
+            showPercentage={showMoreComps}
             userLastScore={userLastScore}
         />
     );
@@ -110,68 +146,82 @@ function ClientMobileApp({ history }) {
         <PercCircleAndGift
             userScore={userScore}
             maxScore={maxScore}
-            showPercentage={showPercentage}
+            showPercentage={showMoreComps}
+            playBeep={playBeep}
         />
     );
 
     const showRatingIcons = () => (
-        <div style={{margin: '40px 0 50px'}}>
+        <div style={{margin: '40px 0 80px'}}>
             <RatingIcons score={userScore} maxScore={maxScore || 0} />
-            {showPercentage
+            {showMoreComps
             ? (
                 <div>
-                    <ProgressMsg userScore={userScore || 0} maxScore={maxScore || 0} />
+                    <ProgressMsg
+                        userScore={userScore || 0}
+                        maxScore={maxScore || 0}
+                        playBeep={playBeep}
+                    />
                 </div>
             ) :  null}
         </div>
     );
 
     const showRules = () => (
-        <Link to="/regulamento">
-            {showPercentage
+        <div>
+            {showMoreComps
             ? (
                 <div
-                    onClick={playBeep}
                     id="rules"
-                    className="text-normal font-weight-italic text-center"
-                    style={{color: "var(--mainWhite)", cursor: "pointer"}}
+                    className="container-center"
                 >
-                    Consulte<br />Regras Aqui
+                    <Link to="/regulamento">
+                        <div
+                            className="no-text-decoration text-normal text-center pressed-to-left"
+                            onClick={playBeep}
+                            style={styles.rulesBtn}>
+                            Consulte<br />Regras Aqui
+                        </div>
+                    </Link>
                 </div>
             ) : null}
-        </Link>
+        </div>
     );
 
     const showMoreOptionsBtn = () => (
         <MoreOptionsBtn
             playBeep={playBeep}
             showMoreBtn={showMoreBtn}
+            userName={userName}
         />
     );
 
     return (
         <div style={{overflowX: 'hidden'}}>
             {showLogo()}
-            <section>
-                {isUserAuth && role === "cliente"
-                ? (
-                    <Fragment>
-                        {showGreeting()}
-                        {showAllScores()}
-                        {showPercCircleAndGift()}
-                        {showRatingIcons()}
-                        <div className="mb-4">
-                            {showRules()}
-                        </div>
-                        {showMoreOptionsBtn()}
-                        <audio id="appBtn" src="https://ia601500.us.archive.org/29/items/confirmation-keypad-sound/confirmation-keypad-sound.wav"></audio>
-                    </Fragment>
-                ) : (
-                    <div style={{margin: '120px 0 0'}}>
-                        {showLogin()}
-                    </div>
-                )}
-            </section>
+            {!gotToken && (
+                <div style={{margin: '120px 0 0'}}>
+                    {showLogin()}
+                </div>
+            )}
+
+            {gotToken && (
+                <section>
+                    {role === "cliente" && (
+                        <Fragment>
+                            {showGreeting()}
+                            {showAllScores()}
+                            {showPercCircleAndGift()}
+                            {showRatingIcons()}
+                            <div className="mb-4">
+                                {showRules()}
+                            </div>
+                            {showMoreOptionsBtn()}
+                            <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
+                        </Fragment>
+                    )}
+                </section>
+            )}
         </div>
     );
 }
@@ -179,12 +229,12 @@ function ClientMobileApp({ history }) {
 export default withRouter(ClientMobileApp);
 
 /* ARCHIVES
-{loading
+{gotToken && !userName
 ? (
-    <LoadingThreeDots color="white" />
-) : (
-
-)}
+    <div style={{margin: '200px 0 0'}}>
+        <LoadingThreeDots color="white" />
+    </div>
+)
  */
 
 /*

@@ -1,0 +1,37 @@
+/*UTILS*/
+.c-pointer {
+    cursor: pointer;
+}
+
+.no-outline:focus {
+    outline: none;
+}
+// Index
+.z-index-minus-1 {
+    z-index: -1;
+}
+
+.z-index-top {
+    z-index: 1000;
+}
+
+.z-index-top2 {
+    z-index: 1500;
+}
+// End Index
+
+.fixedNav {
+    position: fixed;
+    width: 100%;
+    top: 0;
+}
+
+/*links*/
+.disabledLink {
+    pointer-events: none;
+}
+
+.enabledLink {
+    pointer-events: auto;
+}
+/*end links*/

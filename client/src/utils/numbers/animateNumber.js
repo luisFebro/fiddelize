@@ -16,7 +16,7 @@ export default function animateNumber(ref, start, end, duration, next) {
     var obj = ref;
 
     if(!obj) {
-        next(true);
+        //next(true); n1
         return;
     }
 
@@ -43,3 +43,31 @@ export default function animateNumber(ref, start, end, duration, next) {
         }
     }, stepTime);
 }
+
+// the lowest the score, the more delay it will have.
+const getAnimationDuration = score => {
+    if(typeof score === 'object') return 0;
+    if(!(['number', 'undefined']).includes(typeof score)) throw new Error("Primary type should be a number or empty. Not " + typeof score);
+
+    let animaDuration;
+    if(score <= 100) {
+        animaDuration = 3500;
+    } else if (score >= 100 && score <= 200) {
+        animaDuration = 3000;
+    } else if (score >= 200 && score <= 300) {
+        animaDuration = 2500;
+    } else if (score >= 300 && score <= 400) {
+        animaDuration = 2000;
+    } else {
+        animaDuration = 1000;
+    }
+
+    return animaDuration;
+}
+
+export { getAnimationDuration }
+
+
+/* COMMENTS
+n1: this is commented out because this next function triggers other components untimely
+*/

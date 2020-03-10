@@ -13,6 +13,7 @@ import BackUpToExcel from './BackUpToExcel';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../redux/actions/snackbarActions';
 import { readAdmin, updateAdmin, updateConfig, readVerificationPass } from '../../../redux/actions/adminActions';
+import 'style.scss';
 
 export default function UpdateConfigForm() {
     const [showSpinner, setShowSpinner] = useState(true);

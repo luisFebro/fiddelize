@@ -1,9 +1,11 @@
 const User = require('../../models/user');
 const validateEmail = require('../../utils/validation/validateEmail');
 const validatePhone = require('../../utils/validation/validatePhone');
+const isValidName = require('../../utils/validation/isValidName');
 const CPF = require('../../utils/validation/validateCpf');
 const { msg } = require('../_msgs/auth');
 const { msgG } = require('../_msgs/globalMsgs');
+
 
 exports.mwValidateRegister = (req, res, next) => {
     const { name, email, cpf, birthday, phone } = req.body;
@@ -12,9 +14,11 @@ exports.mwValidateRegister = (req, res, next) => {
     User.findOne({ cpf })
     .then(user => {
         if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
+        if(!name) return res.status(400).json(msg('error.noName'));
+        if(!isValidName) return res.status(400).json(msg('error.invalidLengthName'));
+        if(user && user.name === name) return res.status(400).json(msg('error.userAlreadyRegistered'));
         if(user && user.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
         if(!cpf) return res.status(400).json(msg('error.noCpf'));
-        if(!name) return res.status(400).json(msg('error.noName'));
         if(!email) return res.status(400).json(msg('error.noEmail'));
         if(!phone) return res.status(400).json(msg('error.noPhone'));
         if(!birthday) return res.status(400).json(msg('error.noBirthday'));
