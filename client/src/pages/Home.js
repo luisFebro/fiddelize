@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Register from '../components/auth/Register';
+import RegisterClientAdmin from '../components/auth/RegisterClientAdmin';
 import ScrollArrow from '../keyframes/built/scroll-arrow/ScrollArrow';
 import { Link } from 'react-router-dom';
 import AOS from 'aos';
@@ -29,7 +29,7 @@ export default function Home() {
                 className="text-center align-item-center text-md-left text-title text-white"
                 style={{ maxWidth: '700px'}}
             >
-                Pontos de Fidelidade Online para seus Clientes
+                Pontos de Fidelidade Digital para seus Clientes
             </h1>
         </section>
     );
@@ -61,7 +61,7 @@ export default function Home() {
                 <ScrollArrow color="white" />
             </div>
             {showAppShowCase()}
-            <Register />
+            <RegisterClientAdmin />
         </Fragment>
     );
 };

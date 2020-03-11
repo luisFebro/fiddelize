@@ -14,9 +14,13 @@ export default function LoginPage() {
             <div>
             {currentComp === "login"
                 ? (
-                    <Login />
+                    <div style={{margin: '70px 0'}}>
+                        <Login />
+                    </div>
                 ) : (
-                    <LoyaltyScoreHandler />
+                    <div style={{margin: '70px 0'}}>
+                        <LoyaltyScoreHandler />
+                    </div>
                 )}
             </div>
 

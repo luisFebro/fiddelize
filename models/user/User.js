@@ -67,39 +67,30 @@ const regulationData = {
     }
 }
 const RegulationSchema = new Schema(regulationData, { _id: false, timestamps: true });
+
 const clientAdminData = {
-    biz: {
-        name: {
-            type: String,
-            required: true,
-        },
-        cnpj: String,
-        whatsapp: Number,
+    bizName: {
+        type: String,
+        // required: true,comment out cuz every sign up will request and throw error
     },
-    reward: {
-        score: {
-            type: Number, // prior maxScore
-            required: true
-        },
-        list: {
-            type: Array,
-            required: true
-        },
+    bizCnpj: String,
+    bizWhatsapp: Number,
+    rewardScore: {
+        type: Number, // prior maxScore
+    },
+    rewardList: {
+        type: Array,
+        // required: true
     },
     regulation: RegulationSchema,
-    theming: {
-        themePColor: String,
-        themeSColor: String,
-    },
-    logoImg: {
-        url: String
-    },
-    app: {
-        downloads: {
-            type: Number,
-            default: 0,
-        }
-    },
+
+    themePColor: String,
+    themeSColor: String,
+    logoImgUrl: String,
+    appDownloads: {
+        type: Number,
+        default: 0,
+    }
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 

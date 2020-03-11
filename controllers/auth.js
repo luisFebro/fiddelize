@@ -57,7 +57,17 @@ exports.loadAuthUser = (req, res) => {
 }
 
 exports.register = (req, res) => {
-    let { role, name, email, cpf, birthday, phone, maritalStatus } = req.body;
+    let {
+        role,
+        name,
+        email,
+        cpf,
+        birthday,
+        phone,
+        maritalStatus,
+        clientAdminData,
+    } = req.body;
+
 
     if(maritalStatus === "selecione estado civil") {
         maritalStatus = "cliente não informou";
@@ -70,7 +80,8 @@ exports.register = (req, res) => {
         cpf,
         birthday,
         phone,
-        maritalStatus
+        maritalStatus,
+        clientAdminData,
     });
 
     newUser.save()

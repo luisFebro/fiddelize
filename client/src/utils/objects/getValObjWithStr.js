@@ -1,4 +1,4 @@
-export default function getValObjWithStr(obj, path) {
+function getValObjWithStr(obj, path) {
     const paths = path.split('.');
     let curr = obj;
 
@@ -7,14 +7,17 @@ export default function getValObjWithStr(obj, path) {
         ? undefined
         : curr = curr[path];
     })
+
     return curr;
 }
+
 // e.g
 // const obj = {
-//     "hello": "worked!!!",
+//     "hello": {
+//         a: "worked!!!",
+//     },
 //     "bye": "bye",
 // }
-
-// console.log(getValObjWithStr(obj, "obj.hello"))
+// console.log(getValObjWithStr(obj, "obj.hello.a"))
 // #
 // worked!!!
