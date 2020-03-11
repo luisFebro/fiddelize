@@ -19,7 +19,7 @@ import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage from '../../utils/storage/lStorage';
-import { confettiPlay, userProfileOp, needInitialStateOp, needAppRegisterOp } from './lStorageStore';
+import { confettiPlayOp, userProfileOp, needInitialStateOp, needAppRegisterOp } from './lStorageStore';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 import Register from '../../components/auth/Register';
 
@@ -69,14 +69,11 @@ function ClientMobileApp({ history }) {
 
     // const dispatch = useStoreDispatch();
 
-
-    const options = confettiPlay;
-
     useEffect(() => {
-        const playConfettiAgain = lStorage("getItem", options)
+        const playConfettiAgain = lStorage("getItem", confettiPlayOp)
         if(!playConfettiAgain && userScore >= maxScore) {
             confetti.start();
-            lStorage("setItem", options);
+            lStorage("setItem", confettiPlayOp);
         } else {
             if(confetti.isRunning && showMoreComps) {
                 setTimeout(() => confetti.stop(), 5000)
@@ -84,7 +81,7 @@ function ClientMobileApp({ history }) {
         }
 
         if(playConfettiAgain && userScore <= maxScore) {
-            lStorage("removeOneItem", options); // returns null if no keys were found.
+            lStorage("removeItem", confettiPlayOp); // returns null if no keys were found.
         }
 
     }, [maxScore, userScore, showMoreComps]);
