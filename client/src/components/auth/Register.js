@@ -118,7 +118,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
             role: isClientUser ? "cliente" : "cliente-admin",
         };
 
-        showSnackbar(dispatch, 'Cadastrando...')
+        showSnackbar(dispatch, 'Registrando...')
         registerEmail(dispatch, newUser)
         .then(res => {
             if(res.status !== 200) {

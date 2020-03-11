@@ -1,27 +1,35 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
 import lStorage from '../utils/storage/lStorage';
+import { userProfileOp, needInitialStateOp } from '../pages/mobile-app/lStorageStore';
 // You can use only one isntance of object like 'cases' for each object.
 // Check for mispellings in case of one action not being dispatched properly.
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
-// const currUserData = {
-//     role: null || userData.role,
-//     name: null || userData.name,
-//     loyaltyScores: {
-//         currentScore: null || userData.currentScore,
-//         cashCurrentScore: null || userData.lastScore,
-//     },
-//     clientAdminData: {
-//         reward: {
-//             score: null || userData.maxScore, // this will be moved to clientAdminData collection
-//         }
-//     }
-// }
+if(lStorage("getItem", needInitialStateOp)) {
+    lStorage("setItems", userProfileOp);
+    lStorage("setItem", { ...needInitialStateOp, value: false })
+}
+
+const userData = lStorage("getItems", userProfileOp);
+
+const currUserData = {
+    role: null || userData && userData.role,
+    name: null || userData && userData.name,
+    loyaltyScores: {
+        currentScore: null || userData && userData.currentScore,
+        cashCurrentScore: null || userData && userData.lastScore,
+    },
+    clientAdminData: {
+        reward: {
+            score: null || userData && userData.maxScore, // this will be moved to clientAdminData collection
+        }
+    }
+}
 
 // REDUCERS
 const initialState = {
-    currentUser: {},
+    currentUser: currUserData,
     allUsers: [],
     highestScores: [],
 };

@@ -49,18 +49,9 @@ function ClientMobileApp({ history }) {
         clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }))
 
-    let collOption = userProfileOp;
-    let collOption2 = needInitialStateOp;
-    if(lStorage("getItem", collOption2)) {
-        lStorage("setItems", collOption);
-        lStorage("setItem", { ...collOption2, value: false })
-    }
-    const userData = lStorage("getItems", collOption);
-    role = role || userData && userData.role;
-    userName = userName || userData && userData.name;
     let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
-    let userScore = loyaltyScores && loyaltyScores.currentScore || userData && userData.currentScore;
-    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore || userData && userData.lastScore;
+    let userScore = loyaltyScores && loyaltyScores.currentScore;
+    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
     setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
 
@@ -218,14 +209,12 @@ function ClientMobileApp({ history }) {
         />
     );
 
-    // const conditionRegister1 = !gotToken && needAppRegister === true && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
-
-    // const conditionLogin1 = !gotToken && needAppRegister !== true && showLogin()
     const conditionRegister = !gotToken && loginOrRegister === "register" && showRegister(true)
     const conditionLogin = !gotToken && loginOrRegister === "login" && showLogin()
 
     return (
         <div style={{overflowX: 'hidden'}}>
+            <span className="text-right text-white for-version-test">{"test1"}</span>
             {showLogo()}
             <section>
                 {needAppRegister

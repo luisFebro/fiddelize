@@ -30,32 +30,39 @@ function Login({ history, setLoginOrRegister }) {
                 showSnackbar(dispatch, res.data.msg, 'error');
                 return null;
             }
+
             const { msg, role, name, authUserId } = res.data;
-            showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
+
             if(role === "admin") {
+                showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
                 setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
                 setTimeout(() => history.push("/admin/painel-de-controle"), 5000);
                 setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
+
             if(role === "cliente-admin") {
-                    const bizName = "fiddelize"; // need to change
-                    setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                    setTimeout(() => history.push(`${bizName}/cliente-admin/painel-de-controle`), 5000);
-                    setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
+                showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
+                const bizName = "fiddelize"; // need to change
+                setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                setTimeout(() => history.push(`${bizName}/cliente-admin/painel-de-controle`), 5000);
+                setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
-            // if(role === "colaborador") {
-            //     setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-            //     setTimeout(() => history.push(`/colaborador/quadro-administrativo/${authUserId}`), 5000);
-            //     setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
-            // }
+
             if(role === "cliente") {
-                if(true) {
+                if(isThisApp()) {
+                    // window.location.href = "/mobile-app" // this is for updating the values from lStorage...
                     history.push("/mobile-app");
                 } else {
                     showComponent(dispatch, "purchaseValue");
                     history.push("/cliente/pontos-fidelidade");
                 }
             }
+            // if(role === "colaborador") {
+            // showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
+            //     setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+            //     setTimeout(() => history.push(`/colaborador/quadro-administrativo/${authUserId}`), 5000);
+            //     setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
+            // }
         })
     };
 
