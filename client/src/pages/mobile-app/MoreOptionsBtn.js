@@ -31,8 +31,8 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
 
     const styles = {
         fabRoot: {
-            bottom: '70px',
-            right: '80px',
+            bottom: '75px',
+            right: '85px',
         },
         fabTooltip: {
             backgroundColor: "var(--mainYellow)",
@@ -88,7 +88,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                         <Fab
                             style={styles.fabTooltip}
                             className="float-it-5"
-                            size="small"
+                            size="medium"
                             onClick={() => {
                                 showComponent(dispatch, "purchaseValue");
                                 history.push("/cliente/pontos-fidelidade");

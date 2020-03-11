@@ -118,7 +118,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
             role: isClientUser ? "cliente" : "cliente-admin",
         };
 
-        // showSnackbar(dispatch, 'Cadastrando...')
+        showSnackbar(dispatch, 'Cadastrando...')
         registerEmail(dispatch, newUser)
         .then(res => {
             if(res.status !== 200) {
@@ -130,8 +130,13 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                 return;
             }
 
+            const removalOptions = {
+                collection: "onceChecked",
+            }
+            lStorage("removeItems", removalOptions);
+
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            switch(role) {
+            switch(res.data.roleRegistered) {
                 case "cliente":
                     showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
                     setLoginOrRegister("login");
@@ -141,11 +146,8 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                     break;
             }
 
-            const removalOptions = {
-                collection: "onceChecked",
-            }
-            lStorage("removeItems", removalOptions);
             sendEmail(res.data.authUserId);
+
         })
     };
 

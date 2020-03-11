@@ -78,6 +78,7 @@ exports.register = (req, res) => {
         res.json({
             msg: msg('ok.successRegister', name, 'onlyMsg'),
             authUserId: user._id,
+            roleRegistered: role,
         });
     });
 }
