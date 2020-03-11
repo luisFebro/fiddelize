@@ -14,7 +14,6 @@ import { handleEnterPress } from '../../../../utils/event/isKeyPressed';
 import clearForm from '../../../../utils/form/use-state/clearForm';
 import { checkVerificationPass } from "../../../../redux/actions/adminActions";
 import PropTypes from 'prop-types';
-import showVanillaToast from '../../../../components/vanilla-js/toastify/showVanillaToast';
 
 StaffConf.propTypes = {
     success: PropTypes.bool,
@@ -46,7 +45,6 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
         .then(res => {
             if(res.status !== 200) {
                 showSnackbar(dispatch, res.data.msg, 'error');
-                showVanillaToast("A senha de verificação está errada.", 5000, { backgroundColor: 'var(--mainRed)'})
                 return;
             }
             showSnackbar(dispatch, res.data.msg, 'success');

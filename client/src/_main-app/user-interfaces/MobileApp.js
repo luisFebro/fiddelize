@@ -45,10 +45,7 @@ function Mobile({ location }) {
                 <PrivateRouteClientAdm path="/admin/painel-de-controle-c-adm" exact component={DashboardClientAdmin} />
                 <Route component={Default} />
             </Switch>
-            {role === "admin"
-            ? (
-                <SnackbarMulti />
-            ) : null}
+            <SnackbarMulti />
         </Fragment>
     );
 }

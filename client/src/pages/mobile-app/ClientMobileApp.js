@@ -13,7 +13,6 @@ import PercCircleAndGift from './PercCircleAndGift';
 // UTILS
 import {CLIENT_URL} from '../../config/clientUrl';
 import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
-import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import "./ellipse.css";
 import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 import { confetti } from '../../keyframes/animations-js/confetti/confetti';
@@ -212,10 +211,18 @@ function ClientMobileApp({ history }) {
         </div>
     );
 
+    const showRegister = (needLoginBtn, needSetFunc) => (
+        <Register
+            isClientUser={true}
+            setLoginOrRegister={setLoginOrRegister || true}
+            needLoginBtn={needLoginBtn}
+        />
+    );
+
     // const conditionRegister1 = !gotToken && needAppRegister === true && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
 
     // const conditionLogin1 = !gotToken && needAppRegister !== true && showLogin()
-    const conditionRegister = !gotToken && loginOrRegister === "register" && <Register isClientUser={true} setLoginOrRegister={setLoginOrRegister} />
+    const conditionRegister = !gotToken && loginOrRegister === "register" && showRegister(true)
     const conditionLogin = !gotToken && loginOrRegister === "login" && showLogin()
 
     return (
@@ -225,7 +232,7 @@ function ClientMobileApp({ history }) {
                 {needAppRegister
                 ? (
                     <Fragment>
-                        <Register />
+                        {showRegister(false)}
                         {lStorage("setItem", {...needAppRegisterOp, value: false})}
                     </Fragment>
                 ) : (

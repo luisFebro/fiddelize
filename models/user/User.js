@@ -122,7 +122,7 @@ const AdminDataSchema = new Schema(adminData, { _id: false });
 const data = {
     role: {
         type: String,
-        default: "cliente",
+        default: "cliente-admin",
         enum: ["admin", "cliente-admin", "cliente"]
     },
     name: {

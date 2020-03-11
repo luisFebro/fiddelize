@@ -44,10 +44,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Register({ isClientUser = false, setLoginOrRegister }) {
+function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
+    const [switchNumToText, setSwitchNumToText] = useState(false); //n1
     const [data, setData] = useState({
+        role: 'cliente-admin',
         name: '',
         email: '',
         phone: '',
@@ -55,7 +57,7 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
         cpf: '',
         maritalStatus: 'selecione estado civil',
     });
-    const { name, email, maritalStatus, birthday, cpf, phone } = data;
+    const { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 
     const { bizInfo } = useStoreState(state => ({
         bizInfo: state.adminReducer.cases.businessInfo,
@@ -81,8 +83,15 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
         setData({ ...data, birthday: getDayMonthBr(selectedDate) })
     }, [selectedDate])
 
+    useEffect(() => {
+        if(isClientUser) {
+            setData({...data, role: "cliente"});
+        }
+    }, [])
+
     const clearData = () => {
         setData({
+            role: '',
             name: '',
             email: '',
             phone: '',
@@ -111,6 +120,7 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
 
     const registerThisUser = e => {
         const newUser = {
+            role,
             name,
             email,
             maritalStatus,
@@ -119,6 +129,7 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
             phone
         };
 
+        showSnackbar(dispatch, 'Registrando...')
         registerEmail(dispatch, newUser)
             .then(res => {
                 if(res.status !== 200) {
@@ -131,9 +142,16 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
                 }
                 sendEmail(res.data.authUserId);
 
-                showSnackbar(dispatch, 'Registrando...')
                 // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-                setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
+                switch(role) {
+                    case "cliente":
+                        showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success")
+                        setLoginOrRegister("login");
+                        break;
+                    case "cliente-admin":
+                        setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
+                        break;
+                }
 
                 const removalOptions = {
                     collection: "onceChecked",
@@ -163,11 +181,11 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
         setTimeout(() => document.getElementById(nextFieldToFocusId).focus(), timeInSec);
     }
 
-    const showLoginForm = isClientUser => (
-        isClientUser && (
+    const showLoginForm = needLoginBtn => (
+        needLoginBtn && (
             <div
                 className="text-white position-absolute text-small font-weight-bold p-2"
-                style={{top: '105px', left: '50px'}}
+                style={{top: isSmall ? '105px' : '130px', left: '50px'}}
             >
                 <p style={{whiteSpace: 'nowrap'}}>Já é cadastrado?{" "}
                 <RadiusBtn title="Faça login" onClick={() => setLoginOrRegister("login")} /></p>
@@ -183,7 +201,7 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themePDark)"
             />
-            {showLoginForm(isClientUser)}
+            {showLoginForm(needLoginBtn)}
         </div>
     );
 
@@ -232,7 +250,7 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
                     }}
                     autoComplete="off"
                     value={name}
-                    type="name"
+                    type="text"
                     fullWidth
                     InputProps={{
                       startAdornment: (
@@ -256,11 +274,11 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
                     variant="outlined"
                     autoOk={false}
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)});}
+                        if(isKeyPressed(e, "Enter")) { setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
                     }}
-                    onBlur={() => { setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}) }}
+                    onBlur={() => { setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
                     value={cpf}
-                    type="text"
+                    type={switchNumToText ? "text": "number"}
                     autoComplete="off"
                     helperText="Digite apenas números."
                     FormHelperTextProps={{ style: styles.helperFromField }}
@@ -369,7 +387,6 @@ function Register({ isClientUser = false, setLoginOrRegister }) {
                 <div className="my-3">
                     <Select
                       id="field6"
-                      tabIndex="0"
                       margin="dense"
                       labelId="maritalStatus"
                       onChange={handleChange(setData, data)}
@@ -461,3 +478,7 @@ MODEL BTN PINK CIRCULAR
 >
 </button>
  */
+
+/* COMMENTS
+n1: used here because it disappears if string or decimal...
+*/

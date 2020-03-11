@@ -10,6 +10,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const useStyles = makeStyles(theme => ({
     snackbar: {
         [theme.breakpoints.down('xs')]: {
@@ -48,9 +50,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const variantIcon = {
-  success: "far fa-check-circle",
-  warning: "fas fa-info",
-  error: "fas fa-times",
+  success: <FontAwesomeIcon icon="check-circle" />,
+  warning: <FontAwesomeIcon icon="info" />,
+  error: <FontAwesomeIcon icon="exclamation-circle" />,
 };
 
 export default function SnackbarMulti() {
@@ -84,10 +86,11 @@ export default function SnackbarMulti() {
             }}
             message={
                 <span id="message-id" className={`text-normal ${classes.message}`}>
-                    <i
+                    <div
                         style={{ color: 'var(--mainWhite)', fontSize: '1.7em', paddingRight: '8px' }}
-                        className={variantIcon[snackbarStatusColor]}
-                    ></i>
+                    >
+                        {variantIcon[snackbarStatusColor]}
+                    </div>
                     {snackbarMsg}
                 </span>
             }
