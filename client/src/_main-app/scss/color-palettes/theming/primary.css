@@ -11,10 +11,5 @@
     --mainWhite: #ecf0f1;
 
     --mainFont: 'Poppins', sans-serif;
-
-    /*no zooming on mobile config*/
-    touch-action: pan-x pan-y;
-    height: 100%
-
 }
 

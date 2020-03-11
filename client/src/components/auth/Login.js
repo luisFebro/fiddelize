@@ -38,8 +38,9 @@ function Login({ history, setLoginOrRegister }) {
                 setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
             if(role === "cliente-admin") {
+                    const bizName = "fiddelize"; // need to change
                     setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                    setTimeout(() => history.push(`/colaborador/quadro-administrativo/${authUserId}`), 5000);
+                    setTimeout(() => history.push(`${bizName}/cliente-admin/painel-de-controle`), 5000);
                     setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
             // if(role === "colaborador") {

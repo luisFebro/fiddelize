@@ -124,12 +124,15 @@ exports.removeField = (req, res) => { // n1
 const getQuery = (role) => {
     let mainQuery;
     const me = {_id: { $ne: ObjectId("5e360888051f2617d0df2245")}};
-    const adminStaffQuery = {"$or": [{role: "admin"}, {role: "colaborador"}]};
+    const adminStaffQuery = {"$or": [{role: "client-admin"}, {role: "admin"}, {role: "colaborador"}]};
     const withNonEmptyArray = { $exists: true, $ne: [] }; // staffBookingList: withNonEmptyArray}
 
     switch(role) {
         case 'cliente':
             mainQuery = { role: 'cliente' };
+            break;
+        case 'cliente-admin':
+            mainQuery = { role: 'cliente-admin' };
             break;
         case 'colaborador':
              // This is not being used. Check getStaffWithBookings in admin

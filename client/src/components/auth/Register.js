@@ -83,12 +83,6 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
         setData({ ...data, birthday: getDayMonthBr(selectedDate) })
     }, [selectedDate])
 
-    useEffect(() => {
-        if(isClientUser) {
-            setData({...data, role: "cliente"});
-        }
-    }, [])
-
     const clearData = () => {
         setData({
             role: '',
@@ -120,45 +114,40 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
 
     const registerThisUser = e => {
         const newUser = {
-            role,
-            name,
-            email,
-            maritalStatus,
-            birthday,
-            cpf,
-            phone
+            ...data,
+            role: isClientUser ? "cliente" : "cliente-admin",
         };
+        alert(JSON.stringify(newUser));
 
         showSnackbar(dispatch, 'Registrando...')
         registerEmail(dispatch, newUser)
-            .then(res => {
-                if(res.status !== 200) {
-                    showSnackbar(dispatch, res.data.msg, 'error', 6000);
-                    // detect field errors
-                    const thisModalFields = Object.keys(data);
-                    const foundObjError = detectErrorField(res.data.msg, thisModalFields);
-                    setFieldError(foundObjError);
-                    return;
-                }
-                sendEmail(res.data.authUserId);
+        .then(res => {
+            if(res.status !== 200) {
+                showSnackbar(dispatch, res.data.msg, 'error', 6000);
+                // detect field errors
+                const thisModalFields = Object.keys(data);
+                const foundObjError = detectErrorField(res.data.msg, thisModalFields);
+                setFieldError(foundObjError);
+                return;
+            }
+            sendEmail(res.data.authUserId);
 
-                // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-                switch(role) {
-                    case "cliente":
-                        showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success")
-                        setLoginOrRegister("login");
-                        break;
-                    case "cliente-admin":
-                        setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
-                        break;
-                }
+            // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
+            switch(role) {
+                case "cliente":
+                    showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
+                    setLoginOrRegister("login");
+                    break;
+                case "cliente-admin":
+                    setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
+                    break;
+            }
 
-                const removalOptions = {
-                    collection: "onceChecked",
-                }
-                lStorage("removeItems", removalOptions);
-            })
-
+            const removalOptions = {
+                collection: "onceChecked",
+            }
+            lStorage("removeItems", removalOptions);
+        })
     };
 
     const handleShowFields = field => {
@@ -312,8 +301,8 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                         views={["month", "date"]}
                         name="birthday"
                         value={selectedDate}
-                        onChange={() => {
-                            handleDateChange()
+                        onChange={e => {
+                            handleDateChange(e._d)
                             setShowMoreFields("otherFields")
                             handleFocus("field4", 1500)
                         }}

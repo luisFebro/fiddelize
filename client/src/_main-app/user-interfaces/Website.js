@@ -57,7 +57,7 @@ export default function  Website() {
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                 <Route path="/novo-app" exact component={CreationPage} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
-                <PrivateRouteClientAdm path="/admin/painel-de-controle-c-adm" exact component={DashboardClientAdmin} />
+                <PrivateRouteClientAdm path="/:bizName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <Route component={Default} />
             </Switch>
             <SnackbarMulti />
