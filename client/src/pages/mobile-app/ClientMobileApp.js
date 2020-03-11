@@ -30,7 +30,6 @@ import Register from '../../components/auth/Register';
 //
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
-console.log("needAppRegister", needAppRegister);
 // const options1 = {...needAppRegisterOp, value: }
 
 const isSmall = window.Helper.isSmallScreen();
@@ -57,11 +56,11 @@ function ClientMobileApp({ history }) {
         lStorage("setItem", { ...collOption2, value: false })
     }
     const userData = lStorage("getItems", collOption);
-    role = role || userData.role;
-    userName = userName || userData.name;
+    role = role || userData && userData.role;
+    userName = userName || userData && userData.name;
     let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
-    let userScore = loyaltyScores && loyaltyScores.currentScore || userData.currentScore;
-    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore || userData.lastScore;
+    let userScore = loyaltyScores && loyaltyScores.currentScore || userData && userData.currentScore;
+    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore || userData && userData.lastScore;
 
     setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
 

@@ -49,7 +49,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
     const [data, setData] = useState({
-        role: 'cliente-admin',
+        role: '',
         name: '',
         email: '',
         phone: '',
@@ -85,7 +85,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
 
     const clearData = () => {
         setData({
-            role: '',
+            role: 'cliente-admin',
             name: '',
             email: '',
             phone: '',
@@ -113,12 +113,12 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
     };
 
     const registerThisUser = e => {
-        if(isClientUser) { setData({...data, role: "cliente"}) }
         const newUser = {
             ...data,
+            role: isClientUser ? "cliente" : "cliente-admin",
         };
 
-        showSnackbar(dispatch, 'Registrando...')
+        // showSnackbar(dispatch, 'Cadastrando...')
         registerEmail(dispatch, newUser)
         .then(res => {
             if(res.status !== 200) {
@@ -129,7 +129,6 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                 setFieldError(foundObjError);
                 return;
             }
-            sendEmail(res.data.authUserId);
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
             switch(role) {
@@ -146,6 +145,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                 collection: "onceChecked",
             }
             lStorage("removeItems", removalOptions);
+            sendEmail(res.data.authUserId);
         })
     };
 

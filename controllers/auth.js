@@ -57,13 +57,14 @@ exports.loadAuthUser = (req, res) => {
 }
 
 exports.register = (req, res) => {
-    let { name, email, cpf, birthday, phone, maritalStatus } = req.body;
+    let { role, name, email, cpf, birthday, phone, maritalStatus } = req.body;
 
     if(maritalStatus === "selecione estado civil") {
         maritalStatus = "cliente não informou";
     }
 
     const newUser = new User({
+        role,
         name,
         email,
         cpf,
