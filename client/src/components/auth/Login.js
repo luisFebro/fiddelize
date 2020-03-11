@@ -88,12 +88,14 @@ function Login({ history, setLoginOrRegister }) {
     );
 
     const showRegisterForm = () => (
-        <p
-            className="text-small text-center font-weight-bold  p-2"
-        >
-            Novo Usuário?<br/>Faça seu cadastro{" "}
-            <RadiusBtn title="aqui" onClick={() => setLoginOrRegister("register")} />
-        </p>
+        isThisApp() && (
+            <p
+                className="text-small text-center font-weight-bold  p-2"
+            >
+                Novo Usuário?<br/>Faça seu cadastro{" "}
+                <RadiusBtn title="aqui" onClick={() => setLoginOrRegister("register")} />
+            </p>
+        )
     );
 
     return (

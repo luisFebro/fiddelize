@@ -211,7 +211,7 @@ function ClientMobileApp({ history }) {
 
     return (
         <div style={{overflowX: 'hidden'}}>
-            <span className="text-right text-white for-version-test">{"test1"}</span>
+            <span className="text-right text-white for-version-test">{"test2"}</span>
             {showLogo()}
             <section>
                 {needAppRegister
