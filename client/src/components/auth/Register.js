@@ -57,7 +57,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
         cpf: '',
         maritalStatus: 'selecione estado civil',
     });
-    const { role, name, email, maritalStatus, birthday, cpf, phone } = data;
+    let { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 
     const { bizInfo } = useStoreState(state => ({
         bizInfo: state.adminReducer.cases.businessInfo,
@@ -113,11 +113,10 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
     };
 
     const registerThisUser = e => {
+        if(isClientUser) { setData({...data, role: "cliente"}) }
         const newUser = {
             ...data,
-            role: isClientUser ? "cliente" : "cliente-admin",
         };
-        alert(JSON.stringify(newUser));
 
         showSnackbar(dispatch, 'Registrando...')
         registerEmail(dispatch, newUser)
