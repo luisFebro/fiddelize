@@ -138,7 +138,7 @@ export default function CreationPage({ location }) {
                         />
                     </figure>
                 </div>
-                <div style={{marginTop: '50px'}} className={`margin-auto-80 text-subtitle ${isSmall ? "text-left pl-3" : "text-center"}`} data-aos="zoom-in-left" data-aos-duration="2500">
+                <div style={{marginTop: '50px'}} className={`margin-auto-80 text-subtitle ${isSmall ? "text-left pl-1" : "text-center"}`} data-aos="zoom-in-left" data-aos-duration="2500">
                     <strong>Por que um prêmio?</strong><br />Além de valorizar as compras dos clientes, todos gostam de um desafio com um prêmio em mente, incluindo seus clientes.
                     <br/>
                     Um cliente satisfeito e recompensado, volta ainda mais vezes.
