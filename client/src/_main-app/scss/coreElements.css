@@ -8,6 +8,9 @@
 html, body {
     overflow-x: hidden;
     /*max-width: 100%;*/
+    /* Disables pull-to-refresh and overscroll glow effect for PWA.
+         Still keeps swipe navigations. Try contain value for only disable pull to refresh */
+    overscroll-behavior-y: none;
 }
 html {
     line-height: 1.15;
@@ -22,10 +25,8 @@ body {
     color: var(--mainDark) !important;
     user-select: none;
     margin: 0;
-    /* Disables pull-to-refresh and overscroll glow effect for PWA.
-         Still keeps swipe navigations. Try contain value for only disable pull to refresh */
-    overscroll-behavior-y: none;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
 }
 
 article, aside, footer, header, nav, section, figcaption, figure, main {
