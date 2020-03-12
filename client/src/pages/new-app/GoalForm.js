@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { CLIENT_URL } from '../../config/clientUrl';
 import handleChange from '../../utils/form/use-state/handleChange';
+import AOS from 'aos';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -23,6 +24,9 @@ export default function GoalForm() {
         rewardScore: null,
         rewardList: [],
     })
+    AOS.init({
+        offset: 150
+    });
     const { rewardScore, rewardList } = data;
 
     const classes = useStyles();
@@ -54,7 +58,7 @@ export default function GoalForm() {
             //animationIterationCount: 2,
         },
         giftBagIcon: {
-            top: isSmall ? '70px' : '130px',
+            top: isSmall ? '40px' : '70px',
             left: '240px',
             zIndex: 3000,
         },
@@ -66,19 +70,20 @@ export default function GoalForm() {
     }
 
     return (
-        <div className="container-center mt-5">
-            <form className="card-elevation" onBlur={() => setError("")} style={styles.form}>
-                <div className="position-relative margin-auto-90 text-white text-normal font-weight-bold">
+        <div className="container-center mt-5 text-white" data-aos="flip-left">
+            <form className="card-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
+                <p className="text-title text-center m-1 p-1">Meta do App</p>
+                <div className="position-relative margin-auto-90 text-normal font-weight-bold">
                     <div style={styles.formIcons} className="position-absolute">
                         <img
                             src={`${CLIENT_URL}/img/icons/coins.svg`}
-                            className="img-fluid svg-elevation"
-                            width={90}
+                            className="svg-elevation"
+                            width={70}
                             height="auto"
                             alt="pontos"
                         />
                     </div>
-                    <p>Qual é seu ponto de recompensa?</p>
+                    <p>Qual é o ponto de recompensa?</p>
                     <TextField
                         placeholder="0"
                         style={{
@@ -94,7 +99,7 @@ export default function GoalForm() {
                         name="rewardScore"
                         type="number"
                         value={rewardScore}
-                        helperText={"Insira um número inteiro"}
+                        helperText={"Lembre-se: é o ponto que o cliente precisa alcançar"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         onChange={handleChange(setData, data)}
                         variant="outlined"
@@ -105,25 +110,25 @@ export default function GoalForm() {
                 <div className="position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold">
                     <div style={styles.giftBagIcon} className="position-absolute">
                         <img
-                            src={`${CLIENT_URL}/img/icons/gift-bag.svg`}
-                            className="img-fluid svg-elevation"
-                            width={90}
+                            src={`${CLIENT_URL}/img/icons/gift.svg`}
+                            className="svg-elevation"
+                            width={60}
                             height="auto"
-                            alt="pontos"
+                            alt="prêmio desc"
                         />
                     </div>
-                    <p>Qual é o prêmio após seu cliente atingir o ponto de recompensa?</p>
+                    <p>Qual é a descrição do prêmio?</p>
                     <TextField
-                        placeholder="nome"
+                        placeholder="digite aqui"
                         InputProps={{
-                            style: { ...styles.fieldFormValue, fontSize: '1.8em', maxWidth: '280px' }, // alignText is not working here... tried input types and variations
+                            style: { ...styles.fieldFormValue, fontSize: '1.7em', maxWidth: '280px' }, // alignText is not working here... tried input types and variations
                             classes: {
                                 input: classes.outlinedInput,
                             }
                         }}
                         name="rewardList"
                         value={rewardList}
-                        helperText={"Indeciso(a)? Sem problemas, você vai poder modificar depois no seu painel de controle 👍"}
+                        helperText={"Lembre-se: um serviço, produto, benefício ou desconto. Você vai poder modificar depois no seu painel de controle 👍"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         onChange={handleChange(setData, data)}
                         variant="outlined"

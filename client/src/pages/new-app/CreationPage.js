@@ -48,51 +48,106 @@ export default function CreationPage({ location }) {
                     <br />
                     novo APP da {bizName}
                     <br />
-                    agora mesmo no seu estilo.
+                    no seu estilo.
                 </p>
             </div>
         </section>
     );
 
     const showSysExplanation = () => (
-        <section
-            className="text-white"
-            data-aos-delay="15000"
-        >
-            <p
-                className="text-center text-subtitle ml-2 mt-5 mb-3"
-                data-aos="fade-up"
-            >
-                &#187; {name}, nosso sistema de pontuação é simples:
-            </p>
-            <div
-                className="text-normal container-center"
-                data-aos-delay="4000"
+        <Fragment>
+            <section
+                className="text-white"
+                data-aos-delay="15000"
             >
                 <p
-                    style={{maxWidth: '400px'}}
-                    data-aos="zoom-in-right"
-                    data-aos-duration="2500"
+                    className="text-center text-subtitle ml-3 mt-5 mb-3"
+                    data-aos="fade-up"
+                    style={{marginTop: '50px'}}
                 >
-                    Cada Ponto é igual ao valor de compra.
-                    <br />
-                    Seu cliente comprou R$ 50,<br/>ganhou 50 pontos.
+                    &#187; {name}, nosso <strong>sistema de pontuação</strong> é simples:
                 </p>
-                <figure
-                    style={styles.coinsEqualMoneyIcon}
-                    className="svg-elevation"
-                    data-aos="zoom-in-left"
-                    data-aos-duration="2500"
+                <div
+                    className="text-normal container-center"
+                    data-aos-delay="4000"
                 >
-                    <img
-                        src={`${CLIENT_URL}/img/icons/coinsEqualMoney.svg`}
-                        width={200}
-                        height="auto"
-                        alt="ponto igual a valor de compra"
-                    />
-                </figure>
-            </div>
-        </section>
+                    <p
+                        style={{maxWidth: '400px'}}
+                        data-aos="zoom-in-right"
+                        data-aos-duration="2500"
+                        className={`${isSmall && "ml-3"}`}
+                    >
+                        Cada Ponto é igual ao valor de compra.
+                        <br />
+                        Seu cliente comprou R$ 50,<br/>ganhou 50 pontos.
+                    </p>
+                    <figure
+                        style={styles.coinsEqualMoneyIcon}
+                        className="svg-elevation"
+                        data-aos="zoom-in-left"
+                        data-aos-duration="2500"
+                    >
+                        <img
+                            src={`${CLIENT_URL}/img/icons/coinEqualMoney.svg`}
+                            width={200}
+                            height="auto"
+                            alt="ponto igual a valor de compra"
+                        />
+                    </figure>
+                </div>
+            </section>
+            <section
+                style={{marginTop: '50px'}}
+                className="text-white"
+                data-aos-delay="15000"
+            >
+                <p
+                    className="text-center text-subtitle ml-3 mt-5 mb-3"
+                    data-aos="fade-up"
+                >
+                    <strong>Você estipula o ponto de recompensa:</strong>
+                </p>
+                <div
+                    className="text-normal container-center"
+                    data-aos-delay="4000"
+                >
+                    <p
+                        style={{maxWidth: '400px'}}
+                        data-aos="zoom-in-right"
+                        data-aos-duration="2500"
+                        className={`${isSmall && "ml-3"}`}
+                    >
+                        Quando seu cliente atingir esse ponto,
+                        <br />
+                        você entrega um <strong>prêmio simbólico</strong>.
+                        <br />
+                        Ex: Atingiu 100 pontos, ganhou tal serviço, produto, benefício ou desconto.
+                        Você escolhe!
+                    </p>
+                    <figure
+                        style={styles.coinsEqualMoneyIcon}
+                        className="svg-elevation"
+                        data-aos="zoom-in-left"
+                        data-aos-duration="2500"
+                    >
+                        <img
+                            src={`${CLIENT_URL}/img/icons/official-gift-bag.svg`}
+                            width={200}
+                            height="auto"
+                            alt="ponto igual a valor de compra"
+                        />
+                    </figure>
+                </div>
+                <div style={{marginTop: '50px'}} className="margin-auto-80 text-subtitle text-center" data-aos="zoom-in-left" data-aos-duration="2500">
+                    <strong>Por que um prêmio?</strong><br />Além de valorizar as compras dos clientes, todos gostam de um desafio com um prêmio em mente, incluindo seus clientes.
+                    <br/>
+                    Um cliente satisfeito e recompensado, volta ainda mais vezes.
+                </div>
+                <div style={{marginTop: '90px'}} className="text-hero text-center" data-aos="zoom-in-left" data-aos-duration="2500">
+                    Ok, agora vamos começar!
+                </div>
+            </section>
+        </Fragment>
     );
 
     const showGoalForm = () => (
