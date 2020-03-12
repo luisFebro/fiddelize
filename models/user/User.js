@@ -55,7 +55,9 @@ const clientUserData = {
     maxScore: { // this will change to client-admin reward: score
         type: Number,
         default: 500,
-    }
+    },
+    scoreHistoricDesc: String,
+    scoreHistoricValue: Number,
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 
@@ -69,24 +71,19 @@ const regulationData = {
 const RegulationSchema = new Schema(regulationData, { _id: false, timestamps: true });
 
 const clientAdminData = {
-    bizName: {
-        type: String,
-        // required: true,comment out cuz every sign up will request and throw error
-    },
+    bizName: String, // required: true,comment out cuz every sign up will request and throw error
+    bizCodeName: String,
     bizCnpj: String,
     bizWhatsapp: Number,
-    rewardScore: {
-        type: Number, // prior maxScore
-    },
-    rewardList: {
-        type: Array,
-        // required: true
-    },
-    regulation: RegulationSchema,
+    bizLogoImg: String,
+
+    rewardScore: Number, // prior maxScore
+    rewardList: Array, // / required: true
 
     themePColor: String,
     themeSColor: String,
-    logoImgUrl: String,
+
+    regulation: RegulationSchema,
     appDownloads: {
         type: Number,
         default: 0,

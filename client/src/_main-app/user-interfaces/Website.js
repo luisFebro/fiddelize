@@ -55,9 +55,9 @@ export default function  Website() {
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
-                <Route path="/novo-app" exact component={CreationPage} />
+                <Route path="/:bizCodeName/novo-app" exact component={CreationPage} />
+                <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
-                <PrivateRouteClientAdm path="/:bizName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <Route component={Default} />
             </Switch>
             <SnackbarMulti />

@@ -8,8 +8,9 @@ const { msgG } = require('../_msgs/globalMsgs');
 
 
 exports.mwValidateRegister = (req, res, next) => {
-    const { name, email, cpf, birthday, phone } = req.body;
+    const { role, name, email, cpf, birthday, phone } = req.body;
     const isCpfValid = new CPF().validate(cpf);
+    console.log(req.body)
 
     User.findOne({ name })
     .then(user => { // the search should includename and business to narrow down
@@ -17,9 +18,13 @@ exports.mwValidateRegister = (req, res, next) => {
         if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
         if(!name) return res.status(400).json(msg('error.noName'));
         if(!isValidName(name)) return res.status(400).json(msg('error.invalidLengthName'));
+        // client admin validaiton
+        // if(role === "cliente-admin") {
+        //     if(!clientAdminData.bizName) return res.status(400).json(msg('error.noBizName'));
+        // }
         User.findOne({ cpf })
-        .then(user2 => {
-            if(user2 && user2.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
+        .then(user3 => {
+            if(user3 && user3.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
             if(!cpf) return res.status(400).json(msg('error.noCpf'));
             if(!email) return res.status(400).json(msg('error.noEmail'));
             if(!phone) return res.status(400).json(msg('error.noPhone'));

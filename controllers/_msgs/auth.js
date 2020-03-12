@@ -26,6 +26,7 @@ const msg = (typeAndMsgName, customized = 'NeedCustomWord', options) => {
     error.anyFieldFilled = "Você precisa preencher todos os campos";
     error.noDigitFound = 'Sua senha deve conter pelo menos um dígito';
     error.noName = 'Por favor, insira o seu nome';
+    error.noBizName = 'Por favor, insira o nome do seu projeto/empresa';
     error.noPassword = 'Por favor, insira uma senha';
     error.noCpf = 'Por favor, insira o seu CPF';
     error.noBirthday = 'Por favor, insira o DIA e MÊS do seu aniversário';

@@ -41,8 +41,8 @@ function Mobile({ location }) {
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
                 <Route path="/regulamento/" exact component={RegulationPage} />
+                <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
-                <PrivateRouteClientAdm path="/:bizName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <Route component={Default} />
             </Switch>
             <SnackbarMulti />

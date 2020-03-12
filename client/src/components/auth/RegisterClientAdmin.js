@@ -33,9 +33,10 @@ import ButtonMulti from '../buttons/material-ui/ButtonMulti';
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
+import { getUniqueCodeName } from '../../utils/string/generateAlphaNumeric';
+import addDashesToString from '../../utils/string/addDashesToString';
 import 'moment/locale/pt-br';
 moment.updateLocale('pt-BR');
-
 const isSmall = window.Helper.isSmallScreen();
 
 const useStyles = makeStyles(theme => ({
@@ -52,7 +53,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [data, setData] = useState({
         role: 'cliente-admin',
         name: '',
-        clientAdminData: { bizName: '' },
+        clientAdminData: { bizName: '', bizCodeName: '' },
         email: '',
         phone: '',
         birthday: '',
@@ -85,6 +86,14 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     useEffect(() => {
         setData({ ...data, birthday: getDayMonthBr(selectedDate) })
     }, [selectedDate])
+
+    useEffect(() => {
+        if(clientAdminData.bizName) {
+            const bizCode = getUniqueCodeName(clientAdminData.bizName);
+            const finalDashedName = addDashesToString(`${clientAdminData.bizName} ${bizCode}`)
+            setValObjWithStr(data, "clientAdminData.bizCodeName", finalDashedName);
+        }
+    }, [clientAdminData.bizName])
 
     const clearData = () => {
         setData({
@@ -138,15 +147,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             lStorage("removeItems", removalOptions);
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            switch(res.data.roleRegistered) {
-                case "cliente":
-                    showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
-                    setLoginOrRegister("login");
-                    break;
-                case "cliente-admin":
-                    setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
-                    break;
-            }
+            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?name=${name}&phone=${phone}&bizName=${clientAdminData.bizName}`, 1500);
 
             sendEmail(res.data.authUserId);
 
@@ -384,7 +385,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     />
                 </div>
                 <div className="mt-3">
-                    Contato
+                    Contato/Whatsapp
                     <TextField
                         required
                         id="field6"
