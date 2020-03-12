@@ -58,8 +58,8 @@ export default function GoalForm() {
             //animationIterationCount: 2,
         },
         giftBagIcon: {
-            top: isSmall ? '40px' : '70px',
-            left: '240px',
+            top: isSmall ? '50px' : '70px',
+            left: '230px',
             zIndex: 3000,
         },
         helperFromField: {

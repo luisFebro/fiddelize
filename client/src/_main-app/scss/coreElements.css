@@ -11,6 +11,8 @@ html {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     height: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -21,8 +23,6 @@ body {
     /* Disables pull-to-refresh and overscroll glow effect for PWA.
          Still keeps swipe navigations. Try contain value for only disable pull to refresh */
     overscroll-behavior-y: none;
-    max-width: 100%;
-    overflow-x: hidden;
 }
 
 /*html, body {
