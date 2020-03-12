@@ -147,7 +147,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             lStorage("removeItems", removalOptions);
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?name=${name}&phone=${phone}&bizName=${clientAdminData.bizName}`, 1500);
+            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?name=${name}&bizName=${clientAdminData.bizName}`, 1500);
 
             sendEmail(res.data.authUserId);
 

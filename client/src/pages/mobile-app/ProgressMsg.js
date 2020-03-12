@@ -51,7 +51,7 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
         }}>
             <Tooltip
                 needAttentionWaves={attentionBtnChecked ? false : true }
-                title={`► Objetivo atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
+                title={`► Meta atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
                     <i>
                         <FontAwesomeIcon

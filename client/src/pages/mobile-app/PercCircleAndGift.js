@@ -59,7 +59,7 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage,
                 <Fragment>
                     <div onClick={playBeep}>
                         <Tooltip
-                            title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}</strong> do<br />objetivo até agora.`}
+                            title={`Você já alcançou<br /><strong>${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}</strong> do<br />meta até agora.`}
                             element={
                                 <div
                                     className="zoom-it container-center text-em-2-5 animated zoomIn"
