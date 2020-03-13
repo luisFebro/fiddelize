@@ -96,10 +96,10 @@ exports.register = (req, res) => {
 
 exports.login = (req, res) => {
     const { password, needKeepLoggedIn } = req.body;
-    const { _id, name, role } = req.profile;
+    const { _id, name, role, clientAdminData } = req.profile;
 
     let expiringTime;
-    role === "cliente" ? expiringTime = "90d" : expiringTime = "30m"; // default: 30m (enum: 30s, 30m, 1h, 7d)
+    role !== "cliente" ? expiringTime = "30m" : expiringTime = "90d"; // default: 30m (enum: 30s, 30m, 1h, 7d)
 
     jwt.sign(
         { id: _id },
@@ -111,6 +111,7 @@ exports.login = (req, res) => {
                 token,
                 role,
                 name,
+                bizName: clientAdminData.bizName,
                 authUserId: _id,
                 msg: msg('ok.welcomeBack', name, 'onlyMsg')
             });
