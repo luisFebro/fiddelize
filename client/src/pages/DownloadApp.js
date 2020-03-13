@@ -5,6 +5,7 @@ import parse from 'html-react-parser';
 import PwaInstaller from '../components/pwa-installer/PwaInstaller';
 import { CLIENT_URL } from '../config/clientUrl';
 import checkIfElemIsVisible from '../utils/window/checkIfElemIsVisible';
+import getQueryByName from '../utils/string/getQueryByName';
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
@@ -12,6 +13,8 @@ export default function DownloadApp({ match, location }) {
     const [userName, setUserName] = useState(match.params.userName);
     const [run, setRun] = useState(false);
     const isFromRegister = location.search.includes("isFromRegister=true");
+    const isClientAdmin = location.search.includes("isClientAdmin=true");
+    const bizName = getQueryByName("bizName", location.search)
 
     useEffect(() => {
         checkIfElemIsVisible("#target", setRun, true);
@@ -23,13 +26,27 @@ export default function DownloadApp({ match, location }) {
 
     const styles = {
         icon: {
-            fontSize: '3rem',
+            fontSize: isClientAdmin ? '6rem' : '3rem',
             fontWeight: 'bold',
         },
         margin: {
             marginTop: '110px',
         }
     }
+
+    const showClientAdminText = () => (
+        <div className="text-white text-center text-title">
+            <p className="text-hero">O App da {bizName && bizName.cap()} ficou pronto!<i style={styles.icon}>🎉</i></p>
+            <div className="pt-1 pb-5">
+                <ScrollArrow margin={50} />
+            </div>
+            <p className="text-title" style={styles.margin} data-aos="fade-up">Baixe o App logo aqui embaixo, deslizando a tela.</p>
+            <ScrollArrow margin={30} />
+            <div id="target" style={{minHeight: '200px 0'}}>
+                <ScrollArrow margin={20} />
+            </div>
+        </div>
+    );
 
     const showMainText = () => (
         <div className="text-left text-title">
@@ -75,9 +92,14 @@ export default function DownloadApp({ match, location }) {
 
     return (
         <div id="holder" className="text-white gradient-animation" style={{minHeight: '325vmin'}}>
-            {showMainText()}
+            {isClientAdmin
+            ? showClientAdminText()
+            : showMainText()}
             <PwaInstaller
-                title={`<strong>${userName.cap()},<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`}
+                title={isClientAdmin
+                    ? `<strong>${userName.cap()},<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`
+                    : `<strong>${userName.cap()},<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`
+                }
                 icon={`${CLIENT_URL}/img/official-logo-white.svg`}
                 run={run}
             />

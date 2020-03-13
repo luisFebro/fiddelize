@@ -142,7 +142,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                     setLoginOrRegister("login");
                     break;
                 case "cliente-admin":
-                    setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 3000);
+                    setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 1500);
                     break;
             }
 

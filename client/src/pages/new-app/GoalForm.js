@@ -29,7 +29,7 @@ const useStyles = makeStyles({  // n1
     },
 });
 
-export default function GoalForm({ userId }) {
+export default function GoalForm({ userId, bizName, name }) {
     const [error, setError] = useState("");
     const [showThisField, setShowThisField] = useState(false);
     const [data, setData] = useState({
@@ -108,7 +108,8 @@ export default function GoalForm({ userId }) {
 
         updateUser(dispatch, dataToSend, userId)
         .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
+            setTimeout(() => window.location.href = `/baixe-app/${name}?isClientAdmin=true&bizName=${bizName}`, 1500);
         })
     }
 
