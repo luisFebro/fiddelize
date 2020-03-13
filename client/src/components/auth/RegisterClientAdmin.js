@@ -9,7 +9,7 @@ import cpfMaskBr from '../../utils/validation/masks/cpfMaskBr';
 import getDayMonthBr from '../../utils/dates/getDayMonthBr';
 import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function RegisterClientAdmin({ history, setLoginOrRegister, needLoginBtn }) {
+function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showThisField, setShowThisField] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
@@ -131,7 +131,7 @@ function RegisterClientAdmin({ history, setLoginOrRegister, needLoginBtn }) {
             ...data,
         };
 
-        showSnackbar(dispatch, 'Registrando...')
+        showSnackbar(dispatch, 'Registrando... Aguarde um momento.', 'warning', 7000)
         registerEmail(dispatch, newUser)
         .then(res => {
             if(res.status !== 200) {
@@ -149,7 +149,7 @@ function RegisterClientAdmin({ history, setLoginOrRegister, needLoginBtn }) {
             lStorage("removeItems", removalOptions);
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            setTimeout(() => history.push(`/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`), 3000);
+            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`, 500);
 
             sendEmail(res.data.authUserId);
 
@@ -466,7 +466,7 @@ function RegisterClientAdmin({ history, setLoginOrRegister, needLoginBtn }) {
     );
 }
 
-export default React.memo(withRouter(RegisterClientAdmin));
+export default React.memo(RegisterClientAdmin);
 
 /* ARCHIVES
 <div style={{whiteSpace: 'wrap'}}>
