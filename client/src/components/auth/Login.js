@@ -42,7 +42,6 @@ function Login({ history, setLoginOrRegister }) {
 
             if(role === "cliente-admin") {
                 showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
-                const bizName = "fiddelize"; // need to change
                 setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
                 setTimeout(() => history.push(`/${bizName}/cliente-admin/painel-de-controle`), 5000);
                 setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
