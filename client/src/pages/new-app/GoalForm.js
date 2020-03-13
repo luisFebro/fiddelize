@@ -23,6 +23,10 @@ const useStyles = makeStyles({  // n1
         padding: '2px 5px',
         margin: '0px',
     },
+    outlinedInput2: {
+        padding: '8px 5px 5px',
+        margin: '0px',
+    },
 });
 
 export default function GoalForm({ userId }) {
@@ -82,7 +86,7 @@ export default function GoalForm({ userId }) {
     const handleNextFieldFunc = (type, e) => handleNextField(type, setShowThisField, {nextField: "field2", delay: 1500 })(e);
 
     const handleShowCurrField = field => {
-        const field2 =  showThisField === "field2" &&  clientAdminData.rewardScore.length >= 1 || showThisField === "field3" || showThisField === "field4" || showThisField === "otherFields";
+        const field2 =  showThisField === "field2" &&  clientAdminData.rewardScore && clientAdminData.rewardScore.length >= 1 || showThisField === "field3" || showThisField === "field4" || showThisField === "otherFields";
 
         switch(field) {
             case "field2":
@@ -178,11 +182,13 @@ export default function GoalForm({ userId }) {
                     <p>Qual é a descrição do prêmio?</p>
                     <TextField
                         id="field2"
+                        multiline
+                        rows={2}
                         placeholder="digite aqui"
                         InputProps={{
-                            style: { ...styles.fieldFormValue, fontSize: '1.7em', maxWidth: '280px' }, // alignText is not working here... tried input types and variations
+                            style: { ...styles.fieldFormValue, fontSize: '26px', maxWidth: '280px' }, // alignText is not working here... tried input types and variations
                             classes: {
-                                input: classes.outlinedInput,
+                                input: classes.outlinedInput2,
                             }
                         }}
                         name="clientAdminData.mainReward"

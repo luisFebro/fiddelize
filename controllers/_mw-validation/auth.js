@@ -10,7 +10,6 @@ const { msgG } = require('../_msgs/globalMsgs');
 exports.mwValidateRegister = (req, res, next) => {
     const { role, name, email, cpf, birthday, phone } = req.body;
     const isCpfValid = new CPF().validate(cpf);
-    console.log(req.body)
 
     User.findOne({ name })
     .then(user => { // the search should includename and business to narrow down
@@ -18,11 +17,6 @@ exports.mwValidateRegister = (req, res, next) => {
         if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
         if(!name) return res.status(400).json(msg('error.noName'));
         if(!isValidName(name)) return res.status(400).json(msg('error.invalidLengthName'));
-        // client admin validaiton
-        if(role === "cliente-admin") {
-            const thisBizName = clientAdminData.bizName;
-            if(!thisBizName) return res.status(400).json(msg('error.noBizName'));
-        }
         User.findOne({ cpf })
         .then(user3 => {
             if(user3 && user3.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
@@ -34,6 +28,14 @@ exports.mwValidateRegister = (req, res, next) => {
             if(!isCpfValid) return res.status(400).json(msg('error.invalidCpf'));
             if(!validatePhone(phone)) return res.status(400).json(msg('error.invalidPhone'));
             //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
+
+            // client admin validaiton // nOT FUCKIN WORKING !!!
+            // console.log(role === "cliente-admin");
+            // if(role === "cliente-admin") {
+            //     const thisBizName = user.clientAdminData.bizName;
+            //     console.log("thisBizName", thisBizName);
+            //     if(thisBizName) return res.status(400).json(msg('error.noName'));
+            // }
             next();
         }).catch(err => msgG('error.systemError', err));
     }).catch(err => msgG('error.systemError', err));
