@@ -9,6 +9,7 @@ import cpfMaskBr from '../../utils/validation/masks/cpfMaskBr';
 import getDayMonthBr from '../../utils/dates/getDayMonthBr';
 import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
+import { withRouter } from 'react-router-dom';
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
@@ -47,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
+function RegisterClientAdmin({ history, setLoginOrRegister, needLoginBtn }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showThisField, setShowThisField] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
@@ -148,7 +149,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             lStorage("removeItems", removalOptions);
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`, 1500);
+            setTimeout(() => history.push(`/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`), 3000);
 
             sendEmail(res.data.authUserId);
 
@@ -465,7 +466,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     );
 }
 
-export default React.memo(RegisterClientAdmin);
+export default React.memo(withRouter(RegisterClientAdmin));
 
 /* ARCHIVES
 <div style={{whiteSpace: 'wrap'}}>
