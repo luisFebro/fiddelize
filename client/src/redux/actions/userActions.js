@@ -15,11 +15,11 @@ export const readUser = async (dispatch, _userId) => {
     });
 };
 
-export const updateUser = async (dispatch, objToSend, _idUser, needDispatch = true) => {
-    const updateObj = Object.assign({}, {_id: _idUser}, objToSend);
+export const updateUser = async (dispatch, objToSend, _idUser) => {
+    // const updateObj = Object.assign({}, {_id: _idUser}, objToSend);
     try {
         const res = await axios.put(`/api/user/${_idUser}`, objToSend, getHeaderJson);
-        dispatch({ type: 'USER_UPDATED', payload: needDispatch ? updateObj : null });
+        // dispatch({ type: 'USER_UPDATED', payload: needDispatch ? updateObj : null });
         return res;
     } catch (err) {
         return err;

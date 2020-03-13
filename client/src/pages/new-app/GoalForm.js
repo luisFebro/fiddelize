@@ -4,6 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CLIENT_URL } from '../../config/clientUrl';
 import handleChange from '../../utils/form/use-state/handleChange';
 import AOS from 'aos';
+import { handleNextField } from '../../utils/form';
+import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import setValObjWithStr from '../../utils/objects/setValObjWithStr';
+import { updateUser } from '../../redux/actions/userActions';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -18,17 +25,20 @@ const useStyles = makeStyles({  // n1
     },
 });
 
-export default function GoalForm() {
+export default function GoalForm({ userId }) {
     const [error, setError] = useState("");
+    const [showThisField, setShowThisField] = useState(false);
     const [data, setData] = useState({
-        rewardScore: null,
-        rewardList: [],
+        clientAdminData: { rewardScore: undefined, mainReward: '' },
     })
+
+    const dispatch = useStoreDispatch();
+
     AOS.init({
         offset: 150
     });
-    const { rewardScore, rewardList } = data;
 
+    const { clientAdminData } = data;
     const classes = useStyles();
 
     const styles = {
@@ -69,6 +79,52 @@ export default function GoalForm() {
         },
     }
 
+    const handleNextFieldFunc = (type, e) => handleNextField(type, setShowThisField, {nextField: "field2", delay: 1500 })(e);
+
+    const handleShowCurrField = field => {
+        const field2 =  showThisField === "field2" &&  clientAdminData.rewardScore.length >= 1 || showThisField === "field3" || showThisField === "field4" || showThisField === "otherFields";
+
+        switch(field) {
+            case "field2":
+                return field2;
+
+            default:
+                console.log("something went wrong with handleShowCurrField...")
+        }
+    }
+
+    const sendDataBackend = () => {
+        const score = clientAdminData.rewardScore;
+        const prize = clientAdminData.mainReward;
+        if(!score) { setError("rewardScore"); showSnackbar(dispatch, "Você precisa inserir o valor da recompensa", "error"); return; }
+        if(!prize) { setError("mainReward"); showSnackbar(dispatch, "Você precisa inserir um prêmio", "error"); return; }
+        const dataToSend = {
+            ...data,
+        };
+
+        updateUser(dispatch, dataToSend, userId)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+        })
+    }
+
+    const showButtonAction = () => (
+        <div className="container-center" style={{marginTop: '20px'}}>
+            <ButtonMulti
+                onClick={() => {
+                    sendDataBackend();
+                }}
+                color="var(--mainWhite)"
+                backgroundColor="var(--themeP)"
+                backColorOnHover="var(--themeP)"
+                iconFontAwesome={<FontAwesomeIcon icon="paper-plane" />}
+                textTransform='uppercase'
+            >
+                Prosseguir
+            </ButtonMulti>
+        </div>
+    );
+
     return (
         <div className="container-center mt-5 text-white" data-aos="flip-left">
             <form className="card-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
@@ -96,18 +152,20 @@ export default function GoalForm() {
                                 input: classes.outlinedInput,
                             }
                         }}
-                        name="rewardScore"
                         type="number"
-                        value={rewardScore}
                         helperText={"Lembre-se: é o ponto que o cliente precisa alcançar"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
-                        onChange={handleChange(setData, data)}
+                        name="clientAdminData.rewardScore"
+                        value={clientAdminData.rewardScore}
+                        onChange={handleChange(setData, data, true)}
+                        onBlur={e => handleNextFieldFunc("onBlur", e)}
+                        onKeyPress={e => handleNextFieldFunc("onKeyPress", e)}
                         variant="outlined"
                         error={error === "rewardScore" ? true : false}
                         autoComplete="off"
                     />
                 </div>
-                <div className="position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold">
+                <div className={`animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold ${handleShowCurrField("field2") ? "d-block" : "d-none"}`}>
                     <div style={styles.giftBagIcon} className="position-absolute">
                         <img
                             src={`${CLIENT_URL}/img/icons/gift.svg`}
@@ -119,6 +177,7 @@ export default function GoalForm() {
                     </div>
                     <p>Qual é a descrição do prêmio?</p>
                     <TextField
+                        id="field2"
                         placeholder="digite aqui"
                         InputProps={{
                             style: { ...styles.fieldFormValue, fontSize: '1.7em', maxWidth: '280px' }, // alignText is not working here... tried input types and variations
@@ -126,16 +185,18 @@ export default function GoalForm() {
                                 input: classes.outlinedInput,
                             }
                         }}
-                        name="rewardList"
-                        value={rewardList}
+                        name="clientAdminData.mainReward"
+                        value={clientAdminData.mainReward}
                         helperText={"Lembre-se: um serviço, produto, benefício ou desconto. Você vai poder modificar depois no seu painel de controle 👍"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
-                        onChange={handleChange(setData, data)}
+                        onChange={handleChange(setData, data, true)}
+                        onBlur={() => setValObjWithStr(data, "clientAdminData.mainReward", clientAdminData.mainReward.cap())}
                         variant="outlined"
-                        error={error === "rewardScore" ? true : false}
+                        error={error === "mainReward" ? true : false}
                         autoComplete="off"
                     />
                 </div>
+                {showButtonAction()}
             </form>
         </div>
     );

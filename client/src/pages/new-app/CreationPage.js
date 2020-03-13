@@ -13,7 +13,7 @@ const truncate = (name, leng) => window.Helper.truncate(name, leng);
 export default function CreationPage({ location }) {
     const name = getQueryByName("name", location.search).cap();
     const bizName = getQueryByName("bizName", location.search).cap();
-    // const userId = getQueryByName("userId", location.search).cap();
+    const id = getQueryByName("id", location.search);
 
     const styles = {
         confettiIcon: {
@@ -79,6 +79,7 @@ export default function CreationPage({ location }) {
                     >
                         Cada Ponto é igual ao valor de compra.
                         <br />
+                        <br />
                         Seu cliente comprou R$ 50,<br/>ganhou 50 pontos.
                     </p>
                     <figure
@@ -121,6 +122,7 @@ export default function CreationPage({ location }) {
                         <br />
                         você entrega um <strong>prêmio simbólico</strong>.
                         <br />
+                        <br />
                         Ex: Atingiu 100 pontos, ganhou tal serviço, produto, benefício ou desconto.
                         Você escolhe!
                     </p>
@@ -141,6 +143,7 @@ export default function CreationPage({ location }) {
                 <div style={{marginTop: '50px'}} className={`margin-auto-80 text-subtitle ${isSmall ? "text-left pl-1" : "text-center"}`} data-aos="zoom-in-left" data-aos-duration="2500">
                     <strong>Por que um prêmio?</strong><br />Além de valorizar as compras dos clientes, todos gostam de um desafio com um prêmio em mente, incluindo seus clientes.
                     <br/>
+                    <br/>
                     Um cliente satisfeito e recompensado, volta ainda mais vezes.
                 </div>
                 <div style={{marginTop: '90px'}} className="text-hero text-center" data-aos="zoom-in-left" data-aos-duration="2500">
@@ -151,7 +154,7 @@ export default function CreationPage({ location }) {
     );
 
     const showGoalForm = () => (
-        <GoalForm />
+        <GoalForm userId={id} />
     );
 
     return (

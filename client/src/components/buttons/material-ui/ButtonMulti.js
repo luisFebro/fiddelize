@@ -53,10 +53,21 @@ export default function ButtonMulti({
     ...props }) {
     const { sText, sBtnColors, sBtnDefaultColors, sIcon } = useStyles(props);
 
-    const showIcon = iconFontAwesome => (
-        iconFontAwesome &&
-        <i className={clsx(iconFontAwesome, sIcon)}></i>
-    );
+    const showIcon = iconFontAwesome => {
+        if(iconFontAwesome && typeof iconFontAwesome !== "string") {
+
+            return(
+                <i className={{...sIcon, padding: 0, margin: 0, fontSize: '2.2em', marginLeft: '6px'}}>
+                    {iconFontAwesome}
+                </i>
+            );
+        }
+
+        return(
+            iconFontAwesome &&
+            <i className={clsx(iconFontAwesome, sIcon)}></i>
+        );
+    };
 
     return (
         <CustomizedButton

@@ -8,6 +8,7 @@ import {
     faExclamationCircle, // for errors
     faInfo, // for warning
     faCheckCircle, // for success
+    faPaperPlane, // for send data
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -17,4 +18,5 @@ library.add(
   faExclamationCircle,
   faInfo,
   faCheckCircle,
+  faPaperPlane,
 );

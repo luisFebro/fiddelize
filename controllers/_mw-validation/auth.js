@@ -19,9 +19,10 @@ exports.mwValidateRegister = (req, res, next) => {
         if(!name) return res.status(400).json(msg('error.noName'));
         if(!isValidName(name)) return res.status(400).json(msg('error.invalidLengthName'));
         // client admin validaiton
-        // if(role === "cliente-admin") {
-        //     if(!clientAdminData.bizName) return res.status(400).json(msg('error.noBizName'));
-        // }
+        if(role === "cliente-admin") {
+            const thisBizName = clientAdminData.bizName;
+            if(!thisBizName) return res.status(400).json(msg('error.noBizName'));
+        }
         User.findOne({ cpf })
         .then(user3 => {
             if(user3 && user3.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));

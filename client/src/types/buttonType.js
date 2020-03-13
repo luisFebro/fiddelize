@@ -24,6 +24,7 @@ import {
     func,
     bool,
     oneOf,
+    oneOfType,
 } from 'prop-types';
 
 export const buttonMultiType = {
@@ -32,7 +33,7 @@ export const buttonMultiType = {
     children: string,
     onClick: func,
     component: string,
-    iconFontAwesome: string,
+    iconFontAwesome: oneOfType([string, element]),
     variant: oneOf(['link', 'contained', 'outlined']),
     color: string,
     backgroundColor: string,

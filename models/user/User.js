@@ -78,6 +78,7 @@ const clientAdminData = {
     bizLogoImg: String,
 
     rewardScore: Number, // prior maxScore
+    mainReward: String,
     rewardList: Array, // / required: true
 
     themePColor: String,

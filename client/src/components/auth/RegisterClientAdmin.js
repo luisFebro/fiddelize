@@ -18,6 +18,7 @@ import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
 import detectErrorField from '../../utils/validation/detectErrorField';
 import handleChange from '../../utils/form/use-state/handleChange';
+import { handleFocus } from '../../utils/form';
 import lStorage from '../../utils/storage/lStorage';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
@@ -48,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 
 function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [selectedDate, handleDateChange] = useState(new Date());
-    const [showMoreFields, setShowMoreFields] = useState(false);
+    const [showThisField, setShowThisField] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
     const [data, setData] = useState({
         role: 'cliente-admin',
@@ -147,17 +148,17 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             lStorage("removeItems", removalOptions);
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?name=${name}&bizName=${clientAdminData.bizName}`, 1500);
+            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`, 1500);
 
             sendEmail(res.data.authUserId);
 
         })
     };
 
-    const handleShowFields = field => {
-        const field2 =  showMoreFields === "field2" && name.length >= 1 || showMoreFields === "field3" || showMoreFields === "field4" || showMoreFields === "otherFields";
-        const field3 = showMoreFields === "field3" && clientAdminData.bizName.length >= 1 || showMoreFields === "field4" || showMoreFields === "otherFields";
-        const field4 = showMoreFields === "field4" && cpf.length >= 1 || showMoreFields === "otherFields";
+    const handleShowCurrField = field => {
+        const field2 =  showThisField === "field2" && name.length >= 1 || showThisField === "field3" || showThisField === "field4" || showThisField === "otherFields";
+        const field3 = showThisField === "field3" && clientAdminData.bizName.length >= 1 || showThisField === "field4" || showThisField === "otherFields";
+        const field4 = showThisField === "field4" && cpf.length >= 1 || showThisField === "otherFields";
 
         switch(field) {
             case "field2":
@@ -167,14 +168,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             case "field4":
                 return field4;
             case "otherFields":
-                return showMoreFields === "otherFields";
+                return showThisField === "otherFields";
             default:
-                console.log("something went wrong with handleShowFields...")
+                console.log("something went wrong with handleShowCurrField...")
         }
-    }
-
-    const handleFocus = (nextFieldToFocusId, timeInSec = 0) => {
-        setTimeout(() => document.getElementById(nextFieldToFocusId).focus(), timeInSec);
     }
 
     const showLoginForm = needLoginBtn => (
@@ -238,10 +235,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     name="name"
                     value={name}
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field2", 1500); setData({ ...data, name: name.cap()}); handleFocus("field2");}
+                        if(isKeyPressed(e, "Enter")) {setShowThisField("field2", 1500); setData({ ...data, name: name.cap()}); handleFocus("field2");}
                     }}
                     onBlur={() => {
-                        setShowMoreFields("field2", 1500);
+                        setShowThisField("field2", 1500);
                         handleFocus("field2");
                         setData({ ...data, name: name.cap()})
                     }}
@@ -258,7 +255,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowFields("field2") ? "d-block" : "d-none"}`}>
+            <div className={`animated slideInDown fast mt-3 ${handleShowCurrField("field2") ? "d-block" : "d-none"}`}>
                 Qual é o nome do<br />seu projeto/empresa?
                 <TextField
                     id="field2"
@@ -270,10 +267,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     name="clientAdminData.bizName"
                     value={clientAdminData.bizName}
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field3", 1500); setValObjWithStr(data, "clientAdminData.bizName", clientAdminData.bizName.cap()); handleFocus("field3");}
+                        if(isKeyPressed(e, "Enter")) {setShowThisField("field3", 1500); setValObjWithStr(data, "clientAdminData.bizName", clientAdminData.bizName.cap()); handleFocus("field3");}
                     }}
                     onBlur={() => {
-                        setShowMoreFields("field3", 1500);
+                        setShowThisField("field3", 1500);
                         handleFocus("field3");
                         setData({ ...data, name: name.cap()})
                     }}
@@ -290,7 +287,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowFields("field3") ? "d-block" : "d-none"}`}>
+            <div className={`animated slideInDown fast mt-3 ${handleShowCurrField("field3") ? "d-block" : "d-none"}`}>
                 Ok, informe seu CPF
                 <TextField
                     id="field3"
@@ -302,9 +299,9 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     variant="outlined"
                     autoOk={false}
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) { setShowMoreFields("field4"); handleFocus("field4", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
+                        if(isKeyPressed(e, "Enter")) { setShowThisField("field4"); handleFocus("field4", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
                     }}
-                    onBlur={() => { setShowMoreFields("field4"); handleFocus("field4", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
+                    onBlur={() => { setShowThisField("field4"); handleFocus("field4", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
                     value={cpf}
                     type={switchNumToText ? "text": "tel"}
                     autoComplete="off"
@@ -321,7 +318,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowFields("field4") ? "d-block" : "d-none"}`}>
+            <div className={`animated slideInDown fast mt-3 ${handleShowCurrField("field4") ? "d-block" : "d-none"}`}>
                 {name
                 ? <span>{name.cap()}, quando é o seu aniversário?</span>
                 : <span>Quando é o seu aniversário?</span>}
@@ -343,7 +340,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         onChange={e => {
                             handleDateChange(e._d)
                             handleFocus("field5", 1500)
-                            setShowMoreFields("otherFields")
+                            setShowThisField("otherFields")
                         }}
                         InputProps={{
                           startAdornment: (
@@ -357,7 +354,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section className={`animated slideInLeft fast ${handleShowFields("otherFields")  ? "d-block" : "d-none"}`}>
+            <section className={`animated slideInLeft fast ${handleShowCurrField("otherFields")  ? "d-block" : "d-none"}`}>
                 <p className="text-left my-2">Para finalizar seu cadastro...</p>
                 <div className="mt-3">
                     Email
