@@ -20,7 +20,7 @@ Illustration.propTypes = {
         to: PropTypes.string,
     }),
     txtImgConfig: PropTypes.shape({
-        txt: PropTypes.node.isRequired,
+        txt: PropTypes.node,
         fontSize: PropTypes.string,
         txtStyle: PropTypes.string,
         txtColor: PropTypes.string,
@@ -66,10 +66,10 @@ export default function Illustration({
     return (
         <Fragment>
             <h2 className="text-center text-sub-title-upper">{title}</h2>
-            <DivWrapper className="container-center">
+            <DivWrapper className="container-center my-5">
                 <img
                     style={imgStyle}
-                    className="image-center tranparent-img-shadow"
+                    className="image-center svg-elevation"
                     src={img}
                     alt={alt}
                 />
@@ -81,7 +81,7 @@ export default function Illustration({
                             fontSize: fontSize || '2rem',
                             textAlign: txtAlign || "center",
                             color: txtColor || "black",
-                            top: `${isSmall ? "35%" : topPos || "5%"}`,
+                            top: `${isSmall ? "40%" : topPos || "-2%"}`,
                             left: leftPos || "50%",
                         }}
                     >

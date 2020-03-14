@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import getQueryByName from '../../utils/string/getQueryByName';
 import ToggleVisibilityPassword from '../../components/forms/fields/ToggleVisibilityPassword';
 import handleChange from '../../utils/form/use-state/handleChange';
@@ -9,6 +9,9 @@ import { updateUser } from '../../redux/actions/userActions';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { withRouter } from 'react-router-dom';
+import Illustration from '../../components/Illustration';
+import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
+import AOS from 'aos';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -24,6 +27,10 @@ export default function PasswordPage({ location, match, history }) {
     const clientAdminId = getQueryByName("id", location.search);
     const clientAdminName = getQueryByName("name", location.search).cap();
     const bizCodeName = match.params.bizCodeName;
+
+    AOS.init({
+        offset: 50,
+    });
 
     const styles = {
         form: {
@@ -43,12 +50,11 @@ export default function PasswordPage({ location, match, history }) {
             zIndex: 2000
         },
         lockIcon: {
-            top: isSmall ? '110px' : '120px',
+            top: isSmall ? '80px' : '115px',
             left: '-70px',
             zIndex: 3000,
         },
     }
-
 
     const sendDataBackend = () => {
         if(!clientAdminData.verificationPass) { setError(true); showSnackbar(dispatch, "Você precisa inserir a senha de verificação", "error"); return; }
@@ -57,6 +63,7 @@ export default function PasswordPage({ location, match, history }) {
             "clientAdminData.verificationPass": clientAdminData.verificationPass,
         };
 
+        showSnackbar(dispatch, "Ok, registrando...")
         updateUser(dispatch, dataToSend, clientAdminId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
@@ -82,8 +89,54 @@ export default function PasswordPage({ location, match, history }) {
         </div>
     );
 
+    const showExplanation = () => (
+        <Fragment>
+            <div  data-aos="fade-down-right" data-aos-delay="2000" data-aos-duration="1500">
+                <Illustration
+                    img={`${CLIENT_URL}/img/illustrations/woman-typing-password.svg`}
+                    alt="mulher digitando"
+                    txtImgConfig = {{
+                        topPos: "30%",
+                        txt: isSmall ? "" : `${clientAdminName},<br/>defina uma senha aqui.`,
+                        txtStyle: "text-title",
+                    }}
+                />
+            </div>
+            <div className="pt-1 pb-5">
+                <ScrollArrow margin={50} />
+            </div>
+            <section className={`text-title ${isSmall ? "ml-3 text-left" : "text-center"} container-center`}>
+                {!isSmall
+                ? (
+                    <p style={{marginTop: '80px'}} data-aos="fade-down-left" data-aos-delay="3000" data-aos-duration="1500">
+                        Defina uma <strong>senha de verificação</strong> para
+                        <br />
+                        validar a compra dos seus clientes.
+                        <br />
+                    </p>
+                ) : (
+                    <p style={{marginTop: '80px'}} data-aos="fade-down-left" data-aos-delay="3000" data-aos-duration="1500">
+                        {clientAdminName},
+                        <br />
+                        Defina uma <strong>senha de verificação</strong> para
+                        <br />
+                        validar a compra dos seus clientes.
+                        <br />
+                    </p>
+                )}
+                <p style={{marginTop: '80px'}} data-aos="fade-down-right" data-aos-delay="3000" data-aos-duration="1500">
+                    Você pode trocar essa senha quando precisar.
+                    <br />
+                    <br />
+                    Ah! E temos um <strong>gerador de senhas</strong><br />
+                    para facilitar na criação de novas senhas.
+                </p>
+            </section>
+        </Fragment>
+    );
+
     const showVerificationPassField = () => (
-        <div style={{bottom: isSmall ? '-50px' : '-300px'}} className="mt-4 position-relative">
+        <div data-aos="zoom-in-up" style={{zIndex: 3000, bottom: isSmall ? '-50px' : '-300px'}} className="mt-4 position-relative">
             <form className="shadow-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}>
                     <div style={styles.lockIcon} className="position-absolute">
@@ -96,9 +149,7 @@ export default function PasswordPage({ location, match, history }) {
                         />
                     </div>
                     <p>
-                        {clientAdminName && clientAdminName.cap()},
-                        <br />
-                        Insira sua senha de verificação
+                        Insira aqui sua senha de verificação
                     </p>
                     <ToggleVisibilityPassword
                         showGeneratePass={true}
@@ -120,6 +171,7 @@ export default function PasswordPage({ location, match, history }) {
 
     return (
         <div className="text-white">
+            {showExplanation()}
             {showVerificationPassField()}
             <img width="100%" height="auto" style={{overflow: 'hidden'}} src={`${CLIENT_URL}/img/shapes/wave1.svg`} alt="onda"/>
         </div>

@@ -456,7 +456,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
 
     return (
         <Card
-            className="animated zoomIn fast card-elevation"
+            className="animated zoomIn fast card-elevation mb-5"
             style={styles.card}
         >
             {showTitle()}

@@ -36,13 +36,14 @@ export default function GoalForm({ userId, bizName, name }) {
         clientAdminData: { rewardScore: undefined, mainReward: '' },
     })
 
+    const { clientAdminData } = data;
+
     const dispatch = useStoreDispatch();
 
     AOS.init({
         offset: 150
     });
 
-    const { clientAdminData } = data;
     const classes = useStyles();
 
     const styles = {
@@ -68,7 +69,7 @@ export default function GoalForm({ userId, bizName, name }) {
         },
         giftBagIcon: {
             top: isSmall ? '60px' : '70px',
-            left: isSmall ? '210px' : '230px',
+            left: isSmall ? '210px' : '240px',
             zIndex: 3000,
         },
         helperFromField: {
@@ -98,7 +99,8 @@ export default function GoalForm({ userId, bizName, name }) {
         if(!score) { setError("rewardScore"); showSnackbar(dispatch, "Você precisa inserir o valor da recompensa", "error"); return; }
         if(!prize) { setError("mainReward"); showSnackbar(dispatch, "Você precisa inserir um prêmio", "error"); return; }
         const dataToSend = {
-            ...data,
+            "clientAdminData.rewardScore": clientAdminData.rewardScore,
+            "clientAdminData.mainReward": clientAdminData.mainReward,
         };
 
         updateUser(dispatch, dataToSend, userId)
