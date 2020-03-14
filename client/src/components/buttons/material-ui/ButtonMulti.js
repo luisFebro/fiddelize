@@ -4,8 +4,14 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { buttonMultiType } from '../../../types';
 import clsx from 'clsx';
+import parse from 'html-react-parser';
 
 ButtonMulti.propTypes = buttonMultiType;
+
+export const stylesFA = {
+    fontSize: '30px',
+    marginLeft: '10px'
+}
 
 const useStyles = makeStyles(theme => ({ // n1
     sText: {
@@ -50,6 +56,7 @@ export default function ButtonMulti({
     component="button",
     variant="contained",
     disabled,
+    needParse = false,
     ...props }) {
     const { sText, sBtnColors, sBtnDefaultColors, sIcon } = useStyles(props);
 
@@ -57,7 +64,7 @@ export default function ButtonMulti({
         if(iconFontAwesome && typeof iconFontAwesome !== "string") {
 
             return(
-                <i className={{...sIcon, padding: 0, margin: 0, fontSize: '2.2em', marginLeft: '6px'}}>
+                <i className={{ ...sIcon, padding: 0, margin: 0 }}>
                     {iconFontAwesome}
                 </i>
             );
@@ -79,7 +86,7 @@ export default function ButtonMulti({
             disabled={disabled}
             component={component}
         >
-            <span className={variant === 'contained' ? sText : null}>{title || children}</span>
+            <span className={variant === 'contained' ? sText : null}>{needParse ? parse(title) : title || children}</span>
             {showIcon(iconFontAwesome)}
         </CustomizedButton>
     );

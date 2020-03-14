@@ -90,10 +90,16 @@ function Navbar({ history, location }) {
 
                     {role === "cliente-admin" &&
                     <Fragment>
-                        <Link style={{color: 'var(--themeS)'}} to={`/${clientAdminData && clientAdminData.bizCodeName}/cliente-admin/painel-de-controle`}>
+                        <Link
+                            style={{
+                                color: 'var(--themeS)',
+                                display: locationNow.includes("/nova-senha-verificacao") ? "none" : "block",
+                            }}
+                            to={`/${clientAdminData && clientAdminData.bizCodeName}/cliente-admin/painel-de-controle`}
+                        >
                             {isSmall ? "Admin" : "Usuário: Cliente-Admin"} <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                            {btnLogout()}
                         </Link>
-                        {btnLogout()}
                     </Fragment>}
 
                     {role === "cliente" &&

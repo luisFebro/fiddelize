@@ -37,7 +37,7 @@ function Login({ history, setLoginOrRegister }) {
                 name,
                 authUserId,
                 bizCodeName,
-                onceActionSetPassword
+                verificationPass,
             } = res.data;
 
             if(role === "admin") {
@@ -49,15 +49,18 @@ function Login({ history, setLoginOrRegister }) {
 
             if(role === "cliente-admin") {
                 let whichRoute;
-                if(onceActionSetPassword) {
-                    whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}`;
-                } else {
+                if(verificationPass) {
                     whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
+                    showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
+                    setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                    setTimeout(() => history.push(whichRoute), 5000);
+                    setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
+                } else {
+                    showSnackbar(dispatch, "Verificando...", 'warning', 3000);
+                    setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                    whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
+                    setTimeout(() => history.push(whichRoute), 5000);
                 }
-                showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
-                setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                setTimeout(() => history.push(whichRoute), 5000);
-                setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
             }
 
             if(role === "cliente") {

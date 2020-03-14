@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreDispatch } from 'easy-peasy';
 import { Link } from 'react-router-dom';
@@ -11,16 +11,19 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
+import RadiusBtn from '../../buttons/RadiusBtn';
+import generateAlphaNumeric from '../../../utils/string/generateAlphaNumeric';
+import setValObjWithStr from '../../../utils/objects/setValObjWithStr';
 // import { closeModal } from '../../../redux/actions/modalActions';
 // end material ui
 
 ToggleVisibilityPassword.propTypes = {
     onChange: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
-    setData: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired,
     name: PropTypes.string,
     showForgotPass: PropTypes.bool,
-    value: PropTypes.string,
+    showGeneratePass: PropTypes.bool,
+    generatePassObj: PropTypes.object,
     label: PropTypes.string,
     error: PropTypes.bool
 };
@@ -29,16 +32,22 @@ ToggleVisibilityPassword.propTypes = {
 export default function ToggleVisibilityPassword({
     label,
     onChange,
-    data,
-    setData,
     error,
     name,
     value,
-    showForgotPass = true }) {
+    style,
+    showForgotPass = false,
+    showGeneratePass = false,
+    generatePassObj, }) {
+    const [data, setData] = useState({
+        showPassword: false,
+    })
+    const { showPassword } = data;
+
     const dispatch = useStoreDispatch();
-    // Toggle Password Visibility Handlers
+
     const handleClickShowPassword = () => {
-        setData({ ...data, showPassword: !data.showPassword });
+        setData({ ...data, showPassword: !showPassword });
     };
 
     const handleMouseDownPassword = event => {
@@ -47,8 +56,8 @@ export default function ToggleVisibilityPassword({
 
     // Render
 
-    const showForgotPassLink = needDisplay => (
-        needDisplay &&
+    const showForgotPassLink = showForgotPass => (
+        showForgotPass &&
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Link to="/cliente/trocar-senha">
                 <Button
@@ -62,6 +71,31 @@ export default function ToggleVisibilityPassword({
         </div>
     );
 
+    const insertNewPass = () => {
+        if(generatePassObj.hasOwnProperty("setObj")) {
+            const passValue = generateAlphaNumeric(7, "a#@");
+            const { setObj, obj } = generatePassObj;
+
+            setValObjWithStr(obj, name, passValue);
+            const newObj = obj;
+            setObj(Object.assign({}, obj, newObj));
+            setData({showPassword: true});
+        }
+    };
+
+    const showGeneratePassBtn = showGeneratePass => (
+        showGeneratePass &&
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <span className="text-white text-normal mr-2">ou</span>
+            <RadiusBtn
+                title="gerar uma senha"
+                backgroundColor="var(--themeP)"
+                className="my-2"
+                onClick={() => insertNewPass()}
+            />
+        </div>
+    );
+
     return (
         <FormControl fullWidth>
             <InputLabel
@@ -72,7 +106,9 @@ export default function ToggleVisibilityPassword({
             </InputLabel>
             <Input
                 id="adornment-password"
-                type={data.showPassword ? 'text' : 'password'}
+                variant="outlined"
+                type={showPassword ? 'text' : 'password'}
+                style={style}
                 name={name || "password"}
                 margin='dense'
                 error={error ? true : false}
@@ -85,12 +121,13 @@ export default function ToggleVisibilityPassword({
                             onClick={handleClickShowPassword}
                             onMouseDown={handleMouseDownPassword}
                         >
-                            {data.showPassword ? <Visibility /> : <VisibilityOff />}
+                            {showPassword ? <Visibility fontSize="large" /> : <VisibilityOff fontSize="large" />}
                         </IconButton>
                     </InputAdornment>
                 }
             />
             {showForgotPassLink(showForgotPass)}
+            {showGeneratePassBtn(showGeneratePass)}
         </FormControl>
     );
 }

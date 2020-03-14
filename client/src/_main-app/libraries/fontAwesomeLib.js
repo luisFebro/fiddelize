@@ -10,6 +10,7 @@ import {
     faCheckCircle, // for success
     faPaperPlane, // for send data
     faLock, // for authentication
+    faSave,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -21,4 +22,5 @@ library.add(
   faCheckCircle,
   faPaperPlane,
   faLock,
+  faSave,
 );

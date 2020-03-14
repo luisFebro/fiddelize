@@ -222,11 +222,13 @@ function ClientMobileApp({ history }) {
                 <Link to={`/${clientAdmin.bizCodeName}/cliente-admin/painel-de-controle`}>
                     <RadiusBtn title="acessar" className="mr-2"/>
                 </Link>
-                <RadiusBtn
-                    title="sair"
-                    backgroundColor="var(--mainRed)"
-                    onClick={logout(dispatch)}
-                />
+                <span>
+                    <RadiusBtn
+                        title="sair"
+                        backgroundColor="var(--mainRed)"
+                        onClick={() => logout(dispatch)}
+                    />
+                </span>
             </div>
         </div>
     );

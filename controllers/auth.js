@@ -112,7 +112,7 @@ exports.login = (req, res) => {
                 role,
                 name,
                 bizCodeName: clientAdminData.bizCodeName,
-                onceActionSetPassword: clientAdminData.onceActionSetPassword,
+                verificationPass: clientAdminData.verificationPass,
                 authUserId: _id,
                 msg: msg('ok.welcomeBack', name, 'onlyMsg')
             });

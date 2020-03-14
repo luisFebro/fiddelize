@@ -5,7 +5,7 @@ import { CLIENT_URL } from '../../config/clientUrl';
 import handleChange from '../../utils/form/use-state/handleChange';
 import AOS from 'aos';
 import { handleNextField } from '../../utils/form';
-import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
+import ButtonMulti, { stylesFA } from '../../components/buttons/material-ui/ButtonMulti';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
 import { updateUser } from '../../redux/actions/userActions';
@@ -51,11 +51,6 @@ export default function GoalForm({ userId, bizName, name }) {
             background: 'var(--themeSDark)',
             borderRadius: '10px',
             padding: '25px'
-        },
-        fieldForm: {
-            backgroundColor: 'var(--mainWhite)',
-            textAlign:'center',
-            zIndex: 2000
         },
         fieldFormValue: {
             backgroundColor: 'var(--mainWhite)',
@@ -116,22 +111,21 @@ export default function GoalForm({ userId, bizName, name }) {
     const showButtonAction = () => (
         <div className="container-center" style={{marginTop: '20px'}}>
             <ButtonMulti
+                title="Prosseguir"
                 onClick={() => {
                     sendDataBackend();
                 }}
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeP)"
                 backColorOnHover="var(--themeP)"
-                iconFontAwesome={<FontAwesomeIcon icon="paper-plane" />}
+                iconFontAwesome={<FontAwesomeIcon icon="paper-plane" style={stylesFA} />}
                 textTransform='uppercase'
-            >
-                Prosseguir
-            </ButtonMulti>
+            />
         </div>
     );
 
     return (
-        <div className="container-center mt-5 text-white" data-aos="flip-left">
+        <div className="container-center my-5 text-white" data-aos="flip-left">
             <form className="card-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <p className="text-title text-nowrap text-center m-1 p-1">Meta do App</p>
                 <div className="position-relative margin-auto-90 text-normal font-weight-bold">

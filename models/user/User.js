@@ -84,9 +84,10 @@ const clientAdminData = {
     themePColor: String,
     themeSColor: String,
 
+    verificationPass: String,
     regulation: RegulationSchema,
     appDownloads: { type: Number, default: 0 },
-    onceActionSetPassword: { type: Boolean, default: false },
+    // onceActionSetPassword: { type: Boolean, default: false },
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 
