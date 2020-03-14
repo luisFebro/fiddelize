@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useStoreDispatch } from 'easy-peasy';
 import { Link } from 'react-router-dom';
-import { closeModal } from '../../../redux/actions/modalActions';
 // material ui
 import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,6 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
+// import { closeModal } from '../../../redux/actions/modalActions';
 // end material ui
 
 ToggleVisibilityPassword.propTypes = {
@@ -53,7 +53,7 @@ export default function ToggleVisibilityPassword({
             <Link to="/cliente/trocar-senha">
                 <Button
                     className="my-2"
-                    onClick={() => closeModal(dispatch)}
+                    onClick={null}
                     size='small'
                 >
                     Esqueceu sua senha?

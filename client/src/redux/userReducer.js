@@ -21,8 +21,8 @@ const currUserData = {
         cashCurrentScore: null || userData && userData.lastScore,
     },
     clientAdminData: {
-        reward: {
-            score: null || userData && userData.maxScore, // this will be moved to clientAdminData collection
+        reward: { // rewardScore
+            score: null || userData && userData.maxScore,
         }
     }
 }

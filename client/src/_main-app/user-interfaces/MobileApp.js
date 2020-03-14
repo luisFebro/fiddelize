@@ -11,6 +11,7 @@ import LoginPage from '../../pages/LoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
+import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import ClientMobileApp from '../../pages/mobile-app/ClientMobileApp';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
@@ -41,6 +42,7 @@ function Mobile({ location }) {
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
                 <Route path="/regulamento/" exact component={RegulationPage} />
+                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />

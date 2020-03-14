@@ -2,13 +2,14 @@
 import React, { Fragment, useRef, useEffect, useState } from 'react';
 import Login from '../../components/auth/Login';
 import { Link, withRouter } from 'react-router-dom';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreDispatch } from 'easy-peasy';
 // APP COMPONENTS
 import RatingIcons from './RatingIcons';
 import ProgressMsg from './ProgressMsg';
 import MoreOptionsBtn from './MoreOptionsBtn';
 import AllScores from './AllScores';
 import PercCircleAndGift from './PercCircleAndGift';
+import RadiusBtn from '../../components/buttons/RadiusBtn';
 // END APP COMPONENTS
 // UTILS
 import {CLIENT_URL} from '../../config/clientUrl';
@@ -22,7 +23,8 @@ import lStorage from '../../utils/storage/lStorage';
 import { confettiPlayOp, userProfileOp, needInitialStateOp, needAppRegisterOp } from './lStorageStore';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 import Register from '../../components/auth/Register';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { logout } from '../../redux/actions/authActions';
 // import ImageLogo from '../../components/ImageLogo';
 
 // This following logic will inserted in the client-user's download button.
@@ -48,6 +50,7 @@ function ClientMobileApp({ history }) {
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
         clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }))
+    const dispatch = useStoreDispatch();
 
     let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
     let userScore = loyaltyScores && loyaltyScores.currentScore;
@@ -67,7 +70,6 @@ function ClientMobileApp({ history }) {
 
     checkIfElemIsVisible("#rules", setShowMoreBtn)
 
-    // const dispatch = useStoreDispatch();
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
@@ -209,6 +211,26 @@ function ClientMobileApp({ history }) {
     const conditionRegister = !gotToken && loginOrRegister === "register" && showRegister(true)
     const conditionLogin = !gotToken && loginOrRegister === "login" && showLogin()
 
+    const showConnectedStatus = () => (
+        <div className="mt-5 container-center-col text-white text-normal text-center">
+            <span>
+                Conectado como
+                <br/>
+                <strong>{role && role.cap()}<FontAwesomeIcon icon="lock" style={{marginLeft: '5px'}} /></strong>
+            </span>
+            <div className="container-center">
+                <Link to={`/${clientAdmin.bizCodeName}/cliente-admin/painel-de-controle`}>
+                    <RadiusBtn title="acessar" className="mr-2"/>
+                </Link>
+                <RadiusBtn
+                    title="sair"
+                    backgroundColor="var(--mainRed)"
+                    onClick={logout(dispatch)}
+                />
+            </div>
+        </div>
+    );
+
     return (
         <div style={{overflowX: 'hidden'}}>
             <span className="text-right text-white for-version-test">{""}</span>
@@ -241,6 +263,12 @@ function ClientMobileApp({ history }) {
                             </div>
                             {showMoreOptionsBtn()}
                             <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
+                        </Fragment>
+                    )}
+                    {role !== "cliente" && (
+                        <Fragment>
+                            {gotToken && showConnectedStatus()}
+                            {showLogin()}
                         </Fragment>
                     )}
                 </section>

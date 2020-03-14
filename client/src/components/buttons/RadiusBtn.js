@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function RadiusBtn({ title, onClick }) {
+export default function RadiusBtn({ title, onClick, className, backgroundColor }) {
     const styles = {
         btn: {
             //position: 'absolute',
@@ -9,13 +9,13 @@ export default function RadiusBtn({ title, onClick }) {
             color: "white",
             padding: '2px 5px',
             borderRadius: '20px',
-            backgroundColor: 'var(--themeSDark)',
+            backgroundColor: backgroundColor || 'var(--themeSDark)',
             outline: "none"
         }
     }
     return (
         <button
-            className="text-small text-shadow font-weight-bold"
+            className={className + " text-small text-shadow font-weight-bold"}
             style={styles.btn}
             onClick={onClick}
         >

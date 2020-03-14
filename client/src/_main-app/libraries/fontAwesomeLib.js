@@ -9,6 +9,7 @@ import {
     faInfo, // for warning
     faCheckCircle, // for success
     faPaperPlane, // for send data
+    faLock, // for authentication
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -19,4 +20,5 @@ library.add(
   faInfo,
   faCheckCircle,
   faPaperPlane,
+  faLock,
 );

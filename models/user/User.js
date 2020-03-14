@@ -85,10 +85,8 @@ const clientAdminData = {
     themeSColor: String,
 
     regulation: RegulationSchema,
-    appDownloads: {
-        type: Number,
-        default: 0,
-    }
+    appDownloads: { type: Number, default: 0 },
+    onceActionSetPassword: { type: Boolean, default: false },
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 
@@ -144,7 +142,7 @@ const data = {
         staffRequired: {
             type: Boolean,
             default: false,
-        }
+        },
     },
     loyaltyScores: LoyaltyScoresSchema, // this will be moved to clientUserData...
     clientUserData: ClientUserDataSchema,

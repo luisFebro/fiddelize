@@ -13,6 +13,7 @@ import Footer from '../../components/_layout/footer/Footer';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
+import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import Loadable from 'react-loadable';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
@@ -56,6 +57,7 @@ export default function  Website() {
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                 <Route path="/:bizCodeName/novo-app" exact component={CreationPage} />
+                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />

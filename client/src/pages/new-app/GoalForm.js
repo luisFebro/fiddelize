@@ -47,7 +47,7 @@ export default function GoalForm({ userId, bizName, name }) {
 
     const styles = {
         form: {
-            maxWidth: '400px',
+            maxWidth: '350px',
             background: 'var(--themeSDark)',
             borderRadius: '10px',
             padding: '25px'
@@ -133,7 +133,7 @@ export default function GoalForm({ userId, bizName, name }) {
     return (
         <div className="container-center mt-5 text-white" data-aos="flip-left">
             <form className="card-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
-                <p className="text-title text-center m-1 p-1">Meta do App</p>
+                <p className="text-title text-nowrap text-center m-1 p-1">Meta do App</p>
                 <div className="position-relative margin-auto-90 text-normal font-weight-bold">
                     <div style={styles.formIcons} className="position-absolute">
                         <img

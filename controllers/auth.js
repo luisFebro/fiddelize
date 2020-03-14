@@ -99,7 +99,7 @@ exports.login = (req, res) => {
     const { _id, name, role, clientAdminData } = req.profile;
 
     let expiringTime;
-    role !== "cliente" ? expiringTime = "30m" : expiringTime = "90d"; // default: 30m (enum: 30s, 30m, 1h, 7d)
+    role !== "cliente" ? expiringTime = "1h" : expiringTime = "90d"; // default: 30m (enum: 30s, 30m, 1h, 7d)
 
     jwt.sign(
         { id: _id },
@@ -111,7 +111,8 @@ exports.login = (req, res) => {
                 token,
                 role,
                 name,
-                bizName: clientAdminData.bizName,
+                bizCodeName: clientAdminData.bizCodeName,
+                onceActionSetPassword: clientAdminData.onceActionSetPassword,
                 authUserId: _id,
                 msg: msg('ok.welcomeBack', name, 'onlyMsg')
             });

@@ -12,10 +12,11 @@ const isSmall = window.Helper.isSmallScreen();
 function Navbar({ history, location }) {
     // const [showSkeleton, setShowSkeleton] = useState(true);
     const [isSearchOpen, setSearchOpen] = useState(false);
-    const { isUserAuthenticated, role, _idStaff } = useStoreState(state => ({
+    const { isUserAuthenticated, role, _idStaff, clientAdminData } = useStoreState(state => ({
        isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
        role: state.userReducer.cases.currentUser.role,
        _idStaff: state.userReducer.cases.currentUser._id,
+       clientAdminData: state.userReducer.cases.currentUser.clientAdminData,
     }));
 
     const dispatch = useStoreDispatch();
@@ -87,10 +88,10 @@ function Navbar({ history, location }) {
                         {btnLogout()}
                     </Fragment>}
 
-                    {role === "colaborador" &&
+                    {role === "cliente-admin" &&
                     <Fragment>
-                        <Link to={`/colaborador/quadro-administrativo/${_idStaff}`}>
-                            C-Admin <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                        <Link style={{color: 'var(--themeS)'}} to={`/${clientAdminData && clientAdminData.bizCodeName}/cliente-admin/painel-de-controle`}>
+                            {isSmall ? "Admin" : "Usuário: Cliente-Admin"} <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
                         </Link>
                         {btnLogout()}
                     </Fragment>}
@@ -151,6 +152,14 @@ This is not wokring right... I cant seem to log out when clicked i the btn.
     </span>
     {btnLogout()}
 </div>
+
+{role === "colaborador" &&
+<Fragment>
+    <Link to={`/colaborador/quadro-administrativo/${_idStaff}`}>
+        Usuário: Colaborador <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+    </Link>
+    {btnLogout()}
+</Fragment>}
 */
 
 // STYLES
