@@ -20,11 +20,12 @@ import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage from '../../utils/storage/lStorage';
-import { confettiPlayOp, userProfileOp, needInitialStateOp, needAppRegisterOp } from './lStorageStore';
+import { systemOp, confettiPlayOp, userProfileOp, needInitialStateOp, needAppRegisterOp } from '../../utils/storage/lStorageStore';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 import Register from '../../components/auth/Register';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { logout } from '../../redux/actions/authActions';
+import AOS from 'aos';
 // import ImageLogo from '../../components/ImageLogo';
 
 // This following logic will inserted in the client-user's download button.
@@ -32,6 +33,10 @@ import { logout } from '../../redux/actions/authActions';
 //
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
+
+//AppSystem
+const appSystem = lStorage("getItems", { collection: "appSystem"});
+console.log("appSystem", JSON.stringify(appSystem));
 // const options1 = {...needAppRegisterOp, value: }
 
 const isSmall = window.Helper.isSmallScreen();
@@ -57,6 +62,10 @@ function ClientMobileApp({ history }) {
     let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
 
     setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
+
+    AOS.init({
+        offset: 50,
+    });
 
     const gotToken = localStorage.getItem("token");
 
@@ -195,7 +204,7 @@ function ClientMobileApp({ history }) {
     );
 
     const showLogin = () => (
-        <div className="container-center" style={{margin: '120px 0 0'}}>
+        <div className="container-center" style={{margin: '80px 0 0'}}>
             <Login isClientUser={role === "cliente" ? true : false} setLoginOrRegister={setLoginOrRegister} />
         </div>
     );
@@ -208,15 +217,35 @@ function ClientMobileApp({ history }) {
         />
     );
 
-    const conditionRegister = !gotToken && loginOrRegister === "register" && showRegister(true)
-    const conditionLogin = !gotToken && loginOrRegister === "login" && showLogin()
+    const showAppType = () => (
+        appSystem &&
+        <div className="container-center" data-aos="flip-right" data-aos-delay="3000">
+            <div className="position-relative">
+                <p style={{zIndex: 2000, top: '10px', left: '145px'}} className="text-center text-white position-absolute text-shadow">
+                    <span className="text-subtitle font-weight-bold">App</span>
+                    <br />
+                    <span
+                        className="text-title text-nowrap"
+                    >
+                        do {
+                            appSystem && appSystem.roleForDownload === "clientUser"
+                            ? "Cliente" : "Admin"
+                        }
+                    </span>
+                </p>
+                <div style={{animationIterationCount: 5}} className="animated rubberBand delay-5s">
+                    <img width={460} height={130} src={`${CLIENT_URL}/img/shapes/blob1.svg`} alt="tipo de app"/>
+                </div>
+            </div>
+        </div>
+    );
 
     const showConnectedStatus = () => (
         <div className="mt-5 container-center-col text-white text-normal text-center">
             <span>
-                Conectado como
+                Conectado por
                 <br/>
-                <strong>{role && role.cap()}<FontAwesomeIcon icon="lock" style={{marginLeft: '5px'}} /></strong>
+                <strong className="text-title">{userName && userName.cap()}</strong><br />
             </span>
             <div className="container-center">
                 <Link to={`/${clientAdmin.bizCodeName}/cliente-admin/painel-de-controle`}>
@@ -233,10 +262,14 @@ function ClientMobileApp({ history }) {
         </div>
     );
 
+    const conditionRegister = !gotToken && loginOrRegister === "register" && showRegister(true)
+    const conditionLogin = !gotToken && loginOrRegister === "login" && showLogin()
+
     return (
         <div style={{overflowX: 'hidden'}}>
             <span className="text-right text-white for-version-test">{""}</span>
             {showLogo()}
+            {showAppType()}
             <section>
                 {needAppRegister
                 ? (
@@ -270,7 +303,7 @@ function ClientMobileApp({ history }) {
                     {role !== "cliente" && (
                         <Fragment>
                             {gotToken && showConnectedStatus()}
-                            {showLogin()}
+                            {!gotToken && showLogin()}
                         </Fragment>
                     )}
                 </section>

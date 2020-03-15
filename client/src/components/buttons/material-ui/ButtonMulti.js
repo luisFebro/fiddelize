@@ -8,9 +8,10 @@ import parse from 'html-react-parser';
 
 ButtonMulti.propTypes = buttonMultiType;
 
-export const stylesFA = {
+export const faStyle = {
     fontSize: '30px',
-    marginLeft: '10px'
+    marginLeft: '10px',
+    filter:  'drop-shadow(.5px .5px 1.5px black)',
 }
 
 const useStyles = makeStyles(theme => ({ // n1

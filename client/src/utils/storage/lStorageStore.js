@@ -22,7 +22,11 @@ const needAppRegisterOp = combine(collVal1, { property: "needAppRegister", value
 
 const userProfileOp = combine(collVal2, { property: ["role", "name", "maxScore", "currentScore", "lastScore"], })
 
-const roleDownloadSystemOp = combine(collVal3, { property: "roleForDownload"})
+const systemOp = {
+    downloadClientAdmin: combine(collVal3, { property: "roleForDownload", value: "clientAdmin"}),
+    downloadClientUser: combine(collVal3, { property: "roleForDownload", value: "clientUser"}),
+    businessId: combine(collVal3, { property: "businessId"}),
+}
 // const clientAdminProfileOp = combine(collVal3, { property: ["role", "name", "bizName"], })
 // END PROPERTIES
 
@@ -34,7 +38,7 @@ export {
     userProfileOp,
     needInitialStateOp,
     needAppRegisterOp,
-    roleDownloadSystemOp,
+    systemOp,
 }
 
 export const needSetTrueLocalKey = (lastChecked, currChecked) => {

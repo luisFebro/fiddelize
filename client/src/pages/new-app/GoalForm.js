@@ -5,7 +5,7 @@ import { CLIENT_URL } from '../../config/clientUrl';
 import handleChange from '../../utils/form/use-state/handleChange';
 import AOS from 'aos';
 import { handleNextField } from '../../utils/form';
-import ButtonMulti, { stylesFA } from '../../components/buttons/material-ui/ButtonMulti';
+import ButtonMulti, { faStyle } from '../../components/buttons/material-ui/ButtonMulti';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
 import { updateUser } from '../../redux/actions/userActions';
@@ -29,7 +29,7 @@ const useStyles = makeStyles({  // n1
     },
 });
 
-export default function GoalForm({ userId, bizName, name }) {
+export default function GoalForm({ bizId, bizName, name }) {
     const [error, setError] = useState("");
     const [showThisField, setShowThisField] = useState(false);
     const [data, setData] = useState({
@@ -103,10 +103,10 @@ export default function GoalForm({ userId, bizName, name }) {
             "clientAdminData.mainReward": clientAdminData.mainReward,
         };
 
-        updateUser(dispatch, dataToSend, userId)
+        updateUser(dispatch, dataToSend, bizId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-            setTimeout(() => window.location.href = `/baixe-app/${name}?isClientAdmin=true&bizName=${bizName}`, 1500);
+            setTimeout(() => window.location.href = `/baixe-app/${name}?negocio=${bizName}&admin=1`, 1500);
         })
     }
 
@@ -120,7 +120,7 @@ export default function GoalForm({ userId, bizName, name }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeP)"
                 backColorOnHover="var(--themeP)"
-                iconFontAwesome={<FontAwesomeIcon icon="paper-plane" style={stylesFA} />}
+                iconFontAwesome={<FontAwesomeIcon icon="paper-plane" style={faStyle} />}
                 textTransform='uppercase'
             />
         </div>

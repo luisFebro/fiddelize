@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import ButtonMulti from '../../buttons/material-ui/ButtonMulti';
+import ButtonMulti, { faStyle } from '../../buttons/material-ui/ButtonMulti';
 import KeypadHandler from './KeypadHandler';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 KeypadButton.propTypes = {
     title: PropTypes.string.isRequired,
@@ -41,7 +42,7 @@ export default function KeypadButton({
           color="var(--mainWhite)"
           backgroundColor="var(--themeSDark)"
           backColorOnHover="var(--themeSDark)"
-          iconFontAwesome="fas fa-keyboard"
+          iconFontAwesome={<FontAwesomeIcon icon="keyboard" style={faStyle} />}
           textTransform='uppercase'
       >
           Abrir Teclado

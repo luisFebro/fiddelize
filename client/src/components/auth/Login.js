@@ -13,6 +13,7 @@ import KeypadButton from '../modals/keypad';
 import isThisApp from '../../utils/window/isThisApp';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
+import { CLIENT_URL } from '../../config/clientUrl';
 
 function Login({ history, setLoginOrRegister }) {
     const [cpf, setData] = useState("0");

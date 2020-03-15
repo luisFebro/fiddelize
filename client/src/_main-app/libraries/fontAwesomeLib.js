@@ -11,6 +11,7 @@ import {
     faPaperPlane, // for send data
     faLock, // for authentication
     faSave,
+    faKeyboard,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -23,4 +24,5 @@ library.add(
   faPaperPlane,
   faLock,
   faSave,
+  faKeyboard,
 );

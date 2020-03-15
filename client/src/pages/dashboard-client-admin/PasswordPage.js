@@ -3,7 +3,7 @@ import getQueryByName from '../../utils/string/getQueryByName';
 import ToggleVisibilityPassword from '../../components/forms/fields/ToggleVisibilityPassword';
 import handleChange from '../../utils/form/use-state/handleChange';
 import { CLIENT_URL } from '../../config/clientUrl';
-import ButtonMulti, { stylesFA } from '../../components/buttons/material-ui/ButtonMulti';
+import ButtonMulti, { faStyle } from '../../components/buttons/material-ui/ButtonMulti';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { updateUser } from '../../redux/actions/userActions';
 import { useStoreDispatch } from 'easy-peasy';
@@ -83,7 +83,7 @@ export default function PasswordPage({ location, match, history }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeP)"
                 backColorOnHover="var(--themeP)"
-                iconFontAwesome={<FontAwesomeIcon icon="save" style={stylesFA} />}
+                iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle} />}
                 textTransform='uppercase'
             />
         </div>
@@ -125,7 +125,7 @@ export default function PasswordPage({ location, match, history }) {
                     </p>
                 )}
                 <p style={{marginTop: '80px'}} data-aos="fade-down-right" data-aos-delay="3000" data-aos-duration="1500">
-                    Você pode trocar essa senha quando precisar.
+                    Você pode trocar essa senha quando precisar no painel de controle.
                     <br />
                     <br />
                     Ah! E temos um <strong>gerador de senhas</strong><br />
@@ -136,7 +136,7 @@ export default function PasswordPage({ location, match, history }) {
     );
 
     const showVerificationPassField = () => (
-        <div data-aos="zoom-in-up" style={{zIndex: 3000, bottom: isSmall ? '-50px' : '-300px'}} className="mt-4 position-relative">
+        <div data-aos="zoom-in-up" style={{zIndex: 1000, bottom: isSmall ? '-50px' : '-300px'}} className="mt-4 position-relative">
             <form className="shadow-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}>
                     <div style={styles.lockIcon} className="position-absolute">

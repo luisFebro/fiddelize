@@ -10,7 +10,7 @@ const Footer = () => {
                         Fiddelize
                     </strong>
                         <br />
-                        Sistema de Pontos de Fidelidade
+                        Sistema de Pontos de Fidelidade Digital
                         <br />
                         Roraima - {new Date().getFullYear()}
                 </div>

@@ -154,7 +154,7 @@ export default function CreationPage({ location }) {
     );
 
     const showGoalForm = () => (
-        <GoalForm userId={id} bizName={bizName} name={name} />
+        <GoalForm userId={id} bizName={bizName} bizId={id} name={name} />
     );
 
     return (
