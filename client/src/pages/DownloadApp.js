@@ -6,8 +6,7 @@ import PwaInstaller from '../components/pwa-installer/PwaInstaller';
 import { CLIENT_URL } from '../config/clientUrl';
 import checkIfElemIsVisible from '../utils/window/checkIfElemIsVisible';
 import getQueryByName from '../utils/string/getQueryByName';
-import lStorage from '../utils/storage/lStorage';
-import { systemOp } from '../utils/storage/lStorageStore';
+import lStorage, { systemOp } from '../utils/storage/lStorage';
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
@@ -18,6 +17,7 @@ export default function DownloadApp({ match, location }) {
     const bizId = getQueryByName("id", location.search);
     const isClientAdmin = location.search.includes("admin=1");
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
+    const isValidRoleType = isClientAdmin || isClientUser;
     // `/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1`
     const { downloadClientAdmin, downloadClientUser, businessId } = systemOp;
     useEffect(() => {
@@ -47,7 +47,7 @@ export default function DownloadApp({ match, location }) {
     }
 
     const showClientAdminText = () => (
-        <div className="text-white text-center text-title">
+        <div className="text-white text-center text-title mt-5">
             <p className="text-hero">O App da {bizName && bizName.cap()} ficou pronto!<i style={styles.icon}>🎉</i></p>
             <div className="pt-1 pb-5">
                 <ScrollArrow margin={50} />
@@ -84,7 +84,7 @@ export default function DownloadApp({ match, location }) {
                 {isClientUser && (
                     <Fragment>
                         <p>Você foi convidado(a) para baixar o app do(a)</p>
-                        <p className="text-hero text-center">{bizName}</p>
+                        <p className="text-hero text-center">{bizName && bizName.cap()}</p>
                         <p>
                             para te oferecer uma <strong>experiência de compra</strong> ainda melhor
                             <br />
@@ -93,9 +93,9 @@ export default function DownloadApp({ match, location }) {
 
                         {showAppShowCase()}
 
-                        <p style={styles.margin} data-aos="fade-up">Você vai acompanhar seus pontos de fidelidade, histórico de compras, conversar com a gente, ter acesso offline e mais!</p>
-                        <p className="text-hero" style={styles.margin} data-aos="fade-up">E o melhor, você ainda ganha prêmios a cada meta atingida!</p>
-                        <p style={styles.margin} data-aos="fade-up">Baixe o seu app aqui embaixo, é leve e baixa rápido!</p>
+                        <p style={styles.margin} data-aos="fade-up">Você vai acompanhar seus pontos de fidelidade, histórico de compras, conversar com a gente, ter acesso offline e mais.</p>
+                        <p className="text-hero" style={styles.margin} data-aos="fade-up">E o melhor...<br />você ainda ganha prêmios a cada meta atingida!</p>
+                        <p style={styles.margin} data-aos="fade-up">Baixe o seu app aqui embaixo, é leve e baixa rápido.</p>
                         <div style={{margin: '0 0 500px'}}>
                             <ScrollArrow margin={30} />
                             <div id="target">
@@ -108,20 +108,38 @@ export default function DownloadApp({ match, location }) {
         </div>
     );
 
-    return (
-        <div id="holder" className="text-white gradient-animation" style={{minHeight: '325vmin'}}>
-            {isClientAdmin
-            ? showClientAdminText()
-            : showClientUserText()}
-            <PwaInstaller
-                title={isClientAdmin
-                    ? `<strong>${userName.cap()},<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`
-                    : `<strong>${userName.cap()},<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`
-                }
-                icon={`${CLIENT_URL}/img/official-logo-white.svg`}
-                run={run}
-            />
+    const errorMsg = () => (
+        <div className="text-white text-center">
+            <p
+                className={`pl-3 mt-5 text-center text-hero`}
+            >
+                Oops! Parece que esse link não é válido.
+            </p>
+            <p className={`${isSmall ? "ml-2 text-left" : "text-center"} my-5 text-title`}>Por favor, tente um outro link para baixar seu app.</p>
         </div>
+
+    );
+
+    return (
+        <Fragment>
+            {!bizName || !bizId || !isValidRoleType
+            ? errorMsg()
+            : (
+                <div id="holder" className="text-white gradient-animation" style={{minHeight: '325vmin'}}>
+                    {isClientAdmin
+                    ? showClientAdminText()
+                    : showClientUserText()}
+                    <PwaInstaller
+                        title={isClientAdmin
+                            ? `<strong>${userName && userName.cap()},<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`
+                            : `<strong>${userName ? userName.cap() : "Ei"},<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`
+                        }
+                        icon={`${CLIENT_URL}/img/official-logo-white.svg`}
+                        run={run}
+                    />
+                </div>
+            )}
+        </Fragment>
     );
 }
 

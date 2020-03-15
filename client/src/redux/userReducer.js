@@ -1,7 +1,6 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
-import lStorage from '../utils/storage/lStorage';
-import { userProfileOp, needInitialStateOp } from '../pages/mobile-app/lStorageStore';
+import lStorage, { userProfileOp, needInitialStateOp } from '../utils/storage/lStorage';
 // You can use only one isntance of object like 'cases' for each object.
 // Check for mispellings in case of one action not being dispatched properly.
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED

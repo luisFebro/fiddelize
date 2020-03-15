@@ -14,9 +14,7 @@ import isThisApp from '../../../utils/window/isThisApp';
 import { showComponent } from "../../../redux/actions/componentActions";
 import { logout } from "../../../redux/actions/authActions";
 import { Link } from 'react-router-dom';
-import lStorage from '../../../utils/storage/lStorage';
-import { userProfileOp } from '../../../pages/mobile-app/lStorageStore';
-
+import lStorage, { userProfileOp } from '../../../utils/storage/lStorage';
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,

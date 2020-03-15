@@ -2,9 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import getRemainder from '../../utils/numbers/getRemainder';
 import Tooltip from './Tooltip';
-import lStorage from '../../utils/storage/lStorage';
+import lStorage, { tooltip1 } from '../../utils/storage/lStorage';
 import { convertDotToComma } from '../../utils/numbers/convertDotComma';
-import { tooltip1 } from './lStorageStore';
 import { useStoreDispatch } from 'easy-peasy';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

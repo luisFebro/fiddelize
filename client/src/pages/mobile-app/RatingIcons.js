@@ -11,7 +11,7 @@ RatingIcons.propTypes = {
 }
 
 export default function RatingIcons({ score, maxScore }) {
-    const selectedIcon = "star";
+    const selectedIcon = "heart";
 
     const milestoneIcons = {
         star: {

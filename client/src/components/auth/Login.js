@@ -65,7 +65,7 @@ function Login({ history, setLoginOrRegister }) {
             }
 
             if(role === "cliente") {
-                if(isThisApp()) {
+                if(true) {
                     // window.location.href = "/mobile-app" // this is for updating the values from lStorage...
                     history.push("/mobile-app");
                 } else {
@@ -92,7 +92,7 @@ function Login({ history, setLoginOrRegister }) {
     );
 
     const showKeypadButton = () => (
-        <div className="mt-3 mb-2 animated jackInTheBox slow delay-1s d-flex justify-content-center">
+        <div className="mt-3 mb-2 animated jackInTheBox slower delay-1s d-flex justify-content-center">
             <KeypadButton
                 title="Informe o seu CPF"
                 titleIcon="fas fa-list-ol"

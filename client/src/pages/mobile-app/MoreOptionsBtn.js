@@ -10,9 +10,8 @@ import LocalMallIcon from '@material-ui/icons/LocalMall';
 import ChatIcon from '@material-ui/icons/Chat';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Tooltip from './Tooltip';
-import lStorage from '../../utils/storage/lStorage';
+import lStorage, { tooltip1, yellowBtn2, needSetTrueLocalKey } from '../../utils/storage/lStorage';
 import Fab from '@material-ui/core/Fab';
-import { tooltip1, yellowBtn2, needSetTrueLocalKey } from './lStorageStore';
 // End SpeedDial and Icons
 
 const lastOption = tooltip1;

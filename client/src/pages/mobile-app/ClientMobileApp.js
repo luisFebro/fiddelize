@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 // APP COMPONENTS
 import RatingIcons from './RatingIcons';
-import ProgressMsg from './ProgressMsg';
+import ProgressMsg from './ProgressMsg' ;
 import MoreOptionsBtn from './MoreOptionsBtn';
 import AllScores from './AllScores';
 import PercCircleAndGift from './PercCircleAndGift';
@@ -19,8 +19,10 @@ import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDot
 import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
-import lStorage from '../../utils/storage/lStorage';
-import { systemOp, confettiPlayOp, userProfileOp, needInitialStateOp, needAppRegisterOp } from '../../utils/storage/lStorageStore';
+import lStorage, {
+    systemOp,
+    confettiPlayOp,
+    userProfileOp, needInitialStateOp, needAppRegisterOp } from '../../utils/storage/lStorage';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 import Register from '../../components/auth/Register';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -233,7 +235,7 @@ function ClientMobileApp({ history }) {
                         }
                     </span>
                 </p>
-                <div style={{animationIterationCount: 5}} className="animated rubberBand delay-5s">
+                <div style={{animationIterationCount: 3}} className="animated rubberBand delay-5s">
                     <img width={460} height={130} src={`${CLIENT_URL}/img/shapes/blob1.svg`} alt="tipo de app"/>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+export * from './lStorageStore';
 // You need to specify here all the collections of the project.
 // This should be AN OBJECT
 const collectionStore = {
