@@ -17,40 +17,42 @@ export default function Dashboard() {
         clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
     }));
 
-    const showGreetingAndActionBtns = () => (
-        <div className="position-relative" style={{minHeight: '75px'}}>
-            <section style={{zIndex: 3000, right: '20px', top: '55px' }} className="position-absolute container-center">
-                <div style={{marginRight: '15px'}}>
-                    <ButtonFab
-                        backgroundColor="var(--themeSDark)"
-                        position="relative"
-                        size="medium"
-                        iconFontAwesome={`fas fa-mobile-alt`}
-                        iconFontSize="1.8em"
-                        iconMarginLeft="0"
-                        onClick={null}
-                    />
-                </div>
-                <Link to={`/${clientAdmin.bizCodeName}/compartilhar-app?negocio=${clientAdmin.bizName}&id=${bizId}&role=${role}`}>
-                    <ButtonMulti
-                        title="compartilhar app"
-                        onClick={null}
-                        color="var(--mainWhite)"
-                        backgroundColor="var(--themeSDark)"
-                        backColorOnHover="var(--themeSDark)"
-                        iconFontAwesome="fas fa-share-alt"
-                    />
-                </Link>
-            </section>
-            <p
-                style={{margin: 0, paddingLeft: 20}}
-                className="text-normal text-center text-white"
-            >
-                <span>{getDayGreetingBr()},
-                <br />
-                {name ? `${name.cap()}!` : " ..."}</span>
-            </p>
-        </div>
+    const showActionBtn = () => (
+        <section style={{zIndex: 3000, right: '15px', top: 0 }} className="position-absolute container-center">
+            <div style={{marginRight: '15px'}}>
+                <ButtonFab
+                    backgroundColor="var(--themeSDark)"
+                    position="relative"
+                    size="medium"
+                    iconFontAwesome={`fas fa-mobile-alt`}
+                    iconFontSize="2.1em"
+                    iconMarginLeft="0"
+                    onClick={null}
+                />
+            </div>
+            <Link to={`/${clientAdmin.bizCodeName}/compartilhar-app?negocio=${clientAdmin.bizName}&id=${bizId}&role=${role}`}>
+                <ButtonFab
+                    backgroundColor="var(--themeSDark)"
+                    position="relative"
+                    size="medium"
+                    iconFontAwesome={`fas fa-share-alt`}
+                    iconFontSize="2.1em"
+                    iconMarginLeft="0"
+                    onClick={null}
+                />
+            </Link>
+        </section>
+    );
+
+    const showGreeting = () => (
+        <p
+            className="position-relative text-normal text-center text-white"
+            style={{margin: 0, top: '10px'}}
+        >
+            <span>{getDayGreetingBr()},
+            <br />
+            {name ? `${name.cap()}!` : " ..."}</span>
+        </p>
     );
 
     return (
@@ -59,7 +61,8 @@ export default function Dashboard() {
             ? (
                 <Navbar />
             ) : null}
-            {showGreetingAndActionBtns()}
+            {showActionBtn()}
+            {showGreeting()}
             <br/>
             <GroupedDashSessions />
         </Fragment>

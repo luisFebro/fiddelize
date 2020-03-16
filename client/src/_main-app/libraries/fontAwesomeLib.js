@@ -12,6 +12,7 @@ import {
     faLock, // for authentication
     faSave,
     faKeyboard,
+    faAngleDoubleRight, // generate something,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -25,4 +26,5 @@ library.add(
   faLock,
   faSave,
   faKeyboard,
+  faAngleDoubleRight,
 );

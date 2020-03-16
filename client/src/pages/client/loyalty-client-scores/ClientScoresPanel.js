@@ -166,6 +166,11 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
         </div>
     );
 
+    const showSharingBtn = () => (
+        <div>
+        </div>
+    );
+
     const showHomeBtn = () => {
         const title = "Finalizar";
         const backColorOnHover = "var(--themeSLight)";
@@ -196,10 +201,23 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
             <div style={{maxWidth: 330}} className=" container-center mt-5 animated slideInLeft fast">
                 {showHeader()}
                 {showScores()}
+                {showSharingBtn()}
                 {showHomeBtn()}
         </div>
     );
 }
+/*ARCHIVES
+<Link to={`/${clientAdmin.bizCodeName}/compartilhar-app?negocio=${clientAdmin.bizName}&id=${bizId}&role=${role}`}>
+    <ButtonMulti
+        title="compartilhar app"
+        onClick={null}
+        color="var(--mainWhite)"
+        backgroundColor="var(--themeSDark)"
+        backColorOnHover="var(--themeSDark)"
+        iconFontAwesome="fas fa-share-alt"
+    />
+</Link>
+*/
 
 /* COMMENTS
 LESSON: <p> is better for aligning texts instead of <span>

@@ -304,7 +304,7 @@ function ClientMobileApp({ history }) {
                     )}
                     {role !== "cliente" && appSystem && appSystem.roleForDownload !== "clientUser" && (
                         <Fragment>
-                            {gotToken && showConnectedStatus()}
+                            {showConnectedStatus()}
                             {!gotToken && showLogin()}
                         </Fragment>
                     )}

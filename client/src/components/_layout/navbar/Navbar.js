@@ -50,7 +50,7 @@ function Navbar({ history, location }) {
             className="text-small text-shadow"
             style={{
                 position: 'absolute',
-                top: '45px',
+                top: '65px',
                 right: '5px',
                 color: "white",
                 padding: '2px 5px',
@@ -97,8 +97,7 @@ function Navbar({ history, location }) {
                             }}
                             to={`/${clientAdminData && clientAdminData.bizCodeName}/cliente-admin/painel-de-controle`}
                         >
-                            {isSmall ? "Admin" : "Usuário: Cliente-Admin"} <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
-                            {btnLogout()}
+                            {locationNow.includes("/cliente-admin/painel-de-controle") && btnLogout()}
                         </Link>
                     </Fragment>}
 
@@ -151,6 +150,8 @@ function Navbar({ history, location }) {
 export default withRouter(Navbar); // n1
 
 /* ARCHIVES
+{isSmall ? "Admin" : "Usuário: Cliente-Admin"} <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+
 This is not wokring right... I cant seem to log out when clicked i the btn.
 <div>
     <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>

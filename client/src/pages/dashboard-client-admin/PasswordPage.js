@@ -42,10 +42,9 @@ export default function PasswordPage({ location, match, history }) {
         fieldFormValue: {
             backgroundColor: 'var(--mainWhite)',
             color: 'var(--themeP)',
-            fontSize: '2.1em',
+            fontSize: '26px',
             fontFamily: 'var(--mainFont)',
             // textAlign: 'center', it does not works
-            fontSize: '26px',
             padding: '10px 14px',
             zIndex: 2000
         },

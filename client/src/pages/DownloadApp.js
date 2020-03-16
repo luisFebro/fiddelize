@@ -10,6 +10,10 @@ import lStorage, { systemOp } from '../utils/storage/lStorage';
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
+const appSystem = lStorage("getItems", { collection: "appSystem"});
+
+const isAdminLoggedIn = appSystem && appSystem.roleForDownload === "clientAdmin";
+
 export default function DownloadApp({ match, location }) {
     const [userName, setUserName] = useState(match.params.userName);
     const [run, setRun] = useState(false);
@@ -22,7 +26,7 @@ export default function DownloadApp({ match, location }) {
     const { downloadClientAdmin, downloadClientUser, businessId } = systemOp;
     useEffect(() => {
         if(isClientAdmin) { lStorage("setItem", downloadClientAdmin); }
-        if(isClientUser) {
+        if(isClientUser && !isAdminLoggedIn) {
             lStorage("setItem", downloadClientUser);
             lStorage("setItem", {...businessId, value: bizId});
         }
@@ -95,7 +99,7 @@ export default function DownloadApp({ match, location }) {
 
                         <p style={styles.margin} data-aos="fade-up">Você vai acompanhar seus pontos de fidelidade, histórico de compras, conversar com a gente, ter acesso offline e mais.</p>
                         <p className="text-hero" style={styles.margin} data-aos="fade-up">E o melhor...<br />você ainda ganha prêmios a cada meta atingida!</p>
-                        <p style={styles.margin} data-aos="fade-up">Baixe o seu app aqui embaixo, é leve e baixa rápido.</p>
+                        <p style={styles.margin} data-aos="fade-up">Baixe o seu app aqui embaixo,<br /> é leve e baixa rápido.</p>
                         <div style={{margin: '0 0 500px'}}>
                             <ScrollArrow margin={30} />
                             <div id="target">
