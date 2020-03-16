@@ -2,6 +2,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const { msgG } = require('./_msgs/globalMsgs');
 const { msg } = require('./_msgs/auth');
+const selectObjKeys = require("../utils/objects/selectObjKeys");
 
 // MIDDLEWARES
 exports.mwIsAuth = (req, res, next) => {
@@ -94,9 +95,41 @@ exports.register = (req, res) => {
     });
 }
 
+
+const handleRolesData = (role, ...allKeys) => {
+    console.log("running")
+    let objToSend;
+    const allKeysStore = Object.assign({}, ...allKeys);
+    // console.log(Object.keys(allKeysStore))
+
+    switch(role) {
+        case "cliente-admin":
+            const array1 = [ 'token', 'role', 'name', 'bizCodeName', 'verificationPass', 'authUserId', 'msg' ];
+            objToSend = selectObjKeys(allKeysStore, array1);
+            break;
+        case "cliente":
+            const array2 = [ 'token', 'role', 'name', 'authUserId', 'msg' ];
+            objToSend = selectObjKeys(allKeysStore, array2);
+            break;
+        default:
+            objToSend = allKeysStore;
+            console.log("All keys are included in handleRolesData function at auth");
+    }
+
+    return objToSend;
+}
 exports.login = (req, res) => {
     const { password, needKeepLoggedIn } = req.body;
     const { _id, name, role, clientAdminData } = req.profile;
+
+    let keysStore = {
+        role,
+        name,
+        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+        verificationPass: clientAdminData && clientAdminData.verificationPass,
+        authUserId: _id,
+        msg: msg('ok.welcomeBack', name, 'onlyMsg')
+    }
 
     let expiringTime;
     role !== "cliente" ? expiringTime = "1h" : expiringTime = "90d"; // default: 30m (enum: 30s, 30m, 1h, 7d)
@@ -107,15 +140,7 @@ exports.login = (req, res) => {
         { expiresIn: expiringTime },
         (err, token) => {
             if(err) return res.status(500).json(msgG('error.systemError', err));
-            res.json({
-                token,
-                role,
-                name,
-                bizCodeName: clientAdminData.bizCodeName,
-                verificationPass: clientAdminData.verificationPass,
-                authUserId: _id,
-                msg: msg('ok.welcomeBack', name, 'onlyMsg')
-            });
+            res.json(handleRolesData(role, {...keysStore, token}));
         }
     )
 

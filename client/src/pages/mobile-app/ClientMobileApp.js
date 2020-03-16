@@ -38,7 +38,6 @@ const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 //AppSystem
 const appSystem = lStorage("getItems", { collection: "appSystem"});
-console.log("appSystem", JSON.stringify(appSystem));
 // const options1 = {...needAppRegisterOp, value: }
 
 const isSmall = window.Helper.isSmallScreen();
@@ -219,8 +218,9 @@ function ClientMobileApp({ history }) {
         />
     );
 
+    const isClientUserLogged = gotToken && role === "cliente";
     const showAppType = () => (
-        appSystem &&
+        appSystem && !isClientUserLogged &&
         <div className="container-center" data-aos="flip-right" data-aos-delay="3000">
             <div className="position-relative">
                 <p style={{zIndex: 2000, top: '10px', left: '145px'}} className="text-center text-white position-absolute text-shadow">
@@ -230,7 +230,7 @@ function ClientMobileApp({ history }) {
                         className="text-title text-nowrap"
                     >
                         do {
-                            appSystem && appSystem.roleForDownload === "clientUser"
+                            appSystem && appSystem.roleForDownload === "clientUser" || role === "cliente"
                             ? "Cliente" : "Admin"
                         }
                     </span>
@@ -302,7 +302,7 @@ function ClientMobileApp({ history }) {
                             <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
                         </Fragment>
                     )}
-                    {role !== "cliente" && (
+                    {role !== "cliente" && appSystem && appSystem.roleForDownload !== "clientUser" && (
                         <Fragment>
                             {gotToken && showConnectedStatus()}
                             {!gotToken && showLogin()}

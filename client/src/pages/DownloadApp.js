@@ -64,9 +64,9 @@ export default function DownloadApp({ match, location }) {
         <div
             data-aos="fade-up-right"
             data-aos-duration="1500"
-            style={{maxWidth: 800, position: 'relative', left: isSmall ? '-115px' : '-239px'}}
+            style={{maxWidth: 800, position: 'relative', left: isSmall ? '-125px' : '-239px'}}
         >
-            <img className="img-fluid shape-elevation" src="/img/illustrations/one-hand-held-mobile.png" height="auto" alt="app do celular"/>
+            <img className="img-fluid shape-elevation" src="/img/illustrations/app-demo-download-page.png" height="auto" alt="app do celular"/>
         </div>
     );
 

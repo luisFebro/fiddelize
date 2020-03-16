@@ -65,8 +65,8 @@ function Login({ history, setLoginOrRegister }) {
             }
 
             if(role === "cliente") {
-                if(true) {
-                    // window.location.href = "/mobile-app" // this is for updating the values from lStorage...
+                if(isThisApp()) {
+                    // window.location.href = "/mobile-app"
                     history.push("/mobile-app");
                 } else {
                     showComponent(dispatch, "purchaseValue");
