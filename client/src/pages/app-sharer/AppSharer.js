@@ -8,7 +8,12 @@ import TextField from '@material-ui/core/TextField';
 import handleChange from '../../utils/form/use-state/handleChange';
 import { handleEnterPress } from '../../utils/event/isKeyPressed';
 import addSpacingPlusToQuery from '../../utils/string/addSpacingPlusToQuery';
-// import Card from '@material-ui/core/Card';
+import ShareSocialMediaButtons from '../../components/buttons/ShareSocialMediaButtons';
+import parse from 'html-react-parser';
+import Card from '@material-ui/core/Card';
+import RadiusBtn from '../../components/buttons/RadiusBtn';
+import animateCSS from '../../utils/animateCSS';
+import { handleFocus } from '../../utils/form/handleFocus';
 
 const addSpace = str => addSpacingPlusToQuery(str);
 
@@ -53,7 +58,7 @@ export default function AppSharer({ location, match }) {
             border: 0,
         },
         megaPhoneIcon: {
-            top: isSmall ? '70px' : '115px',
+            top: isSmall ? '110px' : '155px',
             left: '-65px',
             zIndex: 3000,
         },
@@ -85,7 +90,7 @@ export default function AppSharer({ location, match }) {
             </p>
             <br />
             <span>
-                Divulgue aqui<br />para seus clientes ou contatos.
+                Divulgue aqui<br />para seus clientes.
             </span>
         </header>
     );
@@ -95,11 +100,9 @@ export default function AppSharer({ location, match }) {
         clientName
         ? link = `${CLIENT_URL}/baixe-app/${addSpace(clientName)}?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
         : link = `${CLIENT_URL}/baixe-app?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
-
-        if(contactSharingLink) {
-            link = CLIENT_URL
-        }
-
+        // if(contactSharingLink) {
+        //     link = CLIENT_URL
+        // }
         setData({...data, clientName: clientName.cap() ,isSharingBtnsOpen: true, generatedLink: link })
     }
 
@@ -108,7 +111,7 @@ export default function AppSharer({ location, match }) {
             <ButtonMulti
                 title="Gerar link"
                 needParse={true}
-                onClick={() => handleGeneratedLink()}
+                onClick={() => { handleGeneratedLink(); handleScrollIntoView("view1", 1000); }}
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeP)"
                 backColorOnHover="var(--themeP)"
@@ -117,6 +120,13 @@ export default function AppSharer({ location, match }) {
             />
         </div>
     );
+
+    const handleScrollIntoView = (thisElem, delay = 0) => {
+        // const elem = ;
+        if(thisElem) {
+            setTimeout(() => document.getElementById(thisElem).scrollIntoView(), delay);
+        }
+    }
 
     const showMain = () => (
         <div className="my-5">
@@ -131,21 +141,22 @@ export default function AppSharer({ location, match }) {
                             alt="megafone"
                         />
                     </div>
-                    <p className="text-shadow text-normal">
+                    <p className="text-shadow text-title">
                         Insira o nome do seu cliente para divulgar
                     </p>
                     <TextField
+                        id="form1"
                         style={styles.fieldFormValue}
                         onChange={handleChange(setData, data)}
                         name="clientName"
-                        onKeyPress={e => handleEnterPress(e, handleGeneratedLink)}
+                        onKeyPress={e => { handleEnterPress(e, handleGeneratedLink); handleScrollIntoView("view1", 3000); }}
                         value={clientName}
                         variant="outlined"
                         type="text"
                         InputProps={{
                             style: styles.fieldFormValue, // alignText is not working here... tried input types and variations
                         }}
-                        helperText="ou deixe em branco para enviar para um grupo, sem espeficar nome"
+                        helperText="ou deixe em branco se for enviar para um grupo, sem especificar nome."
                         FormHelperTextProps={{ style: styles.helperFromField }}
                     />
                 </div>
@@ -160,14 +171,50 @@ export default function AppSharer({ location, match }) {
         </div>
     );
 
+    const showSharingBtns = () => {
+        // Share Button Infos
+        const sharingData = {
+            titleShare: '',
+            pageURL: generatedLink,
+            pageImg: 'i.imgur.com/9GjtAiW',
+            pageTitle: '',//`Ei, baixe o App de pontos de fidelidade`,
+            // get pageDescription() {
+            //     return `Baixe nosso App de pontos de fidelidade`;
+            // }
+        };
+        // End Share Button Infos
+        return(
+            isSharingBtnsOpen && (
+                <div id="zoomOut" className="margin-auto-90 my-5">
+                    <p className="animated zoomIn text-center text-white text-title">
+                        Novo Link gerado e pronto!
+                    </p>
+                    <Card className="animated zoomIn delay-2s fast card-elevation p-4">
+                        <p className="text-center text-normal font-weight-bold">Escolha um meio:</p>
+                        <ShareSocialMediaButtons config={{size: 50, radius: 50}} data={sharingData} />
+                    </Card>
+                    <div id="view1" className="mt-3">
+                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <RadiusBtn
+                                title="gerar novo link"
+                                backgroundColor="var(--themeSDark)"
+                                className="my-2"
+                                onClick={() => { setData({ ...data, isSharingBtnsOpen: false, clientName: '' }); animateCSS("#zoomOut", "zoomOut", "slower"); handleFocus("form1") }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )
+        );
+    }
+
     return (
         <div className="text-white text-center text-title">
             {showBackBtn()}
             {showHeader()}
             {showMain()}
-            <div style={{margin: '100px 0'}} className="text-break">
-                {JSON.stringify(data)}
-            </div>
+            {showSharingBtns()}
+            <img width="100%" height="auto" style={{overflow: 'hidden'}} src={`${CLIENT_URL}/img/shapes/wave1.svg`} alt="onda"/>
         </div>
     );
 }

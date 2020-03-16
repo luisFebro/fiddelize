@@ -87,7 +87,7 @@ export default function ButtonFab({
             aria-label={title}
             style={styles.fab}
         >
-            <span className="text-shadow">
+            <span style={{fontFamily: 'var(--mainFont)'}} className="text-shadow">
                 {title}
                 {showIcon(iconFontAwesome)}
                 {showMuIcon(iconMu)}

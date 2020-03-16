@@ -15,6 +15,9 @@ import { showComponent } from "../../../redux/actions/componentActions";
 import { logout } from "../../../redux/actions/authActions";
 import { Link } from 'react-router-dom';
 import lStorage, { userProfileOp } from '../../../utils/storage/lStorage';
+import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
+import { readClientAdmin } from '../../../redux/actions/userActions';
+const appSystem = lStorage("getItems", { collection: "appSystem"});
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -49,15 +52,21 @@ function manageSetItem(collection, ...values) {
     lStorage("setItem", options2);
 }
 
+
 export default function ClientScoresPanel({ success, valuePaid, verification }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const animatedNumber = useRef(null);
 
-    const { name, userId, loyaltyScores } = useStoreState(state => ({
+    const { name, userId, loyaltyScores, clientAdmin, role } = useStoreState(state => ({
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
         name: state.userReducer.cases.currentUser.name,
+        role: state.userReducer.cases.currentUser.role,
         userId: state.userReducer.cases.currentUser._id,
+        clientAdmin: state.userReducer.cases.clientAdminData,
     }))
+    const bizCodeName = clientAdmin && clientAdmin.clientAdminData.bizCodeName;
+    const bizName = clientAdmin && clientAdmin.clientAdminData.bizName;
+    const bizId = clientAdmin && clientAdmin._id;
 
     const dispatch = useStoreDispatch();
 
@@ -72,6 +81,14 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
 
     let currentScore = parseFloat(lastScore) + parseFloat(cashCurrentScore);
     currentScore = getIntOrFloat(currentScore);
+
+    useEffect(() => {
+        if(appSystem) {
+            readClientAdmin(dispatch, appSystem.businessId);
+        }
+    }, []);
+
+    console.log(clientAdmin)
 
     useEffect(() => {
         if(success && verification) {
@@ -167,8 +184,21 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     );
 
     const showSharingBtn = () => (
-        <div>
-        </div>
+        <Link to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${bizId}&role=${role}`}>
+            <ButtonFab
+                position="relative"
+                top={-10}
+                left={70}
+                title={`compartilhar app`}
+                iconFontAwesome="fas fa-heart"
+                iconFontSize="16px"
+                variant="extended"
+                fontWeight="bolder"
+                fontSize=".9em"
+                color="var(--mainWhite)"
+                backgroundColor="var(--themeSDark)"
+            />
+        </Link>
     );
 
     const showHomeBtn = () => {

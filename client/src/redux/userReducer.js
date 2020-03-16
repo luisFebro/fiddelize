@@ -29,6 +29,7 @@ const currUserData = {
 // REDUCERS
 const initialState = {
     currentUser: currUserData,
+    clientAdminData: '',
     allUsers: [],
     highestScores: [],
 };
@@ -41,6 +42,11 @@ export const userReducer = {
                 return {
                     ...state,
                     currentUser: action.payload,
+                };
+            case 'CLIENT_ADMIN_READ':
+                return {
+                    ...state,
+                    clientAdminData: action.payload,
                 };
             case 'USER_DELETED':
                 return {

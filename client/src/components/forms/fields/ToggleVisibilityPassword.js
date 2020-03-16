@@ -86,7 +86,7 @@ export default function ToggleVisibilityPassword({
     const showGeneratePassBtn = showGeneratePass => (
         showGeneratePass &&
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <span className="text-white text-normal mr-2">ou</span>
+            <span className="text-white text-normal mr-2 text-shadow">ou</span>
             <RadiusBtn
                 title="gerar uma senha"
                 backgroundColor="var(--themeP)"

@@ -1,6 +1,6 @@
 // reference: https://github.com/daneden/animate.css
-export default function animateCSS(element, animationName, speed, callback) {
-    const node = element //document.querySelector(element)
+export default function animateCSS(element, animationName, speed = 'normal', callback) {
+    const node = document.querySelector(element)
     node.classList.add('animated', animationName, speed)
 
     function handleAnimationEnd() {

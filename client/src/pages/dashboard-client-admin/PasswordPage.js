@@ -147,7 +147,7 @@ export default function PasswordPage({ location, match, history }) {
                             alt="cadeado"
                         />
                     </div>
-                    <p>
+                    <p className="text-shadow">
                         Insira aqui sua senha de verificação
                     </p>
                     <ToggleVisibilityPassword

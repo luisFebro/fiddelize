@@ -65,7 +65,7 @@ function Login({ history, setLoginOrRegister }) {
             }
 
             if(role === "cliente") {
-                if(true) {
+                if(isThisApp()) {
                     // window.location.href = "/mobile-app"
                     history.push("/mobile-app");
                 } else {

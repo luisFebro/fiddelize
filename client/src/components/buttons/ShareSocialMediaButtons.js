@@ -29,19 +29,15 @@ export default function ShareSocialMediaButtons({ data, config = {} }) { // n1
             <h2 style={{fontSize: `${titleShareSize}` }} className={`${marginTop || "mt-5"} text-${alignment || 'center'}`}>{titleShare}</h2>
             <InlineShareButtons
                 config={{
+                    style: {filter: 'drop-shadow(.001em .1em .1em var(--mainDark))'},
                     alignment: alignment || 'center', // alignment of buttons (left, center, right)
                     color: 'social', // set the color of buttons (social, white)
                     enabled: true, // show/hide buttons (true, false)
                     font_size: 25, // font size for the buttons
                     labels: 'null', // button labels (cta, counts, null)
                     language: 'pt', // which language to use (see LANGUAGES)
-                    networks: [
-                        'sms',
-                        'facebook',
-                        'email',
-                        'whatsapp',
-                        'messenger',
-                        'twitter'
+                    networks: [ // opt 'sms', 'facebook', 'email', 'whatsapp', 'messenger', 'twitter'
+                        'email', 'whatsapp', 'sms', 'messenger',
                     ],
                     padding: padding || 12,
                     radius: radius || 4,
