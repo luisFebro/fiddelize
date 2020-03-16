@@ -250,7 +250,7 @@ function ClientMobileApp({ history }) {
                 <strong className="text-title">{userName && userName.cap()}</strong><br />
             </span>
             <div className="container-center">
-                <Link to={`/${clientAdmin.bizCodeName}/cliente-admin/painel-de-controle`}>
+                <Link to={`/${clientAdmin && clientAdmin.bizCodeName}/cliente-admin/painel-de-controle`}>
                     <RadiusBtn title="acessar" className="mr-2"/>
                 </Link>
                 <span>

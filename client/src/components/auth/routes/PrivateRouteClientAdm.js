@@ -18,7 +18,7 @@ export default function PrivateRouteClientAdm({ component: Component, ...rest })
         return (
             <Redirect
                 to={{
-                    pathname: isThisApp() ? "/mobile-app" : "/",
+                    pathname: true ? "/mobile-app" : "/",
                     state: { from: props.location }
                 }}
             />
