@@ -3,6 +3,9 @@ import { readUser } from './userActions';
 import { setLoadingProgress } from './globalActions';
 import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
+import lStorage from '../../utils/storage/lStorage';
+import { readClientAdmin } from './userActions';
+const appSystem = lStorage("getItems", { collection: "appSystem"});
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 
@@ -14,6 +17,7 @@ export const loadUser = () => (dispatch, getState) => {
        // from user reducer
         dispatch({ type: 'AUTHENTICATE_USER_ONLY' });
         dispatch({ type: 'USER_READ', payload: res.data.profile });
+        if(appSystem) { readClientAdmin(dispatch, appSystem.businessId); }
         // readUser(dispatch, res.data.profile);
     })
     .catch(err => {
@@ -31,6 +35,7 @@ export const loginEmail = async (dispatch, objToSend) => {
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
         readUser(dispatch, res.data.authUserId);
+        if(appSystem) { readClientAdmin(dispatch, appSystem.businessId); }
         dispatch({ type: 'LOGIN_EMAIL', payload: res.data.token });
         setLoadingProgress(dispatch, false);
         return res;

@@ -16,7 +16,7 @@ export const readUser = async (dispatch, _userId) => {
 };
 
 export const readClientAdmin = async (dispatch, _userId) => {
-    const res = await axios.get(`/api/user/${_userId}`, getHeaderJson);
+    const res = await axios.get(`/api/user/${_userId}?onlyEssencialData=true`, getHeaderJson);
     dispatch({
         type: 'CLIENT_ADMIN_READ',
         payload: res.data

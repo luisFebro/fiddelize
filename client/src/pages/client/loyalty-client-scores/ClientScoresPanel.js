@@ -16,8 +16,6 @@ import { logout } from "../../../redux/actions/authActions";
 import { Link } from 'react-router-dom';
 import lStorage, { userProfileOp } from '../../../utils/storage/lStorage';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
-import { readClientAdmin } from '../../../redux/actions/userActions';
-const appSystem = lStorage("getItems", { collection: "appSystem"});
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -57,16 +55,16 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const animatedNumber = useRef(null);
 
-    const { name, userId, loyaltyScores, clientAdmin, role } = useStoreState(state => ({
+    const { name, userId, loyaltyScores, bizId, clientAdmin, role } = useStoreState(state => ({
         loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
         name: state.userReducer.cases.currentUser.name,
         role: state.userReducer.cases.currentUser.role,
+        bizId: state.userReducer.cases.clientAdmin._id,
+        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
         userId: state.userReducer.cases.currentUser._id,
-        clientAdmin: state.userReducer.cases.clientAdminData,
     }))
-    const bizCodeName = clientAdmin && clientAdmin.clientAdminData.bizCodeName;
-    const bizName = clientAdmin && clientAdmin.clientAdminData.bizName;
-    const bizId = clientAdmin && clientAdmin._id;
+    const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
+    const bizName = clientAdmin && clientAdmin.bizName;
 
     const dispatch = useStoreDispatch();
 
@@ -81,14 +79,6 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
 
     let currentScore = parseFloat(lastScore) + parseFloat(cashCurrentScore);
     currentScore = getIntOrFloat(currentScore);
-
-    useEffect(() => {
-        if(appSystem) {
-            readClientAdmin(dispatch, appSystem.businessId);
-        }
-    }, []);
-
-    console.log(clientAdmin)
 
     useEffect(() => {
         if(success && verification) {

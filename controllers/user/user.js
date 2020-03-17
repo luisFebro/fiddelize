@@ -39,9 +39,24 @@ exports.mwBackup = (req, res, next) => {
 }
 // END MIDDLEWARE
 
+const assignToUndefined = (obj, keysArray) => {
+    return keysArray.forEach(key => {
+        obj[key] = undefined;
+    })
+}
 
 exports.read = (req, res) => {
-    req.profile.password = undefined;
+    const role = req.profile.role;
+    const essencialData = req.query.onlyEssencialData;
+    const clientAdminRequest = essencialData && role === "cliente-admin";
+    if(clientAdminRequest) {
+        assignToUndefined(req.profile, [
+            "birthday", "password", "maritalStatus",
+            "role", "name", "email", "cpf", "phone",
+            "createdAt", "updatedAt", "__v"])
+    } else {
+        req.profile.password = undefined;
+    }
     return res.json(req.profile);
 };
 

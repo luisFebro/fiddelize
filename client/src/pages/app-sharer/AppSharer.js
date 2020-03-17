@@ -85,13 +85,21 @@ export default function AppSharer({ location, match }) {
         <header className={`${fluidTextAlign} container-center`}>
             <p className="text-hero text-center">
                 {!isSmall
-                ? <span>Compartilhe seu App</span>
-                : <span>Comparti-<br />-lhe seu App</span>}
+                ? <span>Compartilhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>
+                : <span>Comparti-<br />-lhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>}
             </p>
-            <br />
-            <span>
-                Divulgue aqui<br />para seus clientes.
-            </span>
+            <p>
+                {role === "cliente-admin" ?
+                (
+                    <span>
+                        Divulgue aqui<br />para seus clientes.
+                    </span>
+                ) : (
+                    <span>
+                        Passe para a galera.<br />Divulgue para amigos e familiares aqui.
+                    </span>
+                )}
+            </p>
         </header>
     );
 
@@ -142,7 +150,12 @@ export default function AppSharer({ location, match }) {
                         />
                     </div>
                     <p className="text-shadow text-title">
-                        Insira o nome do seu cliente para divulgar
+                        {role === "cliente-admin"
+                        ? (
+                            <span>Insira o nome do seu cliente para divulgar</span>
+                        ) : (
+                            <span>Insira o nome de alguém para divulgar</span>
+                        )}
                     </p>
                     <TextField
                         id="form1"
@@ -202,6 +215,13 @@ export default function AppSharer({ location, match }) {
                                 onClick={() => { setData({ ...data, isSharingBtnsOpen: false, clientName: '' }); animateCSS("#zoomOut", "zoomOut", "slower"); handleFocus("form1") }}
                             />
                         </div>
+                    </div>
+                    <div className="mt-5 text-center text-normal font-weight-bold">
+                        {clientName && (
+                            <span>
+                                O link gerado possui uma página personalizada feita para o {clientName && clientName.cap()}
+                            </span>
+                        )}
                     </div>
                 </div>
             )
