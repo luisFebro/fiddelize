@@ -22,7 +22,9 @@ import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage, {
     systemOp,
     confettiPlayOp,
-    userProfileOp, needInitialStateOp, needAppRegisterOp } from '../../utils/storage/lStorage';
+    userProfileOp,
+    clientAdminOp,
+    needInitialStateOp, needAppRegisterOp } from '../../utils/storage/lStorage';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 import Register from '../../components/auth/Register';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -61,9 +63,26 @@ function ClientMobileApp({ history }) {
     let bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     let userScore = client && client.currScore;
     let userLastScore = client && client.cashCurrScore;
+    const regulationTxt = clientAdmin && clientAdmin.regulationTxt;
     const bizId = client && client.bizId;
+    const rewardList = ["giftA", "giftB"];
+    const mainReward = "free service";
 
-    setDataIfOnline(userProfileOp, role, userName, userScore, userLastScore, [{desc: "compra1", value: 0}], bizId);
+    setDataIfOnline(
+        clientAdminOp,
+        maxScore,
+        mainReward,
+        rewardList,
+        regulationTxt);
+
+    setDataIfOnline(
+        userProfileOp,
+        role,
+        userName,
+        userScore,
+        userLastScore,
+        [{desc: "compra1", value: 0}],
+        bizId);
 
     AOS.init({
         offset: 50,

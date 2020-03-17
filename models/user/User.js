@@ -39,6 +39,7 @@ const regulationData = {
     text: {
         type: String,
         trim: true,
+        default: "some text",
     }
 }
 const RegulationSchema = new Schema(regulationData, { _id: false, timestamps: true });
@@ -67,7 +68,7 @@ const clientAdminData = {
 
 
     verificationPass: String,
-    regulationText: RegulationSchema,
+    regulationTxt: RegulationSchema,
     appDownloads: { type: Number, default: 0 },
     // onceActionSetPassword: { type: Boolean, default: false },
 }

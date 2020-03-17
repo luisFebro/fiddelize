@@ -7,7 +7,7 @@ function combine(...objs) {
 const collVal1 = { collection: "onceChecked", value: true };
 const collVal2 = { collection: "userProfile", value: ["cliente", undefined, 0, 0, [{desc: "compra1", value: 0}], "0"] } // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 const collVal3 = { collection: "appSystem", value: "" }
-const collVal4 = { collection: "clientAdmin", value: [500,] }
+const collVal4 = { collection: "clientAdmin", value: [500, "free product", ["giftA", "giftB"], "some regulation", ] }
 // const collVal3 = { collection: "clientAdminProfile", value: ["cliente-admin", undefined, 500, 0, 0] } // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 // END COLLECTIONS
 
@@ -22,7 +22,7 @@ const needInitialStateOp = combine(collVal1, { property: "needInitialState" });
 const needAppRegisterOp = combine(collVal1, { property: "needAppRegister", value: true});
 
 const userProfileOp = combine(collVal2, { property: ["role", "name", "currScore", "lastScore", "purchaseHistory", "bizId"], })
-const clientAdminOp = combine(collVal4, { property: ["maxScore"], })
+const clientAdminOp = combine(collVal4, { property: ["maxScore", "mainReward", "rewardList", "regulationTxt"], })
 
 const systemOp = {
     downloadClientAdmin: combine(collVal3, { property: "roleWhichDownloaded", value: "cliente-admin"}),

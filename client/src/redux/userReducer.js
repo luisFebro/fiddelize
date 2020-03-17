@@ -12,7 +12,7 @@ if(lStorage("getItem", needInitialStateOp)) {
 }
 
 const userData = lStorage("getItems", userProfileOp);
-const clientUserData = lStorage("getItems", clientAdminOp);
+const clientAdminData = lStorage("getItems", clientAdminOp);
 
 const currUserData = {
     role: null || userData && userData.role,
@@ -27,7 +27,10 @@ const currUserData = {
 
 const currClientAdminData = {
     clientAdminData: {
-        rewardScore:  null || clientUserData && clientUserData.maxScore,
+        rewardScore:  null || clientAdminData && clientAdminData.maxScore,
+        mainReward: null || clientAdminData && clientAdminData.mainReward,
+        rewardList: null || clientAdminData && clientAdminData.rewardList,
+        regulationTxt: null || clientAdminData && clientAdminData.regulationTxt,
     }
 }
 
