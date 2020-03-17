@@ -44,22 +44,21 @@ const styles = {
 }
 
 function manageSetItem(collection, ...values) {
-    const options1 = { collection, property: "currentScore", value: values[0]}
-    const options2 = { collection, property: "lastScoreScore", value: values[1]}
+    const options1 = { collection, property: "currScore", value: values[0]}
+    const options2 = { collection, property: "lastScore", value: values[1]}
     lStorage("setItem", options1);
     lStorage("setItem", options2);
 }
-
 
 export default function ClientScoresPanel({ success, valuePaid, verification }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const animatedNumber = useRef(null);
 
-    const { name, userId, loyaltyScores, bizId, clientAdmin, role } = useStoreState(state => ({
-        loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
+    const { name, userId, bizId, clientAdmin, client, role } = useStoreState(state => ({
         name: state.userReducer.cases.currentUser.name,
         role: state.userReducer.cases.currentUser.role,
         bizId: state.userReducer.cases.clientAdmin._id,
+        client: state.userReducer.cases.currentUser.clientUserData,
         clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
         userId: state.userReducer.cases.currentUser._id,
     }))
@@ -68,25 +67,25 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
 
     const dispatch = useStoreDispatch();
 
-    let lastScore = loyaltyScores && loyaltyScores.currentScore;
+    let lastScore = client && client.currScore;
     if(typeof lastScore === "undefined") {
         lastScore = "0";
     }
     lastScore = getIntOrFloat(lastScore);
 
-    let cashCurrentScore = convertCommaToDot(valuePaid);
-    cashCurrentScore = getIntOrFloat(cashCurrentScore);
+    let cashCurrScore = convertCommaToDot(valuePaid);
+    cashCurrScore = getIntOrFloat(cashCurrScore);
 
-    let currentScore = parseFloat(lastScore) + parseFloat(cashCurrentScore);
-    currentScore = getIntOrFloat(currentScore);
+    let currScore = parseFloat(lastScore) + parseFloat(cashCurrScore);
+    currScore = getIntOrFloat(currScore);
 
     useEffect(() => {
         if(success && verification) {
             animateNumber(
                 animatedNumber.current,
                 0,
-                cashCurrentScore,
-                getAnimationDuration(Number(cashCurrentScore)),
+                cashCurrScore,
+                getAnimationDuration(Number(cashCurrScore)),
                 setShowTotalPoints
             );
 
@@ -95,15 +94,15 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
             // }
 
             const objToSend = {
-                "loyaltyScores.cashCurrentScore": cashCurrentScore,
-                "loyaltyScores.currentScore": currentScore, // need to be Number to ranking in DB properly
-                "loyaltyScores.lastScore": lastScore,
+                "clientUserData.cashCurrScore": cashCurrScore,
+                "clientUserData.currScore": currScore, // need to be Number to ranking in DB properly
+                "clientUserData.lastScore": lastScore,
             }
 
             updateUser(dispatch, objToSend, userId, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                manageSetItem("userProfile", currentScore, cashCurrentScore)
+                manageSetItem("userProfile", currScore, cashCurrScore)
 
                 setTimeout(() => showSnackbar(dispatch, "Pontuação registrada!", 'success', 4000), 5000);
             })
@@ -163,7 +162,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                     }}
                 >
                     <p className="ml-2 text-left">&#187; Pontuação Atual:</p>
-                    <p className="text-center text-hero">{convertDotToComma(currentScore)}</p>
+                    <p className="text-center text-hero">{convertDotToComma(currScore)}</p>
                 </div>
                 <section className="position-relative" style={{margin: '90px 0 20px'}}>
                     <i className="fas fa-crown" style={styles.crownIcon}></i>

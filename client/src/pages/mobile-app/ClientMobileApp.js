@@ -28,11 +28,9 @@ import Register from '../../components/auth/Register';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { logout } from '../../redux/actions/authActions';
 import AOS from 'aos';
+import { updateUser } from '../../redux/actions/userActions';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
 // import ImageLogo from '../../components/ImageLogo';
-
-// This following logic will inserted in the client-user's download button.
-// lStorage("setItem", needAppRegisterOp);
-//
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -50,19 +48,22 @@ function ClientMobileApp({ history }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
-    let { role, loyaltyScores, userName, clientAdmin } = useStoreState(state => ({
+    let { role, userName, clientAdmin, client, clientId } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
         userName: state.userReducer.cases.currentUser.name,
-        loyaltyScores: state.userReducer.cases.currentUser.loyaltyScores,
-        clientAdmin: state.userReducer.cases.currentUser.clientAdminData,
+        clientId: state.userReducer.cases.currentUser._id,
+        client: state.userReducer.cases.currentUser.clientUserData,
+        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
     }))
     const dispatch = useStoreDispatch();
 
-    let maxScore = 500; // clientAdmin.reward.score > need to create this path in the userData.
-    let userScore = loyaltyScores && loyaltyScores.currentScore;
-    let userLastScore = loyaltyScores && loyaltyScores.cashCurrentScore;
+    let maxScore = clientAdmin && clientAdmin.rewardScore;
+    let bizCodeName = clientAdmin && clientAdmin.bizCodeName;
+    let userScore = client && client.currScore;
+    let userLastScore = client && client.cashCurrScore;
+    const bizId = client && client.bizId;
 
-    setDataIfOnline(userProfileOp, role, userName, maxScore, userScore, userLastScore);
+    setDataIfOnline(userProfileOp, role, userName, userScore, userLastScore, [{desc: "compra1", value: 0}], bizId);
 
     AOS.init({
         offset: 50,
@@ -79,7 +80,19 @@ function ClientMobileApp({ history }) {
     }
 
     checkIfElemIsVisible("#rules", setShowMoreBtn)
+        // CONTINUES systemOp Logics here
+    useEffect(() => {
+        if(bizId === "0" && role === "cliente") {
+            const idFromSystem = appSystem && appSystem.businessId;
+            const objToSend = { "clientUserData.bizId": idFromSystem }
 
+            updateUser(dispatch, objToSend, clientId)
+            .then(res => {
+                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                // showSnackbar(dispatch, res.data.msg, 'success');
+            })
+        }
+    }, [bizId, clientId, role])
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
@@ -230,7 +243,7 @@ function ClientMobileApp({ history }) {
                         className="text-title text-nowrap"
                     >
                         do {
-                            appSystem && appSystem.roleForDownload === "clientUser" || role === "cliente"
+                            appSystem && appSystem.roleWhichDownloaded === "cliente" || role === "cliente"
                             ? "Cliente" : "Admin"
                         }
                     </span>
@@ -250,7 +263,7 @@ function ClientMobileApp({ history }) {
                 <strong className="text-title">{userName && userName.cap()}</strong><br />
             </span>
             <div className="container-center">
-                <Link to={`/${clientAdmin && clientAdmin.bizCodeName}/cliente-admin/painel-de-controle`}>
+                <Link to={`/${bizCodeName}/cliente-admin/painel-de-controle`}>
                     <RadiusBtn title="acessar" className="mr-2"/>
                 </Link>
                 <span>
@@ -302,7 +315,7 @@ function ClientMobileApp({ history }) {
                             <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
                         </Fragment>
                     )}
-                    {role !== "cliente" && appSystem && appSystem.roleForDownload !== "clientUser" && (
+                    {role !== "cliente" && appSystem && appSystem.roleWhichDownloaded !== "cliente" && (
                         <Fragment>
                             {showConnectedStatus()}
                             {!gotToken && showLogin()}

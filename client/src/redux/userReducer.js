@@ -1,35 +1,40 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
-import lStorage, { userProfileOp, needInitialStateOp } from '../utils/storage/lStorage';
+import lStorage, { userProfileOp, clientAdminOp, needInitialStateOp } from '../utils/storage/lStorage';
 // You can use only one isntance of object like 'cases' for each object.
 // Check for mispellings in case of one action not being dispatched properly.
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
 if(lStorage("getItem", needInitialStateOp)) {
     lStorage("setItems", userProfileOp);
+    lStorage("setItems", clientAdminOp);
     lStorage("setItem", { ...needInitialStateOp, value: false })
 }
 
 const userData = lStorage("getItems", userProfileOp);
+const clientUserData = lStorage("getItems", clientAdminOp);
 
 const currUserData = {
     role: null || userData && userData.role,
     name: null || userData && userData.name,
-    loyaltyScores: {
-        currentScore: null || userData && userData.currentScore,
-        cashCurrentScore: null || userData && userData.lastScore,
-    },
+    clientUserData: {
+        bizId: null || userData && userData.bizData,
+        currScore: null || userData && userData.currScore,
+        cashCurrScore: null || userData && userData.lastScore,
+        purchaseHistory: null || userData && userData.purchaseHistory,
+    }
+}
+
+const currClientAdminData = {
     clientAdminData: {
-        reward: { // rewardScore
-            score: null || userData && userData.maxScore,
-        }
+        rewardScore:  null || clientUserData && clientUserData.maxScore,
     }
 }
 
 // REDUCERS
 const initialState = {
     currentUser: currUserData,
-    clientAdmin: '',
+    clientAdmin: currClientAdminData,
     allUsers: [],
     highestScores: [],
 };

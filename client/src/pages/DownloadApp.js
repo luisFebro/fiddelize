@@ -12,7 +12,7 @@ const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 const appSystem = lStorage("getItems", { collection: "appSystem"});
 
-const isAdminLoggedIn = appSystem && appSystem.roleForDownload === "clientAdmin";
+const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
 
 export default function DownloadApp({ match, location }) {
     const [userName, setUserName] = useState(match.params.userName);

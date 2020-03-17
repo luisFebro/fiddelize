@@ -14,37 +14,15 @@ const dataTempAuthUserToken = {
 const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // END TEMP AUTH USER ID
 
-// LOYALTY SCORES- this will be moved to client
-const dataLoyaltyScores = {
-    cashCurrentScore: {
-        type: String,
-        default: "0"
-    },
-    currentScore: {
-        type: Number,
-        default: 0
-    },
-    lastScore: {
-        type: String,
-        default: "0"
-    },
-    maxScore: {
-        type: Number,
-        default: 500,
-    }
-}
-
-const LoyaltyScoresSchema = new Schema(dataLoyaltyScores, { _id: false });
-// END LOYALTY SCORES
-
 // USER'S ROLES
 // Client User
 const clientUserData = {
-    cashCurrentScore: {
+    bizId: { type: String, default: "0"},
+    cashCurrScore: {
         type: String,
         default: "0"
     },
-    currentScore: { // last score + cashCurrenScore
+    currScore: { // last score + cashCurrenScore
         type: Number, // need to be number to ranking the values property.
         default: 0
     },
@@ -52,12 +30,7 @@ const clientUserData = {
         type: String,
         default: "0"
     },
-    maxScore: { // this will change to client-admin reward: score
-        type: Number,
-        default: 500,
-    },
-    scoreHistoricDesc: String,
-    scoreHistoricValue: Number,
+    purchaseHistory: Array, // e.g {desc: "compra 1", value: 20}
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 
@@ -75,17 +48,26 @@ const clientAdminData = {
     bizCodeName: String,
     bizCnpj: String,
     bizWhatsapp: Number,
+    bizPlan: {
+        type: String,
+        default: "free",
+        enum: ["free", "lite", "gold"]
+    },
+
+    // self-service
     bizLogoImg: String,
+    milestoneIcon: String,
+    themePColor: String,
+    themeSColor: String,
+    // end self-service
 
     rewardScore: Number, // prior maxScore
     mainReward: String,
     rewardList: Array, // / required: true
 
-    themePColor: String,
-    themeSColor: String,
 
     verificationPass: String,
-    regulation: RegulationSchema,
+    regulationText: RegulationSchema,
     appDownloads: { type: Number, default: 0 },
     // onceActionSetPassword: { type: Boolean, default: false },
 }
@@ -145,7 +127,6 @@ const data = {
             default: false,
         },
     },
-    loyaltyScores: LoyaltyScoresSchema, // this will be moved to clientUserData...
     clientUserData: ClientUserDataSchema,
     clientAdminData: ClientAdminDataSchema,
     adminData: AdminDataSchema,

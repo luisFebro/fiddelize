@@ -4,6 +4,7 @@ export * from './lStorageStore';
 const collectionStore = {
     "onceChecked": {}, // this is for actions that need to be used only once in the app like introduction msgs.
     "userProfile": {},
+    "clientAdmin": {},
     "appSystem": {},
 };
 

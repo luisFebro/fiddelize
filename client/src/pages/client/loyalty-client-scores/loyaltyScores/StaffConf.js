@@ -88,6 +88,7 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
                 margin="dense"
                 onChange={handleChange(setData, data)}
                 autoComplete="off"
+                autoFocus
                 onKeyPress={e => handleEnterPress(e, checkAccess)}
                 error={null}
                 name="pass"
