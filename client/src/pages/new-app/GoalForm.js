@@ -96,8 +96,8 @@ export default function GoalForm({ bizId, bizName, name }) {
     const sendDataBackend = () => {
         const score = clientAdminData.rewardScore;
         const prize = clientAdminData.mainReward;
-        if(!score) { setError("rewardScore"); showSnackbar(dispatch, "Você precisa inserir o valor da recompensa", "error"); return; }
-        if(!prize) { setError("mainReward"); showSnackbar(dispatch, "Você precisa inserir um prêmio", "error"); return; }
+        if(!score) { setError("rewardScore"); showSnackbar(dispatch, "Você precisa inserir o ponto de prêmio", "error"); return; }
+        if(!prize) { setError("mainReward"); showSnackbar(dispatch, "Você precisa inserir uma descrição do prêmio", "error"); return; }
         const dataToSend = {
             "clientAdminData.rewardScore": clientAdminData.rewardScore,
             "clientAdminData.mainReward": clientAdminData.mainReward,
@@ -140,7 +140,7 @@ export default function GoalForm({ bizId, bizName, name }) {
                             alt="pontos"
                         />
                     </div>
-                    <p>Qual é o ponto de recompensa?</p>
+                    <p>Qual é o ponto de prêmio?</p>
                     <TextField
                         placeholder="0"
                         style={{
@@ -154,7 +154,7 @@ export default function GoalForm({ bizId, bizName, name }) {
                             }
                         }}
                         type="number"
-                        helperText={"Lembre-se: é o ponto que o cliente precisa alcançar"}
+                        helperText={"Lembre-se: é o ponto/valor que o cliente precisa alcançar em compras"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         name="clientAdminData.rewardScore"
                         value={clientAdminData.rewardScore}

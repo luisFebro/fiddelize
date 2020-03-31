@@ -21,24 +21,20 @@ export default function IconAndTitle({
             <div
                 style={{
                     width: '15%',
-                    margin: '0 5px'
+                    margin: '0 8px'
                 }}
                 className="d-flex align-items-center justify-content-center p-2 mr-2"
             >
                 <i
                     style={{fontSize: '2.8em', marginLeft: '5px'}}
-                    className={titleIcon}>
+                >
+                 {titleIcon}
                 </i>
             </div>
             <div
                 className="text-subtitle font-weight-bold"
             >
-                <span
-                    style={{
-                        margin: 'auto',
-                        width: '80%'
-                    }}
-                >
+                <span style={{ margin: 'auto', width: '80%'}}>
                     {title}
                 </span>
             </div>

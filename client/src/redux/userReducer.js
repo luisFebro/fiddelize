@@ -1,47 +1,52 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
-import lStorage, { userProfileOp, clientAdminOp, needInitialStateOp } from '../utils/storage/lStorage';
-// You can use only one isntance of object like 'cases' for each object.
-// Check for mispellings in case of one action not being dispatched properly.
-// Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
+import lStorage, { userProfileOp, clientAdminOp, setInitialStateOp } from '../utils/storage/lStorage';
 
-if(lStorage("getItem", needInitialStateOp)) {
-    lStorage("setItems", userProfileOp);
-    lStorage("setItems", clientAdminOp);
-    lStorage("setItem", { ...needInitialStateOp, value: false })
+if(!lStorage("getItem", setInitialStateOp)) {
+    lStorage("setItemsByArray", userProfileOp);
+    lStorage("setItemsByArray", clientAdminOp);
+    lStorage("setItem", { ...setInitialStateOp, value: true })
 }
 
 const userData = lStorage("getItems", userProfileOp);
 const clientAdminData = lStorage("getItems", clientAdminOp);
 
 const currUserData = {
-    role: null || userData && userData.role,
-    name: null || userData && userData.name,
+    _id: userData && userData._id,
+    role: userData && userData.role,
+    name: userData && userData.name,
     clientUserData: {
-        bizId: null || userData && userData.bizData,
-        currScore: null || userData && userData.currScore,
-        cashCurrScore: null || userData && userData.lastScore,
-        purchaseHistory: null || userData && userData.purchaseHistory,
+        bizId: userData && userData.bizId,
+        currScore: userData && userData.currScore,
+        cashCurrScore: userData && userData.lastScore,
+        purchase: userData && userData.purchase,
     }
 }
 
 const currClientAdminData = {
     clientAdminData: {
-        rewardScore:  null || clientAdminData && clientAdminData.maxScore,
-        mainReward: null || clientAdminData && clientAdminData.mainReward,
-        rewardList: null || clientAdminData && clientAdminData.rewardList,
-        regulationTxt: null || clientAdminData && clientAdminData.regulationTxt,
+        bizName: clientAdminData && clientAdminData.bizName,
+        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+        bizPlan: clientAdminData && clientAdminData.bizPlan,
+        rewardScore: clientAdminData && clientAdminData.maxScore,
+        mainReward: clientAdminData && clientAdminData.mainReward,
+        rewardList: clientAdminData && clientAdminData.rewardList,
+        regulation: {
+            text: clientAdminData && clientAdminData.regulation.text,
+            updatedAt: clientAdminData && clientAdminData.regulation.updatedAt,
+        },
     }
 }
+
+const highestScoreData = clientAdminData && clientAdminData.highestScores;
 
 // REDUCERS
 const initialState = {
     currentUser: currUserData,
     clientAdmin: currClientAdminData,
+    highestScores: highestScoreData,
     allUsers: [],
-    highestScores: [],
 };
-
 
 export const userReducer = {
     cases: reducer((state = initialState, action) => {
@@ -98,6 +103,9 @@ export const userReducer = {
                     }
                 }
             case 'USER_CLEARED':
+                lStorage("removeItem", {collection: 'onceChecked', property: 'setInitialState'})
+                lStorage("removeCol", {collection: 'userProfile'})
+
                 return {
                     ...state,
                     currentUser: {}

@@ -1,10 +1,12 @@
-export default function isSmallScreen() {
+export default function isSmallScreen(customWidth) {
     const width =
     window.innerWidth ||
     document.documentElement.clientWidth ||
     document.body.clientWidth;
 
-    const SMALL_SCREENS = width <= 768;
+    const maxWidthForSmall = customWidth || 768;
+
+    const SMALL_SCREENS = width <= maxWidthForSmall;
 
     return SMALL_SCREENS;
 }

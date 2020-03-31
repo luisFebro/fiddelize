@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import cpfMaskBr from '../../../utils/validation/masks/cpfMaskBr';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -73,9 +74,9 @@ export default function Keyboard({
             <div
                 onClick={() => {eraseLastChar(); playBeep()} }
                 style={{fontSize: '1.8em'}}
-                className="d-flex align-items-center  flex-row justify-content-center erase-last side-btn"
+                className="d-flex align-items-center flex-row justify-content-center erase-last side-btn"
             >
-                <i style={{fontSize: '.9em'}} className="mr-2 fas fa-arrow-left"></i>
+                <FontAwesomeIcon icon="arrow-left" style={{fontSize: '.9em'}} className="mr-2 icon-shadow" />
                 <span style={{fontSize: '.7em'}}>Corrigir</span>
             </div>
             <div onClick={() => {getValue("4"); playBeep()} } className="item4">4</div>
@@ -86,14 +87,18 @@ export default function Keyboard({
                 style={{fontSize: '1.8em'}}
                 className="d-flex align-items-center justify-content-center cancel side-btn"
             >
-                <i style={{fontSize: '.9em'}} className="mr-2 fas fa-times"></i>
+                <FontAwesomeIcon icon="times" style={{fontSize: '.9em'}} className="mr-2 icon-shadow" />
                 <span style={{fontSize: '.7em'}}>Cancelar</span>
             </div>
             <div onClick={() => {getValue("7"); playBeep()}} className="item7">7</div>
             <div onClick={() => {getValue("8"); playBeep()}} className="item8">8</div>
             <div onClick={() => {getValue("9"); playBeep()}} className="item9">9</div>
             <div onClick={() => {handleConfirm(); playBeepConfirm()} } className="d-flex flex-column justify-content-center confirm side-btn">
-                <i style={{fontSize: '1.9em'}} className="fas fa-check"></i>
+                <FontAwesomeIcon
+                    icon="check"
+                    style={{fontSize: '1.9em'}}
+                    className="icon-shadow d-flex align-self-center"
+                />
                <span style={{fontSize: '.9em'}}>Confirmar</span>
             </div>
             <div className="empty"></div>

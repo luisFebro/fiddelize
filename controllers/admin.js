@@ -93,18 +93,6 @@ exports.updateConfig = (req, res) => {
     });
 }
 
-exports.checkVerificationPass = (req, res) => {
-    const { pass } = req.body;
-
-    Admin.findById(adminId)
-    .exec((err, admin) => {
-        if (err) return res.status(400).json(msgG("error.systemError", err));
-        const { verificationPass } = admin;
-        if(verificationPass !== pass) return res.status(401).json({ msg: "A senha de verificação está errada." })
-        res.json({ msg: "A verificação foi realizada com sucesso!"})
-    })
-};
-
 exports.readVerificationPass = (req, res) => {
     Admin.findById(adminId)
     .exec((err, admin) => {
@@ -186,10 +174,27 @@ exports.getStaffWithBookings = (req, res) => {
 }
 // END STAFF BOOKINGS
 
+// CLIENT-ADMIN
+exports.checkVerificationPass = (req, res) => {
+    const { pass, bizId } = req.body;
+
+    User.findById(bizId)
+    .exec((err, clientAdmin) => {
+        if (err) return res.status(400).json(msgG("error.systemError", err));
+        if(!clientAdmin) return res.status(401).json({ msg: "Algo deu errado na verificação." });
+
+        const { clientAdminData } = clientAdmin;
+        if(clientAdminData.verificationPass !== pass) return res.status(401).json({ msg: "A senha de verificação está errada." })
+        res.json({ msg: "A verificação foi realizada com sucesso!"})
+    })
+};
+
 exports.countAppDownloads = (req, res) => {
-    const countingField = { "app.downloads": 1 };
-    Admin.findOneAndUpdate(
-        { _id: adminId },
+    const { bizId } = req.body;
+
+    const countingField = { "clientAdminData.appDownloads": 1 };
+    User.findOneAndUpdate(
+        { _id: bizId },
         { $inc: countingField},
         { new: true})
     .select("app.downloads -_id")
@@ -198,6 +203,7 @@ exports.countAppDownloads = (req, res) => {
         res.json(update);
     })
 }
+// END CLIENT-ADMIN
 
 /* ARCHIVES
 exports.mwUniqueStaffIds = (req, res, next) => {

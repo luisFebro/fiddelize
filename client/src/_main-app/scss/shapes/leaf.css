@@ -1,0 +1,7 @@
+.leaf {
+    height: 15.65em;
+    width: 15.65em;
+
+    border-radius: 15.65em 0; /* 250px applied to top-left and bottom-right corners */
+    background-color: #000;
+}

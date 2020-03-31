@@ -1,0 +1,165 @@
+// ROOT LAYOUT CSS ONLY  like absolute elements, z-index, spacing margin adjusts
+
+// ActionBtns.js
+.blob-action-btns--root > div {
+    margin: 40px 0;
+}
+
+.blob-action-btns--root .history-btn {
+    margin-bottom: 30px;
+}
+
+@media only screen and (min-width: 768px) {
+    .blob-action-btns--root .history-btn { margin-bottom: 0; margin-right: 60px }
+}
+
+.panel-hidden-content--root {
+    user-select: text;
+    margin: auto;
+    width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+    .panel-hidden-content--root { width: 90% }
+}
+
+.blob-action-btns--root > .star {
+    margin: 0;
+    padding: 0;
+}
+
+.blob-action-btn--root .star {
+    z-index: -1;
+    top: -20px;
+    left: -50px;
+    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+    transform: rotate(30deg);
+    filter: opacity(.6)
+}
+@media only screen and (min-width: 768px) {
+    .blob-action-btn--root .star { left: -65px }
+}
+
+.blob-action-btn--root .star.star-align {
+    left: -40px;
+    top: -15px;
+    font-size: 15px;
+}
+// end actionBtns.js
+
+
+// ModalFullScreenHistory
+.purchase-history-table-data--root {
+    display: flex;
+    padding: 0 4px;
+}
+
+.purchase-history-table-data--root div {
+    padding: 9px 5px;
+}
+
+.purchase-history-table-data--root .desc {
+    flex-basis: 80%;
+}
+.purchase-history-table-data--root .desc .inner-container {
+    display: flex;
+    flex-direction: row; // default;
+    margin: 0;
+    padding: 0;
+}
+.desc .inner-container div:last-child {
+    line-height: 10px;
+}
+
+.purchase-history-table-data--root .desc .inner-container div:first-child {
+    flex-basis: 5%;
+}
+
+.purchase-history-prize-card--root {
+    padding: 0 15px 15px;
+    border: 2px solid white;
+}
+
+.purchase-history-prize-card--root .gift-main-title {
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.purchase-history-prize-card--root .gift-main-title div:last-child {
+    margin-left: 20px;
+}
+
+.purchase-history-prize-card--root .gift-main-title .prize-btn {
+    position: relative;
+    top: -10px;
+}
+
+.purchase-history-status-panel--root {
+    top: -15px;
+}
+
+.purchase-history-status-panel--root .board {
+    height: 25px;
+    display: flex;
+    align-items: center;
+    top: 0;
+    border-radius: 15% 15%;
+    background-color: var(--mainWhite);
+}
+.purchase-history-status-panel--root .board div {
+    display: flex;
+}
+
+.purchase-history-status-panel--root .board p:first-child {
+    position: relative;
+    left: -13px;
+}
+
+
+.purchase-history-status-panel--root .board div > p {
+    margin: 0 10px;
+    padding: 0;
+}
+.purchase-history-status-panel--root .board div:last-child {
+    margin-left: 10px;
+}
+
+.purchase-history-status-panel--root .board div .icon {
+    position: relative;
+    left: -25px;
+}
+
+.purchase-history-sum--root {
+    max-height: 75px;
+}
+
+.purchase-history-sum--root .scores,
+.purchase-history-sum--root .challenges {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 0;
+}
+.purchase-history-sum--root .challenges {
+    position: relative;
+    top: -15px;
+}
+
+.purchase-history-sum--root .scores span:first-child, {
+    flex-basis: 70%;
+}
+
+.purchase-history-sum--root .value, {
+    font-size: 30px;
+    margin-left: 10px;
+}
+
+// CartRace and ModalHIstory
+.mot-challenge-msg {
+    position: relative;
+    margin: 0;
+    top: 15px;
+}

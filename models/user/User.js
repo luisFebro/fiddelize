@@ -16,6 +16,25 @@ const UserTokenSchema = new Schema(dataTempAuthUserToken);
 
 // USER'S ROLES
 // Client User
+// Client Admin
+const historyData = {
+    challengeN: {type: Number, default: 1},
+    icon: String,
+    desc: String,
+    createdAt: {type: Date, default: new Date()},
+    value: Number,
+    cardType: { type: String, default: "record",  enum: ["prize", "record"]},
+    // For "prize" cartType variables. both false as default but not explicit at start.
+    isPrizeReceived: Boolean,
+    isPrizeConfirmed: Boolean,
+}
+const HistorySchema = new Schema(historyData, { _id: false, timestamps: false });
+
+const purchaseData = {
+    history: [HistorySchema],
+}
+const PurchaseSchema = new Schema(purchaseData, { _id: false, timestamps: true });
+
 const clientUserData = {
     bizId: { type: String, default: "0"},
     cashCurrScore: {
@@ -30,7 +49,7 @@ const clientUserData = {
         type: String,
         default: "0"
     },
-    purchaseHistory: Array, // e.g {desc: "compra 1", value: 20}
+    purchase: PurchaseSchema,
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 
@@ -68,7 +87,7 @@ const clientAdminData = {
 
 
     verificationPass: String,
-    regulationTxt: RegulationSchema,
+    regulation: RegulationSchema,
     appDownloads: { type: Number, default: 0 },
     // onceActionSetPassword: { type: Boolean, default: false },
 }

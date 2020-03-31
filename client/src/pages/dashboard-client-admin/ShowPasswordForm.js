@@ -1,0 +1,164 @@
+import React, { useState, useEffect } from 'react';
+import AOS from 'aos';
+import { useStoreDispatch, useStoreState } from 'easy-peasy';
+import { CLIENT_URL } from '../../config/clientUrl';
+import ToggleVisibilityPassword from '../../components/forms/fields/ToggleVisibilityPassword';
+import handleChange from '../../utils/form/use-state/handleChange';
+import ButtonMulti, { faStyle } from '../../components/buttons/material-ui/ButtonMulti';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { showSnackbar } from '../../redux/actions/snackbarActions';
+import { updateUser } from '../../redux/actions/userActions';
+import { readUser } from '../../redux/actions/userActions';
+import setValObjWithStr from '../../utils/objects/setValObjWithStr';
+
+const isSmall = window.Helper.isSmallScreen();
+
+export default function ShowPasswordForm({
+    isFromCliAdminDash = false, dataFromPassPage = {}}) {
+    const [error, setError] = useState("");
+    const [data, setData] = useState({
+        clientAdminData: { verificationPass: '' }, // We can simply declare clientAdminData.verificationPass in the sendDataToBackend obj
+    })
+    const { clientAdminData } = data;
+
+    const { cliAdminId } = useStoreState(state => state.userReducer.cases.currentUser._id);
+
+    const history = dataFromPassPage.history;
+    const clientAdminId = dataFromPassPage.clientAdminId;
+    const clientAdminName = dataFromPassPage.clientAdminName;
+    const bizCodeName = dataFromPassPage.bizCodeName;
+
+
+    const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        if(isFromCliAdminDash) {
+            const keyName = "clientAdminData.verificationPass";
+
+            setValObjWithStr(data, keyName, "1234567fds");
+            const newObj = data;
+            setData(Object.assign({}, data, newObj));
+            // readUser(dispatch, cliAdminId)
+            // .then(res => {
+            //     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+            //         const passValue = res.data && res.data.clientAdminData.verificationPass;
+            //         const keyName = "clientAdminData.verificationPass";
+
+            //         setValObjWithStr(data, keyName, passValue);
+            //         const newObj = data;
+            //         setData(Object.assign({}, data, newObj));
+            // })
+        }
+    }, [cliAdminId])
+
+    AOS.init({
+        offset: 50,
+    });
+
+    const styles = {
+        form: {
+            maxWidth: '350px',
+            background: 'var(--themeSDark)',
+            borderRadius: '10px',
+            padding: '25px'
+        },
+        fieldFormValue: {
+            backgroundColor: 'var(--mainWhite)',
+            color: 'var(--themeP)',
+            fontSize: '26px',
+            fontFamily: 'var(--mainFont)',
+            // textAlign: 'center', it does not works
+            padding: '10px 14px',
+            zIndex: 2000
+        },
+        lockIcon: {
+            top: isSmall ? '80px' : isFromCliAdminDash ? '90px' : '115px',
+            left: '-70px',
+            zIndex: 3000,
+        },
+    }
+
+    const sendDataBackend = () => {
+        if(!clientAdminData.verificationPass) { setError(true); showSnackbar(dispatch, "Você precisa inserir a senha de verificação", "error"); return; }
+
+        const dataToSend = {
+            "clientAdminData.verificationPass": clientAdminData.verificationPass,
+        };
+
+        showSnackbar(dispatch, "Ok, registrando...")
+        updateUser(dispatch, dataToSend, clientAdminId)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
+            if(isFromCliAdminDash) {
+                showSnackbar(dispatch, "Senha foi alterada!")
+            } else {
+                showSnackbar(dispatch, "Preparando seu painel...")
+                setTimeout(() => history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`), 1500);
+            }
+
+        })
+    }
+
+    const showButtonAction = () => (
+        <div className="container-center" style={{marginTop: '20px'}}>
+            <ButtonMulti
+                title={isFromCliAdminDash ? "Alterar senha" : "Salvar e acessar<br />seu painel de controle"}
+                needParse={true}
+                onClick={() => {
+                    sendDataBackend();
+                }}
+                color="var(--mainWhite)"
+                backgroundColor="var(--themeP)"
+                backColorOnHover="var(--themeP)"
+                iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle} />}
+                textTransform='uppercase'
+            />
+        </div>
+    );
+
+    const handleBottomValues = () => {
+        if(isFromCliAdminDash) {
+            return "";
+        } else {
+            return isSmall
+            ? '-50px'
+            : '-300px'
+        }
+    };
+
+    return (
+        <div data-aos={!isFromCliAdminDash && "zoom-in-up"} style={{zIndex: 1000, bottom: handleBottomValues()}} className="mt-4 position-relative">
+            <form className="shadow-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
+                <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}>
+                    <div style={styles.lockIcon} className="position-absolute">
+                        <img
+                            src={`${CLIENT_URL}/img/icons/lock.svg`}
+                            className="svg-elevation"
+                            width={90}
+                            height="auto"
+                            alt="cadeado"
+                        />
+                    </div>
+                    <p className="text-shadow">
+                        {isFromCliAdminDash
+                        ? "Altere aqui sua senha sempre que precisar"
+                        : "Insira aqui sua senha de verificação"}
+                    </p>
+                    <ToggleVisibilityPassword
+                        showGeneratePass={true}
+                        generatePassObj={{
+                            setObj: setData,
+                            obj: data,
+                        }}
+                        style={styles.fieldFormValue}
+                        onChange={handleChange(setData, data, true)}
+                        label=" "
+                        name="clientAdminData.verificationPass"
+                        value={clientAdminData.verificationPass}
+                    />
+                </div>
+                {showButtonAction()}
+            </form>
+        </div>
+    );
+}

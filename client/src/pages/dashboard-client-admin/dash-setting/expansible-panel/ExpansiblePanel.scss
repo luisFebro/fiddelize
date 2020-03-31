@@ -1,0 +1,16 @@
+.ex-pa-main-heading {
+    font {
+        size: 1em;
+        weight: bold;
+    }
+    text-shadow: 1px 1px 3px black;
+    flex-basis: 43.33%;
+    flex-shrink: 0;
+    padding-right: 30px;
+    // maxWidth: 120px,
+}
+
+// .ex-pa--headings {
+//     display: flex;
+//     align-items: center;
+// }

@@ -1,0 +1,6 @@
+.rightangledTriangle {
+    height: 0;
+    width: 0;
+    border-bottom: 12.500em solid #000;
+    border-right: 12.500em solid transparent;
+}

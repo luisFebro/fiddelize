@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
+import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 import PropTypes from 'prop-types';
-import ModalConfYesNo from './ModalConfYesNo';
-import { buttonFabType } from '../../../types';
-import handleChange from '../../../utils/form/use-state/handleChange';
+import ModalFullScreenHistory from './ModalFullScreenHistory';
+import { buttonFabType } from '../../../../../../../types';
+import handleChange from '../../../../../../../utils/form/use-state/handleChange';
 
 ModalBtn.propTypes = {
     modalData: PropTypes.object.isRequired,
@@ -17,12 +17,16 @@ export default function ModalBtn({
 
     const {
         title,
+        position,
+        variant,
         iconFontAwesome,
         iconMarginLeft,
         shadowColor,
         top,
         left,
-        backgroundColor } = button;
+        backgroundColor,
+        size,
+        iconMu, } = button;
 
     const onOpen = () => {
       setOpen(true);
@@ -33,27 +37,22 @@ export default function ModalBtn({
       // setSelectedValue(value); using redux update instead
     };
 
-    const styles = {
-        fab: {
-            transform: 'translate(-50%, -50%)'
-        },
-    }
-
 
     return (
         <div>
             <ButtonFab
                 title={title}
                 iconFontAwesome={iconFontAwesome}
+                iconMu={iconMu}
                 iconMarginLeft={iconMarginLeft}
                 shadowColor={shadowColor}
-                top={top}
-                left={left}
-                style={styles.fab}
                 backgroundColor={backgroundColor}
                 onClick={onOpen}
+                position={position}
+                variant={variant}
+                size={size}
             />
-            <ModalConfYesNo
+            <ModalFullScreenHistory
                 open={open}
                 onClose={onClose}
                 modalData={modalData}

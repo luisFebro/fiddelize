@@ -1,0 +1,41 @@
+.instruction-area .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    margin: 10px 0;
+}
+
+.instruction-area .text .formatting-commands > p, .key-values > p  {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.instruction-area .text .formatting-commands .row {
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
+}
+
+.instruction-area .text .formatting-commands .row div {
+    display: flex;
+    flex-direction: column;
+    line-height: 20px;
+    // justify-content: center;
+}
+
+.instruction-area .text .formatting-commands .row:nth-child(even),
+.key-values div:nth-child(even)  {
+    background-color:var(--lightGrey);
+    // justify-content: center;
+}
+
+.instruction-area .text .formatting-commands .row:nth-child(odd),
+.key-values div:nth-child(odd)  {
+    background-color: #DCDCDC; //light grey
+    // justify-content: center;
+}
+
+.instruction-area .text .formatting-commands .row p {
+    text-align: center;
+}

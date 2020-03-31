@@ -4,6 +4,13 @@
 }
 ::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: #00e5ff; // cyan
-    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    background-color:rgba(0,0,0,.1);
+    -webkit-box-shadow: transparent;
+}
+
+@media only screen and (min-width: 768px) {
+    ::-webkit-scrollbar-thumb {
+        background-color: #00e5ff; // cyan
+        -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    }
 }

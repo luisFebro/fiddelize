@@ -130,10 +130,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                 return;
             }
 
-            const removalOptions = {
-                collection: "onceChecked",
-            }
-            lStorage("removeItems", removalOptions);
+            lStorage("removeCol", {collection: 'onceChecked'})
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
             switch(res.data.roleRegistered) {

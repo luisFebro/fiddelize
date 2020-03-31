@@ -65,7 +65,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
             <span
                 className="text-main-container text-center font-weight-bold"
             >
-                {parse(title)}
+                {title && parse(title)}
             </span>
         </DialogTitle>
     );
@@ -73,7 +73,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
     const showSubTitle = () => (
         <DialogContentText>
             <div className="text-normal text-center">
-                {parse(subTitle)}
+                {subTitle && parse(subTitle)}
                 <br />
             </div>
         </DialogContentText>

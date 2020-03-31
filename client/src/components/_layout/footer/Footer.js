@@ -5,14 +5,16 @@ const Footer = () => {
     return (
         <footer style={{position: 'relative', bottom: 0}} className="theme-p-dark text-s">
             <div className="container-center"> {/*n1*/}
-                <div className="text-small text-center py-2 pt-3">
-                    <strong>
+                <div className="text-center py-2 pt-3">
+                    <strong style={{fontSize: '24px'}}>
                         Fiddelize
                     </strong>
+                    <span className="font-weight-bold text-small">
                         <br />
-                        Sistema de Pontos de Fidelidade Digital
+                        Plataforma de Pontos de Fidelidade Digital
                         <br />
                         Roraima - {new Date().getFullYear()}
+                    </span>
                 </div>
             </div>
         </footer>

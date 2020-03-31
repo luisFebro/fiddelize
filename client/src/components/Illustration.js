@@ -66,22 +66,22 @@ export default function Illustration({
     return (
         <Fragment>
             <h2 className="text-center text-sub-title-upper">{title}</h2>
-            <DivWrapper className="container-center my-5">
+            <DivWrapper className="container-center my-5" style={{overflowX: 'hidden'}}>
                 <img
-                    style={imgStyle}
+                    style={{...imgStyle, overflowX: 'hidden'}}
                     className="image-center svg-elevation"
                     src={img}
                     alt={alt}
                 />
                 <div className="container-center">
                     <p
-                        className={`move-txt-from-center ${txtBorder} ${txtStyle || "text-main-container"}`}
+                        className={`move-txt-from-center ${txtBorder} ${txtStyle || "text-subtitle"}`}
                         style={{
                             minWidth: `${isSmall ? "300px" : "500px"}`,
                             fontSize: fontSize || '2rem',
                             textAlign: txtAlign || "center",
                             color: txtColor || "black",
-                            top: `${isSmall ? "40%" : topPos || "-2%"}`,
+                            top: topPos || "-2%",
                             left: leftPos || "50%",
                         }}
                     >

@@ -1,0 +1,24 @@
+.hexagon {
+    position: relative;
+
+    height: 0;
+    width: 12.5em;
+
+    border-top: 9.375em solid #fff;
+    border-right: 6.25em solid transparent;
+    border-left: 6.25em solid transparent;
+}
+
+.hexagon:before {
+    position: absolute;
+    content: '';
+
+    height: 0;
+    width: 12.5em;
+
+    border-bottom: 9.375em solid #fff;
+    border-right: 6.25em solid transparent;
+    border-left: 6.25em solid transparent;
+    bottom: 9.375em;
+    left: -6.25em;
+}

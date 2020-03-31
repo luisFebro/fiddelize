@@ -167,18 +167,24 @@ exports.getList = (req, res) => {
     const skip = parseInt(req.query.skip);
     const role = req.query.role;
     const search = req.query.search;
+    const bizId = req.query.bizId;
 
     const sortQuery = {$sort: { name: 1 }};
     const skipQuery = {$skip: skip};
     const limitQuery = {$limit: 5};
     const countQuery = {$count: 'value'};
     const searchQuery = {name: {$regex: `${search}`, $options: 'i'}};
+    const bizIdQuery = {"clientUserData.bizId": bizId};
 
     let { mainQuery } = getQuery(role);
+
+    // For new bizId implementation
+    mainQuery = Object.assign({}, mainQuery, bizIdQuery);
 
     if(search) {
         mainQuery = Object.assign({}, mainQuery, searchQuery);
     }
+    console.log("mainQuery", mainQuery);
 
     User.aggregate([
         {
@@ -205,9 +211,11 @@ exports.getList = (req, res) => {
 }
 
 exports.getHighestScores = (req, res) => {
-    User.find({})
-    .select("name loyaltyScores")
-    .sort({ 'loyaltyScores.currentScore': -1 })
+    const bizId = req.query.bizId;
+
+    User.findOne({ 'clientUserData.bizId': bizId })
+    .select("name clientUserData")
+    .sort({ 'clientUserData.currScore': -1 })
     .limit(3)
     .exec((err, data) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));

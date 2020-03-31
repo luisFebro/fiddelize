@@ -58,18 +58,6 @@ export const readVerificationPass = async () => { // L
     }
 };
 
-export const checkVerificationPass = async (dispatch, objToSend) => { // L
-    setLoadingProgress(dispatch, true);
-    try {
-        const res = await axios.post(`/api/admin/verification-pass`, objToSend, getHeaderJson);
-        setLoadingProgress(dispatch, false);
-        return res;
-    } catch (err) {
-        setLoadingProgress(dispatch, false);
-        return err.response;
-    }
-};
-
 // STAFF BOOKING
 export const getStaffWithBookingsList = async (dispatch, docsToSkip) => { // L
     // const searchQuery = search ? `&search=${search}` : "";
@@ -128,13 +116,27 @@ export const readAllDbFromModels = async (dispatch, securityObj, model) => {
     }
 };
 
-export const countAppDownloads = async (dispatch) => {
+// CLIENT-ADMIN
+export const checkVerificationPass = async (dispatch, objToSend) => { // L
+    setLoadingProgress(dispatch, true);
     try {
-        await axios.put(`/api/admin/app/downloads`, getHeaderJson);
+        const res = await axios.post(`/api/admin/verification-pass`, objToSend, getHeaderJson);
+        setLoadingProgress(dispatch, false);
+        return res;
+    } catch (err) {
+        setLoadingProgress(dispatch, false);
+        return err.response;
+    }
+};
+
+export const countAppDownloads = async (dispatch, dataToSend) => {
+    try {
+        await axios.put(`/api/admin/app/downloads`, dataToSend, getHeaderJson);
     } catch (err) {
         return err.response;
     }
 };
+// END CLIENT ADMIN
 
 /* COMMENTS
 n1: LESSON: never use GET METHOD if you want to send an object to backend, even in the case if it is working on Postman.

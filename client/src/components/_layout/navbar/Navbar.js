@@ -6,8 +6,11 @@ import { CLIENT_URL } from '../../../config/clientUrl';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import isThisApp from '../../../utils/window/isThisApp';
+import ActionBtns from './ActionBtns';
+import './NavbarLayout.scss';
 
 const isSmall = window.Helper.isSmallScreen();
+const gotToken = localStorage.getItem("token");
 
 function Navbar({ history, location }) {
     // const [showSkeleton, setShowSkeleton] = useState(true);
@@ -16,38 +19,17 @@ function Navbar({ history, location }) {
        isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
        role: state.userReducer.cases.currentUser.role,
        _idStaff: state.userReducer.cases.currentUser._id,
-       clientAdminData: state.userReducer.cases.currentUser.clientAdminData,
+       clientAdminData: state.userReducer.cases.clientAdmin.clientAdminData,
     }));
 
     const dispatch = useStoreDispatch();
-
-    const addZoomout = () => {
-        const icon = document.getElementById('searchIcon');
-        icon.className += ' animated zoomOut slow';
-        setTimeout(() => {
-            setSearchOpen(true);
-        }, 1000);
-    };
-
-    const closeBtn = () => {
-        const icon = document.getElementById('searchIcon'),
-            closeBtn = document.getElementById('closeBtn');
-        // searchComplete = document.getElementById("SearchCompleteWithImg");
-
-        closeBtn.className = 'fas fa-times-circle animated rotateOut';
-        // searchComplete.className = "animated zoomOut delay-2s";
-        icon.className = 'fas fa-search animated zoomIn slow';
-        setTimeout(() => {
-            setSearchOpen(false);
-        }, 1000);
-    };
 
     // Render
     const locationNow = location.pathname;
 
     const btnLogout = () => (
         <button
-            className="text-small text-shadow"
+            className="font-weight-bold text-small text-shadow"
             style={{
                 position: 'absolute',
                 top: '65px',
@@ -66,7 +48,7 @@ function Navbar({ history, location }) {
 
     const titleByRoleHandler = () => (
         <Fragment>
-            {!isUserAuthenticated ? (
+            {!gotToken ? (
                 <Link
                     to="/acesso/verificacao"
                     className={["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(locationNow) ? "disabled-link" : "nav-link"}
@@ -90,6 +72,7 @@ function Navbar({ history, location }) {
 
                     {role === "cliente-admin" &&
                     <Fragment>
+                        <ActionBtns role="cliente-admin" location={locationNow} />
                         <Link
                             style={{
                                 color: 'var(--themeS)',
@@ -97,7 +80,7 @@ function Navbar({ history, location }) {
                             }}
                             to={`/${clientAdminData && clientAdminData.bizCodeName}/cliente-admin/painel-de-controle`}
                         >
-                            {locationNow.includes("/cliente-admin/painel-de-controle") && btnLogout()}
+                            {btnLogout()}
                         </Link>
                     </Fragment>}
 
@@ -113,7 +96,7 @@ function Navbar({ history, location }) {
     );
 
     const showManagingBtn = () => (
-        <ul className="animated zoomIn slow navbar-nav ml-3 ml-sm-auto mr-3 align-items-center">
+        <ul className="animated zoomIn faster navbar-nav ml-3 ml-sm-auto mr-3 align-items-center">
             <li
                 className="nav-item text-subtitle"
                 style={{color: "black"}}
@@ -150,6 +133,8 @@ function Navbar({ history, location }) {
 export default withRouter(Navbar); // n1
 
 /* ARCHIVES
+{locationNow.includes("/cliente-admin/painel-de-controle") && btnLogout()}
+
 {isSmall ? "Admin" : "Usuário: Cliente-Admin"} <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
 
 This is not wokring right... I cant seem to log out when clicked i the btn.
@@ -190,38 +175,14 @@ const NavWrapper = styled.nav`
         left: 65%;
         transform: translate(-50%, -50%);
     }
-    #searchIcon {
-        cursor: pointer;
-        z-index: 1200;
-    }
-    #closeBtn {
-        position: fixed;
-        cursor: pointer;
-        font-size: 1.7em;
-        top: 5rem;
-        right: 5%;
-        color: var(--mainWhite);
-        z-index: 1500;
-        filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
-    }
     & .fixed {
         position: fixed;
         right: 1.2rem;
         top: 1.9rem;
     }
-    #searchIcon {
-        font-size: 2.1rem;
-        filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
-    }
-    .nav-link,
-    #searchIcon {
-        text-transform: capitalize;
-    }
 
-    & .nav-link:hover:hover,
-    #searchIcon:hover {
-        transform: scale(1.1);
-        filter: drop-shadow(0.001em 0.2em 0.1em var(--mainTheme));
+    .nav-link {
+        text-transform: capitalize;
     }
 `;
 

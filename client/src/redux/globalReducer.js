@@ -12,6 +12,7 @@ const initialState = {
     currentItemFound: null,
     run: false,
     runName: '',
+    runArray: [], // for history of executed elements...
 };
 
 export const globalReducer = {
@@ -24,10 +25,13 @@ export const globalReducer = {
                     currentItemFound: action.payload
                 };
             case 'RUN_SET': {
+                const newArr = state.runArray;
+                newArr.push(action.payload);
                 return {
                     ...state,
                     run: !state.run,
                     runName: action.payload,
+                    runArray: newArr,
                 }
             }
             //Show

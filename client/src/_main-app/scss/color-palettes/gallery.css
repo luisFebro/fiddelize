@@ -12,10 +12,17 @@
     --lightBlue: #009ffd;
     --mainDegrade: linear-gradient(to right, #ed213a, #93291e);
     --mainYellow: #fff200;
+    --niceUiYellow: #fbc531;
+    --mainPurple: #4a148c;
+    --mainCyan: #00b2cc;
 }
 
 .text-red {
     color: var(--mainRed);
+}
+
+.text-expense-red {
+    color: var(--expenseRed);
 }
 
 .text-yellow {
@@ -28,4 +35,28 @@
 
 .text-blue {
     color: var(--mainBlue);
+}
+
+.text-purple {
+    color: var(--mainPurple);
+}
+
+.text-sys-green {
+    color: green;
+}
+
+.text-green {
+    color: var(--mainGreen);
+}
+
+.text-income-green {
+    color: var(--incomeGreen);
+}
+
+.text-grey {
+    color: grey;
+}
+
+.text-cyan {
+    color: var(--mainCyan);
 }

@@ -1,8 +1,4 @@
-import React from 'react';
-import isSmallScreen from '../utils/isSmallScreen';
-// End Dash Sessions
-
-// Material UI
+import React, { useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -11,9 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import { green } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
+import { setRun } from '../redux/actions/globalActions';
+import { useStoreDispatch } from 'easy-peasy';
+
+const isSmall = window.Helper.isSmallScreen();
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index, boxPadding, ...other } = props;
 
     return (
         <Typography
@@ -24,7 +24,7 @@ function TabPanel(props) {
             aria-labelledby={`action-tab-${index}`}
             {...other}
         >
-            <Box p={3}>{children}</Box>
+            <Box p={boxPadding || 3}>{children}</Box>
         </Typography>
     );
 }
@@ -67,24 +67,31 @@ TabSessions.propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({
         tabLabel: PropTypes.string.isRequired,
         tabIcon: PropTypes.element.isRequired,
-        tabContentPanel: PropTypes.element.isRequired,
+        tabContentPanel: PropTypes.any,
     })),
     needTabFullWidth: PropTypes.bool,
 }
 
-export default function TabSessions({ data, needTabFullWidth = false }) {
-    const { tabLabel, tabIcon, tabContentPanel } = data;
+export default function TabSessions({
+    data, needTabFullWidth = false }) {
+
     const classes = useStyles();
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
+
+    const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        setRun(dispatch, value);
+    }, [value])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const handleChangeIndex = index => {
-        setValue(index);
-    };
+    // const handleChangeIndex = index => {
+    //     setValue(index);
+    // };
 
     return (
         <div className={classes.root}>
@@ -95,7 +102,7 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
                     variant={
                         needTabFullWidth
                         ? "fullWidth"
-                        : (isSmallScreen() ? "scrollable" : "fullWidth")
+                        : (isSmall() ? "scrollable" : "fullWidth")
                     }
                     indicatorColor="primary"
                     textColor="primary"
@@ -113,11 +120,12 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
             {data && data.map((tab, ind) => {
                 return(
                     <TabPanel
-                        style={{overflow: 'hidden'}}
+                        style={{overflow: 'hidden', minHeight: '500px'}}
                         key={ind}
                         value={value}
                         index={ind}
                         dir={theme.direction}
+                        boxPadding={tab.boxPadding}
                     >
                         {tab.tabContentPanel}
                     </TabPanel>

@@ -1,0 +1,78 @@
+.plan-badge--root {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    left: 20px;
+    top: 100px;
+}
+
+.plan-badge--root .cortesia {
+    background-color: var(--mainWhite);
+    box-shadow: inset 0 0 .4em #000;
+    color: var(--themeP);
+    padding: 4px 5px;
+    font-size: 18px;
+}
+
+.plan-badge--root .prata {
+    background-color: grey;
+    box-shadow: inset 0 0 .4em #000;
+    filter:  drop-shadow(1px 1px 1.5px white);
+    color: white;
+    text-shadow: 1px 1px 3px black;
+    padding: 4px 5px;
+    font-size: 18px;
+}
+
+.plan-badge--root .ouro {
+    background-color: var(--mainDark);
+    box-shadow: inset 0 0 .4em #000;
+    filter:  drop-shadow(1px 1px 1.5px white);
+    color: var(--mainYellow);
+    text-shadow: 1px 1px 3px black;
+    padding: 4px 5px;
+    font-size: 18px;
+}
+
+.plan-badge--root .title, .plan-badge--root .plan {
+    position: relative;
+    top: 3px;
+}
+
+.plan-badge--root .plan {
+    margin: 0;
+    padding: 0 10px;
+}
+
+
+.plan-badge--root .upgrade-btn {
+    left: -10px;
+    filter:  drop-shadow(.5px .5px 1.5px black);
+}
+
+.plan-badge--root .upgrade-btn .crown-icon {
+    top: -5px;
+    left: 84px;
+    color: var(--mainYellow);
+    filter:  drop-shadow(.5px .5px 1.5px black);
+    font-size: 34px;
+    z-index: 10;
+}
+
+.plan-badge--root .prata-icon {
+    top: -10px;
+    left: 60px;
+    color: var(--lightGrey);
+    font-size: 38px;
+    z-index: 10;
+    filter: drop-shadow(-2px 0 #fff)
+}
+
+.plan-badge--root .ouro-icon {
+    top: -10px;
+    left: 60px;
+    color: var(--mainYellow);
+    font-size: 38px;
+    z-index: 10;
+    filter: drop-shadow(-2px 0 #fff)
+}

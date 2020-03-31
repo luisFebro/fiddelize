@@ -6,6 +6,7 @@
 @import 'styling-utils/core';
 @import 'effects/core';
 @import 'customization/core';
+@import 'shapes/core';
 
 /*CART BUTTON*/
 .btn-black {
@@ -64,6 +65,10 @@
     box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
 }
 
+.icon-shadow {
+    filter:  drop-shadow(.5px .5px 1.5px black);
+}
+
 .shape-elevation,
 .card-elevation,
 .svg-elevation { /*recommended*/
@@ -89,9 +94,10 @@
 
 /*ICON DEFAULT*/
 /*Material UI icon*/
-.icon-svg {
+.icon-svg, .icon-mu {
     transform: scale(2);
 }
+
 .icon-default {
     color: var(--mainWhite);
     cursor: pointer;
@@ -163,3 +169,6 @@
 
 /*END MENU DROPDOWN*/
 
+.anima-iteration-2 {
+    animation-iteration-count: 2;
+}

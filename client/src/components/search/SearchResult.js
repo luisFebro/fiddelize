@@ -32,6 +32,8 @@ export default function SearchResult({
         }
     }
 
+    const allTimeScore = 2300; // INSERT BACKEND LATER...
+
     return (
         <div className="text-main-container my-5">
             {!filteredUsersLength
@@ -58,7 +60,7 @@ export default function SearchResult({
                     {searchTerm !== ""
                     ? (
                         <div>
-                            <h2 className="text-sub-title text-left pl-5">
+                            <h2 className="text-subtitle text-p text-left pl-5">
                                 {isLoading
                                 ? ""
                                 : (
@@ -70,13 +72,17 @@ export default function SearchResult({
                         </div>
                     ) : (
                         <div>
-                            <h2 className="text-sub-title text-left pl-5">
+                            <h2 className="text-subtitle text-p text-left pl-1">
                                 {isLoading
                                 ? ""
                                 : (
-                                    <span>
-                                        {`Total de ${pluralizeBr(mainSubject)}:`} <strong>{allUsersLength}</strong>
-                                    </span>
+                                    <p className="position-relative" style={{top: '30px'}}>
+                                        <span className="text-title">Totais Gerais:</span>
+                                        <br />
+                                        <strong>• {`${allUsersLength} ${pluralizeBr(mainSubject)}`}</strong>
+                                        <br />
+                                        <strong>• {`${allTimeScore} Pontos/R$`}</strong>
+                                    </p>
                                 )}
                             </h2>
                         </div>

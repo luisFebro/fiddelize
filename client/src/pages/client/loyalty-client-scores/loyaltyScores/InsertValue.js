@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import KeypadButton from '../../../../components/modals/keypad';
 import isMoneyBrValidAndAlert from '../../../../utils/numbers/isMoneyBrValidAndAlert';
 import AddOrSearch from '../../../../components/search/AddOrSearch';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 InsertValue.propTypes = {
     success: PropTypes.bool,
@@ -53,7 +54,7 @@ export default function InsertValue({ success, setValuePaid }) {
         <div className="animated jackInTheBox slow delay-2s d-flex justify-content-center mt-1 mb-4">
             <KeypadButton
                 title="Insira o valor gasto"
-                titleIcon="far fa-money-bill-alt"
+                titleIcon={<FontAwesomeIcon icon="money-bill-alt" />}
                 setSelectedValue={setData}
                 confirmFunction={handleSwitch}
             />

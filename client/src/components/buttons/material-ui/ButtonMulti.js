@@ -14,6 +14,11 @@ export const faStyle = {
     filter:  'drop-shadow(.5px .5px 1.5px black)',
 }
 
+export const faStyleSmall = {
+    fontSize: '25px',
+    marginLeft: '10px',
+}
+
 const useStyles = makeStyles(theme => ({ // n1
     sText: {
         textShadow: props => props.textShadow || '1px 1px 3px black',
@@ -87,7 +92,9 @@ export default function ButtonMulti({
             disabled={disabled}
             component={component}
         >
-            <span className={variant === 'contained' ? sText : null}>{needParse ? parse(title) : title || children}</span>
+            <span className={variant === 'contained' ? sText : "main-font font-weight-bold"}>
+                {needParse ? parse(title) : title || children}
+            </span>
             {showIcon(iconFontAwesome)}
         </CustomizedButton>
     );

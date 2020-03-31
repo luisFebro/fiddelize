@@ -1,0 +1,29 @@
+.ex-pa-main-heading {
+    font {
+        size: 1em;
+        weight: bold;
+    }
+    text-shadow: 1px 1px 3px black;
+    flex-basis: 43.33%;
+    flex-shrink: 0;
+    padding-right: 30px;
+    // maxWidth: 120px,
+}
+
+.ex-pa--headings {
+    display: flex;
+    align-items: center;
+}
+
+// .ex-pa--main-icon {
+//     position: absolute;
+//     top: -5;
+//     left: 5;
+// }
+
+// .ex-pa--secondary-heading {
+//     justify-content: center;
+//     text-shadow: 1px 1px 3px black;
+//     // fontSize: theme.typography.pxToRem(15),
+// }
+

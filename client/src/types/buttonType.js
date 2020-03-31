@@ -57,10 +57,10 @@ export const buttonFabType = {
     fontWeight: string,
     backgroundColor: string,
     iconMu: element,
-    iconFontAwesome: string,
+    iconFontAwesome: oneOfType([string, element]),
     iconMarginLeft: string,
     iconFontSize: string,
-    iconAfterClick: string,
+    iconAfterClick: oneOfType([string, element]),
     actionAfterClick: shape({
         setStatus: func,
         status: bool,

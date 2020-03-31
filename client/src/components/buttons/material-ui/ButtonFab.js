@@ -7,6 +7,21 @@ import { buttonFabType } from '../../../types';
 
 ButtonFab.propTypes = buttonFabType;
 
+export const muStyle = {
+    transform: 'scale(1.2)',
+    marginLeft: '3px',
+}
+
+export const faStyle = {
+    fontSize: '30px',
+    filter:  'drop-shadow(.5px .5px 1.5px black)',
+    color: 'white',
+}
+
+export const faStyleSmall = {
+    fontSize: '25px',
+}
+
 const handleBtnShadow = (shadowColor, custom) => {
     if(shadowColor) {
         return `drop-shadow(.001em .15em .2em ${shadowColor})`;
@@ -33,20 +48,24 @@ export default function ButtonFab({
     backgroundColor,
     iconMu,
     iconFontAwesome,
-    iconAfterClick,
+    toggleStatus,
+    iconAfterClick = null,
+    needClickAndToggle = false,
     iconMarginLeft,
     iconFontSize,
-    actionAfterClick,
+    needIconShadow = true,
     onClick,
     shadowColor,
     shadowColorCustom,
-    title }) {
-    const [toggle, setToggle] = useState(false);
+    title,
+    id,
+    textTransform }) {
+    const [toggle, setToggle] = useState('');
 
     const styles = {
         icon: {
             fontSize: iconFontSize,
-            marginLeft: iconMarginLeft || '5px',
+            marginLeft: iconMarginLeft,
         },
         fab: {
             fontWeight: fontWeight,
@@ -61,33 +80,62 @@ export default function ButtonFab({
         }
     }
 
-    const showIcon = iconFontAwesome => (
-        iconFontAwesome &&
-        <i style={styles.icon} className={toggle ? iconAfterClick : iconFontAwesome}></i>
-    );
+    const showIcon = iconFontAwesome => {
+        if(iconFontAwesome && typeof iconFontAwesome !== "string") {
+            return(
+                <i className={`${variant === 'extended' && "ml-2"} ${needIconShadow ? "icon-shadow" : ""}`}>
+                    {toggle ? iconAfterClick : iconFontAwesome}
+                </i>
+            );
+        }
+
+        return(
+            iconFontAwesome &&
+            <i
+                style={styles.icon}
+                className={toggle ? iconAfterClick : iconFontAwesome}
+            ></i>
+        );
+    }
 
     const showMuIcon = iconMu => (
-        iconMu && (iconMu)
+        <i className={`${variant === 'extended' && "ml-2"} icon-shadow`}>
+            {iconMu}
+        </i>
     );
 
     const handleToggle = () => {
-        setToggle(!toggle);
-        actionAfterClick && actionAfterClick.setStatus(!actionAfterClick.status);
-        actionAfterClick.setFunction && actionAfterClick.setFunction();
+        if(toggle) {
+            setToggle("");
+        } else {
+            setToggle(toggleStatus);
+        }
     }
 
+    const handleOnClick = () => {
+        if(iconAfterClick && needClickAndToggle) {
+            handleToggle();
+            onClick();
+        } else if (iconAfterClick) {
+            handleToggle();
+        } else {
+            return false;
+        }
+    }
 
     return (
         <Fab
+            id={id}
             variant={variant || "round"}
-            onClick={
-                iconAfterClick
-                ? handleToggle : onClick}
+            onClick={() => handleOnClick() === false ? onClick() : handleOnClick()}
             size={ size || "small" }
             aria-label={title}
             style={styles.fab}
         >
-            <span style={{fontFamily: 'var(--mainFont)'}} className="text-shadow">
+            <span
+                className="p-1 text-shadow text-normal font-weight-bold"
+                style={{textTransform: textTransform || 'capitalize'}}
+            >
                 {title}
                 {showIcon(iconFontAwesome)}
                 {showMuIcon(iconMu)}

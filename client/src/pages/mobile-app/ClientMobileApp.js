@@ -23,8 +23,7 @@ import lStorage, {
     systemOp,
     confettiPlayOp,
     userProfileOp,
-    clientAdminOp,
-    needInitialStateOp, needAppRegisterOp } from '../../utils/storage/lStorage';
+    clientAdminOp, needAppRegisterOp } from '../../utils/storage/lStorage';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 import Register from '../../components/auth/Register';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,8 +36,8 @@ import { showSnackbar } from '../../redux/actions/snackbarActions';
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 //AppSystem
-const appSystem = lStorage("getItems", { collection: "appSystem"});
-// const options1 = {...needAppRegisterOp, value: }
+const appSystemCol = { collection: "appSystem"};
+const appSystem = lStorage("getItems", appSystemCol);
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -62,27 +61,14 @@ function ClientMobileApp({ history }) {
     let maxScore = clientAdmin && clientAdmin.rewardScore;
     let bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     let userScore = client && client.currScore;
+    let purchaseHistory = client && client.purchaseHistory;
     let userLastScore = client && client.cashCurrScore;
-    const regulationTxt = clientAdmin && clientAdmin.regulationTxt;
     const bizId = client && client.bizId;
-    const rewardList = ["giftA", "giftB"];
+    // const rewardList = ["giftA", "giftB"];
     const mainReward = "free service";
 
-    setDataIfOnline(
-        clientAdminOp,
-        maxScore,
-        mainReward,
-        rewardList,
-        regulationTxt);
-
-    setDataIfOnline(
-        userProfileOp,
-        role,
-        userName,
-        userScore,
-        userLastScore,
-        [{desc: "compra1", value: 0}],
-        bizId);
+    setDataIfOnline(clientAdminOp, { maxScore, mainReward });
+    setDataIfOnline(userProfileOp, [role, userName, userScore, userLastScore, purchaseHistory, bizId]);
 
     AOS.init({
         offset: 50,
@@ -111,7 +97,12 @@ function ClientMobileApp({ history }) {
                 // showSnackbar(dispatch, res.data.msg, 'success');
             })
         }
-    }, [bizId, clientId, role])
+
+        if(!appSystem && role && bizId) {
+            const updatedValues = {roleWhichDownloaded: role, businessId: bizId };
+            lStorage("setItems", {...appSystemCol, newObj: updatedValues})
+        }
+    }, [bizId, clientId, role, appSystem])
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
@@ -255,14 +246,14 @@ function ClientMobileApp({ history }) {
         appSystem && !isClientUserLogged &&
         <div className="container-center" data-aos="flip-right" data-aos-delay="3000">
             <div className="position-relative">
-                <p style={{zIndex: 2000, top: '10px', left: '145px'}} className="text-center text-white position-absolute text-shadow">
+                <p style={{zIndex: 2000, top: '20px', left: '150px'}} className="text-center text-white position-absolute text-shadow">
                     <span className="text-subtitle font-weight-bold">App</span>
                     <br />
                     <span
                         className="text-title text-nowrap"
                     >
                         do {
-                            appSystem && appSystem.roleWhichDownloaded === "cliente" || role === "cliente"
+                            appSystem && appSystem.roleWhichDownloaded === "cliente"
                             ? "Cliente" : "Admin"
                         }
                     </span>

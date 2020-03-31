@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Tooltip from './Tooltip';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import animateCSS from '../../utils/animateCSS';
 
 RatingIcons.propTypes = {
     score: PropTypes.number,
@@ -11,12 +12,12 @@ RatingIcons.propTypes = {
 }
 
 export default function RatingIcons({ score, maxScore }) {
-    const selectedIcon = "heart";
+    const selectedIcon = "star";
 
     const milestoneIcons = {
         star: {
             icon: "star", // n1
-            fontSize: "52px",
+            fontSize: "60px",
         },
         sun : {
             icon: "☀",
@@ -133,6 +134,11 @@ export default function RatingIcons({ score, maxScore }) {
 
     const { icon, fontSize } = milestoneIcons[selectedIcon];
 
+    const handleFlip = e => {
+       let currIconElemParent = e.target.parentElement;
+       animateCSS(currIconElemParent, 'rubberBand', 'fast');
+    }
+
     return (
         <RatingDiv>
             {levels.map(level => (
@@ -143,9 +149,10 @@ export default function RatingIcons({ score, maxScore }) {
                             <i>
                                 <FontAwesomeIcon
                                     icon={icon}
-                                    className="icon"
+                                    className="icon "
                                     style={{fontSize: fontSize}}
                                     id={`icon-${level}`}
+                                    onClick={e => handleFlip(e)}
                                 />
                             </i>
                         }

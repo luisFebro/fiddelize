@@ -45,22 +45,17 @@ export const deleteUser = async (dispatch, _idUser) => { // n1
 };
 // END RUD
 
-export const confirmUserAccount = async (userId) => {
-    try {
-        return await axios.get(`/api/user/confirm-account/${userId}`, getHeaderJson);
-    } catch (err) {
-        return err.response;
-    }
-}
-
 // LISTS
-export const readUserList = async (dispatch, skip = 0, role = "", search = "") => {
+export const readUserList = async (dispatch, skip = 0, role = "", search = "", bizId) => {
+    if(!bizId) throw new Error("You should specify the bizId argument");
+    bizId = `&bizId=${bizId}`;
+
     const searchQuery = search ? `&search=${search}` : "";
     const roleQuery = role ? `&role=${role}` : "";
 
     setLoadingProgress(dispatch, true);
     try {
-        const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}`, getHeaderJson);
+        const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}${bizId}`, getHeaderJson);
         setLoadingProgress(dispatch, false);
         console.log('==ALL USERS UPDATED==');
         dispatch({ type: 'USER_READ_LIST', payload: res.data.list });
@@ -71,14 +66,24 @@ export const readUserList = async (dispatch, skip = 0, role = "", search = "") =
     }
 };
 
-export const readHighestScores = async (dispatch) => {
+export const readHighestScores = async (dispatch, bizId) => {
     try {
-        const res = await axios.get('/api/user/list/highest-scores', getHeaderJson);
+        const res = await axios.get(`/api/user/list/highest-scores?bizId=${bizId}`, getHeaderJson);
         dispatch({ type: "HIGHEST_SCORES_READ", payload: res.data})
     } catch (err) {
         return err;
     }
 };
+
+/* ARCHIVES
+export const confirmUserAccount = async (userId) => {
+    try {
+        return await axios.get(`/api/user/confirm-account/${userId}`, getHeaderJson);
+    } catch (err) {
+        return err.response;
+    }
+}
+
 
 // FIELDS
 export const addElemArrayUser = async (dispatch, objToSend) => {
@@ -126,6 +131,7 @@ export const sendNotification = async (dispatch, objToSend, _idClient) => {
 };
 // END  FIELDS
 
+*/
 
 /* COMMENTS
 n1:   // Making the logout of the user firstly to make sure the system will not crash with a remaining activate token left by the deleted user

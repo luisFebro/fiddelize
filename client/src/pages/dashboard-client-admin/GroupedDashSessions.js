@@ -3,24 +3,78 @@ import PropTypes from 'prop-types';
 import isSmallScreen from '../../utils/isSmallScreen';
 // material-ui
 import TabSessions from '../../components/TabSessions';
-import DashUsers from './dash-users';
+import DashClients from './dash-clients';
 // Icons from Tabs
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
+import BuildIcon from '@material-ui/icons/Build';
+import NotificationBadge from '../../components/NotificationBadge';
+import Loadable from 'react-loadable';
+import { useStoreState } from 'easy-peasy';
+import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
 // End Material UI
 
-const data = [
-    {
-        tabLabel: "Usuários Gerenciamento",
-        tabIcon: <SupervisedUserCircleIcon />,
-        tabContentPanel: <DashUsers />
-    },
+const DashSettingLazy = Loadable({
+    loader: () => import(/* webpackChunkName: "dash-setting-lazy"*/ "./dash-setting"),
+    loading() {
+        return <FullPageLoading />;
+    }
+})
+const ClientIconWithBadge = ({ notifElemsArray }) => {
+    notifElemsArray = [{first: 'year'}, {first: 'year'}, {first: 'year'}, {first: 'year'}]; //
 
+    return(
+        <NotificationBadge
+            badgeNumber={notifElemsArray.length}
+            right={-20}
+            top={5}
+        >
+            <PermContactCalendarIcon />
+        </NotificationBadge>
+    );
+}
+let data;
+const dataTab1 = [
+    {
+        tabLabel: "Clientes",
+        tabIcon: <ClientIconWithBadge />,
+        tabContentPanel: <DashClients />
+    },
+    {
+        tabLabel: "Configurações",
+        tabIcon: <BuildIcon />,
+        tabContentPanel: null,
+    },
+]
+
+const dataTab2 = [
+    {
+        tabLabel: "Clientes",
+        tabIcon: <ClientIconWithBadge />,
+        tabContentPanel: <DashClients />
+    },
+    {
+        tabLabel: "Configurações",
+        tabIcon: <BuildIcon />,
+        tabContentPanel: <DashSettingLazy />,
+        boxPadding: 1,
+    },
 ]
 
 export default function GroupedDashSessions() {
+    const { runName } = useStoreState(state => ({
+        runName: state.globalReducer.cases.runName,
+    }));
+
+    if(runName === 1) {
+        data = dataTab2;
+    } else {
+        data = dataTab1;
+    }
+
     return (
         <TabSessions
             data={data}
+            needTabFullWidth={true}
         />
     );
 }

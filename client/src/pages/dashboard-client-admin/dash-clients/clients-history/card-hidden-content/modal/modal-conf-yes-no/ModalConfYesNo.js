@@ -1,20 +1,17 @@
 import React from 'react';
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../redux/actions/snackbarActions';
-// End Redux
-// Material UI
-import ButtonMulti from '../../../components/buttons/material-ui/ButtonMulti';
+import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
+import ButtonMulti from '../../../../../../../components/buttons/material-ui/ButtonMulti';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import parse from 'html-react-parser';
-// End Material UI
 import PropTypes from 'prop-types';
 // CUSTOM DATA
-import { deleteUser } from '../../../redux/actions/userActions';
-import { setRun } from '../../../redux/actions/globalActions';
+import { deleteUser } from '../../../../../../../redux/actions/userActions';
+import { setRun } from '../../../../../../../redux/actions/globalActions';
 
 // END CUSTOM DATA
 
@@ -26,10 +23,9 @@ ModalConfYesNo.propTypes = {
 
 export default function ModalConfYesNo({ open, onClose, modalData }) {
     const dispatch = useStoreDispatch();
-
     const { title, subTitle, itemData } = modalData;
 
-    const handleRemoval = itemData => {
+    const handleRemoval = (itemData, dispatch) => {
         showSnackbar(dispatch, "Processando...", 'warning', 3000);
         setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 4000), 3000);
         setTimeout(() => {
@@ -42,7 +38,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
         }, 7100);
     }
 
-    const showActionBtns = () => (
+    const showActionBtns = dispatch => (
         <section>
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '28px' }}>
                 <ButtonMulti
@@ -52,7 +48,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 />
                 <ButtonMulti
                     title="SIM"
-                    onClick={() => handleRemoval(itemData)}
+                    onClick={() => handleRemoval(itemData, dispatch)}
                     backgroundColor= "var(--mainRed)"
                     backColorOnHover= "var(--mainRed)"
                 />
@@ -62,18 +58,18 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
 
     const showTitle = () => (
         <DialogTitle id="form-dialog-title">
-            <span
-                className="text-main-container text-center font-weight-bold"
+            <p
+                className="text-subtitle text-purple text-center font-weight-bold"
             >
-                {parse(title)}
-            </span>
+                {title && parse(title)}
+            </p>
         </DialogTitle>
     );
 
     const showSubTitle = () => (
         <DialogContentText>
             <div className="text-normal text-center">
-                {parse(subTitle)}
+                {subTitle && parse(subTitle)}
                 <br />
             </div>
         </DialogContentText>
@@ -81,9 +77,11 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
 
     return (
         <Dialog
+            PaperProps={{ style: {backgroundColor: 'var(--mainWhite)'}}}
             style={{ zIndex: 1500 }}
             open={open}
             aria-labelledby="form-dialog-title"
+            className="animated slideInLeft faster"
         >
             {showTitle()}
             <DialogContent>

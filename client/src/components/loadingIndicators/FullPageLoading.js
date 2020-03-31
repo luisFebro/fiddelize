@@ -1,35 +1,19 @@
 import React from 'react';
-import { pulse } from '../keyframes/pulse';
 import styled, { keyframes } from 'styled-components';
+import { CLIENT_URL } from '../../config/clientUrl';
 
-export default function Preloader() {
-    // const loadImage = () => {
-    //     var img = new Image(),
-    //         x = document.querySelector("babadoo-logo");
-
-    //     img.onload = function() {
-    //         x.src = img.src;
-    //     };
-
-    //     img.src = "img/babadoo-logo_no-slogon.png";
-    // }
+export default function FullPageLoading() {
     return (
         <DivWrapper>
             <img
-                id="babadoo-logo"
-                src="img/babadoo-logo_no-slogon.png"
-                alt="babadoo - sexyshop está carregando..."
+                className="svg-elevation pulse-it"
+                id="logo"
+                src={`${CLIENT_URL}/img/official-logo-white.png`}
+                alt="logo carregando..."
                 height="150px"
             />
-            <section>
-                <h1 className="text-slogon text-center">
-                    <strong>
-                        <span>L</span>ingeries <br />e<br /> Acessórios Eróticos
-                    </strong>
-                </h1>
-            </section>
             <section className="loading-container">
-                <h2 className="">Carregando</h2>
+                <h2 className="loading-text">Carregando</h2>
                 <div className="spinner">
                     <div className="bounce1"></div>
                     <div className="bounce2"></div>
@@ -62,11 +46,6 @@ const DivWrapper = styled.div`
     color: var(--mainDark);
     z-index: 999;
 
-    & img {
-        transition: 0.5s;
-        animation: ${pulse} 1s linear infinite;
-    }
-
     //Three-dot bouncing loading effect
     //Resource: https://codepen.io/danielmorosan/pen/XmYBVx
     .loading-container {
@@ -75,6 +54,11 @@ const DivWrapper = styled.div`
         justify-content: center;
         align-items: center;
         margin-top: 40px;
+    }
+
+    .loading-text {
+        color: var(--themeP);
+        fontWeight: bold;
     }
 
     & .spinner {
@@ -102,3 +86,24 @@ const DivWrapper = styled.div`
         animation-delay: -0.16s;
     }
 `;
+
+
+/* ARCHIVES
+// const loadImage = () => {
+//     var img = new Image(),
+//         x = document.querySelector("babadoo-logo");
+
+//     img.onload = function() {
+//         x.src = img.src;
+//     };
+
+//     img.src = "img/babadoo-logo_no-slogon.png";
+// }
+<section>
+    <h1 className="text-title text-center">
+        <strong>
+            <span>L</span>ingeries <br />e<br /> Acessórios Eróticos
+        </strong>
+    </h1>
+</section>
+*/

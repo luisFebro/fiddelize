@@ -19,10 +19,10 @@ export default function Home() {
             <div className="align-self-center mb-3">
                 <img
                     className="svg-elevation"
-                    src="/img/official-logo-white.svg"
+                    src="/img/official-logo-white.png"
                     alt="logo"
-                    width={250}
-                    height={250}
+                    width={150}
+                    height='auto'
                 />
             </div>
             <h1

@@ -1,5 +1,26 @@
 // reference: https://stackoverflow.com/questions/20015462/find-out-how-many-thousands-and-hundreds-and-tens-are-there-in-a-amount/38807562
 // get remainder from multiple of ten
+
+export const getNewRemainder = (targetNumber, originalNumber) => {
+    //validation
+    if(typeof targetNumber !== "number" || typeof originalNumber !== "number") {
+        throw new Error("The arguments should be number type");
+    }
+    //end validation
+
+    let remainder = targetNumber % originalNumber;
+    if(!remainder) {
+        remainder = 0;
+    }
+
+    const isInteger = Number.isInteger(parseFloat(targetNumber));
+    if(!isInteger) {
+        remainder = remainder.toFixed(2);
+    }
+
+    return remainder;
+}
+
 export default function getRemainder(type, targetNumber, eachMilestone) {
     //validation
     if(typeof targetNumber !== "number") {

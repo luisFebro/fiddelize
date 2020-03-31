@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -10,16 +10,17 @@ import clsx from 'clsx';
 // Customized Data
 import { useStoreDispatch } from 'easy-peasy';
 import ButtonFab from '../../components/buttons/material-ui/ButtonFab';
-import { default as SelectBtn } from './modal-select/ModalBtn';
-import { default as YesNoModalBtn } from './modal-conf-yes-no/ModalBtn';
+import './ExpansiblePanel.scss';
 // End Customized Data
+
+const isSmall = window.Helper.isSmallScreen();
 
 ExpansiblePanel.propTypes = {
     actions: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string,
-            mainHeading: PropTypes.string,
-            secondaryHeading: PropTypes.string,
+            mainHeading: PropTypes.object, // parser
+            secondaryHeading: PropTypes.object, // parser
             hiddenContent: PropTypes.any
         })
     ).isRequired,
@@ -31,24 +32,12 @@ ExpansiblePanel.propTypes = {
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: window.Helper.isSmallScreen() ? '100%' : '80%',
-        margin: 'auto',
-    },
-    heading: {
-        fontSize: '1em',
-        fontWeight: 'bold',
-        flexBasis: '33.33%',
-        flexShrink: 0,
-        textShadow: '1px 1px 3px black'
-    },
-    secondaryHeading: {
-        paddingLeft: '10px',
-        fontSize: theme.typography.pxToRem(15),
-        textShadow: '1px 1px 3px black'
-    },
-    mainHeading: {
+        width: isSmall ? '100%' : '80%',
         display: 'flex',
-        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        padding: '15px 0',
+        margin: '10px 0',
     }
 }));
 
@@ -65,72 +54,17 @@ export default function ExpansiblePanel({
     const dispatch = useStoreDispatch();
 
     const styles = {
-        expansionPanelContainer: {
-            position: 'relative',
-        },
         expansionPanel: {
             color: color,
             backgroundColor: backgroundColor, // default is paper color
-            margin: '35px 0',
+            margin: '25px 0',
         },
-        iconContainer: {
-            position: 'absolute',
-            top: -10,
-            left: 10
-        },
-        mainHeading: {
-            display: 'flex',
-            alignItems: 'center',
-        }
-
     }
-
-    const showUpperConfigBtns = panel => (
-        statusAfterClick &&
-        <div className="animated zoomIn">
-            <YesNoModalBtn
-                button={{
-                    iconFontAwesome: "fas fa-trash-alt",
-                    backgroundColor: "#4834d4", // purple
-                    iconMarginLeft: '0px',
-                    size: "small",
-                    top: -30,
-                    left: 40
-                }}
-                modalData={{
-                    title: `Confirmação de Exclusão Usuário`,
-                    subTitle: `Confirme a exclusão do usuário:<br /><strong>${panel.userData.name.cap()}</strong> ?`,
-                    itemData: panel.userData,
-                }}
-                setRun={setRun}
-                run={run}
-            />
-            <SelectBtn
-                button={{
-                    title: "trocar tipo usuário",
-                    variant: "extended",
-                    top: -27,
-                    left: 90,
-                    backgroundColor: "grey",
-                    iconFontAwesome: "fas fa-user-plus",
-                }}
-                modal={{
-                    title: "Seleção de Nova Função",
-                    txtBtn: "Alterar",
-                    iconBtn: "fas fa-exchange-alt",
-                    modalData: panel.userData
-                }}
-                setRun={setRun}
-                run={run}
-            />
-        </div>
-    );
 
     const showPanel = panel => (
         <ExpansionPanelSummary
             expandIcon={
                 <div
-                    style={styles.iconContainer}
                     className="enabledLink"
                 >
                     {ToggleButton
@@ -142,17 +76,26 @@ export default function ExpansiblePanel({
             aria-controls={`panel${panel._id}bh-content`}
             id={`panel${panel._id}bh-header`}
         >
-            <Typography
-                className={clsx(classes.heading, "text-title")}
-                style={styles.mainHeading}
-            >
-                {panel.mainHeading}
-            </Typography>
-            <Typography
-                className={classes.secondaryHeading}
-            >
-                {panel.secondaryHeading}
-            </Typography>
+            {isSmall
+            ? (
+                <div className="d-flex flex-column align-self-start">
+                    {panel.mainHeading}
+                    {panel.secondaryHeading}
+                </div>
+            ) : (
+            <Fragment>
+                <Typography
+                    className="ex-pa-main-heading ex-pa--headings"
+                >
+                    {panel.mainHeading}
+                </Typography>
+                <Typography
+                    className="ex-pa--headings"
+                >
+                    {panel.secondaryHeading}
+                </Typography>
+            </Fragment>
+            )}
         </ExpansionPanelSummary>
     );
 
@@ -167,16 +110,15 @@ export default function ExpansiblePanel({
             {actions.map(panel => (
                 <div
                     key={panel._id}
-                    style={styles.expansionPanelContainer}
+                    className="position-relative"
                 >
                     <ExpansionPanel
-                        style={styles.expansionPanel}
                         className="disabledLink"
+                        style={styles.expansionPanel}
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}
                     </ExpansionPanel>
-                    {showUpperConfigBtns(panel)}
                 </div>
             ))}
         </div>

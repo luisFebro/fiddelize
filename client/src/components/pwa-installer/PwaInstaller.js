@@ -8,6 +8,11 @@ import { countAppDownloads } from '../../redux/actions/adminActions';
 import parse from 'html-react-parser';
 import AOS from 'aos';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
+import lStorage from '../../utils/storage/lStorage';
+
+//AppSystem
+const appSystem = lStorage("getItems", { collection: "appSystem"});
+const bizId = appSystem && appSystem.businessId;
 
 PwaInstaller.propTypes = {
   title: PropTypes.string,
@@ -54,7 +59,7 @@ export default function PwaInstaller({ title, icon, run = true }) { // A2HS = Ap
             deferredPrompt.userChoice.then(function(choiceResult) {
                 if(choiceResult.outcome === 'accepted') {
                     showSnackbar(dispatch, 'Instalando App em instantes...', 'warning', 7000)
-                    countAppDownloads(dispatch);
+                    countAppDownloads(dispatch, bizId);
                     setTimeout(() => {
                         showSnackbar(dispatch, 'Instalado com sucesso! Você já pode acessar o app pela sua tela inicial', 'success', 6000)
                         setTimeout(() => closeWindow(), 7000)

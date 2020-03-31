@@ -14,6 +14,7 @@ import isThisApp from '../../utils/window/isThisApp';
 import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaToast';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import { CLIENT_URL } from '../../config/clientUrl';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Login({ history, setLoginOrRegister }) {
     const [cpf, setData] = useState("0");
@@ -65,7 +66,7 @@ function Login({ history, setLoginOrRegister }) {
             }
 
             if(role === "cliente") {
-                if(isThisApp()) {
+                if(true) {
                     // window.location.href = "/mobile-app"
                     history.push("/mobile-app");
                 } else {
@@ -95,7 +96,7 @@ function Login({ history, setLoginOrRegister }) {
         <div className="mt-3 mb-2 animated jackInTheBox slower delay-1s d-flex justify-content-center">
             <KeypadButton
                 title="Informe o seu CPF"
-                titleIcon="fas fa-list-ol"
+                titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
                 setSelectedValue={setData}
                 confirmFunction={signInThisUser}

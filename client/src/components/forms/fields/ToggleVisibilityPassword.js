@@ -90,6 +90,7 @@ export default function ToggleVisibilityPassword({
             <RadiusBtn
                 title="gerar uma senha"
                 backgroundColor="var(--themeP)"
+                padding="4px 9px"
                 className="my-2"
                 onClick={() => insertNewPass()}
             />

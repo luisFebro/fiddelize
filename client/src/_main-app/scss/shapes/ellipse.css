@@ -1,0 +1,7 @@
+.ellipse {
+    height: 12.500em;
+    width: 18.750em;
+
+    border-radius: 50%;
+    background-color: #000;
+}

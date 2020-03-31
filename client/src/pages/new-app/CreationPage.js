@@ -106,7 +106,7 @@ export default function CreationPage({ location }) {
                     className="text-center text-subtitle ml-3 mt-5 mb-3"
                     data-aos="fade-up"
                 >
-                    <strong>Você estipula o ponto de recompensa:</strong>
+                    <strong>Você estipula o ponto de prêmio:</strong>
                 </p>
                 <div
                     className="text-normal container-center"

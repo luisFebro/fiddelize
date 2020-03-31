@@ -1,0 +1,8 @@
+.trapezium {
+    height: 0;
+    width: 12.500em;
+
+    border-right: 6.250em solid transparent;
+    border-bottom: 12.500em solid #000;
+    border-left: 6.250em solid transparent;
+}

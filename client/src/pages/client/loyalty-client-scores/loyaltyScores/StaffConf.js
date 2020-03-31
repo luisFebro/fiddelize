@@ -14,6 +14,10 @@ import { handleEnterPress } from '../../../../utils/event/isKeyPressed';
 import clearForm from '../../../../utils/form/use-state/clearForm';
 import { checkVerificationPass } from "../../../../redux/actions/adminActions";
 import PropTypes from 'prop-types';
+import lStorage from '../../../../utils/storage/lStorage';
+
+//AppSystem
+const appSystem = lStorage("getItems", { collection: "appSystem"});
 
 StaffConf.propTypes = {
     success: PropTypes.bool,
@@ -21,9 +25,11 @@ StaffConf.propTypes = {
     valuePaid: PropTypes.string,
 }
 
+
 export default function StaffConf({ success, setVerification, valuePaid, desc }) {
     const [data, setData] = useState({
         pass: '',
+        bizId: '',
     })
 
     const { pass } = data;
@@ -39,7 +45,8 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
 
     const checkAccess = () => {
         const bodyToSend = {
-            pass
+            pass,
+            bizId: appSystem && appSystem.businessId,
         }
         checkVerificationPass(dispatch, bodyToSend)
         .then(res => {

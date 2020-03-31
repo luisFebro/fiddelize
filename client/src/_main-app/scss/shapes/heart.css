@@ -1,0 +1,46 @@
+.heart {
+    position: relative;
+
+    height: 80px;
+    width: 100px;
+}
+
+.heart:before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 50px;
+
+    height: 80px;
+    width: 50px;
+
+    border-radius: 50px 50px 0 0;
+    background: red;
+
+    -webkit-transform: rotate(-45deg);
+       -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+         -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+    -webkit-transform-origin: 0 100%;
+}
+
+.heart:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 0;
+
+    height: 80px;
+    width: 50px;
+
+    border-radius: 50px 50px 0 0;
+    background: red;
+
+    -webkit-transform: rotate(45deg);
+       -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+         -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+    -webkit-transform-origin: bottom right;
+}

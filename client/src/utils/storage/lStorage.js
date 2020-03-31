@@ -9,7 +9,7 @@ const collectionStore = {
 };
 
 export default function lStorage(type, options, next) {
-    const { collection, property, value } = options;
+    const { collection, property, value, newObj } = options;
 
     const notInCollection = !collectionStore.hasOwnProperty(collection);
     const objInCollection = JSON.parse(localStorage.getItem(collection));
@@ -20,7 +20,7 @@ export default function lStorage(type, options, next) {
 
     // Validation
     if(!collection) throw new Error("Insert a collection's name");
-    if(!(["setItem", "setItems", "getItem", "getItems", "removeItems", "removeItem"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, setItems, getItem, getItems, removeItems (remove all items from a collection), removeItem (One specific property from a collection). Check also for typos...")
+    if(!(["setItem", "setItems", "setItemsByArray", "getItem", "getItems", "removeItems", "removeItem", "removeCol"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, setItems (any number of props and keys), setItemsByArray(quantity of props and values are equal), getItem, getItems, removeItems (remove all items from a collection), removeItem (One specific property from a collection). Check also for typos...")
     if(!value && type === "setItem" && typeof value !== 'boolean') throw new Error("Insert a value");
     if(notInCollection && type === "getItem") throw new Error("This collection does not exists. You can not get anything...")
     // End Validation
@@ -41,6 +41,25 @@ export default function lStorage(type, options, next) {
     }
 
     if(type === "setItems") {
+        // by obj, more flexible, any keys can be changedfrom any collection
+        // if array, only the current keys can be modified, can not insert new keys.
+        let result;
+        if(!newObj) throw new Error("You should assign in the options an `newObj` with new props and values");
+        const keys = Object.keys(newObj);
+        const values = Object.values(newObj);
+
+        const newProps = {};
+        keys.forEach((key, ind) => {
+            newProps[key] = values[ind];
+        })
+
+        result = {...objInCollection, ...newProps};
+
+        localStorage.setItem(collection, JSON.stringify(result))
+        return;
+    }
+
+    if(type === "setItemsByArray") {
         if(notInCollection) throw new Error("You need to specify a new localStorage collection on utils/storage/lStorage.js file")
         const isBothKeyArray = Array.isArray(property) && Array.isArray(value);
 
@@ -89,8 +108,15 @@ export default function lStorage(type, options, next) {
         localStorage.setItem(collection, JSON.stringify({}))
         return;
     }
+    // remove an entire collection
+    if(type === "removeCol") {
+        localStorage.removeItem(collection);
+        return;
+    }
 
-    next();
+    if(typeof next === 'function') {
+        next();
+    }
 }
 
 

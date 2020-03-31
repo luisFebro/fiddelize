@@ -119,7 +119,16 @@ export default function DownloadApp({ match, location }) {
             >
                 Oops! Parece que esse link não é válido.
             </p>
-            <p className={`${isSmall ? "ml-2 text-left" : "text-center"} my-5 text-title`}>Por favor, tente um outro link para baixar seu app.</p>
+            <p
+                className={`${isSmall ? "ml-2 text-left" : "text-center"} my-5 text-title`}
+            >
+                Por favor, tente um outro link para baixar seu app.
+            </p>
+            {/*FUTURE UPDATE*/}
+            <div style={{display: 'none'}}>
+                A button which will take the user to a choose the company's page
+                in order to get the right link again...
+            </div>
         </div>
 
     );
@@ -138,7 +147,7 @@ export default function DownloadApp({ match, location }) {
                             ? `<strong>${userName && userName.cap()},<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`
                             : `<strong>${userName ? userName.cap() : "Ei"},<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`
                         }
-                        icon={`${CLIENT_URL}/img/official-logo-white.svg`}
+                        icon={`${CLIENT_URL}/img/official-logo-white.png`}
                         run={run}
                     />
                 </div>

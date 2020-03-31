@@ -23,6 +23,7 @@ const radiusTooltipStyle = makeStyles(theme => ({
         fontWeight: 'bold',
         borderRadius: '15px 15px',
         padding: '4px auto',
+        margin: '40px 0',
         whiteSpace: 'nowrap',
         textShadow: '1px 1px 3px black',
     },
