@@ -106,7 +106,7 @@ export default function GoalForm({ bizId, bizName, name }) {
         updateUser(dispatch, dataToSend, bizId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-            setTimeout(() => window.location.href = `/baixe-app/${name}?negocio=${bizName}&admin=1`, 1500);
+            setTimeout(() => window.location.href = `/baixe-app/${name}?negocio=${bizName}&id=${bizId}&admin=1`, 1500);
         })
     }
 

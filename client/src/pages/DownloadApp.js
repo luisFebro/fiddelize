@@ -56,7 +56,7 @@ export default function DownloadApp({ match, location }) {
             <div className="pt-1 pb-5">
                 <ScrollArrow margin={50} />
             </div>
-            <p className="text-title" style={styles.margin} data-aos="fade-up">Baixe o App logo aqui embaixo, deslizando a tela.</p>
+            <p className="text-title" style={styles.margin} data-aos="fade-up">Baixe o seu App logo aqui embaixo, deslizando a tela.</p>
             <ScrollArrow margin={30} />
             <div id="target" style={{minHeight: '200px 0'}}>
                 <ScrollArrow margin={20} />
