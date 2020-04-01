@@ -28,7 +28,7 @@ export default function NotificationArea({ userName, notifElemsArray }) {
                 <div className="font-weight-bold">
                     {userName && userName.cap()},
                     <br />
-                    Você tem <span style={styles.badge}>{notifElemsArray.length}</span> novidades
+                    Você tem <span style={styles.badge}>{notifElemsArray ? notifElemsArray.length : 0}</span> novidades
                     por aqui:
                 </div>
 

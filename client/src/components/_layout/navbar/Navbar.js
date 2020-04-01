@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import isThisApp from '../../../utils/window/isThisApp';
 import ActionBtns from './ActionBtns';
 import './NavbarLayout.scss';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const isSmall = window.Helper.isSmallScreen();
 const gotToken = localStorage.getItem("token");
@@ -56,7 +57,7 @@ function Navbar({ history, location }) {
                     {locationNow === "/"
                     ? (
                         <span className="text-subtitle text-s" style={{position: 'relative', right: isSmall ? '-18px' : '' }}>
-                            Acesso <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                            Acesso <FontAwesomeIcon icon="lock" style={{fontSize: '1.9rem'}} />
                         </span>
                     ) : null}
                 </Link>
@@ -65,7 +66,7 @@ function Navbar({ history, location }) {
                     {role === "admin" &&
                     <Fragment>
                         <Link to="/admin/painel-de-controle">
-                            Usuário: Administrador <i className="fas fa-lock" style={{fontSize: '1.9rem'}}></i>
+                            Logado: Admin <FontAwesomeIcon icon="lock" style={{fontSize: '1.9rem'}} />
                         </Link>
                         {btnLogout()}
                     </Fragment>}
@@ -86,8 +87,8 @@ function Navbar({ history, location }) {
 
                     {role === "cliente" &&
                         <Fragment>
-                            {!isThisApp()
-                            ? null : null}
+                            Cliente
+                            {btnLogout()}
                         </Fragment>
                     }
                 </div>

@@ -20,11 +20,11 @@ const DashSettingLazy = Loadable({
     }
 })
 const ClientIconWithBadge = ({ notifElemsArray }) => {
-    notifElemsArray = [{first: 'year'}, {first: 'year'}, {first: 'year'}, {first: 'year'}]; //
+    notifElemsArray = []; // {first: 'year'}, {first: 'year'}, {first: 'year'}, {first: 'year'}
 
     return(
         <NotificationBadge
-            badgeNumber={notifElemsArray.length}
+            badgeNumber={notifElemsArray ? notifElemsArray.length : 0}
             right={-20}
             top={5}
         >

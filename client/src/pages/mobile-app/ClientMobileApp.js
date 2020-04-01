@@ -3,6 +3,7 @@ import React, { Fragment, useRef, useEffect, useState } from 'react';
 import Login from '../../components/auth/Login';
 import { Link, withRouter } from 'react-router-dom';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
+import { useClientAdmin, useClientUser } from '../../hooks/useRoleData';
 // APP COMPONENTS
 import RatingIcons from './RatingIcons';
 import ProgressMsg from './ProgressMsg' ;
@@ -49,17 +50,20 @@ function ClientMobileApp({ history }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
-    let { role, userName, clientAdmin, client, clientId } = useStoreState(state => ({
+    let { role, userName, client, clientId } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
         userName: state.userReducer.cases.currentUser.name,
         clientId: state.userReducer.cases.currentUser._id,
         client: state.userReducer.cases.currentUser.clientUserData,
-        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
     }))
     const dispatch = useStoreDispatch();
 
-    let maxScore = clientAdmin && clientAdmin.rewardScore;
-    let bizCodeName = clientAdmin && clientAdmin.bizCodeName;
+    const { bizCodeName, maxScore } = useClientAdmin();
+    console.log("maxScore", maxScore);
+    console.log("bizCodeName", bizCodeName);
+
+    // let maxScore = clientAdmin && clientAdmin.rewardScore;
+    // let bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     let userScore = client && client.currScore;
     let purchaseHistory = client && client.purchaseHistory;
     let userLastScore = client && client.cashCurrScore;

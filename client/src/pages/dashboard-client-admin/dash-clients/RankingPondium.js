@@ -14,6 +14,7 @@ const appSystem = lStorage("getItems", appSystemCol);
 
 export default function RankingPondium() {
     let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
+    console.log("highestScores", highestScores);
     const dispatch = useStoreDispatch();
 
     // Test
@@ -30,7 +31,7 @@ export default function RankingPondium() {
 
     const showScores = () => (
         <Fragment>
-            {highestScores.length !== 0 && highestScores.map((user, id) => {
+            {highestScores && highestScores.length !== 0 && highestScores.map((user, id) => {
                 const { name, clientUserData } = user;
                 const css = ["first-place", "second-place", "third-place"];
                 return(
@@ -38,7 +39,7 @@ export default function RankingPondium() {
                         key={id}
                         className={`${css[id]} position-absolute animated zoomIn delay-5s text-main-container text-shadow-white`}
                     >
-                        {!clientUserData
+                        {user === `name${id + 1}`
                         ? (
                             <FontAwesomeIcon
                                 icon="question"

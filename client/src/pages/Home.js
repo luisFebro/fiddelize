@@ -15,8 +15,8 @@ export default function Home() {
     // }
 
     const showSlogon = () => (
-        <section className="mt-2 d-flex flex-column flex-md-row justify-content-center align-items-center">
-            <div className="align-self-center mb-3">
+        <section className="mt-5 d-flex flex-column flex-md-row justify-content-center align-items-center">
+            <div className="align-self-center m-3">
                 <img
                     className="svg-elevation"
                     src="/img/official-logo-white.png"
