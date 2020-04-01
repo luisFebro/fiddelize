@@ -47,14 +47,17 @@ exports.mwSession = (req, res, next) => { // n1
 
 // this will load the authorized user's data after and only if the token is valid in mwAuth
 exports.loadAuthUser = (req, res) => {
-    const userIdInsideJwt = req.authObj.id;
-
-    User.findById(userIdInsideJwt)
+    const userIdInsideJwt = req.authObj && req.authObj.id;
+    if(!userIdInsideJwt) {
+        console.log("Warning: user loaded without ID")
+    } else {
+        User.findById(userIdInsideJwt)
         .select('-cpf')
         .exec((err, profile) => {
             if(err) return res.status(500).json(msgG('error.systemError', err))
             res.json({ profile });
         })
+    }
 }
 
 exports.register = (req, res) => {
@@ -119,7 +122,7 @@ const handleRolesData = (role, ...allKeys) => {
     return objToSend;
 }
 exports.login = (req, res) => {
-    const { password, needKeepLoggedIn } = req.body;
+    // const { password, needKeepLoggedIn } = req.body;
     const { _id, name, role, clientAdminData } = req.profile;
 
     let keysStore = {

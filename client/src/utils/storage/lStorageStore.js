@@ -32,7 +32,7 @@ Você pode verificar quanto falta exatamente para o próximo nível acessando se
 // COLLECTIONS - different collections receives different numbers at the very end in the order of execution
 // value here are DEFAULT ones if need
 const collVal1 = { collection: "onceChecked", value: true };
-const collVal2 = { collection: "userProfile", value: ["123abc", "cliente", "ana teste", 0, 0, { history: [{desc: "compra1", value: 0}], updatedAt: 0 }, "0"]} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
+const collVal2 = { collection: "userProfile", value: ["123abc", "cliente", "...", 0, 0, { history: [{desc: "compra1", value: 0}], updatedAt: 0 }, "0"]} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 const collVal3 = { collection: "appSystem", value: '' }
 const collVal4 = { collection: "clientAdmin", value: ["empresa teste", "empresa-teste-et2d@yd", "cortesia", 500, "free product", ["giftA", "giftB"], { text: defaultText, updatedAt: new Date() }, [{ name: "nome1" },{ name: "nome2" },{ name: "nome3"}]] }
 // const collVal3 = { collection: "clientAdminProfile", value: ["cliente-admin", undefined, 500, 0, 0] } // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };

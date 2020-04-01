@@ -2,8 +2,8 @@
 import React, { Fragment, useRef, useEffect, useState } from 'react';
 import Login from '../../components/auth/Login';
 import { Link, withRouter } from 'react-router-dom';
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { useClientAdmin, useClientUser } from '../../hooks/useRoleData';
+import { useStoreDispatch } from 'easy-peasy';
+import { useProfile, useClientAdmin, useClientUser } from '../../hooks/useRoleData';
 // APP COMPONENTS
 import RatingIcons from './RatingIcons';
 import ProgressMsg from './ProgressMsg' ;
@@ -50,29 +50,14 @@ function ClientMobileApp({ history }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
-    let { role, userName, client, clientId } = useStoreState(state => ({
-        role: state.userReducer.cases.currentUser.role,
-        userName: state.userReducer.cases.currentUser.name,
-        clientId: state.userReducer.cases.currentUser._id,
-        client: state.userReducer.cases.currentUser.clientUserData,
-    }))
-    const dispatch = useStoreDispatch();
 
-    const { bizCodeName, maxScore } = useClientAdmin();
-    console.log("maxScore", maxScore);
-    console.log("bizCodeName", bizCodeName);
-
-    // let maxScore = clientAdmin && clientAdmin.rewardScore;
-    // let bizCodeName = clientAdmin && clientAdmin.bizCodeName;
-    let userScore = client && client.currScore;
-    let purchaseHistory = client && client.purchaseHistory;
-    let userLastScore = client && client.cashCurrScore;
-    const bizId = client && client.bizId;
-    // const rewardList = ["giftA", "giftB"];
-    const mainReward = "free service";
-
+    const { userId, role, userName } = useProfile();
+    const { bizId, userScore, userLastScore, userPurchase } = useClientUser();
+    const { bizCodeName, maxScore, mainReward } = useClientAdmin();
     setDataIfOnline(clientAdminOp, { maxScore, mainReward });
-    setDataIfOnline(userProfileOp, [role, userName, userScore, userLastScore, purchaseHistory, bizId]);
+    setDataIfOnline(userProfileOp, { userName, userScore, userLastScore, userPurchase, bizId });
+
+    const dispatch = useStoreDispatch();
 
     AOS.init({
         offset: 50,
@@ -95,7 +80,7 @@ function ClientMobileApp({ history }) {
             const idFromSystem = appSystem && appSystem.businessId;
             const objToSend = { "clientUserData.bizId": idFromSystem }
 
-            updateUser(dispatch, objToSend, clientId)
+            updateUser(dispatch, objToSend, userId)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 // showSnackbar(dispatch, res.data.msg, 'success');
@@ -106,7 +91,7 @@ function ClientMobileApp({ history }) {
             const updatedValues = {roleWhichDownloaded: role, businessId: bizId };
             lStorage("setItems", {...appSystemCol, newObj: updatedValues})
         }
-    }, [bizId, clientId, role, appSystem])
+    }, [bizId, userId, role, appSystem])
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)

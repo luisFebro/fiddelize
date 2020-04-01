@@ -6,15 +6,10 @@ const isOnline = !isOffline();
 export default function setDataIfOnline(options, dataOnline) {
     const isArray = Array.isArray(dataOnline);
     const isObj = !isArray && typeof dataOnline === 'object';
+    if(!isObj) throw new Error("You should send as the second argument an object with keys to be inserted in the local storage.")
 
     if(isOnline) { // Future updates, maybe we should compare arrays, if they are diff, then apply new values...
-        if(isArray) {
-            const newObj = {...options, value: dataOnline}
-            lStorage("setItemsByArray", newObj);
-        }
-        if(isObj) {
-            const newObj = {...options, newObj: dataOnline}
-            lStorage("setItems", newObj);
-        }
+        const newOptions = {...options, newObj: dataOnline}
+        lStorage("setItems", newOptions);
     }
 }
