@@ -33,7 +33,7 @@ Você pode verificar quanto falta exatamente para o próximo nível acessando se
 // value here are DEFAULT ones if need
 const collVal1 = { collection: "onceChecked", value: true };
 const collVal2 = { collection: "userProfile", value: ["123abc", "cliente", "...", 0, 0, { history: [{desc: "compra1", value: 0}], updatedAt: 0 }, "0"]} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
-const collVal3 = { collection: "appSystem", value: '' }
+const collVal3 = { collection: "appSystem" }
 const collVal4 = { collection: "clientAdmin", value: ["empresa teste", "empresa-teste-et2d@yd", "cortesia", 500, "free product", ["giftA", "giftB"], { text: defaultText, updatedAt: new Date() }, [{ name: "nome1" },{ name: "nome2" },{ name: "nome3"}]] }
 // const collVal3 = { collection: "clientAdminProfile", value: ["cliente-admin", undefined, 500, 0, 0] } // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 // END COLLECTIONS
@@ -51,11 +51,15 @@ const needAppRegisterOp = combine(collVal1, { property: "needAppRegister" });
 const userProfileOp = combine(collVal2, { property: ["_id", "role", "name", "currScore", "lastScore", "purchase", "bizId"], })
 const clientAdminOp = combine(collVal4, { property: ["bizName", "bizCodeName", "bizPlan", "maxScore", "mainReward", "rewardList", "regulation", "highestScores"], })
 
-const systemOp = {
-    downloadClientAdmin: combine(collVal3, { property: "roleWhichDownloaded", value: "cliente-admin"}),
-    downloadClientUser: combine(collVal3, { property: "roleWhichDownloaded", value: "cliente"}),
-    businessId: combine(collVal3, { property: "businessId"}),
+const systemOp = (role, id) => {
+    if(!role || !id) throw new Error("arguments missing...")
+    // roleWhichDownloaded: cliente || cliente-admin || dev || rep
+    const obj = { roleWhichDownloaded: role || 'cliente', businessId: id };
+    const res = { ...collVal3, newObj: obj };
+
+    return res;
 }
+
 // const clientAdminProfileOp = combine(collVal3, { property: ["role", "name", "bizName"], })
 // END PROPERTIES
 

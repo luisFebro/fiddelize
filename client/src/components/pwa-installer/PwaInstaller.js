@@ -12,7 +12,9 @@ import lStorage from '../../utils/storage/lStorage';
 
 //AppSystem
 const appSystem = lStorage("getItems", { collection: "appSystem"});
+console.log("appSystem", appSystem);
 const bizId = appSystem && appSystem.businessId;
+console.log("bizId", bizId);
 
 PwaInstaller.propTypes = {
   title: PropTypes.string,

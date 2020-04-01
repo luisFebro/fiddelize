@@ -11,8 +11,13 @@ const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 const appSystem = lStorage("getItems", { collection: "appSystem"});
+console.log("appSystem", appSystem);
 
 const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
+console.log("isAdminLoggedIn", isAdminLoggedIn);
+// Valid links:
+// general: site/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1
+// custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1
 
 export default function DownloadApp({ match, location }) {
     const [userName, setUserName] = useState(match.params.userName);
@@ -22,14 +27,10 @@ export default function DownloadApp({ match, location }) {
     const isClientAdmin = location.search.includes("admin=1");
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
     const isValidRoleType = isClientAdmin || isClientUser;
-    // `/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1`
-    const { downloadClientAdmin, downloadClientUser, businessId } = systemOp;
     useEffect(() => {
-        if(isClientAdmin) { lStorage("setItem", downloadClientAdmin); }
-        if(isClientUser && !isAdminLoggedIn) {
-            lStorage("setItem", downloadClientUser);
-            lStorage("setItem", {...businessId, value: bizId});
-        }
+        const newObj = systemOp.newObj;
+        if(isClientAdmin) { lStorage("setItems", systemOp("cliente-admin", bizId)); }
+        if(isClientUser && !isAdminLoggedIn) { lStorage("setItems", systemOp("cliente", bizId)); }
     }, [isClientAdmin, isClientUser])
 
     useEffect(() => {
