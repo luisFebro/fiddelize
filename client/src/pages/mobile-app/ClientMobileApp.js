@@ -71,7 +71,7 @@ function ClientMobileApp({ location, history }) {
     }, [needAppRegister])
 
     const showLogo = () => {
-        const logoSrc = isAuthUser ? imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
+        const logoSrc = isAuthUser ? selfBizLogoImg && imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
         const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
 
         return(
