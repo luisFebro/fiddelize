@@ -11,7 +11,25 @@ PickTheming.propTypes = {
     step: PropTypes.number,
     setNextDisabled: PropTypes.func,
 }
-export default function PickTheming({ step, setNextDisabled }) {
+
+const translatedColor = {
+    "padrão": "default",
+    rosa: "pink",
+    roxo: "purple",
+    vermelho: "red",
+    preto: "black",
+    branco: "white",
+    azul: "blue",
+    verde: "green",
+    marron: "brown",
+    amarelo: "yellow",
+}
+
+export default function PickTheming({
+    step,
+    setNextDisabled,
+    theme,
+    setTheme }) {
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
@@ -107,6 +125,8 @@ export default function PickTheming({ step, setNextDisabled }) {
                     setData={setData}
                     data={data}
                     setFullOpen={setFullOpen}
+                    theme={theme}
+                    setTheme={setTheme}
                 />}
                 fullOpen={fullOpen}
                 setFullOpen={setFullOpen}
@@ -118,7 +138,12 @@ export default function PickTheming({ step, setNextDisabled }) {
 const ColorPicker = ({
     notIncludeColorPrimary,
     notIncludeColorSecondary,
-    whichColorModal, setData, data, setFullOpen }) => {
+    whichColorModal,
+    setData,
+    data,
+    setFullOpen,
+    theme,
+    setTheme }) => {
 
     const isPrimary = whichColorModal === "Principal";
     const dontNeedShowColor = loopColor => Boolean(loopColor === notIncludeColorPrimary || loopColor === notIncludeColorSecondary);
@@ -157,8 +182,10 @@ const ColorPicker = ({
 
                                         if(isPrimary) {
                                             setData({ ...data, primaryColor: ptColorName , hexValuePrimary: hexValue });
+                                            setTheme({...theme, colorP: translatedColor[ptColorName]})
                                         } else {
                                             setData({ ...data, secondaryColor: ptColorName, hexValueSecondary: hexValue });
+                                            setTheme({...theme, colorS: translatedColor[ptColorName]})
                                         }
                                         setFullOpen(false);
                                     }}

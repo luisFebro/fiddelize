@@ -5,7 +5,8 @@ import getPercentage from '../../utils/numbers/getPercentage';
 import Tooltip from './Tooltip';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 
-export default function PercCircleAndGift({ currScore, maxScore, showPercentage, playBeep }) {
+export default function PercCircleAndGift({
+    currScore, maxScore, showPercentage, playBeep, colorS }) {
     const percentageAchieved = getPercentage(maxScore, currScore);
     const needResizeFont = percentageAchieved.toString().includes(".");
 
@@ -13,7 +14,7 @@ export default function PercCircleAndGift({ currScore, maxScore, showPercentage,
         percentageCircle: {
             fontFamily: 'var(--mainFont)',
             fontSize: needResizeFont ? '1.0em' : 'text-em-1-3',
-            color: 'var(--themeSDark)'
+            color: "var(--themeSDark--" + colorS +")",
         }
     }
 
@@ -24,11 +25,10 @@ export default function PercCircleAndGift({ currScore, maxScore, showPercentage,
                 <div>
                     <p className="mt-3 text-title">Parabéns!<br />Você ganhou um prêmio.</p>
                     <ImgLoader
-                        id="app_gift"
+                        className="app_gift animated bounce"
                         src={imgLib.app_gift}
                         width={100}
                         height="auto"
-                        className="animated bounce"
                         style={{animationIterationCount: 20}}
                     />
                 </div>
@@ -36,11 +36,10 @@ export default function PercCircleAndGift({ currScore, maxScore, showPercentage,
                 <div>
                     <div className="position-relative mt-4">
                         <ImgLoader
-                            id="app_gift"
+                            className="app_gift animated bounce"
                             src={imgLib.app_gift}
                             width={100}
                             height="auto"
-                            className="animated bounce"
                             style={{opacity: '.5'}}
                         />
                         <p
@@ -78,7 +77,7 @@ export default function PercCircleAndGift({ currScore, maxScore, showPercentage,
                                         percent={percentageAchieved}
                                         radius={75} /*circle size*/
                                         borderWidth={20}
-                                        color="var(--themeS)" /*external line color*/
+                                        color={"var(--themeS--" + colorS +")"} /*external line color*/
                                         textStyle={styles.percentageCircle}
                                     />
                                 </div>

@@ -1,8 +1,9 @@
-:root, [primary-theme="default"] {
+:root {
     /*purple 900*/
     --themeP: #4a148c;
     --themePLight: #7c43bd;
     --themePDark: #12005e;
+
     /*surface (such as cards, sheets, and menus) and background*/
     --themeSurface: #f7f1e3; /*white variant*/
     --themeBackground: #4a148c; /*same as primary*/
@@ -11,5 +12,24 @@
     --mainWhite: #ecf0f1;
 
     --mainFont: 'Poppins', sans-serif;
+    /*THEMING*/
+    /*default*/
+    --themeP--default: #4a148c;
+    --themePLight--default: #7c43bd;
+    --themePDark--default: #12005e;
+    --themeBackground--default: #4a148c;
+    /*green*/
+    --themeP--green: #2ecc71;
+    --themePLight--green: #2ecc71;
+    --themePDark--green: #2ecc71;
+    --themeBackground--green: #2ecc71;
+    /*purple*/
+    --themeP--purple: #4a148c;
+    --themePLight--purple: #7c43bd;
+    --themePDark--purple: #12005e;
+    --themeBackground--purple: #4a148c;
+    /*END THEMING*/
 }
-
+/* THEMING */
+.theme-back--default { background-color: #4a148c;  }
+.theme-back--green { background-color: #2ecc71;  }

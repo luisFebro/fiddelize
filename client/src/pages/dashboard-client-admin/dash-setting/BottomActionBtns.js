@@ -179,9 +179,8 @@ const ContactComp = () => {
             {showTitle()}
             <div className="mx-4">
                 <ImgLoader
-                    id="app_chat_illustra"
+                    className="app_chat_illustra img-fluid"
                     src={imgLib.app_chat_illustra}
-                    className="img-fluid"
                     height="auto"
                     style={{maxHeight: !isSmall ? '210px' : '220px', width: '100%'}}
                     alt="chat online"

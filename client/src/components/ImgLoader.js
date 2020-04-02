@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Skeleton from '@material-ui/lab/Skeleton';
 import Spinner from './loadingIndicators/Spinner';
 import PropTypes from 'prop-types';
@@ -24,6 +24,12 @@ export default function ImgLoader({
     needLoader = true, }) {
 
     const [status, setStatus] = useState(true);
+
+    useEffect(() => {
+        if(src) {
+            setStatus(false);
+        }
+    }, [src])
 
     return(
         <div style={{margin: `${marginY || 0}px 0px` }} className="container-center">

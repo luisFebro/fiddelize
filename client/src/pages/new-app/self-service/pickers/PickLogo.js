@@ -9,11 +9,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
 import { uploadImages, updateImages } from '../../../../redux/actions/userActions';
-import { setImage } from '../../../../utils/storage/lForage';
 
 PickLogo.propTypes = {
     step: PropTypes.number,
-    setNextDisabled: PropTypes.func,
 }
 
 export default function PickLogo({
@@ -29,7 +27,6 @@ export default function PickLogo({
     })
     const { sizeSquare, sizeRect } = data;
 
-    setImage("data_logo", "biz_logo", "https://res.cloudinary.com/fiddelize/image/upload/h_150,w_150/v1588293249/you-vipp-shop-scvfdsfd.jpg")
     const dispatch = useStoreDispatch();
 
     const goNext = () => setNextDisabled(false);

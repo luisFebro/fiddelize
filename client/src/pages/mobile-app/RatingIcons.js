@@ -16,7 +16,6 @@ RatingIcons.propTypes = {
 export default function RatingIcons({ score, maxScore, selfMilestoneIcon, runName }) {
     const appPreviewIcon = gotArrayThisItem(iconNamesOnly, runName) ? runName : false;
     const selectedIcon = appPreviewIcon || selfMilestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
-    console.log("selectedIcon", selectedIcon);
 
     const paintStarsForScore = (score, maxScore) => {
         let indScore;

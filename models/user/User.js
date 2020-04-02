@@ -112,6 +112,7 @@ const clientAdminData = {
     selfMilestoneIcon: String,
     selfThemePColor: String,
     selfThemeSColor: String,
+    selfThemeBackColor: String,
     // end self-service
 
     totalClientUserScores: Number,

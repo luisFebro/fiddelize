@@ -71,15 +71,16 @@ function ClientMobileApp({ location, history }) {
     }, [needAppRegister])
 
     const showLogo = () => {
-        const logSrc = isAuthUser ? imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
+        const logoSrc = isAuthUser ? imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
+        const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
+
         return(
             <ImgLoader
-                id={isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"}
-                className="animated zoomIn slow shadow-elevation-white"
-                src={logSrc}
+                className={`${isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                src={logoSrc}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                width={selfBizLogoImg ? "" : 190}
-                height={selfBizLogoImg ? "" : 85}
+                width={isSquared ? 100 : 190}
+                height={isSquared ? 100 : 85}
             />
         );
     }
@@ -124,7 +125,7 @@ function ClientMobileApp({ location, history }) {
                     className="animated rubberBand delay-5s"
                 >
                     <ImgLoader
-                        id="app_start_shape"
+                        className="app_start_shape"
                         src={imgLib.app_start_shape}
                         width={460}
                         needLoader={false}

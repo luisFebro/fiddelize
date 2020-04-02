@@ -1,8 +1,22 @@
-:root, [secondary-theme="default"] {
+:root {
     /*cyan (greenish-blue) a400*/
     --themeS: #00e5ff;
     --themeSLight: #6effff;
     --themeSDark: #00b2cc;
+
+    /* THEMING */
+    /*default*/
+    --themeS--default: #00e5ff;
+    --themeSLight--default: #6effff;
+    --themeSDark--default: #00b2cc;
+    /*green*/
+    --themeS--green: #2ecc71;
+    --themeSLight--green: #2ecc71;
+    --themeSDark--green: #2ecc71;
+    /*purple*/
+    --themeS--purple: #4a148c;
+    --themeSLight--purple: #7c43bd;
+    --themeSDark--purple: #12005e;
 }
 
 /*Secondary colors are best to accent select parts of your UI.:

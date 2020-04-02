@@ -28,7 +28,10 @@ function ClientUserAppContent({
     useClientAdmin,
     needAppForCliAdmin,
     needAppForPreview,
-    runName, }) {
+    runName,
+    colorP,
+    colorS,
+    colorBack, }) {
 
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
@@ -106,7 +109,7 @@ function ClientUserAppContent({
 
     const showGreeting = () => (
         <section className="mt-3 position-relative animated slideInLeft slow">
-            <div className="ellipse" style={{backgroundColor: 'var(--themePLight)'}}></div>
+            <div className="ellipse" style={{backgroundColor: "var(--themePLight--" + colorP + ")"}}></div>
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
                 className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
@@ -135,6 +138,7 @@ function ClientUserAppContent({
             maxScore={maxScore}
             showPercentage={showMoreComps}
             playBeep={playBeep}
+            colorS={colorS}
         />
     );
 
@@ -191,6 +195,7 @@ function ClientUserAppContent({
             userName={name}
             needAppForCliAdmin={needAppForCliAdmin}
             needAppForPreview={needAppForPreview}
+            colorS={colorS}
         />
     );
 

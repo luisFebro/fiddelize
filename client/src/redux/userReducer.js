@@ -41,6 +41,7 @@ const currClientAdminData = {
     selfMilestoneIcon: clientAdminData && clientAdminData.selfMilestoneIcon,
     selfThemePColor: clientAdminData && clientAdminData.selfThemePColor,
     selfThemeSColor: clientAdminData && clientAdminData.selfThemeSColor,
+    selfThemeBackColor: clientAdminData && clientAdminData.selfThemeBackColor,
 }
 
 const currCentralAdminData = {

@@ -112,7 +112,7 @@ function Navbar({ history, location }) {
     );
 
     const showLogo = () => {
-        const logoSrc =  isAuthUser ? selfBizLogoImg : imgLib.app_fiddelize_logo;
+        const logoSrc =  isAuthUser ? imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
         const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
         const handleSize = side => {
@@ -131,8 +131,7 @@ function Navbar({ history, location }) {
         return(
             <Link to={isThisApp() ? "/mobile-app" : "/"}>
                 <ImgLoader
-                    id="app_fiddelize_logo"
-                    className="animated zoomIn slow shadow-elevation-white"
+                    className={`${isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
                     style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '5px' : '20px'}}
                     src={logoSrc}
                     alt="Logomarca Principal"

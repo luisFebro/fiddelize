@@ -6,7 +6,9 @@ export default function DashSetting() {
     return (
         <Fragment>
             <div>
-                <DashSectionTitle title="Configurações Gerais do Site" />
+                <DashSectionTitle
+                    title="Configurações Gerais do Site"
+                />
                 <UpdateConfigForm />
             </div>
         </Fragment>

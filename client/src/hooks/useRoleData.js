@@ -97,6 +97,7 @@ export const useClientAdmin = () => {
     const selfMilestoneIcon = clientAdmin && clientAdmin.selfMilestoneIcon;
     const selfThemePColor = clientAdmin && clientAdmin.selfThemePColor;
     const selfThemeSColor = clientAdmin && clientAdmin.selfThemeSColor;
+    const selfThemeBackColor = clientAdmin && clientAdmin.selfThemeBackColor;
 
     return({
         bizName,

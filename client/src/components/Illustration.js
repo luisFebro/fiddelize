@@ -69,9 +69,8 @@ export default function Illustration({
             <h2 className="text-center text-sub-title-upper">{title}</h2>
             <DivWrapper className="container-center my-5" style={{overflowX: 'hidden'}}>
                 <ImgLoader
-                    id="convert_any_illustration"
+                    className="convert_any_illustration image-center svg-elevation"
                     src={imgLib.convert_any_illustration(img)}
-                    className="image-center svg-elevation"
                     width=""
                     height=""
                     style={{...imgStyle, overflowX: 'hidden'}}

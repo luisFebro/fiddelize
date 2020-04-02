@@ -11,7 +11,9 @@ export default function DashSetting() {
     return (
         <Fragment>
             <div style={{marginTop: '16px'}}>
-                <DashSectionTitle title={<Title />} />
+                <DashSectionTitle
+                    title={<Title />}
+                />
             </div>
             <main className="mt-2">
                 <ShowConfigExpansiblePanel />

@@ -36,11 +36,10 @@ const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { //
         mySrc = reader.result;
         store.setItem(keyToSet, mySrc)
         .then(generatedUrl => {
-            const doc = document.querySelector(`#${keyToSet}`);
+            const doc = document.querySelector(`.${keyToSet}`);
             if(doc) doc.src = generatedUrl;
-        }) // it can not return a promise
+        })
     }
-
 }
 
 // export default function getImages(key, imageUrl) {

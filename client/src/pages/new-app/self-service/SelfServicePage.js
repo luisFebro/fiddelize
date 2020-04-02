@@ -7,6 +7,12 @@ import './style.scss';
 
 export default function SelfServicePage({ location, match }) {
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
+    const [theme, setTheme] = useState({
+        colorP: "default",
+        colorS: "default",
+        colorBack: "",
+    })
+    const { colorP, colorS, colorBack } = theme;
 
     const bizId = match.params.bizId;
     const bizCodeName = match.params.bizCodeName; // for image naming
@@ -37,11 +43,16 @@ export default function SelfServicePage({ location, match }) {
                         clientName={clientName}
                         isTest={isTest}
                         setLogoUrlPreview={setLogoUrlPreview}
+                        theme={theme}
+                        setTheme={setTheme}
                     />
                 </section>
                 <AppPreview
                     clientName={clientName}
                     logoUrlPreview={logoUrlPreview}
+                    colorP={colorP}
+                    colorS={colorS}
+                    colorBack={colorBack}
                 />
             </div>
         </div>

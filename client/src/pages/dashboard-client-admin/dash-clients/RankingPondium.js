@@ -73,11 +73,10 @@ export default function RankingPondium() {
             )}
             <div className="position-relative" style={{marginTop: '30px'}}>
                 <ImgLoader
-                    id="dash_podium"
+                    className="dash_podium shadow-elevation-black"
                     src={imgLib.dash_podium}
                     width={300}
                     height={250}
-                    className="shadow-elevation-black"
                 />
                 {showScores()}
             </div>

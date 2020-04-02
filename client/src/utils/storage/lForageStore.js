@@ -40,7 +40,8 @@ const imgLib = {
 export default imgLib;
 export { ImgLoader }
 
-// requires declare id to the img. The same name as the key.
+// requires declare className to the img.
+// The same name as the key. Priorly it was an ID, but there were issues when more then one src is need
 function handleStorage(coll, key, url, isFromInternet = false) {
     const urlPath = isFromInternet ? url : `${CLIENT_URL}/${url}`;
 
@@ -51,7 +52,7 @@ function handleStorage(coll, key, url, isFromInternet = false) {
             .then(res => console.log(`New image set to indexedDB. Collection: ${coll}, dataKey: ${key}`))
             .catch(err => console.log(err))
         } else {
-            const doc = document.querySelector(`#${key}`);
+            const doc = document.querySelector(`.${key}`);
             if(doc) doc.src = generatedUrl;
         }
     })

@@ -12,7 +12,6 @@ const isSmall = window.Helper.isSmallScreen();
 let lastIcon = "";
 export default function CarouselFlickity({ data }) {
     const [iconSelected, setIconSelected] = useState('star');
-    console.log("iconSelected", iconSelected);
     const dispatch = useStoreDispatch();
 
     useEffect(() => {

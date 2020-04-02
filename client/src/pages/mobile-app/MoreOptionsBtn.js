@@ -27,7 +27,13 @@ const lastChecked = lStorage("getItem", lastOption);
 const currChecked = lStorage("getItem", currOption);
 
 function MoreOptionsBtn({
-    history, playBeep, showMoreBtn, userName, needAppForCliAdmin, needAppForPreview }) {
+    history,
+    playBeep,
+    showMoreBtn,
+    userName,
+    needAppForCliAdmin,
+    needAppForPreview,
+    colorS, }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -83,7 +89,7 @@ function MoreOptionsBtn({
             {
                 icon: <ExitToAppIcon />,
                 name: 'Desconectar ►',
-                backColor: 'var(--themeSDark)',
+                backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && logout(dispatch);
                     playBeep();
@@ -92,7 +98,7 @@ function MoreOptionsBtn({
             {
                 icon: <ChatIcon />,
                 name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
-                backColor: 'var(--themeSDark)',
+                backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && setFullOpen(true);
                     playBeep();
@@ -101,7 +107,7 @@ function MoreOptionsBtn({
             {
                 icon: <LocalMallIcon />,
                 name: 'Seu Histórico ►',
-                backColor: 'var(--themeSDark)',
+                backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && setIsModalOpen(true);
                     playBeep();
@@ -143,7 +149,7 @@ function MoreOptionsBtn({
                 tooltipOpen={true}
                 size="large"
                 FabProps={{
-                    backgroundColor: 'var(--themeSDark)',
+                    backgroundColor: "var(--themeSDark--" + colorS + ")",
                     size: 'medium',
                     filter: `drop-shadow(.5px .5px 3px black)`, // still not working
                 }}

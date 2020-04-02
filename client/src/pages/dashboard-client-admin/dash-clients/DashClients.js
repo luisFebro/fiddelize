@@ -21,7 +21,9 @@ export default function DashClients() {
 
     return (
         <div>
-            <DashSectionTitle title={<Title bizName={bizName} />} />
+            <DashSectionTitle
+                title={<Title bizName={bizName} />}
+            />
             <NotificationArea userName={name} />
             <hr />
             <RankingPondium />

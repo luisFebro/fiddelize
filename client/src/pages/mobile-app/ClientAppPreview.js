@@ -1,15 +1,19 @@
 import React, { Fragment } from 'react';
 import { useClientAdmin } from '../../hooks/useRoleData';
-import {CLIENT_URL} from '../../config/clientUrl';
 import ClientUserAppContent from './content/ClientUserAppContent';
 import { withRouter } from 'react-router-dom';
 import getQueryByName from '../../utils/string/getQueryByName';
+import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
+
 const isSmall = window.Helper.isSmallScreen();
 
 function ClientAppPreview({ location }) {
     const runName = getQueryByName("runName", location.search);
     const clientName = getQueryByName("clientName", location.search);
-    const logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
+    let logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
+    const colorP = getQueryByName("colorP", location.search);
+    const colorS = getQueryByName("colorS", location.search);
+    const colorBack = getQueryByName("colorBack", location.search);
 
     const useProfile = () => ({
         role: 'cliente',
@@ -21,17 +25,17 @@ function ClientAppPreview({ location }) {
         lastScore: 20,
     });
 
-    const logo = "https://res.cloudinary.com/fiddelize/image/upload/h_150,w_150/v1588293249/you-vipp-shop-scvfdsfd.jpg" || logoUrlPreview || `${CLIENT_URL}/img/official-logo-name.png`;
-
+    const logoSrc = logoUrlPreview || imgLib.app_fiddelize_logo;
+    const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
     const showLogo = () => (
         <div className="container-center">
-            <img
-                className="animated zoomIn slow"
+            <ImgLoader
+                className={`${logoUrlPreview ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                src={logo}
+                src={logoSrc}
                 alt="Logomarca Principal"
-                width={logoUrlPreview ? "" : 190}
-                height={logoUrlPreview ? "" : 85}
+                width={isSquared ? 100 : 190}
+                height={isSquared ? 100 : 85}
             />
         </div>
     );
@@ -45,12 +49,15 @@ function ClientAppPreview({ location }) {
                 useClientAdmin={useClientAdmin}
                 needAppForPreview={true}
                 runName={runName}
+                colorP={colorP}
+                colorS={colorS}
+                colorBack={colorBack}
             />
         </Fragment>
     );
 
     return (
-        <div style={{overflowX: 'hidden', overflowY: 'auto', cursor: 'pointer'}}>
+        <div className={`theme-back--${colorBack || colorP}`} style={{overflowX: 'hidden', overflowY: 'auto', cursor: 'pointer'}}>
             {mainContent()}
         </div>
     );
