@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import lStorage from '../utils/storage/lStorage';
+import lStorage from '../../utils/storage/lStorage';
 // import { useClientUser } from '../hooks/useRoleData';
-import useDispatch, { showSnackbar } from '../hooks/useDispatch';
-import { updateUser } from '../redux/actions/userActions';
-import { readClientAdmin as readCliAdmin } from '../redux/actions/userActions';
+import useDispatch, { showSnackbar } from '../useDispatch';
+import { updateUser } from '../../redux/actions/userActions';
+import { readClientAdmin as readCliAdmin } from '../../redux/actions/userActions';
 
 const collection = { collection: "appSystem" };
 const appSystem = lStorage("getItems", collection);

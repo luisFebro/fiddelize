@@ -4,7 +4,7 @@ import { setLoadingProgress } from './globalActions';
 import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
 import lStorage from '../../utils/storage/lStorage';
-import { readClientAdmin } from '../../hooks/useRecoverSysData';
+import { readClientAdmin } from '../../hooks/roles-storage-and-data-recovery/useRecoverSysData';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 
@@ -15,7 +15,6 @@ export const loadUser = () => (dispatch, getState) => {
     .then(res => {
        // from user reducer
         const userId = res.data.profile._id;
-        console.log("userId", userId);
         readClientAdmin(dispatch, userId);
 
         dispatch({ type: 'AUTHENTICATE_USER_ONLY' });

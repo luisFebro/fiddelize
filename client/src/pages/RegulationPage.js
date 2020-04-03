@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ButtonMulti from '../components/buttons/material-ui/ButtonMulti';
-import { useStoreDispatch, useStoreState } from 'easy-peasy';
+import { useStoreDispatch } from 'easy-peasy';
 import { Link } from 'react-router-dom';
 import LoadingThreeDots from '../components/loadingIndicators/LoadingThreeDots';
 import Paper from '@material-ui/core/Paper';
@@ -9,26 +9,29 @@ import isThisApp from '../utils/window/isThisApp';
 import replaceVariablesInTxt from '../utils/string/replaceVariablesInTxt';
 import MomentDateWithIcon from '../components/date-time/MomentDateWithIcon';
 import getQueryByName from '../utils/string/getQueryByName';
+import { readClientAdmin } from '../redux/actions/userActions';
+import { appSystem } from '../hooks/useRoleData';
 import moment from 'moment';
+import { useProfile, useClientAdmin, useClientUser } from '../hooks/useRoleData';
+
 moment.updateLocale('pt-br');
 
 export default function RegulationPage({ location }) {
     const isClientAdmin = location.search.includes("cliAdmin=1");
     const bizCodeName = getQueryByName("bizCodeName", location.search);
 
-    let { client, clientAdmin, currentUser } = useStoreState(state => ({
-        currentUser: state.userReducer.cases.currentUser,
-        client: state.userReducer.cases.currentUser.clientUserData,
-        clientAdmin: state.userReducer.cases.clientAdmin
-    }))
+    const { userName } = useProfile();
+    const { bizName, bizRegulation, mainReward, maxScore } = useClientAdmin();
 
-    const userName = currentUser && currentUser.name.cap();
-    const bizName = clientAdmin && clientAdmin.bizName.cap();
-    const mainReward = clientAdmin && clientAdmin.mainReward.cap();
-    const rewardScore = clientAdmin && clientAdmin.rewardScore;
-    const levelScore = clientAdmin && clientAdmin.rewardScore / 5;
-    const regulationTxt = clientAdmin && clientAdmin.regulation.text;
-    const updatedAt = clientAdmin && clientAdmin.regulation.updatedAt;
+    const rewardScore = maxScore;
+    const levelScore = rewardScore && rewardScore / 5;
+
+    const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        const bizId = appSystem.businessId;
+        readClientAdmin(dispatch, bizId)
+    }, [])
 
     const variablesObj = {
         "nome-empresa": bizName,
@@ -38,16 +41,15 @@ export default function RegulationPage({ location }) {
         "ponto-nivel": `${levelScore} pontos`,
     }
 
-    const dispatch = useStoreDispatch();
 
     const showText = () => (
         <main>
             <Paper style={{backgroundColor: 'var(--mainWhite)'}}>
                 <div style={{minHeight: '400px'}} className="text-align py-4">
                     <pre className="text-normal" style={{whiteSpace: 'pre-line'}}>
-                        {regulationTxt.length === 0
+                        {bizRegulation.text.length === 0
                         ? <LoadingThreeDots />
-                        : replaceVariablesInTxt(regulationTxt, variablesObj, {needBold: true})}
+                        : replaceVariablesInTxt(bizRegulation.text, variablesObj, {needBold: true})}
                     </pre>
                 </div>
             </Paper>
@@ -91,7 +93,7 @@ export default function RegulationPage({ location }) {
     const showTimeStamp = () => (
          <MomentDateWithIcon
             style={{marginTop: 15, color: 'var(--mainWhite)'}}
-            date={updatedAt}
+            date={bizRegulation.updatedAt}
             msgIfNotValidDate="Nenhuma alteração."
         />
     );

@@ -2,13 +2,10 @@ import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import ScrollToTop from 'react-router-scroll-top';
 import isThisApp from '../utils/window/isThisApp';
-import setDataIfOnline from '../utils/storage/setDataIfOnline';
-import { clientAdminColl, userProfileColl } from '../utils/storage/lStorage';
-import { useProfile, useClientAdmin, useClientUser } from '../hooks/useRoleData';
-import useRecoverSysData from '../hooks/useRecoverSysData';
 // REDUX
 import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
+import { useRecoveryAndDataOffline } from '../hooks/roles-storage-and-data-recovery';
 import '../utils/globalHelpers';
 //STYLING
 import './scss/App.scss';
@@ -25,6 +22,7 @@ import MobileApp from './user-interfaces/MobileApp';
 //END UIs
 
 export default function App() {
+    useRecoveryAndDataOffline();
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
@@ -32,16 +30,7 @@ export default function App() {
         dispatch(loadUser(dispatch));
     }, [dispatch]);
 
-    // local storage and system
 
-    const { userId, role, userName } = useProfile();
-    const { bizId, userScore, userLastScore, userPurchase } = useClientUser(); // , userPurchase
-    const { bizName, bizPlan, bizCodeName, bizRegulation, maxScore, mainReward } = useClientAdmin();
-
-    setDataIfOnline(userProfileColl, { _id: userId, role, name: userName, currScore: userScore, lastScore: userLastScore, purchase: userPurchase });
-    setDataIfOnline(clientAdminColl, { bizName, bizPlan, bizCodeName, regulation: { text: bizRegulation.text, updatedAt: bizRegulation.updatedAt }, maxScore, mainReward });
-    useRecoverSysData(role, userId, { bizId: bizId });
-    // end local storage and system
     return (
         <BrowserRouter>
             <ScrollToTop>

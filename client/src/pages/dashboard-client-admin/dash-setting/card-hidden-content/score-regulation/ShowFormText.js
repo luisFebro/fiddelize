@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import { useStoreDispatch, useStoreState } from 'easy-peasy';
 import { updateUser } from '../../../../../redux/actions/userActions';
@@ -13,6 +13,7 @@ const isSmall = window.Helper.isSmallScreen();
 
 export default function RegulationText() {
     const [msgStatus, setMsgStatus] = useState("atualizado.")
+    const [disabledBtn, setDisabledBtn] = useState(false);
     const [data, setData] = useState({ regulationText: '' })
     const { regulationText } = data;
 
@@ -69,6 +70,7 @@ export default function RegulationText() {
     const updateRegText = onlyChangeStatus => {
         if(onlyChangeStatus) {
             setMsgStatus("salvando...");
+            setDisabledBtn(true);
         } else {
             const objToSend = {
                 "clientAdminData.regulation.text": regulationText,
@@ -78,17 +80,25 @@ export default function RegulationText() {
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 setMsgStatus("salvo");
+                setDisabledBtn(false);
                 const updatedText = res.data.clientAdminData.regulation.text;
                 setData({ regulationText: updatedText })
-
             })
         }
     }
 
     const showActionBtn = () => (
         <section className="d-flex justify-content-center mt-3">
-            <a href={`/regulamento?cliAdmin=1&bizCodeName=${bizCodeName}`}>
+            {disabledBtn && (
+                <p className="animated zoomIn text-normal text-center mt-2">
+                    Clique em qualquer lugar
+                    <br />
+                    fora da caixa para salvar.
+                </p>
+            )}
+            <Link className={`${disabledBtn && "disabledLink"} no-outline`} to={`/regulamento?cliAdmin=1&bizCodeName=${bizCodeName}`}>
                 <ButtonMulti
+                    disabled={disabledBtn ? true : false}
                     onClick={updateRegText}
                     color="var(--mainWhite)"
                     backgroundColor="var(--themeP)"
@@ -96,9 +106,9 @@ export default function RegulationText() {
                     iconFontAwesome={<FontAwesomeIcon icon="file-alt" style={faStyle} />}
                     textTransform='uppercase'
                 >
-                    Ver Resultado
+                    {disabledBtn ? "Aguardando..." : "Ver Resultado App"}
                 </ButtonMulti>
-            </a>
+            </Link>
         </section>
     );
 

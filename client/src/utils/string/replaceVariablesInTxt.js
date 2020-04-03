@@ -7,9 +7,9 @@ export default function replaceVariablesInTxt(text, variableObj, opts) {
         needBold = false,
         needMainPattern = true,
         mainPattern,
-        centerRegex = /\@((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-\,\.\;\"\']+))\@/gi,
-        italicRegex = /\~((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-\,\.\;\"\']+))\~/gi,
-        boldRegex = /\*((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-\,\.\;\"\']+))\*/gi,
+        centerRegex = /@((\w|\s|[áéíóúâêôãç]|[!?@&+-,.;"'])+)@/gi, // L
+        italicRegex = /~((\w|\s|[áéíóúâêôãç]|[!?@&+-,.;"'])+)~/gi,
+        boldRegex = /\*((\w|\s|[áéíóúâêôãç]|[!?@&+-,.;"'])+)\*/gi,
     } = opts;
 
     const keys = Object.keys(variableObj);
@@ -54,3 +54,8 @@ export default function replaceVariablesInTxt(text, variableObj, opts) {
 
     return newText;
 }
+
+/* COMMENTS
+n1: LESSON: it is not required to escape especial tokens if you are declaring them in a bracket like
+[\!\?\@\&\+\-\,\.\;\"\']. This throws an error of unecessary escape.
+*/

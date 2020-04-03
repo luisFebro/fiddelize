@@ -5,10 +5,9 @@ function combine(...objs) {
 // COLLECTIONS - different collections receives different numbers at the very end in the order of execution
 // value here are DEFAULT ones if need
 const collVal1 = { collection: "onceChecked", value: true };
-const collVal2 = { collection: "userProfile", value: ["123abc", "cliente", "...", 0, 0, { history: [{desc: "compra1", value: 0}], updatedAt: 0 }, "0"]} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
-const collVal3 = { collection: "appSystem" }
+const collVal2 = { collection: "userProfile", value: ["123abc", "...", "...", 0, 0, { history: [{desc: "compra1", value: 0}], updatedAt: 0 }, "0"]} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
+const coll3 = { collection: "appSystem" }
 const collVal4 = { collection: "clientAdmin", value: ["...", "empresa-teste-et2d@yd", "cortesia", 500, "free product", ["giftA", "giftB"], { text: "...", updatedAt: new Date() }, [{ name: "nome1" },{ name: "nome2" },{ name: "nome3"}]] }
-// const collVal3 = { collection: "clientAdminProfile", value: ["cliente-admin", undefined, 500, 0, 0] } // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 // END COLLECTIONS
 
 // PROPERTIES
@@ -25,12 +24,13 @@ const userProfileOp = combine(collVal2, { property: ["_id", "role", "name", "cur
 const clientAdminOp = combine(collVal4, { property: ["bizName", "bizCodeName", "bizPlan", "maxScore", "mainReward", "rewardList", "regulation", "highestScores"], })
 const userProfileColl = { collection: "userProfile" };
 const clientAdminColl = { collection: "clientAdmin" };
+const appSystemColl = coll3;
 
 const systemOp = (role, id) => {
     if(!role || !id) throw new Error("arguments missing...")
     // roleWhichDownloaded: cliente || cliente-admin || dev || rep
     const obj = { roleWhichDownloaded: role || 'cliente', businessId: id };
-    const res = { ...collVal3, newObj: obj };
+    const res = { ...coll3, newObj: obj };
 
     return res;
 }
@@ -45,6 +45,7 @@ export {
     confettiPlayOp,
     userProfileOp,
     clientAdminOp,
+    appSystemColl,
     userProfileColl,
     clientAdminColl,
     setInitialStateOp,

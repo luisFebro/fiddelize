@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { useStoreState } from 'easy-peasy';
+import { useProfile } from '../../../hooks/useRoleData';
 import isThisApp from '../../../utils/window/isThisApp';
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
-const gotToken = localStorage.getItem('token');
+// const gotToken = localStorage.getItem('token');
 
-const isApp = isThisApp();
 export default function PrivateRouteClientAdm({ component: Component, ...rest }) {
-    const { role } = useStoreState(state => ({
-        role: state.userReducer.cases.currentUser.role
-    }))
-
+    const { role } = useProfile();
     // const dispatch = useStoreDispatch();
 
     const alertAndRedirect = props => {
@@ -29,7 +25,7 @@ export default function PrivateRouteClientAdm({ component: Component, ...rest })
         <Route
             {...rest}
             render={props =>
-                gotToken && role === "cliente-admin" ? (
+                role === "cliente-admin" ? (
                     <Component {...props} />
                 ) :  alertAndRedirect(props)
             }

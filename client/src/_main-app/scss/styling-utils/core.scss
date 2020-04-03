@@ -3,7 +3,7 @@
     cursor: pointer;
 }
 
-.no-outline:focus {
+.no-outline:focus, .no-outline:hover {
     outline: none;
 }
 // Index

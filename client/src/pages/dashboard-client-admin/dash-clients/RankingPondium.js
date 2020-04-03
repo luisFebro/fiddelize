@@ -39,7 +39,7 @@ export default function RankingPondium() {
                         key={id}
                         className={`${css[id]} position-absolute animated zoomIn delay-5s text-main-container text-shadow-white`}
                     >
-                        {user === `nome${id + 1}`
+                        {name === `nome${id + 1}`
                         ? (
                             <FontAwesomeIcon
                                 icon="question"

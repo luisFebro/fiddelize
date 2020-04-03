@@ -9,7 +9,7 @@ import { clientAdminOp, userProfileOp } from '../../../utils/storage/lStorage';
 const Title = ({ bizName }) => {
     return(
         <span className="text-subtitle font-weight-bold">
-            Clientes da(o)
+            Clientes do(a)
             <br />
             <span className="text-title">{bizName && bizName.cap()}</span>
         </span>

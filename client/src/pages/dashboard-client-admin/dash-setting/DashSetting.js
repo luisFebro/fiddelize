@@ -27,7 +27,7 @@ const Title = () => {
     return(
         <Fragment>
             <span className="text-subtitle  font-weight-bold">
-                Configurações da(o)
+                Configurações do(a)
                 <br />
                 <span className="text-title">{bizName && bizName.cap()}</span>
             </span>

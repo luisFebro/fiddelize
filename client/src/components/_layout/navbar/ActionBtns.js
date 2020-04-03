@@ -3,7 +3,7 @@ import ButtonFab, {faStyle} from '../../../components/buttons/material-ui/Button
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreState } from 'easy-peasy';
+import { useClientAdmin } from '../../../hooks/useRoleData';
 import lStorage from '../../../utils/storage/lStorage';
 
 //AppSystem
@@ -11,16 +11,7 @@ const appSystem = lStorage("getItems", { collection: "appSystem"});
 const bizId = appSystem && appSystem.businessId;
 
 export default function ActionBtns({ role, location }) {
-    const { clientAdmin } = useStoreState(state => ({
-        clientAdmin: state.userReducer.cases.clientAdmin
-    }));
-
-    const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
-    console.log("bizCodeName", bizCodeName);
-    const bizName = clientAdmin && clientAdmin.bizName;
-    console.log("bizName", bizName);
-    const bizPlan = clientAdmin && clientAdmin.bizPlan;
-    console.log("bizPlan", bizPlan);
+    const { bizCodeName, bizName, bizPlan } = useClientAdmin();
 
     if(role === "cliente-admin") {
         return(
