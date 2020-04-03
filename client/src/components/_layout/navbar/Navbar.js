@@ -20,7 +20,7 @@ function Navbar({ history, location }) {
        isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
        role: state.userReducer.cases.currentUser.role,
        _idStaff: state.userReducer.cases.currentUser._id,
-       clientAdminData: state.userReducer.cases.clientAdmin.clientAdminData,
+       clientAdminData: state.userReducer.cases.clientAdmin
     }));
 
     const dispatch = useStoreDispatch();

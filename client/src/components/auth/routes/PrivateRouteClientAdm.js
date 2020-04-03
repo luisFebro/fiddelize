@@ -3,11 +3,11 @@ import { Route, Redirect } from "react-router-dom";
 import { useStoreState } from 'easy-peasy';
 import isThisApp from '../../../utils/window/isThisApp';
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
+const gotToken = localStorage.getItem('token');
 
 const isApp = isThisApp();
 export default function PrivateRouteClientAdm({ component: Component, ...rest }) {
-    const { isUserAuthenticated, role } = useStoreState(state => ({
-        isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
+    const { role } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role
     }))
 
@@ -29,7 +29,7 @@ export default function PrivateRouteClientAdm({ component: Component, ...rest })
         <Route
             {...rest}
             render={props =>
-                isUserAuthenticated && role === "cliente-admin" ? (
+                gotToken && role === "cliente-admin" ? (
                     <Component {...props} />
                 ) :  alertAndRedirect(props)
             }

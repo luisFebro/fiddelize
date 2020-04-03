@@ -19,7 +19,7 @@ export default function RegulationPage({ location }) {
     let { client, clientAdmin, currentUser } = useStoreState(state => ({
         currentUser: state.userReducer.cases.currentUser,
         client: state.userReducer.cases.currentUser.clientUserData,
-        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
+        clientAdmin: state.userReducer.cases.clientAdmin
     }))
 
     const userName = currentUser && currentUser.name.cap();

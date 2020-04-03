@@ -39,25 +39,24 @@ exports.mwBackup = (req, res, next) => {
 }
 // END MIDDLEWARE
 
-const assignToUndefined = (obj, keysArray) => {
-    return keysArray.forEach(key => {
-        obj[key] = undefined;
-    })
+const handleUserRole = (isAdmin, profile) => {
+    if(isAdmin) {
+        const cliAdminObj = profile.clientAdminData;
+        cliAdminObj.verificationPass = undefined;
+
+        return cliAdminObj;
+    } else {
+        profile.password = undefined;
+        profile.clientAdminData = undefined;
+        return profile;
+    }
 }
 
 exports.read = (req, res) => {
-    const role = req.profile.role;
-    const essencialData = req.query.onlyEssencialData;
-    const clientAdminRequest = essencialData && role === "cliente-admin";
-    if(clientAdminRequest) {
-        assignToUndefined(req.profile, [
-            "birthday", "password", "maritalStatus",
-            "role", "name", "email", "cpf", "phone",
-            "createdAt", "updatedAt", "__v"])
-    } else {
-        req.profile.password = undefined;
-    }
-    return res.json(req.profile);
+    const clientAdminRequest = req.query.clientAdminRequest;
+    const clientAdminData = req.profile.clientAdminData;
+
+    return res.json(handleUserRole(clientAdminRequest, req.profile));
 };
 
 exports.update = (req, res) => { // n2
@@ -163,6 +162,7 @@ const getQuery = (role) => {
         mainQuery
     }
 }
+
 exports.getList = (req, res) => {
     const skip = parseInt(req.query.skip);
     const role = req.query.role;
@@ -230,6 +230,19 @@ exports.readBackup = (req, res) => {
         res.json(data);
     });
 }
+
+/*ARCHIVES
+const assignToUndefined = (obj, keysArray) => {
+    return keysArray.forEach(key => {
+        obj[key] = undefined;
+    })
+}
+assignToUndefined(req.profile, [
+    "birthday", "password", "maritalStatus",
+    "role", "name", "email", "cpf", "phone",
+    "createdAt", "updatedAt", "__v"])
+
+*/
 
 // END LISTS
 

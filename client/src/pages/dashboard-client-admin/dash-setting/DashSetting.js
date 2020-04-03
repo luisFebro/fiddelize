@@ -22,7 +22,7 @@ export default function DashSetting() {
 }
 
 const Title = () => {
-    const bizName = useStoreState(state => state.userReducer.cases.clientAdmin.clientAdminData.bizName)
+    const bizName = useStoreState(state => state.userReducer.cases.clientAdmin.bizName)
 
     return(
         <Fragment>

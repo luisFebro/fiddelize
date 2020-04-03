@@ -25,7 +25,7 @@ const Div = styled.div`
 
 export default function ActionBtns({ data }) {
     const { clientAdminData } = useStoreState(state => ({
-        clientAdminData: state.userReducer.cases.clientAdmin.clientAdminData,
+        clientAdminData: state.userReducer.cases.clientAdmin
     }))
 
     return (

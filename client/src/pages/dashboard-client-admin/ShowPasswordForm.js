@@ -10,7 +10,7 @@ import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { updateUser } from '../../redux/actions/userActions';
 import { readUser } from '../../redux/actions/userActions';
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
-
+import { regulationText } from './regulationText';
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ShowPasswordForm({
@@ -83,6 +83,7 @@ export default function ShowPasswordForm({
 
         const dataToSend = {
             "clientAdminData.verificationPass": clientAdminData.verificationPass,
+            "clientAdminData.regulation.text": regulationText,
         };
 
         showSnackbar(dispatch, "Ok, registrando...")

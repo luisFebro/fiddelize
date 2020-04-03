@@ -20,9 +20,9 @@ const faStyle = {
 }
 
 export default function ShowExpansiblePanel() {
-    const { userData } = useStoreState(state => ({
+    const { userData, clientAdmin } = useStoreState(state => ({
         userData: state.userReducer.cases.currentUser,
-        // clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
+        clientAdmin: state.userReducer.cases.clientAdmin
     }));
 
 
@@ -43,7 +43,7 @@ export default function ShowExpansiblePanel() {
             id: 2,
             name: "Regulamento<br />de Pontos",
             leftIcon: <FontAwesomeIcon icon="list-ul" />,
-            hiddenContent: <HiddenScoreRegulation />,
+            hiddenContent: <HiddenScoreRegulation clientAdmin={clientAdmin} />,
         },
         {
             id: 3,

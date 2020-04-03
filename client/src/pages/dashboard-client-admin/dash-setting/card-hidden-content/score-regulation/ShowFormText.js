@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import { useStoreDispatch, useStoreState } from 'easy-peasy';
 import { updateUser } from '../../../../../redux/actions/userActions';
@@ -8,6 +8,7 @@ import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import ButtonMulti, { faStyle } from '../../../../../components/buttons/material-ui/ButtonMulti';
 import handleChange from '../../../../../utils/form/use-state/handleChange';
 import replaceVariablesInTxt from '../../../../../utils/string/replaceVariablesInTxt';
+
 const isSmall = window.Helper.isSmallScreen();
 
 export default function RegulationText() {
@@ -17,9 +18,9 @@ export default function RegulationText() {
 
     const { cliAdminId, regTxt, clientAdmin } = useStoreState(state => ({
         cliAdminId: state.userReducer.cases.currentUser._id,
-        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
+        clientAdmin: state.userReducer.cases.clientAdmin,
+        regTxt: state.userReducer.cases.clientAdmin.regulation.text,
         // currentUser: state.userReducer.cases.currentUser,
-        regTxt: state.userReducer.cases.clientAdmin.clientAdminData.regulation.text,
     }));
 
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
@@ -65,23 +66,28 @@ export default function RegulationText() {
         init(regTxt);
     }, [regTxt])
 
-    const updateRegText = () => {
-        setMsgStatus("salvando...");
-        // Testing
-        setTimeout(() => setMsgStatus("salvo"), 3000);
-        // end
+    const updateRegText = onlyChangeStatus => {
+        if(onlyChangeStatus) {
+            setMsgStatus("salvando...");
+        } else {
+            const objToSend = {
+                "clientAdminData.regulation.text": regulationText,
+                "clientAdminData.regulation.updatedAt": new Date(),
+            }
+            updateUser(dispatch, objToSend, cliAdminId)
+            .then(res => {
+                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                setMsgStatus("salvo");
+                const updatedText = res.data.clientAdminData.regulation.text;
+                setData({ regulationText: updatedText })
 
-        // const objToSend = { regulationText }
-        // updateUser(dispatch, objToSend, cliAdminId)
-        // .then(res => {
-        //     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-        //     setMsgStatus("salvo");
-        // })
+            })
+        }
     }
 
     const showActionBtn = () => (
         <section className="d-flex justify-content-center mt-3">
-            <Link to={`/regulamento?cliAdmin=1&bizCodeName=${bizCodeName}`}>
+            <a href={`/regulamento?cliAdmin=1&bizCodeName=${bizCodeName}`}>
                 <ButtonMulti
                     onClick={updateRegText}
                     color="var(--mainWhite)"
@@ -92,7 +98,7 @@ export default function RegulationText() {
                 >
                     Ver Resultado
                 </ButtonMulti>
-            </Link>
+            </a>
         </section>
     );
 
@@ -114,7 +120,8 @@ export default function RegulationText() {
                     style: styles.fieldFormValue,
                 }}
                 value={regulationText === "" ? "Carregando..." : regulationText}
-                onChange={e => { handleChange(setData, data)(e); updateRegText(); }}
+                onChange={e => { handleChange(setData, data)(e); updateRegText(true); }}
+                onBlur={() => updateRegText(false)}
                 variant="outlined"
                 fullWidth
             />

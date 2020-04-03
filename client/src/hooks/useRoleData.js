@@ -8,8 +8,8 @@ export const useProfile = () => {
     const role = currentUser && currentUser.role;
 
     return({
-        role,
         userId,
+        role,
         userName,
     })
 };
@@ -34,16 +34,22 @@ export const useClientUser = () => {
 
 export const useClientAdmin = () => {
     const { clientAdmin } = useStoreState(state => ({
-        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
+        clientAdmin: state.userReducer.cases.clientAdmin
     }))
 
-    const maxScore = clientAdmin && clientAdmin.rewardScore;
+    const bizName = clientAdmin && clientAdmin.bizName;
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
+    const bizPlan = clientAdmin && clientAdmin.bizPlan;
+    const bizRegulation = clientAdmin && clientAdmin.regulation;
+    const maxScore = clientAdmin && clientAdmin.rewardScore;
     const mainReward = clientAdmin && clientAdmin.mainReward;
 
     return({
-        maxScore,
+        bizName,
+        bizPlan,
         bizCodeName,
+        bizRegulation,
+        maxScore,
         mainReward,
     });
 }

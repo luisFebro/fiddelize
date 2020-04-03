@@ -14,7 +14,6 @@ const appSystem = lStorage("getItems", { collection: "appSystem"});
 console.log("appSystem", appSystem);
 
 const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
-console.log("isAdminLoggedIn", isAdminLoggedIn);
 // Valid links:
 // general: site/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1
 // custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1

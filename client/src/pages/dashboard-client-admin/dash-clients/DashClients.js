@@ -1,9 +1,10 @@
 import React from 'react';
 import ClientsHistory from './clients-history/ClientsHistory';
 import DashSectionTitle from '../../DashSectionTitle';
-import { useStoreState } from 'easy-peasy';
 import RankingPondium from './RankingPondium';
 import NotificationArea from './notification-area/NotificationArea';
+import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
+import { clientAdminOp, userProfileOp } from '../../../utils/storage/lStorage';
 
 const Title = ({ bizName }) => {
     return(
@@ -16,10 +17,8 @@ const Title = ({ bizName }) => {
 };
 
 export default function DashClients() {
-    const { bizName, userName } = useStoreState(state => ({
-        userName: state.userReducer.cases.currentUser.name,
-        bizName: state.userReducer.cases.clientAdmin.clientAdminData.bizName,
-    }))
+    const { bizName } = useClientAdmin();
+    const { userName } = useProfile();
 
     return (
         <div>

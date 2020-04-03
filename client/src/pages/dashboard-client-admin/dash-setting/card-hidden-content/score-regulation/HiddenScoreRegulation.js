@@ -3,10 +3,14 @@ import MomentDateWithIcon from '../../../../../components/date-time/MomentDateWi
 import ShowFormText from './ShowFormText';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import "./HiddenScoreRegulation.scss";
+import PropTypes from 'prop-types';
 
+HiddenScoreRegulation.propTypes = {
+    clientAdmin: PropTypes.object,
+}
 // DEFINE IF(updatedAt === createdAt) === NO CHANGES MADE....
 
-export default function HiddenScoreRegulation() {
+export default function HiddenScoreRegulation({ clientAdmin }) {
     const [openCommands, setOpenCommands] = useState(false);
 
     const showTitleAndExplanation = () => (
@@ -93,7 +97,7 @@ export default function HiddenScoreRegulation() {
             <ShowFormText />
             <MomentDateWithIcon
                 style={{marginTop: 15}}
-                date={undefined}
+                date={clientAdmin && clientAdmin.regulation.updatedAt}
                 msgIfNotValidDate="Nenhuma alteração."
             />
         </div>

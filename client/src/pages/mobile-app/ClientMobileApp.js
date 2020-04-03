@@ -25,20 +25,17 @@ import lStorage, {
     confettiPlayOp,
     userProfileOp,
     clientAdminOp, needAppRegisterOp } from '../../utils/storage/lStorage';
-import setDataIfOnline from '../../utils/storage/setDataIfOnline';
 import Register from '../../components/auth/Register';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { logout } from '../../redux/actions/authActions';
 import AOS from 'aos';
-import { updateUser } from '../../redux/actions/userActions';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
 // import ImageLogo from '../../components/ImageLogo';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 //AppSystem
-const appSystemCol = { collection: "appSystem"};
-const appSystem = lStorage("getItems", appSystemCol);
+const appSystemCollection = { collection: "appSystem"};
+const appSystem = lStorage("getItems", appSystemCollection);
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -53,9 +50,8 @@ function ClientMobileApp({ history }) {
 
     const { userId, role, userName } = useProfile();
     const { bizId, userScore, userLastScore, userPurchase } = useClientUser();
-    const { bizCodeName, maxScore, mainReward } = useClientAdmin();
-    setDataIfOnline(clientAdminOp, { maxScore, mainReward });
-    setDataIfOnline(userProfileOp, { userName, userScore, userLastScore, userPurchase, bizId });
+    const { bizCodeName, maxScore } = useClientAdmin();
+    // setDataIfOnline(userProfileOp, { userName, userScore, userLastScore, userPurchase });
 
     const dispatch = useStoreDispatch();
 
@@ -74,24 +70,6 @@ function ClientMobileApp({ history }) {
     }
 
     checkIfElemIsVisible("#rules", setShowMoreBtn)
-        // CONTINUES systemOp Logics here
-    useEffect(() => {
-        if(bizId === "0" && role === "cliente") {
-            const idFromSystem = appSystem && appSystem.businessId;
-            const objToSend = { "clientUserData.bizId": idFromSystem }
-
-            updateUser(dispatch, objToSend, userId)
-            .then(res => {
-                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                // showSnackbar(dispatch, res.data.msg, 'success');
-            })
-        }
-
-        if(!appSystem && role && bizId) {
-            const updatedValues = {roleWhichDownloaded: role, businessId: bizId };
-            lStorage("setItems", {...appSystemCol, newObj: updatedValues})
-        }
-    }, [bizId, userId, role, appSystem])
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
@@ -261,9 +239,9 @@ function ClientMobileApp({ history }) {
                 <br/>
                 <strong className="text-title">{userName && userName.cap()}</strong><br />
             </span>
-            <div className="container-center">
-                <Link to={`/${bizCodeName}/cliente-admin/painel-de-controle`}>
-                    <RadiusBtn title="acessar" className="mr-2"/>
+            <div className="container-center mt-4">
+                <Link className="mr-3" to={`/${bizCodeName}/cliente-admin/painel-de-controle`}>
+                    <RadiusBtn title="acessar"/>
                 </Link>
                 <span>
                     <RadiusBtn

@@ -59,7 +59,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
         role: state.userReducer.cases.currentUser.role,
         bizId: state.userReducer.cases.clientAdmin._id,
         client: state.userReducer.cases.currentUser.clientUserData,
-        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
+        clientAdmin: state.userReducer.cases.clientAdmin,
         userId: state.userReducer.cases.currentUser._id,
     }))
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;

@@ -7,9 +7,9 @@ export default function replaceVariablesInTxt(text, variableObj, opts) {
         needBold = false,
         needMainPattern = true,
         mainPattern,
-        centerRegex = /\@((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-])+)\@/gi,
-        italicRegex = /\~((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-])+)\~/gi,
-        boldRegex = /\*((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-])+)\*/gi,
+        centerRegex = /\@((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-\,\.\;\"\']+))\@/gi,
+        italicRegex = /\~((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-\,\.\;\"\']+))\~/gi,
+        boldRegex = /\*((\w|\s|[áéíóúâêôãç]|[\!\?\@\&\+\-\,\.\;\"\']+))\*/gi,
     } = opts;
 
     const keys = Object.keys(variableObj);

@@ -58,10 +58,10 @@ const regulationData = {
     text: {
         type: String,
         trim: true,
-        default: "some text",
-    }
+    },
+    updatedAt: { type: Date }
 }
-const RegulationSchema = new Schema(regulationData, { _id: false, timestamps: true });
+const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true is not working here
 
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
@@ -70,8 +70,8 @@ const clientAdminData = {
     bizWhatsapp: Number,
     bizPlan: {
         type: String,
-        default: "free",
-        enum: ["free", "lite", "gold"]
+        default: "cortesia",
+        enum: ["cortesia", "prata", "ouro"]
     },
 
     // self-service

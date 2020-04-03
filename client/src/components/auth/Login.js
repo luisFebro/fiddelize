@@ -7,6 +7,7 @@ import Card from '@material-ui/core/Card';
 import { showComponent } from '../../redux/actions/componentActions';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { loginEmail } from '../../redux/actions/authActions';
+import { readUser } from '../../redux/actions/userActions';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import PropTypes from 'prop-types';
 import KeypadButton from '../modals/keypad';

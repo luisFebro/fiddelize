@@ -12,12 +12,15 @@ const bizId = appSystem && appSystem.businessId;
 
 export default function ActionBtns({ role, location }) {
     const { clientAdmin } = useStoreState(state => ({
-        clientAdmin: state.userReducer.cases.clientAdmin.clientAdminData,
+        clientAdmin: state.userReducer.cases.clientAdmin
     }));
 
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
+    console.log("bizCodeName", bizCodeName);
     const bizName = clientAdmin && clientAdmin.bizName;
+    console.log("bizName", bizName);
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
+    console.log("bizPlan", bizPlan);
 
     if(role === "cliente-admin") {
         return(

@@ -23,19 +23,19 @@ const currUserData = {
     }
 }
 
+// This data is read in the authAction and requires the valid bizId, otherwise default values will be set...lStorage
+// if(appSystem) { readClientAdmin(dispatch, appSystem.businessId); }
 const currClientAdminData = {
-    clientAdminData: {
-        bizName: clientAdminData && clientAdminData.bizName,
-        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
-        bizPlan: clientAdminData && clientAdminData.bizPlan,
-        rewardScore: clientAdminData && clientAdminData.maxScore,
-        mainReward: clientAdminData && clientAdminData.mainReward,
-        rewardList: clientAdminData && clientAdminData.rewardList,
-        regulation: {
-            text: clientAdminData && clientAdminData.regulation.text,
-            updatedAt: clientAdminData && clientAdminData.regulation.updatedAt,
-        },
-    }
+    bizName: clientAdminData && clientAdminData.bizName,
+    bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+    bizPlan: clientAdminData && clientAdminData.bizPlan,
+    rewardScore: clientAdminData && clientAdminData.maxScore,
+    mainReward: clientAdminData && clientAdminData.mainReward,
+    rewardList: clientAdminData && clientAdminData.rewardList,
+    regulation: {
+        text: clientAdminData && clientAdminData.regulation.text,
+        updatedAt: clientAdminData && clientAdminData.regulation.updatedAt,
+    },
 }
 
 const highestScoreData = clientAdminData && clientAdminData.highestScores;

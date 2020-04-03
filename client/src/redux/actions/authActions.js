@@ -4,8 +4,7 @@ import { setLoadingProgress } from './globalActions';
 import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
 import lStorage from '../../utils/storage/lStorage';
-import { readClientAdmin } from './userActions';
-const appSystem = lStorage("getItems", { collection: "appSystem"});
+import { readClientAdmin } from '../../hooks/useRecoverSysData';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 
@@ -15,13 +14,19 @@ export const loadUser = () => (dispatch, getState) => {
     axios.get('/api/auth/user', tokenConfig(getState))
     .then(res => {
        // from user reducer
+        const userId = res.data.profile._id;
+        console.log("userId", userId);
+        readClientAdmin(dispatch, userId);
+
         dispatch({ type: 'AUTHENTICATE_USER_ONLY' });
         dispatch({ type: 'USER_READ', payload: res.data.profile });
-        if(appSystem) { readClientAdmin(dispatch, appSystem.businessId); }
-        // readUser(dispatch, res.data.profile);
     })
     .catch(err => {
-        if(err.response && err.response.data && err.response.data.msg && err.response.data.msg.length !== 0) {
+        const gotObj = err.response && err.response.data;
+        if(gotObj && err.response.status === 500) {
+            showSnackbar(dispatch, "Não foi possível mostrar informações do servidor. Verifique sua conexão.")
+        }
+        if(gotObj && err.response.data.msg && err.response.data.msg.length !== 0) {
             showSnackbar(dispatch, err.response.data.msg, 'warning', 10000)
             logout(dispatch, false);
         }
@@ -34,8 +39,11 @@ export const loginEmail = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
-        readUser(dispatch, res.data.authUserId);
-        if(appSystem) { readClientAdmin(dispatch, appSystem.businessId); }
+
+        readUser(dispatch, res.data.authUserId)
+
+        readClientAdmin(dispatch, res.data.authUserId);
+
         dispatch({ type: 'LOGIN_EMAIL', payload: res.data.token });
         setLoadingProgress(dispatch, false);
         return res;
