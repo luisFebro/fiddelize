@@ -26,11 +26,11 @@ const userProfileColl = { collection: "userProfile" };
 const clientAdminColl = { collection: "clientAdmin" };
 const appSystemColl = coll3;
 
-const systemOp = (role, id) => {
+const setSystemOp = (role, id) => {
     if(!role || !id) throw new Error("arguments missing...")
     // roleWhichDownloaded: cliente || cliente-admin || dev || rep
     const obj = { roleWhichDownloaded: role || 'cliente', businessId: id };
-    const res = { ...coll3, newObj: obj };
+    const res = { ...appSystemColl, newObj: obj };
 
     return res;
 }
@@ -50,7 +50,7 @@ export {
     clientAdminColl,
     setInitialStateOp,
     needAppRegisterOp,
-    systemOp,
+    setSystemOp,
 }
 
 export const needSetTrueLocalKey = (lastChecked, currChecked) => {

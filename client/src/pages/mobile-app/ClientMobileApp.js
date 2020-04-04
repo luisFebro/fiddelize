@@ -21,7 +21,6 @@ import { confetti } from '../../keyframes/animations-js/confetti/confetti';
 import getDayGreetingBr from '../../utils/getDayGreetingBr';
 import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
 import lStorage, {
-    systemOp,
     confettiPlayOp,
     userProfileOp,
     clientAdminOp, needAppRegisterOp } from '../../utils/storage/lStorage';

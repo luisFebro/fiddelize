@@ -6,14 +6,12 @@ import PwaInstaller from '../components/pwa-installer/PwaInstaller';
 import { CLIENT_URL } from '../config/clientUrl';
 import checkIfElemIsVisible from '../utils/window/checkIfElemIsVisible';
 import getQueryByName from '../utils/string/getQueryByName';
-import lStorage, { systemOp } from '../utils/storage/lStorage';
+import lStorage, { setSystemOp } from '../utils/storage/lStorage';
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 const appSystem = lStorage("getItems", { collection: "appSystem"});
-console.log("appSystem", appSystem);
 
-const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
 // Valid links:
 // general: site/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1
 // custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1
@@ -28,11 +26,9 @@ export default function DownloadApp({ match, location }) {
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
     const isValidRoleType = isClientAdmin || isClientUser;
 
-    useEffect(() => {
-        const newObj = systemOp.newObj;
-        if(isClientAdmin) { lStorage("setItems", systemOp("cliente-admin", bizId)); }
-        if(isClientUser && !isAdminLoggedIn) { lStorage("setItems", systemOp("cliente", bizId)); }
-    }, [isClientAdmin, isClientUser])
+    const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
+    if(isClientAdmin) { lStorage("setItems", setSystemOp("cliente-admin", bizId)); }
+    if(isClientUser && !isAdminLoggedIn) { lStorage("setItems", setSystemOp("cliente", bizId)); } // L
 
     useEffect(() => {
         checkIfElemIsVisible("#target", setRun, true);
@@ -158,6 +154,9 @@ export default function DownloadApp({ match, location }) {
     );
 }
 
+/* COMMENTS
+n1: LESSON: lStorage does not work with useEffect. just declare in the function body normally...
+*/
 /*
 <p>{!isInstalled ? parse("<br /><br />Foi instalado.<br/>Visite sua galeria<br />de Apps") : ""}</p>
 FOR TESTING VERSIONS: <span className="text-right">{"t5"}</span>
