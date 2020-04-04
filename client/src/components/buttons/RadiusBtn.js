@@ -12,7 +12,7 @@ export default function RadiusBtn({
             borderRadius: '20px',
             backgroundColor: backgroundColor || 'var(--themeSDark)',
             outline: "none",
-            fontSize: fontSize,
+            fontSize: fontSize || '28px',
         }
     }
     return (

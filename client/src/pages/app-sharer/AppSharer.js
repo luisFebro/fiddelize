@@ -28,6 +28,9 @@ export default function AppSharer({ location, match }) {
     })
 
     const { clientName, isSharingBtnsOpen, generatedLink } = data;
+    console.log("clientName", clientName);
+    console.log("isSharingBtnsOpen", isSharingBtnsOpen);
+    console.log("generatedLink", generatedLink);
 
     const role = getQueryByName("role", location.search);
     const bizCodeName = match.params.bizCodeName;
@@ -86,7 +89,7 @@ export default function AppSharer({ location, match }) {
             <p className="text-hero text-center">
                 {!isSmall
                 ? <span>Compartilhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>
-                : <span>Comparti-<br />-lhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>}
+                : <span>Comparti-<br />lhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>}
             </p>
             <p>
                 {role === "cliente-admin" ?
@@ -103,14 +106,12 @@ export default function AppSharer({ location, match }) {
         </header>
     );
 
-    const handleGeneratedLink = (contactSharingLink = false) => {
+    const handleGeneratedLink = () => {
         let link;
         clientName
         ? link = `${CLIENT_URL}/baixe-app/${addSpace(clientName)}?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
         : link = `${CLIENT_URL}/baixe-app?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
-        // if(contactSharingLink) {
-        //     link = CLIENT_URL
-        // }
+
         setData({...data, clientName: clientName.cap() ,isSharingBtnsOpen: true, generatedLink: link })
     }
 

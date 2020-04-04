@@ -38,7 +38,6 @@ export default function ShowPasswordForm({
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                     const passValue = res.data.verificationPass;
-                    console.log("passValue", passValue);
                     const keyName = "clientAdminData.verificationPass";
 
                     setValObjWithStr(data, keyName, passValue);
