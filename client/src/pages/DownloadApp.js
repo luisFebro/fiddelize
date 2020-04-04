@@ -19,13 +19,15 @@ const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-
 // custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1
 
 export default function DownloadApp({ match, location }) {
-    const [userName, setUserName] = useState(match.params.userName);
+    let [userName, setUserName] = useState(match.params.userName);
+    userName = userName && userName.replace("+", " ");
     const [run, setRun] = useState(false);
     const bizName = getQueryByName("negocio", location.search);
     const bizId = getQueryByName("id", location.search);
     const isClientAdmin = location.search.includes("admin=1");
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
     const isValidRoleType = isClientAdmin || isClientUser;
+
     useEffect(() => {
         const newObj = systemOp.newObj;
         if(isClientAdmin) { lStorage("setItems", systemOp("cliente-admin", bizId)); }
