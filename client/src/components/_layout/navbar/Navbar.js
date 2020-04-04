@@ -6,9 +6,9 @@ import { CLIENT_URL } from '../../../config/clientUrl';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import isThisApp from '../../../utils/window/isThisApp';
-import ActionBtns from './ActionBtns';
 import './NavbarLayout.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useClientAdmin } from '../../../hooks/useRoleData';
 
 const isSmall = window.Helper.isSmallScreen();
 const gotToken = localStorage.getItem("token");
@@ -16,12 +16,13 @@ const gotToken = localStorage.getItem("token");
 function Navbar({ history, location }) {
     // const [showSkeleton, setShowSkeleton] = useState(true);
     const [isSearchOpen, setSearchOpen] = useState(false);
-    const { isUserAuthenticated, role, _idStaff, clientAdminData } = useStoreState(state => ({
+    const { isUserAuthenticated, role, _idStaff } = useStoreState(state => ({
        isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
        role: state.userReducer.cases.currentUser.role,
        _idStaff: state.userReducer.cases.currentUser._id,
-       clientAdminData: state.userReducer.cases.clientAdmin
     }));
+
+    const { bizCodeName } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
@@ -39,7 +40,7 @@ function Navbar({ history, location }) {
                 padding: '2px 5px',
                 borderRadius: '20px',
                 backgroundColor: 'var(--themeSDark)',
-                outline: "none"
+                outline: "none",
             }}
             onClick={() => logout(dispatch)}
         >
@@ -49,7 +50,7 @@ function Navbar({ history, location }) {
 
     const titleByRoleHandler = () => (
         <Fragment>
-            {!gotToken ? (
+            {!gotToken || !role ? (
                 <Link
                     to="/acesso/verificacao"
                     className={["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(locationNow) ? "disabled-link" : "nav-link"}
@@ -62,32 +63,29 @@ function Navbar({ history, location }) {
                     ) : null}
                 </Link>
             ) : (
-                <div className="text-white">
+                <div>
                     {role === "admin" &&
                     <Fragment>
-                        <Link to="/admin/painel-de-controle">
-                            Logado: Admin <FontAwesomeIcon icon="lock" style={{fontSize: '1.9rem'}} />
+                        <Link to="/admin/painel-de-controle" className="text-cyan-light">
+                            Admin <FontAwesomeIcon icon="lock" style={{fontSize: '1.9rem'}} />
                         </Link>
                         {btnLogout()}
                     </Fragment>}
 
-                    {role === "cliente-admin" &&
+                    {role === "cliente-admin" && // logout and actionbtns moved to DashboardClientAdmin.js
                     <Fragment>
-                        <ActionBtns role="cliente-admin" location={locationNow} />
                         <Link
-                            style={{
-                                color: 'var(--themeS)',
-                                display: locationNow.includes("/nova-senha-verificacao") ? "none" : "block",
-                            }}
-                            to={`/${clientAdminData && clientAdminData.bizCodeName}/cliente-admin/painel-de-controle`}
+                            to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                            style={{ display: !locationNow.includes("/cliente-admin/painel-de-controle") ? "block" : "none"}}
+                            className="text-cyan-light"
                         >
-                            {btnLogout()}
+                            Cli-Admin <FontAwesomeIcon icon="lock" style={{fontSize: '1.9rem'}} />
                         </Link>
                     </Fragment>}
 
                     {role === "cliente" &&
                         <Fragment>
-                            Cliente
+                            <span className="text-cyan-light">Cliente</span>
                             {btnLogout()}
                         </Fragment>
                     }

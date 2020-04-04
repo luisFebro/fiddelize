@@ -15,6 +15,7 @@
     --niceUiYellow: #fbc531;
     --mainPurple: #4a148c;
     --mainCyan: #00b2cc;
+    --mainCyanLight: #00e5ff;
 }
 
 .text-red {
@@ -59,4 +60,8 @@
 
 .text-cyan {
     color: var(--mainCyan);
+}
+
+.text-cyan-light {
+    color: var(--mainCyanLight);
 }
