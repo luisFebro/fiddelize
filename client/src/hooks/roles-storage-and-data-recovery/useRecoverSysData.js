@@ -8,7 +8,7 @@ import { readClientAdmin as readCliAdmin } from '../../redux/actions/userActions
 const collection = { collection: "appSystem" };
 const appSystem = lStorage("getItems", collection);
 const bizSysId = appSystem && appSystem.businessId;
-console.log("bizSysId", bizSysId);
+
 const roleDownloaded = appSystem && appSystem.roleWhichDownloaded;
 
 const needUpdateSys = !bizSysId || !roleDownloaded;

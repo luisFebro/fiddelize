@@ -22,9 +22,9 @@ export const loadUser = () => (dispatch, getState) => {
     })
     .catch(err => {
         const gotObj = err.response && err.response.data;
-        if(gotObj && err.response.status === 500) {
-            showSnackbar(dispatch, "Não foi possível mostrar informações do servidor. Verifique sua conexão.")
-        }
+        // if(gotObj && err.response.status === 500) {
+        //     showSnackbar(dispatch, "Não foi possível mostrar informações do servidor. Verifique sua conexão.")
+        // }
         if(gotObj && err.response.data.msg && err.response.data.msg.length !== 0) {
             showSnackbar(dispatch, err.response.data.msg, 'warning', 10000)
             logout(dispatch, false);

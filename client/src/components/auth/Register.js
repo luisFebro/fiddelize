@@ -9,6 +9,7 @@ import cpfMaskBr from '../../utils/validation/masks/cpfMaskBr';
 import getDayMonthBr from '../../utils/dates/getDayMonthBr';
 import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
@@ -29,7 +30,7 @@ import MoneyIcon from '@material-ui/icons/Money';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
-import ButtonMulti from '../buttons/material-ui/ButtonMulti';
+import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -44,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
+function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn = false }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
@@ -171,11 +172,11 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
     const showLoginForm = needLoginBtn => (
         needLoginBtn && (
             <div
-                className="text-white position-absolute text-small font-weight-bold p-2"
-                style={{top: isSmall ? '105px' : '130px', left: '50px'}}
+                className="animated zoomIn delay-2s position-absolute p-2"
+                style={{top: isSmall ? '90px' : '115px', right: '30px'}}
             >
-                <p style={{whiteSpace: 'nowrap'}}>Já é cadastrado?{" "}
-                <RadiusBtn title="Faça login" onClick={() => setLoginOrRegister("login")} /></p>
+                <p className="text-white font-weight-bold text-small text-shadow" style={{whiteSpace: 'nowrap'}}>Já é cadastrado?{" "}
+                <RadiusBtn size="small" title="Faça login" onClick={() => setLoginOrRegister("login")} /></p>
             </div>
         )
     );
@@ -188,7 +189,6 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themePDark)"
             />
-            {showLoginForm(needLoginBtn)}
         </div>
     );
 
@@ -407,7 +407,7 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"
-                iconFontAwesome="fas fa-save"
+                iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle}/>}
                 textTransform='uppercase'
             >
                 Registrar
@@ -416,14 +416,17 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn }) {
     );
 
     return (
-        <Card
-            className="animated zoomIn fast card-elevation"
-            style={styles.card}
-        >
-            {showTitle()}
-            {showForm()}
-            {showButtonActions()}
-        </Card>
+        <div className="my-5 position-relative">
+            <Card
+                className="animated zoomIn fast card-elevation"
+                style={styles.card}
+            >
+                {showTitle()}
+                {showForm()}
+                {showButtonActions()}
+            </Card>
+            {showLoginForm(needLoginBtn)}
+        </div>
     );
 }
 

@@ -194,7 +194,7 @@ function ClientMobileApp({ history }) {
     );
 
     const showLogin = () => (
-        <div className="container-center" style={{margin: '80px 0 0'}}>
+        <div className="container-center">
             <Login isClientUser={role === "cliente" ? true : false} setLoginOrRegister={setLoginOrRegister} />
         </div>
     );
@@ -265,7 +265,7 @@ function ClientMobileApp({ history }) {
                 {needAppRegister
                 ? (
                     <Fragment>
-                        {showRegister(false)}
+                        {showRegister(true)}
                         {lStorage("setItem", {...needAppRegisterOp, value: false})}
                     </Fragment>
                 ) : (

@@ -10,6 +10,9 @@ const collectionStore = {
 
 export default function lStorage(type, options, next) {
     const { collection, property, value, newObj } = options;
+    console.log("value", value);
+    console.log("property", property);
+    console.log("collection", collection);
 
     const notInCollection = !collectionStore.hasOwnProperty(collection);
     const objInCollection = JSON.parse(localStorage.getItem(collection));

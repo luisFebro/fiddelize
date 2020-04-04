@@ -9,12 +9,9 @@ import parse from 'html-react-parser';
 import AOS from 'aos';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
 import lStorage from '../../utils/storage/lStorage';
+import { appSystem } from '../../hooks/useRoleData';
 
-//AppSystem
-const appSystem = lStorage("getItems", { collection: "appSystem"});
-console.log("appSystem", appSystem);
-const bizId = appSystem && appSystem.businessId;
-console.log("bizId", bizId);
+const bizId = appSystem.businessId;
 
 PwaInstaller.propTypes = {
   title: PropTypes.string,

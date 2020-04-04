@@ -6,7 +6,7 @@ import PwaInstaller from '../components/pwa-installer/PwaInstaller';
 import { CLIENT_URL } from '../config/clientUrl';
 import checkIfElemIsVisible from '../utils/window/checkIfElemIsVisible';
 import getQueryByName from '../utils/string/getQueryByName';
-import lStorage, { setSystemOp } from '../utils/storage/lStorage';
+import lStorage, { setSystemOp, needAppRegisterOp } from '../utils/storage/lStorage';
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
@@ -19,7 +19,9 @@ const appSystem = lStorage("getItems", { collection: "appSystem"});
 export default function DownloadApp({ match, location }) {
     let [userName, setUserName] = useState(match.params.userName);
     userName = userName && userName.replace("+", " ");
+
     const [run, setRun] = useState(false);
+
     const bizName = getQueryByName("negocio", location.search);
     const bizId = getQueryByName("id", location.search);
     const isClientAdmin = location.search.includes("admin=1");
@@ -28,7 +30,10 @@ export default function DownloadApp({ match, location }) {
 
     const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
     if(isClientAdmin) { lStorage("setItems", setSystemOp("cliente-admin", bizId)); }
-    if(isClientUser && !isAdminLoggedIn) { lStorage("setItems", setSystemOp("cliente", bizId)); } // L
+    if(isClientUser && !isAdminLoggedIn) {
+        lStorage("setItems", setSystemOp("cliente", bizId));
+        lStorage("setItem", {...needAppRegisterOp, value: true});
+    } // L
 
     useEffect(() => {
         checkIfElemIsVisible("#target", setRun, true);
@@ -156,6 +161,7 @@ export default function DownloadApp({ match, location }) {
 
 /* COMMENTS
 n1: LESSON: lStorage does not work with useEffect. just declare in the function body normally...
+If you see an error in JSON position, also check local storage for missing comma while editing...
 */
 /*
 <p>{!isInstalled ? parse("<br /><br />Foi instalado.<br/>Visite sua galeria<br />de Apps") : ""}</p>

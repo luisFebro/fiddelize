@@ -88,7 +88,7 @@ function Login({ history, setLoginOrRegister }) {
         <Title
             title="Acessar Conta"
             color="var(--mainWhite)"
-            padding="p-2"
+            padding="py-2 px-2"
             backgroundColor="var(--themePDark)"
         />
     );
@@ -111,13 +111,13 @@ function Login({ history, setLoginOrRegister }) {
                 className="text-small text-center font-weight-bold  p-2"
             >
                 Novo Usuário?<br/>Faça seu cadastro{" "}
-                <RadiusBtn title="aqui" onClick={() => setLoginOrRegister("register")} />
+                <RadiusBtn size="small" title="aqui" onClick={() => setLoginOrRegister("register")} />
             </p>
         )
     );
 
     return (
-        <Card style={{ maxWidth: 330 }} className="animated zoomIn fast card-elevation">
+        <Card style={{ maxWidth: 330 }} className="animated zoomIn fast card-elevation my-5">
             {showTitle()}
             {showKeypadButton()}
             {showRegisterForm()}
