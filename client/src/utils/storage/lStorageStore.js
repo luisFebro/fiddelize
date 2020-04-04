@@ -5,7 +5,7 @@ function combine(...objs) {
 // COLLECTIONS - different collections receives different numbers at the very end in the order of execution
 // value here are DEFAULT ones if need
 const collVal1 = { collection: "onceChecked", value: true };
-const collVal2 = { collection: "userProfile", value: ["123abc", "...", "...", 0, 0, { history: [{desc: "compra1", value: 0}], updatedAt: 0 }, "0"]} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
+const collVal2 = { collection: "userProfile", value: ["123abc", "", "...", 0, 0, { history: [{desc: "compra1", value: 0}], updatedAt: 0 }, "0"]} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 const coll3 = { collection: "appSystem" }
 const collVal4 = { collection: "clientAdmin", value: ["...", "empresa-teste-et2d@yd", "cortesia", 500, "free product", ["giftA", "giftB"], { text: "...", updatedAt: new Date() }, [{ name: "nome1" },{ name: "nome2" },{ name: "nome3"}]] }
 // END COLLECTIONS
