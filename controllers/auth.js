@@ -77,6 +77,7 @@ exports.register = (req, res) => {
         phone,
         maritalStatus,
         clientAdminData,
+        clientUserData,
     } = req.body;
 
 
@@ -93,6 +94,7 @@ exports.register = (req, res) => {
         phone,
         maritalStatus,
         clientAdminData,
+        clientUserData,
     });
 
     newUser.save()

@@ -107,21 +107,27 @@ function Login({ history, setLoginOrRegister }) {
 
     const showRegisterForm = () => (
         isThisApp() && (
-            <p
-                className="text-small text-center font-weight-bold  p-2"
+            <div
+                className="animated zoomIn delay-2s p-2 mt-3"
             >
-                Novo Usuário?<br/>Faça seu cadastro{" "}
-                <RadiusBtn size="small" title="aqui" onClick={() => setLoginOrRegister("register")} />
-            </p>
+                <p
+                    className="text-white font-weight-bold text-small text-shadow"
+                >
+                    Novo Usuário?<br/>Faça seu cadastro{" "}
+                    <RadiusBtn size="small" title="aqui" onClick={() => setLoginOrRegister("register")} />
+                </p>
+            </div>
         )
     );
 
     return (
-        <Card style={{ maxWidth: 330 }} className="animated zoomIn fast card-elevation my-5">
-            {showTitle()}
-            {showKeypadButton()}
+        <div className="my-5">
+            <Card style={{ maxWidth: 330 }} className="animated zoomIn fast card-elevation">
+                {showTitle()}
+                {showKeypadButton()}
+            </Card>
             {showRegisterForm()}
-        </Card>
+        </div>
     );
 }
 

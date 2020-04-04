@@ -31,11 +31,14 @@ import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
 import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
+
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
+import { appSystem } from '../../hooks/useRoleData';
 import 'moment/locale/pt-br';
-moment.updateLocale('pt-BR');
 
+moment.updateLocale('pt-BR');
+const bizId = appSystem && appSystem.businessId;
 const isSmall = window.Helper.isSmallScreen();
 
 const useStyles = makeStyles(theme => ({
@@ -45,18 +48,19 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn = false }) {
+function Register({ setLoginOrRegister, needLoginBtn = false }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
     const [data, setData] = useState({
-        role: '',
+        role: 'cliente',
         name: '',
         email: '',
         phone: '',
         birthday: '',
         cpf: '',
         maritalStatus: 'selecione estado civil',
+        clientUserData: { bizId: bizId },
     });
     let { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 
@@ -86,7 +90,6 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn = fal
 
     const clearData = () => {
         setData({
-            role: 'cliente-admin',
             name: '',
             email: '',
             phone: '',
@@ -116,7 +119,6 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn = fal
     const registerThisUser = e => {
         const newUser = {
             ...data,
-            role: isClientUser ? "cliente" : "cliente-admin",
         };
 
         showSnackbar(dispatch, 'Registrando... Aguarde um momento.', 'warning', 7000)
@@ -172,11 +174,16 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn = fal
     const showLoginForm = needLoginBtn => (
         needLoginBtn && (
             <div
-                className="animated zoomIn delay-2s position-absolute p-2"
-                style={{top: isSmall ? '90px' : '115px', right: '30px'}}
+                className="animated zoomIn delay-2s position-absolute p-2 mt-3"
+                style={{right: '30px'}}
             >
-                <p className="text-white font-weight-bold text-small text-shadow" style={{whiteSpace: 'nowrap'}}>Já é cadastrado?{" "}
-                <RadiusBtn size="small" title="Faça login" onClick={() => setLoginOrRegister("login")} /></p>
+                <p
+                    className="text-white font-weight-bold text-small text-shadow"
+                    style={{whiteSpace: 'nowrap'}}
+                >
+                    Já é cadastrado?{" "}
+                    <RadiusBtn size="small" title="Faça login" onClick={() => setLoginOrRegister("login")} />
+                </p>
             </div>
         )
     );
@@ -184,8 +191,8 @@ function Register({ isClientUser = false, setLoginOrRegister, needLoginBtn = fal
     const showTitle = () => (
         <div className="position-relative">
             <Title
-                title={!isClientUser ? "Comece Hoje!" : "Cadastre-se!"}
-                subTitle={!isClientUser ? "Cadastre-se aqui." : "É rápido e fácil."}
+                title="Cadastre-se!"
+                subTitle="É rápido e fácil."
                 color="var(--mainWhite)"
                 backgroundColor="var(--themePDark)"
             />

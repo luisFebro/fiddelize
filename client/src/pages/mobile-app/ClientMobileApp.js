@@ -46,7 +46,6 @@ function ClientMobileApp({ history }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
-
     const { userId, role, userName } = useProfile();
     const { bizId, userScore, userLastScore, userPurchase } = useClientUser();
     const { bizCodeName, maxScore } = useClientAdmin();
@@ -86,6 +85,13 @@ function ClientMobileApp({ history }) {
         }
 
     }, [maxScore, userScore, showMoreComps]);
+
+    useEffect(() => {
+        if(needAppRegister) {
+            setLoginOrRegister("register");
+            lStorage("setItem", {...needAppRegisterOp, value: false})
+        }
+    }, [needAppRegister])
 
     useEffect(() => {
         if(gotToken && role === "cliente") {
@@ -201,7 +207,6 @@ function ClientMobileApp({ history }) {
 
     const showRegister = (needLoginBtn, needSetFunc) => (
         <Register
-            isClientUser={true}
             setLoginOrRegister={setLoginOrRegister || true}
             needLoginBtn={needLoginBtn}
         />
@@ -262,18 +267,8 @@ function ClientMobileApp({ history }) {
             {showLogo()}
             {showAppType()}
             <section>
-                {needAppRegister
-                ? (
-                    <Fragment>
-                        {showRegister(true)}
-                        {lStorage("setItem", {...needAppRegisterOp, value: false})}
-                    </Fragment>
-                ) : (
-                    <Fragment>
-                        {conditionRegister}
-                        {conditionLogin}
-                    </Fragment>
-                )}
+                {conditionRegister}
+                {conditionLogin}
             </section>
 
             {gotToken && (

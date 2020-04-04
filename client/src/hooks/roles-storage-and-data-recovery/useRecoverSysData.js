@@ -17,18 +17,6 @@ export default function useRecoverSysData(role, userId, opts = {}) {
     const { bizId } = opts;
 
     useEffect(() => {
-        // "0" and "client" are the initial <defau></defau>lt values...
-        if(bizSysId === "0") {
-            if(role === "cliente") {
-                const objToSend = { "clientUserData.bizId": bizSysId }
-                updateUser(useDispatch, objToSend, userId)
-                .then(res => {
-                    if(res.status !== 200) return showSnackbar(useDispatch, res.data.msg, 'error')
-                    console.log("User was updated in the useUpdateSysData")
-                })
-            }
-        }
-
         if(needUpdateSys) {
             let whichBizId;
 
@@ -48,3 +36,13 @@ export const readClientAdmin = (dispatch, userId) => {
         readCliAdmin(dispatch, userId); //  if clientAdmin, userId === bizId.
     }
 }
+// DEPRACATED
+// This data is now inserted in the register form directly.
+// export const setBizIdInDb = userId => {
+//     const objToSend = { "clientUserData.bizId": bizSysId }
+//     updateUser(useDispatch, objToSend, userId)
+//     .then(res => {
+//         if(res.status !== 200) return showSnackbar(useDispatch, res.data.msg, 'error')
+//         console.log("User was updated with bizId in her/his record in db")
+//     })
+// }

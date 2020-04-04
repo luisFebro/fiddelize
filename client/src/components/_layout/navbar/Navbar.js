@@ -97,7 +97,7 @@ function Navbar({ history, location }) {
     const showRoleTitles = () => (
         <ul
             className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center"
-            style={{ display: ["/baixe-app/",].some(link => locationNow.includes(link)) ? "none" : "block" }}
+            style={{ display: ["/baixe-app/", "/cliente/pontos-fidelidade"].some(link => locationNow.includes(link)) ? "none" : "block" }}
         >
             <li
                 className="nav-item text-subtitle"
