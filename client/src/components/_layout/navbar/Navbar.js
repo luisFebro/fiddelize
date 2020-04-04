@@ -93,7 +93,7 @@ function Navbar({ history, location }) {
             )}
         </Fragment>
     );
-    console.log(locationNow)
+
     const showRoleTitles = () => (
         <ul
             className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center"
