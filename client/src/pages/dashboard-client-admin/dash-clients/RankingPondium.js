@@ -14,7 +14,6 @@ const appSystem = lStorage("getItems", appSystemCol);
 
 export default function RankingPondium() {
     let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
-    console.log("highestScores", highestScores);
     const dispatch = useStoreDispatch();
 
     // Test

@@ -77,9 +77,13 @@ export const userReducer = {
                     allUsers: action.payload,
                 };
             case 'HIGHEST_SCORES_READ':
+                let payload;
+                !action.payload
+                ? payload = highestScoreData
+                : payload = action.payload
                 return {
                     ...state,
-                    highestScores: action.payload,
+                    highestScores: payload,
                 };
             // CUSTOMIZED DATA HANDLING from social network
             case 'USER_GOOGLE_DATA':

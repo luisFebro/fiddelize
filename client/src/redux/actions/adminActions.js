@@ -49,15 +49,6 @@ export const updateBusinessInfo = async (dispatch, objToUpdate) => {
     }
 };
 
-export const readVerificationPass = async () => { // L
-    try {
-        const res = await axios.get(`/api/admin/verification-pass`, getHeaderJson);
-        return res;
-    } catch (err) {
-        return err.response;
-    }
-};
-
 // STAFF BOOKING
 export const getStaffWithBookingsList = async (dispatch, docsToSkip) => { // L
     // const searchQuery = search ? `&search=${search}` : "";
@@ -117,6 +108,15 @@ export const readAllDbFromModels = async (dispatch, securityObj, model) => {
 };
 
 // CLIENT-ADMIN
+export const readVerificationPass = async (bizId) => { // L
+    try {
+        const res = await axios.get(`/api/admin/verification-pass/${bizId}`, getHeaderJson);
+        return res;
+    } catch (err) {
+        return err.response;
+    }
+};
+
 export const checkVerificationPass = async (dispatch, objToSend) => { // L
     setLoadingProgress(dispatch, true);
     try {

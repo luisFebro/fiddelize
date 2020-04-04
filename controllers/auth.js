@@ -29,6 +29,13 @@ exports.mwIsAdmin = (req, res, next) => {
     next();
 };
 
+exports.mwIsClientAdmin = (req, res, next) => {
+    if(req.profile.role !== "cliente-admin") {
+        return res.status(403).json(msg('error.accessDenied'));
+    }
+    next();
+};
+
 exports.mwSession = (req, res, next) => { // n1
     const token = req.header("x-auth-token"); // this does not work with authorization header // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkYjQzMDFlZDM5YTRlMTI1NDYyNzdhOCIsImlhdCI6MTU3NDIxMDUwNCwiZXhwIjoxNTc0ODE1MzA0fQ.HAUlZ6lCHxRuieN5nizug_ZMTEuAmJ2Ck22uCcBkmeY"
 

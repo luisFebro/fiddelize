@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AOS from 'aos';
-import { useStoreDispatch, useStoreState } from 'easy-peasy';
+import { useStoreDispatch } from 'easy-peasy';
 import { CLIENT_URL } from '../../config/clientUrl';
 import ToggleVisibilityPassword from '../../components/forms/fields/ToggleVisibilityPassword';
 import handleChange from '../../utils/form/use-state/handleChange';
@@ -8,9 +8,10 @@ import ButtonMulti, { faStyle } from '../../components/buttons/material-ui/Butto
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { updateUser } from '../../redux/actions/userActions';
-import { readUser } from '../../redux/actions/userActions';
+import { readVerificationPass } from '../../redux/actions/adminActions';
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
 import { regulationText } from './regulationText';
+import { appSystem } from '../../hooks/useRoleData';
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ShowPasswordForm({
@@ -21,10 +22,9 @@ export default function ShowPasswordForm({
     })
     const { clientAdminData } = data;
 
-    const { cliAdminId } = useStoreState(state => state.userReducer.cases.currentUser._id);
+    const businessId = appSystem.businessId;
 
     const history = dataFromPassPage.history;
-    const clientAdminId = dataFromPassPage.clientAdminId;
     const clientAdminName = dataFromPassPage.clientAdminName;
     const bizCodeName = dataFromPassPage.bizCodeName;
 
@@ -32,24 +32,21 @@ export default function ShowPasswordForm({
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
+        console.log("isFromCliAdminDash", isFromCliAdminDash);
         if(isFromCliAdminDash) {
-            const keyName = "clientAdminData.verificationPass";
+            readVerificationPass(businessId)
+            .then(res => {
+                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                    const passValue = res.data.verificationPass;
+                    console.log("passValue", passValue);
+                    const keyName = "clientAdminData.verificationPass";
 
-            setValObjWithStr(data, keyName, "1234567fds");
-            const newObj = data;
-            setData(Object.assign({}, data, newObj));
-            // readUser(dispatch, cliAdminId)
-            // .then(res => {
-            //     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            //         const passValue = res.data && res.data.clientAdminData.verificationPass;
-            //         const keyName = "clientAdminData.verificationPass";
-
-            //         setValObjWithStr(data, keyName, passValue);
-            //         const newObj = data;
-            //         setData(Object.assign({}, data, newObj));
-            // })
+                    setValObjWithStr(data, keyName, passValue);
+                    const newObj = data;
+                    setData(Object.assign({}, data, newObj));
+            })
         }
-    }, [cliAdminId])
+    }, [businessId])
 
     AOS.init({
         offset: 50,
@@ -80,18 +77,22 @@ export default function ShowPasswordForm({
 
     const sendDataBackend = () => {
         if(!clientAdminData.verificationPass) { setError(true); showSnackbar(dispatch, "Você precisa inserir a senha de verificação", "error"); return; }
-
-        const dataToSend = {
-            "clientAdminData.verificationPass": clientAdminData.verificationPass,
-            "clientAdminData.regulation.text": regulationText,
-        };
+        let dataToSend;
+        if(isFromCliAdminDash) {
+            dataToSend = { "clientAdminData.verificationPass": clientAdminData.verificationPass, }
+        } else {
+            dataToSend = {
+                "clientAdminData.verificationPass": clientAdminData.verificationPass,
+                "clientAdminData.regulation.text": regulationText,
+            };
+        }
 
         showSnackbar(dispatch, "Ok, registrando...")
-        updateUser(dispatch, dataToSend, clientAdminId)
+        updateUser(dispatch, dataToSend, businessId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
             if(isFromCliAdminDash) {
-                showSnackbar(dispatch, "Senha foi alterada!")
+                showSnackbar(dispatch, "Senha foi alterada!", "success")
             } else {
                 showSnackbar(dispatch, "Preparando seu painel...")
                 setTimeout(() => history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`), 1500);

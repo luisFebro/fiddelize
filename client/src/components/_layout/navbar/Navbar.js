@@ -97,7 +97,7 @@ function Navbar({ history, location }) {
     );
 
     const showManagingBtn = () => (
-        <ul className="animated zoomIn faster navbar-nav ml-3 ml-sm-auto mr-3 align-items-center">
+        <ul className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center">
             <li
                 className="nav-item text-subtitle"
                 style={{color: "black"}}

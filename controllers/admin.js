@@ -93,14 +93,6 @@ exports.updateConfig = (req, res) => {
     });
 }
 
-exports.readVerificationPass = (req, res) => {
-    Admin.findById(adminId)
-    .exec((err, admin) => {
-        if (err) return res.status(400).json(msgG("error.systemError", err));
-        res.json({ verificationPass: admin.verificationPass })
-    })
-};
-
 // SERVICES CRUD
 exports.createService = (req, res) => {
     const newServiceName = req.body.name;
@@ -175,6 +167,17 @@ exports.getStaffWithBookings = (req, res) => {
 // END STAFF BOOKINGS
 
 // CLIENT-ADMIN
+exports.readVerificationPass = (req, res) => {
+    const { userId } = req.params;
+    User.findById(userId)
+    .select("clientAdminData.verificationPass -_id")
+    .exec((err, data) => {
+        const pass = data.clientAdminData.verificationPass;
+        if (err) return res.status(400).json(msgG("error.systemError", err));
+        res.json({ verificationPass: pass })
+    })
+};
+
 exports.checkVerificationPass = (req, res) => {
     const { pass, bizId } = req.body;
 

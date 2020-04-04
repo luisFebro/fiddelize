@@ -184,7 +184,6 @@ exports.getList = (req, res) => {
     if(search) {
         mainQuery = Object.assign({}, mainQuery, searchQuery);
     }
-    console.log("mainQuery", mainQuery);
 
     User.aggregate([
         {

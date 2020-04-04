@@ -21,7 +21,7 @@ const {
     countAppDownloads,
 } = require('../controllers/admin');
 
-const { mwIsAdmin } = require("../controllers/auth");
+const { mwIsAdmin, mwIsClientAdmin } = require("../controllers/auth");
 const { mwUserId } = require("../controllers/user");
 
 // @ routes api/admin
@@ -34,7 +34,7 @@ router.put("/business-info/update", updateBusinessInfo);
 
 router.put("/config", updateConfig);
 
-router.get("/verification-pass", readVerificationPass);
+router.get("/verification-pass/:userId", mwIsClientAdmin, readVerificationPass);
 router.post("/verification-pass", checkVerificationPass);
 
 // Services CRUD
