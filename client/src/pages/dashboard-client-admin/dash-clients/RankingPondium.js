@@ -8,20 +8,12 @@ import { readHighestScores } from '../../../redux/actions/userActions';
 import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import lStorage from '../../../utils/storage/lStorage';
-
-const appSystemCol = { collection: "appSystem"};
-const appSystem = lStorage("getItems", appSystemCol);
+import  { appSystem } from '../../../hooks/useRoleData';
 
 export default function RankingPondium() {
     let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
+    console.log("highestScores", highestScores);
     const dispatch = useStoreDispatch();
-
-    // Test
-    // highestScores = [
-    //     { name: "luis febro", clientUserData: { currScore: 200}},
-    //     // { name: "fabiano amorin", clientUserData: { currScore: 100}},
-    //     // { name: "fernanda costa", clientUserData: { currScore: 50}}
-    // ]
 
     useEffect(() => {
         const bizId = appSystem && appSystem.businessId;
@@ -55,15 +47,14 @@ export default function RankingPondium() {
                                     {id === 0 && " Pontos"}
                                 </span>
                             </p>
-                        )
-                        }
+                        )}
                     </div>
                 );
             })}
         </Fragment>
     );
 
-    const gotFirstPlaceScore = highestScores && highestScores[0].clientUserData;
+    const gotFirstPlaceScore = null // highestScores && highestScores[0].clientUserData;
 
     return (
         <DivPodium

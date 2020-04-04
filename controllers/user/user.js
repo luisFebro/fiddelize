@@ -212,8 +212,8 @@ exports.getList = (req, res) => {
 exports.getHighestScores = (req, res) => {
     const bizId = req.query.bizId;
 
-    User.findOne({ 'clientUserData.bizId': bizId })
-    .select("name clientUserData")
+    User.find({ 'clientUserData.bizId': bizId })
+    .select("name clientUserData.currScore -_id")
     .sort({ 'clientUserData.currScore': -1 })
     .limit(3)
     .exec((err, data) => {
