@@ -12,7 +12,7 @@ import ShareSocialMediaButtons from '../../components/buttons/ShareSocialMediaBu
 import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
-import animateCSS from '../../utils/animateCSS';
+// import animateCSS from '../../utils/animateCSS';
 import { handleFocus } from '../../utils/form/handleFocus';
 
 const addSpace = str => addSpacingPlusToQuery(str);
@@ -21,16 +21,13 @@ const isSmall = window.Helper.isSmallScreen();
 const fluidTextAlign = `${isSmall ? "ml-2 text-left" : "text-center"}`;
 
 export default function AppSharer({ location, match }) {
+    const [showLink, setShowLink] = useState(false);
     const [data, setData] = useState({
         clientName: '',
         isSharingBtnsOpen: false,
         generatedLink: '',
     })
-
     const { clientName, isSharingBtnsOpen, generatedLink } = data;
-    console.log("clientName", clientName);
-    console.log("isSharingBtnsOpen", isSharingBtnsOpen);
-    console.log("generatedLink", generatedLink);
 
     const role = getQueryByName("role", location.search);
     const bizCodeName = match.params.bizCodeName;
@@ -61,7 +58,7 @@ export default function AppSharer({ location, match }) {
             border: 0,
         },
         megaPhoneIcon: {
-            top: isSmall ? '110px' : '155px',
+            top: isSmall ? '60px' : '105px',
             left: '-65px',
             zIndex: 3000,
         },
@@ -140,7 +137,7 @@ export default function AppSharer({ location, match }) {
     const showMain = () => (
         <div className="my-5">
             <form className="shadow-elevation margin-auto-90" style={styles.form}>
-                <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}>
+                <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white`}>
                     <div style={styles.megaPhoneIcon} className="position-absolute">
                         <img
                             src={`${CLIENT_URL}/img/icons/megaphone.svg`}
@@ -150,7 +147,7 @@ export default function AppSharer({ location, match }) {
                             alt="megafone"
                         />
                     </div>
-                    <p className="text-shadow text-title">
+                    <p className="text-shadow text-normal font-weight-bold">
                         {role === "cliente-admin"
                         ? (
                             <span>Insira o nome do seu cliente para divulgar</span>
@@ -186,7 +183,6 @@ export default function AppSharer({ location, match }) {
     );
 
     const showSharingBtns = () => {
-        // Share Button Infos
         const sharingData = {
             titleShare: '',
             pageURL: generatedLink,
@@ -196,31 +192,49 @@ export default function AppSharer({ location, match }) {
             //     return `Baixe nosso App de pontos de fidelidade`;
             // }
         };
-        // End Share Button Infos
+        const displayLink = () => (
+            <div className="user-select-text">
+                <RadiusBtn
+                        title={showLink ? "esconder link" : 'mostrar link'}
+                        backgroundColor="var(--mainDark)"
+                        size="small"
+                        onClick={() => { setShowLink(!showLink)}}
+                />
+                {showLink
+                ? (
+                    <p style={{margin: 0}} className="animated zoomIn faster text-break text-normal text-purple text-center">
+                        {generatedLink}
+                    </p>
+                ) : null}
+            </div>
+        );
+
         return(
             isSharingBtnsOpen && (
-                <div id="zoomOut" className="margin-auto-90 my-5">
+                <div className="my-5">
                     <p className="animated zoomIn text-center text-white text-title">
                         Novo Link gerado e pronto!
                     </p>
-                    <Card className="animated zoomIn delay-2s fast card-elevation p-4">
-                        <p className="text-center text-normal font-weight-bold">Escolha um meio:</p>
-                        <ShareSocialMediaButtons config={{size: 50, radius: 50}} data={sharingData} />
-                    </Card>
-                    <div id="view1" className="mt-3">
-                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className={`d-md-flex justify-content-md-center flex-md-column ${isSmall && "margin-auto-90"}`}>
+                        <Card style={{maxWidth: '600px'}} className="align-self-center animated zoomIn delay-2s fast card-elevation p-4">
+                            <p className="text-center text-normal font-weight-bold">Escolha um meio:</p>
+                            <ShareSocialMediaButtons config={{size: 50, radius: 50}} data={sharingData} />
+                            {displayLink()}
+                        </Card>
+                        <div id="view1" className={`mt-2`}>
                             <RadiusBtn
                                 title="gerar novo link"
                                 backgroundColor="var(--themeSDark)"
                                 className="my-2"
-                                onClick={() => { setData({ ...data, isSharingBtnsOpen: false, clientName: '' }); animateCSS("#zoomOut", "zoomOut", "slower"); handleFocus("form1") }}
+                                onClick={() => { setData({ ...data, isSharingBtnsOpen: false, clientName: '' }); handleFocus("form1") }}
                             />
                         </div>
                     </div>
+
                     <div className="mt-5 text-center text-normal font-weight-bold">
                         {clientName && (
                             <span>
-                                O link gerado possui uma página personalizada feita para o {clientName && clientName.cap()}
+                                O link gerado possui uma página personalizada feita para o(a) {clientName && clientName.cap()}
                             </span>
                         )}
                     </div>

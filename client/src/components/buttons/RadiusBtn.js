@@ -1,7 +1,16 @@
 import React from 'react';
 
 export default function RadiusBtn({
-    title, onClick, className, backgroundColor, color, fontSize, padding, needTxtShadow = true }) {
+    title,
+    onClick,
+    className,
+    backgroundColor,
+    color, fontSize, padding, needTxtShadow = true, size }) {
+    if(size === 'small') {
+        className = "my-1";
+        fontSize = "15px";
+    }
+
     const styles = {
         btn: {
             //position: 'absolute',
@@ -12,7 +21,7 @@ export default function RadiusBtn({
             borderRadius: '20px',
             backgroundColor: backgroundColor || 'var(--themeSDark)',
             outline: "none",
-            fontSize: fontSize || '28px',
+            fontSize: fontSize || '20px',
         }
     }
     return (
