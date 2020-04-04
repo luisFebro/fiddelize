@@ -93,12 +93,14 @@ function Navbar({ history, location }) {
             )}
         </Fragment>
     );
-
-    const showManagingBtn = () => (
-        <ul className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center">
+    console.log(locationNow)
+    const showRoleTitles = () => (
+        <ul
+            className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center"
+            style={{ display: ["/baixe-app/",].some(link => locationNow.includes(link)) ? "none" : "block" }}
+        >
             <li
                 className="nav-item text-subtitle"
-                style={{color: "black"}}
             >
                 {titleByRoleHandler()}
             </li>
@@ -124,7 +126,7 @@ function Navbar({ history, location }) {
             className="navbar navbar-expand-sm text-nav-items theme-p-dark"
         >
             {showLogo()}
-            {showManagingBtn()}
+            {showRoleTitles()}
         </NavWrapper>
     );
 }

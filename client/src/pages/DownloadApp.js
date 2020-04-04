@@ -18,7 +18,7 @@ const appSystem = lStorage("getItems", { collection: "appSystem"});
 
 export default function DownloadApp({ match, location }) {
     let [userName, setUserName] = useState(match.params.userName);
-    userName = userName && userName.replace("+", " ");
+    userName = userName && userName.replace(/\+/g, " ");
 
     const [run, setRun] = useState(false);
 
