@@ -105,7 +105,7 @@ export const logout = (dispatch, needSnackbar = true) => {
     dispatch({ type: 'LOGOUT_SUCCESS' });
     dispatch({ type: 'USER_CLEARED' });
     dispatch({ type: 'ALL_COMPONENTS_CLEARED' });
-    window.location.href = isThisApp() ? "/mobile-app" : "/app"
+    window.location.href = isThisApp() ? "/mobile-app" : "/"
     setTimeout(() => needSnackbar && showSnackbar(dispatch, 'Sua sessão foi finalizada com sucesso!', 'warning', 4000), 2000);
 };
 
