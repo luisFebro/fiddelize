@@ -43,13 +43,15 @@ export const useClientUser = () => {
 }
 
 export const useClientAdmin = () => {
-    const { clientAdmin } = useStoreState(state => ({
-        clientAdmin: state.userReducer.cases.clientAdmin
+    const { clientAdmin, highestScores } = useStoreState(state => ({
+        clientAdmin: state.userReducer.cases.clientAdmin,
+        highestScores: state.userReducer.cases.highestScores,
     }))
 
+
     const maxScore = clientAdmin && clientAdmin.rewardScore;
-    const bizName = clientAdmin && clientAdmin.bizName && clientAdmin.bizName.cap();
     const mainReward = clientAdmin &&  clientAdmin.mainReward && clientAdmin.mainReward.cap();
+    const bizName = clientAdmin && clientAdmin.bizName && clientAdmin.bizName.cap();
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
     const bizRegulation = clientAdmin && clientAdmin.regulation;
@@ -59,6 +61,7 @@ export const useClientAdmin = () => {
         bizPlan,
         bizCodeName,
         bizRegulation,
+        highestScores,
         maxScore,
         mainReward,
     });

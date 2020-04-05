@@ -28,7 +28,7 @@ export default function RankingPondium() {
                 return(
                     <div
                         key={id}
-                        className={`${css[id]} position-absolute animated zoomIn delay-5s text-main-container text-shadow-white`}
+                        className={`${css[id]} text-purple position-absolute animated zoomIn delay-5s`}
                     >
                         {name === `nome${id + 1}`
                         ? (
@@ -38,11 +38,11 @@ export default function RankingPondium() {
                             />
                         ) : (
                             <p className={id === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
-                                <span className="text-normal">
+                                <span className="text-normal font-weight-bold text-shadow-white">
                                     {truncateWords(name.cap(), 10)}
                                 </span>
                                 <br />
-                                <span className="text-subtitle">
+                                <span className="text-subtitle font-weight-bold text-shadow-white">
                                     {clientUserData && convertDotToComma(clientUserData.currScore)}
                                     {id === 0 && " Pontos"}
                                 </span>
@@ -54,7 +54,7 @@ export default function RankingPondium() {
         </Fragment>
     );
 
-    const gotFirstPlaceScore = null // highestScores && highestScores[0].clientUserData;
+    const gotAtLeastOne = highestScores && highestScores[0].name !== "nome1";
 
     return (
         <DivPodium
@@ -64,18 +64,19 @@ export default function RankingPondium() {
                 title="&#187; Pódio Fidelidade"
                 color="var(--themeP)"
                 margin="my-4"
+                padding=" "
             />
-            {!gotFirstPlaceScore && (
-                <p className="text-normal mb-5" style={{color: 'grey'}}>
+            {!gotAtLeastOne && (
+                <p className="text-normal" style={{color: 'grey'}}>
                     Aqui você acompanha as
                     <br />3 maiores pontuações
                     <br />de todos seus clientes com atualizações em tempo real.
                 </p>
             )}
-            <div className="position-relative">
+            <div className="position-relative" style={{marginTop: '30px'}}>
                 <img
                     className="shadow-elevation-black"
-                    src={`${CLIENT_URL}/img/icons/podium.svg`}
+                    src={`${CLIENT_URL}/img/icons/podium.png`}
                     alt="podium"
                     width="300"
                 />
@@ -92,7 +93,7 @@ const DivPodium = styled.div`
     }
 
     & .bounce-repeat {
-        animation-iteration-count: 6;
+        animation-iteration-count: 4;
     }
 
     & .podium-title {
@@ -108,20 +109,20 @@ const DivPodium = styled.div`
     }
 
     & .first-place {
-        top: -5%;
+        top: -9%;
         left: 50%;
         transform: translate(-50%, -50%);
     }
 
     & .second-place {
-        top: 17%;
+        top: 18%;
         left: 17%;
         transform: translate(-50%, -50%);
     }
 
     & .third-place {
-        top: 25%;
-        left: 80%;
+        top: 26%;
+        left: 85%;
         transform: translate(-50%, -50%);
     }
 `;

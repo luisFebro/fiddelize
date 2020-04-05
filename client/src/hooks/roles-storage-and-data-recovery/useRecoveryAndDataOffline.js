@@ -8,7 +8,7 @@ import { useProfile, useClientAdmin, useClientUser } from '../useRoleData';
 export const useRecoveryAndDataOffline = () => {
     const { userId, role, userName } = useProfile();
     const { bizId, userScore, userLastScore, userPurchase } = useClientUser(); // , userPurchase
-    const { bizName, bizPlan, bizCodeName, bizRegulation, maxScore, mainReward } = useClientAdmin();
+    const { bizName, bizPlan, bizCodeName, bizRegulation, maxScore, mainReward, highestScores } = useClientAdmin();
 
     // data
     const userProfileNewObj = {
@@ -29,7 +29,8 @@ export const useRecoveryAndDataOffline = () => {
             updatedAt: bizRegulation.updatedAt,
         },
         maxScore,
-        mainReward
+        mainReward,
+        highestScores,
     }
 
     setDataIfOnline(userProfileColl, userProfileNewObj);
