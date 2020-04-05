@@ -21,7 +21,6 @@ export default function ActionBtns({ location }) {
     if(role === "cliente-admin") {
         return(
             <div>
-                <PlanBadges role={role} bizPlan={bizPlan} />
                 <ClientAdminBtns role={role} bizCodeName={bizCodeName} bizName={bizName} />
                 <ShowLogoutBtn locationNow={locationNow} />
             </div>
@@ -54,35 +53,40 @@ const ClientAdminBtns = ({ bizCodeName, bizName, role }) => { // L
     );
 }
 
-const PlanBadges = ({ role, bizPlan }) => (
-    <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-5s">
-        <div className={`${bizPlan}`}>
-            <span className="title">{bizPlan === "cortesia" && "Seu plano:"}</span>
-            <span className="plan text-center font-weight-bold">{bizPlan}</span>
-        </div>
-        {bizPlan === "cortesia"
-        ? (
-            <div className="upgrade-btn position-relative">
-                <RadiusBtn
-                    title="atualizar"
-                    onClick={null}
-                    backgroundColor="var(--mainYellow)"
-                    padding='5px 10px'
-                    fontSize="18px"
-                    color="black"
-                    needTxtShadow={false}
-                />
-                <div className="crown-icon position-absolute">
+export const PlanBadges = () => { // this export is required because this overrides the title in mobile testing...
+    const { role } = useProfile();
+    const { bizPlan } = useClientAdmin();
+
+    return(
+        <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-5s">
+            <div className={`${bizPlan}`}>
+                <span className="title">{bizPlan === "cortesia" && "Seu plano:"}</span>
+                <span className="plan text-center font-weight-bold">{bizPlan}</span>
+            </div>
+            {bizPlan === "cortesia"
+            ? (
+                <div className="upgrade-btn position-relative">
+                    <RadiusBtn
+                        title="atualizar"
+                        onClick={null}
+                        backgroundColor="var(--mainYellow)"
+                        padding='5px 10px'
+                        fontSize="18px"
+                        color="black"
+                        needTxtShadow={false}
+                    />
+                    <div className="crown-icon position-absolute">
+                        <FontAwesomeIcon icon="crown" />
+                    </div>
+                </div>
+            ) : (
+                <div className={`${bizPlan}-icon position-absolute`}>
                     <FontAwesomeIcon icon="crown" />
                 </div>
-            </div>
-        ) : (
-            <div className={`${bizPlan}-icon position-absolute`}>
-                <FontAwesomeIcon icon="crown" />
-            </div>
-        )}
-    </section>
-);
+            )}
+        </section>
+    );
+};
 
 const ShowLogoutBtn = ({ locationNow }) => {
 

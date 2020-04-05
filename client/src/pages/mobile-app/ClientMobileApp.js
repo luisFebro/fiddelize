@@ -12,7 +12,6 @@ import AllScores from './AllScores';
 import PercCircleAndGift from './PercCircleAndGift';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 // END APP COMPONENTS
-// UTILS
 import {CLIENT_URL} from '../../config/clientUrl';
 import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
 import "./ellipse.css";
@@ -27,6 +26,8 @@ import lStorage, {
 import Register from '../../components/auth/Register';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { logout } from '../../redux/actions/authActions';
+import { setRun } from '../../hooks/useRunComp';
+import { useAuthUser } from '../../hooks/useAuthUser';
 import AOS from 'aos';
 // import ImageLogo from '../../components/ImageLogo';
 
@@ -41,6 +42,7 @@ const isSmall = window.Helper.isSmallScreen();
 function ClientMobileApp({ history }) {
     // history and withRouter is not being used
     const userScoreRef = useRef(null);
+    const { isAuthUser } =useAuthUser();
 
     const [showMoreBtn, setShowMoreBtn] = useState(false);
     const [showMoreComps, setShowMoreComps] = useState(false);
@@ -56,8 +58,6 @@ function ClientMobileApp({ history }) {
     AOS.init({
         offset: 50,
     });
-
-    const gotToken = localStorage.getItem("token");
 
     const styles = {
         rulesBtn: {
@@ -94,7 +94,7 @@ function ClientMobileApp({ history }) {
     }, [needAppRegister])
 
     useEffect(() => {
-        if(gotToken && role === "cliente") {
+        if(isAuthUser && role === "cliente") {
             animateNumber(
                 userScoreRef.current,
                 0,
@@ -103,7 +103,7 @@ function ClientMobileApp({ history }) {
                 setShowMoreComps
             );
         }
-    }, [role, gotToken])
+    }, [role, isAuthUser])
 
     // UTILS
     function playBeep() {
@@ -212,7 +212,7 @@ function ClientMobileApp({ history }) {
         />
     );
 
-    const isClientUserLogged = gotToken && role === "cliente";
+    const isClientUserLogged = isAuthUser && role === "cliente";
     const showAppType = () => (
         appSystem && !isClientUserLogged &&
         <div className="container-center" data-aos="flip-right" data-aos-delay="3000">
@@ -244,7 +244,11 @@ function ClientMobileApp({ history }) {
                 <strong className="text-title">{userName && userName.cap()}</strong><br />
             </span>
             <div className="container-center mt-4">
-                <Link className="mr-3" to={`/${bizCodeName}/cliente-admin/painel-de-controle`}>
+                <Link
+                    className="mr-3"
+                    to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                    onClick={() => setRun(dispatch, "goDash")}
+                >
                     <RadiusBtn title="acessar"/>
                 </Link>
                 <span>
@@ -258,8 +262,8 @@ function ClientMobileApp({ history }) {
         </div>
     );
 
-    const conditionRegister = !gotToken && loginOrRegister === "register" && showRegister(true)
-    const conditionLogin = !gotToken && loginOrRegister === "login" && showLogin()
+    const conditionRegister = !isAuthUser && loginOrRegister === "register" && showRegister(true)
+    const conditionLogin = !isAuthUser && loginOrRegister === "login" && showLogin()
 
     return (
         <div style={{overflowX: 'hidden'}}>
@@ -271,7 +275,7 @@ function ClientMobileApp({ history }) {
                 {conditionLogin}
             </section>
 
-            {gotToken && (
+            {isAuthUser && (
                 <section>
                     {role === "cliente" && (
                         <Fragment>
@@ -289,7 +293,7 @@ function ClientMobileApp({ history }) {
                     {role !== "cliente" && appSystem && appSystem.roleWhichDownloaded !== "cliente" && (
                         <Fragment>
                             {showConnectedStatus()}
-                            {!gotToken && showLogin()}
+                            {!isAuthUser && showLogin()}
                         </Fragment>
                     )}
                 </section>
@@ -301,7 +305,7 @@ function ClientMobileApp({ history }) {
 export default withRouter(ClientMobileApp);
 
 /* ARCHIVES
-{gotToken && !userName
+{isAuthUser && !userName
 ? (
     <div style={{margin: '200px 0 0'}}>
         <LoadingThreeDots color="white" />

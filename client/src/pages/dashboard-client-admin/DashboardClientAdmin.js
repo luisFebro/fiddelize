@@ -7,7 +7,7 @@ import isThisApp from '../../utils/window/isThisApp';
 import './mainLayout.scss';
 import getFirstName from '../../utils/string/getFirstName';
 import { useProfile } from '../../hooks/useRoleData';
-import ActionBtns from './ActionBtns';
+import ActionBtns, { PlanBadges } from './ActionBtns';
 import { withRouter } from 'react-router-dom';
 
 function DashboardClientAdmin({ location }) {
@@ -25,6 +25,7 @@ function DashboardClientAdmin({ location }) {
     return (
         <Fragment>
             {showGreeting()}
+            <PlanBadges />
             <br/>
             <GroupedDashSessions />
             <ActionBtns location={location} />

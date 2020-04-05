@@ -31,7 +31,7 @@ export default function Title({
             {parse(title)}
             <p
                 className="mt-2 text-subtitle"
-                style={{ color: subColor || color, marginBottom: 0 }}
+                style={{ color: subColor || color, marginBottom: 0, }}
             >
                 {subTitle && parse(subTitle)}
             </p>

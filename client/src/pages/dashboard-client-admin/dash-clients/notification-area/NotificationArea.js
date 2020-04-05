@@ -21,7 +21,7 @@ export default function NotificationArea({ userName, notifElemsArray }) {
             <Title
                 title="&#187; Novidades do dia"
                 color="var(--themeP)"
-                margin="mt-4 mb-1"
+                margin="my-4"
                 padding=" "
             />
             {notifElemsArray.length !== 0

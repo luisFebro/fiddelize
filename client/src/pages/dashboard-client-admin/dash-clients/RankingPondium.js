@@ -12,7 +12,6 @@ import  { appSystem } from '../../../hooks/useRoleData';
 
 export default function RankingPondium() {
     let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
-    console.log("highestScores", highestScores);
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
@@ -38,13 +37,13 @@ export default function RankingPondium() {
                             />
                         ) : (
                             <p className={id === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
-                                <span className="text-normal font-weight-bold text-shadow-white">
-                                    {truncateWords(name.cap(), 10)}
-                                </span>
-                                <br />
-                                <span className="text-subtitle font-weight-bold text-shadow-white">
+                                <span style={{top: '14px'}} className="position-relative text-subtitle font-weight-bold text-shadow-white">
                                     {clientUserData && convertDotToComma(clientUserData.currScore)}
                                     {id === 0 && " Pontos"}
+                                </span>
+                                <br />
+                                <span className="text-normal font-weight-bold text-shadow-white">
+                                    {truncateWords(name.cap(), 10)}
                                 </span>
                             </p>
                         )}
@@ -54,7 +53,7 @@ export default function RankingPondium() {
         </Fragment>
     );
 
-    const gotAtLeastOne = highestScores && highestScores[0].name !== "nome1";
+    const gotAtLeastOne = highestScores && highestScores[0] && highestScores[0].name !== "nome1";
 
     return (
         <DivPodium
@@ -63,7 +62,7 @@ export default function RankingPondium() {
             <Title
                 title="&#187; Pódio Fidelidade"
                 color="var(--themeP)"
-                margin="my-4"
+                margin="my-5"
                 padding=" "
             />
             {!gotAtLeastOne && (
@@ -93,7 +92,7 @@ const DivPodium = styled.div`
     }
 
     & .bounce-repeat {
-        animation-iteration-count: 4;
+        animation-iteration-count: 5;
     }
 
     & .podium-title {
@@ -109,7 +108,7 @@ const DivPodium = styled.div`
     }
 
     & .first-place {
-        top: -9%;
+        top: -14%;
         left: 50%;
         transform: translate(-50%, -50%);
     }

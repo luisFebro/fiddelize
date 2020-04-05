@@ -54,10 +54,15 @@ function Login({ history, setLoginOrRegister }) {
                 let whichRoute;
                 if(verificationPass) {
                     whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
-                    showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
-                    setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                    setTimeout(() => history.push(whichRoute), 5000);
-                    setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
+                    if(isThisApp()) {
+                        showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 1500);
+                        setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 1400);
+                    } else {
+                        showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
+                        setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                        setTimeout(() => history.push(whichRoute), 5000);
+                        setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 7000);
+                    }
                 } else {
                     showSnackbar(dispatch, "Verificando...", 'warning', 3000);
                     setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
