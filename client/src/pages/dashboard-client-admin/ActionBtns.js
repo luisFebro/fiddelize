@@ -3,16 +3,14 @@ import ButtonFab, {faStyle} from '../../components/buttons/material-ui/ButtonFab
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useClientAdmin, appSystem, useProfile } from '../../hooks/useRoleData';
+import { useClientAdmin, useAppSystem, useProfile } from '../../hooks/useRoleData';
 import lStorage from '../../utils/storage/lStorage';
 import { logout } from '../../redux/actions/authActions';
 import { useStoreDispatch } from 'easy-peasy';
 
 // IMPORTANT: This was moved from navbar since it was not running the buttons at the start.
-
-const bizId = appSystem && appSystem.businessId;
-
 export default function ActionBtns({ location }) {
+    const { businessId } = useAppSystem();
     const { role } = useProfile();
     const { bizCodeName, bizName, bizPlan } = useClientAdmin();
 
@@ -21,14 +19,14 @@ export default function ActionBtns({ location }) {
     if(role === "cliente-admin") {
         return(
             <div>
-                <ClientAdminBtns role={role} bizCodeName={bizCodeName} bizName={bizName} />
+                <ClientAdminBtns businessId={businessId} role={role} bizCodeName={bizCodeName} bizName={bizName} />
                 <ShowLogoutBtn locationNow={locationNow} />
             </div>
         );
     }
 }
 
-const ClientAdminBtns = ({ bizCodeName, bizName, role }) => { // L
+const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role }) => { // L
     return(
         <section style={{zIndex: 3000, right: '15px', top: 5 }} className="position-absolute container-center">
             <div style={{marginRight: '15px'}}>
@@ -40,7 +38,7 @@ const ClientAdminBtns = ({ bizCodeName, bizName, role }) => { // L
                     onClick={null}
                 />
             </div>
-            <Link to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${bizId}&role=${role}`}>
+            <Link to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}>
                 <ButtonFab
                     backgroundColor="var(--themeSDark)"
                     position="relative"

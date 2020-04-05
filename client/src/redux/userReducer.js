@@ -112,7 +112,7 @@ export const userReducer = {
 
                 return {
                     ...state,
-                    currentUser: {}
+                    currentUser: {},
                 }
             default:
                 return state;

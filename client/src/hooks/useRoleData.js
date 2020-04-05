@@ -1,5 +1,5 @@
 import { useStoreState } from 'easy-peasy';
-import lStorage, { appSystemColl } from '../utils/storage/lStorage';
+import lStorage, { appSystemColl, userProfileColl } from '../utils/storage/lStorage';
 
 const sys = lStorage("getItems", appSystemColl);
 const systemRole = sys && sys.systemRole;
@@ -8,6 +8,23 @@ const systemBizId = sys && sys.businessId;
 export const appSystem = {
     roleWhichDownloaded: systemRole,
     businessId: systemBizId,
+}
+
+export const useAppSystem = () => {
+    const { clientUser, profile, role } = useStoreState(state => ({
+        role: state.userReducer.cases.currentUser.role,
+        clientUser: state.userReducer.cases.currentUser.clientUserData,
+        profile: state.userReducer.cases.currentUser,
+    }));
+    const clientUserBizId = clientUser && clientUser.bizId;
+    const clientAdminBizId = profile && profile._id;
+
+    const onlineBizId = role === "cliente-admin" ? clientAdminBizId : clientUserBizId;
+
+    return({
+        roleWhichDownloaded: systemRole || role,
+        businessId: systemBizId || onlineBizId,
+    });
 }
 
 export const useProfile = () => {

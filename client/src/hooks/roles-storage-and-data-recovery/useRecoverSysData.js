@@ -30,6 +30,7 @@ export default function useRecoverSysData(role, userId, opts = {}) {
 }
 
 export const readClientAdmin = (dispatch, userId) => {
+    console.log("appSystem check value if empty from Recovery", appSystem)
     if(appSystem) {
         readCliAdmin(dispatch, bizSysId);
     } else {

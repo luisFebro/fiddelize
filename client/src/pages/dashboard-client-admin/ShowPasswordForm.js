@@ -32,11 +32,10 @@ export default function ShowPasswordForm({
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        console.log("isFromCliAdminDash", isFromCliAdminDash);
         if(isFromCliAdminDash) {
             readVerificationPass(businessId)
             .then(res => {
-                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                if(res.status !== 200) return console.log("CODE ERROR: There is no businessId...")
                     const passValue = res.data.verificationPass;
                     const keyName = "clientAdminData.verificationPass";
 

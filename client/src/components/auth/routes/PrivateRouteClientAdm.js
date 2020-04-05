@@ -23,6 +23,9 @@ export default function PrivateRouteClientAdm({ component: Component, history, .
     const [goHome, setGoHome] = useState(checkPath(run, runName));
     const { role } = useProfile();
     const { isAuthUser } = useAuthUser();
+    console.log("isAuthUser", isAuthUser);
+    console.log("role", role);
+    console.log("goHome", goHome);
     // const dispatch = useStoreDispatch();
 
     const whichPath = isThisApp() ? "/mobile-app" : "/";

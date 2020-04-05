@@ -102,10 +102,10 @@ export const registerFacebook = (dispatch, body, resFacebook) => {
 // Register Social Networks
 
 export const logout = (dispatch, needSnackbar = true) => {
+    window.location.href = isThisApp() ? "/mobile-app" : "/";
     dispatch({ type: 'LOGOUT_SUCCESS' });
     dispatch({ type: 'USER_CLEARED' });
     dispatch({ type: 'ALL_COMPONENTS_CLEARED' });
-    window.location.href = isThisApp() ? "/mobile-app" : "/"
     setTimeout(() => needSnackbar && showSnackbar(dispatch, 'Sua sessão foi finalizada com sucesso!', 'warning', 4000), 2000);
 };
 
