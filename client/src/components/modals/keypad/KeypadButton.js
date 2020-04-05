@@ -17,7 +17,7 @@ export default function KeypadButton({
     title,
     titleIcon,
     keyboardType = "numeric",
-    setSelectedValue,
+    // setSelectedValue,
     confirmFunction }) {
   const [open, setOpen] = useState(false);
 
@@ -25,15 +25,9 @@ export default function KeypadButton({
     setOpen(true);
   };
 
-  const onClose = (value, isCancel = false) => {
+  const onClose = () => {
     setOpen(false);
-    setSelectedValue(isCancel ? "0" : value);
   };
-
-  const checkDataBeforeClose = value => {
-    setSelectedValue(value);
-    return true;
-  }
 
   return (
     <div>
@@ -54,11 +48,17 @@ export default function KeypadButton({
             titleIcon={titleIcon}
             keyboardType={keyboardType}
             confirmFunction={confirmFunction}
-            checkDataBeforeClose={checkDataBeforeClose}
       />
     </div>
   );
 }
+
+/* ARCHIVES
+// const checkDataBeforeClose = value => {
+//   // setSelectedValue(value);
+//   return true;
+// }
+*/
 
 /*
 USAGE EXEMPLE:

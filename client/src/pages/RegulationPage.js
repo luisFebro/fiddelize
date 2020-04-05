@@ -10,6 +10,7 @@ import replaceVariablesInTxt from '../utils/string/replaceVariablesInTxt';
 import MomentDateWithIcon from '../components/date-time/MomentDateWithIcon';
 import getQueryByName from '../utils/string/getQueryByName';
 import { readClientAdmin } from '../redux/actions/userActions';
+import { setRun } from '../redux/actions/globalActions';
 import { appSystem } from '../hooks/useRoleData';
 import moment from 'moment';
 import { useProfile, useClientAdmin, useClientUser } from '../hooks/useRoleData';
@@ -77,7 +78,7 @@ export default function RegulationPage({ location }) {
 
     const showBackBtn = () => (
         <div className="d-flex justify-content-start mb-5">
-            <Link to={handlePath()}>
+            <Link to={handlePath()} onClick={() => handlePath().includes("/cliente-admin") && setRun(dispatch, "goDash")}>
                 <ButtonMulti
                     title={isClientAdmin ? "voltar painel" : "voltar"}
                     color="var(--mainWhite)"

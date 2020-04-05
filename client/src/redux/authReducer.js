@@ -7,7 +7,7 @@ import { reducer } from 'easy-peasy';
 // REDUCERS
 const initialState = {
     token: localStorage.getItem('token'), // n1 n3
-    tokenWhenLogin: '', // n2
+    tokenWhenLogin: false, // n2
     isUserAuthenticated: false,
 };
 
@@ -41,7 +41,7 @@ export const authReducer = {
                 return {
                     ...state,
                     isUserAuthenticated: false,
-                    tokenWhenLogin: '',
+                    tokenWhenLogin: false,
                     token: null,
                 };
             default:

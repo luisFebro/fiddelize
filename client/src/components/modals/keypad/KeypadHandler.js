@@ -15,7 +15,6 @@ NumericKeypad.propTypes = {
     open: PropTypes.bool.isRequired,
     keyboardType: PropTypes.oneOf(['numeric', 'cpf']),
     confirmFunction: PropTypes.func,
-    checkDataBeforeClose: PropTypes.func,
 }
 
 const defaultValue = {
@@ -29,7 +28,6 @@ export default function NumericKeypad({
     onClose,
     open,
     confirmFunction,
-    checkDataBeforeClose,
 }) {
 
     const [display, setDisplay] = useState(defaultValue[keyboardType]);
@@ -38,14 +36,14 @@ export default function NumericKeypad({
 
     const handleClose = () => {
       setDisplay(defaultValue[keyboardType])
-      onClose(display, true);
-      showSnackbar(dispatch, "A operação foi cancelada.", "warning", 5000);
+      onClose();
+      // showSnackbar(dispatch, "A operação foi cancelada.", "warning", 5000);
     };
 
     const handleConfirm = () => {
       if(display === "Digite 11 dígitos") return showSnackbar(dispatch, "Por favor, insira seu CPF para acesso", 'error', 6000)
-      if(checkDataBeforeClose(display) && confirmFunction(display)) {
-          onClose(display);
+      if(confirmFunction(display)) {
+          onClose();
       }
 
     };

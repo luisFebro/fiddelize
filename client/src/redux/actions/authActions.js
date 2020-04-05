@@ -5,6 +5,7 @@ import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
 import lStorage from '../../utils/storage/lStorage';
 import { readClientAdmin } from '../../hooks/roles-storage-and-data-recovery/useRecoverSysData';
+import isThisApp from '../../utils/window/isThisApp';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 
@@ -104,6 +105,7 @@ export const logout = (dispatch, needSnackbar = true) => {
     dispatch({ type: 'LOGOUT_SUCCESS' });
     dispatch({ type: 'USER_CLEARED' });
     dispatch({ type: 'ALL_COMPONENTS_CLEARED' });
+    window.location.href = isThisApp() ? "/mobile-app" : "/app"
     setTimeout(() => needSnackbar && showSnackbar(dispatch, 'Sua sessão foi finalizada com sucesso!', 'warning', 4000), 2000);
 };
 

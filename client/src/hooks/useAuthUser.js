@@ -9,9 +9,10 @@ export const useAuthUser = () => {
         tokenWhenLogin: state.authReducer.cases.tokenWhenLogin,
     }))
 
-    const isAuthorized = tokenWhenLogin || gotToken;
+    const isAuthorized = (gotToken && !tokenWhenLogin) || (!gotToken && tokenWhenLogin);
 
     return({
         isAuthUser: Boolean(isAuthorized),
+        gotToken,
     })
 }

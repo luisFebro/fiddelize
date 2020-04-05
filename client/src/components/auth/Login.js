@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Title from '../../components/Title';
 import { withRouter } from 'react-router-dom';
 import { useStoreDispatch } from 'easy-peasy';
@@ -18,8 +18,6 @@ import { CLIENT_URL } from '../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Login({ history, setLoginOrRegister }) {
-    const [cpf, setData] = useState("0");
-
     const dispatch = useStoreDispatch();
 
     const signInThisUser = value => {
@@ -104,7 +102,6 @@ function Login({ history, setLoginOrRegister }) {
                 title="Informe o seu CPF"
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
-                setSelectedValue={setData}
                 confirmFunction={signInThisUser}
             />
         </div>
