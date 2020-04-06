@@ -50,7 +50,7 @@ exports.mwValidateLogin = (req, res, next) => {
         if(!cpf) return res.status(400).json(msg('error.noCpf'));
         if(!isCpfValid) return res.status(400).json(msg('error.invalidCpf'));
         if(!user) return res.status(400).json(msg('error.notRegistedCpf'));
-        const appType = user.role === "cliente-admin" ? "CLIENTE" : "ADMIN"
+        const appType = user.role === "cliente-admin" ? "ADMIN" : "CLIENTE"
         if(roleWhichDownloaded && roleWhichDownloaded !== user.role) return res.status(400).json(msg('error.differentRoles', appType))
         req.profile = user;
         next();

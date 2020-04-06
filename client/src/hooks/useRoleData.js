@@ -24,7 +24,7 @@ export const useAppSystem = () => {
     const onlineBizId = role === "cliente-admin" ? clientAdminBizId : clientUserBizId;
 
     return({
-        roleWhichDownloaded: systemRole || role,
+        roleWhichDownloaded: systemRole || role, //do notincludes role for checking if current appis accessed by the right type of user in the backend.
         businessId: systemBizId || onlineBizId,
     });
 }

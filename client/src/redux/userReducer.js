@@ -78,8 +78,8 @@ export const userReducer = {
                 };
             case 'HIGHEST_SCORES_READ':
                 let payload;
-                !action.payload
-                ? payload = highestScoreData
+                action.payload && action.payload.length === 0
+                ? payload = [{name: "nome1"}, {name: "nome2"}, {name: "nome3"}]
                 : payload = action.payload
                 return {
                     ...state,
@@ -109,6 +109,7 @@ export const userReducer = {
             case 'USER_CLEARED':
                 lStorage("removeItem", {collection: 'onceChecked', property: 'setInitialState'})
                 lStorage("removeCol", {collection: 'userProfile'})
+                lStorage("removeCol", {collection: 'clientAdmin'})
 
                 return {
                     ...state,

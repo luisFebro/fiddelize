@@ -185,9 +185,11 @@ export default function RegisteredClientsList() {
                 searchTerm={searchTerm}
                 mainSubject="cliente"
             />
-            <p style={{top: '40px'}} className="text-p position-relative text-normal text-left pl-2 font-weight-bold">
-                Últimos Registros:
-            </p>
+            {list.length !== 0 && (
+                <p style={{top: '40px'}} className="text-p position-relative text-normal text-left pl-2 font-weight-bold">
+                    Últimos Registros:
+                </p>
+            )}
             {isLoading
             ? <LoadingThreeDots />
             : (

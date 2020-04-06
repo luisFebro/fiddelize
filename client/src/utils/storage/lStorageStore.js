@@ -36,7 +36,7 @@ const appSystemColl = coll3;
 const setSystemOp = (role, id) => {
     if(!role || !id) throw new Error("arguments missing...")
     // roleWhichDownloaded: cliente || cliente-admin || dev || rep
-    const obj = { roleWhichDownloaded: role || 'cliente', businessId: id };
+    const obj = { roleWhichDownloaded: role, businessId: id }; //|| 'cliente'
     const res = { ...appSystemColl, newObj: obj };
 
     return res;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { useProfile } from '../../../hooks/useRoleData';
+import { useAppSystem } from '../../../hooks/useRoleData';
 import { useAuthUser } from '../../../hooks/useAuthUser';
 import isThisApp from '../../../utils/window/isThisApp';
 import { useRunComp } from '../../../hooks/useRunComp';
@@ -21,7 +21,8 @@ const checkPath = (run, runName) => {
 export default function PrivateRouteClientAdm({ component: Component, history, ...rest }) {
     const { run, runName } = useRunComp();
     const [goHome, setGoHome] = useState(checkPath(run, runName));
-    const { role } = useProfile();
+    const { roleWhichDownloaded } = useAppSystem();
+    console.log("roleWhichDownloaded", roleWhichDownloaded);
     const { isAuthUser } = useAuthUser();
     console.log("isAuthUser", isAuthUser);
     // const dispatch = useStoreDispatch();
@@ -43,7 +44,7 @@ export default function PrivateRouteClientAdm({ component: Component, history, .
         <Route
             {...rest}
             render={props =>
-                role === "cliente-admin" && !goHome ? ( // isAuthUser is not working sometimes at start.
+                roleWhichDownloaded === "cliente-admin" && !goHome ? ( // isAuthUser is not working sometimes at start.
                     <Component {...props} />
                 ) :  alertAndRedirect(props)
             }
