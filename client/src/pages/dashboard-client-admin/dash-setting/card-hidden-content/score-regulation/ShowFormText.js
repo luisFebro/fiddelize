@@ -8,6 +8,7 @@ import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import ButtonMulti, { faStyle } from '../../../../../components/buttons/material-ui/ButtonMulti';
 import handleChange from '../../../../../utils/form/use-state/handleChange';
 import replaceVariablesInTxt from '../../../../../utils/string/replaceVariablesInTxt';
+import { useAppSystem } from '../../../../../hooks/useRoleData';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -17,8 +18,9 @@ export default function RegulationText() {
     const [data, setData] = useState({ regulationText: '' })
     const { regulationText } = data;
 
-    const { cliAdminId, regTxt, clientAdmin } = useStoreState(state => ({
-        cliAdminId: state.userReducer.cases.currentUser._id,
+    const { businessId } = useAppSystem();
+
+    const { regTxt, clientAdmin } = useStoreState(state => ({
         clientAdmin: state.userReducer.cases.clientAdmin,
         regTxt: state.userReducer.cases.clientAdmin.regulation.text,
         // currentUser: state.userReducer.cases.currentUser,
@@ -76,7 +78,7 @@ export default function RegulationText() {
                 "clientAdminData.regulation.text": regulationText,
                 "clientAdminData.regulation.updatedAt": new Date(),
             }
-            updateUser(dispatch, objToSend, cliAdminId)
+            updateUser(dispatch, objToSend, businessId)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 setMsgStatus("salvo");

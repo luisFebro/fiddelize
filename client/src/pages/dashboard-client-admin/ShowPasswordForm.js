@@ -11,7 +11,7 @@ import { updateUser } from '../../redux/actions/userActions';
 import { readVerificationPass } from '../../redux/actions/adminActions';
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
 import { regulationText } from './regulationText';
-import { appSystem } from '../../hooks/useRoleData';
+import { useAppSystem } from '../../hooks/useRoleData';
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ShowPasswordForm({
@@ -22,7 +22,8 @@ export default function ShowPasswordForm({
     })
     const { clientAdminData } = data;
 
-    const businessId = appSystem.businessId;
+    const { businessId } = useAppSystem();
+
 
     const history = dataFromPassPage.history;
     const clientAdminName = dataFromPassPage.clientAdminName;

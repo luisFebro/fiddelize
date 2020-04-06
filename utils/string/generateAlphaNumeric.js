@@ -1,6 +1,6 @@
-import getOnlyConsonants from './getOnlyConsonants';
+
 // reference: https://stackoverflow.com/questions/10726909/random-alpha-numeric-string-in-javascript
-export default function generateAlphaNumeric(length, chars) {
+function generateAlphaNumeric(length, chars) {
     var mask = '';
     if (chars.indexOf('a') > -1) mask += 'bcdfghjklmnpqrstvwxyz';
     if (chars.indexOf('A') > -1) mask += 'BCDFGHJKLMNPQRSTVWXYZ';
@@ -12,19 +12,17 @@ export default function generateAlphaNumeric(length, chars) {
     return result;
 }
 
+const generatePlanCodes = () => {
+    const codesObj = { bronze: null, silver: null, gold: null };
+    let plan;
+    for(plan in codesObj) {
+        codesObj[plan] = generateAlphaNumeric(7, '#a@!')
+    }
 
-// Customized Functions
-const getUniqueCodeName = name => {
-    let finalName;
-    const onlyConsonants = getOnlyConsonants(name, 2);
-    const alphaNumeric = generateAlphaNumeric(5, 'a#!');
-
-    finalName = `${onlyConsonants}${alphaNumeric}`;
-
-    return finalName;
+    return codesObj;
 }
 
-export { getUniqueCodeName };
+module.exports = generatePlanCodes;
 
 // Other working exemple:
 // const length = 11; // max lenght is 11 characters.

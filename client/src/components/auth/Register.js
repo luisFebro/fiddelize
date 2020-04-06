@@ -34,11 +34,10 @@ import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
 
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
-import { appSystem } from '../../hooks/useRoleData';
+import { useAppSystem } from '../../hooks/useRoleData';
 import 'moment/locale/pt-br';
 
 moment.updateLocale('pt-BR');
-const bizId = appSystem && appSystem.businessId;
 const isSmall = window.Helper.isSmallScreen();
 
 const useStyles = makeStyles(theme => ({
@@ -49,6 +48,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Register({ setLoginOrRegister, needLoginBtn = false }) {
+    const { businessId } = useAppSystem();
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
@@ -60,7 +60,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
         birthday: '',
         cpf: '',
         maritalStatus: 'selecione estado civil',
-        clientUserData: { bizId: bizId },
+        clientUserData: { bizId: businessId },
     });
     let { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 

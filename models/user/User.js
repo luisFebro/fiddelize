@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const collectionName = "all-clients";
+const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
 
 // TEMP AUTH USER ID
 const dataTempAuthUserToken = {
@@ -59,20 +60,31 @@ const regulationData = {
         type: String,
         trim: true,
     },
-    updatedAt: { type: Date }
+    updatedAt: Date
 }
 const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true is not working here
+
+const planCodesData = {
+    bronze: String, // self-service functionalities - 3 options
+    silver: String,
+    gold: String,
+}
+const PaidPlanCodesSchema = new Schema(planCodesData, { _id: false });
 
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
     bizCodeName: String,
-    bizCnpj: String,
+    bizCnpj: String, // NOT IMPLEMENTED YET
     bizWhatsapp: Number,
     bizPlan: {
         type: String,
-        default: "cortesia",
-        enum: ["cortesia", "prata", "ouro"]
+        default: "gratis",
+        enum: ["gratis", "prata", "ouro"]
     },
+    bizPlanCode: PaidPlanCodesSchema,
+    bizPlanStarts: Date, // NOT IMPLEMENTED YET
+    bizPlanExpires: Date, // NOT IMPLEMENTED YET
+    bizCep: Number, // NOT IMPLEMENTED YET
 
     // self-service
     bizLogoImg: String,
@@ -80,6 +92,9 @@ const clientAdminData = {
     themePColor: String,
     themeSColor: String,
     // end self-service
+
+    totalUsersScore: Number, // NOT IMPLEMENTED YET
+    totalUsers: Number, // NOT IMPLEMENTED YET
 
     rewardScore: Number, // prior maxScore
     mainReward: String,
@@ -92,6 +107,10 @@ const clientAdminData = {
     // onceActionSetPassword: { type: Boolean, default: false },
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
+ClientAdminDataSchema.pre('save', function(next) {
+    this.bizPlanCode = generatePlanCodes();
+    next();
+});
 
 // Client Admin
 const adminData = {

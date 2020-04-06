@@ -55,7 +55,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [data, setData] = useState({
         role: 'cliente-admin',
         name: '',
-        clientAdminData: { bizName: '', bizCodeName: '' },
+        clientAdminData: { bizName: '', bizCodeName: ''},
         email: '',
         phone: '',
         birthday: '',
@@ -105,7 +105,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             phone: '',
             birthday: '',
             cpf: '',
-            maritalStatus: 'selecione estado civil'
+            maritalStatus: 'selecione estado civil',
         })
         setFieldError(null);
     }
