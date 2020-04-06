@@ -17,7 +17,7 @@ const msg = (typeAndMsgName, customized = 'NeedCustomWord', options) => {
     ok.successRegister = `${customized}, cadastro realizado com sucesso. Você já está participando do nosso plano de fidelidade. Agradecemos sua visita!`;
     ok.changedPassword = `Sua senha foi alterada com sucesso, ${customized}!`;
     error.jwtNotFound = "JWT token não foi encontrado";
-    error.sessionEnded = 'A sua sessão terminou. Faça seu acesso login novamente.';
+    error.sessionEnded = 'A sua sessão terminou.';
     error.notAuthorized = "Você não tem autorização para acessar este documento";
     error.accessDenied = "Acesso Negado. Somente admin";
     error.expiredAuthToken = 'O prazo para trocar a senha expirou.';

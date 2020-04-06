@@ -49,7 +49,7 @@ export default function PanelHiddenContent({ data }) {
             className="text-normal enabledLink panel-hidden-content--root"
         >
             {showInfos()}
-            <div className="animated flipInY slow delay-1s">
+            <div className="animated flipInY slow delay-3s">
                 <ActionBtns data={data} />
             </div>
         </div>

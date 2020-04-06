@@ -14,11 +14,7 @@ import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
 import LoadingThreeDots from '../../../../components/loadingIndicators/LoadingThreeDots';
 import LoadMoreItemsButton from '../../../../components/buttons/LoadMoreItemsButton';
 import Title from '../../../../components/Title';
-import lStorage from '../../../../utils/storage/lStorage';
-
-//AppSystem
-const appSystem = lStorage("getItems", { collection: "appSystem"});
-const bizId = appSystem && appSystem.businessId;
+import { useAppSystem } from '../../../../hooks/useRoleData';
 
 moment.updateLocale('pt-br');
 
@@ -26,6 +22,8 @@ const initialSkip = 0;
 let searchTerm = "";
 export default function RegisteredClientsList() {
     const [init, setInit] = useState(true);
+    const { businessId } = useAppSystem();
+    console.log("businessId", businessId);
     const [clientsData, setClientsData] = useState({
         list: [],
         chunkSize: 0,
@@ -44,27 +42,6 @@ export default function RegisteredClientsList() {
         }],
         updatedAt: new Date(),
     }
-
-    const cli2 = {
-        clientUserData: {
-            currScore: 210,
-            cashCurrScore: 0,
-            purchase: purchaseHistory,
-        },
-        name: "Fernanda Nogueira",
-        email: 'fernanda_nogueira@gmail.com',
-        maritalStatus: 'solteiro',
-        cpf: '043.248.852-42',
-        birthday: '22 de Outubro.',
-        _id: '456',
-        phone: '(95) 99999-9999',
-        updatedAt: new Date()
-    };
-    // const cli1 = { clientUserData: {currScore: 0, cashCurrScore: "0"}, purchase: { history: [{challengeN: 1, icon: "star", desc: "Primeira Compra", createdAt: new Date(), value: 20.50,}] }},  _id: '123', phone: '(92) 99281-7363', birthday: '23 de agosto', name: "John Doe", email: 'luisfebro@gmail.com', maritalStatus: 'solteiro', cpf: '02324889242', updatedAt: new Date() };
-    // const cli3 = { clientUserData: {currScore: 150, cashCurrScore: 100}, purchase: { history: [{challengeN: 1, icon: "star", desc: "Primeira Compra", createdAt: new Date(), value: 20.50,}] }},  _id: '789', phone: '(92) 99281-7363', birthday: '23 de agosto', name: "Roberta Nogueira da Silva", email: 'luisfebro@gmail.com', maritalStatus: 'solteiro', cpf: '02324889242', updatedAt: new Date() };
-    // const cli4 = { clientUserData: {currScore: 150, cashCurrScore: 111}, purchase: { history: [{challengeN: 1, icon: "star", desc: "Primeira Compra", createdAt: new Date(), value: 20.50,}] }},  _id: '101112', phone: '(92) 99281-7363', birthday: '23 de agosto', name: "Ana Silvia da Silva", email: 'luisfebro@gmail.com', maritalStatus: 'solteiro', cpf: '02324889242', updatedAt: new Date() };
-    list = [cli2]
-    totalSize = 4;
     // end test
 
     const { isLoading, adminName, run, runName } = useStoreState(state => ({
@@ -76,28 +53,28 @@ export default function RegisteredClientsList() {
 
     const dispatch = useStoreDispatch();
 
-    // useEffect(() => {
-    //     if(init || runName === "registered") {
-    //         readUserList(dispatch, initialSkip, "cliente", "", bizId)
-    //         .then(res => {
-    //             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-    //             setClientsData({
-    //                 ...clientsData,
-    //                 list: res.data.list,
-    //                 chunkSize: res.data.chunkSize,
-    //                 totalSize: res.data.totalSize
-    //             })
-    //             setInit(false);
-    //         })
-    //     }
-    // }, [run, runName])
+    useEffect(() => {
+        if(init || runName === "registered") {
+            readUserList(dispatch, initialSkip, "cliente", "", businessId)
+            .then(res => {
+                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                setClientsData({
+                    ...clientsData,
+                    list: res.data.list,
+                    chunkSize: res.data.chunkSize,
+                    totalSize: res.data.totalSize
+                })
+                setInit(false);
+            })
+        }
+    }, [run, runName])
 
     // search
     const onSearchChange = e => {
         const querySearched = e.target.value;
         searchTerm = querySearched;
 
-        readUserList(dispatch, initialSkip, "cliente", querySearched, bizId)
+        readUserList(dispatch, initialSkip, "cliente", querySearched, businessId)
         .then(res => {
 
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
@@ -188,7 +165,7 @@ export default function RegisteredClientsList() {
             button={{
                 title: "Carregar mais Clientes",
                 loadingIndicator: "Carregando mais agora...",
-                backgroundColor: 'var(--mainPink)',
+                backgroundColor: 'var(--themeP)',
             }}
         />
     );

@@ -12,15 +12,23 @@ HiddenScoreRegulation.propTypes = {
 
 export default function HiddenScoreRegulation({ clientAdmin }) {
     const [openCommands, setOpenCommands] = useState(false);
+    const [showInstru, setShowInstru] = useState(false);
+
+    const dateUpdated = clientAdmin && clientAdmin.regulation.updatedAt;
+    if(!dateUpdated) {
+        setShowInstru(true);
+    }
 
     const showTitleAndExplanation = () => (
         <section style={{padding: '0 20px'}}>
-            <p className="text-grey">
-                Seu primeiro regulamento de pontos já foi criado automaticamente para seus clientes.
-                <br />
-                <br />
-                Fique à vontade para alterar ou adicionar mais detalhes.
-            </p>
+            {showInstru && (
+                <p className="text-grey">
+                    Seu primeiro regulamento de pontos já foi criado automaticamente para seus clientes.
+                    <br />
+                    <br />
+                    Fique à vontade para alterar ou adicionar mais detalhes.
+                </p>
+            )}
             <section className="instruction-area">
                 <div className="btn">
                     <ButtonFab
