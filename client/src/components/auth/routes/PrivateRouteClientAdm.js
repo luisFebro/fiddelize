@@ -21,9 +21,7 @@ const checkPath = (run, runName) => {
 export default function PrivateRouteClientAdm({ component: Component, history, ...rest }) {
     const { run, runName } = useRunComp();
     const [goHome, setGoHome] = useState(checkPath(run, runName));
-    console.log("goHome", goHome);
     const { role } = useProfile();
-    console.log("role", role);
     const { isAuthUser } = useAuthUser();
     console.log("isAuthUser", isAuthUser);
     // const dispatch = useStoreDispatch();
@@ -45,7 +43,7 @@ export default function PrivateRouteClientAdm({ component: Component, history, .
         <Route
             {...rest}
             render={props =>
-                isAuthUser && role === "cliente-admin" && !goHome ? (
+                role === "cliente-admin" && !goHome ? ( // isAuthUser is not working sometimes at start.
                     <Component {...props} />
                 ) :  alertAndRedirect(props)
             }
