@@ -134,7 +134,7 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
 
     return (
         <div
-            className='container-center mt-4'
+            className='container-center-col mt-4'
         >
             {showCheckSummary()}
             <Card
