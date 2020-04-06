@@ -27,7 +27,6 @@ exports.mwPhoto = (req, res, next) => {
     next();
 };
 // END MIDDLEWARES
-
 exports.createOrUpdate = (req, res) => { // n4
     Admin.findOneAndUpdate(
         { _id: adminId },

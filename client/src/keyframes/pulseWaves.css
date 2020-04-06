@@ -1,7 +1,7 @@
 /*reference: https://codepen.io/wifeo/pen/KwdXwV*/
 .pulse-waves {
-    width: 2px;
-    height: 2px;
+    width: 20px;
+    height: 20px;
     position: absolute;
     top: 40%;
     left: 40%;

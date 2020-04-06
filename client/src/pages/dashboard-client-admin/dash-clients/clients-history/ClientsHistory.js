@@ -15,6 +15,7 @@ import LoadingThreeDots from '../../../../components/loadingIndicators/LoadingTh
 import LoadMoreItemsButton from '../../../../components/buttons/LoadMoreItemsButton';
 import Title from '../../../../components/Title';
 import { useAppSystem } from '../../../../hooks/useRoleData';
+import PremiumButton from '../../../../components/buttons/PremiumButton';
 
 moment.updateLocale('pt-br');
 
@@ -88,12 +89,20 @@ export default function RegisteredClientsList() {
     }
 
     const showSearchBar = () => (
-        <div className="container-center my-4">
-            <SearchFilter
-                placeholder="Admin, procure cliente"
-                searchChange={onSearchChange}
-            />
-        </div>
+        <section className="container-center my-4">
+            <span className="position-relative">
+                <SearchFilter
+                    placeholder="Admin, procure cliente"
+                    searchChange={onSearchChange}
+                />
+                <PremiumButton
+                    needAttentionWaves={true}
+                    onClick={null}
+                    left={10}
+                    top={-40}
+                />
+            </span>
+        </section>
     );
     // end search
 

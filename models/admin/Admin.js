@@ -3,24 +3,14 @@ const Schema = mongoose.Schema;
 const collectionName = "admin";
 
 const data = {
-    siteBackgroundColor: {
-        type: String,
-        default: "black"
-    },
-    trademark: {
-        data: Buffer,
-        contentType: String
-    },
     verificationPass: {
         type: String,
         default: "slb19"
     },
+    limitFreePlanNewUsers: Number,
     businessInfo: {
         type: Schema.ObjectId,
         ref: 'BusinessInfo',
-    },
-    regulationText: {
-        type: String,
     },
     app: {
         downloads: {
@@ -34,4 +24,16 @@ const adminSchema = new Schema(data, { timestamps: true });
 module.exports = mongoose.model('Admin', adminSchema, collectionName);
 
 
-
+/*ARCHIVES
+siteBackgroundColor: {
+    type: String,
+    default: "black"
+},
+trademark: {
+    data: Buffer,
+    contentType: String
+},
+regulationText: {
+    type: String,
+},
+*/
