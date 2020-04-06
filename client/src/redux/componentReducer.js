@@ -2,7 +2,7 @@ import { reducer } from 'easy-peasy';
 
 // REDUCERS
 const initialState = {
-    currentComp: 'staffConfirmation',
+    currentComp: 'login',
     currentCompSet2: '?',
 };
 
