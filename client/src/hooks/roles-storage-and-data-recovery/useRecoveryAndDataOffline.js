@@ -25,8 +25,8 @@ export const useRecoveryAndDataOffline = () => {
         bizPlan,
         bizCodeName,
         regulation: {
-            text: bizRegulation.text,
-            updatedAt: bizRegulation.updatedAt,
+            text: bizRegulation && bizRegulation.text,
+            updatedAt: bizRegulation && bizRegulation.updatedAt,
         },
         maxScore,
         mainReward,

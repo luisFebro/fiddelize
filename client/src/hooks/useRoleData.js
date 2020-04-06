@@ -2,7 +2,7 @@ import { useStoreState } from 'easy-peasy';
 import lStorage, { appSystemColl, userProfileColl } from '../utils/storage/lStorage';
 
 const sys = lStorage("getItems", appSystemColl);
-const systemRole = sys && sys.systemRole;
+const systemRole = sys && sys.roleWhichDownloaded;
 const systemBizId = sys && sys.businessId;
 
 // appSystem will be depracated since it is not reliable with starting valueswith nulll from local storage...

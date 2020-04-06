@@ -16,13 +16,16 @@ import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaTo
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import { CLIENT_URL } from '../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAppSystem } from '../../hooks/useRoleData';
 
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
+    const { roleWhichDownloaded } = useAppSystem();
 
     const signInThisUser = value => {
         const userData = {
             cpf: value,
+            roleWhichDownloaded,
         };
 
         loginEmail(dispatch, userData)

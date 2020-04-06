@@ -109,7 +109,6 @@ exports.register = (req, res) => {
 
 
 const handleRolesData = (role, ...allKeys) => {
-    console.log("running")
     let objToSend;
     const allKeysStore = Object.assign({}, ...allKeys);
     // console.log(Object.keys(allKeysStore))

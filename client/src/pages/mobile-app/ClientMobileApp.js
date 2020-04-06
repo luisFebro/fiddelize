@@ -11,22 +11,18 @@ import { useProfile, useClientAdmin, useClientUser } from '../../hooks/useRoleDa
 import { logout } from '../../redux/actions/authActions';
 import { setRun } from '../../hooks/useRunComp';
 import { useAuthUser } from '../../hooks/useAuthUser';
+import { useAppSystem } from '../../hooks/useRoleData';
 import ClientUserAppContent from './content/ClientUserAppContent';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
-//AppSystem
-const appSystemCollection = { collection: "appSystem"};
-const appSystem = lStorage("getItems", appSystemCollection);
-const roleWhichDownloaded = appSystem && appSystem.roleWhichDownloaded;
-
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ClientMobileApp() {
     const { isAuthUser } = useAuthUser();
-    console.log("isAuthUser", isAuthUser);
+    const { roleWhichDownloaded } = useAppSystem();
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 

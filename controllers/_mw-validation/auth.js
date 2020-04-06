@@ -42,7 +42,7 @@ exports.mwValidateRegister = (req, res, next) => {
 }
 
 exports.mwValidateLogin = (req, res, next) => {
-    const { cpf } = req.body;
+    const { cpf, roleWhichDownloaded } = req.body;
     const isCpfValid = new CPF().validate(cpf);
 
     User.findOne({ cpf })
@@ -50,6 +50,8 @@ exports.mwValidateLogin = (req, res, next) => {
         if(!cpf) return res.status(400).json(msg('error.noCpf'));
         if(!isCpfValid) return res.status(400).json(msg('error.invalidCpf'));
         if(!user) return res.status(400).json(msg('error.notRegistedCpf'));
+        const appType = user.role === "cliente-admin" ? "CLIENTE" : "ADMIN"
+        if(roleWhichDownloaded && roleWhichDownloaded !== user.role) return res.status(400).json(msg('error.differentRoles', appType))
         req.profile = user;
         next();
     })

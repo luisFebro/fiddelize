@@ -71,6 +71,12 @@ const planCodesData = {
 }
 const PaidPlanCodesSchema = new Schema(planCodesData, { _id: false });
 
+// where_what_description
+const onceActionsData = {
+    cliAdminDash_feature_proSearch: { type: Boolean, default: false },
+}
+const OnceActionsSchema = new Schema(onceActionsData, { _id: false });
+
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
     bizCodeName: String,
@@ -103,8 +109,9 @@ const clientAdminData = {
 
     verificationPass: String,
     regulation: RegulationSchema,
+
     appDownloads: { type: Number, default: 0 },
-    // onceActionSetPassword: { type: Boolean, default: false },
+    onceActions: OnceActionsSchema, // NOT IMPLEMENTED YET
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {
