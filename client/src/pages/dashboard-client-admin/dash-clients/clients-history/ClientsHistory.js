@@ -23,7 +23,7 @@ let searchTerm = "";
 export default function RegisteredClientsList() {
     const [init, setInit] = useState(true);
     const { businessId } = useAppSystem();
-    console.log("businessId", businessId);
+
     const [clientsData, setClientsData] = useState({
         list: [],
         chunkSize: 0,

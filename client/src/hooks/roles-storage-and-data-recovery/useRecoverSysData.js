@@ -3,7 +3,8 @@ import lStorage from '../../utils/storage/lStorage';
 // import { useClientUser } from '../hooks/useRoleData';
 import useDispatch, { showSnackbar } from '../useDispatch';
 import { updateUser } from '../../redux/actions/userActions';
-import { readClientAdmin as readCliAdmin } from '../../redux/actions/userActions';
+import { readClientAdmin } from '../../redux/actions/userActions';
+import { useAppSystem } from '../useRoleData';
 
 const collection = { collection: "appSystem" };
 const appSystem = lStorage("getItems", collection);
@@ -29,12 +30,14 @@ export default function useRecoverSysData(role, userId, opts = {}) {
     }, [userId, role, bizSysId, needUpdateSys])
 }
 
-export const readClientAdmin = (dispatch, userId) => {
-    console.log("appSystem check value if empty from Recovery", appSystem)
-    if(appSystem) {
-        readCliAdmin(dispatch, bizSysId);
+export const readCliAdmin = (dispatch, role, opts = {}) => {
+    const { userId, bizId } = opts;
+    if(!role || !userId || !bizId) throw new Error("Missing arguments");
+
+    if(role === 'cliente-admin') {
+        readClientAdmin(dispatch, userId);
     } else {
-        readCliAdmin(dispatch, userId); //  if clientAdmin, userId === bizId.
+        readClientAdmin(dispatch, bizId); //  if clientAdmin, userId === bizId.
     }
 }
 // DEPRACATED

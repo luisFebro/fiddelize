@@ -16,7 +16,6 @@ import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaTo
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import { CLIENT_URL } from '../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { readClientAdmin } from '../../hooks/roles-storage-and-data-recovery/useRecoverSysData';
 
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
@@ -38,6 +37,7 @@ function Login({ history, setLoginOrRegister }) {
                 role,
                 name,
                 authUserId,
+                bizId,
                 bizCodeName,
                 verificationPass,
             } = res.data;
@@ -50,8 +50,6 @@ function Login({ history, setLoginOrRegister }) {
             }
 
             if(role === "cliente-admin") {
-                readClientAdmin(dispatch, authUserId)
-                readUser(dispatch, authUserId)
                 let whichRoute;
                 if(verificationPass) {
                     whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;

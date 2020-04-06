@@ -21,11 +21,11 @@ const checkPath = (run, runName) => {
 export default function PrivateRouteClientAdm({ component: Component, history, ...rest }) {
     const { run, runName } = useRunComp();
     const [goHome, setGoHome] = useState(checkPath(run, runName));
+    console.log("goHome", goHome);
     const { role } = useProfile();
+    console.log("role", role);
     const { isAuthUser } = useAuthUser();
     console.log("isAuthUser", isAuthUser);
-    console.log("role", role);
-    console.log("goHome", goHome);
     // const dispatch = useStoreDispatch();
 
     const whichPath = isThisApp() ? "/mobile-app" : "/";

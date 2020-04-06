@@ -7,16 +7,15 @@ import styled from 'styled-components';
 import { readHighestScores } from '../../../redux/actions/userActions';
 import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import lStorage from '../../../utils/storage/lStorage';
-import  { appSystem } from '../../../hooks/useRoleData';
+import  { useAppSystem } from '../../../hooks/useRoleData';
 
 export default function RankingPondium() {
     let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
     const dispatch = useStoreDispatch();
+    const { businessId } = useAppSystem();
 
     useEffect(() => {
-        const bizId = appSystem && appSystem.businessId;
-        readHighestScores(dispatch, bizId);
+        readHighestScores(dispatch, businessId);
     }, [])
 
     const showScores = () => (

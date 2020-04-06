@@ -120,7 +120,7 @@ const handleRolesData = (role, ...allKeys) => {
             objToSend = selectObjKeys(allKeysStore, array1);
             break;
         case "cliente":
-            const array2 = [ 'token', 'role', 'name', 'authUserId', 'msg' ];
+            const array2 = [ 'bizId', 'token', 'role', 'name', 'authUserId', 'msg' ];
             objToSend = selectObjKeys(allKeysStore, array2);
             break;
         default:
@@ -132,11 +132,12 @@ const handleRolesData = (role, ...allKeys) => {
 }
 exports.login = (req, res) => {
     // const { password, needKeepLoggedIn } = req.body;
-    const { _id, name, role, clientAdminData } = req.profile;
+    const { _id, name, role, clientAdminData, clientUserData } = req.profile;
 
     let keysStore = {
         role,
         name,
+        bizId: clientUserData && clientUserData.bizId || "0",
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
         verificationPass: clientAdminData && clientAdminData.verificationPass,
         authUserId: _id,

@@ -4,7 +4,7 @@ import { setLoadingProgress } from './globalActions';
 import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
 import lStorage from '../../utils/storage/lStorage';
-import { readClientAdmin } from '../../hooks/roles-storage-and-data-recovery/useRecoverSysData';
+import { readCliAdmin } from '../../hooks/roles-storage-and-data-recovery/useRecoverSysData';
 import isThisApp from '../../utils/window/isThisApp';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
@@ -15,8 +15,12 @@ export const loadUser = () => (dispatch, getState) => {
     axios.get('/api/auth/user', tokenConfig(getState))
     .then(res => {
        // from user reducer
+
+        const role = res.data.profile.role;
         const userId = res.data.profile._id;
-        readClientAdmin(dispatch, userId);
+        const userDataPath = res.data.profile.clientUserData;
+        const bizId = userDataPath && userDataPath.bizId;
+        readCliAdmin(dispatch, role, {userId: userId, bizId: bizId})
 
         dispatch({ type: 'AUTHENTICATE_USER_ONLY' });
         dispatch({ type: 'USER_READ', payload: res.data.profile });
@@ -40,9 +44,9 @@ export const loginEmail = async (dispatch, objToSend) => {
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
 
+        readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || "0"})
         readUser(dispatch, res.data.authUserId)
 
-        readClientAdmin(dispatch, res.data.authUserId);
 
         dispatch({ type: 'LOGIN_EMAIL', payload: res.data.token });
         setLoadingProgress(dispatch, false);
