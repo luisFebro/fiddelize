@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 KeypadButton.propTypes = {
     title: PropTypes.string.isRequired,
-    titleIcon: PropTypes.string.isRequired,
+    titleIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     setSelectedValue: PropTypes.func.isRequired,
     keyboardType: PropTypes.string,
     confirmFunction: PropTypes.func,

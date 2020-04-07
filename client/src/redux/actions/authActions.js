@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { readUser } from './userActions';
-import { setLoadingProgress } from './globalActions';
+import { setLoadingProgress, setRun } from './globalActions';
 import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
 import lStorage from '../../utils/storage/lStorage';
@@ -12,6 +12,7 @@ import isThisApp from '../../utils/window/isThisApp';
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
     console.log('==USER LOADING==');
+    dispatch({ type: 'USER_ONLINE', payload: true });
     axios.get('/api/auth/user', tokenConfig(getState))
     .then(res => {
        // from user reducer
@@ -27,12 +28,12 @@ export const loadUser = () => (dispatch, getState) => {
     })
     .catch(err => {
         const gotObj = err.response && err.response.data;
-        // if(gotObj && err.response.status === 500) {
-        //     showSnackbar(dispatch, "Não foi possível mostrar informações do servidor. Verifique sua conexão.")
-        // }
+        if(gotObj && err.response.status === 500) {
+            dispatch({ type: 'USER_ONLINE', payload: false });
+        }
         if(gotObj && err.response.data.msg && err.response.data.msg.length !== 0) {
-            showSnackbar(dispatch, err.response.data.msg, 'warning', 10000)
-            logout(dispatch, false);
+            showSnackbar(dispatch, "Sua sessão terminou. Faça seu acesso novamente.", 'warning', 10000) // err.response.data.msg
+            logout(dispatch, {needSnackbar: false});
         }
     });
 };
@@ -44,11 +45,12 @@ export const loginEmail = async (dispatch, objToSend) => {
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
 
-        readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || "0"})
         readUser(dispatch, res.data.authUserId)
+        readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || "0"})
 
 
         dispatch({ type: 'LOGIN_EMAIL', payload: res.data.token });
+        dispatch({ type: 'USER_ONLINE', payload: true });
         setLoadingProgress(dispatch, false);
         return res;
     } catch (err) {
@@ -69,6 +71,7 @@ export const registerEmail = async (dispatch, objToSend) => {
         // dispatch({ type: 'REGISTER_EMAIL', payload: res.data.token });
         // readUser(dispatch, res.data.authUserId);
         setLoadingProgress(dispatch, false);
+        dispatch({ type: 'USER_ONLINE', payload: true });
         return res;
     } catch(err) {
         dispatch({
@@ -105,8 +108,14 @@ export const registerFacebook = (dispatch, body, resFacebook) => {
 };
 // Register Social Networks
 
-export const logout = (dispatch, needSnackbar = true) => {
-    window.location.href = isThisApp() ? "/mobile-app" : "/";
+export const logout = (dispatch, opts = {   }) => {
+    const { needSnackbar = true, needReload = false } = opts;
+
+    setRun(dispatch, "logout");
+
+    if(needReload) {
+        window.location.href = isThisApp() ? "/mobile-app" : "/";
+    }
     dispatch({ type: 'LOGOUT_SUCCESS' });
     dispatch({ type: 'USER_CLEARED' });
     dispatch({ type: 'ALL_COMPONENTS_CLEARED' });

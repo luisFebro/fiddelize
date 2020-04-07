@@ -19,6 +19,7 @@ export default function RegulationText() {
     const { regulationText } = data;
 
     const { businessId } = useAppSystem();
+    console.log("businessId", businessId);
 
     const { regTxt, clientAdmin } = useStoreState(state => ({
         clientAdmin: state.userReducer.cases.clientAdmin,
@@ -131,7 +132,7 @@ export default function RegulationText() {
                 InputProps={{
                     style: styles.fieldFormValue,
                 }}
-                value={regulationText === "" ? "Carregando..." : regulationText}
+                value={regulationText === "" ? "..." : regulationText}
                 onChange={e => { handleChange(setData, data)(e); updateRegText(true); }}
                 onBlur={() => updateRegText(false)}
                 variant="outlined"

@@ -24,7 +24,7 @@ export const useAppSystem = () => {
     const onlineBizId = role === "cliente-admin" ? clientAdminBizId : clientUserBizId;
 
     return({
-        roleWhichDownloaded: systemRole || role, //do notincludes role for checking if current appis accessed by the right type of user in the backend.
+        roleWhichDownloaded: systemRole || role,
         businessId: systemBizId || onlineBizId,
     });
 }
@@ -70,6 +70,7 @@ export const useClientAdmin = () => {
 
     const maxScore = clientAdmin && clientAdmin.rewardScore;
     const mainReward = clientAdmin &&  clientAdmin.mainReward && clientAdmin.mainReward.cap();
+    const rewardList = ["giftA", "giftB"];
     const bizName = clientAdmin && clientAdmin.bizName && clientAdmin.bizName.cap();
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
@@ -83,5 +84,6 @@ export const useClientAdmin = () => {
         highestScores,
         maxScore,
         mainReward,
+        rewardList,
     });
 }

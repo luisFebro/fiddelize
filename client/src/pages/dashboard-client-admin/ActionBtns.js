@@ -16,14 +16,16 @@ export default function ActionBtns({ location }) {
 
     const locationNow = location.pathname;
 
-    if(role === "cliente-admin") {
+    if(locationNow.includes("/cliente-admin/painel-de-controle")) {
         return(
-            <div>
+            <div className="animated zoomIn fast">
                 <ClientAdminBtns businessId={businessId} role={role} bizCodeName={bizCodeName} bizName={bizName} />
                 <ShowLogoutBtn locationNow={locationNow} />
             </div>
         );
     }
+
+    return null;
 }
 
 const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role }) => { // L
@@ -58,10 +60,10 @@ export const PlanBadges = () => { // this export is required because this overri
     return(
         <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-5s">
             <div className={`${bizPlan}`}>
-                <span className="title">{bizPlan === "cortesia" && "Seu plano:"}</span>
+                <span className="title">{bizPlan === "gratis" && "Seu plano:"}</span>
                 <span className="plan text-center font-weight-bold">{bizPlan}</span>
             </div>
-            {bizPlan === "cortesia"
+            {bizPlan === "gratis"
             ? (
                 <div className="upgrade-btn position-relative">
                     <RadiusBtn

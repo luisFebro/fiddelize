@@ -1,12 +1,6 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
-import lStorage, { userProfileOp, clientAdminOp, setInitialStateOp } from '../utils/storage/lStorage';
-
-if(!lStorage("getItem", setInitialStateOp)) {
-    lStorage("setItemsByArray", userProfileOp);
-    lStorage("setItemsByArray", clientAdminOp);
-    lStorage("setItem", { ...setInitialStateOp, value: true })
-}
+import lStorage, { userProfileOp, clientAdminOp } from '../utils/storage/lStorage';
 
 const userData = lStorage("getItems", userProfileOp);
 const clientAdminData = lStorage("getItems", clientAdminOp);
@@ -108,8 +102,8 @@ export const userReducer = {
                 }
             case 'USER_CLEARED':
                 lStorage("removeItem", {collection: 'onceChecked', property: 'setInitialState'})
+                lStorage("removeCol", {collection: 'clientAdmin'}) // THis collection is not being removed..
                 lStorage("removeCol", {collection: 'userProfile'})
-                lStorage("removeCol", {collection: 'clientAdmin'})
 
                 return {
                     ...state,

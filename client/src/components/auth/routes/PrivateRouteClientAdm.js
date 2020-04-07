@@ -22,9 +22,7 @@ export default function PrivateRouteClientAdm({ component: Component, history, .
     const { run, runName } = useRunComp();
     const [goHome, setGoHome] = useState(checkPath(run, runName));
     const { roleWhichDownloaded } = useAppSystem();
-    console.log("roleWhichDownloaded", roleWhichDownloaded);
     const { isAuthUser } = useAuthUser();
-    console.log("isAuthUser", isAuthUser);
     // const dispatch = useStoreDispatch();
 
     const whichPath = isThisApp() ? "/mobile-app" : "/";
@@ -44,7 +42,7 @@ export default function PrivateRouteClientAdm({ component: Component, history, .
         <Route
             {...rest}
             render={props =>
-                roleWhichDownloaded === "cliente-admin" && !goHome ? ( // isAuthUser is not working sometimes at start.
+                isAuthUser && roleWhichDownloaded === "cliente-admin" && !goHome ? ( // isAuthUser is not working sometimes at start.
                     <Component {...props} />
                 ) :  alertAndRedirect(props)
             }

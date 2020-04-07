@@ -10,13 +10,13 @@ HiddenScoreRegulation.propTypes = {
 }
 // DEFINE IF(updatedAt === createdAt) === NO CHANGES MADE....
 
+let showInstru = false;
 export default function HiddenScoreRegulation({ clientAdmin }) {
     const [openCommands, setOpenCommands] = useState(false);
-    const [showInstru, setShowInstru] = useState(false);
 
-    const dateUpdated = clientAdmin && clientAdmin.regulation.updatedAt;
+    const dateUpdated = clientAdmin && clientAdmin.regulation && clientAdmin.regulation.updatedAt;
     if(!dateUpdated) {
-        setShowInstru(true);
+        showInstru = true;
     }
 
     const showTitleAndExplanation = () => (
@@ -105,7 +105,7 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
             <ShowFormText />
             <MomentDateWithIcon
                 style={{marginTop: 15}}
-                date={clientAdmin && clientAdmin.regulation.updatedAt}
+                date={dateUpdated}
                 msgIfNotValidDate="Nenhuma alteração."
             />
         </div>

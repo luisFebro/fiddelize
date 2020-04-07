@@ -9,11 +9,17 @@ const initialState = {
     token: localStorage.getItem('token'), // n1 n3
     tokenWhenLogin: false, // n2
     isUserAuthenticated: false,
+    isUserOnline: "",
 };
 
 export const authReducer = {
     cases: reducer((state = initialState, action) => {
         switch(action.type) {
+            case 'USER_ONLINE':
+                return {
+                    ...state,
+                    isUserOnline: action.payload,
+                };
             case 'AUTHENTICATE_USER_ONLY':
                 return {
                     ...state,

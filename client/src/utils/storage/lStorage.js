@@ -1,3 +1,4 @@
+import areObjsEqual from '../objects/areObjsEqual';
 export * from './lStorageStore';
 // You need to specify here all the collections of the project.
 // This should be AN OBJECT
@@ -9,7 +10,7 @@ const collectionStore = {
 };
 
 export default function lStorage(type, options, next) {
-    const { collection, property, value, newObj } = options;
+    const { collection, property, value, newObj, compareThisObj } = options;
 
     const notInCollection = !collectionStore.hasOwnProperty(collection);
     const objInCollection = JSON.parse(localStorage.getItem(collection));
@@ -20,7 +21,7 @@ export default function lStorage(type, options, next) {
 
     // Validation
     if(!collection) throw new Error("Insert a collection's name");
-    if(!(["setItem", "setItems", "setItemsByArray", "getItem", "getItems", "removeItems", "removeItem", "removeCol"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, setItems (any number of props and keys), setItemsByArray(quantity of props and values are equal), getItem, getItems, removeItems (remove all items from a collection), removeItem (One specific property from a collection). Check also for typos...")
+    if(!(["setItem", "setItems", "setItemsByArray", "getItem", "getItems", "removeItems", "removeItem", "removeCol", "compareCol"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, setItems (any number of props and keys), setItemsByArray(quantity of props and values are equal), getItem, getItems, removeItems (remove all items from a collection), removeItem (One specific property from a collection), compareCol. Check also for typos...")
     if(!value && type === "setItem" && typeof value !== 'boolean') throw new Error("Insert a value");
     if(notInCollection && type === "getItem") throw new Error("This collection does not exists. You can not get anything...")
     // End Validation
@@ -112,6 +113,14 @@ export default function lStorage(type, options, next) {
     if(type === "removeCol") {
         localStorage.removeItem(collection);
         return;
+    }
+
+    if(type === "compareCol") {
+        if(!compareThisObj) throw new Error("You need the target object as an option")
+        const Obj1 = objInCollection;
+        const Obj2 = compareThisObj;
+
+        return areObjsEqual(Obj1, Obj2);
     }
 
     if(typeof next === 'function') {
