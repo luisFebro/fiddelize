@@ -99,7 +99,7 @@ export default function RegisteredClientsList() {
                     needAttentionWaves={true}
                     onClick={null}
                     left={10}
-                    top={-40}
+                    top={-20}
                 />
             </span>
         </section>

@@ -82,7 +82,7 @@ export default function AppSharer({ location, match }) {
     );
 
     const showHeader = () => (
-        <header className={`${fluidTextAlign} container-center`}>
+        <header className={`${fluidTextAlign} container-center-col`}>
             <p className="text-hero text-center">
                 {!isSmall
                 ? <span>Compartilhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>

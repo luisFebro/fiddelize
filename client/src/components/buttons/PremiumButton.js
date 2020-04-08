@@ -5,25 +5,23 @@ import AttentionWaves from './AttentionWaves';
 
 export default function PremiumButton({ onClick, top, left, needAttentionWaves }) {
     return (
-        <div style={{top, left}} className="position-relative">
-            <span>
-                <AttentionWaves
-                    isActive={needAttentionWaves}
-                    waveColor="rgba(255, 242, 0, 0.3)"
-                    waveSize="40px"
-                    style={{top: -30, left: 25}}
-                />
-                <ButtonFab
-                    position="relative"
-                    top={top}
-                    left={left}
-                    size="medium"
-                    onClick={onClick}
+        <div style={{top, left}} className="position-absolute">
+            <AttentionWaves
+                isActive={needAttentionWaves}
+                waveColor="rgba(255, 242, 0, 0.3)"
+                waveSize="40px"
+                style={{top: -10, left: 25}}
+            />
+            <ButtonFab
+                position="absolute"
+                top={top}
+                left={left}
+                size="medium"
+                onClick={onClick}
                     color="var(--mainWhite)"
                     backgroundColor="#fbc531" // nice ui yellow
                     iconFontAwesome={<FontAwesomeIcon icon="crown" style={faStyle} />}
                 />
-            </span>
         </div>
     );
 }
