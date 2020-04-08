@@ -35,9 +35,9 @@ export default function RegulationPage({ location }) {
     }, [])
 
     const variablesObj = {
-        "nome-empresa": bizName,
-        "nome-cliente": userName,
-        "nome-premio": mainReward,
+        "nome-empresa": bizName || " ",
+        "nome-cliente": userName || " ",
+        "nome-premio": mainReward || " ",
         "ponto-premio": `${rewardScore} pontos`,
         "ponto-nivel": `${levelScore} pontos`,
     }

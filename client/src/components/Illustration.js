@@ -77,6 +77,7 @@ export default function Illustration({
                     <p
                         className={`move-txt-from-center ${txtBorder} ${txtStyle || "text-subtitle"}`}
                         style={{
+                            overflowY: 'visible',
                             minWidth: `${isSmall ? "300px" : "500px"}`,
                             fontSize: fontSize || '2rem',
                             textAlign: txtAlign || "center",

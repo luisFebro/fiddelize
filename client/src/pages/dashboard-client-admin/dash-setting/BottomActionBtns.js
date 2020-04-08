@@ -33,7 +33,7 @@ export default function BottomActionBtns() {
                     position="relative"
                     variant="extended"
                     textTransform="none"
-                    title={`Turbine seu app, ${getFirstName(userName.cap())}`}
+                    title={`Turbine seu app, ${userName && getFirstName(userName.cap())}`}
                     size="large"
                     onClick={null}
                     color="var(--mainWhite)"

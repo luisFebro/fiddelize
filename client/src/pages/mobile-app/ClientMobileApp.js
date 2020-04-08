@@ -101,7 +101,7 @@ export default function ClientMobileApp() {
             <span>
                 Conectado por
                 <br/>
-                <strong className="text-title">{userName}</strong><br />
+                <strong className="text-title animated bounce">{userName}</strong><br />
             </span>
             <div className="container-center mt-4">
                 <Link

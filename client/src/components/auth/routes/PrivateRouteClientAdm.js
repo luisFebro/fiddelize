@@ -6,9 +6,9 @@ import isThisApp from '../../../utils/window/isThisApp';
 import { useRunComp } from '../../../hooks/useRunComp';
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
 
-const checkPath = (run, runName) => {
+const checkPath = runName => {
     if(isThisApp()) {
-        const runDash = run && runName === "goDash";
+        const runDash = runName === "goDash";
         if(runDash) {
             return false;
         }
@@ -19,8 +19,8 @@ const checkPath = (run, runName) => {
 }
 
 export default function PrivateRouteClientAdm({ component: Component, history, ...rest }) {
-    const { run, runName } = useRunComp();
-    const [goHome, setGoHome] = useState(checkPath(run, runName));
+    const { runName } = useRunComp();
+    const [goHome, setGoHome] = useState(checkPath(runName));
     const { roleWhichDownloaded } = useAppSystem();
     const { isAuthUser } = useAuthUser();
     // const dispatch = useStoreDispatch();
