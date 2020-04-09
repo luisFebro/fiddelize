@@ -6,7 +6,6 @@ const CPF = require('../../utils/validation/validateCpf');
 const { msg } = require('../_msgs/auth');
 const { msgG } = require('../_msgs/globalMsgs');
 
-
 exports.mwValidateRegister = (req, res, next) => {
     const { role, name, email, cpf, birthday, phone } = req.body;
     const isCpfValid = new CPF().validate(cpf);

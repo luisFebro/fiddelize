@@ -18,23 +18,19 @@ const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // USER'S ROLES
 // Client User
 // Client Admin
+
 const historyData = {
     challengeN: {type: Number, default: 1},
+    cardType: { type: String, default: "record",  enum: ["prize", "record"]},
     icon: String,
     desc: String,
     createdAt: {type: Date, default: new Date()},
-    value: Number,
-    cardType: { type: String, default: "record",  enum: ["prize", "record"]},
+    value: { type: Number, default: 0 },
     // For "prize" cartType variables. both false as default but not explicit at start.
-    isPrizeReceived: Boolean,
-    isPrizeConfirmed: Boolean,
+    isPrizeReceived: {type: Boolean, default: function() { return this.cardType === "prize" ? false : undefined }},
+    isPrizeConfirmed: {type: Boolean, default: function() { return this.cardType === "prize" ? false : undefined }},
 }
-const HistorySchema = new Schema(historyData, { _id: false, timestamps: false });
-
-const purchaseData = {
-    history: [HistorySchema],
-}
-const PurchaseSchema = new Schema(purchaseData, { _id: false, timestamps: true });
+const HistorySchema = new Schema(historyData, { _id: true });
 
 const clientUserData = {
     bizId: { type: String, default: "0"},
@@ -50,7 +46,7 @@ const clientUserData = {
         type: String,
         default: "0"
     },
-    purchase: PurchaseSchema,
+    purchaseHistory: [HistorySchema],
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 
@@ -62,7 +58,7 @@ const regulationData = {
     },
     updatedAt: Date
 }
-const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true is not working here
+const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true does  not work as a subdocument
 
 const planCodesData = {
     bronze: String, // self-service functionalities - 3 options
@@ -182,7 +178,6 @@ const data = {
 const UserSchema = new Schema(data, { timestamps: true });
 module.exports = mongoose.model('User', UserSchema, collectionName);
 
-
 /* COMMENTS
 n1: LESSON: JSON does not accept numbers which starts with 0
 L: LESSON: if you need get the length of the arrays to sort them, just reference the field's array themselves.array
@@ -197,3 +192,12 @@ By the way, this field will not be sorted at all
 This is how I sorted by the largest length of items, and then sorted by name:
 .sort({ staffBookingList: 1, name: 1 })
 */
+
+
+/* ARCHIVES
+UserSchema.pre('findOneAndUpdate', async function(next) {
+    const doc = await this.model.findOne(this.getQuery());
+
+    next();
+});
+ */

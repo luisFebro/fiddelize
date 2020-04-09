@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 const { msgG } = require('../_msgs/globalMsgs');
 const { msg } = require('../_msgs/user');
 const validateEmail = require('../../utils/validation/validateEmail');
-
 const { ObjectId } = mongoose.Types;
+const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
@@ -229,6 +229,68 @@ exports.readBackup = (req, res) => {
         res.json(data);
     });
 }
+
+// USER PURCHASE HISTORY
+const findOneAndUpdate = (res, _id, unshiftThis) => {
+    return User.findOneAndUpdate(
+        { _id },
+        { $push: { "clientUserData.purchaseHistory": unshiftThis } },
+        { new: true }
+    )
+    .exec((err, historyList) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err))
+        res.json(historyList);
+    });
+}
+
+exports.addPurchaseHistory = (req, res) => {
+    const { _id } = req.profile;
+    // keyRefs: rewardScore, icon, value, isPrizeReceived, isPrizeConfirmed };
+    //
+    User.findById(_id)
+    .select("clientUserData")
+    .exec((err, currDoc) => {
+        const userData = currDoc.clientUserData;
+        const purchaseLength = userData.purchaseHistory.length;
+        const historyData = currDoc.clientUserData.purchaseHistory[0];
+
+        const lastPurchaseObj = {
+            challengeN: historyData ? historyData.challengeN : 1,
+            purchaseLength,
+        }
+        const scores = {
+            rewardScore: req.body.rewardScore,
+            currScore: userData.currScore,
+        }
+
+        let [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchaseObj, scores);
+        currHistoryData = { ...req.body, ...currHistoryData };
+
+        let unshiftThis = { $each: [currHistoryData], $position: 0 }; // insert as the first array's element.
+
+        if(lastHistoryData) {
+            lastHistoryData = { ...req.body, ...lastHistoryData };
+            unshiftThis = { $each: [currHistoryData, lastHistoryData], $position: 0 }; // insert as the first array's element.
+
+            User.findOneAndUpdate(
+                { _id },
+                { $pull: { "clientUserData.purchaseHistory": {desc: `Última Compra ${purchaseLength}`}}},
+                { new: false }
+            ).exec((err, historyList) => {
+                if(err) return res.status(500).json(msgG('error.systemError', err))
+                // res.json(historyList);
+                findOneAndUpdate(res, _id, unshiftThis);
+            });
+        } else {
+            findOneAndUpdate(res, _id, unshiftThis);
+        }
+    })
+}
+
+exports.readHistoryList = (req, res) => {
+    //.limit(100) // load more logics goes here. set to 10 as default...
+}
+// END USER PURCHASE HISTORY
 
 /*ARCHIVES
 const assignToUndefined = (obj, keysArray) => {

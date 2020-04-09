@@ -3,7 +3,6 @@ import { CLIENT_URL } from '../../../../../../config/clientUrl';
 import Illustration from '../../../../../../components/Illustration';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment';
-import detectChangedNumberAndPrize from './helpers/detectChangedNumberAndPrize';
 import { convertDotToComma } from '../../../../../../utils/numbers/convertDotComma';
 import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';

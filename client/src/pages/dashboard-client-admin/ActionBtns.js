@@ -60,7 +60,7 @@ export const PlanBadges = () => { // this export is required because this overri
     return(
         <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-5s">
             <div className={`${bizPlan}`}>
-                <span className="title">{bizPlan === "gratis" && "Seu plano:"}</span>
+                <span className="title">{bizPlan === "gratis" && "Sua versão:"}</span>
                 <span className="plan text-center font-weight-bold">{bizPlan}</span>
             </div>
             {bizPlan === "gratis"

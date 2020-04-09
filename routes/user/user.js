@@ -13,7 +13,9 @@ const {
     createBooking,
     getHighestScores,
     mwUserId,
-    mwBackup
+    mwBackup,
+    addPurchaseHistory,
+    readHistoryList,
 } = require("../../controllers/user");
 
 const { mwIsAdmin } = require("../../controllers/auth");
@@ -26,6 +28,10 @@ router.delete('/:userId', mwBackup, remove);
 
 router.get("/confirm-account/:authUserId", confirmUserAccount);
 
+// purchase history
+router.put('/purchase-history/:userId', addPurchaseHistory);
+router.get("/list/purchase-history", readHistoryList);
+
 // LISTS
 router.get("/list/all", getList);
 router.get("/list/highest-scores", getHighestScores);
@@ -36,6 +42,7 @@ router.get("/:userId/backup/list", mwIsAdmin, readBackup);
 router.put('/field/array/push/:id', addElementArray);
 router.put('/field/array/pull/:id', removeElementArray);
 router.put('/field/remove/:id', removeField);
+
 
 router.param("userId", mwUserId); // n1
 
