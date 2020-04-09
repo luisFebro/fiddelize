@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { updateUser } from "../../../redux/actions/userActions";
+import { updateUser, addPurchaseHistory } from "../../../redux/actions/userActions";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import Title from '../../../components/Title';
 import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
@@ -16,6 +16,10 @@ import { logout } from "../../../redux/actions/authActions";
 import { Link } from 'react-router-dom';
 import lStorage, { userProfileOp } from '../../../utils/storage/lStorage';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
+import {
+    useProfile,
+    useClientUser,
+    useClientAdmin, useAppSystem } from '../../../hooks/useRoleData';
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -54,20 +58,14 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const animatedNumber = useRef(null);
 
-    const { name, userId, bizId, clientAdmin, client, role } = useStoreState(state => ({
-        name: state.userReducer.cases.currentUser.name,
-        role: state.userReducer.cases.currentUser.role,
-        bizId: state.userReducer.cases.clientAdmin._id,
-        client: state.userReducer.cases.currentUser.clientUserData,
-        clientAdmin: state.userReducer.cases.clientAdmin,
-        userId: state.userReducer.cases.currentUser._id,
-    }))
-    const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
-    const bizName = clientAdmin && clientAdmin.bizName;
+    const { role, userName, userId } = useProfile();
+    const { currScore } = useClientUser();
+    const { maxScore, bizName, bizCodeName } = useClientAdmin();
+    const { businessId } = useAppSystem();
 
     const dispatch = useStoreDispatch();
 
-    let lastScore = client && client.currScore;
+    let lastScore = currScore;
     if(typeof lastScore === "undefined") {
         lastScore = "0";
     }
@@ -89,45 +87,33 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 setShowTotalPoints
             );
 
-            // if(birthday.includes(getMonthNowBr())) {
-            //     setGotBirthday(true);
-            // }
-
             const objToSend = {
                 "clientUserData.cashCurrScore": cashCurrScore,
                 "clientUserData.currScore": currScore, // need to be Number to ranking in DB properly
-                "clientUserData.lastScore": lastScore,
+                "clientUserData.lastScore": lastScore, // the same as currScore
             }
 
             updateUser(dispatch, objToSend, userId, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 manageSetItem("userProfile", currScore, cashCurrScore)
+                const historyObj = {
+                    "rewardScore": maxScore,
+                    "icon": "star", // need to change it after implement self-servic page
+                    "value": cashCurrScore,
+                }
+                addPurchaseHistory(dispatch, userId, historyObj);
 
                 setTimeout(() => showSnackbar(dispatch, "Pontuação registrada!", 'success', 4000), 5000);
             })
         }
     }, [success, verification])
 
-    // This will be moved to client-admin soon.
-    // const showBirthdayMsg = () => (
-    //     <div className="container-center text-center flex-column">
-    //         O cliente faz aniversário este mês
-    //         <img
-    //             src={`${CLIENT_URL}/img/icons/birthday-cake.svg`}
-    //             width="128px"
-    //             height="120px"
-    //             alt="aniversariante"
-    //         />
-    //         <p className="text-default">em: {birthday}</p>
-    //     </div>
-    // );
-
     // RENDER
     const showHeader = () => (
         <div>
             <span className="text-hero">
-                {name && name.cap()},
+                {userName},
             </span>
             <Title
                 title="Sua nova pontuação"
@@ -173,7 +159,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     );
 
     const showSharingBtn = () => (
-        <Link to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${bizId}&role=${role}`}>
+        <Link to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}>
             <ButtonFab
                 position="relative"
                 top={-10}
@@ -226,7 +212,25 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     );
 }
 /*ARCHIVES
-<Link to={`/${clientAdmin.bizCodeName}/compartilhar-app?negocio=${clientAdmin.bizName}&id=${bizId}&role=${role}`}>
+birthday
+// if(birthday.includes(getMonthNowBr())) {
+//     setGotBirthday(true);
+// }
+// This will be moved to client-admin soon.
+// const showBirthdayMsg = () => (
+//     <div className="container-center text-center flex-column">
+//         O cliente faz aniversário este mês
+//         <img
+//             src={`${CLIENT_URL}/img/icons/birthday-cake.svg`}
+//             width="128px"
+//             height="120px"
+//             alt="aniversariante"
+//         />
+//         <p className="text-default">em: {birthday}</p>
+//     </div>
+// );
+
+<Link to={`/${clientAdmin.bizCodeName}/compartilhar-app?negocio=${clientAdmin.bizName}&id=${businessId}&role=${role}`}>
     <ButtonMulti
         title="compartilhar app"
         onClick={null}

@@ -1,5 +1,5 @@
 function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
-    let { challengeN, purchaseLength } = lastPurchaseObj;
+    let { challengeN, purchaseLength, value, icon, createdAt, createdAt } = lastPurchaseObj;
     const { rewardScore, currScore } = scores;
 
     let currentPurchase = {};
@@ -9,7 +9,7 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
     const currPurchaseCount = purchaseLength + 1;
     const lastPurchaseCount = currPurchaseCount - 1;
 
-    let defaultObj = { challengeN: challengeN, cardType: 'record', desc: '' };
+    let defaultObj = {, createdAt challengeN: challengeN, cardType: 'record', desc: '' };
 
     if(!purchaseLength && !cliUserBeatedGoal) {
         currentPurchase = { ...defaultObj, desc: 'Primeira Compra' };
@@ -23,14 +23,14 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
 
     if(purchaseLength >= 2 && !cliUserBeatedGoal) {
         currentPurchase = { ...defaultObj, desc: `Última Compra ${currPurchaseCount}` };
-        lastPurchase = { ...defaultObj, desc: `Compra ${lastPurchaseCount}` };
+        lastPurchase = { ...defaultObj, desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
         return [ currentPurchase, lastPurchase ];
     }
 
     if(cliUserBeatedGoal) {
         defaultObj = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${currPurchaseCount}`};
         currentPurchase = { ...defaultObj };
-        lastPurchase = { challengeN: --challengeN, cardType: 'record', desc: `Compra ${lastPurchaseCount}` };
+        lastPurchase = { challengeN: --challengeN, cardType: 'record', desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
         return [currentPurchase, lastPurchase];
     }
 }

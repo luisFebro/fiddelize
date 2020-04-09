@@ -20,7 +20,7 @@ const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // Client Admin
 
 const historyData = {
-    challengeN: {type: Number, default: 1},
+    challengeN: Number,
     cardType: { type: String, default: "record",  enum: ["prize", "record"]},
     icon: String,
     desc: String,

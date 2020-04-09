@@ -45,6 +45,16 @@ export const deleteUser = async (dispatch, _idUser) => { // n1
 };
 // END RUD
 
+// Purchase History
+export const addPurchaseHistory = async (dispatch, _idUser, bodyToSend) => { // n1
+    try {
+        await axios.put(`/api/user/purchase-history/${_idUser}`, bodyToSend, getHeaderJson);
+    } catch(err) {
+        return err.response;
+    }
+};
+// End Purchase History
+
 // LISTS
 export const readUserList = async (dispatch, skip = 0, role = "", search = "", bizId) => {
     if(!bizId) throw new Error("You should specify the bizId argument");

@@ -235,11 +235,11 @@ const findOneAndUpdate = (res, _id, unshiftThis) => {
     return User.findOneAndUpdate(
         { _id },
         { $push: { "clientUserData.purchaseHistory": unshiftThis } },
-        { new: true }
+        { new: false }
     )
     .exec((err, historyList) => {
         if(err) return res.status(500).json(msgG('error.systemError', err))
-        res.json(historyList);
+        res.json("User purchase's history updated.");
     });
 }
 
@@ -257,6 +257,9 @@ exports.addPurchaseHistory = (req, res) => {
         const lastPurchaseObj = {
             challengeN: historyData ? historyData.challengeN : 1,
             purchaseLength,
+            value: purchaseLength && historyData.value,
+            icon: purchaseLength && historyData.icon,
+            createdAt: purchaseLength && historyData.createdAt,
         }
         const scores = {
             rewardScore: req.body.rewardScore,
