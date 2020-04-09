@@ -74,8 +74,8 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     let cashCurrScore = convertCommaToDot(valuePaid);
     cashCurrScore = getIntOrFloat(cashCurrScore);
 
-    let currScore = parseFloat(lastScore) + parseFloat(cashCurrScore);
-    currScore = getIntOrFloat(currScore);
+    let currScoreNow = parseFloat(lastScore) + parseFloat(cashCurrScore);
+    currScoreNow = getIntOrFloat(currScoreNow);
 
     useEffect(() => {
         if(success && verification) {
@@ -89,14 +89,14 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
 
             const objToSend = {
                 "clientUserData.cashCurrScore": cashCurrScore,
-                "clientUserData.currScore": currScore, // need to be Number to ranking in DB properly
-                "clientUserData.lastScore": lastScore, // the same as currScore
+                "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
+                "clientUserData.lastScore": lastScore, // the same as currScoreNow
             }
 
             updateUser(dispatch, objToSend, userId, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                manageSetItem("userProfile", currScore, cashCurrScore)
+                manageSetItem("userProfile", currScoreNow, cashCurrScore)
                 const historyObj = {
                     "rewardScore": maxScore,
                     "icon": "star", // need to change it after implement self-servic page
@@ -148,7 +148,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                     }}
                 >
                     <p className="ml-2 text-left">&#187; Pontuação Atual:</p>
-                    <p className="text-center text-hero">{convertDotToComma(currScore)}</p>
+                    <p className="text-center text-hero">{convertDotToComma(currScoreNow)}</p>
                 </div>
                 <section className="position-relative" style={{margin: '90px 0 20px'}}>
                     <i className="fas fa-crown" style={styles.crownIcon}></i>
