@@ -32,19 +32,6 @@ export default function RegisteredClientsList() {
     });
     let { list, totalSize } = clientsData;
 
-    // test
-    const purchaseHistory = {
-        history: [{
-            challengeN: 1,
-            icon: "star",
-            desc: "Primeira Compra",
-            createdAt: new Date(),
-            value: 20.50
-        }],
-        updatedAt: new Date(),
-    }
-    // end test
-
     const { isLoading, adminName, run, runName } = useStoreState(state => ({
         run: state.globalReducer.cases.run,
         runName: state.globalReducer.cases.runName,
@@ -122,12 +109,12 @@ export default function RegisteredClientsList() {
                 >
                     • Última compra:
                     <br />
-                    {!(user.clientUserData && user.clientUserData.purchase)
+                    {!(user.clientUserData && user.clientUserData.purchaseHistory[0])
                     ? <span className="text-small font-weight-bold">Sem data registrada.</span>
                     : (
                         <span className="text-small font-weight-bold">
                             {moment(
-                                user.clientUserData.purchase.updatedAt
+                                user.clientUserData.purchaseHistory[0].createdAt,
                             ).calendar(null, { sameElse: 'lll'})}.
                         </span>
                     )}

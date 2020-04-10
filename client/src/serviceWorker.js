@@ -2,7 +2,7 @@ import showVanillaToast from './components/vanilla-js/toastify/showVanillaToast'
 
 const isToastActivated = true;
 // WARNING: The currentVersion needsfds to be actually the NEXT ONE because the next cache client receives is not updated.
-const currentVersion = "2.18";
+const currentVersion = "2.19";
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||

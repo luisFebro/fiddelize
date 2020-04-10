@@ -30,7 +30,7 @@ router.get("/confirm-account/:authUserId", confirmUserAccount);
 
 // purchase history
 router.put('/purchase-history/:userId', addPurchaseHistory);
-router.get("/list/purchase-history", readHistoryList);
+router.get("/list/purchase-history/:userId", readHistoryList);
 
 // LISTS
 router.get("/list/all", getList);

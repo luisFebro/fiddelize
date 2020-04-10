@@ -8,6 +8,7 @@ const { msg } = require('../_msgs/user');
 const validateEmail = require('../../utils/validation/validateEmail');
 const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
+const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
 
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
@@ -263,7 +264,7 @@ exports.addPurchaseHistory = (req, res) => {
         }
         const scores = {
             rewardScore: req.body.rewardScore,
-            currScore: userData.currScore,
+            currScore: 600// userData.currScore,
         }
 
         let [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchaseObj, scores);
@@ -291,6 +292,21 @@ exports.addPurchaseHistory = (req, res) => {
 }
 
 exports.readHistoryList = (req, res) => {
+    const { _id } = req.profile;
+    const rewardScore = req.query.rewardScore;
+
+    User.findById(_id)
+    .select("clientUserData")
+    .exec((err, data) => {
+        const purchaseHistory = data.clientUserData.purchaseHistory;
+        const currScore = data.clientUserData.currScore;
+
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+        const scores = { rewardScore, currScore };
+        const newHistoryData = generatePrizeCard(purchaseHistory, scores);
+
+        res.json(newHistoryData);
+    });
     //.limit(100) // load more logics goes here. set to 10 as default...
 }
 // END USER PURCHASE HISTORY

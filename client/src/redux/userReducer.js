@@ -13,7 +13,7 @@ const currUserData = {
         bizId: userData && userData.bizId,
         currScore: userData && userData.currScore,
         cashCurrScore: userData && userData.lastScore,
-        purchase: userData && userData.purchase,
+        purchaseHistory: userData && userData.purchaseHistory,
     }
 }
 

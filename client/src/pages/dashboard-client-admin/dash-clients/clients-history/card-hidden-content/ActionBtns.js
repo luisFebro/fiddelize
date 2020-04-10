@@ -70,7 +70,7 @@ const showDiscountBtn = (data, clientAdminData) => {
 };
 // NEed change to database structure
 const showHistoryBtn = data => {
-    const challengeNData = data.clientUserData.purchase && data.clientUserData.purchase.history[0].challengeN;
+    const challengeN = data.clientUserData.purchaseHistory[0] && data.clientUserData.purchaseHistory[0].challengeN;
     return(
         <div>
             <FullModalBtnHistory
@@ -83,10 +83,10 @@ const showHistoryBtn = data => {
                     size: "medium",
                 }}
                 modalData={{
-                    title: `&#187; Histórico de<br />Compras ${challengeNData ? `de ${data.name.slice(0, data.name.indexOf(" "))}` : ""}`,
+                    title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${data.name.slice(0, data.name.indexOf(" "))}` : ""}`,
                     subTitle: null,
                     componentContent: <PurchaseHistory data={data} />,
-                    challengeN: challengeNData,
+                    challengeN: challengeN,
                     currUserScore: data.clientUserData.currScore,
                     userName: data.name,
                 }}

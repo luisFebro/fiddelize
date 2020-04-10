@@ -48,9 +48,9 @@ export default function RegulationPage({ location }) {
             <Paper style={{backgroundColor: 'var(--mainWhite)'}}>
                 <div style={{minHeight: '400px'}} className="text-align py-4">
                     <pre className="text-normal" style={{whiteSpace: 'pre-line'}}>
-                        {bizRegulation.text.length === 0
+                        {bizRegulation && bizRegulation.text.length === 0
                         ? <LoadingThreeDots />
-                        : replaceVariablesInTxt(bizRegulation.text, variablesObj, {needBold: true})}
+                        : replaceVariablesInTxt(bizRegulation && bizRegulation.text, variablesObj, {needBold: true})}
                     </pre>
                 </div>
             </Paper>
@@ -94,7 +94,7 @@ export default function RegulationPage({ location }) {
     const showTimeStamp = () => (
          <MomentDateWithIcon
             style={{marginTop: 15, color: 'var(--mainWhite)'}}
-            date={bizRegulation.updatedAt}
+            date={bizRegulation && bizRegulation.updatedAt}
             msgIfNotValidDate="Nenhuma alteração."
         />
     );

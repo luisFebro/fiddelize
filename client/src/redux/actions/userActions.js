@@ -53,6 +53,15 @@ export const addPurchaseHistory = async (dispatch, _idUser, bodyToSend) => { // 
         return err.response;
     }
 };
+
+export const readPurchaseHistory = async (dispatch, _idUser, rewardScore) => { // n1
+    try {
+        const res = await axios.get(`/api/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}`, getHeaderJson);
+        return res;
+    } catch(err) {
+        return err.response;
+    }
+};
 // End Purchase History
 
 // LISTS

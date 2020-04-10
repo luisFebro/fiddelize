@@ -21,23 +21,7 @@ moment.updateLocale('pt-br');
 export default function PurchaseHistory({ data }) {
     const { name, clientUserData } = data;
 
-    // TEST
-    if(clientUserData.purchase) {
-        clientUserData.purchase.history = [
-            {challengeN: '#2', icon: "heart", desc: "Última Compra", value: 20.50, createdAt: new Date()},
-            {challengeN: '#2', icon: "heart", desc: "Compra 11", value: 20.50, createdAt: new Date()},
-            {challengeN: 'prize#1', icon: "star", desc: "1 par de ingressos cinema", value: 20.50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 9", value: 20.50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 8", value: 20.50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 7", value: 20.50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 6", value: 20.50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 5", value: 20.50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 4", value: 100.50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 3", value: 50, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Compra 2", value: 10, createdAt: new Date()},
-            {challengeN: '#1', icon: "star", desc: "Primeira Compra", value: 30, createdAt: new Date()},
-        ]
-    }
+    const purchaseHistoryArray = clientUserData.purchaseHistory;
 
     const onlyFirstName = name.slice(0, name.indexOf(" "));
 
@@ -62,7 +46,7 @@ export default function PurchaseHistory({ data }) {
             <div className="inner-container">
                 <div>
                     <FontAwesomeIcon icon={historyData.icon} className="pr-1" style={faStyle}/>
-                    {historyData.challengeN}
+                    #{historyData.challengeN}
                 </div>
                 <div>
                     <span className="font-weight-bold text-normal">
@@ -88,9 +72,8 @@ export default function PurchaseHistory({ data }) {
         </div>
     );
 
-    const mainData = clientUserData.purchase
-    && clientUserData.purchase.history.map(historyData => {
-        if(historyData.challengeN.includes("prize")) {
+    const mainData = purchaseHistoryArray.map(historyData => {
+        if(historyData.cardType.includes("prize")) {
             return <PrizeCard historyData={historyData} />
         } else {
             return(
@@ -132,7 +115,7 @@ export default function PurchaseHistory({ data }) {
 
     return (
         <div>
-            {!clientUserData.purchase
+            {!purchaseHistoryArray.length
             ? illustrationIfEmpty()
             : (
                 <Fragment>

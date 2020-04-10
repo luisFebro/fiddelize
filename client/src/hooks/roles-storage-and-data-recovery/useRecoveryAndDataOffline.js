@@ -10,7 +10,7 @@ export const useRecoveryAndDataOffline = () => {
     const isUserOnline = useStoreState(state => state.authReducer.cases.isUserOnline);
 
     const { userId, role, userName } = useProfile();
-    const { bizId, userScore, userLastScore, userPurchase } = useClientUser(); // , userPurchase
+    const { bizId, userScore, userLastScore, userPurchase } = useClientUser();
     const { bizName, bizPlan, bizCodeName, bizRegulation, maxScore, mainReward, rewardList, highestScores } = useClientAdmin();
 
     // data
@@ -20,7 +20,7 @@ export const useRecoveryAndDataOffline = () => {
         name: userName,
         currScore: userScore,
         lastScore: userLastScore,
-        purchase: userPurchase,
+        purchaseHistory: userPurchase,
         bizId,
     }
 
@@ -40,7 +40,7 @@ export const useRecoveryAndDataOffline = () => {
 
     setDataIfOnline(userProfileColl, userProfileNewObj, isUserOnline);
     setDataIfOnline(clientAdminColl, clientAdminNewObj, isUserOnline);
-    useRecoverSysData(role, userId, { bizId: bizId });
+    useRecoverSysData(role, userId, { bizId: bizId, isUserOnline });
 }
 
 /* ARCHIVES

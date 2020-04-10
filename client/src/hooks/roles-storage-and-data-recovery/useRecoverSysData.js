@@ -15,19 +15,25 @@ const roleDownloaded = appSystem && appSystem.roleWhichDownloaded;
 const needUpdateSys = !bizSysId || !roleDownloaded;
 
 export default function useRecoverSysData(role, userId, opts = {}) {
-    const { bizId } = opts;
+    const { bizId, isUserOnline } = opts;
 
     useEffect(() => {
-        if(needUpdateSys) {
+        if(needUpdateSys || isUserOnline) {
             let whichBizId;
 
             if(role === "cliente") { whichBizId = bizId; }
             if(role === "cliente-admin") { whichBizId = userId; } // if clientAdmin, userId === bizId.
 
             const updatedValues = {roleWhichDownloaded: role, businessId: whichBizId };
+            console.log("Setting new appSystem data to lStorage")
+            console.log("Role:", role);
+            console.log("Reason:");
+            console.log("needUpdateSys", needUpdateSys);
+            console.log("or");
+            console.log("isUserOnline", isUserOnline);
             lStorage("setItems", {...collection, newObj: updatedValues})
         }
-    }, [userId, role, bizSysId, needUpdateSys])
+    }, [userId, role, bizSysId, needUpdateSys, isUserOnline])
 }
 
 export const readCliAdmin = (dispatch, role, opts = {}) => {

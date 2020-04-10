@@ -24,8 +24,8 @@ export const useAppSystem = () => {
     const onlineBizId = role === "cliente-admin" ? clientAdminBizId : clientUserBizId;
 
     return({
-        roleWhichDownloaded: systemRole || role,
-        businessId: systemBizId || onlineBizId,
+        roleWhichDownloaded: role || systemRole, // change priority for online both role and onlineBizId to make sure http requests are updated to current bizId, not the prior account.
+        businessId: onlineBizId || systemBizId,
     });
 }
 
@@ -51,7 +51,7 @@ export const useClientUser = () => {
     const bizId = clientUser && clientUser.bizId;
     const userScore = clientUser && clientUser.currScore;
     const userLastScore = clientUser && clientUser.cashCurrScore;
-    const userPurchase = clientUser && clientUser.purchase;
+    const userPurchase = clientUser && clientUser.purchaseHistory;
 
     return({
         bizId,
