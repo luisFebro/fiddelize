@@ -12,7 +12,11 @@ ModalBtn.propTypes = {
 }
 
 export default function ModalBtn({
-    modalData, button, setSelectedValue, setRun, run }) {
+    modalData,
+    button,
+    setSelectedValue,
+    setRun,
+    run }) {
     const [open, setOpen] = useState(false);
 
     const {

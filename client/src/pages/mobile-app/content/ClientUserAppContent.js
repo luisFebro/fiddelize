@@ -26,6 +26,7 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
     const { role, userName } = useProfile();
     const { userScore, userLastScore, } = useClientUser();
     const { maxScore } = useClientAdmin();
+    console.log("maxScore", maxScore);
 
     const { gotToken } = useAuthUser();
 

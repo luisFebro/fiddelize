@@ -44,6 +44,8 @@ const handleUserRole = (isAdmin, profile) => {
     if(isAdmin) {
         const cliAdminObj = profile.clientAdminData;
         cliAdminObj.verificationPass = undefined;
+        cliAdminObj.bizPlanCode = undefined;
+        console.log("cliAdminObj", cliAdminObj);
 
         return cliAdminObj;
     } else {
@@ -55,7 +57,6 @@ const handleUserRole = (isAdmin, profile) => {
 
 exports.read = (req, res) => {
     const clientAdminRequest = req.query.clientAdminRequest;
-    const clientAdminData = req.profile.clientAdminData;
 
     return res.json(handleUserRole(clientAdminRequest, req.profile));
 };

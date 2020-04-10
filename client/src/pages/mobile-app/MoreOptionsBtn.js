@@ -4,6 +4,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { showComponent } from '../../redux/actions/componentActions';
 import SpeedDialButton from '../../components/buttons/SpeedDialButton';
 import { useStoreDispatch } from 'easy-peasy';
+import ModalFullScreenHistory from "../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-full-screen_history/ModalFullScreenHistory";
+import PurchaseHistory from '../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/PurchaseHistory';
+import { useClientUser } from '../../hooks/useRoleData';
 // SpeedDial and Icons
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -21,6 +24,8 @@ const lastChecked = lStorage("getItem", lastOption);
 const currChecked = lStorage("getItem", currOption);
 
 function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { currScore, userPurchase } = useClientUser();
     // const { run, runName } = useStoreState(state => ({
     //     run: state.globalReducer.cases.run,
     //     runName: state.globalReducer.cases.runName,
@@ -38,6 +43,41 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
             color: "var(--mainDark)",
             filter: `drop-shadow(0 0 15px #ffc)`,
         }
+    }
+
+    const showPurchaseHistoryModal = () => {
+        const challengeN = 1;
+        const purchaseHistoryArray = [
+            {
+                _id: 123,
+                challengeN: 1,
+                desc: "Primeira Compra",
+                icon: "star",
+                value: 0,
+                cardType: 'record',
+                createdAt: new Date()
+            }
+        ]
+        const data = {
+            name: userName,
+            clientUserData: {
+                purchaseHistory: userPurchase || purchaseHistoryArray,
+            }
+        }
+        return(
+            <ModalFullScreenHistory
+                open={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                modalData={{
+                    title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${userName.slice(0, userName.indexOf(" "))}` : ""}`,
+                    subTitle: null,
+                    componentContent: <PurchaseHistory data={data} />,
+                    challengeN: challengeN,
+                    currUserScore: currScore,
+                    userName: userName,
+                }}
+            />
+        );
     }
 
     const speedDial = {
@@ -67,7 +107,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                 name: 'Seu Histórico ►',
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
-                    history.push("/mobile-app");
+                    setIsModalOpen(true);
                     playBeep();
                 },
             }
@@ -82,7 +122,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
             >
                 <Tooltip
                     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
-                    title={`♦ Sugestão: ${userName && userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
+                    title={`♦ Sugestão: ${userName}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
                     element={
                         <Fab
                             style={styles.fabTooltip}
@@ -116,6 +156,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                 }}
                 hidden={!showMoreBtn}
             />
+            {showPurchaseHistoryModal()}
         </div>
     );
 }

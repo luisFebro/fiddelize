@@ -81,7 +81,7 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
             PaperProps={{ style: {backgroundColor: 'var(--mainWhite)', maxWidth: '500px', overflowX: 'hidden',}}}
             maxWidth="md"
             fullWidth
-            style={{ zIndex: 1500, overflowX: 'hidden', }}
+            style={{ zIndex: 3000, overflowX: 'hidden', }}
             fullScreen={true}
             open={open}
             aria-labelledby="form-dialog-title"
