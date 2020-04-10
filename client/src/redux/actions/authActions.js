@@ -45,13 +45,13 @@ export const loginEmail = async (dispatch, objToSend) => {
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
 
-        readUser(dispatch, res.data.authUserId)
         readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || "0"})
-
+        // readUser(dispatch, res.data.authUserId) // moved to login
 
         dispatch({ type: 'LOGIN_EMAIL', payload: res.data.token });
         dispatch({ type: 'USER_ONLINE', payload: true });
         setLoadingProgress(dispatch, false);
+
         return res;
     } catch (err) {
         dispatch({
@@ -64,12 +64,11 @@ export const loginEmail = async (dispatch, objToSend) => {
 
 // Register User
 // objToSend: { name, email, password, registeredBy = email }
-export const registerEmail = async (dispatch, objToSend) => {
+export const registerEmail = async (dispatch, objToSend) => { // registerEmail does not requires to readUser or Admin obj because the app is not initionalized promptly. it is redirected to login or some other page.
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post('/api/auth/register', objToSend, getHeaderJson);
-        // dispatch({ type: 'REGISTER_EMAIL', payload: res.data.token });
-        // readUser(dispatch, res.data.authUserId);
+
         setLoadingProgress(dispatch, false);
         dispatch({ type: 'USER_ONLINE', payload: true });
         return res;

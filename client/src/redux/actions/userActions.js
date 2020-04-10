@@ -13,6 +13,8 @@ export const readUser = async (dispatch, _userId) => {
         type: 'USER_READ',
         payload: res.data
     });
+
+    return res;
 };
 
 export const readClientAdmin = async (dispatch, _userId) => {

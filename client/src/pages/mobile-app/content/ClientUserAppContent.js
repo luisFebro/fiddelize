@@ -24,11 +24,14 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
     const userScoreRef = useRef(null);
 
     const { role, userName } = useProfile();
+    console.log("role", role);
     const { userScore, userLastScore, } = useClientUser();
+    console.log("userScore", userScore);
     const { maxScore } = useClientAdmin();
     console.log("maxScore", maxScore);
 
-    const { gotToken } = useAuthUser();
+    const { isAuthUser } = useAuthUser();
+    console.log("isAuthUser", isAuthUser);
 
     const dispatch = useStoreDispatch();
 
@@ -45,7 +48,7 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
     }
 
     useEffect(() => {
-        if(gotToken && role === "cliente") {
+        if(isAuthUser && role === "cliente") {
             animateNumber(
                 userScoreRef.current,
                 0,
@@ -54,7 +57,7 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
                 setShowMoreComps
             );
         }
-    }, [role, gotToken])
+    }, [role, isAuthUser])
 
     checkIfElemIsVisible("#rules", setShowMoreBtn);
 

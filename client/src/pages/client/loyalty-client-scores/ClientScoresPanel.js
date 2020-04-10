@@ -206,7 +206,6 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
             <div style={{maxWidth: 330}} className=" container-center mt-5 animated slideInLeft fast">
                 {showHeader()}
                 {showScores()}
-                {showSharingBtn()}
                 {showHomeBtn()}
         </div>
     );

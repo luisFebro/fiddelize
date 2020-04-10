@@ -26,3 +26,6 @@ Você pode verificar quanto falta exatamente para o próximo nível acessando se
 
 ~Boas Compras!~
 `;
+
+
+// console.log(JSON.stringify(regulationText))

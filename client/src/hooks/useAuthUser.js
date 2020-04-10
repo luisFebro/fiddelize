@@ -16,6 +16,6 @@ export const useAuthUser = () => {
 
     return({
         isAuthUser: Boolean(isAuthorized),
-        gotToken,
+        gotToken, // This is depracated.
     })
 }

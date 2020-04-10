@@ -76,7 +76,12 @@ function Login({ history, setLoginOrRegister }) {
             if(role === "cliente") {
                 if(isThisApp()) {
                     // window.location.href = "/mobile-app"
-                    history.push("/mobile-app");
+                    readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
+                    .then(res => {
+                        if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                        history.push("/mobile-app");
+                    })
+
                 } else {
                     showComponent(dispatch, "purchaseValue");
                     history.push("/cliente/pontos-fidelidade");

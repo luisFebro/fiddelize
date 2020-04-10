@@ -45,7 +45,6 @@ const handleUserRole = (isAdmin, profile) => {
         const cliAdminObj = profile.clientAdminData;
         cliAdminObj.verificationPass = undefined;
         cliAdminObj.bizPlanCode = undefined;
-        console.log("cliAdminObj", cliAdminObj);
 
         return cliAdminObj;
     } else {
