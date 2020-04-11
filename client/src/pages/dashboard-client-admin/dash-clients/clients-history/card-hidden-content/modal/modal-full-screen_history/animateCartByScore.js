@@ -74,10 +74,12 @@ function chooseMsg(props) {
     } else {
         switch(currLevel) {
             case 1:
-                return `<strong>Seu primeiro progresso, ${userFirstName.cap()}.
+                return `<strong>Seu primeiro progresso!
                         <br />
-                        Falta mais ${nextScore} pontos
-                        <br />para nível ${nextLevel}.
+                        Nível ${nextLevel} é o próximo ponto.
+                        <br />
+                        Mais ${nextScore} pontos, ${userFirstName.cap()}.
+                        <br />
                         </strong>`;
             case 2:
                 return `<strong>Opa! Mais ${nextScore} pontos e você

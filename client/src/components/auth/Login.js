@@ -57,7 +57,7 @@ function Login({ history, setLoginOrRegister }) {
                 if(verificationPass) {
                     whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
                     if(isThisApp()) {
-                        showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 1500);
+                        showSnackbar(dispatch, "Carregando...", 'warning', 4000);
                         setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 1400);
                     } else {
                         showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);

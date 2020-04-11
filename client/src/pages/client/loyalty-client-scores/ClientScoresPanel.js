@@ -13,8 +13,7 @@ import { CLIENT_URL } from '../../../config/clientUrl';
 import isThisApp from '../../../utils/window/isThisApp';
 import { showComponent } from "../../../redux/actions/componentActions";
 import { logout } from "../../../redux/actions/authActions";
-import { Link } from 'react-router-dom';
-import lStorage, { userProfileColl } from '../../../utils/storage/lStorage';
+import { Link, withRouter } from 'react-router-dom';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import {
     useProfile,
@@ -48,7 +47,7 @@ const styles = {
     }
 }
 
-export default function ClientScoresPanel({ success, valuePaid, verification }) {
+function ClientScoresPanel({ history, success, valuePaid, verification }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const [finishedWork, setFinishedWork] = useState(false);
     const animatedNumber = useRef(null);
@@ -87,11 +86,9 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
             }
-
             updateUser(dispatch, objToSend, userId, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                lStorage("setItems", { ...userProfileColl, newObj: {currScore: currScoreNow, lastScore: cashCurrScore  } });
                 const historyObj = {
                     "rewardScore": maxScore,
                     "icon": "star", // need to change it after implement self-servic page
@@ -100,8 +97,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 addPurchaseHistory(dispatch, userId, historyObj)
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                    showSnackbar(dispatch, res.data.msg, 'success');
-                    readUser(dispatch, userId);
+                    showSnackbar(dispatch, "Pontuação Registrada!", 'success');
                     setFinishedWork(true);
                 })
 
@@ -188,7 +184,11 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
                 style={styles.finishButton}
                 onClick={() => {
                     if(isThisApp()) {
-                        window.location.href = `/mobile-app`
+                        readUser(dispatch, userId)
+                        .then(res => {
+                            if(res.status !== 200) return console.log("Error on readUser");
+                            history.push(`/mobile-app`);
+                        })
                     } else {
                         showComponent(dispatch, "login")
                         window.location.href = `/acesso/verificacao`
@@ -212,6 +212,8 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
         </div>
     );
 }
+
+export default withRouter(ClientScoresPanel)
 /*ARCHIVES
 birthday
 // if(birthday.includes(getMonthNowBr())) {

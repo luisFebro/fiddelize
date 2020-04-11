@@ -50,6 +50,7 @@ const handleUserRole = (isAdmin, profile) => {
     } else {
         profile.password = undefined;
         profile.clientAdminData = undefined;
+        delete profile.clientUserData.purchaseHistory; // Not working.. this does not need toload at first because we add this when the component loads. Both online and offline.
         return profile;
     }
 }

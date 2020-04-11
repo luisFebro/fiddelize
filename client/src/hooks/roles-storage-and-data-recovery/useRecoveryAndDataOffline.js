@@ -1,3 +1,5 @@
+// WARNING: to avoid conflict of data, it does not requires to use lStorage in other components
+// Declare them all here otherwise may arise some issues while comparing online and offline data...
 import { useEffect } from 'react';
 import { clientAdminColl, userProfileColl } from '../../utils/storage/lStorage';
 import setDataIfOnline from '../../utils/storage/setDataIfOnline';
@@ -29,13 +31,13 @@ export const useRecoveryAndDataOffline = () => {
         bizCodeName,
         bizPlan,
         maxScore,
+        mainReward,
         rewardList,
         regulation: {
             text: bizRegulation && bizRegulation.text,
             updatedAt: bizRegulation && bizRegulation.updatedAt,
         },
         highestScores,
-        mainReward,
     }
 
     setDataIfOnline(userProfileColl, userProfileNewObj, isUserOnline);

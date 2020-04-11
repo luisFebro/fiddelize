@@ -8,7 +8,7 @@ import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
 import PrizeCard from './PrizeCard';
 import { readPurchaseHistory } from '../../../../../../redux/actions/userActions';
-import lStorage, { clientAdminColl } from '../../../../../../utils/storage/lStorage';
+// import lStorage, { userProfileColl } from '../../../../../../utils/storage/lStorage';
 import { useProfile, useClientAdmin } from '../../../../../../hooks/useRoleData';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -36,7 +36,6 @@ export default function PurchaseHistory({ data }) {
         .then(res => {
             if(res.status !== 200) return console.log("error on readPurchaseHistory")
             setPurchaseHistoryArray(res.data);
-            lStorage("setItems", { ...clientAdminColl, newObj: {historyPurchase: res.data} });
         })
     }, [userId, maxScore])
 

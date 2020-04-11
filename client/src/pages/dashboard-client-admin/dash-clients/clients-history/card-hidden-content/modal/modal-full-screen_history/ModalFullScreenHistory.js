@@ -29,8 +29,6 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     //     checkIfElemIsVisible("#raceCartSwitch", () => setShowRaceCart(!showRaceCart), true)
     // }, [showRaceCart])
     const { title, subTitle, componentContent, challengeN, currUserScore, userName } = modalData;
-    console.log("currUserScore", currUserScore);
-    console.log("challengeN", challengeN);
 
     const handleScroll = id => {
         const elem = document.querySelector(id);

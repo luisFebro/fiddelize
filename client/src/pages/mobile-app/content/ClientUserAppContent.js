@@ -25,7 +25,6 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
 
     const { role, userName } = useProfile();
     const { userScore, userLastScore, } = useClientUser();
-    console.log("userScore", userScore);
     const { maxScore } = useClientAdmin();
 
     const { isAuthUser } = useAuthUser();
@@ -46,13 +45,15 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
 
     useEffect(() => {
         if(isAuthUser && role === "cliente") {
-            animateNumber(
-                userScoreRef.current,
-                0,
-                userScore,
-                getAnimationDuration(userScore),
-                setShowMoreComps
-            );
+            setTimeout(() => {
+                animateNumber(
+                    userScoreRef.current,
+                    0,
+                    userScore,
+                    getAnimationDuration(userScore),
+                    setShowMoreComps
+                );
+            }, 3000) // Time to process new db values isntead of offline valeus if any.
         }
     }, [role, isAuthUser])
 

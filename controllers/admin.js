@@ -187,7 +187,7 @@ exports.checkVerificationPass = (req, res) => {
 
         const { clientAdminData } = clientAdmin;
         if(clientAdminData.verificationPass !== pass) return res.status(401).json({ msg: "A senha de verificação está errada." })
-        res.json({ msg: "A verificação foi realizada com sucesso!"})
+        res.json({ msg: "Ok!"})
     })
 };
 
