@@ -29,13 +29,13 @@ export const useRecoveryAndDataOffline = () => {
         bizCodeName,
         bizPlan,
         maxScore,
-        mainReward,
         rewardList,
         regulation: {
             text: bizRegulation && bizRegulation.text,
             updatedAt: bizRegulation && bizRegulation.updatedAt,
         },
         highestScores,
+        mainReward,
     }
 
     setDataIfOnline(userProfileColl, userProfileNewObj, isUserOnline);

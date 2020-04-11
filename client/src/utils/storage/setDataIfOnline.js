@@ -19,8 +19,6 @@ export default function setDataIfOnline(options, dataOnline, isUserOnline) {
     const isUserOnlineAndDataChanged = isUserOnline && !areCollectionsEqual;
     if(isUserOnlineAndDataChanged) {
         console.log("Setting data to lStorage");
-        console.log("isUserOnline", isUserOnline);
-        console.log("areCollectionsEqual", areCollectionsEqual);
         const newOptions = {...options, newObj: dataOnline}
         lStorage("setItems", newOptions);
     }

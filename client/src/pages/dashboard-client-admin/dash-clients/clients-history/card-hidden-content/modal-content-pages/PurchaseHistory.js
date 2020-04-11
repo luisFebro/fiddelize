@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { CLIENT_URL } from '../../../../../../config/clientUrl';
 import Illustration from '../../../../../../components/Illustration';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,9 @@ import { convertDotToComma } from '../../../../../../utils/numbers/convertDotCom
 import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
 import PrizeCard from './PrizeCard';
+import { readPurchaseHistory } from '../../../../../../redux/actions/userActions';
+import lStorage, { clientAdminColl } from '../../../../../../utils/storage/lStorage';
+import { useProfile, useClientAdmin } from '../../../../../../hooks/useRoleData';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -20,8 +23,22 @@ moment.updateLocale('pt-br');
 
 export default function PurchaseHistory({ data }) {
     const { name, clientUserData } = data;
+    const { userId } = useProfile();
+    const { maxScore } = useClientAdmin();
 
-    const purchaseHistoryArray = clientUserData.purchaseHistory;
+    const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData.purchaseHistory);
+
+    const totalPurchaseHistory = 2300.40;
+    const totalFinishedChallenges = clientUserData.purchaseHistory[0] && clientUserData.purchaseHistory[0].challengeN - 1;
+
+    useEffect(() => {
+        readPurchaseHistory(userId, maxScore)
+        .then(res => {
+            if(res.status !== 200) return console.log("error on readPurchaseHistory")
+            setPurchaseHistoryArray(res.data);
+            lStorage("setItems", { ...clientAdminColl, newObj: {historyPurchase: res.data} });
+        })
+    }, [userId, maxScore])
 
     const onlyFirstName = name.slice(0, name.indexOf(" "));
 
@@ -34,7 +51,7 @@ export default function PurchaseHistory({ data }) {
             }}
             txtImgConfig = {{
                 topPos: "15%",
-                txt: `Sem compras, ${onlyFirstName.cap()}.`,
+                txt: `Sem compras,<br />${onlyFirstName.cap()}.`,
                 txtStyle: "text-title",
                 txtColor: "var(--mainPurple)",
             }}
@@ -65,10 +82,8 @@ export default function PurchaseHistory({ data }) {
     );
 
     const showScore = historyData => (
-        <div className="text-subtitle text-center container-center">
-            <div>
-                {convertDotToComma(historyData.value)}
-            </div>
+        <div className="font-weight-bold text-subtitle text-center container-center">
+            {convertDotToComma(historyData.value)}
         </div>
     );
 
@@ -86,8 +101,6 @@ export default function PurchaseHistory({ data }) {
             );
         }
     })
-    const purchaseHistorySum = 2300.40;
-    const challengesFinished = 5;
     const showAllTimeTotal = () => (
         <Card
             className="mt-2 text-shadow text-normal text-white"
@@ -96,7 +109,7 @@ export default function PurchaseHistory({ data }) {
             <div className="purchase-history-sum--root">
                 <div className="scores">
                     <span>{isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:"}</span>
-                    <span className="value">{convertDotToComma(purchaseHistorySum)}</span>
+                    <span className="value">{convertDotToComma(totalPurchaseHistory)}</span>
                 </div>
                 <div className="challenges">
                     <span>
@@ -107,7 +120,7 @@ export default function PurchaseHistory({ data }) {
                             style={{ marginLeft: '5px' }}
                         />:
                     </span>
-                    <span className="value">{challengesFinished ? challengesFinished : 0}</span>
+                    <span className="value">{totalFinishedChallenges ? totalFinishedChallenges : 0}</span>
                 </div>
             </div>
         </Card>

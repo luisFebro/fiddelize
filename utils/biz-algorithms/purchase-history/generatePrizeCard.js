@@ -1,3 +1,10 @@
+let generatedCard = {
+    cardType: 'prize',
+    desc: ``,
+    isPrizeReceived: false,
+    isPrizeConfirmed: false
+};
+
 function generatePrizeCard(historyDataArray, scores = {}) {
     if(!historyDataArray) throw new Error("No array as the first argument")
     const isValidArray = Boolean(historyDataArray.length);
@@ -6,7 +13,7 @@ function generatePrizeCard(historyDataArray, scores = {}) {
     const { rewardScore, currScore } = scores;
 
     let currChallengeN = isValidArray && historyDataArray[0].challengeN;
-    const cliUserBeatedGoal = currScore >= rewardScore;
+    const cliUserBeatedGoal = currScore >= Number(rewardScore);
 
     let onlyOnceCheck = false;
     isValidArray && historyDataArray.forEach((elem, ind) => {
@@ -16,14 +23,14 @@ function generatePrizeCard(historyDataArray, scores = {}) {
         const changedChallenge =  nextElem !== currElem;
 
         if(cliUserBeatedGoal && !onlyOnceCheck) {
-            const generatedCard = { challengeN: currChallengeN, cardType: 'prize', desc: ``};
+            generatedCard = { ...generatedCard, challengeN: currChallengeN };
             newArray.push(generatedCard);
             onlyOnceCheck = true;
         }
 
         if(changedChallenge) {
             newArray.push(elem);
-            const generatedCard = { challengeN: --currChallengeN, cardType: 'prize', desc: ``};
+            generatedCard = { ...generatedCard, challengeN: --currChallengeN };
             if(generatedCard.challengeN !== 0) {
                 newArray.push(generatedCard);
             }
@@ -38,18 +45,6 @@ function generatePrizeCard(historyDataArray, scores = {}) {
 module.exports = generatePrizeCard;
 
 // const historyDataArray = [
-//     { challengeN: 6, cardType: 'record', desc: 'Última Compra 13' },
-//     { challengeN: 5, cardType: 'record', desc: 'Compra 12' },
-//     { challengeN: 5, cardType: 'record', desc: 'Compra 11' },
-//     { challengeN: 5, cardType: 'record', desc: 'Compra 10' },
-//     { challengeN: 4, cardType: 'record', desc: 'Compra 9' },
-//     { challengeN: 4, cardType: 'record', desc: 'Compra 8' },
-//     { challengeN: 3, cardType: 'record', desc: 'Compra 7' },
-//     { challengeN: 3, cardType: 'record', desc: 'Compra 6' },
-//     { challengeN: 2, cardType: 'record', desc: 'Compra 5' },
-//     { challengeN: 2, cardType: 'record', desc: 'Compra 4' },
-//     { challengeN: 1, cardType: 'record', desc: 'Compra 3' },
-//     { challengeN: 1, cardType: 'record', desc: 'Compra 2' },
 //     { challengeN: 1, cardType: 'record', desc: 'Primeira Compra' },
 // ];
 

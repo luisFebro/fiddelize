@@ -12,10 +12,9 @@ import isThisApp from '../../utils/window/isThisApp';
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
     console.log('==USER LOADING==');
-    dispatch({ type: 'USER_ONLINE', payload: true });
     axios.get('/api/auth/user', tokenConfig(getState))
     .then(res => {
-       // from user reducer
+        dispatch({ type: 'USER_ONLINE', payload: true });
 
         const role = res.data.profile.role;
         const userId = res.data.profile._id;

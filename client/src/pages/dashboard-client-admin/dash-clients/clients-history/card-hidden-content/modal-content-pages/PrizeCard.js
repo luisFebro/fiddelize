@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
+import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 
 const faStyle = {
     filter: 'drop-shadow(0 0 30px #ffc)',
@@ -9,24 +10,40 @@ const faStyle = {
     fontSize: '30px',
 }
 
-const getChallengeNumber = prizeString => {
-    let result;
-    const hashInd = prizeString.indexOf("#");
-    result = prizeString.slice(hashInd);
+// const getChallengeNumber = prizeString => {
+//     console.log("prizeString", prizeString);
+//     let result;
+//     const hashInd = prizeString.indexOf("#");
+//     result = prizeString.slice(hashInd);
 
-    return result;
-}
+//     return result;
+// }
 
 
 export default function PrizeCard({ historyData }) {
     const [prizeView, setPrizeView] = useState(false);
+
+    const currChallengeN = historyData.challengeN;
+
+    const { mainReward, rewardList } = useClientAdmin();
+
+    const handlePrizeName = (currChallengeN) => {
+        if(currChallengeN === 1) {
+            return mainReward;
+        } else {
+            const ind = currChallengeN - 2 // start with 0 in the rewardList and so on...
+            return rewardList[ind];
+        }
+    }
 
     const displayMainContent = () => (
         <section className="purchase-history-prize-card--root text-shadow text-white text-center text-purple">
             <main className="gift-main-title" >
                 <div>
                     <FontAwesomeIcon icon="gift" style={{...faStyle, fontSize: '45px', filter: ''}} />
-                    <p className="edition font-weight-bold text-subtitle">{getChallengeNumber(historyData.challengeN)}</p>
+                    <p className="edition font-weight-bold text-subtitle">
+                        #{historyData.challengeN}
+                    </p>
                 </div>
                 <div>
                     <p className="text-title">Você ganhou:</p>
@@ -45,7 +62,7 @@ export default function PrizeCard({ historyData }) {
                             </div>
                         ) : (
                             <p className="text-normal animated zoomIn fast">
-                                • {historyData.desc}
+                                • {handlePrizeName(currChallengeN)}
                             </p>
                         )}
                     </div>
@@ -97,7 +114,7 @@ export default function PrizeCard({ historyData }) {
         </section>
     );
     return(
-        <section className="position-relative">
+        <section className="position-relative animated slideInDown fast">
             <Card key={historyData.desc} className="mt-4" style={{backgroundColor: 'var(--themePLight)'}}>
                 {displayMainContent()}
             </Card>

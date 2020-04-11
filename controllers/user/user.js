@@ -264,7 +264,7 @@ exports.addPurchaseHistory = (req, res) => {
         }
         const scores = {
             rewardScore: req.body.rewardScore,
-            currScore: 600// userData.currScore,
+            currScore: userData.currScore,
         }
 
         let [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchaseObj, scores);

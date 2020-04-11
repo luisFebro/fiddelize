@@ -50,16 +50,15 @@ export const deleteUser = async (dispatch, _idUser) => { // n1
 // Purchase History
 export const addPurchaseHistory = async (dispatch, _idUser, bodyToSend) => { // n1
     try {
-        await axios.put(`/api/user/purchase-history/${_idUser}`, bodyToSend, getHeaderJson);
+        return await axios.put(`/api/user/purchase-history/${_idUser}`, bodyToSend, getHeaderJson);
     } catch(err) {
         return err.response;
     }
 };
 
-export const readPurchaseHistory = async (dispatch, _idUser, rewardScore) => { // n1
+export const readPurchaseHistory = async (_idUser, rewardScore) => { // n1
     try {
-        const res = await axios.get(`/api/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}`, getHeaderJson);
-        return res;
+        return await axios.get(`/api/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}`, getHeaderJson);
     } catch(err) {
         return err.response;
     }

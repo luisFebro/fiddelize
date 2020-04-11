@@ -28,6 +28,9 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     // useEffect(() => {
     //     checkIfElemIsVisible("#raceCartSwitch", () => setShowRaceCart(!showRaceCart), true)
     // }, [showRaceCart])
+    const { title, subTitle, componentContent, challengeN, currUserScore, userName } = modalData;
+    console.log("currUserScore", currUserScore);
+    console.log("challengeN", challengeN);
 
     const handleScroll = id => {
         const elem = document.querySelector(id);
@@ -43,13 +46,12 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     }
 
     const dispatch = useStoreDispatch();
-    const { title, subTitle, componentContent, challengeN, currUserScore, userName } = modalData;
 
     const showTitle = () => (
-        <div id="form-dialog-title" style={{padding: isEvenSmall ? '16px 24px 0' : '16px 24px 35px' }}>
+        <div id="form-dialog-title" style={{padding: isEvenSmall ? '16px 24px 0' : '16px 24px 15px' }}>
             <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-                style={{margin: '0 15px'}}
+                className="text-nowrap position-relative text-subtitle text-purple text-center font-weight-bold"
+                style={{margin: '0 15px', top: '15px'}}
             >
                 {title && parse(title)}
             </p>
@@ -98,7 +100,7 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
             <CloseButton
                 onClick={onClose}
                 size="40px"
-                top="15px"
+                top={isEvenSmall ? "5px" : "15px"}
                 right="15px"
             />
         </Dialog>

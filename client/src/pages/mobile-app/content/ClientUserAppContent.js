@@ -24,14 +24,11 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
     const userScoreRef = useRef(null);
 
     const { role, userName } = useProfile();
-    console.log("role", role);
     const { userScore, userLastScore, } = useClientUser();
     console.log("userScore", userScore);
     const { maxScore } = useClientAdmin();
-    console.log("maxScore", maxScore);
 
     const { isAuthUser } = useAuthUser();
-    console.log("isAuthUser", isAuthUser);
 
     const dispatch = useStoreDispatch();
 

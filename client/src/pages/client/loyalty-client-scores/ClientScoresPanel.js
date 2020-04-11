@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { updateUser, addPurchaseHistory } from "../../../redux/actions/userActions";
+import { readUser, updateUser, addPurchaseHistory } from "../../../redux/actions/userActions";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import Title from '../../../components/Title';
 import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
@@ -14,12 +14,13 @@ import isThisApp from '../../../utils/window/isThisApp';
 import { showComponent } from "../../../redux/actions/componentActions";
 import { logout } from "../../../redux/actions/authActions";
 import { Link } from 'react-router-dom';
-import lStorage, { userProfileOp } from '../../../utils/storage/lStorage';
+import lStorage, { userProfileColl } from '../../../utils/storage/lStorage';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import {
     useProfile,
     useClientUser,
     useClientAdmin, useAppSystem } from '../../../hooks/useRoleData';
+import getFirstName from '../../../utils/string/getFirstName';
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -47,25 +48,19 @@ const styles = {
     }
 }
 
-function manageSetItem(collection, ...values) {
-    const options1 = { collection, property: "currScore", value: values[0]}
-    const options2 = { collection, property: "lastScore", value: values[1]}
-    lStorage("setItem", options1);
-    lStorage("setItem", options2);
-}
-
 export default function ClientScoresPanel({ success, valuePaid, verification }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
+    const [finishedWork, setFinishedWork] = useState(false);
     const animatedNumber = useRef(null);
 
     const { role, userName, userId } = useProfile();
-    const { currScore } = useClientUser();
+    const { userScore } = useClientUser();
     const { maxScore, bizName, bizCodeName } = useClientAdmin();
     const { businessId } = useAppSystem();
 
     const dispatch = useStoreDispatch();
 
-    let lastScore = currScore;
+    let lastScore = userScore;
     if(typeof lastScore === "undefined") {
         lastScore = "0";
     }
@@ -96,13 +91,19 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
             updateUser(dispatch, objToSend, userId, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                manageSetItem("userProfile", currScoreNow, cashCurrScore)
+                lStorage("setItems", { ...userProfileColl, newObj: {currScore: currScoreNow, lastScore: cashCurrScore  } });
                 const historyObj = {
                     "rewardScore": maxScore,
                     "icon": "star", // need to change it after implement self-servic page
                     "value": cashCurrScore,
                 }
-                addPurchaseHistory(dispatch, userId, historyObj);
+                addPurchaseHistory(dispatch, userId, historyObj)
+                .then(res => {
+                    if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                    showSnackbar(dispatch, res.data.msg, 'success');
+                    readUser(dispatch, userId);
+                    setFinishedWork(true);
+                })
 
                 setTimeout(() => showSnackbar(dispatch, "Pontuação registrada!", 'success', 4000), 5000);
             })
@@ -113,7 +114,7 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     const showHeader = () => (
         <div>
             <span className="text-hero">
-                {userName},
+                {getFirstName(userName)},
             </span>
             <Title
                 title="Sua nova pontuação"
@@ -177,11 +178,12 @@ export default function ClientScoresPanel({ success, valuePaid, verification }) 
     );
 
     const showHomeBtn = () => {
-        const title = "Finalizar";
+        const title = finishedWork ? "Finalizar" : "Processando...";
         const backColorOnHover = "var(--themeSLight)";
         const backgroundColor = "var(--themeSDark)";
         return(
             <button
+                disabled={finishedWork ? false : true}
                 className="text-shadow my-5 pressed-to-left"
                 style={styles.finishButton}
                 onClick={() => {

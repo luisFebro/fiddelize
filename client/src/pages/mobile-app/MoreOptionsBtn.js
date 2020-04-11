@@ -25,7 +25,8 @@ const currChecked = lStorage("getItem", currOption);
 
 function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { currScore, userPurchase } = useClientUser();
+    let { userScore, userPurchase } = useClientUser();
+
     // const { run, runName } = useStoreState(state => ({
     //     run: state.globalReducer.cases.run,
     //     runName: state.globalReducer.cases.runName,
@@ -46,22 +47,12 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
     }
 
     const showPurchaseHistoryModal = () => {
-        const challengeN = 1;
-        const purchaseHistoryArray = [
-            {
-                _id: 123,
-                challengeN: 1,
-                desc: "Primeira Compra",
-                icon: "star",
-                value: 0,
-                cardType: 'record',
-                createdAt: new Date()
-            }
-        ]
+        const challengeN = userPurchase[0] && userPurchase[0].challengeN;
+
         const data = {
             name: userName,
             clientUserData: {
-                purchaseHistory: userPurchase || purchaseHistoryArray,
+                purchaseHistory: userPurchase,
             }
         }
         return(
@@ -69,11 +60,11 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 modalData={{
-                    title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${userName.slice(0, userName.indexOf(" "))}` : ""}`,
+                    title: `&#187; Histórico de Compras<br />${challengeN ? `de ${userName.slice(0, userName.indexOf(" "))}` : ""}`,
                     subTitle: null,
                     componentContent: <PurchaseHistory data={data} />,
                     challengeN: challengeN,
-                    currUserScore: currScore,
+                    currUserScore: userScore,
                     userName: userName,
                 }}
             />

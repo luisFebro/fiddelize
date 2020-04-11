@@ -5,7 +5,7 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
     let currentPurchase = {};
     let lastPurchase = {}; // this overrides the desc value from last pruchases.
 
-    const cliUserBeatedGoal = currScore >= rewardScore;
+    const cliUserBeatedGoal = currScore >= Number(rewardScore);
     const currPurchaseCount = purchaseLength + 1;
     const lastPurchaseCount = currPurchaseCount - 1;
 
@@ -37,17 +37,17 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
 
 module.exports = generateHistoryData;
 
-const lastPurchase = {
-   challengeN: 2,
-   purchaseLength: 10,
-}
+// const lastPurchase = {
+//    challengeN: 2,
+//    purchaseLength: 10,
+// }
 
-const scores = {
-    rewardScore: 500,
-    currScore: 501,
-}
+// const scores = {
+//     rewardScore: 500,
+//     currScore: 501,
+// }
 
-const [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchase, scores);
+// const [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchase, scores);
 
 // #
 /*

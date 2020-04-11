@@ -69,8 +69,8 @@ function chooseMsg(props) {
         currUserScore,
         currChallenge } = props;
 
-    if(currUserScore <= eachLevelScore) {
-        return `<strong>Vamos lá!<br />Falta mais ${nextScore} pontos para nível ${nextLevel ? nextLevel : '1'}</strong>.`;
+    if(currUserScore < eachLevelScore) {
+        return `<strong>Vamos lá!<br /> Nível ${nextLevel ? nextLevel : '1'} logo alí. Mais ${nextScore} pontos.</strong>`;
     } else {
         switch(currLevel) {
             case 1:

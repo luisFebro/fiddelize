@@ -2,11 +2,9 @@ import React, { useEffect, Fragment } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './CartRace.scss';
 import PropTypes from 'prop-types';
-import lStorage from '../../../../../../../utils/storage/lStorage';
 import animateCartByScore, { options } from './animateCartByScore';
+import { useClientAdmin } from '../../../../../../../hooks/useRoleData';
 
-const clientAdmin = lStorage("getItems", { collection: "clientAdmin"});
-const rewardScore = clientAdmin && clientAdmin.maxScore;
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
 CartRace.propTypes = {
@@ -21,11 +19,12 @@ const faStyle = {
 
 
 export default function CartRace({ currUserScore, challengeN, userName, className, id }) {
+    const { maxScore } = useClientAdmin();
 
     useEffect(() => {
         const currChallenge = challengeN;
-        animateCartByScore(currUserScore, rewardScore, { ...options, currChallenge, userName});
-    }, [rewardScore, currUserScore])
+        animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName});
+    }, [maxScore, currUserScore])
 
     const showLineRoad = () => (
         <div className="line">

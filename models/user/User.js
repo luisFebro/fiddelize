@@ -27,8 +27,8 @@ const historyData = {
     createdAt: {type: Date, default: new Date()},
     value: { type: Number, default: 0 },
     // For "prize" cartType variables. both false as default but not explicit at start.
-    isPrizeReceived: {type: Boolean, default: function() { return this.cardType === "prize" ? false : undefined }},
-    isPrizeConfirmed: {type: Boolean, default: function() { return this.cardType === "prize" ? false : undefined }},
+    isPrizeReceived: Boolean,
+    isPrizeConfirmed: Boolean, // archive: default: function() { return this.cardType === "prize" ? false : undefined }},
 }
 const HistorySchema = new Schema(historyData, { _id: true });
 
