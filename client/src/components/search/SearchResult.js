@@ -9,6 +9,7 @@ SearchResult.propTypes = {
     isLoading: PropTypes.bool,
     searchTerm: PropTypes.string,
     mainSubject: PropTypes.string,
+    totalCliUserScores: PropTypes.number,
 }
 
 export default function SearchResult({
@@ -16,7 +17,8 @@ export default function SearchResult({
     filteredUsersLength,
     allUsersLength,
     searchTerm,
-    mainSubject = "usuário" }) {
+    mainSubject = "usuário",
+    totalCliUserScores, }) {
 
     const pluralizeBr = word => {
         let res;
@@ -31,8 +33,6 @@ export default function SearchResult({
             return res.cap();
         }
     }
-
-    const allTimeScore = 2300; // INSERT BACKEND LATER...
 
     return (
         <div className="text-main-container my-5">
@@ -81,7 +81,7 @@ export default function SearchResult({
                                         <br />
                                         <strong>• {`${allUsersLength} ${pluralizeBr(mainSubject)}`}</strong>
                                         <br />
-                                        <strong>• {`${allTimeScore} Pontos/R$`}</strong>
+                                        <strong>• {`${totalCliUserScores} Pontos/R$`}</strong>
                                     </p>
                                 )}
                             </h2>

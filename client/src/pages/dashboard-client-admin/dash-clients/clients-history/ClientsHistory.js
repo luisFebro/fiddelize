@@ -29,8 +29,9 @@ export default function RegisteredClientsList() {
         list: [],
         chunkSize: 0,
         totalSize: 0,
+        totalCliUserScores: 0,
     });
-    let { list, totalSize } = clientsData;
+    let { list, totalSize, totalCliUserScores } = clientsData;
 
     const { isLoading, adminName, run, runName } = useStoreState(state => ({
         run: state.globalReducer.cases.run,
@@ -50,7 +51,8 @@ export default function RegisteredClientsList() {
                     ...clientsData,
                     list: res.data.list,
                     chunkSize: res.data.chunkSize,
-                    totalSize: res.data.totalSize
+                    totalSize: res.data.totalSize,
+                    totalCliUserScores: res.data.totalCliUserScores,
                 })
                 setInit(false);
             })
@@ -177,6 +179,7 @@ export default function RegisteredClientsList() {
             <SearchResult
                 isLoading={isLoading}
                 filteredUsersLength={totalSize}
+                totalCliUserScores={totalCliUserScores}
                 allUsersLength={totalSize}
                 searchTerm={searchTerm}
                 mainSubject="cliente"

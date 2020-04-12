@@ -50,7 +50,9 @@ const handleUserRole = (isAdmin, profile) => {
     } else {
         profile.password = undefined;
         profile.clientAdminData = undefined;
-        delete profile.clientUserData.purchaseHistory; // Not working.. this does not need toload at first because we add this when the component loads. Both online and offline.
+        if(profile.clientUserData) { // for cli-admin login conflict avoidance...
+            profile.clientUserData.purchaseHistory = undefined; // Not working.. this does not need toload at first because we add this when the component loads. Both online and offline.
+        }
         return profile;
     }
 }
@@ -177,6 +179,8 @@ exports.getList = (req, res) => {
     const countQuery = {$count: 'value'};
     const searchQuery = {name: {$regex: `${search}`, $options: 'i'}};
     const bizIdQuery = {"clientUserData.bizId": bizId};
+    const clientUserScoresQuery = { role: 'cliente' };
+    const totalClientUserScoresQuery = {$group: { _id: null, value: { $sum: '$clientUserData.totalGeneralScore' }}}
 
     let { mainQuery } = getQuery(role);
 
@@ -193,6 +197,7 @@ exports.getList = (req, res) => {
                 list: [{$match: mainQuery}, sortQuery, skipQuery, limitQuery],
                 chunkSize: [{$match: mainQuery}, skipQuery, limitQuery, countQuery],
                 totalSize: [{$match: mainQuery}, countQuery],
+                totalCliUserScores: [{$match: mainQuery}, totalClientUserScoresQuery],
             }
         }
     ])
@@ -200,13 +205,15 @@ exports.getList = (req, res) => {
         const {
             list,
             chunkSize,
-            totalSize
+            totalSize,
+            totalCliUserScores,
         } = docs[0];
 
         res.json({
             list,
             chunkSize: chunkSize[0] === undefined ? 0 : chunkSize[0].value,
             totalSize: totalSize[0] === undefined ? 0 : totalSize[0].value,
+            totalCliUserScores: totalCliUserScores[0] === undefined ? 0 : totalCliUserScores[0].value,
         })
     })
 }
