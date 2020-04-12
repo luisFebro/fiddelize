@@ -30,7 +30,7 @@ export default function PurchaseValue({ success, setValuePaid }) {
     }
 
     useEffect(() => {
-        if(userName && role === "cliente" && !didUserReadMsg) {
+        if(false) { // NOT WORKING... keep displaying mesg even after confirmed... userName && role === "cliente" && !didUserReadMsg
             setTimeout(() => {
                 showVanillaToast(
                     `${userName.cap()}, nesta sessão você precisa de um colaborador para validar sua nova pontuação.`,

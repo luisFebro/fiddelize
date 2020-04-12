@@ -45,15 +45,13 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
 
     useEffect(() => {
         if(isAuthUser && role === "cliente") {
-            setTimeout(() => {
-                animateNumber(
-                    userScoreRef.current,
-                    0,
-                    userScore,
-                    getAnimationDuration(userScore),
-                    setShowMoreComps
-                );
-            }, 3000) // Time to process new db values isntead of offline valeus if any.
+            animateNumber(
+                userScoreRef.current,
+                0,
+                userScore,
+                getAnimationDuration(userScore),
+                setShowMoreComps
+            );
         }
     }, [role, isAuthUser])
 

@@ -97,11 +97,9 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
                 addPurchaseHistory(dispatch, userId, historyObj)
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                    showSnackbar(dispatch, "Pontuação Registrada!", 'success');
+                    showSnackbar(dispatch, `Pontuação Registrada, ${getFirstName(userName)}!`, 'success');
                     setFinishedWork(true);
                 })
-
-                setTimeout(() => showSnackbar(dispatch, "Pontuação registrada!", 'success', 4000), 5000);
             })
         }
     }, [success, verification])

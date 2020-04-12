@@ -9,7 +9,7 @@ const validateEmail = require('../../utils/validation/validateEmail');
 const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
-
+const { findOneAndUpdate, countPurchaseTotal, countPurchasePrizes } = require("./purchase-history-helpers/main");
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
@@ -233,18 +233,6 @@ exports.readBackup = (req, res) => {
 }
 
 // USER PURCHASE HISTORY
-const findOneAndUpdate = (res, _id, unshiftThis) => {
-    return User.findOneAndUpdate(
-        { _id },
-        { $push: { "clientUserData.purchaseHistory": unshiftThis } },
-        { new: false }
-    )
-    .exec((err, historyList) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err))
-        res.json("User purchase's history updated.");
-    });
-}
-
 exports.addPurchaseHistory = (req, res) => {
     const { _id } = req.profile;
     // keyRefs: rewardScore, icon, value, isPrizeReceived, isPrizeConfirmed };
@@ -262,6 +250,7 @@ exports.addPurchaseHistory = (req, res) => {
             value: purchaseLength && historyData.value,
             icon: purchaseLength && historyData.icon,
             createdAt: purchaseLength && historyData.createdAt,
+            cardType: purchaseLength && historyData.cardType,
         }
         const scores = {
             rewardScore: req.body.rewardScore,
@@ -284,10 +273,10 @@ exports.addPurchaseHistory = (req, res) => {
             ).exec((err, historyList) => {
                 if(err) return res.status(500).json(msgG('error.systemError', err))
                 // res.json(historyList);
-                findOneAndUpdate(res, _id, unshiftThis);
+                findOneAndUpdate(User, res, _id, unshiftThis, currDoc);
             });
         } else {
-            findOneAndUpdate(res, _id, unshiftThis);
+            findOneAndUpdate(User, res, _id, unshiftThis, currDoc);
         }
     })
 }
@@ -306,7 +295,15 @@ exports.readHistoryList = (req, res) => {
         const scores = { rewardScore, currScore };
         const newHistoryData = generatePrizeCard(purchaseHistory, scores);
 
-        res.json(newHistoryData);
+        if(newHistoryData.length && newHistoryData[0].cardType === "prize") {
+            User.findOneAndUpdate({ _id }, { $set: { "clientUserData.purchaseHistory": newHistoryData } }, { new: false }) // real time updated! this send the most recently updated response/doc from database to app
+            .exec((err, user) => {
+                if(err) return res.status(500).json(msgG('error.systemError', err));
+                res.json(newHistoryData);
+            });
+        } else {
+            res.json(newHistoryData);
+        }
     });
     //.limit(100) // load more logics goes here. set to 10 as default...
 }

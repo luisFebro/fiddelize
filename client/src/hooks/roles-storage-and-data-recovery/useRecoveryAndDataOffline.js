@@ -12,7 +12,7 @@ export const useRecoveryAndDataOffline = () => {
     const isUserOnline = useStoreState(state => state.authReducer.cases.isUserOnline);
 
     const { userId, role, userName } = useProfile();
-    const { bizId, userScore, userLastScore, userPurchase } = useClientUser();
+    const { bizId, userScore, userLastScore, userPurchase, totalGeneralScore, totalPurchasePrize, } = useClientUser();
     const { bizName, bizPlan, bizCodeName, bizRegulation, maxScore, mainReward, rewardList, highestScores } = useClientAdmin();
 
     // data
@@ -24,6 +24,7 @@ export const useRecoveryAndDataOffline = () => {
         lastScore: userLastScore,
         purchaseHistory: userPurchase,
         bizId,
+        totalGeneralScore, totalPurchasePrize,
     }
 
     const clientAdminNewObj = {

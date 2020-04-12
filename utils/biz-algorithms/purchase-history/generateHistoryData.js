@@ -1,5 +1,7 @@
+
+
 function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
-    let { challengeN, purchaseLength, value, icon, createdAt } = lastPurchaseObj;
+    let { challengeN, purchaseLength, cardType, value, icon, createdAt } = lastPurchaseObj;
     const { rewardScore, currScore } = scores;
 
     let currentPurchase = {};
@@ -9,7 +11,7 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
     const currPurchaseCount = purchaseLength + 1;
     const lastPurchaseCount = currPurchaseCount - 1;
 
-    let defaultObj = { challengeN: challengeN, cardType: 'record', desc: '' };
+    let defaultObj = { challengeN: challengeN, cardType: 'record', desc: '', createdAt: new Date() };
 
     if(!purchaseLength && !cliUserBeatedGoal) {
         currentPurchase = { ...defaultObj, desc: 'Primeira Compra' };
@@ -21,17 +23,17 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
         return [currentPurchase];
     }
 
-    if(purchaseLength >= 2 && !cliUserBeatedGoal) {
+
+    if(cliUserBeatedGoal && cardType === "prize") {
+        currentPurchase = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${currPurchaseCount}`, createdAt: new Date()};
+        // lastPurchase = { challengeN: challengeN, cardType: 'record', desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
+        return [currentPurchase];
+    }
+
+    if(purchaseLength >= 2) {
         currentPurchase = { ...defaultObj, desc: `Última Compra ${currPurchaseCount}` };
         lastPurchase = { ...defaultObj, desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
         return [ currentPurchase, lastPurchase ];
-    }
-
-    if(cliUserBeatedGoal) {
-        defaultObj = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${currPurchaseCount}`};
-        currentPurchase = { ...defaultObj };
-        lastPurchase = { challengeN: --challengeN, cardType: 'record', desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
-        return [currentPurchase, lastPurchase];
     }
 }
 
@@ -39,7 +41,11 @@ module.exports = generateHistoryData;
 
 // const lastPurchase = {
 //    challengeN: 2,
-//    purchaseLength: 10,
+//    purchaseLength: 2,
+//    value: 50,
+//    icon: "star",
+//    createdAt: new Date(),
+//    cardType: "prize",
 // }
 
 // const scores = {
@@ -48,6 +54,8 @@ module.exports = generateHistoryData;
 // }
 
 // const [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchase, scores);
+// console.log("lastHistoryData", lastHistoryData);
+// console.log("currHistoryData", currHistoryData);
 
 // #
 /*

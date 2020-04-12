@@ -20,11 +20,11 @@ const faStyle = {
 
 export default function CartRace({ currUserScore, challengeN, userName, className, id }) {
     const { maxScore } = useClientAdmin();
+    const currChallenge = challengeN === 1 ? 1 : challengeN - 1;
 
     useEffect(() => {
-        const currChallenge = challengeN;
         animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName});
-    }, [maxScore, currUserScore])
+    }, [maxScore, currUserScore, currChallenge])
 
     const showLineRoad = () => (
         <div className="line">
@@ -44,7 +44,7 @@ export default function CartRace({ currUserScore, challengeN, userName, classNam
             <p
                 className="mot-challenge-msg text-subtitle text-purple text-center"
             >
-                {isEvenSmall && challengeN && `Desafio #${challengeN}`}
+                {isEvenSmall && currChallenge && `Desafio #${currChallenge}`}
             </p>
             <p
                 id="challenge-msg"

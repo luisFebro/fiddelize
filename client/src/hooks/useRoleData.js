@@ -52,12 +52,16 @@ export const useClientUser = () => {
     const userScore = clientUser && clientUser.currScore;
     const userLastScore = clientUser && clientUser.cashCurrScore;
     const userPurchase = clientUser && clientUser.purchaseHistory;
+    const totalGeneralScore = clientUser && clientUser.totalGeneralScore;
+    const totalPurchasePrize = clientUser && clientUser.totalPurchasePrize;
 
     return({
         bizId,
         userScore,
         userLastScore,
         userPurchase,
+        totalGeneralScore,
+        totalPurchasePrize,
     });
 }
 

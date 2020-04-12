@@ -9,7 +9,8 @@ import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFa
 import PrizeCard from './PrizeCard';
 import { readPurchaseHistory } from '../../../../../../redux/actions/userActions';
 // import lStorage, { userProfileColl } from '../../../../../../utils/storage/lStorage';
-import { useProfile, useClientAdmin } from '../../../../../../hooks/useRoleData';
+import { useProfile, useClientAdmin, useClientUser } from '../../../../../../hooks/useRoleData';
+import defineCurrChallenge from '../helpers/defineCurrChallenge';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -24,12 +25,12 @@ moment.updateLocale('pt-br');
 export default function PurchaseHistory({ data }) {
     const { name, clientUserData } = data;
     const { userId } = useProfile();
+    const { totalGeneralScore, totalPurchasePrize } = useClientUser();
     const { maxScore } = useClientAdmin();
 
     const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData.purchaseHistory);
 
-    const totalPurchaseHistory = 2300.40;
-    const totalFinishedChallenges = clientUserData.purchaseHistory[0] && clientUserData.purchaseHistory[0].challengeN - 1;
+    const challengeN = defineCurrChallenge(clientUserData);
 
     useEffect(() => {
         readPurchaseHistory(userId, maxScore)
@@ -108,7 +109,7 @@ export default function PurchaseHistory({ data }) {
             <div className="purchase-history-sum--root">
                 <div className="scores">
                     <span>{isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:"}</span>
-                    <span className="value">{convertDotToComma(totalPurchaseHistory)}</span>
+                    <span className="value">{convertDotToComma(totalGeneralScore)}</span>
                 </div>
                 <div className="challenges">
                     <span>
@@ -119,7 +120,7 @@ export default function PurchaseHistory({ data }) {
                             style={{ marginLeft: '5px' }}
                         />:
                     </span>
-                    <span className="value">{totalFinishedChallenges ? totalFinishedChallenges : 0}</span>
+                    <span className="value">{totalPurchasePrize ? totalPurchasePrize : 0}</span>
                 </div>
             </div>
         </Card>

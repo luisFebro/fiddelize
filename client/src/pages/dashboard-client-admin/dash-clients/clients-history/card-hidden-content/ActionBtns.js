@@ -11,6 +11,7 @@ import { default as FullModalBtnHistory } from "./modal/modal-full-screen_histor
 import { useStoreState } from 'easy-peasy';
 import ClientProfile from './modal-content-pages/ClientProfile';
 import PurchaseHistory from './modal-content-pages/PurchaseHistory';
+import defineCurrChallenge from './helpers/defineCurrChallenge';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -70,7 +71,7 @@ const showDiscountBtn = (data, clientAdminData) => {
 };
 // NEed change to database structure
 const showHistoryBtn = data => {
-    const challengeN = data.clientUserData.purchaseHistory[0] && data.clientUserData.purchaseHistory[0].challengeN;
+    const challengeN = defineCurrChallenge(data.clientUserData);
     return(
         <div>
             <FullModalBtnHistory

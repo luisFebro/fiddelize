@@ -101,9 +101,10 @@ function chooseMsg(props) {
                        <br />
                        confirmar seu resultado,
                        <br />
-                       seu prêmio vai aparecer
+                       o STATUS de prêmio
                        <br />
-                       aqui.</strong>`
+                       CONFIRMADO ficará verde.
+                       </strong>`
             default:
                 console.log("Something went worng with chooseMsg");
         }

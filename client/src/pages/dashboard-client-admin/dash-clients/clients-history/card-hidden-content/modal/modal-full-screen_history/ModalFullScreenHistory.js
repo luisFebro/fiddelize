@@ -68,7 +68,7 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     const showCartRace = () => (
         !hideRaceCart && isEvenSmall && challengeN && (
             <CartRace
-                className="animated slideInUp faster"
+                className="animated zoomIn faster"
                 currUserScore={currUserScore}
                 challengeN={challengeN}
                 userName={userName}

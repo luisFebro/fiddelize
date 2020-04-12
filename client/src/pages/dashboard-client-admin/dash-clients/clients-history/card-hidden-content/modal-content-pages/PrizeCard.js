@@ -10,16 +10,6 @@ const faStyle = {
     fontSize: '30px',
 }
 
-// const getChallengeNumber = prizeString => {
-//     console.log("prizeString", prizeString);
-//     let result;
-//     const hashInd = prizeString.indexOf("#");
-//     result = prizeString.slice(hashInd);
-
-//     return result;
-// }
-
-
 export default function PrizeCard({ historyData }) {
     const [prizeView, setPrizeView] = useState(false);
 

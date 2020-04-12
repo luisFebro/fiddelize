@@ -53,7 +53,7 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
                 showSnackbar(dispatch, res.data.msg, 'error');
                 return;
             }
-            showSnackbar(dispatch, res.data.msg, 'success');
+            // showSnackbar(dispatch, res.data.msg, 'success');
             setVerification(true);
             showComponent(dispatch, 'clientScoresPanel')
         })

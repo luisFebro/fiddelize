@@ -46,6 +46,8 @@ const clientUserData = {
         type: String,
         default: "0"
     },
+    totalPurchasePrize: { type: Number, default: 0 },
+    totalGeneralScore: { type: Number, default: 0 },
     purchaseHistory: [HistorySchema],
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });

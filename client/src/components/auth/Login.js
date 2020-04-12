@@ -57,7 +57,6 @@ function Login({ history, setLoginOrRegister }) {
                 if(verificationPass) {
                     whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
                     if(isThisApp()) {
-                        showSnackbar(dispatch, "Carregando...", 'warning', 4000);
                         setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 1400);
                     } else {
                         showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
@@ -79,6 +78,7 @@ function Login({ history, setLoginOrRegister }) {
                     readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
                     .then(res => {
                         if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                        showSnackbar(dispatch, "Carregando...", 'warning', 3000);
                         history.push("/mobile-app");
                     })
 
