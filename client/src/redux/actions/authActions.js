@@ -27,7 +27,7 @@ export const loadUser = () => (dispatch, getState) => {
     })
     .catch(err => {
         const gotObj = err.response && err.response.data;
-        const gotMsg = err.response.data.msg && err.response.data.msg.length !== 0;
+        const gotMsg = gotObj && err.response.data.msg && err.response.data.msg.length !== 0;
         if(gotObj && err.response.status === 500 && gotMsg) {
             dispatch({ type: 'USER_ONLINE', payload: false });
             showSnackbar(dispatch, "Modo Offline Ativado!", 'warning', 5000)

@@ -1,5 +1,5 @@
 exports.findOneAndUpdate = (User, res, _id, unshiftThis, currDoc) => {
-    const historyData = currDoc.clientUserData.purchaseHistory;
+    const historyData = currDoc.purchaseHistory;
     const totalGeneralScore = countPurchaseTotal(historyData);
     const totalPurchasePrize = countPurchasePrizes(historyData);
     const objToSet = { "clientUserData.totalGeneralScore": totalGeneralScore , "clientUserData.totalPurchasePrize": totalPurchasePrize };
@@ -29,10 +29,22 @@ countPurchasePrizes = arrayOfData => {
     if(!arrayOfData.length) return 0;
 
     return arrayOfData.reduce((acc, next) => {
-        const nextValue = next.cardType === "prize" ? 1 : 0; // if find elem wich does not have value, then zero.
+        const condition = next.cardType === "prize" && next.isPrizeConfirmed === true;
+        const nextValue = condition ? 1 : 0; // if find elem wich does not have value, then zero.
         return acc + nextValue;
     }, 0)
 }
+
+exports.confirmPrizeStatus = (arrayOfData, opts) => {
+    const { statusType } = opts;
+    const newArray = [];
+    console.log(arrayOfData);
+    console.log(statusType);
+
+    return newArray;
+}
+
+
 
 /* ARCHIVES
 // exports.checkIfHasUncheckedPrize = (arrayOfData) => {

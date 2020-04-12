@@ -9,7 +9,7 @@ const validateEmail = require('../../utils/validation/validateEmail');
 const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
-const { findOneAndUpdate, countPurchaseTotal, countPurchasePrizes } = require("./purchase-history-helpers/main");
+const { findOneAndUpdate, confirmPrizeStatus } = require("./purchase-history-helpers/main");
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
@@ -234,78 +234,81 @@ exports.readBackup = (req, res) => {
 
 // USER PURCHASE HISTORY
 exports.addPurchaseHistory = (req, res) => {
-    const { _id } = req.profile;
+    const { _id, clientUserData } = req.profile;
     // keyRefs: rewardScore, icon, value, isPrizeReceived, isPrizeConfirmed };
-    //
-    User.findById(_id)
-    .select("clientUserData")
-    .exec((err, currDoc) => {
-        const userData = currDoc.clientUserData;
-        const purchaseLength = userData.purchaseHistory.length;
-        const historyData = currDoc.clientUserData.purchaseHistory[0];
+    const purchaseLength = clientUserData.purchaseHistory.length;
+    const historyData = clientUserData.purchaseHistory[0];
 
-        const lastPurchaseObj = {
-            challengeN: historyData ? historyData.challengeN : 1,
-            purchaseLength,
-            value: purchaseLength && historyData.value,
-            icon: purchaseLength && historyData.icon,
-            createdAt: purchaseLength && historyData.createdAt,
-            cardType: purchaseLength && historyData.cardType,
-        }
-        const scores = {
-            rewardScore: req.body.rewardScore,
-            currScore: userData.currScore,
-        }
+    const lastPurchaseObj = {
+        challengeN: historyData ? historyData.challengeN : 1,
+        purchaseLength,
+        value: purchaseLength && historyData.value,
+        icon: purchaseLength && historyData.icon,
+        createdAt: purchaseLength && historyData.createdAt,
+        cardType: purchaseLength && historyData.cardType,
+    }
+    const scores = {
+        rewardScore: req.body.rewardScore,
+        currScore: clientUserData.currScore,
+    }
 
-        let [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchaseObj, scores);
-        currHistoryData = { ...req.body, ...currHistoryData };
+    let [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchaseObj, scores);
+    currHistoryData = { ...req.body, ...currHistoryData };
 
-        let unshiftThis = { $each: [currHistoryData], $position: 0 }; // insert as the first array's element.
+    let unshiftThis = { $each: [currHistoryData], $position: 0 }; // insert as the first array's element.
 
-        if(lastHistoryData) {
-            lastHistoryData = { ...req.body, ...lastHistoryData };
-            unshiftThis = { $each: [currHistoryData, lastHistoryData], $position: 0 }; // insert as the first array's element.
+    if(lastHistoryData) {
+        lastHistoryData = { ...req.body, ...lastHistoryData };
+        unshiftThis = { $each: [currHistoryData, lastHistoryData], $position: 0 }; // insert as the first array's element.
 
-            User.findOneAndUpdate(
-                { _id },
-                { $pull: { "clientUserData.purchaseHistory": {desc: `Última Compra ${purchaseLength}`}}},
-                { new: false }
-            ).exec((err, historyList) => {
-                if(err) return res.status(500).json(msgG('error.systemError', err))
-                // res.json(historyList);
-                findOneAndUpdate(User, res, _id, unshiftThis, currDoc);
-            });
-        } else {
-            findOneAndUpdate(User, res, _id, unshiftThis, currDoc);
-        }
-    })
+        User.findOneAndUpdate(
+            { _id },
+            { $pull: { "clientUserData.purchaseHistory": {desc: `Última Compra ${purchaseLength}`}}},
+            { new: false }
+        ).exec((err, historyList) => {
+            if(err) return res.status(500).json(msgG('error.systemError', err))
+            // res.json(historyList);
+            findOneAndUpdate(User, res, _id, unshiftThis, clientUserData);
+        });
+    } else {
+        findOneAndUpdate(User, res, _id, unshiftThis, clientUserData);
+    }
 }
 
 exports.readHistoryList = (req, res) => {
-    const { _id } = req.profile;
+    const { _id, clientUserData } = req.profile;
     const rewardScore = req.query.rewardScore;
 
-    User.findById(_id)
-    .select("clientUserData")
-    .exec((err, data) => {
-        const purchaseHistory = data.clientUserData.purchaseHistory;
-        const currScore = data.clientUserData.currScore;
+    const purchaseHistory = clientUserData.purchaseHistory;
+    const currScore = clientUserData.currScore;
 
-        if(err) return res.status(500).json(msgG('error.systemError', err));
-        const scores = { rewardScore, currScore };
-        const newHistoryData = generatePrizeCard(purchaseHistory, scores);
+    const scores = { rewardScore, currScore };
+    const newHistoryData = generatePrizeCard(purchaseHistory, scores);
 
-        if(newHistoryData.length && newHistoryData[0].cardType === "prize") {
-            User.findOneAndUpdate({ _id }, { $set: { "clientUserData.purchaseHistory": newHistoryData } }, { new: false }) // real time updated! this send the most recently updated response/doc from database to app
-            .exec((err, user) => {
-                if(err) return res.status(500).json(msgG('error.systemError', err));
-                res.json(newHistoryData);
-            });
-        } else {
+    if(newHistoryData.length && newHistoryData[0].cardType === "prize") {
+        User.findOneAndUpdate({ _id }, { $set: { "clientUserData.purchaseHistory": newHistoryData } }, { new: false })
+        .exec((err, user) => {
+            if(err) return res.status(500).json(msgG('error.systemError', err));
             res.json(newHistoryData);
-        }
-    });
+        });
+    } else {
+        res.json(newHistoryData);
+    }
     //.limit(100) // load more logics goes here. set to 10 as default...
+}
+
+exports.changePrizeStatus = (req, res) => {
+    const { _id, clientUserData } = req.profile;
+    const { statusType } = req.body;
+    if(!"confirmed, received".includes(statusType)) return res.status(400).json({msg: "This status type is not valid. Choose one of these: confirmed, received"})
+
+    const historyData = clientUserData.purchaseHistory;
+    const newData = confirmPrizeStatus(historyData, { statusType });
+    User.findOneAndUpdate({ _id }, { $set: { "clientUserData.purchaseHistory": newData } }, { new: false })
+    .exec(err => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+        res.json({msg: `The status ${statusType.toUpperCase()} was successfully confirmed!`});
+    });
 }
 // END USER PURCHASE HISTORY
 

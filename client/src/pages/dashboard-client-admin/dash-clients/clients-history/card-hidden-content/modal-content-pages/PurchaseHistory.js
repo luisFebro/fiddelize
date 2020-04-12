@@ -101,30 +101,66 @@ export default function PurchaseHistory({ data }) {
             );
         }
     })
-    const showAllTimeTotal = () => (
-        <Card
-            className="mt-2 text-shadow text-normal text-white"
-            style={{backgroundColor: 'var(--incomeGreen)'}}
-        >
-            <div className="purchase-history-sum--root">
-                <div className="scores">
-                    <span>{isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:"}</span>
-                    <span className="value">{convertDotToComma(totalGeneralScore)}</span>
-                </div>
-                <div className="challenges">
-                    <span>
-                        • Desafios
-                        <FontAwesomeIcon
-                            icon="check-circle"
-                            className="icon-shadow"
-                            style={{ marginLeft: '5px' }}
-                        />:
-                    </span>
-                    <span className="value">{totalPurchasePrize ? totalPurchasePrize : 0}</span>
-                </div>
+    const showAllTimeTotal = () => {
+        const conditionFirstChallenge = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
+        const conditionAfterFirstChall = `• Pontos desafio #${totalPurchasePrize + 1}:`
+
+        const handleCurrChallengeScore = (totals, maxScore, scoresList) => {
+            const { totalGeneralScore, totalPurchasePrize } = totals;
+            const currChall = totalPurchasePrize + 1;
+            const needMaxScore = currChall === 2;
+
+            let calculation;
+            if(needMaxScore) {
+                calculation = totalGeneralScore - maxScore;
+            } else {
+                // scoreList logic for after challenge 3 using premium add more challenges.
+                calculation = null;
+            }
+
+            return calculation;
+        }
+
+        const totalScoreFirstChall = convertDotToComma(totalGeneralScore);
+        const totalScoreAfterFirstChall = handleCurrChallengeScore({ totalGeneralScore, totalPurchasePrize }, maxScore);
+
+        const isAfterFirstChall = totalPurchasePrize >= 1;
+        return(
+            <div className="card-total position-relative">
+                <Card
+                    className="mt-2 text-shadow text-normal text-white"
+                    style={{backgroundColor: 'var(--incomeGreen)'}}
+                >
+                    <div className="purchase-history-sum--root">
+                        <div className="scores">
+                            <span>{isAfterFirstChall ? conditionAfterFirstChall : conditionFirstChallenge}</span>
+                            <span className="value">{isAfterFirstChall ? totalScoreAfterFirstChall : totalScoreFirstChall}</span>
+                        </div>
+                        <div className="challenges">
+                            <span>
+                                • Desafios
+                                <FontAwesomeIcon
+                                    icon="check-circle"
+                                    className="icon-shadow"
+                                    style={{ marginLeft: '5px' }}
+                                />:
+                            </span>
+                            <span className="value">{totalPurchasePrize ? totalPurchasePrize : 0}</span>
+                        </div>
+                    </div>
+                </Card>
+                {isAfterFirstChall && (
+                    <div className="badge-total-scores">
+                        <p className="text text-shadow text-normal text-white">
+                            <span className="number">{totalGeneralScore}</span>
+                            <br />
+                            Pontos Gerais
+                        </p>
+                    </div>
+                )}
             </div>
-        </Card>
-    );
+        );
+    }
 
     return (
         <div>

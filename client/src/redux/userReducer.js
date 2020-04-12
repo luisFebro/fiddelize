@@ -34,12 +34,17 @@ const currClientAdminData = {
     },
 }
 
+const currCentralAdminData = {
+    // main data to run the app like the quantity of free clients register
+}
+
 const highestScoreData = clientAdminData && clientAdminData.highestScores;
 
 // REDUCERS
 const initialState = {
-    currentUser: currUserData,
+    centralAdmin: currCentralAdminData, // NEED IMPLEMENT YET...
     clientAdmin: currClientAdminData,
+    currentUser: currUserData,
     highestScores: highestScoreData,
     allUsers: [],
 };
@@ -47,15 +52,20 @@ const initialState = {
 export const userReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
-            case 'USER_READ':
+            case 'CENTRAL_ADMIN_READ':
                 return {
                     ...state,
-                    currentUser: action.payload,
+                    centralAdmin: action.payload,
                 };
             case 'CLIENT_ADMIN_READ':
                 return {
                     ...state,
                     clientAdmin: action.payload,
+                };
+            case 'USER_READ':
+                return {
+                    ...state,
+                    currentUser: action.payload,
                 };
             case 'USER_DELETED':
                 return {

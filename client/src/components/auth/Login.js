@@ -54,38 +54,41 @@ function Login({ history, setLoginOrRegister }) {
 
             if(role === "cliente-admin") {
                 let whichRoute;
-                if(verificationPass) {
-                    whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
-                    if(isThisApp()) {
-                        setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 1400);
+                readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
+                .then(res => {
+                    if(verificationPass) {
+                        whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
+                        if(isThisApp()) {
+                            setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 1400);
+                        } else {
+                            showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
+                            setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                            setTimeout(() => history.push(whichRoute), 5000);
+                            setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 7000);
+                        }
                     } else {
-                        showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
+                        showSnackbar(dispatch, "Verificando...", 'warning', 3000);
                         setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                        whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
                         setTimeout(() => history.push(whichRoute), 5000);
-                        setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 7000);
                     }
-                } else {
-                    showSnackbar(dispatch, "Verificando...", 'warning', 3000);
-                    setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                    whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
-                    setTimeout(() => history.push(whichRoute), 5000);
-                }
+                })
             }
 
             if(role === "cliente") {
-                if(isThisApp()) {
-                    // window.location.href = "/mobile-app"
-                    readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
-                    .then(res => {
-                        if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                        showSnackbar(dispatch, "Carregando...", 'warning', 3000);
-                        history.push("/mobile-app");
-                    })
+                // window.location.href = "/mobile-app"
+                readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
+                .then(res => {
+                    if(isThisApp()) {
+                            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                            showSnackbar(dispatch, "Carregando...", 'warning', 3000);
+                            history.push("/mobile-app");
 
-                } else {
-                    showComponent(dispatch, "purchaseValue");
-                    history.push("/cliente/pontos-fidelidade");
-                }
+                    } else {
+                        showComponent(dispatch, "purchaseValue");
+                        history.push("/cliente/pontos-fidelidade");
+                    }
+                })
             }
             // if(role === "colaborador") {
             // showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
