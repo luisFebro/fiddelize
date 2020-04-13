@@ -10,7 +10,7 @@ import { updateUser, readUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
 import isValidName from '../../../../utils/validation/isValidName';
-// const isSmall = window.Helper.isSmallScreen();
+const isSmall = window.Helper.isSmallScreen();
 
 HiddenProfile.propTypes = {
     userData: PropTypes.object,
