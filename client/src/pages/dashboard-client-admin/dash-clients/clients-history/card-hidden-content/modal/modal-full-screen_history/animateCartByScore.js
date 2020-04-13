@@ -70,7 +70,7 @@ function chooseMsg(props) {
         currChallenge } = props;
 
     if(currUserScore < eachLevelScore) {
-        return `<strong>Vamos lá!<br /> Nível ${nextLevel ? nextLevel : '1'} logo alí. Mais ${nextScore} pontos.</strong>`;
+        return `<strong>Vamos lá!<br /> Nível ${nextLevel ? nextLevel : '1'} logo alí. Falta ${nextScore} pontos.</strong>`;
     } else {
         switch(currLevel) {
             case 1:

@@ -71,7 +71,17 @@ const showDiscountBtn = (data, clientAdminData) => {
 };
 // NEed change to database structure
 const showHistoryBtn = data => {
-    const challengeN = defineCurrChallenge(data.clientUserData);
+    const challengeN = defineCurrChallenge(data.clientUserData.totalPurchasePrize);
+    // This structure is required because both cliuser and cliadmin have access to this component.
+    const dataToSendModal = {
+        _id: data._id,
+        name: data.name,
+        clientUserData: {
+            purchaseHistory: data.clientUserData.purchaseHistory,
+        },
+        totalGeneralScore: data.clientUserData.totalGeneralScore,
+        totalPurchasePrize: data.clientUserData.totalPurchasePrize,
+    }
     return(
         <div>
             <FullModalBtnHistory
@@ -86,7 +96,7 @@ const showHistoryBtn = data => {
                 modalData={{
                     title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${data.name.slice(0, data.name.indexOf(" "))}` : ""}`,
                     subTitle: null,
-                    componentContent: <PurchaseHistory data={data} />,
+                    componentContent: <PurchaseHistory data={dataToSendModal} />,
                     challengeN: challengeN,
                     currUserScore: data.clientUserData.currScore,
                     userName: data.name,
@@ -109,7 +119,7 @@ const showProfileBtn = data => (
             }}
             modalData={{
                 title: "&#187; Perfil do Cliente",
-                subTitle: <p><span className="font-weight-bold text-normal">• NOME:</span><br/>{data.name},</p>,
+                subTitle: <p><span className="font-weight-bold text-normal">• NOME:</span><br/>{data.name && data.name.cap()},</p>,
                 componentContent: <ClientProfile data={data} />,
             }}
         />
@@ -158,7 +168,7 @@ const showDeleteBtn = data => (
             modalData={{
                 title: `Confirmação<br />de Exclusão de Cliente`,
                 subTitle: `Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
-                itemData: data.userData,
+                itemData: data,
             }}
             setRun={null}
             run={null}

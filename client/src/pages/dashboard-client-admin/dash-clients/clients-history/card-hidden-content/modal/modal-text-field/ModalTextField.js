@@ -21,7 +21,8 @@ import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions
 import animateCSS from '../../../../../../../utils/animateCSS';
 import { fluidTextAlign } from '../../../../../../../utils/string/fluidTextAlign';
 import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
-// import { readUserList } from '../../../../../../../redux/actions/userActions';
+import { readUserList } from '../../../../../../../redux/actions/userActions';
+import { useAppSystem } from '../../../../../../../hooks/useRoleData';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -41,6 +42,7 @@ export default function ModalTextField({
     const [showInstruction, setShowInstruction] = useState(false);
 
     const { valueOnField, remainValue } = data;
+    const { businessId } = useAppSystem();
 
     const dispatch = useStoreDispatch();
 
@@ -94,9 +96,10 @@ export default function ModalTextField({
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             onClose();
-            // readUserList(dispatch)
+            const initialSkip = 0;
+            readUserList(dispatch, initialSkip, "cliente", "", businessId)
             showSnackbar(dispatch, `Os pontos de fidelidade do cliente foram descontados com sucesso`, 'success', 8000)
-            setTimeout(() => readHighestScores(dispatch), 3000);
+            setTimeout(() => readHighestScores(dispatch, businessId), 3000);
         })
     };
 
@@ -196,10 +199,9 @@ export default function ModalTextField({
             </div>
             {showInstruction && (
                 <p id="instru" className={`${fluidTextAlign} text-normal d-flex align-self-center`} style={{color: 'grey', maxWidth: '400px'}}>
-                    - Os valores do histórico de compra
-                    do cliente não são zerados ou descontados porque
-                    ficam como registro de todos os
-                    pontos acumulados.
+                    - Valores do histórico de compra
+                    do cliente e Pontos acumulados não são zerados ou descontados porque
+                    ficam como registro. Apenas os pontos do desafio atual.
                 </p>
             )}
         </section>

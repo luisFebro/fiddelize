@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 // CUSTOM DATA
-import { deleteUser } from '../../../../../../../redux/actions/userActions';
+import { deleteUser, updateUser } from '../../../../../../../redux/actions/userActions';
 import { setRun } from '../../../../../../../redux/actions/globalActions';
 
 // END CUSTOM DATA
@@ -25,7 +25,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
     const dispatch = useStoreDispatch();
     const { title, subTitle, itemData } = modalData;
 
-    const handleRemoval = (itemData, dispatch) => {
+    const handleRemoval = itemData => {
         showSnackbar(dispatch, "Processando...", 'warning', 3000);
         setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 4000), 3000);
         setTimeout(() => {
@@ -35,7 +35,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 showSnackbar(dispatch, `O Usuário ${itemData.name.cap()} foi excluído com sucesso!`, 'success', 6000);
                 setRun(dispatch, "registered");
             })
-        }, 7100);
+        }, 5900);
     }
 
     const showActionBtns = dispatch => (
@@ -48,7 +48,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 />
                 <ButtonMulti
                     title="SIM"
-                    onClick={() => handleRemoval(itemData, dispatch)}
+                    onClick={() => handleRemoval(itemData)}
                     backgroundColor= "var(--mainRed)"
                     backColorOnHover= "var(--mainRed)"
                 />

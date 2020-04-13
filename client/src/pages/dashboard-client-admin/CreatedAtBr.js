@@ -21,7 +21,7 @@ export default function CreatedAtBr({
            className="text-center pt-3">
            <p>
                <span>
-                    {title || "Conta criada em:" }
+                    <span className="font-weight-bold">{title || "Conta criada em:" }</span>
                     <br />
                     {moment(createdAt).format('Do [de] MMMM, YYYY')}
                </span>

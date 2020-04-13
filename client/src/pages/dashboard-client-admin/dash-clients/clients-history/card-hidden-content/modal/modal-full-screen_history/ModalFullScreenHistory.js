@@ -30,6 +30,8 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     // }, [showRaceCart])
     const { title, subTitle, componentContent, challengeN, currUserScore, userName } = modalData;
 
+    const isCartEmpty = !Boolean(currUserScore);
+
     const handleScroll = id => {
         const elem = document.querySelector(id);
         if(elem) {
@@ -57,7 +59,7 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     );
 
     const showHeaderBar = () => (
-        Boolean(challengeN) && (
+        !isCartEmpty && (
             <section className="px-2 purchase-history-table-data--root text-normal text-center text-purple font-weight-bold">
                 <div className="desc text-left">DESCRIÇÃO</div>
                 <div className="score">PONTOS/R$</div>
@@ -66,7 +68,7 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     );
 
     const showCartRace = () => (
-        !hideRaceCart && isEvenSmall && challengeN && (
+        !hideRaceCart && isEvenSmall && !isCartEmpty && (
             <CartRace
                 className="animated zoomIn faster"
                 currUserScore={currUserScore}

@@ -25,7 +25,7 @@ const currChecked = lStorage("getItem", currOption);
 
 function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    let { userScore, userPurchase } = useClientUser();
+    let { userId, userScore, userPurchase, totalPurchasePrize, totalGeneralScore } = useClientUser();
 
     // const { run, runName } = useStoreState(state => ({
     //     run: state.globalReducer.cases.run,
@@ -47,13 +47,16 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
     }
 
     const showPurchaseHistoryModal = () => {
-        const challengeN = userPurchase[0] && userPurchase[0].challengeN;
+        const challengeN = !totalPurchasePrize ? 1 : totalPurchasePrize + 1;
 
         const data = {
+            _id: userId,
             name: userName,
             clientUserData: {
                 purchaseHistory: userPurchase,
-            }
+            },
+            totalGeneralScore,
+            totalPurchasePrize
         }
         return(
             <ModalFullScreenHistory

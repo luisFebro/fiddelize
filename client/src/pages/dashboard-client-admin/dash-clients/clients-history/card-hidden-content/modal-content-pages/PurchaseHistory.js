@@ -9,7 +9,7 @@ import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFa
 import PrizeCard from './PrizeCard';
 import { readPurchaseHistory } from '../../../../../../redux/actions/userActions';
 // import lStorage, { userProfileColl } from '../../../../../../utils/storage/lStorage';
-import { useProfile, useClientAdmin, useClientUser } from '../../../../../../hooks/useRoleData';
+import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 import defineCurrChallenge from '../helpers/defineCurrChallenge';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -23,22 +23,20 @@ const faStyle = {
 moment.updateLocale('pt-br');
 
 export default function PurchaseHistory({ data }) {
-    const { name, clientUserData } = data;
-    const { userId } = useProfile();
-    const { totalGeneralScore, totalPurchasePrize } = useClientUser();
+    const { _id, name, clientUserData, totalGeneralScore, totalPurchasePrize } = data;
     const { maxScore } = useClientAdmin();
 
     const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData.purchaseHistory);
 
-    const challengeN = defineCurrChallenge(clientUserData);
+    const challengeN = defineCurrChallenge(totalPurchasePrize);
 
     useEffect(() => {
-        readPurchaseHistory(userId, maxScore)
+        readPurchaseHistory(_id, maxScore)
         .then(res => {
             if(res.status !== 200) return console.log("error on readPurchaseHistory")
             setPurchaseHistoryArray(res.data);
         })
-    }, [userId, maxScore])
+    }, [_id, maxScore])
 
     const onlyFirstName = name.slice(0, name.indexOf(" "));
 
@@ -121,8 +119,12 @@ export default function PurchaseHistory({ data }) {
             return calculation;
         }
 
-        const totalScoreFirstChall = convertDotToComma(totalGeneralScore);
-        const totalScoreAfterFirstChall = handleCurrChallengeScore({ totalGeneralScore, totalPurchasePrize }, maxScore);
+        let totalScoreFirstChall = totalGeneralScore;
+        console.log("totalScoreFirstChall", totalScoreFirstChall);
+        let totalScoreAfterFirstChall = handleCurrChallengeScore({ totalGeneralScore, totalPurchasePrize }, maxScore);
+        console.log("totalScoreAfterFirstChall", totalScoreAfterFirstChall);
+        totalScoreFirstChall = convertDotToComma(totalGeneralScore);
+        totalScoreAfterFirstChall = convertDotToComma(totalScoreAfterFirstChall);
 
         const isAfterFirstChall = totalPurchasePrize >= 1;
         return(
