@@ -12,7 +12,7 @@ exports.mwValidateRegister = (req, res, next) => {
 
     User.findOne({ name })
     .then(user => { // the search should includename and business to narrow down
-        if(user && user.name === name.toLowerCase()) return res.status(400).json(msg('error.userAlreadyRegistered'));
+        // if(user && user.name === name.toLowerCase()) return res.status(400).json(msg('error.userAlreadyRegistered')); // disable this until implementation of finding by bizId with { $and: [{ name }, { bizId }] }
         if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
         if(!name) return res.status(400).json(msg('error.noName'));
         if(!isValidName(name)) return res.status(400).json(msg('error.invalidLengthName'));

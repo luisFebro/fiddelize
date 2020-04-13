@@ -19,7 +19,6 @@ export default function RegulationText() {
     const { regulationText } = data;
 
     const { businessId } = useAppSystem();
-    console.log("businessId", businessId);
 
     const { regTxt, clientAdmin } = useStoreState(state => ({
         clientAdmin: state.userReducer.cases.clientAdmin,

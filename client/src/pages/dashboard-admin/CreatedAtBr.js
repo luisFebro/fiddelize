@@ -17,7 +17,7 @@ export default function CreatedAtBr({
 
     return (
        <div
-           style={{backgroundColor: backgroundColor || 'var(--mainDark)'}}
+           style={{backgroundColor: 'transparent'}}
            className="text-center pt-3">
            <p>
                <span>

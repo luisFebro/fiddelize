@@ -13,13 +13,14 @@ CreatedAtBr.propTypes = {
 export default function CreatedAtBr({
     createdAt,
     backgroundColor,
-    title }) {
+    title,
+    needTextShadow }) {
 
     return (
        <div
-           style={{backgroundColor: backgroundColor || 'var(--mainDark)'}}
+           style={{backgroundColor: backgroundColor || 'transparent'}}
            className="text-center pt-3">
-           <p>
+           <p className={`${needTextShadow && "text-shadow"}`}>
                <span>
                     <span className="font-weight-bold">{title || "Conta criada em:" }</span>
                     <br />

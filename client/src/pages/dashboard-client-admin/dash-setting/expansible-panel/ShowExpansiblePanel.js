@@ -49,13 +49,13 @@ export default function ShowExpansiblePanel() {
             id: 3,
             name: "Senha<br />de Verificação",
             leftIcon: <FontAwesomeIcon icon="lock" />,
-            hiddenContent: <HiddenVerifPass />,
+            hiddenContent: <HiddenVerifPass userData={userData} />,
         },
         {
             id: 4,
             name: "Seu<br />Perfil",
             leftIcon: <FontAwesomeIcon icon="user" />,
-            hiddenContent: <HiddenProfile />,
+            hiddenContent: <HiddenProfile userData={userData} />,
         },
         {
             id: 5,

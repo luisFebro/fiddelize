@@ -16,7 +16,9 @@ const currUserData = {
         purchaseHistory: userData && userData.purchaseHistory,
         totalGeneralScore: userData && userData.totalGeneralScore,
         totalPurchasePrize: userData && userData.totalPurchasePrize,
-    }
+    },
+    updatedAt: '',
+    createdAt: '',
 }
 
 // This data is read in the authAction and requires the valid bizId, otherwise default values will be set...lStorage

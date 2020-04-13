@@ -129,6 +129,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const registerThisUser = e => {
         const newUser = {
             ...data,
+            "clientAdminData.bizWhatsapp": phone,
         };
 
         showSnackbar(dispatch, 'Registrando... Aguarde um momento.', 'warning', 7000)

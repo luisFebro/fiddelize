@@ -38,6 +38,7 @@ import {
     faClock,
     faFileAlt,
     faDatabase, // security copies
+    faExchangeAlt, // update
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -77,4 +78,5 @@ library.add(
   faClock,
   faFileAlt,
   faDatabase,
+  faExchangeAlt,
 );

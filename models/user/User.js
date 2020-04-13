@@ -79,7 +79,7 @@ const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
     bizCodeName: String,
     bizCnpj: String, // NOT IMPLEMENTED YET
-    bizWhatsapp: Number,
+    bizWhatsapp: String,
     bizPlan: {
         type: String,
         default: "gratis",
