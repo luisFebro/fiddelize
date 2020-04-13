@@ -53,7 +53,7 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
     const animatedNumber = useRef(null);
 
     const { role, userName, userId } = useProfile();
-    const { userScore } = useClientUser();
+    const { userScore, totalGeneralScore } = useClientUser();
     const { maxScore, bizName, bizCodeName } = useClientAdmin();
     const { businessId } = useAppSystem();
 
@@ -93,6 +93,7 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
                     "rewardScore": maxScore,
                     "icon": "star", // need to change it after implement self-servic page
                     "value": cashCurrScore,
+                    "totalGeneralScore": totalGeneralScore + cashCurrScore,
                 }
                 addPurchaseHistory(dispatch, userId, historyObj)
                 .then(res => {

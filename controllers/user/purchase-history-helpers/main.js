@@ -1,8 +1,7 @@
-exports.findOneAndUpdate = (User, res, _id, unshiftThis, currDoc) => {
+exports.findOneAndUpdate = (User, res, _id, unshiftThis, currDoc, newTotalScore) => {
     const historyData = currDoc.purchaseHistory;
-    const totalGeneralScore = countPurchaseTotal(historyData);
     const totalPurchasePrize = countPurchasePrizes(historyData);
-    const objToSet = { "clientUserData.totalGeneralScore": totalGeneralScore , "clientUserData.totalPurchasePrize": totalPurchasePrize };
+    const objToSet = { "clientUserData.totalGeneralScore": newTotalScore, "clientUserData.totalPurchasePrize": totalPurchasePrize };
     const objToPush = { "clientUserData.purchaseHistory": unshiftThis };
 
     return User.findOneAndUpdate(
@@ -16,16 +15,18 @@ exports.findOneAndUpdate = (User, res, _id, unshiftThis, currDoc) => {
     });
 }
 
-countPurchaseTotal = arrayOfData => {
+
+exports.countPurchasePrizesOnly = arrayOfData => {
     if(!arrayOfData.length) return 0;
 
     return arrayOfData.reduce((acc, next) => {
-        const nextValue = next.value ? next.value : 0; // if find elem wich does not have value, then zero.
+        const condition = next.cardType === "prize";
+        const nextValue = condition ? 1 : 0; // if find elem wich does not have value, then zero.
         return acc + nextValue;
     }, 0)
 }
 
-countPurchasePrizes = arrayOfData => {
+const countPurchasePrizes = arrayOfData => {
     if(!arrayOfData.length) return 0;
 
     return arrayOfData.reduce((acc, next) => {
@@ -34,6 +35,16 @@ countPurchasePrizes = arrayOfData => {
         return acc + nextValue;
     }, 0)
 }
+
+// This was not counting properly when user scored for the first time.
+// countPurchaseTotal = arrayOfData => {
+//     if(!arrayOfData.length) return 0;
+
+//     return arrayOfData.reduce((acc, next) => {
+//         const nextValue = next.value ? next.value : 0; // if find elem wich does not have value, then zero.
+//         return acc + nextValue;
+//     }, 0)
+// }
 
 exports.confirmPrizeStatus = (arrayOfData, opts) => {
     const { statusType } = opts;

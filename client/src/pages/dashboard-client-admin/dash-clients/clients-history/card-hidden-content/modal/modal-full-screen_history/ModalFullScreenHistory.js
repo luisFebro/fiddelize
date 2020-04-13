@@ -57,7 +57,7 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     );
 
     const showHeaderBar = () => (
-        challengeN && (
+        Boolean(challengeN) && (
             <section className="px-2 purchase-history-table-data--root text-normal text-center text-purple font-weight-bold">
                 <div className="desc text-left">DESCRIÇÃO</div>
                 <div className="score">PONTOS/R$</div>

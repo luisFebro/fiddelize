@@ -146,7 +146,6 @@ exports.login = (req, res) => {
     let expiringTime;
     role !== "cliente" ? expiringTime = "1h" : expiringTime = "90d"; // default: 30m (enum: 30s, 30m, 1h, 7d)
 
-    console.log("expiringTime", expiringTime);
     jwt.sign(
         { id: _id },
         process.env.JWT_SECRET,

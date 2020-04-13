@@ -50,8 +50,10 @@ function generatePrizeCard(historyDataArray, scores = {}) {
         const nextElem = posNext && posNext.challengeN;
         const currElem = elem.challengeN;
         const changedChallenge = nextElem !== currElem;
+        const needPrize = elem.needPrize;
 
-        if(cliUserBeatedGoal && !onlyOnceCheck) {
+        const condition = (cliUserBeatedGoal && !onlyOnceCheck) || needPrize;
+        if(condition) {
             generatedPrizeCard = { ...generatedPrizeCard, challengeN: currChallengeN };
             newArray.push(generatedPrizeCard);
             onlyOnceCheck = true;

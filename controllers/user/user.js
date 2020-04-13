@@ -9,7 +9,7 @@ const validateEmail = require('../../utils/validation/validateEmail');
 const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
-const { findOneAndUpdate, confirmPrizeStatus } = require("./purchase-history-helpers/main");
+const { findOneAndUpdate, confirmPrizeStatus, countPurchasePrizesOnly } = require("./purchase-history-helpers/main");
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
@@ -167,7 +167,7 @@ const getQuery = (role) => {
     }
 }
 
-exports.getList = (req, res) => {
+exports.getList = (req, res) => { // n3 - New way of fetching data with $facet aggreagtion
     const skip = parseInt(req.query.skip);
     const role = req.query.role;
     const search = req.query.search;
@@ -243,8 +243,12 @@ exports.readBackup = (req, res) => {
 exports.addPurchaseHistory = (req, res) => {
     const { _id, clientUserData } = req.profile;
     // keyRefs: rewardScore, icon, value, isPrizeReceived, isPrizeConfirmed };
-    const purchaseLength = clientUserData.purchaseHistory.length;
-    const historyData = clientUserData.purchaseHistory[0];
+    const prizeCount = countPurchasePrizesOnly(clientUserData.purchaseHistory);
+    const purchaseLength = clientUserData.purchaseHistory.length - prizeCount;
+    const historyData =  clientUserData.purchaseHistory[0];
+    const newTotalGeneralScore = req.body.totalGeneralScore;
+
+    const lastPurchaseNumber = purchaseLength;
 
     const lastPurchaseObj = {
         challengeN: historyData ? historyData.challengeN : 1,
@@ -270,15 +274,14 @@ exports.addPurchaseHistory = (req, res) => {
 
         User.findOneAndUpdate(
             { _id },
-            { $pull: { "clientUserData.purchaseHistory": {desc: `Última Compra ${purchaseLength}`}}},
+            { $pull: { "clientUserData.purchaseHistory": {desc: `Última Compra ${lastPurchaseNumber}`}}},
             { new: false }
-        ).exec((err, historyList) => {
+        ).exec(err => {
             if(err) return res.status(500).json(msgG('error.systemError', err))
-            // res.json(historyList);
-            findOneAndUpdate(User, res, _id, unshiftThis, clientUserData);
+            findOneAndUpdate(User, res, _id, unshiftThis, clientUserData, newTotalGeneralScore);
         });
     } else {
-        findOneAndUpdate(User, res, _id, unshiftThis, clientUserData);
+        findOneAndUpdate(User, res, _id, unshiftThis, clientUserData, newTotalGeneralScore);
     }
 }
 
@@ -338,6 +341,35 @@ assignToUndefined(req.profile, [
 n1: Only for objects with no default value. Need fix validation and it does not remove keys with default values.
 n2: only update one specific key in the document, including objects like "key.prop".targetField. If you update an element of array, all the rest will be gone, updated.
 In order to add/remove arrays use add/removeElementArray instead;
+n3:
+Need test this in future implementation in the effort to cut down more the boilerplate
+in the current working implementation:
+
+db.collection.aggregate([
+
+     //{$sort: {...}}
+
+     //{$match:{...}}
+
+     {$facet:{
+
+       "stage1" : [ $group:{_id:null, count:{$sum:1}} ],
+
+       "stage2" : [ { "$skip": 0}, {"$limit": 2} ]
+
+     }},
+
+
+    {$unwind: "$stage1"},
+
+     //output projection
+    {$project:{
+       count: "$stage1.count",
+       data: "$stage2"
+    }}
+
+]);
+
 */
 
 

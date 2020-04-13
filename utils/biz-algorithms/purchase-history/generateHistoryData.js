@@ -24,17 +24,24 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
     }
 
 
-    if(cliUserBeatedGoal && cardType === "prize") {
-        currentPurchase = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${currPurchaseCount}`, createdAt: new Date()};
+    if(cardType === "prize") {
+        currentPurchase = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${lastPurchaseCount}`, createdAt: new Date()};
         // lastPurchase = { challengeN: challengeN, cardType: 'record', desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
         return [currentPurchase];
     }
+
 
     if(purchaseLength >= 2) {
         currentPurchase = { ...defaultObj, desc: `Última Compra ${currPurchaseCount}` };
         lastPurchase = { ...defaultObj, desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
         return [ currentPurchase, lastPurchase ];
     }
+
+    if(cliUserBeatedGoal) {
+        currentPurchase = { challengeN: challengeN, cardType: 'record', desc: `Última Compra ${currPurchaseCount}`, createdAt: new Date(), needPrize: true};
+        return [currentPurchase];
+    }
+
 }
 
 module.exports = generateHistoryData;
