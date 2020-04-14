@@ -6,7 +6,7 @@ import SpeedDialButton from '../../components/buttons/SpeedDialButton';
 import { useStoreDispatch } from 'easy-peasy';
 import ModalFullScreenHistory from "../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-full-screen_history/ModalFullScreenHistory";
 import PurchaseHistory from '../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/PurchaseHistory';
-import { useClientUser } from '../../hooks/useRoleData';
+import { useClientUser, useProfile } from '../../hooks/useRoleData';
 // SpeedDial and Icons
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -25,13 +25,9 @@ const currChecked = lStorage("getItem", currOption);
 
 function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    let { userId, userScore, userPurchase, totalPurchasePrize, totalGeneralScore } = useClientUser();
+    const { userId } = useProfile();
+    let { userScore, userPurchase, totalPurchasePrize, totalGeneralScore } = useClientUser();
 
-    // const { run, runName } = useStoreState(state => ({
-    //     run: state.globalReducer.cases.run,
-    //     runName: state.globalReducer.cases.runName,
-    // }))
-    // const needRun = run && runName === "appIntro";
     const dispatch = useStoreDispatch();
 
     const styles = {
@@ -159,5 +155,9 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
 export default withRouter(MoreOptionsBtn);
 
 /*ARCHIVES
-
+// const { run, runName } = useStoreState(state => ({
+//     run: state.globalReducer.cases.run,
+//     runName: state.globalReducer.cases.runName,
+// }))
+// const needRun = run && runName === "appIntro";
 */

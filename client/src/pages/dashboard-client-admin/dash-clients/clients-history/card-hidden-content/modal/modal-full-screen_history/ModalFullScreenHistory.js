@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
@@ -25,9 +25,7 @@ ModalFullScreenHistory.propTypes = {
 
 export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     const [hideRaceCart, setHideRaceCart] = useState(false);
-    // useEffect(() => {
-    //     checkIfElemIsVisible("#raceCartSwitch", () => setShowRaceCart(!showRaceCart), true)
-    // }, [showRaceCart])
+
     const { title, subTitle, componentContent, challengeN, currUserScore, userName, totalGeneralScore } = modalData;
 
     const isCartEmpty = !Boolean(totalGeneralScore);

@@ -26,7 +26,7 @@ export default function PurchaseHistory({ data }) {
     const { _id, name, clientUserData, totalGeneralScore, totalPurchasePrize } = data;
     const { maxScore } = useClientAdmin();
 
-    const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData.purchaseHistory);
+    const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData && clientUserData.purchaseHistory);
 
     const challengeN = defineCurrChallenge(totalPurchasePrize);
 
@@ -85,7 +85,7 @@ export default function PurchaseHistory({ data }) {
         </div>
     );
 
-    const mainData = purchaseHistoryArray.map(historyData => {
+    const mainData = purchaseHistoryArray && purchaseHistoryArray.map(historyData => {
         if(historyData.cardType.includes("prize")) {
             return <PrizeCard historyData={historyData} />
         } else {
@@ -162,14 +162,24 @@ export default function PurchaseHistory({ data }) {
         );
     }
 
+    const showError = () => (
+        clientUserData === undefined &&
+        <p className="text-normal text-grey text-center">
+            Ocorreu um erro ao
+            <br />
+            carregar seus cartões.
+        </p>
+    );
+
     return (
         <div>
-            {!purchaseHistoryArray.length
+            {purchaseHistoryArray && !purchaseHistoryArray.length
             ? illustrationIfEmpty()
             : (
                 <Fragment>
                     {showAllTimeTotal()}
                     {mainData}
+                    {showError()}
                 </Fragment>
             )}
         </div>
