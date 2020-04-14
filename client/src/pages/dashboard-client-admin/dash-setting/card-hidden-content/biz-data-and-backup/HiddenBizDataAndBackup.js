@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import { updateUser, readClientAdmin } from '../../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
+import BackUpToExcel from './BackUpToExcel';
+
 const isSmall = window.Helper.isSmallScreen();
 
 HiddenBizDataAndBackup.propTypes = {
@@ -109,7 +111,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
                         Whatsapp Comercial
                     </p>
                     <TextField
-                        InputProps={{ style: {...styles.fieldForm, color: 'grey'} }}
+                        InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         fullWidth
                         autoComplete="off"
@@ -154,8 +156,15 @@ export default function HiddenBizDataAndBackup({ userData }) {
         </div>
     );
 
+    const showBackupBtn = () => (
+        <div>
+            <BackUpToExcel />
+        </div>
+    );
+
     return (
         <div className="hidden-content--root text-normal mt-4">
+            {showBackupBtn()}
             {showForm()}
             <MomentDateWithIcon
                 date={userData.updatedAt}

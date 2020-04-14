@@ -50,9 +50,9 @@ export default function ButtonDropdown({
   return (
     <Grid container direction="column" alignItems="center">
       <Grid item xs={12}>
-        <ButtonGroup variant="contained" color="secondary" ref={anchorRef} aria-label="split button">
+        <ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="split button">
           <Button
-            color="secondary"
+            color="primary"
             size="large"
             aria-controls={open ? 'split-button-menu' : undefined}
             aria-expanded={open ? 'true' : undefined}
@@ -65,7 +65,7 @@ export default function ButtonDropdown({
           <Button
           >
             <span
-                style={{textShadow: '1px 1px 3px black', fontWeight: 'bold', textTransform: 'uppercase'}}
+                style={{color: "white",  textShadow: '1px 1px 3px black', fontWeight: 'bold', textTransform: 'uppercase'}}
             >
                 {titleOptions[selectedIndex]}
             </span>

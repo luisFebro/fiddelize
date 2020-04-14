@@ -97,11 +97,11 @@ function chooseMsg(props) {
             case 5:
                 return `<strong>🎉 Parabéns!!! Você concluiu o desafio #${currChallenge}!
                        <br />
-                       ${userFirstName.cap()}, foi enviado para  uma
+                       ${userFirstName.cap()}, agora só aguardar
                        <br />
-                       notificação do seu prêmio.
+                       a confirmação do desafio #${currChallenge}
                        <br />
-                       Logo será confirmado!
+                       e do prêmio.
                        </strong>`
             default:
                 console.log("Something went worng with chooseMsg");

@@ -18,6 +18,7 @@ const isSmall = window.Helper.isSmallScreen();
 let temp = "";
 export default function RegulationText({ generateRegulation }) {
     const { rewardDeadline } = useClientAdmin();
+
     const [msgStatus, setMsgStatus] = useState("atualizado.")
     const [disabledBtn, setDisabledBtn] = useState(false);
     const [showDeadline, setShowDeadline] = useState(false);
@@ -35,7 +36,7 @@ export default function RegulationText({ generateRegulation }) {
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
 
     const init = regTxt => {
-        setData({ regulationText: regTxt });
+        setData({ ...data, regulationText: regTxt });
     }
 
     useEffect(() => {
@@ -45,10 +46,10 @@ export default function RegulationText({ generateRegulation }) {
     useEffect(() => {
         if(generateRegulation) {
             temp = regulationText;
-            setData({ regulationText: generatedRegTxt });
+            setData({ ...data, regulationText: generatedRegTxt });
         }
         if(generateRegulation === false) {
-            setData({ regulationText: temp })
+            setData({ ...data, regulationText: temp })
         }
     }, [generateRegulation])
 
@@ -78,8 +79,7 @@ export default function RegulationText({ generateRegulation }) {
             width: '90px',
             backgroundColor: 'var(--mainWhite)',
             color: 'var(--themeP)',
-            fontSize: '30px',
-            fontFamily: 'var(--mainFont)',
+            font: 'bold 35px var(--mainFont)',
             zIndex: 2000
         },
         fieldFormValue: {
@@ -128,7 +128,7 @@ export default function RegulationText({ generateRegulation }) {
                 setMsgStatus("salvo");
                 setDisabledBtn(false);
                 const updatedText = res.data.clientAdminData.regulation.text;
-                setData({ regulationText: updatedText })
+                setData({ ...data, regulationText: updatedText })
             })
         }
     }
