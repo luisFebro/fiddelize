@@ -101,6 +101,7 @@ const clientAdminData = {
     totalUsers: Number, // NOT IMPLEMENTED YET
 
     rewardScore: Number, // prior maxScore
+    rewardDeadline: { type: Number, default: 30 },
     mainReward: String,
     rewardList: Array, // / required: true
 

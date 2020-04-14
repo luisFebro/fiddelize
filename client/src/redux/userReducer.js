@@ -34,6 +34,7 @@ const currClientAdminData = {
         text: clientAdminData && clientAdminData.regulation.text,
         updatedAt: clientAdminData && clientAdminData.regulation.updatedAt,
     },
+    rewardDeadline: clientAdminData && clientAdminData.rewardDeadline,
 }
 
 const currCentralAdminData = {

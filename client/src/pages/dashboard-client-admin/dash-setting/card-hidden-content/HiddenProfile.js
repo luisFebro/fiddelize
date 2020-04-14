@@ -93,7 +93,7 @@ export default function HiddenProfile({ userData }) {
     const showForm = () => (
         <div className="container-center mt-5">
             <form className="animated zoomIn fast shadow-elevation text-white font-weight-bold" onBlur={() => ""} style={styles.form}>
-                <p className="text-shadow text-subtitle">
+                <p className="text-shadow text-subtitle font-weight-bold">
                     Atualize informações de Perfil
                 </p>
                 <div className={`mt-4 margin-auto-95 text-normal`}>

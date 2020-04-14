@@ -79,6 +79,7 @@ export const useClientAdmin = () => {
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
     const bizRegulation = clientAdmin && clientAdmin.regulation;
+    const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
 
     return({
         bizName,
@@ -89,5 +90,6 @@ export const useClientAdmin = () => {
         maxScore,
         mainReward,
         rewardList,
+        rewardDeadline,
     });
 }

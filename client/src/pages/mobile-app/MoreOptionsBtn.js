@@ -67,6 +67,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                     subTitle: null,
                     componentContent: <PurchaseHistory data={data} />,
                     challengeN: challengeN,
+                    totalGeneralScore,
                     currUserScore: userScore,
                     userName: userName,
                 }}

@@ -15,7 +15,7 @@ Neste primeiro desafio, você precisa alcançar:
 • O desafio possui 5 níveis com ##ponto-nivel.
 
 @RESGATE DO SEU PRÊMIO@
-Você tem 30 dias para resgatar seu prêmio do(a) ##nome-empresa contando a partir da data da última compra onde você atingiu sua meta.
+Você tem ##prazo-premio para resgatar seu prêmio do(a) ##nome-empresa contando a partir da data da última compra onde você atingiu sua meta.
 
 @SEGURANÇA DE DADOS@
 Adotamos as melhores práticas de segurança para manter os dados e pontos dos nossos clientes seguros como por meios de serviços de cópias de segurança a fim de manter nosso app protegido e íntegro.

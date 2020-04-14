@@ -13,7 +13,16 @@ export const useRecoveryAndDataOffline = () => {
 
     const { userId, role, userName } = useProfile();
     const { bizId, userScore, userLastScore, userPurchase, totalGeneralScore, totalPurchasePrize, } = useClientUser();
-    const { bizName, bizPlan, bizCodeName, bizRegulation, maxScore, mainReward, rewardList, highestScores } = useClientAdmin();
+    const {
+        bizName,
+        bizPlan,
+        bizCodeName,
+        bizRegulation,
+        maxScore,
+        mainReward,
+        rewardList,
+        highestScores,
+        rewardDeadline } = useClientAdmin();
 
     // data
     const userProfileNewObj = {
@@ -24,7 +33,8 @@ export const useRecoveryAndDataOffline = () => {
         lastScore: userLastScore,
         purchaseHistory: userPurchase,
         bizId,
-        totalGeneralScore, totalPurchasePrize,
+        totalGeneralScore,
+        totalPurchasePrize,
     }
 
     const clientAdminNewObj = {
@@ -39,6 +49,7 @@ export const useRecoveryAndDataOffline = () => {
             updatedAt: bizRegulation && bizRegulation.updatedAt,
         },
         highestScores,
+        rewardDeadline,
     }
 
     setDataIfOnline(userProfileColl, userProfileNewObj, isUserOnline);

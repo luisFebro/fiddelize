@@ -120,9 +120,7 @@ export default function PurchaseHistory({ data }) {
         }
 
         let totalScoreFirstChall = totalGeneralScore;
-        console.log("totalScoreFirstChall", totalScoreFirstChall);
         let totalScoreAfterFirstChall = handleCurrChallengeScore({ totalGeneralScore, totalPurchasePrize }, maxScore);
-        console.log("totalScoreAfterFirstChall", totalScoreAfterFirstChall);
         totalScoreFirstChall = convertDotToComma(totalGeneralScore);
         totalScoreAfterFirstChall = convertDotToComma(totalScoreAfterFirstChall);
 

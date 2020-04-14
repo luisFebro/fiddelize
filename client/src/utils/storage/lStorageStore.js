@@ -28,7 +28,7 @@ const userProfileValuesArray = [
 const collVal1 = { collection: "onceChecked", value: true };
 const collVal2 = { collection: "userProfile", value: userProfileValuesArray} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
 const coll3 = { collection: "appSystem" }
-const collVal4 = { collection: "clientAdmin", value: ["...", "empresa-teste-et2d@yd", "gratis", 500, "free product", ["giftA", "giftB"], { text: "...", updatedAt: new Date() }, highestScoresArray] }
+const collVal4 = { collection: "clientAdmin", value: ["...", "empresa-teste-et2d@yd", "gratis", 500, "free product", ["giftA", "giftB"], { text: "...", updatedAt: new Date() }, highestScoresArray, 0] }
 // END COLLECTIONS
 
 // PROPERTIES
@@ -52,8 +52,21 @@ const userProfileKeysArray = [
     "totalGeneralScore",
     "totalPurchasePrize",
 ]
+
+const clientAdminKeysArray = [
+    "bizName",
+    "bizCodeName",
+    "bizPlan",
+    "maxScore",
+    "mainReward",
+    "rewardList",
+    "regulation",
+    "highestScores",
+    "rewardDeadline",
+];
+
 const userProfileOp = combine(collVal2, { property: userProfileKeysArray })
-const clientAdminOp = combine(collVal4, { property: ["bizName", "bizCodeName", "bizPlan", "maxScore", "mainReward", "rewardList", "regulation", "highestScores"], })
+const clientAdminOp = combine(collVal4, { property: clientAdminKeysArray })
 const userProfileColl = { collection: "userProfile" };
 const clientAdminColl = { collection: "clientAdmin" };
 const appSystemColl = coll3;

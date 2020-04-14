@@ -22,7 +22,7 @@ export default function RegulationPage({ location }) {
     const bizCodeName = getQueryByName("bizCodeName", location.search);
 
     const { userName } = useProfile();
-    const { bizName, bizRegulation, mainReward, maxScore } = useClientAdmin();
+    const { bizName, bizRegulation, mainReward, maxScore, rewardDeadline } = useClientAdmin();
 
     const rewardScore = maxScore;
     const levelScore = rewardScore && rewardScore / 5;
@@ -38,6 +38,7 @@ export default function RegulationPage({ location }) {
         "nome-empresa": bizName || " ",
         "nome-cliente": userName || " ",
         "nome-premio": mainReward || " ",
+        "prazo-premio": `${rewardDeadline} dias`,
         "ponto-premio": `${rewardScore} pontos`,
         "ponto-nivel": `${levelScore} pontos`,
     }

@@ -100,6 +100,7 @@ const showHistoryBtn = data => {
                     challengeN: challengeN,
                     currUserScore: data.clientUserData.currScore,
                     userName: data.name,
+                    totalGeneralScore: dataToSendModal && dataToSendModal.totalGeneralScore,
                 }}
             />
         </div>
