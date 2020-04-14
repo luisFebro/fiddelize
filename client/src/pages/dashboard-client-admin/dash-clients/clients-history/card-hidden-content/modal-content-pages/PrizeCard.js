@@ -44,7 +44,7 @@ export default function PrizeCard({ historyData }) {
                                  <ButtonFab
                                     position="relative"
                                     onClick={() => setPrizeView(true)}
-                                    title="Ver Prêmio"
+                                    title="Ver seu Prêmio"
                                     variant="extended"
                                     color="white"
                                     backgroundColor="var(--themeSDark)"

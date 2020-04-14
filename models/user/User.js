@@ -70,16 +70,18 @@ const planCodesData = {
 const PaidPlanCodesSchema = new Schema(planCodesData, { _id: false });
 
 // where_what_description
-const onceActionsData = {
-    cliAdminDash_feature_proSearch: { type: Boolean, default: false },
+const onceCheckedData = {
+    cliAdminDash_feature_proSearch: Boolean, // avoid declare default false to not declare unessary fields to DB.
 }
-const OnceActionsSchema = new Schema(onceActionsData, { _id: false });
+const OnceCheckedSchema = new Schema(onceCheckedData, { _id: false });
 
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
     bizCodeName: String,
     bizCnpj: String, // NOT IMPLEMENTED YET
     bizWhatsapp: String,
+
+    // premium plans
     bizPlan: {
         type: String,
         default: "gratis",
@@ -88,7 +90,12 @@ const clientAdminData = {
     bizPlanCode: PaidPlanCodesSchema,
     bizPlanStarts: Date, // NOT IMPLEMENTED YET
     bizPlanExpires: Date, // NOT IMPLEMENTED YET
+    // end premium plans
+
+    // address
     bizCep: Number, // NOT IMPLEMENTED YET
+    bizAddress: Number, // NOT IMPLEMENTED YET
+    // end address
 
     // self-service
     bizLogoImg: String,
@@ -109,8 +116,7 @@ const clientAdminData = {
     verificationPass: String,
     regulation: RegulationSchema,
 
-    appDownloads: { type: Number, default: 0 },
-    onceActions: OnceActionsSchema, // NOT IMPLEMENTED YET
+    onceChecked: OnceCheckedSchema, // NOT IMPLEMENTED YET
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {

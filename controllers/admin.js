@@ -191,20 +191,22 @@ exports.checkVerificationPass = (req, res) => {
     })
 };
 
-exports.countAppDownloads = (req, res) => {
-    const { bizId } = req.body;
+// DEPRACATED - this will count by users registered and active instead of download page.
+// replaced by countAllusers with query search like "?type="cliente" which will count all time clients from all cli-admins
+// exports.countAppDownloads = (req, res) => {
+//     const { bizId } = req.body;
 
-    const countingField = { "clientAdminData.appDownloads": 1 };
-    User.findOneAndUpdate(
-        { _id: bizId },
-        { $inc: countingField},
-        { new: true})
-    .select("app.downloads -_id")
-    .exec((err, update) => {
-        if(err) return res.status(500).json(msgG("error.systemError", err));
-        res.json(update);
-    })
-}
+//     const countingField = { "clientAdminData.appDownloads": 1 };
+//     User.findOneAndUpdate(
+//         { _id: bizId },
+//         { $inc: countingField},
+//         { new: true})
+//     .select("app.downloads -_id")
+//     .exec((err, update) => {
+//         if(err) return res.status(500).json(msgG("error.systemError", err));
+//         res.json(update);
+//     })
+// }
 // END CLIENT-ADMIN
 
 /* ARCHIVES

@@ -23,6 +23,7 @@ export const readClientAdmin = async (dispatch, _userId) => {
         type: 'CLIENT_ADMIN_READ',
         payload: res.data
     });
+    return res;
 };
 
 export const updateUser = async (dispatch, objToSend, _idUser) => {

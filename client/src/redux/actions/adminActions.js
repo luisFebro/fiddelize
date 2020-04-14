@@ -129,13 +129,13 @@ export const checkVerificationPass = async (dispatch, objToSend) => { // L
     }
 };
 
-export const countAppDownloads = async (dispatch, dataToSend) => {
-    try {
-        await axios.put(`/api/admin/app/downloads`, dataToSend, getHeaderJson);
-    } catch (err) {
-        return err.response;
-    }
-};
+// export const countAppDownloads = async (dispatch, dataToSend) => {
+//     try {
+//         await axios.put(`/api/admin/app/downloads`, dataToSend, getHeaderJson);
+//     } catch (err) {
+//         return err.response;
+//     }
+// };
 // END CLIENT ADMIN
 
 /* COMMENTS

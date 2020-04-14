@@ -1,27 +1,166 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ButtonMulti, { faStyle } from '../../../../../components/buttons/material-ui/ButtonMulti';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TextField from '@material-ui/core/TextField';
+import handleChange from '../../../../../utils/form/use-state/handleChange';
+import MomentDateWithIcon from '../../../../../components/date-time/MomentDateWithIcon';
+import PropTypes from 'prop-types';
+import { updateUser, readClientAdmin } from '../../../../../redux/actions/userActions';
+import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
+import { useStoreDispatch } from 'easy-peasy';
+const isSmall = window.Helper.isSmallScreen();
 
-export default function HiddenBizDataAndBackup() {
+HiddenBizDataAndBackup.propTypes = {
+    userData: PropTypes.object,
+}
+
+export default function HiddenBizDataAndBackup({ userData }) {
+    const [data, setData] = useState({
+        bizName: '',
+        bizWhatsapp: '',
+        bizCep: '',
+        bizAddress: '',
+    })
+
+    const { bizName, bizWhatsapp, bizCep, bizAddress } = data;
+
+    useEffect(() => {
+        readClientAdmin(dispatch, userData._id)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+            setData({
+                bizName: res.data.bizName,
+                bizWhatsapp: res.data.bizWhatsapp,
+                bizCep: res.data.bizCep,
+                bizAddress: res.data.bizAddress,
+            })
+        })
+    }, [])
+
+    const dispatch = useStoreDispatch();
+
+
+    const styles = {
+        form: {
+            maxWidth: '350px',
+            background: 'var(--themeSDark)',
+            borderRadius: '10px',
+            padding: '25px'
+        },
+        fieldForm: {
+            backgroundColor: 'var(--mainWhite)',
+            color: 'var(--mainPurple)',
+            zIndex: 2000,
+            font: 'normal 1em Poppins, sans-serif',
+        },
+        helperFromField: {
+            color: 'grey',
+            fontFamily: 'Poppins, sans-serif',
+            fontSize: isSmall ? '.8em' : '.6em',
+        },
+    }
+
+    const sendDataBackend = () => {
+        const dataToSend = { ...data };
+        updateUser(dispatch, dataToSend, userData._id)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+            showSnackbar(dispatch, "Seu perfil foi atualizado!", 'success');
+        })
+    }
+
+    const showButtonAction = () => (
+        <div className="container-center" style={{marginTop: '20px'}}>
+            <ButtonMulti
+                title="Atualizar"
+                onClick={sendDataBackend}
+                color="var(--mainWhite)"
+                backgroundColor="var(--themeP)"
+                backColorOnHover="var(--themeP)"
+                iconFontAwesome={<FontAwesomeIcon icon="exchange-alt" style={faStyle} />}
+                textTransform='uppercase'
+            />
+        </div>
+    );
+
+    const showForm = () => (
+        <div className="container-center mt-5">
+            <form className="animated zoomIn fast shadow-elevation text-white font-weight-bold" onBlur={() => ""} style={styles.form}>
+                <p className="text-shadow text-subtitle font-weight-bold">
+                    Atualize Dados Comerciais
+                </p>
+                <div className={`mt-4 margin-auto-95 text-normal`}>
+                    <p className="text-shadow">
+                        Nome sua Empresa/Projeto
+                    </p>
+                    <TextField
+                        InputProps={{ style: styles.fieldForm }}
+                        variant="outlined"
+                        onChange={handleChange(setData, data)}
+                        fullWidth
+                        autoComplete="off"
+                        type="text"
+                        name="bizName"
+                        value={bizName}
+                    />
+                </div>
+                <div className={`mt-4 margin-auto-95 text-normal`}>
+                    <p className="text-shadow">
+                        Whatsapp Comercial
+                    </p>
+                    <TextField
+                        InputProps={{ style: {...styles.fieldForm, color: 'grey'} }}
+                        variant="outlined"
+                        fullWidth
+                        autoComplete="off"
+                        onChange={handleChange(setData, data)}
+                        name="bizWhatsapp"
+                        value={bizWhatsapp}
+                    />
+                </div>
+                <div className={`mt-4 margin-auto-95 text-normal`}>
+                    <p className="text-shadow">
+                        Endereço Comercial
+                    </p>
+                    <TextField
+                        InputProps={{ style: styles.fieldForm }}
+                        variant="outlined"
+                        onChange={handleChange(setData, data)}
+                        autoComplete="off"
+                        name="bizAddress"
+                        value={bizAddress}
+                        // helperText="Usado para divulgar"
+                        // FormHelperTextProps={{ style: styles.helperFromField }}
+                        type="text"
+                        fullWidth
+                    />
+                </div>
+                <div className={`mt-4 margin-auto-95 text-normal`}>
+                    <p className="text-shadow">
+                        CEP
+                    </p>
+                    <TextField
+                        InputProps={{ style: styles.fieldForm }}
+                        variant="outlined"
+                        onChange={handleChange(setData, data)}
+                        autoComplete="off"
+                        fullWidth
+                        name="bizCep"
+                        value={bizCep}
+                    />
+                </div>
+                {showButtonAction()}
+            </form>
+        </div>
+    );
+
     return (
-        <div className="hidden-content--root text-normal">
-            I am the biz data and backup content...
-            Add bizWhatsapp field here...
+        <div className="hidden-content--root text-normal mt-4">
+            {showForm()}
+            <MomentDateWithIcon
+                date={userData.updatedAt}
+                msgIfNotValidDate="Nenhuma alteração."
+            />
         </div>
     );
 }
-
-/*
-<div className={`mt-4 margin-auto-95 text-normal`}>
-    <p className="text-shadow">
-        Whatsapp
-    </p>
-    <TextField
-        InputProps={{ style: styles.fieldForm }}
-        variant="outlined"
-        onChange={handleChange(setData, data)}
-        fullWidth
-        type="text"
-        name="bizWhatsapp"
-        value={bizWhatsapp}
-    />
-</div>
- */

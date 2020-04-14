@@ -61,7 +61,7 @@ export default function ShowExpansiblePanel() {
             id: 5,
             name: `Dados Projeto<br />e Segurança`,
             leftIcon: <FontAwesomeIcon icon="database" />,
-            hiddenContent: <HiddenBizDataAndBackup />,
+            hiddenContent: <HiddenBizDataAndBackup userData={userData} />,
         },
     ]
 

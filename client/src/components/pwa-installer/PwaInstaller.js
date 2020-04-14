@@ -4,14 +4,10 @@ import PropTypes from 'prop-types';
 import isThisApp from '../../utils/window/isThisApp';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
-import { countAppDownloads } from '../../redux/actions/adminActions';
 import parse from 'html-react-parser';
 import AOS from 'aos';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
 import lStorage from '../../utils/storage/lStorage';
-import { appSystem } from '../../hooks/useRoleData';
-
-const bizId = appSystem.businessId;
 
 PwaInstaller.propTypes = {
   title: PropTypes.string,
@@ -58,7 +54,6 @@ export default function PwaInstaller({ title, icon, run = true }) { // A2HS = Ap
             deferredPrompt.userChoice.then(function(choiceResult) {
                 if(choiceResult.outcome === 'accepted') {
                     showSnackbar(dispatch, 'Instalando App em instantes...', 'warning', 7000)
-                    countAppDownloads(dispatch, bizId);
                     setTimeout(() => {
                         showSnackbar(dispatch, 'Instalado com sucesso! Você pode fechar essa janela e acessar o app na sua tela inicial', 'success', 8000)
                         setTimeout(() => closeWindow(), 7000)
