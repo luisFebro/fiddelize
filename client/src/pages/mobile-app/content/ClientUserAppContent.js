@@ -17,7 +17,8 @@ import AllScores from '../AllScores';
 import PercCircleAndGift from '../PercCircleAndGift';
 // END APP COMPONENTS
 
-export default function ClientUserAppContent({ useProfile, useClientUser, useClientAdmin }) {
+export default function ClientUserAppContent({
+    useProfile, useClientUser, useClientAdmin, needAppForCliAdmin }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
 
@@ -44,7 +45,8 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
     }
 
     useEffect(() => {
-        if(isAuthUser && role === "cliente") {
+        const condition = isAuthUser && role === "cliente" || needAppForCliAdmin;
+        if(condition) {
             animateNumber(
                 userScoreRef.current,
                 0,
@@ -53,7 +55,7 @@ export default function ClientUserAppContent({ useProfile, useClientUser, useCli
                 setShowMoreComps
             );
         }
-    }, [role, isAuthUser])
+    }, [role, isAuthUser, needAppForCliAdmin])
 
     checkIfElemIsVisible("#rules", setShowMoreBtn);
 

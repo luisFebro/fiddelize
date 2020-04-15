@@ -7,6 +7,7 @@ import { useClientAdmin, useAppSystem, useProfile } from '../../hooks/useRoleDat
 import lStorage from '../../utils/storage/lStorage';
 import { logout } from '../../redux/actions/authActions';
 import { useStoreDispatch } from 'easy-peasy';
+import isThisApp from '../../utils/window/isThisApp';
 
 // IMPORTANT: This was moved from navbar since it was not running the buttons at the start.
 export default function ActionBtns({ location }) {
@@ -31,15 +32,20 @@ export default function ActionBtns({ location }) {
 const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role }) => { // L
     return(
         <section style={{zIndex: 3000, right: '15px', top: 5 }} className="position-absolute container-center">
-            <div style={{marginRight: '15px'}}>
-                <ButtonFab
-                    backgroundColor="var(--themeSDark)"
-                    position="relative"
-                    size="medium"
-                    iconFontAwesome={<FontAwesomeIcon icon="mobile-alt" style={faStyle} />}
-                    onClick={null}
-                />
-            </div>
+            {isThisApp()
+            && (
+                <Link to={`/mobile-app?client-admin=1`}>
+                    <div style={{marginRight: '15px'}}>
+                        <ButtonFab
+                            backgroundColor="var(--themeSDark)"
+                            position="relative"
+                            size="medium"
+                            iconFontAwesome={<FontAwesomeIcon icon="mobile-alt" style={faStyle} />}
+                            onClick={null}
+                        />
+                    </div>
+                </Link>
+            )}
             <Link to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}>
                 <ButtonFab
                     backgroundColor="var(--themeSDark)"

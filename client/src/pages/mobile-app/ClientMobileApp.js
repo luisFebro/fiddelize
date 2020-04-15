@@ -1,7 +1,7 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
 import React, { useRef, useEffect, useState } from 'react';
 import Login from '../../components/auth/Login';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { useStoreDispatch } from 'easy-peasy';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import {CLIENT_URL} from '../../config/clientUrl';
@@ -20,7 +20,7 @@ const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function ClientMobileApp() {
+function ClientMobileApp({ location }) {
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded } = useAppSystem();
 
@@ -30,6 +30,9 @@ export default function ClientMobileApp() {
     const { bizCodeName } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
+
+    const searchQuery = location.search;
+    const needAppForCliAdmin = searchQuery.includes("client-admin=1");
 
     useEffect(() => {
         if(needAppRegister) {
@@ -67,7 +70,7 @@ export default function ClientMobileApp() {
     const isClientUserLogged = isAuthUser && role === "cliente";
 
     const showAppType = () => (
-        roleWhichDownloaded && !isClientUserLogged &&
+        roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin &&
         <div className="container-center">
             <div className="position-relative">
                 <p style={{zIndex: 100, top: '20px', left: '150px'}}
@@ -125,8 +128,11 @@ export default function ClientMobileApp() {
     const conditionRegister = loginOrRegister === "register" && showRegister(true)
     const conditionLogin = loginOrRegister === "login" && showLogin()
 
-    const isCliAdminConnected = role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
-    const isCliUserConnected = role === "cliente" || roleWhichDownloaded === "cliente";
+    let isCliAdminConnected = role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
+    const isCliUserConnected = needAppForCliAdmin || role === "cliente" || roleWhichDownloaded === "cliente";
+    if(needAppForCliAdmin) {
+        isCliAdminConnected = false;
+    }
 
     return (
         <div style={{overflowX: 'hidden'}}>
@@ -148,6 +154,7 @@ export default function ClientMobileApp() {
                             useProfile={useProfile}
                             useClientUser={useClientUser}
                             useClientAdmin={useClientAdmin}
+                            needAppForCliAdmin={needAppForCliAdmin}
                         />
                     )}
 
@@ -158,6 +165,8 @@ export default function ClientMobileApp() {
         </div>
     );
 }
+
+export default withRouter(ClientMobileApp);
 
 /* COMMENTS
 n1: LESSON: Do not use Fragment inside session since Fragment can hide inner elements...
