@@ -26,6 +26,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
     const { title, subTitle, itemData } = modalData;
 
     const handleRemoval = itemData => {
+        if(itemData._id === '5e890d185162091014c53b56') return showSnackbar(dispatch, "O usuário de teste não pode ser excluido.", "error")
         showSnackbar(dispatch, "Processando...", 'warning', 3000);
         setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 4000), 3000);
         setTimeout(() => {
