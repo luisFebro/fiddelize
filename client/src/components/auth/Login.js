@@ -128,7 +128,7 @@ function Login({ history, setLoginOrRegister }) {
                 <p
                     className="text-white font-weight-bold text-small text-shadow"
                 >
-                    Novo Usuário?<br/>Faça seu cadastro{" "}
+                    Novo Cliente?<br/>Faça cadastro{"  "}
                     <RadiusBtn size="small" title="aqui" onClick={() => setLoginOrRegister("register")} />
                 </p>
             </div>

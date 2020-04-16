@@ -181,7 +181,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                     className="text-white font-weight-bold text-small text-shadow"
                     style={{whiteSpace: 'nowrap'}}
                 >
-                    Já é cadastrado?{" "}
+                    Já é cadastrado(a)?{"  "}
                     <RadiusBtn size="small" title="Faça login" onClick={() => setLoginOrRegister("login")} />
                 </p>
             </div>
