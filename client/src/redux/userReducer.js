@@ -26,6 +26,7 @@ const currClientAdminData = {
     bizName: clientAdminData && clientAdminData.bizName,
     bizCodeName: clientAdminData && clientAdminData.bizCodeName,
     bizPlan: clientAdminData && clientAdminData.bizPlan,
+    bizWhatsapp: clientAdminData && clientAdminData.bizWhatsapp,
     rewardScore: clientAdminData && clientAdminData.maxScore,
     mainReward: clientAdminData && clientAdminData.mainReward,
     rewardList: clientAdminData && clientAdminData.rewardList,

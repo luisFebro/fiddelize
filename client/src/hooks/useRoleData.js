@@ -88,6 +88,7 @@ export const useClientAdmin = () => {
     const bizName = clientAdmin && clientAdmin.bizName && clientAdmin.bizName.cap();
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
+    const bizWhatsapp = clientAdmin && clientAdmin.bizWhatsapp;
     const regulation = clientAdmin && clientAdmin.regulation;
     const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
 
@@ -95,6 +96,7 @@ export const useClientAdmin = () => {
         bizName,
         bizCodeName,
         bizPlan,
+        bizWhatsapp,
         maxScore,
         mainReward,
         rewardList,

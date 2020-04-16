@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { logout } from '../../redux/actions/authActions';
 import { Link, withRouter } from 'react-router-dom';
 import { showComponent } from '../../redux/actions/componentActions';
@@ -7,6 +7,8 @@ import { useStoreDispatch } from 'easy-peasy';
 import ModalFullScreenHistory from "../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-full-screen_history/ModalFullScreenHistory";
 import PurchaseHistory from '../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/PurchaseHistory';
 import { useClientUser, useProfile } from '../../hooks/useRoleData';
+import { CLIENT_URL } from '../../config/clientUrl';
+import WhatsappBtn from '../../components/buttons/WhatsappBtn';
 // SpeedDial and Icons
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -152,7 +154,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
             />
             {showPurchaseHistoryModal()}
             <ModalFullContent
-                contentComp={null}
+                contentComp={<ContactComp />}
                 fullOpen={fullOpen}
                 setFullClose={setFullClose}
             />
@@ -161,6 +163,30 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
 }
 
 export default withRouter(MoreOptionsBtn);
+
+const ContactComp = () => {
+    const showTitle = () => (
+        <div className="my-4">
+            <p
+                className="text-subtitle text-purple text-center font-weight-bold"
+            >
+                &#187; Fale conosco
+            </p>
+        </div>
+    );
+
+    return(
+        <Fragment>
+            {showTitle()}
+            <div className="mx-4">
+                <img className="img-fluid" height="auto" src={`${CLIENT_URL}/img/illustrations/online-chat.svg`} alt="chat online"/>
+            </div>
+            <div style={{height: '100%'}} className="container-center">
+                <WhatsappBtn />
+            </div>
+        </Fragment>
+    );
+};
 
 /*ARCHIVES
 // const { run, runName } = useStoreState(state => ({

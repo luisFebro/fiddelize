@@ -1,6 +1,7 @@
 // copy this to every component which needs icons:
 // USE: import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; <FontAwesomeIcon icon="heart" />
 import { library } from '@fortawesome/fontawesome-svg-core';
+
 import {
     faHeart,
     faStar,
@@ -39,6 +40,8 @@ import {
     faFileAlt,
     faDatabase, // security copies
     faExchangeAlt, // update
+    faCogs, // tech support, setting
+    faChartPie,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -79,4 +82,6 @@ library.add(
   faFileAlt,
   faDatabase,
   faExchangeAlt,
+  faCogs,
+  faChartPie,
 );

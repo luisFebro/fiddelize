@@ -28,6 +28,7 @@ const defaultClientAdmin = {
     bizName: "...",
     bizCodeName: "empresa-teste-et2d@yd",
     bizPlan: "gratis",
+    bizWhatapp: "(99) 99999-9999",
     maxScore: 500,
     mainReward: "Free Product",
     rewardList: ["giftA", "giftB"],

@@ -36,7 +36,7 @@ exports.createOrUpdate = (req, res) => { // n4
 exports.read = (req, res) => {
     Admin.findById(adminId)
     .populate('businessInfo', "bizInstagram bizName bizWebsite")
-    .select("-_id -createdAt -updatedAt")
+    .select("-_id -createdAt -updatedAt -__v")
     .then(centralAdminData => res.json(centralAdminData))
     .catch(err => res.json(msgG("error.systemError", err)))
 }
