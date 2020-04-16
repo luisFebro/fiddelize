@@ -128,8 +128,8 @@ export default function ModalTextField({
                 {subTitle && parse(subTitle)}
             </p>
             <p className="text-normal text-purple text-center my-4">
-                • Pontos Atual do Cliente:<br/>
-                <strong>{userCurrScore}</strong>
+                • Pontuação Atual do Cliente:<br/>
+                <strong>{userCurrScore} Pontos</strong>
             </p>
         </div>
     );
@@ -217,11 +217,6 @@ export default function ModalTextField({
                 onClick={onClose}
                 variant="link"
             />
-            <ButtonMulti
-                title="Desconto Parcial"
-                backgroundColor="var(--themeP)"
-                backColorOnHover="var(--themeP)"
-            />
         </section>
     );
 
@@ -245,11 +240,6 @@ export default function ModalTextField({
         <section className="container-center">
             {showSubtitleAndInfos()}
             {showPartialDiscountBtn()}
-            <div className={`${needPartialDiscount ? "d-block animated zoomIn fast" : "d-none"}`}>
-                {showForm()}
-                {showResultScoreAndWarning()}
-                {showActionButtons()}
-            </div>
         </section>
     );
 
