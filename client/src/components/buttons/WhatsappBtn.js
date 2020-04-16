@@ -11,13 +11,13 @@ WhatsappBtn.propTypes = {
     elsePhone: PropTypes.string,
 }
 
-export default function WhatsappBtn({ elsePhone, supportName, iconName }) {
+export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
     const { bizWhatsapp, bizName } = useClientAdmin();
 
     const targetedNumber = elsePhone ? elsePhone : bizWhatsapp;
     const convertedWhatsapp = convertPhoneStrToInt(targetedNumber);
     const greetingTxt = elsePhone ? `Oi ${supportName}, vim pelo app pelo suporte da Fiddelize e preciso ` : `Oi, vim pelo app de ${bizName} e preciso `;
-    const awesomeIcon = elsePhone ? iconName : "comment";
+
     return (
         <a
             target="_blank"
@@ -28,10 +28,11 @@ export default function WhatsappBtn({ elsePhone, supportName, iconName }) {
             <ButtonMulti
                 title="Iniciar chat"
                 onClick={null}
+                disabled={isDisabled}
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeP)"
                 backColorOnHover="var(--themeP)"
-                iconFontAwesome={<FontAwesomeIcon icon={awesomeIcon} style={faStyle} />}
+                iconFontAwesome={<FontAwesomeIcon icon="comment" style={faStyle} />}
             />
         </a>
     );

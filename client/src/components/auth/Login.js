@@ -54,6 +54,7 @@ function Login({ history, setLoginOrRegister }) {
 
             if(role === "cliente-admin") {
                 let whichRoute;
+                showSnackbar(dispatch, "Carregando...")
                 readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
                 .then(res => {
                     if(verificationPass) {

@@ -38,7 +38,6 @@ export default function ModalTextField({
         remainValue: '0,0',
     });
     const [gotError, setGotError] = useState(false);
-    const [needPartialDiscount, setNeedDiscount] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
 
     const { valueOnField, remainValue } = data;
@@ -209,8 +208,7 @@ export default function ModalTextField({
 
     const showPartialDiscountBtn = () => (
         <section
-            className={`${!needPartialDiscount ? "d-block my-3 d-flex flex-column-reverse flex-md-row justify-content-center" : "d-none"}`}
-            onClick={e => animateCSS(e.currentTarget, "zoomOut", "slow", () => setNeedDiscount(true))}
+            className={`d-block my-3 d-flex flex-column-reverse flex-md-row justify-content-center`}
         >
             <ButtonMulti
                 title={"Voltar"}

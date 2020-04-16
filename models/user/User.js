@@ -172,12 +172,6 @@ const data = {
         type: String,
         default: "Não selecionado"
     },
-    msgReadByUser: {
-        staffRequired: {
-            type: Boolean,
-            default: false,
-        },
-    },
     clientUserData: ClientUserDataSchema,
     clientAdminData: ClientAdminDataSchema,
     centralAdminData: CentralAdminDataSchema,
