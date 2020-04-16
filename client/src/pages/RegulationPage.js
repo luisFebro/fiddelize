@@ -21,8 +21,8 @@ export default function RegulationPage({ location }) {
     const isClientAdmin = location.search.includes("cliAdmin=1");
     const bizCodeName = getQueryByName("bizCodeName", location.search);
 
-    const { userName } = useProfile();
-    const { bizName, bizRegulation, mainReward, maxScore, rewardDeadline } = useClientAdmin();
+    const { name } = useProfile();
+    const { bizName, regulation, mainReward, maxScore, rewardDeadline } = useClientAdmin();
 
     const rewardScore = maxScore;
     const levelScore = rewardScore && rewardScore / 5;
@@ -36,7 +36,7 @@ export default function RegulationPage({ location }) {
 
     const variablesObj = {
         "nome-empresa": bizName || " ",
-        "nome-cliente": userName || " ",
+        "nome-cliente": name || " ",
         "nome-premio": mainReward || " ",
         "prazo-premio": `${rewardDeadline} dias`,
         "ponto-premio": `${rewardScore} pontos`,
@@ -49,9 +49,9 @@ export default function RegulationPage({ location }) {
             <Paper style={{backgroundColor: 'var(--mainWhite)'}}>
                 <div style={{minHeight: '400px'}} className="text-align py-4">
                     <pre className="text-normal" style={{whiteSpace: 'pre-line'}}>
-                        {bizRegulation && bizRegulation.text.length === 0
+                        {regulation && regulation.text.length === 0
                         ? <LoadingThreeDots />
-                        : replaceVariablesInTxt(bizRegulation && bizRegulation.text, variablesObj, {needBold: true})}
+                        : replaceVariablesInTxt(regulation && regulation.text, variablesObj, {needBold: true})}
                     </pre>
                 </div>
             </Paper>
@@ -95,7 +95,7 @@ export default function RegulationPage({ location }) {
     const showTimeStamp = () => (
          <MomentDateWithIcon
             style={{marginTop: 15, color: 'var(--mainWhite)'}}
-            date={bizRegulation && bizRegulation.updatedAt}
+            date={regulation && regulation.updatedAt}
             msgIfNotValidDate="Nenhuma alteração."
         />
     );

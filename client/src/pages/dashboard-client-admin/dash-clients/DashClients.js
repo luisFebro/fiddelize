@@ -4,7 +4,6 @@ import DashSectionTitle from '../../DashSectionTitle';
 import RankingPondium from './RankingPondium';
 import NotificationArea from './notification-area/NotificationArea';
 import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
-import { clientAdminOp, userProfileOp } from '../../../utils/storage/lStorage';
 
 const Title = ({ bizName }) => {
     return(
@@ -18,12 +17,12 @@ const Title = ({ bizName }) => {
 
 export default function DashClients() {
     const { bizName } = useClientAdmin();
-    const { userName } = useProfile();
+    const { name } = useProfile();
 
     return (
         <div>
             <DashSectionTitle title={<Title bizName={bizName} />} />
-            <NotificationArea userName={userName} />
+            <NotificationArea userName={name} />
             <hr />
             <RankingPondium />
             <hr />

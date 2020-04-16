@@ -2,6 +2,21 @@ function combine(...objs) {
     return Object.assign({}, ...objs);
 }
 
+// COLLECTIONS
+const collVal1 = { collection: "onceChecked", value: true };
+const coll3 = { collection: "appSystem" }
+// new way without separated keys and values in an array:
+// LESSON: this name is what will be also used as variable throughtout the app declared in "useRoleData"
+// central admin
+const defaultCentralAdmin = {
+    limitFreePlanNewUsers: 0,
+    mainSalesWhatsapp: '(97) 99999-9999',
+    mainTechWhatsapp: '(97) 99999-9999',
+}
+const centralAdminColl = { collection: "centralAdmin", newObj: defaultCentralAdmin };
+// end central admin
+
+// client Admin
 const highestScoresArray =
 [
     { name: "nome1",  "clientUserData": {"currScore": 0} },
@@ -9,6 +24,21 @@ const highestScoresArray =
     { name: "nome3", "clientUserData": {"currScore": 0} }
 ]
 
+const defaultClientAdmin = {
+    bizName: "...",
+    bizCodeName: "empresa-teste-et2d@yd",
+    bizPlan: "gratis",
+    maxScore: 500,
+    mainReward: "Free Product",
+    rewardList: ["giftA", "giftB"],
+    regulation: { text: "...", updatedAt: '...' },
+    highestScores: highestScoresArray,
+    rewardDeadline: 0,
+}
+const clientAdminColl = { collection: "clientAdmin", newObj: defaultClientAdmin };
+// end client Admin
+
+// user profile
 const purchaseHistoryArray = [
     {
         _id: 123,
@@ -17,18 +47,25 @@ const purchaseHistoryArray = [
         icon: "star",
         value: 0,
         cardType: 'record',
-        createdAt: new Date()
+        createdAt: '...',
     }
 ]
 
-const userProfileValuesArray = [
-    "123abc", "", "...", 0, 0, purchaseHistoryArray, "0", 0, 0, ];
-// COLLECTIONS - different collections receives different numbers at the very end in the order of execution
-// value here are DEFAULT ones if need
-const collVal1 = { collection: "onceChecked", value: true };
-const collVal2 = { collection: "userProfile", value: userProfileValuesArray} // Array(5).fill(undefined) same as [undefined, undefined, undefined, undefined, undefined] };
-const coll3 = { collection: "appSystem" }
-const collVal4 = { collection: "clientAdmin", value: ["...", "empresa-teste-et2d@yd", "gratis", 500, "free product", ["giftA", "giftB"], { text: "...", updatedAt: new Date() }, highestScoresArray, 0] }
+const defaultUserProfile = {
+    _id: "123abc",
+    role: "",
+    name: "...",
+    updatedAt: "...",
+    createdAt: "...",
+    currScore: 0,
+    lastScore: 0,
+    purchaseHistory: purchaseHistoryArray,
+    bizId: "0",
+    totalGeneralScore: 0,
+    totalPurchasePrize: 0,
+}
+const userProfileColl = { collection: "userProfile", newObj: defaultUserProfile };
+// end user profile
 // END COLLECTIONS
 
 // PROPERTIES
@@ -41,34 +78,6 @@ const confettiPlayOp = combine(collVal1, { property: "confettiPlay" })
 const setInitialStateOp = combine(collVal1, { property: "setInitialState", value: false});
 const needAppRegisterOp = combine(collVal1, { property: "needAppRegister" });
 
-const userProfileKeysArray = [
-    "_id",
-    "role",
-    "name",
-    "currScore",
-    "lastScore",
-    "purchaseHistory",
-    "bizId",
-    "totalGeneralScore",
-    "totalPurchasePrize",
-]
-
-const clientAdminKeysArray = [
-    "bizName",
-    "bizCodeName",
-    "bizPlan",
-    "maxScore",
-    "mainReward",
-    "rewardList",
-    "regulation",
-    "highestScores",
-    "rewardDeadline",
-];
-
-const userProfileOp = combine(collVal2, { property: userProfileKeysArray })
-const clientAdminOp = combine(collVal4, { property: clientAdminKeysArray })
-const userProfileColl = { collection: "userProfile" };
-const clientAdminColl = { collection: "clientAdmin" };
 const appSystemColl = coll3;
 
 const setSystemOp = (role, id) => {
@@ -88,14 +97,13 @@ export {
     tooltip1,
     yellowBtn2,
     confettiPlayOp,
-    userProfileOp,
-    clientAdminOp,
     appSystemColl,
     userProfileColl,
     clientAdminColl,
     setInitialStateOp,
     needAppRegisterOp,
     setSystemOp,
+    centralAdminColl,
 }
 
 export const needSetTrueLocalKey = (lastChecked, currChecked) => {

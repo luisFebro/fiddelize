@@ -26,7 +26,7 @@ function ClientMobileApp({ location }) {
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
-    const { role, userName } = useProfile();
+    const { role, name } = useProfile();
     const { bizCodeName } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
@@ -104,7 +104,7 @@ function ClientMobileApp({ location }) {
             <span>
                 Conectado por
                 <br/>
-                <strong className="text-title animated bounce">{userName}</strong><br />
+                <strong className="text-title animated bounce">{name}</strong><br />
             </span>
             <div className="container-center mt-4">
                 <Link
@@ -173,7 +173,7 @@ n1: LESSON: Do not use Fragment inside session since Fragment can hide inner ele
 */
 
 /* ARCHIVES
-{isAuthUser && !userName
+{isAuthUser && !name
 ? (
     <div style={{margin: '200px 0 0'}}>
         <LoadingThreeDots color="white" />

@@ -40,7 +40,7 @@ export default function ActionBtns({ data }) {
 }
 
 const showDiscountBtn = (data, clientAdminData) => {
-    const userScore = data.clientUserData && data.clientUserData.currScore;
+    const currScore = data.clientUserData && data.clientUserData.currScore;
     const rewardScore = clientAdminData.rewardScore;
     return(
         <div>
@@ -55,13 +55,13 @@ const showDiscountBtn = (data, clientAdminData) => {
                 }}
                 modalData={{
                     title: "Desconto de Pontos<br />do Cliente",
-                    subTitle: userScore >= rewardScore
+                    subTitle: currScore >= rewardScore
                     ? `Esse cliente chegou lá!<br />${data.name.cap()}<br />ATINGIU a meta de ${rewardScore} Pontos 🎉`
                     : `Cliente<br />${data.name.cap()}<br/>ainda NÃO ATINGIU a meta de ${rewardScore} Pontos`,
                     labelTxtField: "Valor para ser descontado:",
                     txtBtn: "Descontar",
                     iconBtn: <FontAwesomeIcon icon="minus-circle" />,
-                    userCurrScore: userScore,
+                    userCurrScore: currScore,
                     rewardScore: rewardScore,
                     userId: data._id,
                 }}

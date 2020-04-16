@@ -4,22 +4,9 @@ import { getBodyRequest } from '../../utils/server/getBodyRequest';
 import { setLoadingProgress } from './globalActions';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
-
-export const readAdmin = async dispatch => {
-    try {
-        // setLoadingOn(dispatch);
-        const res = await axios.get('/api/admin', getHeaderJson);
-        console.log('==ADMIN DATA LOADED==');
-        dispatch({
-            type: 'LOAD_ADMIN',
-            payload: res.data
-        });
-        return res;
-        // setLoadingOff(dispatch);
-    } catch (err) {
-        return err.response;
-    }
-}
+////////////////////////////////////////////////////////////////////
+// readAdmin moved to userActions userActions as readCentralAdmin //
+////////////////////////////////////////////////////////////////////
 
 export const updateAdmin = async (dispatch, bodyToSend) => {
     try {
@@ -49,6 +36,51 @@ export const updateBusinessInfo = async (dispatch, objToUpdate) => {
     }
 };
 
+export const readAllDbFromModels = async (dispatch, securityObj, model) => {
+    try {
+        return await axios.get(`/api/database/db-from-models/list/${securityObj.adminId}?modelName=${model}`, getHeaderToken(securityObj.token));
+    } catch (err) {
+        return err.response;
+    }
+};
+
+// CLIENT-ADMIN
+export const readVerificationPass = async (bizId) => { // L
+    try {
+        const res = await axios.get(`/api/admin/verification-pass/${bizId}`, getHeaderJson);
+        return res;
+    } catch (err) {
+        return err.response;
+    }
+};
+
+export const checkVerificationPass = async (dispatch, objToSend) => { // L
+    setLoadingProgress(dispatch, true);
+    try {
+        const res = await axios.post(`/api/admin/verification-pass`, objToSend, getHeaderJson);
+        setLoadingProgress(dispatch, false);
+        return res;
+    } catch (err) {
+        setLoadingProgress(dispatch, false);
+        return err.response;
+    }
+};
+
+// export const countAppDownloads = async (dispatch, dataToSend) => {
+//     try {
+//         await axios.put(`/api/admin/app/downloads`, dataToSend, getHeaderJson);
+//     } catch (err) {
+//         return err.response;
+//     }
+// };
+// END CLIENT ADMIN
+
+/* COMMENTS
+n1: LESSON: never use GET METHOD if you want to send an object to backend, even in the case if it is working on Postman.
+*/
+
+
+/* ARCHIVES
 // STAFF BOOKING
 export const getStaffWithBookingsList = async (dispatch, docsToSkip) => { // L
     // const searchQuery = search ? `&search=${search}` : "";
@@ -98,46 +130,4 @@ export const deleteService = async (dispatch, adminId, serviceId) => {
     }
 };
 // END SERVICES CRUD
-
-export const readAllDbFromModels = async (dispatch, securityObj, model) => {
-    try {
-        return await axios.get(`/api/database/db-from-models/list/${securityObj.adminId}?modelName=${model}`, getHeaderToken(securityObj.token));
-    } catch (err) {
-        return err.response;
-    }
-};
-
-// CLIENT-ADMIN
-export const readVerificationPass = async (bizId) => { // L
-    try {
-        const res = await axios.get(`/api/admin/verification-pass/${bizId}`, getHeaderJson);
-        return res;
-    } catch (err) {
-        return err.response;
-    }
-};
-
-export const checkVerificationPass = async (dispatch, objToSend) => { // L
-    setLoadingProgress(dispatch, true);
-    try {
-        const res = await axios.post(`/api/admin/verification-pass`, objToSend, getHeaderJson);
-        setLoadingProgress(dispatch, false);
-        return res;
-    } catch (err) {
-        setLoadingProgress(dispatch, false);
-        return err.response;
-    }
-};
-
-// export const countAppDownloads = async (dispatch, dataToSend) => {
-//     try {
-//         await axios.put(`/api/admin/app/downloads`, dataToSend, getHeaderJson);
-//     } catch (err) {
-//         return err.response;
-//     }
-// };
-// END CLIENT ADMIN
-
-/* COMMENTS
-n1: LESSON: never use GET METHOD if you want to send an object to backend, even in the case if it is working on Postman.
-*/
+ */

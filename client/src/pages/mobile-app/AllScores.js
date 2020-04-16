@@ -1,15 +1,15 @@
 import React from 'react';
 import { convertDotToComma } from '../../utils/numbers/convertDotComma';
 
-const AllScores = ({ userScoreRef, userScore, showPercentage, userLastScore }) => (
+const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore }) => (
     <div className="text-subtitle my-3 text-white text-center">
         <span className="text-title">Fidelidômetro:</span><br/>
         <div className="d-flex justify-content-center">
-            <p className="text-title" ref={userScoreRef}>...</p>
+            <p className="text-title" ref={currScoreRef}>...</p>
             <span className="ml-2">Pontos</span>
         </div>
         {/*LAST SCORE*/}
-        {userScore === 0 || !userScore || !showPercentage
+        {currScore === 0 || !currScore || !showPercentage
          ? null
          : (
             <section className="text-normal position-relative animated slideInLeft slow">
@@ -26,7 +26,7 @@ const AllScores = ({ userScoreRef, userScore, showPercentage, userLastScore }) =
                 >
                     Sua<br />última pontuação:<br />
                     <span className="text-em-1-3">
-                        {convertDotToComma(userLastScore)}
+                        {convertDotToComma(lastScore)}
                     </span>
                 </div>
             </section>

@@ -1,9 +1,10 @@
 import { reducer } from 'easy-peasy';
 import updateKeyWithId from './helpers/updateKeyWithId';
-import lStorage, { userProfileOp, clientAdminOp } from '../utils/storage/lStorage';
+import lStorage, { userProfileColl, clientAdminColl, centralAdminColl } from '../utils/storage/lStorage';
 
-const userData = lStorage("getItems", userProfileOp);
-const clientAdminData = lStorage("getItems", clientAdminOp);
+const userData = lStorage("getItems", userProfileColl); // n1
+const clientAdminData = lStorage("getItems", clientAdminColl);
+const centralAdminData = lStorage("getItems", centralAdminColl);
 
 const currUserData = {
     _id: userData && userData._id,
@@ -17,12 +18,10 @@ const currUserData = {
         totalGeneralScore: userData && userData.totalGeneralScore,
         totalPurchasePrize: userData && userData.totalPurchasePrize,
     },
-    updatedAt: '',
-    createdAt: '',
+    updatedAt: userData && userData.updatedAt,
+    createdAt: userData && userData.updatedAt,
 }
 
-// This data is read in the authAction and requires the valid bizId, otherwise default values will be set...lStorage
-// if(appSystem) { readClientAdmin(dispatch, appSystem.businessId); }
 const currClientAdminData = {
     bizName: clientAdminData && clientAdminData.bizName,
     bizCodeName: clientAdminData && clientAdminData.bizCodeName,
@@ -38,14 +37,16 @@ const currClientAdminData = {
 }
 
 const currCentralAdminData = {
-    // main data to run the app like the quantity of free clients register
+    limitFreePlanNewUsers: centralAdminData && centralAdminData.limitFreePlanNewUsers,
+    mainSalesWhatsapp: centralAdminData && centralAdminData.mainSalesWhatsapp,
+    mainTechWhatsapp: centralAdminData && centralAdminData.mainTechWhatsapp,
 }
 
 const highestScoreData = clientAdminData && clientAdminData.highestScores;
 
 // REDUCERS
 const initialState = {
-    centralAdmin: currCentralAdminData, // NEED IMPLEMENT YET...
+    centralAdmin: currCentralAdminData,
     clientAdmin: currClientAdminData,
     currentUser: currUserData,
     highestScores: highestScoreData,
@@ -130,4 +131,6 @@ export const userReducer = {
     })
 };
 
-// n1:
+/* COMMENTS
+n1: this new way actually just need the oollection's name only...
+*/

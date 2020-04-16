@@ -52,14 +52,14 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
     const [finishedWork, setFinishedWork] = useState(false);
     const animatedNumber = useRef(null);
 
-    const { role, userName, userId } = useProfile();
-    const { userScore, totalGeneralScore } = useClientUser();
+    const { role, name, _id } = useProfile();
+    const { currScore, totalGeneralScore } = useClientUser();
     const { maxScore, bizName, bizCodeName } = useClientAdmin();
     const { businessId } = useAppSystem();
 
     const dispatch = useStoreDispatch();
 
-    let lastScore = userScore;
+    let lastScore = currScore;
     if(typeof lastScore === "undefined") {
         lastScore = "0";
     }
@@ -86,7 +86,7 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
             }
-            updateUser(dispatch, objToSend, userId, false)
+            updateUser(dispatch, objToSend, _id, false)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 const historyObj = {
@@ -95,10 +95,10 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
                     "value": cashCurrScore,
                     "totalGeneralScore": totalGeneralScore + cashCurrScore,
                 }
-                addPurchaseHistory(dispatch, userId, historyObj)
+                addPurchaseHistory(dispatch, _id, historyObj)
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                    showSnackbar(dispatch, `Pontuação Registrada, ${getFirstName(userName)}!`, 'success');
+                    showSnackbar(dispatch, `Pontuação Registrada, ${getFirstName(name)}!`, 'success');
                     setFinishedWork(true);
                 })
             })
@@ -109,7 +109,7 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
     const showHeader = () => (
         <div>
             <span className="text-hero">
-                {getFirstName(userName)},
+                {getFirstName(name)},
             </span>
             <Title
                 title="Sua nova pontuação"
@@ -183,7 +183,7 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
                 style={styles.finishButton}
                 onClick={() => {
                     if(isThisApp()) {
-                        readUser(dispatch, userId)
+                        readUser(dispatch, _id)
                         .then(res => {
                             if(res.status !== 200) return console.log("Error on readUser");
                             history.push(`/mobile-app`);

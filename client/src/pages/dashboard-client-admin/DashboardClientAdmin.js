@@ -11,14 +11,14 @@ import ActionBtns, { PlanBadges } from './ActionBtns';
 import { withRouter } from 'react-router-dom';
 
 function DashboardClientAdmin({ location }) {
-    const { userName } = useProfile();
+    const { name } = useProfile();
 
     const showGreeting = () => (
         <p
             className="position-relative text-normal text-center text-white"
             style={{margin: 0, top: '10px'}}
         >
-            <span>{getDayGreetingBr()}, {userName ? `${getFirstName(userName)}!` : " ..."}</span>
+            <span className="font-weight-bold">{getDayGreetingBr()}, {name ? `${getFirstName(name)}!` : " ..."}</span>
         </p>
     );
 

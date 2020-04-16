@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { readUser } from './userActions';
+import { readUser, readCentralAdmin } from './userActions';
 import { setLoadingProgress, setRun } from './globalActions';
 import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
@@ -20,7 +20,7 @@ export const loadUser = () => (dispatch, getState) => {
         const userId = res.data.profile._id;
         const userDataPath = res.data.profile.clientUserData;
         const bizId = userDataPath && userDataPath.bizId;
-        readCliAdmin(dispatch, role, {userId: userId, bizId: bizId})
+        readCliAdmin(dispatch, role, {userId: userId, bizId: bizId});
 
         dispatch({ type: 'AUTHENTICATE_USER_ONLY' });
         dispatch({ type: 'USER_READ', payload: res.data.profile });
@@ -45,9 +45,9 @@ export const loginEmail = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
-        console.log("res", res);
 
         readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || "0"})
+        readCentralAdmin(dispatch);
         // readUser(dispatch, res.data.authUserId) // moved to login
 
         dispatch({ type: 'LOGIN_EMAIL', payload: res.data.token });

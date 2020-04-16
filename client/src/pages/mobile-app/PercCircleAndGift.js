@@ -13,10 +13,10 @@ const styles = {
     }
 }
 
-export default function PercCircleAndGift({ userScore, maxScore, showPercentage, playBeep }) {
+export default function PercCircleAndGift({ currScore, maxScore, showPercentage, playBeep }) {
     const displayGift = () => (
         <div className="shake-it">
-            {userScore >= maxScore
+            {currScore >= maxScore
             ? (
                 <div>
                     <p className="mt-3 text-title">Parabéns!<br />Você ganhou um prêmio.</p>
@@ -63,7 +63,7 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage,
                                 Você já alcançou
                                 <br />
                                 <strong>
-                                    ${getPercentage(maxScore, userScore)}% ${!userScore ? "(nenhum ponto)" : `(${userScore} pontos)`}
+                                    ${getPercentage(maxScore, currScore)}% ${!currScore ? "(nenhum ponto)" : `(${currScore} pontos)`}
                                 </strong> da
                                 <br />
                                 meta até agora.`}
@@ -72,7 +72,7 @@ export default function PercCircleAndGift({ userScore, maxScore, showPercentage,
                                     className="zoom-it container-center text-em-2-5 animated zoomIn"
                                 >
                                     <ReactjsPercentageCircle
-                                        percent={getPercentage(maxScore, userScore)}
+                                        percent={getPercentage(maxScore, currScore)}
                                         radius={70} /*circle size*/
                                         borderWidth={20}
                                         color="var(--themeS)" /*external line color*/

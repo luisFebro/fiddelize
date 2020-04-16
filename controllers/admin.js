@@ -12,21 +12,15 @@ const { msgG } = require('./_msgs/globalMsgs');
 exports.mwAdminId = (req, res, next, id) => {
     Admin.findOne({ _id: id })
     .exec((err, admin) => {
-        if (!admin) return res.status(400).json(msgG('error.accessDenied'));
+        if(!admin) return res.status(400).json(msgG('error.accessDenied'));
 
         req.admin = admin;
         next();
     });
 }
-
-exports.mwPhoto = (req, res, next) => {
-    if (req.admin.trademark.data) {
-        res.set("Content-Type", req.admin.trademark.contentType);
-        return res.send(req.admin.trademark.data);
-    }
-    next();
-};
 // END MIDDLEWARES
+
+// CENTRAL-ADMIN
 exports.createOrUpdate = (req, res) => { // n4
     Admin.findOneAndUpdate(
         { _id: adminId },
@@ -42,10 +36,12 @@ exports.createOrUpdate = (req, res) => { // n4
 exports.read = (req, res) => {
     Admin.findById(adminId)
     .populate('businessInfo', "bizInstagram bizName bizWebsite")
-    .select("-trademark -verificationPass")
-    .then(bizInfo => res.json(bizInfo))
+    .select("-_id -createdAt -updatedAt")
+    .then(centralAdminData => res.json(centralAdminData))
     .catch(err => res.json(msgG("error.systemError", err)))
 }
+
+// END CENTRAL-ADMIN
 
 
 // can also create if there is no document in the DB.
@@ -60,6 +56,59 @@ exports.updateBusinessInfo = (req, res) => {
             res.json(bizInfo);
         }
     );
+};
+
+// CLIENT-ADMIN
+exports.readVerificationPass = (req, res) => {
+    const { userId } = req.params;
+    User.findById(userId)
+    .select("clientAdminData.verificationPass -_id")
+    .exec((err, data) => {
+        const pass = data.clientAdminData.verificationPass;
+        if (err) return res.status(400).json(msgG("error.systemError", err));
+        res.json({ verificationPass: pass })
+    })
+};
+
+exports.checkVerificationPass = (req, res) => {
+    const { pass, bizId } = req.body;
+
+    User.findById(bizId)
+    .exec((err, clientAdmin) => {
+        if (err) return res.status(400).json(msgG("error.systemError", err));
+        if(!clientAdmin) return res.status(401).json({ msg: "Algo deu errado na verificação." });
+
+        const { clientAdminData } = clientAdmin;
+        if(clientAdminData.verificationPass !== pass) return res.status(401).json({ msg: "A senha de verificação está errada." })
+        res.json({ msg: "Ok!"})
+    })
+};
+
+// DEPRACATED - this will count by users registered and active instead of download page.
+// replaced by countAllusers with query search like "?type="cliente" which will count all time clients from all cli-admins
+// exports.countAppDownloads = (req, res) => {
+//     const { bizId } = req.body;
+
+//     const countingField = { "clientAdminData.appDownloads": 1 };
+//     User.findOneAndUpdate(
+//         { _id: bizId },
+//         { $inc: countingField},
+//         { new: true})
+//     .select("app.downloads -_id")
+//     .exec((err, update) => {
+//         if(err) return res.status(500).json(msgG("error.systemError", err));
+//         res.json(update);
+//     })
+// }
+// END CLIENT-ADMIN
+
+/* ARCHIVES
+exports.mwPhoto = (req, res, next) => {
+    if (req.admin.trademark.data) {
+        res.set("Content-Type", req.admin.trademark.contentType);
+        return res.send(req.admin.trademark.data);
+    }
+    next();
 };
 
 exports.updateConfig = (req, res) => {
@@ -165,51 +214,6 @@ exports.getStaffWithBookings = (req, res) => {
 }
 // END STAFF BOOKINGS
 
-// CLIENT-ADMIN
-exports.readVerificationPass = (req, res) => {
-    const { userId } = req.params;
-    User.findById(userId)
-    .select("clientAdminData.verificationPass -_id")
-    .exec((err, data) => {
-        const pass = data.clientAdminData.verificationPass;
-        if (err) return res.status(400).json(msgG("error.systemError", err));
-        res.json({ verificationPass: pass })
-    })
-};
-
-exports.checkVerificationPass = (req, res) => {
-    const { pass, bizId } = req.body;
-
-    User.findById(bizId)
-    .exec((err, clientAdmin) => {
-        if (err) return res.status(400).json(msgG("error.systemError", err));
-        if(!clientAdmin) return res.status(401).json({ msg: "Algo deu errado na verificação." });
-
-        const { clientAdminData } = clientAdmin;
-        if(clientAdminData.verificationPass !== pass) return res.status(401).json({ msg: "A senha de verificação está errada." })
-        res.json({ msg: "Ok!"})
-    })
-};
-
-// DEPRACATED - this will count by users registered and active instead of download page.
-// replaced by countAllusers with query search like "?type="cliente" which will count all time clients from all cli-admins
-// exports.countAppDownloads = (req, res) => {
-//     const { bizId } = req.body;
-
-//     const countingField = { "clientAdminData.appDownloads": 1 };
-//     User.findOneAndUpdate(
-//         { _id: bizId },
-//         { $inc: countingField},
-//         { new: true})
-//     .select("app.downloads -_id")
-//     .exec((err, update) => {
-//         if(err) return res.status(500).json(msgG("error.systemError", err));
-//         res.json(update);
-//     })
-// }
-// END CLIENT-ADMIN
-
-/* ARCHIVES
 exports.mwUniqueStaffIds = (req, res, next) => {
     StaffBooking.distinct("staffId")
     .exec((err, ids) => {

@@ -22,10 +22,10 @@ export default function ClientUserAppContent({
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
 
-    const userScoreRef = useRef(null);
+    const currScoreRef = useRef(null);
 
-    const { role, userName } = useProfile();
-    const { userScore, userLastScore, } = useClientUser();
+    const { role, name } = useProfile();
+    const { currScore, lastScore, } = useClientUser();
     const { maxScore } = useClientAdmin();
 
     const { isAuthUser } = useAuthUser();
@@ -48,10 +48,10 @@ export default function ClientUserAppContent({
         const condition = isAuthUser && role === "cliente" || needAppForCliAdmin;
         if(condition) {
             animateNumber(
-                userScoreRef.current,
+                currScoreRef.current,
                 0,
-                userScore,
-                getAnimationDuration(userScore),
+                currScore,
+                getAnimationDuration(currScore),
                 setShowMoreComps
             );
         }
@@ -61,7 +61,7 @@ export default function ClientUserAppContent({
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
-        if(!playConfettiAgain && userScore >= maxScore) {
+        if(!playConfettiAgain && currScore >= maxScore) {
             confetti.start();
             lStorage("setItem", confettiPlayOp);
         } else {
@@ -70,11 +70,11 @@ export default function ClientUserAppContent({
             }
         }
 
-        if(playConfettiAgain && userScore <= maxScore) {
+        if(playConfettiAgain && currScore <= maxScore) {
             lStorage("removeItem", confettiPlayOp); // returns null if no keys were found.
         }
 
-    }, [maxScore, userScore, showMoreComps]);
+    }, [maxScore, currScore, showMoreComps]);
 
     // UTILS
     function playBeep() {
@@ -89,23 +89,23 @@ export default function ClientUserAppContent({
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
                 className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
-                {getDayGreetingBr()},<br/> <span className="text-title">{userName + "!"}</span>
+                {getDayGreetingBr()},<br/> <span className="text-title">{name + "!"}</span>
             </div>
         </section>
     );
 
     const showAllScores = () => (
         <AllScores
-            userScoreRef={userScoreRef}
-            userScore={userScore}
+            currScoreRef={currScoreRef}
+            currScore={currScore}
             showPercentage={showMoreComps}
-            userLastScore={userLastScore}
+            lastScore={lastScore}
         />
     );
 
     const showPercCircleAndGift = () => (
         <PercCircleAndGift
-            userScore={userScore}
+            currScore={currScore}
             maxScore={maxScore}
             showPercentage={showMoreComps}
             playBeep={playBeep}
@@ -114,12 +114,12 @@ export default function ClientUserAppContent({
 
     const showRatingIcons = () => (
         <div style={{margin: '40px 0 80px'}}>
-            <RatingIcons score={userScore} maxScore={maxScore || 0} />
+            <RatingIcons score={currScore} maxScore={maxScore || 0} />
             {showMoreComps
             ? (
                 <div>
                     <ProgressMsg
-                        userScore={userScore || 0}
+                        currScore={currScore || 0}
                         maxScore={maxScore || 0}
                         playBeep={playBeep}
                     />
@@ -153,7 +153,7 @@ export default function ClientUserAppContent({
         <MoreOptionsBtn
             playBeep={playBeep}
             showMoreBtn={showMoreBtn}
-            userName={userName}
+            userName={name}
         />
     );
 

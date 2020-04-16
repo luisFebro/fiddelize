@@ -7,6 +7,7 @@ const collectionStore = {
     "userProfile": {},
     "clientAdmin": {},
     "appSystem": {},
+    "centralAdmin": {},
 };
 
 export default function lStorage(type, options, next) {
@@ -121,8 +122,8 @@ export default function lStorage(type, options, next) {
         const Obj2 = compareThisObj;
         if(!areObjsEqual(Obj1, Obj2)) {
             console.log("The following objs NOT EQUAL:")
-            console.log("Obj1 - storage data", Obj1);
-            console.log("Obj2 - setOnlineData", Obj2);
+            console.log("Obj1 at lStorageStore", Obj1);
+            console.log("Obj2 at useRoleData/setDataOnline", Obj2);
         }
 
         return areObjsEqual(Obj1, Obj2);

@@ -6,7 +6,7 @@ import parse from 'html-react-parser';
 import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { readUserList } from '../../../../redux/actions/userActions';
+import { readUserList, updateUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import UserCardExpansiblePanel from './expansible-panel/UserCardExpansiblePanel';
 import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
@@ -41,6 +41,14 @@ export default function RegisteredClientsList() {
     }));
 
     const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        const objToSend = {
+            "clientAdminData.totalClientUserScores": totalCliUserScores,
+            "clientAdminData.totalClientUsers": totalSize,
+        }
+        updateUser(dispatch, objToSend, businessId)
+    }, [totalSize, totalCliUserScores])
 
     useEffect(() => {
         if(init || runName === "registered") {

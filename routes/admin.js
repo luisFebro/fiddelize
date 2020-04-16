@@ -4,21 +4,10 @@ const {
     createOrUpdate,
     updateBusinessInfo,
     read,
-    getCoupon,
-    updateCoupon,
-    mwPhoto,
     mwAdminId,
     updateConfig,
-    // Services
-    createService,
-    readServicesList,
-    updateService,
-    deleteService,
-    // End
     checkVerificationPass,
     readVerificationPass,
-    createOrUpdateRegText,
-    // countAppDownloads,
 } = require('../controllers/admin');
 
 const { mwIsAdmin, mwIsClientAdmin } = require("../controllers/auth");
@@ -29,13 +18,21 @@ const { mwUserId } = require("../controllers/user");
 router.get("/", read);
 router.put("/", createOrUpdate);
 
-router.get("/photo/:adminId", mwPhoto);
 router.put("/business-info/update", updateBusinessInfo);
-
-router.put("/config", updateConfig);
 
 router.get("/verification-pass/:userId", mwIsClientAdmin, readVerificationPass);
 router.post("/verification-pass", checkVerificationPass);
+
+router.param('adminId', mwAdminId);
+router.param('userId', mwUserId);
+
+module.exports = router;
+
+/*ARCHIVES
+
+router.put("/config", updateConfig);
+
+router.get("/photo/:adminId", mwPhoto);
 
 // Services CRUD
 router.post("/service/:userId", mwIsAdmin, createService); // :userId is used to verify mwIsAdmin
@@ -45,8 +42,4 @@ router.delete("/service/:userId", mwIsAdmin, deleteService);
 // End Services CRUD
 
 // router.put("/app/downloads", countAppDownloads);
-
-router.param('adminId', mwAdminId);
-router.param('userId', mwUserId);
-
-module.exports = router;
+*/

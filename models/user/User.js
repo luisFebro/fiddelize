@@ -104,8 +104,8 @@ const clientAdminData = {
     themeSColor: String,
     // end self-service
 
-    totalUsersScore: Number, // NOT IMPLEMENTED YET
-    totalUsers: Number, // NOT IMPLEMENTED YET
+    totalClientUserScores: Number,
+    totalClientUsers: Number,
 
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },
@@ -125,7 +125,7 @@ ClientAdminDataSchema.pre('save', function(next) {
 });
 
 // Client Admin
-const adminData = {
+const centralAdminData = {
     subRole: {
         type: String,
         default: "rep-vendas",
@@ -137,7 +137,7 @@ const adminData = {
         transitionTax: Number,
     },
 }
-const AdminDataSchema = new Schema(adminData, { _id: false });
+const CentralAdminDataSchema = new Schema(centralAdminData, { _id: false });
 // END USER'S ROLES
 
 const data = {
@@ -180,7 +180,7 @@ const data = {
     },
     clientUserData: ClientUserDataSchema,
     clientAdminData: ClientAdminDataSchema,
-    adminData: AdminDataSchema,
+    centralAdminData: CentralAdminDataSchema,
     // staffBookingList: Array, // L
 }
 

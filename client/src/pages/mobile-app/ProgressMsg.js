@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { setRun } from '../../redux/actions/globalActions';
 
 ProgressMsg.propTypes = {
-    userScore: PropTypes.number,
+    currScore: PropTypes.number,
     maxScore: PropTypes.number,
     playBeep: PropTypes.func,
 }
@@ -18,14 +18,14 @@ ProgressMsg.propTypes = {
 const options = tooltip1;
 const attentionBtnChecked = lStorage("getItem", options);
 
-export default function ProgressMsg({ userScore, maxScore, playBeep }) {
+export default function ProgressMsg({ currScore, maxScore, playBeep }) {
     const eachMilestone = maxScore / 5;
-    const currMilestone = getRemainder("tens", userScore, eachMilestone);
+    const currMilestone = getRemainder("tens", currScore, eachMilestone);
     const milestoneLeft = convertDotToComma(eachMilestone - currMilestone);
     const dispatch = useStoreDispatch();
 
     const maxLevel = Math.floor(maxScore / eachMilestone);
-    let nextLevel = Math.floor(userScore / eachMilestone) + 1;
+    let nextLevel = Math.floor(currScore / eachMilestone) + 1;
 
     const styles = {
         flagIcon: {
@@ -65,11 +65,11 @@ export default function ProgressMsg({ userScore, maxScore, playBeep }) {
 
     const showMsg = () => (
         <div className="text-center">
-            {!userScore
+            {!currScore
             ? null
             : (
                 <Fragment>
-                    {userScore >= maxScore
+                    {currScore >= maxScore
                     ? (
                         <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
                     )  : (

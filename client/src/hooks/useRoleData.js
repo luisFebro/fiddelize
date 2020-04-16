@@ -29,18 +29,28 @@ export const useAppSystem = () => {
     });
 }
 
+export const useCentralAdmin = () => {
+    const centralAdmin = useStoreState(state => state.userReducer.cases.centralAdmin);
+
+    return centralAdmin;
+};
+
 export const useProfile = () => {
     const currentUser = useStoreState(state => state.userReducer.cases.currentUser);
 
-    const userId = currentUser && currentUser._id;
-    const userName = currentUser && currentUser.name && currentUser.name.cap();
+    const _id = currentUser && currentUser._id;
     const role = currentUser && currentUser.role;
+    const name = currentUser && currentUser.name && currentUser.name.cap();
+    const updatedAt = currentUser && currentUser.updatedAt;
+    const createdAt = currentUser && currentUser.createdAt;
 
-    return({
-        userId,
+    return ({
+        _id,
         role,
-        userName,
-    })
+        name,
+        updatedAt,
+        createdAt,
+    });
 };
 
 export const useClientUser = () => {
@@ -49,17 +59,17 @@ export const useClientUser = () => {
     }));
 
     const bizId = clientUser && clientUser.bizId;
-    const userScore = clientUser && clientUser.currScore;
-    const userLastScore = clientUser && clientUser.cashCurrScore;
-    const userPurchase = clientUser && clientUser.purchaseHistory;
+    const currScore = clientUser && clientUser.currScore;
+    const lastScore = clientUser && clientUser.cashCurrScore;
+    const purchaseHistory = clientUser && clientUser.purchaseHistory;
     const totalGeneralScore = clientUser && clientUser.totalGeneralScore;
     const totalPurchasePrize = clientUser && clientUser.totalPurchasePrize;
 
     return({
+        currScore,
+        lastScore,
+        purchaseHistory,
         bizId,
-        userScore,
-        userLastScore,
-        userPurchase,
         totalGeneralScore,
         totalPurchasePrize,
     });
@@ -78,18 +88,18 @@ export const useClientAdmin = () => {
     const bizName = clientAdmin && clientAdmin.bizName && clientAdmin.bizName.cap();
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
-    const bizRegulation = clientAdmin && clientAdmin.regulation;
+    const regulation = clientAdmin && clientAdmin.regulation;
     const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
 
     return({
         bizName,
-        bizPlan,
         bizCodeName,
-        bizRegulation,
-        highestScores,
+        bizPlan,
         maxScore,
         mainReward,
         rewardList,
+        regulation,
+        highestScores,
         rewardDeadline,
     });
 }

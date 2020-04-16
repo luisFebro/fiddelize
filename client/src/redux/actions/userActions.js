@@ -5,7 +5,7 @@ import { setLoadingProgress } from './globalActions';
 // import { tokenConfig } from './authActions';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
-// RUD
+// MAIN DATA LOADING
 export const readUser = async (dispatch, _userId) => {
     const res = await axios.get(`/api/user/${_userId}`, getHeaderJson);
     console.log('===CURRENT USER LOADED===');
@@ -25,6 +25,20 @@ export const readClientAdmin = async (dispatch, _userId) => {
     });
     return res;
 };
+
+export const readCentralAdmin = async dispatch => {
+    try {
+        // setLoadingOn(dispatch);
+        const res = await axios.get('/api/admin', getHeaderJson);
+        console.log('==CENTRAL ADMIN LOADED==');
+        dispatch({ type: 'CENTRAL_ADMIN_READ', payload: res.data });
+        return res;
+        // setLoadingOff(dispatch);
+    } catch (err) {
+        return err.response;
+    }
+}
+// END MAIN DATA LOADING
 
 export const updateUser = async (dispatch, objToSend, _idUser) => {
     // const updateObj = Object.assign({}, {_id: _idUser}, objToSend);

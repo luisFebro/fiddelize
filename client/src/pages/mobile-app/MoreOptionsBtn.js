@@ -14,6 +14,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Tooltip from './Tooltip';
 import lStorage, { tooltip1, yellowBtn2, needSetTrueLocalKey } from '../../utils/storage/lStorage';
+import ModalFullContent from '../../components/modals/ModalFullContent';
 import Fab from '@material-ui/core/Fab';
 // End SpeedDial and Icons
 
@@ -25,8 +26,10 @@ const currChecked = lStorage("getItem", currOption);
 
 function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { userId } = useProfile();
-    let { userScore, userPurchase, totalPurchasePrize, totalGeneralScore } = useClientUser();
+    const [fullOpen, setFullClose] = useState(false);
+
+    const { _id } = useProfile();
+    let { currScore, purchaseHistory, totalGeneralScore, totalPurchasePrize } = useClientUser();
 
     const dispatch = useStoreDispatch();
 
@@ -46,10 +49,10 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
         const challengeN = !totalPurchasePrize ? 1 : totalPurchasePrize + 1;
 
         const data = {
-            _id: userId,
+            _id,
             name: userName,
             clientUserData: {
-                purchaseHistory: userPurchase,
+                purchaseHistory,
             },
             totalGeneralScore,
             totalPurchasePrize
@@ -64,7 +67,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                     componentContent: <PurchaseHistory data={data} />,
                     challengeN: challengeN,
                     totalGeneralScore,
-                    currUserScore: userScore,
+                    currUserScore: currScore,
                     userName: userName,
                 }}
             />
@@ -89,7 +92,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                 name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
-                    history.push("/mobile-app");
+                    setFullClose(true);
                     playBeep();
                 },
             },
@@ -148,6 +151,11 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                 hidden={!showMoreBtn}
             />
             {showPurchaseHistoryModal()}
+            <ModalFullContent
+                contentComp={null}
+                fullOpen={fullOpen}
+                setFullClose={setFullClose}
+            />
         </div>
     );
 }
