@@ -8,6 +8,11 @@ import {
     useProfile, useClientAdmin, useClientUser, useCentralAdmin } from '../useRoleData';
 import { useStoreState } from 'easy-peasy';
 import { useAppSystem } from '../useRoleData';
+import lStorage from '../../utils/storage/lStorage';
+
+const collection = { collection: "appSystem" };
+const appSystem = lStorage("getItems", collection);
+const bizSysId = appSystem && appSystem.businessId;
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
 // end data
 export const useRecoveryAndDataOffline = () => {
@@ -18,10 +23,9 @@ export const useRecoveryAndDataOffline = () => {
 
     let { bizId } = clientUserValues;
     const { role, _id } = profileValues;
-    const { businessId } = useAppSystem;
+    const { businessId } = useAppSystem();
 
-    bizId = bizId || businessId;
-    console.log("bizId", bizId);
+    bizId = bizSysId || businessId || bizId; // businessId and bizId returns "0" when user is in the download page...
 
     // data
     const centralAdminNewObj = useCentralAdmin();
