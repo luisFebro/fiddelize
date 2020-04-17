@@ -67,7 +67,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
         birthday: '',
         cpf: '',
         maritalStatus: 'selecione estado civil',
-        clientUserData: { bizId: businessId },
+        clientUserData: { bizId: bizSysId },
     });
     let { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 
