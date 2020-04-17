@@ -4,7 +4,6 @@ import lStorage from '../../utils/storage/lStorage';
 import useDispatch, { showSnackbar } from '../useDispatch';
 import { updateUser } from '../../redux/actions/userActions';
 import { readClientAdmin } from '../../redux/actions/userActions';
-import { useAppSystem } from '../useRoleData';
 
 const collection = { collection: "appSystem" };
 const appSystem = lStorage("getItems", collection);

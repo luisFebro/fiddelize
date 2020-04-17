@@ -9,6 +9,10 @@ import isThisApp from '../../utils/window/isThisApp';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 
+const collection = { collection: "appSystem" };
+const appSystem = lStorage("getItems", collection);
+const bizSysId = appSystem && appSystem.businessId;
+
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
     console.log('==USER LOADING==');
@@ -20,7 +24,7 @@ export const loadUser = () => (dispatch, getState) => {
         const userId = res.data.profile._id;
         const userDataPath = res.data.profile.clientUserData;
         const bizId = userDataPath && userDataPath.bizId;
-        readCliAdmin(dispatch, role, {userId: userId, bizId: bizId});
+        readCliAdmin(dispatch, role, {userId: userId, bizId: bizId || bizSysId});
 
         dispatch({ type: 'AUTHENTICATE_USER_ONLY' });
         dispatch({ type: 'USER_READ', payload: res.data.profile });
@@ -46,7 +50,7 @@ export const loginEmail = async (dispatch, objToSend) => {
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
 
-        readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || "0"})
+        readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || bizSysId})
         readCentralAdmin(dispatch);
         // readUser(dispatch, res.data.authUserId) // moved to login
 

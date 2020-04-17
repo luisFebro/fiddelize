@@ -7,6 +7,7 @@ import useRecoverSysData from './useRecoverSysData';
 import {
     useProfile, useClientAdmin, useClientUser, useCentralAdmin } from '../useRoleData';
 import { useStoreState } from 'easy-peasy';
+import { useAppSystem } from '../useRoleData';
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
 // end data
 export const useRecoveryAndDataOffline = () => {
@@ -15,8 +16,12 @@ export const useRecoveryAndDataOffline = () => {
     const clientUserValues = useClientUser();
     const profileValues = useProfile();
 
-    const { bizId } = clientUserValues;
+    let { bizId } = clientUserValues;
     const { role, _id } = profileValues;
+    const { businessId } = useAppSystem;
+
+    bizId = bizId || businessId;
+    console.log("bizId", bizId);
 
     // data
     const centralAdminNewObj = useCentralAdmin();
