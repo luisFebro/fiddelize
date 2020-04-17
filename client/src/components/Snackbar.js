@@ -73,7 +73,7 @@ export default function SnackbarMulti() {
             disableWindowBlurListener={true} //n1
             TransitionComponent={Slide}
             transitionDuration={{ enter: 300, exit: 300 }}
-            style={{ zIndex: 1501 }}
+            style={{ zIndex: 4000 }}
             open={isSnackbarOpen}
             autoHideDuration={snackbarTiming}
             resumeHideDuration={500} // n3
