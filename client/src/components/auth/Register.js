@@ -117,6 +117,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     };
 
     const registerThisUser = e => {
+        if(!businessId || businessId === "0") return showSnackbar(dispatch, "Não foi possivel encontrar a chave de acesso neste dispositivo. Tente acessar a página de download do app novamente.")
         const newUser = {
             ...data,
         };
