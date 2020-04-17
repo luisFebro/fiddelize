@@ -37,7 +37,7 @@ export default function useRecoverSysData(role, userId, opts = {}) {
 
 export const readCliAdmin = (dispatch, role, opts = {}) => {
     const { userId, bizId } = opts;
-    if(!role || !userId || !bizId) throw new Error("Missing arguments");
+    if(!role) throw new Error("Missing role");
 
     if(role === 'cliente-admin') {
         readClientAdmin(dispatch, userId);

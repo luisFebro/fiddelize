@@ -3,15 +3,12 @@ import { readUser, readCentralAdmin } from './userActions';
 import { setLoadingProgress, setRun } from './globalActions';
 import { showSnackbar } from './snackbarActions';
 import { getHeaderJson } from '../../utils/server/getHeaders';
-import lStorage from '../../utils/storage/lStorage';
 import { readCliAdmin } from '../../hooks/roles-storage-and-data-recovery/useRecoverSysData';
 import isThisApp from '../../utils/window/isThisApp';
+// import lStorage from '../../utils/storage/lStorage';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 
-const collection = { collection: "appSystem" };
-const appSystem = lStorage("getItems", collection);
-const bizSysId = appSystem && appSystem.businessId;
 
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
@@ -24,7 +21,7 @@ export const loadUser = () => (dispatch, getState) => {
         const userId = res.data.profile._id;
         const userDataPath = res.data.profile.clientUserData;
         const bizId = userDataPath && userDataPath.bizId;
-        readCliAdmin(dispatch, role, {userId: userId, bizId: bizId || bizSysId});
+        readCliAdmin(dispatch, role, {userId: userId, bizId: bizId || "0"});
 
         dispatch({ type: 'AUTHENTICATE_USER_ONLY' });
         dispatch({ type: 'USER_READ', payload: res.data.profile });
@@ -49,8 +46,9 @@ export const loginEmail = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
+        console.log("res", res);
 
-        readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId || bizSysId})
+        readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId })
         readCentralAdmin(dispatch);
         // readUser(dispatch, res.data.authUserId) // moved to login
 
