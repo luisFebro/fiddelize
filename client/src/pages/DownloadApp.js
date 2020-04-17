@@ -59,7 +59,7 @@ export default function DownloadApp({ match, location }) {
             <div className="pt-1 pb-5">
                 <ScrollArrow margin={50} />
             </div>
-            <p className="text-title" style={styles.margin} data-aos="fade-up">Baixe o seu App logo aqui embaixo, deslizando a tela.</p>
+            <p className="text-title" style={styles.margin} data-aos="fade-up">Baixe o seu App logo a baixo, deslizando a tela.</p>
             <ScrollArrow margin={30} />
             <div id="target" style={{minHeight: '200px 0'}}>
                 <ScrollArrow margin={20} />
@@ -102,7 +102,7 @@ export default function DownloadApp({ match, location }) {
 
                         <p style={styles.margin} data-aos="fade-up">Você vai acompanhar seus pontos de fidelidade, histórico de compras, conversar com a gente, ter acesso offline e mais.</p>
                         <p className="text-hero" style={styles.margin} data-aos="fade-up">E o melhor...<br />você ainda ganha prêmios a cada meta atingida!</p>
-                        <p style={styles.margin} data-aos="fade-up">Baixe o seu app aqui embaixo,<br /> é leve e baixa rápido.</p>
+                        <p style={styles.margin} data-aos="fade-up">Baixe o seu app logo a baixo,<br /> é leve e baixa rápido.</p>
                         <div style={{margin: '0 0 500px'}}>
                             <ScrollArrow margin={30} />
                             <div id="target">
