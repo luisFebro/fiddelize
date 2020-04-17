@@ -38,6 +38,13 @@ import { useAppSystem } from '../../hooks/useRoleData';
 import 'moment/locale/pt-br';
 
 moment.updateLocale('pt-BR');
+
+// bizSysId for validation only since when the user is runningthe app
+// for the first time, businessId returns "0"...
+const collection = { collection: "appSystem" };
+const appSystem = lStorage("getItems", collection);
+const bizSysId = appSystem && appSystem.businessId;
+
 const isSmall = window.Helper.isSmallScreen();
 
 const useStyles = makeStyles(theme => ({
@@ -117,7 +124,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     };
 
     const registerThisUser = e => {
-        if(!businessId || businessId === "0") return showSnackbar(dispatch, "Não foi possivel encontrar a chave de acesso neste dispositivo. Reinicie o App e tente novamente.")
+        if(!bizSysId || bizSysId === "0") return showSnackbar(dispatch, "Não foi possivel encontrar a chave de acesso neste dispositivo. Reinicie o App e tente novamente.")
         const newUser = {
             ...data,
         };

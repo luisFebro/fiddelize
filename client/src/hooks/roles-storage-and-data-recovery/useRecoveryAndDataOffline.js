@@ -26,6 +26,7 @@ export const useRecoveryAndDataOffline = () => {
     const { businessId } = useAppSystem();
 
     bizId = bizSysId || businessId || bizId; // businessId and bizId returns "0" when user is in the download page...
+    console.log("bizId", bizId);
 
     // data
     const centralAdminNewObj = useCentralAdmin();
