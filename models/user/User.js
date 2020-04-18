@@ -14,11 +14,19 @@ const dataTempAuthUserToken = {
 
 const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // END TEMP AUTH USER ID
+// GENERAL SCHEMAS
+const enumCliAdmin = ["cliAdmin_birthday", "cliAdmin_newClients", "cliAdmin_clientWonChall"];
+const notificationsData = {
+    type: { type: String, enum: [...enumCliAdmin] }, // pattern: (role_desc);
+    sent: { type: Boolean, default: false },
+    checked: { type: Boolean, default: false },
+    createdAt: { type: Date, default: new Date() },
+}
+const NotificationsSchema = new Schema(notificationsData, { _id: false });
+// END GENERAL SCHEMAS
 
 // USER'S ROLES
-// Client User
-// Client Admin
-
+// Client-User
 const historyData = {
     challengeN: Number,
     cardType: { type: String, default: "record",  enum: ["prize", "record"]},
@@ -51,6 +59,7 @@ const clientUserData = {
     purchaseHistory: [HistorySchema],
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
+// End Client-User
 
 // Client Admin
 const regulationData = {
@@ -85,7 +94,7 @@ const clientAdminData = {
     bizPlan: {
         type: String,
         default: "gratis",
-        enum: ["gratis", "prata", "ouro"]
+        enum: ["gratis", "bronze", "prata", "ouro"]
     },
     bizPlanCode: PaidPlanCodesSchema,
     bizPlanStarts: Date, // NOT IMPLEMENTED YET
@@ -98,10 +107,10 @@ const clientAdminData = {
     // end address
 
     // self-service
-    bizLogoImg: String,
-    milestoneIcon: String,
-    themePColor: String,
-    themeSColor: String,
+    bizLogoImg: String, // NOT IMPLEMENTED YET
+    milestoneIcon: String, // NOT IMPLEMENTED YET
+    themePColor: String, // NOT IMPLEMENTED YET
+    themeSColor: String, // NOT IMPLEMENTED YET
     // end self-service
 
     totalClientUserScores: Number,
@@ -110,21 +119,22 @@ const clientAdminData = {
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },
     mainReward: String,
-    rewardList: Array, // / required: true
-
+    rewardList: Array, // NOT IMPLEMENTED
 
     verificationPass: String,
     regulation: RegulationSchema,
 
     onceChecked: OnceCheckedSchema, // NOT IMPLEMENTED YET
+    notifications: [NotificationsSchema], // NOT IMPLEMENTED YET
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {
     this.bizPlanCode = generatePlanCodes();
     next();
 });
+// End Client Admin
 
-// Client Admin
+// Central Admin
 const centralAdminData = {
     subRole: {
         type: String,
@@ -138,8 +148,10 @@ const centralAdminData = {
     },
 }
 const CentralAdminDataSchema = new Schema(centralAdminData, { _id: false });
+// End Central Admin
 // END USER'S ROLES
 
+// Profile
 const data = {
     role: {
         type: String,
@@ -177,6 +189,7 @@ const data = {
     centralAdminData: CentralAdminDataSchema,
     // staffBookingList: Array, // L
 }
+// End Profile
 
 const UserSchema = new Schema(data, { timestamps: true });
 module.exports = mongoose.model('User', UserSchema, collectionName);

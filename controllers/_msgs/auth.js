@@ -23,6 +23,7 @@ const msg = (typeAndMsgName, customized = 'NeedCustomWord', options) => {
     error.expiredAuthToken = 'O prazo para trocar a senha expirou.';
     error.noAuthToken = 'Não foi encontrado nenhuma solicitação de mudança de senha';
     error.differentRoles = `Essa conta tipo ${customized} não tem acesso a esse App`;
+    error.registersLimit = `Limite máximo de cadastro alcançado. Por favor, contate ${customized.toUpperCase()}.`;
     // Form
     error.anyFieldFilled = "Você precisa preencher todos os campos";
     error.noDigitFound = 'Sua senha deve conter pelo menos um dígito';
