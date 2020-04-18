@@ -50,7 +50,7 @@ export default function PwaInstaller({ title, icon, run = true }) { // A2HS = Ap
             // Show the prompt
             setBannerVisible(false);
             deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
+            // Wait for the user to respond to the prompts
             deferredPrompt.userChoice.then(function(choiceResult) {
                 if(choiceResult.outcome === 'accepted') {
                     showSnackbar(dispatch, 'Instalando seu App agora...', 'warning', 11000)
