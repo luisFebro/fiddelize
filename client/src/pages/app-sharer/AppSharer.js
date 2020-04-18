@@ -157,7 +157,6 @@ export default function AppSharer({ location, match }) {
                     </p>
                     <TextField
                         id="form1"
-                        style={styles.fieldFormValue}
                         onChange={handleChange(setData, data)}
                         name="clientName"
                         onKeyPress={e => { handleEnterPress(e, handleGeneratedLink); handleScrollIntoView("view1", 3000); }}

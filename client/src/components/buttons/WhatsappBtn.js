@@ -18,7 +18,7 @@ export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
     const dispatch = useStoreDispatch();
     const targetedNumber = elsePhone ? elsePhone : bizWhatsapp;
     const convertedWhatsapp = convertPhoneStrToInt(targetedNumber);
-    const greetingTxt = elsePhone ? `Oi ${supportName}, vim pelo app pelo suporte da Fiddelize e preciso ...` : `Oi, vim pelo app de ${bizName} e preciso ...`;
+    const greetingTxt = elsePhone ? `Oi ${supportName}, vim pelo app para suporte da Fiddelize e preciso ...` : `Oi, vim pelo app de ${bizName} e preciso ...`;
 
     return (
         <a

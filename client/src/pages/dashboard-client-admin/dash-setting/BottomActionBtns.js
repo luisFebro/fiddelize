@@ -59,7 +59,6 @@ export default function BottomActionBtns() {
                 contentComp={<ContactComp />}
                 fullOpen={fullOpen}
                 setFullClose={setFullClose}
-                style={{overflowY: 'hidden'}}
             />
         </section>
     );

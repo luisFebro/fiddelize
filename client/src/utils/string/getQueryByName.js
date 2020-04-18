@@ -10,7 +10,6 @@ export default function getQueryByName(name, searchQuery) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-
 /* COMMENTS
 n1:result variable output exemple:
 [ '?name=Luis%20Fdsfd',

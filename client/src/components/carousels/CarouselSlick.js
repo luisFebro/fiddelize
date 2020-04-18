@@ -1,4 +1,4 @@
-// ⚠ Need also install slick-carousel for css and font
+// ⚠ Need also install slick-carousel for css and font (OK)
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';

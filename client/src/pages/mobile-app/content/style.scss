@@ -1,0 +1,34 @@
+.back-btn-client-admin {
+    position: fixed;
+    bottom: 0;
+    left: 5px;
+}
+
+.back-btn-client-admin .container {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    // justify-content: center;
+}
+
+.back-btn-client-admin .container .title {
+    color: var(--mainDark);
+    margin: 0;
+    padding: 2px 4px;
+    font: bolder 12px var(--mainFont);
+    border-radius: 10px 10px;
+    box-shadow: inset 0 0 .3em #000;
+    text-align: center;
+    width: 60px;
+    background-color: var(--mainWhite);
+}
+
+.title span {
+    // padding: 10px;
+}
+
+.back-btn-client-admin .container .btn {
+    align-self: flex-end;
+    width: 100%;
+    padding: 0;
+}

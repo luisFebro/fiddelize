@@ -17,9 +17,10 @@ export default function ModalFullContent({
     style, }) {
 
     let defaultStyle = { zIndex: 3000, overflowX: 'hidden', };
-    if(style) {
-        defaultStyle = { ...defaultStyle, ...style };
-    }
+    // Not working
+    // if(style) {
+    //     defaultStyle = { ...defaultStyle, ...style };
+    // }
     return (
         <Dialog
             PaperProps={{ style: {backgroundColor: 'var(--mainWhite)', maxWidth: '500px', overflowX: 'hidden'}}}

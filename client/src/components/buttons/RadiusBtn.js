@@ -6,12 +6,8 @@ export default function RadiusBtn({
     className,
     backgroundColor,
     color, fontSize, padding, needTxtShadow = true, size }) {
-    if(size === 'small') {
-        className = "my-1";
-        fontSize = "15px";
-    }
 
-    const styles = {
+    let styles = {
         btn: {
             //position: 'absolute',
             //top: '45px',
@@ -24,6 +20,16 @@ export default function RadiusBtn({
             fontSize: fontSize || '20px',
         }
     }
+
+    if(size === 'small') {
+        className = "my-1";
+        fontSize = "15px";
+    }
+
+    if(size === "extra-small") {
+        styles.btn = extraSmallConfig;
+    }
+
     return (
         <button
             className={className + `text-small ${needTxtShadow ? 'text-shadow' : ''} font-weight-bold`}
@@ -34,4 +40,13 @@ export default function RadiusBtn({
             {title}
         </button>
     );
+}
+
+const extraSmallConfig = {
+    color: "white",
+    padding: '2px 5px',
+    borderRadius: '20px',
+    backgroundColor: 'var(--themeSDark)',
+    outline: "none",
+    fontSize: "12px",
 }

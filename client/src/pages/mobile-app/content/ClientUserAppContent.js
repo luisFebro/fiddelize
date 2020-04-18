@@ -1,5 +1,5 @@
 import React, { Fragment, useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import getDayGreetingBr from '../../../utils/getDayGreetingBr';
 import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
 import { useAuthUser } from '../../../hooks/useAuthUser';
@@ -9,6 +9,9 @@ import { confetti } from '../../../keyframes/animations-js/confetti/confetti';
 import { useStoreDispatch } from 'easy-peasy';
 import AOS from 'aos';
 import "../ellipse.css";
+import { setRun } from '../../../redux/actions/globalActions';
+import RadiusBtn from '../../../components/buttons/RadiusBtn';
+import "./style.scss";
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
 import ProgressMsg from '../ProgressMsg' ;
@@ -17,8 +20,8 @@ import AllScores from '../AllScores';
 import PercCircleAndGift from '../PercCircleAndGift';
 // END APP COMPONENTS
 
-export default function ClientUserAppContent({
-    useProfile, useClientUser, useClientAdmin, needAppForCliAdmin }) {
+function ClientUserAppContent({
+    history, useProfile, useClientUser, useClientAdmin, needAppForCliAdmin }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
 
@@ -26,7 +29,7 @@ export default function ClientUserAppContent({
 
     const { role, name } = useProfile();
     const { currScore, lastScore, } = useClientUser();
-    const { maxScore } = useClientAdmin();
+    const { maxScore, bizCodeName } = useClientAdmin();
 
     const { isAuthUser } = useAuthUser();
 
@@ -157,6 +160,27 @@ export default function ClientUserAppContent({
         />
     );
 
+    const backBtnForCliAdmin = () => (
+        needAppForCliAdmin &&
+        <section className="back-btn-client-admin">
+            <div className="container">
+                <p className="title">
+                    Modo App Cliente
+                </p>
+                <div className="btn">
+                    <RadiusBtn
+                        size="extra-small"
+                        title="voltar painel"
+                        onClick={() => {
+                            setRun(dispatch, "goDash");
+                            history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);
+                        }}
+                    />
+                </div>
+            </div>
+        </section>
+    );
+
     return (
         <Fragment>
             {showGreeting()}
@@ -165,7 +189,14 @@ export default function ClientUserAppContent({
             {showRatingIcons()}
             {showRules()}
             {showMoreOptionsBtn()}
+            {backBtnForCliAdmin()}
             <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
         </Fragment>
     );
 }
+
+export default withRouter(ClientUserAppContent);
+
+/*
+
+ */

@@ -53,12 +53,12 @@ export default function PwaInstaller({ title, icon, run = true }) { // A2HS = Ap
             // Wait for the user to respond to the prompt
             deferredPrompt.userChoice.then(function(choiceResult) {
                 if(choiceResult.outcome === 'accepted') {
-                    setTimeout(() => window.location.href = "/acesso/verificacao", 0)
                     showSnackbar(dispatch, 'Instalando seu App agora...', 'warning', 11000)
                     setTimeout(() => {
                         showSnackbar(dispatch, 'Instalado com sucesso! Você pode fechar essa janela e acessar o app na sua tela inicial', 'success', 8000)
                         setTimeout(() => closeWindow(), 7000)
-                        // const timeoutDuration = isThisApp() ? 15000 : 0;
+                        const timeoutDuration = isThisApp() ? 15000 : 0;
+                        setTimeout(() => window.location.href = "/acesso/verificacao", timeoutDuration)
                     }, 10990)
                 } else {
                     showSnackbar(dispatch, 'A instalação do app foi cancelada.', 'warning')
