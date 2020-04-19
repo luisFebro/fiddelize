@@ -15,7 +15,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { registerEmail } from '../../redux/actions/authActions';
-import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
+import { countTotalCliAdminUsers } from '../../redux/actions/userActions';
+// import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
 import detectErrorField from '../../utils/validation/detectErrorField';
 import handleChange from '../../utils/form/use-state/handleChange';
@@ -34,7 +35,6 @@ import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
 
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
-import { useAppSystem } from '../../hooks/useRoleData';
 import 'moment/locale/pt-br';
 
 moment.updateLocale('pt-BR');
@@ -55,7 +55,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Register({ setLoginOrRegister, needLoginBtn = false }) {
-    const { businessId } = useAppSystem();
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
@@ -71,11 +70,11 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     });
     let { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 
-    const { bizInfo } = useStoreState(state => ({
-        bizInfo: state.adminReducer.cases.businessInfo,
-    }));
+    // const { bizInfo } = useStoreState(state => ({
+    //     bizInfo: state.adminReducer.cases.businessInfo,
+    // }));
 
-    const { bizName, bizWebsite, bizInstagram } = bizInfo;
+    // const { bizName, bizWebsite, bizInstagram } = bizInfo;
 
     // detecting field errors
     const [fieldError, setFieldError] = useState(null);
@@ -107,29 +106,32 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
         setFieldError(null);
     }
 
-    const sendEmail = userId => {
-        const dataEmail = {
-            name,
-            email,
-            bizName,
-            bizWebsite,
-            bizInstagram
-        };
-        sendWelcomeConfirmEmail(dataEmail, userId)
-        .then(res => {
-            if (res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-            // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
-            clearData();
-        });
-    };
+    // Temporarily disabled (Not sending emails)
+    // const sendEmail = userId => {
+    //     const dataEmail = {
+    //         name,
+    //         email,
+    //         bizName,
+    //         bizWebsite,
+    //         bizInstagram
+    //     };
+    //     sendWelcomeConfirmEmail(dataEmail, userId)
+    //     .then(res => {
+    //         if (res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
+    //         // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
+    //         clearData();
+    //     });
+    // };
 
     const registerThisUser = e => {
-        if(!bizSysId || bizSysId === "0") return showSnackbar(dispatch, "Não foi possivel encontrar a chave de acesso neste dispositivo. Reinicie o App e tente novamente.")
+        if(!bizSysId || bizSysId === "0") return showSnackbar(dispatch, "Nenhuma chave de acesso encontrada. Faça login se for admin ou desinstale e baixe o app novamente.", "warning", 7000)
+
         const newUser = {
             ...data,
         };
 
         showSnackbar(dispatch, 'Registrando... Aguarde um momento.', 'warning', 7000)
+
         registerEmail(dispatch, newUser)
         .then(res => {
             if(res.status !== 200) {
@@ -143,18 +145,13 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
 
             lStorage("removeCol", {collection: 'onceChecked'})
 
-            // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            switch(res.data.roleRegistered) {
-                case "cliente":
-                    showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
-                    setLoginOrRegister("login");
-                    break;
-                case "cliente-admin":
-                    setTimeout(() => window.location.href = `/baixe-app/${name}?isFromRegister=true`, 1500);
-                    break;
-            }
-
-            sendEmail(res.data.authUserId);
+            countTotalCliAdminUsers(bizSysId)
+            .then(res => {
+                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                setLoginOrRegister("login");
+                showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
+                // sendEmail(res.data.authUserId);
+            })
 
         })
     };
@@ -182,16 +179,17 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     const showLoginForm = needLoginBtn => (
         needLoginBtn && (
             <div
-                className="animated zoomIn delay-2s position-absolute p-2 mt-3"
-                style={{right: '30px'}}
+                class="container-center animated zoomIn delay-2s position-relative p-2 mt-3"
             >
                 <p
-                    className="text-white font-weight-bold text-small text-shadow"
+                    className="text-white m-0 font-weight-bold text-small text-shadow"
                     style={{whiteSpace: 'nowrap'}}
                 >
                     Já é cadastrado(a)?{"  "}
-                    <RadiusBtn size="small" title="Faça login" onClick={() => setLoginOrRegister("login")} />
                 </p>
+                <div className="pl-2">
+                    <RadiusBtn size="small" title="Faça login" onClick={() => setLoginOrRegister("login")} />
+                </div>
             </div>
         )
     );
@@ -431,7 +429,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     );
 
     return (
-        <div className="my-5 position-relative">
+        <div className="my-5 position-relative" style={{overflowY: 'hidden'}}>
             <Card
                 className="animated zoomIn fast card-elevation"
                 style={styles.card}

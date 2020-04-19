@@ -17,6 +17,7 @@ const {
     addPurchaseHistory,
     readHistoryList,
     changePrizeStatus,
+    countTotalCliAdminUsers,
 } = require("../../controllers/user");
 
 const { mwIsAdmin } = require("../../controllers/auth");
@@ -38,6 +39,8 @@ router.get("/list/purchase-history/:userId", readHistoryList);
 router.get("/list/all", getList);
 router.get("/list/highest-scores", getHighestScores);
 router.get("/:userId/backup/list", mwIsAdmin, readBackup);
+
+router.put("/count/total-cli-admin-users/:userId", countTotalCliAdminUsers);
 
 // FIELDS
 // Array Fields handled: none

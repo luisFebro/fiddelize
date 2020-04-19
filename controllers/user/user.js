@@ -173,7 +173,7 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
     const search = req.query.search;
     const bizId = req.query.bizId;
 
-    const sortQuery = {$sort: { name: 1 }};
+    const sortQuery = {$sort: { createdAt: -1 }};
     const skipQuery = {$skip: skip};
     const limitQuery = {$limit: 5};
     const countQuery = {$count: 'value'};
@@ -321,6 +321,21 @@ exports.changePrizeStatus = (req, res) => {
     });
 }
 // END USER PURCHASE HISTORY
+
+exports.countTotalCliAdminUsers = (req, res) => {
+    const { _id } = req.profile;
+    const countingField = { "clientAdminData.totalClientUsers": 1 };
+
+    User.findOneAndUpdate(
+        { _id },
+        { $inc: countingField },
+        { new: false })
+    .exec(err => {
+        if(err) return res.status(500).json(msgG("error.systemError", err));
+        res.json("updated");
+    })
+}
+
 
 /*ARCHIVES
 const assignToUndefined = (obj, keysArray) => {

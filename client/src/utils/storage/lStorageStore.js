@@ -28,13 +28,15 @@ const defaultClientAdmin = {
     bizName: "...",
     bizCodeName: "empresa-teste-et2d@yd",
     bizPlan: "gratis",
-    bizWhatapp: "(99) 99999-9999",
+    bizWhatsapp: "(99) 99999-9999",
     maxScore: 500,
     mainReward: "Free Product",
     rewardList: ["giftA", "giftB"],
     regulation: { text: "...", updatedAt: '...' },
     highestScores: highestScoresArray,
     rewardDeadline: 0,
+    totalClientUserScores: 0,
+    totalClientUsers: 0,
 }
 const clientAdminColl = { collection: "clientAdmin", newObj: defaultClientAdmin };
 // end client Admin

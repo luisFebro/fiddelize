@@ -35,6 +35,8 @@ const currClientAdminData = {
         updatedAt: clientAdminData && clientAdminData.regulation.updatedAt,
     },
     rewardDeadline: clientAdminData && clientAdminData.rewardDeadline,
+    totalClientUserScores: clientAdminData && clientAdminData.totalClientUserScores,
+    totalClientUsers: clientAdminData && clientAdminData.totalClientUsers,
 }
 
 const currCentralAdminData = {

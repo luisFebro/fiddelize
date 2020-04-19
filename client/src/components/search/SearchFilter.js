@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import PropTypes from 'prop-types';
 
@@ -35,9 +35,6 @@ export default function SearchFilter({ placeholder, searchChange }) {
 
   return (
     <Paper component="form" className={classes.root}>
-      <IconButton className={classes.iconButton} aria-label="menu">
-        <MenuIcon />
-      </IconButton>
       <InputBase
         name="searchTerm"
         autoComplete="off"
@@ -56,3 +53,10 @@ export default function SearchFilter({ placeholder, searchChange }) {
     </Paper>
   );
 }
+
+
+/*
+<IconButton className={classes.iconButton} aria-label="menu">
+  <MenuIcon />
+</IconButton>
+ */

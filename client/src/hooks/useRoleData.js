@@ -91,6 +91,8 @@ export const useClientAdmin = () => {
     const bizWhatsapp = clientAdmin && clientAdmin.bizWhatsapp;
     const regulation = clientAdmin && clientAdmin.regulation;
     const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
+    const totalClientUserScores = clientAdmin && clientAdmin.totalClientUserScores;
+    const totalClientUsers = clientAdmin && clientAdmin.totalClientUsers;
 
     return({
         bizName,
@@ -103,5 +105,7 @@ export const useClientAdmin = () => {
         regulation,
         highestScores,
         rewardDeadline,
+        totalClientUserScores,
+        totalClientUsers,
     });
 }

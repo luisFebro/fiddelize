@@ -1,4 +1,4 @@
-function getValObjWithStr(obj, path) {
+export default function getValObjWithStr(obj, path) {
     const paths = path.split('.');
     let curr = obj;
 

@@ -38,18 +38,6 @@ const LoginPageLazy = Loadable({
 })
 //END PAGES
 
-const InstallMsg = () => (
-    <div className="text-center mt-5">
-        <p className="text-white text-title">
-            Seu App está sendo instalado!
-        </p>
-        <p className="text-white text-subtitle mx-2">
-            Feche essa janela e abra o app direto da sua área de desktop
-            assim que aparecer a mensagem de confirmação.
-        </p>
-    </div>
-);
-
 function Website({ location }) {
     const { role } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
@@ -68,7 +56,6 @@ function Website({ location }) {
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                 <Route path="/baixe-app" exact component={DownloadApp} />
-                <Route path="/mobile-app" exact component={InstallMsg} />
                 <Route path="/:bizCodeName/novo-app" exact component={CreationPage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />

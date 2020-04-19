@@ -126,10 +126,12 @@ function Login({ history, setLoginOrRegister }) {
                 className="animated zoomIn delay-2s p-2 mt-3"
             >
                 <p
-                    className="text-white font-weight-bold text-small text-shadow"
+                    className="d-flex justify-content-center text-white font-weight-bold text-small text-shadow"
                 >
                     Novo Cliente?<br/>Faça cadastro{"  "}
-                    <RadiusBtn size="small" title="aqui" onClick={() => setLoginOrRegister("register")} />
+                    <div className="pl-2">
+                        <RadiusBtn size="small" title="aqui" onClick={() => setLoginOrRegister("register")} />
+                    </div>
                 </p>
             </div>
         )

@@ -24,6 +24,20 @@ import LinearProgress from '../../components/loadingIndicators/LinearProgress';
 import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
 
+// This is the msg to be displayed for desktop users when popping up the
+// new screen right after the download.
+const InstallMsg = () => (
+    <div className="text-center mt-5">
+        <p className="text-white text-title">
+            Seu App está sendo instalado!
+        </p>
+        <p className="text-white text-subtitle mx-2">
+            Feche essa janela e abra o app direto da sua área de desktop
+            assim que aparecer a mensagem de confirmação.
+        </p>
+    </div>
+);
+
 function Mobile({ location }) {
     const { role } = useStoreState(state => ({
         role: state.userReducer.cases.currentUser.role,
@@ -45,6 +59,7 @@ function Mobile({ location }) {
                 <Route path="/regulamento/" exact component={RegulationPage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
+                <Route path="/baixe-app" exact component={InstallMsg} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />

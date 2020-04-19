@@ -20,7 +20,6 @@ const handleRoles = (currRoles, rolesQueryObj) => {
 
 exports.mwValidateRegister = (req, res, next) => {
     const { role, name, email, cpf, birthday, phone, clientUserData, clientAdminData } = req.body;
-    console.log("req.body", req.body)
     const isCpfValid = new CPF().validate(cpf);
     const bizId = clientUserData && clientUserData.bizId;
     // valid assertions:
@@ -63,11 +62,9 @@ exports.mwValidateRegister = (req, res, next) => {
             .then(cliAdmin => {
                 const planType = cliAdmin.clientAdminData.bizPlan;
                 const bizName = cliAdmin.clientAdminData.bizName;
-                console.log("planType", planType);
                 const totalUsers = cliAdmin.clientAdminData && cliAdmin.clientAdminData.totalClientUsers;
-                console.log("totalUsers", totalUsers);
-                const registersLimit = 10;
-                if(planType === "gratis" && totalUsers === registersLimit) return res.status(401).json(msg('error.registersLimit', bizName))
+                const registersLimit = 10 - 1; // -1 because the request is not the current value, but the last
+                if(planType === "gratis" && totalUsers > registersLimit) return res.status(401).json(msg('error.registersLimit', bizName))
                 // if(user && user.name === name.toLowerCase()) return res.status(400).json(msg('error.userAlreadyRegistered')); // disable this until implementation of finding by bizId with { $and: [{ name }, { bizId }] }
                 next();
             }).catch(err => msgG('error.systemError', err));

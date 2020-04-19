@@ -16,7 +16,12 @@ const bizSysId = appSystem && appSystem.businessId;
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
 // end data
 export const useRecoveryAndDataOffline = () => {
-    const isUserOnline = useStoreState(state => state.authReducer.cases.isUserOnline);
+    const { isUserOnline, runName } = useStoreState(state => ({
+        runName: state.globalReducer.cases.runName,
+        isUserOnline: state.authReducer.cases.isUserOnline,
+    }));
+
+    const didUserLogout = runName === "logout";
 
     const clientUserValues = useClientUser();
     const profileValues = useProfile();
@@ -35,7 +40,7 @@ export const useRecoveryAndDataOffline = () => {
     setDataIfOnline(userProfileColl, userProfileNewObj, isUserOnline);
     setDataIfOnline(clientAdminColl, clientAdminNewObj, isUserOnline);
     setDataIfOnline(centralAdminColl, centralAdminNewObj, isUserOnline);
-    useRecoverSysData(role, _id, { bizId, isUserOnline });
+    useRecoverSysData(role, _id, { bizId, isUserOnline, didUserLogout });
 }
 
 /* ARCHIVES

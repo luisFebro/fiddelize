@@ -201,6 +201,8 @@ export default function RegisteredClientsList() {
             ? <LoadingThreeDots />
             : (
                 <Fragment>
+                <div>
+                </div>
                     {showExpansionPanel()}
                     {showMoreItemsBtn()}
                 </Fragment>
