@@ -13,38 +13,35 @@
     "@material-ui/lab": "^4.0.0-alpha.35",
     "@material-ui/pickers": "^3.2.8",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "animate.css": "^3.7.2",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "animate.css": "^3.7.0",
     "aos": "^2.3.4",
     "axios": "^0.19.0",
-    "babel-loader": "^8.0.6",
     "bootstrap": "^4.4.1",
-    "cra-append-sw": "^2.7.0",
     "easy-peasy": "3.1.0",
     "html-react-parser": "^0.10.0",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-google-login": "^5.0.7",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^5.1.2",
     "react-router-hash-link": "^1.2.2",
     "react-router-scroll-top": "^0.2.1",
     "react-router-sitemap": "^1.2.0",
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.4.1",
     "react-slick": "^0.25.2",
     "react-tilt": "^0.1.4",
     "sharethis-reactjs": "^1.5.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^4.4.1",
-    "uuid": "^3.3.3",
-    "webpack": "^4.41.2"
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cra-append-sw --skip-compile ./public/custom-sw.js",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -62,9 +59,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2"
   }
 }
