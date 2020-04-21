@@ -52,8 +52,10 @@ const DivWrapper = styled.div`
     }
 
     & .spinner {
+        display: flex;
+        flex-flow: row no-wrap;
         //margin: 100px auto 0;
-        width: 70px;
+        width: 100%;
         text-align: center;
     }
 
