@@ -120,6 +120,17 @@ export const countTotalCliAdminUsers = async (businessId, typeObj) => {
     }
 }
 
+// FIELDS
+export const removeField = async (userId, fieldName) => {
+    const objToSend = { fieldToBeDeleted: fieldName }
+    try {
+        return await axios.put(`/api/user/field/remove/${userId}`, objToSend, getHeaderJson);
+        // dispatch({ type: 'USER_READ', payload: res.data.user });
+    } catch (err) {
+        return err;
+    }
+};
+
 /* ARCHIVES
 export const confirmUserAccount = async (userId) => {
     try {

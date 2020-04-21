@@ -24,7 +24,7 @@ const Div = styled.div`
     }
 `;
 
-export default function ActionBtns({ data }) {
+export default function ActionBtns({ data, needBadgeForTestMode }) {
     const { clientAdminData } = useStoreState(state => ({
         clientAdminData: state.userReducer.cases.clientAdmin
     }))
@@ -34,7 +34,7 @@ export default function ActionBtns({ data }) {
             cssProps={{compName: null}}
         >
             {showBlobActionBtns(data, clientAdminData)}
-            {showDeleteBtn(data)}
+            {showDeleteBtn(data, needBadgeForTestMode)}
         </Div>
     );
 }
@@ -155,7 +155,8 @@ const showBlobActionBtns = (data, clientAdminData) => (
     </main>
 );
 
-const showDeleteBtn = data => (
+const showDeleteBtn = (data, needBadgeForTestMode) => (
+    !needBadgeForTestMode &&
     <div className="animated zoomIn mt-5">
         <YesNoModalBtn
             button={{

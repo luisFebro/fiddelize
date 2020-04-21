@@ -12,6 +12,11 @@ import { useStoreDispatch } from 'easy-peasy';
 import './ExpansiblePanel.scss';
 import ToggleBtn from './ToggleBtn';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
+import { removeField } from '../../../../../redux/actions/userActions';
+// import { setRun } from '../../../../../redux/actions/globalActions';
+import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
+import { useClientAdmin } from '../../../../../hooks/useRoleData';
 // End Customized Data
 
 const isSmall = window.Helper.isSmallScreen();
@@ -46,13 +51,12 @@ export default function UserCardExpansiblePanel({
     actions,
     backgroundColor,
     color,
-    setRun,
-    run,
     statusAfterClick,
     needToggleButton = false, }) {
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
+    const { bizCodeName } = useClientAdmin();
 
     const styles = {
         expansionPanel: {
@@ -61,6 +65,21 @@ export default function UserCardExpansiblePanel({
             margin: '25px 0 0',
         },
     }
+
+    const handleEraseTestCard = cardId => {
+        showSnackbar(dispatch, "Apagando card de teste...");
+        setTimeout(() => {
+            removeField(cardId, "clientUserData")
+            .then(res => {
+                if(res.status !== 200) return console.log("smt wrong while updating")
+                showSnackbar(dispatch, "Pronto! Para mostrar o card de teste novamente, acesse o MODO APP CLIENTE.", "warning", 6000);
+                setTimeout(() => {
+                    // setRun(dispatch, "goDash"); it does not work because it reloads teh page, then it is gone.
+                    window.location.href = `/${bizCodeName}/cliente-admin/painel-de-controle`;
+                }, 3900)
+            })
+        }, 5000)
+    };
 
     const showPanel = panel => (
         <Fragment>
@@ -102,7 +121,7 @@ export default function UserCardExpansiblePanel({
                 )}
             </ExpansionPanelSummary>
             {panel.needBadgeForTestMode &&
-                <div>
+                <div className="enabledLink">
                     <ButtonFab
                         position="absolute"
                         top={-15}
@@ -113,6 +132,14 @@ export default function UserCardExpansiblePanel({
                         fontSize=".9em"
                         color="var(--mainWhite)"
                         backgroundColor="var(--niceUiYellow)"
+                    />
+                    <RadiusBtn
+                        size="extra-small"
+                        title="apagar"
+                        onClick={() => handleEraseTestCard(panel._id)}
+                        position="absolute"
+                        top={-25}
+                        left={isSmall ? 210 : 239}
                     />
                 </div>}
         </Fragment>

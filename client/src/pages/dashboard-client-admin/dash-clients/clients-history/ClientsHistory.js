@@ -125,7 +125,7 @@ export default function RegisteredClientsList() {
                 >
                     • Última compra:
                     <br />
-                    {!(user.clientUserData && user.clientUserData.purchaseHistory[0])
+                    {!(user.clientUserData && user.clientUserData.purchaseHistory && user.clientUserData.purchaseHistory[0])
                     ? <span className="text-small font-weight-bold">Sem data registrada.</span>
                     : (
                         <span className="text-small font-weight-bold">
@@ -150,7 +150,7 @@ export default function RegisteredClientsList() {
            secondaryHeading: handleSecHeading(user),
            userData: user,
            needBadgeForTestMode: isTestMode,
-           hiddenContent: <PanelHiddenContent data={user} />
+           hiddenContent: <PanelHiddenContent data={user} needBadgeForTestMode={isTestMode} />
         });
     })
 

@@ -7,7 +7,7 @@ PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-export default function PanelHiddenContent({ data }) {
+export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
     const { runArray } = useStoreState(state => ({
        runArray: state.globalReducer.cases.runArray,
     }));
@@ -50,7 +50,7 @@ export default function PanelHiddenContent({ data }) {
         >
             {showInfos()}
             <div className="animated flipInY slow delay-3s">
-                <ActionBtns data={data} />
+                <ActionBtns data={data} needBadgeForTestMode={needBadgeForTestMode} />
             </div>
         </div>
     );

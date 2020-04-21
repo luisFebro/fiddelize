@@ -5,13 +5,20 @@ export default function RadiusBtn({
     onClick,
     className,
     backgroundColor,
-    color, fontSize, padding, needTxtShadow = true, size }) {
+    color,
+    fontSize,
+    padding,
+    needTxtShadow = true,
+    size,
+    position,
+    top,
+    left, }) {
 
     let styles = {
         btn: {
-            //position: 'absolute',
-            //top: '45px',
-            //right: '5px',
+            position,
+            top,
+            left,
             color: color || "white",
             padding: padding || '2px 8px',
             borderRadius: '20px',
@@ -19,6 +26,18 @@ export default function RadiusBtn({
             outline: "none",
             fontSize: fontSize || '20px',
         }
+    }
+
+    const extraSmallConfig = {
+        position,
+        top,
+        left,
+        color: "white",
+        padding: '2px 5px',
+        borderRadius: '20px',
+        backgroundColor: 'var(--themeSDark)',
+        outline: "none",
+        fontSize: "12px",
     }
 
     if(size === 'small') {
@@ -40,13 +59,4 @@ export default function RadiusBtn({
             {title}
         </button>
     );
-}
-
-const extraSmallConfig = {
-    color: "white",
-    padding: '2px 5px',
-    borderRadius: '20px',
-    backgroundColor: 'var(--themeSDark)',
-    outline: "none",
-    fontSize: "12px",
 }

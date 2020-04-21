@@ -22,9 +22,9 @@ export default function setDataIfOnline(collectionData, dataOnline, isUserOnline
     const areCollectionsEqual = lStorage("compareCol", {...collectionData, compareThisObj: dataOnline });
     const isUserOnlineAndDataChanged = isUserOnline && !areCollectionsEqual;
     if(isUserOnlineAndDataChanged) {
-        console.log("Setting data to lStorage");
+        // console.log("Setting data to lStorage at setDAtaIfOnline");
         const newOptions = {...collectionData, newObj: dataOnline}
-        console.log("newOptions", newOptions);
+        // console.log("newOptions", newOptions);
         lStorage("setItems", newOptions);
     }
 }

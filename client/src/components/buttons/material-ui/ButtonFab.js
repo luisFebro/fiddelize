@@ -133,7 +133,7 @@ export default function ButtonFab({
             style={styles.fab}
         >
             <span
-                className="d-flex align-self-center p-1 text-shadow text-normal font-weight-bold"
+                className="text-shadow text-normal font-weight-bold"
                 style={{textTransform: textTransform || 'capitalize'}}
             >
                 {title}
