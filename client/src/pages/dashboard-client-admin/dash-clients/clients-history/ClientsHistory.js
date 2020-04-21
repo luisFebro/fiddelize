@@ -227,8 +227,8 @@ const  generateMsgToFreeAccounts = (plan, opts) => {
     const { totalClientUsers, limitFreePlanNewUsers, name } = opts;
 
     const showTxtDefault = txt => (
-        <div className="text-center text-normal animated rubberBand my-3">
-            <p className="text-purple text-subtitle font-weight-bold">
+        <div className="text-center text-normal animated rubberBand my-5">
+            <p className="text-purple text-subtitle font-weight-bold m-0">
                 Nota <FontAwesomeIcon icon="info-circle" />
             </p>
             {txt}
