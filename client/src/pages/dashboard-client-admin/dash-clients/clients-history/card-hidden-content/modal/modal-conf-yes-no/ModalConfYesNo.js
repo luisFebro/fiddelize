@@ -36,16 +36,18 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
         if(itemData._id === '5e890d185162091014c53b56') return showSnackbar(dispatch, "O usuário de teste não pode ser excluido.", "error")
         showSnackbar(dispatch, "Processando...", 'warning', 3000);
         setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 5000), 2900);
-        deleteUser(dispatch, itemData._id)
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            countTotalCliAdminUsers(businessId, { type: 'dec' })
+        setTimeout(() => {
+            deleteUser(dispatch, itemData._id)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                showSnackbar(dispatch, `O Usuário ${itemData.name.cap()} foi excluído com sucesso!`, 'success', 6000);
-                setRun(dispatch, "registered");
+                countTotalCliAdminUsers(businessId, { type: 'dec' })
+                .then(res => {
+                    if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                    showSnackbar(dispatch, `O Usuário ${itemData.name.cap()} foi excluído com sucesso!`, 'success', 6000);
+                    setRun(dispatch, "registered");
+                })
             })
-        })
+        }, 5900)
     }
 
     const showActionBtns = dispatch => (
