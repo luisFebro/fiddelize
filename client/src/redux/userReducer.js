@@ -121,8 +121,8 @@ export const userReducer = {
                 }
             case 'USER_CLEARED':
                 lStorage("removeItem", {collection: 'onceChecked', property: 'setInitialState'})
-                lStorage("removeCol", {collection: 'clientAdmin'}) // THis collection is not being removed..
-                lStorage("removeCol", {collection: 'userProfile'})
+                // lStorage("removeCol", {collection: 'clientAdmin'}) // THis collection is not being removed..
+                // lStorage("removeCol", {collection: 'userProfile'})
 
                 return {
                     ...state,

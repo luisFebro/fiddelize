@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import ButtonMulti from './material-ui/ButtonMulti';
+import ButtonMulti, { faStyle } from './material-ui/ButtonMulti';
 import { useStoreDispatch } from 'easy-peasy';
 import { showComponent } from "../../redux/actions/componentActions";
 import { logout } from "../../redux/actions/authActions";
@@ -22,7 +22,7 @@ export default function HomeButton() {
                     backgroundColor="var(--themeSDark)"
                     backColorOnHover="var(--themeSDark)"
                     textTransform='uppercase'
-                    iconFontAwesome={isThisApp() ? <FontAwesomeIcon icon="home" /> : ""}
+                    iconFontAwesome={isThisApp() ? <FontAwesomeIcon icon="home" style={faStyle} /> : ""}
                 >
                     Voltar
                 </ButtonMulti>

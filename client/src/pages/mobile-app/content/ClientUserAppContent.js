@@ -139,7 +139,7 @@ function ClientUserAppContent({
                     id="rules"
                     className="container-center"
                 >
-                    <Link to="/regulamento">
+                    <Link to={needAppForCliAdmin ? "/regulamento?client-admin=1" : "/regulamento"}>
                         <div
                             className="no-text-decoration text-normal text-center pressed-to-left"
                             onClick={playBeep}
@@ -157,6 +157,7 @@ function ClientUserAppContent({
             playBeep={playBeep}
             showMoreBtn={showMoreBtn}
             userName={name}
+            needAppForCliAdmin={needAppForCliAdmin}
         />
     );
 

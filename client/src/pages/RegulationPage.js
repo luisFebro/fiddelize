@@ -19,6 +19,7 @@ moment.updateLocale('pt-br');
 
 export default function RegulationPage({ location }) {
     const isClientAdmin = location.search.includes("cliAdmin=1");
+    const needAppForCliAdmin = location.search.includes("client-admin=1");
     const bizCodeName = getQueryByName("bizCodeName", location.search);
 
     const { name } = useProfile();
@@ -70,11 +71,15 @@ export default function RegulationPage({ location }) {
     const handlePath = () => {
         if(isClientAdmin) {
             return `/${bizCodeName}/cliente-admin/painel-de-controle`;
-        } else {
-            return isThisApp()
-            ? "/mobile-app"
-            : "/"
         }
+
+        if(needAppForCliAdmin) {
+            return  "/mobile-app?client-admin=1";
+        }
+
+        return isThisApp()
+        ? "/mobile-app"
+        : "/"
     }
 
     const showBackBtn = () => (

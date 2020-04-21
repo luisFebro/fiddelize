@@ -9,6 +9,7 @@ import lStorage, { needAppRegisterOp } from '../../utils/storage/lStorage';
 import Register from '../../components/auth/Register';
 import { useProfile, useClientAdmin, useClientUser } from '../../hooks/useRoleData';
 import { logout } from '../../redux/actions/authActions';
+import { updateUser } from '../../redux/actions/userActions';
 import { setRun } from '../../hooks/useRunComp';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { useAppSystem } from '../../hooks/useRoleData';
@@ -22,17 +23,32 @@ const isSmall = window.Helper.isSmallScreen();
 
 function ClientMobileApp({ location }) {
     const { isAuthUser } = useAuthUser();
-    const { roleWhichDownloaded } = useAppSystem();
+    const { roleWhichDownloaded, businessId } = useAppSystem();
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
     const { role, name } = useProfile();
     const { bizCodeName } = useClientAdmin();
+    const { bizId } = useClientUser();
 
     const dispatch = useStoreDispatch();
 
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
+
+    useEffect(() => {
+        if(needAppForCliAdmin && !bizId) {
+            const newCliUserData = {
+                "clientUserData.bizId": businessId,
+                "clientUserData.cashCurrScore": "0",
+                "clientUserData.currScore": 0,
+                "clientUserData.lastScore": "0",
+                "clientUserData.totalGeneralScore": 0,
+                "clientUserData.totalPurchasePrize": 0
+            }
+            updateUser(dispatch, newCliUserData, businessId);
+        }
+    }, [needAppForCliAdmin])
 
     useEffect(() => {
         if(needAppRegister) {

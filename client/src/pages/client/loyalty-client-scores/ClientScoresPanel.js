@@ -47,8 +47,9 @@ const styles = {
     }
 }
 
-function ClientScoresPanel({ history, success, valuePaid, verification }) {
+function ClientScoresPanel({ history, location, success, valuePaid, verification }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
+    const needAppForCliAdmin = location.search.includes("client-admin=1");
     const [finishedWork, setFinishedWork] = useState(false);
     const animatedNumber = useRef(null);
 
@@ -186,7 +187,8 @@ function ClientScoresPanel({ history, success, valuePaid, verification }) {
                         readUser(dispatch, _id)
                         .then(res => {
                             if(res.status !== 200) return console.log("Error on readUser");
-                            history.push(`/mobile-app`);
+                            const path = needAppForCliAdmin ? "/mobile-app?client-admin=1" : "/mobile-app"
+                            history.push(path);
                         })
                     } else {
                         showComponent(dispatch, "login")

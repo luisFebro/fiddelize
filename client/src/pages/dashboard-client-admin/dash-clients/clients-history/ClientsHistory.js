@@ -30,7 +30,6 @@ export default function RegisteredClientsList() {
     const { businessId } = useAppSystem();
     const { name } = useProfile();
     const { bizPlan, totalClientUsers } = useClientAdmin();
-    console.log("totalClientUsers", totalClientUsers);
     const { limitFreePlanNewUsers } = useCentralAdmin();
 
     const [clientsData, setClientsData] = useState({
@@ -141,6 +140,8 @@ export default function RegisteredClientsList() {
 
 
         const truncate = (name, leng) => window.Helper.truncate(name, leng);
+        const isTestMode = name === user.name.cap();
+
         return({
            _id: user._id,
            mainHeading: <span
@@ -148,6 +149,7 @@ export default function RegisteredClientsList() {
                 {truncate(user.name.cap(), window.Helper.isSmallScreen() ? 17 : 40)}</span>,
            secondaryHeading: handleSecHeading(user),
            userData: user,
+           needBadgeForTestMode: isTestMode,
            hiddenContent: <PanelHiddenContent data={user} />
         });
     })
@@ -223,6 +225,7 @@ export default function RegisteredClientsList() {
     );
 }
 
+// Need to reload to update. And even after reloaded, there's a delay to update...
 const  generateMsgToFreeAccounts = (plan, opts) => {
     const { totalClientUsers, limitFreePlanNewUsers, name } = opts;
 

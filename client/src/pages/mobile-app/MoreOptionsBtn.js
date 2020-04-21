@@ -26,7 +26,7 @@ const currOption = yellowBtn2;
 const lastChecked = lStorage("getItem", lastOption);
 const currChecked = lStorage("getItem", currOption);
 
-function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
+function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName, needAppForCliAdmin }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fullOpen, setFullClose] = useState(false);
 
@@ -125,8 +125,9 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName }) {
                             className="float-it-5"
                             size="medium"
                             onClick={() => {
+                                const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
                                 showComponent(dispatch, "purchaseValue");
-                                history.push("/cliente/pontos-fidelidade");
+                                history.push(path);
                                 playBeep();
                                 lStorage("setItem", currOption);
                             }}

@@ -147,7 +147,7 @@ const getQuery = (role) => {
 
     switch(role) {
         case 'cliente':
-            mainQuery = { role: 'cliente' };
+            mainQuery = {$or: [{ role: 'cliente'}, {role: 'cliente-admin'}]}; // for test mode in the dashboard, it is requires to search both client and client-admin;
             break;
         case 'cliente-admin':
             mainQuery = { role: 'cliente-admin' };
@@ -179,7 +179,6 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
     const countQuery = {$count: 'value'};
     const searchQuery = {name: {$regex: `${search}`, $options: 'i'}};
     const bizIdQuery = {"clientUserData.bizId": bizId};
-    const clientUserScoresQuery = { role: 'cliente' };
     const totalClientUserScoresQuery = {$group: { _id: null, value: { $sum: '$clientUserData.totalGeneralScore' }}}
 
     let { mainQuery } = getQuery(role);

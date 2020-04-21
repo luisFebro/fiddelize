@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import { useStoreDispatch } from 'easy-peasy';
 import './ExpansiblePanel.scss';
 import ToggleBtn from './ToggleBtn';
+import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 // End Customized Data
 
 const isSmall = window.Helper.isSmallScreen();
@@ -62,43 +63,59 @@ export default function UserCardExpansiblePanel({
     }
 
     const showPanel = panel => (
-        <ExpansionPanelSummary
-            expandIcon={
-                <div
-                    className="enabledLink"
-                >
-                    {needToggleButton
-                    ? (
-                        <ToggleBtn
-                            cardId={panel._id}
-                        />
-                    ) : <ExpandMoreIcon />}
-                </div>
-            }
-            aria-controls={`panel${panel._id}bh-content`}
-            id={`panel${panel._id}bh-header`}
-        >
-            {isSmall
-            ? (
-                <div className="d-flex flex-column align-self-start">
-                    {panel.mainHeading}
-                    {panel.secondaryHeading}
-                </div>
-            ) : (
-            <Fragment>
-                <Typography
-                    className="ex-pa-main-heading ex-pa--headings"
-                >
-                    {panel.mainHeading}
-                </Typography>
-                <Typography
-                    className="ex-pa--headings"
-                >
-                    {panel.secondaryHeading}
-                </Typography>
-            </Fragment>
-            )}
-        </ExpansionPanelSummary>
+        <Fragment>
+            <ExpansionPanelSummary
+                expandIcon={
+                    <div
+                        className="enabledLink"
+                    >
+                        {needToggleButton
+                        ? (
+                            <ToggleBtn
+                                cardId={panel._id}
+                            />
+                        ) : <ExpandMoreIcon />}
+                    </div>
+                }
+                aria-controls={`panel${panel._id}bh-content`}
+                id={`panel${panel._id}bh-header`}
+            >
+                {isSmall
+                ? (
+                    <div className="d-flex flex-column align-self-start">
+                        {panel.mainHeading}
+                        {panel.secondaryHeading}
+                    </div>
+                ) : (
+                <Fragment>
+                    <Typography
+                        className="ex-pa-main-heading ex-pa--headings"
+                    >
+                        {panel.mainHeading}
+                    </Typography>
+                    <Typography
+                        className="ex-pa--headings"
+                    >
+                        {panel.secondaryHeading}
+                    </Typography>
+                </Fragment>
+                )}
+            </ExpansionPanelSummary>
+            {panel.needBadgeForTestMode &&
+                <div>
+                    <ButtonFab
+                        position="absolute"
+                        top={-15}
+                        left={70}
+                        title="MODO TESTE"
+                        variant="extended"
+                        fontWeight="bolder"
+                        fontSize=".9em"
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--niceUiYellow)"
+                    />
+                </div>}
+        </Fragment>
     );
 
     const showHiddenPanel = panel => (

@@ -119,9 +119,9 @@ export default function PurchaseHistory({ data }) {
             return calculation;
         }
 
-        let totalScoreFirstChall = totalGeneralScore;
+        let totalScoreFirstChall = totalGeneralScore || 0;
         let totalScoreAfterFirstChall = handleCurrChallengeScore({ totalGeneralScore, totalPurchasePrize }, maxScore);
-        totalScoreFirstChall = convertDotToComma(totalGeneralScore);
+        totalScoreFirstChall = convertDotToComma(totalScoreFirstChall);
         totalScoreAfterFirstChall = convertDotToComma(totalScoreAfterFirstChall);
 
         const isAfterFirstChall = totalPurchasePrize >= 1;
