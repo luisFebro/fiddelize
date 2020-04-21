@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
@@ -12,6 +12,8 @@ import PropTypes from 'prop-types';
 // CUSTOM DATA
 import { deleteUser, updateUser } from '../../../../../../../redux/actions/userActions';
 import { setRun } from '../../../../../../../redux/actions/globalActions';
+import { countTotalCliAdminUsers } from '../../../../../../../redux/actions/userActions';
+import { useAppSystem } from '../../../../../../../hooks/useRoleData';
 
 // END CUSTOM DATA
 
@@ -22,21 +24,28 @@ ModalConfYesNo.propTypes = {
 };
 
 export default function ModalConfYesNo({ open, onClose, modalData }) {
+    const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
+
     const dispatch = useStoreDispatch();
     const { title, subTitle, itemData } = modalData;
 
+    const { businessId } = useAppSystem();
+
     const handleRemoval = itemData => {
+        setIsYesBtnDisabled(true);
         if(itemData._id === '5e890d185162091014c53b56') return showSnackbar(dispatch, "O usuário de teste não pode ser excluido.", "error")
         showSnackbar(dispatch, "Processando...", 'warning', 3000);
-        setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 4000), 3000);
-        setTimeout(() => {
-            deleteUser(dispatch, itemData._id)
+        setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 5000), 2900);
+        deleteUser(dispatch, itemData._id)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+            countTotalCliAdminUsers(businessId, { type: 'dec' })
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 showSnackbar(dispatch, `O Usuário ${itemData.name.cap()} foi excluído com sucesso!`, 'success', 6000);
                 setRun(dispatch, "registered");
             })
-        }, 5900);
+        })
     }
 
     const showActionBtns = dispatch => (
@@ -49,6 +58,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 />
                 <ButtonMulti
                     title="SIM"
+                    disabled={isYesBtnDisabled ? true : false}
                     onClick={() => handleRemoval(itemData)}
                     backgroundColor= "var(--mainRed)"
                     backColorOnHover= "var(--mainRed)"

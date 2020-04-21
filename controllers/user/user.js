@@ -324,7 +324,14 @@ exports.changePrizeStatus = (req, res) => {
 
 exports.countTotalCliAdminUsers = (req, res) => {
     const { _id } = req.profile;
-    const countingField = { "clientAdminData.totalClientUsers": 1 };
+    const { type } = req.body;
+
+    if(!type) return res.status(400).json({msg: "No type sending in the body of the request"})
+
+    let countingField = { "clientAdminData.totalClientUsers": 1 };
+    if(type === "dec") {
+        countingField = { "clientAdminData.totalClientUsers": -1 };
+    }
 
     User.findOneAndUpdate(
         { _id },

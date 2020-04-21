@@ -8,7 +8,7 @@ import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
 const Title = ({ bizName }) => {
     return(
         <span className="text-subtitle font-weight-bold">
-            Clientes do(a)
+            Clientes de
             <br />
             <span className="text-title">{bizName && bizName.cap()}</span>
         </span>

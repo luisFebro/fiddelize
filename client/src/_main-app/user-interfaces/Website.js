@@ -22,6 +22,7 @@ import DownloadApp from '../../pages/DownloadApp';
 import CreationPage from '../../pages/new-app';
 import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
+import PlansPage from '../../pages/plans-page/PlansPage';
 
 // COMPONENTS
 import SnackbarMulti from '../../components/Snackbar';
@@ -59,6 +60,7 @@ function Website({ location }) {
                 <Route path="/:bizCodeName/novo-app" exact component={CreationPage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
+                <Route path="/planos" exact component={PlansPage} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />

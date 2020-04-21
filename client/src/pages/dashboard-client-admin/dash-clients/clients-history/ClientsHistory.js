@@ -4,6 +4,8 @@ import SearchResult from "../../../../components/search/SearchResult";
 import moment from 'moment';
 import parse from 'html-react-parser';
 import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
+import { Link } from 'react-router-dom';
+import getFirstName from '../../../../utils/string/getFirstName';
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { readUserList, updateUser } from '../../../../redux/actions/userActions';
@@ -14,16 +16,22 @@ import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
 import LoadingThreeDots from '../../../../components/loadingIndicators/LoadingThreeDots';
 import LoadMoreItemsButton from '../../../../components/buttons/LoadMoreItemsButton';
 import Title from '../../../../components/Title';
-import { useAppSystem } from '../../../../hooks/useRoleData';
+import { useAppSystem, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
 import PremiumButton from '../../../../components/buttons/PremiumButton';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 moment.updateLocale('pt-br');
 
 const initialSkip = 0;
 let searchTerm = "";
+// let accumulatedChunks = 5;
 export default function RegisteredClientsList() {
     const [init, setInit] = useState(true);
     const { businessId } = useAppSystem();
+    const { name } = useProfile();
+    const { bizPlan, totalClientUsers } = useClientAdmin();
+    console.log("totalClientUsers", totalClientUsers);
+    const { limitFreePlanNewUsers } = useCentralAdmin();
 
     const [clientsData, setClientsData] = useState({
         list: [],
@@ -31,13 +39,12 @@ export default function RegisteredClientsList() {
         totalSize: 0,
         totalCliUserScores: 0,
     });
-    let { list, totalSize, totalCliUserScores } = clientsData;
+    let { chunkSize, list, totalSize, totalCliUserScores } = clientsData;
 
-    const { isLoading, adminName, run, runName } = useStoreState(state => ({
+    const { isLoading, run, runName } = useStoreState(state => ({
         run: state.globalReducer.cases.run,
         runName: state.globalReducer.cases.runName,
         isLoading: state.globalReducer.cases.isLinearPLoading,
-        adminName: state.userReducer.cases.currentUser.name,
     }));
 
     const dispatch = useStoreDispatch();
@@ -45,16 +52,15 @@ export default function RegisteredClientsList() {
     useEffect(() => {
         const objToSend = {
             "clientAdminData.totalClientUserScores": totalCliUserScores,
-            "clientAdminData.totalClientUsers": totalSize,
         }
         updateUser(dispatch, objToSend, businessId)
-    }, [totalSize, totalCliUserScores])
+    }, [totalCliUserScores])
 
     useEffect(() => {
         if(init || runName === "registered") {
             readUserList(dispatch, initialSkip, "cliente", "", businessId)
             .then(res => {
-                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                if(res.status !== 200) return console.log("Something went wrong with readUserList");
                 setClientsData({
                     ...clientsData,
                     list: res.data.list,
@@ -80,7 +86,8 @@ export default function RegisteredClientsList() {
                 ...clientsData,
                 list: res.data.list,
                 chunkSize: res.data.chunkSize,
-                totalSize: res.data.totalSize
+                totalSize: res.data.totalSize,
+                totalCliUserScores: res.data.totalCliUserScores,
             })
         })
     }
@@ -158,7 +165,7 @@ export default function RegisteredClientsList() {
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton
-            url={`/api/user/list/all?skip=${"SKIP"}&role=cliente`}
+            url={`/api/user/list/all?skip=${"SKIP"}&role=cliente&bizId=${businessId}`}
             objPathes={{
                 strList: "data.list",
                 strChunkSize: "data.chunkSize",
@@ -167,7 +174,7 @@ export default function RegisteredClientsList() {
             setData={setClientsData}
             data={clientsData}
             remainingText="Clientes Restantes:"
-            msgAfterDone={`${adminName}, Isso é tudo! Não há mais Clientes`}
+            msgAfterDone={`${getFirstName(name)}, Isso é tudo! Não há mais Clientes`}
             button={{
                 title: "Carregar mais Clientes",
                 loadingIndicator: "Carregando mais agora...",
@@ -205,10 +212,60 @@ export default function RegisteredClientsList() {
                 </div>
                     {showExpansionPanel()}
                     {showMoreItemsBtn()}
+                    {totalSize >= 7 && generateMsgToFreeAccounts(bizPlan, {
+                        totalClientUsers,
+                        limitFreePlanNewUsers,
+                        name,
+                    })}
                 </Fragment>
             )}
         </Fragment>
     );
+}
+
+const  generateMsgToFreeAccounts = (plan, opts) => {
+    const { totalClientUsers, limitFreePlanNewUsers, name } = opts;
+
+    const showTxtDefault = txt => (
+        <div className="text-center text-normal animated rubberBand my-3">
+            <p className="text-purple text-subtitle font-weight-bold">
+                Nota <FontAwesomeIcon icon="info-circle" />
+            </p>
+            {txt}
+        </div>
+    );
+
+    const aboutToExpireMsg = () => {
+        const leftRegisters = limitFreePlanNewUsers - totalClientUsers;
+        const txt =
+        <span>
+            - {getFirstName(name)}, faltam mais
+            <br />
+            <strong>{leftRegisters} cadastros</strong> para atingir limite do seu plano gratis.{" "}
+            <Link to="/planos?cliente-admin=1" className="text-purple font-weight-bold">Escolha um PLANO PREMIUM para mais cadastros!</Link>
+        </span>
+        return showTxtDefault(txt);
+    }
+
+    const expiredMsg = () => {
+        const txt =
+        <span>
+            - O limite de cadastros para seu plano terminou.{" "}
+            <br />
+            <Link to="/planos?cliente-admin=1" className="text-purple font-weight-bold">Escolha um PLANO PREMIUM para mais cadastros!</Link>
+        </span>
+        return showTxtDefault(txt);
+    };
+
+    if(plan === "gratis") {
+        if(totalClientUsers >= limitFreePlanNewUsers) {
+            return expiredMsg();
+        } else if(totalClientUsers >= 7) {
+            return aboutToExpireMsg();
+        }
+    }
+
+    return null;
 }
 
 /* COMMENTS

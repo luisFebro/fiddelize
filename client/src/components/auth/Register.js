@@ -55,6 +55,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Register({ setLoginOrRegister, needLoginBtn = false }) {
+    const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
@@ -124,6 +125,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     // };
 
     const registerThisUser = e => {
+        setActionBtnDisabled(true);
         if(!bizSysId || bizSysId === "0") return showSnackbar(dispatch, "Nenhuma chave de acesso encontrada. Faça login se for admin ou desinstale e baixe o app novamente.", "warning", 7000)
 
         const newUser = {
@@ -144,8 +146,8 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
             }
 
             lStorage("removeCol", {collection: 'onceChecked'})
-
-            countTotalCliAdminUsers(bizSysId)
+            const objToSend = { type: 'inc' }
+            countTotalCliAdminUsers(bizSysId, objToSend)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 setLoginOrRegister("login");
@@ -228,7 +230,10 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
         <form
             style={{margin: 'auto', width: '90%'}}
             className="text-p text-normal"
-            onBlur={() => setFieldError(null)}
+            onBlur={() => {
+                setFieldError(null);
+                setActionBtnDisabled(false);
+            }}
         >
             <div className="mt-3">
                 Qual é o seu nome?
@@ -414,17 +419,15 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     const showButtonActions = () => (
         <div className="container-center">
             <ButtonMulti
-                onClick={() => {
-                    registerThisUser();
-                }}
+                onClick={registerThisUser}
+                disabled={actionBtnDisabled ? true : false}
+                title="Registrar"
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"
                 iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle}/>}
                 textTransform='uppercase'
-            >
-                Registrar
-            </ButtonMulti>
+            />
         </div>
     );
 

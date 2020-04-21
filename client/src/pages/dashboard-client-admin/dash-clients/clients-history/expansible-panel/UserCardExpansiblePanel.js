@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         flexDirection: 'column',
         padding: '15px 0',
-        margin: isSmall ? '10px 0 100px' : '10px 80px 100px',
+        margin: isSmall ? '10px 0 40px' : '10px 80px 40px',
     }
 }));
 
@@ -57,7 +57,7 @@ export default function UserCardExpansiblePanel({
         expansionPanel: {
             color: color,
             backgroundColor: backgroundColor, // default is paper color
-            margin: '25px 0',
+            margin: '25px 0 0',
         },
     }
 

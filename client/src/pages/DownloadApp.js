@@ -90,7 +90,7 @@ export default function DownloadApp({ match, location }) {
             <div className="ml-2">
                 {isClientUser && (
                     <Fragment>
-                        <p>Você foi convidado(a) para baixar o app do(a)</p>
+                        <p>Você foi convidado(a) para baixar o app de </p>
                         <p className="text-hero text-center">{bizName && bizName.cap()}</p>
                         <p>
                             para te oferecer uma <strong>experiência de compra</strong> ainda melhor

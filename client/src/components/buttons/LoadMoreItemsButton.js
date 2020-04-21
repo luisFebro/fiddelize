@@ -95,13 +95,13 @@ export default function LoadMoreItemsButton({
             <Fragment>
                 {chunkSize === totalSize && chunkSize >= limit
                 ? (
-                  <p className="text-main-container text-center my-3">
+                  <p className="text-normal text-center">
                     {msgAfterDone || `Isso é tudo. Não há mais items.`}
                   </p>
                 ) : (
                     searchTerm.length === 0 && data.totalSize > limit && (
                     <section>
-                        <div className="container-center mt-5 mb-3">
+                        <div className="container-center mb-3">
                             <ButtonMulti
                                 title={isThisLoading ? loadingIndicator || btnLoadingIndicator : title || "Carregar Mais Clientes"}
                                 onClick={loadMoreDocs}
@@ -110,7 +110,9 @@ export default function LoadMoreItemsButton({
                                 iconFontAwesome={isThisLoading ? "" : "fas fa-chevron-circle-down"}
                             />
                         </div>
-                        <p className="text-center text-normal my-3">{remainingText} <strong className="text-em-2-0">{data.totalSize - chunkSize}</strong></p>
+                        <p className="text-center text-normal mb-3">
+                            {remainingText} <strong className="text-em-2-0">{data.totalSize - chunkSize}</strong>
+                        </p>
                     </section>)
                 )}
             </Fragment>

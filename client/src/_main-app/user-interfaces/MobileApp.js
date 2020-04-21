@@ -16,6 +16,7 @@ import ClientMobileApp from '../../pages/mobile-app/ClientMobileApp';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
+import PlansPage from '../../pages/plans-page/PlansPage';
 //END PAGES
 
 // COMPONENTS
@@ -60,6 +61,7 @@ function Mobile({ location }) {
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                 <Route path="/baixe-app" exact component={InstallMsg} />
+                <Route path="/planos" exact component={PlansPage} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />

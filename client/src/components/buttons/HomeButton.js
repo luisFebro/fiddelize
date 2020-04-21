@@ -5,6 +5,7 @@ import { useStoreDispatch } from 'easy-peasy';
 import { showComponent } from "../../redux/actions/componentActions";
 import { logout } from "../../redux/actions/authActions";
 import isThisApp from '../../utils/window/isThisApp';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function HomeButton() {
     const dispatch = useStoreDispatch();
@@ -21,7 +22,7 @@ export default function HomeButton() {
                     backgroundColor="var(--themeSDark)"
                     backColorOnHover="var(--themeSDark)"
                     textTransform='uppercase'
-                    iconFontAwesome={isThisApp() ? "fas fa-home" : ""}
+                    iconFontAwesome={isThisApp() ? <FontAwesomeIcon icon="home" /> : ""}
                 >
                     Voltar
                 </ButtonMulti>

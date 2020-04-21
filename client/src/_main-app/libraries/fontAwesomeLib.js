@@ -7,7 +7,7 @@ import {
     faStar,
     faFlagCheckered,
     faExclamationCircle, // for errors
-    faInfo, // for warning
+    faInfoCircle, // for warning
     faCheckCircle, // for success
     faCheck, // Confirmation btn
     faPaperPlane, // for send data
@@ -42,6 +42,7 @@ import {
     faExchangeAlt, // update
     faCogs, // tech support, setting
     faChartPie,
+    faHome,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -49,7 +50,7 @@ library.add(
   faStar,
   faFlagCheckered,
   faExclamationCircle,
-  faInfo,
+  faInfoCircle,
   faCheckCircle,
   faCheck,
   faPaperPlane,
@@ -84,4 +85,5 @@ library.add(
   faExchangeAlt,
   faCogs,
   faChartPie,
+  faHome,
 );

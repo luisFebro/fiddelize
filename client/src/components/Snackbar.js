@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 
 const variantIcon = {
   success: <FontAwesomeIcon icon="check-circle" />,
-  warning: <FontAwesomeIcon icon="info" />,
+  warning: <FontAwesomeIcon icon="info-circle" />,
   error: <FontAwesomeIcon icon="exclamation-circle" />,
 };
 
