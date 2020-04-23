@@ -56,6 +56,7 @@ const clientUserData = {
     },
     totalPurchasePrize: { type: Number, default: 0 },
     totalGeneralScore: { type: Number, default: 0 },
+    totalVisits: { type: Number, default: 0 },
     purchaseHistory: [HistorySchema],
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });

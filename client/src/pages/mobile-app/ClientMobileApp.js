@@ -9,7 +9,7 @@ import lStorage, { needAppRegisterOp } from '../../utils/storage/lStorage';
 import Register from '../../components/auth/Register';
 import { useProfile, useClientAdmin, useClientUser } from '../../hooks/useRoleData';
 import { logout } from '../../redux/actions/authActions';
-import { updateUser } from '../../redux/actions/userActions';
+import { updateUser, countField } from '../../redux/actions/userActions';
 import { setRun } from '../../hooks/useRunComp';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { useAppSystem } from '../../hooks/useRoleData';
@@ -28,9 +28,9 @@ function ClientMobileApp({ location, history }) {
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
-    const { role, name } = useProfile();
+    const { _id, role, name } = useProfile();
     const { bizCodeName } = useClientAdmin();
-    const { bizId } = useClientUser();
+    const { currScore } = useClientUser();
     const { runName } = useRunComp();
 
     const dispatch = useStoreDispatch();
@@ -39,12 +39,17 @@ function ClientMobileApp({ location, history }) {
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
 
     useEffect(() => {
+        countField(_id, { field: "clientUserData.totalVisits" })
+    }, [_id])
+
+    useEffect(() => {
         if(runName === "logout") {
             history.push("/mobile-app");
         }
     }, [runName])
+
     useEffect(() => {
-        if(needAppForCliAdmin && !bizId) {
+        if(needAppForCliAdmin && !currScore) {
             const newCliUserData = {
                 "clientUserData.bizId": businessId,
                 "clientUserData.cashCurrScore": "0",

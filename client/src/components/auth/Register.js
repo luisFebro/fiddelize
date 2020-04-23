@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { registerEmail } from '../../redux/actions/authActions';
-import { countTotalCliAdminUsers } from '../../redux/actions/userActions';
+import { countField } from '../../redux/actions/userActions';
 // import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
 import detectErrorField from '../../utils/validation/detectErrorField';
@@ -146,8 +146,8 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
             }
 
             lStorage("removeCol", {collection: 'onceChecked'})
-            const objToSend = { type: 'inc' }
-            countTotalCliAdminUsers(bizSysId, objToSend)
+            const objToSend = { field: "clientAdminData.totalClientUsers", type: 'inc' }
+            countField(bizSysId, objToSend)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 setLoginOrRegister("login");

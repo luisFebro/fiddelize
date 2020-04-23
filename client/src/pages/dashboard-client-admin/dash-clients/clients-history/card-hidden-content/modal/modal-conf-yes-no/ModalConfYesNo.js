@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 // CUSTOM DATA
 import { deleteUser, updateUser } from '../../../../../../../redux/actions/userActions';
 import { setRun } from '../../../../../../../redux/actions/globalActions';
-import { countTotalCliAdminUsers } from '../../../../../../../redux/actions/userActions';
+import { countField } from '../../../../../../../redux/actions/userActions';
 import { useAppSystem } from '../../../../../../../hooks/useRoleData';
 
 // END CUSTOM DATA
@@ -40,7 +40,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
             deleteUser(dispatch, itemData._id)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                countTotalCliAdminUsers(businessId, { type: 'dec' })
+                countField(businessId, { field: "clientAdminData.totalClientUsers", type: 'dec' })
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                     showSnackbar(dispatch, `O Usuário ${itemData.name.cap()} foi excluído com sucesso!`, 'success', 6000);

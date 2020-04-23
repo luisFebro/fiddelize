@@ -112,9 +112,9 @@ export const readHighestScores = async (dispatch, bizId) => {
 
 // END LIST
 
-export const countTotalCliAdminUsers = async (businessId, typeObj) => {
+export const countField = async (_id, objToSend) => {
     try {
-        return await axios.put(`/api/user/count/total-cli-admin-users/${businessId}`, typeObj, getHeaderJson);
+        return await axios.put(`/api/user/count/field/${_id}`, objToSend, getHeaderJson);
     } catch(err) {
         return err.response;
     }

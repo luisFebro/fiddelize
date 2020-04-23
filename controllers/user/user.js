@@ -322,15 +322,15 @@ exports.changePrizeStatus = (req, res) => {
 }
 // END USER PURCHASE HISTORY
 
-exports.countTotalCliAdminUsers = (req, res) => {
+exports.countField = (req, res) => {
     const { _id } = req.profile;
-    const { type } = req.body;
+    const { field, type } = req.body;
 
-    if(!type) return res.status(400).json({msg: "No type sending in the body of the request"})
-
-    let countingField = { "clientAdminData.totalClientUsers": 1 };
+    if(!field) return res.status(400).json({msg: "A field from DB should be specified and sent inside object"})
+    // default is ascendent
+    let countingField = { [field]: 1 };
     if(type === "dec") {
-        countingField = { "clientAdminData.totalClientUsers": -1 };
+        countingField = { [field]: -1 };
     }
 
     User.findOneAndUpdate(
@@ -339,7 +339,7 @@ exports.countTotalCliAdminUsers = (req, res) => {
         { new: false })
     .exec(err => {
         if(err) return res.status(500).json(msgG("error.systemError", err));
-        res.json("updated");
+        res.json(`the field ${field.cap()} was updated`);
     })
 }
 
