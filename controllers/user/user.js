@@ -173,7 +173,8 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
     const search = req.query.search;
     const bizId = req.query.bizId;
 
-    const sortQuery = {$sort: { createdAt: -1 }};
+    const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
+    const sortQuery = {$sort: { ...defaultSort, createdAt: -1 }};
     const skipQuery = {$skip: skip};
     const limitQuery = {$limit: 5};
     const countQuery = {$count: 'value'};
@@ -230,7 +231,7 @@ exports.getHighestScores = (req, res) => {
     });
 }
 
-exports.readBackup = (req, res) => {
+exports.readBackup = (req, res) => { //n4 - great recursive solution and insertMany to insert multiple documents at time.
     BackupUser.find({})
     .exec((err, data) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
@@ -390,6 +391,28 @@ db.collection.aggregate([
     }}
 
 ]);
+
+n4?
+var total = docArray.length
+  , result = []
+;
+
+function saveAll(){
+  var doc = docArray.pop();
+
+  doc.save(function(err, saved){
+    if (err) throw err;//handle error
+
+    result.push(saved[0]);
+
+    if (--total) saveAll();
+    else // all saved here
+  })
+}
+
+saveAll();
+
+More: https://stackoverflow.com/questions/10266512/how-can-i-save-multiple-documents-concurrently-in-mongoose-node-js
 
 */
 

@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import ButtonFab, { faStyleSmall } from '../../../components/buttons/material-ui/ButtonFab';
 import ButtonMulti, {faStyle} from '../../../components/buttons/material-ui/ButtonMulti';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,7 +15,7 @@ import AOS from 'aos';
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function BottomActionBtns() {
+function BottomActionBtns({ history }) {
     const { name } = useProfile();
 
     const [fullOpen, setFullClose] = useState(false);
@@ -46,7 +47,7 @@ export default function BottomActionBtns() {
                     textTransform="none"
                     title={`Turbine seu app, ${name && getFirstName(name)}`}
                     size="large"
-                    onClick={null}
+                    onClick={() => history.push("/planos?cliente-admin=1")}
                     color="var(--mainWhite)"
                     backgroundColor="var(--niceUiYellow)"
                     iconFontAwesome={<FontAwesomeIcon
@@ -63,6 +64,8 @@ export default function BottomActionBtns() {
         </section>
     );
 }
+
+export default withRouter(BottomActionBtns);
 
 const ContactComp = () => {
     const { mainSalesWhatsapp, mainTechWhatsapp } = useCentralAdmin();

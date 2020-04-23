@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonFab, {faStyle} from '../../components/buttons/material-ui/ButtonFab';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin, useAppSystem, useProfile } from '../../hooks/useRoleData';
 import lStorage from '../../utils/storage/lStorage';
@@ -59,7 +59,7 @@ const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role }) => { // L
     );
 }
 
-export const PlanBadges = () => { // this export is required because this overrides the title in mobile testing...
+let PlanBadges = ({ history }) => { // this export is required because this overrides the title in mobile testing...
     const { role } = useProfile();
     const { bizPlan } = useClientAdmin();
 
@@ -74,7 +74,7 @@ export const PlanBadges = () => { // this export is required because this overri
                 <div className="upgrade-btn position-relative">
                     <RadiusBtn
                         title="atualizar"
-                        onClick={null}
+                        onClick={() => history.push("/planos?cliente-admin=1")}
                         backgroundColor="var(--mainYellow)"
                         padding='5px 10px'
                         fontSize="18px"
@@ -93,6 +93,9 @@ export const PlanBadges = () => { // this export is required because this overri
         </section>
     );
 };
+
+PlanBadges = withRouter(PlanBadges);
+export { PlanBadges };
 
 const ShowLogoutBtn = ({ locationNow }) => {
 

@@ -99,6 +99,7 @@ export default function PurchaseHistory({ data }) {
             );
         }
     })
+
     const showAllTimeTotal = () => {
         const conditionFirstChallenge = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
         const conditionAfterFirstChall = `• Pontos desafio #${totalPurchasePrize + 1}:`

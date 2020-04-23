@@ -10,6 +10,7 @@ export default function isThisApp() {
     const isAppFromChrome = (window.matchMedia('(display-mode: standalone)').matches);
 
     const checkBrowsers = resIos || isAppFromChrome || isAppFromFirefox || isAppFromSafari;
+
     return localHostAppMode
     ? true
     : checkBrowsers

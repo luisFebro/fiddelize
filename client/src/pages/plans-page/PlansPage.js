@@ -31,7 +31,7 @@ export default function PlansPage({ location }) {
     return (
         <div className="text-center text-white text-hero">
             {showBackBtn()}
-            I am the PlansPage
+            I am the plans page
         </div>
     );
 }

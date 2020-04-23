@@ -54,7 +54,8 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
     const animatedNumber = useRef(null);
 
     const { role, name, _id } = useProfile();
-    const { currScore, totalGeneralScore } = useClientUser();
+    let { currScore, totalGeneralScore } = useClientUser();
+    totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { maxScore, bizName, bizCodeName } = useClientAdmin();
     const { businessId } = useAppSystem();
 
@@ -87,7 +88,7 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
             }
-            updateUser(dispatch, objToSend, _id, false)
+            updateUser(dispatch, objToSend, _id)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 const historyObj = {

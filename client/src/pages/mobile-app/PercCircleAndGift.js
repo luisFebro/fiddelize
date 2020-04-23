@@ -5,15 +5,19 @@ import getPercentage from '../../utils/numbers/getPercentage';
 import { CLIENT_URL } from '../../config/clientUrl';
 import Tooltip from './Tooltip';
 
-const styles = {
-    percentageCircle: {
-        fontFamily: 'var(--mainFont)',
-        fontSize: 'text-em-1-2',
-        color: 'var(--themeSDark)'
-    }
-}
 
 export default function PercCircleAndGift({ currScore, maxScore, showPercentage, playBeep }) {
+    const percentageAchieved = getPercentage(maxScore, currScore);
+    const needResizeFont = percentageAchieved.toString().includes(".");
+
+    const styles = {
+        percentageCircle: {
+            fontFamily: 'var(--mainFont)',
+            fontSize: needResizeFont ? '1.0em' : 'text-em-1-3',
+            color: 'var(--themeSDark)'
+        }
+    }
+
     const displayGift = () => (
         <div className="shake-it">
             {currScore >= maxScore
@@ -63,7 +67,7 @@ export default function PercCircleAndGift({ currScore, maxScore, showPercentage,
                                 Você já alcançou
                                 <br />
                                 <strong>
-                                    ${getPercentage(maxScore, currScore)}% ${!currScore ? "(nenhum ponto)" : `(${currScore} pontos)`}
+                                    ${percentageAchieved}% ${!currScore ? "(nenhum ponto)" : `(${currScore} pontos)`}
                                 </strong> da
                                 <br />
                                 meta até agora.`}
@@ -72,8 +76,8 @@ export default function PercCircleAndGift({ currScore, maxScore, showPercentage,
                                     className="zoom-it container-center text-em-2-5 animated zoomIn"
                                 >
                                     <ReactjsPercentageCircle
-                                        percent={getPercentage(maxScore, currScore)}
-                                        radius={70} /*circle size*/
+                                        percent={percentageAchieved}
+                                        radius={75} /*circle size*/
                                         borderWidth={20}
                                         color="var(--themeS)" /*external line color*/
                                         textStyle={styles.percentageCircle}

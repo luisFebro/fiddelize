@@ -13,6 +13,7 @@ import { updateUser } from '../../redux/actions/userActions';
 import { setRun } from '../../hooks/useRunComp';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { useAppSystem } from '../../hooks/useRoleData';
+import { useRunComp } from '../../hooks/useRunComp';
 import ClientUserAppContent from './content/ClientUserAppContent';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
@@ -21,7 +22,7 @@ const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 const isSmall = window.Helper.isSmallScreen();
 
-function ClientMobileApp({ location }) {
+function ClientMobileApp({ location, history }) {
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
 
@@ -30,12 +31,18 @@ function ClientMobileApp({ location }) {
     const { role, name } = useProfile();
     const { bizCodeName } = useClientAdmin();
     const { bizId } = useClientUser();
+    const { runName } = useRunComp();
 
     const dispatch = useStoreDispatch();
 
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
 
+    useEffect(() => {
+        if(runName === "logout") {
+            history.push("/mobile-app");
+        }
+    }, [runName])
     useEffect(() => {
         if(needAppForCliAdmin && !bizId) {
             const newCliUserData = {
