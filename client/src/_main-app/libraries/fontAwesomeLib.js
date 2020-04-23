@@ -3,8 +3,31 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {
+    // app milestone icons
     faHeart,
     faStar,
+    faSun,
+    faHamburger,
+    faCut,
+    faCircle,
+    faPaw,
+    faTshirt,
+    faCocktail,
+    faMusic,
+    faRobot,
+    faMedal,
+    faStethoscope,
+    faCar,
+    faDragon,
+    faGrinHearts,
+    faUserTie,
+    faFire,
+    faGamepad,
+    faDumbbell,
+    faAppleAlt,
+    faLightbulb,
+    faCartPlus,
+    // end app milestone icons
     faFlagCheckered,
     faExclamationCircle, // for errors
     faInfoCircle, // for warning
@@ -31,10 +54,10 @@ import {
     faUser,
     faQuestionCircle, // instruction btn
     faShoppingCart,
-    faGift,
+    faTrophy,
     faCrown,
     faPalette,
-    faGem,
+    faGem, // milestone icons and reward config
     faComment,
     faClock,
     faFileAlt,
@@ -46,8 +69,31 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
+  // app milestone icons
   faHeart,
   faStar,
+  faSun,
+  faHamburger,
+  faTshirt,
+  faLightbulb,
+  faCut,
+  faCircle,
+  faPaw,
+  faCocktail,
+  faMusic,
+  faRobot,
+  faMedal,
+  faStethoscope,
+  faCar,
+  faDragon,
+  faGrinHearts,
+  faUserTie,
+  faFire,
+  faGamepad,
+  faDumbbell,
+  faAppleAlt,
+  faCartPlus,
+  //end app milestone icons
   faFlagCheckered,
   faExclamationCircle,
   faInfoCircle,
@@ -74,7 +120,7 @@ library.add(
   faUser,
   faQuestionCircle,
   faShoppingCart,
-  faGift,
+  faTrophy,
   faCrown,
   faPalette,
   faGem,

@@ -30,7 +30,7 @@ export default function PrizeCard({ historyData }) {
         <section className="purchase-history-prize-card--root text-shadow text-white text-center text-purple">
             <main className="gift-main-title" >
                 <div>
-                    <FontAwesomeIcon icon="gift" style={{...faStyle, fontSize: '45px', filter: ''}} />
+                    <FontAwesomeIcon icon="trophy" style={{...faStyle, fontSize: '45px', filter: ''}} />
                     <p className="edition font-weight-bold text-subtitle">
                         #{historyData.challengeN}
                     </p>

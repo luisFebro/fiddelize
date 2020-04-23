@@ -13,75 +13,112 @@ RatingIcons.propTypes = {
 
 export default function RatingIcons({ score, maxScore }) {
     const selectedIcon = "star";
-
+    // icones premium ficaráo disponíveis no seu painel de controle após atualização do seu plano.
     const milestoneIcons = {
         star: {
+            ptBr: 'estrela',
             icon: "star", // n1
             fontSize: "60px",
         },
-        sun : {
-            icon: "☀",
-        },
-        cake: {
-            icon: "🎂",
-        },
-        halloween: {
-            icon: "🎃",
-        },
-        scissor: {
-            icon: "✂️",
-        },
         heart: {
+            ptBr: 'coração',
             icon: "heart",
         },
-        heartValentine: {
-            icon: "💘",
+        sun: {
+            ptBr: 'sol',
+            icon: "sun",
         },
-        heartWithRibbon: {
-            icon: "💝",
+        gem: {
+            ptBr: 'diamante',
+            icon: "gem",
         },
-        barberPole: {
-            icon: "💈",
+        hamburger: {
+            ptBr: 'saduba',
+            icon: "hamburger",
         },
-        bell: {
-            icon: "🔔",
+        scissors: {
+            ptBr: 'tesoura',
+            icon: "cut",
         },
-        musicalNote: {
-            icon: "fas fa-music",
-        },
-        santa: {
-            icon: "🎅",
+        iceCream: {
+            ptBr: 'sorvete',
+            icon: "ice-cream",
         },
         circle: {
-            icon: "🌑",
+            ptBr: 'círculo',
+            icon: "circle"
         },
-        square: {
-            icon: "⬛",
+        paw: {
+            ptBr: 'pet',
+            icon: "paw",
         },
-        moon: {
-            icon: "🌙",
+        drink: {
+            ptBr: 'bebida',
+            icon: 'cocktail'
+        },
+        musicNote: {
+            ptBr: 'música',
+            icon: "music",
+        },
+        robot: {
+            ptBr: "tech",
+            icon: "robot",
+        },
+        medal: {
+            ptBr: "medalha",
+            icon: "medal",
+        },
+        stethoscope: {
+            ptBr: "saúde",
+            icon: "stethoscope",
+        },
+        car: {
+            ptBr: "automóvel",
+            icon: "car",
+        },
+        tshirt: {
+            ptBr: "vestuário",
+            icon: "tshirt",
         },
         crown: {
-            icon: "👑",
+            ptBr: "coroa",
+            icon: "crown",
+        },
+        dragon: {
+            ptBr: "arte",
+            icon: "dragon",
+        },
+        grinHearts: {
+            ptBr: "carinha",
+            icon: "grin-hearts"
+        },
+        business: {
+            ptBr: "negócios",
+            icon: "user-tie",
         },
         lightBulb: {
-            icon: "💡",
+            icon: "lightbulb",
         },
         fire: {
-            icon: "🔥",
+            ptBr: "fogo",
+            icon: "fire",
         },
-        smilingFace: {
-            icon: "😊",
+        dumbbell: {
+            ptBr: "esporte",
+            icon: "dumbbell",
         },
-        smilingFaceHeart: {
-            icon: "😍",
+        gamepad: {
+            ptBr: "entretenimento",
+            icon: "gamepad",
         },
-        gemStone: {
-            icon: "💎",
+        apple: {
+            ptBr: "comida",
+            icon: "apple-alt",
         },
-        rabbit: {
-            icon: "🐰",
-        },
+        cartPlus: {
+            ptBr: "mercadorias",
+            icon: "cart-plus",
+        }
     }
 
     const paintStarsForScore = (score, maxScore) => {

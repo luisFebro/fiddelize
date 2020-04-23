@@ -1,7 +1,7 @@
 import React from 'react';
 import { convertDotToComma } from '../../utils/numbers/convertDotComma';
 
-const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore }) => (
+const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore, needAppForPreview }) => (
     <div className="text-subtitle my-3 text-white text-center">
         <span className="text-title">Fidelidômetro:</span><br/>
         <div className="d-flex justify-content-center">
@@ -13,7 +13,7 @@ const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore }) => (
          ? null
          : (
             <section className="text-normal position-relative animated slideInLeft slow">
-                <div className="ellipse2"></div>
+                <div className="ellipse2" style={{ left: needAppForPreview && '170px'}}></div>
                 <div
                     style={{
                         zIndex: 10,
@@ -21,7 +21,7 @@ const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore }) => (
                         color: 'var(--themeP)',
                         position: 'absolute',
                         top: '-18px',
-                        left: '200px'}}
+                        left: needAppForPreview ? '180px' : '200px'}}
                     className="text-em-0-7 text-nowrap font-weight-bold"
                 >
                     Sua<br />última pontuação:<br />

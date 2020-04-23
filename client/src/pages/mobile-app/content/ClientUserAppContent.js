@@ -21,7 +21,11 @@ import PercCircleAndGift from '../PercCircleAndGift';
 // END APP COMPONENTS
 
 function ClientUserAppContent({
-    history, useProfile, useClientUser, useClientAdmin, needAppForCliAdmin }) {
+    history,
+    useProfile,
+    useClientUser,
+    useClientAdmin,
+    needAppForCliAdmin, needAppForPreview }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
 
@@ -48,7 +52,7 @@ function ClientUserAppContent({
     }
 
     useEffect(() => {
-        const condition = isAuthUser && role === "cliente" || needAppForCliAdmin;
+        const condition = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
         if(condition) {
             animateNumber(
                 currScoreRef.current,
@@ -103,6 +107,7 @@ function ClientUserAppContent({
             currScore={currScore}
             showPercentage={showMoreComps}
             lastScore={lastScore}
+            needAppForPreview={needAppForPreview}
         />
     );
 

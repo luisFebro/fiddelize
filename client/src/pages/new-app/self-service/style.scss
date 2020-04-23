@@ -1,0 +1,69 @@
+.main-self-service {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: flex-start;
+    min-height: 500px;
+}
+
+@media only screen and (min-width: 768px) {
+    .main-self-service {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-around;
+        min-height: 700px;
+    }
+}
+
+.picker-area {
+    // position: relative;
+    justify-content: center;
+}
+
+.pick-rating-icon {
+    justify-content: center; // Not working
+
+}
+
+.live-app-area {
+    position: relative;
+}
+
+.app-preview-blob {
+    position: absolute;
+    top: -150px;
+    z-index: -2;
+    height: 900px;
+    width: 900px;
+}
+
+.app-preview-blob img {
+    height: 100%;
+    width: 100%;
+
+    z-index: -1;
+}
+// LESSON: for iframes and images, you need to insert width and height directly in the tag element..
+.app-preview-iframe {
+    position: absolute;
+    left: 5px;
+    top: 28px;
+    z-index: 1;
+}
+.app-preview-iframe iframe {
+    overflow-y: scroll;
+    border: none;
+}
+
+.app-phone {
+    position: relative;
+}
+
+.app-preview-phone-frame {
+    top: 0;
+    z-index: -1;
+}
+// .app-preview-phone-frame img {
+//     height: 100%;
+//     width: 100%;
+// }

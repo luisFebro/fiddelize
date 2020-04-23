@@ -19,10 +19,12 @@ import Loadable from 'react-loadable';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
 import DownloadApp from '../../pages/DownloadApp';
-import CreationPage from '../../pages/new-app';
+import IntroPage from '../../pages/new-app';
+import SelfServicePage from '../../pages/new-app/self-service/SelfServicePage';
 import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
 import PlansPage from '../../pages/plans-page/PlansPage';
+import ClientAppPreview from '../../pages/mobile-app/ClientAppPreview';
 
 // COMPONENTS
 import SnackbarMulti from '../../components/Snackbar';
@@ -45,11 +47,13 @@ function Website({ location }) {
     }));
 
     const locationNow = location.pathname;
+    const dontNeedLayout = !locationNow.includes("/mobile-app/preview");
 
     return (
         <Fragment>
             <LinearProgress />
-            <Navbar />
+            {dontNeedLayout &&
+            <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/acesso/verificacao" exact component={locationNow === '/acesso/verificacao' ? LoginPageLazy : null} />
@@ -57,16 +61,19 @@ function Website({ location }) {
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                 <Route path="/baixe-app" exact component={DownloadApp} />
-                <Route path="/:bizCodeName/novo-app" exact component={CreationPage} />
+                <Route path="/:bizCodeName/novo-app" exact component={IntroPage} />
+                <Route path="/:bizCodeName/novo-app/self-service" exact component={SelfServicePage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                 <Route path="/planos" exact component={PlansPage} />
+                <Route path="/mobile-app/preview" exact component={ClientAppPreview} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />
             </Switch>
             <SnackbarMulti />
-            <Footer />
+            {dontNeedLayout &&
+            <Footer />}
         </Fragment>
     );
 }
