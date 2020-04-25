@@ -12,6 +12,7 @@ import "../ellipse.css";
 import { setRun } from '../../../redux/actions/globalActions';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
+import scrollIntoView from '../../../utils/document/scrollIntoView';
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
 import ProgressMsg from '../ProgressMsg' ;
@@ -33,7 +34,7 @@ function ClientUserAppContent({
 
     const { role, name } = useProfile();
     const { currScore, lastScore, } = useClientUser();
-    const { maxScore, bizCodeName } = useClientAdmin();
+    const { maxScore, bizCodeName, selfMilestoneIcon } = useClientAdmin();
 
     const { isAuthUser } = useAuthUser();
 
@@ -50,6 +51,15 @@ function ClientUserAppContent({
             cursor: "pointer",
         }
     }
+
+    // position the view to the icon area in preview app
+    useEffect(() => {
+        console.log("showMoreComps", showMoreComps);
+        if(needAppForPreview && showMoreComps) {
+            scrollIntoView("#rating-icons", 3000);
+        }
+    }, [needAppForPreview, showMoreComps])
+
 
     useEffect(() => {
         const condition = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
@@ -80,6 +90,7 @@ function ClientUserAppContent({
         if(playConfettiAgain && currScore <= maxScore) {
             lStorage("removeItem", confettiPlayOp); // returns null if no keys were found.
         }
+
 
     }, [maxScore, currScore, showMoreComps]);
 
@@ -121,8 +132,12 @@ function ClientUserAppContent({
     );
 
     const showRatingIcons = () => (
-        <div style={{margin: '40px 0 80px'}}>
-            <RatingIcons score={currScore} maxScore={maxScore || 0} />
+        <div id="rating-icons" style={{margin: `40px ${needAppForPreview ? '-10px' : '0'} 80px`}}>
+            <RatingIcons
+                score={currScore}
+                maxScore={maxScore || 0}
+                selfMilestoneIcon={selfMilestoneIcon}
+            />
             {showMoreComps
             ? (
                 <div>
@@ -142,7 +157,8 @@ function ClientUserAppContent({
             ? (
                 <div
                     id="rules"
-                    className="container-center"
+                    className="container-center position-relative"
+                    style={{ top: `${needAppForPreview && "15px"}` }}
                 >
                     <Link to={needAppForCliAdmin ? "/regulamento?client-admin=1" : "/regulamento"}>
                         <div

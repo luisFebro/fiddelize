@@ -14,6 +14,7 @@
     --mainYellow: #fff200;
     --niceUiYellow: #fbc531;
     --mainPurple: #4a148c;
+    --lightPurple: #7c43bd;
     --mainCyan: #00b2cc;
     --mainCyanLight: #00e5ff;
 }
@@ -40,6 +41,10 @@
 
 .text-purple {
     color: var(--mainPurple);
+}
+
+.text-light-purple {
+    color: var(--lightPurple);
 }
 
 .text-sys-green {

@@ -93,6 +93,10 @@ export const useClientAdmin = () => {
     const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
     const totalClientUserScores = clientAdmin && clientAdmin.totalClientUserScores;
     const totalClientUsers = clientAdmin && clientAdmin.totalClientUsers;
+    const selfBizLogoImg = clientAdmin && clientAdmin.selfBizLogoImg;
+    const selfMilestoneIcon = clientAdmin && clientAdmin.selfMilestoneIcon;
+    const selfThemePColor = clientAdmin && clientAdmin.selfThemePColor;
+    const selfThemeSColor = clientAdmin && clientAdmin.selfThemeSColor;
 
     return({
         bizName,
@@ -107,5 +111,9 @@ export const useClientAdmin = () => {
         rewardDeadline,
         totalClientUserScores,
         totalClientUsers,
+        selfBizLogoImg,
+        selfMilestoneIcon,
+        selfThemePColor,
+        selfThemeSColor,
     });
 }

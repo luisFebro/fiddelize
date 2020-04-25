@@ -23,7 +23,6 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
         return [currentPurchase];
     }
 
-
     if(cardType === "prize") {
         currentPurchase = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${lastPurchaseCount}`, createdAt: new Date()};
         // lastPurchase = { challengeN: challengeN, cardType: 'record', desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };

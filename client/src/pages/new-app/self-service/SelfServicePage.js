@@ -15,8 +15,11 @@ export default function SelfServicePage() {
             {showTitle()}
             <div className="main-self-service">
                 <section className="picker-area">
-                    <p className="text-subtitle text-center text-white">
-                        Personalize o app do<br />seu cliente aqui
+                    <p className="title text-subtitle text-center text-white">
+                        Personalize o App dos clientes
+                    </p>
+                    <p className="step-indicator text-title text-white text-center">
+                        3/3
                     </p>
                     <PickRatingIcon />
                 </section>

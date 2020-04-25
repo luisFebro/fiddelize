@@ -30,3 +30,17 @@
         -ms-transform: scale(1.3);
             transform: scale(1.3);
 }
+
+.zoom-slow-it:hover {
+    z-index: 3000;
+    outline: none;
+    border: none;
+
+    -webkit-transition: transform .7s;
+        -ms-transition: transform .7s;
+            transition: transform .7s;
+
+    -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+            transform: scale(1.1);
+}

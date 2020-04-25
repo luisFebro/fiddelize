@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import CarouselSlick from '../../components/carousels/CarouselSlick';
 import getQueryByName from '../../utils/string/getQueryByName';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
 import parse from 'html-react-parser';
@@ -173,5 +172,4 @@ export default function CreationPage({ location }) {
 <div className="text-title text-white text-center">
     Selecione a principal cor da sua empresa.
 </div>
-<CarouselSlick />
 */

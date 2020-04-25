@@ -37,6 +37,10 @@ const defaultClientAdmin = {
     rewardDeadline: 0,
     totalClientUserScores: 0,
     totalClientUsers: 0,
+    selfBizLogoImg: "logo-exemple.png",
+    selfMilestoneIcon: "star",
+    selfThemePColor: "purple",
+    selfThemeSColor: "cyan",
 }
 const clientAdminColl = { collection: "clientAdmin", newObj: defaultClientAdmin };
 // end client Admin

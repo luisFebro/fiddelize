@@ -37,6 +37,10 @@ const currClientAdminData = {
     rewardDeadline: clientAdminData && clientAdminData.rewardDeadline,
     totalClientUserScores: clientAdminData && clientAdminData.totalClientUserScores,
     totalClientUsers: clientAdminData && clientAdminData.totalClientUsers,
+    selfBizLogoImg: clientAdminData && clientAdminData.selfBizLogoImg,
+    selfMilestoneIcon: clientAdminData && clientAdminData.selfMilestoneIcon,
+    selfThemePColor: clientAdminData && clientAdminData.selfThemePColor,
+    selfThemeSColor: clientAdminData && clientAdminData.selfThemeSColor,
 }
 
 const currCentralAdminData = {

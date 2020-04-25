@@ -3,30 +3,43 @@
     flex-direction: column;
     justify-content: center;
     justify-items: flex-start;
-    min-height: 500px;
-}
-
-@media only screen and (min-width: 768px) {
-    .main-self-service {
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-around;
-        min-height: 700px;
-    }
 }
 
 .picker-area {
     // position: relative;
-    justify-content: center;
+    align-self: center;
 }
 
-.pick-rating-icon {
-    justify-content: center; // Not working
+.picker-area .title {
+    background-color: var(--niceUiYellow);
+    color: var(--mainWhite);
+    text-shadow: 1px 1px 3px black;
+    font: bold 25px var(--mainFont);
+    padding: 5px 10px;
+    border-radius: 20px;
+}
 
+.picker-area .step-indicator {
+    position: relative;
+    margin: 0;
 }
 
 .live-app-area {
     position: relative;
+    margin-top: 90px;
+}
+
+.title-for-phone {
+    background-color: var(--niceUiYellow);
+    color: var(--mainWhite);
+    text-shadow: 1px 1px 3px black;
+    font: bold 20px var(--mainFont);
+    padding: 5px 10px;
+    border-radius: 20px;
+    top: -80px;
+    left: 70px;
+
+    position: absolute;
 }
 
 .app-preview-blob {
@@ -67,3 +80,18 @@
 //     height: 100%;
 //     width: 100%;
 // }
+
+@media only screen and (min-width: 768px) {
+    .main-self-service {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-around;
+        min-height: 700px;
+    }
+    .live-app-area {
+        margin-top: 0;
+    }
+    .picker-area {
+        align-self: flex-start;
+    }
+}

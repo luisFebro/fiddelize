@@ -56,7 +56,7 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
     const { role, name, _id } = useProfile();
     let { currScore, totalGeneralScore } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
-    const { maxScore, bizName, bizCodeName } = useClientAdmin();
+    const { maxScore, bizName, bizCodeName, selfMilestoneIcon } = useClientAdmin();
     const { businessId } = useAppSystem();
 
     const dispatch = useStoreDispatch();
@@ -93,7 +93,7 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 const historyObj = {
                     "rewardScore": maxScore,
-                    "icon": "star", // need to change it after implement self-servic page
+                    "icon": selfMilestoneIcon,
                     "value": cashCurrScore,
                     "totalGeneralScore": totalGeneralScore + cashCurrScore,
                 }

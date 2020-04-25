@@ -108,10 +108,10 @@ const clientAdminData = {
     // end address
 
     // self-service
-    bizLogoImg: String, // NOT IMPLEMENTED YET
-    milestoneIcon: String, // NOT IMPLEMENTED YET
-    themePColor: String, // NOT IMPLEMENTED YET
-    themeSColor: String, // NOT IMPLEMENTED YET
+    selfBizLogoImg: String,
+    selfMilestoneIcon: String,
+    selfThemePColor: String,
+    selfThemeSColor: String,
     // end self-service
 
     totalClientUserScores: Number,

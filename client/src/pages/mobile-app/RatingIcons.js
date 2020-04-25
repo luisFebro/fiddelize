@@ -5,121 +5,15 @@ import PropTypes from 'prop-types';
 import Tooltip from './Tooltip';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import animateCSS from '../../utils/animateCSS';
+import { milestoneIcons } from '../../global-data/milestoneIcons';
 
 RatingIcons.propTypes = {
     score: PropTypes.number,
     maxScore: PropTypes.number,
 }
 
-export default function RatingIcons({ score, maxScore }) {
-    const selectedIcon = "star";
-    // icones premium ficaráo disponíveis no seu painel de controle após atualização do seu plano.
-    const milestoneIcons = {
-        star: {
-            ptBr: 'estrela',
-            icon: "star", // n1
-            fontSize: "60px",
-        },
-        heart: {
-            ptBr: 'coração',
-            icon: "heart",
-        },
-        sun: {
-            ptBr: 'sol',
-            icon: "sun",
-        },
-        gem: {
-            ptBr: 'diamante',
-            icon: "gem",
-        },
-        hamburger: {
-            ptBr: 'saduba',
-            icon: "hamburger",
-        },
-        scissors: {
-            ptBr: 'tesoura',
-            icon: "cut",
-        },
-        iceCream: {
-            ptBr: 'sorvete',
-            icon: "ice-cream",
-        },
-        circle: {
-            ptBr: 'círculo',
-            icon: "circle"
-        },
-        paw: {
-            ptBr: 'pet',
-            icon: "paw",
-        },
-        drink: {
-            ptBr: 'bebida',
-            icon: 'cocktail'
-        },
-        musicNote: {
-            ptBr: 'música',
-            icon: "music",
-        },
-        robot: {
-            ptBr: "tech",
-            icon: "robot",
-        },
-        medal: {
-            ptBr: "medalha",
-            icon: "medal",
-        },
-        stethoscope: {
-            ptBr: "saúde",
-            icon: "stethoscope",
-        },
-        car: {
-            ptBr: "automóvel",
-            icon: "car",
-        },
-        tshirt: {
-            ptBr: "vestuário",
-            icon: "tshirt",
-        },
-        crown: {
-            ptBr: "coroa",
-            icon: "crown",
-        },
-        dragon: {
-            ptBr: "arte",
-            icon: "dragon",
-        },
-        grinHearts: {
-            ptBr: "carinha",
-            icon: "grin-hearts"
-        },
-        business: {
-            ptBr: "negócios",
-            icon: "user-tie",
-        },
-        lightBulb: {
-            icon: "lightbulb",
-        },
-        fire: {
-            ptBr: "fogo",
-            icon: "fire",
-        },
-        dumbbell: {
-            ptBr: "esporte",
-            icon: "dumbbell",
-        },
-        gamepad: {
-            ptBr: "entretenimento",
-            icon: "gamepad",
-        },
-        apple: {
-            ptBr: "comida",
-            icon: "apple-alt",
-        },
-        cartPlus: {
-            ptBr: "mercadorias",
-            icon: "cart-plus",
-        }
-    }
+export default function RatingIcons({ score, maxScore, selfMilestoneIcon }) {
+    const selectedIcon = selfMilestoneIcon;
 
     const paintStarsForScore = (score, maxScore) => {
         let indScore;
@@ -168,8 +62,7 @@ export default function RatingIcons({ score, maxScore }) {
     }, []);
 
     const levels = [100, 200, 300, 400, 500];
-
-    const { icon, fontSize } = milestoneIcons[selectedIcon];
+    const { fontSize, icon } = milestoneIcons.find(obj => obj["icon"] === selectedIcon);
 
     const handleFlip = e => {
        let currIconElemParent = e.target.parentElement;

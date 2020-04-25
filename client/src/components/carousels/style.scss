@@ -1,0 +1,52 @@
+.carousel--root {
+  background: var(--mainWhite);
+  max-width: 500px;
+}
+
+
+
+.carousel-cell {
+  box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
+  width: 66%;
+  height: 200px;
+  margin: 10px 10px 10px;
+  background: var(--mainWhite);
+  color: var(--mainPurple);
+  cursor: pointer;
+  border: none;
+  padding: 15px;
+  text-align: center;
+  border-radius: 15px;
+}
+
+.card-icons {
+    font-size: 60px;
+}
+
+.flickity-button {
+    background-color: var(--themeS);
+}
+.flickity-button:hover {
+    background-color: var(--themeS);
+}
+.flickity-prev-next-button .arrow {
+  fill: var(--mainDark);
+}
+.flickity-prev-next-button.no-svg {
+  fill: var(--themeS);
+}
+
+.is-selected {
+  background-color: var(--lightPurple);
+  color: var(--mainWhite);
+}
+
+/* cell number */
+// .carousel-cell:before {
+//   display: block;
+//   text-align: center;
+//   // content: counter(carousel-cell);
+//   line-height: 200px;
+//   font-size: 80px;
+//   color: white;
+// }

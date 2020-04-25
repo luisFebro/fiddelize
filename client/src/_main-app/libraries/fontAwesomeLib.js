@@ -7,6 +7,7 @@ import {
     faHeart,
     faStar,
     faSun,
+    faIceCream,
     faHamburger,
     faCut,
     faCircle,
@@ -25,7 +26,6 @@ import {
     faGamepad,
     faDumbbell,
     faAppleAlt,
-    faLightbulb,
     faCartPlus,
     // end app milestone icons
     faFlagCheckered,
@@ -72,10 +72,10 @@ library.add(
   // app milestone icons
   faHeart,
   faStar,
+  faIceCream,
   faSun,
   faHamburger,
   faTshirt,
-  faLightbulb,
   faCut,
   faCircle,
   faPaw,

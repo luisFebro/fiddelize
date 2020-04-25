@@ -37,9 +37,18 @@ export default function AppPreview() {
         </div>
     );
 
+    const showPhoneTitle = () => (
+        <div className="title-for-phone">
+            Resultado App
+            <br />
+            em tempo real.
+        </div>
+    );
+
     return (
         <section className="live-app-area container-center">
             <section className="app-phone">
+                {showPhoneTitle()}
                 {showPhoneFrame()}
                 {showAppIframe()}
             </section>

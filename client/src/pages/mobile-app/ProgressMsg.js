@@ -75,8 +75,8 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
                     )  : (
                         <span>
                             {nextLevel === 5
-                            ? <span className="text-left ml-2">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
-                            : <span>Falta mais <strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
+                            ? <span className="text-left ml-4">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
+                            : <span><strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
                             }
                         </span>
                     )}
@@ -84,11 +84,15 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
             )}
         </div>
     );
+    const currChall = 1;
 
     return (
-        <div className="container-center mt-3 text-normal text-white">
-            {showFlagWithGoals()}
-            {showMsg()}
+        <div className="mt-3 text-normal text-white text-center">
+            <span className="text-subtitle">Desafio #{currChall}</span>
+            <div className="container-center">
+                {showFlagWithGoals()}
+                {showMsg()}
+            </div>
         </div>
     );
 }
