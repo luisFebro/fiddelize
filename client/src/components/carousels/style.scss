@@ -1,20 +1,20 @@
 .carousel--root {
   background: var(--mainWhite);
-  max-width: 500px;
+  max-width: 400px;
+  height: 200px;
 }
 
 
 
 .carousel-cell {
   box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
-  width: 66%;
-  height: 200px;
-  margin: 10px 10px 10px;
+  width: 50%;
+  height: 180px;
+  margin: 10px;
   background: var(--mainWhite);
   color: var(--mainPurple);
   cursor: pointer;
   border: none;
-  padding: 15px;
   text-align: center;
   border-radius: 15px;
 }
@@ -24,13 +24,13 @@
 }
 
 .flickity-button {
-    background-color: var(--themeS);
+    background-color: var(--themeSDark);
 }
 .flickity-button:hover {
-    background-color: var(--themeS);
+    background-color: var(--themeSDark);
 }
 .flickity-prev-next-button .arrow {
-  fill: var(--mainDark);
+  fill: var(--mainWhite);
 }
 .flickity-prev-next-button.no-svg {
   fill: var(--themeS);

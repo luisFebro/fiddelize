@@ -2,10 +2,14 @@ import React from 'react';
 import { useClientAdmin } from '../../hooks/useRoleData';
 import {CLIENT_URL} from '../../config/clientUrl';
 import ClientUserAppContent from './content/ClientUserAppContent';
+import { withRouter } from 'react-router-dom';
+import getQueryByName from '../../utils/string/getQueryByName';
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function ClientAppPreview() {
+function ClientAppPreview({ location }) {
+    const runName = getQueryByName("runName", location.search);
+
     const useProfile = () => ({
         _id: '123456',
         role: 'cliente',
@@ -38,7 +42,10 @@ export default function ClientAppPreview() {
                 useClientUser={useClientUser}
                 useClientAdmin={useClientAdmin}
                 needAppForPreview={true}
+                runName={runName}
             />
         </div>
     );
 }
+
+export default withRouter(ClientAppPreview);

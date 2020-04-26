@@ -4,22 +4,22 @@ import "flickity/dist/flickity.css";
 import Flickity from 'flickity';
 import './style.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { setRun } from '../../redux/actions/globalActions';
+import { useStoreDispatch } from 'easy-peasy';
 
 const isSmall = window.Helper.isSmallScreen();
 
 let lastIcon = "";
 export default function CarouselFlickity({ data }) {
-    const [iconSelected, setIconSelected] = useState('');
-    console.log("iconSelected", iconSelected);
+    const [iconSelected, setIconSelected] = useState('star');
+    const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        if(iconSelected) {
-            // handleSelection(iconSelected)
-        }
+        setRun(dispatch, iconSelected);
     }, [iconSelected])
 
     var elem = document.querySelector('.main-carousel');
-    var flkty = new Flickity( elem, {
+    var flkty = new Flickity(elem, {
       // options
       cellAlign: 'center',
       wrapAround: true,
@@ -30,39 +30,26 @@ export default function CarouselFlickity({ data }) {
       dragThreshold: 3, // default: 3
       percentagePosition: false, // default: true;
       selectedAttraction: 0.1, // default: 0.025
-
+      on: {
+          ready: function() {
+            console.log('Flickity ready');
+          }
+      }
     });
 
-    const dataFlickity = Flickity.data(elem)
-    console.log("data", dataFlickity);
+    flkty.on( 'select', index => index && setIconSelected(data[index].icon));
 
-    const handleSelection = nameIcon => {
-        const currElem = document.getElementById(nameIcon);
-        if(nameIcon === iconSelected) {
-                currElem.style.cssText="color: var(--mainWhite); background-color: var(--mainPurple)";
-                // currElem.style.backgroundColor = "var(--mainPurple)";
-                // currElem.style.color = "var(--mainWhite)";
-                lastIcon = nameIcon;
-                console.log("lastIcon", lastIcon);
-        }
-        // console.log("lastIcon", lastIcon);
-        // if(lastIcon && lastIcon !== nameIcon) {
-        //     const lastElem = document.getElementById(lastIcon);
-        //     lastElem.style.backgroundColor = "var(--mainWhite)";
-        //     lastElem.style.color = "var(--mainPurple)";
-        // }
-    };
+    // const dataFlickity = Flickity.data(elem)
+    // console.log("data", dataFlickity);
 
     return (
         <div className="carousel--root my-2 text-white">
-            <div class="main-carousel">
+            <div className="main-carousel">
                 {data.map(card => {
                     return (
                         <div
-                            id={card.icon}
                             key={card.icon}
                             className="carousel-cell no-outline d-flex flex-column justify-content-center align-content-item"
-                            onClick={() => setIconSelected(card.icon)}
                         >
                             <div className="container-center">
                                 <FontAwesomeIcon

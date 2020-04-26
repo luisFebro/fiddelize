@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import PickRatingIcon from './PickRatingIcon';
 import AppPreview from './AppPreview';
+import AppPickersHandler from './pickers/AppPickersHandler';
 import './style.scss';
 
 export default function SelfServicePage() {
@@ -18,10 +18,7 @@ export default function SelfServicePage() {
                     <p className="title text-subtitle text-center text-white">
                         Personalize o App dos clientes
                     </p>
-                    <p className="step-indicator text-title text-white text-center">
-                        3/3
-                    </p>
-                    <PickRatingIcon />
+                <AppPickersHandler />
                 </section>
                 <AppPreview />
             </div>

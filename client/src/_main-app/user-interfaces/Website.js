@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import { useStoreState } from 'easy-peasy';
 import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
 
 //LAYOUT
@@ -42,9 +41,6 @@ const LoginPageLazy = Loadable({
 //END PAGES
 
 function Website({ location }) {
-    const { role } = useStoreState(state => ({
-        role: state.userReducer.cases.currentUser.role,
-    }));
 
     const locationNow = location.pathname;
     const dontNeedLayout = !locationNow.includes("/mobile-app/preview");
@@ -66,7 +62,7 @@ function Website({ location }) {
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                 <Route path="/planos" exact component={PlansPage} />
-                <Route path="/mobile-app/preview" exact component={ClientAppPreview} />
+                <Route path="/mobile-app/preview" component={ClientAppPreview} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />

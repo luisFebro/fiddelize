@@ -1,8 +1,11 @@
 import React from 'react';
 import { CLIENT_URL } from '../../../config/clientUrl';
+import { useRunComp } from '../../../hooks/useRunComp';
 import './style.scss';
 
 export default function AppPreview() {
+    const { runName } = useRunComp();
+
     const showBlob = () => (
         <div className="app-preview-blob animated slideIn">
             <img
@@ -17,8 +20,8 @@ export default function AppPreview() {
             className="app-preview-iframe"
         >
             <iframe
-                src={`${CLIENT_URL}/mobile-app/preview`}
-                allowfullscreen={false}
+                src={`${CLIENT_URL}/mobile-app/preview?runName=${runName}`}
+                allowFullScreen={false}
                 width={330}
                 height={450}
             >
@@ -45,12 +48,21 @@ export default function AppPreview() {
         </div>
     );
 
+    const showWarning = () => (
+        <div className="text-small text-purple text-center">
+            * App para fins de visual,
+            <br />
+            funcionalidades desativadas.
+        </div>
+    );
+
     return (
         <section className="live-app-area container-center">
             <section className="app-phone">
                 {showPhoneTitle()}
                 {showPhoneFrame()}
                 {showAppIframe()}
+                {showWarning()}
             </section>
             {showBlob()}
         </section>

@@ -26,7 +26,8 @@ const currOption = yellowBtn2;
 const lastChecked = lStorage("getItem", lastOption);
 const currChecked = lStorage("getItem", currOption);
 
-function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName, needAppForCliAdmin }) {
+function MoreOptionsBtn({
+    history, playBeep, showMoreBtn, userName, needAppForCliAdmin, needAppForPreview }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fullOpen, setFullClose] = useState(false);
 
@@ -84,8 +85,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName, needAppForCl
                 name: 'Desconectar ►',
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
-                    // window.location.href = "/mobile-app";
-                    logout(dispatch);
+                    !needAppForPreview && logout(dispatch);
                     playBeep();
                 }
             },
@@ -94,7 +94,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName, needAppForCl
                 name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
-                    setFullClose(true);
+                    !needAppForPreview && setFullClose(true);
                     playBeep();
                 },
             },
@@ -103,7 +103,7 @@ function MoreOptionsBtn({ history, playBeep, showMoreBtn, userName, needAppForCl
                 name: 'Seu Histórico ►',
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
-                    setIsModalOpen(true);
+                    !needAppForPreview && setIsModalOpen(true);
                     playBeep();
                 },
             }

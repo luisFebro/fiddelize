@@ -5,15 +5,17 @@ import PropTypes from 'prop-types';
 import Tooltip from './Tooltip';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import animateCSS from '../../utils/animateCSS';
-import { milestoneIcons } from '../../global-data/milestoneIcons';
+import { milestoneIcons, iconNamesOnly } from '../../global-data/milestoneIcons';
+import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
 
 RatingIcons.propTypes = {
     score: PropTypes.number,
     maxScore: PropTypes.number,
 }
 
-export default function RatingIcons({ score, maxScore, selfMilestoneIcon }) {
-    const selectedIcon = selfMilestoneIcon;
+export default function RatingIcons({ score, maxScore, selfMilestoneIcon, runName }) {
+    const appPreviewIcon = gotArrayThisItem(iconNamesOnly, runName) ? runName : false;
+    const selectedIcon = appPreviewIcon || selfMilestoneIcon;
 
     const paintStarsForScore = (score, maxScore) => {
         let indScore;
@@ -72,7 +74,7 @@ export default function RatingIcons({ score, maxScore, selfMilestoneIcon }) {
     return (
         <RatingDiv>
             {levels.map(level => (
-                <section className="position-relative" key={level}>
+                <section className="position-relative" style={{top: '-20px'}} key={level}>
                     <Tooltip
                         title={`Nível ${level.toString().charAt(0)}`}
                         element={

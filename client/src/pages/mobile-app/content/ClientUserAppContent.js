@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import getDayGreetingBr from '../../../utils/getDayGreetingBr';
 import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
@@ -9,7 +9,7 @@ import { confetti } from '../../../keyframes/animations-js/confetti/confetti';
 import { useStoreDispatch } from 'easy-peasy';
 import AOS from 'aos';
 import "../ellipse.css";
-import { setRun } from '../../../redux/actions/globalActions';
+import { setRun } from '../../../hooks/useRunComp';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
 import scrollIntoView from '../../../utils/document/scrollIntoView';
@@ -26,7 +26,8 @@ function ClientUserAppContent({
     useProfile,
     useClientUser,
     useClientAdmin,
-    needAppForCliAdmin, needAppForPreview }) {
+    needAppForCliAdmin,
+    needAppForPreview, runName }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
 
@@ -53,12 +54,12 @@ function ClientUserAppContent({
     }
 
     // position the view to the icon area in preview app
-    useEffect(() => {
-        console.log("showMoreComps", showMoreComps);
-        if(needAppForPreview && showMoreComps) {
-            scrollIntoView("#rating-icons", 3000);
-        }
-    }, [needAppForPreview, showMoreComps])
+    // useEffect(() => {
+    //     // console.log("runName", runName);
+    //     if(needAppForPreview && runName === "goBottomApp") {
+    //         scrollIntoView("#go-bottom", 3000);
+    //     }
+    // }, [needAppForPreview, runName])
 
 
     useEffect(() => {
@@ -132,11 +133,15 @@ function ClientUserAppContent({
     );
 
     const showRatingIcons = () => (
-        <div id="rating-icons" style={{margin: `40px ${needAppForPreview ? '-10px' : '0'} 80px`}}>
+        <div
+            style={{margin: `40px ${needAppForPreview ? '-10px' : '0'} 80px`}}
+            className={`${needAppForPreview && "enabledLink"}`}
+        >
             <RatingIcons
                 score={currScore}
                 maxScore={maxScore || 0}
                 selfMilestoneIcon={selfMilestoneIcon}
+                runName={runName}
             />
             {showMoreComps
             ? (
@@ -179,6 +184,7 @@ function ClientUserAppContent({
             showMoreBtn={showMoreBtn}
             userName={name}
             needAppForCliAdmin={needAppForCliAdmin}
+            needAppForPreview={needAppForPreview}
         />
     );
 
@@ -204,7 +210,7 @@ function ClientUserAppContent({
     );
 
     return (
-        <Fragment>
+        <div className={`${needAppForPreview && "disabledLink"}`}>
             {showGreeting()}
             {showAllScores()}
             {showPercCircleAndGift()}
@@ -213,7 +219,7 @@ function ClientUserAppContent({
             {showMoreOptionsBtn()}
             {backBtnForCliAdmin()}
             <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
-        </Fragment>
+        </div>
     );
 }
 

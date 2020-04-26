@@ -19,14 +19,21 @@
     border-radius: 20px;
 }
 
-.picker-area .step-indicator {
-    position: relative;
+.picker-area .step-indicator-btn {
+    display: flex;
+    justify-content: space-around;
+}
+
+.step-indicator-btn > p {
     margin: 0;
+    justify-content: center;
+    align-self: center;
 }
 
 .live-app-area {
     position: relative;
-    margin-top: 90px;
+    margin-top: 120px;
+    margin-bottom: 120px;
 }
 
 .title-for-phone {
@@ -36,8 +43,8 @@
     font: bold 20px var(--mainFont);
     padding: 5px 10px;
     border-radius: 20px;
-    top: -80px;
-    left: 70px;
+    top: -85px;
+    left: 80px;
 
     position: absolute;
 }
