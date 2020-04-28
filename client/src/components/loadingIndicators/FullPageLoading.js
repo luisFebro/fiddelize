@@ -2,9 +2,9 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { CLIENT_URL } from '../../config/clientUrl';
 
-export default function FullPageLoading() {
+export default function FullPageLoading({ color, backgroundColor }) {
     return (
-        <DivWrapper>
+        <DivWrapper color={color} backgroundColor={backgroundColor}>
             <img
                 className="svg-elevation pulse-it"
                 id="logo"
@@ -42,7 +42,7 @@ const DivWrapper = styled.div`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    background: var(--mainWhite);
+    background: ${({ backgroundColor }) => backgroundColor || "var(--mainWhite)"};
     color: var(--mainDark);
     z-index: 999;
 
@@ -57,7 +57,7 @@ const DivWrapper = styled.div`
     }
 
     .loading-text {
-        color: var(--themeP);
+        color: ${({ color }) => color || "var(--mainPurple)"};
         fontWeight: bold;
     }
 

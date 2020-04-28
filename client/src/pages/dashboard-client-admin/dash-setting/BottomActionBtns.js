@@ -18,7 +18,7 @@ const isSmall = window.Helper.isSmallScreen();
 function BottomActionBtns({ history }) {
     const { name } = useProfile();
 
-    const [fullOpen, setFullClose] = useState(false);
+    const [fullOpen, setFullOpen] = useState(false);
 
     AOS.init({
         offset: 50,
@@ -34,7 +34,7 @@ function BottomActionBtns({ history }) {
                     variant="extended"
                     title="Fale conosco"
                     size="medium"
-                    onClick={() => setFullClose(!fullOpen)}
+                    onClick={() => setFullOpen(!fullOpen)}
                     color="white"
                     backgroundColor="var(--mainCyan)"
                     iconFontAwesome={<FontAwesomeIcon icon="comment" style={faStyleSmall} />}
@@ -59,7 +59,7 @@ function BottomActionBtns({ history }) {
             <ModalFullContent
                 contentComp={<ContactComp />}
                 fullOpen={fullOpen}
-                setFullClose={setFullClose}
+                setFullOpen={setFullOpen}
             />
         </section>
     );

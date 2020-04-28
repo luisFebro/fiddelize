@@ -12,7 +12,7 @@ export default function PickRatingIcon({ step, setNextDisabled }) {
     const selectedMilestoneIcons = milestoneIcons.filter(iconObj => iconObj.appPreview === true);
     // n1
     return(
-        <div style={{visibility: step === 3 ? "visible" : "hidden"}}>
+        <div style={{visibility: step === 3 ? "visible" : "hidden", height: step === 3 ? 260 : 0 }}>
             <p className="text-normal text-white text-shadow text-center">
                 • Selecione ícone de nível do app:
             </p>

@@ -29,7 +29,7 @@ const currChecked = lStorage("getItem", currOption);
 function MoreOptionsBtn({
     history, playBeep, showMoreBtn, userName, needAppForCliAdmin, needAppForPreview }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [fullOpen, setFullClose] = useState(false);
+    const [fullOpen, setFullOpen] = useState(false);
 
     const { _id } = useProfile();
     let { currScore, purchaseHistory, totalGeneralScore, totalPurchasePrize } = useClientUser();
@@ -94,7 +94,7 @@ function MoreOptionsBtn({
                 name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
                 backColor: 'var(--themeSDark)',
                 onClick: () => {
-                    !needAppForPreview && setFullClose(true);
+                    !needAppForPreview && setFullOpen(true);
                     playBeep();
                 },
             },
@@ -157,7 +157,7 @@ function MoreOptionsBtn({
             <ModalFullContent
                 contentComp={<ContactComp />}
                 fullOpen={fullOpen}
-                setFullClose={setFullClose}
+                setFullOpen={setFullOpen}
             />
         </div>
     );

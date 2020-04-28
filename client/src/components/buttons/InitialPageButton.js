@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import ButtonMulti from './material-ui/ButtonMulti';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ButtonMulti, {faStyle} from './material-ui/ButtonMulti';
 import isThisApp from '../../utils/window/isThisApp';
 
 export default function InitialPageButton() {
@@ -11,7 +12,7 @@ export default function InitialPageButton() {
                 <ButtonMulti
                     title="Voltar"
                     color="var(--mainWhite)"
-                    iconFontAwesome="fas fa-home"
+                    iconFontAwesome={<FontAwesomeIcon icon="home" style={faStyle} />}
                     backgroundColor="var(--themeSDark)"
                     backColorOnHover="var(--themeSDark)"
                     textTransform='uppercase'

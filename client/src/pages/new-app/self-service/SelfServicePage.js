@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import AppPreview from './AppPreview';
 import AppPickersHandler from './pickers/AppPickersHandler';
 import './style.scss';
@@ -11,17 +11,20 @@ export default function SelfServicePage() {
     );
 
     return (
-        <Fragment>
+        <div style={{overflow: 'hidden'}}>
             {showTitle()}
             <div className="main-self-service">
                 <section className="picker-area">
                     <p className="title text-subtitle text-center text-white">
                         Personalize o App dos clientes
                     </p>
-                <AppPickersHandler />
+                    <AppPickersHandler />
                 </section>
                 <AppPreview />
             </div>
-        </Fragment>
+        </div>
     );
 }
+
+/*
+ */

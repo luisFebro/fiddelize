@@ -49,6 +49,24 @@
     position: absolute;
 }
 
+.scroll-instru-desktop {
+    display: none;
+    background-color: transparent;
+    color: var(--mainWhite);
+    font: bold 20px var(--mainFont);
+    text-align: center;
+    line-height: 18px;
+    top: -55px;
+    right: -25px;
+
+    position: absolute;
+    z-index: 20;
+}
+
+@media only screen and (min-width: 768px) {
+    .scroll-instru-desktop { display: block; }
+}
+
 .app-preview-blob {
     position: absolute;
     top: -150px;
@@ -66,13 +84,21 @@
 // LESSON: for iframes and images, you need to insert width and height directly in the tag element..
 .app-preview-iframe {
     position: absolute;
-    left: 5px;
+    left: 2.5px;
     top: 28px;
-    z-index: 1;
+    z-index: 10;
 }
 .app-preview-iframe iframe {
     overflow-y: scroll;
     border: none;
+}
+
+.app-loading-screen {
+    position: absolute;
+    left: 10px;
+    top: 28px;
+    min-width: 313px;
+    z-index: 5;
 }
 
 .app-phone {
@@ -81,7 +107,7 @@
 
 .app-preview-phone-frame {
     top: 0;
-    z-index: -1;
+    z-index: -2;
 }
 // .app-preview-phone-frame img {
 //     height: 100%;

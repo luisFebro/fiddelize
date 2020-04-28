@@ -1,6 +1,8 @@
 import React from 'react';
 import { CLIENT_URL } from '../../../config/clientUrl';
 import { useRunComp } from '../../../hooks/useRunComp';
+import MobileScreenLoading from '../../../components/loadingIndicators/MobileScreenLoading'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './style.scss';
 
 export default function AppPreview() {
@@ -30,7 +32,7 @@ export default function AppPreview() {
     );
 
     const showPhoneFrame = () => (
-        <div className="app-preview-phone-frame">
+        <div className="app-preview-phone-frame" style={{cursor: "pointer"}}>
             <img
                 src={`${CLIENT_URL}/img/illustrations/phone-preview.png`}
                 alt="celular"
@@ -40,11 +42,30 @@ export default function AppPreview() {
         </div>
     );
 
+    const showLoading = () => (
+        <div
+            className="app-loading-screen"
+        >
+            <MobileScreenLoading />
+        </div>
+    );
+
     const showPhoneTitle = () => (
         <div className="title-for-phone">
             Resultado App
             <br />
             em tempo real.
+        </div>
+    );
+
+    const showScrollInstruDesktop = () => (
+        <div className="scroll-instru-desktop text-shadow text-normal">
+            <p>
+                Deslize
+                <br />
+                aqui
+            </p>
+            <FontAwesomeIcon icon="long-arrow-alt-down" style={{color: "var(--mainWhite)", fontSize: '30px', zIndex: 10}} />
         </div>
     );
 
@@ -57,12 +78,14 @@ export default function AppPreview() {
     );
 
     return (
-        <section className="live-app-area container-center">
+        <section  className="live-app-area container-center">
             <section className="app-phone">
                 {showPhoneTitle()}
                 {showPhoneFrame()}
                 {showAppIframe()}
+                {showLoading()}
                 {showWarning()}
+                {showScrollInstruDesktop()}
             </section>
             {showBlob()}
         </section>

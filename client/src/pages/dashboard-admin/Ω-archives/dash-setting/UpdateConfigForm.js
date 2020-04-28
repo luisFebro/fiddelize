@@ -181,7 +181,8 @@ export default function UpdateConfigForm() {
                     <p
                         style={{backgroundColor: "var(--mainDark)"}}
                         className="text-center text-white"
-                    >Nova imagem inserida. Salve para alterar</p>
+                    >Nova imagem inserida. Salve para alterar
+                    </p>
                 </div>
             </div>
         );

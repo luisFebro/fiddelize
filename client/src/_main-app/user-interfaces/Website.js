@@ -58,7 +58,7 @@ function Website({ location }) {
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                 <Route path="/baixe-app" exact component={DownloadApp} />
                 <Route path="/:bizCodeName/novo-app" exact component={IntroPage} />
-                <Route path="/:bizCodeName/novo-app/self-service" exact component={SelfServicePage} />
+                <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={SelfServicePage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                 <Route path="/planos" exact component={PlansPage} />

@@ -6,14 +6,14 @@ import Dialog from '@material-ui/core/Dialog';
 ModalFullContent.propTypes = {
     contentComp: PropTypes.node,
     fullOpen: PropTypes.bool,
-    setFullClose: PropTypes.func,
+    setFullOpen: PropTypes.func,
     style: PropTypes.object,
 }
 
 export default function ModalFullContent({
     contentComp,
     fullOpen = false,
-    setFullClose,
+    setFullOpen,
     style, }) {
 
     let defaultStyle = { zIndex: 3000, overflowX: 'hidden', };
@@ -35,7 +35,7 @@ export default function ModalFullContent({
         >
             {contentComp}
             <CloseButton
-                onClick={() => setFullClose(!fullOpen)}
+                onClick={() => setFullOpen(!fullOpen)}
                 size="40px"
                 top="15px"
                 right="15px"

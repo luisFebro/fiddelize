@@ -67,6 +67,8 @@ import {
     faChartPie,
     faHome,
     faAngleRight,
+    faLongArrowAltDown,
+    faImage,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -134,4 +136,6 @@ library.add(
   faChartPie,
   faHome,
   faAngleRight,
+  faLongArrowAltDown,
+  faImage,
 );

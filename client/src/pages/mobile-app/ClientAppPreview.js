@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useClientAdmin } from '../../hooks/useRoleData';
 import {CLIENT_URL} from '../../config/clientUrl';
 import ClientUserAppContent from './content/ClientUserAppContent';
 import { withRouter } from 'react-router-dom';
 import getQueryByName from '../../utils/string/getQueryByName';
-
 const isSmall = window.Helper.isSmallScreen();
 
 function ClientAppPreview({ location }) {
@@ -17,7 +16,7 @@ function ClientAppPreview({ location }) {
     });
 
     const useClientUser = () => ({
-        currScore: 100,
+        currScore: 110,
         lastScore: 20,
     });
 
@@ -34,8 +33,8 @@ function ClientAppPreview({ location }) {
         </div>
     );
 
-    return (
-        <div style={{overflowX: 'hidden', overflowY: 'auto', cursor: 'pointer'}}>
+    const mainContent = () => (
+        <Fragment>
             {showLogo()}
             <ClientUserAppContent
                 useProfile={useProfile}
@@ -44,6 +43,12 @@ function ClientAppPreview({ location }) {
                 needAppForPreview={true}
                 runName={runName}
             />
+        </Fragment>
+    );
+
+    return (
+        <div style={{overflowX: 'hidden', overflowY: 'auto', cursor: 'pointer'}}>
+            {mainContent()}
         </div>
     );
 }
