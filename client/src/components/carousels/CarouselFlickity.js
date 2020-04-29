@@ -38,7 +38,7 @@ export default function CarouselFlickity({ data }) {
       }
     });
 
-    flkty.on( 'change', index => setTimeout(() => setIconSelected(data[index].icon), 2000));
+    flkty.on('change', index => setTimeout(() => setIconSelected(data[index].icon), 2000));
 
     // const dataFlickity = Flickity.data(elem)
     // console.log("data", dataFlickity);

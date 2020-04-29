@@ -1,6 +1,7 @@
 import showVanillaToast from './components/vanilla-js/toastify/showVanillaToast';
 
-const isToastActivated = true;
+// = f
+const isToastActivated alse; // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 // WARNING: The currentVersion needsfds to be actually the NEXT ONE because the next cache client receives is not updated.
 const currentVersion = "2.50";
 
@@ -65,9 +66,12 @@ function registerValidSW(swUrl, config) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-              isToastActivated && showVanillaToast(`Ei, nova Atualização do App disponível. 🎉<br />(nova versão: ${currentVersion})`, 6000);
-              setTimeout(() => isToastActivated && showVanillaToast("Basta reiniciar o app para atualizar.", 6000), 5000);
-              setTimeout(() => isToastActivated && showVanillaToast("Se tiver usando alguma página do site, feche também.", 8000), 10000);
+              // isToastActivated &&
+              showVanillaToast(`Ei, nova Atualização do App disponível. 🎉<br />(nova versão: ${currentVersion})`, 6000);
+              // isToastActivated &&
+              setTimeout(() => showVanillaToast("Basta reiniciar o app para atualizar.", 6000), 5000);
+              // isToastActivated &&
+              setTimeout(() => showVanillaToast("Se tiver usando alguma página do site, feche também.", 8000), 10000);
               console.log(
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
@@ -81,7 +85,8 @@ function registerValidSW(swUrl, config) {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-              isToastActivated && showVanillaToast(`App foi atualizado para versão ${currentVersion} com sucesso!`, 7000)
+              // isToastActivated &&
+              showVanillaToast(`App foi atualizado para versão ${currentVersion} com sucesso!`, 7000)
               console.log('Content is cached for offline use.');
 
               // Execute callback
