@@ -1,7 +1,6 @@
 import showVanillaToast from './components/vanilla-js/toastify/showVanillaToast';
 
-// = f
-const isToastActivated alse; // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
+const isToastActivated = false; // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 // WARNING: The currentVersion needsfds to be actually the NEXT ONE because the next cache client receives is not updated.
 const currentVersion = "2.50";
 
