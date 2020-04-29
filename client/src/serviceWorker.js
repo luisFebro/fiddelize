@@ -66,11 +66,11 @@ function registerValidSW(swUrl, config) {
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
               // isToastActivated &&
-              showVanillaToast(`Ei, nova Atualização do App disponível. 🎉<br />(nova versão: ${currentVersion})`, 6000);
+              isToastActivated && showVanillaToast(`Ei, nova Atualização do App disponível. 🎉<br />(nova versão: ${currentVersion})`, 6000);
               // isToastActivated &&
-              setTimeout(() => showVanillaToast("Basta reiniciar o app para atualizar.", 6000), 5000);
+              setTimeout(() => isToastActivated && showVanillaToast("Basta reiniciar o app para atualizar.", 6000), 5000);
               // isToastActivated &&
-              setTimeout(() => showVanillaToast("Se tiver usando alguma página do site, feche também.", 8000), 10000);
+              setTimeout(() => isToastActivated && showVanillaToast("Se tiver usando alguma página do site, feche também.", 8000), 10000);
               console.log(
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
