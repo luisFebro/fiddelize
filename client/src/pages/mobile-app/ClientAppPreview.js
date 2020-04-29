@@ -11,9 +11,8 @@ function ClientAppPreview({ location }) {
     const clientName = getQueryByName("clientName", location.search);
 
     const useProfile = () => ({
-        _id: '123456',
         role: 'cliente',
-        name: 'Nome Cliente',
+        name: `${clientName} (teste)`,
     });
 
     const useClientUser = () => ({
@@ -43,7 +42,6 @@ function ClientAppPreview({ location }) {
                 useClientAdmin={useClientAdmin}
                 needAppForPreview={true}
                 runName={runName}
-                cliAdminName={clientName}
             />
         </Fragment>
     );
