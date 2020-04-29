@@ -24,8 +24,8 @@ export const uiColors = [
         hexValue: "var(--lightBlue)",
     },
     {
-        ptColorName: "cinza",
-        hexValue: 'var(--lightGrey)',
+        ptColorName: "verde",
+        hexValue: 'var(--incomeGreen)',
     },
     {
         ptColorName: "marrom",
@@ -36,3 +36,6 @@ export const uiColors = [
         hexValue: "var(--niceUiYellow)",
     },
 ];
+
+// Next colors:
+// grey

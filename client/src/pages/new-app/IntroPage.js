@@ -9,9 +9,10 @@ import GoalForm from './GoalForm';
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function CreationPage({ location }) {
+export default function CreationPage({ location, match }) {
     const name = getQueryByName("name", location.search).cap();
     const bizName = getQueryByName("bizName", location.search).cap();
+    const bizCodeName = match.params.bizCodeName;
     const id = getQueryByName("id", location.search);
 
     const styles = {
@@ -153,7 +154,13 @@ export default function CreationPage({ location }) {
     );
 
     const showGoalForm = () => (
-        <GoalForm userId={id} bizName={bizName} bizId={id} name={name} />
+        <GoalForm
+            userId={id}
+            bizName={bizName}
+            bizCodeName={bizCodeName}
+            bizId={id}
+            name={name}
+        />
     );
 
     return (

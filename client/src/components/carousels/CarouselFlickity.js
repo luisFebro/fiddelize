@@ -12,6 +12,7 @@ const isSmall = window.Helper.isSmallScreen();
 let lastIcon = "";
 export default function CarouselFlickity({ data }) {
     const [iconSelected, setIconSelected] = useState('star');
+    console.log("iconSelected", iconSelected);
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
@@ -23,9 +24,9 @@ export default function CarouselFlickity({ data }) {
       // options
       cellAlign: 'center',
       wrapAround: true,
-      freeScroll: true,
+      freeScroll: false, // if true, this produces an awkward alignment of cards when dragging them
       pageDots: false,
-      prevNextButtons: isSmall ? false : true,
+      prevNextButtons: isSmall ? false : true, //
       friction: 0.28, // default: 0.28
       dragThreshold: 3, // default: 3
       percentagePosition: false, // default: true;
@@ -37,7 +38,7 @@ export default function CarouselFlickity({ data }) {
       }
     });
 
-    flkty.on( 'select', index => index && setIconSelected(data[index].icon));
+    flkty.on( 'change', index => setTimeout(() => setIconSelected(data[index].icon), 2000));
 
     // const dataFlickity = Flickity.data(elem)
     // console.log("data", dataFlickity);

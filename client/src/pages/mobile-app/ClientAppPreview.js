@@ -8,6 +8,7 @@ const isSmall = window.Helper.isSmallScreen();
 
 function ClientAppPreview({ location }) {
     const runName = getQueryByName("runName", location.search);
+    const clientName = getQueryByName("clientName", location.search);
 
     const useProfile = () => ({
         _id: '123456',
@@ -42,6 +43,7 @@ function ClientAppPreview({ location }) {
                 useClientAdmin={useClientAdmin}
                 needAppForPreview={true}
                 runName={runName}
+                cliAdminName={clientName}
             />
         </Fragment>
     );

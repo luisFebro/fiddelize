@@ -27,7 +27,10 @@ function ClientUserAppContent({
     useClientUser,
     useClientAdmin,
     needAppForCliAdmin,
-    needAppForPreview, runName }) {
+    needAppForPreview,
+    runName,
+    cliAdminName, }) {
+
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
 
@@ -108,7 +111,11 @@ function ClientUserAppContent({
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
                 className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
-                {getDayGreetingBr()},<br/> <span className="text-title">{name + "!"}</span>
+                {getDayGreetingBr()},
+                <br/>
+                <span className="text-title">
+                    {cliAdminName ? `${cliAdminName} (teste)!` : `${name}!`}
+                </span>
             </div>
         </section>
     );

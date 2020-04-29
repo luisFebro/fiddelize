@@ -11,6 +11,7 @@ import setValObjWithStr from '../../utils/objects/setValObjWithStr';
 import { updateUser } from '../../redux/actions/userActions';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
+import { withRouter } from 'react-router-dom';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -29,7 +30,8 @@ const useStyles = makeStyles({  // n1
     },
 });
 
-export default function GoalForm({ bizId, bizName, name }) {
+function GoalForm({
+    history, bizId, bizName, bizCodeName, name }) {
     const [error, setError] = useState("");
     const [showThisField, setShowThisField] = useState(false);
     const [data, setData] = useState({
@@ -106,7 +108,7 @@ export default function GoalForm({ bizId, bizName, name }) {
         updateUser(dispatch, dataToSend, bizId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-            setTimeout(() => window.location.href = `/baixe-app/${name}?negocio=${bizName}&id=${bizId}&admin=1`, 1500);
+            setTimeout(() => history.push(`/${bizCodeName}/novo-app/self-service/${bizId}?nome-cliente=${name}&negocio=${bizName}`), 1500);
         })
     }
 
@@ -204,6 +206,8 @@ export default function GoalForm({ bizId, bizName, name }) {
         </div>
     );
 }
+
+export default withRouter(GoalForm);
 
 /* COMMENTS
 n1:

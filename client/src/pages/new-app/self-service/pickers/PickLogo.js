@@ -47,6 +47,7 @@ export default function PickLogo({ step, setNextDisabled }) {
                 style={{ display: 'none'}}
                 id="uploaded-file"
                 type="file"
+                multiple={false}
             />
             <label htmlFor="uploaded-file">
                 <ButtonMulti

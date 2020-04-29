@@ -5,7 +5,7 @@ import MobileScreenLoading from '../../../components/loadingIndicators/MobileScr
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './style.scss';
 
-export default function AppPreview() {
+export default function AppPreview({ clientName }) {
     const { runName } = useRunComp();
 
     const showBlob = () => (
@@ -22,7 +22,7 @@ export default function AppPreview() {
             className="app-preview-iframe"
         >
             <iframe
-                src={`${CLIENT_URL}/mobile-app/preview?runName=${runName}`}
+                src={`${CLIENT_URL}/mobile-app/preview?runName=${runName}&clientName=${clientName}`}
                 allowFullScreen={false}
                 width={330}
                 height={450}
