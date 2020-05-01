@@ -1,4 +1,5 @@
 const express = require('express');
+const formData = require('express-form-data');
 const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -30,6 +31,7 @@ mongoose
 
 // MIDDLEWARES
 app.use(express.json()); //n1
+app.use(formData.parse()); // for images and multimedia in forms.
 app.use(cors()); //n2
 app.use(sslRedirect()); // n5
 
@@ -58,7 +60,7 @@ app.listen(PORT, () => {
 });
 
 /* ARCHIVES
-app.use('/api/finance', require('./routes/finance'));
+<app className="u"></app>se('/api/finance', require('./routes/finance'));
 app.use('/api/staff-booking', require('./routes/staffBooking'));
 
  */

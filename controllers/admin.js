@@ -2,7 +2,6 @@ const Admin = require('../models/admin');
 const User = require("../models/user");
 const BusinessInfo = require("../models/admin/BusinessInfo");
 const Service = require("../models/admin/Service");
-const formidable = require('formidable');
 const fs = require('fs');
 const adminId = '5db4301ed39a4e12546277a8';
 const businessInfoId = "5dcc77a0db168f112884b27f"; //n1a

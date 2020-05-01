@@ -9,6 +9,7 @@ const isSmall = window.Helper.isSmallScreen();
 function ClientAppPreview({ location }) {
     const runName = getQueryByName("runName", location.search);
     const clientName = getQueryByName("clientName", location.search);
+    const logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
 
     const useProfile = () => ({
         role: 'cliente',
@@ -20,15 +21,17 @@ function ClientAppPreview({ location }) {
         lastScore: 20,
     });
 
+    const logo = logoUrlPreview || `${CLIENT_URL}/img/official-logo-name.png`;
+
     const showLogo = () => (
         <div className="container-center">
             <img
                 className="animated zoomIn slow"
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                src={CLIENT_URL + "/img/official-logo-name.png"}
+                src={logo}
                 alt="Logomarca Principal"
-                width={190}
-                height="auto"
+                width={logoUrlPreview ? "" : 190}
+                height={logoUrlPreview ? "" : 85}
             />
         </div>
     );

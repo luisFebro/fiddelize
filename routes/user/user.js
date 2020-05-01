@@ -18,6 +18,8 @@ const {
     readHistoryList,
     changePrizeStatus,
     countField,
+    uploadImages,
+    updateImages,
 } = require("../../controllers/user");
 
 const { mwIsAdmin } = require("../../controllers/auth");
@@ -41,6 +43,10 @@ router.get("/list/highest-scores", getHighestScores);
 router.get("/:userId/backup/list", mwIsAdmin, readBackup);
 
 router.put("/count/field/:userId", countField);
+
+// IMAGES
+router.post("/image/upload", uploadImages);
+router.put("/image/update", updateImages);
 
 // FIELDS
 // Array Fields handled: none

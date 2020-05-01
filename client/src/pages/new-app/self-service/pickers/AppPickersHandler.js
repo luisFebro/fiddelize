@@ -12,7 +12,7 @@ import PickRatingIcon from './PickRatingIcon';
 // end pickers
 
 export default function AppPickersHandler({
-    bizId, bizName, clientName, isTest }) {
+    bizId, bizCodeName, bizName, clientName, isTest, setLogoUrlPreview }) {
     const [step, setStep] = useState({ currNumber: 1, nextTask: '(cores)' });
     const [nextDisabled, setNextDisabled] = useState(true);
 
@@ -62,7 +62,14 @@ export default function AppPickersHandler({
     return (
         <div>
             {showStepIndicatorAndBtnAction()}
-            <PickLogo step={currNumber} setNextDisabled={setNextDisabled} />
+            <PickLogo
+                step={currNumber}
+                setNextDisabled={setNextDisabled}
+                bizId={bizId}
+                bizName={bizName}
+                bizCodeName={bizCodeName}
+                setLogoUrlPreview={setLogoUrlPreview}
+            />
             <PickTheming step={currNumber} setNextDisabled={setNextDisabled} />
             <PickRatingIcon step={currNumber} setNextDisabled={setNextDisabled} />
         </div>

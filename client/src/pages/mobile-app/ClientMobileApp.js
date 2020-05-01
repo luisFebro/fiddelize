@@ -77,7 +77,7 @@ function ClientMobileApp({ location, history }) {
                 src={CLIENT_URL + "/img/official-logo-name.png"}
                 alt="Logomarca Principal"
                 width={190}
-                height="auto"
+                height={85}
             />
         </div>
     );

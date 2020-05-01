@@ -4,8 +4,14 @@ import { useRunComp } from '../../../hooks/useRunComp';
 import MobileScreenLoading from '../../../components/loadingIndicators/MobileScreenLoading'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './style.scss';
+import PropTypes from 'prop-types';
 
-export default function AppPreview({ clientName }) {
+AppPreview.propTypes = {
+    clientName: PropTypes.string,
+    logoUrlPreview: PropTypes.string,
+}
+
+export default function AppPreview({ clientName, logoUrlPreview }) {
     const { runName } = useRunComp();
 
     const showBlob = () => (
@@ -22,7 +28,7 @@ export default function AppPreview({ clientName }) {
             className="app-preview-iframe"
         >
             <iframe
-                src={`${CLIENT_URL}/mobile-app/preview?runName=${runName}&clientName=${clientName}`}
+                src={`${CLIENT_URL}/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}`}
                 allowFullScreen={false}
                 width={330}
                 height={450}

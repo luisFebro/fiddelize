@@ -131,6 +131,27 @@ export const removeField = async (userId, fieldName) => {
     }
 };
 
+// END FIELDS
+
+// IMAGE HANDLING
+export const uploadImages = async (formData, options) => {
+    const { _id, fileName } = options;
+    try {
+        return await axios.post(`/api/user/image/upload?id=${_id}&fileName=${fileName}`, formData, getHeaderJson);
+    } catch (err) {
+        return err;
+    }
+};
+
+export const updateImages = async (_id, bodyToSend) => {
+    // bodyToSend: lastUrl, paramArray, customParam
+    try {
+        return await axios.put(`/api/user/image/update?id=${_id}`, bodyToSend, getHeaderJson);
+    } catch (err) {
+        return err;
+    }
+};
+// END IMAGE HANDLING
 /* ARCHIVES
 export const confirmUserAccount = async (userId) => {
     try {

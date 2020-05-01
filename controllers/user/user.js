@@ -9,7 +9,9 @@ const validateEmail = require('../../utils/validation/validateEmail');
 const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
+const addTransformToImgUrl = require("../../utils/biz-algorithms/cloudinary-images/addTransformToImgUrl");
 const { findOneAndUpdate, confirmPrizeStatus, countPurchasePrizesOnly } = require("./purchase-history-helpers/main");
+const cloudinary = require('cloudinary').v2;
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
@@ -343,6 +345,54 @@ exports.countField = (req, res) => {
     })
 }
 
+// IMAGES UPLOAD
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+exports.uploadImages = (req, res) => { // n6 - multiple images promise.
+    const fileRoot = req.files;
+    const imagePath = fileRoot.file.path; // n7 e.g data
+    const _id = req.query.id;
+    const fileName = req.query.fileName;
+
+    const options = {
+        public_id: fileName,
+        use_filename: false, // use file name as public_id
+        image_metadata: true,
+        quality_analysis: true,
+        tags: "logo",
+        backup: true,
+        // folder: "trade-marks/",
+    }
+
+    cloudinary.uploader.upload(imagePath, options)
+    .then(fileResult => {
+        const generatedUrl = addTransformToImgUrl(fileResult.secure_url);
+        User.findByIdAndUpdate(_id, { $set: { "clientAdminData.selfBizLogoImg": generatedUrl }})
+        .exec(err => {
+            if(err) return res.status(500).json(msgG('error.systemError', err));
+            res.json(generatedUrl);
+        })
+    })
+    .catch(err => res.status(500).json(msgG("error.systemError", err)))
+}
+
+exports.updateImages = (req, res) => {
+    const _id = req.query.id;
+    const { lastUrl, paramArray, customParam } = req.body;
+
+    const updatedUrl = addTransformToImgUrl(lastUrl, paramArray);
+    User.findByIdAndUpdate(_id, { $set: { "clientAdminData.selfBizLogoImg": updatedUrl }})
+    .exec(err => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+        res.json(updatedUrl);
+    })
+}
+// END IMAGES UPLOAD
+
 
 /*ARCHIVES
 const assignToUndefined = (obj, keysArray) => {
@@ -366,7 +416,6 @@ In order to add/remove arrays use add/removeElementArray instead;
 n3:
 Need test this in future implementation in the effort to cut down more the boilerplate
 in the current working implementation:
-
 db.collection.aggregate([
 
      //{$sort: {...}}
@@ -414,9 +463,30 @@ saveAll();
 
 More: https://stackoverflow.com/questions/10266512/how-can-i-save-multiple-documents-concurrently-in-mongoose-node-js
 
-*/
+n6
+app.post('/image-upload', (req, res) => {
 
+  const values = Object.values(req.files)
+  const promises = values.map(image => cloudinary.uploader.upload(image.path))
 
+  Promise.all(promises)
+    .then(results => res.json(results))
+    .catch((err) => res.status(400).json(err))
+})
+
+n7:
+Object.values is requires to extract value as object of data.
+{ file:
+     { fieldName: 'file',
+       originalFilename: 'official-logo-name.png',
+       path:
+        'C:\\Users\\ACESSO~1\\AppData\\Local\\Temp\\_RwJJOzSc3a23hFjJJuaQsgW.png',
+       headers:
+        { 'content-disposition': 'form-data; name="file"; filename="official-logo-name.png"',
+          'content-type': 'image/png' },
+       size: 8550,
+       name: 'official-logo-name.png',
+       type: 'image/png'
 /* ARCHIVES
 exports.getStaffClientList = (req, res) => {
     const bookingArrayIds = req.profile.staffBookingList;

@@ -3,31 +3,62 @@ import PropTypes from 'prop-types';
 import ButtonMulti, {faStyle} from '../../../../components/buttons/material-ui/ButtonMulti';
 import Card from '@material-ui/core/Card';
 import CheckBoxForm from '../../../../components/CheckBoxForm';
+import RadioGroupForm from '../../../../components/RadioGroupForm';
 import { CLIENT_URL } from '../../../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-// import { useStoreDispatch } from 'easy-peasy';
-// showSnackbar(dispatch, "Carregando...");
-// const dispatch = useStoreDispatch();
+import { showSnackbar } from '../../../../redux/actions/snackbarActions';
+import { useStoreDispatch } from 'easy-peasy';
+import { uploadImages, updateImages } from '../../../../redux/actions/userActions';
 
 PickLogo.propTypes = {
     step: PropTypes.number,
     setNextDisabled: PropTypes.func,
 }
 
-export default function PickLogo({ step, setNextDisabled }) {
+export default function PickLogo({
+    step, setNextDisabled, bizId, bizCodeName, setLogoUrlPreview }) {
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
+    const [tempImgUrl, setTempImgUrl] = useState("");
+    const [isLoadingPic, setIsLoadingPic] = useState(false);
+    const [editArea, setEditArea] = useState(false);
+    const [data, setData] = useState({
+        sizeRect: false,
+        sizeSquare: false,
+    })
+    const { sizeSquare, sizeRect } = data;
 
+    const dispatch = useStoreDispatch();
 
     const goNext = () => setNextDisabled(false);
 
+    const updateThisImg = data => {
+        updateImages(bizId, data)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+            setTempImgUrl(res.data);
+            setLogoUrlPreview(res.data);
+        })
+    };
+    useEffect(() => {
+        let dataToUpdate = { lastUrl: tempImgUrl };
+        if(sizeSquare) {
+            dataToUpdate = {  ...dataToUpdate, paramArray: ["sizeSquare"] }
+            showSnackbar(dispatch, "Fazendo alteração no formato da imagem...");
+            updateThisImg(dataToUpdate);
+        }
+        if(sizeRect) {
+            dataToUpdate = {  ...dataToUpdate, paramArray: ["sizeRect"] }
+            showSnackbar(dispatch, "Fazendo alteração no formato da imagem...");
+            updateThisImg(dataToUpdate);
+        }
+    }, [sizeSquare, sizeRect])
+
     const gotPic = typeof uploadedPic === "object";
     const picName = uploadedPic && uploadedPic.name;
-
     useEffect(() => {
-        uploadedPic && gotPic && goNext();
-    }, [gotPic, uploadedPic])
+        gotPic && tempImgUrl && goNext();
+    }, [gotPic, tempImgUrl])
 
     useEffect(() => {
         if(isBoxChecked) {
@@ -37,13 +68,49 @@ export default function PickLogo({ step, setNextDisabled }) {
         }
     }, [isBoxChecked])
 
+    const handleMediaChange = e => {
+        const formData = new FormData();
+
+        const name = e.target.name;
+        const fileValue = e.target.files[0];
+
+        // Validattion
+        if(!fileValue) return console.log(`Nenhuma imagem encontrada. Tente novamente.`);
+        // Size Reference: 1mb = 1.000.000 / 1kb 1.000
+        if (fileValue.size > 1000000) return showSnackbar(dispatch, `A imagem ${fileValue.name.cap()} possui mais de 1 MB permitido. Por favor, escolha arquivo menor.`, 'error', 8000);
+
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/svg', 'image/svg+xml', 'image/ai'];
+        if (allowedTypes.every(type => fileValue.type !== type)) {
+            return showSnackbar(dispatch, ` Formato '${fileValue.type.cap()}' não é suportado.`, 'error');
+        }
+        // End Validation
+
+        formData.set(name, fileValue); // n1 - set and append diff
+        setUploadedPic(fileValue);
+
+        const options = { _id: bizId, fileName: bizCodeName }
+        setIsLoadingPic(true);
+        uploadImages(formData, options)
+        .then(res => {
+            if(res.status !== 200) {
+                setIsLoadingPic(false);
+                showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão.", 'error');
+                return;
+            }
+            const generatedImg = res.data;
+            setLogoUrlPreview(generatedImg);
+            setTempImgUrl(generatedImg);
+            setIsLoadingPic(false);
+            setEditArea(true);
+        })
+    };
 
     const showUploadingBtn = () => (
         <div className="animated rubberBand delay-3s" style={{animationIterationCount: 2}}>
             <input
                 accept="image/*"
-                onChange={e => {setUploadedPic(e.target.files[0]); }}
-                name="trademark"
+                onChange={handleMediaChange}
+                name="file"
                 style={{ display: 'none'}}
                 id="uploaded-file"
                 type="file"
@@ -51,7 +118,7 @@ export default function PickLogo({ step, setNextDisabled }) {
             />
             <label htmlFor="uploaded-file">
                 <ButtonMulti
-                    title="Selecione sua Logo"
+                    title={uploadedPic ? "Trocar Logo" : "Selecione sua Logo"}
                     onClick={null}
                     color="var(--mainWhite)"
                     iconFontAwesome={<FontAwesomeIcon icon="image" style={faStyle} />}
@@ -76,8 +143,21 @@ export default function PickLogo({ step, setNextDisabled }) {
                     <span className="font-weight-bold">{picName}</span>
                     <br/>
                     foi carregada!
+                    <br />
+                    <br />
+                    {isLoadingPic && <span className="font-weight-bold">Enviando para app. Processando...</span>}
                 </span>
             </div>
+        </div>
+    );
+
+    const showEditArea = () => (
+        editArea &&
+        <div className="animated zoomIn">
+            <p className="text-center text-subtitle font-weight-bold text-purple">
+                Opções de Edição
+            </p>
+            <RadioGroupForm setData={setData} data={data} />
         </div>
     );
 
@@ -103,6 +183,7 @@ export default function PickLogo({ step, setNextDisabled }) {
                     <p className="text-normal text-purple m-0">ou</p>
                     <CheckBoxForm text="Escolher depois no meu painel de controle." setIsBoxChecked={setIsBoxChecked} />
                 </section>
+                {showEditArea()}
             </Card>
         </section>
     );
@@ -117,3 +198,39 @@ export default function PickLogo({ step, setNextDisabled }) {
         </div>
     );
 }
+
+/* ARCHIVES
+ const [effectShadow, setEffectShadow] = useState(false);
+const [effectBgRemoval, setEffectBgRemoval] = useState(false);
+
+let whichFormat;
+        if(!sizeSquare && !sizeRect || sizeRect) {
+            whichFormat = "sizeRect";
+        } else {
+            whichFormat = "sizeSquare";
+        }
+        console.log("whichFormat", whichFormat);
+        if(effectShadow) {
+            dataToUpdate = {  ...dataToUpdate, paramArray: [whichFormat, "effectShadow"] }
+            showSnackbar(dispatch, "Adicionando sombra na imagem...");
+            updateThisImg(dataToUpdate);
+        }
+        if(effectBgRemoval) {
+            dataToUpdate = {  ...dataToUpdate, paramArray: [whichFormat, "effectBgRemoval"] }
+            showSnackbar(dispatch, "Removendo fundo da imagem...");
+            updateThisImg(dataToUpdate);
+        }
+<div className="container-center-col m-0" style={{backgroundColor: 'var(--lightGrey)'}}>
+    <p className="m-0 text-center text-normal font-weight-bold text-purple">
+        Efeitos:
+    </p>
+    <div>
+        <CheckBoxForm text="Remover fundo." setIsBoxChecked={setEffectBgRemoval} />
+        <CheckBoxForm text="Aplicar sombra." setIsBoxChecked={setEffectShadow} />
+    </div>
+</div>
+ */
+
+/* COMMENTS
+n1: The difference between FormData. set and append() is that if the specified key already exists, FormData. set will overwrite all existing values with the new one, whereas append() will append the new value onto the end of the existing set of values
+*/
