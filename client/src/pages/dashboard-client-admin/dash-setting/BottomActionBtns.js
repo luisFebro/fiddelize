@@ -12,6 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import animateCSS from '../../../utils/animateCSS';
 import AOS from 'aos';
+import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -177,12 +178,13 @@ const ContactComp = () => {
         <Fragment>
             {showTitle()}
             <div className="mx-4">
-                <img
+                <ImgLoader
+                    id="app_chat_illustra"
+                    src={imgLib.app_chat_illustra}
                     className="img-fluid"
                     height="auto"
-                    src={`${CLIENT_URL}/img/illustrations/online-chat.svg`}
-                    alt="chat online"
                     style={{maxHeight: !isSmall ? '210px' : '220px', width: '100%'}}
+                    alt="chat online"
                 />
             </div>
             {showMainContent()}

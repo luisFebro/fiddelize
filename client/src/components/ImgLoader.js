@@ -20,13 +20,14 @@ export default function ImgLoader({
     alt,
     className,
     modeProps,
-    mode = "spinner", }) {
+    mode = "spinner",
+    needLoader = true, }) {
 
     const [status, setStatus] = useState(true);
 
     return(
         <div style={{margin: `${marginY || 0}px 0px` }} className="container-center">
-            <div style={{ ...style, display: status ? 'block' : 'none' }}>
+            <div style={{ ...style, display: status ? 'block' : 'none', visibility: !needLoader && "hidden" }}>
                 <Spinner marginX={width} marginY={height}  />
             </div>
             <div style={{ display: status ? 'none' : 'block'}}>

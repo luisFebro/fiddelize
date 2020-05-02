@@ -16,6 +16,7 @@ export default function DashSectionTitle({ title, backgroundColor }) {
                     id="dash_title_shape"
                     src={imgLib.dash_title_shape}
                     width={440}
+                    needLoader={false}
                     height={155}
                     alt="forma título"
                 />

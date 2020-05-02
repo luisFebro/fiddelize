@@ -78,8 +78,8 @@ function ClientMobileApp({ location, history }) {
                 className="animated zoomIn slow shadow-elevation-white"
                 src={logSrc}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                width={selfBizLogoImg ? 0 : 190}
-                height={selfBizLogoImg ? 0 : 85}
+                width={selfBizLogoImg ? "" : 190}
+                height={selfBizLogoImg ? "" : 85}
             />
         );
     }
@@ -123,7 +123,14 @@ function ClientMobileApp({ location, history }) {
                     style={{animationIterationCount: 3}}
                     className="animated rubberBand delay-5s"
                 >
-                    <img width={460} height={130} src={`${CLIENT_URL}/img/shapes/blob1.svg`} alt="tipo de app"/>
+                    <ImgLoader
+                        id="app_start_shape"
+                        src={imgLib.app_start_shape}
+                        width={460}
+                        needLoader={false}
+                        height={130}
+                        alt="tipo de app"
+                    />
                 </div>
             </div>
         </div>

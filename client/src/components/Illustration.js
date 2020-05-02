@@ -5,6 +5,7 @@ import truncateWords from '../utils/string/truncateWords';
 import { HashLink } from 'react-router-hash-link';
 import { ButtonContainerPressedEffectDark as Dark } from '../components/buttons/Default';
 import parse from 'html-react-parser';
+import imgLib, { ImgLoader } from '../utils/storage/lForageStore';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -67,10 +68,13 @@ export default function Illustration({
         <Fragment>
             <h2 className="text-center text-sub-title-upper">{title}</h2>
             <DivWrapper className="container-center my-5" style={{overflowX: 'hidden'}}>
-                <img
-                    style={{...imgStyle, overflowX: 'hidden'}}
+                <ImgLoader
+                    id="convert_any_illustration"
+                    src={imgLib.convert_any_illustration(img)}
                     className="image-center svg-elevation"
-                    src={img}
+                    width=""
+                    height=""
+                    style={{...imgStyle, overflowX: 'hidden'}}
                     alt={alt}
                 />
                 <div className="container-center">

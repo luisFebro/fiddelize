@@ -5,6 +5,8 @@ import ImgLoader from '../../components/ImgLoader';
 // USE: import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 /*
 e.g
+the width and height should be number and if there is not one of them,
+just write an empty string ("")
 <ImgLoader
     id="dash_podium"
     src={imgLib.dash_podium}
@@ -17,8 +19,8 @@ e.g
 export const collectionStore = {
     logos: ["app_fiddelize_logo", "app_biz_logo"],
     icons: ["app_gift", "dash_podium"],
-    shapes: ["dash_title_shape", ],
-    illustra: [],
+    shapes: ["dash_title_shape", "app_start_shape"],
+    illustrations: ["convert_any_illustration", "app_chat_illustra"],
 };
 
 const imgLib = {
@@ -29,7 +31,10 @@ const imgLib = {
     get dash_podium() { return handleStorage("icons", "dash_podium", `img/icons/podium.png`) },
     // Shapes - check for multiple request found after inserting the first svg shape...
     get dash_title_shape() { return handleStorage("shapes", "dash_title_shape", `img/shapes/blob-dashboard-header.svg`) },
+    get app_start_shape() { return handleStorage("shapes", "app_start_shape", `img/shapes/blob1.svg`) },
     // Illustration
+    convert_any_illustration: url => handleStorage("illustrations", "convert_any_illustration", url, true),
+    get app_chat_illustra() { return handleStorage("illustrations", "app_chat_illustra", `img/illustrations/online-chat.svg`) },
 }
 
 export default imgLib;
