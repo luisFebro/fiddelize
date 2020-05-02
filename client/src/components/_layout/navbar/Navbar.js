@@ -9,6 +9,9 @@ import isThisApp from '../../../utils/window/isThisApp';
 import './NavbarLayout.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from '../../../hooks/useRoleData';
+import gotArrayThisItem from '../../../utils/arrays/gotArrayThisItem';
+import { useAuthUser } from '../../../hooks/useAuthUser';
+import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
 const isSmall = window.Helper.isSmallScreen();
 const gotToken = localStorage.getItem("token");
@@ -16,13 +19,14 @@ const gotToken = localStorage.getItem("token");
 function Navbar({ history, location }) {
     // const [showSkeleton, setShowSkeleton] = useState(true);
     const [isSearchOpen, setSearchOpen] = useState(false);
-    const { isUserAuthenticated, role, _idStaff } = useStoreState(state => ({
-       isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
+    const {  role, _idStaff } = useStoreState(state => ({
        role: state.userReducer.cases.currentUser.role,
        _idStaff: state.userReducer.cases.currentUser._id,
     }));
 
-    const { bizCodeName } = useClientAdmin();
+    const { isAuthUser } = useAuthUser();
+
+    const { bizCodeName, selfBizLogoImg } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
@@ -107,18 +111,37 @@ function Navbar({ history, location }) {
         </ul>
     );
 
-    const showLogo = () => (
-        <Link to={isThisApp() ? "/mobile-app" : "/"}>
-            <img
-                className="animated zoomIn slow"
-                style={{position: 'absolute', top: '12px', left: isSmall ? '5px' : '20px'}}
-                src={CLIENT_URL + "/img/official-logo-name.png"}
-                alt="Logomarca Principal"
-                width="200px"
-                height="70px"
-            />
-        </Link>
-    );
+    const showLogo = () => {
+        const logoSrc =  isAuthUser ? selfBizLogoImg : imgLib.app_fiddelize_logo;
+        const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
+        // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
+        const handleSize = side => {
+            let size;
+            if(side === "width") {
+                if(selfBizLogoImg) {
+                    isSquared  ? size = 80 : size = 150;
+                } else { size = 200; }
+            } else {
+                if(selfBizLogoImg) {
+                    isSquared  ? size = 80 : size = 67;
+                } else { size = 70; }
+            }
+            return size;
+        }
+        return(
+            <Link to={isThisApp() ? "/mobile-app" : "/"}>
+                <ImgLoader
+                    id="app_fiddelize_logo"
+                    className="animated zoomIn slow shadow-elevation-white"
+                    style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '5px' : '20px'}}
+                    src={logoSrc}
+                    alt="Logomarca Principal"
+                    width={handleSize("width")}
+                    height={handleSize("height")}
+                />
+            </Link>
+        );
+    };
 
     // Render
     return (

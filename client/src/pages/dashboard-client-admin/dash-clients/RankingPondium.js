@@ -1,6 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { CLIENT_URL } from '../../../config/clientUrl';
 import Title from '../../../components/Title';
 import truncateWords from '../../../utils/string/truncateWords';
 import styled from 'styled-components';
@@ -8,6 +7,7 @@ import { readHighestScores } from '../../../redux/actions/userActions';
 import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  { useAppSystem } from '../../../hooks/useRoleData';
+import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
 export default function RankingPondium() {
     let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
@@ -72,11 +72,12 @@ export default function RankingPondium() {
                 </p>
             )}
             <div className="position-relative" style={{marginTop: '30px'}}>
-                <img
+                <ImgLoader
+                    id="dash_podium"
+                    src={imgLib.dash_podium}
+                    width={300}
+                    height={250}
                     className="shadow-elevation-black"
-                    src={`${CLIENT_URL}/img/icons/podium.png`}
-                    alt="podium"
-                    width="300"
                 />
                 {showScores()}
             </div>

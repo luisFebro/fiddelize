@@ -15,6 +15,7 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { useAppSystem } from '../../hooks/useRoleData';
 import { useRunComp } from '../../hooks/useRunComp';
 import ClientUserAppContent from './content/ClientUserAppContent';
+import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 
@@ -29,7 +30,7 @@ function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
     const { _id, role, name } = useProfile();
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName, selfBizLogoImg } = useClientAdmin();
     const { currScore } = useClientUser();
     const { runName } = useRunComp();
 
@@ -69,18 +70,19 @@ function ClientMobileApp({ location, history }) {
         }
     }, [needAppRegister])
 
-    const showLogo = () => (
-        <div className="container-center">
-            <img
-                className="animated zoomIn slow"
+    const showLogo = () => {
+        const logSrc = isAuthUser ? selfBizLogoImg : imgLib.app_fiddelize_logo;
+        return(
+            <ImgLoader
+                id="app_fiddelize_logo"
+                className="animated zoomIn slow shadow-elevation-white"
+                src={logSrc}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                src={CLIENT_URL + "/img/official-logo-name.png"}
-                alt="Logomarca Principal"
-                width={190}
-                height={85}
+                width={!selfBizLogoImg && 190}
+                height={!selfBizLogoImg && 85}
             />
-        </div>
-    );
+        );
+    }
 
     const showLogin = () => (
         <div className="container-center">

@@ -21,7 +21,7 @@ function ClientAppPreview({ location }) {
         lastScore: 20,
     });
 
-    const logo = logoUrlPreview || `${CLIENT_URL}/img/official-logo-name.png`;
+    const logo = "https://res.cloudinary.com/fiddelize/image/upload/h_150,w_150/v1588293249/you-vipp-shop-scvfdsfd.jpg" || logoUrlPreview || `${CLIENT_URL}/img/official-logo-name.png`;
 
     const showLogo = () => (
         <div className="container-center">

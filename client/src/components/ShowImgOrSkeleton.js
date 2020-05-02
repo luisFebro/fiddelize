@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Skeleton from '@material-ui/lab/Skeleton';
 import { CLIENT_URL } from "../config/clientUrl";
 import PropTypes from 'prop-types';
@@ -23,7 +23,8 @@ ShowImgOrSkeleton.propTypes = {
     })
 }
 
-export default function ShowImgOrSkeleton({ id, url, alt, width, height, setStatus, status, skeletonOpt, imgOpt }) {
+export default function ShowImgOrSkeleton({
+    id, url, alt, width, height, setStatus, status, skeletonOpt, imgOpt }) {
     const imageUrl = `${CLIENT_URL}/api/${url}/photo/${id}`;
 
     return(

@@ -7,7 +7,6 @@ import './style.scss';
 
 export default function SelfServicePage({ location, match }) {
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
-    console.log("logoUrlPreview", logoUrlPreview);
 
     const bizId = match.params.bizId;
     const bizCodeName = match.params.bizCodeName; // for image naming

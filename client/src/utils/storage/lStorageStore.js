@@ -37,7 +37,7 @@ const defaultClientAdmin = {
     rewardDeadline: 0,
     totalClientUserScores: 0,
     totalClientUsers: 0,
-    selfBizLogoImg: "logo-exemple.png",
+    selfBizLogoImg: "",
     selfMilestoneIcon: "star",
     selfThemePColor: "purple",
     selfThemeSColor: "cyan",

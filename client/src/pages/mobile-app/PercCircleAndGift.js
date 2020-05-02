@@ -2,9 +2,8 @@ import ReactjsPercentageCircle from '../../components/progressIndicators/Reactjs
 import React, { Fragment } from 'react';
 import Tilt from 'react-tilt';
 import getPercentage from '../../utils/numbers/getPercentage';
-import { CLIENT_URL } from '../../config/clientUrl';
 import Tooltip from './Tooltip';
-
+import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 
 export default function PercCircleAndGift({ currScore, maxScore, showPercentage, playBeep }) {
     const percentageAchieved = getPercentage(maxScore, currScore);
@@ -24,25 +23,25 @@ export default function PercCircleAndGift({ currScore, maxScore, showPercentage,
             ? (
                 <div>
                     <p className="mt-3 text-title">Parabéns!<br />Você ganhou um prêmio.</p>
-                    <img
-                        className="animated bounce"
-                        style={{animationIterationCount: 20}}
-                        src={`${CLIENT_URL}/img/icons/pink-gift-box.png`}
-                        alt="presente"
+                    <ImgLoader
+                        id="app_gift"
+                        src={imgLib.app_gift}
                         width={100}
                         height="auto"
+                        className="animated bounce"
+                        style={{animationIterationCount: 20}}
                     />
                 </div>
             ) : (
                 <div>
                     <div className="position-relative mt-4">
-                        <img
-                            style={{opacity: '.5'}}
-                            className="animated bounce"
-                            src="/img/icons/pink-gift-box.png"
-                            alt="presente"
+                        <ImgLoader
+                            id="app_gift"
+                            src={imgLib.app_gift}
                             width={100}
                             height="auto"
+                            className="animated bounce"
+                            style={{opacity: '.5'}}
                         />
                         <p
                             className="text-hero"

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CLIENT_URL } from '../config/clientUrl';
+import imgLib, { ImgLoader } from '../utils/storage/lForageStore';
 const isSmall = window.Helper.isSmallScreen();
 
 DashSectionTitle.propTypes = {
@@ -11,10 +12,11 @@ export default function DashSectionTitle({ title, backgroundColor }) {
     return (
         <div className="container-center">
             <div className="position-relative">
-                <img
-                    width="440px"
+                <ImgLoader
+                    id="dash_title_shape"
+                    src={imgLib.dash_title_shape}
+                    width={440}
                     height="auto"
-                    src={`/img/shapes/blob-dashboard-header.svg`}
                     alt="forma título"
                 />
                 <h2
