@@ -4,23 +4,21 @@ import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
 import { collectionStore } from './lForageStore';
 // export * from './lForageStore';
 
-const store = localforage.createInstance({
-  name: `fiddelizeStorage` // n2
-});
-
 // convert the blob (image) into a data-url (a base64 string) and set that as the src for your image element.
 export const setImage = (collection, dataKey, imageUrlValue) => {
+    const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
     store.config({ storeName: collection }); // n3 dataStore
     if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
     if(!imageUrlValue) throw new Error("imageURL param is missing...")
 
     return fetch(imageUrlValue)
     .then(response => response.blob()) // n4 response e.g
-    .then(blob => convertBlobIntoDataUrlAndSet(collection, dataKey, blob))
+    .then(blob => convertBlobIntoDataUrlAndSet(collection, dataKey, blob, store))
     .catch(console.log.bind(console))
 }
 
 export const readImage = (collection, dataKey) => {
+    const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
     store.config({ storeName: collection }); // n3 dataStore
     if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
 
@@ -29,7 +27,7 @@ export const readImage = (collection, dataKey) => {
     .catch(err => false)
 }
 
-const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob) => { // n1
+const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { // n1
     let mySrc;
 
     const reader = new FileReader();
