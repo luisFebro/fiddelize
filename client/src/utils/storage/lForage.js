@@ -34,7 +34,11 @@ const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { //
     reader.readAsDataURL(blob);
     reader.onloadend = function() {
         mySrc = reader.result;
-        return store.setItem(keyToSet, mySrc) // it can not return a promise
+        store.setItem(keyToSet, mySrc)
+        .then(generatedUrl => {
+            const doc = document.querySelector(`#${keyToSet}`);
+            if(doc) doc.src = generatedUrl;
+        }) // it can not return a promise
     }
 
 }

@@ -48,14 +48,7 @@ function handleStorage(coll, key, url, isFromInternet = false) {
     readThisImage().then(generatedUrl => { // LESSON: promises can not return an async value at all. Use methods like attribute to src, setData to get the value.
         if(!generatedUrl) {
             setImage(coll, key, urlPath)
-            .then(res => {
-                console.log(`New image set to indexedDB. Collection: ${coll}, dataKey: ${key}`);
-                readThisImage()
-                .then(generatedUrl => {
-                    const doc = document.querySelector(`#${key}`);
-                    if(doc) doc.src = generatedUrl;
-                })
-            })
+            .then(res => console.log(`New image set to indexedDB. Collection: ${coll}, dataKey: ${key}`))
             .catch(err => console.log(err))
         } else {
             const doc = document.querySelector(`#${key}`);
