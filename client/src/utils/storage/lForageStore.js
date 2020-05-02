@@ -15,7 +15,7 @@ e.g
  */
 // dataKey syntax: location_description
 export const collectionStore = {
-    coll_logo: ["app_fiddelize_logo"],
+    coll_logo: ["app_fiddelize_logo", "app_biz_logo"],
     coll_icons: ["app_gift", "dash_podium"],
     coll_shapes: ["dash_title_shape", ],
     coll_illustra: [],
@@ -23,10 +23,11 @@ export const collectionStore = {
 
 const imgLib = {
     get app_fiddelize_logo() { return handleStorage("coll_logo", "app_fiddelize_logo", `img/official-logo-name.png`) },
+    app_biz_logo: url => handleStorage("coll_logo", "app_biz_logo", url, true),
     // Custom Icons
     get app_gift() { return handleStorage("coll_icons", "app_gift", `img/icons/pink-gift-box.png`) },
     get dash_podium() { return handleStorage("coll_icons", "dash_podium", `img/icons/podium.png`) },
-    // Shapes
+    // Shapes - check for multiple request found after inserting the first svg shape...
     get dash_title_shape() { return handleStorage("coll_shapes", "dash_title_shape", `img/shapes/blob-dashboard-header.svg`) },
     // Illustration
 }
@@ -35,8 +36,8 @@ export default imgLib;
 export { ImgLoader }
 
 // requires declare id to the img. The same name as the key.
-function handleStorage(coll, key, url) {
-    const urlPath = `${CLIENT_URL}/${url}`;
+function handleStorage(coll, key, url, isFromInternet = false) {
+    const urlPath = isFromInternet ? url : `${CLIENT_URL}/${url}`;
 
     const readThisImage = () => readImage(coll, key)
     readThisImage().then(generatedUrl => { // LESSON: promises can not return an async value at all. Use methods like attribute to src, setData to get the value.

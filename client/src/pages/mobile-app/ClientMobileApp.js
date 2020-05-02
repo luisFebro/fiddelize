@@ -71,10 +71,10 @@ function ClientMobileApp({ location, history }) {
     }, [needAppRegister])
 
     const showLogo = () => {
-        const logSrc = isAuthUser ? selfBizLogoImg : imgLib.app_fiddelize_logo;
+        const logSrc = isAuthUser ? imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
         return(
             <ImgLoader
-                id="app_fiddelize_logo"
+                id={isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"}
                 className="animated zoomIn slow shadow-elevation-white"
                 src={logSrc}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
