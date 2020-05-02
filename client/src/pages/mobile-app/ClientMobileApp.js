@@ -78,8 +78,8 @@ function ClientMobileApp({ location, history }) {
                 className="animated zoomIn slow shadow-elevation-white"
                 src={logSrc}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                width={!selfBizLogoImg && 190}
-                height={!selfBizLogoImg && 85}
+                width={selfBizLogoImg ? 0 : 190}
+                height={selfBizLogoImg ? 0 : 85}
             />
         );
     }
