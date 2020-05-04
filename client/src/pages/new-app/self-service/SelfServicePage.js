@@ -12,7 +12,7 @@ export default function SelfServicePage({ location, match }) {
         colorS: "default",
         colorBack: "",
     })
-    const { colorP, colorS, colorBack } = theme;
+    const { colorP, colorS } = theme;
 
     const bizId = match.params.bizId;
     const bizCodeName = match.params.bizCodeName; // for image naming
@@ -52,7 +52,7 @@ export default function SelfServicePage({ location, match }) {
                     logoUrlPreview={logoUrlPreview}
                     colorP={colorP}
                     colorS={colorS}
-                    colorBack={colorBack}
+                    colorBack={colorP}
                 />
             </div>
         </div>

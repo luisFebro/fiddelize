@@ -10,7 +10,7 @@ import BottomActionBtns from './BottomActionBtns';
 export default function DashSetting() {
     return (
         <Fragment>
-            <div style={{marginTop: '16px'}}>
+            <div style={{marginTop: '16px', display: "block"}}>
                 <DashSectionTitle
                     title={<Title />}
                 />

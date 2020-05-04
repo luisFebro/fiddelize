@@ -9,15 +9,16 @@ DashSectionTitle.propTypes = {
 };
 
 export default function DashSectionTitle({
-    title, backgroundColor, src }) {
+    title, backgroundColor }) {
+    const src = imgLib.dash_title_shape;
     return (
         <div className="container-center">
-            <div className="position-relative">
+            <div className="position-relative" style={{display: 'block'}}>
                 <ImgLoader
                     className="dash_title_shape"
-                    src={imgLib.dash_title_shape}
+                    src={src || `${CLIENT_URL}/img/shapes/blob-dashboard-header.svg`}
                     width={440}
-                    needLoader={false}
+                    needLoader={true}
                     height={155}
                     alt="forma título"
                 />
