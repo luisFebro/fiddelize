@@ -3,6 +3,8 @@
     --mainPink: #e84393;
     --mainDark: #232528;
     --mainRed: #ed213a; /*#ed213a */
+    --mainBrown: #795548;
+    --mainOrange: #ffb300;
     --expenseRed: #ff4757;
     --lightGrey: #CAD3C8;
     --mainGreen: #4cd137;
@@ -11,7 +13,7 @@
     --darkBlue: #2c3e50;
     --lightBlue: #009ffd;
     --mainDegrade: linear-gradient(to right, #ed213a, #93291e);
-    --mainYellow: #fff200;
+    --mainYellow: #ffee58;
     --niceUiYellow: #fbc531;
     --mainPurple: #4a148c;
     --lightPurple: #7c43bd;

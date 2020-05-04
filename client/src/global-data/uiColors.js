@@ -12,6 +12,10 @@ export const uiColors = [
         hexValue: "var(--expenseRed)",
     },
     {
+        ptColorName: "laranja",
+        hexValue: "var(--mainOrange)",
+    },
+    {
         ptColorName: "preto",
         hexValue: "var(--mainDark)",
     },
@@ -29,11 +33,11 @@ export const uiColors = [
     },
     {
         ptColorName: "marrom",
-        hexValue: "brown",
+        hexValue: 'var(--mainBrown)',
     },
     {
         ptColorName: "amarelo",
-        hexValue: "var(--niceUiYellow)",
+        hexValue: "var(--mainYellow)",
     },
 ];
 

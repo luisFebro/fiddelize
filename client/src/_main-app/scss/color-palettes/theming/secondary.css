@@ -9,14 +9,47 @@
     --themeS--default: #00e5ff;
     --themeSLight--default: #6effff;
     --themeSDark--default: #00b2cc;
-    /*green*/
-    --themeS--green: #2ecc71;
-    --themeSLight--green: #2ecc71;
-    --themeSDark--green: #2ecc71;
+    /*pink*/
+    --themeS--pink: #e84393;
+    --themeSLight--pink: #ff79c3;
+    --themeSDark--pink: #b10065;
+    /*red*/
+    --themeS--red: #ff4757;
+    --themeSLight--red: #ff7d84;
+    --themeSDark--red: #c5002e;
     /*purple*/
     --themeS--purple: #4a148c;
     --themeSLight--purple: #7c43bd;
     --themeSDark--purple: #12005e;
+    /*orange*/
+    --themeS--orange: #ffb300;
+    --themeSLight--orange: #ffe54c;
+    --themeSDark--orange: #c68400;
+    /*black*/
+    --themeS--black: #232528;
+    --themeSLight--black: #4b4d50;
+    --themeSDark--black: #000000;
+    /*white*/
+    --themeS--white: #ecf0f1;
+    --themeSLight--white: #ffffff;
+    --themeSDark--white: #babebe;
+    /*blue*/
+    --themeS--blue: #009ffd;
+    --themeSLight--blue: #68d0ff;
+    --themeSDark--blue: #0071c9;
+    /*green*/
+    --themeS--green: #2ecc71;
+    --themeSLight--green: #6effa0;
+    --themeSDark--green: #009a44;
+    /*brown*/
+    --themeS--brown: #795548;
+    --themeSLight--brown: #a98274;
+    --themeSDark--brown: #4b2c20;
+    /*yellow*/
+    --themeS--yellow: #ffee58;
+    --themeSLight--yellow: #ffff8b;
+    --themeSDark--yellow: #c9bc1f;
+    /*END THEMING*/
 }
 
 /*Secondary colors are best to accent select parts of your UI.:
