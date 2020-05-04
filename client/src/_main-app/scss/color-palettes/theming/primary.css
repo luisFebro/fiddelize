@@ -1,3 +1,5 @@
+@import '../../functions/setContrastedColor';
+
 :root {
     /*purple 900*/
     --themeP: #4a148c;
@@ -71,7 +73,7 @@
     /*END THEMING*/
 }
 /* THEMING */
-.theme-back--default { background-color: #4a148c;  }
+.theme-back--default { background-color: #4a148c; }
 .theme-back--pink { background-color: var(--themeBackground--pink); }
 .theme-back--red { background-color: var(--themeBackground--red); }
 .theme-back--purple { background-color: var(--themeBackground--purple); }
@@ -82,3 +84,15 @@
 .theme-back--green { background-color: var(--themeBackground--green); }
 .theme-back--brown { background-color: var(--themeBackground--brown); }
 .theme-back--yellow { background-color: var(--themeBackground--yellow); }
+
+.txt-color--default { color: setContrastedColor(#4a148c); }
+.txt-color--pink { color: setContrastedColor(#b10065); }
+.txt-color--red { color: setContrastedColor(#ff4757); }
+.txt-color--purple { color: setContrastedColor(#4a148c); }
+.txt-color--orange { color: setContrastedColor(#c68400); }
+.txt-color--black { color: setContrastedColor(#232528); }
+.txt-color--white { color: setContrastedColor(#babebe); }
+.txt-color--blue { color: setContrastedColor(#0071c9); }
+.txt-color--green { color: setContrastedColor(#009a44); }
+.txt-color--brown { color: setContrastedColor(#4b2c20); }
+.txt-color--yellow { color: setContrastedColor(#c9bc1f); }

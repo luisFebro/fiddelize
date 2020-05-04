@@ -88,7 +88,7 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
 
     return (
         <div className="mt-3 text-normal text-white text-center">
-            <span className="text-subtitle">Desafio #{currChall}</span>
+            <span className="text-subtitle">Desafio N.º {currChall}</span>
             <div className="container-center">
                 {showFlagWithGoals()}
                 {showMsg()}

@@ -48,7 +48,7 @@ function MoreOptionsBtn({
             right: '85px',
         },
         fabTooltip: {
-            backgroundColor: "var(--mainYellow)",
+            backgroundColor: "var(--lightYellow)",
             color: "var(--mainDark)",
             filter: `drop-shadow(0 0 15px #ffc)`,
         }
@@ -129,7 +129,7 @@ function MoreOptionsBtn({
                         <Fab
                             style={styles.fabTooltip}
                             className="float-it-5"
-                            size="medium"
+                 light  size="medium"
                             onClick={() => {
                                 const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
                                 showComponent(dispatch, "purchaseValue");
