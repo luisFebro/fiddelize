@@ -1,5 +1,8 @@
 // return number
 export default function getPercentage(targetValue, curValue) {
+    if(typeof targetValue !== `number`) { targetValue = Number(targetValue) }
+    if(typeof curValue !== `number`) { curValue = Number(curValue) }
+
     if(!curValue) {
         return 0;
     }

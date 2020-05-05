@@ -7,12 +7,15 @@ import checkIfElemIsVisible from '../../../utils/window/checkIfElemIsVisible';
 import lStorage, { confettiPlayOp, needAppRegisterOp } from '../../../utils/storage/lStorage';
 import { confetti } from '../../../keyframes/animations-js/confetti/confetti';
 import { useStoreDispatch } from 'easy-peasy';
+import getFirstName from '../../../utils/string/getFirstName';
 import AOS from 'aos';
 import "../ellipse.css";
 import { setRun } from '../../../hooks/useRunComp';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
 import scrollIntoView from '../../../utils/document/scrollIntoView';
+import BadaloBell from '../../../components/buttons/bells/badalo/BadaloBell';
+
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
 import ProgressMsg from '../ProgressMsg' ;
@@ -33,15 +36,19 @@ function ClientUserAppContent({
     colorS,
     colorBack,
     rewardScoreTest }) {
+    if(!colorP) { colorP = "default" }
+    if(!colorS) { colorS = "default" }
 
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
 
     const currScoreRef = useRef(null);
 
-    const { role, name } = useProfile();
+    let { role, name } = useProfile();
+    name = needAppForPreview ? name : getFirstName(name);
     const { currScore, lastScore, } = useClientUser();
     let { maxScore, bizCodeName, selfMilestoneIcon } = useClientAdmin();
+
     if(rewardScoreTest) {
         maxScore = Number(rewardScoreTest);
     }
@@ -61,15 +68,6 @@ function ClientUserAppContent({
             cursor: "pointer",
         }
     }
-
-    // position the view to the icon area in preview app
-    // useEffect(() => {
-    //     // console.log("runName", runName);
-    //     if(needAppForPreview && runName === "goBottomApp") {
-    //         scrollIntoView("#go-bottom", 3000);
-    //     }
-    // }, [needAppForPreview, runName])
-
 
     useEffect(() => {
         const condition = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
@@ -111,9 +109,21 @@ function ClientUserAppContent({
     }
     // END UTILS
 
-    const showGreeting = () => (
+    const showGreetingAndNotific = () => (
         <section className="mt-3 position-relative animated slideInLeft slow">
-            <div className="ellipse" style={{backgroundColor: "var(--themePLight--" + colorP + ")"}}></div>
+            <section className="position-relative">
+                <div className="ellipse" style={{backgroundColor: "var(--themePLight--" + colorP + ")"}}></div>
+                <div className={`${needAppForPreview && "enabledLink"}`}>
+                    <BadaloBell
+                        position="absolute"
+                        top={5}
+                        left={270}
+                        notifBorderColor={"var(--themePDark--" + colorP + ")"}
+                        notifBackColor={colorP === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
+                        badgeValue={2}
+                    />
+                </div>
+            </section>
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
                 className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
@@ -228,7 +238,7 @@ function ClientUserAppContent({
 
     return (
         <div className={`${needAppForPreview && "disabledLink"}`}>
-            {showGreeting()}
+            {showGreetingAndNotific()}
             {showAllScores()}
             {showPercCircleAndGift()}
             {showRatingIcons()}

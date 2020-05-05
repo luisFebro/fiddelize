@@ -23,8 +23,8 @@ export default function SelfServicePage({ location, match }) {
     let rewardScore = getQueryByName("ponto-premio", location.search);
     let currScore = getQueryByName("ponto-atual", location.search);
     const isTest = location.search.includes("teste=1");
-    if(rewardScore === "null") { rewardScore = 500 }
-    if(currScore === "null") { currScore = 100 }
+    if(typeof rewardScore === "object") { rewardScore = 500 } // if it is null
+    if(typeof currScore === "object") { currScore = 100 }
     clientName = getFirstName(clientName);
     // END API
 

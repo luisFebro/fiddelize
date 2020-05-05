@@ -41,9 +41,9 @@ export default function RatingIcons({ score, maxScore, selfMilestoneIcon, runNam
         else if(score >= 500) { indScore = 4 }
 
         // forces the first star to arises in the self-service area because it does not work in phone app demo.
-        if(appPreviewIcon) {
-            indScore = 0;
-        }
+        // if(appPreviewIcon) {
+        //     indScore = 0;
+        // }
 
         let arrayIconIds = ["icon-100", "icon-200", "icon-300", "icon-400", "icon-500"];
 

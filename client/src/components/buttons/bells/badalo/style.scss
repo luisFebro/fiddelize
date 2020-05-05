@@ -1,0 +1,108 @@
+// reference: http://lab.iamrohit.in/demos/?t=%20bell%20notification%20animation%20&d=%20&u=https://codepen.io/diogo_ml_gomes/pen/bxxYBd
+
+$color: #fff;
+
+//Icon
+.bell {
+    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+  .bell-top {
+    width: 40px;
+    height: 40px;
+    background: $color;
+    border-radius: 50% 50% 0 0;
+
+    &:before { //catcher
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: inherit;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+    }
+
+    &:after { //bell skirt
+      width: 55px;
+      content: '';
+      border-bottom: 10px solid #fff;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      height: 0;
+      position: absolute;
+      left: -8px;
+      bottom: -11px;
+    }
+  }
+
+  .bell-bot { //badalo
+    width: 16px;
+    height: 8px;
+    background: $color;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -21px;
+    border-radius: 0 0 16px 16px;
+  }
+}
+
+// Animation
+.bell-top-anim {
+    animation: abanico 1000ms ease-in-out 1;
+    transform-origin: top;
+}
+.bell-bot-anim { animation: badalo 1000ms ease-in-out 1; }
+
+@keyframes abanico {
+      0% {
+        transform: rotate(0deg);
+      }
+      7.5% {
+        transform: rotate(25deg);
+      }
+      30% {
+        transform: rotate(-25deg);
+      }
+      45% {
+        transform: rotate(15deg);
+      }
+      58% {
+        transform: rotate(-10deg);
+      }
+      70% {
+        transform: rotate(5deg);
+      }
+      87.5% {
+        transform: rotate(-2deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+}
+
+@keyframes badalo {
+      0% {
+      }
+      15% {
+        transform: translateX(-25px) rotate(7deg);
+      }
+      32.5% {
+        transform: translateX(10px) rotate(-7deg);
+      }
+      50% {
+        transform: translateX(-15px) rotate(7deg);
+      }
+      65% {
+        transform: translateX(5px) rotate(-7deg);
+      }
+      80% {
+        transform: translateX(-15px) rotate(7deg);
+      }
+      90% {
+        transform: translateX(0px) rotate(-7deg);
+      }
+      100% {
+    }
+}
