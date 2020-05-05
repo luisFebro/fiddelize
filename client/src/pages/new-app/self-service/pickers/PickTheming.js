@@ -17,11 +17,12 @@ const translatedColor = {
     rosa: "pink",
     roxo: "purple",
     vermelho: "red",
+    laranja: "orange",
     preto: "black",
     branco: "white",
     azul: "blue",
     verde: "green",
-    marron: "brown",
+    marrom: "brown",
     amarelo: "yellow",
 }
 
@@ -54,6 +55,14 @@ export default function PickTheming({
     }, [secondaryColor])
 
     useEffect(() => {
+        if(primaryColor !== "padrão" || secondaryColor !== "padrão") {
+            const doc = document.querySelector("#status");
+            doc.style.display = "block";
+            setTimeout(() => doc.style.display = "none", 5000);
+        }
+    }, [primaryColor, secondaryColor])
+
+    useEffect(() => {
         if(isBoxChecked) {
             goNext();
         } else {
@@ -76,7 +85,7 @@ export default function PickTheming({
                         Cor
                     </p>
                 </section>
-                <section className="container-center mt-3">
+                <section className="container-center my-3">
                     <div className="flex-column animated rubberBand delay-3s" style={{animationIterationCount: 2}}>
                         <p className="m-0 text-purple text-center text-normal font-weight-bold">Principal</p>
                         <div className="mt-2 d-flex container-center-col">
@@ -105,6 +114,13 @@ export default function PickTheming({
                 <section style={{display: needHideCheckBox ? "none" : "block" }}>
                     <p className="text-normal text-purple m-0">ou</p>
                     <CheckBoxForm text="Selecionar cores acima e editar depois." setIsBoxChecked={setIsBoxChecked} />
+                </section>
+                <section
+                    id="status"
+                    className="animated bounce font-weight-bold text-small text-center text-purple"
+                    style={{ display: "none", animationIterationCount: 2 }}
+                >
+                    Aplicando nova cor ao app...
                 </section>
             </Card>
         </section>

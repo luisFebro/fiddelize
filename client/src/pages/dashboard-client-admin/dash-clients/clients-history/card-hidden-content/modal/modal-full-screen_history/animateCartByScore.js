@@ -95,11 +95,11 @@ function chooseMsg(props) {
                         Falta muito pouco para o último nível.
                         <br />Apenas mais ${nextScore} pontos</strong>`;
             case 5:
-                return `<strong>🎉 Parabéns!!! Você concluiu o desafio N.º ${currChallenge}!
+                return `<strong>🎉 Parabéns!!! Você concluiu o desafio n.º ${currChallenge}!
                        <br />
                        ${userFirstName.cap()}, agora só aguardar
                        <br />
-                       a confirmação do desafio N.º ${currChallenge}
+                       a confirmação do desafio n.º ${currChallenge}
                        <br />
                        e do prêmio.
                        </strong>`

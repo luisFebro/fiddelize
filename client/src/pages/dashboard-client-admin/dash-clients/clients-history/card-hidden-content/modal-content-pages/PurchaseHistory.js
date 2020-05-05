@@ -102,7 +102,7 @@ export default function PurchaseHistory({ data }) {
 
     const showAllTimeTotal = () => {
         const conditionFirstChallenge = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
-        const conditionAfterFirstChall = `• Pontos desafio N.º ${totalPurchasePrize + 1}:`
+        const conditionAfterFirstChall = `• Pontos desafio n.º ${totalPurchasePrize + 1}:`
 
         const handleCurrChallengeScore = (totals, maxScore, scoresList) => {
             const { totalGeneralScore, totalPurchasePrize } = totals;

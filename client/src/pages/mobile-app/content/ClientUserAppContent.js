@@ -31,7 +31,8 @@ function ClientUserAppContent({
     runName,
     colorP,
     colorS,
-    colorBack, }) {
+    colorBack,
+    rewardScoreTest }) {
 
     const [showMoreComps, setShowMoreComps] = useState(false);
     const [showMoreBtn, setShowMoreBtn] = useState(false);
@@ -40,7 +41,10 @@ function ClientUserAppContent({
 
     const { role, name } = useProfile();
     const { currScore, lastScore, } = useClientUser();
-    const { maxScore, bizCodeName, selfMilestoneIcon } = useClientAdmin();
+    let { maxScore, bizCodeName, selfMilestoneIcon } = useClientAdmin();
+    if(rewardScoreTest) {
+        maxScore = Number(rewardScoreTest);
+    }
 
     const { isAuthUser } = useAuthUser();
 
@@ -135,10 +139,12 @@ function ClientUserAppContent({
     const showPercCircleAndGift = () => (
         <PercCircleAndGift
             currScore={currScore}
+            classNamePerc={`${needAppForPreview && "enabledLink"}`}
             maxScore={maxScore}
             showPercentage={showMoreComps}
             playBeep={playBeep}
             colorS={colorS}
+            colorP={colorP}
         />
     );
 
@@ -177,7 +183,7 @@ function ClientUserAppContent({
                 >
                     <Link to={needAppForCliAdmin ? "/regulamento?client-admin=1" : "/regulamento"}>
                         <div
-                            className="no-text-decoration text-normal text-center pressed-to-left"
+                            className="no-text-decoration text-shadow text-normal text-center pressed-to-left"
                             onClick={playBeep}
                             style={styles.rulesBtn}>
                             Consulte<br />Regras Aqui

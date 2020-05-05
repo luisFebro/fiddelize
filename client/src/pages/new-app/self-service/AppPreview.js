@@ -15,7 +15,9 @@ export default function AppPreview({
     clientName,
     logoUrlPreview,
     colorP,
-    colorS }) {
+    colorS,
+    rewardScore,
+    currScore, }) {
     const { runName } = useRunComp();
 
     const showBlob = () => (
@@ -28,7 +30,7 @@ export default function AppPreview({
     );
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
     const iframeUrl =
-    `${CLIENT_URL}/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorP}`;
+    `${CLIENT_URL}/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorP}&rewardScore=${rewardScore}&currScore=${currScore}`;
 
     const showAppIframe = () => (
         <div

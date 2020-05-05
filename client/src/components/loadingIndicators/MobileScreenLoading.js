@@ -64,6 +64,7 @@ const DivLoadingTxt = styled.div`
         width: 6px;
         height: 6px;
         background-color: var(--mainWhite);
+        filter: drop-shadow(.001em .1em .1em var(--mainDark));
 
         border-radius: 100%;
         display: inline-block;

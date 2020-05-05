@@ -57,6 +57,7 @@ const DivWrapper = styled.div`
         //margin: 100px auto 0;
         width: 100%;
         text-align: center;
+        filter: drop-shadow(.001em .1em .1em var(--mainDark));
     }
 
     & .spinner > div {

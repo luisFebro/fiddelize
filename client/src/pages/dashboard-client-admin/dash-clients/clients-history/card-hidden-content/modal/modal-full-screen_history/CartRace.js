@@ -44,7 +44,7 @@ export default function CartRace({ currUserScore, challengeN, userName, classNam
             <p
                 className="mot-challenge-msg text-subtitle text-purple text-center"
             >
-                {isEvenSmall && currChallenge && `Desafio N.º ${currChallenge}`}
+                {isEvenSmall && currChallenge && `Desafio n.º ${currChallenge}`}
             </p>
             <p
                 id="challenge-msg"

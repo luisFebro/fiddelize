@@ -37,7 +37,7 @@
     --themeBackground--purple: #4a148c;
     /*orange*/
     --themeP--orange: #ffb300;
-    --themePLight--orange: #ffe54c;
+    --themePLight--orange: #ffb300; /* prior: #ffe54c; */
     --themePDark--orange: #c68400;
     --themeBackground--orange: #c68400;
     /*black*/
@@ -47,7 +47,7 @@
     --themeBackground--black: #232528;
     /*white*/
     --themeP--white: #ecf0f1;
-    --themePLight--white: #ffffff;
+    --themePLight--white: #ecf0f1; /* prior: #ffffff */
     --themePDark--white: #babebe;
     --themeBackground--white: #babebe;
     /*blue*/
@@ -57,7 +57,7 @@
     --themeBackground--blue: #0071c9;
     /*green*/
     --themeP--green: #2ecc71;
-    --themePLight--green: #6effa0;
+    --themePLight--green: #2ecc71 ; /* prior: #6effa0; */
     --themePDark--green: #009a44;
     --themeBackground--green: #009a44;
     /*brown*/
@@ -67,7 +67,7 @@
     --themeBackground--brown: #4b2c20;
     /*yellow*/
     --themeP--yellow: #ffee58;
-    --themePLight--yellow: #ffff8b;
+    --themePLight--yellow: #ffee58; /* prior: #ffff8b */
     --themePDark--yellow: #c9bc1f;
     --themeBackground--yellow: #c9bc1f;
     /*END THEMING*/

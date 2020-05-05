@@ -18,22 +18,6 @@ SpeedDialButton.propTypes = {
     }),
 };
 
-const useStyles = makeStyles({
-    staticTooltipLabel: {
-        padding: '5px',
-        color: 'var(--mainWhite)',
-        width: 'auto',
-        minWidth: '190px',
-        textAlign: 'center',
-        backgroundColor: 'var(--themeSDark)',
-        font: 'bold 17px var(--mainFont)',
-        borderRadius: '30px',
-    },
-    staticTooltip: {
-        textShadow: '1px 1px 3px black',
-    }
-});
-
 const styles = {
     fabIcon: {
         textShadow: '.5px .5px 3px black',
@@ -44,12 +28,31 @@ export default function SpeedDialButton({
     actions,
     direction,
     tooltipOpen,
+    backColor,
     FabProps,
     onClick,
     root,
     hidden }) {
-    const classes = useStyles();
     const [isOpen, setOpen] = React.useState(false);
+
+    const useStyles = makeStyles({
+        staticTooltipLabel: {
+            padding: '5px',
+            color: '#fff',
+            width: 'auto',
+            minWidth: '190px',
+            textAlign: 'center',
+            backgroundColor: backColor || 'var(--themeSDark)',
+            font: 'bold 17px var(--mainFont)',
+            borderRadius: '30px',
+            filter: 'drop-shadow(.001em .1em .1em var(--mainWhite))',
+        },
+        staticTooltip: {
+            filter: 'drop-shadow(.001em .1em .1em var(--mainWhite))',
+            textShadow: '1px 1px 3px black',
+        }
+    });
+    const classes = useStyles();
 
     const handleOpen = () => {
         setOpen(true);

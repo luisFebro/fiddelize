@@ -125,11 +125,12 @@ function MoreOptionsBtn({
                 <Tooltip
                     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
                     title={`♦ Sugestão: ${userName}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
+                    backgroundColor={"var(--themeSDark--" + colorS + ")"}
                     element={
                         <Fab
                             style={styles.fabTooltip}
                             className="float-it-5"
-                 light  size="medium"
+                            size="medium"
                             onClick={() => {
                                 const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
                                 showComponent(dispatch, "purchaseValue");
@@ -147,6 +148,7 @@ function MoreOptionsBtn({
                 actions={speedDial.actions}
                 onClick={playBeep}
                 tooltipOpen={true}
+                backColor={"var(--themeSDark--" + colorS + ")"}
                 size="large"
                 FabProps={{
                     backgroundColor: "var(--themeSDark--" + colorS + ")",

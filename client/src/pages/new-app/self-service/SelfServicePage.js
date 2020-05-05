@@ -18,9 +18,15 @@ export default function SelfServicePage({ location, match }) {
     const bizCodeName = match.params.bizCodeName; // for image naming
     const getBizName = getQueryByName("negocio", location.search); // this is optional for when it is in testing mode.
     const bizName = getBizName && getBizName.cap();
+    // API
     let clientName = getQueryByName("nome-cliente", location.search).cap();
-    clientName = getFirstName(clientName);
+    let rewardScore = getQueryByName("ponto-premio", location.search);
+    let currScore = getQueryByName("ponto-atual", location.search);
     const isTest = location.search.includes("teste=1");
+    if(rewardScore === "null") { rewardScore = 500 }
+    if(currScore === "null") { currScore = 100 }
+    clientName = getFirstName(clientName);
+    // END API
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
@@ -53,6 +59,8 @@ export default function SelfServicePage({ location, match }) {
                     colorP={colorP}
                     colorS={colorS}
                     colorBack={colorP}
+                    currScore={currScore}
+                    rewardScore={rewardScore}
                 />
             </div>
         </div>

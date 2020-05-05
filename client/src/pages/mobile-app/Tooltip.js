@@ -31,6 +31,7 @@ const radiusTooltipStyle = makeStyles(theme => ({
 
 export default function Tooltip({
     title,
+    backgroundColor,
     element,
     needAttentionWaves,
     placement,

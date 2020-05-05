@@ -50,7 +50,7 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
         }}>
             <Tooltip
                 needAttentionWaves={attentionBtnChecked ? false : true }
-                title={`► Meta atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
+                title={`► Desafio atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
                     <i>
                         <FontAwesomeIcon
@@ -71,11 +71,11 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
                 <Fragment>
                     {currScore >= maxScore
                     ? (
-                        <span>Você alcançou a meta! <i style={styles.confettiIcon}>🎉</i></span>
+                        <span className="text-shadow ml-2">Você venceu o desafio! <i style={styles.confettiIcon}>🎉</i></span>
                     )  : (
-                        <span>
+                        <span className="text-shadow ml-2">
                             {nextLevel === 5
-                            ? <span className="text-left ml-4">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
+                            ? <span className="text-left">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
                             : <span><strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
                             }
                         </span>
@@ -88,7 +88,7 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
 
     return (
         <div className="mt-3 text-normal text-white text-center">
-            <span className="text-subtitle">Desafio N.º {currChall}</span>
+            <span className="text-subtitle text-shadow">Desafio n.º {currChall}</span>
             <div className="container-center">
                 {showFlagWithGoals()}
                 {showMsg()}

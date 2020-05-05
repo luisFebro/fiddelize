@@ -101,14 +101,14 @@ function GoalForm({
         if(!score) { setError("rewardScore"); showSnackbar(dispatch, "Você precisa inserir o ponto de prêmio", "error"); return; }
         if(!prize) { setError("mainReward"); showSnackbar(dispatch, "Você precisa inserir uma descrição do prêmio", "error"); return; }
         const dataToSend = {
-            "clientAdminData.rewardScore": clientAdminData.rewardScore,
-            "clientAdminData.mainReward": clientAdminData.mainReward,
+            "clientAdminData.rewardScore": score,
+            "clientAdminData.mainReward": prize,
         };
 
         updateUser(dispatch, dataToSend, bizId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-            setTimeout(() => history.push(`/${bizCodeName}/novo-app/self-service/${bizId}?nome-cliente=${name}&negocio=${bizName}`), 1500);
+            setTimeout(() => history.push(`/${bizCodeName}/novo-app/self-service/${bizId}?nome-cliente=${name}&negocio=${bizName}&ponto-premio=${score}`), 1500);
         })
     }
 

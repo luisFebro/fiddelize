@@ -14,6 +14,8 @@ function ClientAppPreview({ location }) {
     const colorP = getQueryByName("colorP", location.search);
     const colorS = getQueryByName("colorS", location.search);
     const colorBack = getQueryByName("colorBack", location.search);
+    let rewardScore = getQueryByName("rewardScore", location.search);
+    let currScore = getQueryByName("currScore", location.search);
 
     const useProfile = () => ({
         role: 'cliente',
@@ -21,7 +23,7 @@ function ClientAppPreview({ location }) {
     });
 
     const useClientUser = () => ({
-        currScore: 110,
+        currScore: Number(currScore) || 100,
         lastScore: 20,
     });
 
@@ -49,6 +51,7 @@ function ClientAppPreview({ location }) {
                 useClientAdmin={useClientAdmin}
                 needAppForPreview={true}
                 runName={runName}
+                rewardScoreTest={rewardScore}
                 colorP={colorP}
                 colorS={colorS}
                 colorBack={colorBack}
