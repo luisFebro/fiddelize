@@ -2,6 +2,13 @@
 
 $color: #fff;
 
+// before fixes the issue with badalo skirt's width
+*,
+:before,
+:after {
+    box-sizing: inherit;
+}
+
 //Icon
 .bell {
     filter: drop-shadow(.001em .1em .1em var(--mainDark));
@@ -24,7 +31,7 @@ $color: #fff;
     }
 
     &:after { //bell skirt
-      width: 55px;
+      width: 40px;
       content: '';
       border-bottom: 10px solid #fff;
       border-left: 8px solid transparent;
