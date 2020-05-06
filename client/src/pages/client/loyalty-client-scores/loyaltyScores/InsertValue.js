@@ -10,6 +10,7 @@ import KeypadButton from '../../../../components/modals/keypad';
 import isMoneyBrValidAndAlert from '../../../../utils/numbers/isMoneyBrValidAndAlert';
 import AddOrSearch from '../../../../components/search/AddOrSearch';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useClientAdmin } from '../../../../hooks/useRoleData'
 
 InsertValue.propTypes = {
     success: PropTypes.bool,
@@ -29,6 +30,8 @@ export default function InsertValue({ success, setValuePaid }) {
         buyDesc: '',
     })
 
+    const { selfThemePColor, selfThemeSColor } = useClientAdmin();
+
     const classes = useStyles();
     const dispatch = useStoreDispatch();
 
@@ -46,7 +49,8 @@ export default function InsertValue({ success, setValuePaid }) {
         <Title
             title="Informações da compra"
             color="var(--mainWhite)"
-            backgroundColor="var(--themePDark)"
+            needShadow={true}
+            backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
         />
     );
 
@@ -57,6 +61,7 @@ export default function InsertValue({ success, setValuePaid }) {
                 titleIcon={<FontAwesomeIcon icon="money-bill-alt" />}
                 setSelectedValue={setData}
                 confirmFunction={handleSwitch}
+                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
             />
         </div>
     );

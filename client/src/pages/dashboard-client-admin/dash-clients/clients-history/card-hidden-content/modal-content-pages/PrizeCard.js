@@ -5,12 +5,12 @@ import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFa
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 
 const faStyle = {
-    filter: 'drop-shadow(0 0 30px #ffc)',
+    filter: 'drop-shadow(0 0 25px grey)',
     color: '#ff0',
     fontSize: '30px',
 }
 
-export default function PrizeCard({ historyData }) {
+export default function PrizeCard({ historyData, colorP, colorS }) {
     const [prizeView, setPrizeView] = useState(false);
 
     const currChallengeN = historyData.challengeN;
@@ -30,8 +30,11 @@ export default function PrizeCard({ historyData }) {
         <section className="purchase-history-prize-card--root text-shadow text-white text-center text-purple">
             <main className="gift-main-title" >
                 <div>
-                    <FontAwesomeIcon icon="trophy" style={{...faStyle, fontSize: '45px', filter: ''}} />
-                    <p className="edition font-weight-bold text-subtitle">
+                    <FontAwesomeIcon icon="trophy" style={{...faStyle, fontSize: '45px'}} />
+                    <p
+                        style={{zIndex: 100}}
+                        className="edition font-weight-bold text-subtitle"
+                    >
                         #{historyData.challengeN}
                     </p>
                 </div>
@@ -47,7 +50,7 @@ export default function PrizeCard({ historyData }) {
                                     title="Ver seu Prêmio"
                                     variant="extended"
                                     color="white"
-                                    backgroundColor="var(--themeSDark)"
+                                    backgroundColor={"var(--themeSDark--" + colorS +  ")"}
                                 />
                             </div>
                         ) : (
@@ -105,7 +108,11 @@ export default function PrizeCard({ historyData }) {
     );
     return(
         <section className="position-relative animated slideInDown fast">
-            <Card key={historyData.desc} className="mt-4" style={{backgroundColor: 'var(--themePLight)'}}>
+            <Card
+                key={historyData.desc}
+                className="mt-4"
+                style={{backgroundColor: 'var(--themePLight' + colorP + ')'}}
+            >
                 {displayMainContent()}
             </Card>
             {showStatusPanel()}

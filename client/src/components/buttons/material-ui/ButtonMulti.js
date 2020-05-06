@@ -63,6 +63,7 @@ export default function ButtonMulti({
     variant="contained",
     disabled,
     needParse = false,
+    shadowColor = "black",
     ...props }) {
     const { sText, sBtnColors, sBtnDefaultColors, sIcon } = useStyles(props);
 
@@ -84,7 +85,7 @@ export default function ButtonMulti({
 
     return (
         <CustomizedButton
-            className={(variant !== 'contained') ? sBtnDefaultColors : sBtnColors }
+            className={`${(variant !== 'contained') ? sBtnDefaultColors : sBtnColors} ${shadowColor === "black" ? "" : "shadow-elevation-white"} `}
             onClick={onClick}
             size={size}
             variant={(variant === 'link') ? null : variant}

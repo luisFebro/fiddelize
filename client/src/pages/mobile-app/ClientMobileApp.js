@@ -16,6 +16,7 @@ import { useAppSystem } from '../../hooks/useRoleData';
 import { useRunComp } from '../../hooks/useRunComp';
 import ClientUserAppContent from './content/ClientUserAppContent';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
+import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 
@@ -28,9 +29,14 @@ function ClientMobileApp({ location, history }) {
     const { roleWhichDownloaded, businessId } = useAppSystem();
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
-
     const { _id, role, name } = useProfile();
-    const { bizCodeName, selfBizLogoImg } = useClientAdmin();
+    const {
+        bizCodeName,
+        selfBizLogoImg,
+        selfThemePColor,
+        selfThemeSColor,
+        selfThemeBackColor, } = useClientAdmin();
+
     const { currScore } = useClientUser();
     const { runName } = useRunComp();
 
@@ -71,17 +77,19 @@ function ClientMobileApp({ location, history }) {
     }, [needAppRegister])
 
     const showLogo = () => {
-        const logoSrc = isAuthUser ? selfBizLogoImg && imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
+        const logoSrc = isAuthUser ? true && imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
         const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
 
         return(
-            <ImgLoader
-                className={`${isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
-                src={logoSrc}
-                style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
-                width={isSquared ? 100 : 190}
-                height={isSquared ? 100 : 85}
-            />
+            <div className="container-center">
+                <ImgLoader
+                    className={`${isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                    src={logoSrc}
+                    style={{position: 'relative', margin: '15px 0'}}
+                    width={isSquared ? 100 : 190}
+                    height={isSquared ? 100 : 85}
+                />
+            </div>
         );
     }
 
@@ -103,23 +111,7 @@ function ClientMobileApp({ location, history }) {
     const showAppType = () => (
         roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin &&
         <div className="container-center">
-            <div className="position-relative">
-                <p style={{zIndex: 100, top: '20px', left: '150px'}}
-                    className="text-center text-white position-absolute text-shadow"
-                >
-                    <span className="text-subtitle font-weight-bold">
-                        App
-                    </span>
-                    <br />
-                    <span
-                        className="text-title text-nowrap"
-                    >
-                        do {
-                            roleWhichDownloaded === "cliente"
-                            ? "Cliente" : "Admin"
-                        }
-                    </span>
-                </p>
+            <div className="position-relative" style={{top: -55, marginTop: 90}}>
                 <div
                     style={{animationIterationCount: 3}}
                     className="animated rubberBand delay-5s"
@@ -133,13 +125,36 @@ function ClientMobileApp({ location, history }) {
                         alt="tipo de app"
                     />
                 </div>
+                <p
+                    style={{zIndex: 100, top: '25px', left: '50%', transform: 'translateX(-50%)'}}
+                    className="text-center text-white position-absolute text-shadow"
+                >
+                    <span
+                        className="position-relative text-subtitle font-weight-bold"
+                        style={{left: -25}}
+                    >
+                        App
+                    </span>
+                    <br />
+                    <span
+                        className="text-title text-nowrap"
+                    >
+                        do {
+                            roleWhichDownloaded === "cliente"
+                            ? "Cliente" : "Admin"
+                        }
+                    </span>
+                </p>
             </div>
         </div>
     );
 
     const showConnectedStatus = () => (
-        <div className="mt-5 container-center-col text-white text-normal text-center">
-            <span>
+        <div
+            className="position-relative my-5 container-center-col text-white text-normal text-center"
+            style={{top: -48}}
+        >
+            <span className={`${selectTxtStyle(selfThemeBackColor)} font-weight-bold`}>
                 Conectado por
                 <br/>
                 <strong className="text-title animated bounce">{name}</strong><br />
@@ -150,7 +165,10 @@ function ClientMobileApp({ location, history }) {
                     to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}
                 >
-                    <RadiusBtn title="acessar"/>
+                    <RadiusBtn
+                        title="acessar"
+                        backgroundColor={'var(--themeSDark--' + selfThemeSColor + ')'}
+                    />
                 </Link>
                 <span>
                     <RadiusBtn
@@ -173,7 +191,10 @@ function ClientMobileApp({ location, history }) {
     }
 
     return (
-        <div style={{overflowX: 'hidden'}}>
+        <div
+            style={{overflowX: 'hidden'}}
+            className={`theme-back--${selfThemeBackColor}`}
+        >
             <span className="text-right text-white for-version-test">{""}</span>
             {showLogo()}
             {showAppType()}
@@ -193,6 +214,8 @@ function ClientMobileApp({ location, history }) {
                             useClientUser={useClientUser}
                             useClientAdmin={useClientAdmin}
                             needAppForCliAdmin={needAppForCliAdmin}
+                            colorP={selfThemePColor}
+                            colorS={selfThemeSColor}
                         />
                     )}
 

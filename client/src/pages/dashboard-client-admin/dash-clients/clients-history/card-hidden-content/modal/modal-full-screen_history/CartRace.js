@@ -19,22 +19,24 @@ const faStyle = {
 
 
 export default function CartRace({ currUserScore, challengeN, userName, className, id }) {
-    const { maxScore } = useClientAdmin();
+    const { maxScore, selfThemeBackColor } = useClientAdmin();
     const currChallenge = challengeN === 1 ? 1 : challengeN - 1;
+
+    const backColor = {backgroundColor: 'var(--themeBackground--' + selfThemeBackColor + ')'};
 
     useEffect(() => {
         animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName});
     }, [maxScore, currUserScore, currChallenge])
 
     const showLineRoad = () => (
-        <div className="line">
+        <div className="line" style={backColor}>
             <p id="dot1" className=""></p>
             <p id="dot2" className=""></p>
             <p id="dot3" className=""></p>
             <p id="dot4" className=""></p>
             <p id="dot5" className=""></p>
-            <div className="vertical-line">
-                <p className=""></p>
+            <div className="vertical-line" style={backColor}>
+                <p className="" style={backColor}></p>
             </div>
         </div>
     );

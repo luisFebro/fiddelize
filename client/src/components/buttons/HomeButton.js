@@ -6,9 +6,12 @@ import { showComponent } from "../../redux/actions/componentActions";
 import { logout } from "../../redux/actions/authActions";
 import isThisApp from '../../utils/window/isThisApp';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useClientAdmin } from '../../hooks/useRoleData';
 
 export default function HomeButton() {
     const dispatch = useStoreDispatch();
+
+    const { selfThemeSColor, selfThemeBackColor } = useClientAdmin();
 
     return (
         <div className="my-5">
@@ -19,10 +22,11 @@ export default function HomeButton() {
                         !isThisApp() && logout(dispatch);
                     }}
                     color="var(--mainWhite)"
-                    backgroundColor="var(--themeSDark)"
-                    backColorOnHover="var(--themeSDark)"
+                    backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                    backColorOnHover={"var(--themeSDark--" + selfThemeSColor + ")"}
                     textTransform='uppercase'
                     iconFontAwesome={isThisApp() ? <FontAwesomeIcon icon="home" style={faStyle} /> : ""}
+                    shadowColor={selfThemeBackColor === "black" ? "white" : "black"}
                 >
                     Voltar
                 </ButtonMulti>

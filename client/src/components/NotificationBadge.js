@@ -26,7 +26,10 @@ export default function NotificationBadge({
     top, }) {
     const [invisible, setInvisible] = useState(true);
 
-    useEffect(() => setTimeout(() => setInvisible(false), 5000), [])
+    useEffect(() => {
+        let runSetInvisible = setTimeout(() => setInvisible(false), 5000);
+        return () => { clearTimeout(runSetInvisible) };
+    }, [])
 
     useEffect(() => {
         badgeInvisible && setInvisible(true);

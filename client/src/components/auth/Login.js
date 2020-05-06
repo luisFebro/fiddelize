@@ -16,11 +16,13 @@ import showVanillaToast from '../../components/vanilla-js/toastify/showVanillaTo
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import { CLIENT_URL } from '../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAppSystem } from '../../hooks/useRoleData';
+import { useAppSystem, useClientAdmin } from '../../hooks/useRoleData';
 
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
     const { roleWhichDownloaded } = useAppSystem();
+
+    const { selfThemeSColor } = useClientAdmin();
 
     const signInThisUser = value => {
         const userData = {
@@ -122,6 +124,7 @@ function Login({ history, setLoginOrRegister }) {
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
                 confirmFunction={signInThisUser}
+                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
             />
         </div>
     );

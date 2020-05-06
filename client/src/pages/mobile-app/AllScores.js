@@ -8,17 +8,17 @@ const AllScores = ({
     lastScore,
     needAppForPreview,
     selectTxtStyle,
-    colorP, }) => (
+    colorBack, }) => (
     <div className="text-subtitle my-3 text-white text-center">
-        <span className={`text-title ${selectTxtStyle(colorP, {bold: true})}`}>
+        <span className={`text-title ${selectTxtStyle(colorBack, {bold: true})}`}>
             Fidelidômetro:
         </span>
         <br/>
         <div className="d-flex justify-content-center">
-            <p className={`text-title ${selectTxtStyle(colorP, {bold: true})}`} ref={currScoreRef}>
+            <p className={`text-title ${selectTxtStyle(colorBack, {bold: true})}`} ref={currScoreRef}>
                 ...
             </p>
-            <span className={`ml-2 ${selectTxtStyle(colorP, {bold: true})}`}>
+            <span className={`ml-2 ${selectTxtStyle(colorBack, {bold: true})}`}>
                 Pontos
             </span>
         </div>

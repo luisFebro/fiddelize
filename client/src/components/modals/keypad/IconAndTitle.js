@@ -7,12 +7,13 @@ IconAndTitle.propTypes = {
 }
 export default function IconAndTitle({
     title,
-    titleIcon
+    titleIcon,
+    colorP,
 }) {
     return (
         <div
             style={{
-                background: 'linear-gradient(to right, var(--themePLight), var(--themePDark))',
+                background: `linear-gradient(to right, var(--themePLight--${colorP}), var(--themePDark--${colorP}))`,
                 border: 'solid 4px var(--mainDark)',
                 textAlign: 'center'
             }}
@@ -21,12 +22,16 @@ export default function IconAndTitle({
             <div
                 style={{
                     width: '15%',
-                    margin: '0 8px'
+                    margin: '0 8px',
                 }}
                 className="d-flex align-items-center justify-content-center p-2 mr-2"
             >
                 <i
-                    style={{fontSize: '2.8em', marginLeft: '5px'}}
+                    style={{
+                        fontSize: '2.8em',
+                        marginLeft: '5px',
+                        filter: 'drop-shadow(.001em .1em .1em var(--mainDark))',
+                    }}
                 >
                  {titleIcon}
                 </i>
@@ -34,7 +39,7 @@ export default function IconAndTitle({
             <div
                 className="text-subtitle font-weight-bold"
             >
-                <span style={{ margin: 'auto', width: '80%'}}>
+                <span className="text-shadow" style={{ margin: 'auto', width: '80%'}}>
                     {title}
                 </span>
             </div>

@@ -35,7 +35,7 @@ export default function RadiusBtn({
         color: "white",
         padding: '2px 5px',
         borderRadius: '20px',
-        backgroundColor: 'var(--themeSDark)',
+        backgroundColor: backgroundColor || 'var(--themeSDark)',
         outline: "none",
         fontSize: "12px",
     }

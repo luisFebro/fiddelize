@@ -21,7 +21,11 @@ export const collectionStore = {
     logos: ["app_fiddelize_logo", "app_biz_logo"],
     icons: ["app_gift", "dash_podium"],
     shapes: ["dash_title_shape", "app_start_shape"],
-    illustrations: ["app_chat_illustra", "dash_no_search_illustra"],
+    illustrations: [
+        "app_chat_illustra",
+        "dash_no_search_illustra",
+        'app_empty_purchase_illustra',
+    ],
 };
 
 const imgLib = {
@@ -32,9 +36,10 @@ const imgLib = {
     get dash_podium() { return handleStorage("icons", "dash_podium", `img/icons/podium.png`) },
     // Shapes - check for multiple request found after inserting the first svg shape...
     get dash_title_shape() { return handleStorage("shapes", "dash_title_shape", `img/shapes/blob-dashboard-header.svg`) },
-    get app_start_shape() { return handleStorage("shapes", "app_start_shape", `img/shapes/blob1.svg`) },
+    get app_start_shape() { return handleStorage("shapes", "app_start_shape", `img/shapes/blob-app-start--default.svg`) },
     // Illustration
     get app_chat_illustra() { return handleStorage("illustrations", "app_chat_illustra", `img/illustrations/online-chat.svg`) },
+    get app_empty_purchase_illustra() { return handleStorage("illustrations", "app_empty_purchase_illustra", `img/illustrations/online-chat.svg`) },
     get dash_no_search_illustra() { return handleStorage("illustrations", "dash_no_search_illustra", `img/illustrations/empty-search.svg`) },
 }
 

@@ -4,10 +4,13 @@ import PurchaseValue from './PurchaseValue';
 import StaffConfirmation from './StaffConfirmation';
 import ClientScoresPanel from './ClientScoresPanel';
 import HomeButton from '../../../components/buttons/HomeButton';
+import { useClientAdmin } from '../../../hooks/useRoleData';
 
 export default function LoyaltyScoreHandler() {
     const [valuePaid, setValuePaid]  = useState("0");
     const [verification, setVerification]  = useState(false);
+
+    const { selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
@@ -36,7 +39,10 @@ export default function LoyaltyScoreHandler() {
     }
 
     return (
-        <div style={{color: 'white'}} className="container-center">
+        <div
+            style={{color: 'white', backgroundColor: 'var(--themeBackground--' + selfThemeBackColor + ')'}}
+            className="container-center"
+        >
             <PurchaseValue
                 success={purchaseValue}
                 setValuePaid={setValuePaid}
@@ -50,6 +56,9 @@ export default function LoyaltyScoreHandler() {
                 success={clientScoresPanel}
                 valuePaid={valuePaid}
                 verification={verification}
+                colorP={selfThemePColor}
+                colorS={selfThemeSColor}
+                colorBack={selfThemeBackColor}
             />
             <Fragment>
                {

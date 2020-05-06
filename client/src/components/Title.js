@@ -22,10 +22,12 @@ export default function Title({
     backgroundColor,
     margin,
     padding,
-    className }) {
+    className,
+    needShadow,
+    fontSize, }) {
     return (
         <div
-            className={`${margin} ${padding || "p-3"} ${className} text-center text-title`}
+            className={`${className ? className : ''} ${fontSize ? fontSize : 'text-title'} ${margin} ${needShadow ? 'text-shadow' : ''} ${padding || "p-3"} text-center`}
             style={{color: color, backgroundColor: backgroundColor}}
         >
             {parse(title)}

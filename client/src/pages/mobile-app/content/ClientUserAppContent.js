@@ -34,7 +34,6 @@ function ClientUserAppContent({
     runName,
     colorP,
     colorS,
-    colorBack,
     rewardScoreTest }) {
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
@@ -47,7 +46,7 @@ function ClientUserAppContent({
     let { role, name } = useProfile();
     name = needAppForPreview ? name : getFirstName(name);
     const { currScore, lastScore, } = useClientUser();
-    let { maxScore, bizCodeName, selfMilestoneIcon } = useClientAdmin();
+    let { maxScore, bizCodeName, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
 
     if(rewardScoreTest) {
         maxScore = Number(rewardScoreTest);
@@ -114,8 +113,8 @@ function ClientUserAppContent({
                         position="absolute"
                         top={5}
                         left={needAppForPreview ? 258 : 270}
-                        notifBorderColor={"var(--themeBackground--" + colorP + ")"}
-                        notifBackColor={colorP === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
+                        notifBorderColor={"var(--themeBackground--" + selfThemeBackColor + ")"}
+                        notifBackColor={selfThemeBackColor === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
                         badgeValue={2}
                     />
                 </div>
@@ -140,7 +139,7 @@ function ClientUserAppContent({
             lastScore={lastScore}
             needAppForPreview={needAppForPreview}
             selectTxtStyle={selectTxtStyle}
-            colorP={colorP}
+            colorBack={selfThemeBackColor}
         />
     );
 
@@ -177,7 +176,7 @@ function ClientUserAppContent({
                         currScore={currScore || 0}
                         maxScore={maxScore || 0}
                         playBeep={playBeep}
-                        colorP={colorP}
+                        colorBack={selfThemeBackColor}
                         colorS={colorS}
                         selectTxtStyle={selectTxtStyle}
                     />
@@ -200,7 +199,7 @@ function ClientUserAppContent({
                             className={`no-text-decoration text-center pressed-to-left`}
                             onClick={playBeep}
                             style={styles.rulesBtn}>
-                            <span className={`${selectTxtStyle(colorP, {bold: true})} text-normal`}>
+                            <span className={`${selectTxtStyle(selfThemeBackColor, {bold: true})} text-normal`}>
                                 Consulte<br />Regras Aqui
                             </span>
                         </div>
@@ -232,6 +231,7 @@ function ClientUserAppContent({
                     <RadiusBtn
                         size="extra-small"
                         title="voltar painel"
+                        backgroundColor={'var(--themeSDark--' + selfThemeSColor + ')'}
                         onClick={() => {
                             setRun(dispatch, "goDash");
                             history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);

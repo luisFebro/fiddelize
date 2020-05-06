@@ -22,7 +22,7 @@ export default function ProgressMsg({
     currScore,
     maxScore,
     playBeep,
-    colorP,
+    colorBack,
     colorS,
     selectTxtStyle, }) {
     const eachMilestone = maxScore / 5;
@@ -38,7 +38,7 @@ export default function ProgressMsg({
             fontSize: '35px',
             transform: 'rotate(18deg)',
             padding: '0 5px',
-            color: selectTxtStyle(colorP, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)",
+            color: selectTxtStyle(colorBack, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)",
         },
         confettiIcon: {
             fontSize: '20px',
@@ -79,11 +79,11 @@ export default function ProgressMsg({
                 <Fragment>
                     {currScore >= maxScore
                     ? (
-                        <span className={`${selectTxtStyle(colorP, {bold: true})} ml-2`}>
+                        <span className={`${selectTxtStyle(colorBack, {bold: true})} ml-2`}>
                             Você venceu o desafio! <i style={styles.confettiIcon}>🎉</i>
                         </span>
                     )  : (
-                        <span className={`${selectTxtStyle(colorP, {bold: true})} ml-2`}>
+                        <span className={`${selectTxtStyle(colorBack, {bold: true})} ml-2`}>
                             {nextLevel === 5
                             ? <span className="text-left">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
                             : <span><strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
@@ -98,7 +98,7 @@ export default function ProgressMsg({
 
     return (
         <div className="mt-3 text-normal text-white text-center">
-            <span className={`${selectTxtStyle(colorP, {bold: true})} text-subtitle`}>Desafio n.º {currChall}</span>
+            <span className={`${selectTxtStyle(colorBack, {bold: true})} text-subtitle`}>Desafio n.º {currChall}</span>
             <div className="container-center">
                 {showFlagWithGoals()}
                 {showMsg()}

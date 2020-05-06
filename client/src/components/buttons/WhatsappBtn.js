@@ -13,7 +13,7 @@ WhatsappBtn.propTypes = {
 }
 
 export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
-    const { bizWhatsapp, bizName } = useClientAdmin();
+    const { bizWhatsapp, bizName, selfThemeSColor } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
     const targetedNumber = elsePhone ? elsePhone : bizWhatsapp;
@@ -34,8 +34,8 @@ export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
                 onClick={null}
                 disabled={isDisabled}
                 color="var(--mainWhite)"
-                backgroundColor="var(--themeP)"
-                backColorOnHover="var(--themeP)"
+                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                backColorOnHover={"var(--themeSDark--" + selfThemeSColor + ")"}
                 iconFontAwesome={<FontAwesomeIcon icon="comment" style={faStyle} />}
             />
         </a>

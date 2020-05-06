@@ -7,14 +7,16 @@ import MoneyIcon from '@material-ui/icons/Money';
 import Card from '@material-ui/core/Card';
 import { showComponent } from '../../../../redux/actions/componentActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import ButtonMulti from '../../../../components/buttons/material-ui/ButtonMulti';
+import ButtonMulti, { faStyle } from '../../../../components/buttons/material-ui/ButtonMulti';
 import handleChange from '../../../../utils/form/use-state/handleChange';
 import detectErrorField from '../../../../utils/validation/detectErrorField';
 import { handleEnterPress } from '../../../../utils/event/isKeyPressed';
 import clearForm from '../../../../utils/form/use-state/clearForm';
 import { checkVerificationPass } from "../../../../redux/actions/adminActions";
 import PropTypes from 'prop-types';
-import { useAppSystem } from '../../../../hooks/useRoleData';
+import { useAppSystem, useClientAdmin } from '../../../../hooks/useRoleData';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import selectTxtStyle from '../../../../utils/biz/selectTxtStyle'
 
 StaffConf.propTypes = {
     success: PropTypes.bool,
@@ -30,6 +32,8 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
     })
 
     const { businessId } = useAppSystem();
+
+    const { selfThemePColor, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
 
     const { pass } = data;
     const [fieldError, setFieldError] = useState(null);
@@ -50,7 +54,7 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
         checkVerificationPass(dispatch, bodyToSend)
         .then(res => {
             if(res.status !== 200) {
-                showSnackbar(dispatch, res.data.msg, 'error');
+                showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão.", 'error');
                 return;
             }
             // showSnackbar(dispatch, res.data.msg, 'success');
@@ -61,7 +65,7 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
 
     const showCheckSummary = () => (
         <div className="d-flex align-content-start ml-3">
-            <p className="text-subtitle">&#187; <strong>Conferir:</strong>
+            <p className={`${selectTxtStyle(selfThemeBackColor)} font-weight-bold text-subtitle`}>&#187; <strong>Conferir:</strong>
                 {desc
                 ? (
                     <Fragment>
@@ -79,7 +83,8 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
         <Title
             title="Insira a senha de verificação"
             color="var(--mainWhite)"
-            backgroundColor="var(--themePDark)"
+            needShadow={true}
+            backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
         />
     );
 
@@ -119,15 +124,15 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
     const showButtonActions = () => (
         <div className="container-center mt-1 mb-4">
             <ButtonMulti
+                title="Verificar"
                 onClick={checkAccess}
                 color="var(--mainWhite)"
-                backgroundColor="var(--themeSDark)"
-                backColorOnHover="var(--themeSDark)"
-                iconFontAwesome="fas fa-check"
+                shadowColor="white"
+                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                backColorOnHover={"var(--themeSDark--" + selfThemeSColor + ")"}
+                iconFontAwesome={<FontAwesomeIcon icon="check" style={faStyle} />}
                 textTransform='uppercase'
-            >
-                Verificar
-            </ButtonMulti>
+            />
         </div>
     );
 
@@ -138,7 +143,7 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
             {showCheckSummary()}
             <Card
                 className="animated slideInLeft fast text-normal align-self-center"
-                style={{ maxWidth: 330, backgroundColor: 'var(--themePDark)' }}
+                style={{ maxWidth: 330, backgroundColor: "var(--themePDark--" + selfThemePColor + ")" }}
             >
                 {showTitle()}
                 {showForm()}

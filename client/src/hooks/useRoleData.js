@@ -116,5 +116,6 @@ export const useClientAdmin = () => {
         selfMilestoneIcon,
         selfThemePColor,
         selfThemeSColor,
+        selfThemeBackColor,
     });
 }

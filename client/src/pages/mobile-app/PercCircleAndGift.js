@@ -53,7 +53,7 @@ export default function PercCircleAndGift({
                         />
                         <p
                             className="text-hero"
-                            style={{position: 'absolute', top: '5px', left: '45%'}}
+                            style={{position: 'absolute', top: '5px', left: '50%', transform: 'translateX(-50%)'}}
                         >
                             ?
                         </p>

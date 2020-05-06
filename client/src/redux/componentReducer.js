@@ -1,6 +1,7 @@
 import { reducer } from 'easy-peasy';
 
 // REDUCERS
+// currentComp options: login, purchaseValue, staffConfirmation, clientScoresPanel
 const initialState = {
     currentComp: 'login',
     currentCompSet2: '?',

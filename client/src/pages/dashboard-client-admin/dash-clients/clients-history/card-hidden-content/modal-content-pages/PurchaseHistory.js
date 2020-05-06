@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { CLIENT_URL } from '../../../../../../config/clientUrl';
 import Illustration from '../../../../../../components/Illustration';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment';
@@ -11,6 +10,8 @@ import { readPurchaseHistory } from '../../../../../../redux/actions/userActions
 // import lStorage, { userProfileColl } from '../../../../../../utils/storage/lStorage';
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 import defineCurrChallenge from '../helpers/defineCurrChallenge';
+import imgLib from '../../../../../../utils/storage/lForageStore';
+import selectTxtStyle from '../../../../../../utils/biz/selectTxtStyle';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -24,7 +25,7 @@ moment.updateLocale('pt-br');
 
 export default function PurchaseHistory({ data }) {
     const { _id, name, clientUserData, totalGeneralScore, totalPurchasePrize } = data;
-    const { maxScore } = useClientAdmin();
+    const { maxScore, selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
 
     const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData && clientUserData.purchaseHistory);
 
@@ -42,7 +43,8 @@ export default function PurchaseHistory({ data }) {
 
     const illustrationIfEmpty = () => (
         <Illustration
-            img={`${CLIENT_URL}/img/illustrations/empty-woman-card.svg`}
+            img={imgLib.app_empty_purchase_illustra}
+            className="app_empty_purchase_illustra"
             alt="Sem Compras"
             imgStyle={{
                 maxWidth: 400
@@ -87,11 +89,19 @@ export default function PurchaseHistory({ data }) {
 
     const mainData = purchaseHistoryArray && purchaseHistoryArray.map(historyData => {
         if(historyData.cardType.includes("prize")) {
-            return <PrizeCard historyData={historyData} />
+            return <PrizeCard
+                        historyData={historyData}
+                        colorP={selfThemePColor}
+                        colorS={selfThemeSColor}
+                    />
         } else {
             return(
-                <Card key={historyData.desc} className="mt-2" style={{backgroundColor: 'var(--themeP)'}}>
-                    <section className="purchase-history-table-data--root text-white text-normal text-center text-purple font-weight-bold">
+                <Card
+                    key={historyData.desc}
+                    className="mt-2"
+                    style={{backgroundColor: 'var(--themePDark--' + selfThemeBackColor + ')'}}
+                >
+                    <section className={`${selectTxtStyle(selfThemeBackColor, {bold: true})} purchase-history-table-data--root text-normal text-center text-purple`}>
                         {showDesc(historyData)}
                         {showScore(historyData)}
                     </section>

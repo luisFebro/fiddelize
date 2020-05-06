@@ -26,7 +26,7 @@ function Navbar({ history, location }) {
 
     const { isAuthUser } = useAuthUser();
 
-    const { bizCodeName, selfBizLogoImg } = useClientAdmin();
+    const { bizCodeName, selfBizLogoImg, selfThemePColor } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
@@ -153,7 +153,8 @@ function Navbar({ history, location }) {
     // Render
     return (
         <NavWrapper
-            className="navbar navbar-expand-sm text-nav-items theme-p-dark"
+            className="navbar navbar-expand-sm text-nav-items"
+            style={{backgroundColor: locationNow.includes("pontos-fidelidade") ? "var(--themePDark--" + selfThemePColor + ")" : "var(--themePDark--default)" }}
         >
             {showLogo()}
             {showRoleTitles()}

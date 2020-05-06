@@ -18,7 +18,8 @@ export default function KeypadButton({
     titleIcon,
     keyboardType = "numeric",
     // setSelectedValue,
-    confirmFunction }) {
+    confirmFunction,
+    backgroundColor, }) {
   const [open, setOpen] = useState(false);
 
   const onOpen = () => {
@@ -34,8 +35,8 @@ export default function KeypadButton({
       <ButtonMulti
           onClick={onOpen}
           color="var(--mainWhite)"
-          backgroundColor="var(--themeSDark)"
-          backColorOnHover="var(--themeSDark)"
+          backgroundColor={backgroundColor || "var(--themeSDark)"}
+          backColorOnHover={backgroundColor || "var(--themeSDark)"}
           iconFontAwesome={<FontAwesomeIcon icon="keyboard" style={faStyle} />}
           textTransform='uppercase'
       >

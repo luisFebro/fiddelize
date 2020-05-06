@@ -20,6 +20,8 @@ import {
     useClientUser,
     useClientAdmin, useAppSystem } from '../../../hooks/useRoleData';
 import getFirstName from '../../../utils/string/getFirstName';
+import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -27,27 +29,15 @@ ClientScoresPanel.propTypes = {
     valuePaid: PropTypes.string
 }
 
-const styles = {
-    finishButton: {
-        border: 'none',
-        fontWeight: 'bold',
-        fontSize: '1.5em',
-        padding: '25px 35px',
-        borderRadius: '20px',
-        backgroundColor: 'var(--themeSDark)',
-        color: 'var(--mainWhite)',
-        outline: 'none',
-    },
-    crownIcon: {
-        position: 'absolute',
-        top: '-45px',
-        left: '218px',
-        fontSize: '2em',
-        transform: 'rotate(20deg)',
-    }
-}
-
-function ClientScoresPanel({ history, location, success, valuePaid, verification }) {
+function ClientScoresPanel({
+    history,
+    location,
+    success,
+    valuePaid,
+    verification,
+    colorP,
+    colorS,
+    colorBack, }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const needAppForCliAdmin = location.search.includes("client-admin=1");
     const [finishedWork, setFinishedWork] = useState(false);
@@ -60,6 +50,27 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
     const { businessId } = useAppSystem();
 
     const dispatch = useStoreDispatch();
+
+    const styles = {
+        finishButton: {
+            border: 'none',
+            fontWeight: 'bold',
+            fontSize: '1.5em',
+            padding: '25px 35px',
+            borderRadius: '20px',
+            backgroundColor: 'var(--themeSDark--' + colorS + ')',
+            color: 'var(--mainWhite)',
+            outline: 'none',
+        },
+        crownIcon: {
+            position: 'absolute',
+            top: '-45px',
+            left: '218px',
+            fontSize: '2em',
+            transform: 'rotate(20deg)',
+            color: selectTxtStyle(colorBack, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)",
+        }
+    }
 
     let lastScore = currScore;
     if(typeof lastScore === "undefined") {
@@ -110,27 +121,36 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
     // RENDER
     const showHeader = () => (
         <div>
-            <span className="text-hero">
+            <span className="text-hero text-shadow">
                 {getFirstName(name)},
             </span>
             <Title
                 title="Sua nova pontuação"
                 color="var(--mainWhite)"
-                backgroundColor="var(--themePDark)"
+                fontSize="text-hero"
+                needShadow={true}
+                backgroundColor={"var(--themePDark--" + colorP + ")"}
             />
         </div>
     );
 
     const showScores = () => (
         <div
-            className="text-shadow text-white theme-p-light text-weight-bold text-center text-title pt-5 pb-1"
+            className={`${selectTxtStyle(colorBack)} text-weight-bold text-title pt-5 pb-1 px-3`}
+            style={{backgroundColor: "var(--themePLight--" + colorP + ")"}}
         >
             <section>
-                <p className="ml-2 text-left text-nowrap">&#187; Pontuação Anterior:</p>
-                <p className="text-center text-hero">{convertDotToComma(lastScore)}</p>
+                <p className="ml-2 text-left text-center text-nowrap">
+                    &#187; Pontuação Anterior:
+                </p>
+                <p className="text-center text-hero">
+                    {convertDotToComma(lastScore)}
+                </p>
             </section>
             <section>
-                <p className="ml-2 text-left">&#187; Você Ganhou:</p>
+                <p className="ml-2 text-left">
+                    &#187; Você Ganhou:
+                </p>
                 <p className="text-center text-hero" ref={animatedNumber}>...</p>
             </section>
             <div
@@ -149,8 +169,10 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
                     <p className="text-center text-hero">{convertDotToComma(currScoreNow)}</p>
                 </div>
                 <section className="position-relative" style={{margin: '90px 0 20px'}}>
-                    <i className="fas fa-crown" style={styles.crownIcon}></i>
-                    <p className="text-hero">Volte sempre!</p>
+                    <FontAwesomeIcon icon="crown" style={styles.crownIcon} />
+                    <p className="text-hero text-center">
+                        Volte sempre!
+                    </p>
                 </section>
             </div>
         </div>
@@ -176,8 +198,8 @@ function ClientScoresPanel({ history, location, success, valuePaid, verification
 
     const showHomeBtn = () => {
         const title = finishedWork ? "Finalizar" : "Processando...";
-        const backColorOnHover = "var(--themeSLight)";
-        const backgroundColor = "var(--themeSDark)";
+        const backColorOnHover = "var(--themeSLight--" + colorS  + ")";
+        const backgroundColor = "var(--themeSDark--" + colorS + ")";
         return(
             <button
                 disabled={finishedWork ? false : true}

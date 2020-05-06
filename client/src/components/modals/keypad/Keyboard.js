@@ -20,6 +20,7 @@ export default function Keyboard({
     display,
     handleClose,
     handleConfirm,
+    colorP,
 }) {
 
     const getValue = value => {
@@ -67,7 +68,7 @@ export default function Keyboard({
     }
 
     return (
-        <GridContainer myGradient="linear-gradient(to right, #16222a, var(--themePLight))">
+        <GridContainer myGradient={`linear-gradient(to right, #16222a, var(--themePLight--${colorP}))`}>
             <div onClick={() => {getValue("1"); playBeep()} } className="item1">1</div>
             <div onClick={() => {getValue("2"); playBeep()} } className="item2">2</div>
             <div onClick={() => {getValue("3"); playBeep()} } className="item3">3</div>

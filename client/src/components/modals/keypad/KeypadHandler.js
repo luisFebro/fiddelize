@@ -6,7 +6,7 @@ import Keyboard from './Keyboard';
 import PropTypes from 'prop-types';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../redux/actions/snackbarActions';
-
+import { useClientAdmin } from '../../../hooks/useRoleData';
 
 NumericKeypad.propTypes = {
     title: PropTypes.string,
@@ -29,6 +29,8 @@ export default function NumericKeypad({
     open,
     confirmFunction,
 }) {
+
+    const { selfThemePColor } = useClientAdmin();
 
     const [display, setDisplay] = useState(defaultValue[keyboardType]);
 
@@ -60,10 +62,12 @@ export default function NumericKeypad({
             <IconAndTitle
                 title={title}
                 titleIcon={titleIcon}
+                colorP={selfThemePColor}
             />
             <Display
                 display={display}
                 keyboardType={keyboardType}
+                colorP={selfThemePColor}
             />
             <Keyboard
                 setDisplay={setDisplay}
@@ -71,6 +75,7 @@ export default function NumericKeypad({
                 handleConfirm={handleConfirm}
                 handleClose={handleClose}
                 keyboardType={keyboardType}
+                colorP={selfThemePColor}
             />
         </Dialog>
     );

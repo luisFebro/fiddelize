@@ -38,7 +38,12 @@ export default function BadaloBell({
     };
 
     useEffect(() => {
-        badgeValue && setTimeout(() => playAnima({ isInit: true }), 3000);
+        let startPlayAnima;
+        if(badgeValue) {
+            startPlayAnima = setTimeout(() => playAnima({ isInit: true }), 6000);
+        }
+        // cleanup function
+        return () => { clearTimeout(startPlayAnima) }
     }, [badgeValue])
 
     return (
@@ -53,9 +58,9 @@ export default function BadaloBell({
                 borderColor={notifBorderColor}
                 top={20}
             >
-                <div class="bell">
-                    <div class="bell-top"></div>
-                    <div class="bell-bot"></div>
+                <div className="bell">
+                    <div className="bell-top"></div>
+                    <div className="bell-bot"></div>
                 </div>
             </NotificationBadge>
         </section>

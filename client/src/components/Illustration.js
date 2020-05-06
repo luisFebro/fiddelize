@@ -9,7 +9,7 @@ import parse from 'html-react-parser';
 const isSmall = window.Helper.isSmallScreen();
 
 Illustration.propTypes = {
-    img: PropTypes.string.isRequired,
+    img: PropTypes.string,
     imgStyle: PropTypes.object,
     title: PropTypes.node,
     alt: PropTypes.string,
