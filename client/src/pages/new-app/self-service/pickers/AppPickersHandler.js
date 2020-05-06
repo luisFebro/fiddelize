@@ -30,8 +30,6 @@ export default function AppPickersHandler({
     const dispatch = useStoreDispatch();
 
     const handleNextStep = currNumber => {
-        console.log(theme.colorP);
-        console.log(theme.colorS);
         switch(currNumber) {
             case 1:
                 setStep({ currNumber: 2, nextTask: '(ícones)' });
@@ -107,6 +105,7 @@ export default function AppPickersHandler({
                 setTheme={setTheme}
             />
             <PickRatingIcon
+                isTest={isTest}
                 step={currNumber}
                 setNextDisabled={setNextDisabled}
             />

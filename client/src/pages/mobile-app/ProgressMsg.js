@@ -18,7 +18,13 @@ ProgressMsg.propTypes = {
 const options = tooltip1;
 const attentionBtnChecked = lStorage("getItem", options);
 
-export default function ProgressMsg({ currScore, maxScore, playBeep }) {
+export default function ProgressMsg({
+    currScore,
+    maxScore,
+    playBeep,
+    colorP,
+    colorS,
+    selectTxtStyle, }) {
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", currScore, eachMilestone);
     const milestoneLeft = convertDotToComma(eachMilestone - currMilestone);
@@ -32,6 +38,7 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
             fontSize: '35px',
             transform: 'rotate(18deg)',
             padding: '0 5px',
+            color: selectTxtStyle(colorP, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)",
         },
         confettiIcon: {
             fontSize: '20px',
@@ -59,6 +66,7 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
                         />
                     </i>
                 }
+                backgroundColor={"var(--themeSDark--" + colorS + ")"}
             />
         </span>
     );
@@ -71,9 +79,11 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
                 <Fragment>
                     {currScore >= maxScore
                     ? (
-                        <span className="text-shadow ml-2">Você venceu o desafio! <i style={styles.confettiIcon}>🎉</i></span>
+                        <span className={`${selectTxtStyle(colorP, {bold: true})} ml-2`}>
+                            Você venceu o desafio! <i style={styles.confettiIcon}>🎉</i>
+                        </span>
                     )  : (
-                        <span className="text-shadow ml-2">
+                        <span className={`${selectTxtStyle(colorP, {bold: true})} ml-2`}>
                             {nextLevel === 5
                             ? <span className="text-left">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
                             : <span><strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
@@ -88,7 +98,7 @@ export default function ProgressMsg({ currScore, maxScore, playBeep }) {
 
     return (
         <div className="mt-3 text-normal text-white text-center">
-            <span className="text-subtitle text-shadow">Desafio n.º {currChall}</span>
+            <span className={`${selectTxtStyle(colorP, {bold: true})} text-subtitle`}>Desafio n.º {currChall}</span>
             <div className="container-center">
                 {showFlagWithGoals()}
                 {showMsg()}

@@ -8,10 +8,11 @@ PickRatingIcon.propTypes = {
     setNextDisabled: PropTypes.func,
 }
 
-export default function PickRatingIcon({ step, setNextDisabled }) {
-    const selectedMilestoneIcons = milestoneIcons.filter(iconObj => iconObj.appPreview === true);
+export default function PickRatingIcon({
+    step, setNextDisabled, isTest }) {
+    const selectedMilestoneIcons = isTest ? milestoneIcons : milestoneIcons.filter(iconObj => iconObj.appPreview === true);
     // n1
-    return(
+        return(
         <div
             style={{visibility: step === 3 ? "visible" : "hidden", height: step === 3 ? 260 : 0 }}
         >

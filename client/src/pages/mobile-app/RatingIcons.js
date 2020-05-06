@@ -13,7 +13,14 @@ RatingIcons.propTypes = {
     maxScore: PropTypes.number,
 }
 
-export default function RatingIcons({ score, maxScore, selfMilestoneIcon, runName }) {
+export default function RatingIcons({
+    score,
+    maxScore,
+    selfMilestoneIcon,
+    runName,
+    selectTxtStyle,
+    colorS,
+    colorP, }) {
     const appPreviewIcon = gotArrayThisItem(iconNamesOnly, runName) ? runName : false;
     const selectedIcon = appPreviewIcon || selfMilestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
@@ -47,13 +54,15 @@ export default function RatingIcons({ score, maxScore, selfMilestoneIcon, runNam
 
         let arrayIconIds = ["icon-100", "icon-200", "icon-300", "icon-400", "icon-500"];
 
+        const needDark = selectTxtStyle(colorP, {needDarkBool: true});
+
         let iconInArray;
         let count = 0;
         for(iconInArray of arrayIconIds) {
             if(count++ <= indScore) {
                 let selectedIcon = document.querySelector("#" + iconInArray);
                 const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-                setTimeout(() => selectedIcon.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); filter: drop-shadow(0 0 30px #ffc);`, delayToAnimated);
+                setTimeout(() => selectedIcon.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); ${needDark ? "filter: drop-shadow(grey 0px 0px 15px);" : "filter: drop-shadow(0 0 30px #ffc);"}`, delayToAnimated);
             }
         }
     }
@@ -87,6 +96,7 @@ export default function RatingIcons({ score, maxScore, selfMilestoneIcon, runNam
                                 />
                             </i>
                         }
+                        backgroundColor={"var(--themeSDark--" + colorS + ")"}
                     />
                 </section>
             ))}
@@ -121,8 +131,9 @@ const RatingDiv = styled.div`
     }
 `;
 
-/* COMMENTS
-n1: the native icons sometimes can demonstrate faitures on displaying the colors in mobile phones.
+/* COselectTxtStyle(colorP, {needDarkBool: true})
+n1: the native icons sometimes can demonstrate faitures on displaying the colors,
+colorP, in mobile phones.
 Font Awesome is a cross-platform solution for that.
 */
 
@@ -157,7 +168,7 @@ But conditionals like case > 5 will return undefined.
 // *
 //  * This method is fired when the user leaves the #rating element, effectively removing all hover states.
 
-// StarRating.prototype.leaveStarListener = function() {
+// StselectTxtStyle(colorP, {needDarkBool: true}).prototype.leaveStarListener = function() {
 //   this.fillStarsUpToElement(null);
 // };
 

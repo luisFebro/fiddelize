@@ -93,6 +93,7 @@ export default function PercCircleAndGift({
                                     />
                                 </div>
                             }
+                            backgroundColor={"var(--themeSDark--" + colorS + ")"}
                         />
                      </div>
                     {displayGift()}

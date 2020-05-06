@@ -1,12 +1,26 @@
 import React from 'react';
 import { convertDotToComma } from '../../utils/numbers/convertDotComma';
 
-const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore, needAppForPreview }) => (
+const AllScores = ({
+    currScoreRef,
+    currScore,
+    showPercentage,
+    lastScore,
+    needAppForPreview,
+    selectTxtStyle,
+    colorP, }) => (
     <div className="text-subtitle my-3 text-white text-center">
-        <span className="text-title text-shadow">Fidelidômetro:</span><br/>
+        <span className={`text-title ${selectTxtStyle(colorP, {bold: true})}`}>
+            Fidelidômetro:
+        </span>
+        <br/>
         <div className="d-flex justify-content-center">
-            <p className="text-title text-shadow" ref={currScoreRef}>...</p>
-            <span className="ml-2 text-shadow">Pontos</span>
+            <p className={`text-title ${selectTxtStyle(colorP, {bold: true})}`} ref={currScoreRef}>
+                ...
+            </p>
+            <span className={`ml-2 ${selectTxtStyle(colorP, {bold: true})}`}>
+                Pontos
+            </span>
         </div>
         {/*LAST SCORE*/}
         {currScore === 0 || !currScore || !showPercentage

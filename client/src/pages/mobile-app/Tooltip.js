@@ -16,19 +16,6 @@ Tooltip.propTypes = {
     placement: PropTypes.string,
 }
 
-const radiusTooltipStyle = makeStyles(theme => ({
-    tooltip: {
-        fontSize: '15px',
-        backgroundColor: 'var(--themeSDark)',
-        fontWeight: 'bold',
-        borderRadius: '15px 15px',
-        padding: '4px auto',
-        margin: '40px 0',
-        whiteSpace: 'nowrap',
-        textShadow: '1px 1px 3px black',
-    },
-}));
-
 export default function Tooltip({
     title,
     backgroundColor,
@@ -52,6 +39,19 @@ export default function Tooltip({
     const handleTooltipOpen = () => {
       setOpen(true);
     };
+
+    const radiusTooltipStyle = makeStyles(theme => ({
+        tooltip: {
+            fontSize: '15px',
+            backgroundColor: backgroundColor || 'var(--themeSDark)',
+            fontWeight: 'bold',
+            borderRadius: '15px 15px',
+            padding: '4px auto',
+            margin: '40px 0',
+            whiteSpace: 'nowrap',
+            textShadow: '1px 1px 3px black',
+        },
+    }));
 
     const classes = radiusTooltipStyle();
 

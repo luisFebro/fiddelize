@@ -8,6 +8,7 @@ import lStorage, { confettiPlayOp, needAppRegisterOp } from '../../../utils/stor
 import { confetti } from '../../../keyframes/animations-js/confetti/confetti';
 import { useStoreDispatch } from 'easy-peasy';
 import getFirstName from '../../../utils/string/getFirstName';
+import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
 import AOS from 'aos';
 import "../ellipse.css";
 import { setRun } from '../../../hooks/useRunComp';
@@ -126,7 +127,7 @@ function ClientUserAppContent({
             </section>
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
-                className="ml-3 mb-2 text-white text-shadow text-subtitle text-left">
+                className={`ml-3 mb-2 ${selectTxtStyle(colorP, {bold: true})} text-subtitle text-left`}>
                 {getDayGreetingBr()},
                 <br/>
                 <span className="text-title">
@@ -143,6 +144,8 @@ function ClientUserAppContent({
             showPercentage={showMoreComps}
             lastScore={lastScore}
             needAppForPreview={needAppForPreview}
+            selectTxtStyle={selectTxtStyle}
+            colorP={colorP}
         />
     );
 
@@ -168,6 +171,9 @@ function ClientUserAppContent({
                 maxScore={maxScore || 0}
                 selfMilestoneIcon={selfMilestoneIcon}
                 runName={runName}
+                selectTxtStyle={selectTxtStyle}
+                colorS={colorS}
+                colorP={colorP}
             />
             {showMoreComps
             ? (
@@ -176,6 +182,9 @@ function ClientUserAppContent({
                         currScore={currScore || 0}
                         maxScore={maxScore || 0}
                         playBeep={playBeep}
+                        colorP={colorP}
+                        colorS={colorS}
+                        selectTxtStyle={selectTxtStyle}
                     />
                 </div>
             ) :  null}
@@ -193,10 +202,12 @@ function ClientUserAppContent({
                 >
                     <Link to={needAppForCliAdmin ? "/regulamento?client-admin=1" : "/regulamento"}>
                         <div
-                            className="no-text-decoration text-shadow text-normal text-center pressed-to-left"
+                            className={`no-text-decoration text-center pressed-to-left`}
                             onClick={playBeep}
                             style={styles.rulesBtn}>
-                            Consulte<br />Regras Aqui
+                            <span className={`${selectTxtStyle(colorP, {bold: true})} text-normal`}>
+                                Consulte<br />Regras Aqui
+                            </span>
                         </div>
                     </Link>
                 </div>
