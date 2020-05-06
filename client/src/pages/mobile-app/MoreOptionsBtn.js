@@ -26,6 +26,12 @@ const currOption = yellowBtn2;
 const lastChecked = lStorage("getItem", lastOption);
 const currChecked = lStorage("getItem", currOption);
 
+const muStyle = {
+    transform: 'scale(1.1)',
+    filter:  'drop-shadow(.5px .5px 1.5px black)',
+    color: '#fff',
+}
+
 function MoreOptionsBtn({
     history,
     playBeep,
@@ -87,7 +93,7 @@ function MoreOptionsBtn({
         actions: [
             //the order rendered is inverse from the bottom to top
             {
-                icon: <ExitToAppIcon />,
+                icon: <ExitToAppIcon style={muStyle} />,
                 name: 'Desconectar ►',
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
@@ -96,7 +102,7 @@ function MoreOptionsBtn({
                 }
             },
             {
-                icon: <ChatIcon />,
+                icon: <ChatIcon style={muStyle} />,
                 name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
@@ -105,7 +111,7 @@ function MoreOptionsBtn({
                 },
             },
             {
-                icon: <LocalMallIcon />,
+                icon: <LocalMallIcon style={muStyle} />,
                 name: 'Seu Histórico ►',
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {

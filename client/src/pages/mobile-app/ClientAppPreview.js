@@ -19,7 +19,7 @@ function ClientAppPreview({ location }) {
 
     const useProfile = () => ({
         role: 'cliente',
-        name: `${clientName} (teste)`,
+        name: `${clientName} (T)`,
     });
 
     const useClientUser = () => ({

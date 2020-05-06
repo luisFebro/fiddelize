@@ -55,6 +55,12 @@ $color: #fff;
 }
 .bell-bot-anim { animation: badalo 1000ms ease-in-out 1; }
 
+.bell-top-anim-2 {
+    animation: abanico 1000ms ease-in-out 2;
+    transform-origin: top;
+}
+.bell-bot-anim-2 { animation: badalo 1000ms ease-in-out 2; }
+
 @keyframes abanico {
       0% {
         transform: rotate(0deg);

@@ -21,6 +21,11 @@ SpeedDialButton.propTypes = {
 const styles = {
     fabIcon: {
         textShadow: '.5px .5px 3px black',
+    },
+    muStyle: {
+        transform: 'scale(1.2)',
+        filter:  'drop-shadow(.5px .5px 1.5px black)',
+        color: '#fff',
     }
 }
 
@@ -45,7 +50,7 @@ export default function SpeedDialButton({
             backgroundColor: backColor || 'var(--themeSDark)',
             font: 'bold 17px var(--mainFont)',
             borderRadius: '30px',
-            filter: 'drop-shadow(.001em .1em .1em var(--mainWhite))',
+            filter: 'drop-shadow(.001em .1em .007em var(--mainWhite))',
         },
         staticTooltip: {
             filter: 'drop-shadow(.001em .1em .1em var(--mainWhite))',
@@ -93,8 +98,10 @@ export default function SpeedDialButton({
                     style: {
                         backgroundColor: FabProps.backgroundColor || '#000',
                         outline: 'none',
+                        filter: 'drop-shadow(.001em .1em .1em var(--mainWhite))'
                     },
                     size: FabProps.size || 'large',
+                    icon: styles.muStyle,
                 }}
                 onOpen={handleOpen}
                 open={isOpen}
@@ -117,6 +124,7 @@ export default function SpeedDialButton({
                         }}
                         FabProps={{
                             style: {
+                                color: "#fff",
                                 textShadow: '1px 1px 3px black',
                             },
                         }}

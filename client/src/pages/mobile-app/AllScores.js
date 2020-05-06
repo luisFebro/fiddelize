@@ -13,7 +13,7 @@ const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore, needApp
          ? null
          : (
             <section className="text-normal position-relative animated slideInLeft slow">
-                <div className="ellipse2" style={{ left: needAppForPreview && '170px'}}></div>
+                <div className="ellipse2" style={{ left: needAppForPreview && '160px'}}></div>
                 <div
                     style={{
                         zIndex: 10,
@@ -21,7 +21,7 @@ const AllScores = ({ currScoreRef, currScore, showPercentage, lastScore, needApp
                         color: 'var(--themeP)',
                         position: 'absolute',
                         top: '-18px',
-                        left: needAppForPreview ? '180px' : '200px'}}
+                        left: needAppForPreview ? '170px' : '200px'}}
                     className="text-em-0-7 text-nowrap font-weight-bold"
                 >
                     Sua<br />última pontuação:<br />

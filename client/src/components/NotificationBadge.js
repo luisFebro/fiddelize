@@ -25,11 +25,8 @@ export default function NotificationBadge({
     right,
     top, }) {
     const [invisible, setInvisible] = useState(true);
-    const [value, setValue] = useState(0);
 
-    useEffect(() => {
-        setTimeout(() => { setValue(badgeValue); setInvisible(false);}, 5000);
-    }, [])
+    useEffect(() => setTimeout(() => setInvisible(false), 5000), [])
 
     useEffect(() => {
         badgeInvisible && setInvisible(true);
@@ -37,13 +34,13 @@ export default function NotificationBadge({
 
     const BorderedBadge = withStyles(theme => ({
         badge: {
-            right: right || -3, //14
+            right: right || 0, //14
             top: top || 1, //18
             height: 0,
-            maxWidth: '16px',
-            padding: '16px',
+            maxWidth: '14px',
+            padding: '14px',
             border: `3px solid ${borderColor ? borderColor : "var(--mainDark)"}`,
-            font: `bold ${fontSize || '22px'} var(--mainFont)`,
+            font: `bold ${fontSize || '20px'} var(--mainFont)`,
             backgroundColor: backgroundColor || 'var(--themeSDark)',
             color: 'white',
             borderRadius: '50%',
@@ -53,7 +50,7 @@ export default function NotificationBadge({
 
     return (
         <BorderedBadge
-            badgeContent={value}
+            badgeContent={badgeValue}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             invisible={invisible}
             showZero={false}

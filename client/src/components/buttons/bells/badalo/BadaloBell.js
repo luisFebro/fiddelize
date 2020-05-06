@@ -15,12 +15,12 @@ export default function BadaloBell({
     const [badgeInvisible, setbadgeInvisible] = useState(false);
 
     const playAnima = (options = {}) => {
-        const { callback } = options;
+        const { callback, isInit } = options;
 
         const animaTop = document.querySelector(".bell-top");
         const animaBottom = document.querySelector(".bell-bot");
-        const class1 = 'bell-top-anim';
-        const class2 = 'bell-bot-anim';
+        const class1 = isInit ? 'bell-top-anim-2' : 'bell-top-anim';
+        const class2 = isInit ? 'bell-bot-anim-2' : 'bell-bot-anim';
 
         animaTop.classList.add(class1)
         animaBottom.classList.add(class2)
@@ -38,9 +38,7 @@ export default function BadaloBell({
     };
 
     useEffect(() => {
-        if(badgeValue) {
-            setTimeout(() => playAnima(), 4000);
-        }
+        badgeValue && setTimeout(() => playAnima({ isInit: true }), 3000);
     }, [badgeValue])
 
     return (
@@ -48,12 +46,12 @@ export default function BadaloBell({
             style={{ position, top, right, left }}
             onClick={() => playAnima({callback: () => setbadgeInvisible(true) })}
         >
- =             <NotificationBadge
+            <NotificationBadge
                 badgeValue={badgeValue}
                 badgeInvisible={badgeInvisible}
                 backgroundColor={notifBackColor}
                 borderColor={notifBorderColor}
-                top={15}
+                top={20}
             >
                 <div class="bell">
                     <div class="bell-top"></div>

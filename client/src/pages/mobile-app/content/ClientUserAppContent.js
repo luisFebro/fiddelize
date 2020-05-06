@@ -112,13 +112,13 @@ function ClientUserAppContent({
     const showGreetingAndNotific = () => (
         <section className="mt-3 position-relative animated slideInLeft slow">
             <section className="position-relative">
-                <div className="ellipse" style={{backgroundColor: "var(--themePLight--" + colorP + ")"}}></div>
+                <div className="ellipse" style={{backgroundColor: "var(--themePLight--" + colorP + ")", width: needAppForPreview && '21.8em',}}></div>
                 <div className={`${needAppForPreview && "enabledLink"}`}>
                     <BadaloBell
                         position="absolute"
                         top={5}
-                        left={270}
-                        notifBorderColor={"var(--themePDark--" + colorP + ")"}
+                        left={needAppForPreview ? 258 : 270}
+                        notifBorderColor={"var(--themeBackground--" + colorP + ")"}
                         notifBackColor={colorP === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
                         badgeValue={2}
                     />
