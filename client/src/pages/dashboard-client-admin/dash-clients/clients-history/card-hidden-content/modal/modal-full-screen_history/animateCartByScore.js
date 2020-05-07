@@ -2,7 +2,7 @@ import { getNewRemainder } from '../../../../../../../utils/numbers/getRemainder
 import getFirstName from '../../../../../../../utils/string/getFirstName';
 
 export default function animateCartByScore(currScore, rewardScore, options) {
-    const { dots, flag, cart, challengeMsg, currChallenge, userName } = options;
+    const { dots, flag, cart, challengeMsg, currChallenge, userName, selfThemeSColor } = options;
 
     let indScore;
     if(!currScore) {
@@ -35,7 +35,7 @@ export default function animateCartByScore(currScore, rewardScore, options) {
             const delayToAnimated = parseInt(`${count + 1}000`); // from 3 secs forwards...
             // DOTS
             let dotIcon = document.querySelector("#" + iconInArray);
-            setTimeout(() => dotIcon.classList.add(dots.className), delayToAnimated);
+            setTimeout(() => dotIcon.classList.add(`${dots.className}--${selfThemeSColor}`), delayToAnimated);
         }
     }
 

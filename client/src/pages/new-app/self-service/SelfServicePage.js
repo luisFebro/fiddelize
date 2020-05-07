@@ -12,7 +12,7 @@ function SelfServicePage({ location, match }) {
         colorS: "default",
         colorBack: "",
     })
-    const { colorP, colorS } = theme;
+    const { colorP, colorS, colorBack } = theme;
 
     const bizId = match.params.bizId;
     const bizCodeName = match.params.bizCodeName; // for image naming
@@ -58,7 +58,7 @@ function SelfServicePage({ location, match }) {
                     logoUrlPreview={logoUrlPreview}
                     colorP={colorP}
                     colorS={colorS}
-                    colorBack={colorP}
+                    colorBack={colorBack}
                     currScore={currScore}
                     rewardScore={rewardScore}
                 />

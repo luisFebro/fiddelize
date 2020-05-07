@@ -16,12 +16,13 @@ function AppPreview({
     logoUrlPreview,
     colorP,
     colorS,
+    colorBack,
     rewardScore,
     currScore, }) {
     const { runName } = useRunComp();
 
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
-    const iframeUrl = `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorP}&rewardScore=${rewardScore}&currScore=${currScore}`;
+    const iframeUrl = `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&rewardScore=${rewardScore}&currScore=${currScore}`;
 
     // function startIframe() {
     //     const iFrame = document.querySelector("#appIframe");

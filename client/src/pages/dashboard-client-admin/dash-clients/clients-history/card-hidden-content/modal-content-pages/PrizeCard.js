@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
+import selectTxtStyle from '../../../../../../utils/biz/selectTxtStyle';
 
 const faStyle = {
     filter: 'drop-shadow(0 0 25px grey)',
@@ -27,7 +28,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
     }
 
     const displayMainContent = () => (
-        <section className="purchase-history-prize-card--root text-shadow text-white text-center text-purple">
+        <section className={`${selectTxtStyle(colorP)} purchase-history-prize-card--root text-center text-purple`}>
             <main className="gift-main-title" >
                 <div>
                     <FontAwesomeIcon icon="trophy" style={{...faStyle, fontSize: '45px'}} />

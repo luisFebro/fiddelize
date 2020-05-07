@@ -11,7 +11,6 @@ import { readPurchaseHistory } from '../../../../../../redux/actions/userActions
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 import defineCurrChallenge from '../helpers/defineCurrChallenge';
 import imgLib from '../../../../../../utils/storage/lForageStore';
-import selectTxtStyle from '../../../../../../utils/biz/selectTxtStyle';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -91,8 +90,8 @@ export default function PurchaseHistory({ data }) {
         if(historyData.cardType.includes("prize")) {
             return <PrizeCard
                         historyData={historyData}
-                        colorP={selfThemePColor}
                         colorS={selfThemeSColor}
+                        colorP={selfThemePColor}
                     />
         } else {
             return(
@@ -101,7 +100,7 @@ export default function PurchaseHistory({ data }) {
                     className="mt-2"
                     style={{backgroundColor: 'var(--themePDark--' + selfThemeBackColor + ')'}}
                 >
-                    <section className={`${selectTxtStyle(selfThemeBackColor, {bold: true})} purchase-history-table-data--root text-normal text-center text-purple`}>
+                    <section className={`text-white font-weight-bold purchase-history-table-data--root text-normal text-center text-purple`}>
                         {showDesc(historyData)}
                         {showScore(historyData)}
                     </section>

@@ -19,22 +19,25 @@ const faStyle = {
 
 
 export default function CartRace({ currUserScore, challengeN, userName, className, id }) {
-    const { maxScore, selfThemeBackColor } = useClientAdmin();
+    const { maxScore, selfThemePColor, selfThemeSColor, } = useClientAdmin();
     const currChallenge = challengeN === 1 ? 1 : challengeN - 1;
 
-    const backColor = {backgroundColor: 'var(--themeBackground--' + selfThemeBackColor + ')'};
+    const backColor = {backgroundColor: 'var(--themeBackground--' + selfThemePColor + ')'};
 
     useEffect(() => {
-        animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName});
-    }, [maxScore, currUserScore, currChallenge])
+        animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName, selfThemeSColor});
+    }, [maxScore, currUserScore, currChallenge, selfThemeSColor])
 
     const showLineRoad = () => (
-        <div className="line" style={backColor}>
-            <p id="dot1" className=""></p>
-            <p id="dot2" className=""></p>
-            <p id="dot3" className=""></p>
-            <p id="dot4" className=""></p>
-            <p id="dot5" className=""></p>
+        <div
+            className="line"
+            style={backColor}
+        >
+            <p id="dot1" style={backColor} className=""></p>
+            <p id="dot2" style={backColor} className=""></p>
+            <p id="dot3" style={backColor} className=""></p>
+            <p id="dot4" style={backColor} className=""></p>
+            <p id="dot5" style={backColor} className=""></p>
             <div className="vertical-line" style={backColor}>
                 <p className="" style={backColor}></p>
             </div>

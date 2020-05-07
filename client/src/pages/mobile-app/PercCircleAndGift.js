@@ -12,12 +12,24 @@ export default function PercCircleAndGift({
     playBeep,
     colorS,
     colorP,
+    colorBack,
     classNamePerc, }) {
     const percentageAchieved = getPercentage(maxScore, currScore);
     const needResizeFont = percentageAchieved.toString().includes(".");
 
+    const handleColorSelection = () => {
+        if(colorS === "white") {
+            return "var(--themePLight--" + colorP +")";
+        } else if(colorBack === "black" && colorS === "black") {
+            return "var(--themeP--" + colorP + ")";
+        } else {
+            return "var(--themeS--" + colorS +")";
+        }
+
+    }
+
     const percentageColor = colorS === "white" ? "var(--themePLight--" + colorP +")" : "var(--themeSDark--" + colorS +")";
-    const indicatorBarColor = colorS === "white" ? "var(--themePLight--" + colorP +")" : "var(--themeS--" + colorS +")";
+    const indicatorBarColor = handleColorSelection();
 
     const styles = {
         percentageCircle: {

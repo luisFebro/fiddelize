@@ -6,7 +6,12 @@ import PwaInstaller from '../components/pwa-installer/PwaInstaller';
 import { CLIENT_URL } from '../config/clientUrl';
 import checkIfElemIsVisible from '../utils/window/checkIfElemIsVisible';
 import getQueryByName from '../utils/string/getQueryByName';
+import { useClientAdmin } from '../hooks/useRoleData';
+import { readClientAdmin } from '../redux/actions/userActions';
 import lStorage, { setSystemOp, needAppRegisterOp } from '../utils/storage/lStorage';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../redux/actions/snackbarActions';
+
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
@@ -17,11 +22,6 @@ const appSystem = lStorage("getItems", { collection: "appSystem"});
 // custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1
 
 export default function DownloadApp({ match, location }) {
-    let [userName, setUserName] = useState(match.params.userName);
-    userName = userName && userName.replace(/\+/g, " ");
-
-    const [run, setRun] = useState(false);
-
     const bizName = getQueryByName("negocio", location.search);
     const bizId = getQueryByName("id", location.search);
     const isClientAdmin = location.search.includes("admin=1");
@@ -34,6 +34,36 @@ export default function DownloadApp({ match, location }) {
         lStorage("setItems", setSystemOp("cliente", bizId));
         lStorage("setItem", {...needAppRegisterOp, value: true});
     } // L
+
+    let [userName, setUserName] = useState(match.params.userName);
+    userName = userName && userName.replace(/\+/g, " ");
+    const [run, setRun] = useState(false);
+
+    const dispatch = useStoreDispatch();
+    const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
+    const { selfBizLogoImg, selfMilestoneIcon, selfThemePColor, selfThemeSColor, selfThemeBackColor, } = useClientAdmin();
+
+    if(needSelfServiceData) {
+        const clientAdminData = {
+            selfBizLogoImg,
+            selfMilestoneIcon,
+            selfThemePColor,
+            selfThemeSColor,
+            selfThemeBackColor,
+        }
+        const clientAdminColl = { collection: "clientAdmin", newObj: clientAdminData };
+        lStorage("setItems", clientAdminColl);
+    }
+
+    useEffect(() => {
+        readClientAdmin(dispatch, bizId)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, "Ocorreu um problema. Verifique sua conexão", 'error')
+            setNeedSelfServiceData(true);
+        })
+    }, [bizId])
+
+
 
     useEffect(() => {
         checkIfElemIsVisible("#target", setRun, true);

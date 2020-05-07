@@ -39,7 +39,7 @@ export default function AppPickersHandler({
                 const objToSend1 = {
                     "clientAdminData.selfThemePColor": theme.colorP,
                     "clientAdminData.selfThemeSColor": theme.colorS,
-                    "clientAdminData.selfThemeBackColor": theme.colorP,
+                    "clientAdminData.selfThemeBackColor": theme.colorBack ? theme.colorBack : theme.colorP,
                 }
                 showSnackbar(dispatch, "Salvando preferências de cores e continuando...");
                 updateUser(dispatch, objToSend1, bizId)

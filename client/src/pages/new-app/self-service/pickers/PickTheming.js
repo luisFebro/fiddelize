@@ -6,6 +6,7 @@ import CheckBoxForm from '../../../../components/CheckBoxForm';
 import { CLIENT_URL } from '../../../../config/clientUrl';
 import ModalFullContent from '../../../../components/modals/ModalFullContent';
 import { uiColors } from '../../../../global-data/uiColors';
+import gotArrayThisItem from '../../../../utils/arrays/gotArrayThisItem';
 
 PickTheming.propTypes = {
     step: PropTypes.number,
@@ -36,15 +37,19 @@ export default function PickTheming({
     const [data, setData] = useState({
         primaryColor: 'padrão',
         secondaryColor: 'padrão',
+        backColor: 'padrão',
         hexValuePrimary: 'var(--themeP)',
         hexValueSecondary: 'var(--themeS)',
+        hexBackValue: 'var(--themeP)',
         currColorModal: '',
     })
 
     const {
         primaryColor,
-        secondaryColor, currColorModal,
-        hexValuePrimary, hexValueSecondary } = data;
+        secondaryColor,
+        backColor,
+        currColorModal,
+        hexValuePrimary, hexValueSecondary, hexBackValue } = data;
 
     const needHideCheckBox = Boolean(primaryColor !== "padrão" || secondaryColor !== "padrão");
 
@@ -55,12 +60,12 @@ export default function PickTheming({
     }, [secondaryColor])
 
     useEffect(() => {
-        if(primaryColor !== "padrão" || secondaryColor !== "padrão") {
+        if(primaryColor !== "padrão" || secondaryColor !== "padrão" || backColor !== "padrão") {
             const doc = document.querySelector("#status");
             doc.style.display = "block";
             setTimeout(() => doc.style.display = "none", 5000);
         }
-    }, [primaryColor, secondaryColor])
+    }, [primaryColor, secondaryColor, backColor])
 
     useEffect(() => {
         if(isBoxChecked) {
@@ -70,8 +75,35 @@ export default function PickTheming({
         }
     }, [isBoxChecked])
 
+    const handleIsSelectedBackColor = () => {
+        if(backColor !== "padrão" && primaryColor !== "padrão") {
+            return true;
+        } else if(primaryColor !== "padrão") {
+           return false;
+        } else {
+           return true;
+        }
+    }
+    const showBackColorBtn = () => (
+        primaryColor !== "padrão" &&
+        <div className="flex-column animated zoomIn">
+            <p className="m-0 text-purple text-center text-normal font-weight-bold">
+                Cor de Fundo
+            </p>
+            <div className="mt-2 d-flex container-center-col">
+                <RadiusColorBtn
+                    selectedColor={handleIsSelectedBackColor() ? hexBackValue : hexValuePrimary}
+                    onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "de Fundo"});}}
+                />
+                <span className="mt-2 text-small text-center text-purple font-weight-bold">
+                    {handleIsSelectedBackColor() ? backColor : primaryColor}
+                </span>
+            </div>
+        </div>
+    );
+
     const showThemingArea = () => (
-        <section className="text-normal text-white margin-auto-90">
+        <section className="text-normal text-white margin-auto-90 mb-md-5">
             <Card style={{minWidth: '330px', backgroundColor: 'var(--mainWhite)'}} className="p-2 text-purple text-center text-normal font-weight-bold animated zoomIn fast">
                 <section className="container-center">
                     <img
@@ -109,6 +141,9 @@ export default function PickTheming({
                                 {secondaryColor}
                             </span>
                         </div>
+                    </div>
+                    <div className="mt-3">
+                        {showBackColorBtn()}
                     </div>
                 </section>
                 <section style={{display: needHideCheckBox ? "none" : "block" }}>
@@ -163,7 +198,16 @@ const ColorPicker = ({
     setTheme }) => {
 
     const isPrimary = whichColorModal === "Principal";
-    const dontNeedShowColor = loopColor => Boolean(loopColor === notIncludeColorPrimary || loopColor === notIncludeColorSecondary);
+    const isBackground = whichColorModal === "de Fundo";
+    const dontNeedShowColor = loopColor => {
+        if(isBackground) {
+            let colorArray;
+            "pretobranco".includes(notIncludeColorPrimary) ? colorArray = ["branco", "preto"] : colorArray = ["branco", "preto", notIncludeColorPrimary];
+            return !gotArrayThisItem(colorArray, loopColor);
+        } else {
+            return Boolean(loopColor === notIncludeColorPrimary || loopColor === notIncludeColorSecondary);
+        }
+    }
 
     const showTitle = () => (
         <div className="my-4">
@@ -177,6 +221,7 @@ const ColorPicker = ({
             </p>
         </div>
     );
+
 
     return(
         <div>
@@ -199,9 +244,13 @@ const ColorPicker = ({
 
                                         setFullOpen(false);
 
+
                                         if(isPrimary) {
                                             setData({ ...data, primaryColor: ptColorName , hexValuePrimary: hexValue });
                                             setTheme({...theme, colorP: translatedColor[ptColorName]})
+                                        } else if(isBackground) {
+                                            setData({ ...data, backColor: ptColorName, hexBackValue: hexValue });
+                                            setTheme({...theme, colorBack: translatedColor[ptColorName]})
                                         } else {
                                             setData({ ...data, secondaryColor: ptColorName, hexValueSecondary: hexValue });
                                             setTheme({...theme, colorS: translatedColor[ptColorName]})

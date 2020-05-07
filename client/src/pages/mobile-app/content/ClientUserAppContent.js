@@ -34,6 +34,7 @@ function ClientUserAppContent({
     runName,
     colorP,
     colorS,
+    colorBack,
     rewardScoreTest }) {
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
@@ -103,6 +104,7 @@ function ClientUserAppContent({
         elem.play();
     }
     // END UTILS
+    const backColorSelect = colorBack || colorP || selfThemeBackColor;
 
     const showGreetingAndNotific = () => (
         <section className="mt-3 position-relative animated slideInLeft slow">
@@ -113,8 +115,8 @@ function ClientUserAppContent({
                         position="absolute"
                         top={5}
                         left={needAppForPreview ? 258 : 270}
-                        notifBorderColor={"var(--themeBackground--" + selfThemeBackColor + ")"}
-                        notifBackColor={selfThemeBackColor === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
+                        notifBorderColor={"var(--themeBackground--" + backColorSelect + ")"}
+                        notifBackColor={backColorSelect === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
                         badgeValue={2}
                     />
                 </div>
@@ -139,7 +141,7 @@ function ClientUserAppContent({
             lastScore={lastScore}
             needAppForPreview={needAppForPreview}
             selectTxtStyle={selectTxtStyle}
-            colorBack={selfThemeBackColor}
+            colorBack={backColorSelect}
         />
     );
 
@@ -152,6 +154,7 @@ function ClientUserAppContent({
             playBeep={playBeep}
             colorS={colorS}
             colorP={colorP}
+            colorBack={backColorSelect}
         />
     );
 
@@ -176,7 +179,7 @@ function ClientUserAppContent({
                         currScore={currScore || 0}
                         maxScore={maxScore || 0}
                         playBeep={playBeep}
-                        colorBack={selfThemeBackColor}
+                        colorBack={backColorSelect}
                         colorS={colorS}
                         selectTxtStyle={selectTxtStyle}
                     />
@@ -199,7 +202,7 @@ function ClientUserAppContent({
                             className={`no-text-decoration text-center pressed-to-left`}
                             onClick={playBeep}
                             style={styles.rulesBtn}>
-                            <span className={`${selectTxtStyle(selfThemeBackColor, {bold: true})} text-normal`}>
+                            <span className={`${selectTxtStyle(backColorSelect, {bold: true})} text-normal`}>
                                 Consulte<br />Regras Aqui
                             </span>
                         </div>
@@ -231,7 +234,7 @@ function ClientUserAppContent({
                     <RadiusBtn
                         size="extra-small"
                         title="voltar painel"
-                        backgroundColor={'var(--themeSDark--' + selfThemeSColor + ')'}
+                        backgroundColor={'var(--themeSDark--' + backColorSelect + ')'}
                         onClick={() => {
                             setRun(dispatch, "goDash");
                             history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);

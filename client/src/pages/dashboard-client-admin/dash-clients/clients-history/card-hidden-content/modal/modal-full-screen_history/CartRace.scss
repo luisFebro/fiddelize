@@ -129,19 +129,97 @@
     top: -7px;
     height: 25px;
     width: 25px;
-    background-color: var(--themeP);
     border-radius: 50%;
     z-index: 2;
 }
 
-.paint-dot {
-    animation: paintDot 3s ease-out 1 normal forwards;
+.paint-dot--default {
+    animation: paintDotDefault 3s ease-out 1 normal forwards;
     transition: all 1s;
 }
-
-@keyframes paintDot {
+.paint-dot--purple {
+    animation: paintDotPurple 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--pink {
+    animation: paintDotPink 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--red {
+    animation: paintDotRed 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--orange {
+    animation: paintDotOrange 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--black {
+    animation: paintDotBlack 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--blue {
+    animation: paintDotBlue 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--brown {
+    animation: paintDotBrown 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--yellow {
+    animation: paintDotYellow 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--green {
+    animation: paintDotGreen 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+.paint-dot--white {
+    animation: paintDotWhite 3s ease-out 1 normal forwards;
+    transition: all 1s;
+}
+@keyframes paintDotDefault {
     0% { background-color: var(--themeP);  }
     100% { background-color: var(--themeS); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotPurple {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--purple); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotPink {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--pink); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotRed {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--red); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotOrange {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--orange); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotBlack {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--black); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotBlue {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--blue); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotBrown {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--brown); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotYellow {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--yellow); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotGreen {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--green); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
+}
+@keyframes paintDotWhite {
+    0% { background-color: var(--mainWhite);  }
+    100% { background-color: var(--themeS--white); height: 30px; width: 30px; filter: drop-shadow(.001em .001em .15em var(--mainDark))}
 }
 
 .cart-race--root .flag {
