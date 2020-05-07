@@ -17,17 +17,6 @@ just write an empty string ("")
  */
 // dataKey syntax: location_description
 // Rules: it should not fetch multiple images from one single instance like prior convert_any_illustration. This duplicates worngly images. Each image should have its own instance.
-export const collectionStore = {
-    logos: ["app_fiddelize_logo", "app_biz_logo"],
-    icons: ["app_gift", "dash_podium"],
-    shapes: ["dash_title_shape", "app_start_shape"],
-    illustrations: [
-        "app_chat_illustra",
-        "dash_no_search_illustra",
-        'app_empty_purchase_illustra',
-    ],
-};
-
 const imgLib = {
     get app_fiddelize_logo() { return handleStorage("logos", "app_fiddelize_logo", `img/official-logo-name.png`) },
     app_biz_logo: url => handleStorage("logos", "app_biz_logo", url, true),
@@ -36,7 +25,17 @@ const imgLib = {
     get dash_podium() { return handleStorage("icons", "dash_podium", `img/icons/podium.png`) },
     // Shapes - check for multiple request found after inserting the first svg shape...
     get dash_title_shape() { return handleStorage("shapes", "dash_title_shape", `img/shapes/blob-dashboard-header.svg`) },
-    get app_start_shape() { return handleStorage("shapes", "app_start_shape", `img/shapes/blob-app-start--default.svg`) },
+    get app_start_shape_default() { return handleStorage("shapes", "app_start_shape_default", `img/shapes/blob-app-start--default.svg`) },
+    get app_start_shape_pink() { return handleStorage("shapes", "app_start_shape_pink", `img/shapes/blob-app-start--pink.svg`) },
+    get app_start_shape_purple() { return handleStorage("shapes", "app_start_shape_purple", `img/shapes/blob-app-start--purple.svg`) },
+    get app_start_shape_red() { return handleStorage("shapes", "app_start_shape_red", `img/shapes/blob-app-start--red.svg`) },
+    get app_start_shape_orange() { return handleStorage("shapes", "app_start_shape_orange", `img/shapes/blob-app-start--orange.svg`) },
+    get app_start_shape_black() { return handleStorage("shapes", "app_start_shape_black", `img/shapes/blob-app-start--black.svg`) },
+    get app_start_shape_white() { return handleStorage("shapes", "app_start_shape_white", `img/shapes/blob-app-start--white.svg`) },
+    get app_start_shape_blue() { return handleStorage("shapes", "app_start_shape_blue", `img/shapes/blob-app-start--blue.svg`) },
+    get app_start_shape_green() { return handleStorage("shapes", "app_start_shape_green", `img/shapes/blob-app-start--green.svg`) },
+    get app_start_shape_brown() { return handleStorage("shapes", "app_start_shape_brown", `img/shapes/blob-app-start--brown.svg`) },
+    get app_start_shape_yellow() { return handleStorage("shapes", "app_start_shape_yellow", `img/shapes/blob-app-start--yellow.svg`) },
     // Illustration
     get app_chat_illustra() { return handleStorage("illustrations", "app_chat_illustra", `img/illustrations/online-chat.svg`) },
     get app_empty_purchase_illustra() { return handleStorage("illustrations", "app_empty_purchase_illustra", `img/illustrations/online-chat.svg`) },

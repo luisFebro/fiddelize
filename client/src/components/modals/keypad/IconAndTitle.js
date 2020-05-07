@@ -14,7 +14,8 @@ export default function IconAndTitle({
         <div
             style={{
                 background: `linear-gradient(to right, var(--themePLight--${colorP}), var(--themePDark--${colorP}))`,
-                border: 'solid 4px var(--mainDark)',
+                borderTop: '4px solid var(--mainWhite)',
+                borderBottom: '4px solid var(--mainWhite)',
                 textAlign: 'center'
             }}
             className="d-flex flex-row text-white align-items-center"

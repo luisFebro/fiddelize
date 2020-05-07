@@ -17,12 +17,13 @@ import RadiusBtn from '../../components/buttons/RadiusBtn';
 import { CLIENT_URL } from '../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSystem, useClientAdmin } from '../../hooks/useRoleData';
+import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
     const { roleWhichDownloaded } = useAppSystem();
 
-    const { selfThemeSColor } = useClientAdmin();
+    const { selfThemeSColor, selfThemePColor, selfThemeBackColor } = useClientAdmin();
 
     const signInThisUser = value => {
         const userData = {
@@ -113,7 +114,8 @@ function Login({ history, setLoginOrRegister }) {
             title="Acessar Conta"
             color="var(--mainWhite)"
             padding="py-2 px-2"
-            backgroundColor="var(--themePDark)"
+            needShadow={true}
+            backgroundColor={"var(--themePDark--" +  selfThemePColor + ")"}
         />
     );
 
@@ -135,11 +137,18 @@ function Login({ history, setLoginOrRegister }) {
                 className="animated zoomIn delay-2s p-2 mt-3"
             >
                 <p
-                    className="d-flex justify-content-center text-white font-weight-bold text-small text-shadow"
+                    className={`${selectTxtStyle(selfThemeBackColor)} d-flex justify-content-center text-small`}
                 >
-                    Novo Cliente?<br/>Faça cadastro{"  "}
+                    <span style={{fontWeight: 'bolder'}}>
+                        Novo Cliente?<br/>Faça cadastro{"  "}
+                    </span>
                     <div className="pl-2">
-                        <RadiusBtn size="small" title="aqui" onClick={() => setLoginOrRegister("register")} />
+                        <RadiusBtn
+                            size="small"
+                            title="aqui"
+                            onClick={() => setLoginOrRegister("register")}
+                            backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                        />
                     </div>
                 </p>
             </div>

@@ -21,8 +21,10 @@ import { countField } from '../../redux/actions/userActions';
 import detectErrorField from '../../utils/validation/detectErrorField';
 import handleChange from '../../utils/form/use-state/handleChange';
 import lStorage from '../../utils/storage/lStorage';
+import { useClientAdmin } from '../../hooks/useRoleData';
+import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 // Material UI
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import EmailIcon from '@material-ui/icons/Email';
@@ -47,13 +49,6 @@ const bizSysId = appSystem && appSystem.businessId;
 
 const isSmall = window.Helper.isSmallScreen();
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        maxWidth: 345,
-        filter: 'drop-shadow(.001em .001em .15em var(--mainDark))',
-    }
-}));
-
 function Register({ setLoginOrRegister, needLoginBtn = false }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [selectedDate, handleDateChange] = useState(new Date());
@@ -71,6 +66,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     });
     let { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 
+    const { selfThemePColor, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
     // }));
@@ -88,8 +84,6 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     // end detecting field errors
 
     const dispatch = useStoreDispatch();
-
-    const classes = useStyles();
 
     useEffect(() => {
         setData({ ...data, birthday: getDayMonthBr(selectedDate) })
@@ -184,13 +178,18 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 class="container-center animated zoomIn delay-2s position-relative p-2 mt-3"
             >
                 <p
-                    className="text-white m-0 font-weight-bold text-small text-shadow"
+                    className={`${selectTxtStyle(selfThemeBackColor)} m-0 font-weight-bold text-small`}
                     style={{whiteSpace: 'nowrap'}}
                 >
                     Já é cadastrado(a)?{"  "}
                 </p>
                 <div className="pl-2">
-                    <RadiusBtn size="small" title="Faça login" onClick={() => setLoginOrRegister("login")} />
+                    <RadiusBtn
+                        size="small"
+                        title="Faça login"
+                        onClick={() => setLoginOrRegister("login")}
+                        backgroundColor={"var(--themeSDark--" +  selfThemeSColor + ")"}
+                    />
                 </div>
             </div>
         )
@@ -202,7 +201,8 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 title="Cadastre-se!"
                 subTitle="É rápido e fácil."
                 color="var(--mainWhite)"
-                backgroundColor="var(--themePDark)"
+                needShadow={true}
+                backgroundColor={"var(--themePDark--" +  selfThemePColor + ")"}
             />
         </div>
     );
@@ -222,7 +222,6 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
             margin: 'auto',
             width: '90%',
             maxWidth: isSmall ? "" : 360,
-            boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
         }
     }
 
@@ -423,9 +422,9 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 disabled={actionBtnDisabled ? true : false}
                 title="Registrar"
                 color="var(--mainWhite)"
-                backgroundColor="var(--themeSDark)"
-                backColorOnHover="var(--themeSDark)"
-                iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle}/>}
+                backgroundColor={"var(--themeSDark--" +  selfThemeSColor + ")"}
+                backColorOnHover={"var(--themeSDark--" +  selfThemeSColor + ")"
+}               iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle}/>}
                 textTransform='uppercase'
             />
         </div>

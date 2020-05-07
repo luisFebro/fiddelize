@@ -1,14 +1,14 @@
 // FOT STATIC ASSETS AND OFFLINE IMAGES
 import localforage from 'localforage';
 import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
-import { collectionStore } from './lForageStore';
 // export * from './lForageStore';
 
 // convert the blob (image) into a data-url (a base64 string) and set that as the src for your image element.
 export const setImage = (collection, dataKey, imageUrlValue) => {
     const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
     store.config({ storeName: collection }); // n3 dataStore
-    if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
+    // This error condition is commented out because there is a need for dinamic name insertion.
+    // if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
     if(!imageUrlValue) throw new Error("imageURL param is missing...")
 
     return fetch(imageUrlValue)
@@ -20,7 +20,7 @@ export const setImage = (collection, dataKey, imageUrlValue) => {
 export const readImage = (collection, dataKey) => {
     const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
     store.config({ storeName: collection }); // n3 dataStore
-    if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
+    // if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
 
     return store.getItem(dataKey)
     .then(function(res) { return res })

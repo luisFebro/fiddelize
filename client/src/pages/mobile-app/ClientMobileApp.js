@@ -94,16 +94,21 @@ function ClientMobileApp({ location, history }) {
     }
 
     const showLogin = () => (
-        <div className="container-center">
+        <div
+            className="container-center position-relative"
+            style={{top: -68}}
+        >
             <Login setLoginOrRegister={setLoginOrRegister} />
         </div>
     );
 
     const showRegister = (needLoginBtn, needSetFunc) => (
-        <Register
-            setLoginOrRegister={setLoginOrRegister || true}
-            needLoginBtn={needLoginBtn}
-        />
+        <div className="position-relative" style={{top: -58}}>
+            <Register
+                setLoginOrRegister={setLoginOrRegister || true}
+                needLoginBtn={needLoginBtn}
+            />
+        </div>
     );
 
     const isClientUserLogged = isAuthUser && role === "cliente";
@@ -117,8 +122,8 @@ function ClientMobileApp({ location, history }) {
                     className="animated rubberBand delay-5s"
                 >
                     <ImgLoader
-                        className="app_start_shape"
-                        src={imgLib.app_start_shape}
+                        className={`app_start_shape_${selfThemePColor}`}
+                        src={imgLib[`app_start_shape_${selfThemePColor}`]}
                         width={460}
                         needLoader={false}
                         height={130}
