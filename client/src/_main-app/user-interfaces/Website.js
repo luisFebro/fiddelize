@@ -31,6 +31,9 @@ import LinearProgress from '../../components/loadingIndicators/LinearProgress';
 import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
 
+// Preloading a lazy component without blocking rendering.
+// const ClientAppPreview = import('../../pages/mobile-app/ClientAppPreview');
+// const ClientAppPreviewLazy = React.lazy(() => ClientAppPreview);
 // NOT WORKING...
 const LoginPageLazy = Loadable({
     loader: () => import(/* webpackChunkName: "login-page-lazy" */ '../../pages/LoginPage'),

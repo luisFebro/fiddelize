@@ -5,7 +5,7 @@ import getQueryByName from '../../../utils/string/getQueryByName';
 import getFirstName from '../../../utils/string/getFirstName';
 import './style.scss';
 
-export default function SelfServicePage({ location, match }) {
+function SelfServicePage({ location, match }) {
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
     const [theme, setTheme] = useState({
         colorP: "default",
@@ -67,3 +67,8 @@ export default function SelfServicePage({ location, match }) {
     );
 }
 
+export default React.memo(SelfServicePage);
+
+/*
+
+ */

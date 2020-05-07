@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CLIENT_URL } from '../../../config/clientUrl';
 import { useRunComp } from '../../../hooks/useRunComp';
 import MobileScreenLoading from '../../../components/loadingIndicators/MobileScreenLoading'
@@ -11,7 +11,7 @@ AppPreview.propTypes = {
     logoUrlPreview: PropTypes.string,
 }
 
-export default function AppPreview({
+function AppPreview({
     clientName,
     logoUrlPreview,
     colorP,
@@ -19,6 +19,18 @@ export default function AppPreview({
     rewardScore,
     currScore, }) {
     const { runName } = useRunComp();
+
+    // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
+    const iframeUrl = `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorP}&rewardScore=${rewardScore}&currScore=${currScore}`;
+
+    // function startIframe() {
+    //     const iFrame = document.querySelector("#appIframe");
+    //     setTimeout(() => iFrame.src = iframeUrl, 5000);
+    // };
+
+    // useEffect(() => {
+    //     startIframe();
+    // }, []);
 
     const showBlob = () => (
         <div className="app-preview-blob animated slideIn">
@@ -28,15 +40,13 @@ export default function AppPreview({
             />
         </div>
     );
-    // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
-    const iframeUrl =
-    `${CLIENT_URL}/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorP}&rewardScore=${rewardScore}&currScore=${currScore}`;
 
     const showAppIframe = () => (
         <div
             className="app-preview-iframe"
         >
             <iframe
+                id="appIframe"
                 src={iframeUrl}
                 allowFullScreen={false}
                 width={330}
@@ -108,3 +118,5 @@ export default function AppPreview({
         </section>
     );
 }
+
+export default React.memo(AppPreview);

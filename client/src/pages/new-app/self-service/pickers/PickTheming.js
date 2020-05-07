@@ -146,6 +146,7 @@ export default function PickTheming({
                 />}
                 fullOpen={fullOpen}
                 setFullOpen={setFullOpen}
+                animatedClass="none"
             />
         </div>
     );
@@ -196,6 +197,8 @@ const ColorPicker = ({
                                         const ptColorName = e.currentTarget.name;
                                         const hexValue = e.currentTarget.value;
 
+                                        setFullOpen(false);
+
                                         if(isPrimary) {
                                             setData({ ...data, primaryColor: ptColorName , hexValuePrimary: hexValue });
                                             setTheme({...theme, colorP: translatedColor[ptColorName]})
@@ -203,7 +206,6 @@ const ColorPicker = ({
                                             setData({ ...data, secondaryColor: ptColorName, hexValueSecondary: hexValue });
                                             setTheme({...theme, colorS: translatedColor[ptColorName]})
                                         }
-                                        setFullOpen(false);
                                     }}
                                     size="65px"
                                 />

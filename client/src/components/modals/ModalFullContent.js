@@ -14,7 +14,8 @@ export default function ModalFullContent({
     contentComp,
     fullOpen = false,
     setFullOpen,
-    style, }) {
+    style,
+    animatedClass, }) {
 
     let defaultStyle = { zIndex: 3000, overflowX: 'hidden', };
     // Not working
@@ -30,7 +31,7 @@ export default function ModalFullContent({
             fullScreen={true}
             open={fullOpen}
             aria-labelledby="form-dialog-title"
-            className="animated rollIn faster"
+            className={`${animatedClass || "animated rollIn faster"}`}
             onScroll={null}
         >
             {contentComp}

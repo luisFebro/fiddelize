@@ -34,7 +34,7 @@ export default function App() {
     return (
         <BrowserRouter>
             <ScrollToTop>
-                <div primary-theme="default">
+                <div>
                     {isThisApp() ? <MobileApp /> : <Website />}
                 </div>
             </ScrollToTop>

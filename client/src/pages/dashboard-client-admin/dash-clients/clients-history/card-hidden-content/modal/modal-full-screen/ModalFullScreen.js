@@ -22,7 +22,10 @@ ModalFullScreen.propTypes = {
     modalData: PropTypes.object,
 };
 
-export default function ModalFullScreen({ open, onClose, modalData }) {
+export default function ModalFullScreen({
+    open,
+    onClose,
+    modalData, }) {
     const dispatch = useStoreDispatch();
     const { title, subTitle, componentContent } = modalData;
 

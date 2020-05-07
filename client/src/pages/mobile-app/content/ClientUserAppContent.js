@@ -9,7 +9,6 @@ import { confetti } from '../../../keyframes/animations-js/confetti/confetti';
 import { useStoreDispatch } from 'easy-peasy';
 import getFirstName from '../../../utils/string/getFirstName';
 import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
-import AOS from 'aos';
 import "../ellipse.css";
 import { setRun } from '../../../hooks/useRunComp';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
@@ -57,10 +56,6 @@ function ClientUserAppContent({
     const { isAuthUser } = useAuthUser();
 
     const dispatch = useStoreDispatch();
-
-    AOS.init({
-        offset: 50,
-    });
 
     const styles = {
         rulesBtn: {

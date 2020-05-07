@@ -66,4 +66,4 @@ function ClientAppPreview({ location }) {
     );
 }
 
-export default withRouter(ClientAppPreview);
+export default React.memo(withRouter(ClientAppPreview));
