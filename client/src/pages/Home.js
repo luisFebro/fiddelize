@@ -41,7 +41,22 @@ export default function Home() {
                 data-aos-duration="1500"
                 className="ml-4 text-title text-white"
             >
-                Conquiste seus clientes com um sistema flexível<br />onde eles acessam seus pontos com<br />um clique pelo App.
+                Combinamos design, sistema e tecnologia de ponta para entregar
+                uma experiência única para empreendedores e seus clientes através
+                de nossa plataforma de fidelização.
+            </p>
+            <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
+                <ScrollArrow color="white" />
+            </div>
+            <p
+                data-aos="fade-up"
+                data-aos-duration="1500"
+                className="ml-4 text-title text-white text-center"
+            >
+                Crie hoje seu multi App de<br />
+                pontos de fidelidade com<br />
+                tecnologia sob medida movido a<br />
+                aumentar sua clientela e vendas<br />
             </p>
             <div
                 data-aos="fade-up-right"

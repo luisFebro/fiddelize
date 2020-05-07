@@ -192,8 +192,8 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const showTitle = () => (
         <div className="position-relative">
             <Title
-                title="Comece Hoje!"
-                subTitle="Cadastre-se aqui."
+                title="Comece Aqui!"
+                subTitle="Cadastre-se."
                 color="var(--mainWhite)"
                 backgroundColor="var(--themePDark)"
             />
