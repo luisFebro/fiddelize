@@ -45,14 +45,14 @@ function AppPreview({
         <div
             className="app-preview-iframe"
         >
-            <iframe
+            <embed
                 id="appIframe"
                 src={iframeUrl}
                 allowFullScreen={false}
                 width={330}
                 height={450}
             >
-            </iframe>
+            </embed>
         </div>
     );
 

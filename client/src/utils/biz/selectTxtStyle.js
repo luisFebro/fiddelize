@@ -1,4 +1,4 @@
-const backColorsWhichNeedDarkTxt = ["yellow", ];
+const backColorsWhichNeedDarkTxt = ["yellow", "white"];
 
 export default function selectTxtStyle(backgroundColor, options = {}) {
     const { bold, needDarkBool } = options;
