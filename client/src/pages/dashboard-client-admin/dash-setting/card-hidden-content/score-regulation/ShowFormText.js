@@ -16,8 +16,10 @@ import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
 const isSmall = window.Helper.isSmallScreen();
 
 let temp = "";
-export default function RegulationText({ generateRegulation }) {
-    const { rewardDeadline } = useClientAdmin();
+
+// NEXT UPDATE: using debouncing and throttling technique to save in real time without any further action like currently as clicking outside the box.
+function RegulationText({ generateRegulation }) {
+    const { rewardDeadline, regulation, bizCodeName } = useClientAdmin();
 
     const [msgStatus, setMsgStatus] = useState("atualizado.")
     const [disabledBtn, setDisabledBtn] = useState(false);
@@ -27,21 +29,15 @@ export default function RegulationText({ generateRegulation }) {
 
     const { businessId } = useAppSystem();
 
-    const { regTxt, clientAdmin } = useStoreState(state => ({
-        clientAdmin: state.userReducer.cases.clientAdmin,
-        regTxt: state.userReducer.cases.clientAdmin.regulation.text,
-        // currentUser: state.userReducer.cases.currentUser,
-    }));
+    console.log("regulation", regulation);
 
-    const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
-
-    const init = regTxt => {
-        setData({ ...data, regulationText: regTxt });
+    const init = regulation => {
+        setData({ ...data, regulationText: regulation && regulation.text });
     }
 
     useEffect(() => {
-        init(regTxt);
-    }, [regTxt])
+        init(regulation);
+    }, [regulation])
 
     useEffect(() => {
         if(generateRegulation) {
@@ -257,3 +253,5 @@ export default function RegulationText({ generateRegulation }) {
         </section>
     );
 }
+
+export default React.memo(RegulationText);

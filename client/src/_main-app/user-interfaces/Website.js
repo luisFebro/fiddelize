@@ -29,15 +29,14 @@ import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
 import SelfServicePage from '../../pages/new-app/self-service/SelfServicePage';
 import PlansPage from '../../pages/plans-page/PlansPage';
-// DYNAMIC ASYNC IMPORT
+// DYNAMIC ASYNC IMPORT - Preloading a lazy component without blocking rendering by calling import outside lazy function.
 const ClientAppPreview = import(/* webpackChunkName: "client-app-preview" */ '../../pages/mobile-app/ClientAppPreview');
-const LoginPage = import(/* webpackChunkName: "login-page" */ '../../pages/LoginPage');
+// const LoginPage = import(/* webpackChunkName: "login-page" */ '../../pages/LoginPage');
 // END DYNAMIC ASYNC IMPORT
 
 
-// Preloading a lazy component without blocking rendering.
 const ClientAppPreviewLazy = React.lazy(() => ClientAppPreview);
-const LoginPageLazy = React.lazy(() => LoginPage);
+const LoginPageLazy = React.lazy(() => import(/* webpackChunkName: "login-page" */ '../../pages/LoginPage')); // magic comments do not work with React.lazy
 // const LoginPageLazy = Loadable({
     // loader: () => import(/* webpackChunkName: "login-page-lazy" */ '../../pages/LoginPage'),
     // loading() {

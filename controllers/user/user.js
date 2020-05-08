@@ -60,7 +60,7 @@ const handleUserRole = (isAdmin, profile) => {
 }
 
 exports.read = (req, res) => {
-    const clientAdminRequest = req.query.clientAdminRequest;
+    const clientAdminRequest = Boolean(req.query.clientAdminRequest);
 
     return res.json(handleUserRole(clientAdminRequest, req.profile));
 };

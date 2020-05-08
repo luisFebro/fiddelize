@@ -12,9 +12,11 @@ import parse from 'html-react-parser';
 
 
 // IMPROVEMENTS:
-// Allow enter key to select the first result and filter it after that.
+// 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
-
+// 2. User history results
+// 3. Implement vanilla DEBOUNCE (rebater) solution to avoid the XHR request to be fetched too often>
+// function debounce(a,b,c){var d,e;return function(){function h(){d=null,c||(e=a.apply(f,g))}var f=this,g=arguments;return clearTimeout(d),d=setTimeout(h,b),c&&!d&&(e=a.apply(f,g)),e}}
 AsyncAutoCompleteSearch.propTypes = {
     data: PropTypes.arrayOf(PropTypes.string),
     circularProgressColor: PropTypes.oneOf(["inherit", "primary", "secondary"])

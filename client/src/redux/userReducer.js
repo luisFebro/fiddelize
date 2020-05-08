@@ -31,8 +31,8 @@ const currClientAdminData = {
     mainReward: clientAdminData && clientAdminData.mainReward,
     rewardList: clientAdminData && clientAdminData.rewardList,
     regulation: {
-        text: clientAdminData && clientAdminData.regulation.text,
-        updatedAt: clientAdminData && clientAdminData.regulation.updatedAt,
+        text: clientAdminData && clientAdminData.regulation && clientAdminData.regulation.text,
+        updatedAt: clientAdminData && clientAdminData.regulation && clientAdminData.regulation.updatedAt,
     },
     rewardDeadline: clientAdminData && clientAdminData.rewardDeadline,
     totalClientUserScores: clientAdminData && clientAdminData.totalClientUserScores,

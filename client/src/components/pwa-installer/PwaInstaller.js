@@ -57,7 +57,7 @@ export default function PwaInstaller({ title, icon, run = true }) { // A2HS = Ap
                     setTimeout(() => {
                         showSnackbar(dispatch, 'Instalado com sucesso! Você pode fechar essa janela e acessar o app na sua tela inicial', 'success', 8000)
                         setTimeout(() => closeWindow(), 7000)
-                        const timeoutDuration = isThisApp() ? 15000 : 0;
+                        const timeoutDuration = 15000;
                         setTimeout(() => window.location.href = "/acesso/verificacao", timeoutDuration)
                     }, 10990)
                 } else {

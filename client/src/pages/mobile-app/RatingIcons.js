@@ -46,7 +46,7 @@ export default function RatingIcons({
         else if(score >= level3 && score <= toLevel4) { indScore = 2 }
         else if(score >= level4 && score <= toLevel5) { indScore = 3 }
         else if(score >= toLevel5) { indScore = 4 }
-        alert(indScore);
+
         // forces the first star to arises in the self-service area because it does not work in phone app demo.
         // if(appPreviewIcon) {
         //     indScore = 0;

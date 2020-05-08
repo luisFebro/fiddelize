@@ -4,11 +4,15 @@ const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 var sslRedirect = require('heroku-ssl-redirect');
+var compression = require('compression');
 require('dotenv').config(); // n4
 require('./utils/globalHelpers');
 
 //Init Express
 const app = express();
+
+// compress all responses
+app.use(compression());
 
 const ENVIRONMENT = process.env.NODE_ENV || 'development';
 const isProduction = ENVIRONMENT === 'production';

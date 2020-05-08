@@ -36,7 +36,7 @@ export default function CarouselFlickity({ data }) {
           }
       }
     });
-
+    // using throttling (delaying function execution) to delay by 2 second to avoid crash app.
     flkty.on('change', index => setTimeout(() => setIconSelected(data[index].icon), 2000));
 
     // const dataFlickity = Flickity.data(elem)
