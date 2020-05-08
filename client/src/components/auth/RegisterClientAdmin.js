@@ -9,6 +9,7 @@ import cpfMaskBr from '../../utils/validation/masks/cpfMaskBr';
 import getDayMonthBr from '../../utils/dates/getDayMonthBr';
 import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { withRouter } from 'react-router-dom';
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
@@ -31,7 +32,7 @@ import MoneyIcon from '@material-ui/icons/Money';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
-import ButtonMulti from '../buttons/material-ui/ButtonMulti';
+import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
@@ -447,7 +448,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"
-                iconFontAwesome="fas fa-save"
+                iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle} />}
                 textTransform='uppercase'
             >
                 Registrar

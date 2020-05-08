@@ -27,7 +27,7 @@ export default function PasswordPage({ location, match, history }) {
 
     const showExplanation = () => (
         <Fragment>
-            <div  data-aos="fade-down-right" data-aos-delay="2000" data-aos-duration="1500">
+            <div className="container-center"  data-aos="fade-down-right" data-aos-delay="2000" data-aos-duration="1500">
                 <Illustration
                     img={`${CLIENT_URL}/img/illustrations/woman-typing-password.svg`}
                     alt="mulher digitando"

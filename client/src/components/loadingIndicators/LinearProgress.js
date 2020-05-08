@@ -3,7 +3,7 @@ import {default as LProgress} from '@material-ui/core/LinearProgress';
 import { useStoreState } from 'easy-peasy';
 // ref: https://material-ui.com/components/progress/
 
-export default function LinearProgress({needDeterminate = false}) {
+function LinearProgress({needDeterminate = false}) {
     const [completed, setCompleted] = useState(0);
     const isLoading = useStoreState(state => state.globalReducer.cases.isLinearPLoading);
 
@@ -51,3 +51,5 @@ export default function LinearProgress({needDeterminate = false}) {
         </div>
     );
 }
+
+export default React.memo(LinearProgress);

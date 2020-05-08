@@ -30,7 +30,7 @@ export default function RatingIcons({
             indScore = -1;
         }
 
-        const eachMilestone = maxScore / 5;
+        const eachMilestone = Number(maxScore / 5);
         const level1 = eachMilestone;
         const level2 = eachMilestone * 2;
         const level3 = eachMilestone * 3;
@@ -45,8 +45,8 @@ export default function RatingIcons({
         else if(score >= level2 && score <= toLevel3) { indScore = 1 }
         else if(score >= level3 && score <= toLevel4) { indScore = 2 }
         else if(score >= level4 && score <= toLevel5) { indScore = 3 }
-        else if(score >= 500) { indScore = 4 }
-
+        else if(score >= toLevel5) { indScore = 4 }
+        alert(indScore);
         // forces the first star to arises in the self-service area because it does not work in phone app demo.
         // if(appPreviewIcon) {
         //     indScore = 0;

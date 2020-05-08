@@ -61,6 +61,7 @@ function Mobile({ location }) {
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                 <Route path="/baixe-app" exact component={InstallMsg} />
+                <Route path="/baixe-app/:userName" component={InstallMsg} />
                 <Route path="/planos" exact component={PlansPage} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />

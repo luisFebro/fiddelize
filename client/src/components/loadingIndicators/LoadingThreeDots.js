@@ -19,7 +19,7 @@ export default function LoadingThreeDots({ color }) {
     return (
         <div className="col-10 mx-auto">
             <DivWrapper>
-                <section className="loading-container" style={styles.text}>
+                <section className="loading-container" style={styles && styles.text}>
                     <h2 className="main-font">Carregando</h2>
                     <div className="spinner">
                         <div style={styles.spinner} className="bounce1"></div>
