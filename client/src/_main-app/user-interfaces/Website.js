@@ -27,9 +27,9 @@ import DownloadApp from '../../pages/DownloadApp';
 import IntroPage from '../../pages/new-app';
 import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
+import SelfServicePage from '../../pages/new-app/self-service/SelfServicePage';
 import PlansPage from '../../pages/plans-page/PlansPage';
 // DYNAMIC ASYNC IMPORT
-const SelfServicePage = import(/* webpackChunkName: "self-service" */ '../../pages/new-app/self-service/SelfServicePage');
 const ClientAppPreview = import(/* webpackChunkName: "client-app-preview" */ '../../pages/mobile-app/ClientAppPreview');
 const LoginPage = import(/* webpackChunkName: "login-page" */ '../../pages/LoginPage');
 // END DYNAMIC ASYNC IMPORT
@@ -38,7 +38,6 @@ const LoginPage = import(/* webpackChunkName: "login-page" */ '../../pages/Login
 // Preloading a lazy component without blocking rendering.
 const ClientAppPreviewLazy = React.lazy(() => ClientAppPreview);
 const LoginPageLazy = React.lazy(() => LoginPage);
-const SelfServiceLazy = React.lazy(() => SelfServicePage);
 // const LoginPageLazy = Loadable({
     // loader: () => import(/* webpackChunkName: "login-page-lazy" */ '../../pages/LoginPage'),
     // loading() {
@@ -57,7 +56,7 @@ function Website({ location }) {
             <LinearProgress />
             {dontNeedLayout &&
             <Navbar />}
-            <React.Suspense fallback={<FullPageLoading />}>
+            <React.Suspense fallback={<div>...</div>}>
                 <Switch>
                     <Route path="/" exact component={Home} />
                     <Route path="/acesso/verificacao" exact component={LoginPageLazy} />
@@ -66,7 +65,7 @@ function Website({ location }) {
                     <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                     <Route path="/baixe-app" exact component={DownloadApp} />
                     <Route path="/:bizCodeName/novo-app" exact component={IntroPage} />
-                    <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={SelfServiceLazy} />
+                    <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={SelfServicePage} />
                     <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                     <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                     <Route path="/planos" exact component={PlansPage} />

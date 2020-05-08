@@ -111,8 +111,16 @@ function Navbar({ history, location }) {
         </ul>
     );
 
+    const handleLogoSrc = () => {
+        if(!isThisApp()) {
+            return `${CLIENT_URL}/img/official-logo-name.png`;
+        } else {
+            return isAuthUser ? imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
+        }
+    }
+
     const showLogo = () => {
-        const logoSrc =  isAuthUser ? imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
+        const logoSrc =  handleLogoSrc();
         const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
         const handleSize = side => {
