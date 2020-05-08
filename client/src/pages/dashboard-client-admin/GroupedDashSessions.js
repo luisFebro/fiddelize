@@ -24,9 +24,10 @@ const ClientIconWithBadge = ({ notifElemsArray }) => {
 
     return(
         <NotificationBadge
-            badgeNumber={notifElemsArray ? notifElemsArray.length : 0}
+            badgeValue={notifElemsArray ? notifElemsArray.length : 0}
             right={-20}
             top={5}
+            badgeInvisible={true}
         >
             <PermContactCalendarIcon />
         </NotificationBadge>

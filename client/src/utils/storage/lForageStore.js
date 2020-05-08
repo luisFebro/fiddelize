@@ -16,11 +16,12 @@ just write an empty string ("")
 />
  */
 // dataKey syntax: location_description
+// Rules: it should not fetch multiple images from one single instance like prior convert_any_illustration. This duplicates worngly images. Each image should have its own instance.
 export const collectionStore = {
     logos: ["app_fiddelize_logo", "app_biz_logo"],
     icons: ["app_gift", "dash_podium"],
     shapes: ["dash_title_shape", "app_start_shape"],
-    illustrations: ["convert_any_illustration", "app_chat_illustra"],
+    illustrations: ["app_chat_illustra", "dash_no_search_illustra"],
 };
 
 const imgLib = {
@@ -33,8 +34,8 @@ const imgLib = {
     get dash_title_shape() { return handleStorage("shapes", "dash_title_shape", `img/shapes/blob-dashboard-header.svg`) },
     get app_start_shape() { return handleStorage("shapes", "app_start_shape", `img/shapes/blob1.svg`) },
     // Illustration
-    convert_any_illustration: url => handleStorage("illustrations", "convert_any_illustration", url, true),
     get app_chat_illustra() { return handleStorage("illustrations", "app_chat_illustra", `img/illustrations/online-chat.svg`) },
+    get dash_no_search_illustra() { return handleStorage("illustrations", "dash_no_search_illustra", `img/illustrations/empty-search.svg`) },
 }
 
 export default imgLib;

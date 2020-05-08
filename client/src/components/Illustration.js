@@ -5,7 +5,6 @@ import truncateWords from '../utils/string/truncateWords';
 import { HashLink } from 'react-router-hash-link';
 import { ButtonContainerPressedEffectDark as Dark } from '../components/buttons/Default';
 import parse from 'html-react-parser';
-import imgLib, { ImgLoader } from '../utils/storage/lForageStore';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -37,6 +36,7 @@ export default function Illustration({
     title,
     img,
     imgStyle,
+    className,
     alt = "conteúdo da página está vazio",
     actionButton = {},
     txtImgConfig = {} }) {
@@ -68,9 +68,9 @@ export default function Illustration({
         <Fragment>
             <h2 className="text-center text-sub-title-upper">{title}</h2>
             <DivWrapper className="container-center my-5" style={{overflowX: 'hidden'}}>
-                <ImgLoader
-                    className="convert_any_illustration image-center svg-elevation"
-                    src={imgLib.convert_any_illustration(img)}
+                <img
+                    className={`${className ? className : ""} image-center svg-elevation`}
+                    src={img}
                     width=""
                     height=""
                     style={{...imgStyle, overflowX: 'hidden'}}

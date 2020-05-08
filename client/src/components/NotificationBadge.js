@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 NotificationBadge.propTypes = {
-    badgeNumber: PropTypes.number.isRequired,
+    badgeValue: PropTypes.number.isRequired,
     children: PropTypes.element,
     padding: PropTypes.string,
     fontSize: PropTypes.string,
