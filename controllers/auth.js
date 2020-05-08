@@ -115,7 +115,7 @@ const handleRolesData = (role, ...allKeys) => {
 
     switch(role) {
         case "cliente-admin":
-            const array1 = [ 'token', 'role', 'name', 'bizCodeName', 'verificationPass', 'authUserId', 'msg' ];
+            const array1 = [ 'token', 'role', 'name', 'bizCodeName', 'verificationPass', 'authUserId', 'msg', 'selfMilestoneIcon' ];
             objToSend = selectObjKeys(allKeysStore, array1);
             break;
         case "cliente":
@@ -139,6 +139,7 @@ exports.login = (req, res) => {
         bizId: clientUserData && clientUserData.bizId || "0",
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
         verificationPass: clientAdminData && clientAdminData.verificationPass,
+        selfMilestoneIcon: clientAdminData && clientAdminData.selfMilestoneIcon,
         authUserId: _id,
         msg: msg('ok.welcomeBack', name, 'onlyMsg')
     }

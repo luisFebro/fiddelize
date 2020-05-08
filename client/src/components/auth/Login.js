@@ -43,6 +43,7 @@ function Login({ history, setLoginOrRegister }) {
                 bizId,
                 bizCodeName,
                 verificationPass,
+                selfMilestoneIcon,
             } = res.data;
 
             if(role === "admin") {
@@ -57,8 +58,18 @@ function Login({ history, setLoginOrRegister }) {
                 showSnackbar(dispatch, "Carregando...")
                 readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
                 .then(res => {
-                    if(verificationPass) {
+                    if(!verificationPass) {
+                        showSnackbar(dispatch, "Verificando...", 'warning', 3000);
+                        setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                        whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
+                        setTimeout(() => history.push(whichRoute), 5000);
+                    } else if(!selfMilestoneIcon) {
+                        whichRoute = `https://fiddelize.netlify.app/${bizCodeName}/novo-app/self-service/${authUserId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
+                        showSnackbar(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
+                        setTimeout(() => window.location.href = whichRoute, 2900);
+                    } else {
                         whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
+
                         if(isThisApp()) {
                             setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 1400);
                         } else {
@@ -67,11 +78,6 @@ function Login({ history, setLoginOrRegister }) {
                             setTimeout(() => history.push(whichRoute), 5000);
                             setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 7000);
                         }
-                    } else {
-                        showSnackbar(dispatch, "Verificando...", 'warning', 3000);
-                        setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                        whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
-                        setTimeout(() => history.push(whichRoute), 5000);
                     }
                 })
             }
