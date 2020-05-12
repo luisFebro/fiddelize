@@ -121,7 +121,7 @@ function Navbar({ history, location }) {
 
     const showLogo = () => {
         const logoSrc =  handleLogoSrc();
-        const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
+        const isSquared = selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
         const handleSize = side => {
             let size;

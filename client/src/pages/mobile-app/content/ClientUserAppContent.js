@@ -104,7 +104,7 @@ function ClientUserAppContent({
         elem.play();
     }
     // END UTILS
-    const backColorSelect = colorBack || colorP || selfThemeBackColor;
+    const backColorSelect = colorBack || selfThemeBackColor || colorP;
 
     const showGreetingAndNotific = () => (
         <section className="mt-3 position-relative animated slideInLeft slow">

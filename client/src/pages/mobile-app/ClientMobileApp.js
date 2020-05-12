@@ -17,6 +17,7 @@ import { useRunComp } from '../../hooks/useRunComp';
 import ClientUserAppContent from './content/ClientUserAppContent';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
+import isThisApp from '../../utils/window/isThisApp';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 
@@ -76,9 +77,17 @@ function ClientMobileApp({ location, history }) {
         }
     }, [needAppRegister])
 
+    const handleLogoSrc = () => {
+        if(isThisApp() && selfBizLogoImg || isAuthUser) {
+            return imgLib.app_biz_logo(selfBizLogoImg);
+        } else {
+            return imgLib.app_fiddelize_logo;
+        }
+    }
+
     const showLogo = () => {
-        const logoSrc = isAuthUser ? true && imgLib.app_biz_logo(selfBizLogoImg) : imgLib.app_fiddelize_logo;
-        const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
+        const logoSrc = handleLogoSrc();
+        const isSquared = selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
 
         return(
             <div className="container-center">
@@ -116,7 +125,7 @@ function ClientMobileApp({ location, history }) {
     const showAppType = () => (
         roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin &&
         <div className="container-center">
-            <div className="position-relative" style={{top: -55, marginTop: 90}}>
+            <div className="position-relative" style={{top: -55, marginTop: 90, marginBottom: 40}}>
                 <div
                     style={{animationIterationCount: 3}}
                     className="animated rubberBand delay-5s"
