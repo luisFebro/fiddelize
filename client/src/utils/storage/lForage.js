@@ -4,6 +4,7 @@ import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
 // export * from './lForageStore';
 
 // convert the blob (image) into a data-url (a base64 string) and set that as the src for your image element.
+// createInstance and config is required especially if you are reading or deleting a file. Requires the right collection to process.
 export const setImage = (collection, dataKey, imageUrlValue) => {
     const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
     store.config({ storeName: collection }); // n3 dataStore
@@ -26,6 +27,23 @@ export const readImage = (collection, dataKey) => {
     .then(function(res) { return res })
     .catch(err => false)
 }
+
+export const deleteImage = (collection, dataKey) => {
+    const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
+    store.config({ storeName: collection }); // n3 dataStore
+
+    return store.getItem(dataKey)
+    .then(generatedUrl => {
+        if(generatedUrl) {
+            store.removeItem(dataKey)
+            .then(deletedImage => {
+                console.log(`The image ${dataKey.toUpperCase()} was deleted successfully.`)
+            }).catch(err => console.log("There was an issue while deleting your image. Details: " + err))
+        } else { console.log("No image found in the IndexedDB to be deleted") }
+    })
+    .catch(err => false)
+}
+
 
 const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { // n1
     let mySrc;

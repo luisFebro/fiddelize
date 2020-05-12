@@ -77,8 +77,9 @@ function ClientMobileApp({ location, history }) {
         }
     }, [needAppRegister])
 
+    const needClientLogo = isThisApp() && selfBizLogoImg || isAuthUser;
     const handleLogoSrc = () => {
-        if(isThisApp() && selfBizLogoImg || isAuthUser) {
+        if(needClientLogo) {
             return imgLib.app_biz_logo(selfBizLogoImg);
         } else {
             return imgLib.app_fiddelize_logo;
@@ -87,12 +88,12 @@ function ClientMobileApp({ location, history }) {
 
     const showLogo = () => {
         const logoSrc = handleLogoSrc();
-        const isSquared = selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
 
         return(
             <div className="container-center">
                 <ImgLoader
-                    className={`${isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                    className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
                     src={logoSrc}
                     style={{position: 'relative', margin: '15px 0'}}
                     width={isSquared ? 100 : 190}

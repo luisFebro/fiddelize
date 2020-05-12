@@ -11,7 +11,7 @@ const bizSysId = appSystem && appSystem.businessId;
 
 const roleDownloaded = appSystem && appSystem.roleWhichDownloaded;
 
-const needUpdateSys = !bizSysId || !roleDownloaded;
+const needUpdateSys = !roleDownloaded; // !bizSysId ||
 
 export default function useRecoverSysData(role, userId, opts = {}) {
     const { bizId, isUserOnline, didUserLogout } = opts;

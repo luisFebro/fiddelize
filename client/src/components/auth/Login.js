@@ -18,6 +18,7 @@ import { CLIENT_URL } from '../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSystem, useClientAdmin } from '../../hooks/useRoleData';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
+import { deleteImage } from '../../utils/storage/lForage';
 
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
@@ -37,6 +38,9 @@ function Login({ history, setLoginOrRegister }) {
                 showSnackbar(dispatch, res.data.msg, 'error');
                 return null;
             }
+
+            // clean up whatever logo from prior login to set new one (especially another account)
+            deleteImage("logos", "app_biz_logo");
 
             const {
                 msg,
