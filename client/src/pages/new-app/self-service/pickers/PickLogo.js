@@ -15,7 +15,9 @@ PickLogo.propTypes = {
 }
 
 export default function PickLogo({
-    step, setNextDisabled, bizId, bizCodeName, setLogoUrlPreview }) {
+    step,
+    setNextDisabled,
+    bizId, bizCodeName, setLogoUrlPreview, isFromDash = false }) {
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
     const [tempImgUrl, setTempImgUrl] = useState("");
@@ -36,9 +38,10 @@ export default function PickLogo({
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             setTempImgUrl(res.data);
-            setLogoUrlPreview(res.data);
+            !isFromDash && setLogoUrlPreview(res.data);
         })
     };
+
     useEffect(() => {
         let dataToUpdate = { lastUrl: tempImgUrl };
         if(sizeSquare) {
@@ -60,12 +63,14 @@ export default function PickLogo({
     }, [gotPic, tempImgUrl])
 
     useEffect(() => {
-        if(isBoxChecked) {
-            goNext();
-        } else {
-            setNextDisabled(true);
+        if(!isFromDash) {
+            if(isBoxChecked) {
+                goNext();
+            } else {
+                setNextDisabled(true);
+            }
         }
-    }, [isBoxChecked])
+    }, [isBoxChecked, isFromDash])
 
     const handleMediaChange = e => {
         const formData = new FormData();
@@ -97,7 +102,7 @@ export default function PickLogo({
                 return;
             }
             const generatedImg = res.data;
-            setLogoUrlPreview(generatedImg);
+            !isFromDash && setLogoUrlPreview(generatedImg);
             setTempImgUrl(generatedImg);
             setIsLoadingPic(false);
             setEditArea(true);
@@ -187,8 +192,10 @@ export default function PickLogo({
         </section>
     );
 
+    const showCondition = isFromDash ? true : step === 1;
+
     return (
-        step === 1 &&
+        showCondition &&
         <div>
             <p className="text-normal text-white text-shadow text-center">
                 • Envie a logo da sua empresa/projeto:

@@ -1,0 +1,41 @@
+// HIDDEN CONTENT ROOT
+.hidden-content--root {
+    min-height: 500px;
+    color: var(--mainPurple);
+    width: 100%;
+    padding: 20px;
+    background-color: var(--mainWhite);
+}
+//END
+
+.card-main-heading--root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-main-heading--root .icon {
+    margin-right: 50px;
+}
+
+.card-main-heading--root p {
+    margin: 0;
+}
+
+
+// BOTTOM-ACTION-BTNS--ROOT
+.bottom-action-btns--root {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    align-items: center;
+}
+
+.bottom-action-btns--root .talk-btn {
+    align-self: flex-end;
+    margin-bottom: 50px;
+    margin-right: 20px;
+}
+
+// END

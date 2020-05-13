@@ -117,7 +117,7 @@ function ClientUserAppContent({
                         left={needAppForPreview ? 258 : 270}
                         notifBorderColor={"var(--themeBackground--" + backColorSelect + ")"}
                         notifBackColor={backColorSelect === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
-                        badgeValue={2}
+                        badgeValue={1}
                     />
                 </div>
             </section>

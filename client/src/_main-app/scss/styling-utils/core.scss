@@ -27,10 +27,12 @@
 }
 
 /*links*/
+.disabled-link,
 .disabledLink {
     pointer-events: none;
 }
 
+.enabled-link,
 .enabledLink {
     pointer-events: auto;
 }

@@ -87,7 +87,8 @@ const ContactComp = () => {
     const showMainContent = () => (
         <div
             className={`${!hideMain ? "d-block" : "d-none"}`}
-            onClick={e => animateCSS(e.currentTarget, "zoomOut", "normal", () => setHideMain(true))}>
+            onClick={e => openThisComp && animateCSS(e.currentTarget, "zoomOut", "normal", () => setHideMain(true))}
+        >
             <p className="text-nowrap position-relative text-center text-subtitle text-purple" style={{top: '35px' }}>
                 Qual suporte você precisa?
             </p>

@@ -18,6 +18,7 @@ import ClientUserAppContent from './content/ClientUserAppContent';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import isThisApp from '../../utils/window/isThisApp';
+import BadaloBell from '../../components/buttons/bells/badalo/BadaloBell';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 
@@ -106,7 +107,7 @@ function ClientMobileApp({ location, history }) {
     const showLogin = () => (
         <div
             className="container-center position-relative"
-            style={{top: -68}}
+            style={{top: -78}}
         >
             <Login setLoginOrRegister={setLoginOrRegister} />
         </div>
@@ -128,7 +129,7 @@ function ClientMobileApp({ location, history }) {
         <div className="container-center">
             <div className="position-relative" style={{top: -55, marginTop: 90, marginBottom: 40}}>
                 <div
-                    style={{animationIterationCount: 3}}
+                    style={{animationIterationCount: 1}}
                     className="animated rubberBand delay-5s"
                 >
                     <ImgLoader
@@ -164,10 +165,23 @@ function ClientMobileApp({ location, history }) {
         </div>
     );
 
+    const showNotificationBell = () => (
+        <div className="container-center">
+            <BadaloBell
+                position="relative"
+                top={-60}
+                left={0}
+                notifBorderColor={"var(--themeBackground--" + selfThemeBackColor + ")"}
+                notifBackColor={selfThemeBackColor === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
+                badgeValue={1}
+            />
+        </div>
+    );
+
     const showConnectedStatus = () => (
         <div
             className="position-relative my-5 container-center-col text-white text-normal text-center"
-            style={{top: -48}}
+            style={{top: -68}}
         >
             <span className={`${selectTxtStyle(selfThemeBackColor)} font-weight-bold`}>
                 Conectado por
@@ -234,6 +248,7 @@ function ClientMobileApp({ location, history }) {
                         />
                     )}
 
+                    {isCliAdminConnected && showNotificationBell()}
                     {isCliAdminConnected && showConnectedStatus()}
                     {!isAuthUser && isCliAdminConnected && showLogin()}
                 </section>

@@ -102,7 +102,7 @@ export default function TabSessions({
                     variant={
                         needTabFullWidth
                         ? "fullWidth"
-                        : (isSmall() ? "scrollable" : "fullWidth")
+                        : (isSmall ? "scrollable" : "fullWidth")
                     }
                     indicatorColor="primary"
                     textColor="primary"

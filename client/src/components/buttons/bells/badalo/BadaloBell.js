@@ -48,7 +48,7 @@ export default function BadaloBell({
 
     return (
         <section
-            style={{ position, top, right, left }}
+            style={{ position, top, right, left, cursor: "pointer" }}
             onClick={() => playAnima({callback: () => setbadgeInvisible(true) })}
         >
             <NotificationBadge

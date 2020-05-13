@@ -4,10 +4,8 @@ import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
 import parse from 'html-react-parser';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState } from 'easy-peasy';
-import HiddenScoreRegulation from '../card-hidden-content/score-regulation/HiddenScoreRegulation';
-import HiddenVerifPass from '../card-hidden-content/HiddenVerifPass';
-import HiddenProfile from '../card-hidden-content/HiddenProfile';
-import HiddenBizDataAndBackup from '../card-hidden-content/biz-data-and-backup/HiddenBizDataAndBackup';
+import HiddenDesignApp from '../card-hidden-content/design/HiddenDesignApp';
+import HiddenGoalsAndRewards from '../card-hidden-content/goals-rewards/HiddenGoalsAndRewards';
 
 import moment from 'moment';
 
@@ -27,28 +25,16 @@ export default function ShowExpansiblePanel() {
     const configList = [
         {
             id: 0,
-            name: "Regulamento<br />de Pontos",
-            leftIcon: <FontAwesomeIcon icon="list-ul" />,
-            hiddenContent: <HiddenScoreRegulation clientAdmin={clientAdmin} />,
+            name: "Design<br />Personalizado",
+            leftIcon: <FontAwesomeIcon icon="palette" />,
+            hiddenContent: <HiddenDesignApp />,
         },
         {
             id: 1,
-            name: "Senha<br />de Verificação",
-            leftIcon: <FontAwesomeIcon icon="lock" />,
-            hiddenContent: <HiddenVerifPass userData={userData} />,
-        },
-        {
-            id: 2,
-            name: "Seu<br />Perfil",
-            leftIcon: <FontAwesomeIcon icon="user" />,
-            hiddenContent: <HiddenProfile userData={userData} />,
-        },
-        {
-            id: 3,
-            name: `Dados Projeto<br />e Segurança`,
-            leftIcon: <FontAwesomeIcon icon="database" />,
-            hiddenContent: <HiddenBizDataAndBackup userData={userData} />,
-        },
+            name: "Metas e<br />Prêmios",
+            leftIcon: <FontAwesomeIcon icon="gem" />,
+            hiddenContent: <HiddenGoalsAndRewards />,
+        }
     ]
 
     const handleMainHeading = config => (

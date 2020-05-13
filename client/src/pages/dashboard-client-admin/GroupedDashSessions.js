@@ -7,11 +7,23 @@ import DashClients from './dash-clients';
 // Icons from Tabs
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
-import NotificationBadge from '../../components/NotificationBadge';
+import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import Loadable from 'react-loadable';
 import { useStoreState } from 'easy-peasy';
 import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
+// temp
+import DashAppDesign from './dash-app-design';
 // End Material UI
+const muStyle = {
+    fontSize: 35,
+}
+
+const DashAppDesignLazy = Loadable({
+    loader: () => import(/* webpackChunkName: "dash-setting-lazy"*/ "./dash-app-design"),
+    loading() {
+        return <FullPageLoading />;
+    }
+})
 
 const DashSettingLazy = Loadable({
     loader: () => import(/* webpackChunkName: "dash-setting-lazy"*/ "./dash-setting"),
@@ -19,30 +31,23 @@ const DashSettingLazy = Loadable({
         return <FullPageLoading />;
     }
 })
-const ClientIconWithBadge = ({ notifElemsArray }) => {
-    notifElemsArray = []; // {first: 'year'}, {first: 'year'}, {first: 'year'}, {first: 'year'}
 
-    return(
-        <NotificationBadge
-            badgeValue={notifElemsArray ? notifElemsArray.length : 0}
-            right={-20}
-            top={5}
-            badgeInvisible={true}
-        >
-            <PermContactCalendarIcon />
-        </NotificationBadge>
-    );
-}
 let data;
 const dataTab1 = [
     {
         tabLabel: "Clientes",
-        tabIcon: <ClientIconWithBadge />,
+        tabIcon: <PermContactCalendarIcon style={muStyle} />,
         tabContentPanel: <DashClients />
     },
     {
-        tabLabel: "Configurações",
-        tabIcon: <BuildIcon />,
+        tabLabel: "App",
+        tabIcon: <PhoneAndroidIcon style={muStyle} />,
+        tabContentPanel: null,
+        boxPadding: 1,
+    },
+    {
+        tabLabel: "Ajustes",
+        tabIcon: <BuildIcon style={muStyle} />,
         tabContentPanel: null,
     },
 ]
@@ -50,17 +55,42 @@ const dataTab1 = [
 const dataTab2 = [
     {
         tabLabel: "Clientes",
-        tabIcon: <ClientIconWithBadge />,
-        tabContentPanel: <DashClients />
+        tabIcon: <PermContactCalendarIcon style={muStyle} />,
+        tabContentPanel: <DashClients />,
     },
     {
-        tabLabel: "Configurações",
-        tabIcon: <BuildIcon />,
-        tabContentPanel: <DashSettingLazy />,
+        tabLabel: "App",
+        tabIcon: <PhoneAndroidIcon style={muStyle} />,
+        tabContentPanel: <DashAppDesign />,
+        boxPadding: 1,
+    },
+    {
+        tabLabel: "Ajustes",
+        tabIcon: <BuildIcon style={muStyle} />,
+        tabContentPanel: null,
         boxPadding: 1,
     },
 ]
 
+const dataTab3 = [
+    {
+        tabLabel: "Clientes",
+        tabIcon: <PermContactCalendarIcon style={muStyle} />,
+        tabContentPanel: <DashClients />
+    },
+    {
+        tabLabel: "App",
+        tabIcon: <PhoneAndroidIcon style={muStyle} />,
+        tabContentPanel: null,
+        boxPadding: 1,
+    },
+    {
+        tabLabel: "Ajustes",
+        tabIcon: <BuildIcon style={muStyle} />,
+        tabContentPanel: <DashSettingLazy />,
+        boxPadding: 1,
+    },
+]
 export default function GroupedDashSessions() {
     const { runName } = useStoreState(state => ({
         runName: state.globalReducer.cases.runName,
@@ -68,6 +98,8 @@ export default function GroupedDashSessions() {
 
     if(runName === 1) {
         data = dataTab2;
+    } else if(runName === 2) {
+        data = dataTab3;
     } else {
         data = dataTab1;
     }
@@ -113,7 +145,7 @@ import BuildIcon from '@material-ui/icons/Build';
     tabContentPanel: <DashFinance />
 },
 {
-    tabLabel: "Configurações",
+    tabLabel: "Ajustes",
     tabIcon: <BuildIcon />,
     tabContentPanel: <DashSetting />
 },
