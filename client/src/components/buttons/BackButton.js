@@ -9,9 +9,7 @@ export default function BackButton({ title, variant = "rect", onClick, }) {
             title={title || "Voltar"}
             color="var(--mainWhite)"
             backgroundColor="var(--themeSDark)"
-            backColorOnHover="var(--themeSDark)"
-            textTransform='uppercase'
-            iconFontAwesome={<FontAwesomeIcon icon="exchange-alt" style={faStyle} />}
+            iconFontAwesome={<FontAwesomeIcon icon="reply" style={faStyle} />}
         />
     );
 }

@@ -1,12 +1,8 @@
 import React, { Fragment } from 'react';
-import PickLogo from '../../../../../pages/new-app/self-service/pickers/PickLogo';
-import { useAppSystem, useClientAdmin } from '../../../../../hooks/useRoleData';
 import BackButton from '../../../../../components/buttons/BackButton';
+import PickRatingIcon from '../../../../../pages/new-app/self-service/pickers/PickRatingIcon';
 
-export default function ShowLogoComp({ openComp, onBackBtnClick }) {
-    const { businessId } = useAppSystem();
-    const { bizCodeName } = useClientAdmin();
-
+export default function ShowIconComp({ openComp, onBackBtnClick }) {
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
             <BackButton
@@ -18,16 +14,14 @@ export default function ShowLogoComp({ openComp, onBackBtnClick }) {
 
     return (
         <section>
-            {openComp === "logo" && (
+            {openComp === "icon" && (
                 <Fragment>
                     {showBackBtn()}
                     <div
-                        className="animated zoomIn container-center text-purple text-hero"
-                        style={{margin: '50px 0px 0px'}}
+                        className="animated zoomIn slow container-center text-purple text-hero"
+                        style={{margin: '50px 0px 110px'}}
                     >
-                        <PickLogo
-                            bizId={businessId}
-                            bizCodeName={bizCodeName}
+                        <PickRatingIcon
                             isFromDash={true}
                         />
                     </div>

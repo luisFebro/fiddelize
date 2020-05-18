@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import getQueryByName from '../../utils/string/getQueryByName';
 import { Link } from 'react-router-dom';
 import ButtonMulti, {faStyle} from '../../components/buttons/material-ui/ButtonMulti';
@@ -8,12 +8,18 @@ import TextField from '@material-ui/core/TextField';
 import handleChange from '../../utils/form/use-state/handleChange';
 import { handleEnterPress } from '../../utils/event/isKeyPressed';
 import addSpacingPlusToQuery from '../../utils/string/addSpacingPlusToQuery';
+import scrollIntoView from '../../utils/document/scrollIntoView';
+import getFirstName from '../../utils/string/getFirstName';
 import ShareSocialMediaButtons from '../../components/buttons/ShareSocialMediaButtons';
 import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
-// import animateCSS from '../../utils/animateCSS';
 import { handleFocus } from '../../utils/form/handleFocus';
+import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
+import { useStoreDispatch } from 'easy-peasy';
+import copyTextToClipboard from '../../utils/document/copyTextToClipboard';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
+
 
 const addSpace = str => addSpacingPlusToQuery(str);
 
@@ -24,19 +30,27 @@ export default function AppSharer({ location, match }) {
     const [showLink, setShowLink] = useState(false);
     const [data, setData] = useState({
         clientName: '',
-        isSharingBtnsOpen: false,
+        opentSharingAreaTo: '',
         generatedLink: '',
     })
-    const { clientName, isSharingBtnsOpen, generatedLink } = data;
+    const {
+        clientName,
+        opentSharingAreaTo,
+        generatedLink,
+    } = data;
+
+    const dispatch = useStoreDispatch();
 
     const role = getQueryByName("role", location.search);
     const bizCodeName = match.params.bizCodeName;
     const bizName = getQueryByName("negocio", location.search);
+    const cliAdminName = getQueryByName("adminName", location.search);
     const bizId = getQueryByName("id", location.search);
 
     const styles = {
         form: {
-            maxWidth: '350px',
+            maxWidth: isSmall ? '' : '350px',
+            width: '100%',
             background: 'var(--themeSDark)',
             borderRadius: '10px',
             padding: '25px'
@@ -46,6 +60,12 @@ export default function AppSharer({ location, match }) {
             zIndex: 2000,
             color: 'var(--themeP)',
             font: 'normal 26px Poppins, sans-serif',
+            paddingLeft: 5,
+        },
+        fieldLink: {
+            font: 'normal 20px Poppins, sans-serif',
+            color: 'var(--mainPurple)',
+            textAlign: 'center',
         },
         helperFromField: {
             color: 'white',
@@ -58,8 +78,8 @@ export default function AppSharer({ location, match }) {
             border: 0,
         },
         megaPhoneIcon: {
-            top: isSmall ? '60px' : '105px',
-            left: '-65px',
+            top: '-20%',
+            transform: 'translateX(-70%)',
             zIndex: 3000,
         },
     }
@@ -74,8 +94,6 @@ export default function AppSharer({ location, match }) {
                     title="Voltar"
                     color="var(--mainWhite)"
                     backgroundColor="var(--themeSDark)"
-                    backColorOnHover="var(--themeSDark)"
-                    textTransform='uppercase'
                 />
             </Link>
         </div>
@@ -85,103 +103,118 @@ export default function AppSharer({ location, match }) {
         <header className={`${fluidTextAlign} container-center-col`}>
             <p className="text-hero text-center">
                 {!isSmall
-                ? <span>Compartilhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>
-                : <span>Comparti-<br />lhe {role === "cliente-admin" ? "seu App" : "nosso App"}</span>}
-            </p>
-            <p>
-                {role === "cliente-admin" ?
-                (
-                    <span>
-                        Divulgue aqui<br />para seus clientes.
-                    </span>
-                ) : (
-                    <span>
-                        Passe para a galera.<br />Divulgue para amigos e familiares aqui.
-                    </span>
-                )}
+                ? <span>Compartilhe ou baixe<br />seu App onde estiver</span>
+                : <span>Comparti-<br />lhe ou baixe seu App onde estiver</span>}
             </p>
         </header>
     );
 
-    const handleGeneratedLink = () => {
+    const handleGeneratedLink = (targetBr) => {
+
         let link;
-        clientName
-        ? link = `${CLIENT_URL}/baixe-app/${addSpace(clientName)}?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
-        : link = `${CLIENT_URL}/baixe-app?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
+        if(targetBr === "cliente-admin") {
+            link = `${CLIENT_URL}/baixe-app/${getFirstName(cliAdminName)}?negocio=${bizName}&id=${bizId}&admin=1&painel=1`;
+            setData({...data, generatedLink: link, opentSharingAreaTo: 'cliente-admin' })
+        } else {
+            clientName
+            ? link = `${CLIENT_URL}/baixe-app/${getFirstName(clientName)}?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
+            : link = `${CLIENT_URL}/baixe-app?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
 
-        setData({...data, clientName: clientName.cap() ,isSharingBtnsOpen: true, generatedLink: link })
-    }
-
-    const showButtonAction = () => (
-        <div className="container-center" style={{marginTop: '20px'}}>
-            <ButtonMulti
-                title="Gerar link"
-                needParse={true}
-                onClick={() => { handleGeneratedLink(); handleScrollIntoView("view1", 1000); }}
-                color="var(--mainWhite)"
-                backgroundColor="var(--themeP)"
-                backColorOnHover="var(--themeP)"
-                iconFontAwesome={<FontAwesomeIcon icon="angle-double-right" style={faStyle} />}
-                textTransform='uppercase'
-            />
-        </div>
-    );
-
-    const handleScrollIntoView = (thisElem, delay = 0) => {
-        // const elem = ;
-        if(thisElem) {
-            setTimeout(() => document.getElementById(thisElem).scrollIntoView(), delay);
+            setData({...data, clientName: clientName.cap() ,opentSharingAreaTo: 'cliente-usuário', generatedLink: link })
         }
     }
 
-    const showMain = () => (
-        <div className="my-5">
-            <form className="shadow-elevation margin-auto-90" style={styles.form}>
-                <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white`}>
-                    <div style={styles.megaPhoneIcon} className="position-absolute">
-                        <img
-                            src={`${CLIENT_URL}/img/icons/megaphone.svg`}
-                            className="svg-elevation"
-                            width={85}
-                            height="auto"
-                            alt="megafone"
-                        />
-                    </div>
-                    <p className="text-shadow text-normal font-weight-bold">
-                        {role === "cliente-admin"
-                        ? (
-                            <span>Insira o nome do seu cliente para divulgar</span>
-                        ) : (
-                            <span>Insira o nome de alguém para divulgar</span>
-                        )}
-                    </p>
-                    <TextField
-                        id="form1"
-                        onChange={handleChange(setData, data)}
-                        name="clientName"
-                        onKeyPress={e => { handleEnterPress(e, handleGeneratedLink); handleScrollIntoView("view1", 3000); }}
-                        value={clientName}
-                        variant="outlined"
-                        type="text"
-                        InputProps={{
-                            style: styles.fieldFormValue, // alignText is not working here... tried input types and variations
-                        }}
-                        helperText="ou deixe em branco se for enviar para um grupo, sem especificar nome."
-                        FormHelperTextProps={{ style: styles.helperFromField }}
-                    />
-                </div>
-                {showButtonAction()}
-            </form>
-        </div>
-    );
-
     const showBlob = () => (
         <div className="position-absolute animated slideIn" style={{left: '-200px', top: '-200px'}}>
-            <img style={{zIndex: -1000}} width='200%' height={600} src={`${CLIENT_URL}/img/shapes/blob-sharing-page.svg`} alt="blob página de compartilhar"/>
+            <img style={{zIndex: -1000}} width={300} height={300} src={`${CLIENT_URL}/img/shapes/blob-sharing-page.svg`} alt="blob página de compartilhar"/>
         </div>
     );
 
-    const showSharingBtns = () => {
+    const showButtonAction = (targetBr) => {
+
+        return(
+            <div className="container-center mt-4">
+                <ButtonMulti
+                    title={"Gerar link"}
+                    needParse={true}
+                    onClick={() => { handleGeneratedLink(targetBr); scrollIntoView(`#${targetBr}`, 1000); }}
+                    color="var(--mainWhite)"
+                    backgroundColor="var(--themeP)"
+                    iconFontAwesome={<FontAwesomeIcon icon="angle-double-right" style={faStyle} />}
+                />
+            </div>
+        );
+    }
+
+    const showCliAdminArea = () => (
+        <section className="my-5">
+            <div className="text-title text-white text-center">
+                Use seu App Admin
+                <br />
+                em outros aparelhos
+            </div>
+            <section className="container-center mt-4 mx-2 position-relative">
+                <div className="shadow-elevation margin-auto-90" style={styles.form}>
+                    <ImportantDevicesIcon
+                        style={{fontSize: '70px', color: 'var(--mainWhite)', filter:  'drop-shadow(.5px .5px 1.5px black)',}}
+                    />
+                    {showButtonAction("cliente-admin")}
+                </div>
+            </section>
+            {showSharingBtns("cliente-admin")}
+        </section>
+    );
+
+    const showCliUserArea = () => (
+        <section className="my-5">
+            <p className="text-title text-white text-center">
+                Divulgue para <br /> seus clientes.
+            </p>
+            <section className="container-center mx-2 mt-4">
+                <form className="shadow-elevation margin-auto-90" style={styles.form}>
+                    <div className={`animated zoomIn fast position-relative margin-auto-90 text-white`}>
+                        <p className="text-shadow text-normal font-weight-bold">
+                            {role === "cliente-admin"
+                            ? (
+                                <span>Insira aqui o nome do seu cliente para divulgar</span>
+                            ) : (
+                                <span>Insira o nome de alguém para divulgar</span>
+                            )}
+                        </p>
+                        <div className="position-relative">
+                            <TextField
+                                id="form1"
+                                onChange={handleChange(setData, data)}
+                                name="clientName"
+                                onKeyPress={e => { handleEnterPress(e, handleGeneratedLink); scrollIntoView("#cliente-usuário", 3000); }}
+                                value={clientName}
+                                variant="outlined"
+                                type="text"
+                                InputProps={{
+                                    style: styles.fieldFormValue, // alignText is not working here... tried input types and variations
+                                }}
+                                helperText="ou deixe em branco se for enviar para um grupo, sem especificar nome."
+                                FormHelperTextProps={{ style: styles.helperFromField }}
+                            />
+                            <div style={styles.megaPhoneIcon} className="position-absolute">
+                                <img
+                                    src={`${CLIENT_URL}/img/icons/megaphone.svg`}
+                                    className="svg-elevation"
+                                    width={85}
+                                    height="auto"
+                                    alt="megafone"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    {showButtonAction()}
+                </form>
+            </section>
+            {showSharingBtns("cliente-usuário")}
+        </section>
+    );
+
+    const showSharingBtns = (targetBr) => {
         const sharingData = {
             titleShare: '',
             pageURL: generatedLink,
@@ -192,52 +225,91 @@ export default function AppSharer({ location, match }) {
             // }
         };
         const displayLink = () => (
-            <div className="user-select-text">
-                <RadiusBtn
+            <section className="user-select-text">
+                <div className="container-center justify-content-around my-3">
+                    <RadiusBtn
                         title={showLink ? "esconder link" : 'mostrar link'}
                         backgroundColor="var(--mainDark)"
                         size="small"
-                        onClick={() => { setShowLink(!showLink)}}
-                />
+                        onClick={() => setShowLink(!showLink)}
+                    />
+                    <RadiusBtn
+                        display={showLink ? 'block' : 'none'}
+                        title="copiar"
+                        backgroundColor="var(--mainDark)"
+                        size="small"
+                        onClick={() => copyTextToClipboard("#linkArea", () => showSnackbar(dispatch, "Link copiado!", "success"))}
+                    />
+                </div>
                 {showLink
                 ? (
-                    <p style={{margin: 0}} className="animated zoomIn faster text-break text-normal text-purple text-center">
-                        {generatedLink}
-                    </p>
+                    <section>
+                        <div className="animated zoomIn faster">
+                            <TextField
+                                id="linkArea"
+                                type="text"
+                                InputProps={{
+                                    style: styles.fieldLink,
+                                }}
+                                name="generatedLink"
+                                value={generatedLink}
+                                variant="outlined"
+                                autoComplete="off"
+                                multiline
+                                rows={4}
+                                fullWidth
+                            />
+                        </div>
+                        {targetBr === "cliente-admin" && (
+                            <p className="mt-3 font-weight-bold text-purple text-small text-left">
+                                Abra o link no dispositivo
+                                <br />
+                                que você quer baixar.
+                            </p>
+                        )}
+                    </section>
                 ) : null}
-            </div>
+            </section>
         );
 
         return(
-            isSharingBtnsOpen && (
-                <div className="my-5">
-                    <p className="animated zoomIn text-center text-white text-title">
+            opentSharingAreaTo === targetBr && (
+                <section className="my-5">
+                    <p id={targetBr} className="my-4 animated zoomIn text-center text-white text-title">
                         Novo Link gerado e pronto!
                     </p>
-                    <div className={`d-md-flex justify-content-md-center flex-md-column ${isSmall && "margin-auto-90"}`}>
-                        <Card style={{maxWidth: '600px'}} className="align-self-center animated zoomIn delay-2s fast card-elevation p-4">
-                            <p className="text-center text-normal font-weight-bold">Escolha um meio:</p>
-                            <ShareSocialMediaButtons config={{size: 50, radius: 50}} data={sharingData} />
+                    <section className="container-center mx-2">
+                        <Card style={{maxWidth: 350, width: '100%', backgroundColor: 'var(--mainWhite)'}} className="align-self-center animated zoomIn delay-2s fast card-elevation p-4">
+                            <p className="text-center text-normal font-weight-bold">
+                                {targetBr === "cliente-admin" ? "Baixe app via:" : "Escolha meio de divulgação:"}
+                            </p>
+                            <ShareSocialMediaButtons
+                                config={{size: 50, radius: 50}}
+                                data={sharingData}
+                            />
                             {displayLink()}
                         </Card>
-                        <div id="view1" className={`mt-2`}>
+                    </section>
+                    {targetBr !== "cliente-admin" && (
+                        <div className="mt-4 container-center">
                             <RadiusBtn
                                 title="gerar novo link"
                                 backgroundColor="var(--themeSDark)"
                                 className="my-2"
-                                onClick={() => { setData({ ...data, isSharingBtnsOpen: false, clientName: '' }); handleFocus("form1") }}
+                                onClick={() => { setData({ ...data, opentSharingAreaTo: '', clientName: '' }); handleFocus("form1") }}
                             />
                         </div>
-                    </div>
-
-                    <div className="mt-5 text-center text-normal font-weight-bold">
-                        {clientName && (
-                            <span>
-                                O link gerado possui uma página personalizada feita para o(a) {clientName && clientName.cap()}
-                            </span>
-                        )}
-                    </div>
-                </div>
+                    )}
+                    {targetBr !== "cliente-admin" && (
+                        <div className="mt-5 text-center text-normal font-weight-bold">
+                            {clientName && (
+                                <span>
+                                    O link gerado possui uma página personalizada feita para {clientName && clientName.cap()}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                </section>
             )
         );
     }
@@ -246,9 +318,32 @@ export default function AppSharer({ location, match }) {
         <div className="text-white text-center text-title">
             {showBackBtn()}
             {showHeader()}
-            {showMain()}
-            {showSharingBtns()}
+            <section className="container-center justify-content-around align-items-start">
+                {showCliAdminArea()}
+                {showCliUserArea()}
+            </section>
             <img width="100%" height="auto" style={{overflow: 'hidden'}} src={`${CLIENT_URL}/img/shapes/wave1.svg`} alt="onda"/>
         </div>
     );
 }
+
+/*ARCHIVES
+// const pickTargetBr = (currRole, target) => {
+//     const cliAdmin = "cliente-admin";
+//     const staff = "colaborador";
+//     const cliUser = "cliente-usuário";
+
+//     if(currRole === cliAdmin) {
+//         if(target === cliAdmin) {
+//             setData({...data, target: cliAdmin })
+//             return cliAdmin;
+//         } else {
+//             setData({...data, target: staff })
+//             return staff;
+//         }
+//     } else {
+//         setData({...data, target: cliUser })
+//     }
+//         return cliUser;
+// }
+*/

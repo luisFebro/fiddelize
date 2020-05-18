@@ -128,11 +128,11 @@ function Navbar({ history, location }) {
             let size;
             if(side === "width") {
                 if(selfBizLogoImg) {
-                    isSquared  ? size = 80 : size = 150;
+                    isSquared  ? size = 90 : size = 150;
                 } else { size = 200; }
             } else {
                 if(selfBizLogoImg) {
-                    isSquared  ? size = 80 : size = 67;
+                    isSquared  ? size = 90 : size = 67;
                 } else { size = 70; }
             }
             return size;

@@ -8,7 +8,9 @@ import { CLIENT_URL } from '../../../../config/clientUrl';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
-import { uploadImages, updateImages } from '../../../../redux/actions/userActions';
+import { readClientAdmin, uploadImages, updateImages } from '../../../../redux/actions/userActions';
+import ShowActionBtns from './ShowActionBtns';
+import { deleteImage } from '../../../../utils/storage/lForage';
 
 PickLogo.propTypes = {
     step: PropTypes.number,
@@ -17,7 +19,9 @@ PickLogo.propTypes = {
 export default function PickLogo({
     step,
     setNextDisabled,
-    bizId, bizCodeName, setLogoUrlPreview, isFromDash = false }) {
+    bizId, bizCodeName,
+    setLogoUrlPreview,
+    isFromDash = false }) {
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
     const [tempImgUrl, setTempImgUrl] = useState("");
@@ -28,6 +32,8 @@ export default function PickLogo({
         sizeSquare: false,
     })
     const { sizeSquare, sizeRect } = data;
+    const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
+
 
     const dispatch = useStoreDispatch();
 
@@ -94,6 +100,8 @@ export default function PickLogo({
 
         const options = { _id: bizId, fileName: bizCodeName }
         setIsLoadingPic(true);
+
+        // n1
         uploadImages(formData, options)
         .then(res => {
             if(res.status !== 200) {
@@ -103,6 +111,18 @@ export default function PickLogo({
             }
             const generatedImg = res.data;
             !isFromDash && setLogoUrlPreview(generatedImg);
+            if(isFromDash) {
+                deleteImage("logos", "app_biz_logo")
+                .then(res => {
+                    if(res.status !== 200) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão.", 'error')
+                    readClientAdmin(dispatch, bizId)
+                    .then(res => {
+                        if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                        showSnackbar(dispatch, "Logo Atualizada!", 'success');
+                        setNeedUpdateBtn(true);
+                    })
+                })
+            }
             setTempImgUrl(generatedImg);
             setIsLoadingPic(false);
             setEditArea(true);
@@ -122,7 +142,7 @@ export default function PickLogo({
             />
             <label htmlFor="uploaded-file">
                 <ButtonMulti
-                    title={uploadedPic ? "Trocar Logo" : "Selecione sua Logo"}
+                    title={(uploadedPic || isFromDash) ? "Trocar Logo" : "Selecione sua Logo"}
                     onClick={null}
                     color="var(--mainWhite)"
                     iconFontAwesome={<FontAwesomeIcon icon="image" style={faStyle} />}
@@ -166,9 +186,16 @@ export default function PickLogo({
     );
 
     const showLogoUploadingArea = () => (
-        <section className="text-normal text-white margin-auto-90">
-            <Card style={{minWidth: '330px', backgroundColor: 'var(--mainWhite)'}} className="p-2 text-purple text-center text-normal font-weight-bold animated zoomIn fast">
-                <section className="container-center">
+        <section className="text-normal text-white container-center">
+            <Card
+                style={{
+                    width: '100%',
+                    backgroundColor: 'var(--mainWhite)',
+                    boxShadow: isFromDash && '0 31px 120px -6px rgba(0, 0, 0, 0.35)',
+                }}
+                className="p-2 text-purple text-center text-normal font-weight-bold animated zoomIn fast"
+            >
+                <section className={`${isFromDash ? "mt-3" : ""} container-center`}>
                     <img
                         src={`${CLIENT_URL}/img/icons/picture-upload.svg`}
                         className="svg-elevation"
@@ -183,12 +210,19 @@ export default function PickLogo({
                 <section className="container-center">
                     {showUploadingBtn()}
                 </section>
-                <section style={{display: gotPic ? "none" : "block" }}>
+                <section style={{display: (gotPic || isFromDash) ? "none" : "block" }}>
                     <p className="text-normal text-purple m-0">ou</p>
                     <CheckBoxForm text="Escolher depois no meu painel de controle." setIsBoxChecked={setIsBoxChecked} />
                 </section>
                 {showEditArea()}
             </Card>
+            {isFromDash && (
+                <ShowActionBtns
+                    needUpdateBtn={needUpdateBtn}
+                    titleBeforeOk="Salvando nova palheta de cores..."
+                    titleAfterOk="Palheta de cores salva."
+                />
+            )}
         </section>
     );
 
@@ -197,14 +231,23 @@ export default function PickLogo({
     return (
         showCondition &&
         <div>
-            <p className="text-normal text-white text-shadow text-center">
-                • Envie a logo da sua empresa/projeto:
-            </p>
+            {isFromDash ? (
+                <p className="text-purple text-normal text-center">
+                    • Envie nova logo do App:
+                </p>
+            ) : (
+                <p className="text-normal text-white text-shadow text-center">
+                    • Envie a logo da sua empresa/projeto:
+                </p>
+            )}
             {showLogoUploadingArea()}
         </div>
     );
 }
 
+/* COMMENTS
+n1: THe user`s generated link is updated on the backend, no need to do it on frontend.
+*/
 /* ARCHIVES
  const [effectShadow, setEffectShadow] = useState(false);
 const [effectBgRemoval, setEffectBgRemoval] = useState(false);

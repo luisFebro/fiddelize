@@ -5,33 +5,24 @@ import Card from '@material-ui/core/Card';
 import CheckBoxForm from '../../../../components/CheckBoxForm';
 import { CLIENT_URL } from '../../../../config/clientUrl';
 import ModalFullContent from '../../../../components/modals/ModalFullContent';
-import { uiColors } from '../../../../global-data/uiColors';
+import { uiColors, translateColorToEng } from '../../../../global-data/uiColors';
 import gotArrayThisItem from '../../../../utils/arrays/gotArrayThisItem';
+import ButtonMulti, {faStyle} from '../../../../components/buttons/material-ui/ButtonMulti';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ShowActionBtns from './ShowActionBtns';
+import { useClientAdmin } from '../../../../hooks/useRoleData';
 
 PickTheming.propTypes = {
     step: PropTypes.number,
     setNextDisabled: PropTypes.func,
 }
 
-const translatedColor = {
-    "padrão": "default",
-    rosa: "pink",
-    roxo: "purple",
-    vermelho: "red",
-    laranja: "orange",
-    preto: "black",
-    branco: "white",
-    azul: "blue",
-    verde: "green",
-    marrom: "brown",
-    amarelo: "yellow",
-}
-
 export default function PickTheming({
     step,
     setNextDisabled,
     theme,
-    setTheme }) {
+    setTheme,
+    isFromDash, }) {
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
@@ -42,6 +33,7 @@ export default function PickTheming({
         hexValueSecondary: 'var(--themeS)',
         hexBackValue: 'var(--themeP)',
         currColorModal: '',
+        needUpdateBtn: false,
     })
 
     const {
@@ -49,31 +41,61 @@ export default function PickTheming({
         secondaryColor,
         backColor,
         currColorModal,
+        needUpdateBtn,
         hexValuePrimary, hexValueSecondary, hexBackValue } = data;
 
     const needHideCheckBox = Boolean(primaryColor !== "padrão" || secondaryColor !== "padrão");
 
     const goNext = () => setNextDisabled(false);
 
+    const { selfThemePColor, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
     useEffect(() => {
-        secondaryColor && goNext();
-    }, [secondaryColor])
+        if(isFromDash) {
+            const primaryCond = selfThemePColor === "default" ? "roxo" : selfThemePColor;
+            const secondaryCond = selfThemePColor === "default" ? "azul cyan" : selfThemeSColor;
+            const backCond = selfThemeBackColor === "" ? "roxo" : selfThemeBackColor;
+
+            setData({
+                ...data,
+                primaryColor: primaryCond,
+                secondaryColor: secondaryCond,
+                backColor: backCond,
+                hexValuePrimary: `var(--themeP--${selfThemePColor})`,
+                hexValueSecondary: `var(--themeS--${selfThemeSColor})`,
+                hexBackValue: selfThemeBackColor === "" ? `var(--themeP--default)` : `var(--themeP--${selfThemeBackColor})`,
+            })
+        }
+    }, [
+    isFromDash,
+    selfThemePColor,
+    selfThemeSColor,
+    selfThemeBackColor])
+
+    useEffect(() => {
+        if(!isFromDash) {
+            secondaryColor && goNext();
+        }
+    }, [secondaryColor, isFromDash])
 
     useEffect(() => {
         if(primaryColor !== "padrão" || secondaryColor !== "padrão" || backColor !== "padrão") {
-            const doc = document.querySelector("#status");
-            doc.style.display = "block";
-            setTimeout(() => doc.style.display = "none", 5000);
+            if(!isFromDash) {
+                const doc = document.querySelector("#status");
+                doc.style.display = "block";
+                setTimeout(() => doc.style.display = "none", 5000);
+            }
         }
     }, [primaryColor, secondaryColor, backColor])
 
     useEffect(() => {
-        if(isBoxChecked) {
-            goNext();
-        } else {
-            setNextDisabled(true);
+        if(!isFromDash) {
+            if(isBoxChecked) {
+                goNext();
+            } else {
+                setNextDisabled(true);
+            }
         }
-    }, [isBoxChecked])
+    }, [isBoxChecked, isFromDash])
 
     const handleIsSelectedBackColor = () => {
         if(backColor !== "padrão" && primaryColor !== "padrão") {
@@ -86,14 +108,14 @@ export default function PickTheming({
     }
     const showBackColorBtn = () => (
         primaryColor !== "padrão" &&
-        <div className="flex-column animated zoomIn">
+        <div className="flex-column animated zoomIn mt-3">
             <p className="m-0 text-purple text-center text-normal font-weight-bold">
-                Cor de Fundo
+                {isFromDash ? "Fundo" : "Cor de Fundo"}
             </p>
             <div className="mt-2 d-flex container-center-col">
                 <RadiusColorBtn
                     selectedColor={handleIsSelectedBackColor() ? hexBackValue : hexValuePrimary}
-                    onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "de Fundo"});}}
+                    onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "de Fundo", needUpdateBtn: isFromDash && true });}}
                 />
                 <span className="mt-2 text-small text-center text-purple font-weight-bold">
                     {handleIsSelectedBackColor() ? backColor : primaryColor}
@@ -103,8 +125,16 @@ export default function PickTheming({
     );
 
     const showThemingArea = () => (
-        <section className="text-normal text-white margin-auto-90 mb-md-5">
-            <Card style={{minWidth: '330px', backgroundColor: 'var(--mainWhite)'}} className="p-2 text-purple text-center text-normal font-weight-bold animated zoomIn fast">
+        <section className="text-normal text-white container-center mb-md-5">
+            <Card
+                style={{
+                    width: '100%',
+                    maxWidth: isFromDash ? '' : 330,
+                    backgroundColor: 'var(--mainWhite)',
+                    boxShadow: isFromDash && '0 31px 120px -6px rgba(0, 0, 0, 0.35)',
+                }}
+                className="p-2 text-purple text-center text-normal font-weight-bold animated zoomIn fast"
+            >
                 <section className="container-center">
                     <img
                         src={`${CLIENT_URL}/img/icons/color-palette.svg`}
@@ -117,36 +147,34 @@ export default function PickTheming({
                         Cor
                     </p>
                 </section>
-                <section className="container-center my-3">
-                    <div className="flex-column animated rubberBand delay-3s" style={{animationIterationCount: 2}}>
+                <section className="container-center justify-content-around my-3">
+                    <div className="flex-column animated rubberBand delay-3s mt-3" style={{animationIterationCount: 2}}>
                         <p className="m-0 text-purple text-center text-normal font-weight-bold">Principal</p>
                         <div className="mt-2 d-flex container-center-col">
                             <RadiusColorBtn
                                 selectedColor={hexValuePrimary}
-                                onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "Principal"});}}
+                                onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "Principal", needUpdateBtn: isFromDash && true});}}
                             />
                             <span className="mt-2 text-small text-center text-purple font-weight-bold">
                                 {primaryColor}
                             </span>
                         </div>
                     </div>
-                    <div className="flex-column animated rubberBand delay-5s ml-4" style={{animationIterationCount: 2}}>
+                    <div className="flex-column animated rubberBand delay-5s mt-3" style={{animationIterationCount: 2}}>
                         <p className="m-0 text-purple text-center text-normal font-weight-bold">Secundária</p>
                         <div className="mt-2 d-flex container-center-col">
                             <RadiusColorBtn
                                 selectedColor={hexValueSecondary}
-                                onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "Secundária"});}}
+                                onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "Secundária", needUpdateBtn: isFromDash && true});}}
                             />
                             <span className="mt-2 text-small text-center text-purple font-weight-bold">
                                 {secondaryColor}
                             </span>
                         </div>
                     </div>
-                    <div className="mt-3">
-                        {showBackColorBtn()}
-                    </div>
+                    {showBackColorBtn()}
                 </section>
-                <section style={{display: needHideCheckBox ? "none" : "block" }}>
+                <section style={{display: (needHideCheckBox || isFromDash) ? "none" : "block" }}>
                     <p className="text-normal text-purple m-0">ou</p>
                     <CheckBoxForm text="Selecionar cores acima e editar depois." setIsBoxChecked={setIsBoxChecked} />
                 </section>
@@ -161,13 +189,32 @@ export default function PickTheming({
         </section>
     );
 
+    const showCondition = isFromDash ? true : step === 2;
     return (
-        step === 2 &&
+        showCondition &&
         <div>
-            <p className="text-normal text-white text-shadow text-center">
-                • Escolha as cores do app:
-            </p>
+            {isFromDash ? (
+                <p className="text-normal text-purple text-center">
+                    • Escolha aqui outras cores para o app:
+                </p>
+            ) : (
+                <p className="text-normal text-white text-shadow text-center">
+                    • Escolha as cores do app:
+                </p>
+            )}
             {showThemingArea()}
+            {isFromDash && (
+                <ShowActionBtns
+                    needUpdateBtn={needUpdateBtn}
+                    objToSend={{
+                        "clientAdminData.selfThemePColor": primaryColor,
+                        "clientAdminData.selfThemeSColor": secondaryColor,
+                        "clientAdminData.selfThemeBackColor": backColor,
+                    }}
+                    titleBeforeOk="Salvando nova palheta de cores..."
+                    titleAfterOk="Palheta de cores salva."
+                />
+            )}
             <ModalFullContent
                 contentComp={<ColorPicker
                     notIncludeColorPrimary={primaryColor}
@@ -178,6 +225,7 @@ export default function PickTheming({
                     setFullOpen={setFullOpen}
                     theme={theme}
                     setTheme={setTheme}
+                    isFromDash={isFromDash}
                 />}
                 fullOpen={fullOpen}
                 setFullOpen={setFullOpen}
@@ -195,7 +243,8 @@ const ColorPicker = ({
     data,
     setFullOpen,
     theme,
-    setTheme }) => {
+    setTheme,
+    isFromDash, }) => {
 
     const isPrimary = whichColorModal === "Principal";
     const isBackground = whichColorModal === "de Fundo";
@@ -229,7 +278,7 @@ const ColorPicker = ({
             <section className="mx-3">
                 <div className="container-center">
                     {uiColors.map(eachColor => (
-                        <div key={eachColor.ptColorName} style={{display: dontNeedShowColor(eachColor.ptColorName) ? "none" : "block"}}>
+                        <div key={eachColor.id} style={{display: (dontNeedShowColor(eachColor.ptColorName) || eachColor.isDefault) ? "none" : "block"}}>
                             <div
                                 className="d-flex container-center-col m-3"
                             >
@@ -239,21 +288,21 @@ const ColorPicker = ({
                                     name={eachColor.ptColorName}
                                     value={eachColor.hexValue}
                                     onClick={e => {
-                                        const ptColorName = e.currentTarget.name;
+                                        const brColorName = e.currentTarget.name;
+                                        const colorName = translateColorToEng(e.currentTarget.name);
                                         const hexValue = e.currentTarget.value;
 
                                         setFullOpen(false);
 
-
                                         if(isPrimary) {
-                                            setData({ ...data, primaryColor: ptColorName , hexValuePrimary: hexValue });
-                                            setTheme({...theme, colorP: translatedColor[ptColorName]})
+                                            setData({ ...data, primaryColor: brColorName , hexValuePrimary: hexValue });
+                                            !isFromDash && setTheme({...theme, colorP: colorName })
                                         } else if(isBackground) {
-                                            setData({ ...data, backColor: ptColorName, hexBackValue: hexValue });
-                                            setTheme({...theme, colorBack: translatedColor[ptColorName]})
+                                            setData({ ...data, backColor: brColorName, hexBackValue: hexValue });
+                                            !isFromDash && setTheme({...theme, colorBack: colorName })
                                         } else {
-                                            setData({ ...data, secondaryColor: ptColorName, hexValueSecondary: hexValue });
-                                            setTheme({...theme, colorS: translatedColor[ptColorName]})
+                                            setData({ ...data, secondaryColor: brColorName, hexValueSecondary: hexValue });
+                                            !isFromDash && setTheme({...theme, colorS: colorName })
                                         }
                                     }}
                                     size="65px"

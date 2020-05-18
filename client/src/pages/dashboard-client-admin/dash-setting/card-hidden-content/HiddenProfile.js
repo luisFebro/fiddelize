@@ -84,7 +84,7 @@ export default function HiddenProfile({ userData }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeP)"
                 backColorOnHover="var(--themeP)"
-                iconFontAwesome={<FontAwesomeIcon icon="exchange-alt" style={faStyle} />}
+                iconFontAwesome={<FontAwesomeIcon icon="sync-alt" style={faStyle} />}
                 textTransform='uppercase'
             />
         </div>

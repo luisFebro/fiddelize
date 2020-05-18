@@ -1,6 +1,9 @@
 import React from 'react';
 import CarouselFlickity from '../../../../components/carousels/CarouselFlickity';
 import { milestoneIcons } from '../../../../global-data/milestoneIcons';
+import { milestoneIconsSorted } from '../../../../global-data/milestoneIconsSorted';
+import { useClientAdmin } from '../../../../hooks/useRoleData';
+import { getIconIndex } from '../../../../global-data/milestoneIconsSorted';
 import PropTypes from 'prop-types';
 
 PickRatingIcon.propTypes = {
@@ -9,22 +12,45 @@ PickRatingIcon.propTypes = {
 }
 
 export default function PickRatingIcon({
-    step, setNextDisabled, isTest }) {
-    const selectedMilestoneIcons = isTest ? milestoneIcons : milestoneIcons.filter(iconObj => iconObj.appPreview === true);
+    step, setNextDisabled, isTest, isFromDash }) {
+    const selectedMilestoneIcons = (isTest || isFromDash) ? milestoneIconsSorted : milestoneIcons.filter(iconObj => iconObj.appPreview === true);
+    const showCondition = isFromDash ? true : step === 3;
+
+    const { selfMilestoneIcon } = useClientAdmin();
+    const currIconInd = getIconIndex(selfMilestoneIcon);
     // n1
-        return(
+    return(
         <div
-            style={{visibility: step === 3 ? "visible" : "hidden", height: step === 3 ? 260 : 0 }}
+            style={{
+                visibility: showCondition ? "visible" : "hidden",
+                height: showCondition ? 260 : 0
+            }}
         >
-            <p className="text-normal text-white text-shadow text-center">
-                • Selecione ícone de nível do app:
-            </p>
-            <CarouselFlickity data={selectedMilestoneIcons} />
-            <p className="text-small text-white text-shadow text-left">
-                * mais ícones ficarão disponíveis
-                <br />
-                em seu painel de controle.
-            </p>
+            {isFromDash ? (
+                <p className="text-normal text-purple text-center">
+                    • Selecione outro ícone de nível principal:
+                </p>
+            ) : (
+                <p className="text-normal text-white text-shadow text-center">
+                    • Selecione ícone de nível do app:
+                </p>
+            )}
+            <CarouselFlickity
+                data={selectedMilestoneIcons}
+                isFromDash={isFromDash}
+                currIconInd={isFromDash ? currIconInd : 0}
+                style={{
+                    maxWidth: isFromDash && '100%',
+                    boxShadow: isFromDash && '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
+                }}
+            />
+            {!isFromDash && (
+                <p className="text-small text-white text-shadow text-left">
+                    * mais ícones ficarão disponíveis
+                    <br />
+                    em seu painel de controle.
+                </p>
+            )}
         </div>
     );
 }

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import { useStoreState } from 'easy-peasy';
 
 // LAYOUT
 import Navbar from '../../components/_layout/navbar';
@@ -40,10 +39,6 @@ const InstallMsg = () => (
 );
 
 function Mobile({ location }) {
-    const { role } = useStoreState(state => ({
-        role: state.userReducer.cases.currentUser.role,
-    }));
-
     const locationNow = location.pathname;
 
     return (

@@ -10,7 +10,7 @@ export const setImage = (collection, dataKey, imageUrlValue) => {
     store.config({ storeName: collection }); // n3 dataStore
     // This error condition is commented out because there is a need for dinamic name insertion.
     // if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
-    if(!imageUrlValue) throw new Error("imageURL param is missing...")
+    if(!imageUrlValue) console.log("WARNING: imageURL param is missing...")
 
     return fetch(imageUrlValue)
     .then(response => response.blob()) // n4 response e.g

@@ -12,13 +12,15 @@ export default function RadiusBtn({
     size,
     position,
     top,
-    left, }) {
+    left,
+    display, }) {
 
     let styles = {
         btn: {
             position,
             top,
             left,
+            display: display || "block",
             color: color || "white",
             padding: padding || '2px 8px',
             borderRadius: '20px',

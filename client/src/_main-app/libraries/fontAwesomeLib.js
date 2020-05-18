@@ -62,13 +62,14 @@ import {
     faClock,
     faFileAlt,
     faDatabase, // security copies
-    faExchangeAlt, // update
     faCogs, // tech support, setting
     faChartPie,
     faHome,
     faAngleRight,
     faLongArrowAltDown,
     faImage,
+    faSyncAlt, // change something, update
+    faReply, // back, return
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -131,11 +132,12 @@ library.add(
   faClock,
   faFileAlt,
   faDatabase,
-  faExchangeAlt,
   faCogs,
   faChartPie,
   faHome,
   faAngleRight,
   faLongArrowAltDown,
   faImage,
+  faSyncAlt,
+  faReply,
 );

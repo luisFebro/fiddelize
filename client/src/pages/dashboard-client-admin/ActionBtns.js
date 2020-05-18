@@ -12,7 +12,7 @@ import isThisApp from '../../utils/window/isThisApp';
 // IMPORTANT: This was moved from navbar since it was not running the buttons at the start.
 export default function ActionBtns({ location }) {
     const { businessId } = useAppSystem();
-    const { role } = useProfile();
+    const { role, name } = useProfile();
     const { bizCodeName, bizName, bizPlan } = useClientAdmin();
 
     const locationNow = location.pathname;
@@ -20,7 +20,13 @@ export default function ActionBtns({ location }) {
     if(locationNow.includes("/cliente-admin/painel-de-controle")) {
         return(
             <div className="animated zoomIn fast">
-                <ClientAdminBtns businessId={businessId} role={role} bizCodeName={bizCodeName} bizName={bizName} />
+                <ClientAdminBtns
+                    businessId={businessId}
+                    role={role}
+                    bizCodeName={bizCodeName}
+                    bizName={bizName}
+                    name={name}
+                />
                 <ShowLogoutBtn locationNow={locationNow} />
             </div>
         );
@@ -29,7 +35,7 @@ export default function ActionBtns({ location }) {
     return null;
 }
 
-const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role }) => { // L
+const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role, name }) => { // L
     return(
         <section style={{zIndex: 3000, right: '15px', top: 5 }} className="position-absolute container-center">
             {isThisApp()
@@ -46,7 +52,9 @@ const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role }) => { // L
                     </div>
                 </Link>
             )}
-            <Link to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}>
+            <Link
+                to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}&adminName=${name}`}
+            >
                 <ButtonFab
                     backgroundColor="var(--themeSDark)"
                     position="relative"

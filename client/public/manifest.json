@@ -1,7 +1,7 @@
 {
   "name": "Fiddelize - Pontos de Fidelidade",
   "short_name": "Fiddelize",
-  "description": "Sistema para verificação de pontos fidelidade e valorização do consumo de clientes",
+  "description": "Plataforma de pontos de fidelidade e valorização do consumo de clientes",
   "start_url": "/mobile-app",
   "display": "standalone",
   "scope": ".",

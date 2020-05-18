@@ -1,0 +1,57 @@
+// Colors
+.color--root {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.color--root div .color-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    // flex-direction: row;
+}
+
+.color--root div .color-text {
+    color: var(--themeP);
+    font: bolder 20px var(--mainFont);
+    white-space: no-wrap;
+}
+
+.color-content .color-desc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 1.5rem;
+}
+
+.color-content .color-desc .color-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid black;
+}
+// End Colors
+
+// Icon
+.icon--root {
+    position: relative;
+}
+
+.icon--circle {
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    box-shadow: inset 12px 5px .4em var(--themePLight);
+}
+
+.icon--selected-one {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 70px;
+    color: #ff0;
+    // filter: drop-shadow(0 0 40px #ffc);
+}
+// End Color

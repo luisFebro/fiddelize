@@ -49,8 +49,8 @@ export default function AppPickersHandler({
                 })
                 break;
             case 3:
-                const objToSend2 = { // need to handle this runName specially when user do not interact with icon picker...
-                    "clientAdminData.selfMilestoneIcon": runName,
+                const objToSend2 = {
+                    "clientAdminData.selfMilestoneIcon": runName || "star",
                 }
                 showSnackbar(dispatch, "Salvando preferências de ícone e continuando...");
                 updateUser(dispatch, objToSend2, bizId)

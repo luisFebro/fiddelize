@@ -7,7 +7,7 @@ import DashClients from './dash-clients';
 // Icons from Tabs
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
-import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
+import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import Loadable from 'react-loadable';
 import { useStoreState } from 'easy-peasy';
 import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
@@ -41,7 +41,7 @@ const dataTab1 = [
     },
     {
         tabLabel: "App",
-        tabIcon: <PhoneAndroidIcon style={muStyle} />,
+        tabIcon: <PhonelinkSetupIcon style={muStyle} />,
         tabContentPanel: null,
         boxPadding: 1,
     },
@@ -60,7 +60,7 @@ const dataTab2 = [
     },
     {
         tabLabel: "App",
-        tabIcon: <PhoneAndroidIcon style={muStyle} />,
+        tabIcon: <PhonelinkSetupIcon style={muStyle} />,
         tabContentPanel: <DashAppDesign />,
         boxPadding: 1,
     },
@@ -80,7 +80,7 @@ const dataTab3 = [
     },
     {
         tabLabel: "App",
-        tabIcon: <PhoneAndroidIcon style={muStyle} />,
+        tabIcon: <PhonelinkSetupIcon style={muStyle} />,
         tabContentPanel: null,
         boxPadding: 1,
     },

@@ -11,9 +11,16 @@ import { readClientAdmin } from '../redux/actions/userActions';
 import lStorage, { setSystemOp, needAppRegisterOp } from '../utils/storage/lStorage';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../redux/actions/snackbarActions';
+import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
+
+const iconStyle = {
+   fontSize: '140px',
+   color: 'var(--mainWhite)',
+   filter:  'drop-shadow(.5px .5px 1.5px black)',
+}
 
 const appSystem = lStorage("getItems", { collection: "appSystem"});
 
@@ -25,6 +32,7 @@ export default function DownloadApp({ match, location }) {
     const bizName = getQueryByName("negocio", location.search);
     const bizId = getQueryByName("id", location.search);
     const isClientAdmin = location.search.includes("admin=1");
+    const isFromAdminPanel = location.search.includes("painel=1");
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
     const isValidRoleType = isClientAdmin || isClientUser;
 
@@ -85,11 +93,43 @@ export default function DownloadApp({ match, location }) {
 
     const showClientAdminText = () => (
         <div className="text-white text-center text-title mt-5">
-            <p className="text-hero">O App da {bizName && bizName.cap()} ficou pronto!<i style={styles.icon}>🎉</i></p>
-            <div className="pt-1 pb-5">
-                <ScrollArrow margin={50} />
-            </div>
-            <p className="text-title" style={styles.margin} data-aos="fade-up">Baixe o seu App logo a baixo, deslizando a tela.</p>
+            {isFromAdminPanel ? (
+                <Fragment>
+                    <p className="text-hero container-center-col">
+                        <ImportantDevicesIcon style={iconStyle} />
+                        {userName && userName.cap()}, baixe seu app seja para celular, tablet ou desktop.
+                    </p>
+                    <div className="pt-1 pb-5">
+                        <ScrollArrow margin={50} />
+                    </div>
+                    <p
+                        style={styles.margin}
+                        data-aos="fade-up"
+                    >
+                        Clique no banner que aparece a baixo,
+                        <br />
+                        e comece a baixar em instantes.
+                    </p>
+                </Fragment>
+            ) : (
+                <Fragment>
+                    <p className="text-hero">
+                        O App da {bizName && bizName.cap()} ficou pronto!
+                        <i style={styles.icon}>🎉</i>
+                    </p>
+                    <div className="pt-1 pb-5">
+                        <ScrollArrow margin={50} />
+                    </div>
+                    <p
+                        style={styles.margin}
+                        data-aos="fade-up"
+                    >
+                        Baixe logo a baixo,
+                        <br />
+                        e já comece a usar.
+                    </p>
+                </Fragment>
+            )}
             <ScrollArrow margin={30} />
             <div id="target" style={{minHeight: '200px 0'}}>
                 <ScrollArrow margin={20} />
@@ -132,7 +172,14 @@ export default function DownloadApp({ match, location }) {
 
                         <p style={styles.margin} data-aos="fade-up">Você vai acompanhar seus pontos de fidelidade, histórico de compras, conversar com a gente, ter acesso offline e mais.</p>
                         <p className="text-hero" style={styles.margin} data-aos="fade-up">E o melhor...<br />você ainda ganha prêmios a cada meta atingida!</p>
-                        <p style={styles.margin} data-aos="fade-up">Baixe o seu app logo a baixo,<br /> é leve e baixa rápido.</p>
+                        <p
+                            style={styles.margin}
+                            data-aos="fade-up"
+                        >
+                            Baixe o seu app logo a baixo,
+                            <br />
+                            é leve e baixa rápido.
+                        </p>
                         <div style={{margin: '0 0 500px'}}>
                             <ScrollArrow margin={30} />
                             <div id="target">

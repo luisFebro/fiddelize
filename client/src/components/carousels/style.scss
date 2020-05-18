@@ -29,6 +29,11 @@
 .flickity-button:hover {
     background-color: var(--themeSDark);
 }
+
+.flickity-prev-next-button {
+    width: 34px;
+}
+
 .flickity-prev-next-button .arrow {
   fill: var(--mainWhite);
 }

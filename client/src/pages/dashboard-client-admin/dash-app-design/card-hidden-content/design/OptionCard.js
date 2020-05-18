@@ -18,10 +18,11 @@ export default function OptionCard({
 
     return (
         <Card
-            className="align-self-center animated shadow-elevation p-4 mt-5 mt-md-0 mr-md-5"
+            className="animated shadow-elevation p-4 mt-5"
             style={{
-                width: 200,
-                height: 250,
+                width: '100%',
+                maxWidth: 305,
+                height: 380,
                 backgroundColor: 'var(--mainWhite)',
                 boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)',
             }}
@@ -29,7 +30,7 @@ export default function OptionCard({
             <p className="text-center text-subtitle font-weight-bold text-purple">
                 {parse(title)}
             </p>
-            <section style={{ minHeight: 100 }}>
+            <section style={{ minHeight: 210 }} className="container-center">
                 {mainContent}
             </section>
             <div className="container-center">
@@ -40,7 +41,7 @@ export default function OptionCard({
                     backgroundColor="var(--themeSDark)"
                     backColorOnHover="var(--themeSDark)"
                     textTransform='uppercase'
-                    iconFontAwesome={<FontAwesomeIcon icon="exchange-alt" style={faStyle} />}
+                    iconFontAwesome={<FontAwesomeIcon icon="sync-alt" style={faStyle} />}
                 />
             </div>
         </Card>

@@ -74,7 +74,7 @@ export default function RatingIcons({
     const levels = [100, 200, 300, 400, 500];
     const { fontSize, icon } = milestoneIcons.find(obj => obj["icon"] === selectedIcon);
 
-    const handleFlip = e => {
+    const handleEffect = e => {
        let currIconElemParent = e.target.parentElement;
        animateCSS(currIconElemParent, 'rubberBand', 'fast');
     }
@@ -92,7 +92,7 @@ export default function RatingIcons({
                                     className="icon "
                                     style={{fontSize: fontSize}}
                                     id={`icon-${level}`}
-                                    onClick={e => handleFlip(e)}
+                                    onClick={e => handleEffect(e)}
                                 />
                             </i>
                         }

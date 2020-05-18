@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({ // n1
         color: props => props.color || 'var(--mainWhite)',
         backgroundColor: props => props.backgroundColor,
         '&:hover': {
-            backgroundColor: props => props.backColorOnHover
+            backgroundColor: props => props.backColorOnHover || props.backgroundColor
         }
     },
     sBtnDefaultColors: {
