@@ -18,6 +18,7 @@ import Tooltip from './Tooltip';
 import lStorage, { tooltip1, yellowBtn2, needSetTrueLocalKey } from '../../utils/storage/lStorage';
 import ModalFullContent from '../../components/modals/ModalFullContent';
 import Fab from '@material-ui/core/Fab';
+import getFirstName from '../../utils/string/getFirstName';
 // End SpeedDial and Icons
 
 const lastOption = tooltip1;
@@ -77,7 +78,7 @@ function MoreOptionsBtn({
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 modalData={{
-                    title: `&#187; Histórico de Compras<br />${challengeN ? `de ${userName.slice(0, userName.indexOf(" "))}` : ""}`,
+                    title: `&#187; Histórico de Compras<br />${challengeN ? `de ${getFirstName(userName)}` : ""}`,
                     subTitle: null,
                     componentContent: <PurchaseHistory data={data} />,
                     challengeN: challengeN,

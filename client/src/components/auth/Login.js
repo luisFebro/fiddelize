@@ -50,7 +50,7 @@ function Login({ history, setLoginOrRegister }) {
                 bizId,
                 bizCodeName,
                 verificationPass,
-                selfMilestoneIcon,
+                // selfMilestoneIcon,
             } = res.data;
 
             if(role === "admin") {
@@ -70,10 +70,6 @@ function Login({ history, setLoginOrRegister }) {
                         setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
                         whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
                         setTimeout(() => history.push(whichRoute), 5000);
-                    } else if(!selfMilestoneIcon) {
-                        whichRoute = `https://fiddelize.netlify.app/${bizCodeName}/novo-app/self-service/${authUserId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
-                        showSnackbar(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
-                        setTimeout(() => window.location.href = whichRoute, 2900);
                     } else {
                         whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
 
@@ -174,6 +170,11 @@ export default withRouter(Login);
 
 
 /*ARCHIVES
+else if(!selfMilestoneIcon) {
+        whichRoute = `https://fiddelize.netlify.app/${bizCodeName}/novo-app/self-service/${authUserId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
+        showSnackbar(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
+        setTimeout(() => window.location.href = whichRoute, 2900);
+
 <div className="mx-2 mb-4 text-left">
     <SafeEnvironmentMsg />
 </div>

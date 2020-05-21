@@ -57,8 +57,10 @@ function handleStorage(coll, key, url, isFromInternet = false) {
             .then(res => console.log(`New image set to indexedDB. Collection: ${coll}, dataKey: ${key}`))
             .catch(err => console.log(err))
         } else {
-            const doc = document.querySelector(`.${key}`);
-            if(doc) doc.src = generatedUrl;
+            const doc = document.querySelectorAll(`.${key}`);
+            if(doc) {
+                doc.forEach(elemFound => elemFound.src = generatedUrl);
+            }
         }
     })
 }

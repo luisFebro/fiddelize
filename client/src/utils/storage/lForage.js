@@ -54,8 +54,10 @@ const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { //
         mySrc = reader.result;
         store.setItem(keyToSet, mySrc)
         .then(generatedUrl => {
-            const doc = document.querySelector(`.${keyToSet}`);
-            if(doc) doc.src = generatedUrl;
+            const doc = document.querySelectorAll(`.${keyToSet}`);
+            if(doc) {
+                  doc.forEach(elemFound => elemFound.src = generatedUrl);
+            }
         })
     }
 }

@@ -33,9 +33,9 @@ export default function ShowCards({ setOpenComp }) {
         return(
             <div className="container-center">
                 <ImgLoader
-                    className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                    className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow shadow-elevation`}
                     src={logoSrc}
-                    style={{position: 'relative', margin: '15px 0'}}
+                    style={{position: 'relative', margin: '15px 0', boxShadow: '0 30px 40px 8px rgba(0, 0, 0, 0.35)'}}
                     width={isSquared ? 100 : 190}
                     height={isSquared ? 100 : 85}
                 />

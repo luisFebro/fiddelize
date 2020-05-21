@@ -11,6 +11,7 @@ import { useStoreDispatch } from 'easy-peasy';
 import { readClientAdmin, uploadImages, updateImages } from '../../../../redux/actions/userActions';
 import ShowActionBtns from './ShowActionBtns';
 import { deleteImage } from '../../../../utils/storage/lForage';
+import { useClientAdmin } from '../../../../hooks/useRoleData';
 
 PickLogo.propTypes = {
     step: PropTypes.number,
@@ -31,9 +32,11 @@ export default function PickLogo({
         sizeRect: false,
         sizeSquare: false,
     })
+
     const { sizeSquare, sizeRect } = data;
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
 
+    const { selfBizLogoImg } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
@@ -44,6 +47,13 @@ export default function PickLogo({
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             setTempImgUrl(res.data);
+            if(isFromDash) {
+                readClientAdmin(dispatch, bizId)
+                .then(res => {
+                    if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                    showSnackbar(dispatch, "Formato Atualizado!", 'success');
+                })
+            }
             !isFromDash && setLogoUrlPreview(res.data);
         })
     };
@@ -54,19 +64,23 @@ export default function PickLogo({
             dataToUpdate = {  ...dataToUpdate, paramArray: ["sizeSquare"] }
             showSnackbar(dispatch, "Fazendo alteração no formato da imagem...");
             updateThisImg(dataToUpdate);
+            setData({ sizeRect: false });
         }
         if(sizeRect) {
             dataToUpdate = {  ...dataToUpdate, paramArray: ["sizeRect"] }
             showSnackbar(dispatch, "Fazendo alteração no formato da imagem...");
             updateThisImg(dataToUpdate);
+            setData({ sizeSquare: false });
         }
     }, [sizeSquare, sizeRect])
 
     const gotPic = typeof uploadedPic === "object";
     const picName = uploadedPic && uploadedPic.name;
     useEffect(() => {
-        gotPic && tempImgUrl && goNext();
-    }, [gotPic, tempImgUrl])
+        if(!isFromDash) {
+            gotPic && tempImgUrl && goNext();
+        }
+    }, [gotPic, tempImgUrl, isFromDash])
 
     useEffect(() => {
         if(!isFromDash) {
@@ -101,6 +115,7 @@ export default function PickLogo({
         const options = { _id: bizId, fileName: bizCodeName }
         setIsLoadingPic(true);
 
+        setEditArea(false);
         // n1
         uploadImages(formData, options)
         .then(res => {
@@ -111,21 +126,26 @@ export default function PickLogo({
             }
             const generatedImg = res.data;
             !isFromDash && setLogoUrlPreview(generatedImg);
+
+            const commonActions = () => {
+                setTempImgUrl(generatedImg);
+                setIsLoadingPic(false);
+                setEditArea(true);
+            }
             if(isFromDash) {
                 deleteImage("logos", "app_biz_logo")
                 .then(res => {
-                    if(res.status !== 200) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão.", 'error')
                     readClientAdmin(dispatch, bizId)
                     .then(res => {
                         if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                        showSnackbar(dispatch, "Logo Atualizada!", 'success');
+                        showSnackbar(dispatch, "Nova logo salva. Alterando no app...", 'success', 6000);
                         setNeedUpdateBtn(true);
+                        commonActions();
                     })
                 })
+            } else {
+                commonActions();
             }
-            setTempImgUrl(generatedImg);
-            setIsLoadingPic(false);
-            setEditArea(true);
         })
     };
 
@@ -185,6 +205,21 @@ export default function PickLogo({
         </div>
     );
 
+    const isSquared = selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+    const showCurrLogoForDash = () => (
+        isFromDash &&
+        <div className="container-center my-3" >
+            <img
+                className="app_biz_logo animated zoomIn slow shadow-elevation"
+                src={null}
+                style={{position: 'relative', margin: '15px 0', boxShadow: '0 30px 40px 8px rgba(0, 0, 0, 0.35)'}}
+                width={isSquared ? 100 : 190}
+                height={isSquared ? 100 : 85}
+                alt="logo"
+            />
+        </div>
+    );
+
     const showLogoUploadingArea = () => (
         <section className="text-normal text-white container-center">
             <Card
@@ -206,6 +241,9 @@ export default function PickLogo({
                     <p className="text-subtitle text-purple m-0 ml-3 font-weight-bold">
                         Logo
                     </p>
+                </section>
+                <section>
+                    {showCurrLogoForDash()}
                 </section>
                 <section className="container-center">
                     {showUploadingBtn()}

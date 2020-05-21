@@ -11,6 +11,7 @@ import { readPurchaseHistory } from '../../../../../../redux/actions/userActions
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 import defineCurrChallenge from '../helpers/defineCurrChallenge';
 import imgLib from '../../../../../../utils/storage/lForageStore';
+import getFirstName from '../../../../../../utils/string/getFirstName';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -38,7 +39,7 @@ export default function PurchaseHistory({ data }) {
         })
     }, [_id, maxScore])
 
-    const onlyFirstName = name.slice(0, name.indexOf(" "));
+    const onlyFirstName = getFirstName(name);
 
     const illustrationIfEmpty = () => (
         <Illustration

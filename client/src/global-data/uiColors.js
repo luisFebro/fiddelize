@@ -1,11 +1,5 @@
 export const uiColors = [
     {
-        id: "defaultP",
-        ptColorName: "roxo",
-        hexValue: "var(--mainPurple)",
-        isDefault: true,
-    },
-    {
         id: "defaultS",
         ptColorName: "azul cyan",
         hexValue: "var(--mainCyan)",

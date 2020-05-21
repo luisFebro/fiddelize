@@ -49,6 +49,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                                     position="relative"
                                     onClick={() => setPrizeView(true)}
                                     title="Ver seu Prêmio"
+                                    needTxtNoWrap={true}
                                     variant="extended"
                                     color="white"
                                     backgroundColor={"var(--themeSDark--" + colorS +  ")"}

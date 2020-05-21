@@ -12,6 +12,7 @@ import { useStoreState } from 'easy-peasy';
 import ClientProfile from './modal-content-pages/ClientProfile';
 import PurchaseHistory from './modal-content-pages/PurchaseHistory';
 import defineCurrChallenge from './helpers/defineCurrChallenge';
+import getFirstName from '../../../../../utils/string/getFirstName';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -94,7 +95,7 @@ const showHistoryBtn = data => {
                     size: "medium",
                 }}
                 modalData={{
-                    title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${data.name.slice(0, data.name.indexOf(" "))}` : ""}`,
+                    title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${data && data.name && getFirstName(data.name)}` : ""}`,
                     subTitle: null,
                     componentContent: <PurchaseHistory data={dataToSendModal} />,
                     challengeN: challengeN,

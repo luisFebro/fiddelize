@@ -64,6 +64,7 @@ function ClientScoresPanel({
         },
         crownIcon: {
             position: 'absolute',
+            filter: 'drop-shadow(.001em .001em .75em var(--mainDark))',
             top: '-45px',
             left: '218px',
             fontSize: '2em',
@@ -121,7 +122,7 @@ function ClientScoresPanel({
     // RENDER
     const showHeader = () => (
         <div>
-            <span className="text-hero text-shadow">
+            <span className="ml-3 text-hero text-shadow">
                 {getFirstName(name)},
             </span>
             <Title

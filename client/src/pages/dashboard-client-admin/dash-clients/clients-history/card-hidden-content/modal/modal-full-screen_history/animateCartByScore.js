@@ -99,10 +99,7 @@ function chooseMsg(props) {
                        <br />
                        ${userFirstName.cap()}, agora só aguardar
                        <br />
-                       a confirmação do desafio n.º ${currChallenge}
-                       <br />
-                       e do prêmio.
-                       </strong>`
+                       a confirmação.`
             default:
                 console.log("Something went worng with chooseMsg");
         }

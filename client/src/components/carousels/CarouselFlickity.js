@@ -15,7 +15,8 @@ export default function CarouselFlickity({
     data,
     style,
     isFromDash,
-    currIconInd = 0, }) {
+    currIconInd, }) {
+
     const [iconSelected, setIconSelected] = useState(data[0].icon);
     const [iconReady, setIconReady] = useState(false);
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
@@ -23,7 +24,7 @@ export default function CarouselFlickity({
 
     const iconChanged = currIconInd !== getIconIndex(iconSelected);
 
-    useEffect(() => {
+    useEffect(() => { // do not insert "iconReady" in the update array for now since it is wrongly inserting the btn right before necessary.
         if(isFromDash) {
             if(iconChanged && iconReady) setNeedUpdateBtn(true);
         }
@@ -56,7 +57,7 @@ export default function CarouselFlickity({
 
         // g (delaying function execution) to delay by 2 second to avoid crash app.
         flkty.on('change', index => setTimeout(() => !iconReady && setIconSelected(data[index].icon), 1000));
-        setTimeout(() => !iconReady && flkty.selectCell(currIconInd, false, false), 3500);
+        setTimeout(() => !iconReady && currIconInd && flkty.selectCell((currIconInd), false, false), 3500);
     }
 
     // const dataFlickity = Flickity.data(elem)

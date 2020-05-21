@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import CheckBoxForm from '../../../../components/CheckBoxForm';
 import { CLIENT_URL } from '../../../../config/clientUrl';
 import ModalFullContent from '../../../../components/modals/ModalFullContent';
-import { uiColors, translateColorToEng } from '../../../../global-data/uiColors';
+import { uiColors, translateColorToEng, translateColorToPtBr } from '../../../../global-data/uiColors';
 import gotArrayThisItem from '../../../../utils/arrays/gotArrayThisItem';
 import ButtonMulti, {faStyle} from '../../../../components/buttons/material-ui/ButtonMulti';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,9 +26,9 @@ export default function PickTheming({
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [fullOpen, setFullOpen] = useState(false);
     const [data, setData] = useState({
-        primaryColor: 'padrão',
-        secondaryColor: 'padrão',
-        backColor: 'padrão',
+        primaryColorBr: 'padrão',
+        secondaryColorBr: 'padrão',
+        backColorBr: 'padrão',
         hexValuePrimary: 'var(--themeP)',
         hexValueSecondary: 'var(--themeS)',
         hexBackValue: 'var(--themeP)',
@@ -37,29 +37,29 @@ export default function PickTheming({
     })
 
     const {
-        primaryColor,
-        secondaryColor,
-        backColor,
+        primaryColorBr,
+        secondaryColorBr,
+        backColorBr,
         currColorModal,
         needUpdateBtn,
         hexValuePrimary, hexValueSecondary, hexBackValue } = data;
 
-    const needHideCheckBox = Boolean(primaryColor !== "padrão" || secondaryColor !== "padrão");
+    const needHideCheckBox = Boolean(primaryColorBr !== "padrão" || secondaryColorBr !== "padrão");
 
     const goNext = () => setNextDisabled(false);
 
     const { selfThemePColor, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
     useEffect(() => {
         if(isFromDash) {
-            const primaryCond = selfThemePColor === "default" ? "roxo" : selfThemePColor;
-            const secondaryCond = selfThemePColor === "default" ? "azul cyan" : selfThemeSColor;
-            const backCond = selfThemeBackColor === "" ? "roxo" : selfThemeBackColor;
+            const primaryCond = selfThemePColor === "default" ? "purple" : selfThemePColor;
+            const secondaryCond = selfThemeSColor === "default" ? "defaultS" : selfThemeSColor;
+            const backCond = selfThemeBackColor === "" ? "purple" : selfThemeBackColor;
 
             setData({
                 ...data,
-                primaryColor: primaryCond,
-                secondaryColor: secondaryCond,
-                backColor: backCond,
+                primaryColorBr: translateColorToPtBr(primaryCond),
+                secondaryColorBr: translateColorToPtBr(secondaryCond),
+                backColorBr: translateColorToPtBr(backCond),
                 hexValuePrimary: `var(--themeP--${selfThemePColor})`,
                 hexValueSecondary: `var(--themeS--${selfThemeSColor})`,
                 hexBackValue: selfThemeBackColor === "" ? `var(--themeP--default)` : `var(--themeP--${selfThemeBackColor})`,
@@ -73,19 +73,19 @@ export default function PickTheming({
 
     useEffect(() => {
         if(!isFromDash) {
-            secondaryColor && goNext();
+            secondaryColorBr && goNext();
         }
-    }, [secondaryColor, isFromDash])
+    }, [secondaryColorBr, isFromDash])
 
     useEffect(() => {
-        if(primaryColor !== "padrão" || secondaryColor !== "padrão" || backColor !== "padrão") {
+        if(primaryColorBr !== "padrão" || secondaryColorBr !== "padrão" || backColorBr !== "padrão") {
             if(!isFromDash) {
                 const doc = document.querySelector("#status");
                 doc.style.display = "block";
                 setTimeout(() => doc.style.display = "none", 5000);
             }
         }
-    }, [primaryColor, secondaryColor, backColor])
+    }, [primaryColorBr, secondaryColorBr, backColorBr])
 
     useEffect(() => {
         if(!isFromDash) {
@@ -98,16 +98,16 @@ export default function PickTheming({
     }, [isBoxChecked, isFromDash])
 
     const handleIsSelectedBackColor = () => {
-        if(backColor !== "padrão" && primaryColor !== "padrão") {
+        if(backColorBr !== "padrão" && primaryColorBr !== "padrão") {
             return true;
-        } else if(primaryColor !== "padrão") {
+        } else if(primaryColorBr !== "padrão") {
            return false;
         } else {
            return true;
         }
     }
     const showBackColorBtn = () => (
-        primaryColor !== "padrão" &&
+        primaryColorBr !== "padrão" &&
         <div className="flex-column animated zoomIn mt-3">
             <p className="m-0 text-purple text-center text-normal font-weight-bold">
                 {isFromDash ? "Fundo" : "Cor de Fundo"}
@@ -118,7 +118,7 @@ export default function PickTheming({
                     onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "de Fundo", needUpdateBtn: isFromDash && true });}}
                 />
                 <span className="mt-2 text-small text-center text-purple font-weight-bold">
-                    {handleIsSelectedBackColor() ? backColor : primaryColor}
+                    {handleIsSelectedBackColor() ? backColorBr : primaryColorBr}
                 </span>
             </div>
         </div>
@@ -156,7 +156,7 @@ export default function PickTheming({
                                 onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "Principal", needUpdateBtn: isFromDash && true});}}
                             />
                             <span className="mt-2 text-small text-center text-purple font-weight-bold">
-                                {primaryColor}
+                                {primaryColorBr}
                             </span>
                         </div>
                     </div>
@@ -168,7 +168,7 @@ export default function PickTheming({
                                 onClick={() => {setFullOpen(!fullOpen); setData({ ...data, currColorModal: "Secundária", needUpdateBtn: isFromDash && true});}}
                             />
                             <span className="mt-2 text-small text-center text-purple font-weight-bold">
-                                {secondaryColor}
+                                {secondaryColorBr}
                             </span>
                         </div>
                     </div>
@@ -207,9 +207,9 @@ export default function PickTheming({
                 <ShowActionBtns
                     needUpdateBtn={needUpdateBtn}
                     objToSend={{
-                        "clientAdminData.selfThemePColor": primaryColor,
-                        "clientAdminData.selfThemeSColor": secondaryColor,
-                        "clientAdminData.selfThemeBackColor": backColor,
+                        "clientAdminData.selfThemePColor": translateColorToEng(primaryColorBr),
+                        "clientAdminData.selfThemeSColor": translateColorToEng(secondaryColorBr),
+                        "clientAdminData.selfThemeBackColor": translateColorToEng(backColorBr),
                     }}
                     titleBeforeOk="Salvando nova palheta de cores..."
                     titleAfterOk="Palheta de cores salva."
@@ -217,8 +217,8 @@ export default function PickTheming({
             )}
             <ModalFullContent
                 contentComp={<ColorPicker
-                    notIncludeColorPrimary={primaryColor}
-                    notIncludeColorSecondary={secondaryColor}
+                    notIncludeColorPrimary={primaryColorBr}
+                    notIncludeColorSecondary={secondaryColorBr}
                     whichColorModal={currColorModal}
                     setData={setData}
                     data={data}
@@ -295,13 +295,13 @@ const ColorPicker = ({
                                         setFullOpen(false);
 
                                         if(isPrimary) {
-                                            setData({ ...data, primaryColor: brColorName , hexValuePrimary: hexValue });
+                                            setData({ ...data, primaryColorBr: brColorName , hexValuePrimary: hexValue });
                                             !isFromDash && setTheme({...theme, colorP: colorName })
                                         } else if(isBackground) {
-                                            setData({ ...data, backColor: brColorName, hexBackValue: hexValue });
+                                            setData({ ...data, backColorBr: brColorName, hexBackValue: hexValue });
                                             !isFromDash && setTheme({...theme, colorBack: colorName })
                                         } else {
-                                            setData({ ...data, secondaryColor: brColorName, hexValueSecondary: hexValue });
+                                            setData({ ...data, secondaryColorBr: brColorName, hexValueSecondary: hexValue });
                                             !isFromDash && setTheme({...theme, colorS: colorName })
                                         }
                                     }}
