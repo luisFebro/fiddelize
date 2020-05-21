@@ -29,6 +29,7 @@ import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
 import SelfServicePage from '../../pages/new-app/self-service/SelfServicePage';
 import PlansPage from '../../pages/plans-page/PlansPage';
+import RedirectLink from '../../pages/RedirectLink';
 // DYNAMIC ASYNC IMPORT - Preloading a lazy component without blocking rendering by calling import outside lazy function.
 const ClientAppPreview = import(/* webpackChunkName: "client-app-preview" */ '../../pages/mobile-app/ClientAppPreview');
 // const LoginPage = import(/* webpackChunkName: "login-page" */ '../../pages/LoginPage');
@@ -69,6 +70,7 @@ function Website({ location }) {
                     <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                     <Route path="/planos" exact component={PlansPage} />
                     <Route path="/mobile-app/preview" component={ClientAppPreviewLazy} />
+                    <Route path="/app/:nameAndCode" component={RedirectLink} />
                     <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                     <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                     <Route component={Default} />

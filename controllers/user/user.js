@@ -345,6 +345,12 @@ exports.countField = (req, res) => {
     })
 }
 
+exports.redirectUrlLink = (res, req) => {
+    const code = req.query.code;
+    if(!code) return res.status(400).json({ msg: "Link Inválido"});
+    res.redirect("https://www.youtube.com");
+}
+
 // IMAGES UPLOAD
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

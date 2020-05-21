@@ -20,6 +20,7 @@ const {
     countField,
     uploadImages,
     updateImages,
+    redirectUrlLink,
 } = require("../../controllers/user");
 
 const { mwIsAdmin } = require("../../controllers/auth");
@@ -43,6 +44,7 @@ router.get("/list/highest-scores", getHighestScores);
 router.get("/:userId/backup/list", mwIsAdmin, readBackup);
 
 router.put("/count/field/:userId", countField);
+router.get("/api/user/redirect-url-link", redirectUrlLink);
 
 // IMAGES
 router.post("/image/upload", uploadImages);

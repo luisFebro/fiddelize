@@ -113,7 +113,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
             <Card
                 key={historyData.desc}
                 className="mt-4"
-                style={{backgroundColor: 'var(--themePLight' + colorP + ')'}}
+                style={{backgroundColor: 'var(--themePLight--' + colorP + ')'}}
             >
                 {displayMainContent()}
             </Card>
