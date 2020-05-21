@@ -345,10 +345,45 @@ exports.countField = (req, res) => {
     })
 }
 
-exports.redirectUrlLink = (res, req) => {
-    const code = req.query.code;
-    if(!code) return res.status(400).json({ msg: "Link Inválido"});
-    res.redirect("https://www.youtube.com");
+exports.redirectUrlLink = (req, res) => {
+    const mainHash = req.query.code;
+    const typeLink = req.query.type || "cli";
+
+    if(!mainHash) return res.status(400).json({ msg: "Link Inválido"});
+
+
+    let code = mainHash;
+    let name;
+    const needSplit = mainHash.includes("_");
+    if(needSplit) {
+        const slashInd = mainHash.indexOf("_");
+        name = mainHash.slice(0, slashInd);
+        code = mainHash.slice(slashInd + 1);
+    }
+
+    User.find({'clientAdminData.bizCodeName': {$regex: `${code}`, $options: 'i'} })
+    .select("_id role clientAdminData.bizName")
+    .exec((err, userArray) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+        if(!userArray.length) return res.status(400).json({ msg: "Link Inválido"});
+        if(userArray[0].role !== "cliente-admin") return res.status(400).json({ msg: "Link Inválido"});
+
+        const user = userArray[0];
+        const cliUser = user.clientAdminData;
+
+        const url = "https://fiddelize.netlify.app";
+        const firstName = name;
+        const bizId = user._id;
+        const bizName = cliUser.bizName;  //"You%20Vipp%20Shop"; //addSpace(bizName.cap())
+
+        let finalUrl;
+        name
+        ? finalUrl = `${url}/baixe-app/${firstName}?negocio=${bizName}&id=${bizId}&cliente=1`
+        : finalUrl = `${url}/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1`
+
+        res.json(finalUrl);
+        // res.redirect(301, "https://youtube.com");
+    });
 }
 
 // IMAGES UPLOAD

@@ -122,7 +122,7 @@ export const countField = async (_id, objToSend) => {
 
 export const getUrlLink = async (code) => {
     try {
-        return await axios.get(`/api/user/redirect-url-link?${code}`);
+        return await axios.get(`/api/user/redirect/url-link?code=${code}`, getHeaderJson);
     } catch(err) {
         return err.response;
     }

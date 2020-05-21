@@ -113,7 +113,7 @@ export default function AppSharer({ location, match }) {
 
         let link;
         if(targetBr === "cliente-admin") {
-            link = `${CLIENT_URL}/baixe-app/${getFirstName(cliAdminName)}?negocio=${bizName}&id=${bizId}&admin=1&painel=1`;
+            link = `${CLIENT_URL}/baixe-app/${getFirstName(cliAdminName)}?negocio=${bizName}&id=${bizId}&admin=1&painel=`;
             setData({...data, generatedLink: link, opentSharingAreaTo: 'cliente-admin' })
         } else {
             clientName

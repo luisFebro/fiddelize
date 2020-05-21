@@ -1,18 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUrlLink } from '../redux/actions/userActions';
 
-export default function RedirectLink() {
+export default function RedirectLink({ match }) {
+    const [error, setError] = useState("");
+    const code = match.params.nameAndCode;
+
     useEffect(() => {
-        const code = 'luis_yvczdd8';
-        getUrlLink(code);
-    }, [])
+        getUrlLink(code)
+        .then(res => {
+            if(res.status === 500) return setError("Problema de Conexão. Tente novamente...")
+            if(res.status !== 200) return setError("Link Inválido!");
+            window.location.href = res.data;
+        })
+    }, [code])
 
     return (
         <div
             style={{backgroundColor: 'var(--mainWhite)', minHeight: '300px'}}
-            className="mt-3 text-title"
+            className="mt-2"
         >
-            Redirecionando...
+            <div className="text-title text-purple m-3">
+                {error
+                ? <p className="text-red">{error}</p>
+                : "Redirecionando..."}
+            </div>
         </div>
     );
 }

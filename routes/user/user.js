@@ -44,10 +44,10 @@ router.get("/list/highest-scores", getHighestScores);
 router.get("/:userId/backup/list", mwIsAdmin, readBackup);
 
 router.put("/count/field/:userId", countField);
-router.get("/api/user/redirect-url-link", redirectUrlLink);
+router.get("/redirect/url-link", redirectUrlLink);
 
 // IMAGES
-router.post("/image/upload", uploadImages);
+router.get("/image/upload", uploadImages);
 router.put("/image/update", updateImages);
 
 // FIELDS
