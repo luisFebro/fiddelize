@@ -22,7 +22,8 @@ import { deleteImage } from '../../utils/storage/lForage';
 
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
-    const { roleWhichDownloaded } = useAppSystem();
+    let { roleWhichDownloaded } = useAppSystem();
+    !isThisApp() ? roleWhichDownloaded = "" : roleWhichDownloaded;
 
     const { selfThemeSColor, selfThemePColor, selfThemeBackColor } = useClientAdmin();
 
