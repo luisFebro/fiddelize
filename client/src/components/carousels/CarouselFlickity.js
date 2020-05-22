@@ -32,7 +32,7 @@ export default function CarouselFlickity({
 
     useEffect(() => {
         if(!isFromDash) { setRun(dispatch, iconSelected) };
-    }, [isFromDash])
+    }, [isFromDash, iconSelected])
 
     const carouselElem = document.querySelector('.main-carousel');
     if(carouselElem) {
@@ -56,8 +56,9 @@ export default function CarouselFlickity({
         });
 
         // g (delaying function execution) to delay by 2 second to avoid crash app.
-        flkty.on('change', index => setTimeout(() => !iconReady && setIconSelected(data[index].icon), 1000));
-        setTimeout(() => !iconReady && currIconInd && flkty.selectCell((currIconInd), false, false), 3500);
+        const condRunSelect = isFromDash ? (!iconReady) : true;
+        flkty.on('change', index => setTimeout(() => condRunSelect && setIconSelected(data[index].icon), 1000));
+        setTimeout(() =>  !iconReady && currIconInd && flkty.selectCell((currIconInd), false, false), 3500);
     }
 
     // const dataFlickity = Flickity.data(elem)

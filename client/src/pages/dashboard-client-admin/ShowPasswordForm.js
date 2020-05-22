@@ -68,7 +68,7 @@ export default function ShowPasswordForm({
             zIndex: 2000
         },
         lockIcon: {
-            top: isSmall ? '80px' : isFromCliAdminDash ? '90px' : '115px',
+            top: 0,
             left: '-70px',
             zIndex: 3000,
         },
@@ -131,32 +131,34 @@ export default function ShowPasswordForm({
         <div data-aos={!isFromCliAdminDash && "zoom-in-up"} style={{zIndex: 1000, bottom: handleBottomValues()}} className="mt-4 position-relative">
             <form className="shadow-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}>
-                    <div style={styles.lockIcon} className="position-absolute">
-                        <img
-                            src={`${CLIENT_URL}/img/icons/lock.svg`}
-                            className="svg-elevation"
-                            width={90}
-                            height="auto"
-                            alt="cadeado"
-                        />
-                    </div>
                     <p className="text-shadow">
                         {isFromCliAdminDash
                         ? "Altere aqui sua senha sempre que precisar"
                         : "Insira aqui sua senha de verificação"}
                     </p>
-                    <ToggleVisibilityPassword
-                        showGeneratePass={true}
-                        generatePassObj={{
-                            setObj: setData,
-                            obj: data,
-                        }}
-                        style={styles.fieldFormValue}
-                        onChange={handleChange(setData, data, true)}
-                        label=" "
-                        name="clientAdminData.verificationPass"
-                        value={clientAdminData.verificationPass}
-                    />
+                    <div className="position-relative" >
+                        <ToggleVisibilityPassword
+                            showGeneratePass={true}
+                            generatePassObj={{
+                                setObj: setData,
+                                obj: data,
+                            }}
+                            style={styles.fieldFormValue}
+                            onChange={handleChange(setData, data, true)}
+                            label=" "
+                            name="clientAdminData.verificationPass"
+                            value={clientAdminData.verificationPass}
+                        />
+                        <div style={styles.lockIcon} className="position-absolute">
+                            <img
+                                src={`${CLIENT_URL}/img/icons/lock.svg`}
+                                className="svg-elevation"
+                                width={90}
+                                height="auto"
+                                alt="cadeado"
+                            />
+                        </div>
+                    </div>
                 </div>
                 {showButtonAction()}
             </form>

@@ -64,14 +64,14 @@ function GoalForm({
             zIndex: 2000
         },
         formIcons: {
-            top: isSmall ? '70px' : '90px',
-            left: '160px',
+            top: '-15%',
+            transform: 'translateX(190%)',
             zIndex: 3000
             //animationIterationCount: 2,
         },
         giftBagIcon: {
-            top: isSmall ? '60px' : '70px',
-            left: isSmall ? '210px' : '240px',
+            top: '-35%',
+            transform: 'translateX(370%)',
             zIndex: 3000,
         },
         helperFromField: {
@@ -133,73 +133,77 @@ function GoalForm({
             <form className="card-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <p className="text-title text-nowrap text-center m-1 p-1">Meta do App</p>
                 <div className="position-relative margin-auto-90 text-normal font-weight-bold">
-                    <div style={styles.formIcons} className="position-absolute">
-                        <img
-                            src={`${CLIENT_URL}/img/icons/coins.svg`}
-                            className="svg-elevation"
-                            width={70}
-                            height="auto"
-                            alt="pontos"
-                        />
-                    </div>
                     <p>Qual é o ponto de prêmio?</p>
-                    <TextField
-                        placeholder="0"
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                        }}
-                        InputProps={{
-                            style: styles.fieldFormValue, // alignText is not working here... tried input types and variations
-                            classes: {
-                                input: classes.outlinedInput,
-                            }
-                        }}
-                        type="number"
-                        helperText={"Lembre-se: é o ponto/valor que o cliente precisa alcançar em compras"}
-                        FormHelperTextProps={{ style: styles.helperFromField }}
-                        name="clientAdminData.rewardScore"
-                        value={clientAdminData.rewardScore}
-                        onChange={handleChange(setData, data, true)}
-                        onBlur={e => handleNextFieldFunc("onBlur", e)}
-                        onKeyPress={e => handleNextFieldFunc("onKeyPress", e)}
-                        variant="outlined"
-                        error={error === "rewardScore" ? true : false}
-                        autoComplete="off"
-                    />
+                    <div className="position-relative">
+                        <TextField
+                            placeholder="0"
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}
+                            InputProps={{
+                                style: styles.fieldFormValue, // alignText is not working here... tried input types and variations
+                                classes: {
+                                    input: classes.outlinedInput,
+                                }
+                            }}
+                            type="number"
+                            helperText={"Lembre-se: é o ponto/valor que o cliente precisa alcançar em compras"}
+                            FormHelperTextProps={{ style: styles.helperFromField }}
+                            name="clientAdminData.rewardScore"
+                            value={clientAdminData.rewardScore}
+                            onChange={handleChange(setData, data, true)}
+                            onBlur={e => handleNextFieldFunc("onBlur", e)}
+                            onKeyPress={e => handleNextFieldFunc("onKeyPress", e)}
+                            variant="outlined"
+                            error={error === "rewardScore" ? true : false}
+                            autoComplete="off"
+                        />
+                        <div style={styles.formIcons} className="position-absolute">
+                            <img
+                                src={`${CLIENT_URL}/img/icons/coins.svg`}
+                                className="svg-elevation"
+                                width={70}
+                                height="auto"
+                                alt="pontos"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className={`animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold ${handleShowCurrField("field2") ? "d-block" : "d-none"}`}>
-                    <div style={styles.giftBagIcon} className="position-absolute">
-                        <img
-                            src={`${CLIENT_URL}/img/icons/gift.svg`}
-                            className="svg-elevation"
-                            width={60}
-                            height="auto"
-                            alt="prêmio desc"
-                        />
-                    </div>
                     <p>Qual é a descrição do prêmio?</p>
-                    <TextField
-                        id="field2"
-                        multiline
-                        rows={2}
-                        placeholder="digite aqui"
-                        InputProps={{
-                            style: { ...styles.fieldFormValue, fontSize: '26px', maxWidth: '280px' }, // alignText is not working here... tried input types and variations
-                            classes: {
-                                input: classes.outlinedInput2,
-                            }
-                        }}
-                        name="clientAdminData.mainReward"
-                        value={clientAdminData.mainReward}
-                        helperText={"Lembre-se: um serviço, produto, benefício ou desconto. Você vai poder modificar depois no seu painel de controle 👍"}
-                        FormHelperTextProps={{ style: styles.helperFromField }}
-                        onChange={handleChange(setData, data, true)}
-                        onBlur={() => setValObjWithStr(data, "clientAdminData.mainReward", clientAdminData.mainReward.cap())}
-                        variant="outlined"
-                        error={error === "mainReward" ? true : false}
-                        autoComplete="off"
-                    />
+                    <div className="position-relative">
+                        <TextField
+                            id="field2"
+                            multiline
+                            rows={2}
+                            placeholder="digite aqui"
+                            InputProps={{
+                                style: { ...styles.fieldFormValue, fontSize: '26px', maxWidth: '280px' }, // alignText is not working here... tried input types and variations
+                                classes: {
+                                    input: classes.outlinedInput2,
+                                }
+                            }}
+                            name="clientAdminData.mainReward"
+                            value={clientAdminData.mainReward}
+                            helperText={"Lembre-se: um serviço, produto, benefício ou desconto. Você vai poder modificar depois no seu painel de controle 👍"}
+                            FormHelperTextProps={{ style: styles.helperFromField }}
+                            onChange={handleChange(setData, data, true)}
+                            onBlur={() => setValObjWithStr(data, "clientAdminData.mainReward", clientAdminData.mainReward.cap())}
+                            variant="outlined"
+                            error={error === "mainReward" ? true : false}
+                            autoComplete="off"
+                        />
+                        <div style={styles.giftBagIcon} className="position-absolute">
+                            <img
+                                src={`${CLIENT_URL}/img/icons/gift.svg`}
+                                className="svg-elevation"
+                                width={60}
+                                height="auto"
+                                alt="prêmio desc"
+                            />
+                        </div>
+                    </div>
                 </div>
                 {showButtonAction()}
             </form>

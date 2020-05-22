@@ -36,7 +36,7 @@ export default function ShareSocialMediaButtons({ data, config = {} }) { // n1
                     font_size: 25, // font size for the buttons
                     labels: 'null', // button labels (cta, counts, null)
                     language: 'pt', // which language to use (see LANGUAGES)
-                    networks: [ // opt 'sms', 'facebook', 'email', 'whatsapp', 'messenger', 'twitter'
+                    networks: [ // opt 'sms (works only on mobile)', 'facebook', 'email (works only on mobile)', 'whatsapp', 'messenger', 'twitter'
                         'email', 'whatsapp', 'sms', 'messenger',
                     ],
                     padding: padding || 12,

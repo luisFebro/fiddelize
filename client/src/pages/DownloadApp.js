@@ -130,9 +130,11 @@ export default function DownloadApp({ match, location }) {
                     </p>
                 </Fragment>
             )}
-            <ScrollArrow margin={30} />
-            <div id="target" style={{minHeight: '200px 0'}}>
-                <ScrollArrow margin={20} />
+            <div style={{margin: '0 0 500px'}}>
+                <ScrollArrow margin={30} />
+                <div id="target">
+                    <ScrollArrow margin={30} />
+                </div>
             </div>
         </div>
     );
