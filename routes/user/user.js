@@ -47,7 +47,7 @@ router.put("/count/field/:userId", countField);
 router.get("/redirect/url-link", redirectUrlLink);
 
 // IMAGES
-router.get("/image/upload", uploadImages);
+router.post("/image/upload", uploadImages);
 router.put("/image/update", updateImages);
 
 // FIELDS

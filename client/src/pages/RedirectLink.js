@@ -16,7 +16,7 @@ export default function RedirectLink({ match }) {
 
     return (
         <div
-            style={{backgroundColor: 'var(--mainWhite)', minHeight: '300px'}}
+            style={{backgroundColor: 'var(--mainWhite)', minHeight: '350px'}}
             className="mt-2"
         >
             <div className="text-title text-purple m-3">

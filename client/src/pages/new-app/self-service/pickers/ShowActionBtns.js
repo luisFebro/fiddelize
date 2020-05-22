@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { updateUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { readClientAdmin } from '../../../../redux/actions/userActions';
+import isThisApp from '../../../../utils/window/isThisApp';
 import PropTypes from 'prop-types';
 
 ShowActionBtns.propTypes = {
@@ -52,7 +53,7 @@ export default function ShowActionBtns({
 
     const conditionToShowResultBtn = !objToSend ? needUpdateBtn : showAppBtn;
     const showResultBtn = () => (
-        conditionToShowResultBtn &&
+        conditionToShowResultBtn && isThisApp() &&
         <div className="animated zoomIn">
             <Link to={`/mobile-app?client-admin=1`}>
                 <ButtonMulti

@@ -12,6 +12,7 @@ const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/g
 const addTransformToImgUrl = require("../../utils/biz-algorithms/cloudinary-images/addTransformToImgUrl");
 const { findOneAndUpdate, confirmPrizeStatus, countPurchasePrizesOnly } = require("./purchase-history-helpers/main");
 const cloudinary = require('cloudinary').v2;
+const { CLIENT_URL } = require('../../config');
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
@@ -351,7 +352,6 @@ exports.redirectUrlLink = (req, res) => {
 
     if(!mainHash) return res.status(400).json({ msg: "Link Inválido"});
 
-
     let code = mainHash;
     let name;
     const needSplit = mainHash.includes("_");
@@ -371,15 +371,14 @@ exports.redirectUrlLink = (req, res) => {
         const user = userArray[0];
         const cliUser = user.clientAdminData;
 
-        const url = "https://fiddelize.netlify.app";
         const firstName = name;
         const bizId = user._id;
         const bizName = cliUser.bizName;  //"You%20Vipp%20Shop"; //addSpace(bizName.cap())
 
         let finalUrl;
         name
-        ? finalUrl = `${url}/baixe-app/${firstName}?negocio=${bizName}&id=${bizId}&cliente=1`
-        : finalUrl = `${url}/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1`
+        ? finalUrl = `${CLIENT_URL}/baixe-app/${firstName}?negocio=${bizName}&id=${bizId}&cliente=1`
+        : finalUrl = `${CLIENT_URL}/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1`
 
         res.json(finalUrl);
         // res.redirect(301, "https://youtube.com");
@@ -393,6 +392,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// request: post
 exports.uploadImages = (req, res) => { // n6 - multiple images promise.
     const fileRoot = req.files;
     const imagePath = fileRoot.file.path; // n7 e.g data

@@ -30,12 +30,12 @@ export default function AppSharer({ location, match }) {
     const [showLink, setShowLink] = useState(false);
     const [data, setData] = useState({
         clientName: '',
-        opentSharingAreaTo: '',
+        openSharingAreaTo: '',
         generatedLink: '',
     })
     const {
         clientName,
-        opentSharingAreaTo,
+        openSharingAreaTo,
         generatedLink,
     } = data;
 
@@ -46,6 +46,9 @@ export default function AppSharer({ location, match }) {
     const bizName = getQueryByName("negocio", location.search);
     const cliAdminName = getQueryByName("adminName", location.search);
     const bizId = getQueryByName("id", location.search);
+
+    const indLastSlash = bizCodeName.lastIndexOf("-");
+    const onlyBizCode = bizCodeName.slice(indLastSlash + 1);
 
     const styles = {
         form: {
@@ -113,14 +116,14 @@ export default function AppSharer({ location, match }) {
 
         let link;
         if(targetBr === "cliente-admin") {
-            link = `${CLIENT_URL}/baixe-app/${getFirstName(cliAdminName)}?negocio=${bizName}&id=${bizId}&admin=1&painel=`;
-            setData({...data, generatedLink: link, opentSharingAreaTo: 'cliente-admin' })
+            link = `${CLIENT_URL}/baixe-app/${getFirstName(cliAdminName)}?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&admin=1&painel=1`;
+            setData({...data, generatedLink: link, openSharingAreaTo: 'cliente-admin' })
         } else {
             clientName
-            ? link = `${CLIENT_URL}/baixe-app/${getFirstName(clientName)}?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
-            : link = `${CLIENT_URL}/baixe-app?negocio=${bizName && addSpace(bizName.cap())}&id=${bizId}&cliente=1`
+            ? link = `${CLIENT_URL}/app/${getFirstName(clientName.toLowerCase())}_${onlyBizCode}`
+            : link = `${CLIENT_URL}/app/${onlyBizCode}`
 
-            setData({...data, clientName: clientName.cap() ,opentSharingAreaTo: 'cliente-usuário', generatedLink: link })
+            setData({...data, clientName: clientName.cap() ,openSharingAreaTo: 'cliente-usuário', generatedLink: link })
         }
     }
 
@@ -228,14 +231,13 @@ export default function AppSharer({ location, match }) {
             <section className="user-select-text">
                 <div className="container-center justify-content-around my-3">
                     <RadiusBtn
-                        title={showLink ? "esconder link" : 'mostrar link'}
+                        title={showLink ? "esconder link" : 'ver link'}
                         backgroundColor="var(--mainDark)"
                         size="small"
                         onClick={() => setShowLink(!showLink)}
                     />
                     <RadiusBtn
-                        display={showLink ? 'block' : 'none'}
-                        title="copiar"
+                        title="copiar link"
                         backgroundColor="var(--mainDark)"
                         size="small"
                         onClick={() => copyTextToClipboard("#linkArea", () => showSnackbar(dispatch, "Link copiado!", "success"))}
@@ -273,7 +275,7 @@ export default function AppSharer({ location, match }) {
         );
 
         return(
-            opentSharingAreaTo === targetBr && (
+            openSharingAreaTo === targetBr && (
                 <section className="my-5">
                     <p id={targetBr} className="my-4 animated zoomIn text-center text-white text-title">
                         Novo Link gerado e pronto!
@@ -296,7 +298,7 @@ export default function AppSharer({ location, match }) {
                                 title="gerar novo link"
                                 backgroundColor="var(--themeSDark)"
                                 className="my-2"
-                                onClick={() => { setData({ ...data, opentSharingAreaTo: '', clientName: '' }); handleFocus("form1") }}
+                                onClick={() => { setData({ ...data, openSharingAreaTo: '', clientName: '' }); handleFocus("form1") }}
                             />
                         </div>
                     )}
