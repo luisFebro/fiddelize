@@ -52,7 +52,7 @@ export default function AppPickersHandler({
                 const objToSend2 = {
                     "clientAdminData.selfMilestoneIcon": runName || "star",
                 }
-                showSnackbar(dispatch, "Salvando preferências de ícone e continuando...");
+                showSnackbar(dispatch, "Salvo. Finalizando a criação dos apps...");
                 updateUser(dispatch, objToSend2, bizId)
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão", 'error')

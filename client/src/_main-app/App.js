@@ -26,17 +26,18 @@ export default function App() {
     useRecoveryAndDataOffline();
     const dispatch = useStoreDispatch();
 
+    // GA
+    if(run) {
+        const opts = { testMode: false }
+        ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+    // END GA
+
     useEffect(() => {
         // loadReCaptcha();
         if(run) {
             dispatch(loadUser(dispatch));
-
-            // GA
-            const opts = { testMode: true }
-            ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
-            ReactGA.pageview(window.location.pathname + window.location.search);
-            // END GA
-
             run = false;
         }
     }, [dispatch]);
