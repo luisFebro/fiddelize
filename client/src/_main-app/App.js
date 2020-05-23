@@ -31,6 +31,19 @@ export default function App() {
         const opts = { testMode: false }
         ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
         ReactGA.pageview(window.location.pathname + window.location.search);
+
+        const callback = list => {
+            list.getEntries().forEach(entry => {
+              ReactGA.timing({
+                category: "Load Performance",
+                variable: 'Server Latency',
+                value: entry.responseStart - entry.requestStart
+              })
+          })
+        }
+
+        var observer = new PerformanceObserver(callback);// metrics
+        observer.observe({entryTypes: ['navigation'] })
     }
     // END GA
 
@@ -62,3 +75,17 @@ import WhatsappIcon from '../components/buttons/WhatsappIcon';
     <Preloader />
 </CustomPreloader>
  */
+
+/* COMMENTS
+n1:
+Server latency:
+entry.responseStart - entry.requestStart
+
+Download time:
+entry.responseEnd - entry.responseStart
+
+Total app load time:
+entry.responseEnd - entry.requestStart
+
+https://www.freecodecamp.org/news/performance-and-user-tracking-in-react-with-google-analytics/
+*/

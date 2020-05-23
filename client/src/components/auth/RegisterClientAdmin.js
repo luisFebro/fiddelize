@@ -149,11 +149,11 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                 return;
             }
 
-            ReactGA.event({
-                category: 'cli-admin',
-                action: 'created an account',
-                label: 'form',
-                nonInteraction: true,
+            ReactGA.event({ // n1
+                label: 'Form',
+                category: 'UserCliAdmin',
+                action: 'Created an account',
+                transport: 'beacon',
             });
 
             const removalOptions = {
@@ -520,4 +520,7 @@ MODEL BTN PINK CIRCULAR
 
 /* COMMENTS
 n1: used here because it disappears if string or decimal...
+n2:
+One thing to note is if your user is submitting a form you can specify the     transport: beacon property in your event hit, which will let you reliably send the hit even if the page is reloaded to another page. This isn't so much of an issue in a single page app like React, but if you did want to do this, just know this option is available
+https://www.freecodecamp.org/news/performance-and-user-tracking-in-react-with-google-analytics/
 */

@@ -141,10 +141,11 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
             }
 
             ReactGA.event({
-                category: 'cli-user',
-                action: 'created an account',
+                category: 'UserCliUser',
+                action: 'Created an account',
                 label: 'form',
                 nonInteraction: true,
+                transport: 'beacon',
             });
 
             lStorage("removeCol", {collection: 'onceChecked'})
