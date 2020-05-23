@@ -14,8 +14,16 @@ export default function BadaloBell({
 
     const [badgeInvisible, setbadgeInvisible] = useState(false);
 
+    function playRingtone() {
+        const elem = document.querySelector("#bellRing");
+        elem.play();
+    }
+
     const playAnima = (options = {}) => {
+
         const { callback, isInit } = options;
+
+        if(!isInit) playRingtone();
 
         const animaTop = document.querySelector(".bell-top");
         const animaBottom = document.querySelector(".bell-bot");
@@ -40,16 +48,17 @@ export default function BadaloBell({
     useEffect(() => {
         let startPlayAnima;
         if(badgeValue) {
-            startPlayAnima = setTimeout(() => playAnima({ isInit: true }), 6000);
+            startPlayAnima = setTimeout(() => playAnima({ isInit: true }), 3000);
         }
         // cleanup function
         return () => { clearTimeout(startPlayAnima) }
     }, [badgeValue])
 
+
     return (
         <section
             style={{ position, top, right, left, cursor: "pointer" }}
-            onClick={() => playAnima({callback: () => setbadgeInvisible(true) })}
+            onClick={() => playAnima({callback: () => setbadgeInvisible(true)})}
         >
             <NotificationBadge
                 badgeValue={badgeValue}
@@ -63,6 +72,7 @@ export default function BadaloBell({
                     <div className="bell-bot"></div>
                 </div>
             </NotificationBadge>
+            <audio id="bellRing" src="/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3"></audio>
         </section>
     );
 }

@@ -91,9 +91,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     }, [selectedDate])
 
     useEffect(() => {
-        if(clientAdminData.bizName) {
-            const bizCode = getUniqueCodeName(clientAdminData.bizName);
-            const finalDashedName = addDashesToString(`${clientAdminData.bizName} ${bizCode}`)
+        const thisBizName = clientAdminData.bizName;
+        if(thisBizName) {
+            const bizCode = getUniqueCodeName(thisBizName);
+            const finalDashedName = `${addDashesToString(`${thisBizName}`)}-${bizCode}`
             setValObjWithStr(data, "clientAdminData.bizCodeName", finalDashedName);
         }
     }, [clientAdminData.bizName])

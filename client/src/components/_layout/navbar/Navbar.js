@@ -111,7 +111,7 @@ function Navbar({ history, location }) {
         </ul>
     );
 
-    const needClientLogo = isThisApp() && selfBizLogoImg || isAuthUser;
+    const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
     const handleLogoSrc = () => {
         if(needClientLogo) {
             return imgLib.app_biz_logo(selfBizLogoImg);
@@ -120,7 +120,7 @@ function Navbar({ history, location }) {
         }
     }
 
-    const showLogo = () => {
+    const showLogo = React.useCallback(() => {
         const logoSrc =  handleLogoSrc();
         const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
@@ -149,7 +149,7 @@ function Navbar({ history, location }) {
                 />
             </Link>
         );
-    };
+    }, []);
 
     // Render
     return (

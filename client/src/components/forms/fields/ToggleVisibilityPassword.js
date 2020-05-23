@@ -58,7 +58,7 @@ export default function ToggleVisibilityPassword({
 
     const showForgotPassLink = showForgotPass => (
         showForgotPass &&
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div className="mt-2" style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Link to="/cliente/trocar-senha">
                 <Button
                     className="my-2"
@@ -85,8 +85,13 @@ export default function ToggleVisibilityPassword({
 
     const showGeneratePassBtn = showGeneratePass => (
         showGeneratePass &&
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <span className="text-white text-normal mr-2 text-shadow">ou</span>
+        <div
+            style={{ display: 'flex', justifyContent: 'flex-end' }}
+            className="mt-2"
+        >
+            <span className="text-white text-normal mr-2 text-shadow">
+                ou
+            </span>
             <RadiusBtn
                 title="gerar uma senha"
                 backgroundColor="var(--themeP)"

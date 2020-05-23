@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CLIENT_URL } from '../config/clientUrl';
 import imgLib, { ImgLoader } from '../utils/storage/lForageStore';
 const isSmall = window.Helper.isSmallScreen();
 
@@ -16,7 +15,7 @@ export default function DashSectionTitle({
             <div className="position-relative" style={{display: 'block'}}>
                 <ImgLoader
                     className="dash_title_shape"
-                    src={src || `${CLIENT_URL}/img/shapes/blob-dashboard-header.svg`}
+                    src={src}
                     width={440}
                     needLoader={true}
                     height={155}
