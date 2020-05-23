@@ -48,9 +48,9 @@ export default function ShowCards({ setOpenComp }) {
         const colorS = selfThemeSColor;
         const colorBack = selfThemeBackColor || 'default';
 
-        const translatedColorP = translateColorToPtBr(colorP === "default" ? "defaultP" : colorP);
+        const translatedColorP = translateColorToPtBr(colorP === "default" ? "purple" : colorP);
         const translatedColorS = translateColorToPtBr(colorS === "default" ? "defaultS" : colorS);
-        const translatedColorBack = translateColorToPtBr(colorBack === "default" ? "defaultP" : colorBack);
+        const translatedColorBack = translateColorToPtBr(colorBack === "default" ? "purple" : colorBack);
         return(
             <section className="color--root">
                 <div>

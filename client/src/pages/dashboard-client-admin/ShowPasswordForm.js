@@ -54,6 +54,7 @@ export default function ShowPasswordForm({
     const styles = {
         form: {
             maxWidth: '350px',
+            width: '100%',
             background: 'var(--themeSDark)',
             borderRadius: '10px',
             padding: '25px'
@@ -128,7 +129,11 @@ export default function ShowPasswordForm({
     };
 
     return (
-        <div data-aos={!isFromCliAdminDash && "zoom-in-up"} style={{zIndex: 1000, bottom: handleBottomValues()}} className="mt-4 position-relative">
+        <div
+            data-aos={!isFromCliAdminDash && "zoom-in-up"}
+            style={{zIndex: 1000, bottom: handleBottomValues()}}
+            className="mt-4 position-relative container-center"
+        >
             <form className="shadow-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}>
                     <p className="text-shadow">

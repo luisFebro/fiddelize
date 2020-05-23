@@ -16,7 +16,7 @@ const generatePlanCodes = () => {
     const codesObj = { bronze: null, silver: null, gold: null };
     let plan;
     for(plan in codesObj) {
-        codesObj[plan] = generateAlphaNumeric(7, '#a@!')
+        codesObj[plan] = generateAlphaNumeric(7, '#aA')
     }
 
     return codesObj;

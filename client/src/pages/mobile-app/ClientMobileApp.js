@@ -78,7 +78,7 @@ function ClientMobileApp({ location, history }) {
         }
     }, [needAppRegister])
 
-    const needClientLogo = isThisApp() && selfBizLogoImg || isAuthUser;
+    const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
     const handleLogoSrc = () => {
         if(needClientLogo) {
             return imgLib.app_biz_logo(selfBizLogoImg);

@@ -16,8 +16,8 @@ export default function generateAlphaNumeric(length, chars) {
 // Customized Functions
 const getUniqueCodeName = name => {
     let finalName;
-    const onlyConsonants = getOnlyConsonants(name, 2);
-    const alphaNumeric = generateAlphaNumeric(5, 'a#!');
+    const onlyConsonants = getOnlyConsonants(name, 3);
+    const alphaNumeric = generateAlphaNumeric(4, 'aA#');
 
     finalName = `${onlyConsonants}${alphaNumeric}`;
 
