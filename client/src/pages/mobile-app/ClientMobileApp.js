@@ -190,7 +190,7 @@ function ClientMobileApp({ location, history }) {
             </span>
             <div className="container-center mt-4">
                 <Link
-                    className="mr-3"
+                    className="mr-3 no-text-decoration"
                     to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}
                 >

@@ -23,8 +23,6 @@ export default function HomeButton() {
                     }}
                     color="var(--mainWhite)"
                     backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
-                    backColorOnHover={"var(--themeSDark--" + selfThemeSColor + ")"}
-                    textTransform='uppercase'
                     iconFontAwesome={isThisApp() ? <FontAwesomeIcon icon="home" style={faStyle} /> : ""}
                     shadowColor={selfThemeBackColor === "black" ? "white" : "black"}
                 >

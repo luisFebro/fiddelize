@@ -15,6 +15,9 @@ import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
 import scrollIntoView from '../../../utils/document/scrollIntoView';
 import BadaloBell from '../../../components/buttons/bells/badalo/BadaloBell';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
+import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -188,6 +191,29 @@ function ClientUserAppContent({
         </div>
     );
 
+    const showSkipIconsBtn = () => (
+        currScore >= 50 && !showMoreComps &&
+        <div
+            className="position-relative container-center animated zoomIn delay-2s"
+            style={{top: '-35px'}}
+        >
+            <ButtonFab
+                position="relative"
+                onClick={() => setShowMoreComps(true)}
+                title="ver mais"
+                iconFontAwesome={<FontAwesomeIcon icon="plus" />}
+                iconFontSize="25px"
+                variant="extended"
+                fontWeight="bolder"
+                fontSize=".9em"
+                size="large"
+                color={currTxtColor(selfThemeSColor)}
+                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                shadowColor={selfThemeBackColor === "black" ? "white" : "black"}
+            />
+        </div>
+    );
+
     const showRules = () => (
         <div className="mb-4">
             {showMoreComps
@@ -251,6 +277,7 @@ function ClientUserAppContent({
             {showAllScores()}
             {showPercCircleAndGift()}
             {showRatingIcons()}
+            {showSkipIconsBtn()}
             {showRules()}
             {showMoreOptionsBtn()}
             {backBtnForCliAdmin()}

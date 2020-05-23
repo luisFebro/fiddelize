@@ -2,7 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PropTypes from 'prop-types';
+
 moment.updateLocale('pt-BR');
+
+MomentDateWithIcon.propTypes = {
+    marginTop: PropTypes.number,
+}
 
 // FOR TESTING DIFFERENT DATES
 // let date = new Date();
@@ -12,7 +18,7 @@ moment.updateLocale('pt-BR');
 
 const Div = styled.div`
     .last-update {
-        margin-top: 70px;
+        margin-top: ${({ cssProps }) => `${cssProps.marginTop}px;` || "70px;" }
         display: flex;
         justify-content: flex-end;
         padding: 10px;
@@ -32,14 +38,18 @@ const Div = styled.div`
 `;
 
 // cssProps: background-color: ${({ cssProps }) => cssProps.btn || 'blue'};
-export default function MomentDateWithIcon({ style, date, msgIfNotValidDate = "Sem atualização." }) {
+export default function MomentDateWithIcon({
+    style,
+    date,
+    msgIfNotValidDate = "Sem atualização.",
+    marginTop, }) {
     return (
-        <Div cssProps={{compName: null}}>
+        <Div cssProps={{ marginTop }}>
             <section className="last-update" style={style}>
                 <div className="icon">
-                    <FontAwesomeIcon icon="clock" />
+                    <FontAwesomeIcon icon="clock" style={{filter:  'drop-shadow(.5px .5px 1.5px black)'}} />
                 </div>
-                <p className="text">
+                <p className="text text-shadow">
                     • Última atualização:
                     <br />
                     {date

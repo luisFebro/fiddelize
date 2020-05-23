@@ -110,8 +110,8 @@ export default function Keyboard({
             >
                 {keyboardType === 'numeric' ? "," : ""}
             </div>
-            <audio id="keypadBeep" src="https://archive.org/download/tock_20191221/Tock.mp3"></audio>
-            <audio id="keypadBeepConfirm" src="https://ia601500.us.archive.org/29/items/confirmation-keypad-sound/confirmation-keypad-sound.wav"></audio>
+            <audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
+            <audio id="keypadBeepConfirm" src="/sounds/confirmation-keypad.wav"></audio>
         </GridContainer>
     );
 }

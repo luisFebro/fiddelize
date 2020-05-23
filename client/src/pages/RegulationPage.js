@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ButtonMulti from '../components/buttons/material-ui/ButtonMulti';
+import ButtonMulti, {faStyle} from '../components/buttons/material-ui/ButtonMulti';
 import { useStoreDispatch } from 'easy-peasy';
 import { Link } from 'react-router-dom';
 import LoadingThreeDots from '../components/loadingIndicators/LoadingThreeDots';
@@ -14,6 +14,8 @@ import { setRun } from '../redux/actions/globalActions';
 import { appSystem } from '../hooks/useRoleData';
 import moment from 'moment';
 import { useProfile, useClientAdmin, useClientUser } from '../hooks/useRoleData';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import selectTxtStyle, { currTxtColor } from '../utils/biz/selectTxtStyle';
 
 moment.updateLocale('pt-br');
 
@@ -23,7 +25,15 @@ export default function RegulationPage({ location }) {
     const bizCodeName = getQueryByName("bizCodeName", location.search);
 
     const { name } = useProfile();
-    const { bizName, regulation, mainReward, maxScore, rewardDeadline } = useClientAdmin();
+    const {
+        bizName,
+        regulation,
+        mainReward,
+        maxScore,
+        rewardDeadline,
+        selfThemePColor,
+        selfThemeSColor,
+        selfThemeBackColor, } = useClientAdmin();
 
     const rewardScore = maxScore;
     const levelScore = rewardScore && rewardScore / 5;
@@ -82,35 +92,31 @@ export default function RegulationPage({ location }) {
         : "/"
     }
 
-    const showBackBtn = () => (
-        <div className="d-flex justify-content-start mb-5">
+    const showBackBtnAndTimeStamp = () => (
+        <div className="d-flex justify-content-between my-5">
             <Link to={handlePath()} onClick={() => handlePath().includes("/cliente-admin") && setRun(dispatch, "goDash")}>
                 <ButtonMulti
                     title={isClientAdmin ? "voltar painel" : "voltar"}
-                    color="var(--mainWhite)"
-                    backgroundColor="var(--themeSDark)"
-                    backColorOnHover="var(--themeSDark)"
-                    iconFontAwesome="fas fa-home"
-                    textTransform='uppercase'
+                    color={currTxtColor(selfThemePColor)}
+                    backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                    iconFontAwesome={<FontAwesomeIcon icon="home" style={faStyle} />}
+                    shadowColor={selfThemeBackColor === "black" ? "white" : "black"}
                 />
             </Link>
+            <MomentDateWithIcon
+                style={{color: currTxtColor(selfThemeBackColor)}}
+                date={regulation && regulation.updatedAt}
+                msgIfNotValidDate="Nenhuma alteração."
+                marginTop={0}
+            />
         </div>
     );
 
-    const showTimeStamp = () => (
-         <MomentDateWithIcon
-            style={{marginTop: 15, color: 'var(--mainWhite)'}}
-            date={regulation && regulation.updatedAt}
-            msgIfNotValidDate="Nenhuma alteração."
-        />
-    );
-
     return (
-        <div className="margin-auto-95">
+        <div className={`theme-back--${selfThemeBackColor} margin-auto-95`}>
             {showTitle()}
             {showText()}
-            {showTimeStamp()}
-            {showBackBtn()}
+            {showBackBtnAndTimeStamp()}
         </div>
     );
 }

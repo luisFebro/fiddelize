@@ -158,7 +158,6 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
                 // sendEmail(res.data.authUserId);
             })
-
         })
     };
 

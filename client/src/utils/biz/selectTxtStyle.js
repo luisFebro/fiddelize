@@ -13,3 +13,6 @@ export default function selectTxtStyle(backgroundColor = "default", options = {}
     if(needDarkBool) return needDark ? true : false;
     return needDark ? darkTheme : whiteTheme;
 }
+
+const currTxtColor = (backColor) => selectTxtStyle(backColor, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)";
+export { currTxtColor };

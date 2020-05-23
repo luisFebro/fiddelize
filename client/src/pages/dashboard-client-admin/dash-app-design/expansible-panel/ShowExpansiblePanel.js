@@ -31,7 +31,7 @@ export default function ShowExpansiblePanel() {
         },
         {
             id: 1,
-            name: "Metas e<br />Prêmios",
+            name: "Desafios e<br />Prêmios",
             leftIcon: <FontAwesomeIcon icon="gem" />,
             hiddenContent: <HiddenGoalsAndRewards />,
         }

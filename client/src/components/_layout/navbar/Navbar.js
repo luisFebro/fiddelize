@@ -155,7 +155,7 @@ function Navbar({ history, location }) {
     return (
         <NavWrapper
             className="navbar navbar-expand-sm text-nav-items"
-            style={{backgroundColor: locationNow.includes("pontos-fidelidade") ? "var(--themePDark--" + selfThemePColor + ")" : "var(--themePDark--default)" }}
+            style={{backgroundColor: locationNow.includes("/painel-de-controle") ? "var(--themePDark--default)" : "var(--themePDark--" + selfThemePColor + ")" }}
         >
             {showLogo()}
             {showRoleTitles()}

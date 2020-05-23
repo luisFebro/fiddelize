@@ -53,7 +53,7 @@ export default function RadiusBtn({
 
     return (
         <button
-            className={className + `text-small ${needTxtShadow ? 'text-shadow' : ''} font-weight-bold`}
+            className={className + `text-small ${needTxtShadow ? 'text-shadow' : ''} font-weight-bold cursor-pointer`}
             style={styles.btn}
             onClick={onClick}
             type='button'
