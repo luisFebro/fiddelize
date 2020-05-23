@@ -56,6 +56,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [selectedDate, handleDateChange] = useState(new Date());
     const [showThisField, setShowThisField] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
+
     const [data, setData] = useState({
         role: 'cliente-admin',
         name: '',
@@ -346,10 +347,9 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         inputVariant="outlined"
                         margin="dense"
                         error={errorBirthday ? true : false}
-                        openTo="month"
+                        openTo="year"
                         autoOk={false}
-                        placeholder="Dia e Mês"
-                        views={["month", "date", "year"]}
+                        views={["year", "month", "date"]}
                         name="birthday"
                         value={selectedDate}
                         onChange={e => {

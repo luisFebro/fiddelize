@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import selectTxtStyle, { currTxtColor } from '../utils/biz/selectTxtStyle';
 
 moment.updateLocale('pt-br');
-
+let defaultColor = false;
 export default function RegulationPage({ location }) {
     const isClientAdmin = location.search.includes("cliAdmin=1");
     const needAppForCliAdmin = location.search.includes("client-admin=1");
@@ -39,6 +39,29 @@ export default function RegulationPage({ location }) {
     const levelScore = rewardScore && rewardScore / 5;
 
     const dispatch = useStoreDispatch();
+
+    const handlePath = React.useCallback(() => {
+        if(isClientAdmin) {
+            return `/${bizCodeName}/cliente-admin/painel-de-controle`;
+        }
+
+        if(needAppForCliAdmin) {
+            return  "/mobile-app?client-admin=1";
+        }
+
+        return isThisApp()
+        ? "/mobile-app"
+        : "/"
+    }, []);
+
+    useEffect(() => {
+        if(!defaultColor) { // Not changing back to default color in dashboard....
+            document.body.style.setProperty('background', `var(--themeBackground--${selfThemeBackColor})`, 'important')
+        } else {
+            document.body.style.setProperty('background', `var(--themeBackground--default)`, 'important')
+            defaultColor = true;
+        }
+    }, [selfThemeBackColor, defaultColor, handlePath]);
 
     useEffect(() => {
         const bizId = appSystem.businessId;
@@ -78,23 +101,12 @@ export default function RegulationPage({ location }) {
         </p>
     );
 
-    const handlePath = () => {
-        if(isClientAdmin) {
-            return `/${bizCodeName}/cliente-admin/painel-de-controle`;
-        }
-
-        if(needAppForCliAdmin) {
-            return  "/mobile-app?client-admin=1";
-        }
-
-        return isThisApp()
-        ? "/mobile-app"
-        : "/"
-    }
-
     const showBackBtnAndTimeStamp = () => (
         <div className="d-flex justify-content-between my-5">
-            <Link to={handlePath()} onClick={() => handlePath().includes("/cliente-admin") && setRun(dispatch, "goDash")}>
+            <Link
+                to={handlePath()}
+                onClick={() => handlePath().includes("/cliente-admin") && setRun(dispatch, "goDash")}
+            >
                 <ButtonMulti
                     title={isClientAdmin ? "voltar painel" : "voltar"}
                     color={currTxtColor(selfThemePColor)}

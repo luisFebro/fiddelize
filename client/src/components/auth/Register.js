@@ -320,10 +320,9 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                         inputVariant="outlined"
                         margin="dense"
                         error={errorBirthday ? true : false}
-                        openTo="month"
+                        openTo="year"
                         autoOk={false}
-                        placeholder="Dia e Mês"
-                        views={["month", "date", "year"]}
+                        views={["year", "month", "date"]}
                         name="birthday"
                         value={selectedDate}
                         onChange={e => {
