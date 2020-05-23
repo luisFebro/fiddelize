@@ -39,8 +39,9 @@ import setValObjWithStr from '../../utils/objects/setValObjWithStr';
 import { getUniqueCodeName } from '../../utils/string/generateAlphaNumeric';
 import addDashesToString from '../../utils/string/addDashesToString';
 import 'moment/locale/pt-br';
-moment.updateLocale('pt-BR');
 import ReactGA from 'react-ga';
+
+moment.updateLocale('pt-BR');
 
 const isSmall = window.Helper.isSmallScreen();
 

@@ -34,9 +34,10 @@ import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
 import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
-
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import moment from 'moment';
+import ReactGA from 'react-ga';
+
 import 'moment/locale/pt-br';
 
 moment.updateLocale('pt-BR');
