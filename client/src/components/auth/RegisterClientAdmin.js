@@ -40,6 +40,8 @@ import { getUniqueCodeName } from '../../utils/string/generateAlphaNumeric';
 import addDashesToString from '../../utils/string/addDashesToString';
 import 'moment/locale/pt-br';
 moment.updateLocale('pt-BR');
+import ReactGA from 'react-ga';
+
 const isSmall = window.Helper.isSmallScreen();
 
 const useStyles = makeStyles(theme => ({
@@ -145,6 +147,13 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                 setFieldError(foundObjError);
                 return;
             }
+
+            ReactGA.event({
+                category: 'cli-admin',
+                action: 'created an account',
+                label: 'form',
+                nonInteraction: true,
+            });
 
             const removalOptions = {
                 collection: "onceChecked",

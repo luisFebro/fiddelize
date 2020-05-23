@@ -31,8 +31,11 @@ export default function App() {
         if(run) {
             dispatch(loadUser(dispatch));
 
-            ReactGA.initialize(process.env.REACT_APP_GA_KEY);
+            // GA
+            const opts = { testMode: true }
+            ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
             ReactGA.pageview(window.location.pathname + window.location.search);
+            // END GA
 
             run = false;
         }

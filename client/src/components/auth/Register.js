@@ -139,7 +139,15 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 return;
             }
 
+            ReactGA.event({
+                category: 'cli-user',
+                action: 'created an account',
+                label: 'form',
+                nonInteraction: true,
+            });
+
             lStorage("removeCol", {collection: 'onceChecked'})
+
             const objToSend = { field: "clientAdminData.totalClientUsers", type: 'inc' }
             countField(bizSysId, objToSend)
             .then(res => {
