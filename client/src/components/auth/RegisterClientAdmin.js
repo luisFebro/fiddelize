@@ -90,7 +90,8 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const classes = useStyles();
 
     useEffect(() => {
-        setData({ ...data, birthday: getDayMonthBr(selectedDate) })
+        const opts = { needYear: true };
+        setData({ ...data, birthday: getDayMonthBr(selectedDate, opts) })
     }, [selectedDate])
 
     useEffect(() => {
@@ -348,7 +349,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         openTo="month"
                         autoOk={false}
                         placeholder="Dia e Mês"
-                        views={["month", "date"]}
+                        views={["month", "date", "year"]}
                         name="birthday"
                         value={selectedDate}
                         onChange={e => {

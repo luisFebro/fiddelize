@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { msgG } = require('./_msgs/globalMsgs');
 const { msg } = require('./_msgs/auth');
 const selectObjKeys = require("../utils/objects/selectObjKeys");
+const getFirstName = require("../utils/string/getFirstName");
 
 // MIDDLEWARES
 exports.mwIsAuth = (req, res, next) => {
@@ -100,7 +101,7 @@ exports.register = (req, res) => {
     newUser.save()
     .then(user => {
         res.json({
-            msg: msg('ok.successRegister', name, 'onlyMsg'),
+            msg: msg('ok.successRegister', getFirstName(name), 'onlyMsg'),
             authUserId: user._id,
             roleRegistered: role,
         });
@@ -141,7 +142,7 @@ exports.login = (req, res) => {
         verificationPass: clientAdminData && clientAdminData.verificationPass,
         selfMilestoneIcon: clientAdminData && clientAdminData.selfMilestoneIcon,
         authUserId: _id,
-        msg: msg('ok.welcomeBack', name, 'onlyMsg')
+        msg: msg('ok.welcomeBack', getFirstName(name), 'onlyMsg')
     }
 
     let expiringTime;

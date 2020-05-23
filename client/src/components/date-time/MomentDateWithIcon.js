@@ -42,14 +42,15 @@ export default function MomentDateWithIcon({
     style,
     date,
     msgIfNotValidDate = "Sem atualização.",
-    marginTop, }) {
+    marginTop,
+    needTxtShadow = false, }) {
     return (
         <Div cssProps={{ marginTop }}>
             <section className="last-update" style={style}>
                 <div className="icon">
-                    <FontAwesomeIcon icon="clock" style={{filter:  'drop-shadow(.5px .5px 1.5px black)'}} />
+                    <FontAwesomeIcon icon="clock" style={{filter: needTxtShadow && 'drop-shadow(.5px .5px 1.5px black)'}} />
                 </div>
-                <p className="text text-shadow">
+                <p className={`text ${needTxtShadow && "text-shadow"}`}>
                     • Última atualização:
                     <br />
                     {date

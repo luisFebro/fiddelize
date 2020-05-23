@@ -3,7 +3,8 @@
  * @param  {string} date new Date
  * @return {string}
  */
-export default function getDayMonthBr(stringDate) {
+export default function getDayMonthBr(stringDate, options) {
+    const { needYear } = options;
     const selectedDate = new Date(stringDate);
 
     let dayMonth;
@@ -16,7 +17,13 @@ export default function getDayMonthBr(stringDate) {
         day = `1º`;
     }
 
-    dayMonth = `${day} de ${selectedMonth}`;
+    if(needYear) {
+        const year = selectedDate.getFullYear();
+        dayMonth = `${day} de ${selectedMonth} de ${year}`;
+    } else {
+        dayMonth = `${day} de ${selectedMonth}`;
+    }
+
 
     return dayMonth;
 }

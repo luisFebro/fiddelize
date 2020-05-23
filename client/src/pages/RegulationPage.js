@@ -60,7 +60,7 @@ export default function RegulationPage({ location }) {
             <Paper style={{backgroundColor: 'var(--mainWhite)'}}>
                 <div style={{minHeight: '400px'}} className="text-align py-4">
                     <pre className="text-normal" style={{whiteSpace: 'pre-line'}}>
-                        {regulation && regulation.text.length === 0
+                        {regulation && regulation.text && regulation.text.length === 0
                         ? <LoadingThreeDots />
                         : replaceVariablesInTxt(regulation && regulation.text, variablesObj, {needBold: true})}
                     </pre>
@@ -104,10 +104,11 @@ export default function RegulationPage({ location }) {
                 />
             </Link>
             <MomentDateWithIcon
-                style={{color: currTxtColor(selfThemeBackColor)}}
+                style={{color: currTxtColor(selfThemeBackColor || "default")}}
                 date={regulation && regulation.updatedAt}
                 msgIfNotValidDate="Nenhuma alteração."
                 marginTop={0}
+                needTxtShadow={true}
             />
         </div>
     );

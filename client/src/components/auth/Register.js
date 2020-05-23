@@ -87,7 +87,8 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        setData({ ...data, birthday: getDayMonthBr(selectedDate) })
+        const opts = { needYear: true }
+        setData({ ...data, birthday: getDayMonthBr(selectedDate, opts) })
     }, [selectedDate])
 
     const clearData = () => {
@@ -322,7 +323,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                         openTo="month"
                         autoOk={false}
                         placeholder="Dia e Mês"
-                        views={["month", "date"]}
+                        views={["month", "date", "year"]}
                         name="birthday"
                         value={selectedDate}
                         onChange={e => {
