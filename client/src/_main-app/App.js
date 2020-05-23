@@ -6,6 +6,7 @@ import isThisApp from '../utils/window/isThisApp';
 import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
 import { useRecoveryAndDataOffline } from '../hooks/roles-storage-and-data-recovery';
+import ReactGA from 'react-ga'; // google analytics
 import '../utils/globalHelpers';
 //STYLING
 import './scss/App.scss';
@@ -20,14 +21,21 @@ import './libraries/fontAwesomeLib';
 import Website from './user-interfaces/Website';
 import MobileApp from './user-interfaces/MobileApp';
 //END UIs
-
+let run = true;
 export default function App() {
     useRecoveryAndDataOffline();
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
         // loadReCaptcha();
-        dispatch(loadUser(dispatch));
+        if(run) {
+            dispatch(loadUser(dispatch));
+
+            ReactGA.initialize(process.env.REACT_APP_GA_KEY);
+            ReactGA.pageview(window.location.pathname + window.location.search);
+
+            run = false;
+        }
     }, [dispatch]);
 
 
