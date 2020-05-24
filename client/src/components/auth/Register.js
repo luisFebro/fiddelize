@@ -52,7 +52,6 @@ const isSmall = window.Helper.isSmallScreen();
 
 function Register({ setLoginOrRegister, needLoginBtn = false }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
-    const [selectedDate, handleDateChange] = useState(new Date());
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
     const [data, setData] = useState({
@@ -65,6 +64,12 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
         maritalStatus: 'selecione estado civil',
         clientUserData: { bizId: bizSysId },
     });
+
+    const dateNow = new Date();
+    const maxYear = dateNow.getFullYear() - 18;
+    dateNow.setFullYear(maxYear);
+    const [selectedDate, handleDateChange] = useState(dateNow);
+
     let { role, name, email, maritalStatus, birthday, cpf, phone } = data;
 
     const { selfThemePColor, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
@@ -321,6 +326,10 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                         margin="dense"
                         error={errorBirthday ? true : false}
                         openTo="year"
+                        disableFuture={true}
+                        allowKeyboardControl={true}
+                        maxDate={new Date(`${maxYear}-12-31`)}
+                        minDate={new Date("1940-01-01")}
                         autoOk={false}
                         views={["year", "month", "date"]}
                         name="birthday"

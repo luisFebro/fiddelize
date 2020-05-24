@@ -53,9 +53,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
-    const [selectedDate, handleDateChange] = useState(new Date());
     const [showThisField, setShowThisField] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
+
+    const dateNow = new Date();
+    const maxYear = dateNow.getFullYear() - 18;
+    dateNow.setFullYear(maxYear);
+    const [selectedDate, handleDateChange] = useState(dateNow);
 
     const [data, setData] = useState({
         role: 'cliente-admin',
@@ -349,6 +353,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         error={errorBirthday ? true : false}
                         openTo="year"
                         autoOk={false}
+                        disableFuture={true}
+                        allowKeyboardControl={true}
+                        maxDate={new Date(`${maxYear}-12-31`)}
+                        minDate={new Date("1940-01-01")}
                         views={["year", "month", "date"]}
                         name="birthday"
                         value={selectedDate}
