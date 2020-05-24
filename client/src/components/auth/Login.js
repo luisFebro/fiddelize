@@ -174,7 +174,7 @@ export default withRouter(Login);
 
 /*ARCHIVES
 else if(!selfMilestoneIcon) {
-        whichRoute = `https://fiddelize.netlify.app/${bizCodeName}/novo-app/self-service/${authUserId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
+        whichRoute = `/${bizCodeName}/novo-app/self-service/${authUserId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
         showSnackbar(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
         setTimeout(() => window.location.href = whichRoute, 2900);
 
