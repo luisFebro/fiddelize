@@ -40,20 +40,6 @@ export default function RegulationPage({ location }) {
 
     const dispatch = useStoreDispatch();
 
-    const handlePath = React.useCallback(() => {
-        if(isClientAdmin) {
-            return `/${bizCodeName}/cliente-admin/painel-de-controle`;
-        }
-
-        if(needAppForCliAdmin) {
-            return  "/mobile-app?client-admin=1";
-        }
-
-        return isThisApp()
-        ? "/mobile-app"
-        : "/"
-    }, []);
-
     useEffect(() => {
         if(!defaultColor) { // Not changing back to default color in dashboard....
             document.body.style.setProperty('background', `var(--themeBackground--${selfThemeBackColor})`, 'important')
@@ -101,15 +87,29 @@ export default function RegulationPage({ location }) {
         </p>
     );
 
+    const handlePath = () => {
+        if(isClientAdmin) {
+            return `/${bizCodeName}/cliente-admin/painel-de-controle`;
+        }
+
+        if(needAppForCliAdmin) {
+            return  "/mobile-app?client-admin=1";
+        }
+
+        return isThisApp()
+        ? "/mobile-app"
+        : "/"
+    };
+
     const showBackBtnAndTimeStamp = () => (
         <div className="d-flex justify-content-between my-5">
             <Link
                 to={handlePath()}
-                onClick={() => handlePath().includes("/cliente-admin") && setRun(dispatch, "goDash")}
+                onClick={() => handlePath() && handlePath().includes("/cliente-admin") && setRun(dispatch, "goDash")}
             >
                 <ButtonMulti
                     title={isClientAdmin ? "voltar painel" : "voltar"}
-                    color={currTxtColor(selfThemePColor)}
+                    color={currTxtColor(selfThemePColor || "default")}
                     backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
                     iconFontAwesome={<FontAwesomeIcon icon="home" style={faStyle} />}
                     shadowColor={selfThemeBackColor === "black" ? "white" : "black"}
