@@ -122,7 +122,7 @@ function ClientMobileApp({ location, history }) {
         </div>
     );
 
-    const isClientUserLogged = isAuthUser && role === "cliente";
+    const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
 
     const showAppType = () => (
         roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin &&

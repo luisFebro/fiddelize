@@ -53,7 +53,7 @@ export default function PickTheming({
         if(isFromDash) {
             const primaryCond = selfThemePColor === "default" ? "purple" : selfThemePColor;
             const secondaryCond = selfThemeSColor === "default" ? "defaultS" : selfThemeSColor;
-            const backCond = selfThemeBackColor === "" ? "purple" : selfThemeBackColor;
+            const backCond = selfThemeBackColor === "default" ? "purple" : selfThemeBackColor;
 
             setData({
                 ...data,

@@ -41,7 +41,7 @@ const defaultClientAdmin = {
     selfMilestoneIcon: "star",
     selfThemePColor: "default",
     selfThemeSColor: "default",
-    selfThemeBackColor: "",
+    selfThemeBackColor: "default",
 }
 const clientAdminColl = { collection: "clientAdmin", newObj: defaultClientAdmin };
 // end client Admin
