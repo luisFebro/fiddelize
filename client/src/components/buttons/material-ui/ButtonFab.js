@@ -60,7 +60,8 @@ export default function ButtonFab({
     title,
     id,
     textTransform,
-    needTxtNoWrap, }) {
+    needTxtNoWrap,
+    needBtnShadow, }) {
     const [toggle, setToggle] = useState('');
 
     const styles = {
@@ -77,7 +78,7 @@ export default function ButtonFab({
             outline: 'none',
             color: color || 'var(--mainWhite)',
             backgroundColor:  backgroundColor || "#4834d4",
-            filter: handleBtnShadow(shadowColor, shadowColorCustom),
+            filter: needBtnShadow && handleBtnShadow(shadowColor, shadowColorCustom),
         }
     }
 
@@ -134,7 +135,7 @@ export default function ButtonFab({
             style={styles.fab}
         >
             <span
-                className={`${needTxtNoWrap ? "text-nowrap" : ""} text-shadow text-normal font-weight-bold`}
+                className={`${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`}
                 style={{textTransform: textTransform || 'capitalize'}}
             >
                 {title}

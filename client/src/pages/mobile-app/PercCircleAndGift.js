@@ -2,7 +2,7 @@ import ReactjsPercentageCircle from '../../components/progressIndicators/Reactjs
 import React, { Fragment } from 'react';
 import Tilt from 'react-tilt';
 import getPercentage from '../../utils/numbers/getPercentage';
-import Tooltip from './Tooltip';
+import Tooltip from '../../components/tooltips/Tooltip';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 
 export default function PercCircleAndGift({

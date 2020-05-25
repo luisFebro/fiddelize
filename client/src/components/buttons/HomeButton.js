@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import ButtonMulti, { faStyle } from './material-ui/ButtonMulti';
 import { useStoreDispatch } from 'easy-peasy';
 import { showComponent } from "../../redux/actions/componentActions";
@@ -8,14 +8,23 @@ import isThisApp from '../../utils/window/isThisApp';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from '../../hooks/useRoleData';
 
-export default function HomeButton() {
+function HomeButton({ location }) {
+    const isClientAdmin = location.search.includes("admin=1");
     const dispatch = useStoreDispatch();
 
     const { selfThemeSColor, selfThemeBackColor } = useClientAdmin();
 
+    const handleLink = () => {
+        if(isThisApp()) {
+            return isClientAdmin ? "/mobile-app?client-admin=1" : "/mobile-app";
+        } else {
+            return "/acesso/verificacao";
+        }
+    }
+
     return (
         <div className="my-5">
-            <Link to={isThisApp() ? "/mobile-app" : "/acesso/verificacao" } style={{textDecoration: "none"}}>
+            <Link to={handleLink()} style={{textDecoration: "none"}}>
                 <ButtonMulti
                     onClick={() => {
                         showComponent(dispatch, "login")
@@ -32,3 +41,5 @@ export default function HomeButton() {
         </div>
     );
 }
+
+export default withRouter(HomeButton);

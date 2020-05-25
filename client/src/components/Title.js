@@ -24,6 +24,7 @@ export default function Title({
     padding,
     className,
     needShadow,
+    subTitleClassName,
     fontSize, }) {
     return (
         <div
@@ -32,7 +33,7 @@ export default function Title({
         >
             {parse(title)}
             <p
-                className="mt-2 text-subtitle"
+                className={subTitleClassName + " mt-2 text-subtitle"}
                 style={{ color: subColor || color, marginBottom: 0, }}
             >
                 {subTitle && parse(subTitle)}

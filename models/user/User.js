@@ -85,6 +85,14 @@ const onceCheckedData = {
 }
 const OnceCheckedSchema = new Schema(onceCheckedData, { _id: false });
 
+const rewardListData = {
+    id: String,
+    icon: String,
+    rewardScore: Number,
+    rewardDesc: String,
+}
+const RewardListSchema = new Schema(rewardListData, { _id: false });
+
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
     bizCodeName: String,
@@ -121,7 +129,7 @@ const clientAdminData = {
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },
     mainReward: String,
-    rewardList: Array, // NOT IMPLEMENTED
+    rewardList: [RewardListSchema],
 
     verificationPass: String,
     regulation: RegulationSchema,

@@ -83,8 +83,8 @@ export const useClientAdmin = () => {
 
 
     const maxScore = clientAdmin && clientAdmin.rewardScore;
-    const mainReward = clientAdmin &&  clientAdmin.mainReward && clientAdmin.mainReward.cap();
-    const rewardList = ["giftA", "giftB"];
+    const mainReward = clientAdmin && clientAdmin.mainReward && clientAdmin.mainReward.cap();
+    const rewardList = clientAdmin && clientAdmin.rewardList;
     const bizName = clientAdmin && clientAdmin.bizName && clientAdmin.bizName.cap();
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;

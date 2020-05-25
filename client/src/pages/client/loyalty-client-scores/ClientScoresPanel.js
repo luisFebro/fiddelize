@@ -61,6 +61,7 @@ function ClientScoresPanel({
             backgroundColor: 'var(--themeSDark--' + colorS + ')',
             color: 'var(--mainWhite)',
             outline: 'none',
+            filter: `drop-shadow(.001em .15em .2em ${colorBack === "black" ? "var(--mainWhite)" : "var(--mainDark)"})`,
         },
         crownIcon: {
             position: 'absolute',

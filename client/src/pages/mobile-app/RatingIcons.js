@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Tooltip from './Tooltip';
+import Tooltip from '../../components/tooltips/Tooltip';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import animateCSS from '../../utils/animateCSS';
 import { milestoneIcons, iconNamesOnly } from '../../global-data/milestoneIcons';

@@ -67,10 +67,15 @@ exports.read = (req, res) => {
 };
 
 exports.update = (req, res) => { // n2
+    const noResponse = Boolean(req.query.noResponse);
+    const selectedString = req.query.selectedKeys ? `${req.query.selectedKeys} -cpf -clientAdminData.bizPlanCode -clientAdminData.verificationPass`  : '_id';
+
     User.findOneAndUpdate({ _id: req.profile._id }, { $set: req.body }, { new: true }) // real time updated! this send the most recently updated response/doc from database to app
+    .select(selectedString)
     .exec((err, user) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
-        res.json(user);
+        const dataToSend = noResponse ? { msg: 'user updated'} : user;
+        res.json(dataToSend);
     });
 };
 

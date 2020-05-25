@@ -188,7 +188,6 @@ export default function ModalTextField({
                         </span>
                         <span className="ml-3">
                             <InstructionBtn
-                                iconFontAwesome={<FontAwesomeIcon icon="question-circle" />}
                                 onClick={() => { setShowInstruction(!showInstruction); scrollIntoView("#instru", 3000); }}
                             />
                         </span>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import truncateWords from '../utils/string/truncateWords';
 import { HashLink } from 'react-router-hash-link';
-import { ButtonContainerPressedEffectDark as Dark } from '../components/buttons/Default';
+import { ButtonContainerPressedEffectDark as Dark } from '../components/buttons/Ω-archives/Default';
 import parse from 'html-react-parser';
 
 const isSmall = window.Helper.isSmallScreen();

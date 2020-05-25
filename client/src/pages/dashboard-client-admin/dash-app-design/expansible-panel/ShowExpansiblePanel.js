@@ -5,7 +5,7 @@ import parse from 'html-react-parser';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState } from 'easy-peasy';
 import HiddenDesignApp from '../card-hidden-content/design/HiddenDesignApp';
-import HiddenGoalsAndRewards from '../card-hidden-content/goals-rewards/HiddenGoalsAndRewards';
+import HiddenChallengesAndPrize from '../card-hidden-content/challenges-prizes/HiddenChallengesAndPrize';
 
 import moment from 'moment';
 
@@ -33,7 +33,7 @@ export default function ShowExpansiblePanel() {
             id: 1,
             name: "Desafios e<br />Prêmios",
             leftIcon: <FontAwesomeIcon icon="gem" />,
-            hiddenContent: <HiddenGoalsAndRewards />,
+            hiddenContent: <HiddenChallengesAndPrize />,
         }
     ]
 

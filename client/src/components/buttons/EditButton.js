@@ -1,10 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
-import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import PropTypes from 'prop-types';
 
-DeleteButton.propTypes = {
+EditButton.propTypes = {
     top: PropTypes.number,
     left: PropTypes.number,
     bottom: PropTypes.number,
@@ -17,7 +17,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function DeleteButton({ top, right, left, bottom, onClick }) {
+const muStyle = {
+    transform: 'scale(1.2)',
+    filter: 'drop-shadow(.5px .5px 1.5px black)',
+    color: '#fff',
+}
+
+export default function EditButton({ position, top, right, left, bottom, onClick }) {
     const classes = useStyles();
 
     return (
@@ -25,19 +31,20 @@ export default function DeleteButton({ top, right, left, bottom, onClick }) {
             onClick={onClick}
             size="small"
             style={{
-                position: 'absolute',
+                position: position || 'relative',
                 top: `${top || 0}px`,
                 right: `${right || 0}px`,
                 left: `${left || 0}px`,
                 bottom: `${bottom || 0}px`,
+                zIndex: 1500,
                 outline: 'none',
                 color: 'var(--mainWhite)',
-                backgroundColor: '#4834d4'
+                backgroundColor: 'var(--themeSDark)',
             }}
-            aria-label="Botão deletar"
+            aria-label="edit"
             className={classes.fab}
         >
-            <DeleteIcon />
+            <EditIcon style={muStyle} />
         </Fab>
     );
 }

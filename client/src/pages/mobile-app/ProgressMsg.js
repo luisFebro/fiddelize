@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import getRemainder from '../../utils/numbers/getRemainder';
-import Tooltip from './Tooltip';
+import Tooltip from '../../components/tooltips/Tooltip';
 import lStorage, { tooltip1 } from '../../utils/storage/lStorage';
 import { convertDotToComma } from '../../utils/numbers/convertDotComma';
 import { useStoreDispatch } from 'easy-peasy';
@@ -86,7 +86,7 @@ export default function ProgressMsg({
                         <span className={`${selectTxtStyle(colorBack, {bold: true})} ml-2`}>
                             {nextLevel === 5
                             ? <span className="text-left">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
-                            : <span><strong>{milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
+                            : <span><strong>+ {milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
                             }
                         </span>
                     )}

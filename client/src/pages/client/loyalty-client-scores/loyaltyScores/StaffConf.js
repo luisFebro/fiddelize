@@ -53,10 +53,8 @@ export default function StaffConf({ success, setVerification, valuePaid, desc })
         }
         checkVerificationPass(dispatch, bodyToSend)
         .then(res => {
-            if(res.status !== 200) {
-                showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão.", 'error');
-                return;
-            }
+            if(res.status === 500) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão.", 'error');
+            if(res.status === 401) return showSnackbar(dispatch, res.data.msg, 'error');
             // showSnackbar(dispatch, res.data.msg, 'success');
             setVerification(true);
             showComponent(dispatch, 'clientScoresPanel')

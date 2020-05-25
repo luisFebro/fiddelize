@@ -83,9 +83,9 @@ export default function ModalTextField({ currItemFound }) {
                             id="outlined-multiline-static"
                             label={parse(`Mensagem para <br /><strong>${name}</strong>`)}
                             multiline
+                            rows="5"
                             fullWidth
                             name={mainKey}
-                            rows="5"
                             autoComplete="off"
                             className={classes.textField}
                             margin="normal"

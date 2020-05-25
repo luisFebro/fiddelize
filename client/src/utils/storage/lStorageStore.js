@@ -31,7 +31,7 @@ const defaultClientAdmin = {
     bizWhatsapp: "(99) 99999-9999",
     maxScore: 500,
     mainReward: "Free Product",
-    rewardList: ["giftA", "giftB"],
+    rewardList: [{ id: '123', icon: 'star', rewardScore: 500, rewardDesc: 'desc. prêmio', }],
     regulation: { text: "...", updatedAt: '...' },
     highestScores: highestScoresArray,
     rewardDeadline: 0,
