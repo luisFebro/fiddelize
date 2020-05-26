@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import EditButton from '../../../../../components/buttons/EditButton';
 import DeleteButton from '../../../../../components/buttons/DeleteButton';
@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../../utils/form/use-state/handleChange';
 import findAndReplaceObjInArray from '../../../../../utils/arrays/findAndReplaceObjInArray';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import EditLevelIconModalBtn from './EditLevelIconModalBtn';
+import uuidv1 from 'uuid/v1';
 
 const truncate = (text, leng) => window.Helper.truncate(text, leng);
 
@@ -17,6 +19,7 @@ ChallComp.propTypes = {
     rewardScore: PropTypes.number,
     rewardDesc: PropTypes.string,
     isFirst: PropTypes.bool,
+    currChallNumber: PropTypes.number,
 }
 
 export default function ChallComp({
@@ -29,15 +32,28 @@ export default function ChallComp({
     challengesArray,
     setChallengesArray,
     showSnackbar,
-    dispatch, }) {
+    dispatch,
+    currChallNumber,
+    milestoneIcon,
+    updateThisUser,
+}) {
     const [data, setData] = useState({
+        currChallNumber,
         id,
         icon,
         rewardScore,
         rewardDesc,
     });
+
     const [edit, setEdit] = useState(false);
     const [saveChangeBtn, setSaveChangeBtn] = useState(false);
+    const [selectedIcon, setSelectedIcon] = useState('');
+    useEffect(() => {
+        if(selectedIcon) {
+            setData({ ...data, icon: selectedIcon })
+            setSaveChangeBtn(true);
+        }
+    }, [selectedIcon])
 
     const txtStyle = "text-small text-white text-center m-0";
     const styles = {
@@ -70,19 +86,23 @@ export default function ChallComp({
         },
     }
 
+    const handleDelete = (arrayId) => {
+        updateThisUser(false, {deleteThisId: arrayId});
+    }
+
     const handleDataChange = () => {
-        showSnackbar(dispatch, "Fazendo alterações");
+        showSnackbar(dispatch, "Fazendo alterações...");
         const updatedArray = [
             {
                 id: data.id,
-                icon: data.icon,
+                icon: isFirst ? milestoneIcon : data.icon,
                 rewardScore: Number(data.rewardScore),
-                rewardDesc: data.rewardDesc,
+                rewardDesc: data.rewardDesc && data.rewardDesc.toLowerCase(),
             }
         ]
         const newArray = findAndReplaceObjInArray(challengesArray, updatedArray, "id")
         setChallengesArray(newArray);
-        setNeedUpdateData(true);
+        setNeedUpdateData(uuidv1());
         setTimeout(() => setEdit(false), 2000);
     }
 
@@ -94,7 +114,11 @@ export default function ChallComp({
             <p className={txtStyle}>
                 {isFirst ? "Ícone Principal:" : "Ícone Desafio:"}
             </p>
-            <FontAwesomeIcon className="ml-md-0 ml-3" icon={icon} style={styles.levelIcon} />
+            <FontAwesomeIcon
+                className="ml-md-0 ml-3"
+                icon={data.icon}
+                style={styles.levelIcon}
+            />
             {edit && (
                 <Fragment>
                     {isFirst ? (
@@ -106,19 +130,10 @@ export default function ChallComp({
                         </p>
                     ) : (
                         <div className="ml-3 ml-md-0 container-center animated zoomIn">
-                            <ButtonFab
-                                position="relative"
-                                onClick={null}
-                                title="trocar"
-                                iconFontAwesome={<FontAwesomeIcon icon="sync-alt" />}
-                                iconFontSize="15px"
-                                variant="extended"
-                                fontWeight="bolder"
-                                fontSize=".4.5em"
-                                size="small"
-                                color={"white"}
-                                backgroundColor={"var(--themeSDark--default)"}
-                                needBtnShadow={false}
+                            <EditLevelIconModalBtn
+                                currChallNumber={data.currChallNumber}
+                                currIcon={data.icon}
+                                setSelectedIcon={setSelectedIcon}
                             />
                         </div>
                     )}
@@ -200,9 +215,15 @@ export default function ChallComp({
                     <ButtonFab
                         position="relative"
                         onClick={() => {
-                            handleDataChange();
-                            setEdit(false);
-                            setSaveChangeBtn(false);
+                            let lastButOneRewardScore = isFirst ? 0 : challengesArray[challengesArray.length - 2].rewardScore;
+                            if(!isFirst && data.rewardScore < lastButOneRewardScore) return showSnackbar(dispatch, "O ponto-prêmio do desafio atual deve ser maior que o anterior", 'error');
+                            if(!Number(data.rewardScore)) {
+                                showSnackbar(dispatch, "Em ponto-prêmio, insira apenas números.", 'error');
+                            } else {
+                                handleDataChange();
+                                setEdit(false);
+                                setSaveChangeBtn(false);
+                            }
                         }}
                         title="salvar"
                         iconFontAwesome={<FontAwesomeIcon icon="save" />}
@@ -218,7 +239,9 @@ export default function ChallComp({
                 </div>
             ) : (
                 <Fragment>
-                    <DeleteButton onClick={null} />
+                    {!isFirst && (
+                        <DeleteButton onClick={() => handleDelete(data.id)} />
+                    )}
                     <EditButton onClick={() => setEdit(!edit)} />
                 </Fragment>
             )}

@@ -44,15 +44,13 @@ export default function App() {
 
         var observer = new PerformanceObserver(callback);// metrics
         observer.observe({entryTypes: ['navigation'] })
+        run = false;
     }
     // END GA
 
     useEffect(() => {
         // loadReCaptcha();
-        if(run) {
-            dispatch(loadUser(dispatch));
-            run = false;
-        }
+        dispatch(loadUser(dispatch));
     }, [dispatch]);
 
 

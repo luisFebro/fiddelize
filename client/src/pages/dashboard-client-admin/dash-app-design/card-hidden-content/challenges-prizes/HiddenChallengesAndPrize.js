@@ -9,6 +9,7 @@ import uuidv1 from 'uuid/v1';
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");
+    const [needAdd, setNeedAdd] = useState('');
 
     const styles = {
         iconPos: {
@@ -41,7 +42,7 @@ export default function HiddenGoalsAndRewards() {
         <div className="container-center mt-5">
             <ButtonFab
                 position="relative"
-                onClick={null}
+                onClick={() => setNeedAdd(uuidv1())}
                 title="adicionar"
                 iconFontAwesome={<FontAwesomeIcon icon="plus" />}
                 iconFontSize="25px"
@@ -59,7 +60,11 @@ export default function HiddenGoalsAndRewards() {
     return (
         <div className="hidden-content--root text-normal">
             {showTitle()}
-            <List setMode={setMode} />
+            <List
+                setMode={setMode}
+                mode={mode}
+                needAdd={needAdd}
+            />
             {showBtnAction()}
         </div>
     );

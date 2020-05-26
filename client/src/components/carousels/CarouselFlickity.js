@@ -8,6 +8,9 @@ import { setRun } from '../../redux/actions/globalActions';
 import { useStoreDispatch } from 'easy-peasy';
 import ShowActionBtns from '../../pages/new-app/self-service/pickers/ShowActionBtns';
 import { getIconIndex } from '../../global-data/milestoneIconsSorted.js';
+import ButtonMulti, {faStyle} from '../../components/buttons/material-ui/ButtonMulti';
+import { useClientAdmin, useAppSystem } from '../../hooks/useRoleData';
+import findAndReplaceObjInArray from '../../utils/arrays/findAndReplaceObjInArray';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -15,12 +18,23 @@ export default function CarouselFlickity({
     data,
     style,
     isFromDash,
-    currIconInd, }) {
-
+    currIconInd,
+    setSelectedIcon,
+    setOpenModal,
+}) {
     const [iconSelected, setIconSelected] = useState(data[0].icon);
     const [iconReady, setIconReady] = useState(false);
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
     const dispatch = useStoreDispatch();
+
+    const { businessId } = useAppSystem();
+    const { selfMilestoneIcon, mainReward, maxScore, rewardList } = useClientAdmin();
+
+    const [carouselElem2, setCarouselElem2] = useState('');
+    useEffect(() => {
+        const carouselElem2 = document.querySelector('.main-carousel');
+        setCarouselElem2(carouselElem2);
+    }, [])
 
     const iconChanged = currIconInd !== getIconIndex(iconSelected);
 
@@ -35,7 +49,7 @@ export default function CarouselFlickity({
     }, [isFromDash, iconSelected])
 
     const carouselElem = document.querySelector('.main-carousel');
-    if(carouselElem) {
+    if(carouselElem || carouselElem2) {
         var flkty = new Flickity(carouselElem, {
           // options
           cellAlign: 'center',
@@ -58,11 +72,24 @@ export default function CarouselFlickity({
         // g (delaying function execution) to delay by 2 second to avoid crash app.
         const condRunSelect = isFromDash ? (!iconReady) : true;
         flkty.on('change', index => setTimeout(() => condRunSelect && setIconSelected(data[index].icon), 1000));
-        setTimeout(() =>  !iconReady && currIconInd && flkty.selectCell((currIconInd), false, false), 3500);
+        setTimeout(() =>  !iconReady && currIconInd && flkty.selectCell((currIconInd), false, false), 2000);
     }
 
     // const dataFlickity = Flickity.data(elem)
     // console.log("data", dataFlickity);
+
+    // Updating rewardList as well:
+    let updatedArray;
+    if(!setSelectedIcon) {
+        updatedArray = [
+            {
+                id: businessId,
+                icon: iconSelected,
+                rewardScore: maxScore,
+                rewardDesc: mainReward,
+            }
+        ]
+    }
 
     return (
         <div
@@ -89,15 +116,27 @@ export default function CarouselFlickity({
                     );
                 })}
             </div>
-            {isFromDash && (
+            {isFromDash && !setSelectedIcon && (
                 <ShowActionBtns
                     needUpdateBtn={needUpdateBtn}
                     objToSend={{
                         "clientAdminData.selfMilestoneIcon": iconSelected,
+                        "clientAdminData.rewardList": findAndReplaceObjInArray(rewardList, updatedArray, "id"),
                     }}
                     titleBeforeOk="Salvando novo ícone..."
                     titleAfterOk="Ícone salvo."
                 />
+            )}
+            {setSelectedIcon && needUpdateBtn && (
+                <section className="animated zoomIn container-center">
+                    <ButtonMulti
+                        onClick={() => { setSelectedIcon(iconSelected); setOpenModal(false); } }
+                        title="selecionar"
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeSDark)"
+                        iconFontAwesome={<FontAwesomeIcon icon="paper-plane" style={faStyle} />}
+                    />
+                </section>
             )}
         </div>
     );

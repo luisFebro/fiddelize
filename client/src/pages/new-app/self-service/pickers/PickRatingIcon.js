@@ -1,9 +1,8 @@
 import React from 'react';
 import CarouselFlickity from '../../../../components/carousels/CarouselFlickity';
 import { milestoneIcons } from '../../../../global-data/milestoneIcons';
-import { milestoneIconsSorted } from '../../../../global-data/milestoneIconsSorted';
+import { milestoneIconsSorted, getIconIndex } from '../../../../global-data/milestoneIconsSorted';
 import { useClientAdmin } from '../../../../hooks/useRoleData';
-import { getIconIndex } from '../../../../global-data/milestoneIconsSorted';
 import PropTypes from 'prop-types';
 
 PickRatingIcon.propTypes = {

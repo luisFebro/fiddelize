@@ -5,33 +5,56 @@ import { readClientAdmin, updateUser } from '../../../../../redux/actions/userAc
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 
-export default function List({ setMode }) {
+export default function List({ setMode, mode, needAdd }) {
     const { businessId } = useAppSystem();
     const { selfMilestoneIcon, mainReward, maxScore, rewardList } = useClientAdmin();
-    const firstMainData = { id: businessId, icon: selfMilestoneIcon, rewardScore: maxScore, rewardDesc: mainReward };
-    if(firstMainData.id !== rewardList[0].id) { rewardList.unshift(firstMainData); }
+    let firstMainData = { id: businessId, icon: selfMilestoneIcon, rewardScore: maxScore, rewardDesc: mainReward };
+    if(!rewardList) { rewardList.unshift(firstMainData); }
     const [challengesArray, setChallengesArray] = useState(rewardList);
-
-    const [isConstantMode, setIsConstantMode] = useState(challengesArray.length <= 1);
+    const [isConstantMode, setIsConstantMode] = useState(challengesArray.length < 2);
     const [needUpdateData, setNeedUpdateData] = useState(false);
     const dispatch = useStoreDispatch();
 
-    const updateThisUser = () => {
-        let dataToSend;
+    useEffect(() => {
+        // needAdd is a unique id every time add button is clicked.
+        if(needAdd) {
+            setIsConstantMode(false);
+            updateThisUser(false, {addThisId: true});
+        }
+    }, [needAdd])
+
+    const updateThisUser = (needMsg = true, opts = {}) => {
+        const { deleteThisId, addThisId } = opts;
         const constObj = {
             "clientAdminData.selfMilestoneIcon": challengesArray[0].icon,
             "clientAdminData.rewardScore": challengesArray[0].rewardScore,
             "clientAdminData.mainReward": challengesArray[0].rewardDesc,
         }
-        isConstantMode
-        ? dataToSend = constObj
-        : dataToSend = { ...constObj, "clientAdminData.rewardList": challengesArray }
+
+        let newModifiedArray;
+        if(deleteThisId) {
+            newModifiedArray = challengesArray.filter(({ id }) => id !== deleteThisId);
+            if(newModifiedArray.length === 1) { setIsConstantMode(true); }
+            setChallengesArray(newModifiedArray);
+        }
+        if(addThisId) {
+            let lastRewardScore = challengesArray[challengesArray.length - 1].rewardScore;
+            let lastIcon = challengesArray[challengesArray.length - 1].icon;
+            const addedObj = { id: needAdd, icon: lastIcon, rewardScore: ++lastRewardScore, rewardDesc: 'Sem Descrição' }
+            newModifiedArray = [...challengesArray, addedObj];
+            setChallengesArray(newModifiedArray);
+        }
+
+        const dataToSend = { ...constObj, "clientAdminData.rewardList": newModifiedArray ? newModifiedArray : challengesArray }
 
         updateUser(dispatch, dataToSend, businessId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão.", 'error')
-            showSnackbar(dispatch, "Alterações salvas!", 'success');
-            readClientAdmin(dispatch, businessId);
+            readClientAdmin(dispatch, businessId)
+            .then(res => {
+                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                needMsg && showSnackbar(dispatch, "Alterações salvas!", 'success');
+            })
         })
     }
 
@@ -50,7 +73,7 @@ export default function List({ setMode }) {
     return (
         <div className="mt-5">
             {challengesArray.map((chall, ind) => (
-                <div key={chall._id} className="mt-3">
+                <div key={chall.id} className="mt-3">
                     {isConstantMode ? (
                         <p className={txtStyle}>
                             Para todos os desafios:
@@ -63,6 +86,7 @@ export default function List({ setMode }) {
                     <ChallComp
                         setNeedUpdateData={setNeedUpdateData}
                         isFirst={ind === 0}
+                        currChallNumber={ind + 1}
                         challengesArray={challengesArray}
                         setChallengesArray={setChallengesArray}
                         showSnackbar={showSnackbar}
@@ -71,16 +95,17 @@ export default function List({ setMode }) {
                         icon={chall.icon}
                         rewardScore={chall.rewardScore}
                         rewardDesc={chall.rewardDesc}
+                        milestoneIcon={selfMilestoneIcon}
+                        updateThisUser={updateThisUser}
                     />
                 </div>
             ))}
             {!isConstantMode && (
                 <p
                     className="text-small text-purple mt-3 animated rubberBand"
-                    style={{animationIterationCount: 2}}
                 >
-                    * Se tiver clientes com pontuação ativa em um <strong>desafio, não é possível exclui-lo.</strong>
-                     Porém você <strong>poderá ainda editá-lo</strong>.
+                    * Se tiver clientes com pontuação ativa em um <strong>desafio, não é possível exclui-lo. </strong>
+                    Porém você <strong>poderá ainda editá-lo</strong>.
                 </p>
             )}
         </div>

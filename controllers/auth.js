@@ -60,7 +60,7 @@ exports.loadAuthUser = (req, res) => {
         console.log("Warning: user loaded without ID")
     } else {
         User.findById(userIdInsideJwt)
-        .select('-cpf')
+        .select('-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode')
         .exec((err, profile) => {
             if(err) return res.status(500).json(msgG('error.systemError', err))
             res.json({ profile });
