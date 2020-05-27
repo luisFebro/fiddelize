@@ -48,6 +48,9 @@ export { ImgLoader }
 // requires declare className to the img.
 // The same name as the key. Priorly it was an ID, but there were issues when more then one src is need
 function handleStorage(coll, key, url, isFromInternet = false) {
+    console.log("isFromInternet", isFromInternet);
+    console.log("url", url);
+    console.log("CLIENT_URL", CLIENT_URL);
     const urlPath = isFromInternet ? url : `${CLIENT_URL}/${url}`;
 
     const readThisImage = () => readImage(coll, key)

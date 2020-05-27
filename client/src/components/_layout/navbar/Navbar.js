@@ -111,7 +111,7 @@ function Navbar({ history, location }) {
         </ul>
     );
 
-    const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
+    const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isThisApp());
     const handleLogoSrc = () => {
         if(needClientLogo) {
             return imgLib.app_biz_logo(selfBizLogoImg);
