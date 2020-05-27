@@ -1,7 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import EditButton from '../../../../../components/buttons/EditButton';
-import DeleteButton from '../../../../../components/buttons/DeleteButton';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +8,7 @@ import handleChange from '../../../../../utils/form/use-state/handleChange';
 import findAndReplaceObjInArray from '../../../../../utils/arrays/findAndReplaceObjInArray';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import EditLevelIconModalBtn from './EditLevelIconModalBtn';
+import DeleteModalBtn from './DeleteModalBtn';
 import uuidv1 from 'uuid/v1';
 
 const truncate = (text, leng) => window.Helper.truncate(text, leng);
@@ -84,10 +84,6 @@ export default function ChallComp({
             backgroundColor: 'var(--mainWhite)',
             font: 'normal 1em Poppins, sans-serif',
         },
-    }
-
-    const handleDelete = (arrayId) => {
-        updateThisUser(false, {deleteThisId: arrayId});
     }
 
     const handleDataChange = () => {
@@ -240,7 +236,11 @@ export default function ChallComp({
             ) : (
                 <Fragment>
                     {!isFirst && (
-                        <DeleteButton onClick={() => handleDelete(data.id)} />
+                        <DeleteModalBtn
+                            id={data.id}
+                            challengeNumber={currChallNumber}
+                            updateThisUser={updateThisUser}
+                        />
                     )}
                     <EditButton onClick={() => setEdit(!edit)} />
                 </Fragment>

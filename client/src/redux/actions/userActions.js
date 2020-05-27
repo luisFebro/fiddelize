@@ -167,6 +167,17 @@ export const updateImages = async (_id, bodyToSend) => {
     }
 };
 // END IMAGE HANDLING
+
+// CHALLENGES AND REWARDS
+export const gotUsersInThisChallenge = async (bizId, challengeInd) => {
+    try {
+        return await axios.get(`/api/user/check/user-challenges?id=${bizId}&challengeInd=${challengeInd}`, getHeaderJson);
+    } catch (err) {
+        return err;
+    }
+};
+// END CHALLENGES AND REWARDS
+
 /* ARCHIVES
 export const confirmUserAccount = async (userId) => {
     try {

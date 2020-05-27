@@ -130,8 +130,9 @@ function MoreOptionsBtn({
                 className={`position-fixed ${!showMoreBtn  ? 'd-none' : 'd-block'}`}
             >
                 <Tooltip
+                    needArrow
                     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
-                    title={`♦ Sugestão: ${userName}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra. ▼`}
+                    text={`♦ Sugestão: ${userName}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra.`}
                     backgroundColor={"var(--themeSDark--" + colorS + ")"}
                     element={
                         <Fab

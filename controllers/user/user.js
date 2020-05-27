@@ -440,6 +440,26 @@ exports.updateImages = (req, res) => {
 // END IMAGES UPLOAD
 
 
+// CHALLENGES AND REWARDS
+//@request get - if it is false, then the user can delete certain challenge.
+exports.gotUsersInThisChallenge = (req, res) => {
+    const bizId = req.query.id;
+    const challengeInd = Number(req.query.challengeInd);
+
+    User.find({ role: "cliente", "clientUserData.bizId": bizId,  "clientUserData.totalPurchasePrize": challengeInd })
+    .select("clientUserData.totalPurchasePrize")
+    .exec((err, data) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+        let result;
+        data.length
+        ? result = data.length
+        : result = false;
+        res.json(result);
+    })
+}
+// END CHALLENGES AND REWARDS
+
+
 /*ARCHIVES
 const assignToUndefined = (obj, keysArray) => {
     return keysArray.forEach(key => {

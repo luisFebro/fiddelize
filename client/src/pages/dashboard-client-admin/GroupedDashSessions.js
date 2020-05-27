@@ -37,7 +37,7 @@ const dataTab1 = [
     {
         tabLabel: "Clientes",
         tabIcon: <PermContactCalendarIcon style={muStyle} />,
-        tabContentPanel: null, // <DashClients />
+        tabContentPanel: <DashClients />,
     },
     {
         tabLabel: "App",
@@ -56,7 +56,7 @@ const dataTab2 = [
     {
         tabLabel: "Clientes",
         tabIcon: <PermContactCalendarIcon style={muStyle} />,
-        tabContentPanel: null, //<DashClients />
+        tabContentPanel: <DashClients />,
     },
     {
         tabLabel: "App",

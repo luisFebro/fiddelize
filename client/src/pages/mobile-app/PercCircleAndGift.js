@@ -84,7 +84,8 @@ export default function PercCircleAndGift({
                         className={classNamePerc}
                         onClick={playBeep}>
                         <Tooltip
-                            title={`
+                            needArrow
+                            text={`
                                 Você já alcançou
                                 <br />
                                 <strong>

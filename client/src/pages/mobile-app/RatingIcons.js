@@ -84,7 +84,7 @@ export default function RatingIcons({
             {levels.map(level => (
                 <section className="position-relative" style={{top: '-20px'}} key={level}>
                     <Tooltip
-                        title={`Nível ${level.toString().charAt(0)}`}
+                        text={`Nível ${level.toString().charAt(0)}`}
                         element={
                             <i>
                                 <FontAwesomeIcon

@@ -56,8 +56,9 @@ export default function ProgressMsg({
             playBeep();
         }}>
             <Tooltip
+                needArrow
                 needAttentionWaves={attentionBtnChecked ? false : true }
-                title={`► Desafio atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
+                text={`► Desafio atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
                     <i>
                         <FontAwesomeIcon

@@ -9,18 +9,21 @@ CloseButton.propTypes = {
     color: PropTypes.string,
     top: PropTypes.string,
     left: PropTypes.string,
+    delay: PropTypes.number
 }
 export default function CloseButton({
+    delay,
     onClick,
     size,
     color,
     top,
     left,
-    right
+    right,
+    position,
 }) {
     const styles = {
         closeBtn: {
-            position: 'fixed',
+            position: position ||  'fixed',
             top: top || '0px',
             left: left,
             right: right,
@@ -34,7 +37,7 @@ export default function CloseButton({
 
     const closeBtn = e => {
         const elem = e.currentTarget;
-        elem.classList.remove("animated", "rotateIn", "delay-2s")
+        elem.classList.remove("animated", "rotateIn", typeof delay === 'number' ? `delay-${delay}s` : "delay-2s")
         animateCSS(elem, "rotateOut", "normal", () => onClick());
     };
 

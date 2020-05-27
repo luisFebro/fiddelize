@@ -48,7 +48,7 @@
     color: var(--mainYellow);
 }
 
-/*BACKDROPS*/
+/*BACKDROPS AND BLUR*/
 .backdrop-strong {
     position: fixed;
     top: 0;
@@ -67,6 +67,35 @@
     bottom: 0;
     background: rgba(0, 0, 0, .4);
     z-index: 989;
+}
+
+.full-screen-mode {
+    // position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: blur(0);
+    // opacity: .5;
+}
+
+.blur-back {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+}
+
+.enable-blur > * {
+  filter: blur(1.2px);
+}
+
+.disable-blur {
+  filter: none;
+  z-index: 3000;
 }
 
 /*MAIN SHADOW AND HOVER*/

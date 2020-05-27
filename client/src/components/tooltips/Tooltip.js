@@ -10,30 +10,50 @@ import parse from 'html-react-parser';
 import  '../../keyframes/pulseWaves.css';
 
 Tooltip.propTypes = {
-    title: PropTypes.string.isRequired,
-    element: PropTypes.element,
+    text: PropTypes.string.isRequired,
+    element: PropTypes.element.isRequired,
     needAttentionWaves: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     placement: PropTypes.string,
+    width: PropTypes.number,
+    whiteSpace: PropTypes.bool,
+    padding: PropTypes.string,
 }
 
+// IMPORTANT: the element should be wrapped around with a div or i so that it will work properly.export
+// ButtonFav will not work without the div element.
+/*
+element={
+    <div>
+        <ButtonFab />
+    </div>
+}
+*/
 export default function Tooltip({
-    title,
+    text,
+    color,
     backgroundColor,
+    needArrow,
     element,
     needAttentionWaves,
     placement,
-    needOpen }) {
+    needOpen,
+    whiteSpace,
+    width,
+    padding,
+    setCloseBtn,
+    needClickAway = true, }) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
     // this useEffect solves the problem with uncontrolled vs controlled components handling.
     useEffect(() => {
-        if(needOpen) {
-            setOpen(true);
-        }
+        if(needOpen) { setOpen(true); } else { setOpen(false); }
     }, [needOpen])
 
     const handleTooltipClose = () => {
-      setOpen(false);
+        if(typeof setCloseBtn === "function") {
+            setCloseBtn(false);
+        }
+        setOpen(false);
     };
 
     const handleTooltipOpen = () => {
@@ -46,10 +66,20 @@ export default function Tooltip({
             backgroundColor: backgroundColor || 'var(--themeSDark)',
             fontWeight: 'bold',
             borderRadius: '15px 15px',
-            padding: '4px auto',
+            padding: padding ? padding : '4px auto',
             margin: '40px 0',
-            whiteSpace: 'nowrap',
+            whiteSpace: whiteSpace ? null : 'nowrap',
             textShadow: '1px 1px 3px black',
+            width: width ? width : '100%',
+            color: color,
+            top: 20,
+        },
+        popper: {
+            zIndex: 4000,
+        },
+        arrow: {
+            fontSize: 25,
+            color: backgroundColor || 'var(--themeSDark)',
         },
     }));
 
@@ -66,12 +96,14 @@ export default function Tooltip({
                 ) : null}
 
                 <TooltipMU
-                    title={parse(title)}
+                    style={{top: 15}}
+                    arrow={needArrow ? true : false}
+                    title={parse(text)}
                     classes={classes}
                     onClick={handleTooltipOpen}
-                    disableFocusListener
-                    disableHoverListener
-                    disableTouchListener
+                    disableFocusListener={true}
+                    disableHoverListener={true}
+                    disableTouchListener={true}
                     interactive
                     onClose={handleTooltipClose}
                     open={open}

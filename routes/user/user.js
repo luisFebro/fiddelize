@@ -21,6 +21,7 @@ const {
     uploadImages,
     updateImages,
     redirectUrlLink,
+    gotUsersInThisChallenge,
 } = require("../../controllers/user");
 
 const { mwIsAdmin } = require("../../controllers/auth");
@@ -45,6 +46,7 @@ router.get("/:userId/backup/list", mwIsAdmin, readBackup);
 
 router.put("/count/field/:userId", countField);
 router.get("/redirect/url-link", redirectUrlLink);
+router.get("/check/user-challenges", gotUsersInThisChallenge);
 
 // IMAGES
 router.post("/image/upload", uploadImages);

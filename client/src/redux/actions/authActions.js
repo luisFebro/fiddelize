@@ -71,7 +71,6 @@ export const registerEmail = async (dispatch, objToSend) => { // registerEmail d
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post('/api/auth/register', objToSend, getHeaderJson);
-        console.log("res", res);
         if(!res) {
             setTimeout(() => {
                 showSnackbar(dispatch, "Parece que há problemas de conexão com a internet.")

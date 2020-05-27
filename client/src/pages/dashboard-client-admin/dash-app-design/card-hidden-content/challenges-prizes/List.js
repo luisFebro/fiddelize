@@ -4,16 +4,30 @@ import { useClientAdmin, useAppSystem } from '../../../../../hooks/useRoleData';
 import { readClientAdmin, updateUser } from '../../../../../redux/actions/userActions';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
+import ShowBizNotes from './ShowBizNotes';
 
-export default function List({ setMode, mode, needAdd }) {
+export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     const { businessId } = useAppSystem();
-    const { selfMilestoneIcon, mainReward, maxScore, rewardList } = useClientAdmin();
+    const { selfMilestoneIcon, mainReward, maxScore, rewardList, bizPlan } = useClientAdmin();
+
     let firstMainData = { id: businessId, icon: selfMilestoneIcon, rewardScore: maxScore, rewardDesc: mainReward };
     if(!rewardList) { rewardList.unshift(firstMainData); }
+
     const [challengesArray, setChallengesArray] = useState(rewardList);
     const [isConstantMode, setIsConstantMode] = useState(challengesArray.length < 2);
     const [needUpdateData, setNeedUpdateData] = useState(false);
+    const [switchAddBtn, setSwitchAddBtn] = useState(false);
+
     const dispatch = useStoreDispatch();
+
+    const limitFree = bizPlan === "gratis" && challengesArray.length >= 3;
+    useEffect(() => {
+        if(limitFree) {
+            setHideAddBtn(true);
+        } else {
+            setHideAddBtn(false);
+        }
+    }, [limitFree, switchAddBtn])
 
     useEffect(() => {
         // needAdd is a unique id every time add button is clicked.
@@ -35,6 +49,7 @@ export default function List({ setMode, mode, needAdd }) {
         if(deleteThisId) {
             newModifiedArray = challengesArray.filter(({ id }) => id !== deleteThisId);
             if(newModifiedArray.length === 1) { setIsConstantMode(true); }
+            if(limitFree) { setSwitchAddBtn(true); }
             setChallengesArray(newModifiedArray);
         }
         if(addThisId) {
@@ -100,14 +115,7 @@ export default function List({ setMode, mode, needAdd }) {
                     />
                 </div>
             ))}
-            {!isConstantMode && (
-                <p
-                    className="text-small text-purple mt-3 animated rubberBand"
-                >
-                    * Se tiver clientes com pontuação ativa em um <strong>desafio, não é possível exclui-lo. </strong>
-                    Porém você <strong>poderá ainda editá-lo</strong>.
-                </p>
-            )}
+            {!isConstantMode && <ShowBizNotes limitFree={limitFree} />}
         </div>
     );
 }
