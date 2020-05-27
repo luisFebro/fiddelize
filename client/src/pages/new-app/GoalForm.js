@@ -108,7 +108,7 @@ function GoalForm({
         updateUser(dispatch, dataToSend, bizId)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-            setTimeout(() => history.push(`/${bizCodeName}/novo-app/self-service/${bizId}?nome-cliente=${name}&negocio=${bizName}&ponto-premio=${score}`), 1500);
+            setTimeout(() => history.push(`/${bizCodeName}/novo-app/self-service/${bizId}?nome-cliente=${name}&negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}`), 1500);
         })
     }
 

@@ -21,6 +21,7 @@ function SelfServicePage({ location, match }) {
     // API
     let clientName = getQueryByName("nome-cliente", location.search).cap();
     let rewardScore = getQueryByName("ponto-premio", location.search);
+    let rewardDesc = getQueryByName("premio-desc", location.search);
     let currScore = getQueryByName("ponto-atual", location.search);
     const isTest = location.search.includes("teste=1");
     if(typeof rewardScore === "object") { rewardScore = 500 } // if it is null
@@ -51,6 +52,8 @@ function SelfServicePage({ location, match }) {
                         setLogoUrlPreview={setLogoUrlPreview}
                         theme={theme}
                         setTheme={setTheme}
+                        rewardScore={rewardScore}
+                        rewardDesc={rewardDesc}
                     />
                 </section>
                 <AppPreview

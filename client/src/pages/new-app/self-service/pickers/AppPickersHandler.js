@@ -21,7 +21,9 @@ export default function AppPickersHandler({
     isTest,
     setLogoUrlPreview,
     theme,
-    setTheme, }) {
+    setTheme,
+    rewardDesc,
+    rewardScore, }) {
     const { runName } = useRunComp();
     const [step, setStep] = useState({ currNumber: 1, nextTask: '(cores)' });
     const [nextDisabled, setNextDisabled] = useState(true);
@@ -51,6 +53,7 @@ export default function AppPickersHandler({
             case 3:
                 const objToSend2 = {
                     "clientAdminData.selfMilestoneIcon": runName || "star",
+                    "clientAdminData.rewardList": [{ id: bizId, icon: runName, rewardScore: rewardScore, rewardDesc: rewardDesc || "Sem Descrição" }]
                 }
                 showSnackbar(dispatch, "Salvo. Finalizando a criação dos apps...");
                 updateUser(dispatch, objToSend2, bizId)

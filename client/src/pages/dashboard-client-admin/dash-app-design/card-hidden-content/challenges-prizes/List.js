@@ -10,8 +10,9 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     const { businessId } = useAppSystem();
     const { selfMilestoneIcon, mainReward, maxScore, rewardList, bizPlan } = useClientAdmin();
 
+    // jsut in case user by any change does not pass throu self-service and decide to log in withot data recorded...
     let firstMainData = { id: businessId, icon: selfMilestoneIcon, rewardScore: maxScore, rewardDesc: mainReward };
-    if(!rewardList) { rewardList.unshift(firstMainData); }
+    if(!rewardList.length) { rewardList.unshift(firstMainData); }
 
     const [challengesArray, setChallengesArray] = useState(rewardList);
     const [isConstantMode, setIsConstantMode] = useState(challengesArray.length < 2);
