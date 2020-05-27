@@ -3,7 +3,7 @@ import ButtonMulti, { faStyle } from '../../../../components/buttons/material-ui
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../utils/form/use-state/handleChange';
-import MomentDateWithIcon from '../../../../components/date-time/MomentDateWithIcon';
+// import MomentDateWithIcon from '../../../../components/date-time/MomentDateWithIcon';
 import PropTypes from 'prop-types';
 import CreatedAtBr from '../../CreatedAtBr';
 import { updateUser, readUser } from '../../../../redux/actions/userActions';
@@ -199,10 +199,14 @@ export default function HiddenProfile({ userData }) {
     return (
         <div className="hidden-content--root text-normal mt-4">
             {showForm()}
-            <MomentDateWithIcon
-                date={userData.updatedAt}
-                msgIfNotValidDate="Nenhuma alteração."
-            />
         </div>
     );
 }
+
+/* ARCHIVES
+wrong date because lack of time recording in db
+<MomentDateWithIcon
+    date={userData.updatedAt}
+    msgIfNotValidDate="Nenhuma alteração."
+/>
+*/

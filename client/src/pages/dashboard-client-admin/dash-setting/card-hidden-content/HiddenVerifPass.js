@@ -1,6 +1,6 @@
 import React from 'react';
 import ShowPasswordForm from '../../ShowPasswordForm';
-import MomentDateWithIcon from '../../../../components/date-time/MomentDateWithIcon';
+// import MomentDateWithIcon from '../../../../components/date-time/MomentDateWithIcon';
 
 // TEST
 // let date = new Date();
@@ -12,10 +12,14 @@ export default function HiddenVerifPass({ userData }) {
     return (
         <div className="hidden-content--root text-normal">
             <ShowPasswordForm isFromCliAdminDash={true} />
-            <MomentDateWithIcon
-                date={userData.updatedAt}
-                msgIfNotValidDate="Nenhuma alteração."
-            />
         </div>
     );
 }
+
+/* ARCHIVES
+wrong date because lack of time recording in db
+<MomentDateWithIcon
+    date={userData.updatedAt}
+    msgIfNotValidDate="Nenhuma alteração."
+/>
+*/

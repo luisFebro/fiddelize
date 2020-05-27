@@ -72,7 +72,7 @@ export default function Tooltip({
             textShadow: '1px 1px 3px black',
             width: width ? width : '100%',
             color: color,
-            top: 20,
+            // top: 20,
         },
         popper: {
             zIndex: 4000,

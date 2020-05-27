@@ -3,7 +3,7 @@ import ButtonMulti, { faStyle } from '../../../../../components/buttons/material
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../../utils/form/use-state/handleChange';
-import MomentDateWithIcon from '../../../../../components/date-time/MomentDateWithIcon';
+// import MomentDateWithIcon from '../../../../../components/date-time/MomentDateWithIcon';
 import PropTypes from 'prop-types';
 import { updateUser, readClientAdmin } from '../../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
@@ -63,7 +63,12 @@ export default function HiddenBizDataAndBackup({ userData }) {
     }
 
     const sendDataBackend = () => {
-        const dataToSend = { ...data };
+        const dataToSend = {
+            "clientAdminData.bizName": bizName,
+            "clientAdminData.bizWhatsapp": bizWhatsapp,
+            "clientAdminData.bizCep": bizCep,
+            "clientAdminData.bizAddress": bizAddress,
+        };
         updateUser(dispatch, dataToSend, userData._id)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
@@ -166,10 +171,14 @@ export default function HiddenBizDataAndBackup({ userData }) {
         <div className="hidden-content--root text-normal mt-4">
             {showBackupBtn()}
             {showForm()}
-            <MomentDateWithIcon
-                date={userData.updatedAt}
-                msgIfNotValidDate="Nenhuma alteração."
-            />
         </div>
     );
 }
+
+/* ARCHIVES
+wrong date because lack of time recording in db
+<MomentDateWithIcon
+    date={userData.updatedAt}
+    msgIfNotValidDate="Nenhuma alteração."
+/>
+*/
