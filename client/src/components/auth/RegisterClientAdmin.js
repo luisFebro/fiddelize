@@ -64,7 +64,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [data, setData] = useState({
         role: 'cliente-admin',
         name: '',
-        clientAdminData: { bizName: '', bizCodeName: ''},
+        clientAdminData: { bizName: '', bizCodeName: '', bizWhatsapp: ''},
         email: '',
         phone: '',
         birthday: '',
@@ -108,6 +108,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         }
     }, [clientAdminData.bizName])
 
+    useEffect(() => {
+        phone && setValObjWithStr(data, "clientAdminData.bizWhatsapp", phone);
+    }, [phone])
+
     const clearData = () => {
         setData({
             role: 'cliente-admin',
@@ -138,9 +142,9 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     };
 
     const registerThisUser = e => {
+        clientAdminData.bizWhatsapp = phone;
         const newUser = {
             ...data,
-            "clientAdminData.bizWhatsapp": phone,
         };
 
         showSnackbar(dispatch, 'Registrando... Aguarde um momento.', 'warning', 7000)
