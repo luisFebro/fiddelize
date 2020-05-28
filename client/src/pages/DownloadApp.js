@@ -232,7 +232,7 @@ export default function DownloadApp({ match, location }) {
             <section className="my-5">
                 {icon()}
                 {run && !analysis && (
-                    <p className="animated zoomIn fast text-subtitle font-weight-bold text-white text-center">
+                    <p className="animated rubberBand text-subtitle font-weight-bold text-white text-center">
                         Você já tem instalado o app de {bizName && bizName.cap()}
                         <br />
                         Verifique na sua tela inicial.
