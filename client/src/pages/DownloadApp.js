@@ -49,6 +49,7 @@ export default function DownloadApp({ match, location }) {
     const [run, setRun] = useState(false);
     const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
     const [downloadAvailable, setDownloadAvailable] = useState(false);
+    const [analysis, setAnalysis] = useState(true);
 
     const dispatch = useStoreDispatch();
     const { selfBizLogoImg, selfMilestoneIcon, selfThemePColor, selfThemeSColor, selfThemeBackColor, } = useClientAdmin();
@@ -77,6 +78,9 @@ export default function DownloadApp({ match, location }) {
 
     useEffect(() => {
         checkIfElemIsVisible(".target", setRun, true);
+        if(run) {
+            setTimeout(() => setAnalysis(false), 3000)
+        }
     }, [run])
 
     AOS.init({
@@ -218,19 +222,23 @@ export default function DownloadApp({ match, location }) {
     );
 
     const showAlreadyDownloadedApp = () => {
+        const icon = () => (
+            <div className="container-center">
+                <PhoneIphoneIcon style={{...iconStyle}} />
+            </div>
+        );
         return(
             !downloadAvailable &&
             <section className="my-5">
-                <div className="container-center">
-                    <PhoneIphoneIcon style={{...iconStyle}} />
-                </div>
-                {!run ? (
-                    <p className="text-subtitle font-weight-bold text-white text-center">
+                {icon()}
+                {run && !analysis && (
+                    <p className="animated zoomIn fast text-subtitle font-weight-bold text-white text-center">
                         Você já tem instalado o app de {bizName && bizName.cap()}
                         <br />
                         Verifique na sua tela inicial.
                     </p>
-                ) : (
+                )}
+                {run && analysis && (
                     <p className="text-subtitle font-weight-bold text-white text-center">
                         Analisando...
                     </p>
