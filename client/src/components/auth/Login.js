@@ -140,7 +140,7 @@ function Login({ history, setLoginOrRegister }) {
                 className="animated zoomIn delay-2s p-2 mt-3"
             >
                 <p
-                    className={`${selectTxtStyle(selfThemeBackColor)} d-flex justify-content-center text-small`}
+                    className={`${selectTxtStyle(selfThemeBackColor || 'default')} d-flex justify-content-center text-small`}
                 >
                     <span style={{fontWeight: 'bolder'}}>
                         Novo Cliente?<br/>Faça cadastro{"  "}
