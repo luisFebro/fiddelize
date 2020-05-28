@@ -77,7 +77,7 @@ export default function DownloadApp({ match, location }) {
 
 
     useEffect(() => {
-        checkIfElemIsVisible(".target", setRun, true);
+        checkIfElemIsVisible(".target-download", setRun, true);
         if(run) {
             setTimeout(() => setAnalysis(false), 5000)
         }
@@ -96,6 +96,15 @@ export default function DownloadApp({ match, location }) {
             marginTop: '110px',
         }
     }
+
+    const showMainScrollArray = () => (
+        <div className="margin-auto-90" style={{display: downloadAvailable ? 'block' : 'none', margin: '0 0 300px'}}>
+            <ScrollArrow margin={30} />
+            <div className="target-download">
+                <ScrollArrow margin={5} />
+            </div>
+        </div>
+    );
 
     const showClientAdminText = () => (
         <div className="text-white text-center text-title mt-5">
@@ -136,12 +145,7 @@ export default function DownloadApp({ match, location }) {
                     </p>
                 </Fragment>
             )}
-            <div style={{display: downloadAvailable ? 'block' : 'none', margin: '0 0 300px'}}>
-                <ScrollArrow margin={30} />
-                <div className="target">
-                    <ScrollArrow margin={30} />
-                </div>
-            </div>
+            {showMainScrollArray()}
         </div>
     );
 
@@ -188,12 +192,7 @@ export default function DownloadApp({ match, location }) {
                             <br />
                             é leve e baixa rápido.
                         </p>
-                        <div style={{display: downloadAvailable ? 'block' : 'none', margin: '0 0 300px'}}>
-                            <ScrollArrow margin={30} />
-                            <div id="target">
-                                <ScrollArrow margin={30} />
-                            </div>
-                        </div>
+                        {showMainScrollArray()}
                     </Fragment>
                 )}
             </div>

@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer style={{bottom: 0, marginTop: 'calc(5% + 60px)'}} className="position-relative target theme-p-dark text-s">
+        <footer style={{bottom: 0, marginTop: 'calc(5% + 60px)'}} className="position-relative target-download theme-p-dark text-s">
             <div className="container-center"> {/*n1*/}
                 <div className="text-center py-3">
                     <strong style={{fontSize: '24px'}}>
