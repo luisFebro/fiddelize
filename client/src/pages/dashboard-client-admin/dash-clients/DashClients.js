@@ -2,7 +2,8 @@ import React from 'react';
 import ClientsHistory from './clients-history/ClientsHistory';
 import DashSectionTitle from '../../DashSectionTitle';
 import RankingPondium from './RankingPondium';
-import NotificationArea from './notification-area/NotificationArea';
+// NotificationArea will be embed into the full modal of notification...
+// import NotificationArea from './notification-area/NotificationArea';
 import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
 
 const Title = ({ bizName }) => {
@@ -24,8 +25,6 @@ export default function DashClients() {
             <DashSectionTitle
                 title={<Title bizName={bizName} />}
             />
-            <NotificationArea userName={name} />
-            <hr />
             <RankingPondium />
             <hr />
             <ClientsHistory />
