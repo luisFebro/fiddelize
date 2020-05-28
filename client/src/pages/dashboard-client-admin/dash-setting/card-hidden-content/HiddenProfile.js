@@ -10,6 +10,11 @@ import { updateUser, readUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
 import isValidName from '../../../../utils/validation/isValidName';
+import phoneMaskBr from '../../../../utils/validation/masks/phoneMaskBr';
+import isKeyPressed from '../../../../utils/event/isKeyPressed';
+import validatePhone from '../../../../utils/validation/validatePhone';
+import validateEmail from '../../../../utils/validation/validateEmail';
+
 const isSmall = window.Helper.isSmallScreen();
 
 HiddenProfile.propTypes = {
@@ -25,6 +30,7 @@ export default function HiddenProfile({ userData }) {
         phone: '',
         maritalStatus: '',
     })
+    const [error, setError] = useState('');
 
     useEffect(() => {
         readUser(dispatch, userData._id)
@@ -66,7 +72,9 @@ export default function HiddenProfile({ userData }) {
     }
 
     const sendDataBackend = () => {
-        if(!isValidName(name)) return showSnackbar(dispatch, "O nome deve conter um sobrenome", 'error');
+        if(!isValidName(name)) return showSnackbar(dispatch, "O nome deve conter um sobrenome", 'error', 4000, setError("name"));
+        if(!validatePhone(phone)) return showSnackbar(dispatch, "Formato telefone inválido. Digita o número com DDD ex: (95) 97777-9999", 'error', 4000, setError("phone"))
+        if(!validateEmail(email)) return showSnackbar(dispatch, "Email inválido. Verifique caracteres e tente novamente", 'error', 4000, setError("email"))
 
         const dataToSend = { ...data };
         updateUser(dispatch, dataToSend, userData._id)
@@ -92,7 +100,11 @@ export default function HiddenProfile({ userData }) {
 
     const showForm = () => (
         <div className="container-center mt-5">
-            <form className="animated zoomIn fast shadow-elevation text-white font-weight-bold" onBlur={() => ""} style={styles.form}>
+            <form
+                className="animated zoomIn fast shadow-elevation text-white font-weight-bold"
+                onBlur={() => setError('')}
+                style={styles.form}
+            >
                 <p className="text-shadow text-subtitle font-weight-bold">
                     Atualize informações de Perfil
                 </p>
@@ -105,6 +117,7 @@ export default function HiddenProfile({ userData }) {
                         variant="outlined"
                         onChange={handleChange(setData, data)}
                         fullWidth
+                        error={error === "name" ? true : false}
                         autoComplete="off"
                         type="text"
                         name="name"
@@ -135,6 +148,9 @@ export default function HiddenProfile({ userData }) {
                         InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         onChange={handleChange(setData, data)}
+                        onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
+                        error={error === "phone" ? true : false}
+                        onKeyPress={e => isKeyPressed(e, "Enter") && setData({ ...data, phone: phoneMaskBr(phone)})}
                         autoComplete="off"
                         name="phone"
                         value={phone}
@@ -164,6 +180,7 @@ export default function HiddenProfile({ userData }) {
                         InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         onChange={handleChange(setData, data)}
+                        error={error === "email" ? true : false}
                         autoComplete="off"
                         type="text"
                         name="email"

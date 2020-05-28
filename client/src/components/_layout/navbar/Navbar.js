@@ -101,7 +101,7 @@ function Navbar({ history, location }) {
     const showRoleTitles = () => (
         <ul
             className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center"
-            style={{ display: ["/baixe-app/", "/regulamento", "/cliente/pontos-fidelidade"].some(link => locationNow.includes(link)) ? "none" : "block" }}
+            style={{ display: ["/baixe-app/", "/regulamento", "/cliente/pontos-fidelidade", "/compartilhar-app"].some(link => locationNow.includes(link)) ? "none" : "block" }}
         >
             <li
                 className="nav-item text-subtitle"
@@ -120,7 +120,7 @@ function Navbar({ history, location }) {
         }
     }
 
-    const showLogo = React.useCallback(() => {
+    const showLogo = () => {
         const logoSrc =  handleLogoSrc();
         const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
@@ -140,7 +140,7 @@ function Navbar({ history, location }) {
         return(
             <Link to={isThisApp() ? "/mobile-app" : "/"}>
                 <ImgLoader
-                    className={`${isAuthUser ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                    className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
                     style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '5px' : '20px'}}
                     src={logoSrc}
                     alt="Logomarca Principal"
@@ -149,7 +149,7 @@ function Navbar({ history, location }) {
                 />
             </Link>
         );
-    }, []);
+    };
 
     // Render
     return (

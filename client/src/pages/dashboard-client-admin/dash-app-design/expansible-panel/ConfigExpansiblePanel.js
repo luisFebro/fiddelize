@@ -116,6 +116,7 @@ export default function ConfigExpansiblePanel({
                 >
                     <ExpansionPanel
                         style={styles.expansionPanel}
+                        TransitionProps={{ unmountOnExit: true }}
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}

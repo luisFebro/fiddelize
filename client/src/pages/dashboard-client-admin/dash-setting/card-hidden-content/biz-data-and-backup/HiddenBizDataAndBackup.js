@@ -9,6 +9,9 @@ import { updateUser, readClientAdmin } from '../../../../../redux/actions/userAc
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
 import BackUpToExcel from './BackUpToExcel';
+import phoneMaskBr from '../../../../../utils/validation/masks/phoneMaskBr';
+import isKeyPressed from '../../../../../utils/event/isKeyPressed';
+import validatePhone from '../../../../../utils/validation/validatePhone';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -24,6 +27,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
         bizCep: '',
         bizAddress: '',
     })
+    const [error, setError] = useState('');
 
     const { bizName, bizWhatsapp, bizCep, bizAddress } = data;
 
@@ -64,6 +68,8 @@ export default function HiddenBizDataAndBackup({ userData }) {
     }
 
     const sendDataBackend = () => {
+        if(!validatePhone(bizWhatsapp)) return showSnackbar(dispatch, "Formato telefone inválido. Digita o número com DDD ex: (95) 97777-9999", 'error', 4000, setError("phone"));
+
         const dataToSend = {
             "clientAdminData.bizName": bizName,
             "clientAdminData.bizWhatsapp": bizWhatsapp,
@@ -93,7 +99,11 @@ export default function HiddenBizDataAndBackup({ userData }) {
 
     const showForm = () => (
         <div className="container-center mt-5">
-            <form className="animated zoomIn fast shadow-elevation text-white font-weight-bold" onBlur={() => ""} style={styles.form}>
+            <form
+                className="animated zoomIn fast shadow-elevation text-white font-weight-bold"
+                onBlur={() => setError('')}
+                style={styles.form}
+            >
                 <p className="text-shadow text-subtitle font-weight-bold">
                     Atualize Dados Comerciais
                 </p>
@@ -120,6 +130,9 @@ export default function HiddenBizDataAndBackup({ userData }) {
                         InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         fullWidth
+                        onKeyPress={e => isKeyPressed(e, "Enter") && setData({ ...data, bizWhatsapp: phoneMaskBr(bizWhatsapp)})}
+                        onBlur={() => setData({ ...data, bizWhatsapp: phoneMaskBr(bizWhatsapp)})}
+                        error={error === "phone" ? true : false}
                         autoComplete="off"
                         onChange={handleChange(setData, data)}
                         name="bizWhatsapp"

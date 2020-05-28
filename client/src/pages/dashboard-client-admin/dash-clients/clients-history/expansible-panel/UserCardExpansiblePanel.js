@@ -159,6 +159,7 @@ export default function UserCardExpansiblePanel({
                     className="position-relative"
                 >
                     <ExpansionPanel
+                        TransitionProps={{ unmountOnExit: true }}
                         className="disabledLink"
                         style={styles.expansionPanel}
                     >

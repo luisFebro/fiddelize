@@ -58,6 +58,7 @@ export default function ExpansiblePanel({ actions }) {
                     key={panel.id}
                     expanded={expanded === `panel${panel.id}`}
                     onChange={handleChange(`panel${panel.id}`)}
+                    TransitionProps={{ unmountOnExit: true }}
                 >
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}

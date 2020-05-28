@@ -178,7 +178,7 @@ const ContactComp = () => {
     return(
         <Fragment>
             {showTitle()}
-            <div className="mx-4">
+            <div className="container-center mx-3">
                 <ImgLoader
                     className="app_chat_illustra img-fluid"
                     src={imgLib.app_chat_illustra}
