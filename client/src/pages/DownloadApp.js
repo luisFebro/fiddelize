@@ -219,20 +219,20 @@ export default function DownloadApp({ match, location }) {
 
     const showAlreadyDownloadedApp = () => {
         return(
-            !downloadAvailable &&
+            !downloadAvailable
             <section className="my-5">
                 <div className="container-center">
                     <PhoneIphoneIcon style={{...iconStyle}} />
                 </div>
                 {!run ? (
                     <p className="text-subtitle font-weight-bold text-white text-center">
-                        Analisando app...
-                    </p>
-                ) : (
-                    <p className="text-subtitle font-weight-bold text-white text-center">
                         Você já tem instalado o app de {bizName && bizName.cap()}
                         <br />
                         Verifique na sua tela inicial.
+                    </p>
+                ) : (
+                    <p className="text-subtitle font-weight-bold text-white text-center">
+                        Analisando...
                     </p>
                 )}
             </section>
