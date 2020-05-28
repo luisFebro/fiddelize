@@ -48,7 +48,8 @@ function ClientUserAppContent({
     const currScoreRef = useRef(null);
 
     let { role, name } = useProfile();
-    name = needAppForPreview ? name : getFirstName(name);
+    name ? name = getFirstName(name) : name = "cliente";
+
     const { currScore, lastScore, } = useClientUser();
     let { maxScore, bizCodeName, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
 

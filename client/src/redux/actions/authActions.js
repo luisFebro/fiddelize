@@ -46,6 +46,7 @@ export const loginEmail = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post('/api/auth/login', objToSend, getHeaderJson);
+        console.log("res", res);
 
         readCliAdmin(dispatch, res.data.role, {userId: res.data.authUserId, bizId: res.data.bizId })
         readCentralAdmin(dispatch);
@@ -57,6 +58,7 @@ export const loginEmail = async (dispatch, objToSend) => {
 
         return res;
     } catch (err) {
+        console.log("err" + err)
         dispatch({
             type: 'LOGIN_ERROR'
         });
