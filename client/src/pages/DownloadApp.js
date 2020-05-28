@@ -132,7 +132,7 @@ export default function DownloadApp({ match, location }) {
                     </p>
                 </Fragment>
             )}
-            <div style={{display: downloadAvailable ? true : false, margin: '0 0 300px'}}>
+            <div style={{display: downloadAvailable ? 'block' : 'none', margin: '0 0 300px'}}>
                 <ScrollArrow margin={30} />
                 <div className="target">
                     <ScrollArrow margin={30} />
@@ -184,7 +184,7 @@ export default function DownloadApp({ match, location }) {
                             <br />
                             é leve e baixa rápido.
                         </p>
-                        <div style={{display: downloadAvailable ? true : false, margin: '0 0 300px'}}>
+                        <div style={{display: downloadAvailable ? 'block' : 'none', margin: '0 0 300px'}}>
                             <ScrollArrow margin={30} />
                             <div id="target">
                                 <ScrollArrow margin={30} />
@@ -239,7 +239,6 @@ export default function DownloadApp({ match, location }) {
             {isLinkInvalid
             ? errorMsg()
             : (
-                downloadAvailable &&
                 <div id="holder" className="text-white gradient-animation" style={{minHeight: '325vmin'}}>
                     {isClientAdmin
                     ? showClientAdminText()
