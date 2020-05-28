@@ -23,9 +23,10 @@ import { deleteImage } from '../../utils/storage/lForage';
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
     let { roleWhichDownloaded } = useAppSystem();
-    if(!isThisApp()) {
-        roleWhichDownloaded = "";
-    }
+    // disable restriction of user during early estages of tests.
+    roleWhichDownloaded = "";
+    // if(!isThisApp()) {
+    // }
 
     const { selfThemeSColor, selfThemePColor, selfThemeBackColor } = useClientAdmin();
 
