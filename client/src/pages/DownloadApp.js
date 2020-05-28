@@ -12,6 +12,7 @@ import lStorage, { setSystemOp, needAppRegisterOp } from '../utils/storage/lStor
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../redux/actions/snackbarActions';
 import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
+import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -46,9 +47,10 @@ export default function DownloadApp({ match, location }) {
     let [userName, setUserName] = useState(match.params.userName);
     userName = userName && userName.replace(/\+/g, " ");
     const [run, setRun] = useState(false);
+    const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
+    const [downloadAvailable, setDownloadAvailable] = useState(false);
 
     const dispatch = useStoreDispatch();
-    const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
     const { selfBizLogoImg, selfMilestoneIcon, selfThemePColor, selfThemeSColor, selfThemeBackColor, } = useClientAdmin();
 
     if(needSelfServiceData) {
@@ -74,11 +76,11 @@ export default function DownloadApp({ match, location }) {
 
 
     useEffect(() => {
-        checkIfElemIsVisible("#target", setRun, true);
+        checkIfElemIsVisible(".target", setRun, true);
     }, [run])
 
     AOS.init({
-        offset: 50,
+        offset: 10,
     });
 
     const styles = {
@@ -130,9 +132,9 @@ export default function DownloadApp({ match, location }) {
                     </p>
                 </Fragment>
             )}
-            <div style={{margin: '0 0 500px'}}>
+            <div style={{margin: '0 0 300px'}}>
                 <ScrollArrow margin={30} />
-                <div id="target">
+                <div className="target">
                     <ScrollArrow margin={30} />
                 </div>
             </div>
@@ -215,11 +217,29 @@ export default function DownloadApp({ match, location }) {
 
     );
 
+    const showAlreadyDownloadedApp = () => {
+        return(
+            !downloadAvailable &&
+            <section className="my-5">
+                <div className="container-center">
+                    <PhoneIphoneIcon style={{...iconStyle}} />
+                </div>
+                <p className="text-subtitle font-weight-bold text-white text-center">
+                    Você já tem instalado o app de {bizName && bizName.cap()}
+                    <br />
+                    Verifique na sua tela inicial.
+                </p>
+            </section>
+        );
+    }
+
+    const isLinkInvalid = !bizName || !bizId || !isValidRoleType;
     return (
         <Fragment>
-            {!bizName || !bizId || !isValidRoleType
+            {isLinkInvalid
             ? errorMsg()
             : (
+                downloadAvailable &&
                 <div id="holder" className="text-white gradient-animation" style={{minHeight: '325vmin'}}>
                     {isClientAdmin
                     ? showClientAdminText()
@@ -231,9 +251,11 @@ export default function DownloadApp({ match, location }) {
                         }
                         icon={`${CLIENT_URL}/img/official-logo-white.png`}
                         run={run}
+                        setDownloadAvailable={setDownloadAvailable}
                     />
                 </div>
             )}
+            {!isLinkInvalid && showAlreadyDownloadedApp()}
         </Fragment>
     );
 }

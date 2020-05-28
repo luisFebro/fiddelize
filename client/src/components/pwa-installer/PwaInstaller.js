@@ -23,10 +23,14 @@ function closeWindow() {
 
 
 let deferredPrompt = null;
-export default function PwaInstaller({ title, icon, run = true }) { // A2HS = App to HomeScreen
+export default function PwaInstaller({ title, icon, run = true, setDownloadAvailable }) { // A2HS = App to HomeScreen
     const [bannerVisible, setBannerVisible] = useState(false);
 
     const shouldRender = run && bannerVisible && !isThisApp();
+
+    useEffect(() => {
+        if(bannerVisible) { setDownloadAvailable(true); }
+    }, [bannerVisible])
 
     const dispatch = useStoreDispatch();
 
