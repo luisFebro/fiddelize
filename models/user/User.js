@@ -111,8 +111,8 @@ const clientAdminData = {
     // end premium plans
 
     // address
-    bizCep: Number, // NOT IMPLEMENTED YET (only in dash optional)
-    bizAddress: Number, // NOT IMPLEMENTED YET (only in dash optional)
+    bizCep: String, // NOT IMPLEMENTED YET - change to number when using this later (only in dash optional)
+    bizAddress: { type: String, lowercase: true, trim: true }, // NOT IMPLEMENTED YET (only in dash optional)
     // end address
 
     // self-service

@@ -171,7 +171,7 @@ function GoalForm({
                     </div>
                 </div>
                 <div className={`animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold ${handleShowCurrField("field2") ? "d-block" : "d-none"}`}>
-                    <p>Qual é a descrição do prêmio?</p>
+                    <p>Qual é a descrição do prêmio principal?</p>
                     <div className="position-relative">
                         <TextField
                             id="field2"

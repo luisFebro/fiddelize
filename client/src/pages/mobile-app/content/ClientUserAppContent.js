@@ -192,7 +192,7 @@ function ClientUserAppContent({
     );
 
     const showSkipIconsBtn = () => (
-        currScore >= 50 && !showMoreComps &&
+        currScore >= 30 && !showMoreComps &&
         <div
             className="position-relative container-center animated zoomIn delay-2s"
             style={{top: '-35px'}}

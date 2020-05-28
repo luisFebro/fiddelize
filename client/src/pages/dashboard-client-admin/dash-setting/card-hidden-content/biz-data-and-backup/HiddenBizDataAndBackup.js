@@ -17,6 +17,7 @@ HiddenBizDataAndBackup.propTypes = {
 }
 
 export default function HiddenBizDataAndBackup({ userData }) {
+    console.log("userData", userData);
     const [data, setData] = useState({
         bizName: '',
         bizWhatsapp: '',
@@ -72,7 +73,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
         updateUser(dispatch, dataToSend, userData._id)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            showSnackbar(dispatch, "Seu perfil foi atualizado!", 'success');
+            showSnackbar(dispatch, "Dados comerciais atualizados!", 'success');
         })
     }
 

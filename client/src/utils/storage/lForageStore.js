@@ -38,7 +38,7 @@ const imgLib = {
     get app_start_shape_yellow() { return handleStorage("shapes", "app_start_shape_yellow", `img/shapes/blob-app-start--yellow.svg`) },
     // Illustration
     get app_chat_illustra() { return handleStorage("illustrations", "app_chat_illustra", `img/illustrations/online-chat.svg`) },
-    get app_empty_purchase_illustra() { return handleStorage("illustrations", "app_empty_purchase_illustra", `img/illustrations/online-chat.svg`) },
+    get app_empty_purchase_illustra() { return handleStorage("illustrations", "app_empty_purchase_illustra", `img/illustrations/empty-woman-card.svg`) },
     get dash_no_search_illustra() { return handleStorage("illustrations", "dash_no_search_illustra", `img/illustrations/empty-search.svg`) },
 }
 
@@ -48,9 +48,6 @@ export { ImgLoader }
 // requires declare className to the img.
 // The same name as the key. Priorly it was an ID, but there were issues when more then one src is need
 function handleStorage(coll, key, url, isFromInternet = false) {
-    console.log("isFromInternet", isFromInternet);
-    console.log("url", url);
-    console.log("CLIENT_URL", CLIENT_URL);
     const urlPath = isFromInternet ? url : `${CLIENT_URL}/${url}`;
 
     const readThisImage = () => readImage(coll, key)

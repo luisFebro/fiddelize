@@ -72,7 +72,7 @@ export default function CarouselFlickity({
         // g (delaying function execution) to delay by 2 second to avoid crash app.
         const condRunSelect = isFromDash ? (!iconReady) : true;
         flkty.on('change', index => setTimeout(() => condRunSelect && setIconSelected(data[index].icon), 1000));
-        setTimeout(() =>  !iconReady && currIconInd && flkty.selectCell((currIconInd), false, false), 2000);
+        setTimeout(() =>  !iconReady && currIconInd && flkty.selectCell((currIconInd), false, false), 3000);
     }
 
     // const dataFlickity = Flickity.data(elem)
