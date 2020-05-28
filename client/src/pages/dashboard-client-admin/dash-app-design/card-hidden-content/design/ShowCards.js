@@ -41,7 +41,7 @@ export default function ShowCards({ setOpenComp }) {
                         height={isSquared ? 100 : 85}
                     />
                 ) : (
-                    <p className="text-normal text-center text-purple">
+                    <p className="text-normal font-weight-bold text-center text-purple">
                         Sem logo
                     </p>
                 )}

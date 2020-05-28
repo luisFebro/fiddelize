@@ -45,7 +45,7 @@ export default function HiddenGoalsAndRewards() {
         <br />
         > Progressivo
         <br />
-        Descrição: Define mais opções de prêmios para uma sequência de desafios com metas progressivas. Ideal para uma lista de prêmios.
+        Descrição: Define mais opções de prêmios para uma sequência de desafios com metas progressivas. Ideal para uma lista de prêmios. É ativado automaticamente ao adicionar mais desafios.
         <br />
         <br />
         Exemplo Prático: Um salão de beleza oferece 3 prêmios:
@@ -53,9 +53,9 @@ export default function HiddenGoalsAndRewards() {
         - prêmio 1: ganha 1 corte de cabelo unissex
         para 200 pontos.
         <br />
-        - prêmio 2: ganha massagem + hidratação para mais 300 pontos. (500 pontos acumulado)
+        - prêmio 2: ganha massagem + hidratação para mais 300 pontos. (500 pontos acumulados)
         <br />
-        - prêmio 3: ganha corte de cabelo + massage + hidratação para mais 400 pontos (900 pontos acumulado)
+        - prêmio 3: ganha corte de cabelo + massage + hidratação para mais 400 pontos (900 pontos acumulados)
         <br />
         <br />
         O cliente que finalizar um desafio, tem sua pontuação atual (fidelidômetro) zerado, porém no seu histórico de compras é acumulativo e sempre registrado
