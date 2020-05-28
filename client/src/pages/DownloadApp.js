@@ -79,7 +79,7 @@ export default function DownloadApp({ match, location }) {
     useEffect(() => {
         checkIfElemIsVisible(".target", setRun, true);
         if(run) {
-            setTimeout(() => setAnalysis(false), 3000)
+            setTimeout(() => setAnalysis(false), 5000)
         }
     }, [run])
 
