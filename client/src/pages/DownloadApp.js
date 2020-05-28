@@ -219,7 +219,7 @@ export default function DownloadApp({ match, location }) {
 
     const showAlreadyDownloadedApp = () => {
         return(
-            !downloadAvailable
+            !downloadAvailable &&
             <section className="my-5">
                 <div className="container-center">
                     <PhoneIphoneIcon style={{...iconStyle}} />
