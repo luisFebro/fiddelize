@@ -239,7 +239,7 @@ export default function DownloadApp({ match, location }) {
             {isLinkInvalid
             ? errorMsg()
             : (
-                <div id="holder" className="text-white gradient-animation" style={{minHeight: '325vmin'}}>
+                <section>
                     {isClientAdmin
                     ? showClientAdminText()
                     : showClientUserText()}
@@ -253,7 +253,7 @@ export default function DownloadApp({ match, location }) {
                         setDownloadAvailable={setDownloadAvailable}
                     />
                     {showAlreadyDownloadedApp()}
-                </div>
+                </section>
             )}
         </Fragment>
     );
