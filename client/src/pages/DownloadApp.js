@@ -224,11 +224,17 @@ export default function DownloadApp({ match, location }) {
                 <div className="container-center">
                     <PhoneIphoneIcon style={{...iconStyle}} />
                 </div>
-                <p className="text-subtitle font-weight-bold text-white text-center">
-                    Você já tem instalado o app de {bizName && bizName.cap()}
-                    <br />
-                    Verifique na sua tela inicial.
-                </p>
+                {!run ? (
+                    <p className="text-subtitle font-weight-bold text-white text-center">
+                        Analisando app...
+                    </p>
+                ) : (
+                    <p className="text-subtitle font-weight-bold text-white text-center">
+                        Você já tem instalado o app de {bizName && bizName.cap()}
+                        <br />
+                        Verifique na sua tela inicial.
+                    </p>
+                )}
             </section>
         );
     }
