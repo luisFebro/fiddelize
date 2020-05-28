@@ -239,7 +239,7 @@ export default function DownloadApp({ match, location }) {
             {isLinkInvalid
             ? errorMsg()
             : (
-                <section>
+                <section className="text-white">
                     {isClientAdmin
                     ? showClientAdminText()
                     : showClientUserText()}
