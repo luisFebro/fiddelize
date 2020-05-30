@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import RegisterClientAdmin from '../components/auth/RegisterClientAdmin';
+import AsyncRegisterClientAdmin from '../components/auth/AsyncRegisterClientAdmin';
 import ScrollArrow from '../keyframes/built/scroll-arrow/ScrollArrow';
 import { Link } from 'react-router-dom';
 import AOS from 'aos';
@@ -71,14 +71,14 @@ export default function Home() {
     return(
         <Fragment>
             <span className="text-right text-white for-version-test">
-                {"T65"}
+                {"T66"}
             </span>
             {showSlogon()}
             <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />
             </div>
             {showAppShowCase()}
-            <RegisterClientAdmin />
+            <AsyncRegisterClientAdmin />
         </Fragment>
     );
 };
