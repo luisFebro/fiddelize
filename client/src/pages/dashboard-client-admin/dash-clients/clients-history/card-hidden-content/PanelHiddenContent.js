@@ -49,7 +49,7 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
             className="text-normal enabledLink panel-hidden-content--root"
         >
             {showInfos()}
-            <div className="animated flipInY slow delay-3s">
+            <div className="animated flipInY slow delay-1s">
                 <ActionBtns data={data} needBadgeForTestMode={needBadgeForTestMode} />
             </div>
         </div>

@@ -18,8 +18,8 @@ import './libraries/fontAwesomeLib';
 // import { loadReCaptcha } from 'react-recaptcha-google';
 
 // UIs
-import Website from './user-interfaces/Website';
-import MobileApp from './user-interfaces/MobileApp';
+import AsyncWebsite from './user-interfaces/AsyncWebsite';
+import AsyncMobileApp from './user-interfaces/AsyncMobileApp';
 //END UIs
 let run = true;
 export default function App() {
@@ -58,7 +58,7 @@ export default function App() {
         <BrowserRouter>
             <ScrollToTop>
                 <div>
-                    {isThisApp() ? <MobileApp /> : <Website />}
+                    {isThisApp() ? <AsyncMobileApp /> : <AsyncWebsite />}
                 </div>
             </ScrollToTop>
         </BrowserRouter>

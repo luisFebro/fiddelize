@@ -54,7 +54,7 @@ export default function RadiusBtn({
     return (
         <button
             className={className + `text-small ${needTxtShadow ? 'text-shadow' : ''} font-weight-bold cursor-pointer`}
-            style={styles.btn}
+            style={{...styles.btn, borderWidth: 2, borderStyle: 'outset', borderColor: 'white',}}
             onClick={onClick}
             type='button'
         >

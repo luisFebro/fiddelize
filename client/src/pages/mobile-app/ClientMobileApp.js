@@ -48,8 +48,10 @@ function ClientMobileApp({ location, history }) {
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
 
     useEffect(() => {
-        countField(_id, { field: "clientUserData.totalVisits" })
-    }, [_id])
+        if(role === "cliente") {
+            countField(_id, { field: "clientUserData.totalVisits" })
+        }
+    }, [_id, role])
 
     useEffect(() => {
         if(runName === "logout") {
@@ -186,7 +188,7 @@ function ClientMobileApp({ location, history }) {
             <span className={`${selectTxtStyle(selfThemeBackColor)} font-weight-bold`}>
                 Conectado por
                 <br/>
-                <strong className="text-title animated bounce">{name}</strong><br />
+                <strong className="text-title animated bounce">{name ? name : "..."}</strong><br />
             </span>
             <div className="container-center mt-4">
                 <Link

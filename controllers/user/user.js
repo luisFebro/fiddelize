@@ -335,7 +335,7 @@ exports.countField = (req, res) => {
     const { field, type } = req.body;
 
     if(!field) return res.status(400).json({msg: "A field from DB should be specified and sent inside object"})
-    // default is ascendent
+    // default is "asc" or "inc" which does not need to bespecified.
     let countingField = { [field]: 1 };
     if(type === "dec") {
         countingField = { [field]: -1 };

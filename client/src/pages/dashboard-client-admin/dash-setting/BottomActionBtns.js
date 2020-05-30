@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import ButtonFab, { faStyleSmall } from '../../../components/buttons/material-ui/ButtonFab';
 import ButtonMulti, {faStyle} from '../../../components/buttons/material-ui/ButtonMulti';
@@ -61,6 +61,7 @@ function BottomActionBtns({ history }) {
                 contentComp={<ContactComp />}
                 fullOpen={fullOpen}
                 setFullOpen={setFullOpen}
+                animatedClass=" "
             />
         </section>
     );
@@ -69,10 +70,16 @@ function BottomActionBtns({ history }) {
 export default withRouter(BottomActionBtns);
 
 const ContactComp = () => {
+    console.log("contact")
     const { mainSalesWhatsapp, mainTechWhatsapp } = useCentralAdmin();
     const [openThisComp, setOpenThisComp] = useState("");
     const [hideMain, setHideMain] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
+
+    useEffect(() => {
+        const imgSrc = imgLib.app_chat_illustra;
+        console.log("imgSrc", imgSrc);
+    }, [])
 
     const showTitle = () => (
         <div className="my-4">
@@ -181,7 +188,6 @@ const ContactComp = () => {
             <div className="container-center mx-3">
                 <ImgLoader
                     className="app_chat_illustra img-fluid"
-                    src={imgLib.app_chat_illustra}
                     height="auto"
                     style={{maxHeight: !isSmall ? '210px' : '220px', width: '100%'}}
                     alt="chat online"

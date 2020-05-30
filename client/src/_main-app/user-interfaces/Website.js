@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
 
 //LAYOUT
 import Navbar from '../../components/_layout/navbar';
@@ -14,13 +13,11 @@ import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
 
 // PAGES
-// import Home from '../../pages/Home';
-// import LoginPage from '../../pages/LoginPage';
 import Home from '../../pages/Home';
+import LoginPage from '../../pages/LoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
-import Loadable from 'react-loadable';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
 import DownloadApp from '../../pages/DownloadApp';
@@ -30,20 +27,7 @@ import AppSharer from '../../pages/app-sharer/AppSharer';
 import SelfServicePage from '../../pages/new-app/self-service/SelfServicePage';
 import PlansPage from '../../pages/plans-page/PlansPage';
 import RedirectLink from '../../pages/RedirectLink';
-// DYNAMIC ASYNC IMPORT - Preloading a lazy component without blocking rendering by calling import outside lazy function.
-const ClientAppPreview = import(/* webpackChunkName: "client-app-preview" */ '../../pages/mobile-app/ClientAppPreview');
-// const LoginPage = import(/* webpackChunkName: "login-page" */ '../../pages/LoginPage');
-// END DYNAMIC ASYNC IMPORT
-
-
-const ClientAppPreviewLazy = React.lazy(() => ClientAppPreview);
-const LoginPageLazy = React.lazy(() => import(/* webpackChunkName: "login-page" */ '../../pages/LoginPage')); // magic comments do not work with React.lazy
-// const LoginPageLazy = Loadable({
-    // loader: () => import(/* webpackChunkName: "login-page-lazy" */ '../../pages/LoginPage'),
-    // loading() {
-        // return <FullPageLoading />
-    // }
-// })
+import ClientAppPreview from '../../pages/mobile-app/ClientAppPreview';
 //END PAGES
 
 function Website({ location }) {
@@ -56,26 +40,24 @@ function Website({ location }) {
             <LinearProgress />
             {dontNeedLayout &&
             <Navbar />}
-            <React.Suspense fallback={<div>...</div>}>
-                <Switch>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/acesso/verificacao" exact component={LoginPageLazy} />
-                    <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
-                    <Route path="/regulamento" exact component={RegulationPage} />
-                    <Route path="/baixe-app/:userName" exact component={DownloadApp} />
-                    <Route path="/baixe-app" exact component={DownloadApp} />
-                    <Route path="/:bizCodeName/novo-app" exact component={IntroPage} />
-                    <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={SelfServicePage} />
-                    <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
-                    <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
-                    <Route path="/planos" exact component={PlansPage} />
-                    <Route path="/mobile-app/preview" component={ClientAppPreviewLazy} />
-                    <Route path="/app/:nameAndCode" component={RedirectLink} />
-                    <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
-                    <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
-                    <Route component={Default} />
-                </Switch>
-            </React.Suspense>
+            <Switch>
+                <Route path="/" exact component={Home} />
+                <Route path="/acesso/verificacao" exact component={LoginPage} />
+                <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
+                <Route path="/regulamento" exact component={RegulationPage} />
+                <Route path="/baixe-app/:userName" exact component={DownloadApp} />
+                <Route path="/baixe-app" exact component={DownloadApp} />
+                <Route path="/:bizCodeName/novo-app" exact component={IntroPage} />
+                <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={SelfServicePage} />
+                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
+                <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
+                <Route path="/planos" exact component={PlansPage} />
+                <Route path="/mobile-app/preview" component={ClientAppPreview} />
+                <Route path="/app/:nameAndCode" component={RedirectLink} />
+                <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
+                <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
+                <Route component={Default} />
+            </Switch>
             <SnackbarMulti />
             {dontNeedLayout &&
             <Footer />}

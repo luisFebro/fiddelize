@@ -42,6 +42,7 @@ export default function ActionBtns({ data, needBadgeForTestMode }) {
 
 const showDiscountBtn = (data, clientAdminData) => {
     const currScore = data.clientUserData && data.clientUserData.currScore;
+    const totalChallenges = data.clientUserData && data.clientUserData.totalPurchasePrize + 1;
     const rewardScore = clientAdminData.rewardScore;
     return(
         <div>
@@ -56,15 +57,15 @@ const showDiscountBtn = (data, clientAdminData) => {
                 }}
                 modalData={{
                     title: "Desconto de Pontos<br />do Cliente",
-                    subTitle: currScore >= rewardScore
-                    ? `Esse cliente chegou lá!<br />${data.name.cap()}<br />ATINGIU a meta de ${rewardScore} Pontos 🎉`
-                    : `Cliente<br />${data.name.cap()}<br/>ainda NÃO ATINGIU a meta de ${rewardScore} Pontos`,
+                    subTitle: null,
                     labelTxtField: "Valor para ser descontado:",
                     txtBtn: "Descontar",
                     iconBtn: <FontAwesomeIcon icon="minus-circle" />,
                     userCurrScore: currScore,
+                    name: data.name.cap(),
                     rewardScore: rewardScore,
                     userId: data._id,
+                    totalChallenges: totalChallenges,
                 }}
             />
         </div>

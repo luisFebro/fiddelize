@@ -20,7 +20,6 @@ HiddenBizDataAndBackup.propTypes = {
 }
 
 export default function HiddenBizDataAndBackup({ userData }) {
-    console.log("userData", userData);
     const [data, setData] = useState({
         bizName: '',
         bizWhatsapp: '',

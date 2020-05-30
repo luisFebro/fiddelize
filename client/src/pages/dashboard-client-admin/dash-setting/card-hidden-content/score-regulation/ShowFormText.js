@@ -29,8 +29,6 @@ function RegulationText({ generateRegulation }) {
 
     const { businessId } = useAppSystem();
 
-    console.log("regulation", regulation);
-
     const init = regulation => {
         setData({ ...data, regulationText: regulation && regulation.text });
     }

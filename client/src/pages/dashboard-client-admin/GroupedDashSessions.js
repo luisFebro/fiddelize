@@ -3,41 +3,23 @@ import PropTypes from 'prop-types';
 import isSmallScreen from '../../utils/isSmallScreen';
 // material-ui
 import TabSessions from '../../components/TabSessions';
-import DashClients from './dash-clients';
 // Icons from Tabs
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-import Loadable from 'react-loadable';
 import { useStoreState } from 'easy-peasy';
-import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
-// temp
-import DashAppDesign from './dash-app-design';
-// End Material UI
+import { AsyncDashClients, AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
+
 const muStyle = {
     fontSize: 35,
 }
-
-const DashAppDesignLazy = Loadable({
-    loader: () => import(/* webpackChunkName: "dash-setting-lazy"*/ "./dash-app-design"),
-    loading() {
-        return <FullPageLoading />;
-    }
-})
-
-const DashSettingLazy = Loadable({
-    loader: () => import(/* webpackChunkName: "dash-setting-lazy"*/ "./dash-setting"),
-    loading() {
-        return <FullPageLoading />;
-    }
-})
 
 let data;
 const dataTab1 = [
     {
         tabLabel: "Clientes",
         tabIcon: <PermContactCalendarIcon style={muStyle} />,
-        tabContentPanel: <DashClients />,
+        tabContentPanel: <AsyncDashClients />,
     },
     {
         tabLabel: "App",
@@ -61,7 +43,7 @@ const dataTab2 = [
     {
         tabLabel: "App",
         tabIcon: <PhonelinkSetupIcon style={muStyle} />,
-        tabContentPanel: <DashAppDesign />,
+        tabContentPanel: <AsyncDashAppDesign />,
         boxPadding: 1,
     },
     {
@@ -87,7 +69,7 @@ const dataTab3 = [
     {
         tabLabel: "Ajustes",
         tabIcon: <BuildIcon style={muStyle} />,
-        tabContentPanel: <DashSettingLazy />,
+        tabContentPanel: <AsyncDashSetting />,
         boxPadding: 1,
     },
 ]

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStoreDispatch } from 'easy-peasy';
 import { readHighestScores } from '../../../../../../../redux/actions/userActions';
 import isMoneyBrValidAndAlert from '../../../../../../../utils/numbers/isMoneyBrValidAndAlert';
@@ -22,7 +22,8 @@ import animateCSS from '../../../../../../../utils/animateCSS';
 import { fluidTextAlign } from '../../../../../../../utils/string/fluidTextAlign';
 import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
 import { readUserList } from '../../../../../../../redux/actions/userActions';
-import { useAppSystem } from '../../../../../../../hooks/useRoleData';
+import { useAppSystem, useClientAdmin } from '../../../../../../../hooks/useRoleData';
+import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -42,10 +43,11 @@ export default function ModalTextField({
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
+    const { rewardList } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
-    const {
+    let {
         title,
         subTitle,
         txtBtn,
@@ -53,9 +55,26 @@ export default function ModalTextField({
         labelTxtField,
         userId,
         userCurrScore,
-        rewardScore, } = modalData;
+        rewardScore,
+        totalChallenges,
+        name, } = modalData;
+
+    const pickedObj = pickCurrChallData(rewardList, totalChallenges - 1);
+    rewardScore = pickedObj["rewardScore"]
+    // useEffect(() => {
+    //     if(rewardList) {
+    //         const pickedObj = pickCurrChallData(rewardList, totalChallenges - 1);
+    //         rewardScore = pickedObj["rewardScore"]
+    //     }
+    // }, [rewardList, totalChallenges])
 
     const userBeatScore = userCurrScore >= rewardScore;
+    useEffect(() => {
+        if(userCurrScore >= rewardScore) {
+            const leftValue = userCurrScore - rewardScore;
+            setData({ ...data, remainValue: leftValue.toString() })
+        }
+    }, [userCurrScore, rewardScore])
 
     const styles = {
         form: {
@@ -78,17 +97,18 @@ export default function ModalTextField({
     }
 
     const handleSubmit = () => {
-        if(parseFloat(remainValue) < 0){
-            showSnackbar(dispatch, "O valor do desconto é maior que o total de pontos do cliente. Digite valor menor", "error", 7000);
-            setGotError(true); return;
-        }
+        // if(parseFloat(remainValue) < 0){
+        //     showSnackbar(dispatch, "O valor do desconto é maior que o total de pontos do cliente. Digite valor menor", "error", 7000);
+        //     setGotError(true); return;
+        // }
 
-        if(!isMoneyBrValidAndAlert(valueOnField, showSnackbar, dispatch)) {
-            setGotError(true); return;
-        }
+        // if(!isMoneyBrValidAndAlert(valueOnField, showSnackbar, dispatch)) {
+        //     setGotError(true); return;
+        // }
 
         const bodyToSend = {
             "clientUserData.currScore": parseFloat(remainValue),
+            "clientUserData.totalPurchasePrize": totalChallenges,
         }
 
         updateUser(dispatch, bodyToSend, userId, false)
@@ -96,17 +116,17 @@ export default function ModalTextField({
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             onClose();
             const initialSkip = 0;
-            readUserList(dispatch, initialSkip, "cliente", "", businessId)
+        readUserList(dispatch, initialSkip, "cliente", "", businessId)
             showSnackbar(dispatch, `Os pontos de fidelidade do cliente foram descontados com sucesso`, 'success', 8000)
             setTimeout(() => readHighestScores(dispatch, businessId), 3000);
         })
     };
 
-    const handleChange = (setObj, obj) => e => {
-        const { name, value } = e.target;
-        let remainingValue = parseFloat(userCurrScore - convertCommaToDot(value))
-        setObj({ valueOnField: value, remainValue: convertCommaToDot(remainingValue).toString() });
-    }
+    // const handleChange = (setObj, obj) => e => {
+    //     const { name, value } = e.target;
+    //     let remainingValue = parseFloat(userCurrScore - convertCommaToDot(value))
+    //     setObj({ valueOnField: value, remainValue: convertCommaToDot(remainingValue).toString() });
+    // }
 
     const showTitle = () => (
         <div className="mt-4 mb-3 margin-auto-90 text-center">
@@ -124,39 +144,63 @@ export default function ModalTextField({
             <p
                 className={`${userBeatScore ? "text-sys-green" : 'text-grey'} text-normal font-weight-bold mt-2`}
             >
-                {subTitle && parse(subTitle)}
+                {parse(
+                    userBeatScore
+                    ? `Esse cliente chegou lá!<br />${name.cap()} ATINGIU a meta de ${rewardScore} Pontos 🎉`
+                    : `O cliente ${name.cap()} ainda NÃO ATINGIU a meta de ${rewardScore} Pontos ${!userBeatScore ? `do desafio n.º ${totalChallenges}` : ""}`
+                )}
             </p>
-            <p className="text-normal text-purple text-center my-4">
-                • Pontuação Atual do Cliente:<br/>
-                <strong>{userCurrScore} Pontos</strong>
-            </p>
+            {userBeatScore && (
+                <div className="text-normal text-purple text-center my-4">
+                    <p className="text-left m-0">
+                        • Desafio Atual:
+                    </p>
+                    <p><strong>Número {totalChallenges}</strong></p>
+                </div>
+            )}
+            <div className="text-normal text-purple text-center my-2">
+                <p className="text-left m-0">
+                    • Pontuação Atual:
+                </p>
+                <p><strong>{userCurrScore} Pontos</strong></p>
+            </div>
+            {userBeatScore && (
+                <div className="text-normal text-purple text-center my-2">
+                    <p className="text-left m-0">
+                        • Cliente fica com:
+                    </p>
+                    <p className="font-weight-bold">
+                        {convertDotToComma(remainValue)} Pontos Restantes
+                    </p>
+                </div>
+            )}
         </div>
     );
 
-    const showForm = () => (
-        <form
-            style={styles.form}
-            onBlur={() => setGotError(false)}
-            className="text-p text-normal"
-        >
-            <div>
-                {parse(labelTxtField)}
-                <TextField
-                    type="text"
-                    fullWidth
-                    name="valueOnField"
-                    value={valueOnField}
-                    InputProps={{
-                        style: styles.fieldFormValue,
-                    }}
-                    error={gotError ? true : false}
-                    variant="outlined"
-                    autoComplete="off"
-                    onChange={handleChange(setData, data)}
-                />
-            </div>
-        </form>
-    );
+    // const showForm = () => (
+    //     <form
+    //         style={styles.form}
+    //         onBlur={() => setGotError(false)}
+    //         className="text-p text-normal"
+    //     >
+    //         <div>
+    //             {parse(labelTxtField)}
+    //             <TextField
+    //                 type="text"
+    //                 fullWidth
+    //                 name="valueOnField"
+    //                 value={valueOnField}
+    //                 InputProps={{
+    //                     style: styles.fieldFormValue,
+    //                 }}
+    //                 error={gotError ? true : false}
+    //                 variant="outlined"
+    //                 autoComplete="off"
+    //                 onChange={handleChange(setData, data)}
+    //             />
+    //         </div>
+    //     </form>
+    // );
 
     const showActionButtons = () => (
         <section style={styles.actionButtons}>
@@ -175,32 +219,24 @@ export default function ModalTextField({
         </section>
     );
 
-    const showResultScoreAndWarning = () => (
+    const showWarningBtn = () => (
         <section className="my-2">
-            <div className="text-normal text-purple text-center">
-                {!Number.isNaN(parseFloat(valueOnField)) && valueOnField !== "0,0"
-                ? <div>
-                    • App do cliente fica:
-                    <br />
-                    <p className="text-subtitle d-inline-block">
-                        <span>
-                            {parseInt(remainValue) === 0 ? "0" : convertDotToComma(remainValue)} Pontos.
-                        </span>
-                        <span className="ml-3">
-                            <InstructionBtn
-                                onClick={() => { setShowInstruction(!showInstruction); scrollIntoView("#instru", 3000); }}
-                                needTooltip={false}
-                            />
-                        </span>
-                    </p>
+            <div className="d-inline-block font-weight-bold">
+                {/*<span>
+                    {parseInt(remainValue) === 0 ? "0" : convertDotToComma(remainValue)} Pontos.
+                </span>*/}
+                <div className="ml-3">
+                    <InstructionBtn
+                        onClick={() => { setShowInstruction(!showInstruction); scrollIntoView("#instru", 3000); }}
+                        needTooltip={false}
+                    />
                 </div>
-                : null}
             </div>
             {showInstruction && (
                 <p id="instru" className={`${fluidTextAlign} text-normal d-flex align-self-center`} style={{color: 'grey', maxWidth: '400px'}}>
-                    - Valores do histórico de compra
-                    do cliente e Pontos acumulados não são zerados ou descontados porque
-                    ficam como registro. Apenas os pontos do desafio atual.
+                    - Todos valores acima ficam registrados no histórico de compras do cliente.
+                    <br />
+                    - Os pontos restantes são registrado como o atual no fidelidômetro do app.
                 </p>
             )}
         </section>
@@ -241,11 +277,11 @@ export default function ModalTextField({
         </section>
     );
 
+    // {showForm()} is discntinued to simplify algorithm from history purchase.
     const showSuccessDialog = () => (
         <section className="container-center">
             {showSubtitleAndInfos()}
-            {showForm()}
-            {showResultScoreAndWarning()}
+            {showWarningBtn()}
             {showActionButtons()}
         </section>
     );

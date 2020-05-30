@@ -1,6 +1,7 @@
 // FOT STATIC ASSETS AND OFFLINE IMAGES
 import localforage from 'localforage';
 import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
+// import lStorage from '../../utils/storage/lStorage';
 // export * from './lForageStore';
 
 // convert the blob (image) into a data-url (a base64 string) and set that as the src for your image element.
@@ -52,6 +53,7 @@ const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { //
     reader.readAsDataURL(blob);
     reader.onloadend = function() {
         mySrc = reader.result;
+        // lStorage("setItems", {collection: 'images', newObj: { [keyToSet]: mySrc } })
         store.setItem(keyToSet, mySrc)
         .then(generatedUrl => {
             const doc = document.querySelectorAll(`.${keyToSet}`);
