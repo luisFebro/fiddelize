@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import { green } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-import { setRun } from '../redux/actions/globalActions';
 import { useStoreDispatch } from 'easy-peasy';
+// import { setRun } from '../redux/actions/globalActions';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -81,9 +81,9 @@ export default function TabSessions({
 
     const dispatch = useStoreDispatch();
 
-    useEffect(() => {
-        setRun(dispatch, value);
-    }, [value])
+    // useEffect(() => {
+    //     setRun(dispatch, value);
+    // }, [value])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);

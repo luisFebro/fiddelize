@@ -6,10 +6,11 @@ const isSmall = window.Helper.isSmallScreen();
 DashSectionTitle.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired
 };
-
+let count = 1;
 export default function DashSectionTitle({
     title, backgroundColor }) {
     const src = imgLib.dash_title_shape;
+    console.log(`times rendered: ${++count}`)
     return (
         <div className="container-center">
             <div className="position-relative" style={{display: 'block'}}>
@@ -17,7 +18,7 @@ export default function DashSectionTitle({
                     className="dash_title_shape"
                     src={src}
                     width={440}
-                    needLoader={true}
+                    needLoader={false}
                     height={155}
                     alt="forma título"
                 />

@@ -7,38 +7,17 @@ import TabSessions from '../../components/TabSessions';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-import { useStoreState } from 'easy-peasy';
 import { AsyncDashClients, AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
 
 const muStyle = {
     fontSize: 35,
 }
 
-let data;
-const dataTab1 = [
+const data = [
     {
         tabLabel: "Clientes",
         tabIcon: <PermContactCalendarIcon style={muStyle} />,
         tabContentPanel: <AsyncDashClients />,
-    },
-    {
-        tabLabel: "App",
-        tabIcon: <PhonelinkSetupIcon style={muStyle} />,
-        tabContentPanel: null,
-        boxPadding: 1,
-    },
-    {
-        tabLabel: "Ajustes",
-        tabIcon: <BuildIcon style={muStyle} />,
-        tabContentPanel: null,
-    },
-]
-
-const dataTab2 = [
-    {
-        tabLabel: "Clientes",
-        tabIcon: <PermContactCalendarIcon style={muStyle} />,
-        tabContentPanel: null,
     },
     {
         tabLabel: "App",
@@ -49,43 +28,11 @@ const dataTab2 = [
     {
         tabLabel: "Ajustes",
         tabIcon: <BuildIcon style={muStyle} />,
-        tabContentPanel: null,
-        boxPadding: 1,
-    },
-]
-
-const dataTab3 = [
-    {
-        tabLabel: "Clientes",
-        tabIcon: <PermContactCalendarIcon style={muStyle} />,
-        tabContentPanel: null,
-    },
-    {
-        tabLabel: "App",
-        tabIcon: <PhonelinkSetupIcon style={muStyle} />,
-        tabContentPanel: null,
-        boxPadding: 1,
-    },
-    {
-        tabLabel: "Ajustes",
-        tabIcon: <BuildIcon style={muStyle} />,
         tabContentPanel: <AsyncDashSetting />,
-        boxPadding: 1,
     },
 ]
+
 export default function GroupedDashSessions() {
-    const { runName } = useStoreState(state => ({
-        runName: state.globalReducer.cases.runName,
-    }));
-
-    if(runName === 1) {
-        data = dataTab2;
-    } else if(runName === 2) {
-        data = dataTab3;
-    } else {
-        data = dataTab1;
-    }
-
     return (
         <TabSessions
             data={data}

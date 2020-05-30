@@ -14,7 +14,7 @@ import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClie
 
 // PAGES
 import Home from '../../pages/Home';
-import LoginPage from '../../pages/LoginPage';
+import AsyncLoginPage from '../../pages/auth/AsyncLoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
@@ -24,7 +24,7 @@ import DownloadApp from '../../pages/DownloadApp';
 import IntroPage from '../../pages/new-app';
 import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
-import SelfServicePage from '../../pages/new-app/self-service/SelfServicePage';
+import AsyncSelfServicePage from '../../pages/new-app/self-service/AsyncSelfServicePage';
 import PlansPage from '../../pages/plans-page/PlansPage';
 import RedirectLink from '../../pages/RedirectLink';
 import ClientAppPreview from '../../pages/mobile-app/ClientAppPreview';
@@ -42,13 +42,13 @@ function Website({ location }) {
             <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />
-                <Route path="/acesso/verificacao" exact component={LoginPage} />
+                <Route path="/acesso/verificacao" exact component={AsyncLoginPage} />
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={DownloadApp} />
                 <Route path="/baixe-app" exact component={DownloadApp} />
                 <Route path="/:bizCodeName/novo-app" exact component={IntroPage} />
-                <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={SelfServicePage} />
+                <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={AsyncSelfServicePage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
                 <Route path="/planos" exact component={PlansPage} />

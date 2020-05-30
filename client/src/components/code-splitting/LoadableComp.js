@@ -1,5 +1,11 @@
 import Loadable from 'react-loadable';
 // import FullPageLoading from './loadingIndicators/FullPageLoading';
+/*
+const CompName = LoadableComp({
+  loader: () => import("./Path" /* webpackChunkName: "comp-lazy" *\/),
+});
+ */
+
 
 export default function LoadableComp(opts) { //n1
   return Loadable(Object.assign({
