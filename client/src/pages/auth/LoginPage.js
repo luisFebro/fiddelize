@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
-import Login from '../components/auth/Login';
-import LoyaltyScoreHandler from './client/loyalty-client-scores';
+import Login from '../../components/auth/Login';
+import LoyaltyScoreHandler from '../client/loyalty-client-scores';
 import { useStoreState } from 'easy-peasy';
 // import { CLIENT_URL } from '../config/clientUrl';
 
