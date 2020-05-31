@@ -29,6 +29,7 @@ const data = [
         tabLabel: "Ajustes",
         tabIcon: <BuildIcon style={muStyle} />,
         tabContentPanel: <AsyncDashSetting />,
+        boxPadding: 1,
     },
 ]
 

@@ -1,16 +1,16 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import ScrollArrow from '../keyframes/built/scroll-arrow/ScrollArrow';
+import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
 import AOS from 'aos';
 import parse from 'html-react-parser';
-import PwaInstaller from '../components/pwa-installer/PwaInstaller';
-import { CLIENT_URL } from '../config/clientUrl';
-import checkIfElemIsVisible from '../utils/window/checkIfElemIsVisible';
-import getQueryByName from '../utils/string/getQueryByName';
-import { useClientAdmin } from '../hooks/useRoleData';
-import { readClientAdmin } from '../redux/actions/userActions';
-import lStorage, { setSystemOp, needAppRegisterOp } from '../utils/storage/lStorage';
+import PwaInstaller from '../../components/pwa-installer/PwaInstaller';
+import { CLIENT_URL } from '../../config/clientUrl';
+import checkIfElemIsVisible from '../../utils/window/checkIfElemIsVisible';
+import getQueryByName from '../../utils/string/getQueryByName';
+import { useClientAdmin } from '../../hooks/useRoleData';
+import { readClientAdmin } from '../../redux/actions/userActions';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
+import lStorage, { setSystemOp, needAppRegisterOp } from '../../utils/storage/lStorage';
 import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../redux/actions/snackbarActions';
 import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 

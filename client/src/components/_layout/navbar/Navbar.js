@@ -133,7 +133,7 @@ function Navbar({ history, location }) {
             } else {
                 if(selfBizLogoImg) {
                     isSquared  ? size = 85 : size = 67;
-                } else { size = 70; }
+                } else { size = 90; }
             }
             return size;
         }

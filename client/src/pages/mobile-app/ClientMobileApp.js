@@ -6,7 +6,7 @@ import { useStoreDispatch } from 'easy-peasy';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import {CLIENT_URL} from '../../config/clientUrl';
 import lStorage, { needAppRegisterOp } from '../../utils/storage/lStorage';
-import AsyncRegisterCliUser from '../../components/auth/AsyncRegisterCliUser';
+import VAsyncRegisterCliUser from '../../components/auth/VAsyncRegisterCliUser';
 import { useProfile, useClientAdmin, useClientUser } from '../../hooks/useRoleData';
 import { logout } from '../../redux/actions/authActions';
 import { updateUser, countField } from '../../redux/actions/userActions';
@@ -117,7 +117,7 @@ function ClientMobileApp({ location, history }) {
 
     const showRegister = (needLoginBtn, needSetFunc) => (
         <div className="position-relative" style={{top: -58}}>
-            <AsyncRegisterCliUser
+            <VAsyncRegisterCliUser
                 setLoginOrRegister={setLoginOrRegister || true}
                 needLoginBtn={needLoginBtn}
             />

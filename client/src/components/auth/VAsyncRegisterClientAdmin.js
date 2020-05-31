@@ -1,8 +1,9 @@
 import React from 'react';
 import LoadableVisible from '../../components/code-splitting/LoadableVisible';
 
-const AsyncRegisterClientAdmin = LoadableVisible({
+// need logospinner as loading...
+const VAsyncRegisterClientAdmin = LoadableVisible({
   loader: () => import("./RegisterClientAdmin" /* webpackChunkName: "cli-admin-register-comp-lazy" */),
 });
 
-export default AsyncRegisterClientAdmin;
+export default VAsyncRegisterClientAdmin;

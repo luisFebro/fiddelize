@@ -20,8 +20,8 @@ import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
 import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
-import DownloadApp from '../../pages/DownloadApp';
-import IntroPage from '../../pages/new-app';
+import AsyncDownloadApp from '../../pages/download-app/AsyncDownloadApp';
+import AsyncIntroPage from '../../pages/new-app';
 import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
 import AsyncSelfServicePage from '../../pages/new-app/self-service/AsyncSelfServicePage';
@@ -45,9 +45,9 @@ function Website({ location }) {
                 <Route path="/acesso/verificacao" exact component={AsyncLoginPage} />
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
                 <Route path="/regulamento" exact component={RegulationPage} />
-                <Route path="/baixe-app/:userName" exact component={DownloadApp} />
-                <Route path="/baixe-app" exact component={DownloadApp} />
-                <Route path="/:bizCodeName/novo-app" exact component={IntroPage} />
+                <Route path="/baixe-app/:userName" exact component={AsyncDownloadApp} />
+                <Route path="/baixe-app" exact component={AsyncDownloadApp} />
+                <Route path="/:bizCodeName/novo-app" exact component={AsyncIntroPage} />
                 <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={AsyncSelfServicePage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />

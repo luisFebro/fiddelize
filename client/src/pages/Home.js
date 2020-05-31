@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import AsyncRegisterClientAdmin from '../components/auth/AsyncRegisterClientAdmin';
+import VAsyncRegisterClientAdmin from '../components/auth/VAsyncRegisterClientAdmin';
 import ScrollArrow from '../keyframes/built/scroll-arrow/ScrollArrow';
 import { Link } from 'react-router-dom';
 import AOS from 'aos';
@@ -10,9 +10,6 @@ const isSmall = window.Helper.isSmallScreen();
 
 export default function Home() {
     AOS.init();
-    // const showToast = () => {
-    //     showVanillaToast("Testing", 10000, {avatar: ' '});
-    // }
 
     const showSlogon = () => (
         <section className="mt-5 d-flex flex-column flex-md-row justify-content-center align-items-center">
@@ -61,9 +58,21 @@ export default function Home() {
             <div
                 data-aos="fade-up-right"
                 data-aos-duration="1500"
-                style={{maxWidth: 800, position: 'relative', left: isSmall ? '-100px' : '-230px'}}
+                style={{maxWidth: 800, position: 'relative', left: isSmall ? '-105px' : '-230px'}}
             >
-                <img className="img-fluid shape-elevation" src="/img/illustrations/one-hand-held-mobile.png" height="auto" alt="app do celular"/>
+                <picture>
+                    <source srcSet="/img/illustrations/one-hand-held-mobile.webp" media="(min-width: 500px)" />
+                    <source srcSet="/img/illustrations/one-hand-held-mobile-small.webp" media="(max-width: 500px)" />
+                    <source srcSet="/img/illustrations/one-hand-held-mobile.png" media="(min-width: 500px)" />
+                    <source srcSet="/img/illustrations/one-hand-held-mobile-small.png" media="(max-width: 500px)" />
+                    <img
+                        className="img-fluid shape-elevation"
+                        src="/img/illustrations/one-hand-held-mobile.png"
+                        height="auto"
+                        alt="app do celular"
+                        onError={e => e.src = "/img/illustrations/one-hand-held-mobile.png"}
+                    />
+                </picture>
             </div>
         </section>
     );
@@ -71,14 +80,14 @@ export default function Home() {
     return(
         <Fragment>
             <span className="text-right text-white for-version-test">
-                {"T66"}
+                {"T67"}
             </span>
             {showSlogon()}
             <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />
             </div>
             {showAppShowCase()}
-            <AsyncRegisterClientAdmin />
+            <VAsyncRegisterClientAdmin />
         </Fragment>
     );
 };

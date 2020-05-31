@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import ScrollToTop from 'react-router-scroll-top';
 import isThisApp from '../utils/window/isThisApp';
+import isWebpSupported from '../utils/media/isWebpSupported';
 // REDUX
 import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
@@ -32,21 +33,25 @@ export default function App() {
         ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
         ReactGA.pageview(window.location.pathname + window.location.search);
 
-        const callback = list => {
-            list.getEntries().forEach(entry => {
-              ReactGA.timing({
-                category: "Load Performance",
-                variable: 'Server Latency',
-                value: entry.responseStart - entry.requestStart
-              })
-          })
-        }
+        // const callback = list => {
+        //     list.getEntries().forEach(entry => {
+        //       ReactGA.timing({
+        //         category: "Load Performance",
+        //         variable: 'Server Latency',
+        //         value: entry.responseStart - entry.requestStart
+        //       })
+        //   })
+        // }
 
-        var observer = new PerformanceObserver(callback);// metrics
-        observer.observe({entryTypes: ['navigation'] })
+        // var observer = new PerformanceObserver(callback);// metrics
+        // observer.observe({entryTypes: ['navigation'] })
         run = false;
     }
     // END GA
+
+    useEffect(() => {
+        isWebpSupported('lossy', (lossy, res) => res && console.log("This browser suppors webp image: " + res))
+    }, [])
 
     useEffect(() => {
         // loadReCaptcha();

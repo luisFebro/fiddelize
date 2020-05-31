@@ -56,7 +56,7 @@ export default function RankingPondium() {
 
     return (
         <DivPodium
-            className="animated zoomIn delay-5s my-3 container-center flex-column"
+            className="animated zoomIn delay-1s my-3 container-center flex-column"
         >
             <Title
                 title="&#187; Pódio Fidelidade"
