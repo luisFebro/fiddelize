@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MomentDateWithIcon from '../../../../../components/date-time/MomentDateWithIcon';
+import DateWithIcon from '../../../../../components/date-time/DateWithIcon';
 import ShowFormText from './ShowFormText';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import "./HiddenScoreRegulation.scss";
@@ -131,7 +131,7 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
         <div className="hidden-content--root text-normal" style={{padding: '20px 0'}}>
             {showTitleAndExplanation()}
             <ShowFormText generateRegulation={generateRegulation} />
-            <MomentDateWithIcon
+            <DateWithIcon
                 style={{marginTop: 15}}
                 date={dateUpdated}
                 msgIfNotValidDate="Nenhuma alteração."

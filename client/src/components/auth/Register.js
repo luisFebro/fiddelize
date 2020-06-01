@@ -1,6 +1,5 @@
 import React, { Fragment,useEffect, useState } from 'react';
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
 import Title from '../Title';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -35,12 +34,8 @@ import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
 import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
 import isKeyPressed from '../../utils/event/isKeyPressed';
-import moment from 'moment';
+import { dateFnsUtils, ptBRLocale } from '../../utils/dates/dateFns';
 import ReactGA from 'react-ga';
-
-import 'moment/locale/pt-br';
-
-moment.updateLocale('pt-BR');
 
 // bizSysId for validation only since when the user is runningthe app
 // for the first time, businessId returns "0"...
@@ -317,8 +312,8 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 ? <span>{name.cap()}, quando é o seu aniversário?</span>
                 : <span>Quando é o seu aniversário?</span>}
                 <MuiPickersUtilsProvider
-                    utils={MomentUtils}
-                    locale={"pt-br"}
+                    utils={dateFnsUtils}
+                    locale={ptBRLocale}
                 >
                     <DatePicker
                         required

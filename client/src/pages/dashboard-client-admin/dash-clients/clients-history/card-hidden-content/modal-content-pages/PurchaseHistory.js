@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import Illustration from '../../../../../../components/Illustration';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import moment from 'moment';
 import { convertDotToComma } from '../../../../../../utils/numbers/convertDotComma';
 import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
@@ -12,6 +11,7 @@ import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 import defineCurrChallenge from '../helpers/defineCurrChallenge';
 import imgLib from '../../../../../../utils/storage/lForageStore';
 import getFirstName from '../../../../../../utils/string/getFirstName';
+import { formatDMY, fromNow } from '../../../../../../utils/dates/dateFns';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -20,8 +20,6 @@ const faStyle = {
     color: '#ff0',
     fontSize: '30px',
 }
-
-moment.updateLocale('pt-br');
 
 export default function PurchaseHistory({ data }) {
     const { _id, name, clientUserData, totalGeneralScore, totalPurchasePrize } = data;
@@ -72,9 +70,9 @@ export default function PurchaseHistory({ data }) {
                     <br />
                     <br />
                     <span className="text-small font-weight-bold">
-                        {moment(historyData.createdAt).format("ll")}
+                        {formatDMY(historyData.createdAt)}
                         <br />
-                        {moment(historyData.createdAt).fromNow()}
+                        {fromNow(historyData.createdAt)}
                     </span>
                 </div>
             </div>

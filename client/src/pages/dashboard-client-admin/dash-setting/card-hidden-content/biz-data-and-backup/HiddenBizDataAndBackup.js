@@ -3,7 +3,7 @@ import ButtonMulti, { faStyle } from '../../../../../components/buttons/material
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../../utils/form/use-state/handleChange';
-// import MomentDateWithIcon from '../../../../../components/date-time/MomentDateWithIcon';
+// import DateWithIcon from '../../../../../components/date-time/DateWithIcon';
 import PropTypes from 'prop-types';
 import { updateUser, readClientAdmin } from '../../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
@@ -190,7 +190,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
 
 /* ARCHIVES
 wrong date because lack of time recording in db
-<MomentDateWithIcon
+<DateWithIcon
     date={userData.updatedAt}
     msgIfNotValidDate="Nenhuma alteração."
 />

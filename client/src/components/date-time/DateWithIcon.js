@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
+import { fromNow, calendar } from '../../utils/dates/dateFns';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from 'prop-types';
 
-moment.updateLocale('pt-BR');
-
-MomentDateWithIcon.propTypes = {
+DateWithIcon.propTypes = {
     marginTop: PropTypes.number,
 }
 
@@ -38,7 +36,7 @@ const Div = styled.div`
 `;
 
 // cssProps: background-color: ${({ cssProps }) => cssProps.btn || 'blue'};
-export default function MomentDateWithIcon({
+export default function DateWithIcon({
     style,
     date,
     msgIfNotValidDate = "Sem atualização.",
@@ -56,8 +54,8 @@ export default function MomentDateWithIcon({
                     {date
                     ? (
                         <span className="text-small font-weight-bold">
-                            {moment(date).calendar(null, { sameElse: 'll'})}{" - "}
-                            {moment(date).fromNow()}
+                            {calendar(date)}{" - "}
+                            {fromNow(date)}
                         </span>
                     ) : (
                         <span className="text-small font-weight-bold">

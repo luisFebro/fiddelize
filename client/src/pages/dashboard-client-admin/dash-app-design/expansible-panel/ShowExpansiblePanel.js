@@ -7,8 +7,6 @@ import { useStoreState } from 'easy-peasy';
 import HiddenDesignApp from '../card-hidden-content/design/HiddenDesignApp';
 import HiddenChallengesAndPrize from '../card-hidden-content/challenges-prizes/HiddenChallengesAndPrize';
 
-import moment from 'moment';
-
 const faStyle = {
     fontSize: '40px',
     filter:  'drop-shadow(.5px .5px 1.5px black)',

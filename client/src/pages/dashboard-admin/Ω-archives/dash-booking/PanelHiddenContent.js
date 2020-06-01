@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CreatedAtBr from '../CreatedAtBr';
 import parse from 'html-react-parser';
-import moment from 'moment';
+import { fromNow, calendar } from '../../../utils/dates/dateFns';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import ButtonMulti from '../../../components/buttons/material-ui/ButtonMulti';
 // import ModalBtn from "./modal/ModalBtn";
@@ -15,8 +15,6 @@ import { showSnackbar } from '../../../redux/actions/snackbarActions';
 import AsyncAutoCompleteSearch from '../../../components/search/AsyncAutoCompleteSearch';
 import LoadingThreeDots from '../../../components/loadingIndicators/LoadingThreeDots';
 // END CUSTOMIZED DATA
-
-moment.updateLocale('pt-br');
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -103,9 +101,9 @@ export default function PanelHiddenContent({ data, setRun, run }) {
            secondaryHeading: parse(`
                 > Data e Horário Agendamento:
                 <br />
-                ${typeof booking.bookingDate === "undefined" ? "Sem Agendamento" : moment(booking.bookingDate).calendar(null, { sameElse: 'LLL'})}
+                ${typeof booking.bookingDate === "undefined" ? "Sem Agendamento" : calendar(booking.bookingDate)}
                 <br />
-                > Atualizado ${moment(booking.updatedAt).fromNow()}  atrás.`),
+                > Atualizado ${fromNow(booking.updatedAt)}  atrás.`),
            staffBooking: booking,
            hiddenContent: <StaffPanelHiddenContent data={booking} />
         });

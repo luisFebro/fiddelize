@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import SearchFilter from "../../../../components/search/SearchFilter";
 import SearchResult from "../../../../components/search/SearchResult";
-import moment from 'moment';
+import { calendar } from '../../../../utils/dates/dateFns';
 import parse from 'html-react-parser';
 import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
 import { Link } from 'react-router-dom';
@@ -19,8 +19,6 @@ import Title from '../../../../components/Title';
 import { useAppSystem, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
 import PremiumButton from '../../../../components/buttons/PremiumButton';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-moment.updateLocale('pt-br');
 
 const initialSkip = 0;
 let searchTerm = "";
@@ -129,9 +127,7 @@ export default function RegisteredClientsList() {
                     ? <span className="text-small font-weight-bold">Sem data registrada.</span>
                     : (
                         <span className="text-small font-weight-bold">
-                            {moment(
-                                user.clientUserData.purchaseHistory[0].createdAt,
-                            ).calendar(null, { sameElse: 'lll'})}.
+                            {calendar(user.clientUserData.purchaseHistory[0].createdAt)}.
                         </span>
                     )}
                 </span>

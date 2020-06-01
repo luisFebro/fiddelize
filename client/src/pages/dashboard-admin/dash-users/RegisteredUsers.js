@@ -7,7 +7,7 @@ import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { readUserList } from '../../../redux/actions/userActions';
 import { showSnackbar } from '../../../redux/actions/snackbarActions';
-import moment from 'moment';
+import { fromNow } from '../../../utils/dates/dateFns';
 import parse from 'html-react-parser';
 import PanelHiddenContent from './PanelHiddenContent';
 // End Redux
@@ -84,7 +84,7 @@ export default function RegisteredUsersList() {
         return({
            _id: user._id,
            mainHeading: user.name.cap(),
-           secondaryHeading: parse(`> Função Gerenciamento: ${user.role.cap()} <br />> Atualizado ${moment(user.updatedAt).fromNow()}  atrás.`),
+           secondaryHeading: parse(`> Função Gerenciamento: ${user.role.cap()} <br />> Atualizado ${fromNow(user.updatedAt)} atrás.`),
            userData: user,
            hiddenContent: <PanelHiddenContent data={user} />
         });

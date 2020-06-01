@@ -7,17 +7,15 @@ import Paper from '@material-ui/core/Paper';
 import { readAdmin } from '../redux/actions/adminActions';
 import isThisApp from '../utils/window/isThisApp';
 import replaceVariablesInTxt from '../utils/string/replaceVariablesInTxt';
-import MomentDateWithIcon from '../components/date-time/MomentDateWithIcon';
+import DateWithIcon from '../components/date-time/DateWithIcon';
 import getQueryByName from '../utils/string/getQueryByName';
 import { readClientAdmin } from '../redux/actions/userActions';
 import { setRun } from '../redux/actions/globalActions';
 import { appSystem } from '../hooks/useRoleData';
-import moment from 'moment';
 import { useProfile, useClientAdmin, useClientUser } from '../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import selectTxtStyle, { currTxtColor } from '../utils/biz/selectTxtStyle';
 
-moment.updateLocale('pt-br');
 let defaultColor = false;
 export default function RegulationPage({ location }) {
     const isClientAdmin = location.search.includes("cliAdmin=1");
@@ -115,7 +113,7 @@ export default function RegulationPage({ location }) {
                     shadowColor={selfThemeBackColor === "black" ? "white" : "black"}
                 />
             </Link>
-            <MomentDateWithIcon
+            <DateWithIcon
                 style={{color: currTxtColor(selfThemeBackColor || "default")}}
                 date={regulation && regulation.updatedAt}
                 msgIfNotValidDate="Nenhuma alteração."

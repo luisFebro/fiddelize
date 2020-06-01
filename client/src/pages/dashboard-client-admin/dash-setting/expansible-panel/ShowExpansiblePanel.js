@@ -9,8 +9,6 @@ import HiddenVerifPass from '../card-hidden-content/HiddenVerifPass';
 import HiddenProfile from '../card-hidden-content/HiddenProfile';
 import HiddenBizDataAndBackup from '../card-hidden-content/biz-data-and-backup/HiddenBizDataAndBackup';
 
-import moment from 'moment';
-
 const faStyle = {
     fontSize: '40px',
     filter:  'drop-shadow(.5px .5px 1.5px black)',

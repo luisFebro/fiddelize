@@ -3,18 +3,10 @@ import VAsyncRegisterClientAdmin from '../components/auth/VAsyncRegisterClientAd
 import ScrollArrow from '../keyframes/built/scroll-arrow/ScrollArrow';
 import { Link } from 'react-router-dom';
 import AOS from 'aos';
-import dayjs from 'dayjs';
-import moment from 'moment';
-import calendar from "dayjs/plugin/calendar";
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
-dayjs.extend(calendar);
-// import ModalForPermission from '../components/pwa-push-notification/ModalForPermission';
-// import showVanillaToast from '../components/vanilla-js/toastify/showVanillaToast'
 
-const isSmall = window.Helper.isSmallScreen();
 
 export default function Home() {
+    const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
     AOS.init();
 
     const showSlogon = () => (
@@ -84,24 +76,14 @@ export default function Home() {
     );
 
     let date = new Date();
-    const daysBefore = 1;
+    const daysBefore = 20;
     date.setDate(date.getDate() - daysBefore);
 
     return(
         <Fragment>
             <span className="text-right text-white for-version-test">
-                {"T67"}
+                {"T70"}
             </span>
-            <p className="text-white text-hero">
-                {dayjs(date).fromNow()}
-                <br />
-                {moment(date).fromNow()}
-                <br />
-                <br />
-                {moment(date).calendar(null, { sameElse: 'll'})}
-                <br />
-                {dayjs(date).calendar(null, { sameElse: 'll'})}
-            </p>
             {showSlogon()}
             <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />

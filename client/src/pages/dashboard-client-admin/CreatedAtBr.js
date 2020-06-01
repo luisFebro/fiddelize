@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-
-moment.updateLocale('pt-br');
+import { formatDMY, fromNow } from '../../utils/dates/dateFns';
 
 CreatedAtBr.propTypes = {
     createdAt: PropTypes.string,
@@ -24,10 +22,10 @@ export default function CreatedAtBr({
                <span>
                     <span className="font-weight-bold">{title || "Conta criada em:" }</span>
                     <br />
-                    {moment(createdAt).format('Do [de] MMMM, YYYY')}
+                    {formatDMY(createdAt)}
                </span>
                <br />
-               {`${moment(createdAt).fromNow()} atrás.`}
+               {`${fromNow(createdAt)} atrás.`}
            </p>
        </div>
     );
