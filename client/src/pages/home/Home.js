@@ -3,6 +3,7 @@ import VAsyncRegisterClientAdmin from '../../components/auth/VAsyncRegisterClien
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
 import { Link } from 'react-router-dom';
 import VAsyncAppShowCase from './VAsyncAppShowCase';
+import { CLIENT_URL } from '../../config/clientUrl';
 
 
 export default function Home() {
@@ -11,13 +12,17 @@ export default function Home() {
     const showSlogon = () => (
         <section className="mt-5 d-flex flex-column flex-md-row justify-content-center align-items-center">
             <div className="align-self-center m-3">
-                <img
-                    className="svg-elevation"
-                    src="/img/official-logo-white.png"
-                    alt="logo"
-                    width={150}
-                    height='auto'
-                />
+                <picture>
+                    <source srcSet="/img/official-logo-white.webp" type="image/webp" />
+                    <source srcSet="/img/official-logo-white.png" type="image/png" />
+                    <img
+                        className="svg-elevation"
+                        src={`${CLIENT_URL}/img/official-logo-white.png`}
+                        alt="logo"
+                        width={150}
+                        height='auto'
+                    />
+                </picture>
             </div>
             <h1
                 className="text-center align-item-center text-md-left text-title text-white"
