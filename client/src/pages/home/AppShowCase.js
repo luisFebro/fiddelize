@@ -1,35 +1,12 @@
-import React, { Fragment } from 'react';
-import VAsyncRegisterClientAdmin from '../components/auth/VAsyncRegisterClientAdmin';
-import ScrollArrow from '../keyframes/built/scroll-arrow/ScrollArrow';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
 import AOS from 'aos';
 
-
-export default function Home() {
+export default function AppShowCase() {
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
     AOS.init();
 
-    const showSlogon = () => (
-        <section className="mt-5 d-flex flex-column flex-md-row justify-content-center align-items-center">
-            <div className="align-self-center m-3">
-                <img
-                    className="svg-elevation"
-                    src="/img/official-logo-white.png"
-                    alt="logo"
-                    width={150}
-                    height='auto'
-                />
-            </div>
-            <h1
-                className="text-center align-item-center text-md-left text-title text-white"
-                style={{ maxWidth: '700px'}}
-            >
-                Pontos de Fidelidade Digital para seus Clientes
-            </h1>
-        </section>
-    );
-
-    const showAppShowCase = () => (
+    return (
         <section>
             <p
                 data-aos="fade-up"
@@ -65,7 +42,7 @@ export default function Home() {
                     <source srcSet="/img/illustrations/one-hand-held-mobile-small.png" media="(max-width: 500px)" />
                     <img
                         className="img-fluid shape-elevation"
-                        src="/img/illustrations/one-hand-held-mobile.webp"
+                        src="/img/illustrations/one-hand-held-mobile.png"
                         height="auto"
                         alt="app do celular"
                         onError={e => e.src = "/img/illustrations/one-hand-held-mobile.png"}
@@ -74,36 +51,4 @@ export default function Home() {
             </div>
         </section>
     );
-
-    let date = new Date();
-    const daysBefore = 20;
-    date.setDate(date.getDate() - daysBefore);
-
-    return(
-        <Fragment>
-            <span className="text-right text-white for-version-test">
-                {"T71"}
-            </span>
-            {showSlogon()}
-            <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
-                <ScrollArrow color="white" />
-            </div>
-            {showAppShowCase()}
-            <VAsyncRegisterClientAdmin />
-        </Fragment>
-    );
-};
-
-
-/* ARCHIVES
-
-<div className="mt-3 text-subtitle text-center">Acumule pontos e ganhe produtos e serviços</div>
-<Link to="/regulamento">
-    <div
-        className="my-5 text-subtitle font-weight-italic text-center"
-        style={{color: "var(--mainPink)", cursor: "pointer"}}
-    >
-        Consulte<br />as Regras Aqui
-    </div>
-</Link>
-*/
+}

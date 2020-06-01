@@ -5,7 +5,6 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import Navbar from '../../components/_layout/navbar';
 
 // PAGES
-import Home from '../../pages/Home';
 import AsyncLoginPage from '../../pages/auth/AsyncLoginPage'; // is it necessarybecauseit is only usedthe login compo inmobile app
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';

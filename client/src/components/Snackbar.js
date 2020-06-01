@@ -3,7 +3,8 @@ import React from 'react';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { closeSnackbar } from '../redux/actions/snackbarActions';
 // End Redux
-import { green, blueGrey } from '@material-ui/core/colors';
+import green from '@material-ui/core/colors/green';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
