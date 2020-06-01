@@ -13,7 +13,7 @@ import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
 
 // PAGES
-import AsyncHome from '../../pages/home/AsyncHome';
+import Home from '../../pages/home/Home';
 import AsyncLoginPage from '../../pages/auth/AsyncLoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
@@ -41,7 +41,7 @@ function Website({ location }) {
             {dontNeedLayout &&
             <Navbar />}
             <Switch>
-                <Route path="/" exact component={AsyncHome} />
+                <Route path="/" exact component={Home} />
                 <Route path="/acesso/verificacao" exact component={AsyncLoginPage} />
                 <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
                 <Route path="/regulamento" exact component={RegulationPage} />
