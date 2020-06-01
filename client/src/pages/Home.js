@@ -65,7 +65,7 @@ export default function Home() {
                     <source srcSet="/img/illustrations/one-hand-held-mobile-small.png" media="(max-width: 500px)" />
                     <img
                         className="img-fluid shape-elevation"
-                        src="/img/illustrations/one-hand-held-mobile.png"
+                        src="/img/illustrations/one-hand-held-mobile.webp"
                         height="auto"
                         alt="app do celular"
                         onError={e => e.src = "/img/illustrations/one-hand-held-mobile.png"}
@@ -82,7 +82,7 @@ export default function Home() {
     return(
         <Fragment>
             <span className="text-right text-white for-version-test">
-                {"T70"}
+                {"T71"}
             </span>
             {showSlogon()}
             <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">

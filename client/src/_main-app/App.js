@@ -22,35 +22,17 @@ import './libraries/fontAwesomeLib';
 import AsyncWebsite from './user-interfaces/AsyncWebsite';
 import AsyncMobileApp from './user-interfaces/AsyncMobileApp';
 //END UIs
-let run = true;
 export default function App() {
     useRecoveryAndDataOffline();
     const dispatch = useStoreDispatch();
 
-    // GA
-    if(run) {
+    useEffect(() => {
+        isWebpSupported('lossy', (lossy, res) => res && console.log("This browser suppors webp image: " + res))
+        // Google Analytics
         const opts = { testMode: false }
         ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
         ReactGA.pageview(window.location.pathname + window.location.search);
-
-        // const callback = list => {
-        //     list.getEntries().forEach(entry => {
-        //       ReactGA.timing({
-        //         category: "Load Performance",
-        //         variable: 'Server Latency',
-        //         value: entry.responseStart - entry.requestStart
-        //       })
-        //   })
-        // }
-
-        // var observer = new PerformanceObserver(callback);// metrics
-        // observer.observe({entryTypes: ['navigation'] })
-        run = false;
-    }
-    // END GA
-
-    useEffect(() => {
-        isWebpSupported('lossy', (lossy, res) => res && console.log("This browser suppors webp image: " + res))
+        // End Google Analytics
     }, [])
 
     useEffect(() => {
@@ -71,6 +53,19 @@ export default function App() {
 }
 
 /* ARCHIVES
+// const callback = list => {
+//     list.getEntries().forEach(entry => {
+//       ReactGA.timing({
+//         category: "Load Performance",
+//         variable: 'Server Latency',
+//         value: entry.responseStart - entry.requestStart
+//       })
+//   })
+// }
+
+// var observer = new PerformanceObserver(callback);// metrics
+// observer.observe({entryTypes: ['navigation'] })
+
 import WhatsappIcon from '../components/buttons/WhatsappIcon';
 <WhatsappIcon />
 
