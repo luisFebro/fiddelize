@@ -8,8 +8,10 @@ gulp.task('critical', () => {
   return gulp
     .src('public/*.html')
     .pipe(critical({
+      inline: true,
       css: [
-        'public/styles/app.css'
+        'public/styles/app.css',
+        'public/styles/bootstrap.min.css',
       ]
     }))
     .on('error', err => {

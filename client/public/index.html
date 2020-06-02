@@ -77,13 +77,6 @@
         onload="this.media='all'; this.onload=null;"
     >
     <link
-        rel="preload"
-        href="/styles/bootstrap.min.css"
-        as="style"
-        onload="this.onload=null;this.rel='stylesheet'"
-    >
-    <noscript><link rel="stylesheet" href="/styles/bootstrap.min.css"></noscript>
-    <link
         rel="stylesheet"
         href="/styles/aos.min.css"
         media="print"
@@ -91,6 +84,23 @@
     >
     <!-- reference: https://github.com/filamentgroup/loadCSS/ -->
     <!-- END ASYNC DEFERED STYLES -->
+
+
+    <!-- PRELOADED MULTIMEDIAS -->
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-name.webp">
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-white.webp">
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/icons/picture-upload.svg">
+    <!-- self-service page -->
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/shapes/blob-app-preview.svg">
+    <!-- end self-service page -->
+    <link rel="prefetch" as="image" href="%PUBLIC_URL%/img/illustrations/online-chat.svg">
+    <!-- sounds -->
+    <link rel="preload" as="media" href="%PUBLIC_URL%/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3">
+    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/app-btn-sound.wav">
+    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/tock.mp3"> <!--NEED TO CHANGE TO LOCAL FILES TO WORK OFFLINE TOO-->
+    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/confirmation-keypad.wav">
+    <!-- end sounds -->
+    <!-- PRELOADED MULTIMEDIAS -->
 
     <!-- BEGIN - FAVICON -->
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
@@ -108,22 +118,6 @@
     <link rel="prefetch" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" /></noscript>
     <!-- END GOOGLE FONTS -->
-
-    <!-- PRELOADED MULTIMEDIAS -->
-    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-name.webp">
-    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-white.webp">
-    <link rel="preload" as="image" href="%PUBLIC_URL%/img/icons/picture-upload.svg">
-    <!-- self-service page -->
-    <link rel="preload" as="image" href="%PUBLIC_URL%/img/shapes/blob-app-preview.svg">
-    <!-- end self-service page -->
-    <link rel="prefetch" as="image" href="%PUBLIC_URL%/img/illustrations/online-chat.svg">
-    <!-- sounds -->
-    <link rel="preload" as="media" href="%PUBLIC_URL%/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3">
-    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/app-btn-sound.wav">
-    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/tock.mp3"> <!--NEED TO CHANGE TO LOCAL FILES TO WORK OFFLINE TOO-->
-    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/confirmation-keypad.wav">
-    <!-- end sounds -->
-    <!-- PRELOADED MULTIMEDIAS -->
 
   </head>
   <body>
@@ -146,6 +140,7 @@
         //     alert("Você está sem internet. Tente Novamente!");
         // })
     </script>
+    <link rel="prefetch" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   </body>
 </html>
 

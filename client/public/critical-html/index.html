@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Fiddelize</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
+    <!-- target-densitydpi=device-dpi: https://stackoverflow.com/questions/7773865/how-to-disable-web-page-zooming-scaling-on-android -->
+    <meta name="HandheldFriendly" content="true">
+    <meta http-equiv="Content-Language" content="pt-br">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> -->
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" /> -->
+    <!-- <meta
+       name="viewport"
+       content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
+    /> -->
+    <!-- <meta name="viewport" content= "width=device-width, user-scalable=no"> -->
+    <!-- META SEO -->
+    <link rel="canonical" href="https://fiddelize.com.br">
+    <meta name="generator" content="www.fiddelize.com.br">
+    <meta name="author" content="Luis Febro">
+    <meta name="description" content="Plataforma de pontos de fidelidade e valorização do consumo de clientes">
+    <meta name="Keywords" content="sistema, fidelidade, pontos, brasil, negócio, clientes, online">
+    <!-- END META SEO -->
+    <!-- TOOLBAR COLOR - requires valid HTTPS certification to work -->
+    <meta name="theme-color" content="#232528">
+    <meta name="msapplication-TileColor" content="#232528">
+    <meta name="msapplication-navbutton-color" content="#232528">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#232528">
+    <!-- END TOOLBAR COLOR -->
+
+    <!-- GOOGLE WEBMASTERS -->
+    <!-- search console -->
+    <meta name="google-site-verification" content="nAosncHFtMApONJPqtLZWwDLLuNJesQukVcbAKazoUw">
+    <!-- END GOOGLE WEBMASTERS -->
+
+    <!-- HOMESCREEN MANIFEST -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- END HOMESCREEN MANIFEST -->
+
+    <!-- CRITICAL CSS -->
+    <style>
+        *,:after,:before{box-sizing:inherit}body,html{overflow-x:hidden;overscroll-behavior-y:none}html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;height:100%}body{position:relative;background:#4a148c!important;color:#232528!important;margin:0;overflow-x:hidden;overscroll-behavior-y:none}::-webkit-scrollbar{-webkit-appearance:none;width:9px}::-webkit-scrollbar-thumb{border-radius:4px;background-color:transparent;-webkit-box-shadow:transparent}@media only screen and (min-width:768px){::-webkit-scrollbar-thumb{background-color:#00e5ff;-webkit-box-shadow:0 0 1px hsla(0,0%,100%,.5)}}
+            .navbar {
+              display: flex !important;
+              position: relative !important;
+              padding: .5rem 1rem !important;
+              align-items: center !important;
+              background-color: #12005e !important;
+            }
+            .subtitle {
+              font: normal 30px "Poppins",sans-serif !important;
+              letter-spacing: .01em !important;
+            }
+            a {
+              color: #007bff !important;
+              text-decoration: none !important;
+              background-color: transparent !important;
+            }
+    </style>
+    <!-- END CRITICAL CSS -->
+
+
+    <!-- FACEBOOK OPEN GRAPHS - TESTING -->
+    <meta property="og:site_name" content="Fiddelize">
+    <meta property="og:title" content="Fiddelize">
+    <meta property="og:image:secure_url" itemprop="image" content="https://fiddelize.com.br/img/official-logo.svg">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Acumule pontos de fidelidade e ganhe prêmios pelo app. Baixe hoje o seu pelo link.">
+    <meta property="og:updated_time" content="1440432930">
+    <!-- END FACEBOOK OPEN GRAPHS - TESTING -->
+
+    <!-- ASYNC DEFERED STYLES -->
+    <style>
+    *,:after,:before{box-sizing:inherit}body,html{overflow-x:hidden;overscroll-behavior-y:none}html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;height:100%}body{position:relative;background:#4a148c!important;background:var(--themeBackground)!important;color:#232528!important;color:var(--mainDark)!important;margin:0;overflow-x:hidden;overscroll-behavior-y:none}:root{--mainPink:#e84393;--mainDark:#232528;--mainRed:#ed213a;--mainBrown:#795548;--mainOrange:#ffb300;--expenseRed:#ff4757;--lightGrey:#cad3c8;--mainGreen:#4cd137;--incomeGreen:#2ecc71;--mainBlue:#2a2a72;--darkBlue:#2c3e50;--lightBlue:#009ffd;--mainDegrade:linear-gradient(90deg,#ed213a,#93291e);--mainYellow:#ffee58;--niceUiYellow:#fbc531;--lightYellow:#ff0;--mainPurple:#4a148c;--lightPurple:#7c43bd;--mainCyan:#00b2cc;--mainCyanLight:#00e5ff}:root{--themeP:#4a148c;--themePLight:#7c43bd;--themePDark:#12005e;--themeSurface:#f7f1e3;--themeBackground:#4a148c;--mainBlack:#000;--mainWhite:#ecf0f1;--mainFont:"Poppins",sans-serif;--themeP--default:#4a148c;--themePLight--default:#7c43bd;--themePDark--default:#12005e;--themeBackground--default:#4a148c;--themeP--pink:#e84393;--themePLight--pink:#ff79c3;--themePDark--pink:#7c003b;--themeBackground--pink:#b10065;--themeP--red:#ff4757;--themePLight--red:#ff7d84;--themePDark--red:#c5002e;--themeBackground--red:#ff4757;--themeP--purple:#4a148c;--themePLight--purple:#7c43bd;--themePDark--purple:#12005e;--themeBackground--purple:#4a148c;--themeP--orange:#ffb300;--themePLight--orange:#ffb300;--themePDark--orange:#905700;--themeBackground--orange:#c68400;--themeP--black:#232528;--themePLight--black:#4b4d50;--themePDark--black:#000;--themeBackground--black:#232528;--themeP--white:#ecf0f1;--themePLight--white:#ecf0f1;--themePDark--white:grey;--themeBackground--white:#babebe;--themeP--blue:#009ffd;--themePLight--blue:#68d0ff;--themePDark--blue:#004798;--themeBackground--blue:#0071c9;--themeP--green:#2ecc71;--themePLight--green:#2ecc71;--themePDark--green:#006a18;--themeBackground--green:#009a44;--themeP--brown:#795548;--themePLight--brown:#a98274;--themePDark--brown:#250200;--themeBackground--brown:#4b2c20;--themeP--yellow:#ffee58;--themePLight--yellow:#ffee58;--themePDark--yellow:#948c00;--themeBackground--yellow:#c9bc1f}:root{--themeS:#00e5ff;--themeSLight:#6effff;--themeSDark:#00b2cc;--themeS--default:#00e5ff;--themeSLight--default:#6effff;--themeSDark--default:#00b2cc;--themeS--pink:#e84393;--themeSLight--pink:#ff79c3;--themeSDark--pink:#b10065;--themeS--red:#ff4757;--themeSLight--red:#ff7d84;--themeSDark--red:#c5002e;--themeS--purple:#4a148c;--themeSLight--purple:#7c43bd;--themeSDark--purple:#12005e;--themeS--orange:#ffb300;--themeSLight--orange:#ffe54c;--themeSDark--orange:#c68400;--themeS--black:#232528;--themeSLight--black:#4b4d50;--themeSDark--black:#000;--themeS--white:#ecf0f1;--themeSLight--white:#fff;--themeSDark--white:#babebe;--themeS--blue:#009ffd;--themeSLight--blue:#68d0ff;--themeSDark--blue:#0071c9;--themeS--green:#2ecc71;--themeSLight--green:#6effa0;--themeSDark--green:#009a44;--themeS--brown:#795548;--themeSLight--brown:#a98274;--themeSDark--brown:#4b2c20;--themeS--yellow:#ffee58;--themeSLight--yellow:#ffff8b;--themeSDark--yellow:#c9bc1f}::-webkit-scrollbar{-webkit-appearance:none;width:9px}::-webkit-scrollbar-thumb{border-radius:4px;background-color:transparent;-webkit-box-shadow:transparent}@media only screen and (min-width:768px){::-webkit-scrollbar-thumb{background-color:#00e5ff;-webkit-box-shadow:0 0 1px hsla(0,0%,100%,.5)}}:root{--blue:#007bff;--indigo:#6610f2;--purple:#6f42c1;--pink:#e83e8c;--red:#dc3545;--orange:#fd7e14;--yellow:#ffc107;--green:#28a745;--teal:#20c997;--cyan:#17a2b8;--white:#fff;--gray:#6c757d;--gray-dark:#343a40;--primary:#007bff;--secondary:#6c757d;--success:#28a745;--info:#17a2b8;--warning:#ffc107;--danger:#dc3545;--light:#f8f9fa;--dark:#343a40;--breakpoint-xs:0;--breakpoint-sm:576px;--breakpoint-md:768px;--breakpoint-lg:992px;--breakpoint-xl:1200px;--font-family-sans-serif:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";--font-family-monospace:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}*,:after,:before{box-sizing:border-box}html{font-family:sans-serif;line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;text-align:left;background-color:#fff}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}
+</style>
+<link rel="preload" href="/styles/app.css" media="print" onload="this.onload=null;this.rel='stylesheet'" as="style">
+<noscript><link rel="stylesheet" href="/styles/app.css" media="print" onload="this.media='all'; this.onload=null;"></noscript>
+    <link rel="preload" href="/styles/bootstrap.min.css" media="print" onload="this.onload=null;this.rel='stylesheet'" as="style">
+<noscript><link rel="stylesheet" href="/styles/bootstrap.min.css" media="print" onload="this.media='all'; this.onload=null;"></noscript>
+    <link rel="preload" href="/styles/aos.min.css" media="print" onload="this.onload=null;this.rel='stylesheet'" as="style">
+<noscript><link rel="stylesheet" href="/styles/aos.min.css" media="print" onload="this.media='all'; this.onload=null;"></noscript>
+    <!-- reference: https://github.com/filamentgroup/loadCSS/ -->
+    <!-- END ASYNC DEFERED STYLES -->
+
+
+    <!-- PRELOADED MULTIMEDIAS -->
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-name.webp">
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-white.webp">
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/icons/picture-upload.svg">
+    <!-- self-service page -->
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/shapes/blob-app-preview.svg">
+    <!-- end self-service page -->
+    <link rel="prefetch" as="image" href="%PUBLIC_URL%/img/illustrations/online-chat.svg">
+    <!-- sounds -->
+    <link rel="preload" as="media" href="%PUBLIC_URL%/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3">
+    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/app-btn-sound.wav">
+    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/tock.mp3"> <!--NEED TO CHANGE TO LOCAL FILES TO WORK OFFLINE TOO-->
+    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/confirmation-keypad.wav">
+    <!-- end sounds -->
+    <!-- PRELOADED MULTIMEDIAS -->
+
+    <!-- BEGIN - FAVICON -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="manifest" href="/icons/site.webmanifest">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="msapplication-config" content="/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- END - FAVICON -->
+
+    <!-- GOOGLE FONTS -->
+    <link rel="prefetch" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap"></noscript>
+    <!-- END GOOGLE FONTS -->
+
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+<script>!function(n){"use strict";n.loadCSS||(n.loadCSS=function(){});var t,o=loadCSS.relpreload={};o.support=function(){var e;try{e=n.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),o.bindMediaToggle=function(t){var e=t.media||"all";function a(){t.addEventListener?t.removeEventListener("load",a):t.attachEvent&&t.detachEvent("onload",a),t.setAttribute("onload",null),t.media=e}t.addEventListener?t.addEventListener("load",a):t.attachEvent&&t.attachEvent("onload",a),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(a,3e3)},o.poly=function(){if(!o.support())for(var t=n.document.getElementsByTagName("link"),e=0;e<t.length;e++){var a=t[e];"preload"!==a.rel||"style"!==a.getAttribute("as")||a.getAttribute("data-loadcss")||(a.setAttribute("data-loadcss",!0),o.bindMediaToggle(a))}},o.support()||(o.poly(),t=n.setInterval(o.poly,500),n.addEventListener?n.addEventListener("load",function(){o.poly(),n.clearInterval(t)}):n.attachEvent&&n.attachEvent("onload",function(){o.poly(),n.clearInterval(t)})),"undefined"!=typeof exports?exports.loadCSS=loadCSS:n.loadCSS=loadCSS}("undefined"!=typeof global?global:this);</script>
+    <div id="root"></div>
+
+    <!-- SCRIPTS -->
+    <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js" integrity="sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh" crossorigin="anonymous">
+    </script>
+    <script>
+        // this disable mini-bar from browser. the custom banner is set in download page....
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+        })
+        // window.addEventListener('offline', () => {
+        //     alert("Você está sem internet. Tente Novamente!");
+        // })
+    </script>
+  </body>
+</html>
+
+
+<!-- /* COMMENTS
+<link rel="preload" as="image" href="%PUBLIC_URL%/img/illustrations/one-hand-held-mobile.webp">
+
+n1:
+Above the fold, as it applies to Web design, is the portion of a Web page that is visible in a browser window when the page first loads. The portion of the page that requires scrolling in order to see content is called "below the fold."
+*/ -->
+
+<!-- ARCHIVES
+<script>
+    const loadStyleSheet = path => {
+        if (document.createStyleSheet) {
+             document.createStyleSheet(path);
+        } else {
+             const stylesheet = document.createElement('link');
+             stylesheet.href = path;
+             stylesheet.rel = 'stylesheet';
+             // stylesheet.type = 'text/css';
+             stylesheet.integrity = 'sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ';
+             stylesheet.crossOrigin = 'anonymous';
+             document.getElementsByTagName('head')[0].appendChild(stylesheet)
+        }
+    }
+      // All of the objects are in the DOM, and all the images, scripts, links have finished loading.
+    window.onload = function () {
+        //FONT AWESOME
+        loadStyleSheet('https://use.fontawesome.com/releases/v5.7.0/css/all.css');
+    };
+</script>
+
+-->
