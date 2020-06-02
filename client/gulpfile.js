@@ -18,10 +18,10 @@ gulp.task('critical', () => {
     .pipe(gulp.dest('public/critical-html'));
 });
 
-// Compile public SASS
+// Compile public SASS - NEED TO AUTOMATE THIS PROCESS BEFORE BUILDING...
 gulp.task('sass', function () {
 return sass('public/styles/sass/main.scss', { style: 'compressed' })
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.write('./maps'))
-    .pipe(gulp.dest('public/styles/css'))
+    .pipe(gulp.dest('public/styles/app.css'))
 });
