@@ -10,11 +10,7 @@ import { useRecoveryAndDataOffline } from '../hooks/roles-storage-and-data-recov
 import ReactGA from 'react-ga'; // google analytics
 import '../utils/globalHelpers';
 //STYLING
-import './scss/App.scss';
-// import 'aos/dist/aos.css'; // take a look in these libraries to reduce bundle and improve performance.
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'animate.css/animate.min.css';
-// import './libraries/fontAwesomeLib';
+import './libraries/fontAwesomeLib';
 //END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
 

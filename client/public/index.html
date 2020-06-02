@@ -37,6 +37,12 @@
     <link rel="manifest" href="/manifest.json" />
     <!-- END HOMESCREEN MANIFEST -->
 
+    <!-- CRITICAL CSS -->
+    <style>
+        *,:after,:before{box-sizing:inherit}body,html{overflow-x:hidden;overscroll-behavior-y:none}html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;height:100%}body{position:relative;background:#4a148c!important;background:var(--themeBackground)!important;color:#232528!important;color:var(--mainDark)!important;margin:0;overflow-x:hidden;overscroll-behavior-y:none}::-webkit-scrollbar{-webkit-appearance:none;width:9px}::-webkit-scrollbar-thumb{border-radius:4px;background-color:transparent;-webkit-box-shadow:transparent}@media only screen and (min-width:768px){::-webkit-scrollbar-thumb{background-color:#00e5ff;-webkit-box-shadow:0 0 1px hsla(0,0%,100%,.5)}}
+    </style>
+    <!-- END CRITICAL CSS -->
+
 
     <!-- FACEBOOK OPEN GRAPHS - TESTING -->
     <meta property="og:site_name" content="Fiddelize">
@@ -46,6 +52,28 @@
     <meta property="og:description" content="Acumule pontos de fidelidade e ganhe prêmios pelo app. Baixe hoje o seu pelo link." />
     <meta property="og:updated_time" content="1440432930" />
     <!-- END FACEBOOK OPEN GRAPHS - TESTING -->
+
+    <!-- ASYNC DEFERED STYLES -->
+    <link
+        rel="stylesheet"
+        href="/styles/app.css"
+        media="print"
+        onload="this.media='all'; this.onload=null;"
+    >
+    <link
+        rel="stylesheet"
+        href="/styles/bootstrap.min.css"
+        media="print"
+        onload="this.media='all'; this.onload=null;"
+    >
+    <link
+        rel="stylesheet"
+        href="/styles/aos.min.css"
+        media="print"
+        onload="this.media='all'; this.onload=null;"
+    >
+    <!-- reference: https://github.com/filamentgroup/loadCSS/ -->
+    <!-- END ASYNC DEFERED STYLES -->
 
     <!-- BEGIN - FAVICON -->
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
@@ -64,7 +92,7 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" /></noscript>
     <!-- END GOOGLE FONTS -->
 
-    <!-- PREFETCHING -->
+    <!-- PRELOADED MULTIMEDIAS -->
     <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-name.webp">
     <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-white.webp">
     <link rel="preload" as="image" href="%PUBLIC_URL%/img/icons/picture-upload.svg">
@@ -78,31 +106,7 @@
     <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/tock.mp3"> <!--NEED TO CHANGE TO LOCAL FILES TO WORK OFFLINE TOO-->
     <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/confirmation-keypad.wav">
     <!-- end sounds -->
-    <!-- END PREFETCHING -->
-
-    <!-- FONT AWESOME -->
-    <!-- reference for deferring non-critical css: -->
-    <!-- https://web.dev/defer-non-critical-css/ -->
-    <!-- <link rel="preload" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" /></noscript> -->
-    <style>
-        *{ box-sizing: inherit; }
-        body, html{ overflow-x: hidden; }
-        html{ line-height: 1.15; height: 100%; }
-        body{ position: relative; -webkit-user-select: none; margin: 0px; overflow-x: hidden; background-color: rgb(74, 20, 140) !important; color: rgb(35, 37, 40) !important; background-position: initial initial !important; background-repeat: initial initial !important; }
-    </style>
-    <!-- <style>
-       .fa,.fab,.fal,.far,.fas {
-         -moz-osx-font-smoothing: grayscale;
-         -webkit-font-smoothing: antialiased;
-         display: inline-block;
-         font-style: normal;
-         font-variant: normal;
-         text-rendering: auto;
-         line-height: 1
-       }
-    </style> -->
-    <!-- END - FONT AWESOME -->
+    <!-- PRELOADED MULTIMEDIAS -->
 
   </head>
   <body>

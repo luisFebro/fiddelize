@@ -3,6 +3,7 @@ var path = require( 'path' );
 var criticalcss = require("criticalcss");
 var fs = require('fs');
 var tmpDir = require('os').tmpdir();
+// need criticalcss module. Using critical in frontend now...
 
 var cssUrl = 'https://www.fiddelize.com.br/static/css/main.c5fe704e.chunk.css';
 var cssPath = path.join( tmpDir, 'main.c5fe704e.chunk.css' );
