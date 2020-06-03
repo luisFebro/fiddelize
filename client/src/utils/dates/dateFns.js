@@ -17,7 +17,7 @@ const pick = locale => locale ? localeObj[locale] : localeObj.default;
 const now = new Date();
 //
 //month should be capitalized
-const formatDMY = (date, locale) => format(date, "do 'de' MMMM, yyyy", { locale: pick(locale) });
+const formatDMY = (date, locale) => format(convertUTCToLocale(date), "do 'de' MMMM, yyyy", { locale: pick(locale) });
 const fromNow = (pastDate, locale) => formatDistance(new Date(pastDate), now, { addSuffix: true, locale: pick(locale) })
 // calendar needs a customformatlike ``{ sameElse: 'll'}`` in moment.
 const calendar = (date, locale) => formatRelative(new Date(date), now, { locale: pick(locale) })
@@ -28,4 +28,20 @@ export {
     formatDMY,
     fromNow,
     calendar,
+}
+
+function convertUTCToLocale(date) {
+    if(typeof date === "string") {
+        date = new Date(date);
+    }
+
+    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+    console.log("newDate", newDate);
+
+    return newDate;
 }

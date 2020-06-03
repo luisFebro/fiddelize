@@ -7,7 +7,6 @@ import { CLIENT_URL } from '../../config/clientUrl';
 import Spinner from '../../components/loadingIndicators/Spinner';
 import useElemShowOnScroll from '../../hooks/scroll/useElemShowOnScroll';
 
-
 export default function Home() {
     // const didScroll = useDidScroll();
     const isAppDisplayOn = useElemShowOnScroll('.target--app-show-case', { detectionOnce: true });
