@@ -10,7 +10,6 @@ import CloseButton from '../../../../../../../components/buttons/CloseButton';
 // CUSTOM DATA
 import { setRun } from '../../../../../../../redux/actions/globalActions';
 import CartRace from './CartRace';
-import checkIfElemIsVisible from '../../../../../../../utils/window/checkIfElemIsVisible';
 
 const isSmall = window.Helper.isSmallScreen();
 const isEvenSmall = window.Helper.isSmallScreen(415);

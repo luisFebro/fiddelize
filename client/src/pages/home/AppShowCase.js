@@ -8,11 +8,7 @@ export default function AppShowCase() {
 
     return (
         <section>
-            <p
-                data-aos="fade-up"
-                data-aos-duration="1500"
-                className="ml-4 text-title text-white"
-            >
+            <p className="ml-4 text-title text-white">
                 Combinamos design, sistema e tecnologia de ponta para entregar
                 uma experiência única para empreendedores e seus clientes através
                 de nossa plataforma de fidelização.

@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { spin } from '../../keyframes/spin';
+import Picture from '../../components/Picture';
 import PropTypes from 'prop-types';
 
-const Wrapper = styled.div`
-    height: 50px;
-    width: 50px;
+const logoOpts = {
+    large: '100px',
+    small: '50px',
+}
+
+const SpinnerInner = styled.div`
+    position: relative;
+    height: ${({ size }) => logoOpts[size]};
+    width: ${({ size }) => logoOpts[size]};
 
     border: 3px solid #f3f3f3;
     border-top: 3px solid var(--lightPurple);
@@ -14,17 +21,18 @@ const Wrapper = styled.div`
     animation: ${spin} .8s linear infinite;
 `;
 
-const SpinnerInner = styled(Wrapper)`
-    position: relative;
-`;
-
 Spinner.propTypes = {
     expireSec: PropTypes.number,
-    alignment: PropTypes.oneOf(['center', 'left', 'right']),
+    size: PropTypes.oneOf(['small', 'large']),
+    logo: PropTypes.oneOf(['white', 'purple']),
 }
 
 export default function Spinner({
-    expireSec, alignment = 'center', marginX, marginY }) {
+    expireSec,
+    marginX, marginY,
+    isCenter = true,
+    size = "small"
+    ,logo }) {
     const [run, setRun] = useState(true);
     // Not working with callback
     const stopSpinnerAfter = useCallback(() => {
@@ -40,26 +48,43 @@ export default function Spinner({
 
     const showSpinner = isRunning => (
         isRunning &&
-        <SpinnerInner />
+        <SpinnerInner size={size} />
     );
 
-    let config = {
-        center: 'container-center',
-        left: '?',
-        right: '?',
-        none: ''
-    }
-
-    const heightCond = typeof marginY === "number" ? (marginY - 50) / 2  : (marginX - 50) / 2;
-    const widthCond = (marginX - 50) / 2;
+    const heightCond = typeof marginY === "number" ? (marginY - logoOpts[size]) / 2  : (marginX - logoOpts[size]) / 2;
+    const widthCond = (marginX - logoOpts[size]) / 2;
     const calculatedRelativeMargin = `${heightCond}px ${widthCond}px`;
     return (
-        <div
-            style={{margin: !marginX ? 0 : calculatedRelativeMargin, minHeight: !marginY && "85px" }}
+        <section
+            className={`${isCenter && "container-center"} ${logo ? "container-center-col" : null}`}
         >
+            <div style={{margin: !marginX ? 0 : calculatedRelativeMargin, minHeight: !marginY ? "85px" : marginY }}>
+                {logo && (
+                    <Picture
+                        path={`/img/official-logo-${logo}`}
+                        className="svg-elevation mb-4"
+                        alt="logo"
+                        width={70}
+                        height='auto'
+                    />
+                )}
+            </div>
             {showSpinner(run)}
-        </div>
+        </section>
     );
 }
+
+
+/* ARCHIVES
+const SpinnerInner = styled(Wrapper)`
+`;
+
+let config = {
+    center: 'container-center',
+    left: '?',
+    right: '?',
+    none: ''
+}
+ */
 
 /* concept from: https://codepen.io/smashtheshell/pen/jqGxzr*/

@@ -77,7 +77,7 @@ export default function DownloadApp({ match, location }) {
 
 
     useEffect(() => {
-        checkIfElemIsVisible(".target-download", setRun, true);
+        checkIfElemIsVisible(".target-download", res => setRun(res));
         if(run) {
             setTimeout(() => setAnalysis(false), 5000)
         }

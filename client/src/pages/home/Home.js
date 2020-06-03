@@ -1,12 +1,17 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import VAsyncRegisterClientAdmin from '../../components/auth/VAsyncRegisterClientAdmin';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
 import { Link } from 'react-router-dom';
 import VAsyncAppShowCase from './VAsyncAppShowCase';
 import { CLIENT_URL } from '../../config/clientUrl';
+import Spinner from '../../components/loadingIndicators/Spinner';
+import useElemShowOnScroll from '../../hooks/scroll/useElemShowOnScroll';
 
 
 export default function Home() {
+    // const didScroll = useDidScroll();
+    const isAppDisplayOn = useElemShowOnScroll('.target--app-show-case', { detectionOnce: true });
+
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
 
     const showSlogon = () => (
@@ -36,14 +41,25 @@ export default function Home() {
     return(
         <Fragment>
             <span className="text-right text-white for-version-test">
-                {"T81"}
+                {"T82"}
             </span>
             {showSlogon()}
             <div style={{margin: isSmall ? '10px 0 300px 0' : '50px 0 300px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />
             </div>
-            {<VAsyncAppShowCase />}
-            <VAsyncRegisterClientAdmin />
+            <section className="target--app-show-case">
+                {!isAppDisplayOn ? (
+                    <Spinner
+                        marginY={10}
+                        size="large"
+                    />
+                ) : (
+                    <VAsyncAppShowCase />
+                )}
+            </section>
+            {isAppDisplayOn && (
+                <VAsyncRegisterClientAdmin />
+            )}
         </Fragment>
     );
 };

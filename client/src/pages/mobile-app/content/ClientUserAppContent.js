@@ -82,7 +82,7 @@ function ClientUserAppContent({
         }
     }, [role, isAuthUser, needAppForCliAdmin])
 
-    checkIfElemIsVisible("#rules", setShowMoreBtn);
+    checkIfElemIsVisible("#rules", res => setShowMoreBtn(res));
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)

@@ -5,9 +5,9 @@ const fs = require('fs');
 
 
 // Parameters
-const directory = "../img"; // ../client/public/img/illustrations
+const directory = "../client/public/img/"; // ../client/public/img/illustrations
 const selectedFormat = "png";
-const searchedQuery = "";
+const searchedQuery = "purple";
 // End Parameters
 
 let count = 0;

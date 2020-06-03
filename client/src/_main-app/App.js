@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import ScrollToTop from 'react-router-scroll-top';
 import isThisApp from '../utils/window/isThisApp';
@@ -41,9 +41,9 @@ export default function App() {
     return (
         <BrowserRouter>
             <ScrollToTop>
-                <div>
+                <Fragment>
                     {isThisApp() ? <AsyncMobileApp /> : <AsyncWebsite />}
-                </div>
+                </Fragment>
             </ScrollToTop>
         </BrowserRouter>
     );
