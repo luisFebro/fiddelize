@@ -45,7 +45,7 @@ export default function RegulationPage({ location }) {
             document.body.style.setProperty('background', `var(--themeBackground--default)`, 'important')
             defaultColor = true;
         }
-    }, [selfThemeBackColor, defaultColor, handlePath]);
+    }, [selfThemeBackColor, defaultColor]);
 
     useEffect(() => {
         const bizId = appSystem.businessId;

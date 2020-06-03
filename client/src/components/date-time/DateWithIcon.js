@@ -54,8 +54,9 @@ export default function DateWithIcon({
                     {date
                     ? (
                         <span className="text-small font-weight-bold">
-                            {calendar(date)}{" - "}
-                            {fromNow(date)}
+                            {calendar(date)}
+                            <br />
+                            {" - "}{fromNow(date)}
                         </span>
                     ) : (
                         <span className="text-small font-weight-bold">

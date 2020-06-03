@@ -30,6 +30,7 @@ export {
     calendar,
 }
 
+// reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time
 function convertUTCToLocale(date) {
     if(typeof date === "string") {
         date = new Date(date);
@@ -41,7 +42,6 @@ function convertUTCToLocale(date) {
     var hours = date.getHours();
 
     newDate.setHours(hours - offset);
-    console.log("newDate", newDate);
 
     return newDate;
 }

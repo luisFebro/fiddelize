@@ -10,7 +10,7 @@ import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
 import { default as FullModalBtnHistory } from "./modal/modal-full-screen_history/ModalBtn";
 import { useStoreState } from 'easy-peasy';
 import ClientProfile from './modal-content-pages/ClientProfile';
-import PurchaseHistory from './modal-content-pages/PurchaseHistory';
+import VAsyncPurchaseHistory from './modal-content-pages/VAsyncPurchaseHistory';
 import defineCurrChallenge from './helpers/defineCurrChallenge';
 import getFirstName from '../../../../../utils/string/getFirstName';
 
@@ -98,7 +98,7 @@ const showHistoryBtn = data => {
                 modalData={{
                     title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${data && data.name && getFirstName(data.name)}` : ""}`,
                     subTitle: null,
-                    componentContent: <PurchaseHistory data={dataToSendModal} />,
+                    componentContent: <VAsyncPurchaseHistory data={dataToSendModal} />,
                     challengeN: challengeN,
                     currUserScore: data.clientUserData.currScore,
                     userName: data.name,

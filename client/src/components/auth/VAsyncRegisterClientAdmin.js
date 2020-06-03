@@ -1,5 +1,4 @@
-import React from 'react';
-import LoadableVisible from '../../components/code-splitting/LoadableVisible';
+import LoadableVisible from '../code-splitting/LoadableVisible';
 
 // need logospinner as loading...
 const VAsyncRegisterClientAdmin = LoadableVisible({

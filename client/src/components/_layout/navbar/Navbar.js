@@ -141,7 +141,7 @@ function Navbar({ history, location }) {
             <Link to={isThisApp() ? "/mobile-app" : "/"}>
                 <ImgLoader
                     className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
-                    style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '5px' : '20px'}}
+                    style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '10px' : '20px'}}
                     src={logoSrc}
                     alt="Logomarca Principal"
                     width={handleSize("width")}

@@ -3,9 +3,6 @@ import Loadable from "react-loadable";
 import LoadableComp from '../../components/code-splitting/LoadableComp';
 import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
 // n1 -magic comments for two or more modules..
-const AsyncDashClients = LoadableComp({
-  loader: () => import("./DashComps" /* webpackChunkName: "cli-admin-dashboard-lazy" */).then(comp => comp.DashClients),
-});
 
 const AsyncDashAppDesign = LoadableComp({
   loader: () => import("./DashComps" /* webpackChunkName: "cli-admin-dashboard-lazy" */).then(comp => comp.DashAppDesign),
@@ -19,7 +16,6 @@ const AsyncDashSetting = LoadableComp({
 export {
   AsyncDashAppDesign,
   AsyncDashSetting,
-  AsyncDashClients,
 };
 
 

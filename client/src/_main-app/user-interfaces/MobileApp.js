@@ -11,7 +11,7 @@ import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
 import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
 import ClientMobileApp from '../../pages/mobile-app/ClientMobileApp';
-import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
+import AsyncLoyaltyScoreHandler from '../../pages/client/loyalty-client-scores/AsyncLoyaltyScoreHandler';
 import RegulationPage from '../../pages/RegulationPage';
 import AppSharer from '../../pages/app-sharer/AppSharer';
 import PlansPage from '../../pages/plans-page/PlansPage';
@@ -50,7 +50,7 @@ function Mobile({ location }) {
             <Switch>
                 <Route path="/acesso/verificacao" exact component={AsyncLoginPage} />
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
-                <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
+                <Route path="/cliente/pontos-fidelidade" exact component={AsyncLoyaltyScoreHandler} />
                 <Route path="/regulamento/" exact component={RegulationPage} />
                 <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
                 <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />

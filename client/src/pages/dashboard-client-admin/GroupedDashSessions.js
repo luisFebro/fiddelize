@@ -7,7 +7,8 @@ import TabSessions from '../../components/TabSessions';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-import { AsyncDashClients, AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
+import DashClients from './dash-clients';
+import { AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
 
 const muStyle = {
     fontSize: 35,
@@ -17,7 +18,7 @@ const data = [
     {
         tabLabel: "Clientes",
         tabIcon: <PermContactCalendarIcon style={muStyle} />,
-        tabContentPanel: <AsyncDashClients />,
+        tabContentPanel: <DashClients />,
     },
     {
         tabLabel: "App",

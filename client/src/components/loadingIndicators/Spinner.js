@@ -54,11 +54,13 @@ export default function Spinner({
     const heightCond = typeof marginY === "number" ? (marginY - logoOpts[size]) / 2  : (marginX - logoOpts[size]) / 2;
     const widthCond = (marginX - logoOpts[size]) / 2;
     const calculatedRelativeMargin = `${heightCond}px ${widthCond}px`;
+
     return (
         <section
             className={`${isCenter && "container-center"} ${logo ? "container-center-col" : null}`}
+            style={{minHeight: !marginY ? "85px" : marginY}}
         >
-            <div style={{margin: !marginX ? 0 : calculatedRelativeMargin, minHeight: !marginY ? "85px" : marginY }}>
+            <div style={{margin: !marginX ? 0 : calculatedRelativeMargin }}>
                 {logo && (
                     <Picture
                         path={`/img/official-logo-${logo}`}

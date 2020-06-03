@@ -23,7 +23,7 @@ export default function ImgLoader({
     mode = "spinner",
     needLoader = true, }) {
 
-    const [status, setStatus] = useState(true);
+    let [status, setStatus] = useState(true);
 
     useEffect(() => {
         if(src) {

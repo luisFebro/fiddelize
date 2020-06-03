@@ -14,7 +14,7 @@ export default function Default({ location }) {
                 alt="página não encontrada..."
                 className="image-center tranparent-img-shadow"
             />
-            <p className="text-white text-normal text-center mt-5 mx-2 text-em-1-5">
+            <p className="text-white text-normal text-center mt-5 mx-2 text-em-1-5 margin-auto-90">
                 Oops! A página:<br />
                 <span
                     className="text-em-2 font-weight-bold text-break"

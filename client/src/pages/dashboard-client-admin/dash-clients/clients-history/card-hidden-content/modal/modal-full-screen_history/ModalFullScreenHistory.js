@@ -84,7 +84,7 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
             fullScreen={true}
             open={open}
             aria-labelledby="form-dialog-title"
-            className="animated rollIn fast"
+            className=""
             onScroll={() => handleScroll("#raceCartSwitch")}
         >
             {showTitle()}

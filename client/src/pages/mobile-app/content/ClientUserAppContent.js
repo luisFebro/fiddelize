@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import getDayGreetingBr from '../../../utils/getDayGreetingBr';
 import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
 import { useAuthUser } from '../../../hooks/useAuthUser';
-import checkIfElemIsVisible from '../../../utils/window/checkIfElemIsVisible';
 import lStorage, { confettiPlayOp, needAppRegisterOp } from '../../../utils/storage/lStorage';
 import { confetti } from '../../../keyframes/animations-js/confetti/confetti';
 import { useStoreDispatch } from 'easy-peasy';
@@ -18,13 +17,14 @@ import BadaloBell from '../../../components/buttons/bells/badalo/BadaloBell';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
+import useElemShowOnScroll from '../../../hooks/scroll/useElemShowOnScroll';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
 import ProgressMsg from '../ProgressMsg' ;
 import MoreOptionsBtn from '../MoreOptionsBtn';
 import AllScores from '../AllScores';
-import PercCircleAndGift from '../PercCircleAndGift';
+import VAsyncPercCircleAndGift from '../VAsyncPercCircleAndGift';
 // END APP COMPONENTS
 
 function ClientUserAppContent({
@@ -43,7 +43,7 @@ function ClientUserAppContent({
     if(!colorS) { colorS = "default" }
 
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const [showMoreBtn, setShowMoreBtn] = useState(false);
+    const showMoreBtn = useElemShowOnScroll(".target--rules-page");
 
     const currScoreRef = useRef(null);
 
@@ -82,7 +82,6 @@ function ClientUserAppContent({
         }
     }, [role, isAuthUser, needAppForCliAdmin])
 
-    checkIfElemIsVisible("#rules", res => setShowMoreBtn(res));
 
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
@@ -150,16 +149,19 @@ function ClientUserAppContent({
     );
 
     const showPercCircleAndGift = () => (
-        <PercCircleAndGift
-            currScore={currScore}
-            classNamePerc={`${needAppForPreview && "enabledLink"}`}
-            maxScore={maxScore}
-            showPercentage={showMoreComps}
-            playBeep={playBeep}
-            colorS={colorS}
-            colorP={colorP}
-            colorBack={backColorSelect}
-        />
+        showMoreComps &&
+        <div className="animated zoomIn">
+            <VAsyncPercCircleAndGift
+                currScore={currScore}
+                classNamePerc={`${needAppForPreview && "enabledLink"}`}
+                maxScore={maxScore}
+                showPercentage={showMoreComps}
+                playBeep={playBeep}
+                colorS={colorS}
+                colorP={colorP}
+                colorBack={backColorSelect}
+            />
+        </div>
     );
 
     const showRatingIcons = () => (
@@ -196,7 +198,7 @@ function ClientUserAppContent({
         currScore >= 30 && !showMoreComps &&
         <div
             className="position-relative container-center animated zoomIn delay-2s"
-            style={{top: '-35px'}}
+            style={{top: '-55px'}}
         >
             <ButtonFab
                 position="relative"
@@ -220,8 +222,7 @@ function ClientUserAppContent({
             {showMoreComps
             ? (
                 <div
-                    id="rules"
-                    className="container-center position-relative"
+                    className="target--rules-page container-center position-relative"
                     style={{ top: `${needAppForPreview && "15px"}` }}
                 >
                     <Link to={needAppForCliAdmin ? "/regulamento?client-admin=1" : "/regulamento"}>
