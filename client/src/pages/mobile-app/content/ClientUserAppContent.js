@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import useElemShowOnScroll from '../../../hooks/scroll/useElemShowOnScroll';
+import Spinner from '../../../components/loadingIndicators/Spinner';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -43,7 +44,17 @@ function ClientUserAppContent({
     if(!colorS) { colorS = "default" }
 
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const showMoreBtn = useElemShowOnScroll(".target--rules-page");
+    const showMoreBtn = useElemShowOnScroll(".target--rules-page", { tSpan: 200 });
+    const [percGiftComp, setPercGiftComp] = useState(false);
+    // multi scroll dection does not work for now...
+    // const showPercGiftComp = useElemShowOnScroll("#target---perc-gift");
+
+    useEffect(() => {
+        if(showMoreComps) {
+            // simulating loading for now...
+            setTimeout(() => setPercGiftComp(true), 2500);
+        }
+    }, [showMoreComps])
 
     const currScoreRef = useRef(null);
 
@@ -106,6 +117,10 @@ function ClientUserAppContent({
         const elem = document.querySelector("#appBtn");
         elem.play();
     }
+
+    const handlePreload = () => {
+        VAsyncPercCircleAndGift.preload();
+    }
     // END UTILS
     const backColorSelect = colorBack || selfThemeBackColor || colorP;
 
@@ -149,19 +164,27 @@ function ClientUserAppContent({
     );
 
     const showPercCircleAndGift = () => (
-        showMoreComps &&
-        <div className="animated zoomIn">
-            <VAsyncPercCircleAndGift
-                currScore={currScore}
-                classNamePerc={`${needAppForPreview && "enabledLink"}`}
-                maxScore={maxScore}
-                showPercentage={showMoreComps}
-                playBeep={playBeep}
-                colorS={colorS}
-                colorP={colorP}
-                colorBack={backColorSelect}
-            />
-        </div>
+        <section id="target---perc-gift" className={showMoreComps ? "d-block" : "d-none"}>
+            {!percGiftComp ? (
+                <Spinner
+                    marginY={150}
+                    size="large"
+                />
+            ) : (
+                <div className="animated zoomIn">
+                    <VAsyncPercCircleAndGift
+                        currScore={currScore}
+                        classNamePerc={`${needAppForPreview && "enabledLink"}`}
+                        maxScore={maxScore}
+                        showPercentage={showMoreComps}
+                        playBeep={playBeep}
+                        colorS={colorS}
+                        colorP={colorP}
+                        colorBack={backColorSelect}
+                    />
+                </div>
+            )}
+        </section>
     );
 
     const showRatingIcons = () => (
@@ -208,6 +231,7 @@ function ClientUserAppContent({
                 iconFontSize="25px"
                 variant="extended"
                 fontWeight="bolder"
+                onMouseOver={() => handlePreload()}
                 fontSize=".9em"
                 size="large"
                 color={currTxtColor(selfThemeSColor)}

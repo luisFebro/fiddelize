@@ -1,4 +1,3 @@
-import React from 'react';
 import LoadableComp from '../../components/code-splitting/LoadableComp';
 
 const AsyncMobileApp = LoadableComp({

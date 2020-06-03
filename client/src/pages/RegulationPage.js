@@ -16,8 +16,8 @@ import { useProfile, useClientAdmin, useClientUser } from '../hooks/useRoleData'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import selectTxtStyle, { currTxtColor } from '../utils/biz/selectTxtStyle';
 
-let defaultColor = false;
 export default function RegulationPage({ location }) {
+    const [defaultColor, setDefaultColor] = useState(false);
     const isClientAdmin = location.search.includes("cliAdmin=1");
     const needAppForCliAdmin = location.search.includes("client-admin=1");
     const bizCodeName = getQueryByName("bizCodeName", location.search);
@@ -43,7 +43,7 @@ export default function RegulationPage({ location }) {
             document.body.style.setProperty('background', `var(--themeBackground--${selfThemeBackColor})`, 'important')
         } else {
             document.body.style.setProperty('background', `var(--themeBackground--default)`, 'important')
-            defaultColor = true;
+            setDefaultColor(true);
         }
     }, [selfThemeBackColor, defaultColor]);
 

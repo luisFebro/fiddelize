@@ -6,13 +6,17 @@ import throttle from '../performance/throttle';
 // detectionOnce is for the cases when you just need the first true result and disable scrolling detection right after...
 
 // const isFunction = func => typeof callback === 'function';
-
+// for now, only work using one function per component...
 export default function checkIfElemIsVisible(elem, callback, opts = {}) {
     const { needPartial = true, throttleSpan = 300, leading = true, trailing = true, detectionOnce = false } = opts;
 
-    window.onscroll = throttle(function() { // LESSON
-        isElemVisible(elem, callback, needPartial);
-    }, throttleSpan, { leading, trailing });
+    const handleScrollEvent = () => {
+        window.onscroll = throttle(function() { // LESSON
+            isElemVisible(elem, callback, needPartial);
+        }, throttleSpan, { leading, trailing });
+    }
+
+    handleScrollEvent();
 
     function isElemVisible(elem, callback, needPartial) {
         if(!elem) throw Error("You need to declare an element as the first parameter");
@@ -33,6 +37,8 @@ export default function checkIfElemIsVisible(elem, callback, opts = {}) {
 
             if(detectionOnce && res) {
                 window.onscroll = null;
+            } else {
+                handleScrollEvent();
             }
         }
     }

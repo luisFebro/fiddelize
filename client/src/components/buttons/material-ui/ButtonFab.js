@@ -61,7 +61,8 @@ export default function ButtonFab({
     id,
     textTransform,
     needTxtNoWrap,
-    needBtnShadow, }) {
+    needBtnShadow,
+    onMouseOver, }) {
     const [toggle, setToggle] = useState('');
 
     const styles = {
@@ -130,6 +131,7 @@ export default function ButtonFab({
             id={id}
             variant={variant || "round"}
             onClick={() => handleOnClick() === false ? onClick() : handleOnClick()}
+            onMouseOver={onMouseOver}
             size={ size || "small" }
             aria-label={title}
             style={styles.fab}

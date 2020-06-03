@@ -13,6 +13,8 @@ import lStorage, { setSystemOp, needAppRegisterOp } from '../../utils/storage/lS
 import { useStoreDispatch } from 'easy-peasy';
 import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
+import Spinner from '../../components/loadingIndicators/Spinner';
+import useElemShowOnScroll from '../../hooks/scroll/useElemShowOnScroll';
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -36,6 +38,11 @@ export default function DownloadApp({ match, location }) {
     const isFromAdminPanel = location.search.includes("painel=1");
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
     const isValidRoleType = isClientAdmin || isClientUser;
+
+    const [isPageReady, setPageReady] = useState(false);
+    useEffect(() => {
+        setTimeout(() => setPageReady(true), 2000);
+    }, [])
 
     const isAdminLoggedIn = appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
     if(isClientAdmin) { lStorage("setItems", setSystemOp("cliente-admin", bizId)); }
@@ -96,6 +103,15 @@ export default function DownloadApp({ match, location }) {
             marginTop: '110px',
         }
     }
+
+    const showSpinner = () => (
+        !isPageReady &&
+        <Spinner
+            marginY={600}
+            size="large"
+            logo="white"
+        />
+    );
 
     const showMainScrollArray = () => (
         <div className="margin-auto-90" style={{display: downloadAvailable ? 'block' : 'none', margin: '0 0 300px'}}>
@@ -248,7 +264,8 @@ export default function DownloadApp({ match, location }) {
 
     const isLinkInvalid = !bizName || !bizId || !isValidRoleType;
     return (
-        <Fragment>
+        <section className="target--content-download">
+            {showSpinner()}
             {isLinkInvalid
             ? errorMsg()
             : (
@@ -268,7 +285,7 @@ export default function DownloadApp({ match, location }) {
                     {showAlreadyDownloadedApp()}
                 </section>
             )}
-        </Fragment>
+        </section>
     );
 }
 

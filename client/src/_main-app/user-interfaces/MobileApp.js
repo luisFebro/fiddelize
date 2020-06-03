@@ -9,11 +9,11 @@ import AsyncLoginPage from '../../pages/auth/AsyncLoginPage'; // is it necessary
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
-import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
+import AsyncPasswordPage from '../../pages/dashboard-client-admin/AsyncPasswordPage';
 import ClientMobileApp from '../../pages/mobile-app/ClientMobileApp';
 import AsyncLoyaltyScoreHandler from '../../pages/client/loyalty-client-scores/AsyncLoyaltyScoreHandler';
 import RegulationPage from '../../pages/RegulationPage';
-import AppSharer from '../../pages/app-sharer/AppSharer';
+import AsyncAppSharer from '../../pages/app-sharer/AsyncAppSharer';
 import PlansPage from '../../pages/plans-page/PlansPage';
 //END PAGES
 
@@ -52,8 +52,8 @@ function Mobile({ location }) {
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
                 <Route path="/cliente/pontos-fidelidade" exact component={AsyncLoyaltyScoreHandler} />
                 <Route path="/regulamento/" exact component={RegulationPage} />
-                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
-                <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
+                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={AsyncPasswordPage} />
+                <Route path="/:bizCodeName/compartilhar-app" exact component={AsyncAppSharer} />
                 <Route path="/baixe-app" exact component={InstallMsg} />
                 <Route path="/baixe-app/:userName" component={InstallMsg} />
                 <Route path="/planos" exact component={PlansPage} />
