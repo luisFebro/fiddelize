@@ -12,11 +12,14 @@ import { useClientAdmin } from '../../../hooks/useRoleData';
 import gotArrayThisItem from '../../../utils/arrays/gotArrayThisItem';
 import { useAuthUser } from '../../../hooks/useAuthUser';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
+// import useCount from '../../../hooks/useCount';
 
 const isSmall = window.Helper.isSmallScreen();
 const gotToken = localStorage.getItem("token");
 
 function Navbar({ history, location }) {
+    //RT = 2 (OK);
+    // useCount();
     // const [showSkeleton, setShowSkeleton] = useState(true);
     const [isSearchOpen, setSearchOpen] = useState(false);
     const {  role, _idStaff } = useStoreState(state => ({
@@ -112,16 +115,15 @@ function Navbar({ history, location }) {
     );
 
     const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isThisApp());
+    const fiddelizeLogo = `${CLIENT_URL}/img/official-logo-name.png`;
     const handleLogoSrc = () => {
         if(needClientLogo) {
             return imgLib.app_biz_logo(selfBizLogoImg);
         } else {
-            return `${CLIENT_URL}/img/official-logo-name.png`;
+            return fiddelizeLogo;
         }
     };
-    useEffect(() => {
-        handleLogoSrc();
-    }, [needClientLogo])
+    const src = React.useCallback(() => handleLogoSrc(), [needClientLogo]);
 
     const showLogo = () => {
         const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
@@ -144,6 +146,7 @@ function Navbar({ history, location }) {
                 <ImgLoader
                     className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
                     style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '10px' : '20px'}}
+                    src={locationNow === "/" ? fiddelizeLogo : src()}
                     alt="Logomarca Principal"
                     width={handleSize("width")}
                     height={handleSize("height")}

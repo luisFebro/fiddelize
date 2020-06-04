@@ -1,4 +1,4 @@
-import LoadableVisible from '../../../code-splitting/LoadableVisible';
+import LoadableVisible from '../../../components/code-splitting/LoadableVisible';
 
 // need logospinner as loading...
 const VAsyncDashAppDesign = LoadableVisible({

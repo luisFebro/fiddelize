@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 export default function useCount() {
     const renders = useRef(0);
-    console.log("renders: ", renders.current++);
+    console.log("renders: ", ++renders.current);
 };
 
-// ref: https://www.youtube.com/watch?v=-Ls48dd-vJE - React Hooks useCallback Tutorial
+// ref: https://www.youtube.com/watch?v=-Ls48dd-vJE - React Hooks useCallback and React.memo Tutorial

@@ -9,7 +9,7 @@ import BuildIcon from '@material-ui/icons/Build';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import DashClients from './dash-clients';
 // import { AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
-import VAsyncAppDesign from './dash-app-design';
+import VAsyncAppDesign from './dash-app-design/VAsyncAppDesign';
 import VAsyncDashSetting from './dash-setting';
 
 const muStyle = {

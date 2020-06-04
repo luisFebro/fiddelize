@@ -18,7 +18,7 @@ just write an empty string ("")
 // dataKey syntax: location_description
 // Rules: it should not fetch multiple images from one single instance like prior convert_any_illustration. This duplicates worngly images. Each image should have its own instance.
 const imgLib = {
-    get app_fiddelize_logo() { return handleStorage("logos", "app_fiddelize_logo", `img/official-logo-name.png`) },
+    get app_fiddelize_logo() { return handleStorage("logos", "app_fiddelize_logo", `img/official-logo-name.png`, false, true) },
     app_biz_logo: url => handleStorage("logos", "app_biz_logo", url, true),
     // Custom Icons
     get app_gift() { return handleStorage("icons", "app_gift", `img/icons/pink-gift-box.png`) },
@@ -47,8 +47,13 @@ export { ImgLoader }
 
 // requires declare className to the img.
 // The same name as the key. Priorly it was an ID, but there were issues when more then one src is need
-function handleStorage(coll, key, url, isFromInternet = false) {
+function handleStorage(coll, key, url, isFromInternet = false, singleSelector = false) {
     const urlPath = isFromInternet ? url : `${CLIENT_URL}/${url}`;
+
+    if(singleSelector) {
+        findElemAndSet(key, urlPath)
+        return;
+    }
 
     const readThisImage = () => readImage(coll, key)
     readThisImage().then(generatedUrl => { // LESSON: promises can not return an async value at all. Use methods like attribute to src, setData to get the value.
@@ -57,10 +62,31 @@ function handleStorage(coll, key, url, isFromInternet = false) {
             .then(res => console.log(`New image set to indexedDB. Collection: ${coll}, dataKey: ${key}`))
             .catch(err => console.log(err))
         } else {
-            const doc = document.querySelectorAll(`.${key}`);
-            if(doc) {
-                doc.forEach(elemFound => elemFound.src = generatedUrl);
-            }
+            findElemAndSet(key, generatedUrl, { type: 'multi'})
         }
     })
+}
+
+function findElemAndSet(query, value,  opts = {}) {
+    let { type } = opts;
+
+    if(!type) { type = 'single'; }
+    // if(type !== "single" || type !== "multi") throw new Error("Invalid type.");
+
+    const setSingle = () => {
+        const doc = document.querySelector(`.${query}`);
+        if(doc) { doc.src = value; }
+    }
+
+    const setMulti = () => {
+        const doc = document.querySelectorAll(`.${query}`);
+        if(doc) {
+            doc.forEach(elemFound => elemFound.src = value);
+        }
+    }
+
+    type === 'single'
+    ? setSingle()
+    : setMulti()
+
 }
