@@ -12,6 +12,7 @@ import { readClientAdmin, uploadImages, updateImages } from '../../../../redux/a
 import ShowActionBtns from './ShowActionBtns';
 import { deleteImage } from '../../../../utils/storage/lForage';
 import { useClientAdmin } from '../../../../hooks/useRoleData';
+// import useCount from '../../../../hooks/useCount';
 
 PickLogo.propTypes = {
     step: PropTypes.number,
@@ -23,6 +24,8 @@ export default function PickLogo({
     bizId, bizCodeName,
     setLogoUrlPreview,
     isFromDash = false }) {
+    // useCount();
+    // last rendering after running all functionalaties: 49 times.
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
     const [tempImgUrl, setTempImgUrl] = useState("");
@@ -150,7 +153,10 @@ export default function PickLogo({
     };
 
     const showUploadingBtn = () => (
-        <div className="animated rubberBand delay-3s" style={{animationIterationCount: 2}}>
+        <div
+            className={!isFromDash && "animated rubberBand delay-3s"}
+            style={{animationIterationCount: 2}}
+        >
             <input
                 accept="image/*"
                 onChange={handleMediaChange}
@@ -211,7 +217,7 @@ export default function PickLogo({
         <div className="container-center my-3" >
             <img
                 className="app_biz_logo animated zoomIn slow shadow-elevation"
-                src={null}
+                src={selfBizLogoImg}
                 style={{position: 'relative', margin: '15px 0', boxShadow: '0 30px 40px 8px rgba(0, 0, 0, 0.35)'}}
                 width={isSquared ? 100 : 190}
                 height={isSquared ? 100 : 85}

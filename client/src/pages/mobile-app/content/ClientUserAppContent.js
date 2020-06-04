@@ -44,7 +44,7 @@ function ClientUserAppContent({
     if(!colorS) { colorS = "default" }
 
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const showMoreBtn = useElemShowOnScroll(".target--rules-page", { tSpan: 200 });
+    const showMoreBtn = useElemShowOnScroll(".target--rules-page", { tSpan: 70 });
     const [percGiftComp, setPercGiftComp] = useState(false);
     // multi scroll dection does not work for now...
     // const showPercGiftComp = useElemShowOnScroll("#target---perc-gift");

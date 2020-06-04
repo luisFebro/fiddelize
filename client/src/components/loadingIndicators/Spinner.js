@@ -64,7 +64,7 @@ export default function Spinner({
                 {logo && (
                     <Picture
                         path={`/img/official-logo-${logo}`}
-                        className="svg-elevation mb-4"
+                        className={`${logo === "purple" ? "" : 'svg-elevation'} mb-4`}
                         alt="logo"
                         width={70}
                         height='auto'

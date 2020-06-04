@@ -6,8 +6,10 @@ import CloseButton from './CloseButton';
 // a question instruction button for some functionalities explanations...
 export default function InstructionBtn({
     text, onClick, needTooltip = true }) {
-    const [closeBtn, setCloseBtn] = useState(false);
-    const [needClose, setNeedClose] = useState(false);
+    const [closeBtn, setShowCloseBtn] = useState(false);
+    console.log("closeBtn", closeBtn);
+    const [needOpen, setNeedOpen] = useState(false);
+    console.log("needOpen", needOpen);
 
     // WARNING: This causes performance issues with else condition, freezes the app
     // useEffect(() => {
@@ -22,15 +24,15 @@ export default function InstructionBtn({
             {needTooltip ? (
                 <section
                     className="position-relative disable-blur"
-                    onClick={() => { setCloseBtn(!closeBtn); }}
+                    onClick={() => setShowCloseBtn(true)}
                 >
                     <Tooltip
                         text={text}
                         padding="10px"
-                        setCloseBtn={setCloseBtn}
+                        onClickAway={() => setShowCloseBtn(false)}
                         whiteSpace
                         needArrow
-                        needOpen={needClose ? false : true }
+                        needOpen={needOpen ? true : false }
                         color="var(--mainWhite)"
                         backgroundColor="var(--mainDark)"
                         width={325}
@@ -50,7 +52,7 @@ export default function InstructionBtn({
                         <CloseButton
                             delay={1}
                             position="absolute"
-                            onClick={() => { setCloseBtn(false); setNeedClose(true); }}
+                            onClick={() => { setShowCloseBtn(false); setNeedOpen(false); }}
                             top={-20}
                             right={-25}
                             size="1.4em"
@@ -60,7 +62,7 @@ export default function InstructionBtn({
             ) : (
                 <ButtonFab
                     position="relative"
-                    onClick={onClick}
+                    onClick={() => onClick()}
                     color="var(--mainDark)"
                     backgroundColor="#CAD3C8" // light grey
                     iconFontAwesome={<FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}

@@ -85,6 +85,12 @@ sub,sup {
     vertical-align: baseline
 }
 
+button {
+    border-width: 2 !important;
+    border-style: outset !important;
+    border-color: white !important;
+}
+
 /* COMMENTS
 n1:
 solution to fixed footer try next:;

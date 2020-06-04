@@ -1,7 +1,8 @@
-import React from 'react';
-import ClientsHistory from './clients-history/ClientsHistory';
+import React, { useEffect, useState } from 'react';
+import VAsyncRecordedClientsList from './clients-history/VAsyncRecordedClientsList';
 import DashSectionTitle from '../../DashSectionTitle';
 import RankingPondium from './RankingPondium';
+// import useDidScroll from '../../../hooks/scroll/useDidScroll';
 // NotificationArea will be embed into the full modal of notification...
 // import NotificationArea from './notification-area/NotificationArea';
 import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
@@ -17,6 +18,19 @@ const Title = ({ bizName }) => {
 };
 
 export default function DashClients() {
+    // need to fix teh fact that it is disabling window.scroll = null
+    // and causing the show more buttons to not appear.
+    // const didScroll = useDidScroll();
+    const [preload, setPreload] = useState(false);
+
+    useEffect(() => {
+        const thisTimeout = setTimeout(() => setPreload(true), 3000);
+        if(preload) {
+            VAsyncRecordedClientsList.preload();
+        }
+        return () => { clearTimeout(thisTimeout) };
+    }, [preload])
+
     const { bizName } = useClientAdmin();
     const { name } = useProfile();
 
@@ -27,7 +41,7 @@ export default function DashClients() {
             />
             <RankingPondium />
             <hr />
-            <ClientsHistory />
+            <VAsyncRecordedClientsList />
         </div>
     );
 }

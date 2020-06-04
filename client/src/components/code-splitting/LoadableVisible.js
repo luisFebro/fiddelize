@@ -1,5 +1,4 @@
 import LoadableVisibility from "react-loadable-visibility/react-loadable";
-// import LogoSpinner from ''
 
 export default function LoadableVisible(opts) {
   return LoadableVisibility(Object.assign({

@@ -94,10 +94,12 @@ export const readUserList = async (dispatch, skip = 0, role = "", search = "", b
 
     const searchQuery = search ? `&search=${search}` : "";
     const roleQuery = role ? `&role=${role}` : "";
-    // setLoadingProgress(dispatch, true);
+    // This Loading is activated because is required to
+    // display the current status of loading in RecordedClientsList...
+    setLoadingProgress(dispatch, true);
     try {
         const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}${bizId}`, getHeaderJson);
-        // setLoadingProgress(dispatch, false);
+        setLoadingProgress(dispatch, false);
         console.log('==ALL USERS UPDATED==');
         dispatch({ type: 'USER_READ_LIST', payload: res.data.list });
         return res;

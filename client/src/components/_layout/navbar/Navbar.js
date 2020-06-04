@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { logout } from '../../../redux/actions/authActions';
@@ -118,10 +118,12 @@ function Navbar({ history, location }) {
         } else {
             return `${CLIENT_URL}/img/official-logo-name.png`;
         }
-    }
+    };
+    useEffect(() => {
+        handleLogoSrc();
+    }, [needClientLogo])
 
     const showLogo = () => {
-        const logoSrc =  handleLogoSrc();
         const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
         const handleSize = side => {
@@ -142,7 +144,6 @@ function Navbar({ history, location }) {
                 <ImgLoader
                     className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
                     style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '10px' : '20px'}}
-                    src={logoSrc}
                     alt="Logomarca Principal"
                     width={handleSize("width")}
                     height={handleSize("height")}

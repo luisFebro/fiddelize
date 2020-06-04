@@ -88,16 +88,17 @@ function ClientMobileApp({ location, history }) {
             return imgLib.app_fiddelize_logo;
         }
     }
+    useEffect(() => {
+        handleLogoSrc();
+    }, [])
 
     const showLogo = () => {
-        const logoSrc = handleLogoSrc();
         const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
 
         return(
             <div className="container-center">
                 <ImgLoader
                     className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
-                    src={logoSrc}
                     style={{position: 'relative', margin: '15px 0'}}
                     width={isSquared ? 100 : 190}
                     height={isSquared ? 100 : 85}

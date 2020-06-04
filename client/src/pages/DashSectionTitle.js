@@ -6,11 +6,11 @@ const isSmall = window.Helper.isSmallScreen();
 DashSectionTitle.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired
 };
-let count = 1;
-export default function DashSectionTitle({
+
+function DashSectionTitle({
     title, backgroundColor }) {
     const src = imgLib.dash_title_shape;
-    console.log(`times rendered: ${++count}`)
+
     return (
         <div className="container-center">
             <div className="position-relative" style={{display: 'block'}}>
@@ -38,3 +38,5 @@ export default function DashSectionTitle({
         </div>
     );
 }
+
+export default React.memo(DashSectionTitle);

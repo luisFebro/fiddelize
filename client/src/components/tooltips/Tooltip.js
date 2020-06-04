@@ -40,7 +40,7 @@ export default function Tooltip({
     whiteSpace,
     width,
     padding,
-    setCloseBtn,
+    onClickAway,
     needClickAway = true, }) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
@@ -50,9 +50,7 @@ export default function Tooltip({
     }, [needOpen])
 
     const handleTooltipClose = () => {
-        if(typeof setCloseBtn === "function") {
-            setCloseBtn(false);
-        }
+        if(typeof onClickAway === "function") { onClickAway(); }
         setOpen(false);
     };
 

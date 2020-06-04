@@ -13,7 +13,7 @@ import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import UserCardExpansiblePanel from './expansible-panel/UserCardExpansiblePanel';
 import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
 // End Redux
-import LoadingThreeDots from '../../../../components/loadingIndicators/LoadingThreeDots';
+import Spinner from '../../../../components/loadingIndicators/Spinner';
 import LoadMoreItemsButton from '../../../../components/buttons/LoadMoreItemsButton';
 import Title from '../../../../components/Title';
 import { useAppSystem, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const initialSkip = 0;
 let searchTerm = "";
 // let accumulatedChunks = 5;
-export default function RegisteredClientsList() {
+export default function RecordedClientsList() {
     const [init, setInit] = useState(true);
     const { businessId } = useAppSystem();
     const { name } = useProfile();
@@ -134,7 +134,6 @@ export default function RegisteredClientsList() {
             </div>
         );
 
-
         const truncate = (name, leng) => window.Helper.truncate(name, leng);
         const isTestMode = name === user.name.cap();
 
@@ -203,8 +202,13 @@ export default function RegisteredClientsList() {
                 </p>
             )}
             {isLoading
-            ? <LoadingThreeDots />
-            : (
+            ? (
+                <Spinner
+                    marginY={100}
+                    size="large"
+                    logo="purple"
+                />
+            ): (
                 <Fragment>
                 <div>
                 </div>

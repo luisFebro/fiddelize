@@ -8,7 +8,9 @@ import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import DashClients from './dash-clients';
-import { AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
+// import { AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
+import VAsyncAppDesign from './dash-app-design';
+import VAsyncDashSetting from './dash-setting';
 
 const muStyle = {
     fontSize: 35,
@@ -23,13 +25,13 @@ const data = [
     {
         tabLabel: "App",
         tabIcon: <PhonelinkSetupIcon style={muStyle} />,
-        tabContentPanel: <AsyncDashAppDesign />,
+        tabContentPanel: <VAsyncAppDesign />,
         boxPadding: 1,
     },
     {
         tabLabel: "Ajustes",
         tabIcon: <BuildIcon style={muStyle} />,
-        tabContentPanel: <AsyncDashSetting />,
+        tabContentPanel: <VAsyncDashSetting />,
         boxPadding: 1,
     },
 ]

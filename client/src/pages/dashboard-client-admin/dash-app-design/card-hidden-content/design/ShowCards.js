@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import OptionCard from './OptionCard';
 import { useClientAdmin } from '../../../../../hooks/useRoleData';
 import { useAuthUser } from '../../../../../hooks/useAuthUser';
@@ -17,17 +17,21 @@ export default function ShowCards({ setOpenComp }) {
     } = useClientAdmin();
     const { isAuthUser } = useAuthUser();
 
-    const logoContent = () => {
-        const needClientLogo = selfBizLogoImg || isAuthUser;
-        const handleLogoSrc = () => {
-            if(needClientLogo) {
-                return imgLib.app_biz_logo(selfBizLogoImg);
-            } else {
-                return imgLib.app_fiddelize_logo;
-            }
-        }
+    const needClientLogo = selfBizLogoImg || isAuthUser;
 
-        const logoSrc = handleLogoSrc();
+    const handleLogoSrc = () => {
+        if(needClientLogo) {
+            return imgLib.app_biz_logo(selfBizLogoImg);
+        } else {
+            return imgLib.app_fiddelize_logo;
+        }
+    }
+
+    useEffect(() => {
+        handleLogoSrc();
+    }, [needClientLogo])
+
+    const logoContent = () => {
         const isSquared = selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
 
         return(
@@ -35,7 +39,6 @@ export default function ShowCards({ setOpenComp }) {
                 {selfBizLogoImg ? (
                     <ImgLoader
                         className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow shadow-elevation`}
-                        src={logoSrc}
                         style={{position: 'relative', margin: '15px 0', boxShadow: '0 30px 40px 8px rgba(0, 0, 0, 0.35)'}}
                         width={isSquared ? 100 : 190}
                         height={isSquared ? 100 : 85}
@@ -49,7 +52,7 @@ export default function ShowCards({ setOpenComp }) {
         );
     }
 
-    const colorContent = () => {
+    const colorContent = React.useCallback(() => {
         const colorP = selfThemePColor;
         const colorS = selfThemeSColor;
         const colorBack = selfThemeBackColor || 'default';
@@ -57,6 +60,7 @@ export default function ShowCards({ setOpenComp }) {
         const translatedColorP = translateColorToPtBr(colorP === "default" ? "purple" : colorP);
         const translatedColorS = translateColorToPtBr(colorS === "default" ? "defaultS" : colorS);
         const translatedColorBack = translateColorToPtBr(colorBack === "default" ? "purple" : colorBack);
+
         return(
             <section className="color--root">
                 <div>
@@ -88,9 +92,9 @@ export default function ShowCards({ setOpenComp }) {
                 </div>
             </section>
         );
-    }
+    }, []);
 
-    const iconContent = () => {
+    const iconContent = React.useCallback(() => {
         const icon = selfMilestoneIcon || "star";
         return(
             <section className="container-center icon--root">
@@ -101,7 +105,7 @@ export default function ShowCards({ setOpenComp }) {
                 />
             </section>
         );
-    }
+    }, []);
 
     return (
         <section
