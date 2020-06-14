@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react';
 import Login from '../../components/auth/Login';
 import LoyaltyScoreHandler from '../client/loyalty-client-scores';
 import { useStoreState } from 'easy-peasy';
+import LogoSpinner from '../../components/loadingIndicators/LogoSpinner';
 // import { CLIENT_URL } from '../config/clientUrl';
 
 export default function LoginPage() {
@@ -10,19 +11,22 @@ export default function LoginPage() {
     }))
 
     return (
-        <div className="container-center mt-5">
-            <div>
-            {currentComp === "login"
-                ? (
-                    <div style={{margin: '70px 0'}}>
-                        <Login />
-                    </div>
-                ) : (
-                    <div style={{margin: '70px 0'}}>
-                        <LoyaltyScoreHandler />
-                    </div>
-                )}
+        <>
+            <LogoSpinner />
+            <div className="container-center mt-5">
+                <div>
+                    {currentComp === "login"
+                    ? (
+                        <div style={{margin: '70px 0'}}>
+                            <Login />
+                        </div>
+                    ) : (
+                        <div style={{margin: '70px 0'}}>
+                            <LoyaltyScoreHandler />
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 }

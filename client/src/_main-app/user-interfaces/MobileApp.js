@@ -58,7 +58,6 @@ function Mobile({ location }) {
                 <Route path="/baixe-app/:userName" component={InstallMsg} />
                 <Route path="/planos" exact component={PlansPage} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
-                <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />
             </Switch>
             <SnackbarMulti />
@@ -69,6 +68,8 @@ function Mobile({ location }) {
 export default withRouter(Mobile);
 
 /* ARCHIVES
+<PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
+
 import ChangePassword from '../../pages/client/ChangePassword';
 import InsertNewPassword from '../../pages/client/InsertNewPassword';
 import ConfirmAccount from '../../pages/client/ConfirmAccount';

@@ -42,11 +42,12 @@
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
-    "analyse": "node scripts/analyse.js"
+    "analyse": "node scripts/analyse.js",
+    "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/js/*.js --output build/static/css"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -64,7 +65,9 @@
     ]
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.3.0",
     "chalk": "^4.0.0",
+    "craco": "0.0.3",
     "critical": "^1.3.9",
     "gulp": "^4.0.2",
     "progress-bar-webpack-plugin": "^2.1.0",

@@ -18,12 +18,12 @@ import AsyncLoginPage from '../../pages/auth/AsyncLoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
-import LoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
+import AsyncLoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
 import RegulationPage from '../../pages/RegulationPage';
 import AsyncDownloadApp from '../../pages/download-app/AsyncDownloadApp';
 import AsyncIntroPage from '../../pages/new-app';
-import PasswordPage from '../../pages/dashboard-client-admin/PasswordPage';
-import AppSharer from '../../pages/app-sharer/AppSharer';
+import AsyncPasswordPage from '../../pages/dashboard-client-admin/AsyncPasswordPage';
+import AsyncAppSharer from '../../pages/app-sharer/AsyncAppSharer';
 import AsyncSelfServicePage from '../../pages/new-app/self-service/AsyncSelfServicePage';
 import PlansPage from '../../pages/plans-page/PlansPage';
 import RedirectLink from '../../pages/RedirectLink';
@@ -43,19 +43,18 @@ function Website({ location }) {
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/acesso/verificacao" exact component={AsyncLoginPage} />
-                <Route path="/cliente/pontos-fidelidade" exact component={LoyaltyScoreHandler} />
+                <Route path="/cliente/pontos-fidelidade" exact component={AsyncLoyaltyScoreHandler} />
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={AsyncDownloadApp} />
                 <Route path="/baixe-app" exact component={AsyncDownloadApp} />
                 <Route path="/:bizCodeName/novo-app" exact component={AsyncIntroPage} />
                 <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={AsyncSelfServicePage} />
-                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={PasswordPage} />
-                <Route path="/:bizCodeName/compartilhar-app" exact component={AppSharer} />
+                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={AsyncPasswordPage} />
+                <Route path="/:bizCodeName/compartilhar-app" exact component={AsyncAppSharer} />
                 <Route path="/planos" exact component={PlansPage} />
                 <Route path="/mobile-app/preview" component={ClientAppPreview} />
                 <Route path="/app/:nameAndCode" component={RedirectLink} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
-                <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
                 <Route component={Default} />
             </Switch>
             <SnackbarMulti />
@@ -68,6 +67,8 @@ function Website({ location }) {
 export default withRouter(Website);
 
 /* ARCHIVES
+<PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
+
 import ChangePassword from '../../pages/client/ChangePassword';
 import ConfirmAccount from '../../pages/client/ConfirmAccount';
 <Route path="/cliente/trocar-senha" exact component={ChangePassword} />
