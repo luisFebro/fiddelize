@@ -1,14 +1,20 @@
-// craco.config.js
-const purgecss = require('@fullhuman/postcss-purgecss');
+// reference: https://tylerzey.com/create-react-app-purge-css/
+
+const path = require('path');
+const fs = require('fs');
+const glob = require('glob-all');
+
+const appDirectory = fs.realpathSync(process.cwd());
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 module.exports = {
-  style: {
-    postcss: {
-      plugins: [
-        purgecss({
-          content: ['./src/**/*.html', './src/**/*.jsx', './src/**/*.js'],
-        }),
-      ],
+    webpack: {
+        plugins: [
+            new PurgecssPlugin({
+                paths: [resolveApp('public/index.html'), ...glob.sync(`${resolveApp('src')}/**/**/*`, { nodir: true })],
+            }),
+        ],
     },
-  },
 };

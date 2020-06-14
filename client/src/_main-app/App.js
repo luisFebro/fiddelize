@@ -11,7 +11,7 @@ import ReactGA from 'react-ga'; // google analytics
 import '../utils/globalHelpers';
 //STYLING
 import './libraries/fontAwesomeLib';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/bootstrap.min.css';
 //END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
 
