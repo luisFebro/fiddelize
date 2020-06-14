@@ -10,8 +10,11 @@ import { useRecoveryAndDataOffline } from '../hooks/roles-storage-and-data-recov
 import ReactGA from 'react-ga'; // google analytics
 import '../utils/globalHelpers';
 //STYLING
+import './scss/App.scss';
 import './libraries/fontAwesomeLib';
 import './styles/bootstrap.min.css';
+import './styles/aos.min.css';
+import './styles/animate.min.css';
 //END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
 
