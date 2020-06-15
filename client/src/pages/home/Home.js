@@ -5,10 +5,16 @@ import { Link } from 'react-router-dom';
 import VAsyncAppShowCase from './VAsyncAppShowCase';
 import { CLIENT_URL } from '../../config/clientUrl';
 import Spinner from '../../components/loadingIndicators/Spinner';
+import animateVisibleElem from '../../utils/window/animateVisibleElem';
 import useElemShowOnScroll from '../../hooks/scroll/useElemShowOnScroll';
 
 export default function Home() {
     // const didScroll = useDidScroll();
+    // useEffect(() => {
+    //     console.log("running useEffect")
+    //     animateVisibleElem(".app-show-case--text", {animaIn: "fadeInUp", animaOut: "fadeOut", needPartial: false })
+    // }, [])
+
     const isAppDisplayOn = useElemShowOnScroll('.target--app-show-case', { detectionOnce: true });
 
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
@@ -40,10 +46,10 @@ export default function Home() {
     return(
         <Fragment>
             <span className="text-right text-white for-version-test">
-                {"T88"}
+                {"<T90></T90>"}
             </span>
             {showSlogon()}
-            <div style={{margin: isSmall ? '10px 0 300px 0' : '50px 0 300px 0'}} className="d-flex justify-content-center">
+            <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />
             </div>
             <section className="target--app-show-case">

@@ -75,6 +75,11 @@
 }
 /*END IMAGES*/
 
+.full-height {
+   height: 20em; // fallback in case of ch is not supported
+   height: 100vh;
+}
+
 /*MOBILE FIRST RESPONSIVE MEDIA QUERIES*/
 /*media portrait tablets and large phones || for large devices, use min-width: 992px and up*/
 @media screen and (min-width: 768px) { /*n1*/

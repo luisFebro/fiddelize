@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import animateVisibleElem from '../../utils/window/animateVisibleElem';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
-import AOS from 'aos';
 
 export default function AppShowCase() {
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
-    AOS.init();
+
+    useEffect(() => {
+        animateVisibleElem(".app-show-case--text", {animaIn: "fadeInUp", animaOut: "fadeOutUp", speed: "slow" })
+        animateVisibleElem(".app-show-case--phone", {animaIn: "fadeInBottomLeft", speed: "slower" })
+    }, [])
+    // AOS.init();
 
     return (
         <section>
-            <p className="ml-4 text-title text-white">
+            <p className="app-show-case--text ml-4 text-title text-white">
                 Combinamos design, sistema e tecnologia de ponta para entregar
                 uma experiência única para empreendedores e seus clientes através
                 de nossa plataforma de fidelização.
@@ -17,9 +22,7 @@ export default function AppShowCase() {
                 <ScrollArrow color="white" />
             </div>
             <p
-                data-aos="fade-up"
-                data-aos-duration="1500"
-                className="ml-4 text-title text-white text-center"
+                className="app-show-case--text ml-4 text-title text-white text-center"
             >
                 Crie hoje seu multi App de<br />
                 pontos de fidelidade com<br />
@@ -27,8 +30,7 @@ export default function AppShowCase() {
                 aumentar sua clientela e vendas<br />
             </p>
             <div
-                data-aos="fade-up-right"
-                data-aos-duration="1500"
+                className="app-show-case--phone"
                 style={{maxWidth: 800, position: 'relative', left: isSmall ? '-105px' : '-230px'}}
             >
                 <picture>
