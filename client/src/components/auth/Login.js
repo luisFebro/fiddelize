@@ -124,7 +124,7 @@ function Login({ history, setLoginOrRegister }) {
     );
 
     const showKeypadButton = () => (
-        <div className="mt-3 mb-2 animated jackInTheBox slower delay-1s d-flex justify-content-center">
+        <div className="mt-3 mb-2 animated fadeInDown slow delay-1s d-flex justify-content-center">
             <KeypadButton
                 title="Informe o seu CPF"
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}

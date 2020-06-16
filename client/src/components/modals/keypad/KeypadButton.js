@@ -1,8 +1,10 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import ButtonMulti, { faStyle } from '../../buttons/material-ui/ButtonMulti';
-import KeypadHandler from './KeypadHandler';
+import AsyncKeypadHandler from './AsyncKeypadHandler';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import usePlayAudio from '../../../hooks/media/usePlayAudio';
+import useDelay from '../../../hooks/useDelay';
 
 KeypadButton.propTypes = {
     title: PropTypes.string.isRequired,
@@ -10,14 +12,6 @@ KeypadButton.propTypes = {
     setSelectedValue: PropTypes.func.isRequired,
     keyboardType: PropTypes.string,
     confirmFunction: PropTypes.func,
-}
-
- const preloadedAudio = () => {
-    var audio = new Audio();
-    audio.preload = "auto";
-    audio.currentTime = 0;
-    audio.src = "/sounds/high-tech.mp3";
-    return audio;
 }
 
 export default function KeypadButton({
@@ -29,29 +23,8 @@ export default function KeypadButton({
     backgroundColor, }) {
   const [open, setOpen] = useState(false);
 
-  // const [audio, setAudio] = useState(null);
-  // console.log("audio", audio);
-    // Create a Custom hook for this...
-    // This is useful especially for longer medias.
-  useEffect(() => {
-        const audio = new Audio();
-        const toneBtn = document.querySelector("#toneBtn");
-        toneBtn.addEventListener("click", () => audio.play());
-
-        fetch("/sounds/high-tech.mp3")
-        .then(response => response.blob())
-        .then(blob => convertBlobToData(blob, audio))
-        .catch(err => console.log(err))
-
-        const convertBlobToData = (blob, elem) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = function() {
-                const str64Data = reader.result;
-                audio.src = str64Data;
-            }
-        }
-  }, [])
+  usePlayAudio("/sounds/high-tech.mp3", "#keypadButtonAudio");
+  const ready = useDelay(3000);
 
   const onOpen = () => {
     setOpen(true);
@@ -64,7 +37,7 @@ export default function KeypadButton({
   return (
     <Fragment>
       <ButtonMulti
-          id="toneBtn"
+          id="keypadButtonAudio"
           onClick={onOpen}
           color="var(--mainWhite)"
           backgroundColor={backgroundColor || "var(--themeSDark)"}
@@ -74,14 +47,16 @@ export default function KeypadButton({
       >
           Abrir Teclado
       </ButtonMulti>
-      <KeypadHandler
-            open={open}
-            onClose={onClose}
-            title={title}
-            titleIcon={titleIcon}
-            keyboardType={keyboardType}
-            confirmFunction={confirmFunction}
-      />
+      {ready && (
+        <AsyncKeypadHandler
+           open={open}
+           onClose={onClose}
+           title={title}
+           titleIcon={titleIcon}
+           keyboardType={keyboardType}
+           confirmFunction={confirmFunction}
+        />
+      )}
     </Fragment>
   );
 }
