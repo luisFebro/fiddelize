@@ -59,6 +59,16 @@
     </style>
     <!-- END CRITICAL CSS -->
 
+    <!-- ASYNC DEFERED STYLES -->
+    <link
+        rel="stylesheet"
+        href="/styles/animate.selected.css"
+        media="print"
+        onload="this.media='all'; this.onload=null;"
+    >
+    <!-- reference: https://github.com/filamentgroup/loadCSS/ -->
+    <!--END ASYNC DEFERED STYLES -->
+
 
     <!-- FACEBOOK OPEN GRAPHS - TESTING -->
     <meta property="og:site_name" content="Fiddelize">
@@ -131,13 +141,6 @@
 <link rel="prefetch" as="image" href="%PUBLIC_URL%/img/illustrations/one-hand-held-mobile.webp">
 
 ASYNC DEFERED STYLES
-<link
-    rel="stylesheet"
-    href="/styles/animate.min.css"
-    media="print"
-    onload="this.media='all'; this.onload=null;"
->
-reference: https://github.com/filamentgroup/loadCSS/
 
 <link rel="preload" as="image" href="%PUBLIC_URL%/img/illustrations/one-hand-held-mobile.webp">
 

@@ -13,7 +13,6 @@ import '../utils/globalHelpers';
 import './scss/App.scss';
 import './libraries/fontAwesomeLib';
 import './styles/bootstrap.min.css';
-import './styles/animate.selected.css';
 //END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
 
