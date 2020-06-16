@@ -4,6 +4,7 @@ import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { logout } from '../../../redux/actions/authActions';
 import { CLIENT_URL } from '../../../config/clientUrl';
 import { Link } from 'react-router-dom';
+import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import styled from 'styled-components';
 import isThisApp from '../../../utils/window/isThisApp';
 import './NavbarLayout.scss';
@@ -14,10 +15,10 @@ import { useAuthUser } from '../../../hooks/useAuthUser';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 // import useCount from '../../../hooks/useCount';
 
-const isSmall = window.Helper.isSmallScreen();
 const gotToken = localStorage.getItem("token");
 
 function Navbar({ history, location }) {
+    const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
     //RT = 2 (OK);
     // useCount();
     // const [showSkeleton, setShowSkeleton] = useState(true);
@@ -28,7 +29,6 @@ function Navbar({ history, location }) {
     }));
 
     const { isAuthUser } = useAuthUser();
-
     const { bizCodeName, selfBizLogoImg, selfThemePColor } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
@@ -55,7 +55,7 @@ function Navbar({ history, location }) {
         </button>
     );
 
-    const titleByRoleHandler = () => (
+    const showAccessBtn = () => (
         <Fragment>
             {!gotToken || !role ? (
                 <Link
@@ -101,17 +101,38 @@ function Navbar({ history, location }) {
         </Fragment>
     );
 
-    const showRoleTitles = () => (
-        <ul
-            className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center"
-            style={{ display: ["/baixe-app/", "/regulamento", "/cliente/pontos-fidelidade", "/compartilhar-app"].some(link => locationNow.includes(link)) ? "none" : "block" }}
+    const showCallToActionBtn = () => (
+        locationNow === "/" &&
+        <Link
+            to="/acesso/verificacao"
+            className={["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(locationNow) ? "disabled-link" : "nav-link"}
         >
-            <li
-                className="nav-item text-subtitle"
+            <RadiusBtn
+                title={isSmall ? "Crie App" : "Crie seu App"}
+                position="fixed"
+                top={20}
+                right={20}
+                zIndex={1000}
+            />
+        </Link>
+    );
+
+    const showButtons = () => (
+        <Fragment>
+            <ul
+                className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center"
+                style={{ display: ["/baixe-app/", "/regulamento", "/cliente/pontos-fidelidade", "/compartilhar-app"].some(link => locationNow.includes(link)) ? "none" : "block" }}
             >
-                {titleByRoleHandler()}
-            </li>
-        </ul>
+                <li
+                    className="nav-item text-subtitle"
+                >
+                    <span>
+                        {showAccessBtn()}
+                    </span>
+                </li>
+            </ul>
+            {showCallToActionBtn()}
+        </Fragment>
     );
 
     const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isThisApp());
@@ -162,7 +183,7 @@ function Navbar({ history, location }) {
             style={{backgroundColor: (!isThisApp() || locationNow.includes("/painel-de-controle")) ? "var(--themePDark--default)" : "var(--themePDark--" + selfThemePColor + ")" }}
         >
             {showLogo()}
-            {showRoleTitles()}
+            {showButtons()}
         </NavWrapper>
     );
 }

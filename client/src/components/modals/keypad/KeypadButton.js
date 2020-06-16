@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import ButtonMulti, { faStyle } from '../../buttons/material-ui/ButtonMulti';
 import KeypadHandler from './KeypadHandler';
 import PropTypes from 'prop-types';
@@ -12,6 +12,13 @@ KeypadButton.propTypes = {
     confirmFunction: PropTypes.func,
 }
 
+ const preloadedAudio = () => {
+    var audio = new Audio();
+    audio.preload = "auto";
+    audio.currentTime = 0;
+    audio.src = "/sounds/high-tech.mp3";
+    return audio;
+}
 
 export default function KeypadButton({
     title,
@@ -22,6 +29,30 @@ export default function KeypadButton({
     backgroundColor, }) {
   const [open, setOpen] = useState(false);
 
+  // const [audio, setAudio] = useState(null);
+  // console.log("audio", audio);
+    // Create a Custom hook for this...
+    // This is useful especially for longer medias.
+  useEffect(() => {
+        const audio = new Audio();
+        const toneBtn = document.querySelector("#toneBtn");
+        toneBtn.addEventListener("click", () => audio.play());
+
+        fetch("/sounds/high-tech.mp3")
+        .then(response => response.blob())
+        .then(blob => convertBlobToData(blob, audio))
+        .catch(err => console.log(err))
+
+        const convertBlobToData = (blob, elem) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = function() {
+                const str64Data = reader.result;
+                audio.src = str64Data;
+            }
+        }
+  }, [])
+
   const onOpen = () => {
     setOpen(true);
   };
@@ -31,8 +62,9 @@ export default function KeypadButton({
   };
 
   return (
-    <div>
+    <Fragment>
       <ButtonMulti
+          id="toneBtn"
           onClick={onOpen}
           color="var(--mainWhite)"
           backgroundColor={backgroundColor || "var(--themeSDark)"}
@@ -50,7 +82,7 @@ export default function KeypadButton({
             keyboardType={keyboardType}
             confirmFunction={confirmFunction}
       />
-    </div>
+    </Fragment>
   );
 }
 

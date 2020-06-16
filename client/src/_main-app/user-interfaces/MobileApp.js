@@ -5,7 +5,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import Navbar from '../../components/_layout/navbar';
 
 // PAGES
-import AsyncLoginPage from '../../pages/auth/AsyncLoginPage'; // is it necessarybecauseit is only usedthe login compo inmobile app
+import LoginPage from '../../pages/auth/LoginPage'; // is it necessarybecauseit is only usedthe login compo inmobile app
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
@@ -48,7 +48,7 @@ function Mobile({ location }) {
                 <Navbar />
             ) : null}
             <Switch>
-                <Route path="/acesso/verificacao" exact component={AsyncLoginPage} />
+                <Route path="/acesso/verificacao" exact component={LoginPage} />
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
                 <Route path="/cliente/pontos-fidelidade" exact component={AsyncLoyaltyScoreHandler} />
                 <Route path="/regulamento/" exact component={RegulationPage} />

@@ -13,13 +13,16 @@ export default function RadiusBtn({
     position,
     top,
     left,
-    display, }) {
+    right,
+    display,
+    zIndex, }) {
 
     let styles = {
         btn: {
             position,
             top,
             left,
+            right,
             display: display || "block",
             color: color || "white",
             padding: padding || '2px 8px',
@@ -27,6 +30,7 @@ export default function RadiusBtn({
             backgroundColor: backgroundColor || 'var(--themeSDark)',
             outline: "none",
             fontSize: fontSize || '20px',
+            zIndex,
         }
     }
 
@@ -34,12 +38,14 @@ export default function RadiusBtn({
         position,
         top,
         left,
+        right,
         color: "white",
         padding: '2px 5px',
         borderRadius: '20px',
         backgroundColor: backgroundColor || 'var(--themeSDark)',
         outline: "none",
         fontSize: "12px",
+        zIndex,
     }
 
     if(size === 'small') {

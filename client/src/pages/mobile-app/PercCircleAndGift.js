@@ -1,9 +1,9 @@
 import ReactjsPercentageCircle from '../../components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle';
 import React, { Fragment } from 'react';
-import Tilt from 'react-tilt';
 import getPercentage from '../../utils/numbers/getPercentage';
 import Tooltip from '../../components/tooltips/Tooltip';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
+// import Tilt from 'react-tilt';
 
 export default function PercCircleAndGift({
     currScore,

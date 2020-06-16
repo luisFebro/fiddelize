@@ -53,6 +53,7 @@ const CustomizedButton = withStyles(theme => ({
 }))(Button);
 
 export default function ButtonMulti({
+    id,
     children,
     title,
     size,
@@ -85,6 +86,7 @@ export default function ButtonMulti({
 
     return (
         <CustomizedButton
+            id={id}
             className={`${(variant !== 'contained') ? sBtnDefaultColors : sBtnColors} ${shadowColor === "black" ? "" : "shadow-elevation-white"} `}
             onClick={onClick}
             size={size}

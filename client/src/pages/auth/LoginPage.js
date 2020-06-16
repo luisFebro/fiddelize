@@ -1,9 +1,8 @@
 import React, { useState, Fragment } from 'react';
-import Login from '../../components/auth/Login';
-import LoyaltyScoreHandler from '../client/loyalty-client-scores';
+import AsyncLogin from '../../components/auth/AsyncLogin';
+import AsyncLoyaltyScoreHandler from '../client/loyalty-client-scores';
 import { useStoreState } from 'easy-peasy';
-import LogoSpinner from '../../components/loadingIndicators/LogoSpinner';
-// import { CLIENT_URL } from '../config/clientUrl';
+import CompLoader from '../../components/CompLoader';
 
 export default function LoginPage() {
     const { currentComp } = useStoreState(state => ({
@@ -12,17 +11,22 @@ export default function LoginPage() {
 
     return (
         <>
-            <LogoSpinner />
             <div className="container-center mt-5">
                 <div>
                     {currentComp === "login"
                     ? (
                         <div style={{margin: '70px 0'}}>
-                            <Login />
+                            <CompLoader
+                                comp={<AsyncLogin />}
+                                hide={true}
+                                timeout={2000}
+                                width={330}
+                                marginY={100}
+                            />
                         </div>
                     ) : (
                         <div style={{margin: '70px 0'}}>
-                            <LoyaltyScoreHandler />
+                            <AsyncLoyaltyScoreHandler />
                         </div>
                     )}
                 </div>

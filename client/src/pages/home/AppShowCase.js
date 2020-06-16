@@ -1,28 +1,25 @@
-import React, { useEffect } from 'react';
-import animateVisibleElem from '../../utils/window/animateVisibleElem';
+import React from 'react';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
+import useAnimateElem from '../../hooks/scroll/useAnimateElem';
+import Picture from '../../components/Picture';
 
-export default function AppShowCase() {
+export default function AppShowCase({ setData }) {
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
-
-    useEffect(() => {
-        animateVisibleElem(".app-show-case--text", {animaIn: "fadeInUp", animaOut: "fadeOutUp", speed: "slow" })
-        animateVisibleElem(".app-show-case--phone", {animaIn: "fadeInBottomLeft", speed: "slower" })
-    }, [])
-    // AOS.init();
+    useAnimateElem(".app-show-case--text1", {animaIn: "fadeInUp", speed: "slower", rootMargin: 50 })
+    useAnimateElem(".app-show-case--text2", {animaIn: "fadeInUp", speed: "slower", threshold: .2 })
 
     return (
         <section>
-            <p className="app-show-case--text ml-4 text-title text-white">
+            <p className="app-show-case--text1 mx-2 mx-md-5 text-title text-white">
                 Combinamos design, sistema e tecnologia de ponta para entregar
                 uma experiência única para empreendedores e seus clientes através
                 de nossa plataforma de fidelização.
             </p>
-            <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
+            <div style={{margin: '50px 0 100px 0'}} className="d-flex justify-content-center">
                 <ScrollArrow color="white" />
             </div>
             <p
-                className="app-show-case--text ml-4 text-title text-white text-center"
+                className="app-show-case--text2 mx-2 mx-md-5 text-title text-white"
             >
                 Crie hoje seu multi App de<br />
                 pontos de fidelidade com<br />
@@ -30,22 +27,19 @@ export default function AppShowCase() {
                 aumentar sua clientela e vendas<br />
             </p>
             <div
-                className="app-show-case--phone"
-                style={{maxWidth: 800, position: 'relative', left: isSmall ? '-105px' : '-230px'}}
+                style={{maxWidth: 650, position: 'relative', left: isSmall ? '-105px' : '-110px', opacity: 1, transform: 'rotate(16deg)'}}
             >
-                <picture>
-                    <source srcSet="/img/illustrations/one-hand-held-mobile.webp" media="(min-width: 500px)" />
-                    <source srcSet="/img/illustrations/one-hand-held-mobile-small.webp" media="(max-width: 500px)" />
-                    <source srcSet="/img/illustrations/one-hand-held-mobile.png" media="(min-width: 500px)" />
-                    <source srcSet="/img/illustrations/one-hand-held-mobile-small.png" media="(max-width: 500px)" />
-                    <img
-                        className="img-fluid shape-elevation"
-                        src="/img/illustrations/one-hand-held-mobile.png"
-                        height="auto"
-                        alt="app do celular"
-                        onError={e => e.src = "/img/illustrations/one-hand-held-mobile.png"}
-                    />
-                </picture>
+                <Picture
+                    isResponsive={true}
+                    path="/img/illustrations/one-hand-held-mobile"
+                    className="img-fluid shape-elevation"
+                    dataClass="one-hand-held-mobile"
+                    dataSrc="/img/illustrations/one-hand-held-mobile.webp"
+                    height="auto"
+                    alt="app do celular"
+                    onError={e => e}
+                    callback={() => setData(true)}
+                />
             </div>
         </section>
     );

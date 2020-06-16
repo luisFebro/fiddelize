@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import AOS from 'aos';
 import { useStoreDispatch } from 'easy-peasy';
 import { CLIENT_URL } from '../../config/clientUrl';
 import ToggleVisibilityPassword from '../../components/forms/fields/ToggleVisibilityPassword';
@@ -12,6 +11,7 @@ import { readVerificationPass } from '../../redux/actions/adminActions';
 import setValObjWithStr from '../../utils/objects/setValObjWithStr';
 import { regulationText } from './regulationText';
 import { useAppSystem } from '../../hooks/useRoleData';
+import useAnimateElem from '../../hooks/scroll/useAnimateElem';
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ShowPasswordForm({
@@ -22,13 +22,14 @@ export default function ShowPasswordForm({
     })
     const { clientAdminData } = data;
 
+    useAnimateElem(".password-form--comp", {animaIn: "bounceInUp", speed: "normal" });
+
     const { businessId } = useAppSystem();
 
 
     const history = dataFromPassPage.history;
     const clientAdminName = dataFromPassPage.clientAdminName;
     const bizCodeName = dataFromPassPage.bizCodeName;
-
 
     const dispatch = useStoreDispatch();
 
@@ -46,10 +47,6 @@ export default function ShowPasswordForm({
             })
         }
     }, [businessId])
-
-    AOS.init({
-        offset: 50,
-    });
 
     const styles = {
         form: {
@@ -130,9 +127,8 @@ export default function ShowPasswordForm({
 
     return (
         <div
-            data-aos={!isFromCliAdminDash && "zoom-in-up"}
             style={{zIndex: 1000, bottom: handleBottomValues()}}
-            className="mt-4 position-relative container-center"
+            className="password-form--comp mt-4 position-relative container-center"
         >
             <form className="shadow-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <div className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}>

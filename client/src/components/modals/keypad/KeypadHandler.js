@@ -52,7 +52,7 @@ export default function NumericKeypad({
 
     return (
         <Dialog
-            className="animated zoomInDown slow"
+            className="animated backInUp slower"
             maxWidth={'md'}
             disableBackdropClick={true}
             onClose={handleClose}

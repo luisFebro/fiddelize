@@ -14,7 +14,7 @@ import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClie
 
 // PAGES
 import Home from '../../pages/home/Home';
-import AsyncLoginPage from '../../pages/auth/AsyncLoginPage';
+import LoginPage from '../../pages/auth/LoginPage';
 import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
@@ -42,7 +42,7 @@ function Website({ location }) {
             <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />
-                <Route path="/acesso/verificacao" exact component={AsyncLoginPage} />
+                <Route path="/acesso/verificacao" exact component={LoginPage} />
                 <Route path="/cliente/pontos-fidelidade" exact component={AsyncLoyaltyScoreHandler} />
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route path="/baixe-app/:userName" exact component={AsyncDownloadApp} />

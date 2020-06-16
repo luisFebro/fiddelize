@@ -4,8 +4,8 @@ import { CLIENT_URL } from '../../config/clientUrl';
 import { withRouter } from 'react-router-dom';
 import Illustration from '../../components/Illustration';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
-import AOS from 'aos';
 import ShowPasswordForm from './ShowPasswordForm';
+import useAnimateElem from '../../hooks/scroll/useAnimateElem';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -14,6 +14,9 @@ export default function PasswordPage({ location, match, history }) {
     const clientAdminName = getQueryByName("name", location.search).cap();
     const bizCodeName = match.params.bizCodeName;
 
+    useAnimateElem(".password-page--img", {animaIn: "fadeInTopLeft", speed: "slow" });
+    useAnimateElem(".password-page--txt", {animaIn: "fadeInUp", speed: "slow" });
+
     const dataFromPassPage = {
         clientAdminId,
         clientAdminName,
@@ -21,13 +24,9 @@ export default function PasswordPage({ location, match, history }) {
         history,
     }
 
-    AOS.init({
-        offset: 50,
-    });
-
     const showExplanation = () => (
         <Fragment>
-            <div className="container-center"  data-aos="fade-down-right" data-aos-delay="2000" data-aos-duration="1500">
+            <div className="password-page--img container-center">
                 <Illustration
                     img={`${CLIENT_URL}/img/illustrations/woman-typing-password.svg`}
                     alt="mulher digitando"
@@ -44,14 +43,14 @@ export default function PasswordPage({ location, match, history }) {
             <section className={`text-title ${isSmall ? "ml-3 text-left" : "text-center"} container-center`}>
                 {!isSmall
                 ? (
-                    <p style={{marginTop: '80px'}} data-aos="fade-down-left" data-aos-delay="3000" data-aos-duration="1500">
+                    <p className="password-page--txt" style={{marginTop: '80px'}}>
                         Defina uma <strong>senha de verificação</strong> para
                         <br />
                         validar a compra dos seus clientes.
                         <br />
                     </p>
                 ) : (
-                    <p style={{marginTop: '80px'}} data-aos="fade-down-left" data-aos-delay="3000" data-aos-duration="1500">
+                    <p className="password-page--txt" style={{marginTop: '80px'}}>
                         {clientAdminName},
                         <br />
                         Defina uma <strong>senha de verificação</strong> para
@@ -60,7 +59,7 @@ export default function PasswordPage({ location, match, history }) {
                         <br />
                     </p>
                 )}
-                <p style={{marginTop: '80px'}} data-aos="fade-down-right" data-aos-delay="3000" data-aos-duration="1500">
+                <p className="password-page--txt" style={{marginTop: '80px'}}>
                     Você pode trocar essa senha quando precisar no painel de controle.
                     <br />
                     <br />

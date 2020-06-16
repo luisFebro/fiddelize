@@ -11,25 +11,23 @@ import { useProfile, useCentralAdmin } from '../../../hooks/useRoleData';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import animateCSS from '../../../utils/animateCSS';
-import AOS from 'aos';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
+import useAnimateElem from '../../../hooks/scroll/useAnimateElem';
 
 const isSmall = window.Helper.isSmallScreen();
 
 function BottomActionBtns({ history }) {
     const { name } = useProfile();
+    useAnimateElem(".bottom-action-btn--contact", {animaIn: "backInLeft", speed: "slow" });
+    useAnimateElem(".bottom-action-btn--biz", {animaIn: "backInRight", speed: "slow" });
 
     const [fullOpen, setFullOpen] = useState(false);
-
-    AOS.init({
-        offset: 50,
-    });
 
     return (
         <section
             className="bottom-action-btns--root"
         >
-            <div className="talk-btn" data-aos="flip-left">
+            <div className="bottom-action-btn--contact talk-btn">
                 <ButtonFab
                     position="relative"
                     variant="extended"
@@ -41,7 +39,7 @@ function BottomActionBtns({ history }) {
                     iconFontAwesome={<FontAwesomeIcon icon="comment" style={faStyleSmall} />}
                 />
             </div>
-            <div className="premium-btn" data-aos="flip-up">
+            <div className="bottom-action-btn--biz premium-btn">
                 <ButtonFab
                     position="relative"
                     variant="extended"

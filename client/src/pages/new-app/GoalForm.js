@@ -3,7 +3,6 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { CLIENT_URL } from '../../config/clientUrl';
 import handleChange from '../../utils/form/use-state/handleChange';
-import AOS from 'aos';
 import { handleNextField } from '../../utils/form';
 import ButtonMulti, { faStyle } from '../../components/buttons/material-ui/ButtonMulti';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +11,7 @@ import { updateUser } from '../../redux/actions/userActions';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { withRouter } from 'react-router-dom';
+import useAnimateElem from '../../hooks/scroll/useAnimateElem';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -38,13 +38,11 @@ function GoalForm({
         clientAdminData: { rewardScore: undefined, mainReward: '' },
     })
 
+    useAnimateElem(".goal-form--comp", {animaIn: "bounceInUp", speed: "normal" });
+
     const { clientAdminData } = data;
 
     const dispatch = useStoreDispatch();
-
-    AOS.init({
-        offset: 150
-    });
 
     const classes = useStyles();
 
@@ -129,7 +127,7 @@ function GoalForm({
     );
 
     return (
-        <div className="container-center my-5 text-white" data-aos="flip-left">
+        <div className="goal-form--comp container-center my-5 text-white">
             <form className="card-elevation margin-auto-90" onBlur={() => setError("")} style={styles.form}>
                 <p className="text-title text-nowrap text-center m-1 p-1">Meta do App</p>
                 <div className="position-relative margin-auto-90 text-normal font-weight-bold">

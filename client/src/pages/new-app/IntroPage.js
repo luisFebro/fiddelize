@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import getQueryByName from '../../utils/string/getQueryByName';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
 import parse from 'html-react-parser';
-import AOS from 'aos';
 import { CLIENT_URL } from '../../config/clientUrl';
 import GoalForm from './GoalForm';
+import useAnimateElem from '../../hooks/scroll/useAnimateElem';
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -15,6 +15,10 @@ export default function CreationPage({ location, match }) {
     const bizCodeName = match.params.bizCodeName;
     const id = getQueryByName("id", location.search);
 
+    useAnimateElem(".intro-page--txt", {animaIn: "fadeInUp", speed: "slow" });
+    useAnimateElem(".intro-page--txt-hero", {animaIn: "bounceInUp", speed: "slow" });
+    useAnimateElem(".intro-page--img-right", {animaIn: "backInRight", speed: "normal" });
+
     const styles = {
         confettiIcon: {
             fontSize: '3rem',
@@ -22,10 +26,6 @@ export default function CreationPage({ location, match }) {
         }
 
     }
-
-    AOS.init({
-        offset: 50,
-    });
 
     const showWelcomeIntro = () => (
         <section className="text-white text-title">
@@ -39,11 +39,11 @@ export default function CreationPage({ location, match }) {
             </p>
             <div className="ml-2 text-center">
                 <p>Cadastro realizado! <i style={styles.confettiIcon}>🎉</i></p>
-                <p className="my-1" data-aos="fade-up" data-aos-delay="150">{parse(`Seja ${isSmall ? "<br />" : ""} bem-vindo(a)!`)}</p>
+                <p className="intro-page--txt my-1">{parse(`Seja ${isSmall ? "<br />" : ""} bem-vindo(a)!`)}</p>
                 <div className="pt-1 pb-5">
                     <ScrollArrow margin={50} />
                 </div>
-                <p className="my-3" data-aos="fade-up">
+                <p className="intro-page--txt my-3">
                     Vamos criar o
                     <br />
                     novo APP da {bizName}
@@ -58,24 +58,19 @@ export default function CreationPage({ location, match }) {
         <Fragment>
             <section
                 className="text-white"
-                data-aos-delay="15000"
             >
                 <p
-                    className="text-center text-subtitle ml-3 mt-5 mb-3"
-                    data-aos="fade-up"
+                    className="intro-page--txt text-center text-subtitle ml-3 mt-5 mb-3"
                     style={{marginTop: '50px'}}
                 >
                     &#187; {name}, nosso <strong>sistema de pontuação</strong> é simples:
                 </p>
                 <div
                     className="text-normal container-center"
-                    data-aos-delay="4000"
                 >
                     <p
                         style={{maxWidth: '400px'}}
-                        data-aos="zoom-in-right"
-                        data-aos-duration="2500"
-                        className={`${isSmall && "ml-3"}`}
+                        className={`${isSmall && "ml-3"} intro-page--txt`}
                     >
                         Cada Ponto é igual ao valor de compra.
                         <br />
@@ -84,9 +79,7 @@ export default function CreationPage({ location, match }) {
                     </p>
                     <figure
                         style={styles.coinsEqualMoneyIcon}
-                        className="svg-elevation"
-                        data-aos="zoom-in-left"
-                        data-aos-duration="2500"
+                        className="svg-elevation intro-page--img-right"
                     >
                         <img
                             src={`${CLIENT_URL}/img/icons/coinEqualMoney.svg`}
@@ -100,23 +93,18 @@ export default function CreationPage({ location, match }) {
             <section
                 style={{marginTop: '50px'}}
                 className="text-white"
-                data-aos-delay="15000"
             >
                 <p
-                    className="text-center text-subtitle ml-3 mt-5 mb-3"
-                    data-aos="fade-up"
+                    className="intro-page--txt text-center text-subtitle ml-3 mt-5 mb-3"
                 >
                     <strong>Você estipula o ponto de prêmio:</strong>
                 </p>
                 <div
                     className="text-normal container-center"
-                    data-aos-delay="4000"
                 >
                     <p
                         style={{maxWidth: '400px'}}
-                        data-aos="zoom-in-right"
-                        data-aos-duration="2500"
-                        className={`${isSmall && "ml-3"}`}
+                        className={`${isSmall && "ml-3"} intro-page--txt`}
                     >
                         Quando seu cliente atingir esse ponto,
                         <br />
@@ -128,9 +116,7 @@ export default function CreationPage({ location, match }) {
                     </p>
                     <figure
                         style={styles.coinsEqualMoneyIcon}
-                        className="svg-elevation"
-                        data-aos="zoom-in-left"
-                        data-aos-duration="2500"
+                        className="svg-elevation intro-page--img-right"
                     >
                         <img
                             src={`${CLIENT_URL}/img/icons/official-gift-bag.svg`}
@@ -140,13 +126,13 @@ export default function CreationPage({ location, match }) {
                         />
                     </figure>
                 </div>
-                <div style={{marginTop: '50px'}} className={`margin-auto-80 text-subtitle ${isSmall ? "text-left pl-1" : "text-center"}`} data-aos="zoom-in-left" data-aos-duration="2500">
+                <div style={{marginTop: '50px'}} className={`intro-page--txt margin-auto-80 text-subtitle ${isSmall ? "text-left pl-1" : "text-center"}`}>
                     <strong>Por que um prêmio?</strong><br />Além de valorizar as compras dos clientes, todos gostam de um desafio com um prêmio em mente, incluindo seus clientes.
                     <br/>
                     <br/>
                     Um cliente satisfeito e recompensado, volta ainda mais vezes.
                 </div>
-                <div style={{marginTop: '90px'}} className="text-hero text-center" data-aos="zoom-in-left" data-aos-duration="2500">
+                <div style={{marginTop: '90px'}} className="intro-page--txt-hero text-hero text-center">
                     Ok, agora vamos começar!
                 </div>
             </section>

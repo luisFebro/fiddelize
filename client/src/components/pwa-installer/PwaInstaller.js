@@ -5,9 +5,9 @@ import isThisApp from '../../utils/window/isThisApp';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import parse from 'html-react-parser';
-import AOS from 'aos';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
 import lStorage from '../../utils/storage/lStorage';
+import useAnimateElem from '../../hooks/scroll/useAnimateElem';
 
 PwaInstaller.propTypes = {
   title: PropTypes.string,
@@ -25,6 +25,8 @@ function closeWindow() {
 let deferredPrompt = null;
 export default function PwaInstaller({ title, icon, run = true, setDownloadAvailable }) { // A2HS = App to HomeScreen
     const [bannerVisible, setBannerVisible] = useState(false);
+    useAnimateElem(".pwa-installer--text", {animaIn: "fadeInUp", speed: "slow" })
+
 
     const shouldRender = run && bannerVisible && !isThisApp();
 
@@ -33,10 +35,6 @@ export default function PwaInstaller({ title, icon, run = true, setDownloadAvail
     }, [bannerVisible])
 
     const dispatch = useStoreDispatch();
-
-    AOS.init({
-        offset: 50,
-    });
 
     useEffect(() => {
         // This event requires the page to reload in order to set correctly...
@@ -120,13 +118,10 @@ export default function PwaInstaller({ title, icon, run = true, setDownloadAvail
             {shouldRender
             ? (
                 <div
-                  className="add-to-home-banner"
-                  data-aos="fade-up"
-                  data-aos-duration="2000"
+                  className="pwa-installer--text add-to-home-banner"
                 >
                     <div
                         onClick={handlePwaInstall}
-                        data-aos="flip-left"
                         className="add-to-home-content"
                     >
                         {icon ? <img style={styles.icon} className="add-to-home-icon animated slideInLeft" src={icon} /> : null}

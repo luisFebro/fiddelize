@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
-import AOS from 'aos';
 import parse from 'html-react-parser';
 import PwaInstaller from '../../components/pwa-installer/PwaInstaller';
 import { CLIENT_URL } from '../../config/clientUrl';
@@ -15,6 +14,7 @@ import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import Spinner from '../../components/loadingIndicators/Spinner';
 import useElemShowOnScroll from '../../hooks/scroll/useElemShowOnScroll';
+import useAnimateElem from '../../hooks/scroll/useAnimateElem';
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -38,6 +38,8 @@ export default function DownloadApp({ match, location }) {
     const isFromAdminPanel = location.search.includes("painel=1");
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
     const isValidRoleType = isClientAdmin || isClientUser;
+
+    useAnimateElem(".download-app--txt", {animaIn: "backInUp", speed: "slow" });
 
     const [isPageReady, setPageReady] = useState(false);
     useEffect(() => {
@@ -90,10 +92,6 @@ export default function DownloadApp({ match, location }) {
         }
     }, [run])
 
-    AOS.init({
-        offset: 10,
-    });
-
     const styles = {
         icon: {
             fontSize: isClientAdmin ? '6rem' : '3rem',
@@ -134,8 +132,8 @@ export default function DownloadApp({ match, location }) {
                         <ScrollArrow margin={50} />
                     </div>
                     <p
+                        className="download-app--txt"
                         style={styles.margin}
-                        data-aos="fade-up"
                     >
                         Clique no banner que aparece a baixo,
                         <br />
@@ -152,8 +150,8 @@ export default function DownloadApp({ match, location }) {
                         <ScrollArrow margin={50} />
                     </div>
                     <p
+                        className="download-app--txt"
                         style={styles.margin}
-                        data-aos="fade-up"
                     >
                         Baixe logo a baixo,
                         <br />
@@ -165,10 +163,9 @@ export default function DownloadApp({ match, location }) {
         </div>
     );
 
+    // Update this with Picture Comp and lazy loading effect: fadeInBottomLeft
     const showAppShowCase = () => (
         <div
-            data-aos="fade-up-right"
-            data-aos-duration="1500"
             style={{maxWidth: 800, position: 'relative', left: isSmall ? '-125px' : '-239px'}}
         >
             <img className="img-fluid shape-elevation" src="/img/illustrations/app-demo-download-page.png" height="auto" alt="app do celular"/>
@@ -198,11 +195,15 @@ export default function DownloadApp({ match, location }) {
 
                         {showAppShowCase()}
 
-                        <p style={styles.margin} data-aos="fade-up">Você vai acompanhar seus pontos de fidelidade, histórico de compras, conversar com a gente, ter acesso offline e mais.</p>
-                        <p className="text-hero" style={styles.margin} data-aos="fade-up">E o melhor...<br />você ainda ganha prêmios a cada meta atingida!</p>
+                        <p className="download-app--txt" style={styles.margin}>
+                            Você vai acompanhar seus pontos de fidelidade, histórico de compras, conversar com a gente, ter acesso offline e mais.
+                        </p>
+                        <p className="download-app--txt text-hero" style={styles.margin}>
+                            E o melhor...<br />você ainda ganha prêmios a cada meta atingida!
+                        </p>
                         <p
+                            className="download-app--txt"
                             style={styles.margin}
-                            data-aos="fade-up"
                         >
                             Baixe o seu app logo a baixo,
                             <br />
