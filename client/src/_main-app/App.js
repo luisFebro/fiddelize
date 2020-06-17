@@ -11,8 +11,7 @@ import { useRecoveryAndDataOffline } from '../hooks/roles-storage-and-data-recov
 import ReactGA from 'react-ga'; // google analytics
 import '../utils/globalHelpers';
 //STYLING
-import './scss/App.scss';
-import './libraries/fontAwesomeLib';
+// import './scss/App.scss';
 import './styles/bootstrap.selected.css';
 //END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
@@ -33,8 +32,9 @@ export default function App() {
             ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
             ReactGA.pageview(window.location.pathname + window.location.search);
         }
-
-        deferJsOnload(runGoogleAnalytics, "func");
+        const runLazyIcons = () => import(/* webpackChunkName: "font-awesome-icons" */ './libraries/fontAwesomeLib');
+        deferJsOnload(runLazyIcons, "func", { delay: 2000 })
+        deferJsOnload(runGoogleAnalytics, "func", { delay: 10000 });
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
             'url',

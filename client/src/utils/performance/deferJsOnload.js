@@ -6,12 +6,14 @@ Many people say "just use defer" or "just use async" or others say "just put you
 // deferring js render-blocking for performance.
 // ELEM is the target element either a src url or a function with component(s) or a function with instances (e.g ()=> {runComp(); runThat();}).
 // MODE can be "func" (function with component(s)) or "url" (link)
-export default function deferJsOnload(elem, mode, options = {}) {
+export default function deferJsOnload(elem, mode, options = {}) { // n1 idea to remove script from html
     const invalidMode = !(["func", "url"]).includes(mode);
     if(!elem) throw new Error("An elem is required. it can be either a src url or a component")
     if(invalidMode) throw new Error("Invalid mode. Only comp or url allowed.")
 
     const { integrity, crossorigin } = options;
+    let { delay } = options;
+    if(!delay) delay = 0;
 
     const appendElem = () => {
         if(mode === "url") {
@@ -20,10 +22,11 @@ export default function deferJsOnload(elem, mode, options = {}) {
             element.src = elem;
             if(integrity) element.integrity = integrity;
             if(crossorigin) element.crossOrigin = crossorigin;
+            element.async = true;
 
             document.body.appendChild(element);
         } else {
-            return elem();
+            return setTimeout(() => elem(), delay);
         }
     }
 
@@ -35,6 +38,29 @@ export default function deferJsOnload(elem, mode, options = {}) {
 
 }
 
+/* COMMENTS
+n1:
+
+export const removeScript = (scriptToremove) => {
+    let allsuspects=document.getElementsByTagName("script");
+    for (let i=allsuspects.length; i>=0; i--){
+if (allsuspects[i] && allsuspects[i].getAttribute("src")!==null
+  && allsuspects[i].getAttribute("src").indexOf(`${scriptToremove}`)                !== -1 ){
+           allsuspects[i].parentNode.removeChild(allsuspects[i])
+        }
+    }
+}
+*/
+
+// useEffect(() => {
+//   const script = document.createElement('script');
+//   script.src = "/path/to/resource.js";
+//   script.async = true;
+//   document.body.appendChild(script);
+// return () => {
+//     document.body.removeChild(script);
+//   }
+// }, []);
 // e.g
 /*
 deferJsOnload(
