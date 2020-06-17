@@ -3,6 +3,8 @@ import AppPreview from './AppPreview';
 import AppPickersHandler from './pickers/AppPickersHandler';
 import getQueryByName from '../../../utils/string/getQueryByName';
 import getFirstName from '../../../utils/string/getFirstName';
+import useDelay from '../../../hooks/useDelay';
+import Spinner from '../../../components/loadingIndicators/Spinner';
 import './style.scss';
 
 function SelfServicePage({ location, match }) {
@@ -13,6 +15,8 @@ function SelfServicePage({ location, match }) {
         colorBack: "",
     })
     const { colorP, colorS, colorBack } = theme;
+
+    const isPageReady = useDelay(2000);
 
     const bizId = match.params.bizId;
     const bizCodeName = match.params.bizCodeName; // for image naming
@@ -35,8 +39,18 @@ function SelfServicePage({ location, match }) {
         </div>
     );
 
+    const showSpinner = () => (
+        !isPageReady &&
+        <Spinner
+            marginY={600}
+            size="large"
+            logo="white"
+        />
+    );
+
     return (
         <div style={{overflow: 'hidden'}}>
+            {showSpinner()}
             {showTitle()}
             <div className="main-self-service">
                 <section className="picker-area">
