@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NotificationBadge from '../../../NotificationBadge';
+import usePlayAudio from '../../../../hooks/media/usePlayAudio';
 import './style.scss';
 
 export default function BadaloBell({
@@ -14,16 +15,13 @@ export default function BadaloBell({
 
     const [badgeInvisible, setbadgeInvisible] = useState(false);
 
-    function playRingtone() {
-        const elem = document.querySelector("#bellRing");
-        elem.play();
-    }
+    usePlayAudio("/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3", ".badalo-bell--audio")
 
     const playAnima = (options = {}) => {
 
         const { callback, isInit } = options;
 
-        if(!isInit) playRingtone();
+        // if(!isInit) playRingtone();
 
         const animaTop = document.querySelector(".bell-top");
         const animaBottom = document.querySelector(".bell-bot");
@@ -57,6 +55,7 @@ export default function BadaloBell({
 
     return (
         <section
+            className="badalo-bell--audio"
             style={{ position, top, right, left, cursor: "pointer" }}
             onClick={() => playAnima({callback: () => setbadgeInvisible(true)})}
         >
@@ -72,7 +71,6 @@ export default function BadaloBell({
                     <div className="bell-bot"></div>
                 </div>
             </NotificationBadge>
-            <audio id="bellRing" src="/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3"></audio>
         </section>
     );
 }
