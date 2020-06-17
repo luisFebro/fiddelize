@@ -113,6 +113,8 @@ function Navbar({ history, location }) {
                 top={20}
                 right={20}
                 zIndex={1000}
+                color="var(--themePDark)"
+                needTxtShadow={false}
             />
         </Link>
     );

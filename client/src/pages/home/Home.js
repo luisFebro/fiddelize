@@ -19,7 +19,7 @@ export default function Home() {
                     <source srcSet="/img/official-logo-white.png" type="image/png" />
                     <img
                         className="svg-elevation"
-                        src={`${CLIENT_URL}/img/official-logo-white.png`}
+                        src={`${CLIENT_URL}/img/official-logo-white.webp`}
                         alt="logo"
                         width={150}
                         height='auto'

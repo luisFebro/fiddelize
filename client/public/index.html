@@ -62,7 +62,7 @@
     <!-- ASYNC DEFERED STYLES -->
     <link
         rel="stylesheet"
-        href="/styles/animate.selected.css"
+        href="/styles/animate.selected.min.css"
         media="print"
         onload="this.media='all'; this.onload=null;"
     >
@@ -81,6 +81,7 @@
 
     <!-- PRELOADED MULTIMEDIAS -->
     <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-name.webp">
+    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-white.webp">
     <link rel="prefetch" as="image" href="%PUBLIC_URL%/img/icons/picture-upload.svg">
     <!-- self-service page -->
     <link rel="preload" as="image" href="%PUBLIC_URL%/img/shapes/blob-app-preview.svg">
@@ -117,19 +118,11 @@
     </noscript>
     <div id="root"></div>
 
-    <!-- SCRIPTS -->
-    <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js"
-        integrity="sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh"
-        crossorigin="anonymous">
-    </script>
     <script>
         // this disable mini-bar from browser. the custom banner is set in download page....
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
         })
-        // window.addEventListener('offline', () => {
-        //     alert("Você está sem internet. Tente Novamente!");
-        // })
     </script>
   </body>
 </html>

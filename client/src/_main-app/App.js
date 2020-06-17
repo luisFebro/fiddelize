@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import ScrollToTop from 'react-router-scroll-top';
 import isThisApp from '../utils/window/isThisApp';
 import isWebpSupported from '../utils/media/isWebpSupported';
+import deferJsOnload from '../utils/performance/deferJsOnload';
 // REDUX
 import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
@@ -26,11 +27,22 @@ export default function App() {
 
     useEffect(() => {
         isWebpSupported('lossy', (lossy, res) => res && console.log("This browser suppors webp image: " + res))
-        // Google Analytics
-        const opts = { testMode: false }
-        ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
-        ReactGA.pageview(window.location.pathname + window.location.search);
-        // End Google Analytics
+
+        const runGoogleAnalytics = () => {
+            const opts = { testMode: false }
+            ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
+            ReactGA.pageview(window.location.pathname + window.location.search);
+        }
+
+        deferJsOnload(runGoogleAnalytics, "func");
+        deferJsOnload(
+            "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
+            'url',
+            {
+                integrity: "sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh",
+                crossorigin: "anonymous",
+            });
+
     }, [])
 
     useEffect(() => {
