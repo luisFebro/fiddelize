@@ -34,7 +34,7 @@ export default function App() {
         }
         const runLazyIcons = () => import(/* webpackChunkName: "font-awesome-icons" */ './libraries/fontAwesomeLib');
         deferJsOnload(runLazyIcons, "func", { delay: 2000 })
-        deferJsOnload(runGoogleAnalytics, "func", { delay: 10000 });
+        deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
             'url',
