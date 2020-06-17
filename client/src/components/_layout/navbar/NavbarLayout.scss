@@ -1,3 +1,28 @@
+// before ml-3 ml-sm-auto
+.nav-item-position {
+    visibility: hidden;
+}
+
+.access-link-mobile {
+    display: block;
+    position: absolute;
+    top: 68px;
+    right: -5px;
+}
+
+@media only screen and (min-width: 500px) {
+    .nav-item-position {
+        visibility: visible;
+        position: relative;
+        right: 120px;
+        margin-left: auto;
+    }
+    .access-link-mobile {
+        display: none;
+    }
+}
+
+
 .plan-badge--root {
     display: flex;
     justify-content: center;

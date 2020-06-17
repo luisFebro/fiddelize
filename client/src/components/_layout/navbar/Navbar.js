@@ -113,8 +113,6 @@ function Navbar({ history, location }) {
                 top={20}
                 right={20}
                 zIndex={1000}
-                color="var(--themePDark)"
-                needTxtShadow={false}
             />
         </Link>
     );
@@ -122,7 +120,7 @@ function Navbar({ history, location }) {
     const showButtons = () => (
         <Fragment>
             <ul
-                className="navbar-nav ml-3 ml-sm-auto mr-3 align-items-center"
+                className="nav-item-position navbar-nav mr-3 align-items-center"
                 style={{ display: ["/baixe-app/", "/regulamento", "/cliente/pontos-fidelidade", "/compartilhar-app"].some(link => locationNow.includes(link)) ? "none" : "block" }}
             >
                 <li
@@ -178,7 +176,20 @@ function Navbar({ history, location }) {
         );
     };
 
-    // Render
+    const showAccessLinkMobile = () => (
+        <Link
+            to="/acesso/verificacao"
+            className={`access-link-mobile ${["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(locationNow) ? "disabled-link" : "nav-link"}`}
+        >
+            {locationNow === "/"
+            ? (
+                <span className="text-normal text-s">
+                    Acesso <FontAwesomeIcon icon="lock" style={{fontSize: '1.4rem'}} />
+                </span>
+            ) : null}
+        </Link>
+    );
+
     return (
         <NavWrapper
             className="navbar navbar-expand-sm text-nav-items"
@@ -186,6 +197,7 @@ function Navbar({ history, location }) {
         >
             {showLogo()}
             {showButtons()}
+            {showAccessLinkMobile()}
         </NavWrapper>
     );
 }
