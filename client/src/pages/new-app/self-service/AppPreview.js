@@ -113,4 +113,4 @@ function AppPreview({
     );
 }
 
-export default AppPreview;
+export default React.memo(AppPreview);

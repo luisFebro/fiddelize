@@ -1,6 +1,6 @@
 .back-btn-client-admin {
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: 5px;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .back-btn-client-admin .container .btn {
-    align-self: flex-end;
+    align-self: flex-start;
     width: 100%;
     padding: 0;
 }

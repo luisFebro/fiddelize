@@ -22,6 +22,12 @@ exports.mwValidateRegister = (req, res, next) => {
     const { role, name, email, cpf, birthday, phone, clientUserData, clientAdminData } = req.body;
     const isCpfValid = new CPF().validate(cpf);
     const bizId = clientUserData && clientUserData.bizId;
+
+    // For testing purpose, it will be allowed:]
+    // 111.111.111-11 for cli-admin free version testing
+    // 222.222.222-22 for cli-user free version testing
+    if(cpf === "111.111.111-11" || cpf === "222.222.222-22") { next() return; }
+
     // valid assertions:
     // Considering CPF as ID, these are true:
     // IMPORTANT: This requires another condition to identify if there is more than one account registered.account

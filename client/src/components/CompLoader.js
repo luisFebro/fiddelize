@@ -4,9 +4,7 @@ import Spinner from './loadingIndicators/Spinner';
 import PropTypes from 'prop-types';
 
 CompLoader.propTypes = {
-    comp: PropTypes.node,
-    align: PropTypes.string,
-    marginY: PropTypes.number,
+    comp: PropTypes.any,
     mode: PropTypes.oneOf(['skeleton', 'spinner']),
     hide: PropTypes.bool,
     timeout: PropTypes.number,

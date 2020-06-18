@@ -8,11 +8,11 @@
 
 .carousel-cell {
   box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
-  width: 50%;
+  width: 50% !important;
   height: 180px;
   margin: 10px;
   background: var(--mainWhite);
-  color: var(--mainPurple);
+  color: var(--mainPurple) !important;
   cursor: pointer;
   border: none;
   text-align: center;
@@ -42,8 +42,8 @@
 }
 
 .is-selected {
-  background-color: var(--lightPurple);
-  color: var(--mainWhite);
+  background-color: var(--lightPurple) !important;
+  color: var(--mainWhite) !important;
 }
 
 /* cell number */

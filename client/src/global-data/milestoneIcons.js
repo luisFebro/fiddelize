@@ -157,24 +157,28 @@ export const milestoneIcons = [
         fontSize: "",
     },
     {
+        id: 21,
         ptBr: "esporte",
         icon: "dumbbell",
         premium: false,
         fontSize: "",
     },
     {
+        id: 22,
         ptBr: "entreten.",
         icon: "gamepad",
         premium: false,
         fontSize: "",
     },
     {
+        id: 23,
         ptBr: "comida",
         icon: "apple-alt",
         premium: false,
         fontSize: "",
     },
     {
+        id: 24,
         ptBr: "mercadorias",
         icon: "cart-plus",
         premium: false,

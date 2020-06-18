@@ -63,7 +63,12 @@ function ClientAppPreview({ location }) {
     );
 
     return (
-        <div className={`theme-back--${colorBack || colorP}`} style={{overflowX: 'hidden', overflowY: 'auto', cursor: 'pointer'}}>
+        <div style={{
+            backgroundColor: `themeBackground--${colorBack || colorP}`,
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            cursor: 'pointer',
+        }}>
             {mainContent()}
         </div>
     );

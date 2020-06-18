@@ -1,4 +1,5 @@
 export default function sortObjKeyInArrayAlphabet(arrayToSort, key, needInsertIndex) {
+    let newSortedArray;
     const handleSort = (aValue, bValue, key) => {
         aValue = aValue[key];
         bValue = bValue[key];
@@ -12,10 +13,10 @@ export default function sortObjKeyInArrayAlphabet(arrayToSort, key, needInsertIn
         }
     }
 
-    arrayToSort = arrayToSort.sort((a, b) => handleSort(a, b, key));
+    newSortedArray = arrayToSort.concat().sort((a, b) => handleSort(a, b, key));
 
     if(needInsertIndex) {
-        const arraySortedWithInd = arrayToSort.map((iconObj, index) => {
+        const arraySortedWithInd = newSortedArray.map((iconObj, index) => {
             iconObj.id = index;
             return iconObj;
         })

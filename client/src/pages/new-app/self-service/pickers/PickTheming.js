@@ -124,6 +124,16 @@ export default function PickTheming({
         </div>
     );
 
+    const showLoadingStatus = () => (
+        <div
+            id="status"
+            className="animated bounce text-center font-weight-bold text-small text-purple mb-3"
+            style={{ display: 'none'}}
+        >
+            Aplicando nova cor ao app...
+        </div>
+    );
+
     const showThemingArea = () => (
         <section className="text-normal text-white container-center mb-md-5">
             <Card
@@ -135,6 +145,7 @@ export default function PickTheming({
                 }}
                 className="p-2 text-purple text-center text-normal font-weight-bold animated zoomIn fast"
             >
+                {showLoadingStatus()}
                 <section className="container-center">
                     <img
                         src={`${CLIENT_URL}/img/icons/color-palette.svg`}
@@ -179,8 +190,8 @@ export default function PickTheming({
                     <CheckBoxForm text="Selecionar cores acima e editar depois." setIsBoxChecked={setIsBoxChecked} />
                 </section>
                 <section
-                    id="status"
-                    className="animated bounce font-weight-bold text-small text-center text-purple"
+
+                    className="animated  font-weight-bold text-small text-center text-purple"
                     style={{ display: "none", animationIterationCount: 2 }}
                 >
                     Aplicando nova cor ao app...

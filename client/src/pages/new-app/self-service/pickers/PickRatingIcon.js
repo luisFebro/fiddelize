@@ -12,7 +12,7 @@ PickRatingIcon.propTypes = {
 
 export default function PickRatingIcon({
     step, setNextDisabled, isTest, isFromDash }) {
-    const selectedMilestoneIcons = (isTest || isFromDash) ? milestoneIconsSorted : milestoneIcons.filter(iconObj => iconObj.appPreview === true);
+    const selectedMilestoneIcons = isFromDash ? milestoneIconsSorted : milestoneIcons.filter(iconObj => iconObj.appPreview === true);
     const showCondition = isFromDash ? true : step === 3;
 
     const { selfMilestoneIcon } = useClientAdmin();

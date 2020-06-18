@@ -205,7 +205,7 @@ export default function PickLogo({
         isLoadingPic &&
         <div
             style={{display: gotPic ? "block" : "none"}}
-            className="zoomIn text-center font-weight-bold text-small text-purple mb-3"
+            className="animated bounce text-center font-weight-bold text-small text-purple mb-3"
         >
             Enviando para app. Processando...
         </div>

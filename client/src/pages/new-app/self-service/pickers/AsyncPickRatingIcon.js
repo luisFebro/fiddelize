@@ -1,12 +1,11 @@
 import React from 'react';
 import LoadableComp from '../../../../components/code-splitting/LoadableComp';
-import CompLoader from '../../../../components/CompLoader';
+import Spinner from '../../../../components/loadingIndicators/Spinner';
+import { IS_DEV } from '../../../../config/clientUrl';
 
-const AsyncComp = LoadableComp({ // n1
-  loader: () => import("./PickRatingIcon" /* webpackChunkName: "pick-rating-icon-comp-lazy" */),
+const AsyncPickRatingIcon = LoadableComp({ // n1
+  loader: () => import("./PickRatingIcon"  /* webpackChunkName: "pick-icons-comp-lazy" */),
+  loading: () => IS_DEV ? null : <Spinner marginY={50} width={200} height={200} size="large" />,
 });
-console.log("AsyncComp", AsyncComp);
-
-const AsyncPickRatingIcon = AsyncComp; //<CompLoader comp={AsyncComp} marginY={50} />
 
 export default AsyncPickRatingIcon;
