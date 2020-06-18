@@ -20,6 +20,7 @@ import { useAppSystem, useClientAdmin } from '../../hooks/useRoleData';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import { deleteImage } from '../../utils/storage/lForage';
 
+const isApp = isThisApp();
 function Login({ history, setLoginOrRegister }) {
     const dispatch = useStoreDispatch();
     let { roleWhichDownloaded } = useAppSystem();
@@ -126,7 +127,7 @@ function Login({ history, setLoginOrRegister }) {
     const showKeypadButton = () => (
         <div className="mt-3 mb-2 animated fadeInDown slow delay-1s d-flex justify-content-center">
             <KeypadButton
-                title="Informe o seu CPF"
+                title={`${isApp ? "Informe o seu CPF" : "Informe CPF"}`}
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
                 confirmFunction={signInThisUser}
