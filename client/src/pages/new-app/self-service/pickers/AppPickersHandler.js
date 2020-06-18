@@ -27,7 +27,7 @@ export default function AppPickersHandler({
     rewardDesc,
     rewardScore, }) {
     const { runName } = useRunComp();
-    const [step, setStep] = useState({ currNumber: 2, nextTask: '(cores)' });
+    const [step, setStep] = useState({ currNumber: 1, nextTask: '(cores)' });
     const [nextDisabled, setNextDisabled] = useState(true);
 
     // useCount(); // RT 3 (OK)
