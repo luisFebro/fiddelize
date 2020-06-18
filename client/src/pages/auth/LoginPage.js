@@ -18,8 +18,6 @@ export default function LoginPage() {
                         <div style={{margin: '70px 0'}}>
                             <CompLoader
                                 comp={<AsyncLogin />}
-                                hide={true}
-                                timeout={2000}
                                 width={330}
                                 marginY={100}
                             />

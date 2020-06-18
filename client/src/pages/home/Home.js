@@ -39,7 +39,7 @@ export default function Home() {
         <Fragment>
             <section className="full-height">
                 <span className="text-right text-white for-version-test">
-                    {"T100"}
+                    {"T101"}
                 </span>
                 {showSlogon()}
                 <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">

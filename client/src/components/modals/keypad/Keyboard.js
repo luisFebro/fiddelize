@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import cpfMaskBr from '../../../utils/validation/masks/cpfMaskBr';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import usePlayAudio from '../../../hooks/media/usePlayAudio';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -22,6 +23,7 @@ export default function Keyboard({
     handleConfirm,
     colorP,
 }) {
+    usePlayAudio('/sounds/confirmation-keypad.wav', ".keypadBeepConfirm");
 
     const getValue = value => {
 
@@ -62,11 +64,6 @@ export default function Keyboard({
         elem.play();
     }
 
-    const playBeepConfirm = () => {
-        const elem = document.querySelector("#keypadBeepConfirm");
-        elem.play();
-    }
-
     return (
         <GridContainer myGradient={`linear-gradient(to right, #16222a, var(--themePLight--${colorP}))`}>
             <div onClick={() => {getValue("1"); playBeep()} } className="item1">1</div>
@@ -94,7 +91,7 @@ export default function Keyboard({
             <div onClick={() => {getValue("7"); playBeep()}} className="item7">7</div>
             <div onClick={() => {getValue("8"); playBeep()}} className="item8">8</div>
             <div onClick={() => {getValue("9"); playBeep()}} className="item9">9</div>
-            <div onClick={() => {handleConfirm(); playBeepConfirm()} } className="d-flex flex-column justify-content-center confirm side-btn">
+            <div onClick={handleConfirm} className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn">
                 <FontAwesomeIcon
                     icon="check"
                     style={{fontSize: '1.9em'}}
@@ -111,7 +108,6 @@ export default function Keyboard({
                 {keyboardType === 'numeric' ? "," : ""}
             </div>
             <audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
-            <audio id="keypadBeepConfirm" src="/sounds/confirmation-keypad.wav"></audio>
         </GridContainer>
     );
 }

@@ -5,9 +5,11 @@ import getQueryByName from '../../../utils/string/getQueryByName';
 import getFirstName from '../../../utils/string/getFirstName';
 import useDelay from '../../../hooks/useDelay';
 import Spinner from '../../../components/loadingIndicators/Spinner';
+// import useCount from '../../../hooks/useCount';
 import './style.scss';
 
 function SelfServicePage({ location, match }) {
+    //useCount();// RT = 3
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
     const [theme, setTheme] = useState({
         colorP: "default",

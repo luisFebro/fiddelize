@@ -212,4 +212,4 @@ var confetti = {
 	}
 })();
 
-export { confetti };
+export const getConfetti = () => confetti;

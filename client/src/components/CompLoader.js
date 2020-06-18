@@ -17,7 +17,7 @@ CompLoader.propTypes = {
 
 export default function CompLoader({
     comp,
-    hide = false,
+    hide = true, // if there is a condition to hide LOADER
     timeout = 2000,
     align,
     marginY,
@@ -27,6 +27,7 @@ export default function CompLoader({
     height,
     style,
     alt,
+    size,
     className,
     modeProps,
     mode = "spinner",
@@ -48,7 +49,7 @@ export default function CompLoader({
     return(
         <div style={{margin: `${marginY || 0}px 0px` }} className="container-center">
             <div style={{ ...style, display: status ? 'block' : 'none', visibility: !needLoader && "hidden" }}>
-                <Spinner marginX={width} marginY={height} isCenter={false} size="large" logo={logo ? logo : undefined} />
+                <Spinner marginX={width} marginY={height} isCenter={false} size={size || "large"} logo={logo ? logo : undefined} />
             </div>
             <div style={{ display: status ? 'none' : 'block'}}>
                 {hide ? comp : null}

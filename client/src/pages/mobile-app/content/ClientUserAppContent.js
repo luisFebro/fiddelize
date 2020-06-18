@@ -4,7 +4,6 @@ import getDayGreetingBr from '../../../utils/getDayGreetingBr';
 import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
 import { useAuthUser } from '../../../hooks/useAuthUser';
 import lStorage, { confettiPlayOp, needAppRegisterOp } from '../../../utils/storage/lStorage';
-import { confetti } from '../../../keyframes/animations-js/confetti/confetti';
 import { useStoreDispatch } from 'easy-peasy';
 import getFirstName from '../../../utils/string/getFirstName';
 import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
@@ -18,15 +17,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import useElemShowOnScroll from '../../../hooks/scroll/useElemShowOnScroll';
-import Spinner from '../../../components/loadingIndicators/Spinner';
+// import usePlayAudio from '../../../hooks/media/usePlayAudio';
+import useCount from '../../../hooks/useCount';
+import CompLoader from '../../../components/CompLoader';
+// import useDelay from '../../../hooks/useDelay';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
-import ProgressMsg from '../ProgressMsg' ;
-import MoreOptionsBtn from '../MoreOptionsBtn';
+import AsyncProgressMsg from '../AsyncProgressMsg' ;
+import AsyncMoreOptionsBtn from '../AsyncMoreOptionsBtn';
 import AllScores from '../AllScores';
-import VAsyncPercCircleAndGift from '../VAsyncPercCircleAndGift';
+import AsyncPercCircleAndGift from '../AsyncPercCircleAndGift';
 // END APP COMPONENTS
+
+const loadConfetti = async (command) => {
+    const { getConfetti } = await import('../../../keyframes/animations-js/confetti/confetti' /* webpackChunkName: "confetti-anima-lazy" */);
+    const confetti = getConfetti();
+
+    if(command === "start") return confetti.start();
+    if(command === "isRunning") return confetti.isRunning;
+    if(command === "stop") return confetti.stop();
+}
 
 function ClientUserAppContent({
     history,
@@ -43,18 +54,15 @@ function ClientUserAppContent({
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
 
+    // usePlayAudio("/sounds/app-btn-sound.wav", '.app-btn--audio') // not working because elem is not displayed on DOM when mounted.
+    useCount("ClientUserAppContent.js"); // RT = 4
+
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const showMoreBtn = useElemShowOnScroll(".target--rules-page", { tSpan: 70 });
-    const [percGiftComp, setPercGiftComp] = useState(false);
+
+    // const targetElem = useRef(null); // withObserver does not track right away, there is a delay...
+    const showMoreBtn = useElemShowOnScroll('.target--rules-page', { tSpan: 20 });
     // multi scroll dection does not work for now...
     // const showPercGiftComp = useElemShowOnScroll("#target---perc-gift");
-
-    useEffect(() => {
-        if(showMoreComps) {
-            // simulating loading for now...
-            setTimeout(() => setPercGiftComp(true), 2500);
-        }
-    }, [showMoreComps])
 
     const currScoreRef = useRef(null);
 
@@ -97,18 +105,17 @@ function ClientUserAppContent({
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
         if(!playConfettiAgain && currScore >= maxScore) {
-            confetti.start();
+            loadConfetti("start");
             lStorage("setItem", confettiPlayOp);
         } else {
-            if(confetti.isRunning && showMoreComps) {
-                setTimeout(() => confetti.stop(), 5000)
+            if(loadConfetti("isRunning") && showMoreComps) {
+                setTimeout(() => loadConfetti("stop"), 5000)
             }
         }
 
         if(playConfettiAgain && currScore <= maxScore) {
             lStorage("removeItem", confettiPlayOp); // returns null if no keys were found.
         }
-
 
     }, [maxScore, currScore, showMoreComps]);
 
@@ -119,7 +126,8 @@ function ClientUserAppContent({
     }
 
     const handlePreload = () => {
-        VAsyncPercCircleAndGift.preload();
+        // if user mouse over the "mostrar mais" btn
+        AsyncPercCircleAndGift.preload();
     }
     // END UTILS
     const backColorSelect = colorBack || selfThemeBackColor || colorP;
@@ -164,26 +172,26 @@ function ClientUserAppContent({
     );
 
     const showPercCircleAndGift = () => (
-        <section id="target---perc-gift" className={showMoreComps ? "d-block" : "d-none"}>
-            {!percGiftComp ? (
-                <Spinner
-                    marginY={150}
-                    size="large"
-                />
-            ) : (
-                <div className="animated zoomIn">
-                    <VAsyncPercCircleAndGift
-                        currScore={currScore}
-                        classNamePerc={`${needAppForPreview && "enabledLink"}`}
-                        maxScore={maxScore}
-                        showPercentage={showMoreComps}
-                        playBeep={playBeep}
-                        colorS={colorS}
-                        colorP={colorP}
-                        colorBack={backColorSelect}
-                    />
-                </div>
-            )}
+        showMoreComps &&
+        <section id="target---perc-gift">
+            <CompLoader
+                comp={
+                    <div className="animated zoomIn">
+                        <AsyncPercCircleAndGift
+                            currScore={currScore}
+                            classNamePerc={`${needAppForPreview && "enabledLink"}`}
+                            maxScore={maxScore}
+                            showPercentage={showMoreComps}
+                            playBeep={playBeep}
+                            colorS={colorS}
+                            colorP={colorP}
+                            colorBack={backColorSelect}
+                        />
+                    </div>
+                }
+                marginY={50}
+                size="small"
+            />
         </section>
     );
 
@@ -201,26 +209,23 @@ function ClientUserAppContent({
                 colorS={colorS}
                 colorP={colorP}
             />
-            {showMoreComps
-            ? (
-                <div>
-                    <ProgressMsg
-                        currScore={currScore || 0}
-                        maxScore={maxScore || 0}
-                        playBeep={playBeep}
-                        colorBack={backColorSelect}
-                        colorS={colorS}
-                        selectTxtStyle={selectTxtStyle}
-                    />
-                </div>
-            ) :  null}
+            {showMoreComps &&
+                <AsyncProgressMsg
+                    currScore={currScore || 0}
+                    maxScore={maxScore || 0}
+                    playBeep={playBeep}
+                    colorBack={backColorSelect}
+                    colorS={colorS}
+                    selectTxtStyle={selectTxtStyle}
+                />
+            }
         </div>
     );
 
     const showSkipIconsBtn = () => (
         currScore >= 30 && !showMoreComps &&
         <div
-            className="position-relative container-center animated zoomIn delay-2s"
+            className={`${needAppForPreview && "enabledLink"} position-relative container-center animated zoomIn delay-2s`}
             style={{top: '-55px'}}
         >
             <ButtonFab
@@ -242,30 +247,29 @@ function ClientUserAppContent({
     );
 
     const showRules = () => (
+        showMoreComps &&
         <div className="mb-4">
-            {showMoreComps
-            ? (
-                <div
-                    className="target--rules-page container-center position-relative"
-                    style={{ top: `${needAppForPreview && "15px"}` }}
-                >
-                    <Link to={needAppForCliAdmin ? "/regulamento?client-admin=1" : "/regulamento"}>
-                        <div
-                            className={`no-text-decoration text-center pressed-to-left`}
-                            onClick={playBeep}
-                            style={styles.rulesBtn}>
-                            <span className={`${selectTxtStyle(backColorSelect, {bold: true})} text-normal`}>
-                                Consulte<br />Regras Aqui
-                            </span>
-                        </div>
-                    </Link>
-                </div>
-            ) : null}
+            <div
+                className="target--rules-page container-center position-relative"
+                style={{ top: `${needAppForPreview && "15px"}` }}
+            >
+                <Link to={needAppForCliAdmin ? "/regulamento?client-admin=1" : "/regulamento"}>
+                    <div
+                        className={`no-text-decoration text-center pressed-to-left`}
+                        onClick={playBeep}
+                        style={styles.rulesBtn}>
+                        <span className={`${selectTxtStyle(backColorSelect, {bold: true})} text-normal`}>
+                            Consulte<br />Regras Aqui
+                        </span>
+                    </div>
+                </Link>
+            </div>
         </div>
     );
 
     const showMoreOptionsBtn = () => (
-        <MoreOptionsBtn
+        showMoreComps &&
+        <AsyncMoreOptionsBtn
             playBeep={playBeep}
             showMoreBtn={showMoreBtn}
             userName={name}
@@ -298,7 +302,7 @@ function ClientUserAppContent({
     );
 
     return (
-        <div className={`${needAppForPreview && "disabledLink"}`}>
+        <div className={`${needAppForPreview && "disabledLink"} client-user-app-content`}>
             {showGreetingAndNotific()}
             {showAllScores()}
             {showPercCircleAndGift()}

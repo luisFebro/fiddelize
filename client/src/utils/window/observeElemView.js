@@ -6,11 +6,17 @@ export default function observeElemView(elem, callback, opts = {}) {
         rootMargin,
         needPreload,
         once = true } = opts;
-        // ISSUE: once with false triggers multiple times.
+        // ISSUE: once with false triggers multiple times with animation. use only for detection of elements!
 
-    if(!elem) throw Error("You need to declare an element as the first parameter");
+    if(!elem) return;
 
-    const elements = document.querySelectorAll(elem);
+    let elements; // elements can be a string or a React Ref.
+    if(typeof elem === "string") {
+        elements = document.querySelectorAll(elem);
+    } else {
+        elements = elem;
+    }
+    console.log(elem);
 
     const config = {
       root: null, // html root default or document.querySelector("#scrollArea")
@@ -22,10 +28,9 @@ export default function observeElemView(elem, callback, opts = {}) {
 
     const elemObserver = new IntersectionObserver((entries, self) => {
         entries.forEach(entry => {
-            console.log("entry", entry);
             if(entry.isIntersecting) {
                 callback(true);
-                intersectionHandler(entry, "in", { isImg: needPreload ? true : false, needAnima: needPreload ? true : false});
+                needPreload && intersectionHandler(entry, "in", { isImg: needPreload ? true : false, needAnima: needPreload ? true : false});
                 needUnobserve && self.unobserve(entry.target);
             } else {
                 callback(false);
@@ -34,10 +39,15 @@ export default function observeElemView(elem, callback, opts = {}) {
 
     }, config);
 
-    elements.forEach(selectedElem => {
-        selectedElem.style.opacity = "0";
-        elemObserver.observe(selectedElem)
-    }); // n1
+    if(typeof elem !== 'string') {
+        elements && elemObserver.observe(elements);
+    } else {
+        elements.forEach(selectedElem => {
+            console.log("selectedElem", selectedElem);
+            selectedElem.style.opacity = "0";
+            elemObserver.observe(selectedElem)
+        }); // n1
+    }
 
     function intersectionHandler(entry, status, opts) {
         const { isImg, needAnima } = opts;

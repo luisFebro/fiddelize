@@ -35,6 +35,7 @@ const muStyle = {
 
 function MoreOptionsBtn({
     history,
+    animaClass,
     playBeep,
     showMoreBtn,
     userName,
@@ -99,7 +100,6 @@ function MoreOptionsBtn({
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && logout(dispatch);
-                    playBeep();
                 }
             },
             {

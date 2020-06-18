@@ -3,11 +3,14 @@ import { useClientAdmin } from '../../hooks/useRoleData';
 import ClientUserAppContent from './content/ClientUserAppContent';
 import { withRouter } from 'react-router-dom';
 import getQueryByName from '../../utils/string/getQueryByName';
+import useCount from '../../hooks/useCount';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 
 const isSmall = window.Helper.isSmallScreen();
 
 function ClientAppPreview({ location }) {
+    useCount("ClientAppPreview.js"); // RT =1 (ok)
+
     const runName = getQueryByName("runName", location.search);
     const clientName = getQueryByName("clientName", location.search);
     let logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
@@ -27,12 +30,12 @@ function ClientAppPreview({ location }) {
         lastScore: 20,
     });
 
-    const logoSrc = logoUrlPreview || imgLib.app_fiddelize_logo;
+    const logoSrc = logoUrlPreview ? logoUrlPreview : "/img/official-logo-name.png";
     const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
     const showLogo = () => (
         <div className="container-center">
             <ImgLoader
-                className={`${logoUrlPreview ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                className={`${logoUrlPreview ? "app_biz_logo" : null} animated zoomIn slow`}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
                 src={logoSrc}
                 alt="Logomarca Principal"
@@ -66,4 +69,4 @@ function ClientAppPreview({ location }) {
     );
 }
 
-export default React.memo(withRouter(ClientAppPreview));
+export default withRouter(ClientAppPreview);

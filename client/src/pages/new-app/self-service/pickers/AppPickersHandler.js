@@ -7,10 +7,12 @@ import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { updateUser } from '../../../../redux/actions/userActions';
 import { useRunComp } from '../../../../hooks/useRunComp';
+// import useCount from '../../../../hooks/useCount';
 //pickers
-import PickTheming from './PickTheming';
 import PickLogo from './PickLogo';
-import PickRatingIcon from './PickRatingIcon';
+import AsyncPickRatingIcon from './AsyncPickRatingIcon';
+import AsyncPickTheming from './AsyncPickTheming';
+
 // end pickers
 
 export default function AppPickersHandler({
@@ -27,6 +29,8 @@ export default function AppPickersHandler({
     const { runName } = useRunComp();
     const [step, setStep] = useState({ currNumber: 1, nextTask: '(cores)' });
     const [nextDisabled, setNextDisabled] = useState(true);
+
+    // useCount(); // RT 3 (OK)
 
     const { currNumber, nextTask } = step;
     const dispatch = useStoreDispatch();
@@ -101,17 +105,21 @@ export default function AppPickersHandler({
                 bizCodeName={bizCodeName}
                 setLogoUrlPreview={setLogoUrlPreview}
             />
-            <PickTheming
-                step={currNumber}
-                setNextDisabled={setNextDisabled}
-                theme={theme}
-                setTheme={setTheme}
-            />
-            <PickRatingIcon
-                isTest={isTest}
-                step={currNumber}
-                setNextDisabled={setNextDisabled}
-            />
+            {currNumber === 2 && (
+                <AsyncPickTheming
+                    step={currNumber}
+                    setNextDisabled={setNextDisabled}
+                    theme={theme}
+                    setTheme={setTheme}
+                />
+            )}
+            {currNumber === 3 && (
+                <AsyncPickRatingIcon
+                    isTest={isTest}
+                    step={currNumber}
+                    setNextDisabled={setNextDisabled}
+                />
+            )}
         </div>
     );
 }

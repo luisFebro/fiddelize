@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { CLIENT_URL } from '../../../config/clientUrl';
 import { useRunComp } from '../../../hooks/useRunComp';
 import MobileScreenLoading from '../../../components/loadingIndicators/MobileScreenLoading'
+import useCount from '../../../hooks/useCount';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './style.scss';
 import PropTypes from 'prop-types';
@@ -20,18 +21,10 @@ function AppPreview({
     rewardScore,
     currScore, }) {
     const { runName } = useRunComp();
+    useCount("AppPreview"); // RT = 2 (OK) || Interation RT = 3 Before = 6
 
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
-    const iframeUrl = `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&rewardScore=${rewardScore}&currScore=${currScore}`;
-
-    // function startIframe() {
-    //     const iFrame = document.querySelector("#appIframe");
-    //     setTimeout(() => iFrame.src = iframeUrl, 5000);
-    // };
-
-    // useEffect(() => {
-    //     startIframe();
-    // }, []);
+    const iframeUrl = React.useCallback(() => `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&rewardScore=${rewardScore}&currScore=${currScore}`, [runName, clientName, logoUrlPreview, currScore, rewardScore, colorBack, colorS, colorP,]);
 
     const showBlob = () => (
         <div className="app-preview-blob animated slideIn">
@@ -48,7 +41,7 @@ function AppPreview({
         >
             <iframe
                 id="appIframe"
-                src={iframeUrl}
+                src={iframeUrl()}
                 allowFullScreen={false}
                 width={330}
                 height={450}
@@ -120,4 +113,4 @@ function AppPreview({
     );
 }
 
-export default React.memo(AppPreview);
+export default AppPreview;

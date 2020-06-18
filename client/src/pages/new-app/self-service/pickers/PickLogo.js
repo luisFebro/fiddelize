@@ -24,8 +24,9 @@ export default function PickLogo({
     bizId, bizCodeName,
     setLogoUrlPreview,
     isFromDash = false }) {
-    // useCount();
-    // last rendering after running all functionalaties: 49 times.
+
+    //useCount("pickLogo"); //RT 3 (OK) || COMPLETE INTERACTION RT: 49 (ATTENTION) - last rendering after running all functionalaties: 49 times.
+
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
     const [tempImgUrl, setTempImgUrl] = useState("");
@@ -180,7 +181,7 @@ export default function PickLogo({
             </label>
             <div
                 style={{display: gotPic ? "block" : "none"}}
-                className=" zoomIn text-center text-small text-purple"
+                className="zoomIn text-center text-small text-purple"
             >
                 <FontAwesomeIcon
                     className="mr-2 animated rubberBand"
@@ -193,11 +194,20 @@ export default function PickLogo({
                     <span className="font-weight-bold">{picName}</span>
                     <br/>
                     foi carregada!
-                    <br />
-                    <br />
-                    {isLoadingPic && <span className="font-weight-bold">Enviando para app. Processando...</span>}
+                    <br/>
+                    <br/>
                 </span>
             </div>
+        </div>
+    );
+
+    const showLoadingStatus = () => (
+        isLoadingPic &&
+        <div
+            style={{display: gotPic ? "block" : "none"}}
+            className="zoomIn text-center font-weight-bold text-small text-purple mb-3"
+        >
+            Enviando para app. Processando...
         </div>
     );
 
@@ -236,6 +246,7 @@ export default function PickLogo({
                 }}
                 className="p-2 text-purple text-center text-normal font-weight-bold animated zoomIn fast"
             >
+                {showLoadingStatus()}
                 <section className={`${isFromDash ? "mt-3" : ""} container-center`}>
                     <img
                         src={`${CLIENT_URL}/img/icons/picture-upload.svg`}
