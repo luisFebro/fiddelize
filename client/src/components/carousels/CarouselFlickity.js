@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "flickity/dist/flickity.css";
 // jquery module is required to run this path
 import Flickity from 'flickity';
-import './CarouselFlickity.scss';
+import './CarouselFlickity.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setRun } from '../../redux/actions/globalActions';
 import { useStoreDispatch } from 'easy-peasy';

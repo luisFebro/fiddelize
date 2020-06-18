@@ -64,7 +64,7 @@ function ClientAppPreview({ location }) {
 
     return (
         <div style={{
-            backgroundColor: `themeBackground--${colorBack || colorP}`,
+            backgroundColor: `var(--themeBackground--${colorBack || colorP})`,
             overflowX: 'hidden',
             overflowY: 'auto',
             cursor: 'pointer',

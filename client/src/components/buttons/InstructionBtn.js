@@ -7,9 +7,7 @@ import CloseButton from './CloseButton';
 export default function InstructionBtn({
     text, onClick, needTooltip = true }) {
     const [closeBtn, setShowCloseBtn] = useState(false);
-    console.log("closeBtn", closeBtn);
     const [needOpen, setNeedOpen] = useState(false);
-    console.log("needOpen", needOpen);
 
     // WARNING: This causes performance issues with else condition, freezes the app
     // useEffect(() => {

@@ -8,13 +8,12 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
 
     const getSingleElem = audio => {
         const mediaBtn = document.querySelector(mediaElem);
-
+        console.log("audio set")
         mediaBtn.addEventListener("click", () => audio.play());
     }
 
     const getMultiElems = audio => {
         const groupElems = document.querySelectorAll(mediaElem);
-        console.log("groupElems", groupElems);
         if(groupElems) {
             groupElems.forEach(elem => elem.addEventListener("click", () => audio.play()))
         }

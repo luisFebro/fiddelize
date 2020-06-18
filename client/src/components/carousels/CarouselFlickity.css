@@ -42,16 +42,18 @@
 }
 
 .is-selected {
-  background-color: var(--lightPurple) !important;
+  background-color: #7c43bd !important; /* var(--lightPurple) */
   color: var(--mainWhite) !important;
 }
 
 /* cell number */
-// .carousel-cell:before {
-//   display: block;
-//   text-align: center;
-//   // content: counter(carousel-cell);
-//   line-height: 200px;
-//   font-size: 80px;
-//   color: white;
-// }
+/*
+.carousel-cell:before {
+  display: block;
+  text-align: center;
+  // content: counter(carousel-cell);
+  line-height: 200px;
+  font-size: 80px;
+  color: white;
+}
+*/

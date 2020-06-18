@@ -17,6 +17,7 @@ function SelfServicePage({ location, match }) {
         colorBack: "",
     })
     const { colorP, colorS, colorBack } = theme;
+    console.log("colorBack", colorBack);
 
     const isPageReady = useDelay(2000);
 
@@ -86,7 +87,7 @@ function SelfServicePage({ location, match }) {
     );
 }
 
-export default React.memo(SelfServicePage);
+export default SelfServicePage;
 
 /*
 
