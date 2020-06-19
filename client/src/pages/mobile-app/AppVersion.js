@@ -16,7 +16,7 @@ export default function AppVersion() {
             }}
             className="app-version text-small text-center"
         >
-            Versão 3.506.0
+            Versão 3.507.0
         </section>
     );
 }
