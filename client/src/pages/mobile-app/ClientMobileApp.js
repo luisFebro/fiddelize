@@ -261,7 +261,7 @@ function ClientMobileApp({ location, history }) {
                     {!isAuthUser && isCliAdminConnected && showLogin()}
                 </section>
             )}
-            <AsyncAppVersion />
+            {!isAuthUser && <AsyncAppVersion />}
         </div>
     );
 }
