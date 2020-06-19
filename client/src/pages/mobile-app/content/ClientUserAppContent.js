@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import useElemShowOnScroll from '../../../hooks/scroll/useElemShowOnScroll';
-// import usePlayAudio from '../../../hooks/media/usePlayAudio';
+import useAutoPlay from '../../../hooks/media/useAutoPlay';
 import useCount from '../../../hooks/useCount';
 import CompLoader from '../../../components/CompLoader';
 // import useDelay from '../../../hooks/useDelay';
@@ -54,10 +54,13 @@ function ClientUserAppContent({
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
 
-    // usePlayAudio("/sounds/app-btn-sound.wav", '.app-btn--audio') // not working because elem is not displayed on DOM when mounted.
+    const [showMoreComps, setShowMoreComps] = useState(false);
+    const [runSound, setRunSound] = useState(false);
+
+    useAutoPlay("win-challenge--audio", { trigger: runSound, delay: 2500 })
     useCount("ClientUserAppContent.js"); // RT = 4
 
-    const [showMoreComps, setShowMoreComps] = useState(false);
+
 
     // const targetElem = useRef(null); // withObserver does not track right away, there is a delay...
     const showMoreBtn = useElemShowOnScroll('.target--rules-page', { tSpan: 20 });
@@ -71,6 +74,11 @@ function ClientUserAppContent({
 
     const { currScore, lastScore, } = useClientUser();
     let { maxScore, bizCodeName, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
+
+    // SET THIS TO TRACK THE CORRECT REWARD SCORE/MAXSCORE VALUE.
+    // const pickedObj = pickCurrChallData(rewardList, totalChallenges - 1);
+    // rewardScore = pickedObj["rewardScore"]
+    const userBeatChallenge = currScore >= maxScore;
 
     if(rewardScoreTest) {
         maxScore = Number(rewardScoreTest);
@@ -88,6 +96,7 @@ function ClientUserAppContent({
         }
     }
 
+    // MOVE TO ANIMATION/ useAnimateConfetti hook
     useEffect(() => {
         const condition = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
         if(condition) {
@@ -101,19 +110,21 @@ function ClientUserAppContent({
         }
     }, [role, isAuthUser, needAppForCliAdmin])
 
-
+    // MOVE TO ANIMATION/ useAnimateConfetti hook
     useEffect(() => {
         const playConfettiAgain = lStorage("getItem", confettiPlayOp)
-        if(!playConfettiAgain && currScore >= maxScore) {
+        if(!playConfettiAgain && userBeatChallenge) {
+            setRunSound(true);
             loadConfetti("start");
             lStorage("setItem", confettiPlayOp);
         } else {
-            if(loadConfetti("isRunning") && showMoreComps) {
+            const condToStopConfetti = loadConfetti("isRunning") && showMoreComps;
+            if(condToStopConfetti) {
                 setTimeout(() => loadConfetti("stop"), 5000)
             }
         }
 
-        if(playConfettiAgain && currScore <= maxScore) {
+        if(playConfettiAgain && !userBeatChallenge) {
             lStorage("removeItem", confettiPlayOp); // returns null if no keys were found.
         }
 

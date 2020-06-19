@@ -22,6 +22,7 @@ import {
 import getFirstName from '../../../utils/string/getFirstName';
 import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import usePlayAudio from '../../../hooks/media/usePlayAudio';
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -45,6 +46,9 @@ function ClientScoresPanel({
 
     const { role, name, _id } = useProfile();
     let { currScore, totalGeneralScore } = useClientUser();
+
+    usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", { storeAudioTo: "win-challenge--audio" })
+
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { maxScore, bizName, bizCodeName, selfMilestoneIcon } = useClientAdmin();
     const { businessId } = useAppSystem();
@@ -205,7 +209,7 @@ function ClientScoresPanel({
         return(
             <button
                 disabled={finishedWork ? false : true}
-                className="text-shadow my-5 pressed-to-left"
+                className="win-challenge--audio text-shadow my-5 pressed-to-left"
                 style={styles.finishButton}
                 onClick={() => {
                     if(isThisApp()) {
@@ -230,11 +234,10 @@ function ClientScoresPanel({
     };
 
     return (
-        success &&
-            <div style={{maxWidth: 330}} className=" container-center mt-5 animated slideInLeft fast">
-                {showHeader()}
-                {showScores()}
-                {showHomeBtn()}
+        <div style={{maxWidth: 330, visibility: success ? "visible" : "hidden"}} className=" container-center mt-5 animated slideInLeft fast">
+            {showHeader()}
+            {showScores()}
+            {showHomeBtn()}
         </div>
     );
 }

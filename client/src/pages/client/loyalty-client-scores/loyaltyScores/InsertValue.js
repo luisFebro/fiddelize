@@ -55,7 +55,7 @@ export default function InsertValue({ success, setValuePaid }) {
     );
 
     const showKeypadButton = () => (
-        <div className="animated fadeInDown fast delay-2s d-flex justify-content-center mt-1 mb-4">
+        <div className="animated fadeInDown normal d-flex justify-content-center mt-1 mb-4">
             <KeypadButton
                 title="Insira o valor gasto"
                 titleIcon={<FontAwesomeIcon icon="money-bill-alt" />}

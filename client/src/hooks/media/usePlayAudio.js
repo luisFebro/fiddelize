@@ -3,13 +3,17 @@ import convertBlobToData from '../../utils/media/convertBlobToData';
 
 // cache and play audio easily and surely after loading a page.
 // mediaElem should be prefix (# id or . class) + componentName + mediaType to avoid conflicts...
+// trigger (bool) condition to play audio
 export default function usePlayAudio(url, mediaElem, options = {}) {
     const { multi } = options;
+    let { storeAudioTo, delay, trigger } = options;
+    if(!delay) delay = 0;
+    if(typeof trigger !== "boolean") trigger = true;
 
     const getSingleElem = audio => {
         const mediaBtn = document.querySelector(mediaElem);
-        console.log("audio set")
-        mediaBtn.addEventListener("click", () => audio.play());
+        console.log(`audio set on ${mediaElem}`)
+        mediaBtn && mediaBtn.addEventListener("click", () => audio.play());
     }
 
     const getMultiElems = audio => {
@@ -22,11 +26,14 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
     useEffect(() => {
         const audio = new Audio();
 
-        multi ? getMultiElems(audio) : getSingleElem(audio);
+        if(trigger) {
+            multi ? getMultiElems(audio) : getSingleElem(audio);
 
-        fetch(url)
-        .then(response => response.blob())
-        .then(blob => convertBlobToData(blob, audio))
-        .catch(err => console.log(err))
-    }, [])
+            fetch(url)
+            .then(response => response.blob())
+            .then(blob => setTimeout(() => convertBlobToData(blob, audio, { storeAudioTo }), delay))
+            .catch(err => console.log(err))
+        }
+
+    }, [multi, trigger])
 };

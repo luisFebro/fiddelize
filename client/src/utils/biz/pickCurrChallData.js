@@ -1,4 +1,5 @@
 export default function pickCurrChallData(rewardList, totalPurchasePrize) {
+    // change the original names to respectively rewardList ones...
     const keyAvalaible = {
         selfMilestoneIcon: 'icon',
         rewardScore: 'rewardScore',

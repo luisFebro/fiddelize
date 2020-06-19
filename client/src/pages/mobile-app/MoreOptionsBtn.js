@@ -58,7 +58,7 @@ function MoreOptionsBtn({
         fabTooltip: {
             backgroundColor: "var(--lightYellow)",
             color: "var(--mainDark)",
-            filter: `drop-shadow(0 0 8px #ffc)`,
+            filter: ``, // drop-shadow(0 0 8px #ffc)
         }
     }
 

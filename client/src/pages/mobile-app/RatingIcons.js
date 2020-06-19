@@ -22,9 +22,7 @@ export default function RatingIcons({
     colorS,
     colorP, }) {
     const appPreviewIcon = gotArrayThisItem(iconNamesOnly, runName) ? runName : false;
-    console.log("appPreviewIcon", appPreviewIcon);
     const selectedIcon = appPreviewIcon || selfMilestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
-    console.log("selectedIcon", selectedIcon);
 
     const paintStarsForScore = (score, maxScore) => {
         let indScore;

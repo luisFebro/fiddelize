@@ -1,5 +1,13 @@
 import React from 'react';
 
+
+
+const latestVersion = "3.6.1"
+const updateDescription = "Login/Acesso - Novo status para verificar novidades em funcionalidades"
+
+
+
+
 export default function AppVersion() {
     return (
         <section
@@ -16,7 +24,7 @@ export default function AppVersion() {
             }}
             className="app-version text-small text-center"
         >
-            Versão 3.508.1
+            Versão {latestVersion}
         </section>
     );
 }
