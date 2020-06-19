@@ -39,7 +39,7 @@ export default function DownloadApp({ match, location }) {
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
     const isValidRoleType = isClientAdmin || isClientUser;
 
-    useAnimateElem(".download-app--txt", {animaIn: "backInUp", speed: "slow" });
+    useAnimateElem(".download-app--txt", {animaIn: "fadeInUp", speed: "normal" });
 
     const [isPageReady, setPageReady] = useState(false);
     useEffect(() => {
