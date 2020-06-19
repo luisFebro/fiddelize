@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NotificationBadge from '../../../NotificationBadge';
 import usePlayAudio from '../../../../hooks/media/usePlayAudio';
-import './style.scss';
+import './_style.scss';
 
 export default function BadaloBell({
     position,
