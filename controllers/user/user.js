@@ -409,6 +409,7 @@ exports.uploadImages = (req, res) => { // n6 - multiple images promise.
         use_filename: false, // use file name as public_id
         image_metadata: true,
         quality_analysis: true,
+        quality: 90,
         tags: "logo",
         backup: true,
         // folder: "trade-marks/",

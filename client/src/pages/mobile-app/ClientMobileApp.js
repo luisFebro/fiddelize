@@ -25,6 +25,7 @@ import LoadableComp from '../../components/code-splitting/LoadableComp';
 
 const AsyncAppVersion = LoadableComp({
     loader: () => import('./AppVersion' /* webpackChunkName: "app-version-lazy" */),
+    loading: () => <div className="text-white text-shadow text-small">Carregando...</div>
 })
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);

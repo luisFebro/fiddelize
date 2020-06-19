@@ -65,7 +65,7 @@ const showDiscountBtn = (data, clientAdminData) => {
                     name: data.name.cap(),
                     rewardScore: rewardScore,
                     userId: data._id,
-                    totalChallenges: totalChallenges,
+                    totalChallenges,
                 }}
             />
         </div>

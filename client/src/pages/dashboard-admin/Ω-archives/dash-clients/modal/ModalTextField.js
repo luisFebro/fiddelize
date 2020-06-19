@@ -78,9 +78,9 @@ export default function ModalTextField({
         updateUser(dispatch, bodyToSend, userId, false)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            onClose();
             readUserList(dispatch)
             showSnackbar(dispatch, `Os pontos de fidelidade do cliente foram descontados com sucesso`, 'success', 8000)
+            onClose();
             setTimeout(() => readHighestScores(dispatch), 3000);
         })
     };

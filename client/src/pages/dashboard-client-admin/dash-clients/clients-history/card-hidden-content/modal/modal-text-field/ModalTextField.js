@@ -24,6 +24,7 @@ import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
 import { readUserList } from '../../../../../../../redux/actions/userActions';
 import { useAppSystem, useClientAdmin } from '../../../../../../../hooks/useRoleData';
 import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
+import { setRun } from '../../../../../../../redux/actions/globalActions';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -61,12 +62,6 @@ export default function ModalTextField({
 
     const pickedObj = pickCurrChallData(rewardList, totalChallenges - 1);
     rewardScore = pickedObj["rewardScore"]
-    // useEffect(() => {
-    //     if(rewardList) {
-    //         const pickedObj = pickCurrChallData(rewardList, totalChallenges - 1);
-    //         rewardScore = pickedObj["rewardScore"]
-    //     }
-    // }, [rewardList, totalChallenges])
 
     const userBeatScore = userCurrScore >= rewardScore;
     useEffect(() => {
@@ -97,36 +92,22 @@ export default function ModalTextField({
     }
 
     const handleSubmit = () => {
-        // if(parseFloat(remainValue) < 0){
-        //     showSnackbar(dispatch, "O valor do desconto é maior que o total de pontos do cliente. Digite valor menor", "error", 7000);
-        //     setGotError(true); return;
-        // }
-
-        // if(!isMoneyBrValidAndAlert(valueOnField, showSnackbar, dispatch)) {
-        //     setGotError(true); return;
-        // }
-
         const bodyToSend = {
             "clientUserData.currScore": parseFloat(remainValue),
             "clientUserData.totalPurchasePrize": totalChallenges,
+            "clientUserData.totalGeneralScore": userCurrScore - rewardScore,
         }
 
+        showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
         updateUser(dispatch, bodyToSend, userId, false)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            onClose();
-            const initialSkip = 0;
-        readUserList(dispatch, initialSkip, "cliente", "", businessId)
+            setRun(dispatch, "registered");
             showSnackbar(dispatch, `Os pontos de fidelidade do cliente foram descontados com sucesso`, 'success', 8000)
+            onClose();
             setTimeout(() => readHighestScores(dispatch, businessId), 3000);
         })
     };
-
-    // const handleChange = (setObj, obj) => e => {
-    //     const { name, value } = e.target;
-    //     let remainingValue = parseFloat(userCurrScore - convertCommaToDot(value))
-    //     setObj({ valueOnField: value, remainValue: convertCommaToDot(remainingValue).toString() });
-    // }
 
     const showTitle = () => (
         <div className="mt-4 mb-3 margin-auto-90 text-center">

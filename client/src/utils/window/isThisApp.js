@@ -1,4 +1,4 @@
-const localHostAppMode = false;
+const localHostAppMode = true;
 
 export default function isThisApp() {
     const isInWebAppiOS = window.navigator.userAgent.toLowerCase();
