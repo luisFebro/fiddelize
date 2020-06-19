@@ -1,5 +1,5 @@
 // reference: https://tylerzey.com/create-react-app-purge-css/
-
+// TEMPORARILY DISABLED - need craco and glob-all modules because server post-build is failing...
 const path = require('path');
 const fs = require('fs');
 const glob = require('glob-all');

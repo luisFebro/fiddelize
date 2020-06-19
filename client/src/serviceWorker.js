@@ -2,10 +2,10 @@ import isThisApp from './utils/window/isThisApp';
 
 const loadVanillaToast = async (txt, time) => {
     const {default: showVanillaToast} = await import(/* webpackChunkName: "toastify-module-lazy" */ './components/vanilla-js/toastify/showVanillaToast');
-    showVanillaToast(txt, time);
+    return showVanillaToast(txt, time);
 }
 
-let isToastActivated = false; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
+let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 isToastActivated = isToastActivated && isThisApp();
 // WARNING: The currentVersion needsfds to be actually the NEXT ONE because the next cache client receives is not updated.
 const currentVersion = "3.6.0";

@@ -12,7 +12,7 @@ export default function AppVersion() {
                 border: '3px solid white',
                 marginBottom: '10px',
                 marginLeft: '10px',
-                width: '130px',
+                width: '140px',
             }}
             className="app-version text-small text-center"
         >

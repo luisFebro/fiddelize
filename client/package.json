@@ -36,9 +36,9 @@
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "CI=false &&   craco build",
-    "test": "craco test",
+    "start": "react-scripts start",
+    "build": "CI=false && react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyse": "node scripts/analyse.js"
   },
