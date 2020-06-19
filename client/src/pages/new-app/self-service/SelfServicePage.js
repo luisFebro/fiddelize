@@ -7,6 +7,9 @@ import useDelay from '../../../hooks/useDelay';
 import Spinner from '../../../components/loadingIndicators/Spinner';
 // import useCount from '../../../hooks/useCount';
 import './style.scss';
+import lStorage from '../../../utils/storage/lStorage';
+
+lStorage("removeItem", {collection: "clientAdmin", property: "selfMilestoneIcon"})
 
 function SelfServicePage({ location, match }) {
     //useCount();// RT = 3
@@ -17,7 +20,6 @@ function SelfServicePage({ location, match }) {
         colorBack: "",
     })
     const { colorP, colorS, colorBack } = theme;
-    console.log("colorBack", colorBack);
 
     const isPageReady = useDelay(2000);
 

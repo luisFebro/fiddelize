@@ -125,7 +125,7 @@ function Login({ history, setLoginOrRegister }) {
     );
 
     const showKeypadButton = () => (
-        <div className="mt-3 mb-2 animated fadeInDown slow delay-1s d-flex justify-content-center">
+        <div className="mt-3 mb-2 animated fadeInDown normal delay-1s d-flex justify-content-center">
             <KeypadButton
                 title={`${isApp ? "Informe o seu CPF" : "Informe CPF"}`}
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}

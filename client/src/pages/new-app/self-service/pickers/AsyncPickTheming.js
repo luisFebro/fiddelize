@@ -9,25 +9,3 @@ const AsyncPickTheming = LoadableComp({ // n1
 });
 
 export default AsyncPickTheming;
-
-// Attempt to create my own lib
-// const loadComponent = async (command) => {
-//     const PickTheming = await import('./PickTheming' /* webpackChunkName: "pick-theming-comp-lazy" */);
-//     return PickTheming.default;
-// }
-
-// const AsyncPickTheming = () => {
-//     const [hideLoader, setHideLoader] = useState(false);
-//     const [Module, setModule] = useState(null);
-//     console.log("<Module />", Module);
-
-//     React.useEffect(() => {
-//         if(Module) setHideLoader(true);
-//     }, [Module])
-
-//     React.useEffect(() => {
-//         loadComponent().then(res => setModule(res))
-//     }, [])
-
-//     return <Module />;
-// }

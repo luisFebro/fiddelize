@@ -96,6 +96,12 @@ button {
     border-color: white !important;
 }
 
+/* MOBILE CAROUSEL PERSISTENT STYLE */
+.is-selected {
+  color: var(--mainWhite) !important;
+  background-color: var(--lightPurple) !important; /* var(--lightPurple) */
+}
+
 /* COMMENTS
 n1:
 solution to fixed footer try next:;

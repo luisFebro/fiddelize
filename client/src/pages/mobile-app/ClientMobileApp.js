@@ -21,6 +21,11 @@ import isThisApp from '../../utils/window/isThisApp';
 import BadaloBell from '../../components/buttons/bells/badalo/BadaloBell';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
+import LoadableComp from '../../components/code-splitting/LoadableComp';
+
+const AsyncAppVersion = LoadableComp({
+    loader: () => import('./AppVersion' /* webpackChunkName: "app-version-lazy" */),
+})
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -256,6 +261,7 @@ function ClientMobileApp({ location, history }) {
                     {!isAuthUser && isCliAdminConnected && showLogin()}
                 </section>
             )}
+            <AsyncAppVersion />
         </div>
     );
 }

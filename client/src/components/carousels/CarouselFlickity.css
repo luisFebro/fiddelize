@@ -12,7 +12,7 @@
   height: 180px;
   margin: 10px;
   background: var(--mainWhite);
-  color: var(--mainPurple) !important;
+  color: var(--mainPurple);
   cursor: pointer;
   border: none;
   text-align: center;
@@ -42,7 +42,7 @@
 }
 
 .is-selected {
-  background-color: #7c43bd !important; /* var(--lightPurple) */
+  background-color: var(--lightPurple) !important; /* var(--lightPurple) */
   color: var(--mainWhite) !important;
 }
 
