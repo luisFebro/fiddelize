@@ -23,16 +23,19 @@ import BadaloBell from '../../components/buttons/bells/badalo/BadaloBell';
 // import ImageLogo from '../../components/ImageLogo';
 import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
 import useDelay from '../../hooks/useDelay';
+import useCount from '../../hooks/useCount';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 const isSmall = window.Helper.isSmallScreen();
+const isApp = isThisApp();
 
 function ClientMobileApp({ location, history }) {
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
 
     const versionReady = useDelay(2000);
+    useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     const { _id, role, name } = useProfile();
@@ -84,7 +87,7 @@ function ClientMobileApp({ location, history }) {
         }
     }, [needAppRegister])
 
-    const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
+    const needClientLogo = (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
     const handleLogoSrc = () => {
         if(needClientLogo) {
             return imgLib.app_biz_logo(selfBizLogoImg);
@@ -97,7 +100,7 @@ function ClientMobileApp({ location, history }) {
     }, [])
 
     const showLogo = () => {
-        const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const isSquared = isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
 
         return(
             <div className="container-center">
@@ -130,7 +133,7 @@ function ClientMobileApp({ location, history }) {
     );
 
     const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
-
+    const shapeColor = `app_start_shape_${selfThemePColor}`;
     const showAppType = () => (
         roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin &&
         <div className="container-center">
@@ -140,8 +143,8 @@ function ClientMobileApp({ location, history }) {
                     className="animated rubberBand delay-5s"
                 >
                     <ImgLoader
-                        className={`app_start_shape_${selfThemePColor}`}
-                        src={imgLib[`app_start_shape_${selfThemePColor}`]}
+                        className={shapeColor}
+                        src={imgLib[shapeColor]}
                         width={460}
                         needLoader={false}
                         height={130}
@@ -185,6 +188,14 @@ function ClientMobileApp({ location, history }) {
         </div>
     );
 
+    const handleConnectedStatusClick = () => {
+        setRun(dispatch, "goDash");
+    }
+
+    const handleLogout = () => {
+        logout(dispatch);
+    }
+
     const showConnectedStatus = () => (
         <div
             className="position-relative my-5 container-center-col text-white text-normal text-center"
@@ -199,7 +210,7 @@ function ClientMobileApp({ location, history }) {
                 <Link
                     className="mr-3 no-text-decoration"
                     to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
-                    onClick={() => setRun(dispatch, "goDash")}
+                    onClick={handleConnectedStatusClick}
                 >
                     <RadiusBtn
                         title="acessar"
@@ -210,7 +221,7 @@ function ClientMobileApp({ location, history }) {
                     <RadiusBtn
                         title="sair"
                         backgroundColor="var(--mainRed)"
-                        onClick={() => logout(dispatch)}
+                        onClick={handleLogout}
                     />
                 </span>
             </div>

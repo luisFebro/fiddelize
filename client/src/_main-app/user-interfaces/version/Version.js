@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.803.1"
+const latestVersion = "3.804.1"
 const updateDescription = "Login/Acesso - Novo status para verificar novidades em funcionalidades com página de atualização"
 const history = [
 
