@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
 
 export default function useAnimateNumber(elemRef, targetNumber, options = {}) {
-    if(typeof targetNumber !== "number") throw new Error("You should specify a number at the second argument")
-
     let { trigger, callback } = options;
 
     useEffect(() => {

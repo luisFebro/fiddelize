@@ -7,9 +7,9 @@ import usePlayAudio from '../../../hooks/media/usePlayAudio';
 import useDelay from '../../../hooks/useDelay';
 
 KeypadButton.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     titleIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-    setSelectedValue: PropTypes.func.isRequired,
+    setSelectedValue: PropTypes.func,
     keyboardType: PropTypes.string,
     confirmFunction: PropTypes.func,
 }

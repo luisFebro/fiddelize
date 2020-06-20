@@ -37,6 +37,8 @@ const styles = {
     }
 }
 
+const greeting = getDayGreetingBr();
+
 function ClientUserAppContent({
     history,
     useProfile,
@@ -66,7 +68,7 @@ function ClientUserAppContent({
 
     const { isAuthUser } = useAuthUser();
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
-    useCount("ClientUserAppContent.js"); // RT = 3 before = / notes: React.useCallback is essential to avoid to render + 15 times at start
+    useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
     useAnimateConfetti(confettiOptions());
     const triggerNumberAnima = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
@@ -90,6 +92,7 @@ function ClientUserAppContent({
     }
     // END UTILS
     const backColorSelect = colorBack || selfThemeBackColor || colorP;
+    const selectedTxtStyle = selectTxtStyle(backColorSelect, {bold: true});
 
     const showGreetingAndNotific = () => (
         <section className="mt-3 position-relative animated slideInLeft slow">
@@ -109,7 +112,7 @@ function ClientUserAppContent({
             <div
                 style={{position: 'absolute', top: '1px', lineHeight: '.9em'}}
                 className={`ml-3 mb-2 ${selectTxtStyle(colorP, {bold: true})} text-subtitle text-left`}>
-                {getDayGreetingBr()},
+                {greeting},
                 <br/>
                 <span className="text-title">
                     {`${name}!`}
@@ -181,6 +184,11 @@ function ClientUserAppContent({
         </div>
     );
 
+    const handleMoreComps = () => {
+        setShowMoreComps(true);
+    }
+
+    const thisCurrTxtColor = currTxtColor(selfThemeSColor);
     const showSkipIconsBtn = () => (
         currScore >= 30 && !showMoreComps &&
         <div
@@ -189,16 +197,16 @@ function ClientUserAppContent({
         >
             <ButtonFab
                 position="relative"
-                onClick={() => setShowMoreComps(true)}
+                onClick={handleMoreComps}
                 title="ver mais"
                 iconFontAwesome={<FontAwesomeIcon icon="plus" />}
                 iconFontSize="25px"
                 variant="extended"
                 fontWeight="bolder"
-                onMouseOver={() => handlePreload()}
+                onMouseOver={handlePreload}
                 fontSize=".9em"
                 size="large"
-                color={currTxtColor(selfThemeSColor)}
+                color={thisCurrTxtColor}
                 backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
                 shadowColor={selfThemeBackColor === "black" ? "white" : "black"}
             />
@@ -217,7 +225,7 @@ function ClientUserAppContent({
                         className={`no-text-decoration text-center pressed-to-left`}
                         onClick={playBeep}
                         style={styles.rulesBtn}>
-                        <span className={`${selectTxtStyle(backColorSelect, {bold: true})} text-normal`}>
+                        <span className={`${selectedTxtStyle} text-normal`}>
                             Consulte<br />Regras Aqui
                         </span>
                     </div>
@@ -238,6 +246,11 @@ function ClientUserAppContent({
         />
     );
 
+    const handleBackBtnClick = () => {
+        setRun(dispatch, "goDash");
+        history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);
+    }
+
     const backBtnForCliAdmin = () => (
         needAppForCliAdmin &&
         <section className="back-btn-client-admin">
@@ -250,10 +263,7 @@ function ClientUserAppContent({
                         size="extra-small"
                         title="voltar painel"
                         backgroundColor={'var(--themeSDark--' + backColorSelect + ')'}
-                        onClick={() => {
-                            setRun(dispatch, "goDash");
-                            history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);
-                        }}
+                        onClick={handleBackBtnClick}
                     />
                 </div>
             </div>
@@ -277,6 +287,8 @@ function ClientUserAppContent({
 
 export default withRouter(ClientUserAppContent);
 
-/*
-
- */
+/* COMMENTS
+n1:
+a) React.useCallback is essential to avoid to render + 15 times at start
+b) When user log in, RT is 36
+*/

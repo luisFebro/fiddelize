@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 IconAndTitle.propTypes = {
     title: PropTypes.string,
-    titleIcon: PropTypes.string,
+    titleIcon: PropTypes.object,
 }
 export default function IconAndTitle({
     title,

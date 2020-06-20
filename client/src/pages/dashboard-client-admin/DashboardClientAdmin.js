@@ -9,9 +9,11 @@ import getFirstName from '../../utils/string/getFirstName';
 import { useProfile } from '../../hooks/useRoleData';
 import ActionBtns, { PlanBadges } from './ActionBtns';
 import { withRouter } from 'react-router-dom';
+import useBackColor from '../../hooks/useBackColor';
 
 function DashboardClientAdmin({ location }) {
     const { name } = useProfile();
+    useBackColor("var(--themeBackground--default)");
 
     const showGreeting = () => (
         <p

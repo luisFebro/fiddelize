@@ -10,7 +10,7 @@ import { useClientAdmin } from '../../../hooks/useRoleData';
 
 NumericKeypad.propTypes = {
     title: PropTypes.string,
-    titleIcon: PropTypes.string,
+    titleIcon: PropTypes.object,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     keyboardType: PropTypes.oneOf(['numeric', 'cpf']),

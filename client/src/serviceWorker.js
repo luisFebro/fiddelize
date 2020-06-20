@@ -72,7 +72,7 @@ function registerValidSW(swUrl, config) {
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
               // isToastActivated &&
-              isToastActivated && loadVanillaToast(`Opa! App atualizado com novidades. 🎉`, 2000);
+              isToastActivated && loadVanillaToast(`Opa! App atualizado com novidades. 🎉`, 3500);
               // isToastActivated &&
               setTimeout(() => isToastActivated && loadVanillaToast("Basta reiniciar seu app para atualizar.", 4000), 1900);
               // isToastActivated &&

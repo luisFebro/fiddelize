@@ -19,9 +19,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSystem, useClientAdmin } from '../../hooks/useRoleData';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import { deleteImage } from '../../utils/storage/lForage';
+import useCount from '../../hooks/useCount';
 
 const isApp = isThisApp();
 function Login({ history, setLoginOrRegister }) {
+    useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
     const dispatch = useStoreDispatch();
     let { roleWhichDownloaded } = useAppSystem();
     // disable restriction of user during early estages of tests.
@@ -95,10 +97,9 @@ function Login({ history, setLoginOrRegister }) {
                 readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
                 .then(res => {
                     if(isThisApp()) {
-                            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                            showSnackbar(dispatch, "Carregando...", 'warning', 3000);
-                            history.push("/mobile-app");
-
+                        if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                        showSnackbar(dispatch, "Carregando...", 'warning', 3000);
+                        history.push("/mobile-app");
                     } else {
                         showComponent(dispatch, "purchaseValue");
                         history.push("/cliente/pontos-fidelidade");
@@ -136,8 +137,12 @@ function Login({ history, setLoginOrRegister }) {
         </div>
     );
 
+    const handleLoginAndRegister = () => {
+        setLoginOrRegister("register")
+    }
+
     const showRegisterForm = () => (
-        isThisApp() && (
+        isApp && (
             <div
                 className="animated zoomIn delay-2s p-2 mt-3"
             >
@@ -151,7 +156,7 @@ function Login({ history, setLoginOrRegister }) {
                         <RadiusBtn
                             size="small"
                             title="aqui"
-                            onClick={() => setLoginOrRegister("register")}
+                            onClick={handleLoginAndRegister}
                             backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
                         />
                     </div>
