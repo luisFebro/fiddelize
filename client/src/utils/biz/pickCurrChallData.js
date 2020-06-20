@@ -1,5 +1,6 @@
 export default function pickCurrChallData(rewardList, totalChallenges) {
-    const prizeInd = totalChallenges === 0 ? totalChallenges : totalChallenges - 1;
+    const prizeInd = !totalChallenges ? 0 : totalChallenges - 1;
+    console.log("prizeInd", prizeInd);
 
     console.log("rewardList", rewardList);
     // change the original names to respectively rewardList ones...

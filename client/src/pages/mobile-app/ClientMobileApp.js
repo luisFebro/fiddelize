@@ -32,7 +32,7 @@ function ClientMobileApp({ location, history }) {
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
 
-    const versionReady = useDelay(5000);
+    const versionReady = useDelay(2000);
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     const { _id, role, name } = useProfile();

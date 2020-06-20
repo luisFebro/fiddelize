@@ -3,7 +3,7 @@ const backColorsWhichNeedDarkTxt = ["yellow", "white"];
 export default function selectTxtStyle(backgroundColor = "default", options = {}) {
     const { bold, needDarkBool } = options;
     const array = backColorsWhichNeedDarkTxt;
-    const needDark = array.some(item => backgroundColor.includes(item));
+    const needDark = array.some(item => backgroundColor && backgroundColor.includes(item));
 
     let whiteTheme = "text-white text-shadow";
     let darkTheme = "text-black";
