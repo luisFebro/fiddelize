@@ -1,9 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import getDayGreetingBr from '../../../utils/getDayGreetingBr';
-import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
 import { useAuthUser } from '../../../hooks/useAuthUser';
-import lStorage, { confettiPlayOp, needAppRegisterOp } from '../../../utils/storage/lStorage';
 import { useStoreDispatch } from 'easy-peasy';
 import getFirstName from '../../../utils/string/getFirstName';
 import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
@@ -11,16 +9,17 @@ import "../ellipse.css";
 import { setRun } from '../../../hooks/useRunComp';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
-import scrollIntoView from '../../../utils/document/scrollIntoView';
 import BadaloBell from '../../../components/buttons/bells/badalo/BadaloBell';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import useElemShowOnScroll from '../../../hooks/scroll/useElemShowOnScroll';
-import useAutoPlay from '../../../hooks/media/useAutoPlay';
 import useCount from '../../../hooks/useCount';
 import CompLoader from '../../../components/CompLoader';
-// import useDelay from '../../../hooks/useDelay';
+import useAnimateConfetti from '../../../hooks/animation/useAnimateConfetti';
+import useAnimateNumber from '../../../hooks/animation/useAnimateNumber';
+import pickCurrChallData from '../../../utils/biz/pickCurrChallData';
+import useBackColor from '../../../hooks/useBackColor';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -30,13 +29,12 @@ import AllScores from '../AllScores';
 import AsyncPercCircleAndGift from '../AsyncPercCircleAndGift';
 // END APP COMPONENTS
 
-const loadConfetti = async (command) => {
-    const { getConfetti } = await import('../../../keyframes/animations-js/confetti/confetti' /* webpackChunkName: "confetti-anima-lazy" */);
-    const confetti = getConfetti();
-
-    if(command === "start") return confetti.start();
-    if(command === "isRunning") return confetti.isRunning;
-    if(command === "stop") return confetti.stop();
+const styles = {
+    rulesBtn: {
+        width: '130px',
+        color: "var(--mainWhite)",
+        cursor: "pointer",
+    }
 }
 
 function ClientUserAppContent({
@@ -51,84 +49,34 @@ function ClientUserAppContent({
     colorS,
     colorBack,
     rewardScoreTest }) {
-    if(!colorP) { colorP = "default" }
-    if(!colorS) { colorS = "default" }
-
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const [runSound, setRunSound] = useState(false);
-
-    useAutoPlay("win-challenge--audio", { trigger: runSound, delay: 2500 })
-    useCount("ClientUserAppContent.js"); // RT = 4
-
-
-
-    // const targetElem = useRef(null); // withObserver does not track right away, there is a delay...
-    const showMoreBtn = useElemShowOnScroll('.target--rules-page', { tSpan: 20 });
-    // multi scroll dection does not work for now...
-    // const showPercGiftComp = useElemShowOnScroll("#target---perc-gift");
-
     const currScoreRef = useRef(null);
 
+    if(!colorP) { colorP = "default" }
+    if(!colorS) { colorS = "default" }
     let { role, name } = useProfile();
     name ? name = getFirstName(name) : name = "cliente";
-
-    const { currScore, lastScore, } = useClientUser();
-    let { maxScore, bizCodeName, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
-
-    // SET THIS TO TRACK THE CORRECT REWARD SCORE/MAXSCORE VALUE.
-    // const pickedObj = pickCurrChallData(rewardList, totalChallenges - 1);
-    // rewardScore = pickedObj["rewardScore"]
+    let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
+    let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
+    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize - 1);
+    console.log("pickedObj", pickedObj);
+    if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
+    maxScore = pickedObj.rewardScore
     const userBeatChallenge = currScore >= maxScore;
 
-    if(rewardScoreTest) {
-        maxScore = Number(rewardScoreTest);
-    }
-
     const { isAuthUser } = useAuthUser();
-
+    useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
+    useCount("ClientUserAppContent.js"); // RT = 3 before = / notes: React.useCallback is essential to avoid to render + 15 times at start
+    const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
+    useAnimateConfetti(confettiOptions());
+    const triggerNumberAnima = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
+    const numberOptions = { trigger: triggerNumberAnima, callback: setShowMoreComps }
+    useAnimateNumber(currScoreRef.current, currScore, numberOptions);
     const dispatch = useStoreDispatch();
-
-    const styles = {
-        rulesBtn: {
-            width: '130px',
-            color: "var(--mainWhite)",
-            cursor: "pointer",
-        }
-    }
-
-    // MOVE TO ANIMATION/ useAnimateConfetti hook
-    useEffect(() => {
-        const condition = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
-        if(condition) {
-            animateNumber(
-                currScoreRef.current,
-                0,
-                currScore,
-                getAnimationDuration(currScore),
-                setShowMoreComps
-            );
-        }
-    }, [role, isAuthUser, needAppForCliAdmin])
-
-    // MOVE TO ANIMATION/ useAnimateConfetti hook
-    useEffect(() => {
-        const playConfettiAgain = lStorage("getItem", confettiPlayOp)
-        if(!playConfettiAgain && userBeatChallenge) {
-            setRunSound(true);
-            loadConfetti("start");
-            lStorage("setItem", confettiPlayOp);
-        } else {
-            const condToStopConfetti = loadConfetti("isRunning") && showMoreComps;
-            if(condToStopConfetti) {
-                setTimeout(() => loadConfetti("stop"), 5000)
-            }
-        }
-
-        if(playConfettiAgain && !userBeatChallenge) {
-            lStorage("removeItem", confettiPlayOp); // returns null if no keys were found.
-        }
-
-    }, [maxScore, currScore, showMoreComps]);
+    const showMoreBtn = useElemShowOnScroll('.target--rules-page', { tSpan: 20 });
+    // const targetElem = useRef(null); // withObserver does not track right away, there is a delay...
+    // multi scroll dection does not work for now...
+    // const showPercGiftComp = useElemShowOnScroll("#target---perc-gift");
 
     // UTILS
     function playBeep() {

@@ -2,7 +2,7 @@ import React from 'react';
 
 
 
-const latestVersion = "3.6.1"
+const latestVersion = "3.7.1"
 const updateDescription = "Login/Acesso - Novo status para verificar novidades em funcionalidades"
 
 

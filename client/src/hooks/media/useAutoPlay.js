@@ -13,17 +13,23 @@ export default function useAutoPlay(mediaName, options = {}) {
     if(!delay) delay = 0;
 
     useEffect(() => {
+        let cancel = false;
         if(trigger) {
             const audio = new Audio();
+            audio.volume = "0.2"
+
+            if(cancel) return;
 
             const audioSrc = localStorage.getItem(mediaName);
             if(!audioSrc) return console.log(`ISSUE: the media ${mediaName.toUpperCase()} was not found in storage. Check for mispellings or make sure to set the audio in string64 format before using this.`)
 
             audio.src = audioSrc;
 
-            return onLoad
+            onLoad
             ? window.onload = () => setTimeout(() => audio.play(), delay)
             : setTimeout(() => audio.play(), delay)
         }
+
+        return () => { cancel = true }
     }, [trigger, onLoad])
 }
