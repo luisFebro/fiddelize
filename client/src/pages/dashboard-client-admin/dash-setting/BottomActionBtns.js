@@ -52,14 +52,14 @@ function BottomActionBtns({ history }) {
                     iconFontAwesome={<FontAwesomeIcon
                                         className="animated rubberBand delay-5s"
                                         icon="crown"
-                                        style={{...faStyleSmall, animationIterationCount: 4 }} />}
+                                        style={{...faStyleSmall, animationIterationCount: 4 }}
+                                    />}
                 />
             </div>
             <ModalFullContent
                 contentComp={<ContactComp />}
                 fullOpen={fullOpen}
                 setFullOpen={setFullOpen}
-                animatedClass=" "
             />
         </section>
     );
@@ -68,7 +68,6 @@ function BottomActionBtns({ history }) {
 export default withRouter(BottomActionBtns);
 
 const ContactComp = () => {
-    console.log("contact")
     const { mainSalesWhatsapp, mainTechWhatsapp } = useCentralAdmin();
     const [openThisComp, setOpenThisComp] = useState("");
     const [hideMain, setHideMain] = useState(false);
@@ -76,7 +75,6 @@ const ContactComp = () => {
 
     useEffect(() => {
         const imgSrc = imgLib.app_chat_illustra;
-        console.log("imgSrc", imgSrc);
     }, [])
 
     const showTitle = () => (

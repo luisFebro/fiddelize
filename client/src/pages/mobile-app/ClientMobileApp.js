@@ -21,12 +21,7 @@ import isThisApp from '../../utils/window/isThisApp';
 import BadaloBell from '../../components/buttons/bells/badalo/BadaloBell';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
-import LoadableComp from '../../components/code-splitting/LoadableComp';
-
-const AsyncAppVersion = LoadableComp({
-    loader: () => import('./AppVersion' /* webpackChunkName: "app-version-lazy" */),
-    loading: () => <div className="text-white text-shadow text-small">Carregando...</div>
-})
+import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -262,7 +257,7 @@ function ClientMobileApp({ location, history }) {
                     {!isAuthUser && isCliAdminConnected && showLogin()}
                 </section>
             )}
-            {!isAuthUser && <AsyncAppVersion />}
+            {!isAuthUser && <AsyncVersion />}
         </div>
     );
 }

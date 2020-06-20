@@ -9,7 +9,6 @@ the width and height should be number and if there is not one of them,
 just write an empty string ("")
 <ImgLoader
     id="dash_podium"
-    src={imgLib.dash_podium}
     width={300}
     height={250}
     className="shadow-elevation-black"
@@ -40,6 +39,7 @@ const imgLib = {
     get app_chat_illustra() { return handleStorage("illustrations", "app_chat_illustra", `img/illustrations/online-chat.svg`) },
     get app_empty_purchase_illustra() { return handleStorage("illustrations", "app_empty_purchase_illustra", `img/illustrations/empty-woman-card.svg`) },
     get dash_no_search_illustra() { return handleStorage("illustrations", "dash_no_search_illustra", `img/illustrations/empty-search.svg`) },
+    get app_version_feature_illustra() { return handleStorage("illustrations", "app_version_feature_illustra", `img/illustrations/new.svg`) },
 }
 
 export default imgLib;

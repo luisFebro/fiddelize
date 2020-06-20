@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const Footer = () => {
     return (
         <footer style={{bottom: 0, marginTop: 'calc(5% + 60px)'}} className="position-relative target-download theme-p-dark text-s">

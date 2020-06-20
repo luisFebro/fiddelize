@@ -31,7 +31,7 @@ export default function ModalFullContent({
             fullScreen={true}
             open={fullOpen}
             aria-labelledby="form-dialog-title"
-            className={`${animatedClass || ""}`}
+            className={`${animatedClass || "animated fadeInUp normal"}`}
             onScroll={null}
         >
             {contentComp}

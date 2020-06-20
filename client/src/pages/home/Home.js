@@ -5,15 +5,17 @@ import { Link } from 'react-router-dom';
 import AppShowCase from './AppShowCase';
 import { CLIENT_URL } from '../../config/clientUrl';
 import CompLoader from '../../components/CompLoader';
-
+import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
+import useDelay from '../../hooks/useDelay';
 
 export default function Home() {
     const [viewPhone, setViewPhone] = useState(false);
+    const versionReady = useDelay(3000);
 
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
 
     const showSlogon = () => (
-        <section className="mt-3 d-flex flex-column flex-md-row justify-content-center align-items-center">
+        <section className="mt-5 d-flex flex-column flex-md-row justify-content-center align-items-center">
             <div className="align-self-center m-1">
                 <picture>
                     <source srcSet="/img/official-logo-white.webp" type="image/webp" />
@@ -52,6 +54,7 @@ export default function Home() {
                 width={200}
                 marginY={30}
             />
+            {versionReady && <AsyncVersion position="absolute" />}
         </Fragment>
     );
 };
