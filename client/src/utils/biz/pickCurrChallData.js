@@ -1,4 +1,7 @@
-export default function pickCurrChallData(rewardList, totalPrizeInd) {
+export default function pickCurrChallData(rewardList, totalChallenges) {
+    const prizeInd = totalChallenges === 0 ? totalChallenges : totalChallenges - 1;
+
+    console.log("rewardList", rewardList);
     // change the original names to respectively rewardList ones...
     const keyAvalaible = {
         selfMilestoneIcon: 'icon',
@@ -19,7 +22,7 @@ export default function pickCurrChallData(rewardList, totalPrizeInd) {
     }
 
     if(isProgressMode) {
-        const newValues = rewardList[totalPrizeInd];
+        const newValues = rewardList[prizeInd];
         return getValues(newValues);
     } else {
         const sameValues = rewardList[0];

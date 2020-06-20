@@ -138,6 +138,7 @@ library.add(
   faSun,
   faTshirt,
   faUserTie,
+  faReply,
   //end app milestone icons
 );
 

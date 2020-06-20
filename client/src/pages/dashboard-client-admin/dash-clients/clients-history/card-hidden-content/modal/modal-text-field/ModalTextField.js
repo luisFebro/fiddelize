@@ -60,7 +60,7 @@ export default function ModalTextField({
         totalChallenges,
         name, } = modalData;
 
-    const pickedObj = pickCurrChallData(rewardList, totalChallenges - 1);
+    const pickedObj = pickCurrChallData(rewardList, totalChallenges);
     rewardScore = pickedObj["rewardScore"]
 
     const userBeatScore = userCurrScore >= rewardScore;

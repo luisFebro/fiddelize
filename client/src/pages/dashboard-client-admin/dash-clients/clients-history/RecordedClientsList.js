@@ -180,6 +180,13 @@ export default function RecordedClientsList() {
         />
     );
 
+    const showFilteredListTitle = () => (
+        list.length !== 0 &&
+        <p style={{top: '40px'}} className="text-p position-relative text-normal text-left pl-2 font-weight-bold">
+            Últimos Registros:
+        </p>
+    );
+
     return (
         <Fragment>
             <Title
@@ -196,11 +203,6 @@ export default function RecordedClientsList() {
                 searchTerm={searchTerm}
                 mainSubject="cliente"
             />
-            {list.length !== 0 && (
-                <p style={{top: '40px'}} className="text-p position-relative text-normal text-left pl-2 font-weight-bold">
-                    Últimos Registros:
-                </p>
-            )}
             {isLoading
             ? (
                 <Spinner
@@ -210,8 +212,7 @@ export default function RecordedClientsList() {
                 />
             ): (
                 <Fragment>
-                <div>
-                </div>
+                    {showFilteredListTitle()}
                     {showExpansionPanel()}
                     {showMoreItemsBtn()}
                     {totalSize >= 7 && generateMsgToFreeAccounts(bizPlan, {

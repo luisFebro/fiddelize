@@ -60,7 +60,7 @@ function ClientUserAppContent({
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
     let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
-    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize - 1);
+    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     console.log("pickedObj", pickedObj);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
