@@ -22,6 +22,7 @@ import BadaloBell from '../../components/buttons/bells/badalo/BadaloBell';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
+import useDelay from '../../hooks/useDelay';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -30,6 +31,8 @@ const isSmall = window.Helper.isSmallScreen();
 function ClientMobileApp({ location, history }) {
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
+
+    const versionReady = useDelay(5000);
 
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     const { _id, role, name } = useProfile();
@@ -257,7 +260,7 @@ function ClientMobileApp({ location, history }) {
                     {!isAuthUser && isCliAdminConnected && showLogin()}
                 </section>
             )}
-            {!isAuthUser && <AsyncVersion />}
+            {!isAuthUser && versionReady && <AsyncVersion />}
         </div>
     );
 }
