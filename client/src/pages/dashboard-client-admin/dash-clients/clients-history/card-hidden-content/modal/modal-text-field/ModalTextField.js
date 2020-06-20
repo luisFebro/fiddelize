@@ -58,6 +58,7 @@ export default function ModalTextField({
         userCurrScore,
         rewardScore,
         totalChallenges,
+        totalGeneralScore,
         name, } = modalData;
 
     const pickedObj = pickCurrChallData(rewardList, totalChallenges);
@@ -95,7 +96,7 @@ export default function ModalTextField({
         const bodyToSend = {
             "clientUserData.currScore": parseFloat(remainValue),
             "clientUserData.totalPurchasePrize": totalChallenges,
-            "clientUserData.totalGeneralScore": userCurrScore - rewardScore,
+            "clientUserData.totalGeneralScore": totalGeneralScore - rewardScore,
         }
 
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
@@ -103,7 +104,7 @@ export default function ModalTextField({
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             setRun(dispatch, "registered");
-            showSnackbar(dispatch, `Os pontos de fidelidade do cliente foram descontados com sucesso`, 'success', 8000)
+            showSnackbar(dispatch, `OK! Foi descontado ${rewardScore} pontos de ${name.cap()}`, 'success', 8000)
             onClose();
             setTimeout(() => readHighestScores(dispatch, businessId), 3000);
         })

@@ -43,6 +43,7 @@ export default function ActionBtns({ data, needBadgeForTestMode }) {
 const showDiscountBtn = (data, clientAdminData) => {
     const currScore = data.clientUserData && data.clientUserData.currScore;
     const totalChallenges = data.clientUserData && data.clientUserData.totalPurchasePrize + 1;
+    const totalGeneralScore = data.clientUserData && data.clientUserData.totalGeneralScore;
     const rewardScore = clientAdminData.rewardScore;
     return(
         <div>
@@ -66,6 +67,7 @@ const showDiscountBtn = (data, clientAdminData) => {
                     rewardScore: rewardScore,
                     userId: data._id,
                     totalChallenges,
+                    totalGeneralScore,
                 }}
             />
         </div>
