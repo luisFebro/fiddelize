@@ -22,7 +22,12 @@ export default function pickCurrChallData(rewardList, totalPrizesInd) {
     }
 
     if(isProgressMode) {
-        const newObjValues = rewardList[prizeInd];
+        // Repeat the last challenge if there is no more of them in the cli-admin list
+        let newObjValues = rewardList[prizeInd];
+        if(!newObjValues && prizeInd !== 0){
+            const lastValidInd = rewardList.length - 1;
+            newObjValues = rewardList[lastValidInd]
+        }
         return getValues(newObjValues);
     } else {
         const sameValues = rewardList[0];
