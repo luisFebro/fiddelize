@@ -20,6 +20,7 @@ const attentionBtnChecked = lStorage("getItem", options);
 
 export default function ProgressMsg({
     currScore,
+    currChall,
     maxScore,
     playBeep,
     colorBack,
@@ -95,11 +96,14 @@ export default function ProgressMsg({
             )}
         </div>
     );
-    const currChall = 1;
 
     return (
         <div className="mt-3 text-normal text-white text-center">
-            <span className={`${selectTxtStyle(colorBack, {bold: true})} text-subtitle`}>Desafio n.º {currChall}</span>
+            <span
+                className={`${selectTxtStyle(colorBack, {bold: true})} text-subtitle`}
+            >
+                Desafio n.º {currChall}
+            </span>
             <div className="container-center">
                 {showFlagWithGoals()}
                 {showMsg()}

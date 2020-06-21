@@ -12,6 +12,8 @@ import defineCurrChallenge from '../helpers/defineCurrChallenge';
 import imgLib from '../../../../../../utils/storage/lForageStore';
 import getFirstName from '../../../../../../utils/string/getFirstName';
 import { formatDMY, fromNow } from '../../../../../../utils/dates/dateFns';
+import Spinner from '../../../../../../components/loadingIndicators/Spinner';
+import useDelay from '../../../../../../hooks/useDelay';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -28,7 +30,7 @@ export default function PurchaseHistory({ data }) {
     const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData && clientUserData.purchaseHistory);
 
     const challengeN = defineCurrChallenge(totalPurchasePrize);
-
+    const mainCompsReady = useDelay(3000);
     useEffect(() => {
         readPurchaseHistory(_id, maxScore)
         .then(res => {
@@ -186,9 +188,19 @@ export default function PurchaseHistory({ data }) {
             ? illustrationIfEmpty()
             : (
                 <Fragment>
-                    {showAllTimeTotal()}
-                    {mainData}
-                    {showError()}
+                    {!mainCompsReady
+                    ? (
+                        <Spinner
+                            marginY={100}
+                            size="small"
+                        />
+                    ) : (
+                        <Fragment>
+                            {showAllTimeTotal()}
+                            {mainData}
+                            {showError()}
+                        </Fragment>
+                    )}
                 </Fragment>
             )}
         </div>

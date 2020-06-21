@@ -20,6 +20,7 @@ export default function LoginPage() {
                                 comp={<AsyncLogin />}
                                 width={330}
                                 marginY={100}
+                                timeout={3500}
                             />
                         </div>
                     ) : (

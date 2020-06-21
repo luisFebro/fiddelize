@@ -50,7 +50,7 @@ export default function Home() {
             <CompLoader
                 comp={<VAsyncRegisterClientAdmin />}
                 hide={viewPhone}
-                timeout={3500}
+                timeout={1000}
                 width={200}
                 marginY={30}
             />

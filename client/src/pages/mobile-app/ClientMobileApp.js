@@ -1,12 +1,12 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
 import React, { useRef, useEffect, useState } from 'react';
-import Login from '../../components/auth/Login';
+import AsyncLogin from '../../components/auth/AsyncLogin';
 import { Link, withRouter } from 'react-router-dom';
 import { useStoreDispatch } from 'easy-peasy';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import {CLIENT_URL} from '../../config/clientUrl';
 import lStorage, { needAppRegisterOp } from '../../utils/storage/lStorage';
-import VAsyncRegisterCliUser from '../../components/auth/VAsyncRegisterCliUser';
+import AsyncRegisterCliUser from '../../components/auth/AsyncRegisterCliUser';
 import { useProfile, useClientAdmin, useClientUser } from '../../hooks/useRoleData';
 import { logout } from '../../redux/actions/authActions';
 import { updateUser, countField } from '../../redux/actions/userActions';
@@ -24,6 +24,8 @@ import BadaloBell from '../../components/buttons/bells/badalo/BadaloBell';
 import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
 import useDelay from '../../hooks/useDelay';
 import useCount from '../../hooks/useCount';
+import CompLoader from '../../components/CompLoader';
+import useBackColor from '../../hooks/useBackColor';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -31,13 +33,10 @@ const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
 
 function ClientMobileApp({ location, history }) {
+    const [loginOrRegister, setLoginOrRegister] = useState("login");
+
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
-
-    const versionReady = useDelay(2000);
-    useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
-
-    const [loginOrRegister, setLoginOrRegister] = useState("login");
     const { _id, role, name } = useProfile();
     const {
         bizCodeName,
@@ -45,10 +44,12 @@ function ClientMobileApp({ location, history }) {
         selfThemePColor,
         selfThemeSColor,
         selfThemeBackColor, } = useClientAdmin();
-
     const { currScore } = useClientUser();
-    const { runName } = useRunComp();
 
+    const { runName } = useRunComp();
+    const versionReady = useDelay(2000);
+    useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
+    useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
     const dispatch = useStoreDispatch();
 
     const searchQuery = location.search;
@@ -101,21 +102,33 @@ function ClientMobileApp({ location, history }) {
     }
 
     const showLogin = () => (
-        <div
-            className="container-center position-relative"
-            style={{top: -78}}
-        >
-            <Login setLoginOrRegister={setLoginOrRegister} />
-        </div>
+        <CompLoader
+            width={200}
+            height={300}
+            comp={
+                <div
+                    className="container-center position-relative"
+                    style={{top: -78}}
+                >
+                    <AsyncLogin setLoginOrRegister={setLoginOrRegister} />
+                </div>
+            }
+        />
     );
 
     const showRegister = (needLoginBtn, needSetFunc) => (
-        <div className="position-relative" style={{top: -58}}>
-            <VAsyncRegisterCliUser
-                setLoginOrRegister={setLoginOrRegister || true}
-                needLoginBtn={needLoginBtn}
-            />
-        </div>
+        <CompLoader
+            width={200}
+            height={300}
+            comp={
+                <div className="position-relative" style={{top: -120}}>
+                    <AsyncRegisterCliUser
+                        setLoginOrRegister={setLoginOrRegister || true}
+                        needLoginBtn={needLoginBtn}
+                    />
+                </div>
+            }
+        />
     );
 
     const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.

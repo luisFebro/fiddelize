@@ -19,7 +19,6 @@ import CompLoader from '../../../components/CompLoader';
 import useAnimateConfetti from '../../../hooks/animation/useAnimateConfetti';
 import useAnimateNumber from '../../../hooks/animation/useAnimateNumber';
 import pickCurrChallData from '../../../utils/biz/pickCurrChallData';
-import useBackColor from '../../../hooks/useBackColor';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -67,7 +66,6 @@ function ClientUserAppContent({
     const userBeatChallenge = currScore >= maxScore;
 
     const { isAuthUser } = useAuthUser();
-    useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
     useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
     useAnimateConfetti(confettiOptions());
@@ -174,6 +172,7 @@ function ClientUserAppContent({
             {showMoreComps &&
                 <AsyncProgressMsg
                     currScore={currScore || 0}
+                    currChall={totalPurchasePrize + 1}
                     maxScore={maxScore || 0}
                     playBeep={playBeep}
                     colorBack={backColorSelect}

@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.9.1"
+const latestVersion = "3.902.1"
 const updateDescription = "Painel de Controle - simplificação processo card teste || melhorias teclado || algoritmo modo progressivo"
 const history = [
     "Login/Acesso - Novo status para verificar novidades em funcionalidades com página de atualização"
@@ -41,7 +41,7 @@ export default function AppVersion({ position = "relative", bottom, left }) {
 const FeatureUpdates = () => {
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
 
-    useEffect(() => imgLib.app_version_feature_illustra, [])
+    useEffect(() => imgLib.app_version_feature_illustra2, [])
 
     const showTitle = () => (
         <div className="my-4">
@@ -75,9 +75,9 @@ const FeatureUpdates = () => {
             {showTitle()}
             <div className="container-center mx-3">
                 <ImgLoader
-                    className="app_version_feature_illustra img-fluid"
+                    className="app_version_feature_illustra2 img-fluid"
                     height="auto"
-                    style={{maxHeight: !isSmall ? '110px' : '120px', width: '100%'}}
+                    style={{maxHeight: !isSmall ? '110px' : '120px', width: '120px'}}
                     alt="novidades"
                 />
             </div>
