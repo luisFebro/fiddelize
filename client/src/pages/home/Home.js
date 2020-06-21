@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import VAsyncRegisterClientAdmin from '../../components/auth/VAsyncRegisterClientAdmin';
 import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
-import { Link } from 'react-router-dom';
 import AppShowCase from './AppShowCase';
 import { CLIENT_URL } from '../../config/clientUrl';
 import CompLoader from '../../components/CompLoader';
 import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
 import useDelay from '../../hooks/useDelay';
+// import { Link } from 'react-router-dom';
 
 export default function Home() {
     const [viewPhone, setViewPhone] = useState(false);

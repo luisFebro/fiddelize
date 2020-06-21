@@ -35,7 +35,8 @@ const defaultClientAdmin = {
     regulation: { text: "...", updatedAt: '...' },
     highestScores: highestScoresArray,
     rewardDeadline: 0,
-    totalClientUserScores: 0,
+    totalClientUserActiveScores: 0, //not used,fetched from db in recordeduserslist, but can be useful to display in home all results so far for instance,,,
+    totalClientUserScores: 0, //not used,fetched from db in recordeduserslist
     totalClientUsers: 0,
     selfBizLogoImg: "",
     selfMilestoneIcon: "star",
@@ -69,6 +70,7 @@ const defaultUserProfile = {
     lastScore: 0,
     purchaseHistory: purchaseHistoryArray,
     bizId: "0",
+    totalActiveScore: 0,
     totalGeneralScore: 0,
     totalPurchasePrize: 0,
 }

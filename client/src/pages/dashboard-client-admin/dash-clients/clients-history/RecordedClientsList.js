@@ -35,8 +35,13 @@ export default function RecordedClientsList() {
         chunkSize: 0,
         totalSize: 0,
         totalCliUserScores: 0,
+        totalActiveScores: 0,
     });
-    let { chunkSize, list, totalSize, totalCliUserScores } = clientsData;
+    let {
+        chunkSize,
+        list,
+        totalSize,
+        totalCliUserScores, totalActiveScores } = clientsData;
 
     const { isLoading, run, runName } = useStoreState(state => ({
         run: state.globalReducer.cases.run,
@@ -46,12 +51,16 @@ export default function RecordedClientsList() {
 
     const dispatch = useStoreDispatch();
 
+    // update current amount of accumulative and active scores from all cli-users of which cli-admin.
+    // this is necessary so that we can have variables to gather these numbers sincedatabase just process them on the fly
+    // useful for central admin to know the general scores from all cli-admins
     useEffect(() => {
         const objToSend = {
             "clientAdminData.totalClientUserScores": totalCliUserScores,
+            "clientAdminData.totalActiveScores": totalActiveScores,
         }
         updateUser(dispatch, objToSend, businessId)
-    }, [totalCliUserScores])
+    }, [totalCliUserScores, totalActiveScores])
 
     useEffect(() => {
         if(init || runName === "registered") {
@@ -64,6 +73,7 @@ export default function RecordedClientsList() {
                     chunkSize: res.data.chunkSize,
                     totalSize: res.data.totalSize,
                     totalCliUserScores: res.data.totalCliUserScores,
+                    totalActiveScores: res.data.totalActiveScores,
                 })
                 setInit(false);
                 if(runName === "registered") localStorage.removeItem("userProfile");
@@ -86,6 +96,7 @@ export default function RecordedClientsList() {
                 chunkSize: res.data.chunkSize,
                 totalSize: res.data.totalSize,
                 totalCliUserScores: res.data.totalCliUserScores,
+                totalActiveScores: res.data.totalActiveScores,
             })
         })
     }
@@ -200,6 +211,7 @@ export default function RecordedClientsList() {
                 isLoading={isLoading}
                 filteredUsersLength={totalSize}
                 totalCliUserScores={totalCliUserScores}
+                totalActiveScores={totalActiveScores}
                 allUsersLength={totalSize}
                 searchTerm={searchTerm}
                 mainSubject="cliente"

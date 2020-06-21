@@ -57,11 +57,11 @@ export default function ModalTextField({
         userId,
         userCurrScore,
         rewardScore,
-        totalChallenges,
-        totalGeneralScore,
+        totalPrizes,
+        totalActiveScore,
         name, } = modalData;
 
-    const pickedObj = pickCurrChallData(rewardList, totalChallenges);
+    const pickedObj = pickCurrChallData(rewardList, totalPrizes);
     rewardScore = pickedObj["rewardScore"]
 
     const userBeatScore = userCurrScore >= rewardScore;
@@ -95,8 +95,8 @@ export default function ModalTextField({
     const handleSubmit = () => {
         const bodyToSend = {
             "clientUserData.currScore": parseFloat(remainValue),
-            "clientUserData.totalPurchasePrize": totalChallenges,
-            "clientUserData.totalGeneralScore": totalGeneralScore - rewardScore,
+            "clientUserData.totalPurchasePrize": totalPrizes + 1,
+            "clientUserData.totalActiveScore": totalActiveScore - rewardScore,
         }
 
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
@@ -129,7 +129,7 @@ export default function ModalTextField({
                 {parse(
                     userBeatScore
                     ? `Esse cliente chegou lá!<br />${name.cap()} ATINGIU a meta de ${rewardScore} Pontos 🎉`
-                    : `O cliente ${name.cap()} ainda NÃO ATINGIU a meta de ${rewardScore} Pontos ${!userBeatScore ? `do desafio n.º ${totalChallenges}` : ""}`
+                    : `O cliente ${name.cap()} ainda NÃO ATINGIU a meta de ${rewardScore} Pontos ${!userBeatScore ? `do desafio n.º ${totalPrizes + 1}` : ""}`
                 )}
             </p>
             {userBeatScore && (
@@ -137,7 +137,7 @@ export default function ModalTextField({
                     <p className="text-left m-0">
                         • Desafio Atual:
                     </p>
-                    <p><strong>Número {totalChallenges}</strong></p>
+                    <p><strong>Número {totalPrizes + 1}</strong></p>
                 </div>
             )}
             <div className="text-normal text-purple text-center my-2">
@@ -240,7 +240,7 @@ export default function ModalTextField({
         <section className="mt-5 my-3 px-3">
             <p className="text-subtitle text-center text-purple">
                 Esse cliente ainda <strong>não possui pontuação </strong>
-                no seu <strong>{totalChallenges}.° desafio</strong> atual.
+                no seu <strong>{totalPrizes + 1}.° desafio</strong> atual.
             </p>
             <div className="container-center">
                 <ButtonMulti

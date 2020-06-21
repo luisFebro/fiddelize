@@ -44,7 +44,7 @@ export default function Keyboard({
 
             if(display.length === 11) {
                 const maskCpf = cpfMaskBr(display)
-                refAnima && animateCSS(refAnima.current, "rubberBand", "normal", () => null);
+                refAnima && animateCSS(refAnima.current, "bounce", "normal", () => null);
                 setReachedLimit(true);
                 setDisplay(maskCpf);
             }

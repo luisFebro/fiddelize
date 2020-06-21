@@ -104,7 +104,7 @@ function Navbar({ history, location }) {
     const showCallToActionBtn = () => (
         locationNow === "/" &&
         <Link
-            to="/empresa-teste/novo-app/self-service/5e8b0bfc8c616719b01abc9c?teste=1&nome-cliente=visitante&ponto-premio=500&ponto-atual=100"
+            to="/empresa-teste/novo-app/self-service/5ed0316700c6a10017f8c190?teste=1&nome-cliente=visitante&ponto-premio=500&ponto-atual=100"
             className={["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(locationNow) ? "disabled-link" : "nav-link"}
         >
             <RadiusBtn

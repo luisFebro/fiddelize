@@ -2,8 +2,8 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.902.1"
-const updateDescription = "Painel de Controle - simplificação processo card teste || melhorias teclado || algoritmo modo progressivo"
+const latestVersion = "3.10.1"
+const updateDescription = "Painel de Controle - simplificação processo card teste || melhorias teclado || algoritmo modo progressivo ||  melhorias no sistema de pontuação cli-admin"
 const history = [
     "Login/Acesso - Novo status para verificar novidades em funcionalidades com página de atualização"
 ]
@@ -48,7 +48,7 @@ const FeatureUpdates = () => {
             <p
                 className="text-subtitle text-purple text-center font-weight-bold"
             >
-                &#187; Novidades
+                &#187; Atualizações App
             </p>
         </div>
     );

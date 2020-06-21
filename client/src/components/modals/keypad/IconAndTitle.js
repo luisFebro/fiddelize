@@ -39,7 +39,7 @@ export default function IconAndTitle({
                 </i>
             </div>
             <div
-                className="text-subtitle font-weight-bold mx-5"
+                className="text-subtitle font-weight-bold mx-2"
             >
                 <span className="text-shadow" style={{ margin: 'auto', width: '80%'}}>
                     {title}

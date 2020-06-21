@@ -62,6 +62,7 @@ export const useClientUser = () => {
     const currScore = clientUser && clientUser.currScore;
     const lastScore = clientUser && clientUser.cashCurrScore;
     const purchaseHistory = clientUser && clientUser.purchaseHistory;
+    const totalActiveScore = clientUser && clientUser.totalActiveScore;
     const totalGeneralScore = clientUser && clientUser.totalGeneralScore;
     const totalPurchasePrize = clientUser && clientUser.totalPurchasePrize;
 
@@ -70,6 +71,7 @@ export const useClientUser = () => {
         lastScore,
         purchaseHistory,
         bizId,
+        totalActiveScore,
         totalGeneralScore,
         totalPurchasePrize,
     });
@@ -91,6 +93,7 @@ export const useClientAdmin = () => {
     const bizWhatsapp = clientAdmin && clientAdmin.bizWhatsapp;
     const regulation = clientAdmin && clientAdmin.regulation;
     const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
+    const totalClientUserActiveScores = clientAdmin && clientAdmin.totalClientUserActiveScores;
     const totalClientUserScores = clientAdmin && clientAdmin.totalClientUserScores;
     const totalClientUsers = clientAdmin && clientAdmin.totalClientUsers;
     const selfBizLogoImg = clientAdmin && clientAdmin.selfBizLogoImg;
@@ -110,6 +113,7 @@ export const useClientAdmin = () => {
         regulation,
         highestScores,
         rewardDeadline,
+        totalClientUserActiveScores,
         totalClientUserScores,
         totalClientUsers,
         selfBizLogoImg,

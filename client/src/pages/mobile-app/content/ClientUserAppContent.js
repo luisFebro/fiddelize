@@ -58,7 +58,10 @@ function ClientUserAppContent({
     let { role, name } = useProfile();
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
+    const currChall = !totalPurchasePrize ? 1 : totalPurchasePrize + 1;
     let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
+    console.log("totalPurchasePrize", totalPurchasePrize);
+    console.log("rewardList", rewardList);
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
@@ -172,7 +175,7 @@ function ClientUserAppContent({
             {showMoreComps &&
                 <AsyncProgressMsg
                     currScore={currScore || 0}
-                    currChall={totalPurchasePrize + 1}
+                    currChall={currChall}
                     maxScore={maxScore || 0}
                     playBeep={playBeep}
                     colorBack={backColorSelect}

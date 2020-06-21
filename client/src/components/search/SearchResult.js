@@ -13,13 +13,26 @@ SearchResult.propTypes = {
     totalCliUserScores: PropTypes.number,
 }
 
+const styles = {
+    accumulativeScore: {
+        display: 'table', // table has the advantage of preserve the blocking settings such as padding, margin and alignment, differently from inline type.
+        fontSize: '28px',
+        backgroundColor: 'var(--themeP)',
+        color: 'var(--mainWhite)',
+        borderRadius: '35px',
+        lineHeight: '25px',
+    }
+}
+
 export default function SearchResult({
     isLoading,
     filteredUsersLength,
     allUsersLength,
     searchTerm,
     mainSubject = "usuário",
-    totalCliUserScores, }) {
+    totalActiveScores,
+    totalCliUserScores,
+}) {
 
     const pluralizeBr = word => {
         let res;
@@ -83,7 +96,14 @@ export default function SearchResult({
                                         <br />
                                         <strong>• {`${allUsersLength} ${pluralizeBr(mainSubject)}`}</strong>
                                         <br />
-                                        <strong>• {`${totalCliUserScores} Pontos/R$`}</strong>
+                                        <strong>• {`${totalActiveScores} Pontos Ativos`}</strong>
+                                        <br />
+                                        <p
+                                            className="text-center mt-2 py-2 px-3 font-weight-bold"
+                                            style={styles.accumulativeScore}
+                                        >
+                                            {`${totalCliUserScores} Pontos Acumulados`}
+                                        </p>
                                     </p>
                                 )}
                             </h2>

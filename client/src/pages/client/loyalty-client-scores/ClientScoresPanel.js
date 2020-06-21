@@ -47,7 +47,7 @@ function ClientScoresPanel({
 
     useCount("ClientScoresPanel") // RT = 46
     const { role, name } = useProfile();
-    let { currScore, totalGeneralScore } = useClientUser();
+    let { currScore, totalGeneralScore, totalActiveScore } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { maxScore, bizName, bizCodeName, selfMilestoneIcon } = useClientAdmin();
     const { businessId } = useAppSystem();
@@ -104,7 +104,7 @@ function ClientScoresPanel({
                 "clientUserData.cashCurrScore": cashCurrScore,
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
-                "clientUserData.totalActiveScore": totalGeneralScore + cashCurrScore, // active is passive to be discounted and general it is accumulative without discount.
+                "clientUserData.totalActiveScore": totalActiveScore + cashCurrScore, // active is passive to be discounted and general it is accumulative without discount.
             }
             updateUser(dispatch, objToSend, businessId)
             .then(res => {

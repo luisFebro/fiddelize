@@ -188,7 +188,8 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
     const countQuery = {$count: 'value'};
     const searchQuery = {name: {$regex: `${search}`, $options: 'i'}};
     const bizIdQuery = {"clientUserData.bizId": bizId};
-    const totalClientUserScoresQuery = {$group: { _id: null, value: { $sum: '$clientUserData.totalGeneralScore' }}}
+    const totalUserGeneralScoresQuery = {$group: { _id: null, value: { $sum: '$clientUserData.totalGeneralScore' }}}
+    const totalActiveScoresQuery = {$group: { _id: null, value: { $sum: '$clientUserData.totalActiveScore' }}}
 
     let { mainQuery } = getQuery(role);
 
@@ -205,7 +206,8 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
                 list: [{$match: mainQuery}, sortQuery, skipQuery, limitQuery],
                 chunkSize: [{$match: mainQuery}, skipQuery, limitQuery, countQuery],
                 totalSize: [{$match: mainQuery}, countQuery],
-                totalCliUserScores: [{$match: mainQuery}, totalClientUserScoresQuery],
+                totalCliUserScores: [{$match: mainQuery}, totalUserGeneralScoresQuery],
+                totalActiveScores: [{$match: mainQuery}, totalActiveScoresQuery],
             }
         }
     ])
@@ -215,6 +217,7 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
             chunkSize,
             totalSize,
             totalCliUserScores,
+            totalActiveScores,
         } = docs[0];
 
         res.json({
@@ -222,6 +225,7 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
             chunkSize: chunkSize[0] === undefined ? 0 : chunkSize[0].value,
             totalSize: totalSize[0] === undefined ? 0 : totalSize[0].value,
             totalCliUserScores: totalCliUserScores[0] === undefined ? 0 : totalCliUserScores[0].value,
+            totalActiveScores: totalActiveScores[0] === undefined ? 0 : totalActiveScores[0].value,
         })
     })
 }
