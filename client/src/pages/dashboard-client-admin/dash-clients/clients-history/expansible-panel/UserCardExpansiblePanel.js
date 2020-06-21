@@ -14,7 +14,7 @@ import ToggleBtn from './ToggleBtn';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
 import { removeField } from '../../../../../redux/actions/userActions';
-// import { setRun } from '../../../../../redux/actions/globalActions';
+import { setRun } from '../../../../../hooks/useRunComp';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import { useClientAdmin } from '../../../../../hooks/useRoleData';
 // End Customized Data
@@ -72,13 +72,10 @@ export default function UserCardExpansiblePanel({
             removeField(cardId, "clientUserData")
             .then(res => {
                 if(res.status !== 200) return console.log("smt wrong while updating")
-                showSnackbar(dispatch, "Para mostrar o card de teste novamente, acesse o MODO APP CLIENTE.", "warning", 6000);
-                setTimeout(() => {
-                    // setRun(dispatch, "goDash"); it does not work because it reloads teh page, then it is gone.
-                    window.location.href = `/${bizCodeName}/cliente-admin/painel-de-controle`;
-                }, 3900)
+                showSnackbar(dispatch, "APAGADO! Para mostrar o card de teste de novo, adicione pontos no MODO APP CLIENTE.", "success", 6000);
+                setRun(dispatch, "registered");
             })
-        }, 5000)
+        }, 3000)
     };
 
     const showPanel = panel => (

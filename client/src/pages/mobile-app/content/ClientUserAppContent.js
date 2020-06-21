@@ -61,9 +61,9 @@ function ClientUserAppContent({
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
     let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    console.log("pickedObj", pickedObj);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
+    selfMilestoneIcon = pickedObj.selfMilestoneIcon
     const userBeatChallenge = currScore >= maxScore;
 
     const { isAuthUser } = useAuthUser();

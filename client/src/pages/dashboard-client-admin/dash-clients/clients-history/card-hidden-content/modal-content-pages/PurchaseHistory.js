@@ -182,7 +182,7 @@ export default function PurchaseHistory({ data }) {
 
     return (
         <div>
-            {purchaseHistoryArray && !purchaseHistoryArray.length
+            {!totalGeneralScore
             ? illustrationIfEmpty()
             : (
                 <Fragment>

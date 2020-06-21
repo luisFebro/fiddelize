@@ -23,6 +23,7 @@ import getFirstName from '../../../utils/string/getFirstName';
 import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from '../../../hooks/media/usePlayAudio';
+import useCount from '../../../hooks/useCount';
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -44,16 +45,14 @@ function ClientScoresPanel({
     const [finishedWork, setFinishedWork] = useState(false);
     const animatedNumber = useRef(null);
 
-    const { role, name, _id } = useProfile();
+    useCount("ClientScoresPanel") // RT = 46
+    const { role, name } = useProfile();
     let { currScore, totalGeneralScore } = useClientUser();
-
-    usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", { storeAudioTo: "win-challenge--audio" })
-
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { maxScore, bizName, bizCodeName, selfMilestoneIcon } = useClientAdmin();
     const { businessId } = useAppSystem();
-
     const dispatch = useStoreDispatch();
+    usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", { storeAudioTo: "win-challenge--audio" })
 
     const styles = {
         finishButton: {
@@ -101,11 +100,13 @@ function ClientScoresPanel({
             );
 
             const objToSend = {
+                "clientUserData.bizId": businessId, // for cli-admin or if not it will not override <again className=""></again>
                 "clientUserData.cashCurrScore": cashCurrScore,
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
+                "clientUserData.totalActiveScore": totalGeneralScore + cashCurrScore, // active is passive to be discounted and general it is accumulative without discount.
             }
-            updateUser(dispatch, objToSend, _id)
+            updateUser(dispatch, objToSend, businessId)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 const historyObj = {
@@ -114,7 +115,7 @@ function ClientScoresPanel({
                     "value": cashCurrScore,
                     "totalGeneralScore": totalGeneralScore + cashCurrScore,
                 }
-                addPurchaseHistory(dispatch, _id, historyObj)
+                addPurchaseHistory(dispatch, businessId, historyObj)
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                     showSnackbar(dispatch, `Pontuação Registrada, ${getFirstName(name)}!`, 'success');
@@ -125,10 +126,11 @@ function ClientScoresPanel({
     }, [success, verification])
 
     // RENDER
+    const firstName = getFirstName(name) || "Olá";
     const showHeader = () => (
         <div>
             <span className="ml-3 text-hero text-shadow">
-                {getFirstName(name)},
+                {firstName},
             </span>
             <Title
                 title="Sua nova pontuação"
@@ -213,7 +215,7 @@ function ClientScoresPanel({
                 style={styles.finishButton}
                 onClick={() => {
                     if(isThisApp()) {
-                        readUser(dispatch, _id)
+                        readUser(dispatch, businessId)
                         .then(res => {
                             if(res.status !== 200) return console.log("Error on readUser");
                             const path = needAppForCliAdmin ? "/mobile-app?client-admin=1" : "/mobile-app"

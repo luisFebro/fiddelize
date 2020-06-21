@@ -67,20 +67,6 @@ function ClientMobileApp({ location, history }) {
     }, [runName])
 
     useEffect(() => {
-        if(needAppForCliAdmin && !currScore) {
-            const newCliUserData = {
-                "clientUserData.bizId": businessId,
-                "clientUserData.cashCurrScore": "0",
-                "clientUserData.currScore": 0,
-                "clientUserData.lastScore": "0",
-                "clientUserData.totalGeneralScore": 0,
-                "clientUserData.totalPurchasePrize": 0
-            }
-            updateUser(dispatch, newCliUserData, businessId);
-        }
-    }, [needAppForCliAdmin])
-
-    useEffect(() => {
         if(needAppRegister) {
             setLoginOrRegister("register");
             lStorage("setItem", {...needAppRegisterOp, value: false})

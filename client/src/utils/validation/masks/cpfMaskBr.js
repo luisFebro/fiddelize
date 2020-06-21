@@ -1,3 +1,7 @@
+export function removeCpfMaskBr(number) {
+    const regEx = /(\.|-)/gi
+    return number.toString().replace(regEx, "");
+}
 
 export default function cpfMaskBr(cpf) {
     const isNotString = typeof cpf !== "string";

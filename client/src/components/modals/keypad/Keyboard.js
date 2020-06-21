@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import cpfMaskBr from '../../../utils/validation/masks/cpfMaskBr';
+import cpfMaskBr, { removeCpfMaskBr } from '../../../utils/validation/masks/cpfMaskBr';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from '../../../hooks/media/usePlayAudio';
+import animateCSS from '../../../utils/animateCSS';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -23,21 +24,28 @@ export default function Keyboard({
     handleConfirm,
     colorP,
 }) {
+    const [reachedLimit, setReachedLimit] = useState(false);
     usePlayAudio('/sounds/confirmation-keypad.wav', ".keypadBeepConfirm");
 
+    const refAnima = React.useRef(null);
     const getValue = value => {
 
         const handleCpf = () => {
+            if(reachedLimit) return;
+
             if(display === "Digite 11 dígitos") {
                 return setDisplay(value);
             }
 
             if(display.includes(".") || display.length < 11 && display.length >= 1) {
+                setReachedLimit(false);
                 setDisplay(display += value)
             }
 
             if(display.length === 11) {
                 const maskCpf = cpfMaskBr(display)
+                refAnima && animateCSS(refAnima.current, "rubberBand", "normal", () => null);
+                setReachedLimit(true);
                 setDisplay(maskCpf);
             }
         }
@@ -49,14 +57,19 @@ export default function Keyboard({
         keyboardType === 'numeric' && (
             display.charAt(0) === "0"
             ? setDisplay(value)
-            : setDisplay(display += value)
+            : setDisplay(display => display += value)
         )
     }
 
     const eraseLastChar = () => {
         display.length === 1
         ? setDisplay("0")
-        : setDisplay(display.slice(0, -1));
+        : setDisplay(display => display.slice(0, -1));
+        if(reachedLimit) {
+            const removedMask = removeCpfMaskBr(display);
+            setDisplay(removedMask);
+            setReachedLimit(false);
+        }
     }
 
     const playBeep = () => {
@@ -91,7 +104,7 @@ export default function Keyboard({
             <div onClick={() => {getValue("7"); playBeep()}} className="item7">7</div>
             <div onClick={() => {getValue("8"); playBeep()}} className="item8">8</div>
             <div onClick={() => {getValue("9"); playBeep()}} className="item9">9</div>
-            <div onClick={handleConfirm} className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn">
+            <div onClick={handleConfirm} ref={refAnima} className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn">
                 <FontAwesomeIcon
                     icon="check"
                     style={{fontSize: '1.9em'}}

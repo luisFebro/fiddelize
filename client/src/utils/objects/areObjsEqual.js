@@ -1,6 +1,5 @@
 export default function areObjsEqual(obj1, obj2) {
-    if(!obj1 || !obj2) throw new Error("Arguments missing...");
-
+    if(!obj1 || !obj2) return false;
      return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 

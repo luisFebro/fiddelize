@@ -66,6 +66,7 @@ export default function RecordedClientsList() {
                     totalCliUserScores: res.data.totalCliUserScores,
                 })
                 setInit(false);
+                if(runName === "registered") localStorage.removeItem("userProfile");
             })
         }
     }, [run, runName])

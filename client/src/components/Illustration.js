@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import truncateWords from '../utils/string/truncateWords';
 import { HashLink } from 'react-router-hash-link';
 import { ButtonContainerPressedEffectDark as Dark } from '../components/buttons/Ω-archives/Default';
 import parse from 'html-react-parser';
+import Spinner from './loadingIndicators/Spinner';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -33,6 +34,9 @@ Illustration.propTypes = {
 }
 
 export default function Illustration({
+    spinnerHeight,
+    spinnerWidth,
+    spinnerSize = "large",
     title,
     img,
     imgStyle,
@@ -40,6 +44,8 @@ export default function Illustration({
     alt = "conteúdo da página está vazio",
     actionButton = {},
     txtImgConfig = {} }) {
+
+    const [status, setStatus] = useState(true);
 
     const { txt,
             txtColor,
@@ -68,30 +74,36 @@ export default function Illustration({
         <Fragment>
             <h2 className="text-center text-sub-title-upper">{title}</h2>
             <DivWrapper className="container-center my-5" style={{overflowX: 'hidden'}}>
-                <img
-                    className={`${className ? className : ""} image-center svg-elevation`}
-                    src={img}
-                    width=""
-                    height=""
-                    style={{...imgStyle, overflowX: 'hidden'}}
-                    alt={alt}
-                />
-                <div className="container-center">
-                    <p
-                        className={`move-txt-from-center ${txtBorder} ${txtStyle || "text-subtitle"}`}
-                        style={{
-                            overflowY: 'visible',
-                            minWidth: `${isSmall ? "300px" : "500px"}`,
-                            fontSize: fontSize || '2rem',
-                            textAlign: txtAlign || "center",
-                            color: txtColor || "black",
-                            top: topPos || "-2%",
-                            left: leftPos || "50%",
-                        }}
-                    >
-                        {parse(truncateWords(txt, truncatedLimit || 55))}
-                    </p>
+                <div style={{ display: status ? 'block' : 'none' }}>
+                    <Spinner marginX={spinnerWidth} marginY={spinnerHeight} isCenter={false} size={spinnerSize} />
                 </div>
+                <section style={{ display: status ? 'none' : 'block'}}>
+                    <img
+                        className={`${className ? className : ""} image-center svg-elevation`}
+                        src={img}
+                        width=""
+                        height=""
+                        style={{...imgStyle, overflowX: 'hidden'}}
+                        alt={alt}
+                        onLoad={() => setStatus(false)}
+                    />
+                    <div className="container-center">
+                        <p
+                            className={`move-txt-from-center ${txtBorder} ${txtStyle || "text-subtitle"}`}
+                            style={{
+                                overflowY: 'visible',
+                                minWidth: `${isSmall ? "300px" : "500px"}`,
+                                fontSize: fontSize || '2rem',
+                                textAlign: txtAlign || "center",
+                                color: txtColor || "black",
+                                top: topPos || "-2%",
+                                left: leftPos || "50%",
+                            }}
+                        >
+                            {parse(truncateWords(txt, truncatedLimit || 55))}
+                        </p>
+                    </div>
+                </section>
             </DivWrapper>
             {showActionButton(actionButton)}
         </Fragment>

@@ -237,9 +237,10 @@ export default function ModalTextField({
     );
 
     const showNoScoreDialog = () => (
-        <section className="mt-5 my-3 px-5">
+        <section className="mt-5 my-3 px-3">
             <p className="text-subtitle text-center text-purple">
-                Esse cliente ainda<br /><strong>não possui pontuação.</strong>
+                Esse cliente ainda <strong>não possui pontuação </strong>
+                no seu <strong>{totalChallenges}.° desafio</strong> atual.
             </p>
             <div className="container-center">
                 <ButtonMulti
