@@ -46,7 +46,7 @@ function ClientScoresPanel({
     const animatedNumber = useRef(null);
 
     useCount("ClientScoresPanel") // RT = 46
-    const { role, name } = useProfile();
+    const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
     let { currScore, totalGeneralScore, totalActiveScore } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { maxScore, bizName, bizCodeName, selfMilestoneIcon } = useClientAdmin();
@@ -106,7 +106,7 @@ function ClientScoresPanel({
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
                 "clientUserData.totalActiveScore": totalActiveScore + cashCurrScore, // active is passive to be discounted and general it is accumulative without discount.
             }
-            updateUser(dispatch, objToSend, businessId)
+            updateUser(dispatch, objToSend, _id)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 const historyObj = {
@@ -115,7 +115,7 @@ function ClientScoresPanel({
                     "value": cashCurrScore,
                     "totalGeneralScore": totalGeneralScore + cashCurrScore,
                 }
-                addPurchaseHistory(dispatch, businessId, historyObj)
+                addPurchaseHistory(dispatch, _id, historyObj)
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                     showSnackbar(dispatch, `Pontuação Registrada, ${getFirstName(name)}!`, 'success');
@@ -215,7 +215,7 @@ function ClientScoresPanel({
                 style={styles.finishButton}
                 onClick={() => {
                     if(isThisApp()) {
-                        readUser(dispatch, businessId)
+                        readUser(dispatch, _id)
                         .then(res => {
                             if(res.status !== 200) return console.log("Error on readUser");
                             const path = needAppForCliAdmin ? "/mobile-app?client-admin=1" : "/mobile-app"

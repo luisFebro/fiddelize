@@ -231,6 +231,9 @@ function ClientMobileApp({ location, history }) {
     const conditionLogin = loginOrRegister === "login" && showLogin()
 
     let isCliAdminConnected = role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
+    console.log("role", role);
+    console.log("roleWhichDownloaded", roleWhichDownloaded);
+    console.log("needAppForCliAdmin", needAppForCliAdmin);
     const isCliUserConnected = needAppForCliAdmin || role === "cliente" || roleWhichDownloaded === "cliente";
     if(needAppForCliAdmin) {
         isCliAdminConnected = false;
