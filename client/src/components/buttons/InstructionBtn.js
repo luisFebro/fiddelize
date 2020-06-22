@@ -5,7 +5,7 @@ import Tooltip from '../tooltips/Tooltip';
 import CloseButton from './CloseButton';
 // a question instruction button for some functionalities explanations...
 export default function InstructionBtn({
-    text, onClick, needTooltip = true }) {
+    text, onClick, needTooltip = true, blurEffect = false, }) {
     const [closeBtn, setShowCloseBtn] = useState(false);
     const [needOpen, setNeedOpen] = useState(false);
 
@@ -18,7 +18,7 @@ export default function InstructionBtn({
 
     return (
         <section>
-            <div className={closeBtn && "blur-back"}></div>
+            <div className={closeBtn && blurEffect && "blur-back"}></div>
             {needTooltip ? (
                 <section
                     className="position-relative disable-blur"
@@ -35,7 +35,7 @@ export default function InstructionBtn({
                         backgroundColor="var(--mainDark)"
                         width={325}
                         element={
-                            <div className="animated zoomIn delay-2s disable-blur">
+                            <div className="disable-blur">
                                 <ButtonFab
                                     position="relative"
                                     color="var(--mainDark)"
@@ -48,7 +48,8 @@ export default function InstructionBtn({
                     />
                     {closeBtn && (
                         <CloseButton
-                            delay={1}
+                            delay={0}
+                            color='var(--mainDark)'
                             position="absolute"
                             onClick={() => { setShowCloseBtn(false); setNeedOpen(false); }}
                             top={-20}

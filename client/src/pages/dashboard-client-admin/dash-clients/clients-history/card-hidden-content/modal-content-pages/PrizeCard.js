@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 import selectTxtStyle from '../../../../../../utils/biz/selectTxtStyle';
+import pickCurrChallData from '../../../../../../utils/biz/pickCurrChallData';
 
 const faStyle = {
     filter: 'drop-shadow(0 0 25px grey)',
@@ -15,17 +16,22 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
     const [prizeView, setPrizeView] = useState(false);
 
     const currChallengeN = historyData.challengeN;
+    const isPrizeConfirmed = historyData.isPrizeConfirmed;
+    const isPrizeReceived = historyData.isPrizeReceived;
 
-    const { mainReward, rewardList } = useClientAdmin();
+    let { mainReward, rewardList } = useClientAdmin();
 
-    const handlePrizeName = (currChallengeN) => {
-        if(currChallengeN === 1) {
-            return mainReward;
-        } else {
-            const ind = currChallengeN - 2 // start with 0 in the rewardList and so on...
-            return rewardList[ind];
-        }
-    }
+    const pickedObj = pickCurrChallData(rewardList, currChallengeN - 1);
+    mainReward = pickedObj["mainReward"]
+
+    // const handlePrizeName = (currChallengeN) => {
+    //     if(currChallengeN === 1) {
+    //         return mainReward;
+    //     } else {
+    //         const ind = currChallengeN - 2 // start with 0 in the rewardList and so on...
+    //         return rewardList[ind];
+    //     }
+    // }
 
     const displayMainContent = () => (
         <section className={`${selectTxtStyle(colorP)} purchase-history-prize-card--root text-center text-purple`}>
@@ -57,7 +63,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                             </div>
                         ) : (
                             <p className="text-normal animated zoomIn fast">
-                                • {handlePrizeName(currChallengeN)}
+                                • {mainReward}
                             </p>
                         )}
                     </div>
@@ -65,10 +71,6 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
             </main>
         </section>
     );
-
-    // Test
-    const isPrizeConfirmed = false;
-    const isPrizeReceived = false;
 
     const showStatusPanel = () => (
         <section className="card-elevation text-purple position-relative purchase-history-status-panel--root">
@@ -83,7 +85,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                     <p className="font-weight-bold">Confirmado:</p>
                     {isPrizeConfirmed
                     ? (
-                        <div className="icon animated rubberBand delay-5s" style={{animationIterationCount: 3}}>
+                        <div className="icon animated rubberBand delay-2s repeat-2">
                             <FontAwesomeIcon icon="check-circle" style={{color: 'green', fontSize: '20px'}} />
                         </div>
                     ) : (
@@ -96,7 +98,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                     <p className="font-weight-bold">Recebido:</p>
                     {isPrizeReceived
                     ? (
-                        <div className="icon animated rubberBand delay-5s" style={{animationIterationCount: 3}}>
+                        <div className="icon animated rubberBand delay-4s repeat-2">
                             <FontAwesomeIcon icon="check-circle" style={{color: 'green', fontSize: '20px'}} />
                         </div>
                     ) : (

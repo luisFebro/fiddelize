@@ -69,7 +69,7 @@ export const deleteUser = async (dispatch, _idUser) => { // n1
 };
 // END RUD
 
-// Purchase History
+// PURCHASE HISTORY
 export const addPurchaseHistory = async (dispatch, _idUser, bodyToSend) => { // n1
     try {
         return await axios.put(`/api/user/purchase-history/${_idUser}`, bodyToSend, getHeaderJson);
@@ -85,7 +85,17 @@ export const readPurchaseHistory = async (_idUser, rewardScore) => { // n1
         return err.response;
     }
 };
-// End Purchase History
+
+export const changePrizeStatus = async (userId, options = {}) => { // n1
+    const { statusType } = options;
+
+    try {
+        return await axios.put(`/api/user/purchase-history/update-status/${userId}?statusType=${statusType}`, getHeaderJson);
+    } catch(err) {
+        return err.response;
+    }
+};
+// END PURCHASE HISTORY
 
 // LISTS
 export const readUserList = async (dispatch, skip = 0, role = "", search = "", bizId) => {

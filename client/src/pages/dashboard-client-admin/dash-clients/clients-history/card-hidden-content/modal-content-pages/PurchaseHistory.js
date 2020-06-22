@@ -8,12 +8,13 @@ import PrizeCard from './PrizeCard';
 import { readPurchaseHistory } from '../../../../../../redux/actions/userActions';
 // import lStorage, { userProfileColl } from '../../../../../../utils/storage/lStorage';
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
-import defineCurrChallenge from '../helpers/defineCurrChallenge';
+import defineCurrChallenge from '../../../../../../utils/biz/defineCurrChallenge';
 import imgLib from '../../../../../../utils/storage/lForageStore';
 import getFirstName from '../../../../../../utils/string/getFirstName';
 import { formatDMY, fromNow } from '../../../../../../utils/dates/dateFns';
 import Spinner from '../../../../../../components/loadingIndicators/Spinner';
 import useDelay from '../../../../../../hooks/useDelay';
+import pickCurrChallData from '../../../../../../utils/biz/pickCurrChallData';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -23,9 +24,31 @@ const faStyle = {
     fontSize: '30px',
 }
 
+const styles = {
+    check: {...faStyle, fontSize: '25px', marginRight: '10px', color: "var(--themeP)"}
+}
+
+const ChallengeBrief = () => (
+    <section className="prize-card--challenge-brief text-purple">
+        <p className="text-subtitle font-weight-bold m-0">
+            Resumo Desafio N.º 1
+        </p>
+        <p className="text-normal animated zoomIn fast">
+            <FontAwesomeIcon icon="check" style={styles.check} />
+            Meta foi de <strong>100 pontos</strong>
+            <br />
+            <FontAwesomeIcon icon="check" style={styles.check} />
+            Você fez <strong>150 pontos</strong>
+        </p>
+    </section>
+);
+
 export default function PurchaseHistory({ data }) {
     const { _id, name, clientUserData, totalGeneralScore, totalPurchasePrize } = data;
-    const { maxScore, selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
+    let { maxScore, rewardList, selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
+
+    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
+    maxScore = pickedObj.rewardScore;
 
     const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData && clientUserData.purchaseHistory);
 
@@ -89,11 +112,16 @@ export default function PurchaseHistory({ data }) {
 
     const mainData = purchaseHistoryArray && purchaseHistoryArray.map(historyData => {
         if(historyData.cardType.includes("prize")) {
-            return <PrizeCard
+            return(
+                <Fragment>
+                    <PrizeCard
                         historyData={historyData}
                         colorS={selfThemeSColor}
                         colorP={selfThemePColor}
                     />
+                    <ChallengeBrief />
+                </Fragment>
+            )
         } else {
             return(
                 <Card

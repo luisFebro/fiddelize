@@ -38,6 +38,7 @@ router.get("/confirm-account/:authUserId", confirmUserAccount);
 router.put('/purchase-history/:userId', addPurchaseHistory);
 router.put('/purchase-history/update-status/:userId', changePrizeStatus);
 router.get("/list/purchase-history/:userId", readHistoryList);
+// end purchase history
 
 // LISTS
 router.get("/list/all", getList);

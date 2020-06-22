@@ -2,8 +2,8 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.1004.1"
-const updateDescription = "Painel de Controle - simplificação processo card teste || melhorias teclado || algoritmo modo progressivo ||  melhorias no sistema de pontuação cli-admin"
+const latestVersion = "3.11.1"
+const updateDescription = "Painel de Controle - simplificação processo card teste || melhorias teclado || algoritmo modo progressivo || melhorias no sistema de pontuação cli-admin || otimização algoritmo do historico de compras"
 const history = [
     "Login/Acesso - Novo status para verificar novidades em funcionalidades com página de atualização"
 ]

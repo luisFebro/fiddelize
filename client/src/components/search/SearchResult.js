@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Illustration from '../Illustration';
 import { CLIENT_URL } from '../../config/clientUrl';
 import imgLib from '../../utils/storage/lForageStore';
+import InstructionBtn from '../../components/buttons/InstructionBtn';
 
 SearchResult.propTypes = {
     filteredUsersLength: PropTypes.number,
@@ -48,6 +49,12 @@ export default function SearchResult({
         }
     }
 
+    const TextInstru = () => (
+        <p className="m-0">
+            É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos.
+        </p>
+    );
+
     return (
         <div className="text-main-container my-5">
             {!filteredUsersLength
@@ -91,20 +98,28 @@ export default function SearchResult({
                                 {isLoading
                                 ? ""
                                 : (
-                                    <p className="position-relative" style={{top: '30px'}}>
+                                    <div className="position-relative" style={{top: '30px'}}>
                                         <span className="text-title">Totais Gerais:</span>
                                         <br />
                                         <strong>• {`${allUsersLength} ${pluralizeBr(mainSubject)}`}</strong>
                                         <br />
-                                        <strong>• {`${totalActiveScores} Pontos Ativos`}</strong>
-                                        <br />
+                                        <div className="m-0 d-flex">
+                                            <p className="m-0 mr-2">
+                                                <strong>• {`${totalActiveScores} Pontos Ativos`}</strong>
+                                            </p>
+                                            <div>
+                                                <InstructionBtn
+                                                    text={<TextInstru />}
+                                                />
+                                            </div>
+                                        </div>
                                         <p
                                             className="text-center mt-2 py-2 px-3 font-weight-bold"
                                             style={styles.accumulativeScore}
                                         >
                                             {`${totalCliUserScores} Pontos Acumulados`}
                                         </p>
-                                    </p>
+                                    </div>
                                 )}
                             </h2>
                         </div>

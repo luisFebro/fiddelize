@@ -19,6 +19,7 @@ import CompLoader from '../../../components/CompLoader';
 import useAnimateConfetti from '../../../hooks/animation/useAnimateConfetti';
 import useAnimateNumber from '../../../hooks/animation/useAnimateNumber';
 import pickCurrChallData from '../../../utils/biz/pickCurrChallData';
+import defineCurrChallenge from '../../../utils/biz/defineCurrChallenge';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -58,7 +59,7 @@ function ClientUserAppContent({
     let { role, name } = useProfile();
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
-    const currChall = !totalPurchasePrize ? 1 : totalPurchasePrize + 1;
+    const currChall = defineCurrChallenge(totalPurchasePrize);
     let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
     console.log("totalPurchasePrize", totalPurchasePrize);
     console.log("rewardList", rewardList);

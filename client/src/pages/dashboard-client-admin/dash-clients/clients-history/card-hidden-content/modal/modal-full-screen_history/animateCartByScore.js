@@ -2,7 +2,7 @@ import { getNewRemainder } from '../../../../../../../utils/numbers/getRemainder
 import getFirstName from '../../../../../../../utils/string/getFirstName';
 
 export default function animateCartByScore(currScore, rewardScore, options) {
-    const { dots, flag, cart, challengeMsg, currChallenge, userName, selfThemeSColor } = options;
+    const { dots, flag, cart, challengeMsg, currChallenge, userName, selfThemeSColor, msgRef } = options;
 
     let indScore;
     if(!currScore) {
@@ -53,9 +53,9 @@ export default function animateCartByScore(currScore, rewardScore, options) {
     }
 
     setTimeout(() => {
-        const challengeMsg = document.getElementById("challenge-msg");
+        const challengeMsg = msgRef;
         const currLevel = indScore + 1;
-        challengeMsg.innerHTML = getStatusMsg(eachMilestone, currLevel, currScore, currChallenge, userName);
+        if(challengeMsg) challengeMsg.innerHTML = getStatusMsg(eachMilestone, currLevel, currScore, currChallenge, userName);
     }, 7000)
 }
 

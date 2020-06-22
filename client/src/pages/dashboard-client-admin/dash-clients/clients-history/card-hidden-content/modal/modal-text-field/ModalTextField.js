@@ -25,6 +25,7 @@ import { readUserList } from '../../../../../../../redux/actions/userActions';
 import { useAppSystem, useClientAdmin } from '../../../../../../../hooks/useRoleData';
 import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
 import { setRun } from '../../../../../../../redux/actions/globalActions';
+import { changePrizeStatus } from '../../../../../../../redux/actions/userActions';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -95,7 +96,6 @@ export default function ModalTextField({
     const handleSubmit = () => {
         const bodyToSend = {
             "clientUserData.currScore": parseFloat(remainValue),
-            "clientUserData.totalPurchasePrize": totalPrizes + 1,
             "clientUserData.totalActiveScore": totalActiveScore - rewardScore,
         }
 
@@ -104,9 +104,14 @@ export default function ModalTextField({
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             setRun(dispatch, "registered");
-            showSnackbar(dispatch, `OK! Foi descontado ${rewardScore} pontos de ${name.cap()}`, 'success', 8000)
-            onClose();
-            setTimeout(() => readHighestScores(dispatch, businessId), 3000);
+            showSnackbar(dispatch, `OK! Foi descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 5000)
+            // notification will be handled in the backend inside thisfunciton
+            changePrizeStatus(userId, { statusType: "confirmed" })
+            .then(res => {
+                showSnackbar(dispatch, `PRONTO! Uma notificação de confirmação foi enviada para ${name.cap()}.`, 'success', 6000)
+                setTimeout(() => readHighestScores(dispatch, businessId), 3000);
+                onClose();
+            })
         })
     };
 

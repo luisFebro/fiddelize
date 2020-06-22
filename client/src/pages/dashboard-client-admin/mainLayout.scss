@@ -161,6 +161,14 @@
     margin-left: 5px;
 }
 
+//
+.prize-card--challenge-brief {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+}
+
 .card-total {
     margin-bottom: 20px;
 }

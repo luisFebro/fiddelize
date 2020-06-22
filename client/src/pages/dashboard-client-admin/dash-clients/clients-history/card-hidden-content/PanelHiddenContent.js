@@ -20,7 +20,8 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
 
     const showInfos = () => {
         const infos = {
-            "Última Pontuação": data && data.clientUserData.cashCurrScore
+            "Última Pontuação": data && data.clientUserData.cashCurrScore,
+            "Pontuação Acumulada": data && data.clientUserData.totalGeneralScore
         }
 
         const infoKeys = Object.keys(infos);
@@ -32,7 +33,7 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
                     <p key={key} className="text-shadow text-normal">
                         <span className="font-weight-bold">• {key}:</span>
                         <br />
-                        {infoValues[ind]
+                        {infoValues[ind] && infoValues[ind] !== "0"
                         ? `${infoValues[ind]} Pontos`
                         : <span className="text-small font-weight-bold">Sem pontos.</span>}
                     </p>

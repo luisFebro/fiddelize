@@ -11,7 +11,7 @@ import { default as FullModalBtnHistory } from "./modal/modal-full-screen_histor
 import { useStoreState } from 'easy-peasy';
 import ClientProfile from './modal-content-pages/ClientProfile';
 import VAsyncPurchaseHistory from './modal-content-pages/VAsyncPurchaseHistory';
-import defineCurrChallenge from './helpers/defineCurrChallenge';
+import defineCurrChallenge from '../../../../../utils/biz/defineCurrChallenge';
 import getFirstName from '../../../../../utils/string/getFirstName';
 
 const isSmall = window.Helper.isSmallScreen();

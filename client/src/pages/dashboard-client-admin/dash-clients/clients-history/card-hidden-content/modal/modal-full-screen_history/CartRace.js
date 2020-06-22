@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './CartRace.scss';
 import PropTypes from 'prop-types';
 import animateCartByScore, { options } from './animateCartByScore';
-import { useClientAdmin } from '../../../../../../../hooks/useRoleData';
+import { useClientAdmin, useClientUser } from '../../../../../../../hooks/useRoleData';
+import defineCurrChallenge from '../../../../../../../utils/biz/defineCurrChallenge';
 
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
@@ -20,13 +21,14 @@ const faStyle = {
 
 export default function CartRace({ currUserScore, challengeN, userName, className, id }) {
     const { maxScore, selfThemePColor, selfThemeSColor, } = useClientAdmin();
-    const currChallenge = challengeN === 1 ? 1 : challengeN - 1;
+    let { totalPurchasePrize  } = useClientUser();
+    const currChallenge = defineCurrChallenge(totalPurchasePrize);
 
     const backColor = {backgroundColor: 'var(--themeBackground--' + selfThemePColor + ')'};
-
+    const msgRef = React.useRef(null);
     useEffect(() => {
-        animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName, selfThemeSColor});
-    }, [maxScore, currUserScore, currChallenge, selfThemeSColor])
+        animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName, selfThemeSColor, msgRef: msgRef.current});
+    }, [maxScore, currUserScore, currChallenge, selfThemeSColor, msgRef])
 
     const showLineRoad = () => (
         <div
@@ -52,7 +54,7 @@ export default function CartRace({ currUserScore, challengeN, userName, classNam
                 {isEvenSmall && currChallenge && `Desafio n.º ${currChallenge}`}
             </p>
             <p
-                id="challenge-msg"
+                ref={msgRef}
                 className="mot-challenge-msg text-small text-center text-purple"
             ></p>
             <div className="cart-race--root mt-3">

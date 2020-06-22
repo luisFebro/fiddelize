@@ -10,7 +10,7 @@ const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
 const addTransformToImgUrl = require("../../utils/biz-algorithms/cloudinary-images/addTransformToImgUrl");
-const { findOneAndUpdate, confirmPrizeStatus, countPurchasePrizesOnly } = require("./purchase-history-helpers/main");
+const { findOneAndUpdate, confirmPrizeStatus } = require("./purchase-history-helpers/main");
 const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
 // fetching enum values exemple:
@@ -258,46 +258,55 @@ exports.readBackup = (req, res) => { //n4 - great recursive solution and insertM
 // USER PURCHASE HISTORY
 exports.addPurchaseHistory = (req, res) => {
     const { _id, clientUserData } = req.profile;
-    // keyRefs: rewardScore, icon, value, isPrizeReceived, isPrizeConfirmed };
-    const prizeCount = countPurchasePrizesOnly(clientUserData.purchaseHistory);
-    const purchaseLength = clientUserData.purchaseHistory.length - prizeCount;
-    const historyData =  clientUserData.purchaseHistory[0];
+
+    const prizeCount = clientUserData.totalPurchasePrize;
+    console.log("prizeCount", prizeCount);
+    const totalNonPrizeCards = clientUserData.purchaseHistory.length - prizeCount;
+    console.log("totalNonPrizeCards", totalNonPrizeCards);
+    const historyData = clientUserData.purchaseHistory[0];
+
+    // for registering user's general score (do not influence in the algorithm)
     const newTotalGeneralScore = req.body.totalGeneralScore;
 
-    const lastPurchaseNumber = purchaseLength;
 
     const lastPurchaseObj = {
         challengeN: historyData ? historyData.challengeN : 1,
-        purchaseLength,
-        value: purchaseLength && historyData.value,
-        icon: purchaseLength && historyData.icon,
-        createdAt: purchaseLength && historyData.createdAt,
-        cardType: purchaseLength && historyData.cardType,
+        totalNonPrizeCards,
+        value: totalNonPrizeCards && historyData.value,
+        icon: totalNonPrizeCards && historyData.icon,
+        createdAt: totalNonPrizeCards && historyData.createdAt,
+        cardType: totalNonPrizeCards && historyData.cardType,
     }
     const scores = {
         rewardScore: req.body.rewardScore,
         currScore: clientUserData.currScore,
     }
 
-    let [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchaseObj, scores);
-    currHistoryData = { ...req.body, ...currHistoryData };
+    let [currCard, lastCard] = generateHistoryData(lastPurchaseObj, scores);
+    currCard = { ...req.body, ...currCard };
 
-    let unshiftThis = { $each: [currHistoryData], $position: 0 }; // insert as the first array's element.
+    let unshiftThis = { $each: [currCard], $position: 0 }; // insert as the first array's element.
 
-    if(lastHistoryData) {
-        lastHistoryData = { ...req.body, ...lastHistoryData };
-        unshiftThis = { $each: [currHistoryData, lastHistoryData], $position: 0 }; // insert as the first array's element.
+    // if the lastCard returns with data, this
+    // means that we are going to delete the last purchase data and add the last card on the top
+    if(lastCard) {
+        const lastCardNumber = totalNonPrizeCards;
+        //req.body: rewardScore, icon, value, totalGeneralScore (this is eliminated in the db auto since it is not part of this set of data)
+        lastCard = { ...req.body, ...lastCard };
+        unshiftThis = { $each: [currCard, lastCard], $position: 0 }; // insert as the first array's element.
 
         User.findOneAndUpdate(
             { _id },
-            { $pull: { "clientUserData.purchaseHistory": {desc: `Última Compra ${lastPurchaseNumber}`}}},
+            // remove the last object to update with a new order
+            { $pull: { "clientUserData.purchaseHistory": {desc: `Última Compra ${lastCardNumber}`}}},
             { new: false }
         ).exec(err => {
             if(err) return res.status(500).json(msgG('error.systemError', err))
-            findOneAndUpdate(User, res, _id, unshiftThis, clientUserData, newTotalGeneralScore);
+            findOneAndUpdate(User, res, _id, unshiftThis, newTotalGeneralScore);
         });
     } else {
-        findOneAndUpdate(User, res, _id, unshiftThis, clientUserData, newTotalGeneralScore);
+        // Add without deleting the last card
+        findOneAndUpdate(User, res, _id, unshiftThis, newTotalGeneralScore);
     }
 }
 
@@ -325,15 +334,25 @@ exports.readHistoryList = (req, res) => {
 
 exports.changePrizeStatus = (req, res) => {
     const { _id, clientUserData } = req.profile;
-    const { statusType } = req.body;
+    let { statusType } = req.query;
+
     if(!"confirmed, received".includes(statusType)) return res.status(400).json({msg: "This status type is not valid. Choose one of these: confirmed, received"})
 
     const historyData = clientUserData.purchaseHistory;
-    const newData = confirmPrizeStatus(historyData, { statusType });
-    User.findOneAndUpdate({ _id }, { $set: { "clientUserData.purchaseHistory": newData } }, { new: false })
-    .exec(err => {
+    const challengeN = clientUserData.totalPurchasePrize + 1;
+    const { arrayOfData, error, status } = confirmPrizeStatus(historyData, { statusType, challengeN });
+
+    if(status === "FAIL") return res.status(400).json({ msg: error })
+
+    User.findOneAndUpdate(
+        { _id },
+        { $set: {
+            "clientUserData.purchaseHistory": arrayOfData,
+            "clientUserData.totalPurchasePrize": challengeN,
+        }}, { new: false }
+    ).exec(err => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
-        res.json({msg: `The status ${statusType.toUpperCase()} was successfully confirmed!`});
+        res.json({msg: `The status ${statusType.toUpperCase()} was successfully set!`});
     });
 }
 // END USER PURCHASE HISTORY

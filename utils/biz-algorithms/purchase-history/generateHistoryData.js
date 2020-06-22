@@ -1,53 +1,56 @@
 
 
 function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
-    let { challengeN, purchaseLength, cardType, value, icon, createdAt } = lastPurchaseObj;
+    let { challengeN, totalNonPrizeCards, cardType, value, icon, createdAt } = lastPurchaseObj;
     const { rewardScore, currScore } = scores;
 
-    let currentPurchase = {};
-    let lastPurchase = {}; // this overrides the desc value from last pruchases.
+    let currCard = {};
+    let lastCard = {}; // this overrides the desc value from last pruchases.
 
     const cliUserBeatedGoal = currScore >= Number(rewardScore);
-    const currPurchaseCount = purchaseLength + 1;
-    const lastPurchaseCount = currPurchaseCount - 1;
+    const nextCardNumber = totalNonPrizeCards + 1; // the next curr card on the top
+    const lastCardNumber = totalNonPrizeCards;
 
     let defaultObj = { challengeN: challengeN, cardType: 'record', desc: '', createdAt: new Date() };
 
-    if(!purchaseLength && !cliUserBeatedGoal) {
-        currentPurchase = { ...defaultObj, desc: 'Primeira Compra' };
-        return [currentPurchase];
+    if(!totalNonPrizeCards && !cliUserBeatedGoal) {
+        // only add the current card
+        currCard = { ...defaultObj, desc: 'Primeira Compra' };
+        return [currCard];
     }
 
-    if(purchaseLength === 1 && !cliUserBeatedGoal) {
-        currentPurchase = { ...defaultObj, desc: `Última Compra ${currPurchaseCount}` };
-        return [currentPurchase];
+    if(totalNonPrizeCards === 1 && !cliUserBeatedGoal) {
+        // only add the current card
+        currCard = { ...defaultObj, desc: `Última Compra ${nextCardNumber}` };
+        return [currCard];
     }
 
     if(cardType === "prize") {
-        currentPurchase = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${lastPurchaseCount}`, createdAt: new Date()};
-        // lastPurchase = { challengeN: challengeN, cardType: 'record', desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
-        return [currentPurchase];
+        // only add the current card
+        currCard = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${nextCardNumber}`, createdAt: new Date()};
+        return [currCard];
     }
 
 
-    if(purchaseLength >= 2) {
-        currentPurchase = { ...defaultObj, desc: `Última Compra ${currPurchaseCount}` };
-        lastPurchase = { ...defaultObj, desc: `Compra ${lastPurchaseCount}`, value, icon, createdAt };
-        return [ currentPurchase, lastPurchase ];
+    if(totalNonPrizeCards >= 2) {
+        // the lastCard will replace the last card with same number and currCard will be add too.
+        currCard = { ...defaultObj, desc: `Última Compra ${nextCardNumber}` };
+        lastCard = { ...defaultObj, desc: `Compra ${lastCardNumber}`, value, icon, createdAt };
+        return [ currCard, lastCard ];
     }
 
     if(cliUserBeatedGoal) {
-        currentPurchase = { challengeN: challengeN, cardType: 'record', desc: `Última Compra ${currPurchaseCount}`, createdAt: new Date(), needPrize: true};
-        return [currentPurchase];
+        currCard = { challengeN: challengeN, cardType: 'record', desc: `Última Compra ${nextCardNumber}`, createdAt: new Date(), needPrize: true};
+        return [currCard];
     }
 
 }
 
 module.exports = generateHistoryData;
 
-// const lastPurchase = {
+// const lastCard = {
 //    challengeN: 2,
-//    purchaseLength: 2,
+//    totalNonPrizeCards: 2,
 //    value: 50,
 //    icon: "star",
 //    createdAt: new Date(),
@@ -59,7 +62,7 @@ module.exports = generateHistoryData;
 //     currScore: 501,
 // }
 
-// const [currHistoryData, lastHistoryData] = generateHistoryData(lastPurchase, scores);
+// const [currHistoryData, lastHistoryData] = generateHistoryData(lastCard, scores);
 // console.log("lastHistoryData", lastHistoryData);
 // console.log("currHistoryData", currHistoryData);
 

@@ -96,7 +96,7 @@ export default function Tooltip({
                 <TooltipMU
                     style={{top: 15}}
                     arrow={needArrow ? true : false}
-                    title={parse(text)}
+                    title={typeof text === "string" ? parse(text) : text}
                     classes={classes}
                     onClick={handleTooltipOpen}
                     disableFocusListener={true}

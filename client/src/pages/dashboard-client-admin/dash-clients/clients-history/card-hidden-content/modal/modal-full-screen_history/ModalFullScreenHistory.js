@@ -25,7 +25,7 @@ ModalFullScreenHistory.propTypes = {
 export default function ModalFullScreenHistory({ open, onClose, modalData }) {
     const [hideRaceCart, setHideRaceCart] = useState(false);
 
-    const { title, subTitle, componentContent, challengeN, currUserScore, userName, totalGeneralScore } = modalData;
+    const { title, subTitle, componentContent, currUserScore, userName, totalGeneralScore } = modalData;
 
     const isCartEmpty = !Boolean(totalGeneralScore);
 
@@ -69,7 +69,6 @@ export default function ModalFullScreenHistory({ open, onClose, modalData }) {
             <CartRace
                 className="animated zoomIn faster"
                 currUserScore={currUserScore}
-                challengeN={challengeN}
                 userName={userName}
             />
         )

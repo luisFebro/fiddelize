@@ -46,11 +46,10 @@ export default function PercCircleAndGift({
                 <div>
                     <p className="mt-3 text-title">Parabéns!<br />Você ganhou um prêmio.</p>
                     <ImgLoader
-                        className="app_gift animated bounce shadow-elevation-white"
+                        className="app_gift animated bounce repeat-3 shadow-elevation-white"
                         src={imgLib.app_gift}
                         width={100}
                         height="auto"
-                        style={{animationIterationCount: 20}}
                     />
                 </div>
             ) : (
