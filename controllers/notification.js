@@ -55,7 +55,7 @@ const pickObjByRole = (role, options = {}) => {
 // Method: Get
 exports.countPendingNotif = (req, res) => {
     const notificationsArray = pickDataByProfile(req.profile);
-    if(!notificationsArray || !notificationsArray.length) return 0;
+    if(!notificationsArray.length) return 0;
     const pendingNotif = notificationsArray.filter(notif => notif.clicked === false);
 
     res.json({ total: pendingNotif.length });

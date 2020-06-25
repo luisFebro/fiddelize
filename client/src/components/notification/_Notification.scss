@@ -1,0 +1,14 @@
+// CARD
+.notif-card--root {
+    display: flex;
+    padding: 0 4px;
+}
+
+.notif-card--root section {
+    padding: 9px 5px;
+}
+
+.notif-card--root .desc {
+    flex-basis: 80%;
+}
+// END CARD

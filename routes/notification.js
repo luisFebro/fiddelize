@@ -22,7 +22,7 @@ router.get('/count-pending-notification/:userId', countPendingNotif);
 router.put('/send', mwIsAuth, sendNotification);
 router.put('/mark-one-clicked/:userId', markOneClicked);
 router.put('/mark-all-clicked/:userId', markAllAsClicked);
-router.put('/mark-as-seen/:userId', markAllAsSeen);
+router.put('/mark-all-seen/:userId', markAllAsSeen);
 
 router.param("userId", mwUserId);
 

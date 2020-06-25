@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import NotificationBadge from '../../../NotificationBadge';
 import usePlayAudio from '../../../../hooks/media/usePlayAudio';
 import './_style.scss';
@@ -14,7 +14,7 @@ export default function BadaloBell({
     left,
 }) {
 
-    const [badgeInvisible, setbadgeInvisible] = useState(false);
+    // const [badgeInvisible, setbadgeInvisible] = useState(false);
 
     usePlayAudio("/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3", ".badalo-bell--audio")
 
@@ -60,7 +60,7 @@ export default function BadaloBell({
             style={{ position, top, right, left, cursor: "pointer" }}
             onClick={() => {
                 playAnima({callback: () => {
-                    setbadgeInvisible(true)
+                    // setbadgeInvisible(true)
                     if(typeof onClick === "function") {
                         onClick();
                     }
@@ -69,7 +69,7 @@ export default function BadaloBell({
         >
             <NotificationBadge
                 badgeValue={badgeValue}
-                badgeInvisible={badgeInvisible}
+                badgeInvisible={false}
                 backgroundColor={notifBackColor}
                 borderColor={notifBorderColor}
                 top={20}

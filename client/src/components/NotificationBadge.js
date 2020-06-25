@@ -31,10 +31,6 @@ export default function NotificationBadge({
         return () => { clearTimeout(runSetInvisible) };
     }, [])
 
-    useEffect(() => {
-        badgeInvisible && setInvisible(true);
-    }, [badgeInvisible])
-
     const BorderedBadge = withStyles(theme => ({
         badge: {
             right: right || 0, //14
@@ -48,6 +44,8 @@ export default function NotificationBadge({
             color: 'white',
             borderRadius: '50%',
             textShadow: '1px 1px 3px black',
+            // animationName: "zoomIn",
+            // animationDuration: '5s',
         }
     }))(Badge);
 
@@ -55,7 +53,7 @@ export default function NotificationBadge({
         <BorderedBadge
             badgeContent={badgeValue}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            invisible={invisible}
+            invisible={!badgeValue ? true : invisible}
             showZero={false}
             max={99}
             overlap="rectangle"
@@ -66,6 +64,11 @@ export default function NotificationBadge({
     );
 }
 
+/* ARCHIVES
+// useEffect(() => {
+//     badgeInvisible && setInvisible(true);
+// }, [badgeInvisible])
+*/
 
 /* REFERENCES - babadoo
 <IconButton href="" className="no-outline" style={{color: 'var(--mainWhite)'}} onClick={handleClick}>

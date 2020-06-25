@@ -20,6 +20,7 @@ import useAnimateConfetti from '../../../hooks/animation/useAnimateConfetti';
 import useAnimateNumber from '../../../hooks/animation/useAnimateNumber';
 import pickCurrChallData from '../../../utils/biz/pickCurrChallData';
 import defineCurrChallenge from '../../../utils/biz/defineCurrChallenge';
+import useCountNotif from '../../../hooks/notification/useCountNotif';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -56,7 +57,8 @@ function ClientUserAppContent({
 
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
-    let { role, name } = useProfile();
+    let { role, name, _id } = useProfile();
+    const totalNotifications = useCountNotif(_id);
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
@@ -105,7 +107,7 @@ function ClientUserAppContent({
                         left={needAppForPreview ? 258 : 270}
                         notifBorderColor={"var(--themeBackground--" + backColorSelect + ")"}
                         notifBackColor={backColorSelect === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
-                        badgeValue={1}
+                        badgeValue={totalNotifications}
                     />
                 </div>
             </section>

@@ -234,3 +234,5 @@ export default function PurchaseHistory({ data }) {
         </div>
     );
 }
+
+PurchaseHistory.whyDidYouUpdate = true;

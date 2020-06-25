@@ -26,6 +26,7 @@ import useDelay from '../../hooks/useDelay';
 import useCount from '../../hooks/useCount';
 import CompLoader from '../../components/CompLoader';
 import useBackColor from '../../hooks/useBackColor';
+import useCountNotif from '../../hooks/notification/useCountNotif';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -48,6 +49,7 @@ function ClientMobileApp({ location, history }) {
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
+    const totalNotifications = useCountNotif(_id);
     useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
     const dispatch = useStoreDispatch();
@@ -182,7 +184,7 @@ function ClientMobileApp({ location, history }) {
                 left={0}
                 notifBorderColor={"var(--themeBackground--" + selfThemeBackColor + ")"}
                 notifBackColor={selfThemeBackColor === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
-                badgeValue={1}
+                badgeValue={totalNotifications}
             />
         </div>
     );

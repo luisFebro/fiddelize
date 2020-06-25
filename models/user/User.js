@@ -17,12 +17,13 @@ const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // GENERAL SCHEMAS
 const enumTypes = [
     // pattern: (role_desc);
-    "system",
+    "system", // cliAdmin/cliUser
     "chatRequest", // future implementations...
-    "cliAdmin_birthdays",
-    "cliAdmin_newClients",
-    "cliAdmin_clientWonChall",
-    "cliUser_prizeStatus",
+    "welcome", // cliAdmin/cliUser
+    "birthdaysInWeek", // cliAdmin
+    "clientWonChall", // cliAdmin
+    "newClientsToday", // cliAdmin
+    "birthdayGreeting", // cliUser
 ];
 const notificationsData = {
     // recipient: { id: String, role: { type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
