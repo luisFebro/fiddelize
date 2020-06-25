@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './_main-app/App';
 // State Management - Redux and Context
+import './wdyr';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { easyStore } from './redux/_easyStore';
 import * as serviceWorker from './serviceWorker';

@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import ScrollToTop from 'react-router-scroll-top';
+// import ScrollToTop from 'react-router-scroll-top';
 import isThisApp from '../utils/window/isThisApp';
 import isWebpSupported from '../utils/media/isWebpSupported';
 import deferJsOnload from '../utils/performance/deferJsOnload';
@@ -54,11 +54,7 @@ export default function App() {
 
     return (
         <BrowserRouter>
-            <ScrollToTop>
-                <Fragment>
-                    {isThisApp() ? <AsyncMobileApp /> : <AsyncWebsite />}
-                </Fragment>
-            </ScrollToTop>
+            {isThisApp() ? <AsyncMobileApp /> : <AsyncWebsite />}
         </BrowserRouter>
     );
 }

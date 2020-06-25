@@ -34,10 +34,12 @@ export default function DashClients() {
     const { bizName } = useClientAdmin();
     const { name } = useProfile();
 
+    const sectionTitle = React.useMemo(() => <Title bizName={bizName} />, [bizName]);
+
     return (
         <div>
             <DashSectionTitle
-                title={<Title bizName={bizName} />}
+                title={sectionTitle}
             />
             <RankingPondium />
             <hr />

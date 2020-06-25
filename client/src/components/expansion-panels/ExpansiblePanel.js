@@ -51,6 +51,7 @@ export default function ExpansiblePanel({ actions }) {
         setExpanded(isExpanded ? panel : false);
     };
 
+    const expandedIcon = <ExpandMoreIcon />;
     return (
         <div className={classes.root}>
             {actions.map(panel => (
@@ -61,7 +62,7 @@ export default function ExpansiblePanel({ actions }) {
                     TransitionProps={{ unmountOnExit: true }}
                 >
                     <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
+                        expandIcon={expandedIcon}
                         aria-controls={`panel${panel.id}bh-content`}
                         id={`panel${panel.id}bh-header`}
                     >

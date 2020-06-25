@@ -7,7 +7,9 @@ const getFirstName = require("../utils/string/getFirstName");
 
 // MIDDLEWARES
 exports.mwIsAuth = (req, res, next) => {
-    const profile = req.profile; const query = req.profile; const body = req.body;
+    const profile = req.profile;
+    const query = req.query;
+    const body = req.body;
     const _id = profile && profile._id || query && query.bizId || body && body.senderId; // add here all means to get id to compare against the JWT verification
     let token = req.header('x-auth-token') || req.header("authorization"); // authrization for postman tests
     if(token && token.includes("Bearer ")) {

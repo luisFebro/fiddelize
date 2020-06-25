@@ -24,6 +24,8 @@ export default function ModalBtn({
         setFullOpen(true);
     }
 
+    const styleIcon = {fontSize: 30, color: "fff"}
+
     return (
         <section>
             {btnComp ? (
@@ -35,7 +37,7 @@ export default function ModalBtn({
                     position="relative"
                     onClick={handleFullOpen}
                     backgroundColor="var(--themeSDark)"
-                    iconMu={<WhatshotIcon className="d-flex align-items-center" style={{fontSize: 30, color: "fff"}} />}
+                    iconMu={<WhatshotIcon className="d-flex align-items-center" style={styleIcon} />}
                     needIconShadow={false}
                 />
             )}

@@ -17,13 +17,13 @@ const findIdAndAssign = (arrayOfObjs, id, property, newValue) => {
 }
 
 const pickDataByProfile = profileData => {
-    const { clientUserData, clientAdminData, role } = profileData;
+    const { role } = profileData;
 
     switch(role) {
         case "cliente":
-            return clientUserData.notifications;
+            return profileData.clientUserData.notifications;
         case "cliente-admin":
-            return clientAdminData.notifications;
+            return profileData.clientAdminData.notifications;
         default:
             console.log("smt wrong with pickDataByProfile")
     }
@@ -53,6 +53,14 @@ const pickObjByRole = (role, options = {}) => {
 // END UTILS
 
 // Method: Get
+exports.countPendingNotif = (req, res) => {
+    const notificationsArray = pickDataByProfile(req.profile);
+    if(!notificationsArray || !notificationsArray.length) return 0;
+    const pendingNotif = notificationsArray.filter(notif => notif.clicked === false);
+
+    res.json({ total: pendingNotif.length });
+}
+
 exports.readNotifications = (req, res) => {
     const data = pickDataByProfile(req.profile);
     res.json(data);

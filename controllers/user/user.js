@@ -221,6 +221,7 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
         } = docs[0];
 
         // remove sensitive cli-admin data
+        // note: check if notification will be include to be excluded too
         const isCliAdmin = list[0].role === "cliente-admin"; // always the first object if available
         if(isCliAdmin) { delete list[0].clientAdminData }
 

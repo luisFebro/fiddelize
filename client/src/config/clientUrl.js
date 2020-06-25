@@ -4,4 +4,4 @@ exports.CLIENT_URL = process.env.NODE_ENV === 'production'
     ? 'https://www.fiddelize.com.br'
     : 'http://localhost:3000'
 
-exports.IS_DEV = process.env.NODE_ENV !== 'production';
+exports.IS_DEV = process.env.NODE_ENV === 'development';

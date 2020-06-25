@@ -178,6 +178,8 @@ function Login({ history, setLoginOrRegister }) {
 
 export default withRouter(Login);
 
+Login.whyDidYouRender = true
+
 
 /*ARCHIVES
 else if(!selfMilestoneIcon) {

@@ -53,10 +53,10 @@ export default function ConfigExpansiblePanel({
 
     const dispatch = useStoreDispatch();
 
-    const styles = {
+    const styles = React.useMemo(() => ({
         expansionPanel: {
-            color: color,
-            backgroundColor: backgroundColor, // default is paper color
+            color,
+            backgroundColor, // default is paper color
             margin: '5px 0',
         },
         muIcon: {
@@ -64,7 +64,7 @@ export default function ConfigExpansiblePanel({
             color: 'white',
             filter:  'drop-shadow(.5px .5px 1.5px black)',
         }
-    }
+    }), [color, backgroundColor])
 
     const showPanel = panel => (
         <ExpansionPanelSummary
