@@ -10,7 +10,7 @@ export default function useCountNotif(userId, role) {
             if(cancel) return;
             countPendingNotif(userId, { role })
             .then(res => {
-                if(res.statusText !== "OK") return console.log("Something wrong with useCountNotif")
+                if(res.status !== 200) return console.log("Something wrong with useCountNotif")
                 setCount(res.data.total);
                 cancel = true;
             })

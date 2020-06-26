@@ -12,9 +12,9 @@ export default function NotifList({ _id, runList }) {
         if(_id && token) {
             readNotifications(_id, { token })
             .then(res => {
-                if(res.statusText !== "OK") return console.log("smt wrong with NotifList")
-                markAllAsSeen(_id);
+                if(res.status !== 200) return console.log("smt wrong with NotifList")
                 setNotifList(res.data);
+                markAllAsSeen(_id);
             })
         }
     }, [_id, token, runList])
@@ -33,7 +33,7 @@ export default function NotifList({ _id, runList }) {
             </section>
         )
     })
-    renderedList.length && alert(renderedList)
+
     return(
         <Fragment>
             {!notifList.length
@@ -42,7 +42,7 @@ export default function NotifList({ _id, runList }) {
                     marginY={100}
                     size="small"
                 />
-            ) : null}
+            ) : renderedList}
         </Fragment>
     );
 }
