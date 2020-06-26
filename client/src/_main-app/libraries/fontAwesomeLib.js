@@ -5,6 +5,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 //ICONS n1
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons/faAngleDoubleRight'; // generate something
+import { faBolt } from '@fortawesome/free-solid-svg-icons/faBolt'; // generate something
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons/faAngleRight';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faChartPie } from '@fortawesome/free-solid-svg-icons/faChartPie';
@@ -139,6 +140,7 @@ library.add(
   faTshirt,
   faUserTie,
   faReply,
+  faBolt,
   //end app milestone icons
 );
 

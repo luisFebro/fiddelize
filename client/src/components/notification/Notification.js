@@ -46,20 +46,21 @@ export default function Notification() {
                 <div className="text-subtitle text-purple ml-3">
                     <p className="text-normal">
                         <strong>Status: </strong>
-                        {!totalNotifications && <strong className="text-normal">...</strong>}
+                        <br />
+                        {totalNotifications === null && <strong className="text-normal">analisando...</strong>}
                         {totalNotifications === 0 &&
                         (
                             <Fragment>
                                 <strong className="text-normal">
-                                    Todas novidades vistas.
+                                    • Todas novidades vistas.
                                 </strong>
                             </Fragment>
                         )}
                         {totalNotifications > 0 && (
                             <Fragment>
                                 <strong className="text-subtitle">
-                                    {totalNotifications}
-                                </strong> novidade{plural} não lida{plural}.
+                                    • {totalNotifications}
+                                </strong> novidade{plural} não vista{plural}.
                             </Fragment>
                         )}
                     </p>
@@ -84,6 +85,11 @@ export default function Notification() {
             {showTitle()}
             {showNotifStatus()}
             <NotifList _id={_id} runList={runList} />
+            {totalNotifications !== null && totalNotifications >= 3 && (
+                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                    Isso é tudo.
+                </p>
+            )}
         </Fragment>
     );
 }

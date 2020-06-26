@@ -4,7 +4,7 @@ import Spinner from '../../components/loadingIndicators/Spinner';
 
 const AsyncBellNotifBtn = LoadableComp({ // n1
   loader: () => import("./BellNotifBtn" /* webpackChunkName: "bell-btn-comp-lazy" */),
-  loading: () => <div style={{margin: '70px 0'}}><Spinner size="small" /></div>
+  loading: () => <Spinner size="small" />
 });
 
 export default AsyncBellNotifBtn;

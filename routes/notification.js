@@ -17,9 +17,9 @@ const {
 } = require("../controllers/user");
 
 // @ routes api/notification/...
-router.get('/read/:userId', readNotifications); // mwIsAuth
+router.get('/read/:userId', mwIsAuth, readNotifications); //
 router.get('/count-pending-notification', countPendingNotif);
-router.put('/send',  sendNotification); // mwIsAuth
+router.put('/send', mwIsAuth, sendNotification); //
 router.put('/mark-one-clicked/:userId', markOneClicked);
 router.put('/mark-all-clicked/:userId', markAllAsClicked);
 router.put('/mark-all-seen/:userId', markAllAsSeen);

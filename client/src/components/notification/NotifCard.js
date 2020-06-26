@@ -3,10 +3,13 @@ import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
 import ButtonMulti, {faStyle} from '../../components/buttons/material-ui/ButtonMulti';
 import { useProfile } from '../../hooks/useRoleData';
-// import parse from 'html-react-parser';
 import { markOneClicked } from '../../redux/actions/notificationActions';
 import { fromNow } from '../../utils/dates/dateFns';
 import getFirstName from '../../utils/string/getFirstName';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from 'easy-peasy';
+import { setRun } from '../../hooks/useRunComp';
+import uuidv1 from 'uuid/v1';
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -34,7 +37,7 @@ function NotifCard({
     createdAt,
     clicked,
 }) {
-
+    const dispatch = useStoreDispatch();
     const { name, _id: userId } = useProfile();
 
     const styles = {
@@ -106,6 +109,10 @@ function NotifCard({
 
     const handleClickedCard = () => {
         markOneClicked(userId, cardId)
+        .then(res => {
+            if(res.status !== 200) return console.log("smt worng with handleClickedCard")
+            setRun(dispatch, `notificationCount${uuidv1()}`)
+        })
     }
 
     const showActionBtn = () => (
@@ -113,6 +120,7 @@ function NotifCard({
             <ButtonMulti
                 onClick={handleClickedCard}
                 title={!clicked ? "Ver" : `Ok ✔️`}
+                iconFontAwesome={!clicked ? <FontAwesomeIcon icon="bolt" style={{...faStyle, fontSize: 22}} /> : null}
                 textShadow={!clicked ? null : " "}
                 color={!clicked ? "var(--mainWhite)" : "var(--mainDark)"}
                 backgroundColor={!clicked ? "var(--themeSDark--" +  backColor + ")" : "var(--lightGrey)"}
