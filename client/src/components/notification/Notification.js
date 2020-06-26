@@ -45,10 +45,21 @@ export default function Notification() {
             <section>
                 <div className="text-subtitle text-purple ml-3">
                     <p className="text-normal">
-                        <strong>Total: </strong>
-                        <strong className="text-subtitle">
-                            {totalNotifications}
-                        </strong> novidade{plural} não lida{plural}.
+                        <strong>Status: </strong>
+                        {!totalNotifications
+                        ? (
+                            <Fragment>
+                                <strong className="text-normal">
+                                    Todas novidades vistas.
+                                </strong>
+                            </Fragment>
+                        ) : (
+                            <Fragment>
+                                <strong className="text-subtitle">
+                                    {totalNotifications}
+                                </strong> novidade{plural} não lida{plural}.
+                            </Fragment>
+                        )}
                     </p>
                 </div>
                 <div className="container-center my-3">
