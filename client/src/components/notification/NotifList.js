@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import NotifCard from './NotifCard';
 import { readNotifications, markAllAsSeen, } from '../../redux/actions/notificationActions';
 import { useToken } from '../../hooks/useRoleData';
+import Spinner from '../../components/loadingIndicators/Spinner';
 
 export default function NotifList({ _id, runList }) {
     const [notifList, setNotifList] = useState([]);
@@ -32,10 +33,16 @@ export default function NotifList({ _id, runList }) {
             </section>
         )
     })
-
+    renderedList.length && alert(renderedList)
     return(
-        <>
-            {renderedList}
-        </>
+        <Fragment>
+            {!notifList.length
+            ? (
+                <Spinner
+                    marginY={100}
+                    size="small"
+                />
+            ) : null}
+        </Fragment>
     );
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { countPendingNotif } from '../../redux/actions/notificationActions';
 
 export default function useCountNotif(userId, role) {
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(null);
 
     useEffect(() => {
         let cancel;

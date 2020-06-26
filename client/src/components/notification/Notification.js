@@ -46,14 +46,16 @@ export default function Notification() {
                 <div className="text-subtitle text-purple ml-3">
                     <p className="text-normal">
                         <strong>Status: </strong>
-                        {!totalNotifications
-                        ? (
+                        {!totalNotifications && <strong className="text-normal">...</strong>}
+                        {totalNotifications === 0 &&
+                        (
                             <Fragment>
                                 <strong className="text-normal">
                                     Todas novidades vistas.
                                 </strong>
                             </Fragment>
-                        ) : (
+                        )}
+                        {totalNotifications > 0 && (
                             <Fragment>
                                 <strong className="text-subtitle">
                                     {totalNotifications}
