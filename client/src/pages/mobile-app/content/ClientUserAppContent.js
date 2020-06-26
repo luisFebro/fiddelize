@@ -9,7 +9,7 @@ import "../ellipse.css";
 import { setRun } from '../../../hooks/useRunComp';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
-import BellNotifBtn from '../../../components/notification/BellNotifBtn';
+import AsyncBellNotifBtn from '../../../components/notification/AsyncBellNotifBtn';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from '../../../utils/biz/selectTxtStyle';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
@@ -58,7 +58,7 @@ function ClientUserAppContent({
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
     let { role, name, _id } = useProfile();
-    const totalNotifications = useCountNotif(_id);
+    const totalNotifications = useCountNotif(_id, "cliente");
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
@@ -101,7 +101,7 @@ function ClientUserAppContent({
             <section className="position-relative">
                 <div className="ellipse" style={{backgroundColor: "var(--themePLight--" + colorP + ")", width: needAppForPreview && '21.8em',}}></div>
                 <div className={`${needAppForPreview && "enabledLink"}`}>
-                    <BellNotifBtn
+                    <AsyncBellNotifBtn
                         position="absolute"
                         top={5}
                         left={needAppForPreview ? 258 : 270}

@@ -18,7 +18,7 @@ import ClientUserAppContent from './content/ClientUserAppContent';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import isThisApp from '../../utils/window/isThisApp';
-import BellNotifBtn from '../../components/notification/BellNotifBtn';
+import AsyncBellNotifBtn from '../../components/notification/AsyncBellNotifBtn';
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
 import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
@@ -49,7 +49,7 @@ function ClientMobileApp({ location, history }) {
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
-    const totalNotifications = useCountNotif(_id);
+    const totalNotifications = useCountNotif(_id, "cliente-admin");
     useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
     const dispatch = useStoreDispatch();
@@ -178,7 +178,7 @@ function ClientMobileApp({ location, history }) {
 
     const showNotificationBell = () => (
         <div className="container-center">
-            <BellNotifBtn
+            <AsyncBellNotifBtn
                 position="relative"
                 top={-60}
                 left={0}

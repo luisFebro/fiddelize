@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 // import IconButton from '@material-ui/core/IconButton';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
@@ -14,7 +14,7 @@ NotificationBadge.propTypes = {
     top: PropTypes.number,
 }
 
-export default function NotificationBadge({
+function NotificationBadge({
     children,
     padding,
     fontSize,
@@ -24,12 +24,6 @@ export default function NotificationBadge({
     borderColor,
     right,
     top, }) {
-    const [invisible, setInvisible] = useState(true);
-
-    useEffect(() => {
-        let runSetInvisible = setTimeout(() => setInvisible(false), 5000);
-        return () => { clearTimeout(runSetInvisible) };
-    }, [])
 
     const BorderedBadge = withStyles(theme => ({
         badge: {
@@ -44,8 +38,8 @@ export default function NotificationBadge({
             color: 'white',
             borderRadius: '50%',
             textShadow: '1px 1px 3px black',
-            // animationName: "zoomIn",
-            // animationDuration: '5s',
+            animationName: "zoomIn",
+            animationDuration: '1s',
         }
     }))(Badge);
 
@@ -53,7 +47,7 @@ export default function NotificationBadge({
         <BorderedBadge
             badgeContent={badgeValue}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            invisible={!badgeValue ? true : invisible}
+            invisible={!badgeValue ? true : false}
             showZero={false}
             max={99}
             overlap="rectangle"
@@ -64,7 +58,15 @@ export default function NotificationBadge({
     );
 }
 
+export default React.memo(NotificationBadge);
 /* ARCHIVES
+// const [invisible, setInvisible] = useState(true);
+
+// useEffect(() => {
+//     let runSetInvisible = setTimeout(() => setInvisible(false), 2000);
+//     return () => { clearTimeout(runSetInvisible) };
+// }, [])
+
 // useEffect(() => {
 //     badgeInvisible && setInvisible(true);
 // }, [badgeInvisible])

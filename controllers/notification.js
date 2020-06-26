@@ -54,11 +54,20 @@ const pickObjByRole = (role, options = {}) => {
 
 // Method: Get
 exports.countPendingNotif = (req, res) => {
-    const notificationsArray = pickDataByProfile(req.profile);
-    if(!notificationsArray.length) return 0;
-    const pendingNotif = notificationsArray.filter(notif => notif.clicked === false);
+    const { userId, role } = req.query;
+    let rolePath;
+    role === "cliente-admin"
+    ? rolePath = 'clientAdminData'
+    : rolePath = 'clientUserData'
 
-    res.json({ total: pendingNotif.length });
+    User.find({ _id: userId, role })
+    .select(`${rolePath}.notifications -_id`)
+    .exec((err, data) => {
+        if (err) return res.status(500).json(msgG('error.systemError', err))
+        const notifs = data[0][rolePath]["notifications"];
+        const totalFilteredNotifs = notifs.filter(notif => notif.clicked === false);
+        res.json({ total: totalFilteredNotifs.length });
+    })
 }
 
 exports.readNotifications = (req, res) => {

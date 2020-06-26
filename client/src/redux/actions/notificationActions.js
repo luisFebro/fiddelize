@@ -2,9 +2,11 @@ import axios from 'axios';
 import { getHeaderJson, getHeaderToken } from '../../utils/server/getHeaders';
 
 // not working properly yet
-export const countPendingNotif = async (userId) => {
+export const countPendingNotif = async (userId, options = {}) => {
+    const { role } = options;
+
     try {
-        return await axios.get(`/api/notification/count-pending-notification/${userId}`, getHeaderJson);
+        return await axios.get(`/api/notification/count-pending-notification?userId=${userId}&role=${role}`, getHeaderJson);
     } catch (err) {
         return err;
     }

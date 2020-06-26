@@ -17,6 +17,10 @@ export default function BellNotifBtn({
         setFullOpen(true);
     }
 
+    const handleFullClose = () => {
+        setFullOpen(false);
+    }
+
     return (
         <section>
             <BadaloBell
@@ -31,7 +35,7 @@ export default function BellNotifBtn({
             <ModalFullContent
                 contentComp={<Notification />}
                 fullOpen={fullOpen}
-                setFullOpen={setFullOpen}
+                setFullOpen={handleFullClose}
             />
         </section>
     );

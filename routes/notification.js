@@ -18,7 +18,7 @@ const {
 
 // @ routes api/notification/...
 router.get('/read/:userId', mwIsAuth, readNotifications);
-router.get('/count-pending-notification/:userId', countPendingNotif);
+router.get('/count-pending-notification', countPendingNotif);
 router.put('/send', mwIsAuth, sendNotification);
 router.put('/mark-one-clicked/:userId', markOneClicked);
 router.put('/mark-all-clicked/:userId', markAllAsClicked);

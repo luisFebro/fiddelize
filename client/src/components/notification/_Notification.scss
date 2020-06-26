@@ -1,14 +1,41 @@
 // CARD
-.notif-card--root {
+.notif-card--root .title {
+    text-align: center;
+    position: relative;
+    top: 5px;
+    padding-left: 10px;
+}
+
+.notif-card--root main {
     display: flex;
-    padding: 0 4px;
 }
 
 .notif-card--root section {
-    padding: 9px 5px;
+    padding: 0px 0px 5px 0px;
 }
 
 .notif-card--root .desc {
-    flex-basis: 80%;
+    padding-left: 10px;
+    flex-basis: 95%;
 }
+
+.notif-card--root .visual-assets {
+    top:-18px;
+    left: -8px;
+}
+
+.notif-card--root .visual-assets .circular-img {
+    position: relative;
+    left: 10px;
+    background: var(--themeSDark);
+    padding: 2px;
+    border-radius: 50%;
+    border: 2px solid var(--mainWhite);
+}
+
+.notif-card--root .action-btn {
+    display: flex;
+    align-items: center;
+}
+
 // END CARD

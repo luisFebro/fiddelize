@@ -19,9 +19,7 @@ export default function BadaloBell({
     usePlayAudio("/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3", ".badalo-bell--audio")
 
     const playAnima = (options = {}) => {
-
         const { callback, isInit } = options;
-
         // if(!isInit) playRingtone();
 
         const animaTop = document.querySelector(".bell-top");
@@ -53,19 +51,28 @@ export default function BadaloBell({
         return () => { clearTimeout(startPlayAnima) }
     }, [badgeValue])
 
+    const handleBadaloClick = () => {
+        playAnima({callback: () => {
+            // setbadgeInvisible(true)
+            if(typeof onClick === "function") {
+                onClick();
+            }
+        }});
+    }
+
+    // When passing props as a child,should wrapped like this to avoid rerender
+    const notifBody = React.useMemo(() => (
+        <div className="bell">
+            <div className="bell-top"></div>
+            <div className="bell-bot"></div>
+        </div>
+    ), [])
 
     return (
         <section
             className="badalo-bell--audio"
             style={{ position, top, right, left, cursor: "pointer" }}
-            onClick={() => {
-                playAnima({callback: () => {
-                    // setbadgeInvisible(true)
-                    if(typeof onClick === "function") {
-                        onClick();
-                    }
-                }});
-            }}
+            onClick={handleBadaloClick}
         >
             <NotificationBadge
                 badgeValue={badgeValue}
@@ -74,11 +81,10 @@ export default function BadaloBell({
                 borderColor={notifBorderColor}
                 top={20}
             >
-                <div className="bell">
-                    <div className="bell-top"></div>
-                    <div className="bell-bot"></div>
-                </div>
+                {notifBody}
             </NotificationBadge>
         </section>
     );
 }
+
+// BadaloBell.whyDidYouRender = true;

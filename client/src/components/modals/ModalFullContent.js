@@ -35,7 +35,7 @@ export default function ModalFullContent({
         >
             {contentComp}
             <CloseButton
-                onClick={() => setFullOpen(!fullOpen)}
+                onClick={setFullOpen}
                 size="40px"
                 top="15px"
                 right="15px"

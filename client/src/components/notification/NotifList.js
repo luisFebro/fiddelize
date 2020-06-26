@@ -21,7 +21,7 @@ export default function NotifList({ _id, runList }) {
     const renderedList = notifList && notifList.map(notif => {
         const { _id, cardType, isCardNew, createdAt, clicked } = notif; // also senderId, senderName, msg (chat only)
         return (
-            <section key={_id}>
+            <section key={_id} className="ml-2">
                 <NotifCard
                     cardId={_id}
                     cardType={cardType}
@@ -34,8 +34,8 @@ export default function NotifList({ _id, runList }) {
     })
 
     return(
-        <section>
+        <>
             {renderedList}
-        </section>
+        </>
     );
 }
