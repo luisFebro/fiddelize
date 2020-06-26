@@ -5,6 +5,10 @@ import useCountNotif from '../../hooks/notification/useCountNotif';
 import { readNotifications, markAllAsClicked } from '../../redux/actions/notificationActions';
 import './_Notification.scss';
 import { useProfile } from '../../hooks/useRoleData';
+import { setRun } from '../../hooks/useRunComp';
+import uuidv1 from 'uuid/v1';
+import { useStoreDispatch } from 'easy-peasy';
+
 
 export default function Notification() {
     const [loading, setLoading] = useState(false);
@@ -13,6 +17,7 @@ export default function Notification() {
     const [runList, setRunList] = useState(false);
 
     const { _id, role } = useProfile();
+    const dispatch = useStoreDispatch();
 
     const totalNotifications = useCountNotif(_id, role);
 
@@ -31,6 +36,7 @@ export default function Notification() {
         markAllAsClicked(_id)
         .then(res => {
             if(res.status !== 200) return console.log("smt wrong with handleMarkAllClicked")
+            setRun(dispatch, `notificationCount${uuidv1()}`)
             setRunList(true);
             setLoading(false);
             setBtnTitle("Marcadas!")
