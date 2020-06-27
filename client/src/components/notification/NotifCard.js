@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
 import ButtonMulti, {faStyle} from '../../components/buttons/material-ui/ButtonMulti';
-import { useProfile } from '../../hooks/useRoleData';
+import { useProfile, useClientAdmin } from '../../hooks/useRoleData';
 import { markOneClicked } from '../../redux/actions/notificationActions';
 import { fromNow } from '../../utils/dates/dateFns';
 import getFirstName from '../../utils/string/getFirstName';
@@ -13,13 +13,12 @@ import uuidv1 from 'uuid/v1';
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
-        "system", // cliAdmin/cliUser
+        "system", // cliAdmin/cliUser for succeful purchase, warnings of deadlines, warnign of usage os SMS, promotions
         "chatRequest", // future implementations...
-        "welcome", // cliAdmin/cliUser
-        "birthdaysInWeek", // cliAdmin
-        "clientWonChall", // cliAdmin
-        "newClientsToday", // cliAdmin
-        "birthdayGreeting", // clieUser
+        "welcome", // cliAdmin/cliUser (active)
+        "birthdaysInWeek", // cliAdmin (active)
+        "clientWonChall", // cliAdmin (active)
+        "birthdayGreeting", // clieUser (active)
     ]),
     isCardNew: PropTypes.bool,
     createdAt: PropTypes.string,
@@ -35,10 +34,12 @@ function NotifCard({
     backColor = "default",
     isCardNew,
     createdAt,
+    msg,
     clicked,
 }) {
     const dispatch = useStoreDispatch();
-    const { name, _id: userId } = useProfile();
+    const { name, _id: userId, role } = useProfile();
+    const { bizName } = useClientAdmin();
 
     const styles = {
         card: {
@@ -61,7 +62,21 @@ function NotifCard({
         </div>
     )
 
+    const handledWelcomeBrief =
+    role === "cliente"
+    ? "Conheça sobre como você vai ficar conectado com seus pontos de fidelidade"
+    : `${getFirstName(name)}, veja como a Fiddelize vai te deixar por dentro dos pontos de fidelidade dos seus clientes`
 
+    const handledBirthdayGreeting =
+    role === "cliente"
+    ? `${getFirstName(name)}, muitas felicidades e sucessos são os votos de ${bizName} neste dia tão especial para você!`
+    : `Pensou que você não receberia uma notificação de aniversário também? Surpresa, ${getFirstName(name)}! A Fiddelize te deseja ainda mais clientes para seu negócio recheada de sucesso para sua vida!`
+
+    // test
+    //This will send through the message like:
+    //firstName_3
+    const clientName = "Anna da Silva Ribeiro"; // get the entire name,display brief onlyfirst name, page entire.
+    const currChall = "3";
     function getCardTypeData(cardType) {
         let title;
         let brief;
@@ -70,12 +85,27 @@ function NotifCard({
         switch(cardType) {
             case "welcome":
                 title = `Boas vindas, ${getFirstName(name)}`;
-                brief = "Conheça sobre como você vai ficar conectado com seus pontos de fidelidade";
+                brief = handledWelcomeBrief;
+                circularImg = "/img/icons/calendar-welcome.svg";
+                break;
+            case "clientWonChall":
+                title = `Cliente concluíu desafio`;
+                brief = `${getFirstName(clientName)} concluíu desafio de n.° ${currChall}. Confirme esse desafio do cliente descontando os pontos.`
+                circularImg = "/img/icons/fiddelize-trophy.svg";
+                break;
+            case "birthdayGreeting":
+                title = `Feliz Aniversário!`;
+                brief = handledBirthdayGreeting;
                 circularImg = "/img/icons/birthday-cake.svg";
                 break;
+            case "birthdaysInWeek":
+                title = `Aniversários da semana`;
+                brief = "Lista de clientes aniversariantes da semana 21/07 por ordem de pontos acumulados";
+                circularImg = "/img/icons/birthday-customers.svg";
+                break;
             case "system":
-                title = "TESTE card sistema";
-                brief = "Test descrição";
+                title = "Fiddelize informa:";
+                brief = "this should be changed dynamically with a subType variable from backend";
                 circularImg = "teste.svg";
                 break;
             default:

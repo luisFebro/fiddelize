@@ -17,20 +17,28 @@ const UserTokenSchema = new Schema(dataTempAuthUserToken);
 // GENERAL SCHEMAS
 const enumTypes = [
     // pattern: (role_desc);
+    "welcome", // cliAdmin/cliUser
+    "clientWonChall", // cliAdmin
+    "birthdaysInWeek", // cliAdmin
+    "birthdayGreeting", // cliUser
     "system", // cliAdmin/cliUser
     "chatRequest", // future implementations...
-    "welcome", // cliAdmin/cliUser
-    "birthdaysInWeek", // cliAdmin
-    "clientWonChall", // cliAdmin
-    "newClientsToday", // cliAdmin
-    "birthdayGreeting", // cliUser
+    // "newClientsToday", // cliAdmin (deactivated)
 ];
+
+const enumSubTypes = [
+    "successfulPurchase",
+    "deadlineWarning",
+    "smsUsageWarning",
+    "promotion",
+]
 const notificationsData = {
     // recipient: { id: String, role: { type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
     senderId: { type: String, trim: true, lowercase: true },
     senderName: { type: String, trim: true, lowercase: true }, // business name... for cliAdmin will be Fiddelize's name
-    msg: { type: String, maxlength: 3000 },
+    msg: { type: String, maxlength: 3000 }, // for chat or infos about variable in such snake format: somehting_34
     cardType: { type: String, enum: [...enumTypes] },
+    subType: { type: String, enum: [...enumSubTypes]},
     isCardNew: { type: Boolean, default: true }, // When user visualize notif page, a new badge will be show and then it will be update as false
     clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
     isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead
