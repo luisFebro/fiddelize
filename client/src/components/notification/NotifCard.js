@@ -1,15 +1,10 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
-import ButtonMulti, {faStyle} from '../../components/buttons/material-ui/ButtonMulti';
 import { useProfile, useClientAdmin } from '../../hooks/useRoleData';
-import { markOneClicked } from '../../redux/actions/notificationActions';
 import { fromNow } from '../../utils/dates/dateFns';
-import getFirstName from '../../utils/string/getFirstName';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from 'easy-peasy';
-import { setRun } from '../../hooks/useRunComp';
-import uuidv1 from 'uuid/v1';
+import getCardTypeData from './helpers/getCardTypeData';
+import CardActionBtn from './card-type-pages/CardActionBtn';
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -31,14 +26,14 @@ const isSmall = window.Helper.isSmallScreen();
 function NotifCard({
     cardId,
     cardType = "system",
+    subType,
     backColor = "default",
     isCardNew,
     createdAt,
     msg,
     clicked,
 }) {
-    const dispatch = useStoreDispatch();
-    const { name, _id: userId, role } = useProfile();
+    const { name: userName, _id: userId, role } = useProfile();
     const { bizName } = useClientAdmin();
 
     const styles = {
@@ -62,64 +57,8 @@ function NotifCard({
         </div>
     )
 
-    const handledWelcomeBrief =
-    role === "cliente"
-    ? "Conheça sobre como você vai ficar conectado com seus pontos de fidelidade"
-    : `${getFirstName(name)}, veja como a Fiddelize vai te deixar por dentro dos pontos de fidelidade dos seus clientes`
-
-    const handledBirthdayGreeting =
-    role === "cliente"
-    ? `${getFirstName(name)}, muitas felicidades e sucessos são os votos de ${bizName} neste dia tão especial para você!`
-    : `Pensou que você não receberia uma notificação de aniversário também? Surpresa, ${getFirstName(name)}! A Fiddelize te deseja ainda mais clientes para seu negócio recheada de sucesso para sua vida!`
-
-    // test
-    //This will send through the message like:
-    //firstName_3
-    const clientName = "Anna da Silva Ribeiro"; // get the entire name,display brief onlyfirst name, page entire.
-    const currChall = "3";
-    function getCardTypeData(cardType) {
-        let title;
-        let brief;
-        let circularImg;
-
-        switch(cardType) {
-            case "welcome":
-                title = `Boas vindas, ${getFirstName(name)}`;
-                brief = handledWelcomeBrief;
-                circularImg = "/img/icons/calendar-welcome.svg";
-                break;
-            case "clientWonChall":
-                title = `Cliente concluíu desafio`;
-                brief = `${getFirstName(clientName)} concluíu desafio de n.° ${currChall}. Confirme esse desafio do cliente descontando os pontos.`
-                circularImg = "/img/icons/fiddelize-trophy.svg";
-                break;
-            case "birthdayGreeting":
-                title = `Feliz Aniversário!`;
-                brief = handledBirthdayGreeting;
-                circularImg = "/img/icons/birthday-cake.svg";
-                break;
-            case "birthdaysInWeek":
-                title = `Aniversários da semana`;
-                brief = "Lista de clientes aniversariantes da semana 21/07 por ordem de pontos acumulados";
-                circularImg = "/img/icons/birthday-customers.svg";
-                break;
-            case "system":
-                title = "Fiddelize informa:";
-                brief = "this should be changed dynamically with a subType variable from backend";
-                circularImg = "teste.svg";
-                break;
-            default:
-                return null;
-        }
-
-        return {
-            title,
-            brief,
-            circularImg,
-        }
-    }
-
-    const { title, brief, circularImg } = getCardTypeData(cardType);
+    const opts = { userName, bizName, role, msg, subType };
+    const { title, brief, circularImg } = getCardTypeData(cardType, opts);
 
     const showTitle = () => (
         <div className="title text-white text-normal m-0">
@@ -137,27 +76,15 @@ function NotifCard({
         );
     };
 
-    const handleClickedCard = () => {
-        markOneClicked(userId, cardId)
-        .then(res => {
-            if(res.status !== 200) return console.log("smt worng with handleClickedCard")
-            setRun(dispatch, `notificationCount${uuidv1()}`)
-        })
-    }
-
     const showActionBtn = () => (
-        <section className="action-btn">
-            <ButtonMulti
-                onClick={handleClickedCard}
-                title={!clicked ? "Ver" : `Ok ✔️`}
-                iconFontAwesome={!clicked ? <FontAwesomeIcon icon="bolt" style={{...faStyle, fontSize: 22}} /> : null}
-                textShadow={!clicked ? null : " "}
-                color={!clicked ? "var(--mainWhite)" : "var(--mainDark)"}
-                backgroundColor={!clicked ? "var(--themeSDark--" +  backColor + ")" : "var(--lightGrey)"}
-            />
-        </section>
+        <CardActionBtn
+            userId={userId}
+            cardId={cardId}
+            cardType={cardType}
+            clicked={clicked}
+            backColor={backColor}
+        />
     );
-
 
     const showNewCardBadge = () => (
         isCardNew &&

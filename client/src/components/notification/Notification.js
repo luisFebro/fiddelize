@@ -58,7 +58,7 @@ export default function Notification() {
                         (
                             <Fragment>
                                 <strong className="text-normal">
-                                    • Todas novidades vistas.
+                                    ✔️ Todas novidades vistas.
                                 </strong>
                             </Fragment>
                         )}
@@ -91,7 +91,7 @@ export default function Notification() {
             {showTitle()}
             {showNotifStatus()}
             <NotifList _id={_id} runList={runList} />
-            {totalNotifications !== null && totalNotifications >= 3 && (
+            {totalNotifications !== null && totalNotifications >= 0 && (
                 <p className="my-5 text-normal text-center font-weight-bold text-purple">
                     Isso é tudo.
                 </p>

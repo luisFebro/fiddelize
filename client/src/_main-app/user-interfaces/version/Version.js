@@ -2,8 +2,8 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.1407.1"
-const updateDescription = "Componentes e Sistema de Notificações - integração de funciolidades interface, design pt 3"
+const latestVersion = "3.1408.1"
+const updateDescription = "Componentes e Sistema de Notificações - integração de funciolidades interface, design pt 4"
 const history = [
     "Componentes e Sistema de Notificações - concluído implementação completa no backend",
     "Painel de Controle - simplificação processo card teste || melhorias teclado || algoritmo modo progressivo || melhorias no sistema de pontuação cli-admin || otimização algoritmo do historico de compras",

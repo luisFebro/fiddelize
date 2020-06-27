@@ -27,7 +27,8 @@ const enumTypes = [
 ];
 
 const enumSubTypes = [
-    "successfulPurchase",
+    "purchaseDetail",
+    "newFeature",
     "deadlineWarning",
     "smsUsageWarning",
     "promotion",
