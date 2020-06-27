@@ -1,7 +1,8 @@
 import getFirstName from '../../../utils/string/getFirstName';
+import extractStrData from '../../../utils/string/extractStrData';
 
 export default function getCardTypeData(cardType, options = {}) {
-    const { userName, bizName, role, msg, subType } = options;
+    const { userName, bizName, role, content, subType } = options;
 
     let title;
     let brief;
@@ -27,7 +28,7 @@ export default function getCardTypeData(cardType, options = {}) {
             const {
                 userName: thisUserName,
                 currChall: thisCurrChall
-            } = extractData(msg);
+            } = extractStrData(content);
             title = `Cliente concluíu desafio`;
             brief = `${getFirstName(thisUserName)} concluíu desafio de n.° ${thisCurrChall}. Confirme esse desafio do cliente descontando os pontos.`
             circularImg = "/img/icons/fiddelize-trophy.svg";
@@ -55,21 +56,5 @@ export default function getCardTypeData(cardType, options = {}) {
         title,
         brief,
         circularImg,
-    }
-}
-
-
-// extract data in this format: fullName_123
-function extractData(data) {
-    let userName, currChall;
-    if(data) {
-        const  indOf_ = data.indexOf("_")
-        userName = data.slice(0, indOf_);
-        currChall = data.slice(indOf_ + 1);
-    }
-
-    return {
-        userName,
-        currChall,
     }
 }

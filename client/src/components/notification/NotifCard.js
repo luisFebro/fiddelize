@@ -30,7 +30,7 @@ function NotifCard({
     backColor = "default",
     isCardNew,
     createdAt,
-    msg,
+    content,
     clicked,
 }) {
     const { name: userName, _id: userId, role } = useProfile();
@@ -57,7 +57,7 @@ function NotifCard({
         </div>
     )
 
-    const opts = { userName, bizName, role, msg, subType };
+    const opts = { userName, bizName, role, content, subType };
     const { title, brief, circularImg } = getCardTypeData(cardType, opts);
 
     const showTitle = () => (
