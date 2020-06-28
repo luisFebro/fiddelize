@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getHeaderJson, getHeaderToken } from '../../utils/server/getHeaders';
 
-// not working properly yet
+// OK sometimes can not load
 export const countPendingNotif = async (userId, options = {}) => {
     const { role } = options;
 
@@ -23,21 +23,25 @@ export const readNotifications = async (userId, options = {}) => {
     }
 }
 
-/*
-{
-    Body To Send
-    "recipient": { "id": "5e8b0bfc8c616719b01abc9c", "role": "cliente-admin", "name": "John" },
-    "senderId": "5e8b0bfc8c616719b01abc9c",
-    "senderName": "Fiddelize",
-    "msg": "Hello fuckfdsfdsfds fdsfds fsdadsa dsads adsal",
-    "cardType": "system"
-}
- */
-export const sendNotification = async (userId, bodyToSend, options = {}) => {
-    const { token } = options;
+// OK
+export const sendNotification = async (userId, cardType, options = {}) => {
+    const { token, noToken, content, role, name, senderId } = options;
+
+    const notificationOpts = {
+        cardType,
+        recipient: { id: userId, role, name },
+        senderId: senderId ? senderId : userId,
+        content,
+    }
+    let queryNoToken = "";
+    let queryCardType = "";
+    if(noToken) {
+        queryNoToken = "?noToken=true";
+        queryCardType = "&cardType=welcome";
+    }
 
     try {
-        return await axios.put(`api/notification/send`, bodyToSend, getHeaderToken(token));
+        return await axios.put(`api/notification/send${queryNoToken}${queryCardType}`, notificationOpts, getHeaderToken(token));
     } catch (err) {
         return err;
     }

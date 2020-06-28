@@ -70,7 +70,7 @@ export default function Notification() {
                             </Fragment>
                         )}
                     </p>
-                </div>
+                </  div>
                 <div className="container-center my-3">
                     {totalNotifications >= 5 && (
                         <RadiusBtn

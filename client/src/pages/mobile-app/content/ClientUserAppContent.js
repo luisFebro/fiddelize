@@ -58,7 +58,7 @@ function ClientUserAppContent({
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
     let { role, name, _id } = useProfile();
-    const totalNotifications = useCountNotif(_id, "cliente");
+    const totalNotifications = useCountNotif(_id, role);
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);

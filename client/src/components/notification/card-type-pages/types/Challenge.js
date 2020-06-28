@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ClientWonChall() {
+export default function Challenge({ subtype }) {
     const showTitle = () => (
         <div className="mt-4">
             <p

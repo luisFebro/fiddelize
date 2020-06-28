@@ -2,7 +2,7 @@ import getFirstName from '../../../utils/string/getFirstName';
 import extractStrData from '../../../utils/string/extractStrData';
 
 export default function getCardTypeData(cardType, options = {}) {
-    const { userName, bizName, role, content, subType } = options;
+    const { userName, bizName, role, content, subtype } = options;
 
     let title;
     let brief;
@@ -45,7 +45,7 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         case "system":
             title = "Fiddelize informa:";
-            brief = "this should be changed dynamically with a subType variable from backend";
+            brief = "this should be changed dynamically with a subtype variable from backend";
             circularImg = "teste.svg";
             break;
         default:

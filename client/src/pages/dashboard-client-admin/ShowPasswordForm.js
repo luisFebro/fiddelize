@@ -92,7 +92,7 @@ export default function ShowPasswordForm({
                 showSnackbar(dispatch, "Senha foi alterada!", "success")
             } else {
                 showSnackbar(dispatch, "Preparando seu painel...")
-                setTimeout(() => history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`), 1500);
+                setTimeout(() => history.push(`/mobile-app`), 1500); //before = ${bizCodeName}/cliente-admin/painel-de-controle changed for new users see notificaiton in the main app page
             }
 
         })

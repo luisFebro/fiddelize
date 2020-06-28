@@ -55,6 +55,7 @@ const pickObjByRole = (role, options = {}) => {
 // Method: Get
 exports.countPendingNotif = (req, res) => {
     const { userId, role } = req.query;
+
     let rolePath;
     role === "cliente-admin"
     ? rolePath = 'clientAdminData'

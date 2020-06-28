@@ -18,15 +18,20 @@ const UserTokenSchema = new Schema(dataTempAuthUserToken);
 const enumTypes = [
     // pattern: (role_desc);
     "welcome", // cliAdmin/cliUser
-    "clientWonChall", // cliAdmin
-    "birthdaysInWeek", // cliAdmin
-    "birthdayGreeting", // cliUser
+    "challenge", // cliAdmin
     "system", // cliAdmin/cliUser
     "chatRequest", // future implementations...
+    "birthdaysInWeek", // cliAdmin
+    "birthdayGreeting", // cliUser
     // "newClientsToday", // cliAdmin (deactivated)
 ];
 
-const enumSubTypes = [
+const enumSubtypes =  [
+    // CHALLENGES
+    "clientWonChall", // cliAdmin
+    "confirmedChall", // cliUser - sent after cli-admin confirm discounts scores
+    // BIRTHDAYS
+    // SYSTEM
     "purchaseDetail",
     "newFeature",
     "deadlineWarning",
@@ -34,12 +39,13 @@ const enumSubTypes = [
     "promotion",
 ]
 const notificationsData = {
-    // recipient: { id: String, role: { type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
-    senderId: { type: String, trim: true, lowercase: true },
-    senderName: { type: String, trim: true, lowercase: true }, // business name... for cliAdmin will be Fiddelize's name
+    // recipient.id and senderId should be equal for all notifications from Fiddelize.
+    // recipient: { id: String (REQUIRED), role: (REQUIRED){ type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
+    cardType: { required: true, type: String, enum: [...enumTypes] },
+    subtype: { type: String, enum: [...enumSubtypes]},
+    senderId: { required: true, type: String }, // for authorization verification and for chat request
+    senderName: { type: String, trim: true, lowercase: true }, // only for chat request
     content: { type: String, maxlength: 3000 }, // msgs for chat or infos about variable in such data format: key1:value1;key2:value2;
-    cardType: { type: String, enum: [...enumTypes] },
-    subType: { type: String, enum: [...enumSubTypes]},
     isCardNew: { type: Boolean, default: true }, // When user visualize notif page, a new badge will be show and then it will be update as false
     clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
     isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead

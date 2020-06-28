@@ -20,8 +20,10 @@ import { useAppSystem, useClientAdmin } from '../../hooks/useRoleData';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import { deleteImage } from '../../utils/storage/lForage';
 import useCount from '../../hooks/useCount';
+import { sendNotification } from '../../redux/actions/notificationActions';
 
 const isApp = isThisApp();
+
 function Login({ history, setLoginOrRegister }) {
     useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
     const dispatch = useStoreDispatch();
@@ -32,6 +34,20 @@ function Login({ history, setLoginOrRegister }) {
     // }
 
     const { selfThemeSColor, selfThemePColor, selfThemeBackColor } = useClientAdmin();
+
+    const handleCliUserPath = (authUserId) => {
+        readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
+        .then(res => {
+            if(isThisApp()) {
+                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                showSnackbar(dispatch, "Carregando...", 'warning', 3000);
+                history.push("/mobile-app");
+            } else {
+                showComponent(dispatch, "purchaseValue");
+                history.push("/cliente/pontos-fidelidade");
+            }
+        })
+    }
 
     const signInThisUser = value => {
         const userData = {
@@ -57,6 +73,7 @@ function Login({ history, setLoginOrRegister }) {
                 bizId,
                 bizCodeName,
                 verificationPass,
+                needCliUserWelcomeNotif,
                 // selfMilestoneIcon,
             } = res.data;
 
@@ -73,10 +90,15 @@ function Login({ history, setLoginOrRegister }) {
                 readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
                 .then(res => {
                     if(!verificationPass) {
-                        showSnackbar(dispatch, "Verificando...", 'warning', 3000);
-                        setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-                        whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
-                        setTimeout(() => history.push(whichRoute), 5000);
+                        sendNotification(authUserId, "welcome", { role, noToken: true })
+                        .then(res => {
+                            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+                            showSnackbar(dispatch, res.data.msg, 'success');
+                            showSnackbar(dispatch, "Verificando...", 'warning', 3000);
+                            setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+                            whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
+                            setTimeout(() => history.push(whichRoute), 5000);
+                        })
                     } else {
                         whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
 
@@ -93,18 +115,16 @@ function Login({ history, setLoginOrRegister }) {
             }
 
             if(role === "cliente") {
-                // window.location.href = "/mobile-app"
-                readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
-                .then(res => {
-                    if(isThisApp()) {
-                        if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                        showSnackbar(dispatch, "Carregando...", 'warning', 3000);
-                        history.push("/mobile-app");
-                    } else {
-                        showComponent(dispatch, "purchaseValue");
-                        history.push("/cliente/pontos-fidelidade");
-                    }
-                })
+                if(needCliUserWelcomeNotif) {
+                    showSnackbar(dispatch, "Preparando App...", 'warning', 3000);
+                    sendNotification(authUserId, "welcome", { role, noToken: true })
+                    .then(res => {
+                        if(res.status !== 200) return console.log("smt wrong with sendNotification")
+                        handleCliUserPath(authUserId);
+                    })
+                } else {
+                    handleCliUserPath(authUserId);
+                }
             }
             // if(role === "colaborador") {
             // showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);

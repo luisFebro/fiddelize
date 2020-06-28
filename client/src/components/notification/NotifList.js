@@ -20,13 +20,13 @@ export default function NotifList({ _id, runList }) {
     }, [_id, token, runList])
 
     const renderedList = notifList && notifList.map(notif => {
-        const { _id, cardType, subType, isCardNew, createdAt, clicked, content } = notif; // also senderId, senderName
+        const { _id, cardType, subtype, isCardNew, createdAt, clicked, content } = notif; // also senderId, senderName
         return (
             <section key={_id} className="mx-2">
                 <NotifCard
                     cardId={_id}
                     cardType={cardType}
-                    subType={subType}
+                    subtype={subtype}
                     isCardNew={isCardNew}
                     createdAt={createdAt}
                     clicked={clicked}

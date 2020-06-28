@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 const logoOpts = {
     large: '100px',
     small: '50px',
+    mini: '20px',
 }
 
 const SpinnerInner = styled.div`
@@ -23,7 +24,7 @@ const SpinnerInner = styled.div`
 
 Spinner.propTypes = {
     expireSec: PropTypes.number,
-    size: PropTypes.oneOf(['small', 'large']),
+    size: PropTypes.oneOf(['mini', 'small', 'large']),
     logo: PropTypes.oneOf(['white', 'purple']),
 }
 
@@ -58,7 +59,7 @@ export default function Spinner({
     return (
         <section
             className={`${isCenter && "container-center"} ${logo ? "container-center-col" : null}`}
-            style={{minHeight: !marginY ? "85px" : marginY}}
+            style={{minHeight: marginY ? marginY : "85px"}}
         >
             <div style={{margin: !marginX ? 0 : calculatedRelativeMargin }}>
                 {logo && (

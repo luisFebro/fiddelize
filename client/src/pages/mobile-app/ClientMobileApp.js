@@ -49,7 +49,7 @@ function ClientMobileApp({ location, history }) {
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
-    const totalNotifications = useCountNotif(_id, "cliente-admin");
+    const totalNotifications = useCountNotif(_id, role);
     useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
     const dispatch = useStoreDispatch();
@@ -141,7 +141,7 @@ function ClientMobileApp({ location, history }) {
             <div className="position-relative" style={{top: -55, marginTop: 90, marginBottom: 40}}>
                 <div
                     style={{animationIterationCount: 1}}
-                    className="animated rubberBand delay-5s"
+                    className="animated rubberBand delay-1s"
                 >
                     <ImgLoader
                         className={shapeColor}

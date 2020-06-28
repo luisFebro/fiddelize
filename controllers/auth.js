@@ -7,6 +7,10 @@ const getFirstName = require("../utils/string/getFirstName");
 
 // MIDDLEWARES
 exports.mwIsAuth = (req, res, next) => {
+    //condition in which is not possible fetch the user's token
+    if(req.query.noToken && req.query.cardType === "welcome") {
+        return next();
+    }
     const profile = req.profile;
     const query = req.query;
     const body = req.body;
@@ -132,7 +136,7 @@ const handleRolesData = (role, ...allKeys) => {
             objToSend = selectObjKeys(allKeysStore, array1);
             break;
         case "cliente":
-            const array2 = [ 'bizId', 'token', 'role', 'name', 'authUserId', 'msg' ];
+            const array2 = [ 'bizId', 'token', 'role', 'name', 'authUserId', 'msg', 'needCliUserWelcomeNotif' ];
             objToSend = selectObjKeys(allKeysStore, array2);
             break;
         default:
@@ -154,7 +158,8 @@ exports.login = (req, res) => {
         verificationPass: clientAdminData && clientAdminData.verificationPass,
         selfMilestoneIcon: clientAdminData && clientAdminData.selfMilestoneIcon,
         authUserId: _id,
-        msg: msg('ok.welcomeBack', getFirstName(name), 'onlyMsg')
+        msg: msg('ok.welcomeBack', getFirstName(name), 'onlyMsg'),
+        needCliUserWelcomeNotif: clientUserData && !clientUserData.notifications.length,
     }
 
     let expiringTime;

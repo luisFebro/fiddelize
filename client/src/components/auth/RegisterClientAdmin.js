@@ -156,6 +156,8 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                 return;
             }
 
+            const userId = res.data.authUserId;
+
             ReactGA.event({ // n1
                 label: 'Form',
                 category: 'UserCliAdmin',
@@ -171,7 +173,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
             setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`, 500);
 
-            sendEmail(res.data.authUserId);
+            sendEmail(userId);
 
         })
     };

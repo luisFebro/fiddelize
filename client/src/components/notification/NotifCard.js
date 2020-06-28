@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
 import { useProfile, useClientAdmin } from '../../hooks/useRoleData';
+import useDelay from '../../hooks/useDelay';
 import { fromNow } from '../../utils/dates/dateFns';
 import getCardTypeData from './helpers/getCardTypeData';
 import CardActionBtn from './card-type-pages/CardActionBtn';
@@ -26,7 +27,7 @@ const isSmall = window.Helper.isSmallScreen();
 function NotifCard({
     cardId,
     cardType = "system",
-    subType,
+    subtype,
     backColor = "default",
     isCardNew,
     createdAt,
@@ -35,6 +36,8 @@ function NotifCard({
 }) {
     const { name: userName, _id: userId, role } = useProfile();
     const { bizName } = useClientAdmin();
+
+    const grayScaleReady = useDelay(3000);
 
     const styles = {
         card: {
@@ -48,6 +51,10 @@ function NotifCard({
             background: "var(--niceUiYellow)",
             color: 'var(--mainDark)',
             animationDuration: '3s',
+        },
+        circularImg: {
+            filter: clicked && grayScaleReady ? "grayscale(100%)" : "grayscale(0%)",
+            transition: "filter 7s",
         }
     }
 
@@ -57,7 +64,7 @@ function NotifCard({
         </div>
     )
 
-    const opts = { userName, bizName, role, content, subType };
+    const opts = { userName, bizName, role, content, subtype };
     const { title, brief, circularImg } = getCardTypeData(cardType, opts);
 
     const showTitle = () => (
@@ -83,6 +90,8 @@ function NotifCard({
             cardType={cardType}
             clicked={clicked}
             backColor={backColor}
+            content={content}
+            subtype={subtype}
         />
     );
 
@@ -99,6 +108,7 @@ function NotifCard({
     const showCircularImg = () => (
         <div
             className="circular-img animated fadeInUp delay-1s"
+            style={styles.circularImg}
         >
             <img
                 className="shadow-elevation-black"
