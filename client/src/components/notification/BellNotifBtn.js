@@ -10,6 +10,7 @@ export default function BellNotifBtn({
     notifBorderColor,
     notifBackColor,
     badgeValue,
+    forceCliUser,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -33,7 +34,7 @@ export default function BellNotifBtn({
                 badgeValue={badgeValue}
             />
             <ModalFullContent
-                contentComp={<Notification />}
+                contentComp={<Notification forceCliUser={forceCliUser} />}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />

@@ -49,7 +49,7 @@ function ClientMobileApp({ location, history }) {
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
-    const totalNotifications = useCountNotif(_id, role);
+    const totalNotifications = useCountNotif(_id, { role });
     useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
     const dispatch = useStoreDispatch();

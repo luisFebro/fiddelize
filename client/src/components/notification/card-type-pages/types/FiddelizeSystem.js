@@ -6,7 +6,7 @@ export default function FiddelizeSystem() {
             <p
                 className="text-subtitle text-purple text-center font-weight-bold"
             >
-                &#187; Fiddelize informe
+                Fiddelize informe
             </p>
         </div>
     );

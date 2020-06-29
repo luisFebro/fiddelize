@@ -21,8 +21,7 @@ const enumTypes = [
     "challenge", // cliAdmin
     "system", // cliAdmin/cliUser
     "chatRequest", // future implementations...
-    "birthdaysInWeek", // cliAdmin
-    "birthdayGreeting", // cliUser
+    "birthday", // cliAdmin/cliUser
     // "newClientsToday", // cliAdmin (deactivated)
 ];
 
@@ -31,6 +30,8 @@ const enumSubtypes =  [
     "clientWonChall", // cliAdmin
     "confirmedChall", // cliUser - sent after cli-admin confirm discounts scores
     // BIRTHDAYS
+    "weeklyReport",
+    "greeting",
     // SYSTEM
     "purchaseDetail",
     "newFeature",

@@ -90,7 +90,8 @@ function Login({ history, setLoginOrRegister }) {
                 readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
                 .then(res => {
                     if(!verificationPass) {
-                        sendNotification(authUserId, "welcome", { role, noToken: true })
+                        // "ambos-clientes" add an welcome obj to cli-user as weel for test mode.
+                        sendNotification(authUserId, "welcome", { role: "ambos-clientes", noToken: true })
                         .then(res => {
                             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                             showSnackbar(dispatch, res.data.msg, 'success');

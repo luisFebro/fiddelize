@@ -8,7 +8,6 @@ import ButtonMulti, {faStyle} from '../../../components/buttons/material-ui/Butt
 import ModalFullContent from '../../../components/modals/ModalFullContent';
 import pickCardType from './pickCardType';
 import Spinner from '../../../components/loadingIndicators/Spinner';
-import { useProfile } from '../../../hooks/useRoleData';
 
 export default function CardActionBtn({
         userId,
@@ -18,16 +17,16 @@ export default function CardActionBtn({
         backColor,
         content, // string
         subtype,
+        brief,
+        role,
     }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [seen, setSeen] = useState(false);
     const dispatch = useStoreDispatch();
-    const { role } = useProfile();
-
 
     const handlePickedComp = () => {
-        const PickedComp = pickCardType(cardType, { content, subtype, role });
+        const PickedComp = pickCardType(cardType, { content, subtype, role, brief });
         return(<PickedComp />)
     }
 
@@ -76,6 +75,7 @@ export default function CardActionBtn({
                 contentComp={handlePickedComp()}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
+                exitBtn="text"
             />
         </section>
     );

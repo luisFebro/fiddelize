@@ -4,13 +4,13 @@ import { readNotifications, markAllAsSeen, } from '../../redux/actions/notificat
 import { useToken } from '../../hooks/useRoleData';
 import Spinner from '../../components/loadingIndicators/Spinner';
 
-export default function NotifList({ _id, runList }) {
+export default function NotifList({ _id, runList, forceCliUser = false, }) {
     const [notifList, setNotifList] = useState([]);
 
     const token = useToken();
     useEffect(() => {
         if(_id && token) {
-            readNotifications(_id, { token })
+            readNotifications(_id, { token, forceCliUser })
             .then(res => {
                 if(res.status !== 200) return console.log("smt wrong with NotifList")
                 setNotifList(res.data);
@@ -20,13 +20,22 @@ export default function NotifList({ _id, runList }) {
     }, [_id, token, runList])
 
     const renderedList = notifList && notifList.map(notif => {
-        const { _id, cardType, subtype, isCardNew, createdAt, clicked, content } = notif; // also senderId, senderName
+        const {
+            _id,
+            cardType,
+            subtype,
+            isCardNew,
+            createdAt,
+            clicked,
+            content } = notif; // also senderId, senderName
+
         return (
             <section key={_id} className="mx-2">
                 <NotifCard
                     cardId={_id}
                     cardType={cardType}
                     subtype={subtype}
+                    forceCliUser={forceCliUser}
                     isCardNew={isCardNew}
                     createdAt={createdAt}
                     clicked={clicked}

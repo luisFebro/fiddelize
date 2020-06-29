@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { countPendingNotif } from '../../redux/actions/notificationActions';
 import { useRunComp } from '../../hooks/useRunComp';
 
-export default function useCountNotif(userId, role) {
+export default function useCountNotif(userId, options = {}) {
+    const { role, forceCliUser } = options;
     const [count, setCount] = useState(null);
 
     const { runName } = useRunComp();
@@ -10,7 +11,7 @@ export default function useCountNotif(userId, role) {
         let cancel;
         if(userId || runName && runName.includes("notificationCount")) {
             if(cancel) return;
-            countPendingNotif(userId, { role })
+            countPendingNotif(userId, { role, forceCliUser })
             .then(res => {
                 // LESSON
                 if(res.status !== 200) return console.log("Something wrong with useCountNotif")

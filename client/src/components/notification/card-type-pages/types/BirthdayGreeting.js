@@ -6,7 +6,7 @@ export default function BirthdayGreeting() {
             <p
                 className="text-subtitle text-purple text-center font-weight-bold"
             >
-                &#187; Feliz Aniversário!
+                Feliz Aniversário!
             </p>
         </div>
     );

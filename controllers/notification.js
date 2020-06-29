@@ -16,8 +16,11 @@ const findIdAndAssign = (arrayOfObjs, id, property, newValue) => {
         });
 }
 
-const pickDataByProfile = profileData => {
-    const { role } = profileData;
+const pickDataByProfile = (profileData, options = {}) => {
+    let { role } = profileData;
+    const { forceCliUser } = options;
+
+    if(forceCliUser) role = "cliente";
 
     switch(role) {
         case "cliente":
@@ -46,6 +49,8 @@ const pickObjByRole = (role, options = {}) => {
             return { "clientAdminData.notifications": handledData };
         case "cliente":
             return { "clientUserData.notifications": handledData };
+        case "ambos-clientes":
+            return { "clientAdminData.notifications": handledData, "clientUserData.notifications": handledData  }
         default:
             console.log("smt wrong with pickObjByRole")
     }
@@ -54,16 +59,19 @@ const pickObjByRole = (role, options = {}) => {
 
 // Method: Get
 exports.countPendingNotif = (req, res) => {
-    const { userId, role } = req.query;
+    const { userId, role, forceCliUser } = req.query;
 
     let rolePath;
     role === "cliente-admin"
     ? rolePath = 'clientAdminData'
     : rolePath = 'clientUserData'
 
+    if(forceCliUser) rolePath = 'clientUserData';
+
     User.find({ _id: userId, role })
     .select(`${rolePath}.notifications -_id`)
     .exec((err, data) => {
+        console.log("data", data);
         if (err) return res.status(500).json(msgG('error.systemError', err))
         const notifs = data[0][rolePath]["notifications"];
         const totalFilteredNotifs = notifs.filter(notif => notif.clicked === false);
@@ -72,7 +80,8 @@ exports.countPendingNotif = (req, res) => {
 }
 
 exports.readNotifications = (req, res) => {
-    const data = pickDataByProfile(req.profile);
+    const forceCliUser = req.query.forceCliUser;
+    const data = pickDataByProfile(req.profile, { forceCliUser });
     res.json(data);
 }
 

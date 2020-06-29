@@ -24,7 +24,7 @@ export default function getCardTypeData(cardType, options = {}) {
             brief = handledWelcomeBrief;
             circularImg = "/img/icons/calendar-welcome.svg";
             break;
-        case "clientWonChall":
+        case "challenge":
             const {
                 userName: thisUserName,
                 currChall: thisCurrChall
@@ -33,15 +33,17 @@ export default function getCardTypeData(cardType, options = {}) {
             brief = `${getFirstName(thisUserName)} concluíu desafio de n.° ${thisCurrChall}. Confirme esse desafio do cliente descontando os pontos.`
             circularImg = "/img/icons/fiddelize-trophy.svg";
             break;
-        case "birthdayGreeting":
-            title = `Feliz Aniversário!`;
-            brief = handledBirthdayGreeting;
-            circularImg = "/img/icons/birthday-cake.svg";
-            break;
-        case "birthdaysInWeek":
-            title = `Aniversários da semana`;
-            brief = "Lista de clientes aniversariantes da semana 21/07 por ordem de pontos acumulados";
-            circularImg = "/img/icons/birthday-customers.svg";
+        case "birthday":
+            if(subtype === "greeting") {
+                title = `Feliz Aniversário!`;
+                brief = handledBirthdayGreeting;
+                circularImg = "/img/icons/birthday-cake.svg";
+            }
+            if(subtype === "weeklyReport") {
+                title = `Aniversários da semana`;
+                brief = "Lista de clientes aniversariantes da semana 21/07 por ordem de pontos acumulados";
+                circularImg = "/img/icons/birthday-customers.svg";
+            }
             break;
         case "system":
             title = "Fiddelize informa:";

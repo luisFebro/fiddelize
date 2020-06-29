@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import NotifList from './NotifList';
 import RadiusBtn from '../../components/buttons/RadiusBtn';
 import useCountNotif from '../../hooks/notification/useCountNotif';
-import { readNotifications, markAllAsClicked } from '../../redux/actions/notificationActions';
+import { markAllAsClicked } from '../../redux/actions/notificationActions';
 import './_Notification.scss';
 import { useProfile } from '../../hooks/useRoleData';
 import { setRun } from '../../hooks/useRunComp';
@@ -10,7 +10,7 @@ import uuidv1 from 'uuid/v1';
 import { useStoreDispatch } from 'easy-peasy';
 
 
-export default function Notification() {
+export default function Notification({ forceCliUser = false, }) {
     const [loading, setLoading] = useState(false);
     const [btnTitle, setBtnTitle] = useState(`Marcar todas ✔️`);
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -19,7 +19,7 @@ export default function Notification() {
     const { _id, role } = useProfile();
     const dispatch = useStoreDispatch();
 
-    const totalNotifications = useCountNotif(_id, role);
+    const totalNotifications = useCountNotif(_id, { role, forceCliUser });
 
     const showTitle = () => (
         <div className="mt-4">
@@ -90,7 +90,11 @@ export default function Notification() {
         <Fragment>
             {showTitle()}
             {showNotifStatus()}
-            <NotifList _id={_id} runList={runList} />
+            <NotifList
+                _id={_id}
+                runList={runList}
+                forceCliUser={forceCliUser}
+            />
             {totalNotifications !== null && totalNotifications >= 0 && (
                 <p className="my-5 text-normal text-center font-weight-bold text-purple">
                     Isso é tudo.

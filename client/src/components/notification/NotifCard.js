@@ -33,8 +33,12 @@ function NotifCard({
     createdAt,
     content,
     clicked,
+    forceCliUser = false,
 }) {
-    const { name: userName, _id: userId, role } = useProfile();
+    const { name: userName, _id: userId } = useProfile();
+    let { role } = useProfile();
+    if(forceCliUser) role = "cliente";
+
     const { bizName } = useClientAdmin();
 
     const grayScaleReady = useDelay(3000);
@@ -76,7 +80,7 @@ function NotifCard({
         return(
             <section className="desc text-left text-white font-weight-bold">
                 <p className="brief mb-2 text-small">
-                    {truncate(brief, isSmall ? 50 : 75)}
+                    {truncate(brief, isSmall ? 60 : 75)}
                 </p>
                 {showDate()}
             </section>
@@ -92,6 +96,8 @@ function NotifCard({
             backColor={backColor}
             content={content}
             subtype={subtype}
+            brief={brief}
+            role={role}
         />
     );
 

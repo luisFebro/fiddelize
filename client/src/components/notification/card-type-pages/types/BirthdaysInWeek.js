@@ -6,7 +6,7 @@ export default function BirthdaysInWeek() {
             <p
                 className="text-subtitle text-purple text-center font-weight-bold"
             >
-                &#187; Aniversários da Semana
+                Aniversários da Semana
             </p>
         </div>
     );

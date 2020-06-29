@@ -3,21 +3,28 @@ import { getHeaderJson, getHeaderToken } from '../../utils/server/getHeaders';
 
 // OK sometimes can not load
 export const countPendingNotif = async (userId, options = {}) => {
-    const { role } = options;
+    const { role, forceCliUser } = options;
+
+    let cliUserQuery = "";
+    if(forceCliUser) cliUserQuery = "&forceCliUser=true";
 
     try {
-        return await axios.get(`/api/notification/count-pending-notification?userId=${userId}&role=${role}`, getHeaderJson);
+        return await axios.get(`/api/notification/count-pending-notification?userId=${userId}&role=${role}${cliUserQuery}`, getHeaderJson);
     } catch (err) {
         return err;
     }
 }
 
 // OK
+// if forceCliUser is true, then a cli-admin will have a cli=user notification's data. Useful for test mode session.
 export const readNotifications = async (userId, options = {}) => {
-    const { token } = options;
+    const { token, forceCliUser } = options;
+
+    let cliUserQuery = "";
+    if(forceCliUser) cliUserQuery = "?forceCliUser=true"
 
     try {
-        return await axios.get(`api/notification/read/${userId}`, getHeaderToken(token));
+        return await axios.get(`api/notification/read/${userId}${cliUserQuery}`, getHeaderToken(token));
     } catch (err) {
         return err;
     }

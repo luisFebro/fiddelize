@@ -58,7 +58,7 @@ function ClientUserAppContent({
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
     let { role, name, _id } = useProfile();
-    const totalNotifications = useCountNotif(_id, role);
+    const totalNotifications = useCountNotif(_id, { role, forceCliUser: true });
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
@@ -103,6 +103,7 @@ function ClientUserAppContent({
                 <div className={`${needAppForPreview && "enabledLink"}`}>
                     <AsyncBellNotifBtn
                         position="absolute"
+                        forceCliUser={true}
                         top={5}
                         left={needAppForPreview ? 258 : 270}
                         notifBorderColor={"var(--themeBackground--" + backColorSelect + ")"}

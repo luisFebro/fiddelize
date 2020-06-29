@@ -102,9 +102,7 @@ const SendMsgToStoreBtn = (dispatch, allUsers, _idUser, userName) => { // n2
             onClick={handleDataInModal}
             color="var(--mainWhite)"
             backgroundColor="var(--mainYellow)"
-            backColorOnHover="var(--mainYellow)"
             iconFontAwesome="fas fa-paper-plane"
-            textTransform='capitalize'
         >
             Enviar Mensagem para Loja
         </ButtonMulti>

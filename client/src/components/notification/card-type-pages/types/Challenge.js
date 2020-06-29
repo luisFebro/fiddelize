@@ -6,7 +6,7 @@ export default function Challenge({ subtype }) {
             <p
                 className="text-subtitle text-purple text-center font-weight-bold"
             >
-                &#187; Cliente concluíu desafio
+                Cliente concluíu desafio
             </p>
         </div>
     );

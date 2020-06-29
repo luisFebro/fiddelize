@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CloseButton from '../buttons/CloseButton';
+import RadiusBtn from '../buttons/RadiusBtn';
 import Dialog from '@material-ui/core/Dialog';
 
 ModalFullContent.propTypes = {
@@ -14,7 +15,9 @@ export default function ModalFullContent({
     fullOpen,
     setFullOpen,
     style,
-    animatedClass, }) {
+    animatedClass,
+    exitBtn,
+}) {
 
     let defaultStyle = { zIndex: 3000, overflowX: 'hidden', };
     // Not working
@@ -34,12 +37,25 @@ export default function ModalFullContent({
             onScroll={null}
         >
             {contentComp}
-            <CloseButton
-                onClick={setFullOpen}
-                size="40px"
-                top="15px"
-                right="15px"
-            />
+            {exitBtn === "text"
+            ? (
+                <RadiusBtn
+                    position="fixed"
+                    onClick={setFullOpen}
+                    top={0}
+                    right={15}
+                    title="voltar"
+                    backgroundColor="black"
+                    size="extra-small"
+                />
+            ) : (
+                <CloseButton
+                    onClick={setFullOpen}
+                    size="40px"
+                    top="15px"
+                    right="15px"
+                />
+            )}
         </Dialog>
     );
 }
