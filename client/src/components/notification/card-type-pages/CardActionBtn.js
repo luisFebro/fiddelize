@@ -9,7 +9,7 @@ import ModalFullContent from '../../../components/modals/ModalFullContent';
 import pickCardType from './pickCardType';
 import Spinner from '../../../components/loadingIndicators/Spinner';
 
-export default function CardActionBtn({
+function CardActionBtn({
         userId,
         cardId,
         cardType,
@@ -19,6 +19,7 @@ export default function CardActionBtn({
         subtype,
         brief,
         role,
+        forceCliUser = false,
     }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +42,7 @@ export default function CardActionBtn({
 
     const handleClickedCard = () => {
         setIsLoading(true);
-        markOneClicked(userId, cardId)
+        markOneClicked(userId, cardId, { forceCliUser })
         .then(res => {
             if(res.status !== 200) { return setIsLoading(false); }
             setRun(dispatch, `notificationCount${uuidv1()}`)
@@ -81,4 +82,5 @@ export default function CardActionBtn({
     );
 }
 
+export default React.memo(CardActionBtn)
 CardActionBtn.whyDidYouUpdate = true;

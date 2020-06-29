@@ -55,27 +55,33 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 }
 
 // OK
-export const markOneClicked = async (userId, cardId) => {
+export const markOneClicked = async (userId, cardId, options = {}) => {
+    const { forceCliUser } = options;
+
     try {
-        return await axios.put(`api/notification/mark-one-clicked/${userId}?cardId=${cardId}`, getHeaderJson);
+        return await axios.put(`api/notification/mark-one-clicked/${userId}?cardId=${cardId}`, options, getHeaderJson);
     } catch (err) {
         return err;
     }
 }
 
 // OK
-export const markAllAsClicked = async (userId) => {
+export const markAllAsClicked = async (userId, options = {}) => {
+    const { forceCliUser } = options;
+
     try {
-        return await axios.put(`api/notification/mark-all-clicked/${userId}`, getHeaderJson);
+        return await axios.put(`api/notification/mark-all-clicked/${userId}`, options, getHeaderJson);
     } catch (err) {
         return err;
     }
 }
 
 // OK
-export const markAllAsSeen = async (userId) => {
+export const markAllAsSeen = async (userId, options = {}) => {
+    const { forceCliUser } = options;
+
     try {
-        return await axios.put(`api/notification/mark-all-seen/${userId}`, getHeaderJson);
+        return await axios.put(`api/notification/mark-all-seen/${userId}`, options, getHeaderJson);
     } catch (err) {
         return err;
     }

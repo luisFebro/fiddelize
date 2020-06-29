@@ -4,11 +4,14 @@ import { setRun } from '../../../../hooks/useRunComp';
 import { Link } from 'react-router-dom';
 import { useClientAdmin } from '../../../../hooks/useRoleData';
 import { useStoreDispatch } from 'easy-peasy';
+import useCount from '../../../../hooks/useCount';
 
 export default function Welcome({
     brief,
     role,
 }) {
+
+    useCount("Welcome"); //RT =
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
     const textStyle = 'text-purple text-left text-normal mx-3';
@@ -26,7 +29,7 @@ export default function Welcome({
     const showIllustration = () => (
         <div className="container-center">
             <img
-                className="shadow-elevation-black"
+                className="animated fadeInUp slow shadow-elevation-black"
                 height="auto"
                 width={150}
                 src="/img/icons/calendar-welcome.svg"
@@ -42,7 +45,7 @@ export default function Welcome({
                 A Fiddelize - pontos de fidelidade - busca trazer uma <strong>experiência moderna e prática</strong> para seu negócio para servir melhor tanto o seu app e o dos seus clientes.
             </p>
             <p>
-                Começamos sua experiência com essa sessão de novidades (outro nome para notificações...) que será seu assistente facilitador e vai <strong>intermediar as atividades mais relevantes para você</strong> em tempo real.
+                Começamos sua experiência com essa sessão de novidades (outro nome para notificações) que será sua assistente facilitadora e vai <strong>intermediar as atividades mais relevantes para você</strong> em tempo real.
             </p>
             <section className="container-center">
                 <img
@@ -59,7 +62,7 @@ export default function Welcome({
             </h2>
 
             <p>
-                <strong>✔️ Quando um cliente concluir um desafio.</strong> O assistente da Fiddelize vai te notificar assim que um cliente alcançar sua meta em pontos. Você nem precisa ficar se preocupando em procurar quem já alcançou ou não. Na Fiddelize é automático e prático esse processo.
+                <strong>✔️ Quando um cliente concluir um desafio.</strong> A assistente da Fiddelize vai te notificar assim que um cliente alcançar sua meta em pontos. Você nem precisa ficar se preocupando em procurar quem já alcançou ou não. Na Fiddelize é automático e prático esse processo.
             </p>
             <p className="d-none">
                 <strong>✔ Resumo da semana dos clientes com ideias baseado nas atividades.</strong>
@@ -68,10 +71,26 @@ export default function Welcome({
                 <strong>✔ Clientes aniversariantes da semana.</strong> Na segunda, você recebe uma lista de clientes - caso disponível - que fazem aniversário durante a semana.
                 <br />
                 <br />
-                A Fiddelize cuida de notificar todos seus clientes com uma <strong>mensagem personalizada com sua marca</strong> para ser lembrada neste dia especial para eles.
+                Precisa de mais praticidade? A Fiddelize vai além e cuida de notificar cada um de seus clientes com uma <strong>mensagem personalizada com sua marca</strong> para ser lembrada neste dia especial para eles.
             </p>
             <p>
                 <strong>✔ E mais novidades</strong> que interessam para sua interação com o app.
+            </p>
+            <hr className="lazer" />
+            <p>
+                Você pode conhecer sobre as novidades que seus clientes receberão pelo <strong>botão modo app cliente <em>(imagem abaixo)</em></strong> no seu painel de controle.
+            </p>
+            <section className="container-center my-3">
+                <img
+                    className="shadow-elevation"
+                    src="/img/demos/notification-cli-user-test-mode.png"
+                    alt="demo sessão novidades"
+                    height="auto"
+                    width={80}
+                />
+            </section>
+            <p>
+                Este modo é uma <strong>versão completa do app dos seus clientes</strong> integrado ao seu painel para você experimentar sem ter de criar uma conta separada.
             </p>
         </section>
     );
@@ -107,7 +126,7 @@ export default function Welcome({
                 onClick={goDash}
             >
                 <ButtonMulti
-                    title={role === "cliente" ? 'Explorar App' : 'Abrir Painel'}
+                    title={role === "cliente" ? 'Explorar seu App' : 'Abrir Painel de Controle'}
                     color="var(--mainWhite)"
                     backgroundColor="var(--themeP)"
                 />

@@ -33,13 +33,13 @@ export default function Notification({ forceCliUser = false, }) {
 
     const handleMarkAllClicked = () => {
         setLoading(true);
-        markAllAsClicked(_id)
+        markAllAsClicked(_id, { forceCliUser })
         .then(res => {
             if(res.status !== 200) return console.log("smt wrong with handleMarkAllClicked")
             setRun(dispatch, `notificationCount${uuidv1()}`)
             setRunList(true);
             setLoading(false);
-            setBtnTitle("Marcadas!")
+            setBtnTitle("Todas Marcadas!")
             setBtnDisabled(true);
         })
     }

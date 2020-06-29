@@ -14,7 +14,7 @@ export default function NotifList({ _id, runList, forceCliUser = false, }) {
             .then(res => {
                 if(res.status !== 200) return console.log("smt wrong with NotifList")
                 setNotifList(res.data);
-                markAllAsSeen(_id);
+                markAllAsSeen(_id, { forceCliUser });
             })
         }
     }, [_id, token, runList])

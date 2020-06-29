@@ -98,6 +98,7 @@ function NotifCard({
             subtype={subtype}
             brief={brief}
             role={role}
+            forceCliUser={forceCliUser}
         />
     );
 

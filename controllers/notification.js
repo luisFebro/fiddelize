@@ -71,7 +71,6 @@ exports.countPendingNotif = (req, res) => {
     User.find({ _id: userId, role })
     .select(`${rolePath}.notifications -_id`)
     .exec((err, data) => {
-        console.log("data", data);
         if (err) return res.status(500).json(msgG('error.systemError', err))
         const notifs = data[0][rolePath]["notifications"];
         const totalFilteredNotifs = notifs.filter(notif => notif.clicked === false);
@@ -104,9 +103,13 @@ exports.sendNotification = (req, res) => {
 
 // method: PUT
 exports.markOneClicked = (req, res) => {
-    const { _id, role } = req.profile;
+    const forceCliUser = req.body.forceCliUser;
+    let { _id, role } = req.profile;
+    if(forceCliUser) role = "cliente";
+
     const { cardId } = req.query;
-    const notifications = pickDataByProfile(req.profile);
+
+    const notifications = pickDataByProfile(req.profile, { forceCliUser });
     const resAction = findIdAndAssign(notifications, cardId, 'clicked', true);
     const objToSet = pickObjByRole(role, {data: resAction })
 
@@ -123,8 +126,11 @@ exports.markOneClicked = (req, res) => {
 // this functionality will only appears if there is more than 5 not read notifications.
 // if isImportant is true, then ignore it.
 exports.markAllAsClicked = (req, res) => {
-    const { _id, role } = req.profile;
-    const notifications = pickDataByProfile(req.profile);
+    const forceCliUser = req.body.forceCliUser;
+    let { _id, role } = req.profile;
+    if(forceCliUser) role = "cliente";
+
+    const notifications = pickDataByProfile(req.profile, { forceCliUser });
     const resAction = assignValueToObj(notifications, 'clicked', true);
     const objToSet = pickObjByRole(role, {data: resAction })
 
@@ -139,8 +145,11 @@ exports.markAllAsClicked = (req, res) => {
 // method: PUT
 // desc: this will set all isCardNew cards to false
 exports.markAllAsSeen = (req, res) => {
-    const { _id, role } = req.profile;
-    const notifications = pickDataByProfile(req.profile);
+    const forceCliUser = req.body.forceCliUser;
+    let { _id, role } = req.profile;
+    if(forceCliUser) role = "cliente";
+
+    const notifications = pickDataByProfile(req.profile, { forceCliUser });
     const resAction = assignValueToObj(notifications, 'isCardNew', false);
     const objToSet = pickObjByRole(role, {data: resAction })
 
