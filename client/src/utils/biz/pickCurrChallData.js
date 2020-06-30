@@ -1,6 +1,5 @@
 export default function pickCurrChallData(rewardList, totalPrizesInd) {
     const prizeInd = !totalPrizesInd ? 0 : totalPrizesInd;
-    console.log("prizeInd", prizeInd);
 
     // change the original names to respectively rewardList ones...
     const keyAvalaible = {

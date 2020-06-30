@@ -32,10 +32,11 @@ export const readNotifications = async (userId, options = {}) => {
 
 // OK
 export const sendNotification = async (userId, cardType, options = {}) => {
-    const { token, noToken, content, role, name, senderId } = options;
+    const { subtype, token, noToken, content, role, name, senderId } = options;
 
     const notificationOpts = {
         cardType,
+        subtype,
         recipient: { id: userId, role, name },
         senderId: senderId ? senderId : userId,
         content,

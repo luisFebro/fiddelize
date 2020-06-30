@@ -19,7 +19,7 @@ export default function NotifList({ _id, runList, forceCliUser = false, }) {
         }
     }, [_id, token, runList])
 
-    const renderedList = notifList && notifList.map(notif => {
+    const renderedList = notifList.map(notif => {
         const {
             _id,
             cardType,
@@ -57,3 +57,5 @@ export default function NotifList({ _id, runList, forceCliUser = false, }) {
         </Fragment>
     );
 }
+
+NotifList.whyDidYouRender = false;

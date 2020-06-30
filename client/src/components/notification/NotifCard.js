@@ -80,7 +80,7 @@ function NotifCard({
         return(
             <section className="desc text-left text-white font-weight-bold">
                 <p className="brief mb-2 text-small">
-                    {truncate(brief, isSmall ? 60 : 75)}
+                    {truncate(brief, isSmall ? 52 : 75)}
                 </p>
                 {showDate()}
             </section>
@@ -97,6 +97,7 @@ function NotifCard({
             content={content}
             subtype={subtype}
             brief={brief}
+            circularImg={circularImg}
             role={role}
             forceCliUser={forceCliUser}
         />
@@ -153,4 +154,4 @@ function NotifCard({
 
 export default React.memo(NotifCard);
 
-NotifCard.whyDidYouRender = true;
+NotifCard.whyDidYouRender = false;

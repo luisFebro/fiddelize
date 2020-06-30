@@ -259,9 +259,6 @@ function ClientUserAppContent({
         needAppForCliAdmin &&
         <section className="back-btn-client-admin">
             <div className="container">
-                <p className="title">
-                    Modo App Cliente
-                </p>
                 <div className="btn">
                     <RadiusBtn
                         size="extra-small"
@@ -270,6 +267,9 @@ function ClientUserAppContent({
                         onClick={handleBackBtnClick}
                     />
                 </div>
+                <p className="title">
+                    Modo App Cliente
+                </p>
             </div>
         </section>
     );
@@ -291,6 +291,7 @@ function ClientUserAppContent({
 
 export default withRouter(ClientUserAppContent);
 
+ClientUserAppContent.whyDidYouRender = true;
 /* COMMENTS
 n1:
 a) React.useCallback is essential to avoid to render + 15 times at start

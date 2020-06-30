@@ -10,6 +10,7 @@ const currUserData = {
     _id: userData && userData._id,
     role: userData && userData.role,
     name: userData && userData.name,
+    birthday: userData && userData.birthday,
     clientUserData: {
         bizId: userData && userData.bizId,
         currScore: userData && userData.currScore,

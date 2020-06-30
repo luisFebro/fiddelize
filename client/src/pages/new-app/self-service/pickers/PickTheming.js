@@ -265,7 +265,7 @@ const ColorPicker = ({
             "pretobranco".includes(notIncludeColorPrimary) ? colorArray = ["branco", "preto"] : colorArray = ["branco", "preto", notIncludeColorPrimary];
             return !gotArrayThisItem(colorArray, loopColor);
         } else {
-            return Boolean(loopColor === notIncludeColorPrimary || loopColor === notIncludeColorSecondary);
+            return false;//Boolean(loopColor === notIncludeColorPrimary || loopColor === notIncludeColorSecondary);
         }
     }
 

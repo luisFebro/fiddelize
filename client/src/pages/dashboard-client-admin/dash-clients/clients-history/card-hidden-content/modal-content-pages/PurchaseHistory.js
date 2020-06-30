@@ -235,4 +235,4 @@ export default function PurchaseHistory({ data }) {
     );
 }
 
-PurchaseHistory.whyDidYouUpdate = true;
+PurchaseHistory.whyDidYouRender = false;

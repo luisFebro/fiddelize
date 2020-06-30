@@ -21,8 +21,10 @@ import './libraries/fontAwesomeLib';
 import AsyncWebsite from './user-interfaces/AsyncWebsite';
 import AsyncMobileApp from './user-interfaces/AsyncMobileApp';
 //END UIs
+import useCustomerBirthdayToday from '../hooks/notification/useCustomerBirthdayToday';
 export default function App() {
     useRecoveryAndDataOffline();
+    useCustomerBirthdayToday();
     const dispatch = useStoreDispatch();
 
     useEffect(() => {

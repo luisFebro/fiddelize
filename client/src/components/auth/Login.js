@@ -199,7 +199,7 @@ function Login({ history, setLoginOrRegister }) {
 
 export default withRouter(Login);
 
-Login.whyDidYouRender = true
+Login.whyDidYouRender = false
 
 
 /*ARCHIVES

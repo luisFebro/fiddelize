@@ -87,4 +87,4 @@ export default function BadaloBell({
     );
 }
 
-// BadaloBell.whyDidYouRender = true;
+// BadaloBell.whyDidYouRender = false;

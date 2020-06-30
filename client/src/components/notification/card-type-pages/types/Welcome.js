@@ -1,42 +1,29 @@
 import React from 'react';
 import ButtonMulti from '../../../../components/buttons/material-ui/ButtonMulti'
-import { setRun } from '../../../../hooks/useRunComp';
 import { Link } from 'react-router-dom';
-import { useClientAdmin } from '../../../../hooks/useRoleData';
+import { setRun } from '../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
+import { useClientAdmin } from '../../../../hooks/useRoleData';
 import useCount from '../../../../hooks/useCount';
+import { textStyle, ShowTitle, ShowIllustration, ShowBrief } from './DefaultRenderComps';
 
-export default function Welcome({
+// const areEqual = ({state:prev}, {state:next}) =>
+//   JSON.stringify(prev) !== JSON.stringify(next)
+
+export default React.memo(Welcome);
+
+function Welcome({
     brief,
     role,
+    mainImg,
+    bizLogo,
+    bizName,
+    userName,
 }) {
 
     useCount("Welcome"); //RT =
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
-    const textStyle = 'text-purple text-left text-normal mx-3';
-
-    const showTitle = () => (
-        <div className="mt-4">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
-                Bem-vindo(a) a bordo!
-            </p>
-        </div>
-    );
-
-    const showIllustration = () => (
-        <div className="container-center">
-            <img
-                className="animated fadeInUp slow shadow-elevation-black"
-                height="auto"
-                width={150}
-                src="/img/icons/calendar-welcome.svg"
-                alt="primeiro dia"
-            />
-        </div>
-    );
 
     const showCliAdminContent = () => (
         role === "cliente-admin" &&
@@ -60,7 +47,6 @@ export default function Welcome({
             <h2 className="text-subtitle">
                 <strong>Você receberá novidades como:</strong>
             </h2>
-
             <p>
                 <strong>✔️ Quando um cliente concluir um desafio.</strong> A assistente da Fiddelize vai te notificar assim que um cliente alcançar sua meta em pontos. Você nem precisa ficar se preocupando em procurar quem já alcançou ou não. Na Fiddelize é automático e prático esse processo.
             </p>
@@ -98,14 +84,20 @@ export default function Welcome({
     const showCliUserContent = () => (
         role === "cliente" &&
         <section className={textStyle}>
-
+            <h2 className="text-subtitle">
+                <strong>{userName},</strong> você receberá novidades como:
+            </h2>
+            <p>
+                <strong>✔ Confirmação de desafio concluído.</strong> Quando você atingir a meta de um desafio e um <strong>colaborador da {bizName} confirmar seu desafio</strong>, você é avisado.
+            </p>
+            <p>
+                <strong>✔ Datas importantes.</strong> Por exemplo, o prazo para você resgatar seu prêmio na {bizName}.
+            </p>
+            <p>
+                <strong>✔ E mais novidades</strong> que interessam para sua interação com o app.
+            </p>
+            <hr className="lazer d-none" />
         </section>
-    );
-
-    const showBrief = () => (
-        <p className={`${textStyle} mt-3 font-weight-bold`}>
-            {brief}
-        </p>
     );
 
     const goDash = () => {
@@ -136,9 +128,9 @@ export default function Welcome({
 
     return (
         <section>
-            {showTitle()}
-            {showIllustration()}
-            {showBrief()}
+            <ShowTitle text="Bem-vindo(a) a bordo!" />
+            <ShowIllustration role={role} mainImg={mainImg} bizLogo={bizLogo} />
+            <ShowBrief brief={brief} />
             {showCliAdminContent()}
             {showCliUserContent()}
             {showActionBtn()}
@@ -146,4 +138,4 @@ export default function Welcome({
     );
 }
 
-Welcome.whyDidYouUpdate = true;
+Welcome.whyDidYouRender = false;

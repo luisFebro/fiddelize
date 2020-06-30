@@ -1,4 +1,5 @@
 export default function extractStrData(strData) {
+    if(!strData) return {}; // avoid faling with destructing
     if(!strData.includes(";") || !strData.includes(";")) throw new Error("Your string should have this format: key:value without spacing and colon should be present in the last key as well")
     let finalObj = {};
     let nextStrPart = strData;

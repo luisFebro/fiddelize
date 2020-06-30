@@ -3,7 +3,7 @@
  * @param  {string} date new Date
  * @return {string}
  */
-export default function getDayMonthBr(stringDate, options) {
+export default function getDayMonthBr(stringDate, options = {}) {
     const { needYear } = options;
     const selectedDate = new Date(stringDate);
 

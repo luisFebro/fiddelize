@@ -64,6 +64,7 @@ const defaultUserProfile = {
     _id: "123abc",
     role: "",
     name: "...",
+    birthday: "29 de Fevereiro de 2020",
     updatedAt: "...",
     createdAt: "...",
     currScore: 0,

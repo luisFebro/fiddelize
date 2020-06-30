@@ -70,7 +70,7 @@ export default function Notification({ forceCliUser = false, }) {
                             </Fragment>
                         )}
                     </p>
-                </  div>
+                </div>
                 <div className="container-center my-3">
                     {totalNotifications >= 5 && (
                         <RadiusBtn
@@ -103,3 +103,5 @@ export default function Notification({ forceCliUser = false, }) {
         </Fragment>
     );
 }
+
+Notification.whyDidYouRender = false;

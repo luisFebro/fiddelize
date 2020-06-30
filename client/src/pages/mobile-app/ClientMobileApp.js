@@ -279,7 +279,7 @@ function ClientMobileApp({ location, history }) {
 
 export default withRouter(ClientMobileApp);
 
-ClientMobileApp.whyDidYouRender = true;
+ClientMobileApp.whyDidYouRender = false;
 
 /* COMMENTS
 n1: LESSON: Do not use Fragment inside session since Fragment can hide inner elements...

@@ -8,17 +8,29 @@ import Challenge from './types/Challenge';
 // END CARD TYPES
 
 export default function pickCardType(cardType, options = {}) {
-    const { content, subtype, role, brief } = options;
+    const {
+        content,
+        subtype,
+        role,
+        brief,
+        circularImg: mainImg,
+        selfBizLogoImg: bizLogo,
+        bizName,
+        userName,
+    } = options;
+
+    const defaultProps = { brief, role, mainImg, bizName, userName };
 
     const chooseBirthday = () => {
-        if(subtype === "greeting") return <BirthdayGreeting />;
-        if(subtype === "weeklyReport") return <BirthdaysInWeek />;
+        if(subtype === "greeting") return <BirthdayGreeting {...defaultProps} bizLogo={bizLogo} />;
+        if(subtype === "weeklyReport") return <BirthdaysInWeek {...defaultProps} />;
     }
 
+
     const typeList = {
-        welcome: <Welcome brief={brief} role={role} />,
-        challenge: <Challenge content={content} />,
-        system: <FiddelizeSystem subtype={subtype} />,
+        welcome: <Welcome {...defaultProps} bizLogo={bizLogo} />,
+        challenge: <Challenge {...defaultProps} subtype={subtype} content={content} />,
+        system: <FiddelizeSystem {...defaultProps} subtype={subtype} content={content} />,
         birthday: chooseBirthday(),
     }
 

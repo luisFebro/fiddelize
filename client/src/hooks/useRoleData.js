@@ -50,6 +50,7 @@ export const useProfile = () => {
     const _id = currentUser && currentUser._id;
     const role = currentUser && currentUser.role;
     const name = currentUser && currentUser.name && currentUser.name.cap();
+    const birthday = currentUser && currentUser.birthday;
     const updatedAt = currentUser && currentUser.updatedAt;
     const createdAt = currentUser && currentUser.createdAt;
 
@@ -57,6 +58,7 @@ export const useProfile = () => {
         _id,
         role,
         name,
+        birthday,
         updatedAt,
         createdAt,
     });

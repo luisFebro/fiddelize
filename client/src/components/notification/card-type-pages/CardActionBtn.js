@@ -8,6 +8,7 @@ import ButtonMulti, {faStyle} from '../../../components/buttons/material-ui/Butt
 import ModalFullContent from '../../../components/modals/ModalFullContent';
 import pickCardType from './pickCardType';
 import Spinner from '../../../components/loadingIndicators/Spinner';
+import { useClientAdmin, useProfile } from '../../../hooks/useRoleData';
 
 function CardActionBtn({
         userId,
@@ -18,6 +19,7 @@ function CardActionBtn({
         content, // string
         subtype,
         brief,
+        circularImg,
         role,
         forceCliUser = false,
     }) {
@@ -25,9 +27,12 @@ function CardActionBtn({
     const [isLoading, setIsLoading] = useState(false);
     const [seen, setSeen] = useState(false);
     const dispatch = useStoreDispatch();
+    const { selfBizLogoImg, bizName } = useClientAdmin();
+    const { name: userName } = useProfile();
 
     const handlePickedComp = () => {
-        const PickedComp = pickCardType(cardType, { content, subtype, role, brief });
+        const opts = { content, subtype, role, brief, circularImg, selfBizLogoImg, bizName, userName };
+        const PickedComp = pickCardType(cardType, opts);
         return(<PickedComp />)
     }
 
@@ -83,4 +88,4 @@ function CardActionBtn({
 }
 
 export default React.memo(CardActionBtn)
-CardActionBtn.whyDidYouUpdate = true;
+CardActionBtn.whyDidYouRender = false;
