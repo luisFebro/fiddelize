@@ -178,6 +178,7 @@ export default function RecordedClientsList() {
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton
+            token={token}
             url={`/api/user/list/all?skip=${"SKIP"}&role=cliente&bizId=${businessId}`}
             objPathes={{
                 strList: "data.list",

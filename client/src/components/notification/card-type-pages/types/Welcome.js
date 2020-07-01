@@ -1,11 +1,13 @@
 import React from 'react';
 import ButtonMulti from '../../../../components/buttons/material-ui/ButtonMulti'
-import { Link } from 'react-router-dom';
-import { setRun } from '../../../../hooks/useRunComp';
-import { useStoreDispatch } from 'easy-peasy';
-import { useClientAdmin } from '../../../../hooks/useRoleData';
 import useCount from '../../../../hooks/useCount';
-import { textStyle, ShowTitle, ShowIllustration, ShowBrief } from './DefaultRenderComps';
+import {
+    textStyle,
+    ShowTitle,
+    ShowIllustration,
+    ShowBrief,
+    ShowActionBtn
+} from './DefaultRenderComps';
 
 // const areEqual = ({state:prev}, {state:next}) =>
 //   JSON.stringify(prev) !== JSON.stringify(next)
@@ -22,8 +24,6 @@ function Welcome({
 }) {
 
     useCount("Welcome"); //RT =
-    const dispatch = useStoreDispatch();
-    const { bizCodeName } = useClientAdmin();
 
     const showCliAdminContent = () => (
         role === "cliente-admin" &&
@@ -100,32 +100,6 @@ function Welcome({
         </section>
     );
 
-    const goDash = () => {
-        if(role === "cliente") window.location.href = "/mobile-app"
-        if(role === "cliente-admin") setRun(dispatch, "goDash");
-    }
-
-    const handleBtnPath = () => {
-        if(role === "cliente") return null;
-        if(role === "cliente-admin") return `/${bizCodeName}/cliente-admin/painel-de-controle`
-    }
-
-    const showActionBtn = () => (
-        <div className="my-5 container-center">
-            <Link
-                className="no-text-decoration"
-                to={handleBtnPath}
-                onClick={goDash}
-            >
-                <ButtonMulti
-                    title={role === "cliente" ? 'Explorar seu App' : 'Abrir Painel de Controle'}
-                    color="var(--mainWhite)"
-                    backgroundColor="var(--themeP)"
-                />
-            </Link>
-        </div>
-    );
-
     return (
         <section>
             <ShowTitle text="Bem-vindo(a) a bordo!" />
@@ -133,7 +107,7 @@ function Welcome({
             <ShowBrief brief={brief} />
             {showCliAdminContent()}
             {showCliUserContent()}
-            {showActionBtn()}
+            <ShowActionBtn role={role} />
         </section>
     );
 }

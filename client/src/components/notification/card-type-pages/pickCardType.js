@@ -17,6 +17,7 @@ export default function pickCardType(cardType, options = {}) {
         selfBizLogoImg: bizLogo,
         bizName,
         userName,
+        senderId,
     } = options;
 
     const defaultProps = { brief, role, mainImg, bizName, userName };
@@ -29,7 +30,7 @@ export default function pickCardType(cardType, options = {}) {
 
     const typeList = {
         welcome: <Welcome {...defaultProps} bizLogo={bizLogo} />,
-        challenge: <Challenge {...defaultProps} subtype={subtype} content={content} />,
+        challenge: <Challenge {...defaultProps} senderId={senderId} subtype={subtype} content={content} />,
         system: <FiddelizeSystem {...defaultProps} subtype={subtype} content={content} />,
         birthday: chooseBirthday(),
     }

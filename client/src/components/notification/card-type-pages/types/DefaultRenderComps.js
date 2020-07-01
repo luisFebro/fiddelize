@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ButtonMulti from '../../../../components/buttons/material-ui/ButtonMulti'
 import { Link } from 'react-router-dom';
 import { setRun } from '../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
 import { useClientAdmin } from '../../../../hooks/useRoleData';
+import ImgLoader from '../../../../components/ImgLoader';
 
 export const textStyle = 'text-purple text-left text-normal mx-3';
 
@@ -21,12 +22,13 @@ export const ShowIllustration = ({ role, mainImg, bizLogo }) => {
     const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
     return (
         <div className="container-center position-relative my-5">
-            <img
-                className="animated delay-1s shadow-elevation-black"
-                height="auto"
-                width={150}
+            <ImgLoader
                 src={mainImg}
-                alt="primeiro dia"
+                className="shadow-elevation-black"
+                alt="ilustração principal"
+                width={150}
+                height="auto"
+                timeout={4000}
             />
             {role === "cliente" && (
                 <div
@@ -56,6 +58,7 @@ export const ShowActionBtn = ({
     role,
     titleCliUser = 'Explorar seu App',
     titleCliAdmin = 'Abrir Painel de Controle',
+    children,
 }) => {
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
@@ -72,17 +75,24 @@ export const ShowActionBtn = ({
 
     return (
         <div className="my-5 container-center">
-            <Link
-                className="no-text-decoration"
-                to={handleBtnPath}
-                onClick={goDash}
-            >
-                <ButtonMulti
-                    title={role === "cliente" ? titleCliUser : titleCliAdmin}
-                    color="var(--mainWhite)"
-                    backgroundColor="var(--themeP)"
-                />
-            </Link>
+            {children
+            ? (
+                <Fragment>
+                    {children}
+                </Fragment>
+            ) : (
+                <Link
+                    className="no-text-decoration"
+                    to={handleBtnPath}
+                    onClick={goDash}
+                >
+                    <ButtonMulti
+                        title={role === "cliente" ? titleCliUser : titleCliAdmin}
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeP)"
+                    />
+                </Link>
+            )}
         </div>
     );
 }

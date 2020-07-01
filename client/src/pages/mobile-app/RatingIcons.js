@@ -24,13 +24,14 @@ export default function RatingIcons({
     const appPreviewIcon = gotArrayThisItem(iconNamesOnly, runName) ? runName : false;
     const selectedIcon = appPreviewIcon || selfMilestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
-    const paintStarsForScore = (score, maxScore) => {
+    const eachMilestone = Number(maxScore / 5);
+
+    const paintStarsForScore = (score) => {
         let indScore;
         if(!score) {
             indScore = -1;
         }
 
-        const eachMilestone = Number(maxScore / 5);
         const level1 = eachMilestone;
         const level2 = eachMilestone * 2;
         const level3 = eachMilestone * 3;
@@ -68,7 +69,7 @@ export default function RatingIcons({
     }
 
     useEffect(() => {
-        paintStarsForScore(score, maxScore);
+        paintStarsForScore(score);
     }, []);
 
     const levels = [100, 200, 300, 400, 500];
@@ -81,10 +82,10 @@ export default function RatingIcons({
 
     return (
         <RatingDiv>
-            {levels.map(level => (
+            {levels.map((level, ind) => (
                 <section className="position-relative" style={{top: '-20px'}} key={level}>
                     <Tooltip
-                        text={`Nível ${level.toString().charAt(0)}`}
+                        text={`NÍVEL ${level.toString().charAt(0)}<br />• Meta: ${eachMilestone * (ind + 1)} pontos.`}
                         element={
                             <i>
                                 <FontAwesomeIcon

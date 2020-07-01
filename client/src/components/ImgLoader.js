@@ -12,6 +12,7 @@ ImgLoader.propTypes = {
 export default function ImgLoader({
     align,
     marginY,
+    timeout = 0, // disabled as default.
     id,
     src,
     width,
@@ -26,10 +27,12 @@ export default function ImgLoader({
     let [status, setStatus] = useState(true);
 
     useEffect(() => {
-        if(src) {
-            setStatus(false);
-        }
-    }, [src])
+        if(src && timeout === 0) setStatus(false);
+    }, [src, timeout])
+
+    useEffect(() => {
+        if(timeout) setTimeout(() => setStatus(false), timeout);
+    }, [timeout])
 
     return(
         <div style={{margin: `${marginY || 0}px 0px` }} className="container-center">

@@ -10,7 +10,7 @@ import parse from 'html-react-parser';
 import  '../../keyframes/pulseWaves.css';
 
 Tooltip.propTypes = {
-    text: PropTypes.string.isRequired,
+    text: PropTypes.string,
     element: PropTypes.element.isRequired,
     needAttentionWaves: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     placement: PropTypes.string,

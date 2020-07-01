@@ -95,7 +95,7 @@ export default function ModalTextField({
     const handleSubmit = () => {
         const bodyToSend = {
             "clientUserData.currScore": parseFloat(remainValue),
-            "clientUserData.totalActiveScore": totalActiveScore - rewardScore,
+            "clientUserData.totalActiveScore": totalActiveScore - rewardScore, // the same as currScore, this is only used to differentiate from totalGeneralScore.
         }
 
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)

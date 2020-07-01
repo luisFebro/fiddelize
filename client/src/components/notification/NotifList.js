@@ -22,6 +22,7 @@ export default function NotifList({ _id, runList, forceCliUser = false, }) {
     const renderedList = notifList.map(notif => {
         const {
             _id,
+            senderId,
             cardType,
             subtype,
             isCardNew,
@@ -35,6 +36,7 @@ export default function NotifList({ _id, runList, forceCliUser = false, }) {
                     cardId={_id}
                     cardType={cardType}
                     subtype={subtype}
+                    senderId={senderId}
                     forceCliUser={forceCliUser}
                     isCardNew={isCardNew}
                     createdAt={createdAt}

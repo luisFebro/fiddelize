@@ -12,9 +12,8 @@ NotifCard.propTypes = {
         "system", // cliAdmin/cliUser for succeful purchase, warnings of deadlines, warnign of usage os SMS, promotions
         "chatRequest", // future implementations...
         "welcome", // cliAdmin/cliUser (active)
-        "birthdaysInWeek", // cliAdmin (active)
-        "clientWonChall", // cliAdmin (active)
-        "birthdayGreeting", // clieUser (active)
+        "challenge", // cliAdmin (active)
+        "birthday", // clieUser (active)
     ]),
     isCardNew: PropTypes.bool,
     createdAt: PropTypes.string,
@@ -26,6 +25,7 @@ const isSmall = window.Helper.isSmallScreen();
 
 function NotifCard({
     cardId,
+    senderId,
     cardType = "system",
     subtype,
     backColor = "default",
@@ -90,6 +90,7 @@ function NotifCard({
     const showActionBtn = () => (
         <CardActionBtn
             userId={userId}
+            senderId={senderId}
             cardId={cardId}
             cardType={cardType}
             clicked={clicked}

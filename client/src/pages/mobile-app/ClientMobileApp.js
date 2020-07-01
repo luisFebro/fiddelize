@@ -258,6 +258,7 @@ function ClientMobileApp({ location, history }) {
                 <section>
                     {isCliUserConnected && (
                         <ClientUserAppContent
+                            businessId={businessId}
                             useProfile={useProfile}
                             useClientUser={useClientUser}
                             useClientAdmin={useClientAdmin}

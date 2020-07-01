@@ -28,11 +28,11 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         case "challenge":
             const {
-                userName: thisUserName,
+                clientFullName: thisClientName,
                 currChall: thisCurrChall
             } = extractStrData(content);
             title = `Cliente concluíu desafio`;
-            brief = `${getFirstName(thisUserName)} concluíu desafio de n.° ${thisCurrChall}. Confirme esse desafio do cliente descontando os pontos.`
+            brief = `Cliente ${getFirstName(thisClientName)} concluíu desafio de n.° ${thisCurrChall}. Confirme esse desafio do cliente descontando pontos.`
             circularImg = "/img/icons/fiddelize-trophy.svg";
             break;
         case "birthday":

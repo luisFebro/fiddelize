@@ -85,7 +85,7 @@ const clientUserData = {
         default: "0"
     },
     totalPurchasePrize: { type: Number, default: 0 },
-    totalActiveScore: { type: Number, default: 0 }, // active score is total of user's current challenge score.
+    totalActiveScore: { type: Number, default: 0 }, // Same as currScore, only used on client history to differentiate from totalGeneralScore, active score is total of user's current challenge score.
     totalGeneralScore: { type: Number, default: 0 }, // it is the general accumative scoring from all challenges.
     totalVisits: { type: Number, default: 0 },
     purchaseHistory: [HistorySchema],

@@ -14,6 +14,7 @@ ModalBtn.propTypes = {
 export default function ModalBtn({
     modalData, button, setSelectedValue }) {
     const [open, setOpen] = useState(false);
+    console.log("open", open);
 
     const {
         title,

@@ -4,7 +4,7 @@ import { useStoreDispatch } from 'easy-peasy';
 import PropTypes from 'prop-types';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import ButtonMulti from './material-ui/ButtonMulti';
-import { getHeaderJson } from '../../utils/server/getHeaders';
+import { getHeaderJson, getHeaderToken } from '../../utils/server/getHeaders';
 import getValObjWithStr from '../../utils/objects/getValObjWithStr';
 
 LoadMoreItemsButton.propTypes = {
@@ -37,6 +37,7 @@ export default function LoadMoreItemsButton({
     msgAfterDone,
     remainingText = "Items Restantes:",
     button,
+    token,
     limitDocs,
     customLoadingIndicator}) {
     const [isThisLoading, setIsThisLoading] = useState(false);
@@ -71,7 +72,7 @@ export default function LoadMoreItemsButton({
         const modifiedUrl = url.replace("SKIP", moreDocsToSkip);
 
         setIsThisLoading(true);
-        axios.get(modifiedUrl, getHeaderJson)
+        axios.get(modifiedUrl, token ? getHeaderToken(token) : getHeaderJson)
         .then(res => {
             if(res.status !== 200) {
                 setIsThisLoading(false);

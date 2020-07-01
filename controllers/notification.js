@@ -97,7 +97,7 @@ exports.sendNotification = (req, res) => {
     .select("clientAdminData.notifications clientUserData.notifications")
     .exec((err, user) => {
         if (err) return res.status(500).json(msgG('error.systemError', err)) // NEED CREATE
-        res.json({ msg: `the notification were sent to ${role}`});
+        res.json({ msg: `the notification was sent to ${role}`});
     });
 }
 

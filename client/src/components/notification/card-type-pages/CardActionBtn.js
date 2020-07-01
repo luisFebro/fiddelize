@@ -12,6 +12,7 @@ import { useClientAdmin, useProfile } from '../../../hooks/useRoleData';
 
 function CardActionBtn({
         userId,
+        senderId,
         cardId,
         cardType,
         clicked,
@@ -31,7 +32,7 @@ function CardActionBtn({
     const { name: userName } = useProfile();
 
     const handlePickedComp = () => {
-        const opts = { content, subtype, role, brief, circularImg, selfBizLogoImg, bizName, userName };
+        const opts = { content, subtype, role, brief, circularImg, senderId, selfBizLogoImg, bizName, userName };
         const PickedComp = pickCardType(cardType, opts);
         return(<PickedComp />)
     }

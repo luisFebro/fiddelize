@@ -21,6 +21,7 @@ import useAnimateNumber from '../../../hooks/animation/useAnimateNumber';
 import pickCurrChallData from '../../../utils/biz/pickCurrChallData';
 import defineCurrChallenge from '../../../utils/biz/defineCurrChallenge';
 import useCountNotif from '../../../hooks/notification/useCountNotif';
+import useSendNotif from '../../../hooks/notification/useSendNotif';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -51,7 +52,8 @@ function ClientUserAppContent({
     colorP,
     colorS,
     colorBack,
-    rewardScoreTest }) {
+    businessId,
+    rewardScoreTest, }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currScoreRef = useRef(null);
 
@@ -60,17 +62,26 @@ function ClientUserAppContent({
     let { role, name, _id } = useProfile();
     const totalNotifications = useCountNotif(_id, { role, forceCliUser: true });
     name ? name = getFirstName(name) : name = "cliente";
-    let { currScore, lastScore, totalPurchasePrize  } = useClientUser();
+    let { currScore, lastScore, totalPurchasePrize } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
     let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
+    const mainReward = pickedObj.mainReward
     selfMilestoneIcon = pickedObj.selfMilestoneIcon
     const userBeatChallenge = currScore >= maxScore;
 
     const { isAuthUser } = useAuthUser();
     useCount("ClientUserAppContent.js"); // RT = 3 before = /
+    const challNotifOptions = React.useCallback(() => ({
+        trigger: userBeatChallenge,
+        senderId: _id,
+        role: "cliente-admin",
+        subtype: "clientWonChall",
+        content: `rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${name};prizeDesc:${mainReward};`,
+    }), [userBeatChallenge, _id])
+    useSendNotif(businessId, "challenge", challNotifOptions())
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
     useAnimateConfetti(confettiOptions());
     const triggerNumberAnima = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
