@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.1502.1"
+const latestVersion = "3.1503.1"
 const updateDescription = "Componentes e Sistema de Notificações - integração de funciolidades interface, design pt 8"
 const history = [
     "Componentes e Sistema de Notificações - concluído implementação completa no backend",

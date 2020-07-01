@@ -10,8 +10,7 @@ export default function needAlertBirthday(strBirthDate, options = {}) {
     const negativeRes = { alert: false, isBelated: false };
     const okRes = { alert: true, isBelated: false };
     if(!trigger) return negativeRes;
-    console.log(strBirthDate.includes(todayWithoutYear))
-    if(strBirthDate.includes(todayWithoutYear)) return okRes;
+    if(strBirthDate && strBirthDate.includes(todayWithoutYear)) return okRes;
 
     let today = getDayMonthBr(new Date(), { needYear: true })
 
