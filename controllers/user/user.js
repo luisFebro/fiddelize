@@ -266,8 +266,10 @@ exports.addPurchaseHistory = (req, res) => {
     const { _id, clientUserData } = req.profile;
     if(!clientUserData) return res.json({ error: "requres user data array"});
 
-    const prizeCount = clientUserData.totalPurchasePrize;
-    const totalNonPrizeCards = clientUserData.purchaseHistory.length - prizeCount;
+    const prizeCount = clientUserData.totalPurchasePrize * 2; // times 2 because every prize has a brief card alongside
+    const remainderCount = clientUserData.purchaseHistory.filter(card => card.cardType === "remainder").length;
+    console.log("remainderCount", remainderCount);
+    const totalNonPrizeCards = clientUserData.purchaseHistory.length - (prizeCount + remainderCount);
     const lastCardData = clientUserData.purchaseHistory[0];
 
     const scores = {

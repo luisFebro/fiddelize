@@ -30,14 +30,16 @@ const styles = {
 
 const ChallengeRemainder = () => (
     <section>
-        ChallengeRemainder
+        Pontos Restantes
+        Opa! Já tem 20 pontos
+        do desafio anterior.
     </section>
 );
 
 const WonChallengeBrief = () => (
     <section className="prize-card--challenge-brief text-purple">
         <p className="text-subtitle font-weight-bold m-0">
-            Resumo Desafio N.º 1
+            Resumo Desafio N.º 1 (DESC FROM BAKCEND)
         </p>
         <p className="text-normal animated zoomIn fast">
             <FontAwesomeIcon icon="check" style={styles.check} />

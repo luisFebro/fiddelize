@@ -48,7 +48,7 @@ function ClientScoresPanel({
 
     useCount("ClientScoresPanel") // RT = 46
     const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
-    let { currScore, totalGeneralScore, totalActiveScore, totalPurchasePrize } = useClientUser();
+    let { currScore: currentScore, totalGeneralScore, totalActiveScore, totalPurchasePrize } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { bizName, rewardList, bizCodeName } = useClientAdmin();
 
@@ -84,16 +84,16 @@ function ClientScoresPanel({
         }
     }
 
-    let lastScore = currScore;
-    if(typeof lastScore === "undefined") {
-        lastScore = "0";
+    let currScore = currentScore;
+    if(typeof currScore === "undefined") {
+        currScore = "0";
     }
-    lastScore = getIntOrFloat(lastScore);
+    currScore = getIntOrFloat(currScore);
 
     let cashCurrScore = convertCommaToDot(valuePaid);
     cashCurrScore = getIntOrFloat(cashCurrScore);
 
-    let currScoreNow = parseFloat(lastScore) + parseFloat(cashCurrScore);
+    let currScoreNow = parseFloat(currScore) + parseFloat(cashCurrScore);
     currScoreNow = getIntOrFloat(currScoreNow);
 
     const userBeatChallenge = currScoreNow >= maxScore;

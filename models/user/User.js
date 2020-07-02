@@ -59,9 +59,10 @@ const NotificationsSchema = new Schema(notificationsData, { _id: true });
 // Client-User
 const historyData = {
     challengeN: Number,
-    cardType: { type: String, default: "record",  enum: ["prize", "record"]},
+    cardType: { type: String, default: "record",  enum: ["prize", "record", "brief", "remainder"]},
     icon: String,
     desc: String,
+    finishedScore: Number, // cardType: brief - the total of scores from a challenge after user has finished.
     createdAt: {type: Date, default: new Date()},
     value: { type: Number, default: 0 },
     // For "prize" cartType variables. both false as default but not explicit at start.

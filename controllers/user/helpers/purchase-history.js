@@ -16,7 +16,7 @@ exports.findOneAndUpdate = (User, options = {}) => {
         { new: false }
     ).exec((err, historyList) => {
         if(err) return res.status(500).json({ error: err });
-        res.json("User purchase's history updated. CURRENT CARD ADDED: " + currCard.cardType);
+        res.json("User purchase's history updated. LAST DATE: " + new Date());
     });
 }
 

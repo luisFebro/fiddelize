@@ -2,8 +2,8 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.1602.2"
-const updateDescription = "Otimização completa do algoritmo do histórico de compra pt 2";
+const latestVersion = "3.17.2"
+const updateDescription = "Otimização completa do algoritmo do histórico de compra || otimização UI sessão histórico de compras pt 3";
 const history = [
     "Componentes e Sistema de Notificações - integração de funciolidades interface, design finalizado",
     "Componentes e Sistema de Notificações - concluído implementação completa no backend",

@@ -19,15 +19,16 @@ function generateHistoryData(lastCardData, scores = {}, options = {}) {
     let lastCard = {}; // this overrides the desc value from last pruchases.
 
     const cliUserBeatedGoal = currScore >= Number(rewardScore);
-    const lastCardNumber = challengeN;
     const nextCardNumber = totalNonPrizeCards + 1; // the next curr card on the top
+    const lastCardNumber = totalNonPrizeCards;
 
     let defaultCard = {
         challengeN: challengeN,
         cardType: 'record',
         icon: currIcon,
         value: currValue,
-        desc: '', createdAt: new Date(),
+        desc: '',
+        createdAt: new Date(),
     };
 
     if(!totalNonPrizeCards && !cliUserBeatedGoal) {
@@ -42,9 +43,10 @@ function generateHistoryData(lastCardData, scores = {}, options = {}) {
         return [currCard];
     }
 
-    if(cardType === "prize" || cardType === "remainder") {
+    const isRemainderCard = cardType === "remainder";
+    if(cardType === "prize" || isRemainderCard) {
         // only card charge of leveling up challengeN from algorithm
-        currCard = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${nextCardNumber}`, createdAt: new Date()};
+        currCard = { ...defaultCard, challengeN: isRemainderCard ? challengeN : ++challengeN, desc: `Última Compra ${nextCardNumber}`};
         return [currCard];
     }
 
@@ -57,14 +59,7 @@ function generateHistoryData(lastCardData, scores = {}, options = {}) {
     }
 
     if(cliUserBeatedGoal) {
-        currCard = {
-            challengeN: challengeN,
-            cardType: 'record',
-            desc: `Última Compra ${nextCardNumber}`,
-            createdAt: new Date(),
-            needPrize: true
-        };
-        console.log('needPrize: true')
+        currCard = { ...defaultCard, desc: `Última Compra ${nextCardNumber}` };
         return [currCard];
     }
 
