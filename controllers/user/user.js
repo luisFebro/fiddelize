@@ -10,7 +10,7 @@ const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
 const addTransformToImgUrl = require("../../utils/biz-algorithms/cloudinary-images/addTransformToImgUrl");
-const { findOneAndUpdate, confirmPrizeStatus } = require("./purchase-history-helpers/main");
+const { findOneAndUpdate, confirmPrizeStatus } = require("./helpers/purchase-history");
 const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
 // fetching enum values exemple:
@@ -267,40 +267,22 @@ exports.addPurchaseHistory = (req, res) => {
     if(!clientUserData) return res.json({ error: "requres user data array"});
 
     const prizeCount = clientUserData.totalPurchasePrize;
-    console.log("prizeCount", prizeCount);
     const totalNonPrizeCards = clientUserData.purchaseHistory.length - prizeCount;
-    console.log("totalNonPrizeCards", totalNonPrizeCards);
-    const historyData = clientUserData.purchaseHistory[0];
+    const lastCardData = clientUserData.purchaseHistory[0];
 
-    // for registering user's general score (do not influence in the algorithm)
-    const newTotalGeneralScore = req.body.totalGeneralScore;
-
-
-    const lastPurchaseObj = {
-        challengeN: historyData ? historyData.challengeN : 1,
-        totalNonPrizeCards,
-        value: totalNonPrizeCards && historyData.value,
-        icon: totalNonPrizeCards && historyData.icon,
-        createdAt: totalNonPrizeCards && historyData.createdAt,
-        cardType: totalNonPrizeCards && historyData.cardType,
-    }
     const scores = {
         rewardScore: req.body.rewardScore,
         currScore: clientUserData.currScore,
     }
 
-    let [currCard, lastCard] = generateHistoryData(lastPurchaseObj, scores);
-    currCard = { ...req.body, ...currCard };
-
-    let unshiftThis = { $each: [currCard], $position: 0 }; // insert as the first array's element.
+    let [currCard, lastCard] = generateHistoryData(lastCardData, scores, { totalNonPrizeCards, reqBody: req.body });
+    console.log("currCard", currCard);
+    console.log("lastCard", lastCard);
 
     // if the lastCard returns with data, this
     // means that we are going to delete the last purchase data and add the last card on the top
     if(lastCard) {
         const lastCardNumber = totalNonPrizeCards;
-        //req.body: rewardScore, icon, value, totalGeneralScore (this is eliminated in the db auto since it is not part of this set of data)
-        lastCard = { ...req.body, ...lastCard };
-        unshiftThis = { $each: [currCard, lastCard], $position: 0 }; // insert as the first array's element.
 
         User.findOneAndUpdate(
             { _id },
@@ -309,31 +291,32 @@ exports.addPurchaseHistory = (req, res) => {
             { new: false }
         ).exec(err => {
             if(err) return res.status(500).json(msgG('error.systemError', err))
-            findOneAndUpdate(User, res, _id, unshiftThis, newTotalGeneralScore);
+            findOneAndUpdate(User, { res, _id, currCard, lastCard });
         });
     } else {
         // Add without deleting the last card
-        findOneAndUpdate(User, res, _id, unshiftThis, newTotalGeneralScore);
+        findOneAndUpdate(User, { res, _id, currCard, lastCard });
     }
 }
 
 exports.readHistoryList = (req, res) => {
     const { _id, clientUserData } = req.profile;
-    const rewardScore = req.query.rewardScore;
+    const rewardScore = Number(req.query.rewardScore);
     let noResponse = req.query.noResponse;
 
     if(!clientUserData) return res.status(400).json([]);
 
     const purchaseHistory = clientUserData.purchaseHistory;
     const currScore = clientUserData.currScore;
-    console.log("currScore", currScore);
 
     const scores = { rewardScore, currScore };
     const newHistoryData = generatePrizeCard(purchaseHistory, scores);
 
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
     const finalRes = noResponse === "true" ? msgOk : newHistoryData;
-    if(newHistoryData.length && newHistoryData[0].cardType === "prize") {
+    const conditionToSave = newHistoryData.length && "prize, remainder".includes(newHistoryData[0].cardType)
+
+    if(conditionToSave) {
         User.findOneAndUpdate({ _id }, { $set: { "clientUserData.purchaseHistory": newHistoryData } }, { new: false })
         .exec((err, user) => {
             if(err) return res.status(500).json(msgG('error.systemError', err));

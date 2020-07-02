@@ -24,15 +24,6 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
     const pickedObj = pickCurrChallData(rewardList, currChallengeN - 1);
     mainReward = pickedObj["mainReward"]
 
-    // const handlePrizeName = (currChallengeN) => {
-    //     if(currChallengeN === 1) {
-    //         return mainReward;
-    //     } else {
-    //         const ind = currChallengeN - 2 // start with 0 in the rewardList and so on...
-    //         return rewardList[ind];
-    //     }
-    // }
-
     const displayMainContent = () => (
         <section className={`${selectTxtStyle(colorP)} purchase-history-prize-card--root text-center text-purple`}>
             <main className="gift-main-title" >

@@ -1,20 +1,22 @@
-exports.findOneAndUpdate = (User, res, _id, unshiftThis, newTotalScore) => {
-    const objToSet = {
-        "clientUserData.totalGeneralScore": newTotalScore,
-    };
-    console.log("objToSet", objToSet);
+exports.findOneAndUpdate = (User, options = {}) => {
+    const { res, _id, currCard, lastCard } = options;
+
+    let unshiftThis;
+    if(lastCard) {
+        unshiftThis = { $each: [currCard, lastCard], $position: 0 }; // insert as the first array's element.
+    } else {
+        unshiftThis = { $each: [currCard], $position: 0 }; // insert as the first array's element.
+    }
 
     const objToPush = { "clientUserData.purchaseHistory": unshiftThis };
-    console.log("objToPush", objToPush);
 
     return User.findOneAndUpdate(
         { _id },
-        { $set: objToSet, $push: objToPush },
+        { $push: objToPush },
         { new: false }
-    )
-    .exec((err, historyList) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err))
-        res.json("User purchase's history updated.");
+    ).exec((err, historyList) => {
+        if(err) return res.status(500).json({ error: err });
+        res.json("User purchase's history updated. CURRENT CARD ADDED: " + currCard.cardType);
     });
 }
 

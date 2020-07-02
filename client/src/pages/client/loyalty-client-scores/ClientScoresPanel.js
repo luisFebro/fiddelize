@@ -114,6 +114,7 @@ function ClientScoresPanel({
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.totalActiveScore": currScoreNow, // the same as currScore | active is passive to be discounted and general it is accumulative without discount.
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
+                "clientUserData.totalGeneralScore": totalGeneralScore + cashCurrScore,
             }
 
             // This is for cli-admin test client mode which does not have a totalPurchasePrize when it is updated.
@@ -128,7 +129,6 @@ function ClientScoresPanel({
                     "rewardScore": maxScore,
                     "icon": selfMilestoneIcon,
                     "value": cashCurrScore,
-                    "totalGeneralScore": totalGeneralScore + cashCurrScore,
                 }
                 addPurchaseHistory(dispatch, _id, historyObj)
                 .then(res => {

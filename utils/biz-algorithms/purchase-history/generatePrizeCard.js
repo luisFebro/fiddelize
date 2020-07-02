@@ -18,8 +18,8 @@ const didCardsChanged = (firstCard, historyDataArray, options = {}) => {
 }
 
 const addPrize = (newArray, options = {}) => {
-    const { currChall, isFirstCardPrize, cardsChanged, unshift } = options;
-    if(isFirstCardPrize) return;
+    const { currChall, skipIfLastCard, cardsChanged, unshift } = options;
+    if(skipIfLastCard) return;
 
     const prizeCardNumber = cardsChanged ? (--currChall) : currChall; // --currChall is the last cardnumber, not the new added one
     generatedPrizeCard = { ...generatedPrizeCard, challengeN: prizeCardNumber };
@@ -36,8 +36,6 @@ function generatePrizeCard(historyDataArray, scores = {}) {
     const isValidArray = Boolean(historyDataArray.length);
 
     const { rewardScore, currScore } = scores;
-    console.log("currScore", typeof currScore);
-    console.log("rewardScore", typeof rewardScore);
 
     let newArray = [];
 
@@ -45,6 +43,7 @@ function generatePrizeCard(historyDataArray, scores = {}) {
 
     let addedNewChall = false;
     isValidArray && historyDataArray.forEach((elem, ind) => {
+        // cliUserBeatedGoal is true in generateHistoryData...
         const needPrize = elem.needPrize;
 
         const isChallNumbersDiff = didCardsChanged(elem, historyDataArray, { secondCard: historyDataArray[ind + 1] });
@@ -57,22 +56,23 @@ function generatePrizeCard(historyDataArray, scores = {}) {
             addedNewChall = true;
         }
 
-        if(!isChallNumbersDiff) newArray.push(elem);
+        newArray.push(elem); //if(!isChallNumbersDiff)
     })
 
     const cliUserBeatedGoal = currScore >= Number(rewardScore);
     if(cliUserBeatedGoal) {
         const firstElem = newArray[0];
         firstElem.desc = firstElem.desc.replace("Última Compra", "Compra");
-        addPrize(newArray, { currChall, unshift: true, isFirstCardPrize: firstElem.cardType === "prize" });
+        addPrize(newArray, { currChall, unshift: true, skipIfLastCard: (firstElem.cardType === "prize" || firstElem.cardType === "remainder") });
 
         const remainder = currScore - rewardScore;
         if(remainder) {
-            const remainderCard = { cardType: 'remainder', remainderValue: remainder }
+            const remainderCard = { challengeN: currChall, cardType: 'remainder', value: remainder, desc: `Opa! Pontos sobraram` }
             newArray.unshift(remainderCard);
         }
     }
 
+    console.log("newArray", newArray);
     return newArray;
 }
 
