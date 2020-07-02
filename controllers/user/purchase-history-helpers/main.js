@@ -2,8 +2,10 @@ exports.findOneAndUpdate = (User, res, _id, unshiftThis, newTotalScore) => {
     const objToSet = {
         "clientUserData.totalGeneralScore": newTotalScore,
     };
+    console.log("objToSet", objToSet);
 
     const objToPush = { "clientUserData.purchaseHistory": unshiftThis };
+    console.log("objToPush", objToPush);
 
     return User.findOneAndUpdate(
         { _id },

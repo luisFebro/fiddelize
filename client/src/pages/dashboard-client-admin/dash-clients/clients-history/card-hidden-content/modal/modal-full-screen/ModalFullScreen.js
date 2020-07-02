@@ -66,7 +66,7 @@ export default function ModalFullScreen({
             fullScreen={isSmall ? true : false}
             open={open}
             aria-labelledby="form-dialog-title"
-            className="animated fadeInUp normal"
+            className="" //animated fadeInUp normal
         >
             {showTitle()}
             {showSubTitle()}

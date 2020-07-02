@@ -43,7 +43,9 @@ exports.mwBackup = (req, res, next) => {
 }
 // END MIDDLEWARE
 
-const handleUserRole = (isAdmin, profile) => {
+const handleUserRole = (isAdmin, profile, opts = {}) => {
+    const { includes } = opts;
+
     if(isAdmin) {
         const cliAdminObj = profile.clientAdminData;
         cliAdminObj.verificationPass = undefined;
@@ -54,21 +56,24 @@ const handleUserRole = (isAdmin, profile) => {
         profile.password = undefined;
         profile.clientAdminData = undefined;
         if(profile.clientUserData) { // for cli-admin login conflict avoidance...
-            profile.clientUserData.purchaseHistory = undefined; // Not working.. this does not need toload at first because we add this when the component loads. Both online and offline.
+            if(includes !== "purchaseHistory") {
+                profile.clientUserData.purchaseHistory = undefined; // Not working.. this does not need toload at first because we add this when the component loads. Both online and offline.
+            }
         }
         return profile;
     }
 }
 
 exports.read = (req, res) => {
+    const includes = req.query.includes; // for testing, allows strict data to be displayed
     const clientAdminRequest = Boolean(req.query.clientAdminRequest);
 
-    return res.json(handleUserRole(clientAdminRequest, req.profile));
+    return res.json(handleUserRole(clientAdminRequest, req.profile, { includes }));
 };
 
 exports.update = (req, res) => { // n2
     const noResponse = Boolean(req.query.noResponse);
-    const selectedString = req.query.selectedKeys ? `${req.query.selectedKeys} -cpf -clientAdminData.bizPlanCode -clientAdminData.verificationPass`  : '_id';
+    const selectedString = req.query.selectedKeys ? `${req.query.selectedKeys}`  : ''; //-cpf -clientAdminData.bizPlanCode -clientAdminData.verificationPass
 
     User.findOneAndUpdate({ _id: req.profile._id }, { $set: req.body }, { new: true }) // real time updated! this send the most recently updated response/doc from database to app
     .select(selectedString)
@@ -259,6 +264,7 @@ exports.readBackup = (req, res) => { //n4 - great recursive solution and insertM
 // USER PURCHASE HISTORY
 exports.addPurchaseHistory = (req, res) => {
     const { _id, clientUserData } = req.profile;
+    if(!clientUserData) return res.json({ error: "requres user data array"});
 
     const prizeCount = clientUserData.totalPurchasePrize;
     console.log("prizeCount", prizeCount);
@@ -314,23 +320,28 @@ exports.addPurchaseHistory = (req, res) => {
 exports.readHistoryList = (req, res) => {
     const { _id, clientUserData } = req.profile;
     const rewardScore = req.query.rewardScore;
+    let noResponse = req.query.noResponse;
+
+    if(!clientUserData) return res.status(400).json([]);
 
     const purchaseHistory = clientUserData.purchaseHistory;
     const currScore = clientUserData.currScore;
+    console.log("currScore", currScore);
 
     const scores = { rewardScore, currScore };
     const newHistoryData = generatePrizeCard(purchaseHistory, scores);
 
+    const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
+    const finalRes = noResponse === "true" ? msgOk : newHistoryData;
     if(newHistoryData.length && newHistoryData[0].cardType === "prize") {
         User.findOneAndUpdate({ _id }, { $set: { "clientUserData.purchaseHistory": newHistoryData } }, { new: false })
         .exec((err, user) => {
             if(err) return res.status(500).json(msgG('error.systemError', err));
-            res.json(newHistoryData);
+            res.json(finalRes);
         });
     } else {
-        res.json(newHistoryData);
+        res.json(finalRes);
     }
-    //.limit(100) // load more logics goes here. set to 10 as default...
 }
 
 exports.changePrizeStatus = (req, res) => {
@@ -338,12 +349,16 @@ exports.changePrizeStatus = (req, res) => {
     let { statusType } = req.query;
 
     if(!"confirmed, received".includes(statusType)) return res.status(400).json({msg: "This status type is not valid. Choose one of these: confirmed, received"})
+    if(!clientUserData) return res.json({ error: "no array data found"})
 
     const historyData = clientUserData.purchaseHistory;
     const challengeN = clientUserData.totalPurchasePrize + 1;
     const { arrayOfData, error, status } = confirmPrizeStatus(historyData, { statusType, challengeN });
+    console.log("status", status);
+    console.log("error", error);
+    console.log("arrayOfData", arrayOfData);
 
-    if(status === "FAIL") return res.status(400).json({ msg: error })
+    if(status === "FAIL") return console.log("ERROR changePrizeStatus: " + error)
 
     User.findOneAndUpdate(
         { _id },

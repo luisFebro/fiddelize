@@ -72,6 +72,7 @@ exports.countPendingNotif = (req, res) => {
     .select(`${rolePath}.notifications -_id`)
     .exec((err, data) => {
         if (err) return res.status(500).json(msgG('error.systemError', err))
+        if(!data[0][rolePath]) return res.json({ total: 0 });
         const notifs = data[0][rolePath]["notifications"];
         const totalFilteredNotifs = notifs.filter(notif => notif.clicked === false);
         res.json({ total: totalFilteredNotifs.length });

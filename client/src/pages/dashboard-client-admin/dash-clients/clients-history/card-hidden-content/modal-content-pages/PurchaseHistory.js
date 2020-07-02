@@ -28,7 +28,13 @@ const styles = {
     check: {...faStyle, fontSize: '25px', marginRight: '10px', color: "var(--themeP)"}
 }
 
-const ChallengeBrief = () => (
+const ChallengeRemainder = () => (
+    <section>
+        ChallengeRemainder
+    </section>
+);
+
+const WonChallengeBrief = () => (
     <section className="prize-card--challenge-brief text-purple">
         <p className="text-subtitle font-weight-bold m-0">
             Resumo Desafio N.º 1
@@ -119,9 +125,13 @@ export default function PurchaseHistory({ data }) {
                         colorS={selfThemeSColor}
                         colorP={selfThemePColor}
                     />
-                    <ChallengeBrief />
+                    <WonChallengeBrief />
                 </Fragment>
             )
+        }
+
+        if(historyData.cardType.includes("remainder")) {
+            return(<ChallengeRemainder />);
         } else {
             return(
                 <Card

@@ -3,6 +3,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import format from 'date-fns/format';
 import formatDistance from 'date-fns/formatDistance';
 import formatRelative from 'date-fns/formatRelative';
+import addDays from 'date-fns/addDays';
 
 const localeObj = {
     default: ptBR,
@@ -28,6 +29,7 @@ export {
     formatDMY,
     fromNow,
     calendar,
+    addDays,
 }
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time

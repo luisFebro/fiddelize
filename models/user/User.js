@@ -50,7 +50,7 @@ const notificationsData = {
     isCardNew: { type: Boolean, default: true }, // When user visualize notif page, a new badge will be show and then it will be update as false
     clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
     isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead
-    createdAt: { type: Date, default: new Date() },
+    createdAt: { type: Date, default: Date.now },
 }
 const NotificationsSchema = new Schema(notificationsData, { _id: true });
 // END GENERAL SCHEMAS

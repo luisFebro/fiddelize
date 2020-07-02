@@ -3,7 +3,7 @@ import ButtonMulti from '../../../../components/buttons/material-ui/ButtonMulti'
 import { Link } from 'react-router-dom';
 import { setRun } from '../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
-import { useClientAdmin } from '../../../../hooks/useRoleData';
+import { useClientAdmin, useProfile, } from '../../../../hooks/useRoleData';
 import ImgLoader from '../../../../components/ImgLoader';
 
 export const textStyle = 'text-purple text-left text-normal mx-3';
@@ -62,9 +62,10 @@ export const ShowActionBtn = ({
 }) => {
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
+    const { role: loggedUserRole } = useProfile();
 
     const goDash = () => {
-        if(role === "cliente") window.location.href = "/mobile-app"
+        if(role === "cliente") window.location.href = loggedUserRole === "cliente-admin" ? "/mobile-app?client-admin=1" : "/mobile-app"
         if(role === "cliente-admin") setRun(dispatch, "goDash");
     }
 

@@ -25,7 +25,7 @@ function generateHistoryData(lastPurchaseObj = {}, scores = {}) {
         return [currCard];
     }
 
-    if(cardType === "prize") {
+    if(cardType === "prize" || cardType === "remainder") {
         // only add the current card
         currCard = { challengeN: ++challengeN, cardType: 'record', desc: `Última Compra ${nextCardNumber}`, createdAt: new Date()};
         return [currCard];

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { readUser, updateUser, addPurchaseHistory } from "../../../redux/actions/userActions";
+import { readUser, updateUser, readPurchaseHistory, addPurchaseHistory } from "../../../redux/actions/userActions";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import Title from '../../../components/Title';
 import animateNumber, { getAnimationDuration } from '../../../utils/numbers/animateNumber';
@@ -24,6 +24,7 @@ import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from '../../../hooks/media/usePlayAudio';
 import useCount from '../../../hooks/useCount';
+import pickCurrChallData from '../../../utils/biz/pickCurrChallData';
 
 ClientScoresPanel.propTypes = {
     success: PropTypes.bool,
@@ -47,9 +48,15 @@ function ClientScoresPanel({
 
     useCount("ClientScoresPanel") // RT = 46
     const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
-    let { currScore, totalGeneralScore, totalActiveScore } = useClientUser();
+    let { currScore, totalGeneralScore, totalActiveScore, totalPurchasePrize } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
-    const { maxScore, bizName, bizCodeName, selfMilestoneIcon } = useClientAdmin();
+    const { bizName, rewardList, bizCodeName } = useClientAdmin();
+
+    let { maxScore, selfMilestoneIcon } = useClientAdmin();
+    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
+    maxScore = pickedObj.rewardScore;
+    selfMilestoneIcon = pickedObj.selfMilestoneIcon;
+
     const { businessId } = useAppSystem();
     const dispatch = useStoreDispatch();
     usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", { storeAudioTo: "win-challenge--audio" })
@@ -89,6 +96,8 @@ function ClientScoresPanel({
     let currScoreNow = parseFloat(lastScore) + parseFloat(cashCurrScore);
     currScoreNow = getIntOrFloat(currScoreNow);
 
+    const userBeatChallenge = currScoreNow >= maxScore;
+
     useEffect(() => {
         if(success && verification) {
             animateNumber(
@@ -99,13 +108,19 @@ function ClientScoresPanel({
                 setShowTotalPoints
             );
 
-            const objToSend = {
+            let objToSend = {
                 "clientUserData.bizId": businessId, // for cli-admin or if not it will not override <again className=""></again>
                 "clientUserData.cashCurrScore": cashCurrScore,
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
+                "clientUserData.totalActiveScore": currScoreNow, // the same as currScore | active is passive to be discounted and general it is accumulative without discount.
                 "clientUserData.lastScore": lastScore, // the same as currScoreNow
-                "clientUserData.totalActiveScore": totalActiveScore + cashCurrScore, // active is passive to be discounted and general it is accumulative without discount.
             }
+
+            // This is for cli-admin test client mode which does not have a totalPurchasePrize when it is updated.
+            if(!totalPurchasePrize && totalPurchasePrize !== 0) {
+                objToSend = {...objToSend, "clientUserData.totalPurchasePrize": 0 }
+            }
+
             updateUser(dispatch, objToSend, _id)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
@@ -119,7 +134,12 @@ function ClientScoresPanel({
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                     showSnackbar(dispatch, `Pontuação Registrada, ${getFirstName(name)}!`, 'success');
-                    setFinishedWork(true);
+                    if(userBeatChallenge) {
+                        readPurchaseHistory(_id, maxScore, { noResponse: true })
+                        setFinishedWork(true);
+                    } else {
+                        setFinishedWork(true);
+                    }
                 })
             })
         }
@@ -219,6 +239,7 @@ function ClientScoresPanel({
                         .then(res => {
                             if(res.status !== 200) return console.log("Error on readUser");
                             const path = needAppForCliAdmin ? "/mobile-app?client-admin=1" : "/mobile-app"
+                            showComponent(dispatch, "login");
                             history.push(path);
                         })
                     } else {

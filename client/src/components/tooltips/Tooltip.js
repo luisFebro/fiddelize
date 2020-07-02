@@ -32,6 +32,7 @@ export default function Tooltip({
     text,
     color,
     backgroundColor,
+    className,
     needArrow,
     element,
     needAttentionWaves,
@@ -39,6 +40,7 @@ export default function Tooltip({
     needOpen,
     whiteSpace,
     width,
+    margin,
     padding,
     onClickAway,
     needClickAway = true, }) {
@@ -65,7 +67,7 @@ export default function Tooltip({
             fontWeight: 'bold',
             borderRadius: '15px 15px',
             padding: padding ? padding : '4px auto',
-            margin: '40px 0',
+            margin: margin || '40px 0',
             whiteSpace: whiteSpace ? null : 'nowrap',
             textShadow: '1px 1px 3px black',
             width: width ? width : '100%',
@@ -85,7 +87,7 @@ export default function Tooltip({
 
     return(
         <ClickAwayListener onClickAway={handleTooltipClose}>
-            <div className="position-relative c-pointer" onClick={() => setStopWave(true)}>
+            <div className={`${className ? className : ""} position-relative c-pointer`} onClick={() => setStopWave(true)}>
                 {needAttentionWaves
                 ? (
                     <div className={`${stopWave ? "" : "pulse-waves"}`}>

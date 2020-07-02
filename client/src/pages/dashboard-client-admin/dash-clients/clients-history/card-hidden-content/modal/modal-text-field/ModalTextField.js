@@ -14,6 +14,7 @@ import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 
 // CUSTOMIZED DATA
+import useSendNotif from '../../../../../../../hooks/notification/useSendNotif';
 import { modalTextFieldDashboardType } from '../../../../../../../types';
 import { convertCommaToDot, convertDotToComma } from '../../../../../../../utils/numbers/convertDotComma';
 import { updateUser } from '../../../../../../../redux/actions/userActions';
@@ -41,10 +42,11 @@ export default function ModalTextField({
     });
     const [gotError, setGotError] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
+    const [runNotif, setRunNotif] = useState(false);
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
-    const { rewardList } = useClientAdmin();
+    const { rewardList, rewardDeadline } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
@@ -59,10 +61,24 @@ export default function ModalTextField({
         rewardScore,
         totalPrizes,
         totalActiveScore,
-        name, } = modalData;
+        name,
+    } = modalData;
+
+    const currChall = totalPrizes + 1;
 
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
-    rewardScore = pickedObj["rewardScore"]
+    rewardScore = pickedObj.rewardScore;
+    const mainReward = pickedObj.mainReward;
+
+    const challNotifOptions = React.useCallback(() => ({
+        subtype: "confirmedChall",
+        trigger: runNotif,
+        senderId: businessId,
+        role: "cliente",
+        content: `currChall:${currChall};prizeDeadline:${rewardDeadline};prizeDesc:${mainReward};prizeConfirmationDate:${new Date()};`,
+    }), [runNotif, businessId])
+    const notifSent = useSendNotif(userId, "challenge", challNotifOptions())
+
 
     const userBeatScore = userCurrScore >= rewardScore;
     useEffect(() => {
@@ -95,21 +111,26 @@ export default function ModalTextField({
     const handleSubmit = () => {
         const bodyToSend = {
             "clientUserData.currScore": parseFloat(remainValue),
-            "clientUserData.totalActiveScore": totalActiveScore - rewardScore, // the same as currScore, this is only used to differentiate from totalGeneralScore.
+            "clientUserData.totalActiveScore": parseFloat(totalActiveScore - rewardScore), // the same as currScore, this is only used to differentiate from totalGeneralScore.
+            // This is handled in the backend with changePrizeStatus
+            // "clientUserData.totalPurchasePrize": totalPrizes + 1, // the same as currScore, this is only used to differentiate from totalGeneralScore.
         }
 
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
         updateUser(dispatch, bodyToSend, userId, false)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            setRun(dispatch, "registered");
+            setRunNotif(true);
             showSnackbar(dispatch, `OK! Foi descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 5000)
-            // notification will be handled in the backend inside thisfunciton
             changePrizeStatus(userId, { statusType: "confirmed" })
             .then(res => {
-                showSnackbar(dispatch, `PRONTO! Uma notificação de confirmação foi enviada para ${name.cap()}.`, 'success', 6000)
-                setTimeout(() => readHighestScores(dispatch, businessId), 3000);
-                onClose();
+                if(res.status !== 200) return console.log("Houve um problema ao trocar status do prêmio")
+                setRun(dispatch, "registered");
+                if(notifSent) {
+                    showSnackbar(dispatch, `PRONTO! Uma notificação de confirmação foi enviada para ${name.cap()}.`, 'success', 4000)
+                    setTimeout(() => readHighestScores(dispatch, businessId), 2000);
+                    setTimeout(() => onClose(), 3900);
+                }
             })
         })
     };
@@ -133,30 +154,33 @@ export default function ModalTextField({
                 {parse(
                     userBeatScore
                     ? `Esse cliente chegou lá!<br />${name.cap()} ATINGIU a meta de ${rewardScore} Pontos 🎉`
-                    : `O cliente ${name.cap()} ainda NÃO ATINGIU a meta de ${rewardScore} Pontos ${!userBeatScore ? `do desafio n.º ${totalPrizes + 1}` : ""}`
+                    : `O cliente ${name.cap()} ainda NÃO ATINGIU a meta de ${rewardScore} Pontos ${!userBeatScore ? `do desafio n.º ${currChall}` : ""}`
                 )}
             </p>
+            <h2 className="my-2 text-center text-purple text-subtitle font-weight-bold">
+                Resumo
+            </h2>
             {userBeatScore && (
-                <div className="text-normal text-purple text-center my-4">
-                    <p className="text-left m-0">
-                        • Desafio Atual:
+                <div className="text-left text-normal text-purple my-1">
+                    <p className="m-0">
+                       ✔ Desafio Atual:
                     </p>
-                    <p><strong>Número {totalPrizes + 1}</strong></p>
+                    <p><strong>• N.º {currChall}</strong></p>
                 </div>
             )}
-            <div className="text-normal text-purple text-center my-2">
-                <p className="text-left m-0">
-                    • Pontuação Atual:
+            <div className="text-left text-normal text-purple my-1">
+                <p className="m-0">
+                   ✔ Pontuação Atual:
                 </p>
-                <p><strong>{userCurrScore} Pontos</strong></p>
+                <p><strong>• {userCurrScore} Pontos</strong></p>
             </div>
             {userBeatScore && (
-                <div className="text-normal text-purple text-center my-2">
-                    <p className="text-left m-0">
-                        • Cliente fica com:
+                <div className="text-left text-normal text-purple my-1">
+                    <p className="m-0">
+                        ✔ Cliente fica com:
                     </p>
                     <p className="font-weight-bold">
-                        {convertDotToComma(remainValue)} Pontos Restantes
+                        • {convertDotToComma(remainValue)} Pontos Restantes
                     </p>
                 </div>
             )}
@@ -244,7 +268,7 @@ export default function ModalTextField({
         <section className="mt-5 my-3 px-3">
             <p className="text-subtitle text-center text-purple">
                 Esse cliente ainda <strong>não possui pontuação </strong>
-                no seu <strong>{totalPrizes + 1}.° desafio</strong> atual.
+                no seu <strong>{currChall}.° desafio</strong> atual.
             </p>
             <div className="container-center">
                 <ButtonMulti

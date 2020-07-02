@@ -24,7 +24,7 @@ export const readNotifications = async (userId, options = {}) => {
     if(forceCliUser) cliUserQuery = "?forceCliUser=true"
 
     try {
-        return await axios.get(`api/notification/read/${userId}${cliUserQuery}`, getHeaderToken(token));
+        return await axios.get(`/api/notification/read/${userId}${cliUserQuery}`, getHeaderToken(token));
     } catch (err) {
         return err;
     }
@@ -49,7 +49,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
     }
 
     try {
-        return await axios.put(`api/notification/send${queryNoToken}${queryCardType}`, notificationOpts, getHeaderToken(token));
+        return await axios.put(`/api/notification/send${queryNoToken}${queryCardType}`, notificationOpts, getHeaderToken(token));
     } catch (err) {
         return err;
     }
@@ -60,7 +60,7 @@ export const markOneClicked = async (userId, cardId, options = {}) => {
     const { forceCliUser } = options;
 
     try {
-        return await axios.put(`api/notification/mark-one-clicked/${userId}?cardId=${cardId}`, options, getHeaderJson);
+        return await axios.put(`/api/notification/mark-one-clicked/${userId}?cardId=${cardId}`, options, getHeaderJson);
     } catch (err) {
         return err;
     }
@@ -71,7 +71,7 @@ export const markAllAsClicked = async (userId, options = {}) => {
     const { forceCliUser } = options;
 
     try {
-        return await axios.put(`api/notification/mark-all-clicked/${userId}`, options, getHeaderJson);
+        return await axios.put(`/api/notification/mark-all-clicked/${userId}`, options, getHeaderJson);
     } catch (err) {
         return err;
     }
@@ -82,7 +82,7 @@ export const markAllAsSeen = async (userId, options = {}) => {
     const { forceCliUser } = options;
 
     try {
-        return await axios.put(`api/notification/mark-all-seen/${userId}`, options, getHeaderJson);
+        return await axios.put(`/api/notification/mark-all-seen/${userId}`, options, getHeaderJson);
     } catch (err) {
         return err;
     }

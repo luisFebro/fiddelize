@@ -1,13 +1,29 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { sendNotification } from '../../redux/actions/notificationActions';
 import { useRunComp } from '../../hooks/useRunComp';
 
+const checkIfAlreadySent = (storageKey, trigger) => {
+    const alreadyAlerted = Boolean(localStorage.getItem(storageKey));
+
+    if(alreadyAlerted && !trigger) localStorage.removeItem(storageKey);
+
+    return alreadyAlerted;
+}
+
+
 export default function useSendNotif(recipientId, cardType, options = {}) {
-    const { subtype, content, trigger, role, senderId } = options;
+    const [sent, setSent] = useState(false);
+    // e.g key = alreadyChallenge | value = cliWonChall
+    const { storage, subtype, content, trigger, role, senderId } = options;
+    const key = storage && storage.key;
+    const value = storage && storage.value;
 
     useEffect(() => {
         let cancel;
-        if(trigger) {
+
+        const alreadySent = key && checkIfAlreadySent(key, trigger);
+
+        if(trigger && !alreadySent) {
             if(cancel) return;
             const options = {
                 subtype,
@@ -18,9 +34,12 @@ export default function useSendNotif(recipientId, cardType, options = {}) {
             sendNotification(recipientId, cardType, options)
             .then(res => {
                 if(res.status !== 200) return console.log("Something wrong with useCountNotif")
-                console.log("a cliWonChall notification type just sent to cli-admin")
+                setSent(true);
+                key && localStorage.setItem(key, value);
             })
         }
         return () => { cancel = true }
-    }, [trigger, recipientId, cardType])
+    }, [trigger, recipientId, cardType, key, value])
+
+    return sent;
 };

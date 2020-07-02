@@ -2,6 +2,7 @@ import React from 'react';
 import extractStrData from '../../../../utils/string/extractStrData';
 import { default as DiscountModalBtn } from "../../../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-text-field/ModalBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { addDays, formatDMY } from '../../../../utils/dates/dateFns';
 
 import {
     textStyle,
@@ -27,7 +28,10 @@ export default function Challenge({
         rewardScore,
         currChall,
         clientFullName,
-        prizeDesc
+        // confirmedChall
+        prizeDeadline,
+        prizeDesc,
+        prizeConfirmationDate,
     } = extractStrData(content);
 
     const showCliWonChallContent = () => (
@@ -36,6 +40,7 @@ export default function Challenge({
             <header className="font-weight-bold">
                 {userName}, estes são os detalhes:
             </header>
+            <br />
             <p>
                 ✔ Nome do Cliente:
                 <br />
@@ -50,6 +55,33 @@ export default function Challenge({
                 ✔ Prêmio do desafio:
                 <br />
                 <strong>• {prizeDesc}</strong>
+            </p>
+        </main>
+    );
+
+    const confirmedChall = subtype === "confirmedChall";
+    const addedDaysToDate = addDays(new Date(prizeConfirmationDate), Number(prizeDeadline));
+    const deadlineDate = formatDMY(addedDaysToDate);
+    const showConfirmedChallContent = () => (
+        confirmedChall &&
+        <main className={textStyle}>
+            <header className="font-weight-bold">
+                {userName}, segue os detalhes:
+            </header>
+            <br />
+            <p>
+                ✔ Prêmio do desafio nº {currChall}:
+                <br />
+                <strong> • {prizeDesc}</strong>
+            </p>
+            <p>
+                ✔ Prazo para resgatar prêmio:
+                <br />
+                <strong>
+                    • {prizeDeadline} dias
+                    <br />
+                    <span > (até {deadlineDate})</span>
+                </strong>
             </p>
         </main>
     );
@@ -86,10 +118,12 @@ export default function Challenge({
             <ShowIllustration role={role} mainImg={mainImg} bizLogo={bizLogo} />
             <ShowBrief brief={brief} />
             {showCliWonChallContent()}
+            {showConfirmedChallContent()}
             <ShowActionBtn
                 role={role}
                 titleCliAdmin="descontar pontos"
-                children={DiscountBtn}
+                titleCliUser="começar novo desafio"
+                children={confirmedChall ? null : DiscountBtn}
             />
         </section>
     );

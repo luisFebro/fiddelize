@@ -78,9 +78,14 @@ export const addPurchaseHistory = async (dispatch, _idUser, bodyToSend) => { // 
     }
 };
 
-export const readPurchaseHistory = async (_idUser, rewardScore) => { // n1
+export const readPurchaseHistory = async (_idUser, rewardScore, options = {}) => { // n1
+    // noResponse is used on ClientScoresPanel and aims to update the purchase list with the most recent prize in the backend. Avoid users to have to access the purchase history to update...
+    const { noResponse } = options;
+    let noResponseQuery = "";
+    if(noResponse) noResponseQuery = "&noResponse=true";
+
     try {
-        return await axios.get(`/api/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}`, getHeaderJson);
+        return await axios.get(`/api/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}${noResponseQuery}`, getHeaderJson);
     } catch(err) {
         return err.response;
     }

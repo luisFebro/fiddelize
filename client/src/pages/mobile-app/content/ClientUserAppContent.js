@@ -76,6 +76,7 @@ function ClientUserAppContent({
     useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const challNotifOptions = React.useCallback(() => ({
         trigger: userBeatChallenge,
+        storage: { key: "alreadyChallenge",  value: "clientWonChall" },
         senderId: _id,
         role: "cliente-admin",
         subtype: "clientWonChall",

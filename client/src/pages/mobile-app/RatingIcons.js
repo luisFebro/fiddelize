@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import animateCSS from '../../utils/animateCSS';
 import { milestoneIcons, iconNamesOnly } from '../../global-data/milestoneIcons';
 import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
+import usePlayAudio from '../../hooks/media/usePlayAudio';
 
 RatingIcons.propTypes = {
     score: PropTypes.number,
@@ -21,6 +22,8 @@ export default function RatingIcons({
     selectTxtStyle,
     colorS,
     colorP, }) {
+
+    usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", { multi: true });
     const appPreviewIcon = gotArrayThisItem(iconNamesOnly, runName) ? runName : false;
     const selectedIcon = appPreviewIcon || selfMilestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
@@ -90,7 +93,7 @@ export default function RatingIcons({
                             <i>
                                 <FontAwesomeIcon
                                     icon={icon}
-                                    className="icon "
+                                    className="icon rating-icon--audio"
                                     style={{fontSize: fontSize}}
                                     id={`icon-${level}`}
                                     onClick={e => handleEffect(e)}
@@ -98,6 +101,8 @@ export default function RatingIcons({
                             </i>
                         }
                         backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                        needArrow
+                        margin="60px 0"
                     />
                 </section>
             ))}

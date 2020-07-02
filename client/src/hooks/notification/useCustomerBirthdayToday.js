@@ -19,7 +19,10 @@ export default function useCustomerBirthDayToday() {
         if(alreadyAlerted) {
             const dotInd = alreadyAlerted.indexOf(".");
             const lastYear = Number(alreadyAlerted.slice(dotInd + 1));
-            if(currYear > lastYear) alreadyAlerted = false
+            if(currYear > lastYear) {
+                alreadyAlerted = false
+                localStorage.removeItem("alreadyBirthAlert");
+            }
         }
 
         if(needAlert && !alreadyAlerted) {
