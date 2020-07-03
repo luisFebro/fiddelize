@@ -73,17 +73,13 @@ const HistorySchema = new Schema(historyData, { _id: true });
 
 const clientUserData = {
     bizId: { type: String, default: "0"},
-    cashCurrScore: {
+    cashCurrScore: { // last score/purchase value
         type: String,
         default: "0"
     },
     currScore: { // last score + cashCurrenScore
         type: Number, // need to be number to ranking the values property.
         default: 0
-    },
-    lastScore: { // backup purpose.
-        type: String,
-        default: "0"
     },
     totalPurchasePrize: { type: Number, default: 0 },
     totalActiveScore: { type: Number, default: 0 }, // Same as currScore, only used on client history to differentiate from totalGeneralScore, active score is total of user's current challenge score.

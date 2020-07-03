@@ -121,13 +121,12 @@ export default function ModalTextField({
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             setRunNotif(true);
-            showSnackbar(dispatch, `OK! Foi descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 5000)
+            showSnackbar(dispatch, `OK! Foi notificado e descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 5000)
             changePrizeStatus(userId, { statusType: "confirmed" })
             .then(res => {
                 if(res.status !== 200) return console.log("Houve um problema ao trocar status do prêmio")
                 setRun(dispatch, "registered");
                 if(notifSent) {
-                    showSnackbar(dispatch, `PRONTO! Uma notificação de confirmação foi enviada para ${name.cap()}.`, 'success', 4000)
                     setTimeout(() => readHighestScores(dispatch, businessId), 2000);
                     setTimeout(() => onClose(), 3900);
                 }

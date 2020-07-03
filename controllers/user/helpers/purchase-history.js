@@ -53,6 +53,11 @@ exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
         const targetObj = arrayOfData[foundObjIndex];
         targetObj[keyToSet] = true;
         status = "OK";
+    } else {
+        return {
+            status,
+            error: `the challenge N.º ${challengeN} was not found`
+        }
     }
 
     return {

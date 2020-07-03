@@ -43,7 +43,7 @@ const WonChallengeBrief = () => (
         </p>
         <p className="text-normal animated zoomIn fast">
             <FontAwesomeIcon icon="check" style={styles.check} />
-            Meta foi de <strong>100 pontos</strong>
+            Meta final foi: <strong>100 pontos</strong>
             <br />
             <FontAwesomeIcon icon="check" style={styles.check} />
             Você fez <strong>150 pontos</strong>

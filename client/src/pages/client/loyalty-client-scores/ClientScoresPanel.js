@@ -113,7 +113,6 @@ function ClientScoresPanel({
                 "clientUserData.cashCurrScore": cashCurrScore,
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.totalActiveScore": currScoreNow, // the same as currScore | active is passive to be discounted and general it is accumulative without discount.
-                "clientUserData.lastScore": lastScore, // the same as currScoreNow
                 "clientUserData.totalGeneralScore": totalGeneralScore + cashCurrScore,
             }
 
@@ -172,7 +171,7 @@ function ClientScoresPanel({
                     &#187; Pontuação Anterior:
                 </p>
                 <p className="text-center text-hero">
-                    {convertDotToComma(lastScore)}
+                    {convertDotToComma(currScoreNow)}
                 </p>
             </section>
             <section>

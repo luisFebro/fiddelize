@@ -266,10 +266,7 @@ exports.addPurchaseHistory = (req, res) => {
     const { _id, clientUserData } = req.profile;
     if(!clientUserData) return res.json({ error: "requres user data array"});
 
-    const prizeCount = clientUserData.totalPurchasePrize * 2; // times 2 because every prize has a brief card alongside
-    const remainderCount = clientUserData.purchaseHistory.filter(card => card.cardType === "remainder").length;
-    console.log("remainderCount", remainderCount);
-    const totalNonPrizeCards = clientUserData.purchaseHistory.length - (prizeCount + remainderCount);
+    const totalNonPrizeCards = clientUserData.purchaseHistory.filter(card => card.cardType === "record").length;
     const lastCardData = clientUserData.purchaseHistory[0];
 
     const scores = {
@@ -339,11 +336,8 @@ exports.changePrizeStatus = (req, res) => {
     const historyData = clientUserData.purchaseHistory;
     const challengeN = clientUserData.totalPurchasePrize + 1;
     const { arrayOfData, error, status } = confirmPrizeStatus(historyData, { statusType, challengeN });
-    console.log("status", status);
-    console.log("error", error);
-    console.log("arrayOfData", arrayOfData);
 
-    if(status === "FAIL") return console.log("ERROR changePrizeStatus: " + error)
+    if(status === "FAIL") return res.status(404).json({ error });
 
     User.findOneAndUpdate(
         { _id },
@@ -353,7 +347,7 @@ exports.changePrizeStatus = (req, res) => {
         }}, { new: false }
     ).exec(err => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
-        res.json({msg: `The status ${statusType.toUpperCase()} was successfully set!`});
+        res.json({msg: `The status ${statusType.toUpperCase()} was successfully set challenge N.º ${challengeN}!`});
     });
 }
 // END USER PURCHASE HISTORY
