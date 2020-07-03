@@ -28,25 +28,17 @@ const styles = {
     check: {...faStyle, fontSize: '25px', marginRight: '10px', color: "var(--themeP)"}
 }
 
-const ChallengeRemainder = () => (
-    <section>
-        Pontos Restantes
-        Opa! Já tem 20 pontos
-        do desafio anterior.
-    </section>
-);
-
-const WonChallengeBrief = () => (
+const WonChallengeBrief = ({ historyData }) => (
     <section className="prize-card--challenge-brief text-purple">
-        <p className="text-subtitle font-weight-bold m-0">
-            Resumo Desafio N.º 1 (DESC FROM BAKCEND)
+        <p className="text-subtitle text-center font-weight-bold m-0">
+            {historyData.desc}
         </p>
         <p className="text-normal animated zoomIn fast">
             <FontAwesomeIcon icon="check" style={styles.check} />
-            Meta final foi: <strong>100 pontos</strong>
+            Meta final foi: <strong>{convertDotToComma(historyData.value)} pontos</strong>
             <br />
             <FontAwesomeIcon icon="check" style={styles.check} />
-            Você fez <strong>150 pontos</strong>
+            Você fez: <strong>{convertDotToComma(historyData.finishedScore)} pontos</strong>
         </p>
     </section>
 );
@@ -89,30 +81,55 @@ export default function PurchaseHistory({ data }) {
         />
     );
 
-    const showDesc = historyData => (
-        <section className="desc text-left">
-            <div className="inner-container">
-                <div>
-                    <FontAwesomeIcon icon={historyData.icon} className="pr-1" style={faStyle}/>
-                    #{historyData.challengeN}
+    const showDesc = (historyData, isRemainder) => {
+        const { selfMilestoneIcon: cardIcon } = pickCurrChallData(rewardList, historyData.challengeN - 1);
+        return(
+            <section className="desc text-left">
+                <div className={`${!isRemainder ? "inner-container" : ""}`}>
+                    {!isRemainder &&
+                    <div>
+                        <FontAwesomeIcon icon={cardIcon} className="pr-1" style={faStyle}/>
+                        #{historyData.challengeN}
+                    </div>}
+                    <div>
+                        {!isRemainder ? (
+                            <span className="font-weight-bold text-normal">
+                                {historyData.desc}
+                            </span>
+                        ) : (
+                            <Fragment>
+                                <p className="m-0 text-center font-weight-bold text-normal">
+                                    {historyData.desc}
+                                </p>
+                                <p
+                                    className="m-0 mt-2 text-left mx-4 font-weight-bold text-small"
+                                    style={{lineHeight: "10px"}}
+                                >
+                                    Opa! Você já começa o desafio seguinte de
+                                    N.º {historyData.challengeN} com
+                                    <strong className="text-normal font-weight-bold"> {convertDotToComma(historyData.value)} pontos.</strong>
+                                </p>
+                            </Fragment>
+                        )}
+                        {!isRemainder && (
+                            <Fragment>
+                                <br />
+                                <br />
+                                <span className="text-small font-weight-bold">
+                                    {formatDMY(historyData.createdAt)}
+                                    <br />
+                                    {fromNow(historyData.createdAt)}
+                                </span>
+                            </Fragment>
+                        )}
+                    </div>
                 </div>
-                <div>
-                    <span className="font-weight-bold text-normal">
-                        {historyData.desc}
-                    </span>
-                    <br />
-                    <br />
-                    <span className="text-small font-weight-bold">
-                        {formatDMY(historyData.createdAt)}
-                        <br />
-                        {fromNow(historyData.createdAt)}
-                    </span>
-                </div>
-            </div>
-        </section>
-    );
+            </section>
+        );
+    }
 
-    const showScore = historyData => (
+    const showScore = (historyData, isRemainder) => (
+        !isRemainder &&
         <div className="font-weight-bold text-subtitle text-center container-center">
             {convertDotToComma(historyData.value)}
         </div>
@@ -121,29 +138,31 @@ export default function PurchaseHistory({ data }) {
     const mainData = purchaseHistoryArray && purchaseHistoryArray.map(historyData => {
         if(historyData.cardType.includes("prize")) {
             return(
-                <Fragment>
-                    <PrizeCard
-                        historyData={historyData}
-                        colorS={selfThemeSColor}
-                        colorP={selfThemePColor}
-                    />
-                    <WonChallengeBrief />
-                </Fragment>
+                <PrizeCard
+                    historyData={historyData}
+                    colorS={selfThemeSColor}
+                    colorP={selfThemePColor}
+                />
             )
         }
 
-        if(historyData.cardType.includes("remainder")) {
-            return(<ChallengeRemainder />);
-        } else {
+        if(historyData.cardType.includes("brief")) {
+            return(
+                <WonChallengeBrief historyData={historyData} />
+            );
+        }
+
+        const isRemainder = historyData.cardType === "remainder";
+        if(historyData.cardType === "record" || isRemainder) {
             return(
                 <Card
                     key={historyData.desc}
                     className="mt-2"
                     style={{backgroundColor: 'var(--themePDark--' + selfThemeBackColor + ')'}}
                 >
-                    <section className={`text-white font-weight-bold purchase-history-table-data--root text-normal text-center text-purple`}>
-                        {showDesc(historyData)}
-                        {showScore(historyData)}
+                    <section className={`text-white font-weight-bold ${!isRemainder ? "purchase-history-table-data--root" : "my-2"} text-normal text-center text-purple`}>
+                        {showDesc(historyData, isRemainder)}
+                        {showScore(historyData, isRemainder)}
                     </section>
                 </Card>
             );
@@ -239,6 +258,9 @@ export default function PurchaseHistory({ data }) {
                             {showAllTimeTotal()}
                             {mainData}
                             {showError()}
+                            <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                                Isso é tudo, {name}.
+                            </p>
                         </Fragment>
                     )}
                 </Fragment>

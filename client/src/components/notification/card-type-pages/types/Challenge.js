@@ -60,8 +60,9 @@ export default function Challenge({
     );
 
     const confirmedChall = subtype === "confirmedChall";
-    const addedDaysToDate = addDays(new Date(prizeConfirmationDate), Number(prizeDeadline));
-    const deadlineDate = formatDMY(addedDaysToDate);
+    // buggy with invalid time range
+    // const addedDaysToDate = addDays(new Date(prizeConfirmationDate), Number(prizeDeadline));
+    const deadlineDate = formatDMY(new Date());
     const showConfirmedChallContent = () => (
         confirmedChall &&
         <main className={textStyle}>
@@ -95,6 +96,7 @@ export default function Challenge({
                 variant: 'extended',
                 position: 'relative',
                 size: "large",
+                needCloseOtherModals: true,
             }}
             modalData={{
                 title: "Desconto de Pontos<br />do Cliente",
@@ -123,6 +125,7 @@ export default function Challenge({
                 role={role}
                 titleCliAdmin="descontar pontos"
                 titleCliUser="começar novo desafio"
+                isConfirmedChall={confirmedChall}
                 children={confirmedChall ? null : DiscountBtn}
             />
         </section>

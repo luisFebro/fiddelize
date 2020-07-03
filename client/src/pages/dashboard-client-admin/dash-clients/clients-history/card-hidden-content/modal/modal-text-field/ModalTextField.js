@@ -35,7 +35,7 @@ ModalTextField.propTypes = {
 };
 
 export default function ModalTextField({
-    open, onClose, modalData }) {
+    open, onClose, modalData, closeOtherModals }) {
     const [data, setData] = useState({
         valueOnField: modalData.userCurrScore && modalData.userCurrScore.toString(),
         remainValue: '0,0',
@@ -43,6 +43,7 @@ export default function ModalTextField({
     const [gotError, setGotError] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
     const [runNotif, setRunNotif] = useState(false);
+    console.log("runNotif", runNotif);
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
@@ -70,14 +71,14 @@ export default function ModalTextField({
     rewardScore = pickedObj.rewardScore;
     const mainReward = pickedObj.mainReward;
 
-    const challNotifOptions = React.useCallback(() => ({
+    const challNotifOptions = {
         subtype: "confirmedChall",
         trigger: runNotif,
         senderId: businessId,
         role: "cliente",
         content: `currChall:${currChall};prizeDeadline:${rewardDeadline};prizeDesc:${mainReward};prizeConfirmationDate:${new Date()};`,
-    }), [runNotif, businessId])
-    const notifSent = useSendNotif(userId, "challenge", challNotifOptions())
+    }
+    const notifSent = useSendNotif(userId, "challenge", challNotifOptions)
 
 
     const userBeatScore = userCurrScore >= rewardScore;
@@ -120,13 +121,14 @@ export default function ModalTextField({
         updateUser(dispatch, bodyToSend, userId, false)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            setRunNotif(true);
-            showSnackbar(dispatch, `OK! Foi notificado e descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 5000)
+            if(closeOtherModals) { closeOtherModals() } // use to close other open notification pages.
             changePrizeStatus(userId, { statusType: "confirmed" })
             .then(res => {
-                if(res.status !== 200) return console.log("Houve um problema ao trocar status do prêmio")
-                setRun(dispatch, "registered");
+                // if(res.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
+                setRunNotif(true);
                 if(notifSent) {
+                    showSnackbar(dispatch, `OK! Cliente notificado e descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 7000)
+                    setRun(dispatch, "registered");
                     setTimeout(() => readHighestScores(dispatch, businessId), 2000);
                     setTimeout(() => onClose(), 3900);
                 }
@@ -299,6 +301,7 @@ export default function ModalTextField({
     return (
         <Dialog
             PaperProps={{ style: {backgroundColor: 'var(--mainWhite)', maxWidth: '450px'}}}
+            style={{ zIndex: 10000 }}
             maxWidth="md"
             open={open}
             aria-labelledby="form-dialog-title"

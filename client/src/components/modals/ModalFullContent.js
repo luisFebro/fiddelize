@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CloseButton from '../buttons/CloseButton';
 import RadiusBtn from '../buttons/RadiusBtn';
 import Dialog from '@material-ui/core/Dialog';
+import { useRunComp } from '../../hooks/useRunComp';
 
 ModalFullContent.propTypes = {
     contentComp: PropTypes.node,
@@ -18,12 +19,13 @@ export default function ModalFullContent({
     animatedClass,
     exitBtn,
 }) {
-
+    const { runName } = useRunComp();
     let defaultStyle = { zIndex: 3000, overflowX: 'hidden', };
-    // Not working
-    // if(style) {
-    //     defaultStyle = { ...defaultStyle, ...style };
-    // }
+    const handleOpen = () => {
+        if(runName === "closeModalFullContent") return false;
+        return fullOpen;
+    }
+
     return (
         <Dialog
             PaperProps={{ style: {backgroundColor: 'var(--mainWhite)', maxWidth: '500px', overflowX: 'hidden'}}}
@@ -31,7 +33,7 @@ export default function ModalFullContent({
             fullWidth
             style={defaultStyle}
             fullScreen={true}
-            open={fullOpen}
+            open={handleOpen()}
             aria-labelledby="form-dialog-title"
             className={`${animatedClass || ""}`}
             onScroll={null}

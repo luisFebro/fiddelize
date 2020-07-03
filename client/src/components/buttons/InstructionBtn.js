@@ -18,7 +18,7 @@ export default function InstructionBtn({
 
     return (
         <section>
-            <div className={closeBtn && blurEffect && "blur-back"}></div>
+            <div className={(closeBtn && blurEffect) ? "blur-back" : undefined}></div>
             {needTooltip ? (
                 <section
                     className="position-relative disable-blur"

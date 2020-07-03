@@ -58,6 +58,7 @@ export const ShowActionBtn = ({
     role,
     titleCliUser = 'Explorar seu App',
     titleCliAdmin = 'Abrir Painel de Controle',
+    isConfirmedChall = false,
     children,
 }) => {
     const dispatch = useStoreDispatch();
@@ -77,11 +78,7 @@ export const ShowActionBtn = ({
     return (
         <div className="my-5 container-center">
             {children
-            ? (
-                <Fragment>
-                    {children}
-                </Fragment>
-            ) : (
+            ? children : (
                 <Link
                     className="no-text-decoration"
                     to={handleBtnPath}

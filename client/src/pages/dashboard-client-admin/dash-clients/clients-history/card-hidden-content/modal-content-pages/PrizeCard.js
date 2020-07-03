@@ -37,7 +37,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                     </p>
                 </div>
                 <div>
-                    <p className="text-title">Você ganhou:</p>
+                    <p className="text-title">Você ganhou!</p>
                     <div className="font-weight-bold text-normal">
                         {!prizeView
                         ? (
@@ -102,10 +102,10 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
         </section>
     );
     return(
-        <section className="position-relative animated slideInDown fast">
+        <section className="position-relative animated slideInUp fast">
             <Card
                 key={historyData.desc}
-                className="mt-4"
+                className="mt-2"
                 style={{backgroundColor: 'var(--themePLight--' + colorP + ')'}}
             >
                 {displayMainContent()}

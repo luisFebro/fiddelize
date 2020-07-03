@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ModalTextField from './ModalTextField';
 import { buttonFabType } from '../../../../../../../types';
 import handleChange from '../../../../../../../utils/form/use-state/handleChange';
+import { setRun } from '../../../../../../../hooks/useRunComp';
+import { useStoreDispatch } from 'easy-peasy';
 
 ModalBtn.propTypes = {
     modalData: PropTypes.object.isRequired,
@@ -14,7 +16,8 @@ ModalBtn.propTypes = {
 export default function ModalBtn({
     modalData, button, setSelectedValue }) {
     const [open, setOpen] = useState(false);
-    console.log("open", open);
+
+    const dispatch = useStoreDispatch();
 
     const {
         title,
@@ -24,7 +27,8 @@ export default function ModalBtn({
         left,
         backgroundColor,
         position,
-        size, } = button;
+        size,
+        needCloseOtherModals, } = button;
 
     const onOpen = () => {
       setOpen(true);
@@ -34,6 +38,10 @@ export default function ModalBtn({
       setOpen(false);
       // setSelectedValue(value); using redux update instead
     };
+
+    const handleCloseModals = () => {
+        needCloseOtherModals && setRun(dispatch, "closeModalFullContent");
+    }
 
     return (
         <div>
@@ -52,6 +60,7 @@ export default function ModalBtn({
                 open={open}
                 onClose={onClose}
                 modalData={modalData}
+                closeOtherModals={handleCloseModals}
             />
         </div>
     );

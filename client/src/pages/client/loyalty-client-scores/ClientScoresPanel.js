@@ -84,16 +84,16 @@ function ClientScoresPanel({
         }
     }
 
-    let currScore = currentScore;
-    if(typeof currScore === "undefined") {
-        currScore = "0";
+    let currScoreBefore = currentScore;
+    if(typeof currScoreBefore === "undefined") {
+        currScoreBefore = "0";
     }
-    currScore = getIntOrFloat(currScore);
+    currScoreBefore = getIntOrFloat(currScoreBefore);
 
     let cashCurrScore = convertCommaToDot(valuePaid);
     cashCurrScore = getIntOrFloat(cashCurrScore);
 
-    let currScoreNow = parseFloat(currScore) + parseFloat(cashCurrScore);
+    let currScoreNow = parseFloat(currScoreBefore) + parseFloat(cashCurrScore);
     currScoreNow = getIntOrFloat(currScoreNow);
 
     const userBeatChallenge = currScoreNow >= maxScore;
@@ -171,7 +171,7 @@ function ClientScoresPanel({
                     &#187; Pontuação Anterior:
                 </p>
                 <p className="text-center text-hero">
-                    {convertDotToComma(currScoreNow)}
+                    {convertDotToComma(currScoreBefore)}
                 </p>
             </section>
             <section>

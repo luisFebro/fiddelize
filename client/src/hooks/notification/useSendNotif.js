@@ -15,6 +15,7 @@ export default function useSendNotif(recipientId, cardType, options = {}) {
     const [sent, setSent] = useState(false);
     // e.g key = alreadyChallenge | value = cliWonChall
     const { storage, subtype, content, trigger, role, senderId } = options;
+    console.log("trigger", trigger);
     const key = storage && storage.key;
     const value = storage && storage.value;
 

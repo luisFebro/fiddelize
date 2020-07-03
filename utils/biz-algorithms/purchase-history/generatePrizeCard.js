@@ -28,9 +28,15 @@ function generatePrizeCard(historyDataArray, scores = {}) {
     const cliUserBeatedGoal = currScore >= Number(rewardScore);
 
     const firstElem = newArray[0];
-    const skipIfLastCard = (firstElem.cardType === "prize" || firstElem.cardType === "remainder");
+    const generatePrize = () => {
+        const skipIfLastCard = (firstElem.cardType === "prize" || firstElem.cardType === "remainder");
+        const skipIfPendingChallenges = newArray.find(card => card.cardType === "prize" && card.isPrizeConfirmed === false).length
+        console.log("skipIfPendingChallenges", skipIfPendingChallenges);
+        if(skipIfLastCard || skipIfPendingChallenges) return false;
+        return true;
+    }
 
-    if(cliUserBeatedGoal && !skipIfLastCard) {
+    if(cliUserBeatedGoal && generatePrize()) {
         firstElem.desc = firstElem.desc.replace("Última Compra", "Compra");
 
         const briefCard = { cardType: 'brief', value: rewardScore, finishedScore: currScore, desc: `Resumo desafio N.º ${currChall}` }
