@@ -76,11 +76,13 @@ function NotifCard({
             {title}
         </div>
     );
+
+    const cardBrief = brief.replace(/§/gi, "");
     const showCardDesc = cardType => {
         return(
             <section className="desc text-left text-white font-weight-bold">
                 <p className="brief mb-2 text-small">
-                    {truncate(brief, isSmall ? 52 : 75)}
+                    {truncate(cardBrief, isSmall ? 52 : 75)}
                 </p>
                 {showDate()}
             </section>

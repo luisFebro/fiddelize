@@ -14,7 +14,6 @@ import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 
 // CUSTOMIZED DATA
-import useSendNotif from '../../../../../../../hooks/notification/useSendNotif';
 import { modalTextFieldDashboardType } from '../../../../../../../types';
 import { convertCommaToDot, convertDotToComma } from '../../../../../../../utils/numbers/convertDotComma';
 import { updateUser } from '../../../../../../../redux/actions/userActions';
@@ -26,6 +25,7 @@ import { useAppSystem, useClientAdmin } from '../../../../../../../hooks/useRole
 import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
 import { setRun } from '../../../../../../../redux/actions/globalActions';
 import { changePrizeStatus } from '../../../../../../../redux/actions/userActions';
+import { sendNotification } from '../../../../../../../redux/actions/notificationActions';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -42,8 +42,6 @@ export default function ModalTextField({
     });
     const [gotError, setGotError] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
-    const [runNotif, setRunNotif] = useState(false);
-    console.log("runNotif", runNotif);
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
@@ -70,16 +68,6 @@ export default function ModalTextField({
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
     rewardScore = pickedObj.rewardScore;
     const mainReward = pickedObj.mainReward;
-
-    const challNotifOptions = {
-        subtype: "confirmedChall",
-        trigger: runNotif,
-        senderId: businessId,
-        role: "cliente",
-        content: `currChall:${currChall};prizeDeadline:${rewardDeadline};prizeDesc:${mainReward};prizeConfirmationDate:${new Date()};`,
-    }
-    const notifSent = useSendNotif(userId, "challenge", challNotifOptions)
-
 
     const userBeatScore = userCurrScore >= rewardScore;
     useEffect(() => {
@@ -109,31 +97,38 @@ export default function ModalTextField({
         },
     }
 
-    const handleSubmit = () => {
-        const bodyToSend = {
+    const handleSubmit = async () => {
+        const updateUserBody = {
             "clientUserData.currScore": parseFloat(remainValue),
             "clientUserData.totalActiveScore": parseFloat(totalActiveScore - rewardScore), // the same as currScore, this is only used to differentiate from totalGeneralScore.
             // This is handled in the backend with changePrizeStatus
             // "clientUserData.totalPurchasePrize": totalPrizes + 1, // the same as currScore, this is only used to differentiate from totalGeneralScore.
         }
 
+        const sendNotifBody = {
+            subtype: "confirmedChall",
+            content: `currChall:${currChall};prizeDeadline:${rewardDeadline};prizeDesc:${mainReward};prizeConfirmationDate:${new Date()};`,
+            role: "cliente",
+            senderId: businessId,
+        }
+
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
-        updateUser(dispatch, bodyToSend, userId, false)
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            if(closeOtherModals) { closeOtherModals() } // use to close other open notification pages.
-            changePrizeStatus(userId, { statusType: "confirmed" })
-            .then(res => {
-                // if(res.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
-                setRunNotif(true);
-                if(notifSent) {
-                    showSnackbar(dispatch, `OK! Cliente notificado e descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 7000)
-                    setRun(dispatch, "registered");
-                    setTimeout(() => readHighestScores(dispatch, businessId), 2000);
-                    setTimeout(() => onClose(), 3900);
-                }
-            })
-        })
+
+        const updateRes = await updateUser(dispatch, updateUserBody, userId, false)
+        if(updateRes.status !== 200) return showSnackbar(dispatch, updateRes.data.msg, 'error')
+        if(closeOtherModals) { closeOtherModals() } // use to close other open notification pages.
+
+        const notifRes = await sendNotification(userId, "challenge", sendNotifBody)
+        if(notifRes.status !== 200) return showSnackbar(dispatch, "Um problema aconteceu ao enviar notificação para o cliente", 'error')
+
+        const prizeStatusRes = await changePrizeStatus(userId, { statusType: "confirmed" })
+        // if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
+        showSnackbar(dispatch, `OK! Cliente notificado e descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 7000)
+        if(!closeOtherModals) {
+            setRun(dispatch, "registered");
+            setTimeout(() => readHighestScores(dispatch, businessId), 2000);
+        }
+        setTimeout(() => onClose(), 3900);
     };
 
     const showTitle = () => (
@@ -164,7 +159,7 @@ export default function ModalTextField({
             {userBeatScore && (
                 <div className="text-left text-normal text-purple my-1">
                     <p className="m-0">
-                       ✔ Desafio Atual:
+                       ✔ Desafio Concluído:
                     </p>
                     <p><strong>• N.º {currChall}</strong></p>
                 </div>

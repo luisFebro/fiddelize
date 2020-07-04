@@ -171,7 +171,7 @@ export default function PurchaseHistory({ data }) {
 
     const showAllTimeTotal = () => {
         const conditionFirstChallenge = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
-        const conditionAfterFirstChall = `• Pontos desafio n.º ${totalPurchasePrize + 1}:`
+        const conditionAfterFirstChall = `• Desafio atual #${challengeN + 1}:`
 
         const handleCurrChallengeScore = (totals, maxScore, scoresList) => {
             const { totalGeneralScore, totalPurchasePrize } = totals;
@@ -191,8 +191,8 @@ export default function PurchaseHistory({ data }) {
 
         let totalScoreFirstChall = totalGeneralScore || 0;
         let totalScoreAfterFirstChall = handleCurrChallengeScore({ totalGeneralScore, totalPurchasePrize }, maxScore);
-        totalScoreFirstChall = convertDotToComma(totalScoreFirstChall);
-        totalScoreAfterFirstChall = convertDotToComma(totalScoreAfterFirstChall);
+        totalScoreFirstChall = isSmall ? convertDotToComma(totalScoreFirstChall) : `${convertDotToComma(totalScoreFirstChall)} pontos`;
+        totalScoreAfterFirstChall = isSmall ? convertDotToComma(totalScoreAfterFirstChall) : `${convertDotToComma(totalScoreAfterFirstChall)} pontos`;
 
         const isAfterFirstChall = totalPurchasePrize >= 1;
         return(
@@ -204,9 +204,8 @@ export default function PurchaseHistory({ data }) {
                     <div className="purchase-history-sum--root">
                         <div className="scores">
                             <span>{isAfterFirstChall ? conditionAfterFirstChall : conditionFirstChallenge}</span>
-                            <span className="value">{isAfterFirstChall ? totalScoreAfterFirstChall : totalScoreFirstChall}</span>
-                        </div>
-                        <div className="challenges">
+                            <p className="d-inline-block value m-0 ml-2">{isAfterFirstChall ? totalScoreAfterFirstChall : totalScoreFirstChall}</p>
+                            <br />
                             <span>
                                 • Desafios
                                 <FontAwesomeIcon
@@ -215,14 +214,14 @@ export default function PurchaseHistory({ data }) {
                                     style={{ marginLeft: '5px' }}
                                 />:
                             </span>
-                            <span className="value">{totalPurchasePrize ? totalPurchasePrize : 0}</span>
+                            <p className="d-inline-block value m-0 ml-2">{totalPurchasePrize ? totalPurchasePrize : 0}</p>
                         </div>
                     </div>
                 </Card>
                 {isAfterFirstChall && (
                     <div className="badge-total-scores">
                         <p className="text text-shadow text-normal text-white">
-                            <span className="number">{totalGeneralScore}</span>
+                            <p className="text-center m-0 mt-2">{totalGeneralScore}</p>
                             <br />
                             Pontos Gerais
                         </p>

@@ -136,29 +136,16 @@
 // purchase total
 .purchase-history-sum--root {
     position: relative;
-    max-height: 75px;
 }
 
-.purchase-history-sum--root .scores,
-.purchase-history-sum--root .challenges {
-    display: flex;
-    align-items: center;
+.purchase-history-sum--root .scores {
     font-weight: bold;
-    padding: 5px 10px;
+    padding: 8px;
     margin: 0;
-}
-.purchase-history-sum--root .challenges {
-    position: relative;
-    top: -20px;
-}
-
-.purchase-history-sum--root .scores span:first-child, {
-    flex-basis: 70%;
 }
 
 .purchase-history-sum--root .value, {
     font-size: 30px;
-    margin-left: 5px;
 }
 
 //
@@ -175,18 +162,15 @@
 
 .card-total .badge-total-scores {
     position: absolute;
-    bottom: -25px;
+    bottom: -20px;
     right: -5px;
     filter: drop-shadow(.001em .1em .1em var(--mainDark));
     border: solid 1px var(--mainWhite);
-    display: flex;
-    justify-content: center;
     border-radius: 20% 20%;
     padding: 5px;
+    height: 40px;
     margin: 10px 5px;
-    width: 150px;
-    height: 50px;
-    line-height: 6px;
+    width: 130px;
     background-color: var(--niceUiYellow);
     text-align: center;
 }
@@ -196,11 +180,14 @@
 }
 
 .card-total .badge-total-scores .text {
-    position: relative;
-    top: 9px;
     color: white;
-    align-self: center;
     font-size: 18px;
+    line-height: 10px;
+    font-weight: bolder;
+}
+
+.card-total .badge-total-scores .text > p {
+    font-size: 30px;
 }
 
 .card-total .badge-total-scores .number {

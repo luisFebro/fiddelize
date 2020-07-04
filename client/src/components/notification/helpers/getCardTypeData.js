@@ -28,17 +28,18 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         case "challenge":
             const {
-                clientFullName: thisClientName,
+                clientFullName,
                 currChall: thisCurrChall,
+                prizeDesc,
             } = extractStrData(content);
 
             if(subtype === "clientWonChall") {
                 title = `Cliente concluíu desafio`;
-                brief = `Cliente ${getFirstName(thisClientName)} concluíu desafio de n.° ${thisCurrChall}. Confirme esse desafio do cliente descontando pontos.`
+                brief = `Cliente §${clientFullName}§ concluíu desafio de §N.° ${thisCurrChall}§ e ganhou §${prizeDesc}§. Confirme o desafio abaixo.`
             }
             if(subtype === "confirmedChall") {
                 title = `Desafio Confirmado`;
-                brief = `Opa! Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e disponível para resgate.`
+                brief = `Opa! Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio disponível para resgate.`
             }
             circularImg = "/img/icons/fiddelize-trophy.svg";
             break;

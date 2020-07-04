@@ -6,13 +6,34 @@ let generatedPrizeCard = {
     createdAt: new Date(),
 };
 
-const addPrize = (newArray, options = {}) => {
+const addBrief = (newArray, options = {}) => {
+    const { currChall, rewardScore, } = options;
+    const filteredRecordCards = newArray && newArray.filter(card => card.cardType === "record" && card.challengeN === currChall);
+    // even if there is an empty array, it will return a default zero.
+    const finishedScore = filteredRecordCards.reduce((acc, next) => acc + next.value, 0);
+    const briefCard = { cardType: 'brief', value: rewardScore, finishedScore, desc: `Resumo desafio N.º ${currChall}` }
+    newArray.unshift(briefCard);
+
+    return finishedScore;
+}
+
+const addPrizeCard = (newArray, options = {}) => {
     const { currChall } = options;
 
     const prizeCardNumber = currChall;
     generatedPrizeCard = { ...generatedPrizeCard, challengeN: prizeCardNumber };
 
     newArray.unshift(generatedPrizeCard);
+}
+
+const addRemainder = (newArray, options = {}) => {
+    let { currChall, challTotalScore, rewardScore } = options;
+
+    const remainder = challTotalScore - rewardScore;
+    if(remainder) {
+        const remainderCard = { challengeN: ++currChall, cardType: 'remainder', value: remainder, desc: `Pontos Restantes` }
+        newArray.unshift(remainderCard);
+    }
 }
 
 function generatePrizeCard(historyDataArray, scores = {}) {
@@ -30,8 +51,7 @@ function generatePrizeCard(historyDataArray, scores = {}) {
     const firstElem = newArray[0];
     const generatePrize = () => {
         const skipIfLastCard = (firstElem.cardType === "prize" || firstElem.cardType === "remainder");
-        const skipIfPendingChallenges = newArray.find(card => card.cardType === "prize" && card.isPrizeConfirmed === false).length
-        console.log("skipIfPendingChallenges", skipIfPendingChallenges);
+        const skipIfPendingChallenges = newArray && newArray.filter(card => card.cardType === "prize" && card.isPrizeConfirmed === false).length;
         if(skipIfLastCard || skipIfPendingChallenges) return false;
         return true;
     }
@@ -39,16 +59,9 @@ function generatePrizeCard(historyDataArray, scores = {}) {
     if(cliUserBeatedGoal && generatePrize()) {
         firstElem.desc = firstElem.desc.replace("Última Compra", "Compra");
 
-        const briefCard = { cardType: 'brief', value: rewardScore, finishedScore: currScore, desc: `Resumo desafio N.º ${currChall}` }
-        newArray.unshift(briefCard);
-
-        addPrize(newArray, { currChall });
-
-        const remainder = currScore - rewardScore;
-        if(remainder) {
-            const remainderCard = { challengeN: ++currChall, cardType: 'remainder', value: remainder, desc: `Pontos Restantes` }
-            newArray.unshift(remainderCard);
-        }
+        let challTotalScore = addBrief(newArray, { currChall, rewardScore })
+        addPrizeCard(newArray, { currChall });
+        addRemainder(newArray, { challTotalScore, currChall, rewardScore })
     }
 
     return newArray;

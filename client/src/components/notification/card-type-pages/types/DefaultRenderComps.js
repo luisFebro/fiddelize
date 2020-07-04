@@ -5,6 +5,7 @@ import { setRun } from '../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
 import { useClientAdmin, useProfile, } from '../../../../hooks/useRoleData';
 import ImgLoader from '../../../../components/ImgLoader';
+import applyTextStyle from '../../../../utils/string/applyTextStyle';
 
 export const textStyle = 'text-purple text-left text-normal mx-3';
 
@@ -18,7 +19,9 @@ export const ShowTitle = ({ text }) => (
     </div>
 );
 
-export const ShowIllustration = ({ role, mainImg, bizLogo }) => {
+export const ShowIllustration = ({ role, mainImg, bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png" }) => {
+    console.log("bizLogo", bizLogo);
+    console.log("role", role);
     const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
     return (
         <div className="container-center position-relative my-5">
@@ -48,11 +51,17 @@ export const ShowIllustration = ({ role, mainImg, bizLogo }) => {
     );
 }
 
-export const ShowBrief = ({ brief }) => (
-    <p className={`${textStyle} mt-3 font-weight-bold`}>
-        {brief}
-    </p>
-);
+export const ShowBrief = ({ brief, module = "fontSize" }) => {
+    const styledTxt = applyTextStyle(brief, module, { fontSize: "25px" });
+    return(
+        <p
+            className={`${textStyle} mt-3 font-weight-bold`}
+            // dangerouslySetInnerHTML={{ __html: styledTxt }}
+        >
+            {styledTxt}
+        </p>
+    );
+}
 
 export const ShowActionBtn = ({
     role,
@@ -76,7 +85,7 @@ export const ShowActionBtn = ({
     }
 
     return (
-        <div className="my-5 container-center">
+        <div className="my-4 container-center">
             {children
             ? children : (
                 <Link

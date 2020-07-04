@@ -275,8 +275,6 @@ exports.addPurchaseHistory = (req, res) => {
     }
 
     let [currCard, lastCard] = generateHistoryData(lastCardData, scores, { totalNonPrizeCards, reqBody: req.body });
-    console.log("currCard", currCard);
-    console.log("lastCard", lastCard);
 
     // if the lastCard returns with data, this
     // means that we are going to delete the last purchase data and add the last card on the top

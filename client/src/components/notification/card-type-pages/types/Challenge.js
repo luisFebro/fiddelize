@@ -34,32 +34,10 @@ export default function Challenge({
         prizeConfirmationDate,
     } = extractStrData(content);
 
-    const showCliWonChallContent = () => (
-        subtype === "clientWonChall" &&
-        <main className={textStyle}>
-            <header className="font-weight-bold">
-                {userName}, estes são os detalhes:
-            </header>
-            <br />
-            <p>
-                ✔ Nome do Cliente:
-                <br />
-                <strong> • {clientFullName}</strong>
-            </p>
-            <p>
-                ✔ Desafio Concluído:
-                <br />
-                <strong>• N.º {currChall}</strong>
-            </p>
-            <p>
-                ✔ Prêmio do desafio:
-                <br />
-                <strong>• {prizeDesc}</strong>
-            </p>
-        </main>
-    );
+    const showCliWonChallContent = () => null; // infos moved to discount modal or brief
 
     const confirmedChall = subtype === "confirmedChall";
+    if(confirmedChall) role = "cliente";
     // buggy with invalid time range
     // const addedDaysToDate = addDays(new Date(prizeConfirmationDate), Number(prizeDeadline));
     const deadlineDate = formatDMY(new Date());
@@ -116,7 +94,7 @@ export default function Challenge({
 
     return (
         <section>
-            <ShowTitle text="Cliente concluíu desafio" />
+            <ShowTitle text={confirmedChall ? "Confirmação de Prêmio" : "Cliente concluíu desafio"} />
             <ShowIllustration role={role} mainImg={mainImg} bizLogo={bizLogo} />
             <ShowBrief brief={brief} />
             {showCliWonChallContent()}
@@ -125,7 +103,6 @@ export default function Challenge({
                 role={role}
                 titleCliAdmin="descontar pontos"
                 titleCliUser="começar novo desafio"
-                isConfirmedChall={confirmedChall}
                 children={confirmedChall ? null : DiscountBtn}
             />
         </section>

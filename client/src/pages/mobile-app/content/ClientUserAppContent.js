@@ -60,6 +60,7 @@ function ClientUserAppContent({
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
     let { role, name, _id } = useProfile();
+    const fullName = name;
     const totalNotifications = useCountNotif(_id, { role, forceCliUser: true });
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize } = useClientUser();
@@ -80,7 +81,7 @@ function ClientUserAppContent({
         senderId: _id,
         role: "cliente-admin",
         subtype: "clientWonChall",
-        content: `rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${name};prizeDesc:${mainReward};`,
+        content: `rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};`,
     }), [userBeatChallenge, _id])
     useSendNotif(businessId, "challenge", challNotifOptions())
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
