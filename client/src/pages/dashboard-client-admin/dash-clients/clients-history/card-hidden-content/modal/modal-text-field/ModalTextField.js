@@ -114,20 +114,25 @@ export default function ModalTextField({
 
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
 
-        const updateRes = await updateUser(dispatch, updateUserBody, userId, false)
-        if(updateRes.status !== 200) return showSnackbar(dispatch, updateRes.data.msg, 'error')
-        if(closeOtherModals) { closeOtherModals() } // use to close other open notification pages.
+        const [updateRes, notifRes, prizeStatusRes] = await Promise.all([
+            updateUser(dispatch, updateUserBody, userId, false),
+            sendNotification(userId, "challenge", sendNotifBody),
+            changePrizeStatus(userId, { statusType: "confirmed" }),
+        ]);
 
-        const notifRes = await sendNotification(userId, "challenge", sendNotifBody)
         if(notifRes.status !== 200) return showSnackbar(dispatch, "Um problema aconteceu ao enviar notificação para o cliente", 'error')
+        if(updateRes.status !== 200) return showSnackbar(dispatch, "Algo deu errado ao atualizar cliente", 'error')
+        if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
 
-        const prizeStatusRes = await changePrizeStatus(userId, { statusType: "confirmed" })
-        // if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
-        showSnackbar(dispatch, `OK! Cliente notificado e descontado ${rewardScore} pontos de ${name.cap()}...`, 'success', 7000)
-        if(!closeOtherModals) {
+        setTimeout(() => showSnackbar(dispatch, `OK! Cliente notificado e descontado ${rewardScore} pontos de ${name.cap()}.`, 'success', 7000), 4900);
+
+        if(closeOtherModals) {
+            closeOtherModals() // use to close other open notification pages.
+        } else {
             setRun(dispatch, "registered");
             setTimeout(() => readHighestScores(dispatch, businessId), 2000);
         }
+
         setTimeout(() => onClose(), 3900);
     };
 

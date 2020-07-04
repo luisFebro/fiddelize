@@ -25,7 +25,10 @@ exports.mwIsAuth = (req, res, next) => {
         process.env.JWT_SECRET,
         (err, decoded) => {
             let isAuthUser = Boolean(_id && decoded && decoded.id === _id.toString());
-            if(err) console.log(`JWT ERROR: ${err.message}`);
+            if(err) {
+                if(err && err.message.includes("expired")) return res.status(403).json({ error: "jwt expired" });
+                console.log(`JWT ERROR: ${err.message}`)
+            }
             if(err || !isAuthUser) return res.status(403).json(msg('error.notAuthorized'));  // n4 401 and 403 http code difference
 
             next();

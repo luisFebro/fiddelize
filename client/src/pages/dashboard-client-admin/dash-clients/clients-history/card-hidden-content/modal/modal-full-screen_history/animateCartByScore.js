@@ -52,9 +52,15 @@ export default function animateCartByScore(currScore, rewardScore, options) {
         setTimeout(() => flagIcon.classList.add(flag.className), delayToAnimated);
     }
 
+    const handleLevel = () => {
+        if(!indScore) return 1;
+        if(indScore >= 5) return 5;
+        return indScore + 1;
+    }
     setTimeout(() => {
         const challengeMsg = msgRef;
-        const currLevel = indScore + 1;
+        const currLevel = handleLevel();
+        console.log("currLevel", currLevel);
         if(challengeMsg) challengeMsg.innerHTML = getStatusMsg(eachMilestone, currLevel, currScore, currChallenge, userName);
     }, 7000)
 }

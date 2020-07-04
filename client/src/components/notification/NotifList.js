@@ -3,15 +3,20 @@ import NotifCard from './NotifCard';
 import { readNotifications, markAllAsSeen, } from '../../redux/actions/notificationActions';
 import { useToken } from '../../hooks/useRoleData';
 import Spinner from '../../components/loadingIndicators/Spinner';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
 
 export default function NotifList({ _id, runList, forceCliUser = false, }) {
     const [notifList, setNotifList] = useState([]);
+
+    const dispatch = useStoreDispatch();
 
     const token = useToken();
     useEffect(() => {
         if(_id && token) {
             readNotifications(_id, { token, forceCliUser })
             .then(res => {
+                if(res.status === 403) return showSnackbar(dispatch, "Sua sessão terminou. Por valor, faça seu login de acesso novamente.", "error")
                 if(res.status !== 200) return console.log("smt wrong with NotifList")
                 setNotifList(res.data);
                 markAllAsSeen(_id, { forceCliUser });

@@ -113,7 +113,7 @@ function ClientScoresPanel({
                 "clientUserData.cashCurrScore": cashCurrScore,
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.totalActiveScore": currScoreNow, // the same as currScore | active is passive to be discounted and general it is accumulative without discount.
-                "clientUserData.totalGeneralScore": totalGeneralScore + cashCurrScore,
+                "clientUserData.totalGeneralScore": totalGeneralScore + Number(cashCurrScore),
             }
 
             // This is for cli-admin test client mode which does not have a totalPurchasePrize when it is updated.
