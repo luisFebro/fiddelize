@@ -37,7 +37,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                     </p>
                 </div>
                 <div>
-                    <p className="text-title">Você ganhou!</p>
+                    <p className="text-title text-nowrap">Você ganhou!</p>
                     <div className="font-weight-bold text-normal">
                         {!prizeView
                         ? (

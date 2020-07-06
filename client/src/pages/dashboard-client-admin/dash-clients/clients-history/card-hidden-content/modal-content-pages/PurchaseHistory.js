@@ -52,8 +52,9 @@ export default function PurchaseHistory({ data }) {
 
     let { maxScore, rewardList, selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
 
-    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    maxScore = pickedObj.rewardScore;
+    const totalPrizes = hasPendingChall ? totalPurchasePrize + 1 : totalPurchasePrize;
+    const pickedObj = pickCurrChallData(rewardList, totalPrizes);
+    maxScore = convertDotToComma(pickedObj.rewardScore);
 
 
     const isAfterFirstChall = totalPurchasePrize >= 1 || hasPendingChall;
@@ -144,14 +145,14 @@ export default function PurchaseHistory({ data }) {
     const showCurrFinalChallScore = () => (
         isAfterFirstChall && challScore > 0 &&
         <section className="container-center">
-            <FontAwesomeIcon icon="trophy" style={styles.check} />
+            <FontAwesomeIcon icon="trophy" style={{...styles.check, fontSize: '35px'}} />
             <p
                 className="d-inline-block text-normal text-purple font-weight-bold m-0"
                 style={{ lineHeight: '21px' }}
             >
                 Meta Atual Final:
                 <br />
-                <span style={{fontSize: '28px'}}>200,0 pontos</span>
+                <span style={{fontSize: '28px'}}>{maxScore} pontos</span>
             </p>
         </section>
     );
