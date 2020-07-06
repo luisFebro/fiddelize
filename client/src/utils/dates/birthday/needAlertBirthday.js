@@ -33,7 +33,7 @@ function getDateCode(strDate) {
     if(!strDate) return {
         code: 0,
         monthCode: 0,
-        maxDayMonth, 0,
+        maxDayMonth: 0,
     }
     const monthesDetails = getMonthesDetails();
     const indFirstSpacing = strDate.indexOf(" ");
