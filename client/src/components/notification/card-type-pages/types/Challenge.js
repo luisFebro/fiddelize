@@ -38,9 +38,10 @@ export default function Challenge({
 
     const confirmedChall = subtype === "confirmedChall";
     if(confirmedChall) role = "cliente";
-    // buggy with invalid time range
-    // const addedDaysToDate = addDays(new Date(prizeConfirmationDate), Number(prizeDeadline));
-    const deadlineDate = formatDMY(new Date());
+    // buggy with invalid time range (watching for errors)
+    const addedDaysToDate = addDays(new Date(prizeConfirmationDate), Number(prizeDeadline));
+    console.log("addedDaysToDate", addedDaysToDate);
+    const deadlineDate = formatDMY(addedDaysToDate);
     const showConfirmedChallContent = () => (
         confirmedChall &&
         <main className={textStyle}>

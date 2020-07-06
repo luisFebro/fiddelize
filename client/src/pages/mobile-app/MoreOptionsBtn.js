@@ -140,8 +140,8 @@ function MoreOptionsBtn({
                             className="float-it-5"
                             size="medium"
                             onClick={() => {
-                                const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
                                 showComponent(dispatch, "purchaseValue");
+                                const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
                                 history.push(path);
                                 playBeep();
                                 lStorage("setItem", currOption);

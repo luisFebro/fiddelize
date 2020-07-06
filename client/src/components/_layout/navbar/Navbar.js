@@ -35,6 +35,7 @@ function Navbar({ history, location }) {
 
     // Render
     const locationNow = location.pathname;
+    const isClientAdmin = location.search.includes("client-admin=1");
 
     const btnLogout = () => (
         <button
@@ -162,8 +163,13 @@ function Navbar({ history, location }) {
             }
             return size;
         }
+
+        const handleLogoClick = () => {
+            if(isClientAdmin && locationNow.includes("pontos-fidelidade")) return "/mobile-app?client-admin=1";
+            return isThisApp() ? "/mobile-app" : "/";
+        }
         return(
-            <Link to={isThisApp() ? "/mobile-app" : "/"}>
+            <Link to={handleLogoClick()}>
                 <ImgLoader
                     className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
                     style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '10px' : '20px'}}

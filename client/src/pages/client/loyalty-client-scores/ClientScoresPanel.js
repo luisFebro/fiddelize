@@ -215,6 +215,22 @@ function ClientScoresPanel({
         </Link>
     );
 
+    const handleHomeBtnClick = () => {
+        if(isThisApp()) {
+            readUser(dispatch, _id)
+            .then(res => {
+                if(res.status !== 200) return console.log("Error on readUser");
+                const path = needAppForCliAdmin ? "/mobile-app?client-admin=1" : "/mobile-app"
+                showComponent(dispatch, "purchaseValue");
+                history.push(path);
+            })
+        } else {
+            showComponent(dispatch, "login");
+            window.location.href = `/acesso/verificacao`
+            logout(dispatch);
+        }
+    }
+
     const showHomeBtn = () => {
         const title = finishedWork ? "Finalizar" : "Processando...";
         const backColorOnHover = "var(--themeSLight--" + colorS  + ")";
@@ -224,21 +240,7 @@ function ClientScoresPanel({
                 disabled={finishedWork ? false : true}
                 className="win-challenge--audio text-shadow my-5 pressed-to-left"
                 style={styles.finishButton}
-                onClick={() => {
-                    if(isThisApp()) {
-                        readUser(dispatch, _id)
-                        .then(res => {
-                            if(res.status !== 200) return console.log("Error on readUser");
-                            const path = needAppForCliAdmin ? "/mobile-app?client-admin=1" : "/mobile-app"
-                            showComponent(dispatch, "login");
-                            history.push(path);
-                        })
-                    } else {
-                        showComponent(dispatch, "login")
-                        window.location.href = `/acesso/verificacao`
-                        logout(dispatch);
-                    }
-                }}
+                onClick={handleHomeBtnClick}
                 onMouseOver={e => e.target.style.backgroundColor=backColorOnHover}
                 onMouseOut={e => e.target.style.backgroundColor=backgroundColor}
             >
@@ -248,6 +250,7 @@ function ClientScoresPanel({
     };
 
     return (
+        success &&
         <div style={{maxWidth: 330, visibility: success ? "visible" : "hidden"}} className=" container-center mt-5 animated slideInLeft fast">
             {showHeader()}
             {showScores()}

@@ -1,9 +1,10 @@
 import { reducer } from 'easy-peasy';
+import isThisApp from '../utils/window/isThisApp';
 
 // REDUCERS
 // currentComp options: login, purchaseValue, staffConfirmation, clientScoresPanel
 const initialState = {
-    currentComp: 'login',
+    currentComp: isThisApp() ? 'purchaseValue' : 'login',
     currentCompSet2: '?',
 };
 
