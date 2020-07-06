@@ -2,7 +2,7 @@ import { IS_DEV } from '../../config/clientUrl';
 
 // change here only if it is the website to be developed in localhost
 const localHostWebsiteMode = false;
-const localHostAppMode = localHostWebsiteMode || IS_DEV ? true : false;
+const localHostAppMode = IS_DEV ? true : false;
 
 export default function isThisApp() {
     const isInWebAppiOS = window.navigator.userAgent.toLowerCase();
@@ -15,6 +15,7 @@ export default function isThisApp() {
 
     const checkBrowsers = resIos || isAppFromChrome || isAppFromFirefox || isAppFromSafari;
 
+    if(localHostWebsiteMode) return false;
     return localHostAppMode
     ? true
     : checkBrowsers
