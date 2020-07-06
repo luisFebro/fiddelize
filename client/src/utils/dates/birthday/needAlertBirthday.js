@@ -30,7 +30,11 @@ export default function needAlertBirthday(strBirthDate, options = {}) {
 }
 
 function getDateCode(strDate) {
-    if(!strDate) return;
+    if(!strDate) return {
+        code: 0,
+        monthCode: 0,
+        maxDayMonth, 0,
+    }
     const monthesDetails = getMonthesDetails();
     const indFirstSpacing = strDate.indexOf(" ");
     let day = strDate.slice(0, indFirstSpacing);
