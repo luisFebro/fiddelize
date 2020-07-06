@@ -16,6 +16,7 @@ export default function PercCircleAndGift({
     classNamePerc, }) {
     const percentageAchieved = getPercentage(maxScore, currScore);
     const needResizeFont = percentageAchieved.toString().includes(".");
+    const leftScore = currScore >= maxScore ? 0 : maxScore - currScore
 
     const handleColorSelection = () => {
         if(colorS === "white") {
@@ -91,7 +92,7 @@ export default function PercCircleAndGift({
                                     ${percentageAchieved}% ${!currScore ? "(nenhum ponto)" : `(${currScore} pontos)`}
                                 </strong> do
                                 <br />
-                                desafio até agora.`}
+                                desafio até agora. <strong>Falta ${leftScore} pontos.</strong>`}
                             element={
                                 <div
                                     className="zoom-it container-center text-em-2-5 animated zoomIn"
