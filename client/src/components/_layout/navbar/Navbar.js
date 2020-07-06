@@ -110,7 +110,7 @@ function Navbar({ history, location }) {
             <RadiusBtn
                 title={isSmall ? "Crie App" : "Crie seu App"}
                 position="fixed"
-                top={10}
+                top={20}
                 right={20}
                 zIndex={1000}
             />
