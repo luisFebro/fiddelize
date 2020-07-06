@@ -57,11 +57,11 @@ export default function PurchaseHistory({ data }) {
 
 
     const isAfterFirstChall = totalPurchasePrize >= 1 || hasPendingChall;
-    const challengeN = defineCurrChallenge(totalPurchasePrize);
+    const challengeN = hasPendingChall ? defineCurrChallenge(totalPurchasePrize) + 1 : defineCurrChallenge(totalPurchasePrize);
     const mainCompsReady = useDelay(3000);
 
     useEffect(() => {
-        const challScore = !isAfterFirstChall ? undefined : challengeN + 1;
+        const challScore = !isAfterFirstChall ? undefined : challengeN;
         readPurchaseHistory(_id, maxScore, { challScore })
         .then(res => {
             if(res.status !== 200) return console.log("error on readPurchaseHistory")
@@ -103,7 +103,6 @@ export default function PurchaseHistory({ data }) {
         }
 
         let currChallScore = handleChallScore(challScore, { totalGeneralScore, isAfterFirstChall });
-        console.log("currChallScore", currChallScore);
         currChallScore = isSmall ? currChallScore && convertDotToComma(currChallScore) : `${convertDotToComma(currChallScore)} pontos`;
 
         return(
@@ -114,7 +113,7 @@ export default function PurchaseHistory({ data }) {
                 >
                     <div className="purchase-history-sum--root">
                         <div className="scores">
-                            <span>{!isAfterFirstChall ?  firstChallScoreTitle : `• Desafio atual #${challengeN + 1}:`}</span>
+                            <span>{!isAfterFirstChall ?  firstChallScoreTitle : `• Desafio atual #${challengeN}:`}</span>
                             <p className="d-inline-block value m-0 ml-2">{currChallScore}</p>
                             <br />
                             <span>
@@ -141,6 +140,21 @@ export default function PurchaseHistory({ data }) {
             </div>
         );
     }
+
+    const showCurrFinalChallScore = () => (
+        isAfterFirstChall && challScore > 0 &&
+        <section className="container-center">
+            <FontAwesomeIcon icon="trophy" style={styles.check} />
+            <p
+                className="d-inline-block text-normal text-purple font-weight-bold m-0"
+                style={{ lineHeight: '21px' }}
+            >
+                Meta Atual Final:
+                <br />
+                <span style={{fontSize: '28px'}}>200,0 pontos</span>
+            </p>
+        </section>
+    );
 
     const showDesc = (historyData, isRemainder) => {
         const { selfMilestoneIcon: cardIcon } = pickCurrChallData(rewardList, historyData.challengeN - 1);
@@ -219,9 +233,9 @@ export default function PurchaseHistory({ data }) {
                 <Card
                     key={historyData.desc}
                     className="mt-2"
-                    style={{backgroundColor: 'var(--themePDark--' + selfThemeBackColor + ')'}}
+                    style={{backgroundColor: !isRemainder ? 'var(--themePDark--' + selfThemeBackColor + ')' : 'var(--themePLight--black)'}}
                 >
-                    <section className={`text-white font-weight-bold ${!isRemainder ? "purchase-history-table-data--root" : "my-2"} text-normal text-center text-purple`}>
+                    <section className={`text-white font-weight-bold ${!isRemainder ? "purchase-history-table-data--root" : "my-2 text-shadow"} text-normal text-center text-purple`}>
                         {showDesc(historyData, isRemainder)}
                         {showScore(historyData, isRemainder)}
                     </section>
@@ -254,6 +268,7 @@ export default function PurchaseHistory({ data }) {
                     ) : (
                         <Fragment>
                             {showAllTimeTotal()}
+                            {showCurrFinalChallScore()}
                             {mainData}
                             {showError()}
                             <p className="my-5 text-normal text-center font-weight-bold text-purple">

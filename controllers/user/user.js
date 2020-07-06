@@ -312,14 +312,13 @@ exports.readHistoryList = (req, res) => {
     const scores = { rewardScore, currScore };
     let newHistoryData = generatePrizeCard(purchaseHistory, scores);
     newHistoryData = getDataChunk(newHistoryData, { skip, limit });
-wHisto
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
     const handleFinalRes = () => {
         // challScore = "10_only"
         const scoreOnly = challScore && challScore.includes("only");
         const getScoreNumber = challScore => { const _ind = challScore.indexOf("_"); return Number(challScore.slice(0, _ind)) }
         const rules = [{ challengeN: scoreOnly ? getScoreNumber(challScore) : challScore }, { cardType: "record || remainder" }]
-        if(scoreOnly) return filterAndCount(neryData, { count: "value", rules });
+        if(scoreOnly) return filterAndCount(newHistoryData, { count: "value", rules });
         if(challScore) return { list: newHistoryData, challScore: filterAndCount(newHistoryData, { count: "value", rules }) }
         return noResponse === "true" ? msgOk : newHistoryData;
     }
