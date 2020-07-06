@@ -21,11 +21,12 @@ import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions
 import animateCSS from '../../../../../../../utils/animateCSS';
 import { fluidTextAlign } from '../../../../../../../utils/string/fluidTextAlign';
 import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
-import { useAppSystem, useClientAdmin } from '../../../../../../../hooks/useRoleData';
+import { useAppSystem, useClientAdmin, useProfile } from '../../../../../../../hooks/useRoleData';
 import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
 import { setRun } from '../../../../../../../redux/actions/globalActions';
-import { changePrizeStatus } from '../../../../../../../redux/actions/userActions';
+import { changePrizeStatus, readPurchaseHistory } from '../../../../../../../redux/actions/userActions';
 import { sendNotification } from '../../../../../../../redux/actions/notificationActions';
+import getFirstName from '../../../../../../../utils/string/getFirstName';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -42,9 +43,11 @@ export default function ModalTextField({
     });
     const [gotError, setGotError] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
+    const [moreRemainder, setMoreRemainder] = useState(0); //score which user did during non-confirmation
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
+    const { name: cliAdminName } = useProfile();
     const { rewardList, rewardDeadline } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
@@ -68,6 +71,14 @@ export default function ModalTextField({
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
     rewardScore = pickedObj.rewardScore;
     const mainReward = pickedObj.mainReward;
+
+    useEffect(() => {
+        readPurchaseHistory(userId, rewardScore, { challScore: `${currChall + 1}_only` })
+        .then(res => {
+            if(res.status !== 200) return console.log("error on readPurchaseHistory")
+            setMoreRemainder(res.data);
+        })
+    }, [userId, rewardScore, currChall])
 
     const userBeatScore = userCurrScore >= rewardScore;
     useEffect(() => {
@@ -99,7 +110,7 @@ export default function ModalTextField({
 
     const handleSubmit = async () => {
         const updateUserBody = {
-            "clientUserData.currScore": parseFloat(remainValue),
+            "clientUserData.currScore": moreRemainder,
             "clientUserData.totalActiveScore": parseFloat(totalActiveScore - rewardScore), // the same as currScore, this is only used to differentiate from totalGeneralScore.
             // This is handled in the backend with changePrizeStatus
             // "clientUserData.totalPurchasePrize": totalPrizes + 1, // the same as currScore, this is only used to differentiate from totalGeneralScore.
@@ -124,7 +135,7 @@ export default function ModalTextField({
         if(updateRes.status !== 200) return showSnackbar(dispatch, "Algo deu errado ao atualizar cliente", 'error')
         if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
 
-        setTimeout(() => showSnackbar(dispatch, `OK! Cliente notificado e descontado ${rewardScore} pontos de ${name.cap()}.`, 'success', 7000), 4900);
+        setTimeout(() => showSnackbar(dispatch, `Ok, ${getFirstName(cliAdminName)}! Cliente foi notificado e ${rewardScore} pontos foram descontados de ${name}.`, 'success', 7000), 4900);
 
         if(closeOtherModals) {
             closeOtherModals() // use to close other open notification pages.
@@ -154,8 +165,8 @@ export default function ModalTextField({
             >
                 {parse(
                     userBeatScore
-                    ? `Esse cliente chegou lá!<br />${name.cap()} ATINGIU a meta de ${rewardScore} Pontos 🎉`
-                    : `O cliente ${name.cap()} ainda NÃO ATINGIU a meta de ${rewardScore} Pontos ${!userBeatScore ? `do desafio n.º ${currChall}` : ""}`
+                    ? `Esse cliente chegou lá!<br />${name} ATINGIU a meta de ${rewardScore} Pontos 🎉`
+                    : `O cliente ${name} ainda NÃO ATINGIU a meta de ${rewardScore} Pontos ${!userBeatScore ? `do desafio n.º ${currChall}` : ""}`
                 )}
             </p>
             <h2 className="my-2 text-center text-purple text-subtitle font-weight-bold">
@@ -173,15 +184,18 @@ export default function ModalTextField({
                 <p className="m-0">
                    ✔ Pontuação Atual:
                 </p>
-                <p><strong>• {userCurrScore} Pontos</strong></p>
+                <p><strong>• {convertDotToComma(userCurrScore)} Pontos</strong></p>
             </div>
             {userBeatScore && (
                 <div className="text-left text-normal text-purple my-1">
                     <p className="m-0">
                         ✔ Cliente fica com:
                     </p>
-                    <p className="font-weight-bold">
-                        • {convertDotToComma(remainValue)} Pontos Restantes
+                    <p className="font-weight-bold text-nowrap">
+                        • {convertDotToComma(moreRemainder)} Pontos Restantes
+                        {moreRemainder !== 0 && (
+                            <span className="text-small font-weight-bold"><br />(pontos feitos enquanto desafio não<br />estava confirmado.)</span>
+                        )}
                     </p>
                 </div>
             )}

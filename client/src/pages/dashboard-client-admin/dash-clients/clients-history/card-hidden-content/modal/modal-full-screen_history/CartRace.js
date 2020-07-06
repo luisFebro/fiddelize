@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import animateCartByScore, { options } from './animateCartByScore';
 import { useClientAdmin, useClientUser } from '../../../../../../../hooks/useRoleData';
 import defineCurrChallenge from '../../../../../../../utils/biz/defineCurrChallenge';
+import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
 
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
@@ -20,11 +21,16 @@ const faStyle = {
 
 
 export default function CartRace({ currUserScore, challengeN, userName, className, id }) {
-    const { maxScore, selfThemePColor, selfThemeSColor, } = useClientAdmin();
     let { totalPurchasePrize  } = useClientUser();
+    let { maxScore, selfThemePColor, selfThemeSColor, rewardList, } = useClientAdmin();
+
+    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
+    maxScore = pickedObj.rewardScore;
+
     const currChallenge = defineCurrChallenge(totalPurchasePrize);
 
     const backColor = {backgroundColor: 'var(--themeBackground--' + selfThemePColor + ')'};
+
     const msgRef = React.useRef(null);
     useEffect(() => {
         animateCartByScore(currUserScore, maxScore, { ...options, currChallenge, userName, selfThemeSColor, msgRef: msgRef.current});

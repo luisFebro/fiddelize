@@ -35,7 +35,7 @@ export default function getCardTypeData(cardType, options = {}) {
 
             if(subtype === "clientWonChall") {
                 title = `Cliente concluíu desafio`;
-                brief = `Cliente §${clientFullName}§ concluíu desafio de §N.° ${thisCurrChall}§ e ganhou §${prizeDesc}§. Confirme o desafio abaixo.`
+                brief = `Cliente §${clientFullName}§ concluíu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`
             }
             if(subtype === "confirmedChall") {
                 title = `Desafio Confirmado`;

@@ -13,6 +13,8 @@ const addTransformToImgUrl = require("../../utils/biz-algorithms/cloudinary-imag
 const { findOneAndUpdate, confirmPrizeStatus } = require("./helpers/purchase-history");
 const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
+const getDataChunk = require("../../utils/array/getDataChunk");
+const filterAndCount = require("../../utils/array/filterAndCount");
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
@@ -299,7 +301,8 @@ exports.addPurchaseHistory = (req, res) => {
 exports.readHistoryList = (req, res) => {
     const { _id, clientUserData } = req.profile;
     const rewardScore = Number(req.query.rewardScore);
-    let noResponse = req.query.noResponse;
+    let { noResponse, skip, limit, challScore } = req.query;
+    challScore = typeof challScore === "string" ? challScore : Number(challScore);
 
     if(!clientUserData) return res.status(400).json([]);
 
@@ -307,10 +310,21 @@ exports.readHistoryList = (req, res) => {
     const currScore = clientUserData.currScore;
 
     const scores = { rewardScore, currScore };
-    const newHistoryData = generatePrizeCard(purchaseHistory, scores);
+    let newHistoryData = generatePrizeCard(purchaseHistory, scores);
+    newHistoryData = getDataChunk(newHistoryData, { skip, limit });
 
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
-    const finalRes = noResponse === "true" ? msgOk : newHistoryData;
+    const handleFinalRes = () => {
+        // challScore = "10_only"
+        const scoreOnly = challScore && challScore.includes("only");
+        const getScoreNumber = challScore => { const _ind = challScore.indexOf("_"); return Number(challScore.slice(0, _ind)) }
+        const rules = [{ challengeN: scoreOnly ? getScoreNumber(challScore) : challScore }, { cardType: "record || remainder" }]
+        if(scoreOnly) return filterAndCount(newHistoryData, { count: "value", rules });
+        if(challScore) return { list: newHistoryData, challScore: filterAndCount(newHistoryData, { count: "value", rules }) }
+        return noResponse === "true" ? msgOk : newHistoryData;
+    }
+    const finalRes = handleFinalRes();
+
     const conditionToSave = newHistoryData.length && "prize, remainder".includes(newHistoryData[0].cardType)
 
     if(conditionToSave) {

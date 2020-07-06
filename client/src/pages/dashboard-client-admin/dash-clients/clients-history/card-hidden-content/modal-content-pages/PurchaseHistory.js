@@ -44,23 +44,33 @@ const WonChallengeBrief = ({ historyData }) => (
 );
 
 export default function PurchaseHistory({ data }) {
-    const { _id, name, clientUserData, totalGeneralScore, totalPurchasePrize } = data;
+    const { _id, name, clientUserData, totalPurchasePrize } = data;
+    let { totalGeneralScore } = data; totalGeneralScore = convertDotToComma(totalGeneralScore);
+    const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData && clientUserData.purchaseHistory);
+    const [hasPendingChall, setHasPendingChall] = useState(false);
+    const [challScore, setChallScore] = useState(0);
+
     let { maxScore, rewardList, selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
 
-    const [purchaseHistoryArray, setPurchaseHistoryArray] = useState(clientUserData && clientUserData.purchaseHistory);
 
+    const isAfterFirstChall = totalPurchasePrize >= 1 || hasPendingChall;
     const challengeN = defineCurrChallenge(totalPurchasePrize);
     const mainCompsReady = useDelay(3000);
+
     useEffect(() => {
-        readPurchaseHistory(_id, maxScore)
+        const challScore = !isAfterFirstChall ? undefined : challengeN + 1;
+        readPurchaseHistory(_id, maxScore, { challScore })
         .then(res => {
             if(res.status !== 200) return console.log("error on readPurchaseHistory")
-            setPurchaseHistoryArray(res.data);
+            setPurchaseHistoryArray(!isAfterFirstChall ? res.data : res.data.list);
+            setChallScore(res.data.challScore);
+            const foundPendingChallenge = challengeN === 1 && res.data && res.data.find(card => card.cardType === "prize" && card.isPrizeConfirmed === false);
+            if(foundPendingChallenge) setHasPendingChall(true);
         })
-    }, [_id, maxScore])
+    }, [_id, maxScore, challengeN, isAfterFirstChall])
 
     const onlyFirstName = getFirstName(name);
 
@@ -80,6 +90,57 @@ export default function PurchaseHistory({ data }) {
             }}
         />
     );
+
+    const showAllTimeTotal = () => {
+        const firstChallScoreTitle = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
+        const confirmedChallenges = totalPurchasePrize ? totalPurchasePrize : 0
+        const showTotalBadge = isAfterFirstChall || hasPendingChall;
+
+        const handleChallScore = (challScore, options) => {
+            const { totalGeneralScore, isAfterFirstChall } = options;
+            if(!isAfterFirstChall) return totalGeneralScore || 0;
+            return challScore;
+        }
+
+        let currChallScore = handleChallScore(challScore, { totalGeneralScore, isAfterFirstChall });
+        console.log("currChallScore", currChallScore);
+        currChallScore = isSmall ? currChallScore && convertDotToComma(currChallScore) : `${convertDotToComma(currChallScore)} pontos`;
+
+        return(
+            <div className="card-total position-relative">
+                <Card
+                    className="mt-2 text-shadow text-normal text-white"
+                    style={{backgroundColor: 'var(--incomeGreen)'}}
+                >
+                    <div className="purchase-history-sum--root">
+                        <div className="scores">
+                            <span>{!isAfterFirstChall ?  firstChallScoreTitle : `• Desafio atual #${challengeN + 1}:`}</span>
+                            <p className="d-inline-block value m-0 ml-2">{currChallScore}</p>
+                            <br />
+                            <span>
+                                • Desafios
+                                <FontAwesomeIcon
+                                    icon="check-circle"
+                                    className="icon-shadow"
+                                    style={{ marginLeft: '5px' }}
+                                />:
+                            </span>
+                            <p className="d-inline-block value m-0 ml-2">{confirmedChallenges}</p>
+                        </div>
+                    </div>
+                </Card>
+                {showTotalBadge && (
+                    <div className="badge-total-scores">
+                        <p className="text text-shadow text-normal text-white">
+                            <p className="text-center m-0 mt-2">{totalGeneralScore}</p>
+                            <br />
+                            Pontos Gerais
+                        </p>
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     const showDesc = (historyData, isRemainder) => {
         const { selfMilestoneIcon: cardIcon } = pickCurrChallData(rewardList, historyData.challengeN - 1);
@@ -168,68 +229,6 @@ export default function PurchaseHistory({ data }) {
             );
         }
     })
-
-    const showAllTimeTotal = () => {
-        const conditionFirstChallenge = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
-        const conditionAfterFirstChall = `• Desafio atual #${challengeN + 1}:`
-
-        const handleCurrChallengeScore = (totals, maxScore, scoresList) => {
-            const { totalGeneralScore, totalPurchasePrize } = totals;
-            const currChall = totalPurchasePrize + 1;
-            const needMaxScore = currChall === 2;
-
-            let calculation;
-            if(needMaxScore) {
-                calculation = totalGeneralScore - maxScore;
-            } else {
-                // scoreList logic for after challenge 3 using premium add more challenges.
-                calculation = null;
-            }
-
-            return calculation;
-        }
-
-        let totalScoreFirstChall = totalGeneralScore || 0;
-        let totalScoreAfterFirstChall = handleCurrChallengeScore({ totalGeneralScore, totalPurchasePrize }, maxScore);
-        totalScoreFirstChall = isSmall ? convertDotToComma(totalScoreFirstChall) : `${convertDotToComma(totalScoreFirstChall)} pontos`;
-        totalScoreAfterFirstChall = isSmall ? convertDotToComma(totalScoreAfterFirstChall) : `${convertDotToComma(totalScoreAfterFirstChall)} pontos`;
-
-        const isAfterFirstChall = totalPurchasePrize >= 1;
-        return(
-            <div className="card-total position-relative">
-                <Card
-                    className="mt-2 text-shadow text-normal text-white"
-                    style={{backgroundColor: 'var(--incomeGreen)'}}
-                >
-                    <div className="purchase-history-sum--root">
-                        <div className="scores">
-                            <span>{isAfterFirstChall ? conditionAfterFirstChall : conditionFirstChallenge}</span>
-                            <p className="d-inline-block value m-0 ml-2">{isAfterFirstChall ? totalScoreAfterFirstChall : totalScoreFirstChall}</p>
-                            <br />
-                            <span>
-                                • Desafios
-                                <FontAwesomeIcon
-                                    icon="check-circle"
-                                    className="icon-shadow"
-                                    style={{ marginLeft: '5px' }}
-                                />:
-                            </span>
-                            <p className="d-inline-block value m-0 ml-2">{totalPurchasePrize ? totalPurchasePrize : 0}</p>
-                        </div>
-                    </div>
-                </Card>
-                {isAfterFirstChall && (
-                    <div className="badge-total-scores">
-                        <p className="text text-shadow text-normal text-white">
-                            <p className="text-center m-0 mt-2">{totalGeneralScore}</p>
-                            <br />
-                            Pontos Gerais
-                        </p>
-                    </div>
-                )}
-            </div>
-        );
-    }
 
     const showError = () => (
         clientUserData === undefined &&

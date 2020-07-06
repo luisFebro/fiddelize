@@ -1,11 +1,23 @@
 import { getNewRemainder } from '../../../../../../../utils/numbers/getRemainder';
 import getFirstName from '../../../../../../../utils/string/getFirstName';
+import { convertDotToComma } from '../../../../../../../utils/numbers/convertDotComma';
 
-export default function animateCartByScore(currScore, rewardScore, options) {
-    const { dots, flag, cart, challengeMsg, currChallenge, userName, selfThemeSColor, msgRef } = options;
+export default function animateCartByScore(currUserScore, rewardScore, options) {
+    console.log("rewardScore", rewardScore);
+    console.log("currUserScore", currUserScore);
+    const {
+        dots,
+        flag,
+        cart,
+        challengeMsg,
+        currChallenge,
+        userName,
+        selfThemeSColor,
+        msgRef,
+    } = options;
 
     let indScore;
-    if(!currScore) {
+    if(!currUserScore) {
         indScore = -1;
     }
 
@@ -20,11 +32,12 @@ export default function animateCartByScore(currScore, rewardScore, options) {
     const toLevel4 = level4 - 0.05;
     const toLevel5 = level5 - 0.05;
 
-    if(currScore >= level1 && currScore <= toLevel2) { indScore = 0 } // L
-    else if(currScore >= level2 && currScore <= toLevel3) { indScore = 1 }
-    else if(currScore >= level3 && currScore <= toLevel4) { indScore = 2 }
-    else if(currScore >= level4 && currScore <= toLevel5) { indScore = 3 }
-    else if(currScore >= 500) { indScore = 4 }
+    if(currUserScore >= level1 && currUserScore <= toLevel2) { indScore = 0 } // L
+    else if(currUserScore >= level2 && currUserScore <= toLevel3) { indScore = 1 }
+    else if(currUserScore >= level3 && currUserScore <= toLevel4) { indScore = 2 }
+    else if(currUserScore >= level4 && currUserScore <= toLevel5) { indScore = 3 }
+    else if(currUserScore >= rewardScore) { indScore = 4 }
+    console.log("indScore", indScore);
 
     let arrayIconIds = dots.idsArray;
 
@@ -47,33 +60,35 @@ export default function animateCartByScore(currScore, rewardScore, options) {
 
     // FLAG
     const delayToAnimated = 4000;
-    if(currScore >= rewardScore) {
+    if(currUserScore >= rewardScore) {
         const flagIcon = document.querySelector("#" + flag.idsArray[0]);
         setTimeout(() => flagIcon.classList.add(flag.className), delayToAnimated);
     }
 
     const handleLevel = () => {
-        if(!indScore) return 1;
         if(indScore >= 5) return 5;
+        if(!indScore) return 1;
         return indScore + 1;
     }
+
     setTimeout(() => {
         const challengeMsg = msgRef;
         const currLevel = handleLevel();
-        console.log("currLevel", currLevel);
-        if(challengeMsg) challengeMsg.innerHTML = getStatusMsg(eachMilestone, currLevel, currScore, currChallenge, userName);
+        if(challengeMsg) challengeMsg.innerHTML = getStatusMsg(eachMilestone, currLevel, currUserScore, currChallenge, userName);
     }, 7000)
 }
 
 function chooseMsg(props) {
     const {
         currLevel,
-        nextScore,
         nextLevel,
         eachLevelScore,
         userFirstName,
         currUserScore,
         currChallenge } = props;
+
+    let { nextScore } = props;
+    nextScore = convertDotToComma(nextScore);
 
     if(currUserScore < eachLevelScore) {
         return `<strong>Vamos lá!<br /> Nível ${nextLevel ? nextLevel : '1'} logo alí. Falta ${nextScore} pontos.</strong>`;
@@ -101,11 +116,11 @@ function chooseMsg(props) {
                         Falta muito pouco para o último nível.
                         <br />Apenas mais ${nextScore} pontos</strong>`;
             case 5:
-                return `<strong>🎉 Parabéns!!! Você concluiu o desafio n.º ${currChallenge}!
+                return `<strong>🎉 Parabéns! Você concluiu o desafio n.º ${currChallenge}!
                        <br />
-                       ${userFirstName.cap()}, agora só aguardar
+                       Agora só aguardar
                        <br />
-                       a confirmação.`
+                       a confirmação do prêmio.`
             default:
                 console.log("Something went worng with chooseMsg");
         }

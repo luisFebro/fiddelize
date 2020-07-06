@@ -1,4 +1,5 @@
 function convertDotToComma(stringNumber) {
+    if(!stringNumber && stringNumber !== 0) return;
     if(typeof stringNumber !== "string") {
         stringNumber = JSON.stringify(stringNumber);
     }

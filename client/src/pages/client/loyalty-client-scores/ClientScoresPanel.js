@@ -84,10 +84,7 @@ function ClientScoresPanel({
         }
     }
 
-    let currScoreBefore = currentScore;
-    if(typeof currScoreBefore === "undefined") {
-        currScoreBefore = "0";
-    }
+    let currScoreBefore = currentScore ? currentScore : 0;
     currScoreBefore = getIntOrFloat(currScoreBefore);
 
     let cashCurrScore = convertCommaToDot(valuePaid);
@@ -186,12 +183,7 @@ function ClientScoresPanel({
                     display: showTotalPoints ? "block" : "none",
                 }}
             >
-                <div
-                    className="animated bounce slow"
-                    style={{
-                        animationIterationCount: 3
-                    }}
-                >
+                <div className="animated bounce slow repeat-2">
                     <p className="ml-2 text-left">&#187; Pontuação Atual:</p>
                     <p className="text-center text-hero">{convertDotToComma(currScoreNow)}</p>
                 </div>
