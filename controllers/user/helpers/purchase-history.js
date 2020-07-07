@@ -26,42 +26,44 @@ function areObjsEqual(obj1, obj2) {
 }
 
 exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
-    const { challengeN, statusType } = opts;
+    const { statusType } = opts;
     let status = "FAIL";
 
     if(!arrayOfData) return { error: "the array should have at least one object, but found none.", status }
-    if(!challengeN || typeof challengeN !== "number") return { error: "no challengeN specified as option or invalid format. it should be number", status };
-    if(!["received", "confirmed"].includes(statusType)) return { error: `the option statusType should be either "confirmed" or "received"`, status };
+    // if(!challengeN || typeof challengeN !== "number") return { error: "no challengeN specified as option or invalid format. it should be number", status };
+    if(!"received, confirmed".includes(statusType)) return { error: `the option statusType should be either "confirmed" or "received"`, status };
 
-    const keys = {
+    const options = {
         received: 'isPrizeReceived',
         confirmed: 'isPrizeConfirmed',
     }
 
-    let foundObjIndex = undefined;
-    let foundPrize = arrayOfData.find((register, ind) => {
-        const condition = register.cardType === "prize" && register.challengeN === challengeN
-        if(condition) {
-            foundObjIndex = ind;
-            return condition;
+    let newChallengeN = 0;
+    const newData = arrayOfData.map(card => {
+        const nonConfirmedPrize = card.cardType === "prize" && card.isPrizeConfirmed === false;
+        const okPrize = card.cardType === "prize" && card.isPrizeConfirmed === true;
+
+        if(okPrize) { ++newChallengeN }
+
+        if(nonConfirmedPrize) {
+            const statusToSet = options[statusType];
+            card[statusToSet] = true;
+            status = "OK";
+            ++newChallengeN;
+            return card;
         }
+
+        return card;
     });
 
-    const keyToSet = keys[statusType];
-
-    if(typeof foundObjIndex !== "undefined") {
-        const targetObj = arrayOfData[foundObjIndex];
-        targetObj[keyToSet] = true;
-        status = "OK";
-    } else {
-        return {
-            status,
-            error: `the challenge N.º ${challengeN} was not found`
-        }
+    if(status === "FAIL") return {
+        status,
+        error: `any non confirmed prize was found`
     }
 
     return {
-        arrayOfData,
+        newData,
+        newChallengeN,
         status
     };
 }

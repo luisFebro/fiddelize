@@ -96,7 +96,7 @@ function ClientScoresPanel({
     const userBeatChallenge = currScoreNow >= maxScore;
 
     useEffect(() => {
-        if(success && verification) {
+        if(success && verification && !finishedWork) {
             animateNumber(
                 animatedNumber.current,
                 0,
@@ -139,7 +139,7 @@ function ClientScoresPanel({
                 })
             })
         }
-    }, [success, verification])
+    }, [success, verification, finishedWork])
 
     // RENDER
     const firstName = getFirstName(name) || "Olá";

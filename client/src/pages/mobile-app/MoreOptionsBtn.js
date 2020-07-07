@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { logout } from '../../redux/actions/authActions';
 import { Link, withRouter } from 'react-router-dom';
 import { showComponent } from '../../redux/actions/componentActions';
@@ -9,6 +9,9 @@ import VAsyncPurchaseHistory from '../dashboard-client-admin/dash-clients/client
 import { useClientUser, useProfile } from '../../hooks/useRoleData';
 import { CLIENT_URL } from '../../config/clientUrl';
 import WhatsappBtn from '../../components/buttons/WhatsappBtn';
+import { readUser } from '../../redux/actions/userActions';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
+
 // SpeedDial and Icons
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -43,12 +46,28 @@ function MoreOptionsBtn({
     needAppForPreview,
     colorS, }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [blockAccess, setBlockAccess] = useState(false);
     const [fullOpen, setFullOpen] = useState(false);
 
     const { _id } = useProfile();
     let { currScore, purchaseHistory, totalGeneralScore, totalPurchasePrize } = useClientUser();
 
     const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        let cancel;
+        if(cancel) return;
+        readUser(dispatch, _id, {select: "clientUserData.totalPurchasePrize"})
+        .then(res => {
+            //if user does not have the same quantity of prize in the db and thus not updateed
+            //then, block access to loyalty score page to avoid registration of accumulative score from the last challenge.
+            if(res.status !== 200) return console.log("smt wrong with readUser from morebtn")
+            const totaldBPrizes = res.data.clientUserData.totalPurchasePrize;
+            if(totaldBPrizes !== totalPurchasePrize) setBlockAccess(true);
+        })
+        return () => cancel = true;
+    }, [_id, totalPurchasePrize])
+
 
     const styles = {
         fabRoot: {
@@ -123,6 +142,15 @@ function MoreOptionsBtn({
         ]
     }
 
+    const handleAddScoreClick = () => {
+        if(blockAccess) return showSnackbar(dispatch, `${getFirstName(userName.cap())}, parece que sua pontuação está desatualizada. Verifique a notificação de confirmação para começar novo desafio ou reinicie o app.`, 9000)
+        showComponent(dispatch, "purchaseValue");
+        const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
+        history.push(path);
+        playBeep();
+        lStorage("setItem", currOption);
+    }
+
     return(
         <div className="position-relative">
             <div
@@ -132,20 +160,14 @@ function MoreOptionsBtn({
                 <Tooltip
                     needArrow
                     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
-                    text={`♦ Sugestão: ${userName}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra.`}
+                    text={`♦ Sugestão: ${userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra.`}
                     backgroundColor={"var(--themeSDark--" + colorS + ")"}
                     element={
                         <Fab
                             style={styles.fabTooltip}
                             className="float-it-5"
                             size="medium"
-                            onClick={() => {
-                                showComponent(dispatch, "purchaseValue");
-                                const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
-                                history.push(path);
-                                playBeep();
-                                lStorage("setItem", currOption);
-                            }}
+                            onClick={handleAddScoreClick}
                         >
                             <LoyaltyIcon />
                         </Fab>

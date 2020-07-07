@@ -6,13 +6,11 @@ import { setLoadingProgress } from './globalActions';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
 // MAIN DATA LOADING
-export const readUser = async (dispatch, _userId) => {
-    const res = await axios.get(`/api/user/${_userId}`, getHeaderJson);
+export const readUser = async (dispatch, _userId, options = {}) => {
+    const { select } = options;
+    const res = await axios.get(`/api/user/${_userId}?select=${select}`, getHeaderJson);
     console.log('===CURRENT USER LOADED===');
-    dispatch({
-        type: 'USER_READ',
-        payload: res.data
-    });
+    !select && dispatch({ type: 'USER_READ', payload: res.data });
 
     return res;
 };

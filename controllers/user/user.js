@@ -20,7 +20,12 @@ const filterAndCount = require("../../utils/array/filterAndCount");
 
 // MIDDLEWARES - mw
 exports.mwUserId = (req, res, next, id) => {
-    User.findById(id).exec((err, user) => {
+    let { select } = req.query;
+    if(!select) select = "";
+
+    User.findById(id)
+    .select(select)
+    .exec((err, user) => {
         if(err || !user) return res.status(400).json(msg("error.notFound"));
         req.profile = user;
         next();
@@ -67,7 +72,7 @@ const handleUserRole = (isAdmin, profile, opts = {}) => {
 }
 
 exports.read = (req, res) => {
-    const includes = req.query.includes; // for testing, allows strict data to be displayed
+    const includes = req.query.includes; // includes for testing, allows strict data to be displayed
     const clientAdminRequest = Boolean(req.query.clientAdminRequest);
 
     return res.json(handleUserRole(clientAdminRequest, req.profile, { includes }));
@@ -345,20 +350,19 @@ exports.changePrizeStatus = (req, res) => {
     if(!clientUserData) return res.json({ error: "no array data found"})
 
     const historyData = clientUserData.purchaseHistory;
-    const challengeN = clientUserData.totalPurchasePrize + 1;
-    const { arrayOfData, error, status } = confirmPrizeStatus(historyData, { statusType, challengeN });
+    const { newData, newChallengeN, error, status } = confirmPrizeStatus(historyData, { statusType });
 
     if(status === "FAIL") return res.status(404).json({ error });
 
-    User.findOneAndUpdate(
-        { _id },
-        { $set: {
-            "clientUserData.purchaseHistory": arrayOfData,
-            "clientUserData.totalPurchasePrize": challengeN,
-        }}, { new: false }
-    ).exec(err => {
+
+    User.findById(_id)
+    .exec((err, doc) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
-        res.json({msg: `The status ${statusType.toUpperCase()} was successfully set challenge N.º ${challengeN}!`});
+        doc.clientUserData.purchaseHistory = newData;
+        doc.clientUserData.totalPurchasePrize = newChallengeN;
+        // modifying an array require we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+        doc.markModified("clientUserData");
+        doc.save(err => res.json({msg: `The status ${statusType.toUpperCase()} was successfully set challenge N.º ${newChallengeN}!`}))
     });
 }
 // END USER PURCHASE HISTORY

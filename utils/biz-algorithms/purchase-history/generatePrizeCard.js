@@ -8,7 +8,7 @@ let generatedPrizeCard = {
 
 const addBrief = (newArray, options = {}) => {
     const { currChall, rewardScore, } = options;
-    const filteredRecordCards = newArray && newArray.filter(card => card.cardType === "record" && card.challengeN === currChall);
+    const filteredRecordCards = newArray && newArray.filter(card => (card.cardType === "record" || card.cardType === "remainder") && card.challengeN === currChall);
     // even if there is an empty array, it will return a default zero.
     const finishedScore = filteredRecordCards.reduce((acc, next) => acc + next.value, 0);
     const briefCard = { cardType: 'brief', value: rewardScore, finishedScore, desc: `Resumo desafio N.º ${currChall}` }

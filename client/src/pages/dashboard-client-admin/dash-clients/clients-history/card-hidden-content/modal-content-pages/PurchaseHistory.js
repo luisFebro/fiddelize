@@ -150,7 +150,7 @@ export default function PurchaseHistory({ data }) {
                 className="d-inline-block text-normal text-purple font-weight-bold m-0"
                 style={{ lineHeight: '21px' }}
             >
-                Meta Atual Final:
+                Meta Final Atual:
                 <br />
                 <span style={{fontSize: '28px'}}>{maxScore} pontos</span>
             </p>
