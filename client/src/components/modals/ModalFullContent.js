@@ -54,8 +54,8 @@ export default function ModalFullContent({
                 <CloseButton
                     onClick={setFullOpen}
                     size="40px"
-                    top="15px"
-                    right="15px"
+                    top="10px"
+                    right="10px"
                 />
             )}
         </Dialog>

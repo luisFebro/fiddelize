@@ -342,6 +342,13 @@ exports.readHistoryList = (req, res) => {
     }
 }
 
+// Prizes
+exports.readPrizes = (req, res) => {
+    const { clientUserData: { purchaseHistory } } = req.profile;
+    const prizes = purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
+    res.json(prizes);
+}
+
 exports.changePrizeStatus = (req, res) => {
     const { _id, clientUserData } = req.profile;
     let { statusType } = req.query;
@@ -365,6 +372,7 @@ exports.changePrizeStatus = (req, res) => {
         doc.save(err => res.json({msg: `The status ${statusType.toUpperCase()} was successfully set challenge N.º ${newChallengeN}!`}))
     });
 }
+// End Prizes
 // END USER PURCHASE HISTORY
 
 exports.countField = (req, res) => {

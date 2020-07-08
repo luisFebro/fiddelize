@@ -47,6 +47,8 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt'; // delete btn
 import { faTrophy } from '@fortawesome/free-solid-svg-icons/faTrophy';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
+import { faHandHolding } from '@fortawesome/free-solid-svg-icons/faHandHolding';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons/faThumbsUp';
 // app milestone icons
 import { faAppleAlt } from '@fortawesome/free-solid-svg-icons/faAppleAlt';
 import { faCar } from '@fortawesome/free-solid-svg-icons/faCar';
@@ -115,6 +117,8 @@ library.add(
   faTrashAlt,
   faTrophy,
   faUser,
+  faHandHolding,
+  faThumbsUp,
   // app milestone icons
   faAppleAlt,
   faCar,

@@ -41,7 +41,7 @@ export default function getCardTypeData(cardType, options = {}) {
                 title = `Desafio Confirmado`;
                 brief = `Opa! Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio disponível para resgate.`
             }
-            circularImg = "/img/icons/fiddelize-trophy.svg";
+            circularImg = "/img/icons/trophies/fiddelize-trophy.svg";
             break;
         case "birthday":
             if(subtype === "greeting") {

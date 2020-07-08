@@ -22,6 +22,7 @@ const {
     updateImages,
     redirectUrlLink,
     gotUsersInThisChallenge,
+    readPrizes,
 } = require("../../controllers/user");
 
 const { mwIsCliAdmin, mwIsAuth, } = require("../../controllers/auth");
@@ -38,6 +39,7 @@ router.get("/confirm-account/:authUserId", confirmUserAccount);
 router.put('/purchase-history/:userId', addPurchaseHistory);
 router.put('/purchase-history/update-status/:userId', changePrizeStatus);
 router.get("/list/purchase-history/:userId", readHistoryList);
+router.get("/list/purchase-history/prizes/:userId", readPrizes);
 // end purchase history
 
 // LISTS

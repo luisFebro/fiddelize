@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from '@material-ui/core/Card';
-import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
 import { useClientAdmin } from '../../../../../../hooks/useRoleData';
 import selectTxtStyle from '../../../../../../utils/biz/selectTxtStyle';
 import pickCurrChallData from '../../../../../../utils/biz/pickCurrChallData';
+import PrizesBtn from './prizes-gallery/PrizesBtn';
 
 const faStyle = {
     filter: 'drop-shadow(0 0 25px grey)',
@@ -13,8 +13,6 @@ const faStyle = {
 }
 
 export default function PrizeCard({ historyData, colorP, colorS }) {
-    const [prizeView, setPrizeView] = useState(false);
-
     const currChallengeN = historyData.challengeN;
     const isPrizeConfirmed = historyData.isPrizeConfirmed;
     const isPrizeReceived = historyData.isPrizeReceived;
@@ -38,25 +36,8 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                 </div>
                 <div>
                     <p className="text-title text-nowrap">Você ganhou!</p>
-                    <div className="font-weight-bold text-normal">
-                        {!prizeView
-                        ? (
-                            <div className="prize-btn">
-                                 <ButtonFab
-                                    position="relative"
-                                    onClick={() => setPrizeView(true)}
-                                    title="Ver seu Prêmio"
-                                    needTxtNoWrap={true}
-                                    variant="extended"
-                                    color="white"
-                                    backgroundColor={"var(--themeSDark--" + colorS +  ")"}
-                                />
-                            </div>
-                        ) : (
-                            <p className="text-normal animated zoomIn fast">
-                                • {mainReward}
-                            </p>
-                        )}
+                    <div className="prize-btn">
+                        <PrizesBtn colorS={colorS} />
                     </div>
                 </div>
             </main>

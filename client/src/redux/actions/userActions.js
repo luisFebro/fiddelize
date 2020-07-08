@@ -93,6 +93,14 @@ export const readPurchaseHistory = async (_idUser, rewardScore, options = {}) =>
     }
 };
 
+export const readPrizes = async (userId) => {
+    try {
+        return await axios.get(`/api/user/list/purchase-history/prizes/${userId}`, getHeaderJson);
+    } catch(err) {
+        return err.response;
+    }
+};
+
 export const changePrizeStatus = async (userId, options = {}) => { // n1
     const { statusType } = options;
 

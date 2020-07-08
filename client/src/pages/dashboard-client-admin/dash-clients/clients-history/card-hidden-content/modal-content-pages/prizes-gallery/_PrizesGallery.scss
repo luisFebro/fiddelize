@@ -1,0 +1,61 @@
+// LIST
+.prize-list--root {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row wrap;
+}
+// END LIST
+
+// TROPHY
+.trophy--root {
+    position: relative;
+    margin: 10px;
+    width: 150px;
+}
+
+.trophy-design {
+    position: relative;
+
+    & .custom-icon {
+        position: absolute;
+        font-size: 50px;
+        z-index: 1000;
+        top: -5%;
+        transform: translateX(100%);
+        color: white;
+    }
+}
+
+.prize-status-icons {
+    position: absolute;
+    bottom: 27%;
+    transform: translateX(75%);
+    display: flex;
+    padding: 0px;
+    z-index: 1000;
+
+    & .confirmed,.delivered {
+        margin: 2px;
+    }
+
+    & .status-icon {
+        position: absolute;
+        font-size: 15px;
+        color: #bdc3c7;
+        top: -9px;
+        transform: translateX(50%);
+        z-index: 1500;
+    }
+
+    & .icon {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        padding: 5px;
+        color: #95a5a6;
+        border-radius: 50%;
+        background-color: var(--mainWhite);
+    }
+}
+
+// END TROPHY

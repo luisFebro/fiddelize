@@ -20,8 +20,6 @@ export const ShowTitle = ({ text }) => (
 );
 
 export const ShowIllustration = ({ role, mainImg, bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png" }) => {
-    console.log("bizLogo", bizLogo);
-    console.log("role", role);
     const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
     return (
         <div className="container-center position-relative my-5">
