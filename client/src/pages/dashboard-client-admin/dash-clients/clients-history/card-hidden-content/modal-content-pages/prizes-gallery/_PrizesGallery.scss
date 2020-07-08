@@ -3,14 +3,24 @@
     display: flex;
     justify-content: space-around;
     flex-flow: row wrap;
+
+    h2 {
+        line-height: 24px;
+    }
 }
 // END LIST
 
 // TROPHY
 .trophy--root {
     position: relative;
-    margin: 10px;
+    margin: 5px;
     width: 150px;
+    margin-bottom: 30px;
+
+    & .prize-desc {
+        padding-top: 5px;
+        line-height: 25px;
+    }
 }
 
 .trophy-design {
@@ -18,18 +28,20 @@
 
     & .custom-icon {
         position: absolute;
-        font-size: 50px;
+        font-size: 40px;
         z-index: 1000;
         top: -5%;
-        transform: translateX(100%);
+        transform: translateX(-50%);
         color: white;
+        left: 50%;
+        filter: drop-shadow(.01em 2px .01em grey);
     }
 }
 
 .prize-status-icons {
     position: absolute;
-    bottom: 27%;
-    transform: translateX(75%);
+    bottom: 5%;
+    transform: translateX(50%);
     display: flex;
     padding: 0px;
     z-index: 1000;
@@ -40,22 +52,44 @@
 
     & .status-icon {
         position: absolute;
+        filter: drop-shadow(.001em .1em .1em var(--mainDark));
         font-size: 15px;
-        color: #bdc3c7;
-        top: -9px;
-        transform: translateX(50%);
+        top: -2px;
+        transform: translateX(40%);
         z-index: 1500;
+    }
+
+    & .status-icon .ok-icon {
+        color: white;
+    }
+
+    & .status-icon .pending-icon {
+        color: #c0392b;
+        opacity: .5;
     }
 
     & .icon {
         align-items: center;
         display: flex;
         justify-content: center;
-        padding: 5px;
-        color: #95a5a6;
+        padding: 8px;
         border-radius: 50%;
+    }
+    // LESSON: if using as combination,then no spacing shouldbe placed.
+    & .icon.ok {
+        color: white;
+        background-color: #20bf6b;
+    }
+
+    & .icon.pending {
+        color: #95a5a6;
         background-color: var(--mainWhite);
     }
+
+    & .icon svg.shadow {
+        filter: drop-shadow(.001em .1em .1em var(--mainDark));
+    }
+
 }
 
 // END TROPHY

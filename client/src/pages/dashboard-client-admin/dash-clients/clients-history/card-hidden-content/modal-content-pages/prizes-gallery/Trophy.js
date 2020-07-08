@@ -5,16 +5,24 @@ const trophyTypes = {
     default: './img/icons/trophies/fiddelize-trophy.svg', // if star.
     custom: './img/icons/trophies/gallery-trophy.svg',
     placeholder: './img/icons/trophies/trophy-silhouette.svg',
+    secret: './img/icons/trophies/trophy-secret-silhouette.png',
 }
 
+const truncate = (name, leng) => window.Helper.truncate(name, leng);
+
 export default function Trophy({
-    type = "default",
-    challN = 1,
-    challIcon = "heart",
-    prizeDesc = "Um par de ingressos",
-    isConfirmed = false,
-    isDelivered = false,
+    key,
+    data,
 }) {
+
+    const {
+        type = "default",
+        challN = 1,
+        challIcon = "heart",
+        prizeDesc = "Um par de ingressos",
+        isConfirmed = true,
+        isDelivered = true,
+    } = data;
 
     const showIconStatus = status => {
         return status
@@ -22,29 +30,35 @@ export default function Trophy({
         : <FontAwesomeIcon icon="times" className="pending-icon" />
     };
 
-    return (
-        <section className="trophy--root">
-            <h2 className="text-center text-subtitle text-purple font-weight-bold">
-                Desafio n.º {challN}
-            </h2>
-            <section className="prize-status-icons">
-                <section className="confirmed">
-                    <div className="status-icon">
-                        {showIconStatus(isConfirmed)}
-                    </div>
-                    <div className="icon">
-                        <FontAwesomeIcon icon="thumbs-up" />
-                    </div>
-                </section>
-                <section className="delivered">
-                    <div className="status-icon">
-                        {showIconStatus(isDelivered)}
-                    </div>
-                    <div className="icon">
-                        <FontAwesomeIcon icon="hand-holding" />
-                    </div>
-                </section>
+
+    const showPrizeStatusIcons = () => (
+        <section className="prize-status-icons">
+            <section className="confirmed">
+                <div className="status-icon">
+                    {showIconStatus(isConfirmed)}
+                </div>
+                <div className={`icon ${isConfirmed ? "ok" : "pending"}`}>
+                    <FontAwesomeIcon icon="thumbs-up" className={`${isConfirmed ? "shadow" : ""}`} />
+                </div>
             </section>
+            <section className="delivered">
+                <div className="status-icon">
+                    {showIconStatus(isDelivered)}
+                </div>
+                <div className={`icon ${isDelivered ? "ok" : "pending"}`}>
+                    <FontAwesomeIcon icon="hand-holding" className={`${isDelivered ? "shadow" : ""}`} />
+                </div>
+            </section>
+        </section>
+    );
+
+    const description = truncate(prizeDesc, 18);
+
+    return (
+        <section key={key} className="trophy--root">
+            <h2 className="text-center text-subtitle text-purple font-weight-bold">
+                Desafio<br />n.º {challN}
+            </h2>
             <section className="trophy-design">
                 <div className="d-block">
                     <img
@@ -58,9 +72,10 @@ export default function Trophy({
                 <div className="custom-icon">
                     <FontAwesomeIcon icon={challIcon} />
                 </div>
+                {showPrizeStatusIcons()}
             </section>
             <section className="prize-desc text-normal text-center text-purple">
-                {prizeDesc}
+                {description}
             </section>
         </section>
     );

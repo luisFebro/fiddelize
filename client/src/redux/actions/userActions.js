@@ -8,7 +8,10 @@ import { setLoadingProgress } from './globalActions';
 // MAIN DATA LOADING
 export const readUser = async (dispatch, _userId, options = {}) => {
     const { select } = options;
-    const res = await axios.get(`/api/user/${_userId}?select=${select}`, getHeaderJson);
+    let selectQuery = "";
+    if(select) selectQuery = `?select=${select}`;
+
+    const res = await axios.get(`/api/user/${_userId}${selectQuery}`, getHeaderJson);
     console.log('===CURRENT USER LOADED===');
     !select && dispatch({ type: 'USER_READ', payload: res.data });
 

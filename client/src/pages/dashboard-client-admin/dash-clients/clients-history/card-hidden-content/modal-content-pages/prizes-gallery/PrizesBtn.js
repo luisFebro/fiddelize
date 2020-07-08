@@ -4,7 +4,7 @@ import PrizesGallery from './PrizesGallery';
 import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 
 export default function PrizesBtn({ colorS }) {
-    const [fullOpen, setFullOpen] = useState(true);
+    const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
         setFullOpen(true);
