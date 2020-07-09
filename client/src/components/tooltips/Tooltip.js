@@ -66,7 +66,7 @@ export default function Tooltip({
             backgroundColor: backgroundColor || 'var(--themeSDark)',
             fontWeight: 'bold',
             borderRadius: '15px 15px',
-            padding: padding ? padding : '4px auto',
+            padding: padding ? padding : '10px',
             margin: margin || '40px 0',
             whiteSpace: whiteSpace ? null : 'nowrap',
             textShadow: '1px 1px 3px black',

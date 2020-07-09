@@ -42,3 +42,10 @@
 .user-select-text {
     user-select: text;
 }
+
+// img
+.center-to-img {
+    left: 50%;
+    transform: translateX(-50%);
+}
+// end img

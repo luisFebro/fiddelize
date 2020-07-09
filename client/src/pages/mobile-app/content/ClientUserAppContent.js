@@ -65,7 +65,7 @@ function ClientUserAppContent({
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
-    let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor } = useClientAdmin();
+    let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor, arePrizesVisible } = useClientAdmin();
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
@@ -157,6 +157,10 @@ function ClientUserAppContent({
                     <div className="animated zoomIn">
                         <AsyncPercCircleAndGift
                             currScore={currScore}
+                            prizeDesc={mainReward}
+                            currChall={currChall}
+                            arePrizesVisible={arePrizesVisible}
+                            userName={name}
                             classNamePerc={`${needAppForPreview && "enabledLink"}`}
                             maxScore={maxScore}
                             showPercentage={showMoreComps}

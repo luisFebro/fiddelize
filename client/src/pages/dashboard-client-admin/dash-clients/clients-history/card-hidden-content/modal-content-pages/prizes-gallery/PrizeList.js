@@ -8,12 +8,12 @@ import { fromNow, formatDMY } from '../../../../../../../utils/dates/dateFns';
 export default function PrizeList({ userId }) {
     const {
         data: list,
-        ShowLoading,
-        ShowError,
+        loading, error,
+        ShowLoading, ShowError,
     } = useAPI({ url: readPrizes(userId) })
-    // const { rewardList, arePrizesHidden } = useClientAdmin();
+    // const { rewardList, arePrizesVisible } = useClientAdmin();
     const rewardList = [{a: 'a'}, {a: 'a'}, {a: 'a'},]
-    const arePrizesHidden = false;
+    const arePrizesVisible = false;
     const isProgressiveMode = rewardList.length > 1;
 
     const getData = (cliPrize) => {
@@ -44,19 +44,26 @@ export default function PrizeList({ userId }) {
         const data = getData(prize);
 
         const TrophyCard =
-        <div className="zoom-it">
+        <div className="zoom-slow-it">
             <Trophy key={prizeId} data={data} />
         </div>
+
+        const tooltipTxt = `
+            <p class="text-center">DETALHES</p>
+            • Meta Final:<br /><strong>${finalGoal} pontos</strong>
+            <br />
+            <br />
+            • Descrição Prêmio:<br /><strong>${prizeDesc}</strong>
+            <br />
+            <br />
+            • Conquistado em:<br /><strong>${formatDMY(createdAt)} - ${fromNow(createdAt)}</strong>`;
 
         return(
             <Tooltip
                 needArrow
-                text={`
-                    • Meta Final: <strong>${finalGoal} pontos</strong>
-                    <br />
-                    • Descrição Prêmio: <strong>${prizeDesc}</strong>
-                    <br />
-                    • Data: <strong>${formatDMY(createdAt)} - ${fromNow(createdAt)}</strong>`}
+                whiteSpace
+                width={325}
+                text={tooltipTxt}
                 element={TrophyCard}
                 backgroundColor={"var(--themeSDark--black)"}
             />
@@ -65,9 +72,9 @@ export default function PrizeList({ userId }) {
 
     return (
         <section className="prize-list--root">
-            <ShowLoading />
-            <ShowError />
             {dataMap}
+            {loading && <ShowLoading />}
+            {error && <ShowError />}
         </section>
     );
 }

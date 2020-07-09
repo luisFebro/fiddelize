@@ -179,7 +179,7 @@ export default function PurchaseHistory({ data }) {
                                 </p>
                                 <p
                                     className="m-0 mt-2 text-left mx-4 font-weight-bold text-small"
-                                    style={{lineHeight: "10px"}}
+                                    style={{lineHeight: "20px"}}
                                 >
                                     Opa! Você já começa o desafio seguinte de
                                     N.º {historyData.challengeN} com

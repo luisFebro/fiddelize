@@ -6,7 +6,11 @@ import PropTypes from 'prop-types';
 ImgLoader.propTypes = {
     align: PropTypes.string,
     marginY: PropTypes.number,
-    mode: PropTypes.oneOf(['skeleton', 'spinner'])
+    mode: PropTypes.oneOf(['skeleton', 'spinner']),
+    skelVariant: PropTypes.oneOf(['text', 'rect', 'circle']),
+    skelWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    skelHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    skelBackColor: PropTypes.string,
 }
 
 export default function ImgLoader({
@@ -20,24 +24,40 @@ export default function ImgLoader({
     style,
     alt,
     className,
-    modeProps,
     mode = "spinner",
-    needLoader = true, }) {
+    needLoader = true,
+    skelVariant = 'react',
+    skelWidth = 150,
+    skelHeight = 150,
+    skelBackColor,
+}) {
 
     let [status, setStatus] = useState(true);
 
-    useEffect(() => {
-        if(src && timeout === 0) setStatus(false);
-    }, [src, timeout])
+    // useEffect(() => {
+    //     if(src && timeout === 0) setStatus(false);
+    // }, [src, timeout])
 
     useEffect(() => {
         if(timeout) setTimeout(() => setStatus(false), timeout);
     }, [timeout])
 
+    const pickMode = mode => {
+        if(mode === "spinner") return (<Spinner marginX={width} marginY={height} isCenter={false} />);
+        return(
+            <Skeleton
+                variant={skelVariant}
+                width={skelWidth}
+                height={skelWidth}
+                style={{ backgroundColor: skelBackColor || 'grey' }}
+            />
+        );
+    };
+
     return(
         <div style={{margin: `${marginY || 0}px 0px` }} className="container-center">
             <div style={{ ...style, display: status ? 'block' : 'none', visibility: !needLoader && "hidden" }}>
-                <Spinner marginX={width} marginY={height} isCenter={false} />
+                {pickMode(mode)}
             </div>
             <div style={{ display: status ? 'none' : 'block'}}>
                 <img
@@ -48,7 +68,7 @@ export default function ImgLoader({
                     style={style}
                     width={width}
                     height={height || "auto"}
-                    onLoad={() => setStatus(false)}
+                    onLoad={() => !timeout && setStatus(false)}
                 />
             </div>
         </div>

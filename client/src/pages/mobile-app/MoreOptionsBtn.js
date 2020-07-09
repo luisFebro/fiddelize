@@ -62,7 +62,7 @@ function MoreOptionsBtn({
             //if user does not have the same quantity of prize in the db and thus not updateed
             //then, block access to loyalty score page to avoid registration of accumulative score from the last challenge.
             if(res.status !== 200) return console.log("smt wrong with readUser from morebtn")
-            const totaldBPrizes = res.data.clientUserData.totalPurchasePrize;
+            const totaldBPrizes = res.data.clientUserData && res.data.clientUserData.totalPurchasePrize;
             if(totaldBPrizes !== totalPurchasePrize) setBlockAccess(true);
         })
         return () => cancel = true;

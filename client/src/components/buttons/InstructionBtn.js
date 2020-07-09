@@ -26,8 +26,8 @@ export default function InstructionBtn({
                 >
                     <Tooltip
                         text={text}
-                        padding="10px"
                         onClickAway={() => setShowCloseBtn(false)}
+                        padding="10px"
                         whiteSpace
                         needArrow
                         needOpen={needOpen ? true : false }

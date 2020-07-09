@@ -25,7 +25,7 @@ export default function useAPI({
     params = null,
     body = null,
     useHasMore = false,
-    timeout = 60000, }) {
+    timeout = 10000, }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -78,10 +78,11 @@ export default function useAPI({
         doRequest();
 
         return () => cancel();
-    }, [reload])
+    }, [method, url, reload])
 
+    // loading inside of this component wasn't update and delay much in dev env.
+    // it is been declared in the target component like {loading && <Component />}
     const ShowLoading = () => (
-        loading &&
         <Spinner
             marginY={100}
             size="small"
@@ -93,7 +94,6 @@ export default function useAPI({
     }
 
     const ShowError = () => (
-        error &&
         <section>
             <h1 className="text-title text-center text-red">
                 Oops!

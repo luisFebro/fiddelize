@@ -3,7 +3,10 @@ import React, { Fragment } from 'react';
 import getPercentage from '../../utils/numbers/getPercentage';
 import Tooltip from '../../components/tooltips/Tooltip';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
+import PrizesBtn from '../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/prizes-gallery/PrizesBtn';
 // import Tilt from 'react-tilt';
+
+const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function PercCircleAndGift({
     currScore,
@@ -13,10 +16,15 @@ export default function PercCircleAndGift({
     colorS,
     colorP,
     colorBack,
-    classNamePerc, }) {
+    classNamePerc,
+    userName,
+    prizeDesc,
+    arePrizesVisible,
+    currChall, }) {
     const percentageAchieved = getPercentage(maxScore, currScore);
     const needResizeFont = percentageAchieved.toString().includes(".");
     const leftScore = currScore >= maxScore ? 0 : maxScore - currScore
+    const userBeatedChall = currScore >= maxScore;
 
     const handleColorSelection = () => {
         if(colorS === "white") {
@@ -40,28 +48,65 @@ export default function PercCircleAndGift({
         }
     }
 
+    const Gift =
+    <ImgLoader
+        className="app_gift animated bounce shadow-elevation-white"
+        src={imgLib.app_gift}
+        width={100}
+        height="auto"
+        style={{ opacity: userBeatedChall ? 1 : 0.5 }}
+    />
+
+    const visibleTxt = `
+        <p class="text-center">PRÊMIO DO DESAFIO n.º ${currChall}</p>
+        • ${userName}, você ganha <strong>${prizeDesc} pontos</strong> ao concluir este desafio.
+        <br />
+    `;
+
+    const hiddenTxt = `
+        <p class="text-center">PRÊMIO DO DESAFIO n.º ${currChall}</p>
+        • ${userName}, o prêmio é uma surpresa e será revelado assim que este desafio for concluído.
+        <br />
+    `;
+    const tooltipTxt = arePrizesVisible ? visibleTxt : hiddenTxt;
+
+    const showPrizesBtn = () => (
+        <div className="position-absolute center-to-img">
+            <PrizesBtn
+                colorS={colorS}
+                title = "Abrir"
+                top = {0}
+                shadowColor = 'white'
+            />
+        </div>
+    );
+
     const displayGift = () => (
         <div className="shake-it">
-            {currScore >= maxScore
+            {userBeatedChall
             ? (
-                <div>
-                    <p className="mt-3 text-title">Parabéns!<br />Você ganhou um prêmio.</p>
-                    <ImgLoader
-                        className="app_gift animated bounce repeat-3 shadow-elevation-white"
-                        src={imgLib.app_gift}
-                        width={100}
-                        height="auto"
-                    />
-                </div>
+                <section>
+                    <p className="text-subtitle text-shadow mt-3 text-title">
+                        Parabéns, {userName}!
+                        <br />
+                        Você ganhou
+                        <span className="text-title"> {truncate(prizeDesc, 20)}</span>.
+                    </p>
+                    <div className="position-relative">
+                        {Gift}
+                        {showPrizesBtn()}
+                    </div>
+                </section>
             ) : (
                 <div>
                     <div className="position-relative mt-4">
-                        <ImgLoader
-                            className="app_gift animated bounce shadow-elevation-white"
-                            src={imgLib.app_gift}
-                            width={100}
-                            height="auto"
-                            style={{opacity: '.5'}}
+                        <Tooltip
+                            needArrow
+                            whiteSpace
+                            width={325}
+                            text={tooltipTxt}
+                            element={Gift}
+                            backgroundColor={"var(--themeS--" + colorS +")"}
                         />
                         <p
                             className="text-hero"

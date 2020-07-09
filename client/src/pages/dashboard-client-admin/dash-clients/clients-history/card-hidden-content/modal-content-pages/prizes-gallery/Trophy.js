@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ImgLoader from '../../../../../../../components/ImgLoader';
 
 const trophyTypes = {
     default: './img/icons/trophies/fiddelize-trophy.svg', // if star.
@@ -58,7 +59,10 @@ export default function Trophy({ data }) {
             </h2>
             <section className="trophy-design">
                 <div className="d-block">
-                    <img
+                    <ImgLoader
+                        mode="skeleton"
+                        skelWidth={125}
+                        timeout={2000}
                         src={trophyTypes[type]}
                         className="trphy-img shadow-elevation-black"
                         alt="troféu"

@@ -2,9 +2,10 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.20.3"
-const updateDescription = "Galeria de Prêmios pt 2 || novo modelo de requisições HTTP - cliente com axios pt 1";
+const latestVersion = "3.2003.3"
+const updateDescription = "Galeria de Prêmios pt 3";
 const history = [
+    "novo modelo de requisições HTTP - cliente com axios ",
     "Otimização completa do algoritmo do histórico de compra || otimização UI sessão histórico de compras pt 8 (finalizado)",
     "Componentes e Sistema de Notificações - integração de funciolidades interface, design finalizado",
     "Componentes e Sistema de Notificações - concluído implementação completa no backend",

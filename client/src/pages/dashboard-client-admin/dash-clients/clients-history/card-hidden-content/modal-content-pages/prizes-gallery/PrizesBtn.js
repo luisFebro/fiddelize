@@ -3,7 +3,13 @@ import ModalFullContent from '../../../../../../../components/modals/ModalFullCo
 import PrizesGallery from './PrizesGallery';
 import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 
-export default function PrizesBtn({ colorS }) {
+export default function PrizesBtn({
+    colorS,
+    title = "Ver seu Prêmio",
+    position = "relative",
+    top = -10,
+    shadowColor = null,
+}) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
@@ -19,10 +25,11 @@ export default function PrizesBtn({ colorS }) {
     return (
         <section>
              <ButtonFab
-                position="relative"
-                top={-10}
+                position={position}
+                top={top}
                 onClick={handleFullOpen}
-                title="Ver seu Prêmio"
+                title={title}
+                shadowColor={shadowColor}
                 needTxtNoWrap={true}
                 variant="extended"
                 color="white"

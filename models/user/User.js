@@ -158,6 +158,7 @@ const clientAdminData = {
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },
     mainReward: String,
+    arePrizesVisible: Boolean,
     rewardList: [RewardListSchema],
 
     verificationPass: String,
