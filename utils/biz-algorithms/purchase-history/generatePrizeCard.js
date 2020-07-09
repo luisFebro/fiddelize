@@ -1,6 +1,8 @@
 let generatedPrizeCard = {
     cardType: 'prize',
-    desc: ``,
+    icon: "", // custom icon for trophy
+    desc: "", // rewardDesc for prizes gallery
+    value: 0, // rewardScore for prizes gallery
     isPrizeReceived: false,
     isPrizeConfirmed: false,
     createdAt: new Date(),
@@ -18,10 +20,16 @@ const addBrief = (newArray, options = {}) => {
 }
 
 const addPrizeCard = (newArray, options = {}) => {
-    const { currChall } = options;
+    const { currChall, rewardScore, prizeDesc: desc, trophyIcon: icon } = options;
 
     const prizeCardNumber = currChall;
-    generatedPrizeCard = { ...generatedPrizeCard, challengeN: prizeCardNumber };
+    generatedPrizeCard = {
+        ...generatedPrizeCard,
+        challengeN: prizeCardNumber,
+        value: rewardScore,
+        desc,
+        icon,
+    };
 
     newArray.unshift(generatedPrizeCard);
 }
@@ -36,11 +44,11 @@ const addRemainder = (newArray, options = {}) => {
     }
 }
 
-function generatePrizeCard(historyDataArray, scores = {}) {
+function generatePrizeCard(historyDataArray, options = {}) {
     if(!historyDataArray) throw new Error("No array as the first argument")
     const isValidArray = Boolean(historyDataArray.length);
 
-    const { rewardScore, currScore } = scores;
+    const { rewardScore, currScore, prizeDesc, trophyIcon } = options;
 
     let newArray = historyDataArray;
 
@@ -60,7 +68,7 @@ function generatePrizeCard(historyDataArray, scores = {}) {
         firstElem.desc = firstElem.desc.replace("Última Compra", "Compra");
 
         let challTotalScore = addBrief(newArray, { currChall, rewardScore })
-        addPrizeCard(newArray, { currChall });
+        addPrizeCard(newArray, { currChall, rewardScore, prizeDesc, trophyIcon });
         addRemainder(newArray, { challTotalScore, currChall, rewardScore })
     }
 

@@ -10,10 +10,7 @@ const trophyTypes = {
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function Trophy({
-    key,
-    data,
-}) {
+export default function Trophy({ data }) {
 
     const {
         type = "default",
@@ -22,6 +19,8 @@ export default function Trophy({
         prizeDesc = "Um par de ingressos",
         isConfirmed = true,
         isDelivered = true,
+        finalGoal = 0,
+        createdAt = new Date(),
     } = data;
 
     const showIconStatus = status => {
@@ -55,7 +54,7 @@ export default function Trophy({
     const description = truncate(prizeDesc, 18);
 
     return (
-        <section key={key} className="trophy--root">
+        <section className="trophy--root">
             <h2 className="text-center text-subtitle text-purple font-weight-bold">
                 Desafio<br />n.º {challN}
             </h2>

@@ -56,6 +56,7 @@ function ClientScoresPanel({
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
     selfMilestoneIcon = pickedObj.selfMilestoneIcon;
+    const prizeDesc = pickedObj.mainReward;
 
     const { businessId } = useAppSystem();
     const dispatch = useStoreDispatch();
@@ -131,7 +132,8 @@ function ClientScoresPanel({
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                     showSnackbar(dispatch, `Pontuação Registrada, ${getFirstName(name)}!`, 'success');
                     if(userBeatChallenge) {
-                        readPurchaseHistory(_id, maxScore, { noResponse: true })
+                        const options = { noResponse: true, prizeDesc, trophyIcon: selfMilestoneIcon };
+                        readPurchaseHistory(_id, maxScore, options);
                         setFinishedWork(true);
                     } else {
                         setFinishedWork(true);

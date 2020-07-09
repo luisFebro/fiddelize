@@ -305,8 +305,8 @@ exports.addPurchaseHistory = (req, res) => {
 
 exports.readHistoryList = (req, res) => {
     const { _id, clientUserData } = req.profile;
+    let { noResponse, skip, limit, challScore, prizeDesc, trophyIcon } = req.query;
     const rewardScore = Number(req.query.rewardScore);
-    let { noResponse, skip, limit, challScore } = req.query;
     challScore = typeof challScore === "string" ? challScore : Number(challScore);
 
     if(!clientUserData) return res.status(400).json([]);
@@ -314,8 +314,8 @@ exports.readHistoryList = (req, res) => {
     const purchaseHistory = clientUserData.purchaseHistory;
     const currScore = clientUserData.currScore;
 
-    const scores = { rewardScore, currScore };
-    let newHistoryData = generatePrizeCard(purchaseHistory, scores);
+    const options = { rewardScore, currScore, prizeDesc, trophyIcon };
+    let newHistoryData = generatePrizeCard(purchaseHistory, options);
     newHistoryData = getDataChunk(newHistoryData, { skip, limit });
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
     const handleFinalRes = () => {
