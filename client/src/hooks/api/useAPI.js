@@ -25,7 +25,7 @@ export default function useAPI({
     params = null,
     body = null,
     useHasMore = false,
-    timeout = 15000, }) {
+    timeout = 60000, }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -37,32 +37,41 @@ export default function useAPI({
     //   setData({...data, res: []})
     // }, [])
 
+    const handleError = () => {
+        setLoading(false);
+        setError(true);
+    }
+
     useEffect(() => {
         let cancel;
+
+        const stopRequest = setTimeout(() => {
+            cancel();
+            handleError();
+        }, timeout);
 
         setLoading(true);
         setError(false);
 
         const config = {
-            method,
             url,
-            params,
+            method,
             data: body,
-            timeout,
+            params,
             cancelToken: new axios.CancelToken(c => cancel = c) // n1
         }
 
         async function doRequest() {
             try {
                 const response = await axios(config);
+                clearTimeout(stopRequest);
                 setData(response.data);
                 setLoading(false);
                 useHasMore && setHasMore(response.data.length > 0);
             } catch(e) {
                 if(axios.isCancel(e)) return
                 if(e.response) console.log(`${e.response.data}. STATUS: ${e.response.status}`)
-                setLoading(false);
-                setError(true);
+                handleError();
             }
         }
 

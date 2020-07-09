@@ -19,8 +19,6 @@ export default function Trophy({ data }) {
         prizeDesc = "Um par de ingressos",
         isConfirmed = true,
         isDelivered = true,
-        finalGoal = 0,
-        createdAt = new Date(),
     } = data;
 
     const showIconStatus = status => {

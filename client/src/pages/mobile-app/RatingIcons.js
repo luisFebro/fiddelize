@@ -86,7 +86,7 @@ export default function RatingIcons({
     return (
         <RatingDiv>
             {levels.map((level, ind) => (
-                <section className="position-relative" style={{top: '-20px'}} key={level}>
+                <section className="position-relative" style={{top: '-25px', marginTop: 10}} key={level}>
                     <Tooltip
                         text={`NÍVEL ${level.toString().charAt(0)}<br />• Meta: ${eachMilestone * (ind + 1)} pontos.`}
                         element={

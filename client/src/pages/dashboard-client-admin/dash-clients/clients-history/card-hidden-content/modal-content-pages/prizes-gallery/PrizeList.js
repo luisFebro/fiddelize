@@ -2,6 +2,8 @@ import React from 'react';
 import { useClientAdmin } from '../../../../../../../hooks/useRoleData';
 import Trophy from './Trophy';
 import useAPI, { readPrizes } from '../../../../../../../hooks/api/useAPI';
+import Tooltip from '../../../../../../../components/tooltips/Tooltip';
+import { fromNow, formatDMY } from '../../../../../../../utils/dates/dateFns';
 
 export default function PrizeList({ userId }) {
     const {
@@ -32,14 +34,31 @@ export default function PrizeList({ userId }) {
     }
 
     const dataMap = list && list.map(prize => {
-        const { _id: prizeId } = prize;
+        const {
+            _id: prizeId,
+            createdAt,
+            value: finalGoal,
+            desc: prizeDesc
+        } = prize;
 
         const data = getData(prize);
 
+        const TrophyCard =
+        <div className="zoom-it">
+            <Trophy key={prizeId} data={data} />
+        </div>
+
         return(
-            <Trophy
-                key={prizeId}
-                data={data}
+            <Tooltip
+                needArrow
+                text={`
+                    • Meta Final: <strong>${finalGoal} pontos</strong>
+                    <br />
+                    • Descrição Prêmio: <strong>${prizeDesc}</strong>
+                    <br />
+                    • Data: <strong>${formatDMY(createdAt)} - ${fromNow(createdAt)}</strong>`}
+                element={TrophyCard}
+                backgroundColor={"var(--themeSDark--black)"}
             />
         );
     })
