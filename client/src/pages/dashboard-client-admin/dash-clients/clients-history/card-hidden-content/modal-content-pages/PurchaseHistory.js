@@ -143,12 +143,12 @@ export default function PurchaseHistory({ data }) {
     }
 
     const showCurrFinalChallScore = () => (
-        isAfterFirstChall && challScore > 0 &&
+        isAfterFirstChall && totalPrizes > 1 &&
         <section className="container-center">
             <FontAwesomeIcon icon="trophy" style={{...styles.check, fontSize: '35px'}} />
             <p
                 className="d-inline-block text-normal text-purple font-weight-bold m-0"
-                style={{ lineHeight: '21px' }}
+                style={{ lineHeight: '24px' }}
             >
                 Meta Final Atual:
                 <br />

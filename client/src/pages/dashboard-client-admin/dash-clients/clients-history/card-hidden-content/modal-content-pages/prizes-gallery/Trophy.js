@@ -3,9 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ImgLoader from '../../../../../../../components/ImgLoader';
 
 const trophyTypes = {
-    default: './img/icons/trophies/fiddelize-trophy.svg', // if star.
     custom: './img/icons/trophies/gallery-trophy.svg',
-    placeholder: './img/icons/trophies/trophy-silhouette.svg',
+    semisecret: './img/icons/trophies/trophy-silhouette.svg',
     secret: './img/icons/trophies/trophy-secret-silhouette.png',
 }
 
@@ -13,8 +12,8 @@ const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function Trophy({ data }) {
 
-    const {
-        type = "default",
+    let {
+        type = "custom",
         challN = 1,
         challIcon = "heart",
         prizeDesc = "Um par de ingressos",
@@ -22,15 +21,22 @@ export default function Trophy({ data }) {
         isDelivered = true,
     } = data;
 
+    const isTypeSecret = type === "secret";
+    const isTypeCustom = type === "custom";
+
+    if(isTypeSecret) {
+        prizeDesc = "";
+        challIcon = "";
+    }
+
     const showIconStatus = status => {
         return status
         ? <FontAwesomeIcon icon="check" className="ok-icon" />
         : <FontAwesomeIcon icon="times" className="pending-icon" />
     };
 
-
     const showPrizeStatusIcons = () => (
-        <section className="prize-status-icons">
+        <section className={`${isTypeCustom ? undefined : "d-none"} prize-status-icons`}>
             <section className="confirmed">
                 <div className="status-icon">
                     {showIconStatus(isConfirmed)}
@@ -50,11 +56,10 @@ export default function Trophy({ data }) {
         </section>
     );
 
-    const description = truncate(prizeDesc, 18);
-
+    const description = prizeDesc && truncate(prizeDesc, 18);
     return (
         <section className="trophy--root">
-            <h2 className="text-center text-subtitle text-purple font-weight-bold">
+            <h2 className={`${isTypeCustom ? "text-purple" : "text-grey"} text-center text-subtitle font-weight-bold`}>
                 Desafio<br />n.º {challN}
             </h2>
             <section className="trophy-design">
@@ -62,9 +67,8 @@ export default function Trophy({ data }) {
                     <ImgLoader
                         mode="skeleton"
                         skelWidth={125}
-                        timeout={2000}
                         src={trophyTypes[type]}
-                        className="trphy-img shadow-elevation-black"
+                        className={isTypeCustom ? "shadow-elevation-black" : undefined}
                         alt="troféu"
                         width={150}
                         height="auto"
@@ -75,9 +79,11 @@ export default function Trophy({ data }) {
                 </div>
                 {showPrizeStatusIcons()}
             </section>
-            <section className="prize-desc text-normal text-center text-purple">
-                {description}
-            </section>
+            {!isTypeSecret && (
+                <section className="prize-desc text-normal text-center text-purple">
+                    {description}
+                </section>
+            )}
         </section>
     );
 }

@@ -30,6 +30,7 @@ export default function PrizesBtn({
                 onClick={handleFullOpen}
                 title={title}
                 shadowColor={shadowColor}
+                needBtnShadow={shadowColor ? true : false}
                 needTxtNoWrap={true}
                 variant="extended"
                 color="white"

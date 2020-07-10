@@ -11,6 +11,7 @@ const generateHistoryData = require("../../utils/biz-algorithms/purchase-history
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
 const addTransformToImgUrl = require("../../utils/biz-algorithms/cloudinary-images/addTransformToImgUrl");
 const { findOneAndUpdate, confirmPrizeStatus } = require("./helpers/purchase-history");
+const { getTrophyData, insertElemWithPlaceholder, defaultSemisecret, defaultSecret } = require("./helpers/prizes-gallery");
 const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
 const getDataChunk = require("../../utils/array/getDataChunk");
@@ -344,9 +345,37 @@ exports.readHistoryList = (req, res) => {
 
 // Prizes
 exports.readPrizes = (req, res) => {
+    const cliAdminId = req.query.cliAdminId;
     const { clientUserData: { purchaseHistory } } = req.profile;
-    const prizes = purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
-    res.json(prizes);
+
+    User.findById(cliAdminId)
+    .select("clientAdminData.rewardList clientAdminData.arePrizesVisible")
+    .exec((err, data) => {
+        if(err) return res.status(400).json(msg("error.notFound"));
+        let { rewardList, arePrizesVisible } = data.clientAdminData;
+        arePrizesVisible = Boolean(arePrizesVisible);
+        const isProgressiveMode = rewardList.length > 1;
+        const cliUserPrizes = purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
+
+        const cliUserPrizesTotal = cliUserPrizes.length;
+        const cliAdminPrizesTotal = cliUserPrizes.length;
+        const needPlaceholdersMap = cliUserPrizesTotal <= cliAdminPrizesTotal;
+
+        const trophyElems = !cliUserPrizes ? [] : cliUserPrizes.map(trophy => getTrophyData(trophy));
+        const placeholders = needPlaceholdersMap && rewardList.map((challenge, ind) =>  {
+            const { rewardScore, icon } = challenge;
+            const challN = rewardList.length - ind;
+
+            return arePrizesVisible
+            ? defaultSemisecret(icon, rewardScore)
+            : defaultSecret({ challN })
+        });
+
+        const finalData = insertElemWithPlaceholder({ elemList: trophyElems, placeholderList: placeholders });
+
+        res.json(finalData);
+    });
+
 }
 
 exports.changePrizeStatus = (req, res) => {

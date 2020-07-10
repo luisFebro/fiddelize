@@ -99,7 +99,7 @@ export default function useAPI({
                 Oops!
             </h1>
             <p className="text-normal mx-2 text-purple text-center">
-                Aconteceu um erro ao se conectar com o servidor.
+                Não foi possível se conectar com o servidor. Verifique sua conexão.
             </p>
             <div className="container-center">
                 <ButtonMulti

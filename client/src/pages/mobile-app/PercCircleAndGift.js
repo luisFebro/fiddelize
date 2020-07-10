@@ -71,12 +71,15 @@ export default function PercCircleAndGift({
     const tooltipTxt = arePrizesVisible ? visibleTxt : hiddenTxt;
 
     const showPrizesBtn = () => (
-        <div className="position-absolute center-to-img">
+        <div
+            className="position-absolute"
+            style={{bottom: '5px', left: '57%'}}
+        >
             <PrizesBtn
                 colorS={colorS}
-                title = "Abrir"
-                top = {0}
-                shadowColor = 'white'
+                title= "Abrir"
+                top= {0}
+                shadowColor= 'white'
             />
         </div>
     );
