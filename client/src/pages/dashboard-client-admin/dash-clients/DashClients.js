@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import VAsyncRecordedClientsList from './clients-history/VAsyncRecordedClientsList';
 import DashSectionTitle from '../../DashSectionTitle';
+// COMPONENTS
 import RankingPondium from './RankingPondium';
-// import useDidScroll from '../../../hooks/scroll/useDidScroll';
-// NotificationArea will be embed into the full modal of notification...
-// import NotificationArea from './notification-area/NotificationArea';
+import AutomaticToDoList from './automatic-to-do-list';
+import VAsyncRecordedClientsList from './clients-history/VAsyncRecordedClientsList';
+// END COMPONENTS
+
 import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
 
 const Title = ({ bizName }) => {
@@ -41,8 +42,10 @@ export default function DashClients() {
             <DashSectionTitle
                 title={sectionTitle}
             />
+            <AutomaticToDoList />
+            <hr className="lazer-purple"/>
             <RankingPondium />
-            <hr />
+            <hr className="lazer-purple"/>
             <VAsyncRecordedClientsList />
         </div>
     );
