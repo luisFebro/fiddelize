@@ -363,11 +363,15 @@ exports.readPrizes = (req, res) => {
 
         const trophyElems = !cliUserPrizes ? [] : cliUserPrizes.map(trophy => getTrophyData(trophy));
         const placeholders = needPlaceholdersMap && rewardList.map((challenge, ind) =>  {
-            const { rewardScore, icon } = challenge;
             const challN = rewardList.length - ind;
+            const lastInd = rewardList.length - (ind + 1);
+
+            const challIcon = rewardList[lastInd].icon;
+            const finalGoal = rewardList[lastInd].rewardScore;
+            const prizeDesc = rewardList[lastInd].rewardDesc;
 
             return arePrizesVisible
-            ? defaultSemisecret(icon, rewardScore)
+            ? defaultSemisecret({ challIcon, finalGoal, challN, prizeDesc })
             : defaultSecret({ challN })
         });
 

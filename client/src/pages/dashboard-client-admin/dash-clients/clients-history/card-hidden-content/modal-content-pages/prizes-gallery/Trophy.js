@@ -74,13 +74,16 @@ export default function Trophy({ data }) {
                         height="auto"
                     />
                 </div>
-                <div className="custom-icon">
+                <div
+                    className="custom-icon"
+                    style={{ filter: `${isTypeCustom ? 'drop-shadow(.01em 2px .01em grey)' : ''}`}}
+                >
                     <FontAwesomeIcon icon={challIcon} />
                 </div>
                 {showPrizeStatusIcons()}
             </section>
             {!isTypeSecret && (
-                <section className="prize-desc text-normal text-center text-purple">
+                <section className={`${isTypeCustom ? "text-purple" : "text-grey"} prize-desc text-normal text-center`}>
                     {description}
                 </section>
             )}

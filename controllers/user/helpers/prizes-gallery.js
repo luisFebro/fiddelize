@@ -34,10 +34,12 @@ exports.getTrophyData = (cliPrize, trophyType = "custom") => {
     return data;
 }
 
-exports.defaultSemisecret = (challIcon, finalGoal) => ({ // users will see trophy as silouette, but with icon and scores exposed
+exports.defaultSemisecret = ({ challIcon, finalGoal, challN, prizeDesc }) => ({ // users will see trophy as silouette, but with icon and scores exposed
     type: "semisecret",
+    challN,
     challIcon,
     finalGoal,
+    prizeDesc,
 });
 
 exports.defaultSecret = ({ challN }) => ({ // users will see trophy as silouette, no details
