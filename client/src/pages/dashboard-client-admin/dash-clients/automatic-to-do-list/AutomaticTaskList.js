@@ -24,7 +24,7 @@ export default function AutomaticTaskList() {
 
             ) : (
                 <div className="text-normal font-weight-bold text-purple">
-                    Você tem <span style={{fontSize: '25px'}}>{list ? list.length : 0}</span> tarefa{plural} pendente{plural}.
+                    Você tem <span style={{fontSize: '25px'}}>{list ? list.length : 0}</span> tarefa{plural} gerada{plural}.
                 </div>
             )}
         </Fragment>

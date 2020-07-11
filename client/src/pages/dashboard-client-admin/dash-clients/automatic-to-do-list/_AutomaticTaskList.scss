@@ -1,0 +1,19 @@
+.task-card--root {
+    padding: 5px;
+}
+
+.task-card--root .title {
+    text-align: center;
+    position: relative;
+    // top: 5px;
+}
+
+.task-card--root .desc {
+    padding-left: 10px;
+}
+
+.action-btn-pending-delivery {
+    position: absolute;
+    bottom: -34px;
+    right: 0;
+}

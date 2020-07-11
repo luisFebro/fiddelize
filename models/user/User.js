@@ -3,17 +3,6 @@ const Schema = mongoose.Schema;
 const collectionName = "all-clients";
 const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
 
-// TEMP AUTH USER ID
-const dataTempAuthUserToken = {
-    this: {
-        type: String,
-        default: '',
-    },
-    createdAt: { type: Date, default: Date.now, expires: '1m' }
-}
-
-const UserTokenSchema = new Schema(dataTempAuthUserToken);
-// END TEMP AUTH USER ID
 // GENERAL SCHEMAS
 const enumTypes = [
     // pattern: (role_desc);
@@ -46,7 +35,7 @@ const notificationsData = {
     subtype: { type: String, enum: [...enumSubtypes]},
     senderId: { required: true, type: String }, // for authorization verification and for chat request
     senderName: { type: String, trim: true, lowercase: true }, // only for chat request
-    content: { type: String, maxlength: 3000 }, // msgs for chat or infos about variable in such data format: key1:value1;key2:value2;
+    content: { type: String }, // msgs for chat or infos about variable in such data format: key1:value1;key2:value2;
     isCardNew: { type: Boolean, default: true }, // When user visualize notif page, a new badge will be show and then it will be update as false
     clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
     isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead
@@ -122,6 +111,15 @@ const rewardListData = {
 }
 const RewardListSchema = new Schema(rewardListData, { _id: false });
 
+const tasksListData = { // or to do list
+    taskType: { type: String, default: "pendingDelivery",  enum: ["pendingDelivery", ]},
+    taskTitle: String,
+    taskDesc: String,
+    createdAt: { type: Date, default: Date.now },
+    done: { type: Boolean, default: false },
+}
+const TasksListSchema = new Schema(tasksListData, { _id: true });
+
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
     bizCodeName: String,
@@ -166,6 +164,7 @@ const clientAdminData = {
 
     onceChecked: OnceCheckedSchema, // NOT IMPLEMENTED YET
     notifications: [NotificationsSchema],
+    tasksList: [TasksListSchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {
@@ -251,6 +250,19 @@ This is how I sorted by the largest length of items, and then sorted by name:
 
 
 /* ARCHIVES
+// TEMP AUTH USER ID
+const dataTempAuthUserToken = {
+    this: {
+        type: String,
+        default: '',
+    },
+    createdAt: { type: Date, default: Date.now, expires: '1m' }
+}
+
+const UserTokenSchema = new Schema(dataTempAuthUserToken);
+// END TEMP AUTH USER ID
+
+
 UserSchema.pre('findOneAndUpdate', async function(next) {
     const doc = await this.model.findOne(this.getQuery());
 
