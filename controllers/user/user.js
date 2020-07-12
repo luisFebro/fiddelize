@@ -395,7 +395,7 @@ exports.changePrizeStatus = (req, res) => {
     if(status === "FAIL") return res.status(404).json({ error });
 
 
-    User.findById(_id)
+    User.findById(_id) // LESSON - do not use select with SAVE.
     .exec((err, doc) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
         doc.clientUserData.purchaseHistory = newData;

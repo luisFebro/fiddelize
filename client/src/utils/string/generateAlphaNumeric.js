@@ -1,6 +1,6 @@
 import getOnlyConsonants from './getOnlyConsonants';
 // reference: https://stackoverflow.com/questions/10726909/random-alpha-numeric-string-in-javascript
-export default function generateAlphaNumeric(length, chars) {
+export default function generateAlphaNumeric(length = 7, chars = 'aA#!@') {
     var mask = '';
     if (chars.indexOf('a') > -1) mask += 'bcdfghjklmnpqrstvwxyz';
     if (chars.indexOf('A') > -1) mask += 'BCDFGHJKLMNPQRSTVWXYZ';

@@ -17,13 +17,17 @@ const PurpleSwitch = withStyles({
   track: {},
 })(Switch);
 
-export default function SwitchBtn({ titleLeft = "Não", titleRight = "Sim" }) {
+export default function SwitchBtn({
+    titleLeft = "Não",
+    titleRight = "Sim",
+    callback,
+}) {
     const [checked, setChecked] = useState(false);
-    console.log("checked", checked);
 
     const handleChange = (event) => {
         const status = event.target.checked;
         setChecked(status);
+        if(typeof callback === "function") callback(status);
     };
 
     const setTrue = () => setChecked(true);

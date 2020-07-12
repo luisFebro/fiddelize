@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
 import Card from '@material-ui/core/Card';
 import { fromNow } from '../../../../../utils/dates/dateFns';
+import useAPI, { toggleDoneUrl, getUniqueId } from '../../../../../hooks/api/useAPI';
 import ActionBtn from './ActionBtn';
+import { useProfile } from '../../../../../hooks/useRoleData';
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
-
+/*
+if done,
+this will be default description:
+Feito por: Febro.
+Atividade Feita: Foi entregue - no dia 11/08/20 às 10:50 - o prêmio (corte unissex) para cliente FERNANDA.
+ */
 export default function TaskCard({ data = {} }) {
     const [moreInfo, setMoreInfo] = useState(false);
+    const [toggleDone, setToggleDone] = useState(undefined);
 
     const {
+        _id: taskId,
         done = false,
         taskType = "pendingDelivery",
         taskTitle = "Entrega de Prêmio",
         taskDesc = "Entregar para CLIENTNAME prêmio (PRIZENAME) do desafio de n.º CHALLNUM até REWARD",
+        deliveredBy = "Febro",
         createdAt = new Date(),
     } = data;
+
+    const { _id: userId } = useProfile();
+    const body = { userId, taskId, doneStatus: toggleDone }
+    const trigger = toggleDone === undefined ? false : toggleDone;
+    useAPI({ method: "put", url: toggleDoneUrl(), body, trigger, runName: `TaskCard${getUniqueId()}` })
 
     const styles = {
         card: {
@@ -59,6 +74,10 @@ export default function TaskCard({ data = {} }) {
         );
     };
 
+    const handleToggleBtnRes = toggleRes => {
+        setToggleDone(toggleRes);
+    }
+
     return (
         <section className="position-relative" style={{marginBottom: '35px'}}>
             <Card
@@ -72,7 +91,10 @@ export default function TaskCard({ data = {} }) {
                     </main>
                 </section>
             </Card>
-            <ActionBtn type="pendingDelivery" />
+            <ActionBtn
+                type="pendingDelivery"
+                callback={handleToggleBtnRes}
+            />
         </section>
     );
 }

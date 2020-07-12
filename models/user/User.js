@@ -112,11 +112,12 @@ const rewardListData = {
 const RewardListSchema = new Schema(rewardListData, { _id: false });
 
 const tasksListData = { // or to do list
+    done: { type: Boolean, default: false },
     taskType: { type: String, default: "pendingDelivery",  enum: ["pendingDelivery", ]},
     taskTitle: String,
     taskDesc: String,
+    deliveredBy: String,
     createdAt: { type: Date, default: Date.now },
-    done: { type: Boolean, default: false },
 }
 const TasksListSchema = new Schema(tasksListData, { _id: true });
 
@@ -164,7 +165,7 @@ const clientAdminData = {
 
     onceChecked: OnceCheckedSchema, // NOT IMPLEMENTED YET
     notifications: [NotificationsSchema],
-    tasksList: [TasksListSchema],
+    tasks: [TasksListSchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {

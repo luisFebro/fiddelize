@@ -43,7 +43,9 @@ export default function Illustration({
     className,
     alt = "conteúdo da página está vazio",
     actionButton = {},
-    txtImgConfig = {} }) {
+    txtImgConfig = {},
+    txtClassName,
+    wrapperClassName, }) {
 
     const [status, setStatus] = useState(true);
 
@@ -72,8 +74,7 @@ export default function Illustration({
 
     return (
         <Fragment>
-            <h2 className="text-center text-sub-title-upper">{title}</h2>
-            <DivWrapper className="container-center my-5" style={{overflowX: 'hidden'}}>
+            <DivWrapper className={`${wrapperClassName ? `${wrapperClassName} container-center` : "container-center"}`} style={{overflowX: 'hidden'}}>
                 <div style={{ display: status ? 'block' : 'none' }}>
                     <Spinner marginX={spinnerWidth} marginY={spinnerHeight} isCenter={false} size={spinnerSize} />
                 </div>
@@ -83,19 +84,18 @@ export default function Illustration({
                         src={img}
                         width=""
                         height=""
-                        style={{...imgStyle, overflowX: 'hidden'}}
+                        style={{...imgStyle, overflowX: 'hidden', maxWidth: 400}}
                         alt={alt}
                         onLoad={() => setStatus(false)}
                     />
                     <div className="container-center">
                         <p
-                            className={`move-txt-from-center ${txtBorder} ${txtStyle || "text-subtitle"}`}
+                            className={`move-txt-from-center ${txtBorder} ${`${txtClassName} text-subtitle` || "text-subtitle"}`}
                             style={{
                                 overflowY: 'visible',
                                 minWidth: `${isSmall ? "300px" : "500px"}`,
                                 fontSize: fontSize || '2rem',
                                 textAlign: txtAlign || "center",
-                                color: txtColor || "black",
                                 top: topPos || "-2%",
                                 left: leftPos || "50%",
                             }}

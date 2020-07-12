@@ -2,18 +2,33 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useStoreDispatch } from 'easy-peasy';
+import { setRun } from '../../hooks/useRunComp';
 import { getHeaderToken } from '../../utils/server/getHeaders';
 import Spinner from '../../components/loadingIndicators/Spinner';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
 
 export * from './requestsLib.js';
+export * from './trigger.js';
+
+/*
+use default:
+const {
+    data: list = [],
+    loading, error,
+    ShowLoading, ShowError,
+} = useAPI({ method: "put", url: readPrizes(userId), params: { cliAdminId: businessId } })
+{listMap}
+{loading && <ShowLoading />}
+{error && <ShowError />}
+ */
 
 //Global axios defaults
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 useAPI.propTypes = {
     url: PropTypes.string.isRequired,
-    method: PropTypes.oneOf(["GET", "POST", "DELETE", "UPDATE"]),
+    method: PropTypes.oneOf(["get", "post", "delete", "update"]),
     params: PropTypes.object, // e.g { q: query, page: pageNumber } the same as ?q=${query}&page=${pageNumber}
     body: PropTypes.object, // body is the data to be sent as the request body - Only applicable for request methods 'PUT', 'POST', 'DELETE , and 'PATCH'
     timeout: PropTypes.number, // `timeout` specifies the number of milliseconds before the request times out. -- If the request takes longer than `timeout`, the request will be aborted.
@@ -25,12 +40,17 @@ export default function useAPI({
     params = null,
     body = null,
     useHasMore = false,
-    timeout = 10000, }) {
+    timeout = 10000,
+    trigger = true,
+    runName = null, }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [reload, setReload] = useState(false);
     const [hasMore, setHasMore] = useState(false);
+    const [init, setInit] =  useState(true); // for allow initial fetch when handling runData with redux.
+
+    const dispatch = useStoreDispatch();
 
     // WATCH WEV SIMPLIFIEND INFINIT SCROLLING TO GET THE IMPLEMENTATIOn
     // useEffect(() => {
@@ -42,10 +62,18 @@ export default function useAPI({
         setError(true);
     }
 
+    const handleUpdateData = () => {
+        // same unique component name which is being requesting...
+        if(!runName) return;
+        setRun(dispatch, runName);
+    }
+
     useEffect(() => {
         let cancel;
+        if(!trigger) return;
+        const needRequest = init || trigger;
 
-        const stopRequest = setTimeout(() => {
+        const stopRequest = needRequest && setTimeout(() => {
             cancel();
             handleError();
         }, timeout);
@@ -66,7 +94,9 @@ export default function useAPI({
                 const response = await axios(config);
                 clearTimeout(stopRequest);
                 setData(response.data);
+                handleUpdateData();
                 setLoading(false);
+                setInit(false);
                 useHasMore && setHasMore(response.data.length > 0);
             } catch(e) {
                 if(axios.isCancel(e)) return
@@ -75,10 +105,10 @@ export default function useAPI({
             }
         }
 
-        doRequest();
+        needRequest && doRequest();
 
         return () => cancel();
-    }, [method, url, reload])
+    }, [trigger, init, method, url, reload])
 
     // loading inside of this component wasn't update and delay much in dev env.
     // it is been declared in the target component like {loading && <Component />}

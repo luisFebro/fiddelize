@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import ModalFullContent from '../../../../../components/modals/ModalFullContent';
-import Content from './Content';
+import ModalContent from './ModalContent';
 
 export default function DoneTasksBtn({
     position = "relative",
@@ -23,7 +23,7 @@ export default function DoneTasksBtn({
     }
 
     const ThisContent =
-    <Content />
+    <ModalContent />
 
     return (
         <section>
