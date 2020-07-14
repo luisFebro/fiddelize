@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Illustration from '../../../../../components/Illustration';
-import useAPI, { readTasks } from '../../../../../hooks/api/useAPI';
+import useAPIList, { readTasks, getTrigger } from '../../../../../hooks/api/useAPIList';
 import { useProfile } from '../../../../../hooks/useRoleData';
+import { useRunComp } from '../../../../../hooks/useRunComp';
 import TaskCard from '../list/TaskCard';
-//TaskCard
+import useElemDetection, { checkDetectedElem } from '../../../../../hooks/api/useElemDetection';
+
 export default function ModalContent() {
+    const [skip, setSkip] = useState(0);
     const { _id: userId } = useProfile();
+    const { runName } = useRunComp();
+
+    const trigger = getTrigger(runName, "TaskCard");
 
     const {
-        data: list = [],
-        loading, error,
-        ShowLoading, ShowError,
-    } = useAPI({ url: readTasks(userId, true) });
+        list = [], listTotal,
+        readyShowElems, needEmptyIllustra,
+        loading, ShowLoadingSkeleton,
+        error, ShowError,
+        isPlural,
+        hasMore,
+    } = useAPIList({ url: readTasks(userId, true), trigger, skip });
+
+    const observer = useRef();
+    const detectedCard = useElemDetection({ observer, loading, hasMore, setSkip });
 
     const showTitle = () => (
         <div className="mt-4">
@@ -23,28 +35,57 @@ export default function ModalContent() {
         </div>
     );
 
+    const showTotalTasks = () => (
+        readyShowElems &&
+        <div className="text-center my-3 text-normal font-weight-bold text-purple">
+            <span style={{fontSize: '25px'}}>✔ {listTotal}</span> tarefa{isPlural}.
+        </div>
+    );
+
     const showNoTasksImg = () => (
+        needEmptyIllustra &&
         <div className="container-center my-5">
             <Illustration
                 img={"/img/illustrations/empty-data.svg" || "/img/error.png"}
                 txtClassName="text-purple"
                 alt="Ilustração"
-                txtImgConfig = {{ topPos: "50%", txt: "Nenhuma tarefa encontrada" }}
+                txtImgConfig = {{ topPos: "50%", txt: "Nenhuma tarefa feita" }}
             />
         </div>
     );
 
-    const listMap = list.map(task => (
-        <TaskCard key={task._id} data={task} />
-    ))
+    const listMap = list.map((task, ind) => {
+        const  props = {
+            key: task._id,
+            data: task,
+            defaultStatus: true,
+            className: "ml-2"
+        }
+
+        return checkDetectedElem({ list, ind, indFromLast: 2 })
+        ? <TaskCard {...props} ref={detectedCard} />
+        : <TaskCard {...props} />
+    })
+
+    const showOverMsg = () => (
+        !hasMore && readyShowElems &&
+        <p
+            className="text-normal text-center font-weight-bold text-purple"
+            style={{margin: '100px 0'}}
+        >
+            Isso é tudo.
+        </p>
+    );
 
     return (
-        <section>
+        <section className="mb-5">
             {showTitle()}
-            {!list.length && showNoTasksImg()}
+            {showTotalTasks()}
             {listMap}
-            {loading && <ShowLoading />}
+            {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
+            {showNoTasksImg()}
+            {showOverMsg()}
         </section>
     );
 }

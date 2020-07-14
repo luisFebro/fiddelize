@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
+import uuidv1 from 'uuid/v1';
 
 const PurpleSwitch = withStyles({
   switchBase: {
@@ -20,18 +21,30 @@ const PurpleSwitch = withStyles({
 export default function SwitchBtn({
     titleLeft = "Não",
     titleRight = "Sim",
+    titleQuestion = "Entregue?",
     callback,
+    defaultStatus = false,
 }) {
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(defaultStatus);
+
+    const getStatusWithId = bool => `${bool}_${uuidv1()}`;
 
     const handleChange = (event) => {
         const status = event.target.checked;
+        const statusId = getStatusWithId(status);
         setChecked(status);
-        if(typeof callback === "function") callback(status);
+        if(typeof callback === "function") callback(statusId);
     };
 
-    const setTrue = () => setChecked(true);
-    const setFalse = () => setChecked(false);
+    const setTrue = () => {
+        setChecked(true);
+        if(typeof callback === "function") callback(getStatusWithId(true));
+    };
+
+    const setFalse = () => {
+        setChecked(false);
+        if(typeof callback === "function") callback(getStatusWithId(false));
+    }
 
     const on = 'm-0 animated rubberBand text-normal text-purple font-weight-bold';
     const off = "m-0 text-normal text-grey";
@@ -40,7 +53,9 @@ export default function SwitchBtn({
 
     return (
         <section className="container-center">
-            <p className="m-0 mr-2 d-inline-block text-normal font-weight-bold text-purple">Feito?</p>
+            <p className="m-0 mr-2 d-inline-block text-normal font-weight-bold text-purple">
+                {titleQuestion}
+            </p>
             <p className={txtStyle1} onClick={setFalse}>{titleLeft}</p>
             <PurpleSwitch
                 checked={checked}

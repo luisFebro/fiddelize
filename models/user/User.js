@@ -115,8 +115,9 @@ const tasksListData = { // or to do list
     done: { type: Boolean, default: false },
     taskType: { type: String, default: "pendingDelivery",  enum: ["pendingDelivery", ]},
     taskTitle: String,
-    taskDesc: String,
-    deliveredBy: String,
+    content: String, // e.g dataFormat: "userName:value;prizeDesc:tickets;challNum:2;deadline:30/12/20;"
+    madeDate: Date,
+    madeBy: String,
     createdAt: { type: Date, default: Date.now },
 }
 const TasksListSchema = new Schema(tasksListData, { _id: true });

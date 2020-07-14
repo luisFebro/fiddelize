@@ -2,8 +2,8 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.2105.3"
-const updateDescription = "painel de controle admin - lista automática de tarefas pt 3";
+const latestVersion = "3.22.3"
+const updateDescription = "painel de controle admin - lista automática de tarefas - rolagem infinita pt 4";
 const history = [
     "Galeria de Prêmios (finalizado)",
     "novo modelo de requisições HTTP - cliente com axios ",

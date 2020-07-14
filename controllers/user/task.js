@@ -1,6 +1,7 @@
 const User = require('../../models/user');
 const { msgG } = require('../_msgs/globalMsgs');
 const findKeyAndAssign = require("../../utils/array/findKeyAndAssign");
+const getDataChunk = require("../../utils/array/getDataChunk");
 
 // UTILS
 const pickDataByProfile = ({ profileData, role = 'cliente-admin' }) => {
@@ -48,14 +49,16 @@ exports.addAutomaticTask = (req, res) => {
     });
 }
 
-// Method: Put
+// Method: Get
 exports.readTasks = (req, res) => {
-    const doneStatus = req.query.doneStatus;
+    const { doneStatus, skip, limit = 5 } = req.query;
     const array = pickDataByProfile({ profileData: req.profile });
 
     const data = array.filter(task => task.done.toString() === doneStatus);
+    const dataSize = data.length;
+    const dataChunk = getDataChunk(data, { skip, limit })
 
-    res.json(data);
+    res.json({ list: dataChunk, listTotal: dataSize, chunksTotal: Math.ceil(dataSize / limit) });
 }
 
 // Method: Put
@@ -77,7 +80,7 @@ exports.toggleDone = (req, res) => {
 
         doc.markModified("clientAdminData.tasks");
 
-        doc.save(err => res.json({msg: `The done status was toggled to ${doneStatus.toString().toUpperCase()}!`}))
+        doc.save(err => res.json({msg: `The done status was toggled to ${doneStatus ? doneStatus.toString().toUpperCase() : doneStatus}!`}))
     });
 
 }

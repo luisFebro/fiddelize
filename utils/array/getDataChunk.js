@@ -2,6 +2,7 @@ function getDataChunk(arrayData, options = {}) {
     if(!arrayData) throw new Error("You should pass an array of object as the first argument.")
 
     let { skip, limit, search } = options;
+    skip = parseInt(skip); limit = parseInt(limit);
     if(!skip) skip = 0; // default
     if(!limit) limit = arrayData.length; // default
 

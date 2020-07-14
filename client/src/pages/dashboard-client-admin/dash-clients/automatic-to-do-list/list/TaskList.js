@@ -1,12 +1,7 @@
 import React from 'react';
 import TaskCard from './TaskCard';
 
-export default function TaskList({ listData }) {
-    const {
-        data: list = [],
-        loading, error,
-        ShowLoading, ShowError,
-    } = listData;
+export default function TaskList({ list }) {
 
     const listMap = list.map(task => (
         <TaskCard key={task._id} data={task} />
@@ -15,8 +10,6 @@ export default function TaskList({ listData }) {
     return (
         <div className="mt-3 mb-5">
             {listMap}
-            {loading && <ShowLoading />}
-            {error && <ShowError />}
         </div>
     );
 }

@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreDispatch } from 'easy-peasy';
 import { setRun } from '../../hooks/useRunComp';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { getHeaderToken } from '../../utils/server/getHeaders';
-import Spinner from '../../components/loadingIndicators/Spinner';
-import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
+import isObjEmpty from '../../utils/objects/isObjEmpty';
+import { ShowLoadingComp } from './Comps';
 
 export * from './requestsLib.js';
 export * from './trigger.js';
@@ -15,8 +16,8 @@ export * from './trigger.js';
 use default:
 const {
     data: list = [],
-    loading, error,
-    ShowLoading, ShowError,
+    loading, ShowLoading,
+    error, ShowError,
 } = useAPI({ method: "put", url: readPrizes(userId), params: { cliAdminId: businessId } })
 {listMap}
 {loading && <ShowLoading />}
@@ -39,47 +40,66 @@ export default function useAPI({
     url,
     params = null,
     body = null,
-    useHasMore = false,
-    timeout = 10000,
+    timeout = 15000,
     trigger = true,
-    runName = null, }) {
+    runName = null,
+    snackbar = {},
+}) {
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-    const [reload, setReload] = useState(false);
-    const [hasMore, setHasMore] = useState(false);
-    const [init, setInit] =  useState(true); // for allow initial fetch when handling runData with redux.
+    const [loading, setLoading] = useState(true);
+    const [alreadyReqId, setAlreadyReqId] = useState(null);
+
+    const {
+        txtPending,
+        txtSuccess = "Operação realizada com sucesso!",
+        txtFailure = "Não foi possível realizar operação. Tente novamente."
+    } = snackbar;
 
     const dispatch = useStoreDispatch();
+    const needSnack = !isObjEmpty(snackbar);
 
-    // WATCH WEV SIMPLIFIEND INFINIT SCROLLING TO GET THE IMPLEMENTATIOn
-    // useEffect(() => {
-    //   setData({...data, res: []})
-    // }, [])
-
-    const handleError = () => {
-        setLoading(false);
-        setError(true);
+    const getSnack = (msg, opts = {}) => {
+        const { type = "warning" } = opts;
+        if(!needSnack || !msg) return true;
+        showSnackbar(dispatch, msg, type);
+        return true;
     }
 
     const handleUpdateData = () => {
-        // same unique component name which is being requesting...
+        // same unique component name which is being requesting with uniqueId alongside if needed more than once...
         if(!runName) return;
         setRun(dispatch, runName);
     }
 
+    function handleSuccess({ response, stopRequest }) {
+        const ok = getSnack(txtSuccess, { type: "success" });
+        if(ok) {
+            clearTimeout(stopRequest);
+            setData(response.data);
+            handleUpdateData();
+            setLoading(false);
+            setAlreadyReqId(trigger);
+        }
+    }
+
+    function handleError() {
+        setAlreadyReqId(null);
+        setLoading(false);
+        getSnack(txtFailure, { type: "error"});
+    }
+
     useEffect(() => {
         let cancel;
+        const alreadyPassed = alreadyReqId === trigger;
+        if(alreadyPassed) return;
         if(!trigger) return;
-        const needRequest = init || trigger;
 
-        const stopRequest = needRequest && setTimeout(() => {
+        const stopRequest = setTimeout(() => {
             cancel();
             handleError();
         }, timeout);
 
         setLoading(true);
-        setError(false);
 
         const config = {
             url,
@@ -91,13 +111,9 @@ export default function useAPI({
 
         async function doRequest() {
             try {
+                getSnack(txtPending);
                 const response = await axios(config);
-                clearTimeout(stopRequest);
-                setData(response.data);
-                handleUpdateData();
-                setLoading(false);
-                setInit(false);
-                useHasMore && setHasMore(response.data.length > 0);
+                handleSuccess({ response, stopRequest });
             } catch(e) {
                 if(axios.isCancel(e)) return
                 if(e.response) console.log(`${e.response.data}. STATUS: ${e.response.status}`)
@@ -105,45 +121,12 @@ export default function useAPI({
             }
         }
 
-        needRequest && doRequest();
+        doRequest();
 
-        return () => cancel();
-    }, [trigger, init, method, url, reload])
+        return () => { cancel(); clearTimeout(stopRequest); };
+    }, [trigger])
 
-    // loading inside of this component wasn't update and delay much in dev env.
-    // it is been declared in the target component like {loading && <Component />}
-    const ShowLoading = () => (
-        <Spinner
-            marginY={100}
-            size="small"
-        />
-    );
-
-    const handleReloadBtn = () => {
-        setReload(reload => !reload);
-    }
-
-    const ShowError = () => (
-        <section>
-            <h1 className="text-title text-center text-red">
-                Oops!
-            </h1>
-            <p className="text-normal mx-2 text-purple text-center">
-                Não foi possível se conectar com o servidor. Verifique sua conexão.
-            </p>
-            <div className="container-center">
-                <ButtonMulti
-                    title="Recarregar"
-                    onClick={handleReloadBtn}
-                    color="var(--mainWhite)"
-                    backgroundColor="var(--mainDark)"
-                />
-            </div>
-        </section>
-    );
-
-    console.log("data", data);
-    return { data, loading, error, ShowLoading, ShowError, hasMore };
+    return { data };
 }
 
 /* COMMENTS
@@ -164,4 +147,8 @@ axios.get('/user/12345', {
 // cancel the request
 cancel();
 Note: you can cancel several requests with the same cancel token.
+
+n2:
+ // loading inside of this component wasn't update and delay much in dev env.
+    // it is been declared in the target component like {loading && <Component />}
 */
