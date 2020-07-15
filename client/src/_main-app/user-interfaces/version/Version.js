@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.2202.3"
+const latestVersion = "3.2203.3"
 const updateDescription = "painel de controle admin - lista automática de tarefas - rolagem infinita pt 5";
 const history = [
     "Galeria de Prêmios (finalizado)",

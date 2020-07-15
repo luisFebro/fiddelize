@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react';
 import Card from '@material-ui/core/Card';
-import { fromNow, formatDMY, addDays } from '../../../../../utils/dates/dateFns';
+import { fromNow, formatDMY } from '../../../../../utils/dates/dateFns';
 import useAPI, { toggleDoneUrl, changePrizeStatus, treatBoolStatus } from '../../../../../hooks/api/useAPI';
 import ActionBtn from './ActionBtn';
 import { useProfile } from '../../../../../hooks/useRoleData';
@@ -66,9 +66,8 @@ function TaskCard(props, ref) {
     }
 
     const showCardDesc = () => {
-        const newMadeDate = addDays(madeDate, -1);
         let taskDesc = `• Entregar para ${cliUserName.toUpperCase()} o prêmio (${prizeDesc}) do desafio de n.º ${challNum} até ${formatDMY(deadline)}`;
-        if(done) taskDesc = `Foi entregue para cliente ${cliUserName.toUpperCase()} - no dia ${formatDMY(newMadeDate)} - o prêmio: ${prizeDesc}.`;
+        if(done) taskDesc = `Foi entregue para cliente ${cliUserName.toUpperCase()} - no dia ${formatDMY(madeDate)} - o prêmio: ${prizeDesc}.`;
         return(
             <p className="brief mb-2 text-small">
                 {done && <span className="font-weight-bold">• TAREFA: </span>}
