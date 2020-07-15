@@ -94,7 +94,7 @@ export default function Challenge({
 
     return (
         <section>
-            <ShowTitle text={confirmedChall ? "Confirmação de Prêmio" : "Cliente concluíu desafio"} />
+            <ShowTitle text={confirmedChall ? "Confirmação de Prêmio" : "Desafio Concluído"} />
             <ShowIllustration role={role} mainImg={mainImg} bizLogo={bizLogo} />
             <ShowBrief brief={brief} />
             {showCliWonChallContent()}
