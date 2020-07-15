@@ -39,20 +39,19 @@ exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
     }
 
     let newChallengeN = 0;
+    const statusToSet = options[statusType];
     const newData = arrayOfData.map(card => {
-        const nonConfirmedPrize = card.cardType === "prize" && card.isPrizeConfirmed === false;
-        const okPrize = card.cardType === "prize" && card.isPrizeConfirmed === true;
+        const nonChangedPrize = card.cardType === "prize" && card[statusToSet] === false;
+        const okPrize = card.cardType === "prize" && card[statusToSet] === true;
 
-        if(okPrize) { ++newChallengeN }
-
-        if(nonConfirmedPrize) {
-            const statusToSet = options[statusType];
+        if(nonChangedPrize) {
             card[statusToSet] = true;
             status = "OK";
             ++newChallengeN;
             return card;
         }
 
+        if(okPrize) { ++newChallengeN }
         return card;
     });
 

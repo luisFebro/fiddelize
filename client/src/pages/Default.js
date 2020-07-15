@@ -1,6 +1,6 @@
 import React from 'react';
 // import RedirectPage from '../components/RedirectPage';
-import Illustration from '../components/Illustration';
+// import Illustration from '../components/Illustration';
 import { CLIENT_URL } from '../config/clientUrl';
 import InitialPageButton from '../components/buttons/InitialPageButton';
 

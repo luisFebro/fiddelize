@@ -86,8 +86,6 @@ export default function PurchaseHistory({ data }) {
             txtImgConfig = {{
                 topPos: "15%",
                 txt: `Sem compras,<br />${onlyFirstName.cap()}.`,
-                txtStyle: "text-title",
-                txtColor: "var(--mainPurple)",
             }}
         />
     );

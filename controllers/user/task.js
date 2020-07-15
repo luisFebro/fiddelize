@@ -70,10 +70,18 @@ exports.toggleDone = (req, res) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
 
         let tasks = doc.clientAdminData.tasks;
+
+        let keyValueObj = undefined;
+        if(doneStatus === true) keyValueObj = {
+            done: doneStatus,
+            madeDate: new Date(),
+        }
+
         const newData = findKeyAndAssign({
             objArray: tasks,
             compareProp: '_id', compareValue: taskId,
             targetProp: 'done', targetValue: doneStatus,
+            keyValueObj,
         });
 
         tasks = newData;

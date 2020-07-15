@@ -59,7 +59,7 @@ export default function ModalContent() {
             key: task._id,
             data: task,
             defaultStatus: true,
-            className: "ml-2"
+            className: "mx-2"
         }
 
         return checkDetectedElem({ list, ind, indFromLast: 2 })

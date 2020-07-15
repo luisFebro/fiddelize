@@ -86,7 +86,8 @@ export default function RecordedClientsList() {
 
     // search
     const onSearchChange = e => {
-        const querySearched = e.target.value;
+        const targetValue = e ? e.target.value : " ";
+        const querySearched = targetValue;
         searchTerm = querySearched;
 
         const listOptions = { token, role: "cliente", skip: initialSkip, search: querySearched}

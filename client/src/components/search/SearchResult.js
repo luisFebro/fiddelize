@@ -71,7 +71,6 @@ export default function SearchResult({
                             txtImgConfig = {{
                                 topPos: "15%",
                                 txt: `Nenhum ${mainSubject} foi encontrado ${searchTerm.length === 0 ? "" : `para ${searchTerm.toUpperCase()}`}`,
-                                txtStyle: "text-title",
                                 txtBorder: "border-white",
                             }}
                         />

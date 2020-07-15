@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 // import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import PropTypes from 'prop-types';
+import { handleEnterPress } from '../../utils/event/isKeyPressed';
 
 SearchFilter.propTypes = {
     placeholder: PropTypes.string,
@@ -33,6 +34,8 @@ const useStyles = makeStyles(theme => ({
 export default function SearchFilter({ placeholder, searchChange }) {
   const classes = useStyles();
 
+  const handleEnter = e => handleEnterPress(e, searchChange)
+
   return (
     <Paper component="form" className={classes.root}>
       <InputBase
@@ -40,13 +43,14 @@ export default function SearchFilter({ placeholder, searchChange }) {
         autoComplete="off"
         className={classes.input}
         onBlur={searchChange}
+        onKeyPress={handleEnter}
         placeholder={placeholder}
         inputProps={{ 'aria-label': placeholder, style: { fontSize: '1.3em'} }}
       />
       <IconButton
             className={classes.iconButton}
             aria-label="search"
-            onClick={null} // Recommended to replace onBlur to this in next updates.
+            onClick={null}
        >
         <SearchIcon />
       </IconButton>

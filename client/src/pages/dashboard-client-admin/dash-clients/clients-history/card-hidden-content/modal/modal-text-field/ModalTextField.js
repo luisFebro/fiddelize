@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStoreDispatch } from 'easy-peasy';
-import { readHighestScores } from '../../../../../../../redux/actions/userActions';
+import { readHighestScores, addAutomaticTask } from '../../../../../../../redux/actions/userActions';
 import isMoneyBrValidAndAlert from '../../../../../../../utils/numbers/isMoneyBrValidAndAlert';
 import Button from '@material-ui/core/Button';
 import ButtonMulti from '../../../../../../../components/buttons/material-ui/ButtonMulti';
@@ -27,6 +27,7 @@ import { setRun } from '../../../../../../../redux/actions/globalActions';
 import { changePrizeStatus, readPurchaseHistory } from '../../../../../../../redux/actions/userActions';
 import { sendNotification } from '../../../../../../../redux/actions/notificationActions';
 import getFirstName from '../../../../../../../utils/string/getFirstName';
+import { addDays } from '../../../../../../../utils/dates/dateFns';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -73,12 +74,15 @@ export default function ModalTextField({
     const mainReward = pickedObj.mainReward;
 
     useEffect(() => {
+        let ignore;
         readPurchaseHistory(userId, rewardScore, { challScore: `${currChall + 1}_only` })
         .then(res => {
             if(res.status !== 200) return console.log("error on readPurchaseHistory")
-            setMoreRemainder(res.data);
+            if(!ignore) setMoreRemainder(res.data);
         })
-    }, [userId, rewardScore, currChall])
+
+        return () => { ignore = true };
+    }, [])
 
     const userBeatScore = userCurrScore >= rewardScore;
     useEffect(() => {
@@ -123,17 +127,28 @@ export default function ModalTextField({
             senderId: businessId,
         }
 
+        const deadlineDate = addDays(new Date(), rewardDeadline + 1).toLocaleString();
+        const taskBody = {
+            taskTitle: "Entrega de Prêmio",
+            taskType: "pendingDelivery",
+            content: `cliUserId:${userId};cliUserName:${name};prizeDesc:${mainReward};challNum:${currChall};deadline:${deadlineDate};`,
+            madeBy: "Febro",
+        }
+
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
 
-        const [updateRes, notifRes, prizeStatusRes] = await Promise.all([
+        const prizeStatusRes = await changePrizeStatus(userId, { statusType: "confirmed" });
+        if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
+
+        const [updateRes, notifRes, taskRes] = await Promise.all([
             updateUser(dispatch, updateUserBody, userId, false),
             sendNotification(userId, "challenge", sendNotifBody),
-            changePrizeStatus(userId, { statusType: "confirmed" }),
+            addAutomaticTask(businessId, taskBody),
         ]);
 
         if(notifRes.status !== 200) return showSnackbar(dispatch, "Um problema aconteceu ao enviar notificação para o cliente", 'error')
         if(updateRes.status !== 200) return showSnackbar(dispatch, "Algo deu errado ao atualizar cliente", 'error')
-        if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
+        if(taskRes.status !== 200) return showSnackbar(dispatch, `Ocorreu um problema ao adicionar tarefa automática.`, 'error')
 
         setTimeout(() => showSnackbar(dispatch, `Ok, ${getFirstName(cliAdminName)}! Cliente foi notificado e ${rewardScore} pontos foram descontados de ${name}.`, 'success', 7000), 4900);
 

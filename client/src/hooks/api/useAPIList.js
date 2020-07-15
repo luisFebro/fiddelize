@@ -52,6 +52,10 @@ export default function useAPIList({
         if(search) setData({ ...data, list: [] });
     }, [search])
 
+    useEffect(() => {
+        setLoading(false);
+    }, [data.list])
+
     function handleSuccess({ response, stopRequest, updateOnly }) {
         clearTimeout(stopRequest);
         const listType = updateOnly ? response.data.list : [...list, ...response.data.list];
@@ -63,7 +67,6 @@ export default function useAPIList({
             listTotal,
             chunksTotal,
         })
-        setLoading(false);
         const hasCards = listTotal > skip ? true : false
         const firstCards = 5 >= listTotal;
         setHasMore(hasCards && !firstCards);

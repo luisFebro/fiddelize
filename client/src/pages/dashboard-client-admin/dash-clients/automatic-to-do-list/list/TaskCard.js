@@ -1,7 +1,7 @@
 import React, { useState, forwardRef } from 'react';
 import Card from '@material-ui/core/Card';
-import { fromNow } from '../../../../../utils/dates/dateFns';
-import useAPI, { toggleDoneUrl, getUniqueId, treatBoolStatus } from '../../../../../hooks/api/useAPI';
+import { fromNow, formatDMY, addDays } from '../../../../../utils/dates/dateFns';
+import useAPI, { toggleDoneUrl, changePrizeStatus, treatBoolStatus } from '../../../../../hooks/api/useAPI';
 import ActionBtn from './ActionBtn';
 import { useProfile } from '../../../../../hooks/useRoleData';
 import extractStrData from '../../../../../utils/string/extractStrData';
@@ -31,11 +31,20 @@ function TaskCard(props, ref) {
     } = data;
 
     const {
-        userName: clientName,
+        cliUserId,
+        cliUserName,
         prizeDesc,
         challNum,
         deadline,
     } = extractStrData(content);
+
+    const { _id: userId } = useProfile();
+    const taskBody = { userId, taskId, doneStatus: treatBoolStatus(toggleDone) }
+    const snackbar = { txtSuccess: treatBoolStatus(toggleDone) ? `Status alterado para FEITO! Movendo para tarefas feitas...` : `Tarefa movida para o PAINEL PRINCIPAL!`}
+    const purchaseSnackbar = { txtSuccess: `Status RECEBIDO marcado no histórico de compra do cliente.`, txtFailure: ""}
+    const trigger = toggleDone === undefined ? false : toggleDone;
+    useAPI({ method: "put", url: toggleDoneUrl(), body: taskBody, snackbar, trigger, runName: `TaskCard${taskId}` })
+    useAPI({ method: "put", url: changePrizeStatus(cliUserId, "received"), trigger, snackbar: purchaseSnackbar })
 
     const styles = {
         card: {
@@ -57,11 +66,12 @@ function TaskCard(props, ref) {
     }
 
     const showCardDesc = () => {
-        let taskDesc = `• Entregar para ${clientName.toUpperCase()} o prêmio (${prizeDesc}) do desafio de n.º ${challNum} até ${deadline}`;
-        if(done) taskDesc = `Foi entregue - no dia ${madeDate} - o prêmio (${prizeDesc}) para cliente ${clientName.toUpperCase()}.`;
+        const newMadeDate = addDays(madeDate, -1);
+        let taskDesc = `• Entregar para ${cliUserName.toUpperCase()} o prêmio (${prizeDesc}) do desafio de n.º ${challNum} até ${formatDMY(deadline)}`;
+        if(done) taskDesc = `Foi entregue para cliente ${cliUserName.toUpperCase()} - no dia ${formatDMY(newMadeDate)} - o prêmio: ${prizeDesc}.`;
         return(
             <p className="brief mb-2 text-small">
-                {done && <span className="font-weight-bold">• ATIVIDADE: </span>}
+                {done && <span className="font-weight-bold">• TAREFA: </span>}
                 {!moreInfo ? truncate(taskDesc, isSmall ? 40 : 75) : taskDesc}
                 {!moreInfo && (
                     <span

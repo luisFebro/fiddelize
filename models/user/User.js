@@ -115,7 +115,7 @@ const tasksListData = { // or to do list
     done: { type: Boolean, default: false },
     taskType: { type: String, default: "pendingDelivery",  enum: ["pendingDelivery", ]},
     taskTitle: String,
-    content: String, // e.g dataFormat: "userName:value;prizeDesc:tickets;challNum:2;deadline:30/12/20;"
+    content: String, // e.g dataFormat: "cliUserId:123;cliUserName:febro;prizeDesc:tickets;challNum:2;deadline:30/12/20;"
     madeDate: Date,
     madeBy: String,
     createdAt: { type: Date, default: Date.now },

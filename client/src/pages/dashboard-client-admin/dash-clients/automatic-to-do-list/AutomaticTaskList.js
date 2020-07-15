@@ -19,23 +19,28 @@ export default function AutomaticTaskList() {
         isPlural,
         listTotal,
         loading,
-        ShowLoading,
         error,
+        ShowLoading,
         ShowError } = useAPIList({ url: readTasks(userId, false), trigger, skip })
 
     const showWarning = () => (
-        !error &&
         <Fragment>
-            {!listTotal
-            ? (
-                <div className="text-normal font-weight-bold text-grey">
-                    {getFirstName(userName)}, sem tarefas geradas.
-                </div>
+            {loading
+            ? <p className="text-normal text-center font-weight-bold text-purple">Analisando...</p>
+            : (
+                <Fragment>
+                    {!listTotal
+                    ? (
+                        <div className="text-normal font-weight-bold text-grey">
+                            {getFirstName(userName)}, sem tarefas geradas.
+                        </div>
 
-            ) : (
-                <div className="text-normal font-weight-bold text-purple">
-                    Você tem <span style={{fontSize: '25px'}}>{listTotal}</span> tarefa{isPlural} gerada{isPlural}.
-                </div>
+                    ) : (
+                        <div className="text-normal font-weight-bold text-purple">
+                            Você tem <span style={{fontSize: '25px'}}>{listTotal}</span> tarefa{isPlural} gerada{isPlural}.
+                        </div>
+                    )}
+                </Fragment>
             )}
         </Fragment>
     );

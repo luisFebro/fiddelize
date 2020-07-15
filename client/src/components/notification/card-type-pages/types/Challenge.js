@@ -39,8 +39,7 @@ export default function Challenge({
     const confirmedChall = subtype === "confirmedChall";
     if(confirmedChall) role = "cliente";
     // buggy with invalid time range (watching for errors) -SOLVED - this is because one notification is sending without date (cliWonCHall)
-    const addedDaysToDate = prizeConfirmationDate ? addDays(new Date(prizeConfirmationDate), Number(prizeDeadline)) : new Date();
-    console.log("addedDaysToDate", addedDaysToDate);
+    const addedDaysToDate = prizeConfirmationDate ? addDays(new Date(prizeConfirmationDate), Number(prizeDeadline) + 1) : new Date();
     const deadlineDate = formatDMY(addedDaysToDate);
     const showConfirmedChallContent = () => (
         confirmedChall &&

@@ -13,6 +13,7 @@ export default function BellNotifBtn({
     forceCliUser,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
+    console.log("fullOpen", fullOpen);
 
     const handleFullOpen = () => {
         setFullOpen(true);

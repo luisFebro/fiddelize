@@ -74,7 +74,7 @@ export default function Illustration({
 
     return (
         <Fragment>
-            <DivWrapper className={`${wrapperClassName ? `${wrapperClassName} container-center` : "container-center"}`} style={{overflowX: 'hidden'}}>
+            <DivWrapper className={`${wrapperClassName ? `${wrapperClassName} container-center` : "container-center mt-5"}`} style={{overflowX: 'hidden'}}>
                 <div style={{ display: status ? 'block' : 'none' }}>
                     <Spinner marginX={spinnerWidth} marginY={spinnerHeight} isCenter={false} size={spinnerSize} />
                 </div>
@@ -90,7 +90,7 @@ export default function Illustration({
                     />
                     <div className="container-center">
                         <p
-                            className={`move-txt-from-center ${txtBorder} ${`${txtClassName} text-subtitle` || "text-subtitle"}`}
+                            className={`move-txt-from-center ${txtBorder ?  txtBorder : ""} ${txtClassName ? `${txtClassName} text-subtitle font-weight-bold` : "text-subtitle font-weight-bold text-purple"}`}
                             style={{
                                 overflowY: 'visible',
                                 minWidth: `${isSmall ? "300px" : "500px"}`,

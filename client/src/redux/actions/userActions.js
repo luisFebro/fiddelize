@@ -109,6 +109,18 @@ export const changePrizeStatus = async (userId, options = {}) => { // n1
 };
 // END PURCHASE HISTORY
 
+// TASKS
+export const addAutomaticTask = async (userId, options = {}) => { // n1
+    const { madeBy, content, taskTitle, taskType } = options;
+
+    try {
+        return await axios.put(`/api/task/add?userId=${userId}`, options, getHeaderJson);
+    } catch(err) {
+        return err.response;
+    }
+};
+// END TASKS
+
 // LISTS
 // note: requires JWT token
 export const readUserList = async (dispatch, bizId, options = {}) => {

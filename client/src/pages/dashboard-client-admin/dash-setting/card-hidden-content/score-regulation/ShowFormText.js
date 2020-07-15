@@ -12,6 +12,7 @@ import replaceVariablesInTxt from '../../../../../utils/string/replaceVariablesI
 import { useAppSystem, useClientAdmin } from '../../../../../hooks/useRoleData';
 import { regulationText as generatedRegTxt } from '../../../regulationText';
 import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
+import { handleEnterPress } from '../../../../../utils/event/isKeyPressed';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -95,6 +96,9 @@ function RegulationText({ generateRegulation }) {
     const dispatch = useStoreDispatch();
 
     const updateField = fieldName => {
+        if(deadline < 0 || isNaN(deadline)) return showSnackbar(dispatch, "Valor Inválido. Insira apenas números positivos", 'error');
+
+        showSnackbar(dispatch, "Atualizando...");
         if(fieldName === "deadline") {
             const objToSend = {
                 "clientAdminData.rewardDeadline": deadline,
@@ -175,6 +179,7 @@ function RegulationText({ generateRegulation }) {
                         // FormHelperTextProps={{ style: styles.helperFromField }}
                         variant="outlined"
                         onChange={handleChange(setData, data)}
+                        onKeyPress={e => handleEnterPress(e, () => updateField("deadline"))}
                         autoComplete="off"
                         type="tel"
                         name="deadline"
