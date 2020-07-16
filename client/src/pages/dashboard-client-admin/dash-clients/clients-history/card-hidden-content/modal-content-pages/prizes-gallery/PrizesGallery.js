@@ -4,7 +4,8 @@ import './_PrizesGallery.scss';
 import { useProfile } from '../../../../../../../hooks/useRoleData';
 
 export default function PrizesGallery({ targetId = undefined }) {
-    const { _id: userId } = useProfile();
+    let { _id: userId } = useProfile();
+    if(targetId) userId = targetId;
 
     const showTitle = () => (
         <div className="mt-4">
@@ -20,7 +21,7 @@ export default function PrizesGallery({ targetId = undefined }) {
     return (
         <section>
             {showTitle()}
-            <PrizeList userId={targetId || userId} />
+            <PrizeList userId={userId} />
         </section>
     );
 }

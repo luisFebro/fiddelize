@@ -126,7 +126,7 @@ export default function useAPI({
         return () => { cancel(); clearTimeout(stopRequest); };
     }, [trigger])
 
-    return { data };
+    return { data, loading };
 }
 
 /* COMMENTS

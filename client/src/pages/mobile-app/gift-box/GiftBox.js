@@ -1,20 +1,35 @@
 import React from 'react';
 import './_GiftBox.scss';
+import GiftCard from './GiftCard'; // LESSON; watch out for wrong naming because will freeze the whole fucking thing.
 
-export default function GiftBox({ boxColor = "pink" }) {
-    const boxLidColor = "var(--themeSDark--" + boxColor + ")" // lid = tampa;
-    const boxBodyColor = "var(--themeSLight--" + boxColor + ")" // lid = tampa;
+export default function GiftBox({
+    boxSColor = "pink",
+    boxPColor = "black",
+    needSmallBox = false,
+    callback,
+    prizeDesc,
+    className,
+}) {
+    const boxLidColor = "var(--themeSDark--" + boxSColor + ")" // lid = tampa;
+    const boxBodyColor1 = "var(--themePDark--" + boxPColor + ")" // lid = tampa;
+    const boxBodyColor2 = "var(--themeSDark--" + boxSColor + ")" // lid = tampa;
+
+    const handleClick = () => {
+        if(typeof callback === "function") callback(true);
+    }
 
     const showBox = () => (
         <main
-            className="gift-box--root"
-            style={{ background: `linear-gradient(#762c2c, ${boxBodyColor})` }}
+            className={`${className} gift-box--root ${needSmallBox ? "small" : undefined }`}
+            style={{ background: `linear-gradient(${boxBodyColor1}, ${boxBodyColor2})` }}
+            onClick={handleClick}
         >
-            <img
-                className="img"
-                src="https://via.placeholder.com/150"
-                alt="folha"
-            />
+            <section className="gift-card">
+                <GiftCard
+                    prizeDesc={prizeDesc}
+                    colorS={boxSColor}
+                />
+            </section>
             <section
                 className="box-lid"
                 style={{ backgroundColor: boxLidColor }}
@@ -25,7 +40,7 @@ export default function GiftBox({ boxColor = "pink" }) {
     );
 
     return (
-        <section className="my-3 container-center">
+        <section className={`container-center`}>
             {showBox()}
         </section>
     );

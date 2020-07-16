@@ -47,7 +47,7 @@ export default function PrizeList({ userId }) {
                         whiteSpace
                         width={325}
                         text={tooltipTxt}
-                        element={TrophyCard}
+                        element={null}
                         backgroundColor={"var(--themeSDark--black)"}
                     />
                 ) : TrophyCard}

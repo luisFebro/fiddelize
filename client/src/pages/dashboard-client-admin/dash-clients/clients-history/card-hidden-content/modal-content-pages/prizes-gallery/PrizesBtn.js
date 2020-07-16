@@ -23,7 +23,7 @@ export default function PrizesBtn({
         setFullOpen(false);
     }
 
-    const gallery = <PrizesGallery targetId={targetId} />
+    const Gallery = <PrizesGallery targetId={targetId} />
 
     return (
         <section>
@@ -41,7 +41,7 @@ export default function PrizesBtn({
                 backgroundColor={backgroundColor ? backgroundColor : "var(--themeSDark--" + colorS +  ")"}
             />
             <ModalFullContent
-                contentComp={gallery}
+                contentComp={Gallery}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />

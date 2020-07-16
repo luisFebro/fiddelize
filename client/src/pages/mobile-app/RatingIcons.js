@@ -66,7 +66,7 @@ export default function RatingIcons({
             if(count++ <= indScore) {
                 let selectedIcon = document.querySelector("#" + iconInArray);
                 const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
-                setTimeout(() => selectedIcon.style.cssText = `color: #ff0; opacity: 1; transform: rotateX(0deg); ${needDark ? "filter: drop-shadow(grey 0px 0px 4px);" : "filter: drop-shadow(0 0 30px #ffc);"}`, delayToAnimated);
+                setTimeout(() => selectedIcon.style.cssText = `z-index: 1000; color: #ff0; opacity: 1; transform: rotateX(0deg); ${needDark ? "filter: drop-shadow(grey 0px 0px 4px);" : "filter: drop-shadow(0 0 20px #ffc);"}`, delayToAnimated);
             }
         }
     }
