@@ -100,7 +100,7 @@ export default function ProgressMsg({
     return (
         <div className="mt-3 text-normal text-white text-center">
             <span
-                className={`${selectTxtStyle(colorBack, {bold: true})} text-subtitle`}
+                className={`${selectTxtStyle(colorBack, {bold: true})} text-subtitle d-block mb-3`}
             >
                 Desafio n.º {currChall}
             </span>

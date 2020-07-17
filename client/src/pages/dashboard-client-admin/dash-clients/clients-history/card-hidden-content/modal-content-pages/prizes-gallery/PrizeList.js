@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import Trophy from './Trophy';
 import useAPIList, { readPrizes } from '../../../../../../../hooks/api/useAPIList';
 import { useAppSystem } from '../../../../../../../hooks/useRoleData';
@@ -26,7 +26,7 @@ export default function PrizeList({ userId }) {
         } = prize;
 
         const TrophyCard =
-        <div key={prizeId} className={type === "custom" ? "zoom-slow-it" : ""}>
+        <div className={type === "custom" ? "zoom-slow-it" : ""}>
             <Trophy data={prize} />
         </div>
 
@@ -42,7 +42,7 @@ export default function PrizeList({ userId }) {
             • Conquistado em:<br /><strong>${formatDMY(createdAt || newDate)} - ${fromNow(createdAt || newDate)}</strong>`;
 
         return(
-            <Fragment>
+            <div key={prizeId}>
                 {type === "custom"
                 ? (
                     <Tooltip
@@ -54,7 +54,7 @@ export default function PrizeList({ userId }) {
                         backgroundColor={"var(--themeSDark--black)"}
                     />
                 ) : TrophyCard}
-            </Fragment>
+            </div>
         );
     })
 

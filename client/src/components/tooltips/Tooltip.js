@@ -10,7 +10,7 @@ import parse from 'html-react-parser';
 import  '../../keyframes/pulseWaves.css';
 
 Tooltip.propTypes = {
-    text: PropTypes.string,
+    text: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     element: PropTypes.element.isRequired,
     needAttentionWaves: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     placement: PropTypes.string,
@@ -32,6 +32,7 @@ export default function Tooltip({
     text,
     color,
     backgroundColor,
+    borderShadow,
     className,
     needArrow,
     element,
@@ -72,6 +73,7 @@ export default function Tooltip({
             textShadow: '1px 1px 3px black',
             width: width ? width : '100%',
             color: color,
+            filter: borderShadow ? "drop-shadow(.001em .1em .1em var(--mainWhite))" : undefined,
             // top: 20,
         },
         popper: {

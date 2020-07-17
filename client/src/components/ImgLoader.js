@@ -26,7 +26,7 @@ export default function ImgLoader({
     className,
     mode = "spinner",
     needLoader = true,
-    skelVariant = 'react',
+    skelVariant = 'rect',
     skelWidth = 150,
     skelHeight = 150,
     skelBackColor,

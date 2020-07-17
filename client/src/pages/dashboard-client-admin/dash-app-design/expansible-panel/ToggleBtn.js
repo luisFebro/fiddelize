@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ToggleBtn({ cardId, onClick }) {
     const [panelId, setPanelId] = useState("");
-    const [togglePanel, setTogglePanel] = useState(false);
 
     const dispatch = useStoreDispatch();
 

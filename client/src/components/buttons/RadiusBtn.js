@@ -14,6 +14,7 @@ export default function RadiusBtn({
     top,
     left,
     right,
+    bottom,
     display,
     zIndex, }) {
 
@@ -39,6 +40,7 @@ export default function RadiusBtn({
         top,
         left,
         right,
+        bottom,
         color: "white",
         padding: '2px 5px',
         borderRadius: '20px',

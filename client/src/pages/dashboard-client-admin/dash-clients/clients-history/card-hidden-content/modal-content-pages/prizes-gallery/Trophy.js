@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ImgLoader from '../../../../../../../components/ImgLoader';
 
 const trophyTypes = {
-    custom: './img/icons/trophies/gallery-trophy.svg',
-    semisecret: './img/icons/trophies/trophy-silhouette.svg',
-    secret: './img/icons/trophies/trophy-secret-silhouette.png',
+    custom: '/img/icons/trophies/gallery-trophy.svg',
+    semisecret: '/img/icons/trophies/trophy-silhouette.svg',
+    secret: '/img/icons/trophies/trophy-secret-silhouette.png',
 }
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);

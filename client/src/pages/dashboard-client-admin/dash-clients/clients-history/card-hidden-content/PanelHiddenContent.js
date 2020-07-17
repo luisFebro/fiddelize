@@ -31,11 +31,13 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
             <div>
                 {infoKeys.map((key, ind) => (
                     <p key={key} className="text-shadow text-normal">
-                        <span className="font-weight-bold">• {key}:</span>
-                        <br />
-                        {infoValues[ind] && infoValues[ind] !== "0"
-                        ? `${infoValues[ind]} Pontos`
-                        : <span className="text-small font-weight-bold">Sem pontos.</span>}
+                        <span className="font-weight-bold d-block m-0 mt-3" style={{ lineHeight: '20px' }}>
+                            • {key}:
+                            <br />
+                            {infoValues[ind] && infoValues[ind] !== "0"
+                            ? <span className="text-small font-weight-bold">{infoValues[ind]} Pontos.</span>
+                            : <span className="text-small font-weight-bold">Sem pontos.</span>}
+                        </span>
                     </p>
                 ))}
             </div>

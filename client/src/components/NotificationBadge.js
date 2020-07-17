@@ -18,7 +18,7 @@ function NotificationBadge({
     children,
     padding,
     fontSize,
-    badgeValue,
+    badgeValue = 0,
     badgeInvisible,
     backgroundColor,
     borderColor,

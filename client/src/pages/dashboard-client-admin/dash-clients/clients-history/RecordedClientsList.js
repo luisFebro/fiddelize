@@ -130,15 +130,23 @@ export default function RecordedClientsList() {
 
         const handleSecHeading = user => (
             <div>
-                <p className="text-subtitle text-shadow font-weight-bold mb-1">
-                    {!user.clientUserData.currScore
+                <p
+                    className="text-subtitle text-shadow font-weight-bold m-0 mt-4"
+                    style={{ lineHeight: '19px' }}
+                >
+                    {!user.clientUserData.totalPurchasePrize
                     ? "• 0 Pontos"
                     : ` • ${convertDotToComma(user.clientUserData.currScore)} Pontos`}
+                    {Boolean(user.clientUserData.totalPurchasePrize) && (
+                        <Fragment>
+                            <br />
+                            <span className="text-small font-weight-bold">(Desafio Atual N.º {user.clientUserData.totalPurchasePrize + 1})</span>
+                        </Fragment>
+                    )}
                 </p>
-                <br />
                 <span
-                    className="text-shadow text-normal font-weight-bold mt-5"
-                    style={{lineHeight: '18px'}}
+                    className="text-shadow text-normal font-weight-bold d-block m-0 mt-3"
+                    style={{lineHeight: '20px'}}
                 >
                     • Última compra:
                     <br />

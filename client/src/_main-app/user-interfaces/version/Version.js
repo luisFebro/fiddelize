@@ -2,9 +2,10 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.2305.3"
-const updateDescription = "cronômetro do prazo de dias do resgate do prêmio || botão de acesso galeria de prêmios para cards no histórico || painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios) || caixa de presente animada - pt 4";
+const latestVersion = "3.24.3"
+const updateDescription = "Lista Automática de Tarefas - opção de excluir card se prêmio expirado || painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios) - pt 5";
 const history = [
+    "caixa de presente animada com design e algoritmos personalizados cronômetro do prazo de dias do resgate do prêmio || botão de acesso galeria de prêmios para cards no histórico",
     "painel de controle admin - lista automática de tarefas - rolagem infinita",
     "Galeria de Prêmios (finalizado)",
     "novo modelo de requisições HTTP - cliente com axios ",

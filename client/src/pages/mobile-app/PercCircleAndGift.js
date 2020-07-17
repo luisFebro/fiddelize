@@ -134,7 +134,7 @@ export default function PercCircleAndGift({
                         ${percentageAchieved}% ${!currScore ? "(nenhum ponto)" : `(${currScore} pontos)`}
                     </strong> do
                     <br />
-                    desafio até agora. <strong>Falta ${leftScore} pontos.</strong>`}
+                    desafio até agora. <strong>Faltam ${leftScore} pontos.</strong>`}
                 element={
                     <div
                         className="zoom-it container-center text-em-2-5 animated zoomIn"
@@ -173,6 +173,7 @@ export default function PercCircleAndGift({
                     <Tooltip
                         needArrow
                         whiteSpace
+                        borderShadow
                         width={325}
                         text={tooltipTxt}
                         element={<div>{displayGiftBox({ needSmallBox: true, disableClick: true, opacity: (userBeatedChall || arePrizesVisible) ? 1 : 0.5 })}</div>}

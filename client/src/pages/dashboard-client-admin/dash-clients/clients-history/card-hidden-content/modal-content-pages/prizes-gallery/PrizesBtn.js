@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import ModalFullContent from '../../../../../../../components/modals/ModalFullContent';
 import PrizesGallery from './PrizesGallery';
 import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
+import RadiusBtn from '../../../../../../../components/buttons/RadiusBtn';
 
 export default function PrizesBtn({
     colorS,
@@ -12,6 +13,7 @@ export default function PrizesBtn({
     size,
     backgroundColor,
     targetId,
+    radiusBtn = false,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -25,21 +27,37 @@ export default function PrizesBtn({
 
     const Gallery = <PrizesGallery targetId={targetId} />
 
+    const showBtn = () => (
+        <Fragment>
+            {radiusBtn
+            ? (
+                <RadiusBtn
+                    size={size}
+                    title={title}
+                    onClick={handleFullOpen}
+                    position="relative"
+                />
+            ) : (
+                 <ButtonFab
+                    position={position}
+                    top={top}
+                    size={size}
+                    onClick={handleFullOpen}
+                    title={title}
+                    shadowColor={shadowColor}
+                    needBtnShadow={shadowColor ? true : false}
+                    needTxtNoWrap={true}
+                    variant="extended"
+                    color="white"
+                    backgroundColor={backgroundColor ? backgroundColor : "var(--themeSDark--" + colorS +  ")"}
+                />
+            )}
+        </Fragment>
+    );
+
     return (
         <section>
-             <ButtonFab
-                position={position}
-                top={top}
-                size={size}
-                onClick={handleFullOpen}
-                title={title}
-                shadowColor={shadowColor}
-                needBtnShadow={shadowColor ? true : false}
-                needTxtNoWrap={true}
-                variant="extended"
-                color="white"
-                backgroundColor={backgroundColor ? backgroundColor : "var(--themeSDark--" + colorS +  ")"}
-            />
+            {showBtn()}
             <ModalFullContent
                 contentComp={Gallery}
                 fullOpen={fullOpen}

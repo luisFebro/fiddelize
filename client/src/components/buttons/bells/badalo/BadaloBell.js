@@ -29,7 +29,7 @@ export default function BadaloBell({
     notifBorderColor,
     notifBackColor,
     onClick,
-    badgeValue,
+    badgeValue = 0,
     top,
     right,
     left,

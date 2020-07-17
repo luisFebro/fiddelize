@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 // Customized Data
-import { useStoreDispatch } from 'easy-peasy';
+import { useStoreDispatch, useStoreState } from 'easy-peasy';
 import './ExpansiblePanel.scss';
 import ToggleBtn from './ToggleBtn';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
@@ -33,7 +33,6 @@ UserCardExpansiblePanel.propTypes = {
     ).isRequired,
     backgroundColor: PropTypes.string,
     color: PropTypes.string,
-    statusAfterClick: PropTypes.bool,
     needToggleButton: PropTypes.bool,
 };
 
@@ -52,12 +51,17 @@ export default function UserCardExpansiblePanel({
     actions,
     backgroundColor,
     color,
-    statusAfterClick,
     needToggleButton = false, }) {
+
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
+
+    const { runArray } = useStoreState(state => ({
+       runArray: state.globalReducer.cases.runArray,
+    }));
+
 
     const styles = {
         expansionPanel: {
@@ -66,10 +70,23 @@ export default function UserCardExpansiblePanel({
             margin: '25px 0 0',
         },
         totalPrizesBadge: {
+            top: 0,
+            right: -33,
             borderRadius: '50px',
-            backgroundColor: "var(--themeP--default)",
-            border: '3px solid white',
+            backgroundColor: "var(--niceUiYellow)",
+            border: '3px solid grey',
+            zIndex: 10,
         },
+        trophyPrizes: {
+            right: 55,
+            bottom: 85,
+        },
+        prizesBtn: {
+            bottom: -25,
+            left: '50%',
+            transform: 'translateX(-50%)',
+        }
+
     }
 
     const handleEraseTestCard = cardId => {
@@ -84,36 +101,42 @@ export default function UserCardExpansiblePanel({
         }, 3000)
     };
 
-    const displayCliPrizes = (panel) => (
-        <section className="position-relative" style={styles.trophyPrizes}>
-            <div>
-                <img
-                    src="/img/icons/thophies/fiddelize-trophy.svg"
-                    className="shadow-elevation-black"
-                    height="auto"
-                    width={100}
-                    alt="troféis cliente"
-                />
-            </div>
-            <div className="position-absolute" style={styles.totalPrizesBadge}>
-                <p className="font-weight-bold text-normal m-0 mx-2 text-center text-purple">
-                    <span
-                        className="text-subtitle"
-                    >{panel.needCliPrizes} </span>
-                    x
-                </p>
-            </div>
-            <div className="position-absolute">
-                <PrizesBtn
-                    backgroundColor="var(--themeSDark)"
-                    title= "Ver prêmios"
-                    size="small"
-                    top={0}
-                    targetId={panel._id}
-                />
-            </div>
-        </section>
-    );
+    const displayCliPrizes = (panel) => {
+        const toggledBtn = runArray.includes(panel._id);
+
+        return(
+            !toggledBtn &&
+            <section className="enabledLink position-absolute" style={styles.trophyPrizes}>
+                <div className="position-relative">
+                    <div>
+                        <img
+                            src="/img/icons/trophies/fiddelize-trophy.svg"
+                            className="shadow-elevation-black"
+                            height="auto"
+                            width={50}
+                            alt="troféu cliente"
+                        />
+                    </div>
+                    <div className="position-absolute d-none" style={styles.totalPrizesBadge}>
+                        <p className="text-shadow font-weight-bold text-small m-0 ml-4 mx-2 text-center text-white p-0">
+                            <span
+                                className="text-normal font-weight-bold"
+                            >{panel.needCliPrizes}</span>
+                            x
+                        </p>
+                    </div>
+                    <div className="position-absolute" style={styles.prizesBtn}>
+                        <PrizesBtn
+                            title= "prêmios"
+                            size="extra-small"
+                            targetId={panel._id}
+                            radiusBtn={true}
+                        />
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
 
     const displayTestCardBadgeBtn = (panel) => (
@@ -141,7 +164,7 @@ export default function UserCardExpansiblePanel({
     );
 
     const showPanel = panel => (
-        <Fragment>
+        <div>
             <ExpansionPanelSummary
                 expandIcon={
                     <div
@@ -181,7 +204,7 @@ export default function UserCardExpansiblePanel({
             </ExpansionPanelSummary>
             {panel.needBadgeForTestMode && displayTestCardBadgeBtn(panel)}
             {Boolean(panel.needCliPrizes) && displayCliPrizes(panel)}
-        </Fragment>
+        </div>
     );
 
     const showHiddenPanel = panel => (
