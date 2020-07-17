@@ -1,7 +1,7 @@
 const User = require('../../models/user');
 const { msgG } = require('../_msgs/globalMsgs');
 const findKeyAndAssign = require("../../utils/array/findKeyAndAssign");
-const getDataChunk = require("../../utils/array/getDataChunk");
+const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
 
 // UTILS
 const pickDataByProfile = ({ profileData, role = 'cliente-admin' }) => {
@@ -58,7 +58,7 @@ exports.readTasks = (req, res) => {
     const dataSize = data.length;
     const dataChunk = getDataChunk(data, { skip, limit })
 
-    res.json({ list: dataChunk, listTotal: dataSize, chunksTotal: Math.ceil(dataSize / limit) });
+    res.json({ list: dataChunk, listTotal: dataSize, chunksTotal: getChunksTotal(dataSize, limit) });
 }
 
 // Method: Put

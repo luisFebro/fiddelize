@@ -202,7 +202,7 @@ export default function PercCircleAndGift({
                     <span style={{fontSize: '28px'}}>Abra seu prêmio.</span>
 
                 </p>
-                <section className="d-block animated bounce repeat-3 delay-1s position-relative pt-5">
+                <section className="d-block animated bounce repeat-2 delay-1s position-relative pt-5">
                     {displayGiftBox({ needSmallBox: false })}
                     {showPrizeDeadline()}
                 </section>

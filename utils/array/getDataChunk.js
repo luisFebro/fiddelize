@@ -1,3 +1,5 @@
+const getChunksTotal = (dataSize, limit) => Math.ceil(dataSize / limit);
+
 function getDataChunk(arrayData, options = {}) {
     if(!arrayData) throw new Error("You should pass an array of object as the first argument.")
 
@@ -18,7 +20,7 @@ function getDataChunk(arrayData, options = {}) {
     return arrayData.slice(skip, finalLimit);
 }
 
-module.exports = getDataChunk;
+module.exports = { getDataChunk, getChunksTotal };
 
 // e.g
 // const array = [{a: "a"}, {b: "b"}, {c: "c"}, {d: "d"}, {e: "e"}, {f: "f"}];

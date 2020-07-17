@@ -345,7 +345,8 @@ exports.readHistoryList = (req, res) => {
 
 // Prizes
 exports.readPrizes = (req, res) => {
-    const { cliAdminId, lastPrizeDate = false, lastPrizeId = false } = req.query;
+    // INFINITE SCROLLING NOT IMPLEMNTED
+    const { cliAdminId, lastPrizeDate = false, lastPrizeId = false, skip, limit = 5 } = req.query;
     const { clientUserData: { purchaseHistory } } = req.profile;
 
     const cliUserPrizes = purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
@@ -382,7 +383,7 @@ exports.readPrizes = (req, res) => {
 
         const finalData = insertElemWithPlaceholder({ elemList: trophyElems, placeholderList: placeholders });
 
-        res.json(finalData);
+        res.json({ list: finalData });
     });
 
 }

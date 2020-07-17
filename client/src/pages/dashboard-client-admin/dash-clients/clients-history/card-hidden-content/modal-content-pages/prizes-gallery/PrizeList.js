@@ -1,17 +1,19 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import Trophy from './Trophy';
-import useAPI, { readPrizes } from '../../../../../../../hooks/api/useAPI';
+import useAPIList, { readPrizes } from '../../../../../../../hooks/api/useAPIList';
 import { useAppSystem } from '../../../../../../../hooks/useRoleData';
 import Tooltip from '../../../../../../../components/tooltips/Tooltip';
 import { fromNow, formatDMY } from '../../../../../../../utils/dates/dateFns';
 
 export default function PrizeList({ userId }) {
+    const [skip, setSkip] = useState(0);
+
     const { businessId } = useAppSystem();
     const {
-        data: list,
-        loading, error,
-        ShowLoading, ShowError,
-    } = useAPI({ url: readPrizes(userId), params: { cliAdminId: businessId } })
+        list,
+        loading, ShowLoading,
+        error, ShowError,
+    } = useAPIList({ url: readPrizes(userId), params: { cliAdminId: businessId } })
 
     const dataMap = list && list.map(prize => {
         const {
@@ -19,17 +21,18 @@ export default function PrizeList({ userId }) {
             _id: prizeId,
             createdAt,
             finalGoal,
-            prizeDesc
+            prizeDesc,
+            challN,
         } = prize;
 
         const TrophyCard =
-        <div className={type === "custom" ? "zoom-slow-it" : ""}>
-            <Trophy key={prizeId} data={prize} />
+        <div key={prizeId} className={type === "custom" ? "zoom-slow-it" : ""}>
+            <Trophy data={prize} />
         </div>
 
         const newDate = new Date();
         const tooltipTxt = `
-            <p class="text-center">DETALHES</p>
+            <p class="text-center">DETALHES - DESAFIO N.º ${challN}</p>
             • Meta Final:<br /><strong>${finalGoal} pontos</strong>
             <br />
             <br />
@@ -47,7 +50,7 @@ export default function PrizeList({ userId }) {
                         whiteSpace
                         width={325}
                         text={tooltipTxt}
-                        element={null}
+                        element={TrophyCard}
                         backgroundColor={"var(--themeSDark--black)"}
                     />
                 ) : TrophyCard}
