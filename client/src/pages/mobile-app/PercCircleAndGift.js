@@ -20,7 +20,7 @@ export default function PercCircleAndGift({
     classNamePerc,
     userName,
     prizeDesc,
-    arePrizesVisible,
+    arePrizesVisible = true,
     currChall,
     userId, }) {
     const [isGiftOpen, setIsGiftOpen] = useState(false);
@@ -69,22 +69,14 @@ export default function PercCircleAndGift({
         }
     }
 
-    // const Gift =
-    // <ImgLoader
-    //     className="app_gift  shadow-elevation-white"
-    //     width={100}
-    //     height="auto"
-    //     style={{ opacity: userBeatedChall ? 1 : 0.5 }}
-    // />
-
     const visibleTxt = `
-        <p class="text-center">PRÊMIO DO DESAFIO n.º ${currChall}</p>
-        • ${userName}, você ganha <strong>${prizeDesc} pontos</strong> ao concluir este desafio.
+        <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
+        • ${userName}, você ganha <strong>${prizeDesc}</strong> ao concluir este desafio.
         <br />
     `;
 
     const hiddenTxt = `
-        <p class="text-center">PRÊMIO DO DESAFIO n.º ${currChall}</p>
+        <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
         • ${userName}, o prêmio é uma surpresa e será revelado assim que este desafio for concluído.
         <br />
     `;
@@ -162,34 +154,38 @@ export default function PercCircleAndGift({
     );
 
     const showGift = () => {
-        const displayGiftBox = ({ needSmallBox }) => (
+        const displayGiftBox = ({ needSmallBox, disableClick = false, opacity, }) => (
             <GiftBox
                 className="gift-box--sound"
-                boxSColor={colorS}
                 boxPColor={colorP}
+                backColor={colorBack}
                 callback={setIsGiftOpen}
                 needSmallBox={needSmallBox}
                 prizeDesc={prizeDesc}
+                disableClick={disableClick}
+                opacity={opacity}
             />
         );
 
         const challengeInProgress = () => (
-            <section className={!arePrizesVisible ? "shake-it" : ""}>
+            <section className={!arePrizesVisible ? "shake-it pt-5" : "pt-5"}>
                 <div className="position-relative mt-5">
                     <Tooltip
                         needArrow
                         whiteSpace
                         width={325}
                         text={tooltipTxt}
-                        element={displayGiftBox({ needSmallBox: true })}
+                        element={<div>{displayGiftBox({ needSmallBox: true, disableClick: true, opacity: (userBeatedChall || arePrizesVisible) ? 1 : 0.5 })}</div>}
                         backgroundColor={"var(--themeS--" + colorS +")"}
                     />
-                    <p
-                        className="text-hero"
-                        style={{position: 'absolute', top: '5px', left: '50%', transform: 'translateX(-50%)'}}
-                    >
-                        ?
-                    </p>
+                    {!arePrizesVisible && (
+                        <p
+                            className="text-hero"
+                            style={{fontSize: 80, position: 'absolute', top: '-10%', left: '55%', transform: 'translateX(-55%)'}}
+                        >
+                            ?
+                        </p>
+                    )}
                 </div>
             </section>
         );

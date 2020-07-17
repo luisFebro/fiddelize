@@ -49,7 +49,7 @@
     --themeP--white: #ecf0f1;
     --themePLight--white: #ecf0f1; /* prior: #ffffff */
     --themePDark--white: #808080;
-    --themeBackground--white: #babebe;
+    --themeBackground--white: #cac5c5; /*prior: #babebe  */;
     /*blue*/
     --themeP--blue: #009ffd;
     --themePLight--blue: #68d0ff;
