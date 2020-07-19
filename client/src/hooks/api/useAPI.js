@@ -42,6 +42,7 @@ export default function useAPI({
         txtPending,
         timePending,
         txtSuccess = "Operação realizada com sucesso!",
+        timeSuccess,
         txtFailure = "Não foi possível realizar operação. Tente novamente."
     } = snackbar;
 
@@ -54,6 +55,7 @@ export default function useAPI({
 
         let time = 4000;
         if(status === "pending" && timePending) time = timePending;
+        if(status === "success" && timeSuccess) time = timeSuccess;
 
         showSnackbar(dispatch, msg, type, time);
         return true;

@@ -81,8 +81,10 @@ export const addPurchaseHistory = async (dispatch, _idUser, bodyToSend) => { // 
 
 export const readPurchaseHistory = async (_idUser, rewardScore, options = {}) => { // n1
     // noResponse is used on ClientScoresPanel and aims to update the purchase list with the most recent prize in the backend. Avoid users to have to access the purchase history to update...
-    const { noResponse, skip, limit, challScore, prizeDesc, trophyIcon, } = options;
+    const { noResponse, skip, limit, challScore, prizeDesc, trophyIcon, trigger = true } = options;
 
+    if(!trigger) return;
+    console.log("RUNNING READPURCHASE HISTORY YEAHHHHHH")
     let noResponseQuery = "", skipQuery = "", limitQuery = "", scoreQuery = "", prizeDescQuery = "", trophyIconQuery = "";
     if(noResponse) noResponseQuery = "&noResponse=true";
     if(skip || skip === 0) skipQuery = `&skip=${skip}`;

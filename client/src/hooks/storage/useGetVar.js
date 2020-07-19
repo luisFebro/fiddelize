@@ -5,10 +5,16 @@ import localforage from 'localforage';
 // differently from localstorage which requires reloads to update the newest stored variables,
 // indexedDB reads without the need of reloading...
 export default function useGetVar(key) {
+
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if(!key) {
+            setData(false);
+            setLoading(false);
+            return;
+        }
         let ignore;
         variablesStore.getItem(key)
         .then(fetchedValue => {
@@ -33,11 +39,19 @@ export const getVar = (key) => {
     return variablesStore.getItem(key);
 }
 
-export const setVar = ({ key, value }) => {
+export const setVar = (obj) => {
+    if(!obj) return;
+
+    const [key] = Object.keys(obj);
+    const [value] = Object.values(obj);
+
     variablesStore.setItem(key, value)
     .then(res => console.log(`key ${key} was set in the indexedDB variables`))
     .catch(err => console.log(`the was an error setting key ${key}. Details: ${err}`))
 }
+// can accept an key with object like: const obj = { key: { a: "123", b: true }}
+// key
+// { a: '123', b: true }
 
 export const removeVar = (key) => {
     variablesStore.removeItem(key)
@@ -59,10 +73,9 @@ export const removeVersion = ({ key, value }) => {
     if(!key || !value) return;
 
     getVar(key)
-    .then(storedValue => {
-        const storedVersion = getStrVersion(storedValue);
-        const currVersion = getStrVersion(value);
-        if(currVersion > storedVersion) {
+    .then(storedVersion => {
+        const currVersion = Number(value);
+        if(currVersion > Number(storedVersion)) {
             removeVar(key)
         }
 

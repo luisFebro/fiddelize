@@ -23,6 +23,8 @@ import defineCurrChallenge from '../../../utils/biz/defineCurrChallenge';
 import useCountNotif from '../../../hooks/notification/useCountNotif';
 import useSendNotif from '../../../hooks/notification/useSendNotif';
 import useAPI, { readPrizes } from '../../../hooks/api/useAPI';
+import { getVar, removeVar, setVar } from '../../../hooks/storage/useGetVar';
+import { readPurchaseHistory } from "../../../redux/actions/userActions";
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -74,12 +76,32 @@ function ClientUserAppContent({
     selfMilestoneIcon = pickedObj.selfMilestoneIcon
     const userBeatChallenge = currScore >= maxScore;
 
+    const totalChallengesWon = Math.floor(currScore / maxScore);
+    useEffect(() => {
+        // Handling challenges which does not pass through score panel session in case of multiple winning challenges..
+        const key = "challengesWon";
+
+        if(totalChallengesWon >= 2) {
+            setVar({ [key]: totalChallengesWon })
+        }
+
+        getVar(key)
+        .then(gotValue => {
+            const options = { trigger: gotValue, noResponse: true, prizeDesc: mainReward, trophyIcon: selfMilestoneIcon };
+            readPurchaseHistory(_id, maxScore, options);
+
+            if(gotValue && !userBeatChallenge) {
+                removeVar(key);
+            }
+        })
+    }, [userBeatChallenge, totalChallengesWon])
+
     const { isAuthUser } = useAuthUser();
     useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const { data: lastPrizeId } = useAPI({ url: readPrizes(_id), params: { lastPrizeId: true } });
     const challNotifOptions = React.useCallback(() => ({
         trigger: Boolean(userBeatChallenge && lastPrizeId),
-        storage: { key: "alreadyAlertChallenge",  value: `challenge_${currChall}` },
+        storage: { key: "alreadyAlertChallenge", value: currChall },
         senderId: _id,
         role: "cliente-admin",
         subtype: "clientWonChall",
@@ -94,9 +116,6 @@ function ClientUserAppContent({
     useAnimateNumber(currScoreRef.current, currScore, numberOptions);
     const dispatch = useStoreDispatch();
     const showMoreBtn = useElemShowOnScroll('.target--rules-page', { tSpan: 20 });
-    // const targetElem = useRef(null); // withObserver does not track right away, there is a delay...
-    // multi scroll dection does not work for now...
-    // const showPercGiftComp = useElemShowOnScroll("#target---perc-gift");
 
     // UTILS
     function playBeep() {

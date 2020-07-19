@@ -10,7 +10,7 @@ export default function useDatesCountdown({ deadline = 0, userId }) {
 
     useEffect(() => {
         if(!loading && lastPrizeDate) {
-            const targetDate = addDays(new Date(lastPrizeDate), deadline + 1);
+            const targetDate = addDays(new Date(lastPrizeDate), deadline);
             const res = getDiffDays(targetDate);
 
             setFinalDeadline(res);

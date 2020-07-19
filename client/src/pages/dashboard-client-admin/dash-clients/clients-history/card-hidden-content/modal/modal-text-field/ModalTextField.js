@@ -74,18 +74,13 @@ export default function ModalTextField({
     rewardScore = pickedObj.rewardScore;
     const mainReward = pickedObj.mainReward;
 
-    const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true, currRewardScore: rewardScore } });
+    const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true } });
     const currRemainder = loading ? "..." : updatedValues.remainder;
     const nextScore = loading ? "..." : updatedValues.nextScore;
-    const currUserScoring = loading ? "..." : convertDotToComma(rewardScore + nextScore);
+    const currUserScoring = loading ? "..." : convertDotToComma(updatedValues.updatedCurrScore);
+    const additionalScore = loading ? "..." : convertDotToComma(currRemainder === nextScore ? 0 : nextScore - currRemainder);
 
     const userBeatScore = userCurrScore >= rewardScore;
-    // useEffect(() => {
-    //     if(userCurrScore >= rewardScore) {
-    //         const leftValue = userCurrScore - rewardScore;
-    //         setData({ ...data, remainValue: leftValue.toString() })
-    //     }
-    // }, [userCurrScore, rewardScore])
 
     const styles = {
         form: {
@@ -223,7 +218,7 @@ export default function ModalTextField({
                                     className="d-block"
                                     style={{fontSize: "18px", lineHeight: "23px" }}
                                 >
-                                    + {loading ? "..." : convertDotToComma(nextScore - currRemainder)} pontos adicionais
+                                    + {loading ? "..." : additionalScore} pontos adicionais
                                     <br />
                                     <span
                                         className="text-small font-weight-bold"

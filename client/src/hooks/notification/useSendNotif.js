@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { sendNotification } from '../../redux/actions/notificationActions';
 import { useStoreDispatch } from 'easy-peasy';
-import useGetVar, { removerVar, getVar, setVar, removeVersion } from '../../hooks/storage/useGetVar';
+import useGetVar, { removerVar, setVar, removeVersion } from '../../hooks/storage/useGetVar';
 
 export default function useSendNotif(recipientId, cardType, options = {}) {
     const [sent, setSent] = useState(false);
@@ -9,7 +9,9 @@ export default function useSendNotif(recipientId, cardType, options = {}) {
     const key = storage && storage.key;
     const value = storage && storage.value;
 
-    const { data: notifVersion, loading: loadingVar } = useGetVar(key)
+    const { data, loading } = useGetVar(key);
+    const notifVersion = data && data.notifVersion;
+    const loadingVar = loading && loading.loadingVar;
 
     const alreadySent = key && notifVersion;
     if(alreadySent) {
@@ -31,7 +33,7 @@ export default function useSendNotif(recipientId, cardType, options = {}) {
             .then(res => {
                 if(res.status !== 200) return console.log("Something wrong with useCountNotif")
                 setSent(true);
-                if(key) setVar({ key, value })
+                if(key) setVar({ [key]: value })
             })
         }
         return () => { cancel = true }

@@ -153,9 +153,13 @@ exports.removeField = (req, res) => { // n1
     User.findById(req.params.id)
     .exec((err, selectedUser) => {
         if(selectedUser[targetField] === "[]") return res.status(400).json(msgG("error.notRemovedField", targetField))
+        // if(!selectedUser[targetField]) return res.status(404).json({ msg: "this field does not exist or already deleted" });
 
-        selectedUser.set(targetField, undefined, {strict: false} );
-        selectedUser.save(() => res.json(msgG("ok.removedField", targetField)))
+        selectedUser.set(targetField, undefined, {strict: true } );
+        selectedUser.save(err => {
+            if(err) return res.json({ error: "shit"});
+            res.json(msgG("ok.removedField", targetField));
+        });
     })
 }
 
@@ -349,15 +353,19 @@ exports.readPrizes = (req, res) => {
     const {
         cliAdminId,
         lastPrizeDate = false, lastPrizeId = false, updatedValues = false,
-        currRewardScore = 0,
         skip, limit = 5 } = req.query;
 
     const { clientUserData = {} } = req.profile;
-    const { purchaseHistory, totalPurchasePrize = 0 } = clientUserData;
+    const { purchaseHistory, totalPurchasePrize = 0, currScore } = clientUserData;
 
     if(updatedValues) {
+        const lastCardChall = purchaseHistory[0] && purchaseHistory[0].challengeN;
         const currChall = !totalPurchasePrize ? (totalPurchasePrize + 1) : totalPurchasePrize;
-        const nextChall = currChall + 1;
+        let nextChall = currChall + 1;
+
+        if(lastCardChall) {
+            if(lastCardChall > nextChall) nextChall = ++nextChall;
+        }
 
         const lastRemainder = purchaseHistory && purchaseHistory.find(card => card.cardType === "remainder" && card.challengeN === nextChall);
         let remainderValue = lastRemainder && lastRemainder.value;
@@ -366,7 +374,8 @@ exports.readPrizes = (req, res) => {
         const nextScore = filterAndCount(purchaseHistory, { count: "value", rules });
 
         if(!remainderValue) remainderValue = 0;
-        return res.json({ remainder: remainderValue, nextScore: nextScore - currRewardScore });
+
+        return res.json({ remainder: remainderValue, nextScore, updatedCurrScore: currScore });
     }
 
     const cliUserPrizes = purchaseHistory && purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
