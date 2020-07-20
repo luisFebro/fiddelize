@@ -49,4 +49,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.img-center { // does not require to specify image size
+    margin-left: 1rem!important;
+    margin-right: 1rem!important;
+
+    & img {
+        max-width: 100%;
+        height: auto;
+    }
+}
 // end img

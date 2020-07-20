@@ -3,23 +3,66 @@ import ButtonFab from './material-ui/ButtonFab';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from '../tooltips/Tooltip';
 import CloseButton from './CloseButton';
+import PropTypes from 'prop-types';
+import ModalFullContent from '../../components/modals/ModalFullContent';
+import pickArticle from '../../pages/articles/pickArticle';
+
+InstructionBtn.propTypes = {
+    mode: PropTypes.oneOf(["none", "tooltip", "modal"]),
+}
+
 // a question instruction button for some functionalities explanations...
 export default function InstructionBtn({
-    text, onClick, needTooltip = true, blurEffect = false, }) {
+    text,
+    onClick,
+    mode = "none",
+    blurEffect = false,
+    article = "SomeArticle_art1",
+}) {
     const [closeBtn, setShowCloseBtn] = useState(false);
     const [needOpen, setNeedOpen] = useState(false);
 
-    // WARNING: This causes performance issues with else condition, freezes the app
-    // useEffect(() => {
-    //     if(closeBtn) {
-    //         document.body.style.setProperty('filter', `blur(1px)`)
-    //     }
-    // }, [closeBtn])
+    const [fullOpen, setFullOpen] = useState(false);
+
+    const handleFullOpen = () => {
+        setFullOpen(true);
+    }
+
+    const handlePickedComp = () => {
+        const PickedComp = pickArticle({ article });
+        return(<PickedComp />)
+    }
+
+    const PickedArticle = handlePickedComp();
+
+    const DefaultIcon =
+    <FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />
+
+    const DefaultBtn =
+    <ButtonFab
+        position="relative"
+        color="var(--mainDark)"
+        backgroundColor="#CAD3C8" // light grey
+        iconFontAwesome={DefaultIcon}
+        needIconShadow={false}
+    />
 
     return (
         <section>
-            <div className={(closeBtn && blurEffect) ? "blur-back" : undefined}></div>
-            {needTooltip ? (
+            {mode === "none" && (
+                <section>
+                    <ButtonFab
+                        position="relative"
+                        onClick={onClick}
+                        color="var(--mainDark)"
+                        backgroundColor="#CAD3C8" // light grey
+                        iconFontAwesome={DefaultIcon}
+                        needIconShadow={false}
+                    />
+                </section>
+            )}
+
+            {mode === "tooltip" && (
                 <section
                     className="position-relative disable-blur"
                     onClick={() => setShowCloseBtn(true)}
@@ -34,17 +77,7 @@ export default function InstructionBtn({
                         color="var(--mainWhite)"
                         backgroundColor="var(--mainDark)"
                         width={325}
-                        element={
-                            <div className="disable-blur">
-                                <ButtonFab
-                                    position="relative"
-                                    color="var(--mainDark)"
-                                    backgroundColor="#CAD3C8" // light grey
-                                    iconFontAwesome={<FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}
-                                    needIconShadow={false}
-                                />
-                            </div>
-                        }
+                        element={DefaultBtn}
                     />
                     {closeBtn && (
                         <CloseButton
@@ -58,16 +91,29 @@ export default function InstructionBtn({
                         />
                     )}
                 </section>
-            ) : (
-                <ButtonFab
-                    position="relative"
-                    onClick={() => onClick()}
-                    color="var(--mainDark)"
-                    backgroundColor="#CAD3C8" // light grey
-                    iconFontAwesome={<FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}
-                    needIconShadow={false}
-                />
+            )}
+
+            {mode === "modal" && (
+                <section>
+                    <ButtonFab
+                        position="relative"
+                        onClick={handleFullOpen}
+                        color="var(--mainDark)"
+                        backgroundColor="#CAD3C8" // light grey
+                        iconFontAwesome={DefaultIcon}
+                        needIconShadow={false}
+                    />
+                    <ModalFullContent
+                        contentComp={PickedArticle}
+                        fullOpen={fullOpen}
+                        setFullOpen={setFullOpen}
+                    />
+                </section>
             )}
         </section>
     );
 }
+
+/*
+<div className={(closeBtn && blurEffect) ? "blur-back" : undefined}></div>
+ */

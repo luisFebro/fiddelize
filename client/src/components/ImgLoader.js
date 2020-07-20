@@ -27,8 +27,8 @@ export default function ImgLoader({
     mode = "spinner",
     needLoader = true,
     skelVariant = 'rect',
-    skelWidth = 150,
-    skelHeight = 150,
+    skelWidth,
+    skelHeight = "auto",
     skelBackColor,
 }) {
 
@@ -49,7 +49,7 @@ export default function ImgLoader({
                 variant={skelVariant}
                 width={skelWidth}
                 height={skelWidth}
-                style={{ backgroundColor: skelBackColor || 'grey' }}
+                style={{ maxWidth: '100%', backgroundColor: skelBackColor || 'grey' }}
             />
         );
     };

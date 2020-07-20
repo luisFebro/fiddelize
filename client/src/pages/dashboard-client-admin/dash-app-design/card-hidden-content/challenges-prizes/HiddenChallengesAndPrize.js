@@ -91,6 +91,8 @@ export default function HiddenGoalsAndRewards() {
                     <div className="position-absolute" style={styles.visibleInstruBtn}>
                         <InstructionBtn
                             text={text}
+                            mode="modal"
+                            article="GiftVisibility_art1"
                         />
                     </div>
                 </section>
@@ -139,6 +141,7 @@ export default function HiddenGoalsAndRewards() {
                 <div className="position-absolute" style={styles.iconPos}>
                     <InstructionBtn
                         text={text}
+                        mode="tooltip"
                     />
                 </div>
             </section>

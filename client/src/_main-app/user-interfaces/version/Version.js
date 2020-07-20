@@ -2,10 +2,11 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.2702.3"
+const latestVersion = "3.28.3"
 // next: integrate indexedDB data fetching to work data lists offline startign with tasks done list
-const updateDescription = "painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios) - pt 8";
+const updateDescription = "sistema de artigos pt 1";
 const history = [
+    "painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios)",
     "Lista Automática de Tarefas - opção de excluir card se prêmio expirado (testando...)",
     "caixa de presente animada com design e algoritmos personalizados cronômetro do prazo de dias do resgate do prêmio || botão de acesso galeria de prêmios para cards no histórico",
     "painel de controle admin - lista automática de tarefas - rolagem infinita",

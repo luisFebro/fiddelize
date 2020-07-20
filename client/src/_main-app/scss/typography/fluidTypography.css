@@ -1,5 +1,5 @@
 /*reference: https://css-tricks.com/snippets/css/fluid-typography - for understanding the math part*/
-.main-font { font-family: 'Poppins', sans-serif; }
+.font-site, .main-font { font-family: 'Poppins', sans-serif; }
 .text-hero { font: normal 60px 'Poppins', sans-serif; letter-spacing: .01em; line-height: 1.2em; }
 .text-title { font: bolder 30px 'Poppins', sans-serif; letter-spacing: .01em; }
 .text-large, .text-subtitle { font: normal 25px 'Poppins', sans-serif; letter-spacing: .01em; }

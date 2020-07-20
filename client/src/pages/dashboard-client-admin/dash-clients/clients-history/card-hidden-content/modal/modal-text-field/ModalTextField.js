@@ -285,7 +285,6 @@ export default function ModalTextField({
                 <div className="ml-3">
                     <InstructionBtn
                         onClick={() => { setShowInstruction(!showInstruction); scrollIntoView("#instru", 3000); }}
-                        needTooltip={false}
                     />
                 </div>
             </div>
