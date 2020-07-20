@@ -3,6 +3,7 @@ import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import uuidv1 from 'uuid/v1';
+import parse from 'html-react-parser';
 
 const PurpleSwitch = withStyles({
   switchBase: {
@@ -21,7 +22,7 @@ const PurpleSwitch = withStyles({
 export default function SwitchBtn({
     titleLeft = "Não",
     titleRight = "Sim",
-    titleQuestion = "Entregue?",
+    titleQuestion = "",
     callback,
     defaultStatus = false,
 }) {
@@ -51,6 +52,8 @@ export default function SwitchBtn({
     const txtStyle1 = checked ? off : on;
     const txtStyle2 = !checked ? off : on;
 
+    titleLeft = parse(titleLeft);
+    titleRight = parse(titleRight);
     return (
         <section className="container-center">
             <p className="m-0 mr-2 d-inline-block text-normal font-weight-bold text-purple">

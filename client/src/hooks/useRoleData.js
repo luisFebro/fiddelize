@@ -112,6 +112,7 @@ export const useClientAdmin = () => {
     const selfThemePColor = clientAdmin && clientAdmin.selfThemePColor;
     const selfThemeSColor = clientAdmin && clientAdmin.selfThemeSColor;
     const selfThemeBackColor = clientAdmin && clientAdmin.selfThemeBackColor;
+    const arePrizesVisible = clientAdmin && clientAdmin.arePrizesVisible;
 
     return({
         bizName,
@@ -132,5 +133,6 @@ export const useClientAdmin = () => {
         selfThemePColor,
         selfThemeSColor,
         selfThemeBackColor,
+        arePrizesVisible,
     });
 }

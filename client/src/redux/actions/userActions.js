@@ -45,13 +45,13 @@ export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
     // selectKeys: is a string with only the keys requires to return.
     // noResponse: update but do not return any data as response.
     let { selectKeys, noResponse } = opts;
-    const selectQuery = selectKeys ? `selectKeys=${selectKeys}&` : "";
+    const selectQuery = selectKeys ? `selectKeys=${selectKeys}` : "";
     !noResponse
     ? noResponse = true
     : noResponse = false
 
     try {
-        const res = await axios.put(`/api/user/${_idUser}?${selectQuery}noResponse=${noResponse}`, objToSend, getHeaderJson);
+        const res = await axios.put(`/api/user/${_idUser}?${selectQuery}&noResponse=${noResponse}`, objToSend, getHeaderJson);
         // dispatch({ type: 'USER_UPDATED', payload: needDispatch ? updateObj : null });
         return res;
     } catch (err) {

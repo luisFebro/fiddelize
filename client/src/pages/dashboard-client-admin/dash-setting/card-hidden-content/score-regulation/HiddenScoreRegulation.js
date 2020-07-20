@@ -65,7 +65,7 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
                 </div>
                 <div>
                     <p>##ponto-premio</p>
-                    <p>ponto que o seu cliente precisa alcançar por desafio</p>
+                    <p>ponto que o seu cliente precisa alcançar no desafio atual.</p>
                 </div>
                 <div>
                     <p>##prazo-premio</p>
@@ -74,6 +74,10 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
                 <div>
                     <p>##ponto-nivel</p>
                     <p>quanto vale cada nível no total de 5. Se 500 é o ponto-premio, 100 é o ponto-nivel.</p>
+                </div>
+                <div>
+                    <p>##desafio-atual</p>
+                    <p>É o desafio atual do usuário que está visualizando o regulamento.</p>
                 </div>
                 <p>
                     - Não é preciso acentuar os valores chaves do sistema e formatadores de texto.

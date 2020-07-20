@@ -15,6 +15,9 @@ import { appSystem } from '../hooks/useRoleData';
 import { useProfile, useClientAdmin, useClientUser } from '../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import selectTxtStyle, { currTxtColor } from '../utils/biz/selectTxtStyle';
+import pickCurrChallData from '../utils/biz/pickCurrChallData';
+import getFirstName from '../utils/string/getFirstName';
+import defineCurrChallenge from '../utils/biz/defineCurrChallenge';
 
 export default function RegulationPage({ location }) {
     const [defaultColor, setDefaultColor] = useState(false);
@@ -22,8 +25,9 @@ export default function RegulationPage({ location }) {
     const needAppForCliAdmin = location.search.includes("client-admin=1");
     const bizCodeName = getQueryByName("bizCodeName", location.search);
 
-    const { name } = useProfile();
-    const {
+    const { name: cliUserName } = useProfile();
+
+    let {
         bizName,
         regulation,
         mainReward,
@@ -31,7 +35,15 @@ export default function RegulationPage({ location }) {
         rewardDeadline,
         selfThemePColor,
         selfThemeSColor,
-        selfThemeBackColor, } = useClientAdmin();
+        selfThemeBackColor,
+        rewardList,
+        totalPurchasePrize } = useClientAdmin();
+
+    const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
+    maxScore = pickedObj.rewardScore;
+    mainReward = pickedObj.mainReward;
+
+    const currChall = defineCurrChallenge(totalPurchasePrize);
 
     const rewardScore = maxScore;
     const levelScore = rewardScore && rewardScore / 5;
@@ -54,11 +66,12 @@ export default function RegulationPage({ location }) {
 
     const variablesObj = {
         "nome-empresa": bizName || " ",
-        "nome-cliente": name || " ",
+        "nome-cliente": getFirstName(cliUserName) || " ",
         "nome-premio": mainReward || " ",
         "prazo-premio": `${rewardDeadline} dias`,
         "ponto-premio": `${rewardScore} pontos`,
         "ponto-nivel": `${levelScore} pontos`,
+        "desafio-atual": `${currChall}`,
     }
 
 

@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.27.3"
+const latestVersion = "3.2702.3"
 // next: integrate indexedDB data fetching to work data lists offline startign with tasks done list
 const updateDescription = "painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios) - pt 8";
 const history = [

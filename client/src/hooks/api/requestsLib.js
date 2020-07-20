@@ -1,4 +1,6 @@
 // URLs ONLY
+// user
+export const updateUser = userId => `/api/user/${userId}?noResponse=true`;
 
 // Purchase's History
 export const readPrizes = userId => `/api/user/list/purchase-history/prizes/${userId}`;

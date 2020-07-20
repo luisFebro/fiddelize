@@ -45,6 +45,7 @@ const currClientAdminData = {
     selfThemePColor: clientAdminData && clientAdminData.selfThemePColor,
     selfThemeSColor: clientAdminData && clientAdminData.selfThemeSColor,
     selfThemeBackColor: clientAdminData && clientAdminData.selfThemeBackColor,
+    arePrizesVisible: clientAdminData && clientAdminData.arePrizesVisible,
 }
 
 const currCentralAdminData = {

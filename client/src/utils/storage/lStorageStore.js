@@ -43,6 +43,7 @@ const defaultClientAdmin = {
     selfThemePColor: "default",
     selfThemeSColor: "default",
     selfThemeBackColor: "default",
+    arePrizesVisible: null,
 }
 const clientAdminColl = { collection: "clientAdmin", newObj: defaultClientAdmin };
 // end client Admin

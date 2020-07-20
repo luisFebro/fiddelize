@@ -7,9 +7,9 @@ export default function replaceVariablesInTxt(text, variableObj, opts) {
         needBold = false,
         needMainPattern = true,
         mainPattern,
-        centerRegex = /@((\w|\s|[áéíóúâêôãç]|[!?@&+-,.;"'])+)@/gi, // L
-        italicRegex = /~((\w|\s|[áéíóúâêôãç]|[!?@&+-,.;"'])+)~/gi,
-        boldRegex = /\*((\w|\s|[áéíóúâêôãç]|[!?@&+-,.;"'])+)\*/gi,
+        centerRegex = /@(.*?)@/gi, // L
+        italicRegex = /~(.*?)~/gi,
+        boldRegex = /\*(.*?)\*/gi,
     } = opts;
 
     const keys = Object.keys(variableObj);
@@ -46,7 +46,7 @@ export default function replaceVariablesInTxt(text, variableObj, opts) {
     const centerResArray = newText.match(centerRegex)
     if(centerResArray) {
         centerResArray.forEach(res => {
-            newText = newText.replace(centerRegex, `<center><strong><span style="text-transform:uppercase; color: var(--mainPurple);">$1</span></strong></center>`);
+            newText = newText.replace(centerRegex, `<center style="display: block; margin: 10px 0px;"><strong><span style="text-transform:uppercase; color: var(--mainPurple);">$1</span></strong></center>`);
         })
     }
 

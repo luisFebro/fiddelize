@@ -19,6 +19,7 @@ export default function ActionBtn({
                 <SwitchBtn
                     leftTitle="Não"
                     rightTitle="Sim"
+                    titleQuestion="Entregue?"
                     callback={callback}
                     defaultStatus={defaultStatus}
                 />
