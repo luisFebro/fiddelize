@@ -1,18 +1,23 @@
+import React from 'react';
 import Loadable from 'react-loadable';
+import Spinner from '../loadingIndicators/Spinner';
 // import FullPageLoading from './loadingIndicators/FullPageLoading';
-/*
-const CompName = LoadableComp({
-  loader: () => import("./Path" /* webpackChunkName: "comp-lazy" *\/),
-});
- */
-
+//
+export const Load = ({ loader, loading, ...otherProps }) => LoadableComp({ loader, loading: loading ? loading : true });
 
 export default function LoadableComp(opts) { //n1
-  return Loadable(Object.assign({
-    loading: () => null,
-    delay: 200,
-    timeout: 10000,
-  }, opts));
+    if(opts.loading === true) {
+        opts = {
+            ...opts,
+            loading: () => <Spinner size="small" />,
+        }
+    }
+
+    return Loadable(Object.assign({
+      loading: () => null,
+      delay: 200,
+      timeout: 10000,
+    }, opts));
 };
 
 /* COMMENTS

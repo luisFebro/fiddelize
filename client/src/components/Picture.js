@@ -14,7 +14,7 @@ export default function Picture({
     callback = () => null,
     ...props }) {
 
-    const triggered = useElemShowOnScroll('[data-class]', { withObserver: true, rootMargin: 200, needPreload: true, animaIn: "fadeInBottomLeft", speed: "slow" })
+    const triggered = useElemShowOnScroll('[data-class]', { withObserver: true, rootMargin: 200, loadImgs: true, needAnima: true, animaIn: "fadeInBottomLeft", speed: "slow" })
 
     useEffect(() => {
         if(triggered) { callback() }

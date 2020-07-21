@@ -1,10 +1,13 @@
 export default function observeElemView(elem, callback, opts = {}) {
     const {
-        animaIn,
+        animaIn = "fadeIn",
         speed = "normal",
         threshold,
         rootMargin,
-        needPreload,
+        loadImgs = false,
+        needAnima,
+        rootElem = null,
+        imgWrapper = false,
         once = true } = opts;
         // ISSUE: once with false triggers multiple times with animation. use only for detection of elements!
 
@@ -16,21 +19,20 @@ export default function observeElemView(elem, callback, opts = {}) {
     } else {
         elements = elem;
     }
-    console.log(elem);
 
     const config = {
-      root: null, // html root default or document.querySelector("#scrollArea")
+      root: rootElem ? document.querySelector(rootElem) : null, // html root default or document.querySelector("#scrollArea")
       rootMargin: rootMargin ? `0px 0px ${rootMargin}px 0px` : "0px", // "e.g preload image before achieving elem"
       threshold: threshold ? threshold : 0, // n2 // 0.5 === 50% (right in the middle) "e.g trigger inside target elem from 0.0 earlier (top) to 1.0 later (bottom)"
     };
 
-    const needUnobserve = once || needPreload;
+    const needUnobserve = once;
 
     const elemObserver = new IntersectionObserver((entries, self) => {
         entries.forEach(entry => {
             if(entry.isIntersecting) {
                 callback(true);
-                needPreload && intersectionHandler(entry, "in", { isImg: needPreload ? true : false, needAnima: needPreload ? true : false});
+                loadImgs && imgHandler(entry, { imgWrapper, needAnima });
                 needUnobserve && self.unobserve(entry.target);
             } else {
                 callback(false);
@@ -43,26 +45,44 @@ export default function observeElemView(elem, callback, opts = {}) {
         elements && elemObserver.observe(elements);
     } else {
         elements.forEach(selectedElem => {
-            console.log("selectedElem", selectedElem);
-            selectedElem.style.opacity = "0";
+            if(needAnima){
+                selectedElem.style.opacity = "0";
+            }
             elemObserver.observe(selectedElem)
         }); // n1
     }
 
-    function intersectionHandler(entry, status, opts) {
-        const { isImg, needAnima } = opts;
+    function imgHandler(entry, opts) {
+        const { needAnima } = opts;
 
-        if(status === "in") {
-            isImg && preloadImages(entry, needAnima);
-        }
+        loadImage(entry, { needAnima, imgWrapper });
     }
 
-    function preloadImages(imgElem, needAnima) {
-        const target = imgElem.target;
-        const src = target.getAttribute('data-src');
+    function loadImage(imgElem, options = {}) {
+        const { needAnima, imgWrapper } = options;
 
-        if (!src) { return; }
-        target.src = src;
-        needAnima && setTimeout(() => target.classList.add("animated", animaIn, speed), 1500);
+        const target = imgElem.target;
+
+        if(needAnima) {
+            target.style.opacity = "1";
+        }
+
+        if(imgWrapper) {
+            const imgContainer = target.lastElementChild;
+
+            const imgElem = imgContainer.firstElementChild;
+            const src = imgElem.getAttribute('data-src');
+
+            imgContainer.style.display = "block";
+            imgElem.src = src;
+            needAnima && setTimeout(() => imgContainer.classList.add("animated", animaIn, speed), 1500);
+        } else {
+            const src = target.getAttribute('data-src');
+            if (!src) { return; }
+            target.src = src;
+
+            needAnima && setTimeout(() => target.classList.add("animated", animaIn, speed), 1500);
+        }
+
     }
 }

@@ -1,6 +1,8 @@
 import React from 'react';
-import GiftVisibility_art1 from './GiftVisibility_art1';
+import { Load } from '../../../components/code-splitting/LoadableComp';
+
+const AsyncGiftVisibility = Load({ loader: () => import('./GiftVisibility_art1' /* webpackChunkName: "instru-article-page-lazy" */)});
 
 export const articleStore = {
-    GiftVisibility_art1: <GiftVisibility_art1 />
+    GiftVisibility_art1: <AsyncGiftVisibility />,
 }

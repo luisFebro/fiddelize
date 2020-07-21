@@ -4,6 +4,7 @@ import CloseButton from '../buttons/CloseButton';
 import RadiusBtn from '../buttons/RadiusBtn';
 import Dialog from '@material-ui/core/Dialog';
 import { useRunComp } from '../../hooks/useRunComp';
+import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
 
 ModalFullContent.propTypes = {
     contentComp: PropTypes.node,
@@ -18,12 +19,17 @@ export default function ModalFullContent({
     style,
     animatedClass,
     exitBtn,
+    showBackBtn = false,
 }) {
     const { runName } = useRunComp();
     let defaultStyle = { zIndex: 3000, overflowX: 'hidden', };
     const handleOpen = () => {
         if(runName === "closeModalFullContent") return false;
         return fullOpen;
+    }
+
+    const handleModalClose = () => {
+        setFullOpen(prevStatus => !prevStatus);
     }
 
     return (
@@ -57,6 +63,17 @@ export default function ModalFullContent({
                     top="10px"
                     right="10px"
                 />
+            )}
+
+            {showBackBtn && (
+                <div className="my-4 container-center">
+                    <ButtonMulti
+                        title="Voltar"
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeP)"
+                        onClick={handleModalClose}
+                    />
+                </div>
             )}
         </Dialog>
     );

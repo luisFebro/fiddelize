@@ -5,6 +5,7 @@ export default function pickArticle({
     article = "GiftVisibility_art1",
     options = {},
 }) {
+
     const pickComp = () => {
         return articleStore[article];
     }

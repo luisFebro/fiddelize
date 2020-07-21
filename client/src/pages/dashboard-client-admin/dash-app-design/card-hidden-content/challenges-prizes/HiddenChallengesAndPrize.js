@@ -83,7 +83,7 @@ export default function HiddenGoalsAndRewards() {
 
     const showPrizeAndGoalsVisibility = () => {
         return(
-            <section className="container-center">
+            <section className="container-center-col">
                 <section className="position-relative">
                     <header className="mb-3 text-purple font-weight-bold text-subtitle text-center">
                         Revelar prêmios e metas para clientes?
@@ -141,7 +141,7 @@ export default function HiddenGoalsAndRewards() {
                 <div className="position-absolute" style={styles.iconPos}>
                     <InstructionBtn
                         text={text}
-                        mode="tooltip"
+                        mode="modal"
                     />
                 </div>
             </section>

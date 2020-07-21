@@ -107,6 +107,7 @@ export default function InstructionBtn({
                         contentComp={PickedArticle}
                         fullOpen={fullOpen}
                         setFullOpen={setFullOpen}
+                        showBackBtn={true}
                     />
                 </section>
             )}

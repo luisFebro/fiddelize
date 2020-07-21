@@ -2,6 +2,55 @@ import React, { useState, useEffect } from "react";
 import Skeleton from '@material-ui/lab/Skeleton';
 import Spinner from './loadingIndicators/Spinner';
 import PropTypes from 'prop-types';
+import { makeStyles } from "@material-ui/core/styles";
+import { IS_DEV } from '../config/clientUrl';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    textAlign: "center",
+    height: "100%",
+    width: "100%"
+  },
+  title: {
+    marginTop: theme.spacing(1)
+  },
+  withTitle: {
+    margin: "auto"
+  },
+  content: {
+    lineHeight: "1.4em"
+  },
+  link: {
+    color: "inherit",
+    textDecoration: "none"
+  },
+  fillContainer: {
+    height: `auto`,
+    width: `100%`,
+    fontSize: "4em"
+  },
+  container: {
+    marginTop: "250px"
+  },
+  fallback: {
+    height: "75%",
+    width: "auto"
+  },
+  avatarSkeletonContainer: {
+    height: 0,
+    overflow: "hidden",
+    paddingTop: "100%",
+    position: "relative"
+  },
+  avatarLoader: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    animation: IS_DEV ? false : "MuiSkeleton-keyframes-animate 1.5s ease-in-out infinite",
+  },
+}))
 
 ImgLoader.propTypes = {
     align: PropTypes.string,
@@ -16,52 +65,61 @@ ImgLoader.propTypes = {
 export default function ImgLoader({
     align,
     marginY,
+    src,
+    dataSrc, // for dynamic image loading
     timeout = 0, // disabled as default.
     id,
-    src,
     width,
     height,
     style,
     alt,
     className,
+    imgContainerClass,
     mode = "spinner",
     needLoader = true,
     skelVariant = 'rect',
     skelWidth,
-    skelHeight = "auto",
+    skelHeight,
     skelBackColor,
 }) {
-
     let [status, setStatus] = useState(true);
 
-    // useEffect(() => {
-    //     if(src && timeout === 0) setStatus(false);
-    // }, [src, timeout])
+    const classes = useStyles();
 
+    // for loading dynamic on view images with intersection observer
     useEffect(() => {
+        if(src && timeout === 0) setStatus(false);
         if(timeout) setTimeout(() => setStatus(false), timeout);
-    }, [timeout])
+    }, [src, timeout])
+
+    const isSkeleton = mode === "skeleton"
 
     const pickMode = mode => {
         if(mode === "spinner") return (<Spinner marginX={width} marginY={height} isCenter={false} />);
         return(
-            <Skeleton
-                variant={skelVariant}
-                width={skelWidth}
-                height={skelWidth}
-                style={{ maxWidth: '100%', backgroundColor: skelBackColor || 'grey' }}
-            />
+            <div className={classes.avatarSkeletonContainer}>
+                <Skeleton
+                    variant={skelVariant}
+                    width={skelWidth}
+                    height={skelHeight}
+                    className={classes.avatarLoader}
+                />
+            </div>
         );
     };
 
     return(
-        <div style={{margin: `${marginY || 0}px 0px` }} className="container-center">
-            <div style={{ ...style, display: status ? 'block' : 'none', visibility: !needLoader && "hidden" }}>
+        <div
+            style={{margin: `${marginY || 0}px 0px` }}
+            className={`${imgContainerClass ?  `${imgContainerClass} container-center`: "container-center" }`}
+        >
+            <section style={{ ...style, display: status ? 'block' : 'none', height: isSkeleton ? "100%" : undefined, width: isSkeleton ? "100%" : undefined, visibility: !needLoader && "hidden",  }}>
                 {pickMode(mode)}
-            </div>
-            <div style={{ display: status ? 'none' : 'block'}}>
+            </section>
+            <section style={{ display: status ? 'none' : 'block'}}>
                 <img
                     id={id}
+                    data-src={dataSrc}
                     className={className}
                     src={src}
                     alt={alt || id}
@@ -70,7 +128,12 @@ export default function ImgLoader({
                     height={height || "auto"}
                     onLoad={() => !timeout && setStatus(false)}
                 />
-            </div>
+            </section>
         </div>
     );
 }
+
+
+/*
+backgroundColor: skelBackColor || 'grey'
+ */
