@@ -1,6 +1,5 @@
 import lStorage, {
     userProfileColl, clientAdminColl, setInitialStateOp, centralAdminColl } from './lStorage';
-import isOffline from '../window/isOffline';
 import { useStoreState } from 'easy-peasy';
 
 // options argument should be depracated after changing setItemsByArray for setItems (obj)

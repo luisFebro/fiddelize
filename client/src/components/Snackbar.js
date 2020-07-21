@@ -2,6 +2,7 @@ import React from 'react';
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { closeSnackbar } from '../redux/actions/snackbarActions';
+import parse from 'html-react-parser';
 // End Redux
 import green from '@material-ui/core/colors/green';
 import blueGrey from '@material-ui/core/colors/blueGrey';
@@ -63,7 +64,9 @@ export default function SnackbarMulti() {
         snackbar: state.snackbarReducer.cases
     }));
     const dispatch = useStoreDispatch();
-    const { snackbarMsg, snackbarStatusColor, snackbarTiming } = snackbar;
+    const { snackbarStatusColor, snackbarTiming } = snackbar;
+    let { snackbarMsg } = snackbar;
+    if(typeof snackbarMsg === "string") snackbarMsg = parse(snackbarMsg);
     // End Redux
     const classes = useStyles();
 

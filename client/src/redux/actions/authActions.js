@@ -31,7 +31,6 @@ export const loadUser = () => (dispatch, getState) => {
         const gotMsg = gotObj && err.response.data.msg && err.response.data.msg.length !== 0;
         if(gotObj && err.response.status === 500 && gotMsg) {
             dispatch({ type: 'USER_ONLINE', payload: false });
-            showSnackbar(dispatch, "Modo Offline Ativado!", 'warning', 5000)
         }
         if(gotObj && err.response.status === 401 && gotMsg) {
             showSnackbar(dispatch, "Sua sessão terminou. Faça seu acesso novamente.", 'warning', 10000) // err.response.data.msg
@@ -39,6 +38,10 @@ export const loadUser = () => (dispatch, getState) => {
         }
     });
 };
+
+export const setUserOnline = (dispatch, status) => {
+    dispatch({ type: 'USER_ONLINE', payload: status })
+}
 
 // login Email
 // loginEMail with Async/Await

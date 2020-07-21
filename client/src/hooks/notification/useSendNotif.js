@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { sendNotification } from '../../redux/actions/notificationActions';
 import { useStoreDispatch } from 'easy-peasy';
-import useGetVar, { removerVar, setVar, removeVersion } from '../../hooks/storage/useGetVar';
+import useGetVar, { removerVar, setVar, removeVersion } from '../../hooks/storage/useVar';
 
 export default function useSendNotif(recipientId, cardType, options = {}) {
     const [sent, setSent] = useState(false);

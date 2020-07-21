@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import isThisApp from '../utils/window/isThisApp';
 import isWebpSupported from '../utils/media/isWebpSupported';
 import deferJsOnload from '../utils/performance/deferJsOnload';
+import useOffline from '../hooks/useOffline';
 // REDUX
 import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
@@ -24,6 +25,7 @@ import AsyncMobileApp from './user-interfaces/AsyncMobileApp';
 import useCustomerBirthdayToday from '../hooks/notification/useCustomerBirthdayToday';
 export default function App() {
     useRecoveryAndDataOffline();
+    useOffline();
     useCustomerBirthdayToday();
     const dispatch = useStoreDispatch();
 

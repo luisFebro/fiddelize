@@ -23,7 +23,7 @@ import defineCurrChallenge from '../../../utils/biz/defineCurrChallenge';
 import useCountNotif from '../../../hooks/notification/useCountNotif';
 import useSendNotif from '../../../hooks/notification/useSendNotif';
 import useAPI, { readPrizes } from '../../../hooks/api/useAPI';
-import { getVar, removeVar, setVar } from '../../../hooks/storage/useGetVar';
+import { getVar, removeVar, setVar } from '../../../hooks/storage/useVar';
 import { readPurchaseHistory } from "../../../redux/actions/userActions";
 
 // APP COMPONENTS

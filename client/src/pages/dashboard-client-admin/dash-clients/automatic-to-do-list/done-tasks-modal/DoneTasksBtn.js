@@ -11,6 +11,7 @@ export default function DoneTasksBtn({
     notifBackColor,
     badgeValue,
     forceCliUser,
+    isOffline = false,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -23,7 +24,7 @@ export default function DoneTasksBtn({
     }
 
     const ThisContent =
-    <ModalContent />
+    <ModalContent isOffline={isOffline} />
 
     return (
         <section>

@@ -48,7 +48,7 @@ function TaskCard(props, ref) {
 
     const { _id: userId } = useProfile();
     const taskBody = { userId, taskId, doneStatus: treatBoolStatus(toggleDone) }
-    const snackbar = { timeSuccess: 7500, txtSuccess: treatBoolStatus(toggleDone) ? `Status alterado para FEITO! Status CONFIRMADO marcado no histórico do cliente e movendo para tarefas feitas...` : `Tarefa DESMARCADA e removido status CONFIRMADO do seu cliente!`}
+    const snackbar = { timeSuccess: 7000, txtSuccess: treatBoolStatus(toggleDone) ? `Tarefa alterada para FEITO! Status CONFIRMADO marcado no histórico do cliente e movendo para TAREFAS FEITAS...` : `Tarefa DESMARCADA e removido status CONFIRMADO do seu cliente!`}
     const purchaseSnackbar = { txtSuccess: `Status RECEBIDO marcado no histórico de compra do cliente.`, timeSuccess: 7500, txtFailure: ""}
     const trigger = toggleDone === undefined ? false : toggleDone;
     const prizeParams = { newValue: treatBoolStatus(toggleDone), prizeId };

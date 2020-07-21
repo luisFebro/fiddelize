@@ -6,7 +6,7 @@ import { useRunComp } from '../../../../../hooks/useRunComp';
 import TaskCard from '../list/TaskCard';
 import useElemDetection, { checkDetectedElem } from '../../../../../hooks/api/useElemDetection';
 
-export default function ModalContent() {
+export default function ModalContent({ isOffline }) {
     const [skip, setSkip] = useState(0);
     const { _id: userId } = useProfile();
     const { runName } = useRunComp();
@@ -20,7 +20,7 @@ export default function ModalContent() {
         error, ShowError,
         isPlural,
         hasMore,
-    } = useAPIList({ url: readTasks(userId, true), trigger, skip });
+    } = useAPIList({ url: readTasks(userId, true), trigger, skip, listName: "automaticTaskListDone" });
 
     const observer = useRef();
     const detectedCard = useElemDetection({ observer, loading, hasMore, setSkip });
@@ -35,15 +35,26 @@ export default function ModalContent() {
         </div>
     );
 
-    const showTotalTasks = () => (
-        readyShowElems &&
-        <div className="text-center my-3 text-normal font-weight-bold text-purple">
-            <span style={{fontSize: '25px'}}>✔ {listTotal}</span> tarefa{isPlural}.
-        </div>
-    );
+    const showTotalTasks = () => {
+        if(readyShowElems) {
+            return(
+                <div className="text-center my-3 text-normal font-weight-bold text-purple">
+                    <span style={{fontSize: '25px'}}>✔ {listTotal}</span> tarefa{isPlural}.
+                </div>
+            );
+        }
+
+        if(isOffline) {
+            return(
+                <div className="text-center my-3 text-normal font-weight-bold text-purple">
+                    <span style={{fontSize: '25px'}}>✔ Últimas Tarefas Offline</span>
+                </div>
+            );
+        }
+    }
 
     const showNoTasksImg = () => (
-        needEmptyIllustra &&
+        needEmptyIllustra && !isOffline &&
         <div className="container-center my-5">
             <Illustration
                 img={"/img/illustrations/empty-data.svg" || "/img/error.png"}

@@ -1,50 +1,33 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Title from '../../../../components/Title';
 import { useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
 import { useRunComp } from '../../../../hooks/useRunComp';
 import useAPIList, { readTasks, getTrigger } from '../../../../hooks/api/useAPIList';
-import getFirstName from '../../../../utils/string/getFirstName';
 import './_AutomaticTaskList.scss';
 import TaskList from './list/TaskList';
 import DoneTasksBtn from './done-tasks-modal/DoneTasksBtn';
 
 export default function AutomaticTaskList() {
     const [skip, setSkip] = useState(0);
-    const { name: userName, _id: userId } = useProfile();
+    const { _id: userId } = useProfile();
     const { rewardDeadline } = useClientAdmin();
     const { runName } = useRunComp();
 
     const trigger = getTrigger(runName, "TaskCard");
+    const apiKeys = { url: readTasks(userId, false), trigger, skip, listName: "automaticTaskList" };
+
     const {
         list = [],
         isPlural,
         listTotal,
         loading,
+        isOffline,
         error,
         ShowLoading,
-        ShowError } = useAPIList({ url: readTasks(userId, false), trigger, skip })
+        ShowListTotals,
+        ShowError
+    } = useAPIList(apiKeys);
 
-    const showWarning = () => (
-        <Fragment>
-            {loading
-            ? <p className="text-normal text-center font-weight-bold text-purple">Analisando...</p>
-            : (
-                <Fragment>
-                    {!listTotal
-                    ? (
-                        <div className="text-normal font-weight-bold text-grey">
-                            {getFirstName(userName)}, sem tarefas geradas.
-                        </div>
-
-                    ) : (
-                        <div className="text-normal font-weight-bold text-purple">
-                            Você tem <span style={{fontSize: '25px'}}>{listTotal}</span> tarefa{isPlural} gerada{isPlural}.
-                        </div>
-                    )}
-                </Fragment>
-            )}
-        </Fragment>
-    );
 
     return (
         <div className="text-normal container-center flex-column" style={{color: 'grey'}}>
@@ -55,14 +38,14 @@ export default function AutomaticTaskList() {
                 padding=" "
             />
 
-            {showWarning()}
+            <ShowListTotals />
 
             <TaskList list={list} rewardDeadline={rewardDeadline} />
             {loading && <ShowLoading />}
             {error && <ShowError />}
 
             <section className="mt-4">
-                <DoneTasksBtn />
+                <DoneTasksBtn isOffline={isOffline} />
             </section>
         </div>
     );

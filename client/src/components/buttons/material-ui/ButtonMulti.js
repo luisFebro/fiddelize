@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({ // n1
         fontWeight: 'bold',
         textTransform: props => props.textTransform || 'uppercase',
         fontFamily: 'var(--mainFont)',
+        whiteSpace: props => props.textNowrap ?  'nowrap' : undefined,
     },
     sIcon: {
         marginLeft: '5px',
@@ -62,11 +63,12 @@ export default function ButtonMulti({
     iconFontAwesome,
     component="button",
     variant="contained",
+    textNowrap = false,
     disabled,
     needParse = false,
     shadowColor = "black",
     ...props }) {
-    const { sText, sBtnColors, sBtnDefaultColors, sIcon } = useStyles(props);
+    const { sText, sBtnColors, sBtnDefaultColors, sIcon } = useStyles({...props, textNowrap});
 
     const showIcon = iconFontAwesome => {
         if(iconFontAwesome && typeof iconFontAwesome !== "string") {

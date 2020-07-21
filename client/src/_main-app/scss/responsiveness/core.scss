@@ -18,6 +18,14 @@
     align-items: center;
     flex-flow: column wrap;
 }
+
+.container-center-nowrap { // for btns in a row
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row nowrap;
+}
+
 .item-align-center {
     display: flex;
     align-items: center;

@@ -1,9 +1,12 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { ShowLoadingComp, ShowTaskSkeleton, } from './Comps';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
+import { useOfflineListData } from '../../hooks/storage/useVar';
+import getFirstName from '../../utils/string/getFirstName';
+import { useProfile } from '../../hooks/useRoleData';
 // import { getHeaderToken } from '../../utils/server/getHeaders';
 
 export * from './requestsLib.js';
@@ -36,16 +39,37 @@ export default function useAPIList({
     body = null,
     skip = null,
     search = null, // query
-    timeout = 30000,
-    trigger, }) {
+    timeout = 15000,
+    trigger,
+    listName, // offline usage
+}) {
     const [data, setData] = useState({ list: [], listTotal: 0, chunksTotal: null, });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [reload, setReload] = useState(false);
     const [hasMore, setHasMore] = useState(false);
     const [reachedChunksLimit, setReachedChunksLimit] = useState(false);
+    const [offlineBtn, setOfflineBtn] = useState(false);
 
     const { list, listTotal, chunksTotal } = data;
+
+    const isPlural = listTotal > 1 ? "s" : "";
+    const gotListItems = list && list.length;
+
+    const { name: userName } = useProfile();
+    const { isOffline, offlineList } = useOfflineListData({ listName, list, trigger: offlineBtn });
+
+    useEffect(() => {
+        if((isOffline || offlineBtn)) {
+            setData({ ...data, list: offlineList });
+            setError(false);
+            setReload(true);
+            setLoading(false);
+            timeout = 2000;
+        }
+
+    }, [list, isOffline, offlineBtn])
+
 
     // For search only - Every time a query changes, then clean previous data. Otherwise it will accumulative with the new one....
     useEffect(() => {
@@ -71,7 +95,7 @@ export default function useAPIList({
         const firstCards = 5 >= listTotal;
         setHasMore(hasCards && !firstCards);
         setReachedChunksLimit(skip >= chunksTotal);
-        console.log("SUCCESSFUL RESPONSE LIST!!!")
+        setOfflineBtn(false);
     }
 
     function handleError() {
@@ -118,47 +142,115 @@ export default function useAPIList({
         return () => { cancel(); clearTimeout(stopRequest); };
     }, [trigger, reload, skip, reachedChunksLimit])
 
-    const handleReloadBtn = () => setReload(reload => !reload);
+    const handleReloadBtn = () => {
+        if(isOffline) window.location.href = "/mobile-app";
+        setReload(reload => !reload);
+    }
+
+    const handleOfflineBtn = () => {
+        setLoading(true);
+        setOfflineBtn(true);
+        setLoading(false);
+    }
+
     const ShowLoading = ({ size = "small" }) => <ShowLoadingComp size={size} />; // n2
     const ShowLoadingSkeleton = () => {
         return(
             <section className="container-center mb-5">
-                <ShowTaskSkeleton />
-                <ShowTaskSkeleton />
-                <ShowTaskSkeleton />
-                <ShowTaskSkeleton />
-                <ShowTaskSkeleton />
+                <ShowTaskSkeleton animation={false} />
+                <ShowTaskSkeleton animation={false} />
+                <ShowTaskSkeleton animation={false} />
+                <ShowTaskSkeleton animation={false} />
+                <ShowTaskSkeleton animation={false} />
             </section>
         );
     }
     const ShowError = () => (
         <section>
-            <h1 className="text-title text-center text-red">
-                Oops!
-            </h1>
-            <p className="text-normal mx-2 text-purple text-center">
-                Não foi possível se conectar com o servidor. Verifique sua conexão.
-            </p>
-            <div className="container-center">
+            {!isOffline ? (
+                <Fragment>
+                    <h1 className="text-title text-center text-expense-red">
+                        Oops!
+                    </h1>
+                    <p className="text-normal mx-2 text-grey text-left">
+                        Não foi possível carregar esta lista.
+                        <br />
+                        <strong>Se sua conexão estiver lenta,</strong> tente acesso offline da última lista carregada.
+                    </p>
+                </Fragment>
+            ) : (
+                <p className="text-normal mx-2 text-grey text-left" style={{marginTop: '100px'}}>
+                    Ufa! Ainda bem que o <strong>modo offline</strong> salvou sua lista.
+                    <br />
+                    Você pode ter mais dados online.
+                </p>
+            )}
+            <div className="container-center-nowrap">
                 <ButtonMulti
-                    title="Tente Novamente"
+                    title="Recarregar"
                     onClick={handleReloadBtn}
                     color="var(--mainWhite)"
                     backgroundColor="var(--mainDark)"
                 />
+                {!isOffline && (
+                    <ButtonMulti
+                        titleNowrap={true}
+                        title="Acesso offline"
+                        onClick={handleOfflineBtn}
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--mainDark)"
+                    />
+                )}
             </div>
         </section>
     );
 
+    const ShowListTotals = ({
+        analysingTxt = "Analisando...",
+        offlineTxt = "Lista offline gerada",
+        noItemsTxt = "Sem tarefas geradas",
+        foundItemsTxt = `tarefa${isPlural} gerada${isPlural}`,
+    }) => (
+        <Fragment>
+            {loading
+            ? (
+                <p
+                    className="text-normal text-center font-weight-bold text-purple"
+                >
+                    {analysingTxt}
+                </p>
+            ) : (
+                <Fragment>
+                    {(isOffline || offlineBtn) && (
+                        <div className="text-normal font-weight-bold text-purple">
+                            {offlineTxt}
+                        </div>
+                    )}
+
+                    {((!gotListItems && offlineBtn && !isOffline) || (!listTotal && !isOffline && !error)) && (
+                        <div className="text-normal font-weight-bold text-grey">
+                            {getFirstName(userName)}, {noItemsTxt}.
+                        </div>
+                    )}
+
+                    {(!offlineBtn && Boolean(listTotal) && !error) && (
+                        <div className="text-normal font-weight-bold text-purple">
+                            Você tem <span style={{fontSize: '25px'}}>{listTotal}</span> {foundItemsTxt}.
+                        </div>
+                    )}
+                </Fragment>
+            )}
+        </Fragment>
+    );
+
     const noBlocking = !loading && !error;
 
-    const isPlural = listTotal > 1 ? "s" : "";
     const needEmptyIllustra = noBlocking && Boolean(!listTotal);
     const needEmptySearch = noBlocking && Boolean(!listTotal) && search;
     const readyShowElems = noBlocking && !needEmptyIllustra;
 
     return {
-        list,
+        list: gotListItems ? list : [],
         listTotal,
         isPlural,
         noBlocking,
@@ -170,7 +262,9 @@ export default function useAPIList({
         ShowLoading,
         ShowLoadingSkeleton,
         ShowError,
-        hasMore };
+        ShowListTotals,
+        hasMore,
+        isOffline, };
 }
 
 /* COMMENTS
