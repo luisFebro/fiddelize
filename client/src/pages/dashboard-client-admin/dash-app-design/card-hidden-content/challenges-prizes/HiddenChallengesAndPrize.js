@@ -39,48 +39,6 @@ export default function HiddenGoalsAndRewards() {
         }
     }
 
-    const text = `
-        São Dois Modos:
-        <br/>
-        CONSTANTE E PROGRESSIVO
-        <br />
-        <br />
-        > Constante:
-        <br />
-        Descrição: Define um único prêmio para
-        <br />
-        todos os desafios. Ideal se você precisa
-        <br />
-        de apenas uma opção de prêmio.
-        <br />
-        Esse é o modo padrão.
-        <br />
-        <br />
-        Exemplo Prático:
-        <br />
-        - Uma churrascaria que dá um almoço extra para cada desafio concluído.
-        <br />
-        - Uma academia oferece 1 par de ingressos toda vez que os clientes alcançarem 500 pontos.
-        <br />
-        <br />
-        > Progressivo
-        <br />
-        Descrição: Define mais opções de prêmios para uma sequência de desafios com metas progressivas. Ideal para uma lista de prêmios. É ativado automaticamente ao adicionar mais desafios.
-        <br />
-        <br />
-        Exemplo Prático: Um salão de beleza oferece 3 prêmios:
-        <br />
-        - prêmio 1: ganha 1 corte de cabelo unissex
-        para 200 pontos.
-        <br />
-        - prêmio 2: ganha massagem + hidratação para mais 300 pontos. (500 pontos acumulados)
-        <br />
-        - prêmio 3: ganha corte de cabelo + massage + hidratação para mais 400 pontos (900 pontos acumulados)
-        <br />
-        <br />
-        O cliente que finalizar um desafio, tem sua pontuação atual (fidelidômetro) zerado, porém no seu histórico de compras é acumulativo e sempre registrado
-    `
-
     const showPrizeAndGoalsVisibility = () => {
         return(
             <section className="container-center-col">
@@ -90,7 +48,6 @@ export default function HiddenGoalsAndRewards() {
                     </header>
                     <div className="position-absolute" style={styles.visibleInstruBtn}>
                         <InstructionBtn
-                            text={text}
                             mode="modal"
                             article="GiftVisibility_art1"
                         />
@@ -140,8 +97,8 @@ export default function HiddenGoalsAndRewards() {
                 />
                 <div className="position-absolute" style={styles.iconPos}>
                     <InstructionBtn
-                        text={text}
                         mode="modal"
+                        article="ChallengeModes_art2"
                     />
                 </div>
             </section>

@@ -38,14 +38,16 @@ export default function InstructionBtn({
     const DefaultIcon =
     <FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />
 
-    const DefaultBtn =
-    <ButtonFab
-        position="relative"
-        color="var(--mainDark)"
-        backgroundColor="#CAD3C8" // light grey
-        iconFontAwesome={DefaultIcon}
-        needIconShadow={false}
-    />
+    const TooltipBtn = // LESSON: Do not fucking pass a React Element without a html wrapper such as DIV cuz it is gives ref errors...
+    <div className="animated zoomIn delay-2s disable-blur">
+        <ButtonFab
+            position="relative"
+            color="var(--mainDark)"
+            backgroundColor="#CAD3C8" // light grey
+            iconFontAwesome={<FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}
+            needIconShadow={false}
+        />
+    </div>
 
     return (
         <section>
@@ -77,7 +79,7 @@ export default function InstructionBtn({
                         color="var(--mainWhite)"
                         backgroundColor="var(--mainDark)"
                         width={325}
-                        element={DefaultBtn}
+                        element={TooltipBtn}
                     />
                     {closeBtn && (
                         <CloseButton

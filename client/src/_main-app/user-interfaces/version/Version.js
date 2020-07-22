@@ -5,7 +5,7 @@ import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 const latestVersion = "3.29.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "sistema offline - gestão de dados e integração indexedDB com as listas para uso offline para lista automática de tarefas (finalizado)";
+const updateDescription = "sistema de lista offline - gestão de dados e integração indexedDB com as listas para uso offline para lista automática de tarefas (finalizado)";
 const history = [
     "sistema de artigos (finalizado edição inicial)",
     "painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios)",

@@ -49,10 +49,7 @@ export default function SearchResult({
         }
     }
 
-    const TextInstru =
-    <p className="m-0">
-        É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos.
-    </p>
+    const textInstru = "É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos."
 
     return (
         <div className="text-main-container my-5">
@@ -107,7 +104,7 @@ export default function SearchResult({
                                             </p>
                                             <div>
                                                 <InstructionBtn
-                                                    text={TextInstru}
+                                                    text={textInstru}
                                                     mode="tooltip"
                                                 />
                                             </div>
