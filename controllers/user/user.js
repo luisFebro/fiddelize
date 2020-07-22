@@ -152,6 +152,7 @@ exports.removeField = (req, res) => { // n1
     let targetField = req.body.fieldToBeDeleted;
     User.findById(req.params.id)
     .exec((err, selectedUser) => {
+        if(!selectedUser) return res.status(404).json({ msg: "data or user not found"})
         if(selectedUser[targetField] === "[]") return res.status(400).json(msgG("error.notRemovedField", targetField))
         // if(!selectedUser[targetField]) return res.status(404).json({ msg: "this field does not exist or already deleted" });
 

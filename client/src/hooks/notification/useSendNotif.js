@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { sendNotification } from '../../redux/actions/notificationActions';
 import { useStoreDispatch } from 'easy-peasy';
-import useGetVar, { removerVar, setVar, removeVersion } from '../../hooks/storage/useVar';
+import useGetVar, { setVar } from '../../hooks/storage/useVar';
 
 export default function useSendNotif(recipientId, cardType, options = {}) {
     const [sent, setSent] = useState(false);
@@ -9,19 +9,19 @@ export default function useSendNotif(recipientId, cardType, options = {}) {
     const key = storage && storage.key;
     const value = storage && storage.value;
 
-    const { data, loading } = useGetVar(key);
-    const notifVersion = data && data.notifVersion;
-    const loadingVar = loading && loading.loadingVar;
+    const { data: notifVersion, loading: loadingVar } = useGetVar(key);
+    console.log("loadingVar", loadingVar);
+    console.log("notifVersion", notifVersion);
 
-    const alreadySent = key && notifVersion;
-    if(alreadySent) {
-        removeVersion({ key, value })
-    }
+    const hasVersion = key && notifVersion;
+
+    // removeVersion now is integrated in a useEffect in the Challenge's confirmation modal when user
+    // check for the notification. Then the system remove the version allowing sending notifcation to clli-admin again..
 
     useEffect(() => {
         let cancel;
 
-        if(trigger && !alreadySent && !loadingVar) {
+        if(trigger && !hasVersion && !loadingVar && !sent) {
             if(cancel) return;
             const options = {
                 subtype,
@@ -37,7 +37,7 @@ export default function useSendNotif(recipientId, cardType, options = {}) {
             })
         }
         return () => { cancel = true }
-    }, [trigger, alreadySent, loadingVar])
+    }, [trigger, hasVersion, loadingVar, sent])
 
     return sent;
 };

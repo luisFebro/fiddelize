@@ -78,7 +78,7 @@ function ClientUserAppContent({
 
     const totalChallengesWon = Math.floor(currScore / maxScore);
     useEffect(() => {
-        // Handling challenges which does not pass through score panel session in case of multiple winning challenges..
+        // read client user data to make sure prizes are generated if user has multiple prizes won in the row...
         const key = "challengesWon";
 
         if(totalChallengesWon >= 2) {

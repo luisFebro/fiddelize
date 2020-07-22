@@ -115,15 +115,27 @@ export default function PurchaseHistory({ data }) {
                             <span>{!isAfterFirstChall ?  firstChallScoreTitle : `• Desafio atual #${challengeN}:`}</span>
                             <p className="d-inline-block value m-0 ml-2">{currChallScore}</p>
                             <br />
-                            <span>
-                                • Desafios
-                                <FontAwesomeIcon
-                                    icon="check-circle"
-                                    className="icon-shadow"
-                                    style={{ marginLeft: '5px' }}
-                                />:
-                            </span>
-                            <p className="d-inline-block value m-0 ml-2">{confirmedChallenges}</p>
+                            {!isAfterFirstChall
+                            ? (
+                                <Fragment>
+                                    <span>
+                                        • Desafios Confirmados:
+                                    </span>
+                                    <p className="d-inline-block value m-0 ml-2">{confirmedChallenges}</p>
+                                </Fragment>
+                            ) : (
+                                <Fragment>
+                                    <span>
+                                        • Desafios
+                                        <FontAwesomeIcon
+                                            icon="check-circle"
+                                            className="icon-shadow"
+                                            style={{ marginLeft: '5px' }}
+                                        />:
+                                    </span>
+                                    <p className="d-inline-block value m-0 ml-2">{confirmedChallenges}</p>
+                                </Fragment>
+                            )}
                         </div>
                     </div>
                 </Card>

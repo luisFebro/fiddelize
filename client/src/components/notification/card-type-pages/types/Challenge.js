@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import extractStrData from '../../../../utils/string/extractStrData';
 import { default as DiscountModalBtn } from "../../../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-text-field/ModalBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addDays, formatDMY } from '../../../../utils/dates/dateFns';
+import { removeVersion } from '../../../../hooks/storage/useVar';
+import { useClientUser } from '../../../../hooks/useRoleData';
+import defineCurrChallenge from '../../../../utils/biz/defineCurrChallenge';
 
 import {
     textStyle,
@@ -22,6 +25,19 @@ export default function Challenge({
     mainImg,
     bizLogo
 }) {
+
+    const confirmedChall = subtype === "confirmedChall";
+    if(confirmedChall) role = "cliente";
+
+    const { totalPurchasePrize } = useClientUser();
+
+    const updatedCurrChall = defineCurrChallenge(totalPurchasePrize);
+    console.log("updatedCurrChall", updatedCurrChall);
+
+    useEffect(() => {
+        if(confirmedChall) removeVersion({ key: "alreadyAlertChallenge", value: updatedCurrChall });
+    }, [confirmedChall, updatedCurrChall])
+
     const {
         currScore,
         totalPrizes,
@@ -37,8 +53,6 @@ export default function Challenge({
 
     const showCliWonChallContent = () => null; // infos moved to discount modal or brief
 
-    const confirmedChall = subtype === "confirmedChall";
-    if(confirmedChall) role = "cliente";
     // buggy with invalid time range (watching for errors) -SOLVED - this is because one notification is sending without date (cliWonCHall)
     const addedDaysToDate = prizeConfirmationDate ? addDays(new Date(prizeConfirmationDate), Number(prizeDeadline) + 1) : new Date();
     const deadlineDate = formatDMY(addedDaysToDate);
