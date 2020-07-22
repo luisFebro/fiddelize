@@ -141,7 +141,7 @@ export default function PurchaseHistory({ data }) {
     }
 
     const showCurrFinalChallScore = () => (
-        isAfterFirstChall && totalPrizes > 1 &&
+        isAfterFirstChall && totalPrizes >= 1 &&
         <section className="container-center">
             <FontAwesomeIcon icon="trophy" style={{...styles.check, fontSize: '35px'}} />
             <p
