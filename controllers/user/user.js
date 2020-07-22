@@ -361,7 +361,7 @@ exports.readPrizes = (req, res) => {
 
     if(updatedValues) {
         const lastCardChall = purchaseHistory[0] && purchaseHistory[0].challengeN;
-        const currChall = !totalPurchasePrize ? (totalPurchasePrize + 1) : totalPurchasePrize;
+        const currChall = Boolean(totalPurchasePrize) ? (totalPurchasePrize + 1) : 1;
         let nextChall = currChall + 1;
 
         if(lastCardChall) {
@@ -371,7 +371,7 @@ exports.readPrizes = (req, res) => {
         const lastRemainder = purchaseHistory && purchaseHistory.find(card => card.cardType === "remainder" && card.challengeN === nextChall);
         let remainderValue = lastRemainder && lastRemainder.value;
 
-        const rules = [{ challengeN: nextChall }, { cardType: "record || remainder" }]
+        const rules = [{ challengeN: nextChall }, { cardType: "record" }]
         const nextScore = filterAndCount(purchaseHistory, { count: "value", rules });
 
         if(!remainderValue) remainderValue = 0;

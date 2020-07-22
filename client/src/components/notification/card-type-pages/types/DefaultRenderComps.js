@@ -72,6 +72,7 @@ export const ShowActionBtn = ({
     titleCliAdmin = 'Abrir Painel de Controle',
     isConfirmedChall = false,
     children,
+    callback,
 }) => {
     const [loading, setLoading] = useState(false);
     const dispatch = useStoreDispatch();
@@ -82,6 +83,7 @@ export const ShowActionBtn = ({
 
     const handleBtnClick = () => {
         setLoading(true);
+        if(typeof callback === "function") callback(true);
         readUser(dispatch, _id)
         .then(res => {
             if(res.status !== 200) return showSnackbar(dispatch, "Não foi possível atualizar. Reinicie app.", 'error')

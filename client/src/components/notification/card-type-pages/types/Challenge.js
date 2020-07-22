@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import extractStrData from '../../../../utils/string/extractStrData';
 import { default as DiscountModalBtn } from "../../../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-text-field/ModalBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,6 +25,7 @@ export default function Challenge({
     mainImg,
     bizLogo
 }) {
+    const [clickedCTA, setClickedCTA] = useState(false);
 
     const confirmedChall = subtype === "confirmedChall";
     if(confirmedChall) role = "cliente";
@@ -32,11 +33,14 @@ export default function Challenge({
     const { totalPurchasePrize } = useClientUser();
 
     const updatedCurrChall = defineCurrChallenge(totalPurchasePrize);
-    console.log("updatedCurrChall", updatedCurrChall);
 
     useEffect(() => {
-        if(confirmedChall) removeVersion({ key: "alreadyAlertChallenge", value: updatedCurrChall });
-    }, [confirmedChall, updatedCurrChall])
+        if(confirmedChall && clickedCTA) removeVersion({ key: "alreadyAlertChallenge", value: updatedCurrChall });
+    }, [confirmedChall, clickedCTA, updatedCurrChall])
+
+    const handleCTA = res => {
+        setClickedCTA(res);
+    }
 
     const {
         currScore,
@@ -120,6 +124,7 @@ export default function Challenge({
                 titleCliAdmin="descontar pontos"
                 titleCliUser="começar novo desafio"
                 children={confirmedChall ? null : DiscountBtn}
+                callback={handleCTA}
             />
         </section>
     );

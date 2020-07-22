@@ -10,8 +10,6 @@ export default function useSendNotif(recipientId, cardType, options = {}) {
     const value = storage && storage.value;
 
     const { data: notifVersion, loading: loadingVar } = useGetVar(key);
-    console.log("loadingVar", loadingVar);
-    console.log("notifVersion", notifVersion);
 
     const hasVersion = key && notifVersion;
 

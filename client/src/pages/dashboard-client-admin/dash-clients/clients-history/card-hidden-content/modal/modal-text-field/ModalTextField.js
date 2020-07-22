@@ -77,9 +77,9 @@ export default function ModalTextField({
     const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true } });
     const currRemainder = loading ? "..." : updatedValues.remainder;
     const nextScore = loading ? "..." : updatedValues.nextScore;
+    const ultimateCurrScore = loading ? "..." : Number(updatedValues.updatedCurrScore - rewardScore);
     const currUserScoring = loading ? "..." : convertDotToComma(updatedValues.updatedCurrScore);
-    const additionalScore = loading ? "..." : convertDotToComma(currRemainder === nextScore ? 0 : nextScore - currRemainder);
-
+    const additionalScore = loading ? "..." : convertDotToComma(nextScore);
     const userBeatScore = userCurrScore >= rewardScore;
 
     const styles = {
@@ -106,7 +106,7 @@ export default function ModalTextField({
         if(loading) return;
 
         const updateUserBody = {
-            "clientUserData.currScore": nextScore,
+            "clientUserData.currScore": ultimateCurrScore,
             "clientUserData.totalActiveScore": parseFloat(totalActiveScore - rewardScore), // the same as currScore, this is only used to differentiate from totalGeneralScore.
             // This is handled in the backend with changePrizeStatus
             // "clientUserData.totalPurchasePrize": totalPrizes + 1, // the same as currScore, this is only used to differentiate from totalGeneralScore.
@@ -165,7 +165,7 @@ export default function ModalTextField({
         </div>
     );
 
-    const displayMoreRemainder = Boolean(nextScore > currRemainder);
+    const displayMoreRemainder = Boolean(nextScore);
     const showSubtitleAndInfos = () => (
         <div className="margin-auto-90 text-center">
             <p
@@ -200,7 +200,7 @@ export default function ModalTextField({
                         ✔ Cliente fica com:
                     </p>
                     <p className={`font-weight-bold text-nowrap ${displayMoreRemainder ? "text-blue" : ""}`}>
-                        • {convertDotToComma(nextScore)} Pontos Restantes
+                        • {convertDotToComma(ultimateCurrScore)} Pontos Restantes
                         {displayMoreRemainder && (
                             <span
                                 className="text-blue text-small font-weight-bold d-block"

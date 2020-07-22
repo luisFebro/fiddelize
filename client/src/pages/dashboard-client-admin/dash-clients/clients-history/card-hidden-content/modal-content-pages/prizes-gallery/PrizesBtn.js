@@ -1,3 +1,4 @@
+
 import React, { useState, Fragment } from 'react';
 import ModalFullContent from '../../../../../../../components/modals/ModalFullContent';
 import PrizesGallery from './PrizesGallery';
@@ -36,6 +37,7 @@ export default function PrizesBtn({
                     title={title}
                     onClick={handleFullOpen}
                     position="relative"
+                    backgroundColor={backgroundColor ? backgroundColor : "var(--themeSDark--" + colorS +  ")"}
                 />
             ) : (
                  <ButtonFab

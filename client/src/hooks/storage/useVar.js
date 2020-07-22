@@ -102,7 +102,7 @@ export const removeVersion = ({ key, value }) => {
     getVar(key)
     .then(storedVersion => {
         const currVersion = Number(value);
-        if(currVersion > Number(storedVersion)) {
+        if(currVersion === Number(storedVersion)) {
             removeVar(key)
         }
 
