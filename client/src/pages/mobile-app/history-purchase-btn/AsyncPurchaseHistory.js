@@ -59,7 +59,7 @@ export default function AsyncPurchaseHistory({
         }
     }
 
-    const mainTitle = parse(`&#187; Histórico de<br />Compras ${isCliAdmin ? `de ${getFirstName(cliUserName)}` : ""}`);
+    const mainTitle = parse(`&#187; Histórico de<br />Compras ${isCliAdmin ? `de ${getFirstName(cliUserName.cap())}` : ""}`);
     const showTitle = () => (
         <div id="form-dialog-title" style={{padding: isEvenSmall ? '16px 24px 0' : '16px 24px 15px' }}>
             <p

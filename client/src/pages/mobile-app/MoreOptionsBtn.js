@@ -4,8 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { showComponent } from '../../redux/actions/componentActions';
 import SpeedDialButton from '../../components/buttons/SpeedDialButton';
 import { useStoreDispatch } from 'easy-peasy';
-import ModalFullScreenHistory from "../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-full-screen_history/ModalFullScreenHistory";
-import AsyncPurchaseHistory from '../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/AsyncPurchaseHistory';
 import { useClientUser, useProfile } from '../../hooks/useRoleData';
 import { CLIENT_URL } from '../../config/clientUrl';
 import WhatsappBtn from '../../components/buttons/WhatsappBtn';
@@ -22,7 +20,9 @@ import lStorage, { tooltip1, yellowBtn2, needSetTrueLocalKey } from '../../utils
 import ModalFullContent from '../../components/modals/ModalFullContent';
 import Fab from '@material-ui/core/Fab';
 import getFirstName from '../../utils/string/getFirstName';
-// End SpeedDial and Icons
+import { Load } from '../../components/code-splitting/LoadableComp'
+
+const Async = Load({ loader: () => import('./history-purchase-btn/AsyncPurchaseHistory'  /* webpackChunkName: "cli-purchase-history-full-page-lazy" */ )});
 
 const lastOption = tooltip1;
 const currOption = yellowBtn2;
@@ -30,11 +30,22 @@ const currOption = yellowBtn2;
 const lastChecked = lStorage("getItem", lastOption);
 const currChecked = lStorage("getItem", currOption);
 
-const muStyle = {
-    transform: 'scale(1.1)',
-    filter:  'drop-shadow(.5px .5px 1.5px black)',
-    color: '#fff',
-}
+const getStyles = () => ({
+    muStyle: {
+        transform: 'scale(1.1)',
+        filter:  'drop-shadow(.5px .5px 1.5px black)',
+        color: '#fff',
+    },
+    fabRoot: {
+        bottom: '75px',
+        right: '85px',
+    },
+    fabTooltip: {
+        backgroundColor: "var(--lightYellow)",
+        color: "var(--mainDark)",
+        filter: ``, // drop-shadow(0 0 8px #ffc)
+    }
+});
 
 function MoreOptionsBtn({
     history,
@@ -45,14 +56,22 @@ function MoreOptionsBtn({
     needAppForCliAdmin,
     needAppForPreview,
     colorS, }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [blockAccess, setBlockAccess] = useState(false);
-    const [fullOpen, setFullOpen] = useState(false);
+    const [purchaseModal, setPurchaseModal] = useState(false);
+    const [contactModal, setContactModal] = useState(false);
+
+    const styles = getStyles();
 
     const { _id } = useProfile();
-    let { currScore, purchaseHistory, totalGeneralScore, totalPurchasePrize } = useClientUser();
-
     const dispatch = useStoreDispatch();
+
+    let {
+        currScore,
+        purchaseHistory,
+        totalGeneralScore,
+        totalPurchasePrize
+    } = useClientUser();
+
 
     useEffect(() => {
         let cancel;
@@ -68,44 +87,28 @@ function MoreOptionsBtn({
         return () => cancel = true;
     }, [_id, totalPurchasePrize])
 
+    const showPurchaseHistory = () => {
 
-    const styles = {
-        fabRoot: {
-            bottom: '75px',
-            right: '85px',
-        },
-        fabTooltip: {
-            backgroundColor: "var(--lightYellow)",
-            color: "var(--mainDark)",
-            filter: ``, // drop-shadow(0 0 8px #ffc)
+        const handlePurchaseClose = () => {
+            setPurchaseModal(false);
         }
-    }
 
-    const showPurchaseHistoryModal = () => {
-        const challengeN = !totalPurchasePrize ? 1 : totalPurchasePrize + 1;
-
-        const data = {
-            _id,
-            name: userName,
-            clientUserData: {
-                purchaseHistory,
-            },
+        const getModalData = () => ({
+            cliUserName: userName,
+            cliUserId: _id,
+            currUserScore: currScore,
             totalGeneralScore,
-            totalPurchasePrize
-        }
+            totalPurchasePrize,
+        });
+
+        const modalData = getModalData();
+        const AsyncPurchaseHistory = <Async modalData={modalData} />
+
         return(
-            <ModalFullScreenHistory
-                open={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                modalData={{
-                    title: `&#187; Histórico de Compras<br />${challengeN ? `de ${getFirstName(userName)}` : ""}`,
-                    subTitle: null,
-                    componentContent: <AsyncPurchaseHistory data={data} />,
-                    challengeN: challengeN,
-                    totalGeneralScore,
-                    currUserScore: currScore,
-                    userName: userName,
-                }}
+            <ModalFullContent
+                contentComp={AsyncPurchaseHistory}
+                fullOpen={purchaseModal}
+                setFullOpen={handlePurchaseClose}
             />
         );
     }
@@ -114,7 +117,7 @@ function MoreOptionsBtn({
         actions: [
             //the order rendered is inverse from the bottom to top
             {
-                icon: <ExitToAppIcon style={muStyle} />,
+                icon: <ExitToAppIcon style={styles.muStyle} />,
                 name: 'Desconectar ►',
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
@@ -122,20 +125,20 @@ function MoreOptionsBtn({
                 }
             },
             {
-                icon: <ChatIcon style={muStyle} />,
+                icon: <ChatIcon style={styles.muStyle} />,
                 name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
-                    !needAppForPreview && setFullOpen(true);
+                    !needAppForPreview && setContactModal(true);
                     playBeep();
                 },
             },
             {
-                icon: <LocalMallIcon style={muStyle} />,
+                icon: <LocalMallIcon style={styles.muStyle} />,
                 name: 'Seu Histórico ►',
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
-                    !needAppForPreview && setIsModalOpen(true);
+                    !needAppForPreview && setPurchaseModal(true);
                     playBeep();
                 },
             }
@@ -149,6 +152,17 @@ function MoreOptionsBtn({
         history.push(path);
         playBeep();
         lStorage("setItem", currOption);
+    }
+
+    const showContactComp = () => {
+        const Comp = <ContactComp />
+        return(
+            <ModalFullContent
+                contentComp={Comp}
+                fullOpen={contactModal}
+                setFullOpen={setContactModal}
+            />
+        );
     }
 
     return(
@@ -191,12 +205,8 @@ function MoreOptionsBtn({
                 }}
                 hidden={!showMoreBtn}
             />
-            {showPurchaseHistoryModal()}
-            <ModalFullContent
-                contentComp={<ContactComp />}
-                fullOpen={fullOpen}
-                setFullOpen={setFullOpen}
-            />
+            {showPurchaseHistory()}
+            {showContactComp()}
         </div>
     );
 }

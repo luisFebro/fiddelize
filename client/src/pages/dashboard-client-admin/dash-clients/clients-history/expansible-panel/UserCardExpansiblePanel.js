@@ -17,7 +17,7 @@ import { removeField } from '../../../../../redux/actions/userActions';
 import { setRun } from '../../../../../hooks/useRunComp';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import { useClientAdmin } from '../../../../../hooks/useRoleData';
-import PrizesBtn from '../card-hidden-content/modal-content-pages/prizes-gallery/PrizesBtn';
+import PrizesBtn from '../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn';
 // End Customized Data
 
 const isSmall = window.Helper.isSmallScreen();

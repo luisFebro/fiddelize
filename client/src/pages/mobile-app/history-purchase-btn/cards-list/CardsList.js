@@ -7,7 +7,7 @@ import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
 import PrizeCard from './PrizeCard';
 import { readPurchaseHistory } from '../../../../redux/actions/userActions';
 // import lStorage, { userProfileColl } from '../../../../utils/storage/lStorage';
-import { useClientAdmin } from '../../../../hooks/useRoleData';
+import { useClientAdmin, useProfile } from '../../../../hooks/useRoleData';
 import defineCurrChallenge from '../../../../utils/biz/defineCurrChallenge';
 import imgLib from '../../../../utils/storage/lForageStore';
 import getFirstName from '../../../../utils/string/getFirstName';
@@ -15,6 +15,7 @@ import { formatDMY, fromNow } from '../../../../utils/dates/dateFns';
 import Spinner from '../../../../components/loadingIndicators/Spinner';
 import useDelay from '../../../../hooks/useDelay';
 import pickCurrChallData from '../../../../utils/biz/pickCurrChallData';
+import useAPIList from '../../../../hooks/api/useAPIList';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -44,13 +45,24 @@ const WonChallengeBrief = ({ historyData }) => (
 );
 
 export default function CardsList({ data }) {
-    const { _id, name, totalPurchasePrize } = data;
-    let { totalGeneralScore } = data; totalGeneralScore = convertDotToComma(totalGeneralScore);
     const [purchaseHistoryArray, setPurchaseHistoryArray] = useState([]);
     const [hasPendingChall, setHasPendingChall] = useState(false);
     const [challScore, setChallScore] = useState(0);
 
-    let { maxScore, rewardList, selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
+    const { _id, name, totalPurchasePrize } = data;
+    let { totalGeneralScore } = data; totalGeneralScore = convertDotToComma(totalGeneralScore);
+    const totalGeneralForIllustra = data.totalGeneralScore;
+
+    let {
+        maxScore,
+        rewardList,
+        selfThemeBackColor,
+        selfThemePColor,
+        selfThemeSColor
+    } = useClientAdmin();
+
+    const { role } = useProfile();
+    const isAdmin = role === "cliente-admin";
 
     const totalPrizes = hasPendingChall ? totalPurchasePrize + 1 : totalPurchasePrize;
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
@@ -257,7 +269,7 @@ export default function CardsList({ data }) {
 
     return (
         <div>
-            {!totalGeneralScore
+            {Boolean(!totalGeneralForIllustra)
             ? illustrationIfEmpty()
             : (
                 <Fragment>
@@ -272,9 +284,11 @@ export default function CardsList({ data }) {
                             {showAllTimeTotal()}
                             {showCurrFinalChallScore()}
                             {mainData}
-                            <p className="my-5 text-normal text-center font-weight-bold text-purple">
-                                Isso é tudo, {name}.
-                            </p>
+                            {!isAdmin && (
+                                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                                    Isso é tudo, {name}.
+                                </p>
+                            )}
                         </Fragment>
                     )}
                 </Fragment>

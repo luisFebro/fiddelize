@@ -15,7 +15,6 @@ const currUserData = {
         bizId: userData && userData.bizId,
         currScore: userData && userData.currScore,
         cashCurrScore: userData && userData.lastScore,
-        purchaseHistory: userData && userData.purchaseHistory,
         totalActiveScore: userData && userData.totalActiveScore,
         totalGeneralScore: userData && userData.totalGeneralScore,
         totalPurchasePrize: userData && userData.totalPurchasePrize,

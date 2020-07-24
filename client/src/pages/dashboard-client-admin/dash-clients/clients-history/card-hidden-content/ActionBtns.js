@@ -7,12 +7,11 @@ import { faStyle } from '../../../../../components/buttons/material-ui/ButtonMul
 import { default as YesNoModalBtn } from './modal/modal-conf-yes-no/ModalBtn';
 import { default as DiscountModalBtn } from "./modal/modal-text-field/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
-import { default as FullModalBtnHistory } from "./modal/modal-full-screen_history/ModalBtn";
 import { useStoreState } from 'easy-peasy';
 import ClientProfile from './modal-content-pages/ClientProfile';
-import AsyncPurchaseHistory from './modal-content-pages/AsyncPurchaseHistory';
 import defineCurrChallenge from '../../../../../utils/biz/defineCurrChallenge';
 import getFirstName from '../../../../../utils/string/getFirstName';
+import PurchaseHistoryBtn from '../../../../mobile-app/history-purchase-btn/PurchaseHistoryBtn';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -75,41 +74,26 @@ const showDiscountBtn = (data, clientAdminData) => {
         </div>
     );
 };
-// NEed change to database structure
-const showHistoryBtn = data => {
-    const challengeN = defineCurrChallenge(data.clientUserData.totalPurchasePrize);
-    // This structure is required because both cliuser and cliadmin have access to this component.
-    const dataToSendModal = {
-        _id: data._id,
-        name: data.name,
-        clientUserData: {
-            purchaseHistory: data.clientUserData.purchaseHistory,
-        },
-        totalGeneralScore: data.clientUserData.totalGeneralScore,
-        totalPurchasePrize: data.clientUserData.totalPurchasePrize,
-    }
+
+const ShowHistoryBtn = ({ data }) => {
+    const { name, _id, clientUserData } = data;
+    const { totalGeneralScore, totalPurchasePrize, currScore } = clientUserData;
+
+    const getModalData = () => ({
+        cliUserName: name,
+        cliUserId: _id,
+        currUserScore: currScore,
+        totalGeneralScore,
+        totalPurchasePrize,
+    });
+
+    const modalData = getModalData();
+
     return(
-        <div>
-            <FullModalBtnHistory
-                button={{
-                    iconMu: <LocalMallIcon style={muStyle} />,
-                    backgroundColor: 'var(--themeSDark)',
-                    title: "Ver Histórico",
-                    variant: 'extended',
-                    position: 'relative',
-                    size: "medium",
-                }}
-                modalData={{
-                    title: `&#187; Histórico de<br />Compras ${challengeN ? `de ${data && data.name && getFirstName(data.name)}` : ""}`,
-                    subTitle: null,
-                    componentContent: <AsyncPurchaseHistory data={dataToSendModal} />,
-                    challengeN: challengeN,
-                    currUserScore: data.clientUserData.currScore,
-                    userName: data.name,
-                    totalGeneralScore: dataToSendModal && dataToSendModal.totalGeneralScore,
-                }}
-            />
-        </div>
+        <PurchaseHistoryBtn
+            from="clientsHistory"
+            modalData={modalData}
+        />
     );
 }
 
@@ -149,7 +133,7 @@ const showBlobActionBtns = (data, clientAdminData) => (
                 <p className="star position-absolute star-align">
                     <FontAwesomeIcon icon="star" className="star-blob-medium animated rotateIn fast delay-5s" />
                 </p>
-                {showHistoryBtn(data)}
+                <ShowHistoryBtn data={data} />
             </div>
             <div className="position-relative blob-action-btn--root">
                 <p className="star position-absolute star-align">

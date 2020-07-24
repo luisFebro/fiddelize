@@ -49,18 +49,6 @@ const clientAdminColl = { collection: "clientAdmin", newObj: defaultClientAdmin 
 // end client Admin
 
 // user profile
-const purchaseHistoryArray = [
-    {
-        _id: 123,
-        challengeN: 1,
-        desc: "Primeira Compra",
-        icon: "star",
-        value: 0,
-        cardType: 'record',
-        createdAt: '...',
-    }
-]
-
 const defaultUserProfile = {
     _id: "123abc",
     role: "",
@@ -70,7 +58,6 @@ const defaultUserProfile = {
     createdAt: "...",
     currScore: 0,
     lastScore: 0,
-    purchaseHistory: purchaseHistoryArray,
     bizId: "0",
     totalActiveScore: 0,
     totalGeneralScore: 0,

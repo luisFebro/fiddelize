@@ -7,6 +7,10 @@ import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
 import { useOfflineListData } from '../../hooks/storage/useVar';
 import getFirstName from '../../utils/string/getFirstName';
 import { useProfile } from '../../hooks/useRoleData';
+import { showSnackbar } from '../../redux/actions/snackbarActions';
+import { useStoreDispatch } from 'easy-peasy';
+import { logout } from '../../redux/actions/authActions';
+
 // import { getHeaderToken } from '../../utils/server/getHeaders';
 
 export * from './requestsLib.js';
@@ -19,7 +23,7 @@ const {
     loading, ShowLoading,
     error, ShowError,
 } = useAPI({ method: "put", url: readPrizes(userId), params: { cliAdminId: businessId } })
-{listMap}
+<List />
 {loading && <ShowLoading />}
 {error && <ShowError />}
  */
@@ -50,6 +54,8 @@ export default function useAPIList({
     const [hasMore, setHasMore] = useState(false);
     const [reachedChunksLimit, setReachedChunksLimit] = useState(false);
     const [offlineBtn, setOfflineBtn] = useState(false);
+
+    const dispatch = useStoreDispatch();
 
     const { list, listTotal, chunksTotal } = data;
 
@@ -98,9 +104,16 @@ export default function useAPIList({
         setOfflineBtn(false);
     }
 
-    function handleError() {
+    function handleError(e) {
         setLoading(false);
         setError(true);
+
+        console.log("ERROR EMSFG NOOO", e);
+
+        if(false) {
+            showSnackbar(dispatch, "Sua sessão terminou.", "warning")
+            logout(dispatch, {needSnackbar: false});
+        }
     }
 
     useEffect(() => {
@@ -132,8 +145,9 @@ export default function useAPIList({
                 handleSuccess({ response, stopRequest, updateOnly });
             } catch(e) {
                 if(axios.isCancel(e)) return
+                // TODO: HANDLE 403 ERROR HERE MAKING TESTS FROM BACKEND.
                 if(e.response) console.log(`${e.response.data}. STATUS: ${e.response.status}`)
-                handleError();
+                handleError(e);
             }
         }
 

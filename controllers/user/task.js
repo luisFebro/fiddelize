@@ -51,6 +51,7 @@ exports.addAutomaticTask = (req, res) => {
 
 // Method: Get
 exports.readTasks = (req, res) => {
+    if(true) return res.status(403).res({ error: 'expired JSON' })
     const { doneStatus, skip, limit = 5 } = req.query;
     const array = pickDataByProfile({ profileData: req.profile });
 

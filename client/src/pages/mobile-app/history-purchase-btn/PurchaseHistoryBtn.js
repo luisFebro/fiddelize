@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
-import { Load } from '../../../components/code-splitting/LoadableComp'
 import ModalFullContent from '../../../components/modals/ModalFullContent';
+import { Load } from '../../../components/code-splitting/LoadableComp'
 
 const Async = Load({ loader: () => import('./AsyncPurchaseHistory'  /* webpackChunkName: "cli-purchase-history-full-page-lazy" */ )});
 
@@ -19,13 +19,14 @@ export default function PurchaseHistoryBtn({
     right,
     bottom,
     modalData,
+    from = "mobileApp",
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const AsyncPurchaseHistory = <Async  modalData={modalData} />
 
     const styles = getStyles();
-    const MallIcon = <LocalMallIcon style={styles.muStyle} />
+    const MallIcon = <LocalMallIcon style={from === "clientsHistory" ? undefined : styles.muStyle} />
 
     const handleFullOpen = () => {
         setFullOpen(true);
@@ -37,15 +38,28 @@ export default function PurchaseHistoryBtn({
 
     return (
         <section>
-            <ButtonFab
-                backgroundColor={"var(--themeSDark--" + colorS + ")"}
-                onClick={handleFullOpen}
-                iconMu={MallIcon}
-                right={right}
-                bottom={bottom}
-                shadowColor={colorS === "black" ? "white" : "black"}
-                needBtnShadow={true}
-            />
+            {from === "clientsHistory"
+            ? (
+                <ButtonFab
+                    size="medium"
+                    title="Ver Histórico"
+                    onClick={handleFullOpen}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant = 'extended'
+                    position = 'relative'
+                    iconMu={MallIcon}
+                />
+            ) : (
+                <ButtonFab
+                    backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                    onClick={handleFullOpen}
+                    iconMu={MallIcon}
+                    right={right}
+                    bottom={bottom}
+                    shadowColor={colorS === "black" ? "white" : "black"}
+                    needBtnShadow={true}
+                />
+            )}
             <ModalFullContent
                 contentComp={AsyncPurchaseHistory}
                 fullOpen={fullOpen}

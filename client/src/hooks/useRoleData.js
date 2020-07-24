@@ -72,7 +72,6 @@ export const useClientUser = () => {
     const bizId = clientUser && clientUser.bizId;
     const currScore = clientUser && clientUser.currScore;
     const lastScore = clientUser && clientUser.cashCurrScore;
-    const purchaseHistory = clientUser && clientUser.purchaseHistory;
     const totalActiveScore = clientUser && clientUser.totalActiveScore;
     const totalGeneralScore = clientUser && clientUser.totalGeneralScore;
     const totalPurchasePrize = clientUser && clientUser.totalPurchasePrize;
@@ -80,7 +79,6 @@ export const useClientUser = () => {
     return({
         currScore,
         lastScore,
-        purchaseHistory,
         bizId,
         totalActiveScore,
         totalGeneralScore,
