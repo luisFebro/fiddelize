@@ -2,7 +2,10 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import Spinner from '../loadingIndicators/Spinner';
 // import FullPageLoading from './loadingIndicators/FullPageLoading';
-//
+
+// This Load one will be the official one which will be placed
+// directed into the component wihtout the need of create an Async file.
+// MAke sure to name the component with prefix Async...
 export const Load = ({ loader, loading, ...otherProps }) => LoadableComp({ loader, loading: loading ? loading : true });
 
 export default function LoadableComp(opts) { //n1

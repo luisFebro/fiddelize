@@ -5,7 +5,7 @@ import { useAuthUser } from '../../../hooks/useAuthUser';
 import { useStoreDispatch } from 'easy-peasy';
 import getFirstName from '../../../utils/string/getFirstName';
 import selectTxtStyle from '../../../utils/biz/selectTxtStyle';
-import "../ellipse.css";
+import "../ellipse.scss";
 import { setRun } from '../../../hooks/useRunComp';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import "./style.scss";
@@ -66,9 +66,15 @@ function ClientUserAppContent({
     const fullName = name;
     const totalNotifications = useCountNotif(_id, { role, forceCliUser: true });
     name ? name = getFirstName(name) : name = "cliente";
-    let { currScore, lastScore, totalPurchasePrize } = useClientUser();
+    let { currScore, lastScore, totalPurchasePrize, totalGeneralScore } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
-    let { maxScore, bizCodeName, rewardList, rewardDeadline, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor, arePrizesVisible } = useClientAdmin();
+    let {
+        maxScore,
+        bizCodeName,
+        rewardList,
+        rewardDeadline,
+        selfMilestoneIcon, selfThemeSColor, selfThemeBackColor,
+        arePrizesVisible } = useClientAdmin();
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
@@ -161,6 +167,8 @@ function ClientUserAppContent({
 
     const showAllScores = () => (
         <AllScores
+            userName={name}
+            userId={_id}
             currScoreRef={currScoreRef}
             currScore={currScore}
             showPercentage={showMoreComps}
@@ -168,6 +176,9 @@ function ClientUserAppContent({
             needAppForPreview={needAppForPreview}
             selectTxtStyle={selectTxtStyle}
             colorBack={backColorSelect}
+            colorS={colorS}
+            totalGeneralScore={totalGeneralScore}
+            totalPurchasePrize={totalPurchasePrize}
         />
     );
 
@@ -195,7 +206,7 @@ function ClientUserAppContent({
                         />
                     </div>
                 }
-                marginY={50}
+                marginY={10}
                 size="small"
             />
         </section>

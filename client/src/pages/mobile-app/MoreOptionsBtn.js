@@ -5,7 +5,7 @@ import { showComponent } from '../../redux/actions/componentActions';
 import SpeedDialButton from '../../components/buttons/SpeedDialButton';
 import { useStoreDispatch } from 'easy-peasy';
 import ModalFullScreenHistory from "../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-full-screen_history/ModalFullScreenHistory";
-import VAsyncPurchaseHistory from '../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/VAsyncPurchaseHistory';
+import AsyncPurchaseHistory from '../dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/AsyncPurchaseHistory';
 import { useClientUser, useProfile } from '../../hooks/useRoleData';
 import { CLIENT_URL } from '../../config/clientUrl';
 import WhatsappBtn from '../../components/buttons/WhatsappBtn';
@@ -100,7 +100,7 @@ function MoreOptionsBtn({
                 modalData={{
                     title: `&#187; Histórico de Compras<br />${challengeN ? `de ${getFirstName(userName)}` : ""}`,
                     subTitle: null,
-                    componentContent: <VAsyncPurchaseHistory data={data} />,
+                    componentContent: <AsyncPurchaseHistory data={data} />,
                     challengeN: challengeN,
                     totalGeneralScore,
                     currUserScore: currScore,

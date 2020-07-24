@@ -84,7 +84,6 @@ export const readPurchaseHistory = async (_idUser, rewardScore, options = {}) =>
     const { noResponse, skip, limit, challScore, prizeDesc, trophyIcon, trigger = true } = options;
 
     if(!trigger) return;
-    console.log("RUNNING READPURCHASE HISTORY YEAHHHHHH")
     let noResponseQuery = "", skipQuery = "", limitQuery = "", scoreQuery = "", prizeDescQuery = "", trophyIconQuery = "";
     if(noResponse) noResponseQuery = "&noResponse=true";
     if(skip || skip === 0) skipQuery = `&skip=${skip}`;

@@ -25,7 +25,7 @@ const enumSubtypes =  [
     "purchaseDetail",
     "newFeature",
     "deadlineWarning",
-    "smsUsageWarning",
+    "lowBalanceWarning", // e.g sms usage is about to end..
     "promotion",
 ]
 const notificationsData = {

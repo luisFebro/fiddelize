@@ -2,11 +2,12 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.30.3"
+const latestVersion = "3.31.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "sistema de lista de dados offline - gestão de dados e integração indexedDB com as listas para uso offline para lista automática de tarefas (finalizado)";
+const updateDescription = "otimização lista historico de compra com botão de atalho no app - pt 1";
 const history = [
+    "sistema de lista de dados offline - gestão de dados e integração indexedDB com as listas para uso offline para lista automática de tarefas (finalizado)",
     "sistema de artigos (finalizado edição inicial)",
     "painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios)",
     "Lista Automática de Tarefas - opção de excluir card se prêmio expirado (testando...)",

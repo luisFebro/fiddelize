@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import PrizesBtn from '../../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/prizes-gallery/PrizesBtn';
+import PrizesBtn from '../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn';
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
