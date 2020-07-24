@@ -15,7 +15,7 @@ const {
 } = require("../../controllers/user");
 
 // @ routes api/task/...
-router.get('/read/:userId', readTasks); // mwIsAuth
+router.get('/read/:userId', mwIsAuth, readTasks);
 router.put('/add', addAutomaticTask); // mwIsAuth
 router.put('/toggle', toggleDone); // mwIsAuth
 router.put('/remove-and-expire', removeTask);

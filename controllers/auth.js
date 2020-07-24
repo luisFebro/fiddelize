@@ -30,7 +30,6 @@ exports.mwIsAuth = (req, res, next) => {
                 console.log(`JWT ERROR: ${err.message}`)
             }
             if(err || !isAuthUser) return res.status(403).json(msg('error.notAuthorized'));  // n4 401 and 403 http code difference
-
             next();
         })
 };

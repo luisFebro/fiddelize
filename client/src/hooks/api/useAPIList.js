@@ -10,8 +10,8 @@ import { useProfile } from '../../hooks/useRoleData';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
 import { logout } from '../../redux/actions/authActions';
-
-// import { getHeaderToken } from '../../utils/server/getHeaders';
+import { chooseHeader } from '../../utils/server/getHeaders';
+import { useToken } from '../../hooks/useRoleData';
 
 export * from './requestsLib.js';
 export * from './trigger.js';
@@ -56,6 +56,7 @@ export default function useAPIList({
     const [offlineBtn, setOfflineBtn] = useState(false);
 
     const dispatch = useStoreDispatch();
+    const token = useToken();
 
     const { list, listTotal, chunksTotal } = data;
 
@@ -104,13 +105,12 @@ export default function useAPIList({
         setOfflineBtn(false);
     }
 
-    function handleError(e) {
+    function handleError(status = 200) {
         setLoading(false);
         setError(true);
 
-        console.log("ERROR EMSFG NOOO", e);
-
-        if(false) {
+        const gotExpiredToken = status === 403;
+        if(gotExpiredToken) {
             showSnackbar(dispatch, "Sua sessão terminou.", "warning")
             logout(dispatch, {needSnackbar: false});
         }
@@ -136,6 +136,7 @@ export default function useAPIList({
             method,
             data: body,
             params: { ...params, skip },
+            headers: chooseHeader({ token: token }),
             cancelToken: new axios.CancelToken(c => cancel = c) // n1
         }
 
@@ -145,9 +146,10 @@ export default function useAPIList({
                 handleSuccess({ response, stopRequest, updateOnly });
             } catch(e) {
                 if(axios.isCancel(e)) return
-                // TODO: HANDLE 403 ERROR HERE MAKING TESTS FROM BACKEND.
-                if(e.response) console.log(`${e.response.data}. STATUS: ${e.response.status}`)
-                handleError(e);
+                if(e.response) console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
+                const { status } = e.response;
+
+                handleError(status);
             }
         }
 
