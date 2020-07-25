@@ -1,7 +1,7 @@
 const backColorsWhichNeedDarkTxt = ["yellow", "white"];
 
 export default function selectTxtStyle(backgroundColor = "default", options = {}) {
-    const { bold, needDarkBool } = options;
+    const { bold, needDarkBool, needShadow, mode = "className" } = options;
     const array = backColorsWhichNeedDarkTxt;
     const needDark = array.some(item => backgroundColor && backgroundColor.includes(item));
 
@@ -10,7 +10,22 @@ export default function selectTxtStyle(backgroundColor = "default", options = {}
 
     if(bold) { darkTheme += " font-weight-bold" };
 
+    if(mode === "style") {
+        if(needDark) {
+            return {
+                color: 'var(--mainBlack)',
+                textShadow: '1px 1px 3px black',
+            }
+        } else {
+            return {
+                color: 'var(--mainWhite)',
+                textShadow: undefined,
+            }
+        }
+    }
+
     if(needDarkBool) return needDark ? true : false;
+    if(needShadow) return needDark ? false : true;
     return needDark ? darkTheme : whiteTheme;
 }
 

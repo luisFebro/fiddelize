@@ -29,6 +29,7 @@ export default function PercCircleAndGift({
 
     const percentageAchieved = getPercentage(maxScore, currScore);
     const needResizeFont = percentageAchieved.toString().includes(".");
+    if(currScore === undefined) currScore = 0;
     const leftScore = currScore >= maxScore ? 0 : maxScore - currScore
     const userBeatedChall = currScore >= maxScore;
 
@@ -152,6 +153,7 @@ export default function PercCircleAndGift({
                     </div>
                 }
                 backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                colorS={colorS}
             />
          </section>
     );
@@ -176,11 +178,11 @@ export default function PercCircleAndGift({
                     <Tooltip
                         needArrow
                         whiteSpace
-                        borderShadow
                         width={325}
                         text={tooltipTxt}
                         element={<div>{displayGiftBox({ needSmallBox: true, disableClick: true, opacity: (userBeatedChall || arePrizesVisible) ? 1 : 0.5 })}</div>}
                         backgroundColor={"var(--themeS--" + colorS +")"}
+                        colorS={colorS}
                     />
                     {!arePrizesVisible && (
                         <p

@@ -81,9 +81,6 @@ const showProfileBtn = data => (
     </div>
 );
 
-// INSERT QUESTION BTN: Descontar pontos? BTN:
-// Sua assistente cuida de te avisar e você recebe uma notificação na página de novidades assim que um cliente concluir sua meta em pontos para os descontos.
-// Fica prático e você não precisa ficar verificando quem já bateu ou não os desafios.
 const showBlobActionBtns = (data, clientAdminData) => (
     <main className="text-white container-center flex-column blob-action-btns--root">
         <p className="mb-5 position-relative text-center text-title text-shadow" style={{top: '40px'}}>

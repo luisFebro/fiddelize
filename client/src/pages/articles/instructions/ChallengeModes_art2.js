@@ -83,7 +83,7 @@ const Body = () => {
 }
 
 
-export default function GiftVisibility_art1() {
+export default function Article() {
     return (
         <section>
             <ShowTitle title="Fiddelize Ensina" />

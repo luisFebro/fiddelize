@@ -101,6 +101,7 @@ export default function RatingIcons({
                             </i>
                         }
                         backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                        colorS={colorS}
                         needArrow
                         margin="60px 0"
                     />

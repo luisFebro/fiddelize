@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ActionBtns from './ActionBtns';
 import { useStoreState } from 'easy-peasy';
+import InstructionBtn from '../../../../../components/buttons/InstructionBtn';
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -48,8 +49,8 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
 
     return (
         needShowActionBtns &&
-        <div
-            className="text-normal enabledLink panel-hidden-content--root"
+        <section
+            className="position-relative text-normal enabledLink panel-hidden-content--root"
         >
             {showInfos()}
             <div className="animated flipInY slow delay-1s">
@@ -58,7 +59,17 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
                     needBadgeForTestMode={needBadgeForTestMode}
                 />
             </div>
-        </div>
+            <section className="position-absolute d-flex" style={{bottom: -15, right: -15 }}>
+                <p className="m-0 text-normal text-white text-shadow">
+                    Descontar<br />Pontos ?  </p>
+                <section className="align-self-end">
+                    <InstructionBtn
+                        mode="modal"
+                        article="ScoreDiscount_art3"
+                    />
+                </section>
+            </section>
+        </section>
     );
 }
 

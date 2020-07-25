@@ -123,7 +123,7 @@ export default function ShowCards({ setOpenComp }) {
                 onBtnClick={() => setOpenComp("colors")}
             />
             <OptionCard
-                title="Ícone de<br />Nível:"
+                title="Ícone de<br />Nível Principal:"
                 mainContent={iconContent()}
                 onBtnClick={() => setOpenComp("icon")}
             />

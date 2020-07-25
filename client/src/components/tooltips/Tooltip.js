@@ -8,6 +8,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Zoom from '@material-ui/core/Zoom';
 import parse from 'html-react-parser';
 import  '../../keyframes/pulseWaves.css';
+import selectTxtStyle from '../../utils/biz/selectTxtStyle';
+import { useClientAdmin } from '../../hooks/useRoleData';
 
 Tooltip.propTypes = {
     text: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
@@ -31,6 +33,7 @@ element={
 export default function Tooltip({
     text,
     color,
+    colorS,
     backgroundColor,
     borderShadow,
     className,
@@ -48,9 +51,15 @@ export default function Tooltip({
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
     // this useEffect solves the problem with uncontrolled vs controlled components handling.
+
+    const { selfThemeBackColor } = useClientAdmin();
+
     useEffect(() => {
         if(needOpen) { setOpen(true); } else { setOpen(false); }
     }, [needOpen])
+
+    const { color: txtColor } = selectTxtStyle(colorS, { mode: "style" })
+    const needShadow = selectTxtStyle(colorS, { needShadow: true })
 
     const handleTooltipClose = () => {
         if(typeof onClickAway === "function") { onClickAway(); }
@@ -70,10 +79,10 @@ export default function Tooltip({
             padding: padding ? padding : '10px',
             margin: margin || '40px 0',
             whiteSpace: whiteSpace ? null : 'nowrap',
-            textShadow: '1px 1px 3px black',
+            textShadow: needShadow ? '1px 1px 3px black' : undefined,
             width: width ? width : '100%',
-            color: color,
-            filter: borderShadow ? "drop-shadow(.001em .1em .1em var(--mainWhite))" : undefined,
+            color: txtColor,
+            filter: selfThemeBackColor === 'black' ? "drop-shadow(.001em .1em .1em var(--mainWhite))" : "drop-shadow(.001em .1em .1em var(--mainDark))",
             // top: 20,
         },
         popper: {
