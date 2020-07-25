@@ -41,7 +41,7 @@ export default function PurchaseHistoryBtn({
             {from === "clientsHistory"
             ? (
                 <ButtonFab
-                    size="medium"
+                    size="large"
                     title="Ver Histórico"
                     onClick={handleFullOpen}
                     backgroundColor={"var(--themeSDark--default)"}

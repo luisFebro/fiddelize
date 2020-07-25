@@ -35,7 +35,7 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
                             • {key}:
                             <br />
                             {infoValues[ind] && infoValues[ind] !== "0"
-                            ? <span className="text-small font-weight-bold">{infoValues[ind]} Pontos.</span>
+                            ? <span className="font-site text-em-0-9 font-weight-bold">{infoValues[ind]} Pontos.</span>
                             : <span className="text-small font-weight-bold">Sem pontos.</span>}
                         </span>
                     </p>

@@ -5,8 +5,8 @@ import LocalMallIcon from '@material-ui/icons/LocalMall';
 import { muStyle } from '../../../../../components/buttons/material-ui/ButtonFab';
 import { faStyle } from '../../../../../components/buttons/material-ui/ButtonMulti';
 import { default as YesNoModalBtn } from './modal/modal-conf-yes-no/ModalBtn';
-import { default as DiscountModalBtn } from "./modal/modal-text-field/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
+// import { default as DiscountModalBtn } from "./modal/modal-text-field/ModalBtn";
 import { useStoreState } from 'easy-peasy';
 import ClientProfile from './modal-content-pages/ClientProfile';
 import defineCurrChallenge from '../../../../../utils/biz/defineCurrChallenge';
@@ -38,42 +38,6 @@ export default function ActionBtns({ data, needBadgeForTestMode }) {
         </Div>
     );
 }
-
-const showDiscountBtn = (data, clientAdminData) => {
-    const currScore = data.clientUserData && data.clientUserData.currScore;
-    const totalPrizes = data.clientUserData && data.clientUserData.totalPurchasePrize;
-    let totalActiveScore = data.clientUserData && data.clientUserData.totalActiveScore;
-    const totalGeneralScore = data.clientUserData && data.clientUserData.totalGeneralScore;
-    if(!totalActiveScore) { totalActiveScore = totalGeneralScore };
-    const rewardScore = clientAdminData.rewardScore;
-    return(
-        <div>
-            <DiscountModalBtn
-                button={{
-                    iconFontAwesome: <FontAwesomeIcon icon="minus-circle" />,
-                    backgroundColor: 'var(--themeSDark)',
-                    title: "Descontar Pontos",
-                    variant: 'extended',
-                    position: 'relative',
-                    size: "large",
-                }}
-                modalData={{
-                    title: "Desconto de Pontos<br />do Cliente",
-                    subTitle: null,
-                    labelTxtField: "Valor para ser descontado:",
-                    txtBtn: "Descontar",
-                    iconBtn: <FontAwesomeIcon icon="minus-circle" />,
-                    userCurrScore: currScore,
-                    name: data.name.cap(),
-                    rewardScore: rewardScore,
-                    userId: data._id,
-                    totalPrizes,
-                    totalActiveScore,
-                }}
-            />
-        </div>
-    );
-};
 
 const ShowHistoryBtn = ({ data }) => {
     const { name, _id, clientUserData } = data;
@@ -117,17 +81,14 @@ const showProfileBtn = data => (
     </div>
 );
 
+// INSERT QUESTION BTN: Descontar pontos? BTN:
+// Sua assistente cuida de te avisar e você recebe uma notificação na página de novidades assim que um cliente concluir sua meta em pontos para os descontos.
+// Fica prático e você não precisa ficar verificando quem já bateu ou não os desafios.
 const showBlobActionBtns = (data, clientAdminData) => (
     <main className="text-white container-center flex-column blob-action-btns--root">
-        <p className="position-relative text-center text-title text-shadow" style={{top: '40px'}}>
+        <p className="mb-5 position-relative text-center text-title text-shadow" style={{top: '40px'}}>
             <FontAwesomeIcon icon="star" className="title-blob-action" /> Ações
         </p>
-        <div className="blob-action-btn--root position-relative">
-            <p className="star position-absolute">
-                <FontAwesomeIcon icon="star" className="star-blob-medium animated rotateIn fast delay-4s" />
-            </p>
-            {showDiscountBtn(data, clientAdminData)}
-        </div>
         <section className={`container-center ${isSmall && "flex-column"}`}>
             <div className="blob-action-btn--root history-btn position-relative">
                 <p className="star position-absolute star-align">
@@ -167,3 +128,48 @@ const showDeleteBtn = (data, needBadgeForTestMode) => (
         />
     </div>
 );
+
+/*
+const showDiscountBtn = (data, clientAdminData) => {
+    const currScore = data.clientUserData && data.clientUserData.currScore;
+    const totalPrizes = data.clientUserData && data.clientUserData.totalPurchasePrize;
+    let totalActiveScore = data.clientUserData && data.clientUserData.totalActiveScore;
+    const totalGeneralScore = data.clientUserData && data.clientUserData.totalGeneralScore;
+    if(!totalActiveScore) { totalActiveScore = totalGeneralScore };
+    const rewardScore = clientAdminData.rewardScore;
+    return(
+        <div>
+            <DiscountModalBtn
+                button={{
+                    iconFontAwesome: <FontAwesomeIcon icon="minus-circle" />,
+                    backgroundColor: 'var(--themeSDark)',
+                    title: "Descontar Pontos",
+                    variant: 'extended',
+                    position: 'relative',
+                    size: "large",
+                }}
+                modalData={{
+                    title: "Desconto de Pontos<br />do Cliente",
+                    subTitle: null,
+                    labelTxtField: "Valor para ser descontado:",
+                    txtBtn: "Descontar",
+                    iconBtn: <FontAwesomeIcon icon="minus-circle" />,
+                    userCurrScore: currScore,
+                    name: data.name.cap(),
+                    rewardScore: rewardScore,
+                    userId: data._id,
+                    totalPrizes,
+                    totalActiveScore,
+                }}
+            />
+        </div>
+    );
+};
+
+<div className="blob-action-btn--root position-relative">
+    <p className="star position-absolute">
+        <FontAwesomeIcon icon="star" className="star-blob-medium animated rotateIn fast delay-4s" />
+    </p>
+    {showDiscountBtn(data, clientAdminData)}
+</div>
+ */

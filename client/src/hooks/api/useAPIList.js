@@ -2,7 +2,7 @@
 import axios from 'axios';
 import React, { useEffect, useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ShowLoadingComp, ShowTaskSkeleton, } from './Comps';
+import { ShowLoadingComp } from './Comps';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
 import { useOfflineListData } from '../../hooks/storage/useVar';
 import getFirstName from '../../utils/string/getFirstName';
@@ -12,6 +12,7 @@ import { useStoreDispatch } from 'easy-peasy';
 import { logout } from '../../redux/actions/authActions';
 import { chooseHeader } from '../../utils/server/getHeaders';
 import { useToken } from '../../hooks/useRoleData';
+import Skeleton, { skeletonRoot } from '../../components/multimedia/Skeleton';
 
 export * from './requestsLib.js';
 export * from './trigger.js';
@@ -172,12 +173,12 @@ export default function useAPIList({
     const ShowLoading = ({ size = "small" }) => <ShowLoadingComp size={size} />; // n2
     const ShowLoadingSkeleton = () => {
         return(
-            <section className="container-center mb-5">
-                <ShowTaskSkeleton animation={false} />
-                <ShowTaskSkeleton animation={false} />
-                <ShowTaskSkeleton animation={false} />
-                <ShowTaskSkeleton animation={false} />
-                <ShowTaskSkeleton animation={false} />
+            <section className="mx-2" style={skeletonRoot}>
+                <Skeleton needLeftText={true} />
+                <Skeleton needLeftText={true} />
+                <Skeleton needLeftText={true} />
+                <Skeleton />
+                <Skeleton />
             </section>
         );
     }

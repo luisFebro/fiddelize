@@ -11,31 +11,6 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     width: "100%"
   },
-  title: {
-    marginTop: theme.spacing(1)
-  },
-  withTitle: {
-    margin: "auto"
-  },
-  content: {
-    lineHeight: "1.4em"
-  },
-  link: {
-    color: "inherit",
-    textDecoration: "none"
-  },
-  fillContainer: {
-    height: `auto`,
-    width: `100%`,
-    fontSize: "4em"
-  },
-  container: {
-    marginTop: "250px"
-  },
-  fallback: {
-    height: "75%",
-    width: "auto"
-  },
   avatarSkeletonContainer: {
     height: 0,
     overflow: "hidden",

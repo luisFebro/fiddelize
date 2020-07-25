@@ -2,10 +2,10 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.3103.3"
+const latestVersion = "3.3105.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "otimização lista historico de compra com botão de atalho no app - pt 3";
+const updateDescription = "card historico de compras e novo artigo para card historico de cliente pt 1";
 const history = [
     "sistema de lista de dados offline - gestão de dados e integração indexedDB com as listas para uso offline para lista automática de tarefas (finalizado)",
     "sistema de artigos (finalizado edição inicial)",
