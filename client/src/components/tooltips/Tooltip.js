@@ -82,7 +82,7 @@ export default function Tooltip({
             textShadow: needShadow ? '1px 1px 3px black' : undefined,
             width: width ? width : '100%',
             color: txtColor,
-            filter: selfThemeBackColor === 'black' ? "drop-shadow(.001em .1em .1em var(--mainWhite))" : "drop-shadow(.001em .1em .1em var(--mainDark))",
+            filter: (selfThemeBackColor === 'black' || colorS === "black") ? "drop-shadow(.001em .1em .1em var(--mainWhite))" : "drop-shadow(.001em .1em .1em var(--mainDark))",
             // top: 20,
         },
         popper: {
