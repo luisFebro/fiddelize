@@ -5,12 +5,12 @@ export const checkDetectedElem = ({ list, ind: currInd, indFromLast = 0 }) => {
     return (list.length - indFromLast) === currInd;
 }
 
-export default function useElemDetection({ observer, loading, hasMore, setSkip }) {
+export default function useElemDetection({ loading, hasMore, setSkip }) {
     return useCallback(elem => {
-        let currObserver = observer.current;
+        console.log("elem", elem);
         if(loading) return; // constantly calls the API ifwe do not return...
 
-        currObserver = new IntersectionObserver((entries, self) => {
+        const currObserver = new IntersectionObserver((entries, self) => {
             const entry = entries[0];
             const detection = entry.isIntersecting && hasMore;
             if(detection) {

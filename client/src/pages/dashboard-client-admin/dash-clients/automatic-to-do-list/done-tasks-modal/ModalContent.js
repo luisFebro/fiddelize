@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState } from 'react';
 import Illustration from '../../../../../components/Illustration';
 import useAPIList, { readTasks, getTrigger } from '../../../../../hooks/api/useAPIList';
 import { useProfile } from '../../../../../hooks/useRoleData';
@@ -22,8 +22,7 @@ export default function ModalContent({ isOffline }) {
         hasMore,
     } = useAPIList({ url: readTasks(userId, true), trigger, skip, listName: "automaticTaskListDone" });
 
-    const observer = useRef();
-    const detectedCard = useElemDetection({ observer, loading, hasMore, setSkip });
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
 
     const showTitle = () => (
         <div className="mt-4">
