@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.3204.3"
+const latestVersion = "3.3205.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
 const updateDescription = "card historico de compras e novo artigo para card historico de cliente || melhorias algoritmo de cores (finalizado)";
