@@ -15,7 +15,6 @@ import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClie
 // PAGES
 import Home from '../../pages/home/Home';
 import LoginPage from '../../pages/auth/LoginPage';
-import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
 import AsyncLoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
@@ -28,6 +27,8 @@ import AsyncSelfServicePage from '../../pages/new-app/self-service/AsyncSelfServ
 import PlansPage from '../../pages/plans-page/PlansPage';
 import RedirectLink from '../../pages/RedirectLink';
 import ClientAppPreview from '../../pages/mobile-app/ClientAppPreview';
+import Default from '../../pages/Default';
+import UnavailableService from '../../pages/UnavailableService';
 //END PAGES
 
 function Website({ location }) {
@@ -56,6 +57,7 @@ function Website({ location }) {
                 <Route path="/app/:nameAndCode" component={RedirectLink} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
                 <Route component={Default} />
+                <Route path="/temporariamente-indisponivel-503" exact component={UnavailableService} />
             </Switch>
             <SnackbarMulti />
             {dontNeedLayout &&

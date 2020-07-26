@@ -136,6 +136,7 @@ function Navbar({ history, location }) {
         </Fragment>
     );
 
+    // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isThisApp());
     const fiddelizeLogo = `${CLIENT_URL}/img/official-logo-name.png`;
     const handleLogoSrc = () => {

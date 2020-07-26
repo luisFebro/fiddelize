@@ -6,7 +6,6 @@ import Navbar from '../../components/_layout/navbar';
 
 // PAGES
 import LoginPage from '../../pages/auth/LoginPage'; // is it necessarybecauseit is only usedthe login compo inmobile app
-import Default from '../../pages/Default';
 import Dashboard from '../../pages/dashboard-admin';
 import DashboardClientAdmin from '../../pages/dashboard-client-admin';
 import AsyncPasswordPage from '../../pages/dashboard-client-admin/AsyncPasswordPage';
@@ -15,6 +14,8 @@ import AsyncLoyaltyScoreHandler from '../../pages/client/loyalty-client-scores/A
 import RegulationPage from '../../pages/RegulationPage';
 import AsyncAppSharer from '../../pages/app-sharer/AsyncAppSharer';
 import PlansPage from '../../pages/plans-page/PlansPage';
+import Default from '../../pages/Default';
+import UnavailableService from '../../pages/UnavailableService';
 //END PAGES
 
 // COMPONENTS
@@ -58,6 +59,7 @@ function Mobile({ location }) {
                 <Route path="/baixe-app/:userName" component={InstallMsg} />
                 <Route path="/planos" exact component={PlansPage} />
                 <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
+                <Route path="/temporariamente-indisponivel-503" exact component={UnavailableService} />
                 <Route component={Default} />
             </Switch>
             <SnackbarMulti />

@@ -11,6 +11,7 @@ import isThisApp from '../../utils/window/isThisApp';
 
 
 // Check token & load user
+let alreadyPass = false;
 export const loadUser = () => (dispatch, getState) => {
     console.log('==USER LOADING==');
     axios.get('/api/auth/user', tokenConfig(getState))
@@ -31,6 +32,12 @@ export const loadUser = () => (dispatch, getState) => {
         const gotMsg = gotObj && err.response.data.msg && err.response.data.msg.length !== 0;
         if(gotObj && err.response.status === 500 && gotMsg) {
             dispatch({ type: 'USER_ONLINE', payload: false });
+        }
+
+        // to avoid infinite request loop
+        const isUnavailablePage = window.location.href.indexOf("temporariamente-indisponivel-503") >= 0;
+        if(err.response && err.response.status === 503 && !isUnavailablePage) {
+            window.location.href = "/temporariamente-indisponivel-503"
         }
         if(gotObj && err.response.status === 401 && gotMsg) {
             showSnackbar(dispatch, "Sua sessão terminou. Faça seu acesso novamente.", 'warning', 10000) // err.response.data.msg
