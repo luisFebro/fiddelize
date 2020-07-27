@@ -224,6 +224,7 @@ function ClientUserAppContent({
                 runName={runName}
                 selectTxtStyle={selectTxtStyle}
                 colorS={colorS}
+                colorBack={backColorSelect}
                 colorP={colorP}
             />
             {showMoreComps &&

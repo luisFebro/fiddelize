@@ -48,7 +48,11 @@ export default function useAPIList({
     trigger,
     listName, // offline usage
 }) {
-    const [data, setData] = useState({ list: [], listTotal: 0, chunksTotal: null, });
+    const [data, setData] = useState({
+        list: [],
+        listTotal: 0,
+        chunksTotal: null,
+        content: null, });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [reload, setReload] = useState(false);
@@ -59,7 +63,7 @@ export default function useAPIList({
     const dispatch = useStoreDispatch();
     const token = useToken();
 
-    const { list, listTotal, chunksTotal } = data;
+    const { list, listTotal, chunksTotal, content } = data;
 
     const isPlural = listTotal > 1 ? "s" : "";
     const gotListItems = list && list.length;
@@ -93,11 +97,14 @@ export default function useAPIList({
         const listType = updateOnly ? response.data.list : [...list, ...response.data.list];
         const listTotal = response.data.listTotal;
         const chunksTotal = response.data.chunksTotal;
+        const content = response.data.content; // for all other kind of data
+
         setData({
             ...data,
             list: listType,
             listTotal,
             chunksTotal,
+            content,
         })
         const hasCards = listTotal > skip ? true : false
         const firstCards = 5 >= listTotal;
@@ -174,9 +181,9 @@ export default function useAPIList({
     const ShowLoadingSkeleton = () => {
         return(
             <section className="mx-2" style={skeletonRoot}>
-                <Skeleton needLeftText={true} />
-                <Skeleton needLeftText={true} />
-                <Skeleton needLeftText={true} />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
                 <Skeleton />
                 <Skeleton />
             </section>
@@ -281,7 +288,8 @@ export default function useAPIList({
         ShowError,
         ShowListTotals,
         hasMore,
-        isOffline, };
+        isOffline,
+        content, };
 }
 
 /* COMMENTS

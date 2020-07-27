@@ -20,6 +20,7 @@ export default function RatingIcons({
     selfMilestoneIcon,
     runName,
     selectTxtStyle,
+    colorBack,
     colorS,
     colorP, }) {
 
@@ -28,6 +29,7 @@ export default function RatingIcons({
     const selectedIcon = appPreviewIcon || selfMilestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
     const eachMilestone = Number(maxScore / 5);
+    const needDark = selectTxtStyle(colorBack, {needDarkBool: true});
 
     const paintStarsForScore = (score) => {
         let indScore;
@@ -57,8 +59,6 @@ export default function RatingIcons({
         // }
 
         let arrayIconIds = ["icon-100", "icon-200", "icon-300", "icon-400", "icon-500"];
-
-        const needDark = selectTxtStyle(colorP, {needDarkBool: true});
 
         let iconInArray;
         let count = 0;
@@ -94,7 +94,7 @@ export default function RatingIcons({
                                 <FontAwesomeIcon
                                     icon={icon}
                                     className="icon rating-icon--audio"
-                                    style={{fontSize: fontSize}}
+                                    style={{fontSize: fontSize, filter: needDark ? 'drop-shadow(grey 0px 0px 4px)' : undefined }}
                                     id={`icon-${level}`}
                                     onClick={e => handleEffect(e)}
                                 />

@@ -9,6 +9,9 @@ const filterAndCount = (arrayData, options) => {
     const getValue = obj => Object.values(obj)[0];
 
     const handleFilterCondition = (elem, ind) => {
+
+        if(rules === undefined) return;
+
         let comparisonResults = [];
         rules.forEach(objProp => {
             const prop = getProp(objProp); const value = getValue(objProp);

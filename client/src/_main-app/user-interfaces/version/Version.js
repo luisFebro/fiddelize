@@ -2,11 +2,12 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.3207.3"
+const latestVersion = "3.3208.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "card historico de compras e novo artigo para card historico de cliente || melhorias algoritmo de cores (finalizado)";
+const updateDescription = "historico de compras - otimização com rolagem infinita e ajustes finais pt1";
 const history = [
+    "novo artigo para card historico de cliente || melhorias algoritmo de cores (finalizado)",
     "sistema de lista de dados offline - gestão de dados e integração indexedDB com as listas para uso offline para lista automática de tarefas (finalizado)",
     "sistema de artigos (finalizado edição inicial)",
     "painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios)",

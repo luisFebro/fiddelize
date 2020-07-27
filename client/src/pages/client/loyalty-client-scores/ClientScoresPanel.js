@@ -32,6 +32,42 @@ ClientScoresPanel.propTypes = {
     valuePaid: PropTypes.string
 }
 
+const getStyles = ({
+    colorP,
+    colorS,
+    colorBack,
+    dynamicTxtColor,
+}) => ({
+    finishButton: {
+        border: 'none',
+        fontWeight: 'bold',
+        fontSize: '1.5em',
+        padding: '25px 35px',
+        borderRadius: '20px',
+        backgroundColor: 'var(--themeSDark--' + colorS + ')',
+        color: 'var(--mainWhite)',
+        outline: 'none',
+        filter: `drop-shadow(.001em .15em .2em ${colorBack === "black" ? "var(--mainWhite)" : "var(--mainDark)"})`,
+    },
+    crownIcon: {
+        position: 'absolute',
+        filter: 'drop-shadow(.001em .001em .75em var(--mainDark))',
+        top: '-45px',
+        left: '218px',
+        fontSize: '2em',
+        transform: 'rotate(20deg)',
+        color: dynamicTxtColor,
+    },
+    challN: {
+        backgroundColor: "var(--themePDark--" + colorP + ")",
+        borderRadius: '50%',
+        padding: '8px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        bottom: '-30px',
+    }
+})
+
 function ClientScoresPanel({
     history,
     location,
@@ -45,6 +81,14 @@ function ClientScoresPanel({
     const needAppForCliAdmin = location.search.includes("client-admin=1");
     const [finishedWork, setFinishedWork] = useState(false);
     const animatedNumber = useRef(null);
+
+    const dynamicTxtColor = selectTxtStyle(colorBack, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)";
+    const styles = getStyles({
+        colorP,
+        colorS,
+        colorBack,
+        dynamicTxtColor,
+    });
 
     useCount("ClientScoresPanel") // RT = 46
     const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
@@ -62,36 +106,6 @@ function ClientScoresPanel({
     const dispatch = useStoreDispatch();
     usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", { storeAudioTo: "win-challenge--audio" })
 
-    const styles = {
-        finishButton: {
-            border: 'none',
-            fontWeight: 'bold',
-            fontSize: '1.5em',
-            padding: '25px 35px',
-            borderRadius: '20px',
-            backgroundColor: 'var(--themeSDark--' + colorS + ')',
-            color: 'var(--mainWhite)',
-            outline: 'none',
-            filter: `drop-shadow(.001em .15em .2em ${colorBack === "black" ? "var(--mainWhite)" : "var(--mainDark)"})`,
-        },
-        crownIcon: {
-            position: 'absolute',
-            filter: 'drop-shadow(.001em .001em .75em var(--mainDark))',
-            top: '-45px',
-            left: '218px',
-            fontSize: '2em',
-            transform: 'rotate(20deg)',
-            color: selectTxtStyle(colorBack, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)",
-        },
-        challN: {
-            backgroundColor: "var(--themePDark--" + colorP + ")",
-            borderRadius: '50%',
-            padding: '8px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            bottom: '-30px',
-        }
-    }
 
     let currScoreBefore = currentScore ? currentScore : 0;
     currScoreBefore = getIntOrFloat(currScoreBefore);
@@ -156,7 +170,9 @@ function ClientScoresPanel({
     const currChallenge = totalPurchasePrize + 1;
     const showHeader = () => (
         <div className="position-relative">
-            <p className="m-0 ml-2 text-hero text-shadow">
+            <p
+                className="m-0 margin-left-25 font-site text-em-2-3 text-shadow"
+            >
                 {firstName},
             </p>
             <Title

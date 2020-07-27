@@ -14,7 +14,7 @@ const { findOneAndUpdate, confirmPrizeStatus } = require("./helpers/purchase-his
 const { getTrophyData, insertElemWithPlaceholder, defaultSemisecret, defaultSecret } = require("./helpers/prizes-gallery");
 const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
-const { getDataChunk } = require("../../utils/array/getDataChunk");
+const { getDataChunk, getChunksTotal, } = require("../../utils/array/getDataChunk");
 const filterAndCount = require("../../utils/array/filterAndCount");
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
@@ -311,9 +311,8 @@ exports.addPurchaseHistory = (req, res) => {
 
 exports.readHistoryList = (req, res) => {
     const { _id, clientUserData } = req.profile;
-    let { noResponse, skip, limit, challScore, prizeDesc, trophyIcon } = req.query;
+    let { noResponse = false, skip, limit = 5, challengeN, prizeDesc, trophyIcon } = req.query;
     const rewardScore = Number(req.query.rewardScore);
-    challScore = typeof challScore === "string" ? challScore : Number(challScore);
 
     if(!clientUserData) return res.status(400).json([]);
 
@@ -322,16 +321,22 @@ exports.readHistoryList = (req, res) => {
 
     const options = { rewardScore, currScore, prizeDesc, trophyIcon };
     let newHistoryData = generatePrizeCard(purchaseHistory, options);
-    newHistoryData = getDataChunk(newHistoryData, { skip, limit });
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
+
     const handleFinalRes = () => {
-        // challScore = "10_only"
-        // const scoreOnly = challScore && challScore.includes("only");
-        // const getScoreNumber = challScore => { const _ind = challScore.indexOf("_"); return Number(challScore.slice(0, _ind)) }
-        const rules = [{ challengeN: challScore }, { cardType: "record || remainder" }]
-        // if(scoreOnly) return filterAndCount(newHistoryData, { count: "value", rules });
-        if(challScore) return { list: newHistoryData, challScore: filterAndCount(newHistoryData, { count: "value", rules }) }
-        return noResponse === "true" ? msgOk : newHistoryData;
+        if(noResponse) return noResponse === "true" ? msgOk : dataToSend;
+        const rules = [{ challengeN: Number(challengeN) }, { cardType: "record || remainder" }]
+        const rulesNext = [{ challengeN: Number(challengeN) + 1 }, { cardType: "record || remainder" }]
+        const challScore = filterAndCount(newHistoryData, { count: "value", rules });
+        const challScoreNext = filterAndCount(newHistoryData, { count: "value", rules: rulesNext });
+
+        const dataSize = newHistoryData.length;
+        const dataRes = {
+            list: getDataChunk(newHistoryData, { skip, limit }),
+            chunksTotal: getChunksTotal(dataSize, limit),
+            listTotal: dataSize,
+            content: `challScore:${challScore};challScoreNext:${challScoreNext};` }
+        return dataRes;
     }
     const finalRes = handleFinalRes();
 
