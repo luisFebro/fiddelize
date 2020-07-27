@@ -91,6 +91,24 @@
     margin-left: 20px;
 }
 
+.record-card {
+    top: -20px;
+    z-index: 1000;
+
+    & p {
+        background-color: var(--lightGrey);
+        padding: 3px 5px;
+        border-radius: 25px;
+    }
+}
+.record-card.desc {
+    left: 60px;
+}
+
+.record-card.score {
+    right: 0px;
+}
+
 // status panel
 .purchase-history-status-panel--root {
     top: -15px;
@@ -168,6 +186,13 @@
     width: 130px;
     // background-color: var(--niceUiYellow);
     text-align: center;
+}
+
+.card-total .badge-loading {
+    position: absolute;
+    font-size: 60px;
+    bottom: -10px;
+    right: 15px;
 }
 
 @media only screen and (min-width: 768px) {

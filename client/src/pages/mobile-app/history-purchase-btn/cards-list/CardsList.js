@@ -79,7 +79,6 @@ export default function CardsList({ data }) {
     const params = React.useMemo(() => ({
         challengeN: challengeN,
         rewardScore: maxScore,
-        limit: 10,
     }), [challengeN, maxScore]);
 
     const {
@@ -178,14 +177,14 @@ export default function CardsList({ data }) {
                     className="mt-2 text-shadow text-normal text-white"
                     style={{backgroundColor: 'var(--incomeGreen)'}}
                 >
-                    {loading
+                    {(loading && skip === 0)
                     ? (
                         <p className="ml-3 my-3 font-weight-bold text-normal text-shadow text-white">
                             Analisando valores...
                         </p>
                     ) : showCore()}
                 </Card>
-                {showTotalBadge && (
+                {showTotalBadge && !loading ? (
                     <div className={`badge-total-scores theme-back--${selfThemeBackColor}`}>
                         <div className={`text text-normal ${txtClass}`}>
                             <p className="text-center m-0 mt-2">{totalGeneralScore}</p>
@@ -193,6 +192,13 @@ export default function CardsList({ data }) {
                             Pontos Gerais
                         </div>
                     </div>
+                ) : (
+                    <Fragment>
+                        {showTotalBadge &&
+                        <p className="badge-loading ml-3 my-3 font-weight-bold text-normal text-shadow text-white">
+                            ...
+                        </p>}
+                    </Fragment>
                 )}
             </div>
         );
@@ -200,7 +206,7 @@ export default function CardsList({ data }) {
 
     const showCurrFinalChallScore = () => (
         isAfterFirstChall && totalPrizes >= 1 &&
-        <section className="container-center">
+        <section className="container-center my-5">
             <FontAwesomeIcon icon="trophy" style={{...styles.check, fontSize: '35px'}} />
             <p
                 className="d-inline-block text-normal text-purple font-weight-bold m-0"
@@ -268,7 +274,9 @@ export default function CardsList({ data }) {
     );
 
     const pickCard = ({
-        historyData, isRemainder
+        historyData,
+        isRemainder,
+        isLastRecordCard,
     }) => (
         <Fragment>
             {historyData.cardType.includes("prize") && (
@@ -287,33 +295,54 @@ export default function CardsList({ data }) {
             )}
 
             {(historyData.cardType === "record" || isRemainder) && (
-                <Card
-                    className="mt-2"
-                    style={{backgroundColor: !isRemainder ? 'var(--themePDark--' + selfThemeBackColor + ')' : 'var(--themePLight--black)'}}
-                >
-                    <section className={`text-white font-weight-bold ${!isRemainder ? "purchase-history-table-data--root" : "my-2 text-shadow"} text-normal text-center text-purple`}>
-                        {showDesc(historyData, isRemainder)}
-                        {showScore(historyData, isRemainder)}
-                    </section>
-                </Card>
+                <section className="position-relative">
+                    <Card
+                        className="mt-2"
+                        style={{backgroundColor: !isRemainder ? 'var(--themePDark--' + selfThemeBackColor + ')' : 'var(--themePLight--black)'}}
+                    >
+                        <section className={`text-white font-weight-bold ${!isRemainder ? "purchase-history-table-data--root" : "my-2 text-shadow"} text-normal text-center text-purple`}>
+                            {showDesc(historyData, isRemainder)}
+                            {showScore(historyData, isRemainder)}
+                        </section>
+                    </Card>
+                    {isLastRecordCard && (
+                        <Fragment>
+                            <section className="record-card desc position-absolute">
+                                <p
+                                    className="font-site text-em-1-1 text-black font-weight-bold"
+                                >
+                                    Descrição
+                                </p>
+                            </section>
+                            <section className="record-card score position-absolute">
+                                <p
+                                    className="font-site text-em-1-1 text-black font-weight-bold"
+                                >
+                                    Pontos/R$
+                                </p>
+                            </section>
+                        </Fragment>
+                    )}
+                </section>
             )}
         </Fragment>
     );
 
-    const mainData = !loading && list.map((historyData, ind) => {
+    const mainData = list.map((historyData, ind) => {
         const isRemainder = historyData.cardType === "remainder";
-        // TODO PLACE HERE DESCRIPTION AND SCORE/r$ DYNAMIC IF TYPE ID RECORD AND IT IS THE LAST CARD
-        // aND INSERT A PERMANNET ONE AFTER CONCLUSION OF CHALLENGE
-        const  props = { key: historyData.desc}
 
-        return checkDetectedElem({ list, ind, indFromLast: 2 })
+        const isLastRecordCard = historyData.isLastRecordCard;
+        console.log("isLastRecordCard", isLastRecordCard);
+        const  props = { key: historyData._id }
+
+        return checkDetectedElem({ list, ind, indFromLast: 3 })
         ? (
             <div { ...props } ref={detectedCard}>
-                {pickCard({ historyData, isRemainder })}
+                {pickCard({ historyData, isRemainder, isLastRecordCard })}
             </div>
         ) : (
             <div { ...props }>
-                {pickCard({ historyData, isRemainder })}
+                {pickCard({ historyData, isRemainder, isLastRecordCard })}
             </div>
         )
     });

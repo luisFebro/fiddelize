@@ -1,3 +1,15 @@
+exports.findLastRecordCard = (historyData) => {
+    let foundAlready;
+    return historyData.map(card => {
+        if(card.isLastRecordCard) card.isLastRecordCard = undefined;
+        if(card.cardType === "record" && !foundAlready) {
+            foundAlready = true;
+            card.isLastRecordCard = true;
+        }
+        return card;
+    })
+}
+
 exports.findOneAndUpdate = (User, options = {}) => {
     const { res, _id, currCard, lastCard } = options;
 

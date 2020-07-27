@@ -49,6 +49,7 @@ const NotificationsSchema = new Schema(notificationsData, { _id: true });
 const historyData = {
     challengeN: Number,
     cardType: { type: String, default: "record",  enum: ["prize", "record", "brief", "remainder"]},
+    isLastRecordCard: Boolean, // for insert desc/score in the last record card dynamically...
     icon: String,
     desc: String,
     finishedScore: Number, // cardType: brief - the total of scores from a challenge after user has finished.

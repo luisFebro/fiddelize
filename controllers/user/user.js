@@ -10,7 +10,10 @@ const { ObjectId } = mongoose.Types;
 const generateHistoryData = require("../../utils/biz-algorithms/purchase-history/generateHistoryData");
 const generatePrizeCard = require("../../utils/biz-algorithms/purchase-history/generatePrizeCard");
 const addTransformToImgUrl = require("../../utils/biz-algorithms/cloudinary-images/addTransformToImgUrl");
-const { findOneAndUpdate, confirmPrizeStatus } = require("./helpers/purchase-history");
+const {
+    findOneAndUpdate,
+    confirmPrizeStatus,
+    findLastRecordCard } = require("./helpers/purchase-history");
 const { getTrophyData, insertElemWithPlaceholder, defaultSemisecret, defaultSecret } = require("./helpers/prizes-gallery");
 const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
@@ -321,6 +324,8 @@ exports.readHistoryList = (req, res) => {
 
     const options = { rewardScore, currScore, prizeDesc, trophyIcon };
     let newHistoryData = generatePrizeCard(purchaseHistory, options);
+    newHistoryData = Number(skip) === 0 ? findLastRecordCard(newHistoryData) : newHistoryData;
+
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
 
     const handleFinalRes = () => {
@@ -335,7 +340,7 @@ exports.readHistoryList = (req, res) => {
             list: getDataChunk(newHistoryData, { skip, limit }),
             chunksTotal: getChunksTotal(dataSize, limit),
             listTotal: dataSize,
-            content: `challScore:${challScore};challScoreNext:${challScoreNext};` }
+            content: Number(skip) === 0 ? `challScore:${challScore};challScoreNext:${challScoreNext};` : null }
         return dataRes;
     }
     const finalRes = handleFinalRes();

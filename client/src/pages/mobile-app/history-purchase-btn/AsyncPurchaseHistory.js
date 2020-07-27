@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // CUSTOM DATA
 import CartRace from './cart-race/CartRace';
 import CardsList from './cards-list/CardsList';
-// import { useProfile } from '../../../hooks/useRoleData';
+import { useProfile } from '../../../hooks/useRoleData';
 import getFirstName from '../../../utils/string/getFirstName';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -24,6 +24,8 @@ export default function AsyncPurchaseHistory({
     const [hideRaceCart, setHideRaceCart] = useState(false);
 
     const dispatch = useStoreDispatch();
+    const { role } = useProfile();
+    const isAdmin = role === "cliente-admin";
 
     const {
         cliUserName,
@@ -43,7 +45,7 @@ export default function AsyncPurchaseHistory({
 
     const isCartEmpty = !Boolean(totalGeneralScore);
 
-    const mainTitle = parse(`&#187; Histórico de<br />Compras de ${getFirstName(cliUserName.cap())}`);
+    const mainTitle = parse(`&#187; Histórico de<br />Compras ${isAdmin ? `de ${getFirstName(cliUserName.cap())}` : ""}`);
     const showTitle = () => (
         <div id="form-dialog-title" style={{padding: isEvenSmall ? '16px 24px 0' : '16px 24px 15px' }}>
             <p

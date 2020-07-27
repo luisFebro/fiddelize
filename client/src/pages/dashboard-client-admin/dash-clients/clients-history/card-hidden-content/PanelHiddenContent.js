@@ -60,8 +60,10 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
                 />
             </div>
             <section className="position-absolute d-flex" style={{bottom: -15, right: -15 }}>
-                <p className="m-0 text-normal text-white text-shadow">
+                {needBadgeForTestMode && (
+                    <p className="m-0 text-normal text-white text-shadow">
                     Descontar<br />Pontos ?  </p>
+                )}
                 <section className="align-self-end">
                     <InstructionBtn
                         mode="modal"

@@ -154,10 +154,13 @@ export default function useAPIList({
                 handleSuccess({ response, stopRequest, updateOnly });
             } catch(e) {
                 if(axios.isCancel(e)) return
-                if(e.response) console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
-                const { status } = e.response;
+                if(e.response) {
+                    console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
 
-                handleError(status);
+                    const { status } = e.response;
+                    handleError(status);
+                }
+
             }
         }
 
