@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.3302.3"
+const latestVersion = "3.3303.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
 const updateDescription = "historico de compras - otimização com rolagem infinita e ajustes finais pt4 (finalizado - testando)";
