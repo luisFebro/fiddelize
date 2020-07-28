@@ -44,7 +44,7 @@ export default function useAPIList({
     body = null,
     skip = null,
     search = null, // query
-    timeout = 15000,
+    timeout = 15000, // default: 15000
     trigger,
     listName, // offline usage
 }) {
@@ -59,6 +59,7 @@ export default function useAPIList({
     const [hasMore, setHasMore] = useState(false);
     const [reachedChunksLimit, setReachedChunksLimit] = useState(false);
     const [offlineBtn, setOfflineBtn] = useState(false);
+    const [ignore, setIgnore] = useState(false);
 
     const dispatch = useStoreDispatch();
     const token = useToken();
@@ -69,7 +70,7 @@ export default function useAPIList({
     const gotListItems = list && list.length;
 
     const { name: userName } = useProfile();
-    const { isOffline, offlineList } = useOfflineListData({ listName, list, trigger: offlineBtn });
+    const { isOffline, offlineList } = useOfflineListData({ listName, list, trigger: (offlineBtn && !ignore) });
 
     useEffect(() => {
         if((isOffline || offlineBtn)) {
@@ -78,9 +79,12 @@ export default function useAPIList({
             setReload(true);
             setLoading(false);
             timeout = 2000;
+            setIgnore(true);
         }
 
-    }, [list, isOffline, offlineBtn])
+        return () => setIgnore(true);
+
+    }, [isOffline, offlineBtn, offlineList])
 
 
     // For search only - Every time a query changes, then clean previous data. Otherwise it will accumulative with the new one....
@@ -128,7 +132,7 @@ export default function useAPIList({
         let cancel;
         if(reachedChunksLimit) { if(hasMore) setHasMore(false); return; };
 
-        const updateOnly = skip === 0 || (trigger && trigger.includes("TaskCard"));
+        const updateOnly = skip === 0 || (trigger && trigger.toString().includes("TaskCard"));
         if(updateOnly) skip = 0;
 
         const stopRequest = setTimeout(() => {
@@ -194,7 +198,7 @@ export default function useAPIList({
     }
     const ShowError = () => (
         <section>
-            {!isOffline ? (
+            {(!isOffline && !offlineBtn) && (
                 <Fragment>
                     <h1 className="text-title text-center text-expense-red">
                         Oops!
@@ -205,13 +209,16 @@ export default function useAPIList({
                         <strong>Se sua conexão estiver lenta,</strong> tente acesso offline da última lista carregada.
                     </p>
                 </Fragment>
-            ) : (
+            )}
+
+            {(isOffline || offlineBtn) && (
                 <p className="text-normal mx-2 text-grey text-left" style={{marginTop: '100px'}}>
                     Ufa! Ainda bem que o <strong>modo offline</strong> salvou sua lista.
                     <br />
                     Você pode ter mais dados online.
                 </p>
             )}
+
             <div className="container-center-nowrap">
                 <ButtonMulti
                     title="Recarregar"
@@ -219,7 +226,7 @@ export default function useAPIList({
                     color="var(--mainWhite)"
                     backgroundColor="var(--mainDark)"
                 />
-                {!isOffline && (
+                {(!isOffline && !offlineBtn) && (
                     <ButtonMulti
                         titleNowrap={true}
                         title="Acesso offline"
@@ -276,6 +283,7 @@ export default function useAPIList({
     const needEmptySearch = noBlocking && Boolean(!listTotal) && search;
     const readyShowElems = noBlocking && !needEmptyIllustra;
 
+    const isOffList = offlineBtn;
     return {
         list: gotListItems ? list : [],
         listTotal,
@@ -292,6 +300,7 @@ export default function useAPIList({
         ShowListTotals,
         hasMore,
         isOffline,
+        isOffList,
         content, };
 }
 

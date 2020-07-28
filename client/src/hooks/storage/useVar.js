@@ -8,34 +8,36 @@ variablesStore.config({ storeName: "global_variables" }); // n3 dataStore
 // using indexedDB with forage to store especially temporary variables.
 // differently from localstorage which requires reloads to update the newest stored variables,
 // indexedDB reads without the need of reloading...
+let ignoreGetVar;
 export default function useGetVar(key) {
 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // if(!ignoreGetVar) return;
         if(!key) {
             setData(false);
             setLoading(false);
             return;
         }
-        let ignore;
         variablesStore.getItem(key)
         .then(fetchedValue => {
-            !ignore && setData(fetchedValue);
+            setData(fetchedValue);
             setLoading(false);
-            ignore = true;
+            ignoreGetVar = true;
         })
         .catch(err => {
             console.log("Error with localForage white handling data: " + err);
             setLoading(false);
         })
-        return () => { ignore = true };
+        return () => { ignoreGetVar = true };
     }, [key])
 
     return { data, loading };
 }
 
+let ignore = false;
 export const useOfflineListData = ({ listName, list, trigger, }) => {
     const [offlineList, setOfflineList] = useState(null);
 
@@ -43,17 +45,23 @@ export const useOfflineListData = ({ listName, list, trigger, }) => {
         isOnline: state.authReducer.cases.isUserOnline,
     }));
 
+
     useEffect(() => {
         if(!listName) return;
 
         const gotItemsList = list && list.length;
-        if(gotItemsList && isOnline) setVar({ [listName]: list })
+        if(gotItemsList && isOnline && !ignore) {
+            setVar({ [listName]: list })
+            ignore = true;
+        }
         if((!isOnline || trigger)) {
             getVar(listName)
             .then(offList => {
                 setOfflineList(offList);
             })
         }
+
+        return () => { ignore = true };
 
     }, [list, listName, isOnline, trigger])
 

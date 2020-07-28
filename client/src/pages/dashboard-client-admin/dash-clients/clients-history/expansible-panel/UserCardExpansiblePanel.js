@@ -16,7 +16,8 @@ import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
 import { removeField } from '../../../../../redux/actions/userActions';
 import { setRun } from '../../../../../hooks/useRunComp';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
-import { useClientAdmin } from '../../../../../hooks/useRoleData';
+import { useClientAdmin, useAppSystem } from '../../../../../hooks/useRoleData';
+import { readUser } from "../../../../../redux/actions/userActions";
 import PrizesBtn from '../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn';
 // End Customized Data
 
@@ -57,6 +58,7 @@ export default function UserCardExpansiblePanel({
 
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
+    const { businessId }  = useAppSystem();
 
     const { runArray } = useStoreState(state => ({
        runArray: state.globalReducer.cases.runArray,
@@ -94,8 +96,14 @@ export default function UserCardExpansiblePanel({
         setTimeout(() => {
             removeField(cardId, "clientUserData")
             .then(res => {
+                showSnackbar(dispatch, "Atualizando app...", "warning", 5500);
+                readUser(dispatch, businessId)
+                .then(res => {
+                    if(res.status !== 200) return showSnackbar(dispatch, "Não foi possível atualizar. Reinicie app.", 'error')
+                    window.location.href = "/mobile-app?client-admin=1";
+                })
                 if(res.status !== 200) return console.log("smt wrong while updating")
-                showSnackbar(dispatch, "APAGADO! Para mostrar o card de teste de novo, adicione pontos no MODO APP CLIENTE.", "success", 6000);
+                showSnackbar(dispatch, "APAGADO! Para mostrar o card de teste de novo, adicione pontos no MODO APP CLIENTE.", "success", 7000);
                 setRun(dispatch, "registered");
             })
         }, 3000)

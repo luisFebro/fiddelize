@@ -3,7 +3,7 @@ import extractStrData from '../../../../utils/string/extractStrData';
 import { default as DiscountModalBtn } from "../../../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-text-field/ModalBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addDays, formatDMY } from '../../../../utils/dates/dateFns';
-import { removeVersion } from '../../../../hooks/storage/useVar';
+import { removeVersion, removeVar } from '../../../../hooks/storage/useVar';
 import { useClientUser } from '../../../../hooks/useRoleData';
 import defineCurrChallenge from '../../../../utils/biz/defineCurrChallenge';
 
@@ -35,7 +35,10 @@ export default function Challenge({
     const updatedCurrChall = defineCurrChallenge(totalPurchasePrize);
 
     useEffect(() => {
-        if(confirmedChall && clickedCTA) removeVersion({ key: "alreadyAlertChallenge", value: updatedCurrChall });
+        if(confirmedChall && clickedCTA) {
+            removeVersion({ key: "alreadyAlertChallenge", value: updatedCurrChall })
+            removeVar("pendingChall")
+        }
     }, [confirmedChall, clickedCTA, updatedCurrChall])
 
     const handleCTA = res => {

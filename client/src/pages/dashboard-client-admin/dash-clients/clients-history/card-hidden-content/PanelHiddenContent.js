@@ -60,7 +60,7 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
                 />
             </div>
             <section className="position-absolute d-flex" style={{bottom: -15, right: -15 }}>
-                {needBadgeForTestMode && (
+                {!needBadgeForTestMode && (
                     <p className="m-0 text-normal text-white text-shadow">
                     Descontar<br />Pontos ?  </p>
                 )}

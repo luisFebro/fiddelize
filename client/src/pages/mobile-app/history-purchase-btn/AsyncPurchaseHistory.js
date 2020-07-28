@@ -33,6 +33,7 @@ export default function AsyncPurchaseHistory({
         currUserScore,
         totalGeneralScore,
         totalPurchasePrize,
+        isFromDashboard = false,
     } = modalData;
 
     const getCardsListData = () => ({
@@ -40,6 +41,7 @@ export default function AsyncPurchaseHistory({
         name: cliUserName,
         totalGeneralScore,
         totalPurchasePrize,
+        isFromDashboard,
     });
     const cardsListData = getCardsListData();
 

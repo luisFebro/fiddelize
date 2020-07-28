@@ -17,6 +17,7 @@ import useAPIList, { readPurchaseCardsList } from '../../../../hooks/api/useAPIL
 import useElemDetection, { checkDetectedElem } from '../../../../hooks/api/useElemDetection';
 import extractStrData from '../../../../utils/string/extractStrData';
 import selectTxtStyle from '../../../../utils/biz/selectTxtStyle';
+import useGetVar, { setVar, removeVar } from '../../../../hooks/storage/useVar';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -47,10 +48,12 @@ const WonChallengeBrief = ({ historyData }) => (
 
 export default function CardsList({ data }) {
     const [skip, setSkip] = useState(0);
-    const [hasPendingChall, setHasPendingChall] = useState(false);
+    const { data: hasPendingChall, loading: loadingGetVar } = useGetVar("pendingChall");
     const [challScore, setChallScore] = useState(0);
 
-    const { _id, name, totalPurchasePrize } = data;
+
+    const { _id, name, totalPurchasePrize, isFromDashboard } = data;
+
     let { totalGeneralScore } = data; totalGeneralScore = convertDotToComma(totalGeneralScore);
     const totalGeneralForIllustra = data.totalGeneralScore;
 
@@ -67,8 +70,9 @@ export default function CardsList({ data }) {
     const { role } = useProfile();
     const isAdmin = role === "cliente-admin";
 
-    const totalPrizes = hasPendingChall ? totalPurchasePrize + 1 : totalPurchasePrize;
+    const totalPrizes = hasPendingChall ? (totalPurchasePrize + 1) : loadingGetVar ? "..." : totalPurchasePrize;
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
+    const rewardScore = pickedObj.rewardScore;
     maxScore = convertDotToComma(pickedObj.rewardScore);
 
 
@@ -77,35 +81,45 @@ export default function CardsList({ data }) {
     const mainCompsReady = useDelay(3000);
 
     const params = React.useMemo(() => ({
-        challengeN: challengeN,
-        rewardScore: maxScore,
-    }), [challengeN, maxScore]);
+        challengeN,
+        rewardScore,
+        isFromDashboard,
+    }), [challengeN, rewardScore, isFromDashboard]);
 
     const {
         list,
         content,
         hasMore,
+        isOffList,
         readyShowElems,
         loading, ShowLoadingSkeleton,
         error, ShowError,
-    } = useAPIList({ url: readPurchaseCardsList(_id), params, skip, listName: "purchaseCardsList" });
-
+    } = useAPIList({
+        url: readPurchaseCardsList(_id),
+        params,
+        skip,
+        trigger: (!loadingGetVar),
+        listName: "purchaseCardsList"
+    });
     const detectedCard = useElemDetection({ loading, hasMore, setSkip });
-
-    useEffect(() => {
-        if(content) {
-            const { challScore, challScoreNext } = extractStrData(content);
-            const score = hasPendingChall ? challScoreNext : challScore;
-            setChallScore(score);
-        }
-    }, [content, hasPendingChall])
 
     useEffect(() => {
         if(list.length) {
             const foundPendingChallenge = list.find(card => card.cardType === "prize" && card.isPrizeConfirmed === false);
-            if(foundPendingChallenge) setHasPendingChall(true);
+            if(foundPendingChallenge) {
+                setVar({ pendingChall: true });
+            }
+
+            // removeVar("pendingChall") is handled in the Challenge component to avoid user remove it and set the prior challenge again...
         }
-    }, [list, challengeN])
+    }, [list])
+
+    useEffect(() => {
+        if(content) {
+            const { challScore } = extractStrData(content);
+            setChallScore(challScore);
+        }
+    }, [content, hasPendingChall])
 
     const onlyFirstName = getFirstName(name);
 
@@ -204,6 +218,13 @@ export default function CardsList({ data }) {
         );
     }
 
+    const showOfflineStatus = () => (
+        isOffList &&
+        <div className="text-center my-3 text-normal font-weight-bold text-purple">
+            <span style={{fontSize: '25px'}}>✔ Últimos Registros Offline</span>
+        </div>
+    );
+
     const showCurrFinalChallScore = () => (
         isAfterFirstChall && totalPrizes >= 1 &&
         <section className="container-center my-5">
@@ -222,7 +243,7 @@ export default function CardsList({ data }) {
     const showDesc = (historyData, isRemainder) => {
         const { selfMilestoneIcon: cardIcon } = pickCurrChallData(rewardList, historyData.challengeN - 1);
         return(
-            <section className="desc text-left">
+            <section className={`desc text-left`}>
                 <div className={`${!isRemainder ? "inner-container" : ""}`}>
                     {!isRemainder &&
                     <div>
@@ -332,10 +353,9 @@ export default function CardsList({ data }) {
         const isRemainder = historyData.cardType === "remainder";
 
         const isLastRecordCard = historyData.isLastRecordCard;
-        console.log("isLastRecordCard", isLastRecordCard);
         const  props = { key: historyData._id }
 
-        return checkDetectedElem({ list, ind, indFromLast: 3 })
+        return (!isOffList && checkDetectedElem({ list, ind, indFromLast: 3 }))
         ? (
             <div { ...props } ref={detectedCard}>
                 {pickCard({ historyData, isRemainder, isLastRecordCard })}
@@ -348,10 +368,20 @@ export default function CardsList({ data }) {
     });
 
     const showOverMsg = () => (
-        !hasMore && readyShowElems &&
-        <p className="my-5 text-normal text-center font-weight-bold text-purple">
-            Isso é tudo{!isAdmin ? `, ${name}` : "."}
-        </p>
+        <Fragment>
+            {!hasMore && readyShowElems && (
+                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                    Isso é tudo{!isAdmin ? `, ${name}` : "."}
+                </p>
+
+            )}
+
+            {isOffList && (
+                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                    Isso é tudo armazenado offline.
+                </p>
+            )}
+        </Fragment>
     );
 
     return (
@@ -369,6 +399,7 @@ export default function CardsList({ data }) {
                     ) : (
                         <Fragment>
                             {showAllTimeTotal()}
+                            {showOfflineStatus()}
                             {showCurrFinalChallScore()}
                             {mainData}
                             {loading && <ShowLoadingSkeleton size="large" />}

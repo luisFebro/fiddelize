@@ -39,7 +39,7 @@ export default function ActionBtns({ data, needBadgeForTestMode }) {
     );
 }
 
-const ShowHistoryBtn = ({ data }) => {
+const ShowHistoryBtn = ({ data, isFromDashboard = true }) => {
     const { name, _id, clientUserData } = data;
     const { totalGeneralScore, totalPurchasePrize, currScore } = clientUserData;
 
@@ -49,6 +49,7 @@ const ShowHistoryBtn = ({ data }) => {
         currUserScore: currScore,
         totalGeneralScore,
         totalPurchasePrize,
+        isFromDashboard,
     });
 
     const modalData = getModalData();

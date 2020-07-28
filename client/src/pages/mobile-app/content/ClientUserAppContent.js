@@ -75,14 +75,17 @@ function ClientUserAppContent({
         rewardDeadline,
         selfMilestoneIcon, selfThemeSColor, selfThemeBackColor,
         arePrizesVisible } = useClientAdmin();
+
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
     const mainReward = pickedObj.mainReward
     selfMilestoneIcon = pickedObj.selfMilestoneIcon
+
     const userBeatChallenge = currScore >= maxScore;
 
     const totalChallengesWon = Math.floor(currScore / maxScore);
+    const pickedObjForPending = React.useMemo(() => pickCurrChallData(rewardList, totalPurchasePrize + 1), [rewardList, totalPurchasePrize])
     useEffect(() => {
         // read client user data to make sure prizes are generated if user has multiple prizes won in the row...
         const key = "challengesWon";
@@ -94,13 +97,32 @@ function ClientUserAppContent({
         getVar(key)
         .then(gotValue => {
             const options = { trigger: gotValue, noResponse: true, prizeDesc: mainReward, trophyIcon: selfMilestoneIcon };
-            readPurchaseHistory(_id, maxScore, options);
+            getVar("pendingChall")
+            .then(resPending => {
+                let thisMaxScore = maxScore;
+                if(resPending) {
+                    thisMaxScore = pickedObjForPending.rewardScore
+                }
+                readPurchaseHistory(_id, thisMaxScore, options);
+            })
 
             if(gotValue && !userBeatChallenge) {
                 removeVar(key);
             }
         })
-    }, [userBeatChallenge, totalChallengesWon])
+    }, [userBeatChallenge, totalChallengesWon, pickedObjForPending])
+
+    useEffect(() => {
+        if(!totalGeneralScore) {
+            getVar("alreadyAlertChallenge")
+            .then(gotValue => {
+                if(gotValue) {
+                    removeVar("alreadyAlertChallenge")
+                    removeVar("pendingChall")
+                }
+            })
+        }
+    }, [totalGeneralScore])
 
     const { isAuthUser } = useAuthUser();
     useCount("ClientUserAppContent.js"); // RT = 3 before = /

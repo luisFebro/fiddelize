@@ -314,16 +314,29 @@ exports.addPurchaseHistory = (req, res) => {
 
 exports.readHistoryList = (req, res) => {
     const { _id, clientUserData } = req.profile;
-    let { noResponse = false, skip, limit = 5, challengeN, prizeDesc, trophyIcon } = req.query;
+    let {
+        noResponse = false,
+        skip,
+        limit = 5,
+        challengeN,
+        prizeDesc,
+        trophyIcon,
+        isFromDashboard,
+    } = req.query;
+    isFromDashboard = isFromDashboard === "true";
     const rewardScore = Number(req.query.rewardScore);
 
     if(!clientUserData) return res.status(400).json([]);
 
+    let currScore = clientUserData.currScore;
+
+    if(!challengeN && !noResponse) return;
+
     const purchaseHistory = clientUserData.purchaseHistory;
-    const currScore = clientUserData.currScore;
 
     const options = { rewardScore, currScore, prizeDesc, trophyIcon };
-    let newHistoryData = generatePrizeCard(purchaseHistory, options);
+    // admin not allowed to load prizes system to avoid mistakes...
+    let newHistoryData = isFromDashboard ? purchaseHistory : generatePrizeCard(purchaseHistory, options);
     newHistoryData = Number(skip) === 0 ? findLastRecordCard(newHistoryData) : newHistoryData;
 
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
@@ -331,16 +344,16 @@ exports.readHistoryList = (req, res) => {
     const handleFinalRes = () => {
         if(noResponse) return noResponse === "true" ? msgOk : dataToSend;
         const rules = [{ challengeN: Number(challengeN) }, { cardType: "record || remainder" }]
-        const rulesNext = [{ challengeN: Number(challengeN) + 1 }, { cardType: "record || remainder" }]
         const challScore = filterAndCount(newHistoryData, { count: "value", rules });
-        const challScoreNext = filterAndCount(newHistoryData, { count: "value", rules: rulesNext });
+        // const rulesNext = [{ challengeN: Number(challengeN) + 1 }, { cardType: "record || remainder" }]
+        // const challScoreNext = filterAndCount(newHistoryData, { count: "value", rules: rulesNext });
 
         const dataSize = newHistoryData.length;
         const dataRes = {
             list: getDataChunk(newHistoryData, { skip, limit }),
             chunksTotal: getChunksTotal(dataSize, limit),
             listTotal: dataSize,
-            content: Number(skip) === 0 ? `challScore:${challScore};challScoreNext:${challScoreNext};` : null }
+            content: Number(skip) === 0 ? `challScore:${challScore};` : null }
         return dataRes;
     }
     const finalRes = handleFinalRes();
@@ -364,7 +377,7 @@ exports.readPrizes = (req, res) => {
     const {
         cliAdminId,
         lastPrizeDate = false, lastPrizeId = false, updatedValues = false,
-        skip, limit = 5 } = req.query;
+        skip, limit = 5, rewardScore } = req.query;
 
     const { clientUserData = {} } = req.profile;
     const { purchaseHistory, totalPurchasePrize = 0, currScore } = clientUserData;
@@ -385,6 +398,14 @@ exports.readPrizes = (req, res) => {
         const nextScore = filterAndCount(purchaseHistory, { count: "value", rules });
 
         if(!remainderValue) remainderValue = 0;
+
+        const isLastRemainderCard = purchaseHistory[0] && purchaseHistory[0].cardType === "remainder";
+        if(isLastRemainderCard) {
+            const remainder = purchaseHistory[0].value;
+            if(remainder >= Number(rewardScore)) {
+                remainderValue = remainder - Number(rewardScore);
+            }
+        }
 
         return res.json({ remainder: remainderValue, nextScore, updatedCurrScore: currScore });
     }

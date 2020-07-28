@@ -74,7 +74,7 @@ export default function ModalTextField({
     rewardScore = pickedObj.rewardScore;
     const mainReward = pickedObj.mainReward;
 
-    const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true } });
+    const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true, rewardScore } });
     const currRemainder = loading ? "..." : updatedValues.remainder;
     const nextScore = loading ? "..." : updatedValues.nextScore;
     const currUserScoring = loading ? "..." : convertDotToComma(updatedValues.updatedCurrScore);

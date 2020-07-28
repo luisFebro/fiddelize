@@ -58,6 +58,10 @@ function generatePrizeCard(historyDataArray, options = {}) {
 
     const firstElem = newArray[0];
     const generatePrize = () => {
+        const isRemainder = firstElem.cardType === "remainder";
+        const acceptIfRemainderIsHigherThanGoal = (isRemainder && firstElem.value >= Number(rewardScore))
+        if(acceptIfRemainderIsHigherThanGoal) return true;
+
         const skipIfLastCard = (firstElem.cardType === "prize" || firstElem.cardType === "remainder");
         const skipIfPendingChallenges = newArray && newArray.filter(card => card.cardType === "prize" && card.isPrizeConfirmed === false).length;
         if(skipIfLastCard || skipIfPendingChallenges) return false;
