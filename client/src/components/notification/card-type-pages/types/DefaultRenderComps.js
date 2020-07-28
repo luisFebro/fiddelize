@@ -74,12 +74,13 @@ export const ShowActionBtn = ({
     children,
     callback,
 }) => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(null);
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
     const { role: loggedUserRole, _id } = useProfile();
 
     if(loading) titleCliUser = "processando..."
+    if(loading === false) titleCliUser = "reiniciando..."
 
     const handleBtnClick = () => {
         setLoading(true);

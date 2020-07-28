@@ -77,7 +77,10 @@ export default function CardsList({ data }) {
 
 
     const isAfterFirstChall = totalPurchasePrize >= 1 || hasPendingChall;
+    const confirmedChallenges = totalPurchasePrize ? totalPurchasePrize : 0
     const challengeN = hasPendingChall ? defineCurrChallenge(totalPurchasePrize) + 1 : defineCurrChallenge(totalPurchasePrize);
+    const challDiffs = challengeN - confirmedChallenges;
+    const needChallDelayAlert = challDiffs >= 2;
     const mainCompsReady = useDelay(3000);
 
     const params = React.useMemo(() => ({
@@ -138,9 +141,15 @@ export default function CardsList({ data }) {
         />
     );
 
+    const showChallDelayAlert = () => (
+        needChallDelayAlert &&
+        <p className="my-3 text-expense-red text-small font-weight-bold text-left mx-2">
+            Atenção: Desafios desatualizados. Veja sua notificação de confirmação para atualizar.
+        </p>
+    );
+
     const showAllTimeTotal = () => {
         const firstChallScoreTitle = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
-        const confirmedChallenges = totalPurchasePrize ? totalPurchasePrize : 0
         const showTotalBadge = isAfterFirstChall || hasPendingChall;
 
         const handleChallScore = (challScore, options) => {
@@ -398,6 +407,7 @@ export default function CardsList({ data }) {
                         />
                     ) : (
                         <Fragment>
+                            {showChallDelayAlert()}
                             {showAllTimeTotal()}
                             {showOfflineStatus()}
                             {showCurrFinalChallScore()}

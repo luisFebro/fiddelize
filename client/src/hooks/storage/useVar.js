@@ -107,7 +107,7 @@ function getStrVersion(str) {
 export const removeVersion = ({ key, value }) => {
     if(!key || !value) return;
 
-    getVar(key)
+    return getVar(key)
     .then(storedVersion => {
         const currVersion = Number(value);
         if(currVersion >= Number(storedVersion)) {

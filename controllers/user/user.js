@@ -403,7 +403,7 @@ exports.readPrizes = (req, res) => {
         if(isLastRemainderCard) {
             const remainder = purchaseHistory[0].value;
             if(remainder >= Number(rewardScore)) {
-                remainderValue = remainder - Number(rewardScore);
+                remainderValue = remainder;
             }
         }
 
@@ -458,6 +458,7 @@ exports.changePrizeStatus = (req, res) => {
     if(!clientUserData) return res.json({ error: "no array data found"})
 
     const historyData = clientUserData.purchaseHistory;
+    // let currDbScore = clientUserData.totalPurchasePrize;
     const { newData, newChallengeN, error, status } = confirmPrizeStatus(historyData, { statusType, newValue, prizeId });
 
     if(status === "FAIL") return res.status(404).json({ error });

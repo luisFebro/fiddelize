@@ -37,7 +37,9 @@ export default function Challenge({
     useEffect(() => {
         if(confirmedChall && clickedCTA) {
             removeVersion({ key: "alreadyAlertChallenge", value: updatedCurrChall })
-            removeVar("pendingChall")
+            .then(res => {
+                removeVar("pendingChall")
+            })
         }
     }, [confirmedChall, clickedCTA, updatedCurrChall])
 

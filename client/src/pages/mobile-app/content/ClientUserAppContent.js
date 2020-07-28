@@ -85,7 +85,7 @@ function ClientUserAppContent({
     const userBeatChallenge = currScore >= maxScore;
 
     const totalChallengesWon = Math.floor(currScore / maxScore);
-    const pickedObjForPending = React.useMemo(() => pickCurrChallData(rewardList, totalPurchasePrize + 1), [rewardList, totalPurchasePrize])
+    const pickedObjForPending = React.useMemo(() => pickCurrChallData(rewardList, totalPurchasePrize + 1), []) // do not include params to run the first right result.
     useEffect(() => {
         // read client user data to make sure prizes are generated if user has multiple prizes won in the row...
         const key = "challengesWon";
@@ -113,16 +113,18 @@ function ClientUserAppContent({
     }, [userBeatChallenge, totalChallengesWon, pickedObjForPending])
 
     useEffect(() => {
-        if(!totalGeneralScore) {
+        if(!currScore) {
             getVar("alreadyAlertChallenge")
             .then(gotValue => {
                 if(gotValue) {
                     removeVar("alreadyAlertChallenge")
-                    removeVar("pendingChall")
+                    .then(res => {
+                        removeVar("pendingChall")
+                    })
                 }
             })
         }
-    }, [totalGeneralScore])
+    }, [currScore])
 
     const { isAuthUser } = useAuthUser();
     useCount("ClientUserAppContent.js"); // RT = 3 before = /

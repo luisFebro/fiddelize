@@ -15,7 +15,7 @@ const filterAndCount = (arrayData, options) => {
         let comparisonResults = [];
         rules.forEach(objProp => {
             const prop = getProp(objProp); const value = getValue(objProp);
-            if(!compare || compare === "===") comparisonResults.push(value.toString().includes(elem[prop]));
+            if(!compare || compare === "===") comparisonResults.push(value.toString() === JSON.stringify(elem[prop]));
         })
 
         return comparisonResults.every(res => res === true);
