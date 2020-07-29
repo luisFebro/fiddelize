@@ -12,3 +12,7 @@ export const readTasks = (userId, doneStatus) => `/api/task/read/${userId}?doneS
 export const addTask = (userId) => `/api/task/add?userId=${userId}`; // PUT
 export const toggleDoneUrl = () => `/api/task/toggle`;  // PUT
 export const removeTaskAndExpireCliPrize = () => `/api/task/remove-and-expire`
+
+
+// Notifications
+export const readNotifications = (userId) => `/api/notification/read/${userId}`; // GET

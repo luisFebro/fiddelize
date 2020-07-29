@@ -17,18 +17,19 @@ export const countPendingNotif = async (userId, options = {}) => {
 
 // OK
 // if forceCliUser is true, then a cli-admin will have a cli=user notification's data. Useful for test mode session.
-export const readNotifications = async (userId, options = {}) => {
-    const { token, forceCliUser } = options;
+// MOVED TO REQUESTSLIB
+// export const readNotifications = async (userId, options = {}) => {
+//     const { token, forceCliUser } = options;
 
-    let cliUserQuery = "";
-    if(forceCliUser) cliUserQuery = "?forceCliUser=true"
+//     let cliUserQuery = "";
+//     if(forceCliUser) cliUserQuery = "?forceCliUser=true"
 
-    try {
-        return await axios.get(`/api/notification/read/${userId}${cliUserQuery}`, getHeaderToken(token));
-    } catch (err) {
-        return err;
-    }
-}
+//     try {
+//         return await axios.get(`/api/notification/read/${userId}${cliUserQuery}`, getHeaderToken(token));
+//     } catch (err) {
+//         return err;
+//     }
+// }
 
 // OK
 export const sendNotification = async (userId, cardType, options = {}) => {

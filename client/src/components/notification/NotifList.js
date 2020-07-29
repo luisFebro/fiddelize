@@ -1,71 +1,74 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import NotifCard from './NotifCard';
-import { readNotifications, markAllAsSeen, } from '../../redux/actions/notificationActions';
-import { useToken } from '../../hooks/useRoleData';
-import Spinner from '../../components/loadingIndicators/Spinner';
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
-import { logout } from '../../redux/actions/authActions';
+import { markAllAsSeen } from '../../redux/actions/notificationActions';
+import useAPIList, { readNotifications } from '../../hooks/api/useAPIList';
+import useElemDetection, { checkDetectedElem } from '../../hooks/api/useElemDetection';
+import getFirstName from '../../utils/string/getFirstName';
 
-export default function NotifList({ _id, runList, forceCliUser = false, }) {
-    const [notifList, setNotifList] = useState([]);
+export default function NotifList({ _id, userName, runList, forceCliUser = false, }) {
+    const [skip, setSkip] = useState(0);
 
-    const dispatch = useStoreDispatch();
+    userName = getFirstName(userName);
 
-    const token = useToken();
+    const trigger = runList ? true : null;
+    const params = { forceCliUser, skip };
+    const apiKeys = { url: readNotifications(_id), skip, trigger, params, listName: "notifList" };
+
+    const {
+        list,
+        loading, ShowLoadingSkeleton,
+        error, ShowError,
+        hasMore, readyShowElems,
+    } = useAPIList(apiKeys);
+
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
+
     useEffect(() => {
-        if(_id && token) {
-            readNotifications(_id, { token, forceCliUser })
-            .then(res => {
-                const resStr = res && res.toString();
-                if(resStr && resStr.includes("403")) {
-                    showSnackbar(dispatch, "Sua sessão terminou.", "warning")
-                    logout(dispatch, {needSnackbar: false});
-                }
-                if(res.status !== 200) return console.log("smt wrong with NotifList")
-                setNotifList(res.data);
-                markAllAsSeen(_id, { forceCliUser });
-            })
+        if(list.length) {
+            markAllAsSeen(_id, { forceCliUser });
         }
-    }, [_id, token, runList])
+    }, [list])
 
-    const renderedList = notifList.map(notif => {
-        const {
-            _id,
-            senderId,
+    const showCard = (props) => (<NotifCard {...props} />);
+    const renderedList = list.map((notif, ind) => {
+        const { _id, senderId, cardType, subtype, isCardNew, createdAt, clicked, content } = notif;
+        const props = {
+            cardId: _id,
             cardType,
             subtype,
+            senderId,
+            forceCliUser,
             isCardNew,
             createdAt,
             clicked,
-            content } = notif; // also senderId, senderName
+            content,
+        };
 
-        return (
+        return checkDetectedElem({ list, ind, indFromLast: 3 })
+        ? (
+            <section key={_id} className="mx-2" ref={detectedCard}>
+                {showCard(props)}
+            </section>
+        ) : (
             <section key={_id} className="mx-2">
-                <NotifCard
-                    cardId={_id}
-                    cardType={cardType}
-                    subtype={subtype}
-                    senderId={senderId}
-                    forceCliUser={forceCliUser}
-                    isCardNew={isCardNew}
-                    createdAt={createdAt}
-                    clicked={clicked}
-                    content={content}
-                />
+                {showCard(props)}
             </section>
         )
     })
 
+    const showOverMsg = () => (
+        !hasMore && readyShowElems &&
+        <p className="my-5 text-normal text-center font-weight-bold text-purple">
+            Isso é tudo, {userName}.
+        </p>
+    );
+
     return(
         <Fragment>
-            {!notifList.length
-            ? (
-                <Spinner
-                    marginY={100}
-                    size="small"
-                />
-            ) : renderedList}
+            {renderedList}
+            {loading && <ShowLoadingSkeleton />}
+            {error && <ShowError />}
+            {showOverMsg()}
         </Fragment>
     );
 }

@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const { msgG } = require('./_msgs/globalMsgs');
+const { getDataChunk, getChunksTotal } = require("../utils/array/getDataChunk");
 
 // UTILS
 const assignValueToObj = (arrayOfObjs, property, newValue) => {
@@ -81,9 +82,18 @@ exports.countPendingNotif = (req, res) => {
 }
 
 exports.readNotifications = (req, res) => {
-    const forceCliUser = req.query.forceCliUser;
+    const { forceCliUser, skip, limit = 5 } = req.query;
     const data = pickDataByProfile(req.profile, { forceCliUser });
-    res.json(data);
+
+    const dataSize = data.length;
+    const dataRes = {
+        list: getDataChunk(data, { skip, limit }),
+        chunksTotal: getChunksTotal(dataSize, limit),
+        listTotal: dataSize,
+        content: undefined,
+    }
+
+    res.json(dataRes);
 }
 
 // Method: Put

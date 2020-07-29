@@ -47,6 +47,7 @@ export default function useAPIList({
     timeout = 15000, // default: 15000
     trigger,
     listName, // offline usage
+    needAuth = true,
 }) {
     const [data, setData] = useState({
         list: [],
@@ -132,7 +133,7 @@ export default function useAPIList({
         let cancel;
         if(reachedChunksLimit) { if(hasMore) setHasMore(false); return; };
 
-        const updateOnly = skip === 0 || (trigger && trigger.toString().includes("TaskCard"));
+        const updateOnly = skip === 0 || typeof trigger === "boolean" || (trigger && trigger.toString().includes("TaskCard"));
         if(updateOnly) skip = 0;
 
         const stopRequest = setTimeout(() => {
@@ -148,7 +149,7 @@ export default function useAPIList({
             method,
             data: body,
             params: { ...params, skip },
-            headers: chooseHeader({ token: token }),
+            headers: chooseHeader({ token: token, needAuth }),
             cancelToken: new axios.CancelToken(c => cancel = c) // n1
         }
 

@@ -351,7 +351,9 @@ exports.readHistoryList = (req, res) => {
             list: getDataChunk(newHistoryData, { skip, limit }),
             chunksTotal: getChunksTotal(dataSize, limit),
             listTotal: dataSize,
-            content: Number(skip) === 0 ? `challScore:${challScore};` : null }
+            content: Number(skip) === 0 ? `challScore:${challScore};` : null
+        }
+
         return dataRes;
     }
     const finalRes = handleFinalRes();

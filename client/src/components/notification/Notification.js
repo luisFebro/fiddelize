@@ -16,7 +16,7 @@ export default function Notification({ forceCliUser = false, }) {
     const [btnDisabled, setBtnDisabled] = useState(false);
     const [runList, setRunList] = useState(false);
 
-    const { _id, role } = useProfile();
+    const { _id, name, role } = useProfile();
     const dispatch = useStoreDispatch();
 
     const totalNotifications = useCountNotif(_id, { role, forceCliUser });
@@ -53,7 +53,14 @@ export default function Notification({ forceCliUser = false, }) {
                     <p className="text-normal">
                         <strong>Status: </strong>
                         <br />
-                        {totalNotifications === null && <strong className="text-normal">analisando...</strong>}
+                        {totalNotifications === null && (
+                            <strong
+                                className="text-normal"
+                            >
+                                analisando...
+                            </strong>
+                        )}
+
                         {totalNotifications === 0 &&
                         (
                             <Fragment>
@@ -62,6 +69,7 @@ export default function Notification({ forceCliUser = false, }) {
                                 </strong>
                             </Fragment>
                         )}
+
                         {totalNotifications > 0 && (
                             <Fragment>
                                 <strong className="text-subtitle">
@@ -92,14 +100,10 @@ export default function Notification({ forceCliUser = false, }) {
             {showNotifStatus()}
             <NotifList
                 _id={_id}
+                userName={name}
                 runList={runList}
                 forceCliUser={forceCliUser}
             />
-            {totalNotifications !== null && totalNotifications >= 0 && (
-                <p className="my-5 text-normal text-center font-weight-bold text-purple">
-                    Isso é tudo.
-                </p>
-            )}
         </Fragment>
     );
 }
