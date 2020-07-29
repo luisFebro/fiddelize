@@ -16,8 +16,8 @@ export default function getCardTypeData(cardType, options = {}) {
     const handledBirthdayGreeting = (isBelated) => {
 
         return role === "cliente"
-        ? `Ei ${getFirstName(userName)}, ${isBelated ? `Mesmo atrasado,` : ""} a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário repleto de prosperidade e conquistas!`
-        : `Surpresa, ${getFirstName(userName)}! Você também recebe uma mensagem de aniversário${isBelated ? `. mesmo que já tenha passado há poucos dias` : ""}. A Fiddelize te deseja ainda mais clientes para seu negócio recheada de conquistas e decorada com sucesso!`
+        ? `Ei ${getFirstName(userName)}, a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário repleto de prosperidade e conquistas!`
+        : `Surpresa, ${getFirstName(userName)}! Você também recebe uma mensagem de aniversário. A Fiddelize te deseja ainda mais clientes para seu negócio recheada de conquistas e decorada com sucesso!`
     }
 
     switch(cardType) {
@@ -45,9 +45,9 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         case "birthday":
             if(subtype === "greeting") {
-                const { isBelated } = extractStrData(content);
+                const { birthdayDate } = extractStrData(content);
                 title = `Feliz Aniversário!`;
-                brief = handledBirthdayGreeting(isBelated);
+                brief = handledBirthdayGreeting(birthdayDate);
                 circularImg = "/img/icons/birthday-cake.svg";
             }
             if(subtype === "weeklyReport") {

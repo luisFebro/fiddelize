@@ -144,7 +144,7 @@ export default function CardsList({ data }) {
     const showChallDelayAlert = () => (
         needChallDelayAlert &&
         <p className="my-3 text-expense-red text-small font-weight-bold text-left mx-2">
-            Atenção: Desafios desatualizados. Veja sua notificação de confirmação para atualizar.
+            Atenção: Desafios desatualizados. Aguarde - ou verifique - a notificação de confirmação para atualizar.
         </p>
     );
 
@@ -249,7 +249,7 @@ export default function CardsList({ data }) {
         </section>
     );
 
-    const showDesc = (historyData, isRemainder) => {
+    const showDesc = (historyData, isRemainder, embodyRemainderCard) => {
         const { selfMilestoneIcon: cardIcon } = pickCurrChallData(rewardList, historyData.challengeN - 1);
         return(
             <section className={`desc text-left`}>
@@ -269,14 +269,26 @@ export default function CardsList({ data }) {
                                 <p className="m-0 text-center font-weight-bold text-normal">
                                     {historyData.desc}
                                 </p>
-                                <p
-                                    className="m-0 mt-2 text-left mx-4 font-weight-bold text-small"
-                                    style={{lineHeight: "20px"}}
-                                >
-                                    Opa! Você já começa o desafio seguinte de
-                                    N.º {historyData.challengeN} com
-                                    <strong className="text-normal font-weight-bold"> {convertDotToComma(historyData.value)} pontos.</strong>
-                                </p>
+                                {embodyRemainderCard(historyData)
+                                ? (
+                                    <p
+                                        className="m-0 mt-2 text-left mx-4 font-weight-bold text-small"
+                                        style={{lineHeight: "20px"}}
+                                    >
+                                        Desafio
+                                        <strong className="text-normal font-weight-bold"> N.º {historyData.challengeN}</strong> começou com<br />
+                                        <strong className="text-normal font-weight-bold"> {convertDotToComma(historyData.value)} pontos.</strong>
+                                    </p>
+                                ) : (
+                                    <p
+                                        className="m-0 mt-2 text-left mx-4 font-weight-bold text-small"
+                                        style={{lineHeight: "20px"}}
+                                    >
+                                        Você já começa o desafio seguinte de
+                                        <strong className="text-normal font-weight-bold"> N.º {historyData.challengeN}</strong> com
+                                        <strong className="text-normal font-weight-bold"> {convertDotToComma(historyData.value)} pontos.</strong>
+                                    </p>
+                                )}
                             </Fragment>
                         )}
                         {!isRemainder && (
@@ -303,6 +315,7 @@ export default function CardsList({ data }) {
         </div>
     );
 
+    const embodyRemainderCard = (historyData) => challengeN >= historyData.challengeN;
     const pickCard = ({
         historyData,
         isRemainder,
@@ -328,10 +341,10 @@ export default function CardsList({ data }) {
                 <section className="position-relative">
                     <Card
                         className="mt-2"
-                        style={{backgroundColor: !isRemainder ? 'var(--themePDark--' + selfThemeBackColor + ')' : 'var(--themePLight--black)'}}
+                        style={{backgroundColor: (!isRemainder || embodyRemainderCard(historyData)) ? 'var(--themePDark--' + selfThemeBackColor + ')' : 'var(--themePLight--black)'}}
                     >
                         <section className={`text-white font-weight-bold ${!isRemainder ? "purchase-history-table-data--root" : "my-2 text-shadow"} text-normal text-center text-purple`}>
-                            {showDesc(historyData, isRemainder)}
+                            {showDesc(historyData, isRemainder, embodyRemainderCard)}
                             {showScore(historyData, isRemainder)}
                         </section>
                     </Card>

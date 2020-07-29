@@ -130,8 +130,10 @@ export default function ModalTextField({
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
 
         const prizeStatusRes = await changePrizeStatus(userId, { statusType: "confirmed", prizeId });
-        if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Pontos deste desafio já foram descontados e podem está desatualizados.`, 'error')
-
+        if(prizeStatusRes.status !== 200) {
+            if(prizeStatusRes.data.error.indexOf("critical") !== -1) return showSnackbar(dispatch, `Não foi possível descontar pontos. Por favor, contate suporte técnico da Fiddelize.`, 'error')
+            return showSnackbar(dispatch, `Pontos deste desafio já foram descontados e podem está desatualizados.`, 'error')
+        }
         const [updateRes, notifRes, taskRes] = await Promise.all([
             updateUser(dispatch, updateUserBody, userId, false),
             sendNotification(userId, "challenge", sendNotifBody),

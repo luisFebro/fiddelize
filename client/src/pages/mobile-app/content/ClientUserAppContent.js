@@ -68,6 +68,7 @@ function ClientUserAppContent({
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize, totalGeneralScore } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
+
     let {
         maxScore,
         bizCodeName,

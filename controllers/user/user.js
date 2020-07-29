@@ -344,9 +344,7 @@ exports.readHistoryList = (req, res) => {
     const handleFinalRes = () => {
         if(noResponse) return noResponse === "true" ? msgOk : dataToSend;
         const rules = [{ challengeN: Number(challengeN) }, { cardType: "record || remainder" }]
-        const challScore = filterAndCount(newHistoryData, { count: "value", rules });
-        // const rulesNext = [{ challengeN: Number(challengeN) + 1 }, { cardType: "record || remainder" }]
-        // const challScoreNext = filterAndCount(newHistoryData, { count: "value", rules: rulesNext });
+        const challScore = filterAndCount(newHistoryData, { count: "value", rules, compare: "||" });
 
         const dataSize = newHistoryData.length;
         const dataRes = {
@@ -395,7 +393,7 @@ exports.readPrizes = (req, res) => {
         let remainderValue = lastRemainder && lastRemainder.value;
 
         const rules = [{ challengeN: nextChall }, { cardType: "record" }]
-        const nextScore = filterAndCount(purchaseHistory, { count: "value", rules });
+        const nextScore = filterAndCount(purchaseHistory, { count: "value", rules, compare: "includes" });
 
         if(!remainderValue) remainderValue = 0;
 
@@ -458,8 +456,8 @@ exports.changePrizeStatus = (req, res) => {
     if(!clientUserData) return res.json({ error: "no array data found"})
 
     const historyData = clientUserData.purchaseHistory;
-    // let currDbScore = clientUserData.totalPurchasePrize;
-    const { newData, newChallengeN, error, status } = confirmPrizeStatus(historyData, { statusType, newValue, prizeId });
+    let totalPrizes = clientUserData.totalPurchasePrize;
+    const { newData, newChallengeN, error, status } = confirmPrizeStatus(historyData, { statusType, newValue, prizeId, totalPrizes });
 
     if(status === "FAIL") return res.status(404).json({ error });
 
@@ -468,7 +466,9 @@ exports.changePrizeStatus = (req, res) => {
     .exec((err, doc) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
         doc.clientUserData.purchaseHistory = newData;
-        doc.clientUserData.totalPurchasePrize = newChallengeN;
+        if(statusType === "confirmed") {
+            doc.clientUserData.totalPurchasePrize = newChallengeN;
+        }
         // modifying an array require we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
         doc.markModified("clientUserData");
         doc.save(err => res.json({msg: `The status ${statusType.toUpperCase()} was successfully set challenge N.º ${newChallengeN}!`}))

@@ -38,12 +38,12 @@ function areObjsEqual(obj1, obj2) {
 }
 
 exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
-    const { statusType, newValue, prizeId } = opts;
+    const { statusType, newValue, prizeId, totalPrizes } = opts;
     let status = "OK";
 
     if(!arrayOfData) return { error: "the array should have at least one object, but found none.", status: "FAIL" }
     // if(!challengeN || typeof challengeN !== "number") return { error: "no challengeN specified as option or invalid format. it should be number", status };
-    if(!"received, confirmed".includes(statusType)) return { error: `the option statusType should be either "confirmed" or "received"`, status };
+    if(!"received, confirmed".includes(statusType)) return { error: `the option statusType should be either "confirmed" or "received"`, status: "FAIL" };
 
     const options = {
         received: 'isPrizeReceived',
@@ -81,6 +81,13 @@ exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
     if(status === "FAIL") return {
         status,
         error: `any non confirmed prize was found`
+    }
+
+    const currDbChallengeN = totalPrizes + 1;
+    const challsDiff = Math.abs(newChallengeN - currDbChallengeN);
+    if(challsDiff && statusType !== "received") return {
+        status: "FAIL",
+        error: `critical error detected: wrong new Challenge N* ${newChallengeN}. Try again!`
     }
 
     return {

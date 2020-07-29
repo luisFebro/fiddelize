@@ -3,7 +3,7 @@ const filterAndCount = (arrayData, options) => {
     let { compare } = options;
 
     if(!arrayData) throw new Error("requires an array of objects as the first argument.")
-    if(compare && !Array.isArray(compare)) throw new Error("compare should be an arrays of comparison operators")
+    // if(compare && !Array.isArray(compare)) throw new Error("compare should be an arrays of comparison operators")
 
     const getProp = obj => Object.keys(obj)[0];
     const getValue = obj => Object.values(obj)[0];
@@ -15,7 +15,22 @@ const filterAndCount = (arrayData, options) => {
         let comparisonResults = [];
         rules.forEach(objProp => {
             const prop = getProp(objProp); const value = getValue(objProp);
-            if(!compare || compare === "===") comparisonResults.push(value.toString() === JSON.stringify(elem[prop]));
+            if(compare === "includes") {
+                comparisonResults.push(value.toString().includes(elem[prop]))
+            }
+
+            if(compare === "||") {
+                const isComparison = value.toString().includes("||");
+                if(isComparison) {
+                    comparisonResults.push(value.toString().includes(elem[prop]))
+                } else {
+                    comparisonResults.push(value.toString() === JSON.stringify(elem[prop]));
+                }
+            }
+
+            if(!compare) {
+                comparisonResults.push(value.toString() === JSON.stringify(elem[prop]));
+            }
         })
 
         return comparisonResults.every(res => res === true);

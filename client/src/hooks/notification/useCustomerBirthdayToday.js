@@ -26,7 +26,7 @@ export default function useCustomerBirthDayToday() {
         }
 
         if(needAlert && !alreadyAlerted) {
-            const options = { subtype: "greeting", role: role === "cliente-admin" ? "ambos-clientes" : role, content: isBelated ? "isBelated:true;" : null }
+            const options = { subtype: "greeting", role: role === "cliente-admin" ? "ambos-clientes" : role, content: isBelated ? `isBelated:true;birthdayDate:${new Date()};` : `birthdayDate:${new Date()};` }
             sendNotification(userId, "birthday", options)
             .then(res => {
                 if(res.status !== 200) return console.log("wrong with sendNotification")

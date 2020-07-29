@@ -23,7 +23,7 @@ export default function pickCardType(cardType, options = {}) {
     const defaultProps = { brief, role, mainImg, bizName, userName };
 
     const chooseBirthday = () => {
-        if(subtype === "greeting") return <BirthdayGreeting {...defaultProps} bizLogo={bizLogo} />;
+        if(subtype === "greeting") return <BirthdayGreeting {...defaultProps} bizLogo={bizLogo} content={content} />;
         if(subtype === "weeklyReport") return <BirthdaysInWeek {...defaultProps} />;
     }
 
