@@ -2,11 +2,12 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.3503.3"
+const latestVersion = "3.36.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "página de notificações - otimização com rolagem infinita e ajustes finais pt2 (Finalizado)";
+const updateDescription = "painel de controle cliente-admin - sessão de envio de SMS";
 const history = [
+    "página de notificações - otimização com rolagem infinita e ajustes finais (Finalizado)",
     "historico de compras - otimização com rolagem infinita e ajustes finais pt4 (finalizado) || docs",
     "novo artigo para card historico de cliente || melhorias algoritmo de cores (finalizado)",
     "sistema de lista de dados offline - gestão de dados e integração indexedDB com as listas para uso offline para lista automática de tarefas (finalizado)",

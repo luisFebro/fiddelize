@@ -6,11 +6,15 @@ import TabSessions from '../../components/TabSessions';
 // Icons from Tabs
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
+import ChatIcon from '@material-ui/icons/Chat';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import DashClients from './dash-clients';
 // import { AsyncDashAppDesign, AsyncDashSetting } from './AsyncDashComps';
-import VAsyncAppDesign from './dash-app-design/VAsyncAppDesign';
-import VAsyncDashSetting from './dash-setting';
+import LoadableVisible from '../../components/code-splitting/LoadableVisible';
+
+const AsyncAppDesign = LoadableVisible({ loader: () => import('./dash-app-design'  /* webpackChunkName: "cli-admin-app-design-session-lazy" */ )});
+const AsyncSMS = LoadableVisible({ loader: () => import('./dash-sms'  /* webpackChunkName: "cli-admin-sms-session-lazy" */ )});
+const AsyncDashSetting = LoadableVisible({ loader: () => import('./dash-setting'  /* webpackChunkName: "cli-admin-settings-session-lazy" */ )});
 
 const muStyle = {
     fontSize: 35,
@@ -25,13 +29,19 @@ const data = [
     {
         tabLabel: "App",
         tabIcon: <PhonelinkSetupIcon style={muStyle} />,
-        tabContentPanel: <VAsyncAppDesign />,
+        tabContentPanel: <AsyncAppDesign />,
+        boxPadding: 1,
+    },
+    {
+        tabLabel: "SMS",
+        tabIcon: <ChatIcon style={muStyle} />,
+        tabContentPanel: <AsyncSMS />,
         boxPadding: 1,
     },
     {
         tabLabel: "Ajustes",
         tabIcon: <BuildIcon style={muStyle} />,
-        tabContentPanel: <VAsyncDashSetting />,
+        tabContentPanel: <AsyncDashSetting />,
         boxPadding: 1,
     },
 ]

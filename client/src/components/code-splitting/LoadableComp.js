@@ -1,6 +1,6 @@
 import React from 'react';
-import Loadable from 'react-loadable';
 import Spinner from '../loadingIndicators/Spinner';
+import Loadable from 'react-loadable';
 // import FullPageLoading from './loadingIndicators/FullPageLoading';
 
 // This Load one will be the official one which will be placed

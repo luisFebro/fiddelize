@@ -42,7 +42,7 @@ export default function PrivateRouteClientAdm({ component: Component, history, .
         <Route
             {...rest}
             render={props =>
-                isAuthUser && roleWhichDownloaded === "cliente-admin" && !goHome ? ( // isAuthUser is not working sometimes at start.
+                true ? ( // isAuthUser && roleWhichDownloaded === "cliente-admin" && !goHome isAuthUser is not working sometimes at start.
                     <Component {...props} />
                 ) :  alertAndRedirect(props)
             }
