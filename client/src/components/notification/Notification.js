@@ -14,7 +14,7 @@ export default function Notification({ forceCliUser = false, }) {
     const [loading, setLoading] = useState(false);
     const [btnTitle, setBtnTitle] = useState(`Marcar todas ✔️`);
     const [btnDisabled, setBtnDisabled] = useState(false);
-    const [runList, setRunList] = useState(false);
+    // const [runList, setRunList] = useState(false);
 
     const { _id, name, role } = useProfile();
     const dispatch = useStoreDispatch();
@@ -37,7 +37,7 @@ export default function Notification({ forceCliUser = false, }) {
         .then(res => {
             if(res.status !== 200) return console.log("smt wrong with handleMarkAllClicked")
             setRun(dispatch, `notificationCount${uuidv1()}`)
-            setRunList(true);
+            // setRunList(`true${uuidv1()}`); not working for now
             setLoading(false);
             setBtnTitle("Todas Marcadas!")
             setBtnDisabled(true);
@@ -101,7 +101,7 @@ export default function Notification({ forceCliUser = false, }) {
             <NotifList
                 _id={_id}
                 userName={name}
-                runList={runList}
+                runList={null}
                 forceCliUser={forceCliUser}
             />
         </Fragment>

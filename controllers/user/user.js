@@ -61,6 +61,8 @@ const handleUserRole = (isAdmin, profile, opts = {}) => {
         const cliAdminObj = profile.clientAdminData;
         cliAdminObj.verificationPass = undefined;
         cliAdminObj.bizPlanCode = undefined;
+        cliAdminObj.notifications = undefined;
+        cliAdminObj.tasks = undefined;
 
         return cliAdminObj;
     } else {

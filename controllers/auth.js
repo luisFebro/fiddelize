@@ -74,11 +74,13 @@ exports.mwSession = (req, res, next) => { // n1
 // this will load the authorized user's data after and only if the token is valid in mwAuth
 exports.loadAuthUser = (req, res) => {
     const userIdInsideJwt = req.authObj && req.authObj.id;
+    const select = '-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications -clientUserData.purchaseHistory'
+
     if(!userIdInsideJwt) {
         console.log("Warning: user loaded without ID")
     } else {
         User.findById(userIdInsideJwt)
-        .select('-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode -clientAdminData.notifications -clientAdminData.tasks')
+        .select(select)
         .exec((err, profile) => {
             if(err) return res.status(500).json(msgG('error.systemError', err))
             res.json({ profile });

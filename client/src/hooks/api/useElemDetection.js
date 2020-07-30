@@ -5,7 +5,7 @@ export const checkDetectedElem = ({ list, ind: currInd, indFromLast = 0 }) => {
     return (list.length - indFromLast) === currInd;
 }
 
-export default function useElemDetection({ loading, hasMore, setSkip }) {
+export default function useElemDetection({ loading, hasMore, setSkip, handleSkip }) {
     return useCallback(elem => {
         if(loading) return; // constantly calls the API ifwe do not return...
 
@@ -14,7 +14,11 @@ export default function useElemDetection({ loading, hasMore, setSkip }) {
             const detection = entry.isIntersecting && hasMore;
             if(detection) {
                 console.log("VISIBLE CARD DETECTED")
-                setSkip(prevSkip => prevSkip + 1);
+                if(handleSkip) {
+                    handleSkip();
+                } else {
+                    setSkip(prevSkip => prevSkip + 1);
+                }
                 self.unobserve(entry.target);
             }
         })

@@ -60,7 +60,8 @@ const pickObjByRole = (role, options = {}) => {
 
 // Method: Get
 exports.countPendingNotif = (req, res) => {
-    const { userId, role, forceCliUser } = req.query;
+    let { userId, role, forceCliUser } = req.query;
+    forceCliUser = forceCliUser === "true";
 
     let rolePath;
     role === "cliente-admin"
@@ -82,7 +83,9 @@ exports.countPendingNotif = (req, res) => {
 }
 
 exports.readNotifications = (req, res) => {
-    const { forceCliUser, skip, limit = 5 } = req.query;
+    let { forceCliUser, skip, limit = 5 } = req.query;
+    forceCliUser = forceCliUser === "true";
+
     const data = pickDataByProfile(req.profile, { forceCliUser });
 
     const dataSize = data.length;
@@ -115,7 +118,9 @@ exports.sendNotification = (req, res) => {
 
 // method: PUT
 exports.markOneClicked = (req, res) => {
-    const forceCliUser = req.body.forceCliUser;
+    let forceCliUser = req.body.forceCliUser;
+    forceCliUser = forceCliUser === "true";
+
     let { _id, role } = req.profile;
     if(forceCliUser) role = "cliente";
 
@@ -138,7 +143,9 @@ exports.markOneClicked = (req, res) => {
 // this functionality will only appears if there is more than 5 not read notifications.
 // if isImportant is true, then ignore it.
 exports.markAllAsClicked = (req, res) => {
-    const forceCliUser = req.body.forceCliUser;
+    let forceCliUser = req.body.forceCliUser;
+    forceCliUser = forceCliUser === "true";
+
     let { _id, role } = req.profile;
     if(forceCliUser) role = "cliente";
 
@@ -157,7 +164,9 @@ exports.markAllAsClicked = (req, res) => {
 // method: PUT
 // desc: this will set all isCardNew cards to false
 exports.markAllAsSeen = (req, res) => {
-    const forceCliUser = req.body.forceCliUser;
+    let forceCliUser = req.body.forceCliUser;
+    forceCliUser = forceCliUser === "true";
+
     let { _id, role } = req.profile;
     if(forceCliUser) role = "cliente";
 

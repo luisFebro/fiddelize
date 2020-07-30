@@ -5,14 +5,14 @@ import useAPIList, { readNotifications } from '../../hooks/api/useAPIList';
 import useElemDetection, { checkDetectedElem } from '../../hooks/api/useElemDetection';
 import getFirstName from '../../utils/string/getFirstName';
 
-export default function NotifList({ _id, userName, runList, forceCliUser = false, }) {
+export default function NotifList({ _id, userName, forceCliUser = false, }) {
     const [skip, setSkip] = useState(0);
+    const [firstChunkLoaded, setFirstChunkLoaded] = useState(false);
 
     userName = getFirstName(userName);
 
-    const trigger = runList ? true : null;
     const params = { forceCliUser, skip };
-    const apiKeys = { url: readNotifications(_id), skip, trigger, params, listName: "notifList" };
+    const apiKeys = { url: readNotifications(_id), skip, params, listName: "notifList" }
 
     const {
         list,
@@ -21,13 +21,15 @@ export default function NotifList({ _id, userName, runList, forceCliUser = false
         hasMore, readyShowElems,
     } = useAPIList(apiKeys);
 
-    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
+    const handleSkip = res => { setSkip(prevSkip => prevSkip + 1) };
+    const detectedCard = useElemDetection({ loading, hasMore, handleSkip });
 
     useEffect(() => {
-        if(list.length) {
+        if(list.length && !firstChunkLoaded) {
             markAllAsSeen(_id, { forceCliUser });
+            setFirstChunkLoaded(true);
         }
-    }, [list])
+    }, [list, firstChunkLoaded])
 
     const showCard = (props) => (<NotifCard {...props} />);
     const renderedList = list.map((notif, ind) => {

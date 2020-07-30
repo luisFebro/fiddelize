@@ -46,6 +46,7 @@ export default function useAPIList({
     search = null, // query
     timeout = 15000, // default: 15000
     trigger,
+    triggerIncludes,
     listName, // offline usage
     needAuth = true,
 }) {
@@ -133,7 +134,7 @@ export default function useAPIList({
         let cancel;
         if(reachedChunksLimit) { if(hasMore) setHasMore(false); return; };
 
-        const updateOnly = skip === 0 || typeof trigger === "boolean" || (trigger && trigger.toString().includes("TaskCard"));
+        const updateOnly = skip === 0 || (trigger && trigger.toString().includes(triggerIncludes || "TaskCard"));
         if(updateOnly) skip = 0;
 
         const stopRequest = setTimeout(() => {

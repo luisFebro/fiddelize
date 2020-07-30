@@ -20,6 +20,25 @@ NotifCard.propTypes = {
     clicked: PropTypes.bool,
 }
 
+const getStyles = ({ clicked, backColor, grayScaleReady }) => ({
+    card: {
+        backgroundColor: !clicked ? 'var(--themePDark--' + backColor + ')' : 'grey',
+        overflow: 'visible',
+    },
+    newBadge: {
+        borderRadius: '40%',
+        padding: '0px 4px',
+        border: '3px solid var(--mainWhite)',
+        background: "var(--niceUiYellow)",
+        color: 'var(--mainDark)',
+        animationDuration: '3s',
+    },
+    circularImg: {
+        filter: clicked && grayScaleReady ? "grayscale(100%)" : "grayscale(0%)",
+        transition: "filter 7s",
+    }
+});
+
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
 
@@ -43,24 +62,7 @@ function NotifCard({
 
     const grayScaleReady = useDelay(3000);
 
-    const styles = {
-        card: {
-            backgroundColor: !clicked ? 'var(--themePDark--' + backColor + ')' : 'grey',
-            overflow: 'visible',
-        },
-        newBadge: {
-            borderRadius: '40%',
-            padding: '0px 4px',
-            border: '3px solid var(--mainWhite)',
-            background: "var(--niceUiYellow)",
-            color: 'var(--mainDark)',
-            animationDuration: '3s',
-        },
-        circularImg: {
-            filter: clicked && grayScaleReady ? "grayscale(100%)" : "grayscale(0%)",
-            transition: "filter 7s",
-        }
-    }
+    const styles = getStyles({ clicked, backColor, grayScaleReady });
 
     const showDate = () => (
         <div className="time-stamp text-small text-white font-weight-bold">

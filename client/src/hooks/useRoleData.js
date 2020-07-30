@@ -92,7 +92,6 @@ export const useClientAdmin = () => {
         highestScores: state.userReducer.cases.highestScores,
     }))
 
-
     const maxScore = clientAdmin && clientAdmin.rewardScore;
     const mainReward = clientAdmin && clientAdmin.mainReward && clientAdmin.mainReward.cap();
     const rewardList = clientAdmin && clientAdmin.rewardList;
