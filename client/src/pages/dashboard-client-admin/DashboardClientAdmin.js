@@ -18,9 +18,13 @@ function DashboardClientAdmin({ location }) {
     const showGreeting = () => (
         <p
             className="position-relative text-normal text-center text-white"
-            style={{margin: 0, top: '10px'}}
+            style={{margin: 15, top: 15 }}
         >
-            <span className="font-weight-bold">{getDayGreetingBr()}, {name ? `${getFirstName(name)}!` : " ..."}</span>
+            <span
+                className="font-weight-bold"
+            >
+                {getDayGreetingBr()}, {name ? `${getFirstName(name)}!` : " ..."}
+            </span>
         </p>
     );
 

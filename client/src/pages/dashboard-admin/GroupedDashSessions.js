@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isSmallScreen from '../../utils/isSmallScreen';
 // material-ui
-import TabSessions from '../../components/TabSessions';
+import TabSessions from '../../components/tabs/TabSessions';
 import DashUsers from './dash-users';
 // Icons from Tabs
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';

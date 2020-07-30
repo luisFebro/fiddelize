@@ -2,6 +2,10 @@ import React, { Fragment } from 'react';
 import DashSectionTitle from '../../DashSectionTitle';
 import { useStoreState } from 'easy-peasy';
 
+//Components
+import RecipientOptions from './recipient-options/RecipientOptions';
+// End Components
+
 export default function AsyncSMS() {
     const TitleSMS = <Title />
 
@@ -12,9 +16,9 @@ export default function AsyncSMS() {
                     title={TitleSMS}
                 />
             </div>
-            <div>
-                I am the SMS session
-            </div>
+            <section>
+                <RecipientOptions />
+            </section>
         </Fragment>
     );
 }

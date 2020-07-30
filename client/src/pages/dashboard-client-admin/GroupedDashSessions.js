@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isSmallScreen from '../../utils/isSmallScreen';
 // material-ui
-import TabSessions from '../../components/TabSessions';
+import TabSessions from '../../components/tabs/TabSessions';
 // Icons from Tabs
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import BuildIcon from '@material-ui/icons/Build';
