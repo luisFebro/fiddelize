@@ -19,7 +19,7 @@ export default function PurchaseHistoryBtn({
     right,
     bottom,
     modalData,
-    from = "mobileApp",
+    from = "mobileApp", // removed discount scores from client hisotry
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 

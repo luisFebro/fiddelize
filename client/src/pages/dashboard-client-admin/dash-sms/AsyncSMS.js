@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react';
 import DashSectionTitle from '../../DashSectionTitle';
 import { useStoreState } from 'easy-peasy';
+import './_AsyncSMS.scss';
 
 //Components
+import CreditsBalance from './credits-balance/CreditsBalance';
 import RecipientOptions from './recipient-options/RecipientOptions';
 // End Components
 
@@ -11,14 +13,14 @@ export default function AsyncSMS() {
 
     return (
         <Fragment>
-            <div style={{marginTop: '16px', display: "block"}}>
+            <div className="async-sms-title">
                 <DashSectionTitle
                     title={TitleSMS}
                 />
             </div>
-            <section>
-                <RecipientOptions />
-            </section>
+            <CreditsBalance />
+            <RecipientOptions />
+            <hr className="lazer-purple" />
         </Fragment>
     );
 }

@@ -1,69 +1,48 @@
 import React from 'react';
 import './_BubbleTabs.scss';
+import parse from 'html-react-parser';
 
-export default function BubbleTabs() {
+export default function BubbleTabs({
+    firstLabel = "I am label 1",
+    secondLabel = "I am label 2",
+}) {
+
+    firstLabel = parse(firstLabel);
+    secondLabel = parse(secondLabel);
+
     const showNavPills = () => (
-        <ul class="nav nav-pills" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="pill" href="#login">Login</a>
+        <ul className="nav nav-pills" role="tablist">
+          <li className="nav-item">
+            <a
+                className="nav-link font-site active"
+                data-toggle="pill"
+                href="#login"
+            >
+                {firstLabel}
+            </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="pill" href="#regis">Register</a>
+          <li className="nav-item">
+            <a
+                className="nav-link font-site"
+                data-toggle="pill"
+                href="#regis"
+            >
+                {secondLabel}
+            </a>
           </li>
         </ul>
     );
 
     const showTabPanes = () => (
-        <section class="tab-content">
-          <div id="login" class="container tab-pane active">
-            <form>
-              <div class="form-group">
-                <label for="exampleFormControlInput1">Email address</label>
-                <input type="email" class="form-control is-valid" id="exampleFormControlInput1" placeholder="name@example.com" />
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control is-invalid" id="exampleInputPassword1" placeholder="Password" />
-                <small id="emailHelp" class="form-text text-muted">Password incorrect.</small>
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-          </div>
-          <div id="regis" class="container tab-pane fade">
-            <form>
-              <div class="form-group">
-                <label for="InputName">Full Name</label>
-                <input type="text" class="form-control is-valid" id="InputName" placeholder="Full Name" />
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-              </div>
-              <div class="form-group">
-                <label for="InputUsername">Username</label>
-                <input type="text" class="form-control is-valid" id="InputUsername" placeholder="Username" />
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleFormControlInput2">Email address</label>
-                <input type="email" class="form-control is-valid" id="exampleFormControlInput2" placeholder="name@example.com" />
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword2">Password</label>
-                <input type="password" class="form-control is-invalid" id="exampleInputPassword2" placeholder="Password" />
-                <small id="emailHelp" class="form-text text-muted">Password incorrect.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPasswordVer">Verify Password</label>
-                <input type="password" class="form-control is-invalid" id="exampleInputPasswordVer" placeholder="Password" />
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+        <section className="tab-content">
+          <div id="login" className="container tab-pane active">
+
           </div>
         </section>
     );
 
     return (
-        <section class="content">
+        <section className="bubble-tabs--root">
             {showNavPills()}
             {showTabPanes()}
         </section>
