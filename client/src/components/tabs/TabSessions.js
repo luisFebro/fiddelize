@@ -60,6 +60,10 @@ const useStyles = makeStyles(theme => ({
         '&:hover': {
             backgroundColor: green[600]
         }
+    },
+    selected: {
+        fontFamily: 'var(--mainFont)',
+        fontWeight: 'bold',
     }
 }));
 
@@ -113,6 +117,9 @@ export default function TabSessions({
                                                         label={tab.tabLabel}
                                                         icon={tab.tabIcon}
                                                         {...a11yProps(ind)}
+                                                        classes={{
+                                                            selected: classes.selected,
+                                                        }}
                                                     />
                     )}
                 </Tabs>

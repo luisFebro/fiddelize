@@ -4,7 +4,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ModalFullContent from '../../../../../components/modals/ModalFullContent';
 import { Load } from '../../../../../components/code-splitting/LoadableComp'
 
-const Async = Load({ loader: () => import('./AsyncAddSMSContent'  /* webpackChunkName: "add-sms-full-page-lazy" */ )});
+const Async = Load({ loader: () => import('./AsyncAddSMSContent'  /* webpackChunkName: "sms-credits-full-page-lazy" */ )});
 
 const getStyles = props => ({
     muStyle: {

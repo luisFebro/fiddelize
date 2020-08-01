@@ -1,11 +1,20 @@
 import React from 'react';
 import AddSMSBtn from './add-sms-btn/AddSMSBtn';
-import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
+import convertToReal from '../../../../utils/numbers/convertToReal';
 
 const isSmall = window.Helper.isSmallScreen();
+const getStyles = () => ({
+    balance: {
+        minWidth: '114px'
+    },
+    credits: {top: isSmall ? '50px' : '70px', right: '0px'}
+});
+
 
 export default function CreditsBalance() {
-    const smsBalance = convertDotToComma(1.554, { needFixed: false });
+    const styles = getStyles();
+    const smsBalance = convertToReal(1450);
+
     return (
         <section className="mt-5 my-3">
             <div className="container-center">
@@ -13,13 +22,13 @@ export default function CreditsBalance() {
                     Saldo:
                     <span
                         className="d-inline-block ml-2 font-size text-em-1-5"
-                        style={{minWidth: '114px'}}
+                        style={styles.balance}
                     >
                         {smsBalance}
                     </span>
                     <p
                         className="position-absolute m-0 text-subtitle font-weight-bold text-purple text-center"
-                        style={{top: isSmall ? '50px' : '70px', right: '0px'}}
+                        style={styles.credits}
                     >créditos</p>
                 </div>
                 <AddSMSBtn />
