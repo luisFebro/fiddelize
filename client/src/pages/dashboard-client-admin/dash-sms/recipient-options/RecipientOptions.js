@@ -13,8 +13,8 @@ export default function RecipientOptions() {
                 padding=" "
             />
             <BubbleTabs
-                firstLabel="Cliente<br />Específico"
-                secondLabel="Múltiplos<br/>Clientes"
+                firstLabel="Múltiplos<br/>Clientes"
+                secondLabel="Cliente<br />Específico"
             />
             <Recipients />
         </section>

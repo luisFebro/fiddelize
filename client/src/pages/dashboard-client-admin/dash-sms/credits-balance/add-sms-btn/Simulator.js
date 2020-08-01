@@ -46,7 +46,7 @@ const getIncreasedPercentage = (startingVal, finalVal) => {
     return division * 100;
 }
 
-export default function Simulator() {
+export default function Simulator({ handleData }) {
     const [packages, setPackages] = useState(1);
     const [discountDiff, setDiscountDiff] = useState(null);
     const [increasedPerc, setIncreasedPerc] = useState(null);
@@ -70,6 +70,15 @@ export default function Simulator() {
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
     const discountDiffReal = convertToReal(discountDiff, { moneySign: true })
     const firstPhasePriceReal = convertToReal(firstPhasePrice, { moneySign: true });
+
+    useEffect(() => {
+        handleData({
+            totalPackage: packages,
+            totalSMS,
+            inv: parseInt(totalFinalMoney.toFixed(2)),
+        })
+
+    }, [packages])
 
     useEffect(() => {
         if(unit !== 0.14) {
@@ -113,7 +122,7 @@ export default function Simulator() {
         discountDiff &&
         <section className="my-5 zoomIn animated">
             <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
-                Automatizador de Descontos
+                Automatizador de Desconto
             </h2>
             <p className="text-normal text-purple text-left">
                 Você economiza <span className="text-subtitle font-weight-bold">{discountDiffReal} ({Math.ceil(increasedPerc)}%)</span> comparado com o preço total de {firstPhasePriceReal} (R$ 0,14 por unidade);

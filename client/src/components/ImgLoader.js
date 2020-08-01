@@ -102,6 +102,7 @@ export default function ImgLoader({
                     width={width}
                     height={height || "auto"}
                     onLoad={() => !timeout && setStatus(false)}
+                    onError={e => e.src = "/img/error.png"}
                 />
             </section>
         </div>

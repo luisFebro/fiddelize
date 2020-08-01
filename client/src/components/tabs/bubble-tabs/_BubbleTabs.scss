@@ -37,6 +37,7 @@
 
     & .tab-content {
         position: relative;
+        display: none;
         width: 100%;
         height: auto;
         margin-top: -35px;
@@ -45,9 +46,20 @@
         border-radius: 30px;
         z-index: 1000;
         box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
-        padding: 30px;
+        padding: 10px;
         margin-bottom: 50px;
         min-height: 300px;
+        // animation: fadeEffect 1s; /* Fading effect takes 1 second */
+        & .tab-pane {
+            background: var(--mainWhite);
+            border-radius: 30px;
+            padding-top: 100%;
+            box-shadow: inset 0 0 0.4em grey;
+        }
+    }
+
+    & .tab-content.active {
+        display: block;
     }
 
     & .tab-content button{
@@ -57,3 +69,8 @@
         float: right;
     }
 }
+
+// @keyframes fadeEffect {
+//   from {opacity: 0;}
+//   to {opacity: 1;}
+// }

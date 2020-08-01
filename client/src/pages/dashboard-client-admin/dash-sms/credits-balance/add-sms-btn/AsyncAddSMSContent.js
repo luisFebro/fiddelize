@@ -4,13 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useProfile } from '../../../../../hooks/useRoleData';
 import getFirstName from '../../../../../utils/string/getFirstName';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import ImgLoader from '../../../../../components/ImgLoader';
 
 export default function AsyncAddSMSContent() {
     const [data, setData] = useState({
         totalPackage: 0,
-        tatalSMS: 0,
+        totalSMS: 0,
         inv: 0,
     })
+
+    const handleData = newData => {
+        setData({
+            ...data,
+            ...newData,
+        })
+    }
 
     let { name: userName } = useProfile();
     userName = getFirstName(userName);
@@ -55,13 +63,24 @@ export default function AsyncAddSMSContent() {
         </section>
     );
 
+    const showIllustration = () => (
+        <ImgLoader
+            src="/img/illustrations/sms-message.svg"
+            className=""
+            alt="ilustração principal"
+            width={150}
+            height="auto"
+        />
+    );
+
     return (
         <section>
             {showTitle()}
+            {showIllustration()}
             <p className="my-3 text-purple text-center text-subtitle">
                 Deslize para mudar a quantidade de pacotes.
             </p>
-            <Simulator />
+            <Simulator handleData={handleData} />
             {showNotes()}
             {showCTA()}
         </section>
