@@ -2,7 +2,7 @@
 required to update material ui to the latest stable version: 4.11 in order to use TableContainer.import
 In case of failing or something unusual, the last working version was ^4.7.2
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -19,10 +19,12 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import Switch from '@material-ui/core/Switch';
+import ButtonFab from '../buttons/material-ui/ButtonFab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    font: 'bolder 18px var(--mainFont)',
   },
   paper: {
     width: '100%',
@@ -62,72 +64,19 @@ const rows = [
 ];
 // END DATA
 
-ShowTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-function ShowTableHead(props) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  const headCells = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Nome Cliente' },
-    { id: 'contact', numeric: false, disablePadding: true, label: 'Contato' },
-  ];
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all items' }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-export default function MuSelectTable() {
+export default function MuSelectTable({
+    callback
+}) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
-    const [selected, setSelected] = React.useState([]);
+    const [selected, setSelected] = React.useState(rows.map((n) => n.name));
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+    useEffect(() => {
+        if(typeof callback === "function") callback(selected);
+    }, [selected]);
 
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
@@ -135,13 +84,14 @@ export default function MuSelectTable() {
       setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event) => {
-      if (event.target.checked) {
+    const handleSelectAllClick = () => {
+      if(!selected.length) {
         const newSelecteds = rows.map((n) => n.name);
         setSelected(newSelecteds);
         return;
+      } else {
+          setSelected([]);
       }
-      setSelected([]);
     };
 
     const handleClick = (event, name) => {
@@ -168,11 +118,6 @@ export default function MuSelectTable() {
       setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event) => {
-      // setRowsPerPage(parseInt(event.target.value, 10));
-      // setPage(0);
-    };
-
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -192,6 +137,7 @@ export default function MuSelectTable() {
                 classes={classes}
                 numSelected={selected.length}
                 order={order}
+                selected={selected}
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
@@ -296,6 +242,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     textAlign: 'center',
     font: 'bold 25px var(--mainFont)',
     color: 'var(--themeP)',
+    flex: 1,
   },
 }));
 
@@ -330,5 +277,68 @@ const ShowTableMainTitle = (props) => {
 ShowTableMainTitle.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
+
+ShowTableHead.propTypes = {
+  classes: PropTypes.object.isRequired,
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
+
+function ShowTableHead(props) {
+  const { classes, onSelectAllClick, selected, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  const headCells = [
+    { id: 'name', numeric: false, disablePadding: true, label: 'Nome Cliente' },
+    { id: 'contact', numeric: false, disablePadding: true, label: 'Contato' },
+  ];
+
+  const showToggleCheckBtn = () => (
+    <ButtonFab
+        size="medium"
+        title={Boolean(selected.length) ? "Desmarcar todos" : "Marcar Todos"}
+        onClick={onSelectAllClick}
+        backgroundColor={"var(--themeSDark--default)"}
+        variant = 'extended'
+        position = 'relative'
+    />
+  );
+
+  return (
+    <TableHead>
+      {showToggleCheckBtn()}
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'default'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <span className={classes.visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </span>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
 
 
