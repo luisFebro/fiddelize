@@ -10,6 +10,7 @@ import { useStoreDispatch } from 'easy-peasy';
 import { loadUser } from '../redux/actions/authActions';
 import { useRecoveryAndDataOffline } from '../hooks/roles-storage-and-data-recovery';
 import ReactGA from 'react-ga'; // google analytics
+import { IS_PROD } from '../config/clientUrl';
 import '../utils/globalHelpers';
 //STYLING
 import './scss/App.scss';
@@ -37,9 +38,8 @@ export default function App() {
             ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
             ReactGA.pageview(window.location.pathname + window.location.search);
         }
-        //     const runLazyIcons = () => import(/* webpackChunkName: "font-awesome-icons" */ './libraries/fontAwesomeLib')
-        //     deferJsOnload(runLazyIcons, "func", { delay: 0 })
-        deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
+
+        IS_PROD && deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
             'url',

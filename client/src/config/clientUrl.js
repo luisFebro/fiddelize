@@ -5,3 +5,4 @@ exports.CLIENT_URL = process.env.NODE_ENV === 'production'
     : 'http://localhost:3000'
 
 exports.IS_DEV = process.env.NODE_ENV === 'development';
+exports.IS_PROD = process.env.NODE_ENV === 'production';

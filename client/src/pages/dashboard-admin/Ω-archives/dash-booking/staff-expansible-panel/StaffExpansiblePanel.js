@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
@@ -85,7 +85,7 @@ export default function ExpansiblePanel({
     // };
 
     const styles = {
-        expansionPanel: {
+        Accordion: {
             color: color,
             backgroundColor: backgroundColor, // default is paper color
             margin: '40px 0',
@@ -122,7 +122,7 @@ export default function ExpansiblePanel({
     );
 
     const showPanel = panel => (
-        <ExpansionPanelSummary
+        <AccordionSummary
             expandIcon={
                 <div
                     style={styles.iconContainer}
@@ -149,13 +149,13 @@ export default function ExpansiblePanel({
             >
                 {panel.secondaryHeading}
             </Typography>
-        </ExpansionPanelSummary>
+        </AccordionSummary>
     );
 
     const showHiddenPanel = panel => (
-        <ExpansionPanelDetails>
+        <AccordionDetails>
             {panel.hiddenContent}
-        </ExpansionPanelDetails>
+        </AccordionDetails>
     );
 
     const showConfigBtns = panel => (
@@ -207,14 +207,14 @@ export default function ExpansiblePanel({
                     key={panel._id}
                     className="position-relative"
                 >
-                    <ExpansionPanel
-                        style={styles.expansionPanel}
+                    <Accordion
+                        style={styles.Accordion}
                         className="disabledLink"
                         disabled={["2cancelado", "1feito"].includes(panel.staffBooking.status) ? true : false}
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}
-                    </ExpansionPanel>
+                    </Accordion>
                     {showStatus(panel)}
                     {showConfigBtns(panel)}
                 </div>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
@@ -55,13 +55,13 @@ export default function ExpansiblePanel({ actions }) {
     return (
         <div className={classes.root}>
             {actions.map(panel => (
-                <ExpansionPanel
+                <Accordion
                     key={panel.id}
                     expanded={expanded === `panel${panel.id}`}
                     onChange={handleChange(`panel${panel.id}`)}
                     TransitionProps={{ unmountOnExit: true }}
                 >
-                    <ExpansionPanelSummary
+                    <AccordionSummary
                         expandIcon={expandedIcon}
                         aria-controls={`panel${panel.id}bh-content`}
                         id={`panel${panel.id}bh-header`}
@@ -78,9 +78,9 @@ export default function ExpansiblePanel({ actions }) {
                         >
                             {panel.secondaryHeading}
                         </Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>{panel.hiddenContent}</ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionSummary>
+                    <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
+                </Accordion>
             ))}
         </div>
     );

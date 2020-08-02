@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
@@ -68,7 +68,7 @@ export default function CashExpansiblePanel({
     const dispatch = useStoreDispatch();
 
     const styles = {
-        expansionPanel: {
+        Accordion: {
             color: color,
             backgroundColor: backgroundColor, // default is paper color
             margin: '40px 0',
@@ -98,7 +98,7 @@ export default function CashExpansiblePanel({
     }
 
     const showPanel = panel => (
-        <ExpansionPanelSummary
+        <AccordionSummary
             expandIcon={
                 <div
                     style={styles.iconContainer}
@@ -136,13 +136,13 @@ export default function CashExpansiblePanel({
             >
                 {panel.secondaryHeading}
             </Typography>
-        </ExpansionPanelSummary>
+        </AccordionSummary>
     );
 
     const showHiddenPanel = panel => (
-        <ExpansionPanelDetails>
+        <AccordionDetails>
             {panel.hiddenContent}
-        </ExpansionPanelDetails>
+        </AccordionDetails>
     );
 
     const showStatus = panel => (
@@ -235,13 +235,13 @@ export default function CashExpansiblePanel({
                     key={panel.itemData._id}
                     className="position-relative"
                 >
-                    <ExpansionPanel
-                        style={styles.expansionPanel}
+                    <Accordion
+                        style={styles.Accordion}
                         className="disabledLink"
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}
-                    </ExpansionPanel>
+                    </Accordion>
                     {showStatus(panel)}
                     {showConfigBtns(panel)}
                 </div>

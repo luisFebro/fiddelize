@@ -84,7 +84,7 @@ export default function RegisteredClientsList() {
     );
     // end search
 
-    // ExpansionPanel Content
+    // Accordion Content
     const actions = list.map(user => {
         return({
            _id: user._id,
@@ -116,7 +116,7 @@ export default function RegisteredClientsList() {
             }
         />
     );
-    //End ExpansionPanel Content
+    //End Accordion Content
 
 
     const showMoreItemsBtn = () => (

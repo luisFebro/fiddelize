@@ -1,3 +1,12 @@
+/*
+SECURITY ADVISE
+If your password reset process involves sending an email, have the user enter their email address. Then send an email with a password reset link if the account exists - and a sign-up email if it's a new email address.
+https://www.hacksplaining.com/exercises/user-enumeration#/captcha
+
+
+ If you are very security-minded, consider adding an exponential backoff after each failed login attempt, so subsequent retries take longer and longer.
+https://www.hacksplaining.com/exercises/user-enumeration#/exponential-backoff
+ */
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import Title from '../../components/Title';

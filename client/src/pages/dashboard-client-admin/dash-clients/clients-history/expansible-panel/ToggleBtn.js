@@ -14,6 +14,8 @@ export default function ToggleBtn({ cardId, onClick }) {
         <ButtonFab
             backgroundColor="var(--themeSDark)"
             size="medium"
+            position="relative"
+            right={-35}
             iconFontAwesome={<FontAwesomeIcon icon="plus" style={faStyle} />}
             iconAfterClick={<FontAwesomeIcon icon="minus" style={faStyle} />}
             toggleStatus={cardId}

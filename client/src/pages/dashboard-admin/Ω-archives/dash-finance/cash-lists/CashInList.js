@@ -65,7 +65,7 @@ export default function CashInList({
         </section>
     );
 
-    // ExpansionPanel Content
+    // Accordion Content
     const actions = cashInData.list.map(item => {
         return({
            _id: item._id,
@@ -85,7 +85,7 @@ export default function CashInList({
             run={run}
         />
     );
-    //End ExpansionPanel Content
+    //End Accordion Content
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton

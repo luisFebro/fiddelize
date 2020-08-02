@@ -2,7 +2,6 @@
 
 .bubble-tabs--root {
     height: auto;
-    margin: 0 auto;
     position: relative;
     max-width: 700px;
 
@@ -38,8 +37,8 @@
     & .tab-content {
         position: relative;
         display: none;
-        width: 100%;
         height: auto;
+        width: 100%;
         margin-top: -35px;
         background: var(--themeP--default);
         color: #000;
@@ -47,14 +46,13 @@
         z-index: 1000;
         box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
         padding: 10px;
-        margin-bottom: 50px;
-        min-height: 300px;
         // animation: fadeEffect 1s; /* Fading effect takes 1 second */
         & .tab-pane {
             background: var(--mainWhite);
             border-radius: 30px;
-            padding-top: 100%;
             box-shadow: inset 0 0 0.4em grey;
+            padding: 20px 10px 10px 10px;
+            min-height: 350px;
         }
     }
 

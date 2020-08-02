@@ -56,7 +56,7 @@ export default function StaffWithBookingsList() {
         })
     }, [])
 
-    // ExpansionPanel Content
+    // Accordion Content
     const actions = list.map(staff => {
         return({
            _id: staff._id,
@@ -83,7 +83,7 @@ export default function StaffWithBookingsList() {
             }
         />
     );
-    //End ExpansionPanel Content
+    //End Accordion Content
 
     // NOT WORKING... DISABLED LIMIT IN BACKEND
     const showMoreItemsBtn = () => (

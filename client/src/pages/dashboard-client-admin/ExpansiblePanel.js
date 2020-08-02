@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
@@ -54,7 +54,7 @@ export default function ExpansiblePanel({
     const dispatch = useStoreDispatch();
 
     const styles = {
-        expansionPanel: {
+        Accordion: {
             color: color,
             backgroundColor: backgroundColor, // default is paper color
             margin: '25px 0',
@@ -62,7 +62,7 @@ export default function ExpansiblePanel({
     }
 
     const showPanel = panel => (
-        <ExpansionPanelSummary
+        <AccordionSummary
             expandIcon={
                 <div
                     className="enabledLink"
@@ -96,13 +96,13 @@ export default function ExpansiblePanel({
                 </Typography>
             </Fragment>
             )}
-        </ExpansionPanelSummary>
+        </AccordionSummary>
     );
 
     const showHiddenPanel = panel => (
-        <ExpansionPanelDetails>
+        <AccordionDetails>
             {panel.hiddenContent}
-        </ExpansionPanelDetails>
+        </AccordionDetails>
     );
 
     return (
@@ -112,13 +112,13 @@ export default function ExpansiblePanel({
                     key={panel._id}
                     className="position-relative"
                 >
-                    <ExpansionPanel
+                    <Accordion
                         className="disabledLink"
-                        style={styles.expansionPanel}
+                        style={styles.Accordion}
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}
-                    </ExpansionPanel>
+                    </Accordion>
                 </div>
             ))}
         </div>

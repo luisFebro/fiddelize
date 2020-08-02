@@ -124,7 +124,7 @@ export default function RecordedClientsList() {
     );
     // end search
 
-    // ExpansionPanel Content
+    // Accordion Content
     const actions = list.map(user => {
         const { clientUserData: cliUser } = user;
 
@@ -186,7 +186,7 @@ export default function RecordedClientsList() {
             needToggleButton={true}
         />
     );
-    //End ExpansionPanel Content
+    //End Accordion Content
 
 
     const showMoreItemsBtn = () => (

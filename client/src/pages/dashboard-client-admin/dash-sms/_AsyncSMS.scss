@@ -2,3 +2,9 @@
     margin-top: 16px;
     display: block;
 }
+
+.all-customers--root {
+    & .mode {
+        line-height: 23px;
+    }
+}

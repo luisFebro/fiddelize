@@ -66,7 +66,7 @@ export default function CashOutList({
         </section>
     );
 
-    // ExpansionPanel Content
+    // Accordion Content
     const actions = cashOutData.list.map(item => {
         return({
            _id: item._id,
@@ -87,7 +87,7 @@ export default function CashOutList({
             run={run}
         />
     );
-    //End ExpansionPanel Content
+    //End Accordion Content
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton

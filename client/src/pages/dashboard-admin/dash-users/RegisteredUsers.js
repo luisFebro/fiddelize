@@ -79,7 +79,7 @@ export default function RegisteredUsersList() {
     );
     // end search
 
-    // ExpansionPanel Content
+    // Accordion Content
     const actions = list.map(user => {
         return({
            _id: user._id,
@@ -111,7 +111,7 @@ export default function RegisteredUsersList() {
             }
         />
     );
-    //End ExpansionPanel Content
+    //End Accordion Content
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton

@@ -1,12 +1,19 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import './_BubbleTabs.scss';
 import parse from 'html-react-parser';
+import addDashesToString from '../../../utils/string/addDashesToString';
+import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 
 export default function BubbleTabs({
     firstLabel = "I am label 1",
     secondLabel = "I am label 2",
+    FirstComp,
+    SecondComp,
+    ctaTitle,
 }) {
 
+    const firstLabelId = addDashesToString(firstLabel);
+    const secondLabelId = addDashesToString(secondLabel);
     firstLabel = parse(firstLabel);
     secondLabel = parse(secondLabel);
 
@@ -33,7 +40,7 @@ export default function BubbleTabs({
             <li className="nav-item">
                 <a
                     className="nav-link font-site active"
-                    onClick={e => openTab(e, firstLabel)}
+                    onClick={e => openTab(e, firstLabelId)}
                 >
                     {firstLabel}
                 </a>
@@ -41,7 +48,7 @@ export default function BubbleTabs({
             <li className="nav-item">
                 <a
                     className="nav-link font-site"
-                    onClick={e => openTab(e, secondLabel)}
+                    onClick={e => openTab(e, secondLabelId)}
                 >
                     {secondLabel}
                 </a>
@@ -50,24 +57,41 @@ export default function BubbleTabs({
     );
 
     const showTabPanes = () => (
-        <Fragment>
-            <section id={firstLabel} className="tab-content active">
+        <section className="d-flex justify-content-center">
+            <section id={firstLabelId} className="tab-content active">
                 <div className="tab-pane">
-                    first section
+                    {FirstComp}
                 </div>
             </section>
-            <section id={secondLabel} className="tab-content">
+            <section id={secondLabelId} className="tab-content">
                 <div className="tab-pane">
-                    second section
+                    {SecondComp}
                 </div>
             </section>
-        </Fragment>
+        </section>
+    );
+
+    const showCTAButton = () => (
+        ctaTitle &&
+        <section className="container-center">
+            <ButtonFab
+                size="large"
+                title={ctaTitle}
+                onClick={null}
+                backgroundColor={"var(--themeSDark--default)"}
+                variant = 'extended'
+                position = 'relative'
+                top={-30}
+                zIndex={2000}
+            />
+        </section>
     );
 
     return (
         <section className="bubble-tabs--root">
             {showNavButtons()}
             {showTabPanes()}
+            {showCTAButton()}
         </section>
     );
 }

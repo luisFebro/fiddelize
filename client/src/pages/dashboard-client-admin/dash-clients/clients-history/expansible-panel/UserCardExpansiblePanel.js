@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
@@ -66,7 +66,7 @@ export default function UserCardExpansiblePanel({
 
 
     const styles = {
-        expansionPanel: {
+        Accordion: {
             color: color,
             backgroundColor: backgroundColor, // default is paper color
             margin: '25px 0 0',
@@ -173,7 +173,7 @@ export default function UserCardExpansiblePanel({
 
     const showPanel = panel => (
         <div>
-            <ExpansionPanelSummary
+            <AccordionSummary
                 expandIcon={
                     <div
                         className="enabledLink"
@@ -209,16 +209,16 @@ export default function UserCardExpansiblePanel({
                     </Typography>
                 </Fragment>
                 )}
-            </ExpansionPanelSummary>
+            </AccordionSummary>
             {panel.needBadgeForTestMode && displayTestCardBadgeBtn(panel)}
             {Boolean(panel.needCliPrizes) && displayCliPrizes(panel)}
         </div>
     );
 
     const showHiddenPanel = panel => (
-        <ExpansionPanelDetails>
+        <AccordionDetails>
             {panel.hiddenContent}
-        </ExpansionPanelDetails>
+        </AccordionDetails>
     );
 
     return (
@@ -228,14 +228,14 @@ export default function UserCardExpansiblePanel({
                     key={panel._id}
                     className="position-relative"
                 >
-                    <ExpansionPanel
+                    <Accordion
                         TransitionProps={{ unmountOnExit: true }}
                         className="disabledLink"
-                        style={styles.expansionPanel}
+                        style={styles.Accordion}
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}
-                    </ExpansionPanel>
+                    </Accordion>
                 </div>
             ))}
         </div>

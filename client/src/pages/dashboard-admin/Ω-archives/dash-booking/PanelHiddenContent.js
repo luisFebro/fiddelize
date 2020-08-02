@@ -93,7 +93,7 @@ export default function PanelHiddenContent({ data, setRun, run }) {
         </div>
     );
 
-    // ExpansionPanel Content
+    // Accordion Content
     const actions = bookings.map(booking => {
         return({
            _id: booking._id,
@@ -128,7 +128,7 @@ export default function PanelHiddenContent({ data, setRun, run }) {
             run={run}
         />
     );
-    //End ExpansionPanel Content
+    //End Accordion Content
 
     const loadMoreDocs = () => {
         const moreDocsToSkip = skip + limit;
