@@ -1,5 +1,5 @@
 import React from 'react';
-import AsyncAutoCompleteSearch from '../../components/search/AsyncAutoCompleteSearch';
+import AsyncAutoCompleteSearch from '../../components/search/Ω-archives/AsyncAutoCompleteSearch';
 import PropTypes from 'prop-types';
 
 AddOrSearch.propTypes = {
@@ -9,7 +9,7 @@ AddOrSearch.propTypes = {
 }
 
 export default function AddOrSearch({ autoCompleteUrl, setSearchData, searchData }) {
-    //auto complete
+    //auto complete data handling
     const onAutoSelectChange = selectedValue => {
         setSearchData({ ...searchData, buyDesc: selectedValue })
     }
@@ -17,7 +17,7 @@ export default function AddOrSearch({ autoCompleteUrl, setSearchData, searchData
     const onValueChange = changedValue => {
         setSearchData({ ...searchData, buyDesc: changedValue })
     }
-    //end auto complete
+    //end auto complete data handling
 
     return (
         <AsyncAutoCompleteSearch
@@ -28,7 +28,6 @@ export default function AddOrSearch({ autoCompleteUrl, setSearchData, searchData
             freeSolo={true}
             onAutoSelectChange={onAutoSelectChange}
             onValueChange={onValueChange}
-            needUserValueFunc={true}
             noOptionsText={`Nada encontrado...`}
             backgroundColor='white'
             color='var(--themePLight)'

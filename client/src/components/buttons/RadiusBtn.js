@@ -9,7 +9,7 @@ export default function RadiusBtn({
     fontSize,
     padding,
     needTxtShadow = true,
-    size,
+    size = "normal",
     position,
     top,
     left,

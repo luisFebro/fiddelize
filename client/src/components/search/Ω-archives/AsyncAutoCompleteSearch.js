@@ -7,7 +7,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { getHeaderJson } from '../../utils/server/getHeaders';
+import { getHeaderJson } from '../../../utils/server/getHeaders';
 import parse from 'html-react-parser';
 
 
