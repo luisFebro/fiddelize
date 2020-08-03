@@ -64,7 +64,8 @@ export default function ButtonFab({
     needTxtNoWrap,
     needBtnShadow,
     onMouseOver,
-    zIndex, }) {
+    zIndex,
+    width, }) {
     const [toggle, setToggle] = useState('');
 
     const styles = {
@@ -81,6 +82,7 @@ export default function ButtonFab({
             bottom,
             right,
             zIndex,
+            width,
             outline: 'none',
             color: color || 'var(--mainWhite)',
             backgroundColor:  backgroundColor || "#4834d4",

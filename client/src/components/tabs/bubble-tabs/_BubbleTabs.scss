@@ -4,6 +4,8 @@
     height: auto;
     position: relative;
     max-width: 700px;
+    margin: auto;
+    width: 100%;
 
     & .nav-pills {
         display: flex;
@@ -65,6 +67,12 @@
         width: 100px;
         margin: 0 auto;
         float: right;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .bubble-tabs--root {
+        width: 95%;
     }
 }
 
