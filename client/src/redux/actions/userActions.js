@@ -128,7 +128,7 @@ export const addAutomaticTask = async (userId, options = {}) => { // n1
 // note: requires JWT token
 export const readUserList = async (dispatch, bizId, options = {}) => {
     let { role, skip, search, token } = options;
-    if(!bizId) throw new Error("You should specify the bizId argument");
+    if(!bizId) return console.log("You should specify the bizId argument");
     if(!skip) skip = 0;
     bizId = `&bizId=${bizId}`;
 

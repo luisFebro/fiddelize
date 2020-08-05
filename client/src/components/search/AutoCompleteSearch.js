@@ -61,6 +61,7 @@ export default function AutoCompleteSearch({
     disableOpenOnFocus = false,
     placeholder = "Procure alguma coisa...",
     formWidth = "100%",
+    needArrowEndAdornment = false,
 }) {
 
     const [open, setOpen] = useState(false);
@@ -174,7 +175,7 @@ export default function AutoCompleteSearch({
             endAdornment: (
                 <React.Fragment>
                     {loading ? <CircularProgress color={"inherit"} size={25} /> : null}
-                    {params.InputProps.endAdornment}
+                    {needArrowEndAdornment ? params.InputProps.endAdornment : null}
                 </React.Fragment>
             ),
           }}

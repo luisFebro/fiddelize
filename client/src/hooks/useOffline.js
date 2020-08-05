@@ -19,7 +19,10 @@ export default function useOffline() {
     useEffect(() => {
         if(isConexionOff) {
             setUserOnline(dispatch, false);
-            showSnackbar(dispatch, "Modo Offline Ativado!")
+            getVar("offlineApp")
+            .then(res => {
+                !res && showSnackbar(dispatch, "Modo Offline Ativado!")
+            })
             setVar({ offlineApp: true })
         } else {
             getVar("offlineApp")

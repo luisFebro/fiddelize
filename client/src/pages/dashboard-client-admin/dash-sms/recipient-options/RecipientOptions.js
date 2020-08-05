@@ -6,9 +6,12 @@ import LoadableVisible from '../../../../components/code-splitting/LoadableVisib
 const AsyncAllCustomers = LoadableVisible({ loading: true, loader: () => import('./options/AsyncAllCustomers'  /* webpackChunkName: "all-customers-comp-sms-lazy" */ )});
 const AsyncSpecificCustomer = LoadableVisible({ loading: true, loader: () => import('./options/AsyncSpecificCustomer'  /* webpackChunkName: "specific-customer-comp-sms-lazy" */ )});
 
-export default function RecipientOptions() {
-    const FirstComp = <AsyncAllCustomers />
-    const SecondComp = <AsyncSpecificCustomer />
+export default function RecipientOptions({
+    setWhichTab,
+    handleList,
+    handleShowMessage }) {
+    const FirstComp = <AsyncAllCustomers handleList={handleList} handleShowMessage={handleShowMessage} />
+    const SecondComp = <AsyncSpecificCustomer handleList={handleList} handleShowMessage={handleShowMessage} />
 
     return (
         <section>
@@ -20,10 +23,14 @@ export default function RecipientOptions() {
             />
             <BubbleTabs
                 FirstComp={FirstComp}
-                firstLabel="Múltiplos<br/>Clientes"
+                firstLabel="Lista de<br/>Clientes"
+                firstName="Lista de Clientes"
                 SecondComp={SecondComp}
-                secondLabel="Cliente<br />Específico"
+                secondLabel="Contatos<br />Selecionados"
+                secondName="Contatos Selecionados"
                 ctaTitle="colocar mensagem"
+                ctaAction={handleShowMessage}
+                setWhichTab={setWhichTab}
             />
         </section>
     );

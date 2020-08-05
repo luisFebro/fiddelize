@@ -3,10 +3,12 @@ import DashSectionTitle from '../../DashSectionTitle';
 // COMPONENTS
 import RankingPondium from './RankingPondium';
 import AutomaticToDoList from './automatic-to-do-list';
-import VAsyncRecordedClientsList from './clients-history/VAsyncRecordedClientsList';
+import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
+import LoadableVisible from '../../../components/code-splitting/LoadableVisible';
+
+const AsyncRecordedClientsList = LoadableVisible({ logo: true, loading: true, loader: () => import('./clients-history/AsyncRecordedClientsList'  /* webpackChunkName: "clients-history-session-lazy" */ )});
 // END COMPONENTS
 
-import { useProfile, useClientAdmin } from '../../../hooks/useRoleData';
 
 const Title = ({ bizName }) => {
     return(
@@ -19,19 +21,6 @@ const Title = ({ bizName }) => {
 };
 
 export default function DashClients() {
-    // need to fix teh fact that it is disabling window.scroll = null
-    // and causing the show more buttons to not appear.
-    // const didScroll = useDidScroll();
-    const [preload, setPreload] = useState(false);
-
-    useEffect(() => {
-        const thisTimeout = setTimeout(() => setPreload(true), 3000);
-        if(preload) {
-            VAsyncRecordedClientsList.preload();
-        }
-        return () => { clearTimeout(thisTimeout) };
-    }, [preload])
-
     const { bizName } = useClientAdmin();
     const { name } = useProfile();
 
@@ -46,7 +35,7 @@ export default function DashClients() {
             <hr className="lazer-purple"/>
             <RankingPondium />
             <hr className="lazer-purple"/>
-            <VAsyncRecordedClientsList />
+            <AsyncRecordedClientsList />
         </div>
     );
 }

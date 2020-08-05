@@ -3,7 +3,7 @@
 .bubble-tabs--root {
     height: auto;
     position: relative;
-    max-width: 700px;
+    max-width: 505px;
     margin: auto;
     width: 100%;
 
@@ -11,6 +11,7 @@
         display: flex;
 
         & .nav-link {
+            cursor: pointer;
             display: flex;
             align-items: start;
             justify-content: center;
@@ -27,7 +28,7 @@
         & .nav-link.active {
             background: var(--themePLight--default);
             color: #fff;
-            font-size: 25px;
+            font-size: 22px;
             text-shadow: 1px 1px 3px black;
         }
 
@@ -41,8 +42,8 @@
         position: relative;
         display: none;
         height: auto;
-        width: 100%;
-        margin-top: -35px;
+        width: 95%;
+        margin-top: -50px;
         background: var(--themePLight--default);
         color: #000;
         border-radius: 30px;

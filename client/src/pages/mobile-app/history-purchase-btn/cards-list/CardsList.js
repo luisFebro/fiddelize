@@ -152,7 +152,7 @@ export default function CardsList({ data }) {
         const firstChallScoreTitle = isSmall ? "• Total de Pontos:" : "• Total de Pontos Gerais:";
         const showTotalBadge = isAfterFirstChall || hasPendingChall;
 
-        const handleChallScore = (challScore, options) => {
+        const handleChallScore = (challScore, options = {}) => {
             const { totalGeneralScore, isAfterFirstChall } = options;
             if(!isAfterFirstChall) return totalGeneralScore || 0;
             return challScore;

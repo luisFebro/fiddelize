@@ -26,6 +26,12 @@
     flex-flow: row nowrap;
 }
 
+.container-center-max-width-500 {
+    margin: auto;
+    width: 100%;
+    max-width: 500px;
+}
+
 .item-align-center {
     display: flex;
     align-items: center;

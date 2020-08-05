@@ -1,15 +1,55 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import DashSectionTitle from '../../DashSectionTitle';
 import { useStoreState } from 'easy-peasy';
 import './_AsyncSMS.scss';
+import { Load } from '../../../components/code-splitting/LoadableComp';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../../redux/actions/snackbarActions';
+import { handleFocus } from '../../../utils/form/handleFocus';
 
 //Components
 import CreditsBalance from './credits-balance/CreditsBalance';
 import RecipientOptions from './recipient-options/RecipientOptions';
+import MessageField from './message/MessageField';
+
+const AsyncSMSSuggestions = Load({ loader: () => import('./message/AsyncSMSSuggestions' /* webpackChunkName: "sms-suggestions-comp-lazy" */)});
 // End Components
 
 export default function AsyncSMS() {
+    const [data, setData] = useState({
+        showMessage: false,
+        contactList: [],
+        whichTab: "Lista de Clientes",
+    });
     const TitleSMS = <Title />
+
+    const dispatch = useStoreDispatch();
+
+    const { showMessage, whichTab, contactList } = data;
+
+    const handleWhichTab = currTab => {
+        setData({ ...data, whichTab: currTab });
+    }
+
+    const handleList = (list) => {
+        setData({ ...data, contactList: list });
+    }
+
+    useEffect(() => {
+        if(showMessage) handleFocus("messageField", 2000);
+    }, [showMessage])
+
+    const handleShowMessage = (close) => {
+        if(!contactList.length) {
+            if(close !== false) {
+                showSnackbar(dispatch, "Selecione, pelo menos, um contato", "error");
+                return;
+            }
+        }
+
+        const needClose = close === false;
+        setData({ ...data, contactList: needClose ? [] : contactList, showMessage: needClose ? false : true });
+    }
 
     return (
         <Fragment>
@@ -19,7 +59,18 @@ export default function AsyncSMS() {
                 />
             </div>
             <CreditsBalance />
-            <RecipientOptions />
+            <RecipientOptions
+                whichTab={whichTab}
+                setWhichTab={handleWhichTab}
+                handleList={handleList}
+                handleShowMessage={handleShowMessage}
+            />
+            <MessageField
+                showMessage={showMessage}
+                whichTab={whichTab}
+                contactList={contactList}
+            />
+            <AsyncSMSSuggestions />
             <hr className="lazer-purple" />
         </Fragment>
     );

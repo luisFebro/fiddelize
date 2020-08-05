@@ -9,7 +9,16 @@ const handleChange = (setObj, obj, isNestedObj = false) => e => {
         const newObj = obj;
         setObj(Object.assign({}, obj, newObj));
     } else {
-        setObj({ ...obj, [name]: value });
+        if(!obj) {
+            setObj(data => {
+                if(typeof data === "string") {
+                    return value;
+                }
+                return ({ ...data, [name]: value })
+            })
+        } else {
+            setObj({ ...obj, [name]: value });
+        }
     }
 }
 

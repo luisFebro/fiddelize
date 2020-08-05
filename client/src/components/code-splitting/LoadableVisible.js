@@ -9,7 +9,7 @@ export default function LoadableVisible(opts) {
     if(opts.loading === true) {
         opts = {
             ...opts,
-            loading: () => <Spinner size="small" />,
+            loading: () => <Spinner size={opts.logo ? "large" : "small"} logo={opts.logo ? "purple" : ""} />,
         }
     }
 

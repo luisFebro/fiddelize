@@ -64,7 +64,8 @@ const useStyles = makeStyles(theme => ({
     selected: {
         fontFamily: 'var(--mainFont)',
         fontWeight: 'bold',
-        color: 'var(--themeP) !important',
+        color: 'var(--themePLight) !important',
+        fontSize: '0.95rem !important',
     }
 }));
 

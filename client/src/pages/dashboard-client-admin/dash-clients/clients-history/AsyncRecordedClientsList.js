@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const initialSkip = 0;
 let searchTerm = "";
 // let accumulatedChunks = 5;
-export default function RecordedClientsList() {
+export default function AsyncRecordedClientsList() {
     const [init, setInit] = useState(true);
     const { businessId } = useAppSystem();
     const { name } = useProfile();

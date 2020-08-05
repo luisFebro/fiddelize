@@ -23,7 +23,6 @@ import ButtonFab from '../buttons/material-ui/ButtonFab';
 const MyTableCell = withStyles({
     root: { color: 'var(--themeP) !important', font: 'bold 17px var(--mainFont)'},
     head: { color: '#fff !important', background: 'var(--themeP) !important' },
-    style: { fontSize: "15px !important;" },
 })(TableCell);
 
 const useStyles = makeStyles((theme) => ({
@@ -71,37 +70,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// DATA
-const rows = [
-  { name: "Ana Beatriz", contact: "(92) 99281-7355" },
-  { name: "Beatriz Lima", contact: "(92) 99281-7353" },
-  { name: "Carlos Eduardo", contact: "(92) 98281-7353" },
-  { name: "Denis Lima", contact: "(92) 98281-7353" },
-  { name: "Eduardo Augusto", contact: "(92) 98281-7354" },
-  { name: "Fernando Luis", contact: "(92) 98281-7359" },
-  { name: "Gustavo Oliveira", contact: "(92) 98281-7310" },
-  { name: "Helen Rocha", contact: "(92) 95281-7310" },
-  { name: "Igo Lins", contact: "(92) 95211-7310" },
-  { name: "Jéssica Alburquerque", contact: "(92) 95211-7314" },
-  { name: "Kelly Noronha", contact: "(92) 95219-7314" },
-  { name: "Leonardo Oliveira", contact: "(92) 95219-7318" },
-  { name: "Maria de Jesus", contact: "(92) 95219-7319" },
-];
-// END DATA
-
 export default function MuSelectTable({
-    callback
+    rowsData = [],
+    emptySelection = false,
+    callback,
 }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
-    const [selected, setSelected] = React.useState(rows.map((n) => n.name));
+    const [selected, setSelected] = React.useState(rowsData.map((n) => n.name));
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [colorHighlighted, setColorHighlighted] = React.useState(true);
 
+    useEffect(() => {
+        if(emptySelection) setSelected([]);
+    }, [emptySelection])
+
     const getTableRowStyle = ({ colorHighlighted }) => ({
-        root: { backgroundColor: colorHighlighted ? "rgb(124, 67, 189, 0.1) !important" : "#fff"}
+        root: { cursor: 'pointer', backgroundColor: colorHighlighted ? "rgb(124, 67, 189, 0.1) !important" : "#fff"}
     })
     const MyTableRow = withStyles(getTableRowStyle({ colorHighlighted }))(TableRow);
 
@@ -121,7 +108,7 @@ export default function MuSelectTable({
 
     const handleSelectAllClick = () => {
       if(!selected.length) {
-        const newSelecteds = rows.map((n) => n.name);
+        const newSelecteds = rowsData.map((n) => n.name);
         setSelected(newSelecteds);
         setColorHighlighted(true);
         return;
@@ -135,7 +122,7 @@ export default function MuSelectTable({
       setPage(newPage);
     };
 
-    const tableBodyProps = { handleColorSelection, MyTableRow, rows, order, orderBy, classes, page, rowsPerPage, setSelected, selected };
+    const tableBodyProps = { handleColorSelection, MyTableRow, rowsData, order, orderBy, classes, page, rowsPerPage, setSelected, selected };
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
@@ -175,7 +162,7 @@ export default function MuSelectTable({
             component="div"
             labelRowsPerPage=""
             labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count !== -1 ? count : `mais do que ${to}`}`}
-            count={rows.length}
+            count={rowsData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
@@ -200,7 +187,7 @@ const useMainTitle = makeStyles((theme) => ({
     },
 }));
 
-const ShowTableMainTitle = ({ numSelected, selected, onSelectAllClick }) => {
+const ShowTableMainTitle = ({ listName= "", numSelected, selected, onSelectAllClick }) => {
   const classes = useMainTitle();
 
   const showToggleCheckBtn = () => (
@@ -228,7 +215,7 @@ const ShowTableMainTitle = ({ numSelected, selected, onSelectAllClick }) => {
             id="tableTitle"
             component="div"
         >
-            Lista de Clientes
+            {listName}
         </Typography>
         {showToggleCheckBtn()}
     </Toolbar>
@@ -258,13 +245,13 @@ function ShowTableHead(props) {
 
   const headCells = [
     { id: 'name', numeric: false, disablePadding: false, label: 'Nome Cliente' },
-    { id: 'contact', numeric: false, disablePadding: false, label: 'Contato' },
+    { id: 'phone', numeric: false, disablePadding: false, label: 'Contato' },
   ];
 
   return (
     <TableHead>
       <MyTableRow>
-        <MyTableCell padding="checkbox">
+        <MyTableCell padding="checkbox" style={{ fontSize: "15px !important" }}>
           <Checkbox
             indeterminate={null}
             checked={null}
@@ -304,13 +291,13 @@ function ShowTableHead(props) {
 }
 
 const ShowTableBody = ({
-    MyTableRow, rows, order, orderBy, handleColorSelection, classes, page, rowsPerPage, setSelected, selected,
+    MyTableRow, rowsData, order, orderBy, handleColorSelection, classes, page, rowsPerPage, setSelected, selected,
 }) => {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     /*
      Do not need too many spaces when have a few data
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowsData.length - page * rowsPerPage);
     <MyTableRow style={{ height: (false ? 33 : 53) * emptyRows }}>
     {emptyRows > 0 && (
       <MyTableRow>
@@ -340,7 +327,7 @@ const ShowTableBody = ({
 
     return(
         <TableBody>
-          {stableSort(rows, getComparator(order, orderBy))
+          {stableSort(rowsData, getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               const isItemSelected = isSelected(row.name);
@@ -370,7 +357,7 @@ const ShowTableBody = ({
                   <MyTableCell component="th" id={labelId} scope="row" padding="none">
                     {row.name}
                   </MyTableCell>
-                  <MyTableCell align="left" style={{ fontSize: '15px', padding: '16px 0px', }}>{row.contact}</MyTableCell>
+                  <MyTableCell align="left" style={{ fontSize: '15px', padding: '16px 0px', }}>{row.phone}</MyTableCell>
                 </MyTableRow>
               );
             })}

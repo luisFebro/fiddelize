@@ -3,19 +3,27 @@ import './_BubbleTabs.scss';
 import parse from 'html-react-parser';
 import addDashesToString from '../../../utils/string/addDashesToString';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
+import { useStoreDispatch } from 'easy-peasy';
+import { setRun } from '../../../hooks/useRunComp';
 
 export default function BubbleTabs({
     firstLabel = "I am label 1",
     secondLabel = "I am label 2",
+    firstName,
+    secondName,
     FirstComp,
     SecondComp,
     ctaTitle,
+    ctaAction,
+    setWhichTab,
 }) {
 
     const firstLabelId = addDashesToString(firstLabel);
     const secondLabelId = addDashesToString(secondLabel);
     firstLabel = parse(firstLabel);
     secondLabel = parse(secondLabel);
+
+    const dispatch = useStoreDispatch();
 
     function openTab(evt, component) {
         // reference: https://www.w3schools.com/howto/howto_js_tabs.asp
@@ -40,7 +48,13 @@ export default function BubbleTabs({
             <li className="nav-item">
                 <a
                     className="nav-link font-site active"
-                    onClick={e => openTab(e, firstLabelId)}
+                    onClick={e => {
+                        if(typeof setWhichTab === "function") {
+                            setWhichTab(firstName);
+                            setRun(dispatch, firstName);
+                        }
+                        openTab(e, firstLabelId)
+                    }}
                 >
                     {firstLabel}
                 </a>
@@ -48,7 +62,13 @@ export default function BubbleTabs({
             <li className="nav-item">
                 <a
                     className="nav-link font-site"
-                    onClick={e => openTab(e, secondLabelId)}
+                    onClick={e => {
+                        if(typeof setWhichTab === "function") {
+                            setWhichTab(secondName);
+                            setRun(dispatch, secondName);
+                        }
+                        openTab(e, secondLabelId)
+                    }}
                 >
                     {secondLabel}
                 </a>
@@ -77,7 +97,7 @@ export default function BubbleTabs({
             <ButtonFab
                 size="large"
                 title={ctaTitle}
-                onClick={null}
+                onClick={ctaAction}
                 backgroundColor={"var(--themeSDark--default)"}
                 variant = 'extended'
                 position = 'relative'

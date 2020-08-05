@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    readContacts
+    readContacts,
+    sendSMS,
 } = require("../controllers/sms");
 
 const { mwIsAuth } = require("../controllers/auth");
@@ -13,6 +14,7 @@ const {
 
 // @ routes api/sms/...
 router.get('/read/contacts', readContacts); // mwIsAuth
+router.post('/send', sendSMS); // mwIsAuth
 
 // router.param("userId", mwUserId);
 
