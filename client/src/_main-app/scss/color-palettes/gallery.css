@@ -66,6 +66,10 @@
     color: grey;
 }
 
+.text-light-grey {
+    color: var(--lightGrey);
+}
+
 .text-cyan {
     color: var(--mainCyan);
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../utils/form/use-state/handleChange';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
@@ -29,10 +29,15 @@ export default function MessageField({
     whichTab,
     contactList,
     showMessage,
+    suggestionMsg,
 }) {
     const [message, setMessage] = useState("");
     const [trigger, setTrigger] = useState(false);
     const styles = getStyles();
+
+    useEffect(() => {
+        if(suggestionMsg) setMessage(suggestionMsg);
+    }, [suggestionMsg])
 
     const { businessId: userId } = useAppSystem();
     useAPI({ method: 'post', url: sendSMS(userId), body: { contactList, message }, trigger })
@@ -80,9 +85,11 @@ export default function MessageField({
                 rows={5}
                 id="messageField"
                 name="message"
-                maxLength={170}
                 InputProps={{
                     style: styles.fieldFormValue,
+                }}
+                inputProps={{
+                    maxLength: 160
                 }}
                 value={message}
                 onChange={handleChange(setMessage)}
@@ -94,7 +101,7 @@ export default function MessageField({
                 <span
                     className="font-weight-bold"
                 >
-                    {message.length}/170 characteres
+                    {message.length}/160 characteres
                 </span>
             </div>
             {showCTABtn()}

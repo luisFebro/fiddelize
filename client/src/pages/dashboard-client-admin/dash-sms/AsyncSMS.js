@@ -20,12 +20,13 @@ export default function AsyncSMS() {
         showMessage: false,
         contactList: [],
         whichTab: "Lista de Clientes",
+        suggestionMsg: "",
     });
     const TitleSMS = <Title />
 
     const dispatch = useStoreDispatch();
 
-    const { showMessage, whichTab, contactList } = data;
+    const { showMessage, whichTab, contactList, suggestionMsg } = data;
 
     const handleWhichTab = currTab => {
         setData({ ...data, whichTab: currTab });
@@ -51,6 +52,11 @@ export default function AsyncSMS() {
         setData({ ...data, contactList: needClose ? [] : contactList, showMessage: needClose ? false : true });
     }
 
+    const handleSuggestionMsg = text => {
+        setData({ ...data, suggestionMsg: text })
+        handleFocus("messageField", 2000);
+    }
+
     return (
         <Fragment>
             <div className="async-sms-title">
@@ -67,10 +73,13 @@ export default function AsyncSMS() {
             />
             <MessageField
                 showMessage={showMessage}
+                suggestionMsg={suggestionMsg}
                 whichTab={whichTab}
                 contactList={contactList}
             />
-            <AsyncSMSSuggestions />
+            {showMessage && (
+                <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />
+            )}
             <hr className="lazer-purple" />
         </Fragment>
     );
