@@ -118,6 +118,16 @@ button {
   background-color: var(--lightPurple) !important; /* var(--lightPurple) */
 }
 
+::-moz-selection { /* Code for Firefox */
+  color: #fff;
+  background: var(--themeP);
+}
+
+::selection {
+  color: #fff;
+  background: var(--themeP);
+}
+
 /* COMMENTS
 n1:
 solution to fixed footer try next:;

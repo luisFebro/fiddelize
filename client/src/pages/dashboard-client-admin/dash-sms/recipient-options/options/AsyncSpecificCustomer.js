@@ -10,8 +10,17 @@ import { useRunComp } from '../../../../../hooks/useRunComp';
 const AsyncShowNewContactForm = Load({ loader: () => import('./comps/AsyncShowNewContactForm' /* webpackChunkName: "form-specific-client-sms-lazy" */)});
 
 export default function AsyncSpecificCustomer({ handleList, handleShowMessage }) {
+    const [data, setData] = useState({
+        selectedValue: "",
+    });
+
+    const { selectedValue } = data;
+    console.log("selectedValue", selectedValue);
+
+    let { name: adminName, _id: userId } = useProfile();
+    adminName = getFirstName(adminName);
+
     const [list, setList] = useState([]);
-    const [search, setSearch] = useState([]);
     const [newContactOpen, setNewContactOpen] = useState(false);
 
     const { runName } = useRunComp();
@@ -20,8 +29,6 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
         if(!list.length) handleShowMessage(false);
     }, [list, runName])
 
-    let { name: adminName } = useProfile();
-    adminName = getFirstName(adminName);
 
     const handleRemoveLast = () => {
         setList(data => {
@@ -38,19 +45,20 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
     }
 
     const showSearch = () => {
-        const autoCompleteUrl = `/api/finance/cash-ops/list/all?search=a&autocomplete=true`;
+        const autocompleteUrl = `/api/sms/read/contacts?userId=${userId}&autocomplete=true`;
 
         const handleNewContact = () => {
             setNewContactOpen(prev => !prev);
         }
+
         return(
             <section className="my-3">
                 <AutoCompleteSearch
-                    url={autoCompleteUrl}
-                    setSearch={setSearch}
-                    noOptionsText={`Nada encontrado, ${adminName}`}
-                    disableOpenOnFocus={true}
+                    autocompleteUrl={autocompleteUrl}
+                    setData={setData}
                     placeholder="Procure cliente"
+                    noOptionsText={`Nenhum cliente encontrado, ${adminName}`}
+                    disableOpenOnFocus={true}
                 />
                 <div className={`d-flex justify-content-end ${!newContactOpen ? "mt-2" : "mt-5"}`}>
                     {!newContactOpen && (

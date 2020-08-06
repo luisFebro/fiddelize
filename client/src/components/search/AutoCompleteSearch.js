@@ -1,6 +1,5 @@
 // reference: https://material-ui.com/components/autocomplete/
-import React, { useState, useEffect } from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect, Fragment } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -8,22 +7,15 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { getHeaderJson } from '../../utils/server/getHeaders';
 import parse from 'html-react-parser';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getVar, setVar } from '../../hooks/storage/useVar';
+import isKeyPressed from '../../utils/event/isKeyPressed';
 
-// IMPROVEMENTS:
 // 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
-// 2. User history results
-// 3. Implement vanilla DEBOUNCE (rebater) solution to avoid the XHR request to be fetched too often>
 AutoCompleteSearch.propTypes = {
     data: PropTypes.arrayOf(PropTypes.string),
-}
-
-function sleep(delay = 0) {
-    return new Promise(resolve => {
-        setTimeout(resolve, delay);
-    });
 }
 
 const getStyles = ({
@@ -47,79 +39,158 @@ const getStyles = ({
     }
 });
 
+function highlightSearchResult(string, search) {
+    const reg = new RegExp(search, 'gi');
+    let newString = string.replace(reg, `<span class="theme-back--default d-inline-block font-site text-white">${search}</span>`);
+    newString = parse(newString.toLowerCase());
+    return newString;
+}
+
+function handlePickedValuesHistory(pickedValue) {
+    const targetKey = "valuesHistory_specificCustomerSMS";
+    getVar(targetKey)
+    .then(data => {
+        if(data) {
+            const dataArray = [pickedValue, ...data].filter(Boolean);
+            const newValue = [...new Set(dataArray)]; // to avoid the array to turn into <object data="" type=""></object>
+
+            if(data.length >= 4) {
+                data.pop();
+                setVar({ [targetKey]: newValue });
+            } else {
+                setVar({ [targetKey]: newValue });
+            }
+        } else {
+            setVar({ [targetKey]: [pickedValue] });
+        }
+
+    })
+}
 
 export default function AutoCompleteSearch({
-    url,
-    autoCompleteUrlStr,
-    setSearch,
+    autocompleteUrl,
+    setData,
     noOptionsText = "",
+    timeout = 5000,
     fieldBack = "#fff" ,
     themeColor = "var(--themeP)",
     txtFont = "1.4em",
-    clearOnEscape = false,
+    clearOnEscape = true,
+    clearOnBlur = true,
+    selectOnFocus = true,
+    autoSelect = true,
+    openOnFocus = true,
     freeSolo = false,
-    disableOpenOnFocus = false,
     placeholder = "Procure alguma coisa...",
     formWidth = "100%",
     needArrowEndAdornment = false,
+    autoHighlight = true,
 }) {
-
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
-    const [autoCompleteUrl, setAutoCompleteUrl] = useState(url);
-    const [userValue, setUserValue] = useState("");
-    const loading = open && options.length === 0;
+    const [newSearchUrl, setNewSearchUrl] = useState(autocompleteUrl);
+    const [searchChange, setSearchChange] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [needHistory, setNeedHistory] = useState(true);
 
     const styles = getStyles({ fieldBack, themeColor, txtFont });
 
-    const onValueChange = newQuery => {
-        setSearch(search => [...search, newQuery]);
+    const onSelectedValue = pickedValue => {
+        setData(data => ({ ...data, selectedValue: pickedValue }));
+        handlePickedValuesHistory(pickedValue);
     }
 
-    const onTextFieldChange = e => {
-        const changedValue = e.target.value;
-        setUserValue(changedValue);
-        onValueChange && onValueChange(changedValue);
-        setAutoCompleteUrl(autoCompleteUrlStr || `/api/finance/cash-ops/list/all?search=${changedValue}&autocomplete=true`)
+    const onSearchChange = e => {
+        const currValue = e.target.value;
+        setSearchChange(currValue);
+    }
+
+    const onKeyPress = e => {
+        if(isKeyPressed(e, "Enter")) {
+            if(options) {
+                const selectFirst = options[0];
+                onSelectedValue(selectFirst);
+            }
+        }
+    }
+
+    const getValuesHistory = () => {
+        getVar("valuesHistory_specificCustomerSMS")
+        .then(data => {
+            if(data) {
+                setNeedHistory(true);
+                setOptions(data);
+            } else {
+                setOptions([" "])
+            }
+        })
     }
 
     useEffect(() => {
+        if(searchChange) setNewSearchUrl(`${autocompleteUrl}&search=${searchChange}`);
+    }, [searchChange])
+
+    useEffect(() => {
         let active = true;
+        let cancel;
 
-        // if(!loading) {
-        //     return undefined;
-        // }
+        setNeedHistory(true);
 
-        (async () => {
-            const response = await axios.get(autoCompleteUrl, getHeaderJson);
-            await sleep(1e3); // For demo purposes.
+        const stopRequest = setTimeout(() => {
+            cancel();
+            setLoading(false);
+        }, timeout);
 
-            if(active && Array.isArray(response.data)) {
-                if(response.data.length === 0) {
-                    setOptions([" "])
-                } else {
-                    setOptions(response.data)
+        open && setLoading(true);
+
+        const config = {
+            url: newSearchUrl,
+            method: 'get',
+            // headers: chooseHeader({ token: token, needAuth }),
+            cancelToken: new axios.CancelToken(c => cancel = c)
+        }
+
+        async function doRequest() {
+            try {
+                const response = await axios(config);
+
+                clearTimeout(stopRequest);
+                setNeedHistory(false);
+
+                if(active && Array.isArray(response.data)) {
+                    if(response.data.length === 0) {
+                        getValuesHistory();
+                    } else {
+                        setOptions(response.data)
+                    }
+                }
+
+                setLoading(false);
+            } catch(e) {
+                if(axios.isCancel(e)) return
+                if(e.response) {
+                    console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
+
+                    const { status } = e.response;
+                    setLoading(false);
                 }
             }
-        })();
 
-        return () => {
-            active = false;
-        };
-    }, [loading, autoCompleteUrl]);
+        }
+
+        doRequest();
+
+        return () => { cancel(); clearTimeout(stopRequest); active = false; };
+    }, [newSearchUrl]);
 
     useEffect(() => {
         if(!open) {
             setOptions([]);
         }
-    }, [open, userValue]);
-
-    const highlightSearchResult = (string, search) => {
-        const reg = new RegExp(search, 'gi');
-        let newString = string.replace(reg, `<strong>${search}</strong>`);
-        newString = parse(newString.toLowerCase());
-        return newString;
-    }
+        if(needHistory || searchChange.length === 0) {
+            getValuesHistory();
+        }
+    }, [open, needHistory, searchChange]);
 
     return (
         <Autocomplete
@@ -132,7 +203,7 @@ export default function AutoCompleteSearch({
           onClose={() => {
             setOpen(false);
           }}
-          onChange={(event, value) => onValueChange(value)}
+          onChange={(event, value) => onSelectedValue(value)}
           getOptionSelected={(option, value) => option.toLowerCase() === value.toLowerCase()}
           getOptionLabel={option => option}
           options={options}
@@ -141,16 +212,23 @@ export default function AutoCompleteSearch({
           clearText="Limpar"
           closeText="Fechar"
           noOptionsText={noOptionsText}
-          autoHighlight
+          autoHighlight={autoHighlight}
           includeInputInList
-          disableOpenOnFocus={disableOpenOnFocus}
           freeSolo={freeSolo}
           clearOnEscape={clearOnEscape}
+          clearOnBlur={clearOnBlur}
+          selectOnFocus={selectOnFocus}
+          autoSelect= {autoSelect}
           autoComplete
+          openOnFocus={openOnFocus}
           renderOption={option => (
-              <div className="text-em-1-4">
-                <span><i style={{color: 'grey'}} className="fas fa-search"></i></span>{" "}
-                {userValue ? highlightSearchResult(option, userValue) : option}
+              <div className="text-em-1-4 font-site">
+                {needHistory ? (
+                    <FontAwesomeIcon icon="history" className="text-light-purple" />
+                ) : (
+                    <FontAwesomeIcon icon="search" className="text-light-purple" />
+                )}{" "}
+                {searchChange ? highlightSearchResult(option, searchChange) : option}
               </div>
           )}
           renderInput={params => (
@@ -159,28 +237,39 @@ export default function AutoCompleteSearch({
               style={styles.asyncAutoSearch}
               placeholder={placeholder}
               fullWidth
-              onChange={onTextFieldChange}
+              onChange={onSearchChange}
+              onKeyPress={e => onKeyPress(e)}
               variant="outlined"
               InputProps={{
                 ...params.InputProps,
+                type: 'search',
                 style: {
                     fontSize: '1em',
                     color: themeColor,
+                    paddingRight: '10px',
                 },
                 startAdornment: (
-                <InputAdornment position="start">
-                    <SearchIcon style={styles.icon} />
-                </InputAdornment>
-            ),
-            endAdornment: (
-                <React.Fragment>
-                    {loading ? <CircularProgress color={"inherit"} size={25} /> : null}
-                    {needArrowEndAdornment ? params.InputProps.endAdornment : null}
-                </React.Fragment>
-            ),
-          }}
+                    <InputAdornment position="start">
+                        <SearchIcon style={styles.icon} />
+                    </InputAdornment>
+                ),
+                endAdornment: (
+                    <Fragment>
+                        {loading ? <CircularProgress color={"inherit"} size={35} /> : null}
+                        {needArrowEndAdornment ? params.InputProps.endAdornment : null}
+                    </Fragment>
+                ),
+            }}
         />
       )}
     />
   );
 }
+
+/* ARCHIVES
+function sleep(delay = 0) {
+    return new Promise(resolve => {
+        setTimeout(resolve, delay);
+    });
+}
+*/

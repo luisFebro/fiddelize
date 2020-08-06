@@ -117,6 +117,7 @@ export default function useAPIList({
         setHasMore(hasCards && !firstCards);
         setReachedChunksLimit(skip >= chunksTotal);
         setOfflineBtn(false);
+        setLoading(false);
     }
 
     function handleError(status = 200) {

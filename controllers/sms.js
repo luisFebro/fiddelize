@@ -5,21 +5,42 @@ const convertPhoneStrToInt = require('../utils/number/convertPhoneStrToInt');
 
 // GET
 exports.readContacts = (req, res) => {
-    const { adminId } = req.query;
+    const {
+        userId,
+        limit = 4,
+        search = "",
+        autocomplete = false, // retuns as string.
+        autocompleteLimit = 7,
+    } = req.query;
 
-    if(!adminId) return res.status(400).json({msg: "Missing admin ID"})
+    if(!userId) return res.status(400).json({msg: "Missing admin ID"})
 
-    User.find({ "clientUserData.bizId": adminId })
+    let findThis = { "clientUserData.bizId": userId };
+    if(search && autocomplete) {
+        const regexSearch = { $regex: `${search}`, $options: 'i'};
+        findThis = { "clientUserData.bizId": userId, name: regexSearch };
+    }
+
+    User.find(findThis)
+    .limit(limit)
     .select("phone name")
     .exec((err, data) => {
         if (err) return res.status(500).json(msgG('error.systemError', err))
 
-        const finalRes = [];
+        let finalRes = [];
         data.forEach(user => {
-            if(user._id.toString() !== adminId) {
-                finalRes.push(`clientName:${user.name};phone:${user.phone};`)
+            if(user._id.toString() !== userId) {
+                if(autocomplete) {
+                    finalRes.push(user.name);
+                } else {
+                    finalRes.push(`clientName:${user.name};phone:${user.phone};`)
+                }
             }
         })
+
+        if(autocomplete) {
+            finalRes = finalRes.slice(0, autocompleteLimit);
+        }
 
         res.json(finalRes);
     });

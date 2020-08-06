@@ -8,9 +8,9 @@ import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import PropTypes from 'prop-types';
 import KeypadButton from '../../../../components/modals/keypad';
 import isMoneyBrValidAndAlert from '../../../../utils/numbers/isMoneyBrValidAndAlert';
-import AddOrSearch from '../../../../components/search/AddOrSearch';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from '../../../../hooks/useRoleData'
+// import AddOrSearch from '../../../../components/search/AddOrSearch';
 
 InsertValue.propTypes = {
     success: PropTypes.bool,
@@ -26,9 +26,9 @@ const useStyles = makeStyles(theme => ({
 const plan = "free";
 export default function InsertValue({ success, setValuePaid }) {
     const [valuePaid, setData] = useState("0,0");
-    const [searchData, setSearchData] = useState({
-        buyDesc: '',
-    })
+    // const [searchData, setSearchData] = useState({
+    //     buyDesc: '',
+    // })
 
     const { selfThemePColor, selfThemeSColor } = useClientAdmin();
 
@@ -66,6 +66,11 @@ export default function InsertValue({ success, setValuePaid }) {
         </div>
     );
 
+    const showSearch = () => (
+        <div className="mt-3 margin-auto-95 d-none">
+        </div>
+    );
+
     return (
         <div
             className='animated zoomIn fast mt-5 card-elevation'
@@ -78,13 +83,7 @@ export default function InsertValue({ success, setValuePaid }) {
                             <div className="ml-2 font-weight-bold mt-2">
                                 Informe Descrição:
                             </div>
-                            <div className="mt-3 margin-auto-95">
-                                <AddOrSearch
-                                    autoCompleteUrl= "CHANGE/api/finance/staff/list/names?role=cliente"
-                                    setSearchData= {setSearchData}
-                                    searchData= {searchData}
-                                />
-                            </div>
+                            {showSearch()}
                         </Fragment>
                     )}
                     <div className={`ml-2 font-weight-bold ${plan !== "free" ? "mt-5" : "mt-2"}`}>
@@ -101,3 +100,11 @@ export default function InsertValue({ success, setValuePaid }) {
         </div>
     );
 }
+
+/* ARCHIVES
+<AddOrSearch
+    autoCompleteUrl= "CHANGE/api/finance/staff/list/names?role=cliente"
+    setSearchData= {setSearchData}
+    searchData= {searchData}
+/>
+ */

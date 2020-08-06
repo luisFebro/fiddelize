@@ -49,6 +49,8 @@ import { faTrophy } from '@fortawesome/free-solid-svg-icons/faTrophy';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faHandHolding } from '@fortawesome/free-solid-svg-icons/faHandHolding';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons/faThumbsUp';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
+import { faHistory } from '@fortawesome/free-solid-svg-icons/faHistory';
 // app milestone icons
 import { faAppleAlt } from '@fortawesome/free-solid-svg-icons/faAppleAlt';
 import { faCar } from '@fortawesome/free-solid-svg-icons/faCar';
@@ -119,6 +121,8 @@ library.add(
   faUser,
   faHandHolding,
   faThumbsUp,
+  faSearch,
+  faHistory,
   // app milestone icons
   faAppleAlt,
   faCar,
