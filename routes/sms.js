@@ -13,7 +13,7 @@ const {
 } = require("../controllers/user");
 
 // @ routes api/sms/...
-router.get('/read/contacts', readContacts); // mwIsAuth
+router.get('/read/contacts', mwIsAuth, readContacts);
 router.post('/send/:userId', mwIsAuth, sendSMS);
 
 // router.param("userId", mwUserId);

@@ -19,6 +19,10 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     const isSendEverybodyMode = Boolean(totalSelected !== 0 && list.length === totalSelected);
 
     useEffect(() => {
+        if(list.length) setSelectedContacts(list.map(contact => contact.name))
+    }, [list])
+
+    useEffect(() => {
         const getList = () => {
             if(isSendEverybodyMode) {
                 return list;
@@ -55,6 +59,7 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     }
 
     const showMode = () => (
+        !loading &&
         <Fragment>
             {!list.length ? (
                 <p className="text-title mode text-center text-grey">
@@ -90,6 +95,7 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
         <section className="all-customers--root">
             {showMode()}
             <MuSelectTable
+                loading={loading}
                 callback={checkSelected}
                 rowsData={list}
                 emptySelection={emptySelection}

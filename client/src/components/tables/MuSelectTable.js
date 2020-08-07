@@ -2,7 +2,7 @@
 required to update material ui to the latest stable version: 4.11 in order to use TableContainer.import
 In case of failing or something unusual, the last working version was ^4.7.2
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -73,12 +73,13 @@ const useStyles = makeStyles((theme) => ({
 export default function MuSelectTable({
     rowsData = [],
     emptySelection = false,
+    loading,
     callback,
 }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
-    const [selected, setSelected] = React.useState(rowsData.map((n) => n.name));
+    const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [colorHighlighted, setColorHighlighted] = React.useState(true);
@@ -86,6 +87,10 @@ export default function MuSelectTable({
     useEffect(() => {
         if(emptySelection) setSelected([]);
     }, [emptySelection])
+
+    useEffect(() => {
+        if(!loading) setSelected(rowsData.map(contact => contact.name));
+    }, [loading])
 
     const getTableRowStyle = ({ colorHighlighted }) => ({
         root: { cursor: 'pointer', backgroundColor: colorHighlighted ? "rgb(124, 67, 189, 0.1) !important" : "#fff"}
@@ -132,43 +137,52 @@ export default function MuSelectTable({
             selected={selected}
             onSelectAllClick={handleSelectAllClick}
           />
-          <TableContainer>
-            <Table
-              className={classes.table}
-              aria-labelledby="tableTitle"
-              size={false ? 'small' : 'medium'}
-              aria-label="enhanced table"
-            >
-              <ShowTableHead
-                classes={classes}
-                order={order}
-                MyTableRow={MyTableRow}
-                selected={selected}
-                orderBy={orderBy}
-                onRequestSort={handleRequestSort}
-              />
-              <ShowTableBody {...tableBodyProps} />
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 50]}
-            nextIconButtonProps={{
-                style: { width: '30px' },
-            }}
-            classes={{
-                root: classes.paginationRoot,
-                caption: classes.paginationCaption,
-                input: classes.paginationCaption,
-            }}
-            component="div"
-            labelRowsPerPage=""
-            labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count !== -1 ? count : `mais do que ${to}`}`}
-            count={rowsData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={null}
-          />
+          {loading ? (
+             <p className="my-5 text-center text-purple font-weight-bold text-subtitle">
+                Carregando lista...
+            </p>
+          ) : (
+                <Fragment>
+                    <TableContainer>
+                      <Table
+                        className={classes.table}
+                        aria-labelledby="tableTitle"
+                        size={false ? 'small' : 'medium'}
+                        aria-label="enhanced table"
+                      >
+                        <ShowTableHead
+                          classes={classes}
+                          order={order}
+                          MyTableRow={MyTableRow}
+                          selected={selected}
+                          orderBy={orderBy}
+                          onRequestSort={handleRequestSort}
+                        />
+                        <ShowTableBody {...tableBodyProps} />
+                      </Table>
+                    </TableContainer>
+                    <TablePagination
+                      rowsPerPageOptions={[10, 50]}
+                      nextIconButtonProps={{
+                          style: { width: '30px' },
+                      }}
+                      classes={{
+                          root: classes.paginationRoot,
+                          caption: classes.paginationCaption,
+                          input: classes.paginationCaption,
+                      }}
+                      component="div"
+                      labelRowsPerPage=""
+                      labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count !== -1 ? count : `mais do que ${to}`}`}
+                      count={rowsData.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onChangePage={handleChangePage}
+                      onChangeRowsPerPage={null}
+                    />
+                </Fragment>
+          )}
+
         </Paper>
       </div>
     );
