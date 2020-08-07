@@ -6,6 +6,9 @@ import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
 import { Load } from '../../../../../components/code-splitting/LoadableComp';
 import ShowSelectionArea from './comps/ShowSelectionArea';
 import { useRunComp } from '../../../../../hooks/useRunComp';
+import useAPI, { readContacts } from '../../../../../hooks/api/useAPI';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 
 const AsyncShowNewContactForm = Load({ loader: () => import('./comps/AsyncShowNewContactForm' /* webpackChunkName: "form-specific-client-sms-lazy" */)});
 
@@ -15,10 +18,23 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
     });
 
     const { selectedValue } = data;
-    console.log("selectedValue", selectedValue);
+
+    const dispatch = useStoreDispatch();
 
     let { name: adminName, _id: userId } = useProfile();
     adminName = getFirstName(adminName);
+
+    const params = { contactFrom: selectedValue }
+    const trigger = selectedValue;
+    const { data: newAddedContact } = useAPI({ url: readContacts(userId), params, trigger, needAuth: true })
+
+    useEffect(() => {
+        if(newAddedContact) {
+            const { name, phone } = newAddedContact[0];
+            handleAddContact({ name, phone });
+        }
+    }, [newAddedContact])
+
 
     const [list, setList] = useState([]);
     const [newContactOpen, setNewContactOpen] = useState(false);
@@ -39,6 +55,11 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
 
     const handleAddContact = ({ name, phone }) => {
         setList(data => {
+            const namesAddedList = data.map(contact => contact.name.toLowerCase());
+            if(namesAddedList.indexOf(name.toLowerCase()) !== -1) {
+                showSnackbar(dispatch, "Nome de contato já adicionado.", "error");
+                return [...data];
+            }
             data.unshift({ name, phone })
             return [...data];
         })

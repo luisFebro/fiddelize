@@ -14,7 +14,7 @@ const {
 
 // @ routes api/sms/...
 router.get('/read/contacts', readContacts); // mwIsAuth
-router.post('/send', sendSMS); // mwIsAuth
+router.post('/send/:userId', mwIsAuth, sendSMS);
 
 // router.param("userId", mwUserId);
 

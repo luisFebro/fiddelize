@@ -1,27 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import MuSelectTable from '../../../../../components/tables/MuSelectTable';
 import { useRunComp } from '../../../../../hooks/useRunComp';
+import useAPI, { readContacts } from '../../../../../hooks/api/useAPI';
+import { useProfile } from '../../../../../hooks/useRoleData';
 
-const customerData = [
-  { name: "Ana Beatriz", phone: "(92) 99281-7355" },
-  { name: "Beatriz Lima", phone: "(92) 99281-7353" },
-  { name: "Carlos Eduardo", phone: "(92) 98281-7353" },
-  { name: "Denis Lima", phone: "(92) 98281-7353" },
-  { name: "Eduardo Augusto", phone: "(92) 98281-7354" },
-  { name: "Fernando Luis", phone: "(92) 98281-7359" },
-  { name: "Gustavo Oliveira", phone: "(92) 98281-7310" },
-  { name: "Helen Rocha", phone: "(92) 95281-7310" },
-  { name: "Igo Lins", phone: "(92) 95211-7310" },
-  { name: "Jéssica Alburquerque", phone: "(92) 95211-7314" },
-  { name: "Kelly Noronha", phone: "(92) 95219-7314" },
-  { name: "Leonardo Oliveira", phone: "(92) 95219-7318" },
-  { name: "Maria de Jesus", phone: "(92) 95219-7319" },
-];
 export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
-    const [list, setList] = useState([...customerData]); // it will be useAPI instead.
     const [selectedContacts, setSelectedContacts] = useState([]);
     const [emptySelection, setEmptySelection] = useState(false);
     const [init, setInit] = useState(true);
+
+    const { _id: userId } = useProfile();
+    let { data: list, loading } = useAPI({ url: readContacts(userId), needAuth: true })
+    if(!list) list = [];
 
     const { runName } = useRunComp();
 
@@ -64,22 +54,41 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
         setSelectedContacts(newSelection);
     }
 
+    const showMode = () => (
+        <Fragment>
+            {!list.length ? (
+                <p className="text-title mode text-center text-grey">
+                    SEM CLIENTES
+                    <span
+                        className="d-block text-normal text-grey text-center"
+                    >
+                        Cadastre clientes!
+                        <br />
+                        Todos aparecerão aqui.
+                    </span>
+                </p>
+            ) : (
+                <p className="text-title mode text-center text-purple">
+                    MODO:
+                    <br />
+                    <br />
+                    {isSendEverybodyMode ? (
+                        <span>Todos da Lista</span>
+                    ) : (
+                        <span>Somente Marcados</span>
+                    )}
+                    <br />
+                    <span className="text-subtitle text-purple text-center">
+                      (Total: {totalSelected} clientes)
+                    </span>
+                </p>
+            )}
+        </Fragment>
+    );
+
     return (
         <section className="all-customers--root">
-            <p className="text-title mode text-center text-purple">
-                MODO:
-                <br />
-                <br />
-                {isSendEverybodyMode ? (
-                    <span>Todos da Lista</span>
-                ) : (
-                    <span>Somente Marcados</span>
-                )}
-                <br />
-                <span className="text-subtitle text-purple text-center">
-                  (Total: {totalSelected} clientes)
-                </span>
-            </p>
+            {showMode()}
             <MuSelectTable
                 callback={checkSelected}
                 rowsData={list}

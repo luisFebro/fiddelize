@@ -24,8 +24,8 @@ export default function ShowSelectionArea({ list = [], handleRemoveLast }) {
 
     const showField = () => (
         <section style={styles.field}>
-            {list.map(user => (
-                <section key={user.name} >
+            {list.map((user, ind) => (
+                <section key={user.ind} >
                     <ContactPill
                         name={user.name}
                         phone={user.phone}

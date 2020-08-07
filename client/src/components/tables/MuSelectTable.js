@@ -127,6 +127,7 @@ export default function MuSelectTable({
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <ShowTableMainTitle
+            rowsData={rowsData}
             numSelected={selected.length}
             selected={selected}
             onSelectAllClick={handleSelectAllClick}
@@ -187,10 +188,11 @@ const useMainTitle = makeStyles((theme) => ({
     },
 }));
 
-const ShowTableMainTitle = ({ listName= "", numSelected, selected, onSelectAllClick }) => {
+const ShowTableMainTitle = ({ rowsData, listName= "", numSelected, selected, onSelectAllClick }) => {
   const classes = useMainTitle();
 
   const showToggleCheckBtn = () => (
+    Boolean(rowsData && rowsData.length) &&
     <section className="my-3" >
         <ButtonFab
             size="medium"

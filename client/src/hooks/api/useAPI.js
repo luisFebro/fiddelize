@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import { useStoreDispatch } from 'easy-peasy';
 import { setRun } from '../../hooks/useRunComp';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
-// import { getHeaderToken } from '../../utils/server/getHeaders';
 import isObjEmpty from '../../utils/objects/isObjEmpty';
 import { ShowLoadingComp } from './Comps';
+import { chooseHeader } from '../../utils/server/getHeaders';
+import { useToken } from '../../hooks/useRoleData';
 
 export * from './requestsLib.js';
 export * from './trigger.js';
@@ -29,10 +30,11 @@ export default function useAPI({
     url,
     params = null,
     body = null,
-    timeout = 15000,
+    timeout = 10000,
     trigger = true,
     runName = null,
     snackbar = {},
+    needAuth = false,
 }) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -48,6 +50,8 @@ export default function useAPI({
 
     const dispatch = useStoreDispatch();
     const needSnack = !isObjEmpty(snackbar);
+
+    const token = useToken();
 
     const getSnack = (msg, opts = {}) => {
         const { type = "warning", status = "success" } = opts;
@@ -102,6 +106,7 @@ export default function useAPI({
             method,
             data: body,
             params,
+            headers: chooseHeader({ token: token, needAuth }),
             cancelToken: new axios.CancelToken(c => cancel = c) // n1
         }
 

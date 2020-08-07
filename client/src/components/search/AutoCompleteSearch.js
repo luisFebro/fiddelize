@@ -78,7 +78,7 @@ export default function AutoCompleteSearch({
     clearOnEscape = true,
     clearOnBlur = true,
     selectOnFocus = true,
-    autoSelect = true,
+    autoSelect = false,
     openOnFocus = true,
     freeSolo = false,
     placeholder = "Procure alguma coisa...",

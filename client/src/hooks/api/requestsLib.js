@@ -17,4 +17,5 @@ export const removeTaskAndExpireCliPrize = () => `/api/task/remove-and-expire`
 export const readNotifications = (userId) => `/api/notification/read/${userId}`; // GET
 
 // SMS
+export const readContacts = (userId) => `/api/sms/read/contacts?userId=${userId}`;
 export const sendSMS = (userId) => `/api/sms/send/${userId}`; // POST

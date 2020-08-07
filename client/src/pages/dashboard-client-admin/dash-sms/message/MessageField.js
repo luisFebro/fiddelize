@@ -10,7 +10,6 @@ import { useStoreDispatch } from 'easy-peasy';
 
 const getStyles = () => ({
     form: {
-        width: '100%',
         background: 'var(--themePLight)',
         borderRadius: '10px',
         padding: '25px 5px',
@@ -40,7 +39,12 @@ export default function MessageField({
     }, [suggestionMsg])
 
     const { businessId: userId } = useAppSystem();
-    useAPI({ method: 'post', url: sendSMS(userId), body: { contactList, message }, trigger })
+    useAPI({
+        method: 'post',
+        url: sendSMS(userId),
+        body: { contactList, msg: message },
+        needAuth: true,
+        trigger })
 
     const dispatch = useStoreDispatch();
     const handleTrigger = () => {
