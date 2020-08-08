@@ -124,6 +124,13 @@ const tasksListData = { // or to do list
 }
 const TasksListSchema = new Schema(tasksListData, { _id: true });
 
+const smsHistorySchema = {
+    smsId: String,
+    contactList: Date,
+    createdAt: { type: Date, default: Date.now },
+}
+const SmsHistorySchema = new Schema(smsHistorySchema, { _id: false });
+
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error
     bizCodeName: String,
@@ -169,6 +176,9 @@ const clientAdminData = {
     onceChecked: OnceCheckedSchema, // NOT IMPLEMENTED YET
     notifications: [NotificationsSchema],
     tasks: [TasksListSchema],
+
+    smsBalance: Number,
+    smsHistory: [SmsHistorySchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {

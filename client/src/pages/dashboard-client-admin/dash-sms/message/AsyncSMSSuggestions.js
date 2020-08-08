@@ -18,6 +18,10 @@ const data = ({ bizName }) => [
         msg: `Baixe o app da ${bizName.toUpperCase()} e ganhe prêmios nas suas compras. Acesse https://fiddelize.com.br/app/ycds123`,
     },
     {
+        title: "Colaboradores",
+        msg: `REUNIÃO ${bizName.toUpperCase()} - Aviso para toda equipe de vendas que teremos uma reunião amanhã às 15:00 na sala de apresentação.`,
+    },
+    {
         title: "Negócio não abre",
         msg: `${bizName.toUpperCase()} informa aos nossos clientes que Sábado não abriremos devido a (motivo). Agradecemos sua compreensão!`,
     },

@@ -60,12 +60,13 @@ export default function AsyncShowNewContactForm({ handleAddContact }) {
     const [data, setData] = useState({
         name: '',
         phone: '',
+        countryCode: 55,
     });
     const [error, setError] = useState(null);
 
     const dispatch = useStoreDispatch();
 
-    const { name, phone } = data;
+    const { name, phone, countryCode } = data;
 
     const styles = getStyles();
 
@@ -74,7 +75,7 @@ export default function AsyncShowNewContactForm({ handleAddContact }) {
         if(!phone) { showSnackbar(dispatch, "Insira um telefone", "error"); setError("phone"); return; }
         if(!validatePhone(phone)) { showSnackbar(dispatch, "Formato telefone inválido. exemplo: 95977779999", "error"); setError("phone"); return; }
         clearForm(setData);
-        handleAddContact({ name, phone })
+        handleAddContact({ name, phone, countryCode })
     }
 
     const showForm = () => (
