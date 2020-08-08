@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const collectionName = "all-clients";
 const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
-
+const { SmsHistorySchema } = require("./schemes");
 // GENERAL SCHEMAS
 const enumTypes = [
     // pattern: (role_desc);
@@ -123,13 +123,6 @@ const tasksListData = { // or to do list
     createdAt: { type: Date, default: Date.now },
 }
 const TasksListSchema = new Schema(tasksListData, { _id: true });
-
-const smsHistorySchema = {
-    smsId: String,
-    contactList: Date,
-    createdAt: { type: Date, default: Date.now },
-}
-const SmsHistorySchema = new Schema(smsHistorySchema, { _id: false });
 
 const clientAdminData = {
     bizName: String, // required: true,comment out cuz every sign up will request and throw error

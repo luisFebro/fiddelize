@@ -25,7 +25,7 @@ const SpinnerInner = styled.div`
 Spinner.propTypes = {
     expireSec: PropTypes.number,
     size: PropTypes.oneOf(['mini', 'small', 'large']),
-    logo: PropTypes.oneOf(['white', 'purple']),
+    logo: PropTypes.oneOf(['white', 'purple', '']),
 }
 
 export default function Spinner({

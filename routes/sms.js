@@ -4,6 +4,8 @@ const router = express.Router();
 const {
     readContacts,
     sendSMS,
+    getMainCardInfos,
+    getTotalTransitions,
     readSMSHistory,
 } = require("../controllers/sms");
 
@@ -17,6 +19,8 @@ const {
 router.get('/read/contacts', readContacts); // mwIsAuth,
 router.post('/send/:userId', mwIsAuth, sendSMS);
 router.get('/read-sms-history', readSMSHistory); // mwIsAuth
+router.get('/read-sms-main', getMainCardInfos); // mwIsAuth
+router.get('/read-total-transitions', getTotalTransitions); // mwIsAuth
 
 // router.param("userId", mwUserId);
 

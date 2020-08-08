@@ -88,7 +88,21 @@ exports.sendSMS = (req, res) => {
 
 }
 
+exports.getTotalTransitions = (req, res) => {
+    // Sent SMS Total
+    // Transition Total (each card)
+}
+
+exports.getMainCardInfos = (req, res) => {
+    // Total amount of each tansition SMS
+    // get the two first name of the list, if only one, ignore the second
+    // Sent msg
+}
+
 exports.readSMSHistory = (req, res) => { // n2
+    // This is all about extract of each contact transition in the table
+    // This will be read only after user click plus btn to see more in each card.
+    // both DB and provider API to get carrier and msg status....
     /*
     /multiple?get?key=SUA_CHAVE_KEY&action=status&id=123456789"
      */

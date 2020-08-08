@@ -11,6 +11,7 @@ import { handleFocus } from '../../../utils/form/handleFocus';
 import CreditsBalance from './credits-balance/CreditsBalance';
 import RecipientOptions from './recipient-options/RecipientOptions';
 import MessageField from './message/MessageField';
+import SmsHistory from './history/SmsHistory';
 
 const AsyncSMSSuggestions = Load({ loader: () => import('./message/AsyncSMSSuggestions' /* webpackChunkName: "sms-suggestions-comp-lazy" */)});
 // End Components
@@ -81,6 +82,7 @@ export default function AsyncSMS() {
                 <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />
             )}
             <hr className="lazer-purple" />
+            <SmsHistory />
         </Fragment>
     );
 }

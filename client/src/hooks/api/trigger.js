@@ -6,6 +6,8 @@ const getUniqueId = () => uuidv1();
 function getTrigger(runNameWithId, targetName) {
     if(!runNameWithId || !targetName) return false;
 
+    if(typeof runNameWithId !== "string") return;
+
     return runNameWithId.includes(targetName)
     ? runNameWithId : false;
 }
