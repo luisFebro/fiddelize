@@ -5,7 +5,8 @@ export default function useDelay(miliseconds) {
     const [ready, setStatus] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => setStatus(true), miliseconds);
+        const start = setTimeout(() => setStatus(true), miliseconds);
+        return () => { clearTimeout(start) }
     }, [])
 
     return ready;

@@ -76,6 +76,9 @@ export default function MuSelectTable({
     emptySelection = false,
     loading,
     callback,
+    enumeration = "checkbox",
+    needMainTitle = true,
+    needHighlightColor = true,
 }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
@@ -93,8 +96,19 @@ export default function MuSelectTable({
         if(!loading) setSelected(rowsData.map(contact => contact.name));
     }, [loading])
 
+    const handleColor = () => {
+        if(!needHighlightColor) return "#fff !important";
+        return colorHighlighted ? "rgb(124, 67, 189, 0.1) !important" : "#fff !important";
+    }
+
     const getTableRowStyle = ({ colorHighlighted }) => ({
-        root: { cursor: 'pointer', backgroundColor: colorHighlighted ? "rgb(124, 67, 189, 0.1) !important" : "#fff"}
+        root: {
+            cursor: 'pointer',
+            backgroundColor: handleColor(),
+            '&:nth-of-type(odd)': {
+                backgroundColor: !needHighlightColor ? "rgb(124, 67, 189, 0.1) !important" :  "",
+            }
+        }
     })
     const MyTableRow = withStyles(getTableRowStyle({ colorHighlighted }))(TableRow);
 
@@ -128,11 +142,12 @@ export default function MuSelectTable({
       setPage(newPage);
     };
 
-    const tableBodyProps = { handleColorSelection, MyTableRow, rowsData, order, orderBy, classes, page, rowsPerPage, setSelected, selected };
+    const tableBodyProps = { enumeration, headCells, handleColorSelection, MyTableRow, rowsData, order, orderBy, classes, page, rowsPerPage, setSelected, selected };
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <ShowTableMainTitle
+            needMainTitle={needMainTitle}
             rowsData={rowsData}
             numSelected={selected.length}
             selected={selected}
@@ -204,7 +219,7 @@ const useMainTitle = makeStyles((theme) => ({
     },
 }));
 
-const ShowTableMainTitle = ({ rowsData, listName= "", numSelected, selected, onSelectAllClick }) => {
+const ShowTableMainTitle = ({ needMainTitle, rowsData, listName= "", numSelected, selected, onSelectAllClick }) => {
   const classes = useMainTitle();
 
   const showToggleCheckBtn = () => (
@@ -224,6 +239,7 @@ const ShowTableMainTitle = ({ rowsData, listName= "", numSelected, selected, onS
   );
 
   return (
+    needMainTitle &&
     <Toolbar
       className={classes.root}
     >
@@ -311,7 +327,7 @@ function ShowTableHead(props) {
 }
 
 const ShowTableBody = ({
-    MyTableRow, rowsData, order, orderBy, handleColorSelection, classes, page, rowsPerPage, setSelected, selected,
+    enumeration, headCells, MyTableRow, rowsData, order, orderBy, handleColorSelection, classes, page, rowsPerPage, setSelected, selected,
 }) => {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -335,6 +351,21 @@ const ShowTableBody = ({
       setSelected(newSelected);
     };
 
+    const MapRows = (rowData) => headCells.map((head, ind) => {
+        return(
+            <Fragment key={ind}>
+                <MyTableCell
+                      id={ind}
+                      padding="none"
+                      align="left"
+                      style={{ fontSize: '15px', padding: '16px 0px', }}
+                  >
+                    {head.id === "status" ? getStatusColor(rowData[head.id]) : rowData[head.id]}
+                </MyTableCell>
+            </Fragment>
+        );
+    })
+
     return(
         <TableBody>
           {stableSort(rowsData, getComparator(order, orderBy))
@@ -355,23 +386,22 @@ const ShowTableBody = ({
                   key={row.name}
                   selected={isItemSelected}
                 >
-                  <MyTableCell padding="checkbox">
-                    <Checkbox
-                      classes={{
-                          root: classes.colorCheckBox
-                      }}
-                      checked={isItemSelected}
-                      inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                  </MyTableCell>
-                  {rowsData.forEach(thisRow => (
-                      <MyTableCell
-                            id={labelId}
-                            padding="none"
-                        >
-                            {thisRow.id}
-                      </MyTableCell>
-                  ))}
+                  {enumeration === "checkbox" ? (
+                    <MyTableCell padding="checkbox">
+                      <Checkbox
+                        classes={{
+                            root: classes.colorCheckBox
+                        }}
+                        checked={isItemSelected}
+                        inputProps={{ 'aria-labelledby': labelId }}
+                      />
+                    </MyTableCell>
+                  ) : (
+                    <MyTableCell>
+                        {index + 1}
+                    </MyTableCell>
+                  )}
+                  {MapRows(row)}
                 </MyTableRow>
               );
             })}
@@ -380,6 +410,31 @@ const ShowTableBody = ({
 };
 
 // HELPERS
+
+function getStatusColor(status) {
+    const getPill = (status, color) => (
+        <p
+            style={{ background: color, padding: '3px', color: '#fff', borderRadius: '30%'}}
+            className="m-0 text-shadow d-inline-block"
+        >
+            {status}
+        </p>
+    );
+
+    switch(status) {
+        case "recebido":
+            return getPill(status, 'var(--mainGreen)');
+        case "agendado":
+            return getPill(status, 'grey');
+        case "enviando":
+            return getPill(status, 'var(--niceUiYellow)');
+        case "falhou":
+            return getPill(status, 'var(--expenseRed)');
+        default:
+            return getPill(status, 'grey');
+    }
+}
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;

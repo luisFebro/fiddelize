@@ -8,6 +8,7 @@ import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons/faAngleDou
 import { faBolt } from '@fortawesome/free-solid-svg-icons/faBolt'; // generate something
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons/faAngleRight';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faChartPie } from '@fortawesome/free-solid-svg-icons/faChartPie';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'; // Confirmation btn
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle'; // for success
@@ -83,6 +84,7 @@ library.add(
   faAngleDoubleRight,
   faAngleRight,
   faArrowLeft,
+  faArrowRight,
   faChartPie,
   faCheck,
   faCheckCircle,

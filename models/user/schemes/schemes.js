@@ -6,7 +6,7 @@ const contactListData = {
     name: String,
     contact: String, //"(92) 99281-7363",
     carrier: String, // operadora: oi, claro, tim, vivo, nextel
-    status: { type: String, default: "sending",  enum: ["received", "sending", "scheduled", "failed"]}
+    status: { type: String, default: "enviando",  enum: ["recebido", "enviando", "agendado", "falhou"]}
 }
 const ContactListSchema = new Schema(contactListData, { _id: false });
 
