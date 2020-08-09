@@ -94,6 +94,7 @@ exports.getTotalTransitions = (req, res) => {
 }
 
 exports.getMainCardInfos = (req, res) => {
+    // .select("-contactList")
     // Total amount of each tansition SMS
     // get the two first name of the list, if only one, ignore the second
     // Sent msg

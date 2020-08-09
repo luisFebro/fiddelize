@@ -12,7 +12,9 @@ const ContactListSchema = new Schema(contactListData, { _id: false });
 
 const smsHistoryData = {
     cardType: { type: String, default: "out",  enum: ["out", "in"]},
-    msgSent: String,
+    sentMsgDesc: String, // description of the msg sent in this batch
+    totalSMS: Number, // length of contact list
+    firstContacts: Array, // the first 3 names from easy identification.
     contactList: [ContactListSchema], // add smsId to each contactList to get carrier and sms status
     createdAt: { type: Date, default: Date.now },
 }

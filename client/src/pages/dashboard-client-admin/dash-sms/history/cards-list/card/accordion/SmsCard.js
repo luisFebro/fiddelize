@@ -4,7 +4,6 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 // Customized Data
@@ -43,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 const getStyles = ({ color, backgroundColor }) => ({
     accordion: {
         color: color,
-        backgroundColor: backgroundColor, // default is paper color
+        backgroundColor: backgroundColor,
         margin: '25px 0 0',
     },
     totalPrizesBadge: {
@@ -81,12 +80,11 @@ export default function SmsCard({
                     <div
                         className="enabledLink"
                     >
-                        {needToggleButton
-                        ? (
+                        {(needToggleButton && panel.data.cardType === "out") && (
                             <ToggleBtn
                                 cardId={panel._id}
                             />
-                        ) : <ExpandMoreIcon />}
+                        )}
                     </div>
                 }
                 aria-controls={`panel${panel._id}bh-content`}
@@ -123,7 +121,9 @@ export default function SmsCard({
     );
 
     return (
-        <div className={classes.root}>
+        <div
+            className={classes.root}
+        >
             {actions.map(panel => (
                 <div
                     key={panel._id}
@@ -132,7 +132,7 @@ export default function SmsCard({
                     <Accordion
                         TransitionProps={{ unmountOnExit: true }}
                         className="disabledLink"
-                        style={styles.accordion}
+                        style={{ ...styles.accordion, backgroundColor: panel.data.cardType === "out" ? "var(--themePLight)" : "#00b894" }} // data mint green
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}

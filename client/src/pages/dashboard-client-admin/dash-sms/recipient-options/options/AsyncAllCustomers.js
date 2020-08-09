@@ -4,6 +4,11 @@ import { useRunComp } from '../../../../../hooks/useRunComp';
 import useAPI, { readContacts } from '../../../../../hooks/api/useAPI';
 import { useProfile } from '../../../../../hooks/useRoleData';
 
+const headCells = [
+    { id: 'name', numeric: false, disablePadding: false, label: 'Nome Cliente' },
+    { id: 'phone', numeric: false, disablePadding: false, label: 'Contato' },
+]
+
 export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     const [selectedContacts, setSelectedContacts] = useState([]);
     const [emptySelection, setEmptySelection] = useState(false);
@@ -95,9 +100,10 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
         <section className="all-customers--root">
             {showMode()}
             <MuSelectTable
+                headCells={headCells}
+                rowsData={list}
                 loading={loading}
                 callback={checkSelected}
-                rowsData={list}
                 emptySelection={emptySelection}
             />
         </section>

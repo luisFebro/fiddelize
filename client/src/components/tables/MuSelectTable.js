@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MuSelectTable({
+    headCells = [],
     rowsData = [],
     emptySelection = false,
     loading,
@@ -157,6 +158,7 @@ export default function MuSelectTable({
                           selected={selected}
                           orderBy={orderBy}
                           onRequestSort={handleRequestSort}
+                          headCells={headCells}
                         />
                         <ShowTableBody {...tableBodyProps} />
                       </Table>
@@ -253,16 +255,18 @@ ShowTableHead.propTypes = {
 };
 
 function ShowTableHead(props) {
-  const { MyTableRow, classes, order, orderBy, onRequestSort } = props;
+  const {
+    MyTableRow,
+    classes,
+    order,
+    orderBy,
+    onRequestSort,
+    headCells,
+  } = props;
 
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
-  const headCells = [
-    { id: 'name', numeric: false, disablePadding: false, label: 'Nome Cliente' },
-    { id: 'phone', numeric: false, disablePadding: false, label: 'Contato' },
-  ];
 
   return (
     <TableHead>
@@ -311,16 +315,6 @@ const ShowTableBody = ({
 }) => {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
-    /*
-     Do not need too many spaces when have a few data
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowsData.length - page * rowsPerPage);
-    <MyTableRow style={{ height: (false ? 33 : 53) * emptyRows }}>
-    {emptyRows > 0 && (
-      <MyTableRow>
-        <MyTableCell colSpan={6} />
-      </MyTableRow>
-    )}
-     */
     const handleClick = (event, name) => {
       const selectedIndex = selected.indexOf(name);
       let newSelected = [];
@@ -370,10 +364,14 @@ const ShowTableBody = ({
                       inputProps={{ 'aria-labelledby': labelId }}
                     />
                   </MyTableCell>
-                  <MyTableCell component="th" id={labelId} scope="row" padding="none">
-                    {row.name}
-                  </MyTableCell>
-                  <MyTableCell align="left" style={{ fontSize: '15px', padding: '16px 0px', }}>{row.phone}</MyTableCell>
+                  {rowsData.forEach(thisRow => (
+                      <MyTableCell
+                            id={labelId}
+                            padding="none"
+                        >
+                            {thisRow.id}
+                      </MyTableCell>
+                  ))}
                 </MyTableRow>
               );
             })}
