@@ -17,7 +17,9 @@ const getStyles = () => ({
     }
 });
 
-export default function ShowSelectionArea({ list = [], handleRemoveLast }) {
+export default function ShowSelectionArea({
+    list = [], handleRemoveLast, handleClearAll,
+}) {
     const styles = getStyles();
 
     const plural = list && list.length === 1 ? "" : "s";
@@ -25,7 +27,7 @@ export default function ShowSelectionArea({ list = [], handleRemoveLast }) {
     const showField = () => (
         <section style={styles.field}>
             {list.map((user, ind) => (
-                <section key={user.ind} >
+                <section key={ind} >
                     <ContactPill
                         name={user.name}
                         phone={user.phone}
@@ -47,12 +49,24 @@ export default function ShowSelectionArea({ list = [], handleRemoveLast }) {
                 Para ver número, clique no nome.
             </p>
             <div className="d-flex justify-content-end mt-1">
-                <RadiusBtn
-                    title="remover último"
-                    backgroundColor="var(--mainDark)"
-                    position="relative"
-                    onClick={handleRemoveLast}
-                />
+                <div className="mr-3">
+                    <RadiusBtn
+                        title="remover último"
+                        backgroundColor="var(--mainDark)"
+                        position="relative"
+                        onClick={handleRemoveLast}
+                    />
+                </div>
+                {list.length >= 3 && (
+                    <div className="animated zoomIn">
+                        <RadiusBtn
+                            title="limpar"
+                            backgroundColor="var(--mainDark)"
+                            position="relative"
+                            onClick={handleClearAll}
+                        />
+                    </div>
+                )}
             </div>
         </section>
     );

@@ -13,6 +13,7 @@ const initialState = {
     run: false,
     runName: '',
     runArray: [], // for history of executed elements...
+    runOneArray: [],
     // variables: {},
 };
 
@@ -31,13 +32,15 @@ export const globalReducer = {
                     currentItemFound: action.payload
                 };
             case 'RUN_SET': {
+                const payload = action.data.payload;
                 const newArr = state.runArray;
-                newArr.push(action.payload);
+                newArr.push(payload);
                 return {
                     ...state,
                     run: !state.run,
-                    runName: action.payload && action.payload.toString(),
+                    runName: payload && payload.toString(),
                     runArray: newArr,
+                    runOneArray: action.data.array, // for arrays which does not change
                 }
             }
             //Show

@@ -7,7 +7,7 @@ import Footer from '../../components/_layout/footer/Footer';
 // END LAYOUT
 
 // COMPONENTS
-import SnackbarMulti from '../../components/Snackbar';
+import SnackbarRedux from '../../components/Snackbar';
 import LinearProgress from '../../components/loadingIndicators/LinearProgress';
 import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
@@ -59,7 +59,7 @@ function Website({ location }) {
                 <Route component={Default} />
                 <Route path="/temporariamente-indisponivel-503" exact component={UnavailableService} />
             </Switch>
-            <SnackbarMulti />
+            <SnackbarRedux />
             {dontNeedLayout &&
             <Footer />}
         </Fragment>

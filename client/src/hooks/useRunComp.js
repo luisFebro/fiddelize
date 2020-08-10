@@ -2,23 +2,23 @@ import { setRun as runThisComp } from '../redux/actions/globalActions';
 import { useStoreState } from 'easy-peasy';
 // it is not possible to use "useDispatch" here because it will never be declared
 // in the header of a component which will break the rule of hooks.
-export const setRun = (dispatch, compName) => {
+export const setRun = (dispatch, compName, options) => {
     if(compName) {
-        runThisComp(dispatch, compName);
+        runThisComp(dispatch, compName, options);
     }
 }
 
 export const useRunComp = () => {
-    const { run, runName, runArray } = useStoreState(state => ({
+    const { run, runName, runOneArray } = useStoreState(state => ({
         run: state.globalReducer.cases.run,
         runName: state.globalReducer.cases.runName,
-        runArray: state.globalReducer.cases.runArray,
+        runOneArray: state.globalReducer.cases.runOneArray,
     }))
 
     return({
         run,
         runName,
-        runArray,
+        runOneArray,
     });
 }
 

@@ -24,7 +24,7 @@ const headCells = [
     { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
 ]
 
-export default function AsyncExtract({ extractId, handleWhichTab, handleList }) {
+export default function AsyncExtract({ extractId }) {
     const loading = false;
     let list = [
         { name: "Febro Feitoza", phone: "(92) 99281-7363", carrier: "oi", "status": "recebido"},
@@ -42,14 +42,11 @@ export default function AsyncExtract({ extractId, handleWhichTab, handleList }) 
 
     const handleResending = () => {
         const handleTabFunc = () => {
-            handleWhichTab("Contatos Selecionados");
-
             list.forEach(data => {
                 delete data.carrier;
                 delete data.status;
             })
-            handleList(list);
-            setRun(dispatch, list);
+            setRun(dispatch, "asyncExtractList", { array: list });
             showSnackbar(dispatch, "Pronto!")
         }
 
@@ -58,11 +55,12 @@ export default function AsyncExtract({ extractId, handleWhichTab, handleList }) 
         }
 
         const config = {
-            mode: "intoView",
+            mode: "center",
+            offset: 10,
             duration: 1000,
             onDone: () => postFunction(),
         }
-        showSnackbar(dispatch, "Um robo da Fiddelize está adicionando contatos. Um momento!", "warning", 7000)
+        showSnackbar(dispatch, "Adicionando contatos... Um momento!", "warning", 7000)
         scrollIntoView("#recipientOptions", config)
     }
 

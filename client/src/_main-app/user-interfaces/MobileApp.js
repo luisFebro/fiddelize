@@ -19,7 +19,7 @@ import UnavailableService from '../../pages/UnavailableService';
 //END PAGES
 
 // COMPONENTS
-import SnackbarMulti from '../../components/Snackbar';
+import SnackbarRedux from '../../components/Snackbar';
 import LinearProgress from '../../components/loadingIndicators/LinearProgress';
 import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
 import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
@@ -62,7 +62,7 @@ function Mobile({ location }) {
                 <Route path="/temporariamente-indisponivel-503" exact component={UnavailableService} />
                 <Route component={Default} />
             </Switch>
-            <SnackbarMulti />
+            <SnackbarRedux />
         </Fragment>
     );
 }

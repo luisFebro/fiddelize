@@ -16,37 +16,22 @@ import getFirstName from '../../../../../utils/string/getFirstName';
 
 const getStyles = () => ({
     icon: { fontSize: 35, color: "white", filter: "drop-shadow(0.001em 0.001em 0.15em grey)" },
+    dateBadge: {
+        left: -15,
+        bottom: -30,
+        backgroundColor: "var(--themeP)",
+        padding: '0px 15px',
+        borderRadius: "20%",
+    }
 });
 
 
-const handleSecHeading = data => {
-    const arrayData = data.firstContacts;
-    const firstContactsLenght = arrayData && arrayData.length;
-    const areMoreThanOne = firstContactsLenght >= 2;
-    const firstContactsNames = arrayData && arrayData.map((name, ind) => firstContactsLenght === (ind + 1) ? `${getFirstName(name)}` : `${getFirstName(name)}, `)
-
+const handleSecHeading = (data, styles) => {
     return(
         <section>
-            {data.cardType === "out" && (
-                <p
-                    className="m-0 mt-4 text-normal text-shadow font-weight-bold"
-                    style={{ lineHeight: '19px' }}
-                >
-                    • Enviado para:
-                    <br />
-                    {areMoreThanOne ? (
-                        <span className="text-small font-weight-bold">
-                            {firstContactsNames} e mais {data.totalSMS - firstContactsLenght} contatos.
-                        </span>
-                    ) : (
-                        <span className="text-small font-weight-bold">
-                            {data.firstContacts}
-                        </span>
-                    )}
-                </p>
-            )}
             <p
-                className="d-block m-0 mt-3"
+                className="position-absolute d-block m-0 mt-3"
+                style={styles.dateBadge}
             >
                 <span className="text-small text-shadow font-weight-bold">
                     {calendar(data.createdAt)}.
@@ -57,7 +42,7 @@ const handleSecHeading = data => {
 }
 // END HELPERS
 
-export default function AsyncCardsList({ handleWhichTab, handleList }) {
+export default function AsyncCardsList() {
     const { businessId } = useAppSystem();
 
     const styles = getStyles();
@@ -67,7 +52,7 @@ export default function AsyncCardsList({ handleWhichTab, handleList }) {
             _id: "123",
             cardType: "out",
             totalSMS: 100,
-            firstContacts: ["João Augusto", "Ana Rodrigues", "Maria da Silva"],
+            firstContacts: ["João Augusto", "Ana Rodrigues"],
             sentMsgDesc: "Hello there!",
             createdAt: new Date()
         },
@@ -79,40 +64,67 @@ export default function AsyncCardsList({ handleWhichTab, handleList }) {
         }
     ];
 
+    const displayTotalSMS = ({ isCardIn, data }) => (
+        <section className="d-flex">
+            {isCardIn ? (
+                <FontAwesomeIcon
+                    icon="arrow-circle-up"
+                    className="mr-2"
+                    style={styles.icon}
+                />
+            ) : (
+                <FontAwesomeIcon
+                    icon="arrow-circle-down"
+                    className="mr-2"
+                    style={styles.icon}
+                />
+            )}
+            <span
+                className={`d-inline-block ${!isCardIn ? "text-nowrap" : ""} text-subtitle font-weight-bold text-shadow`}
+                style={{ lineHeight: "25px" }}
+            >
+                {data.totalSMS} SMS {isCardIn ? "adicionados" : "usados"}
+            </span>
+        </section>
+    );
+
     const showAccordion = () => {
 
         const actions = list.map(data => {
+            const arrayData = data.firstContacts;
+            const firstContactsLenght = arrayData && arrayData.length;
+            const areMoreThanOne = firstContactsLenght >= 2;
+            const firstContactsNames = arrayData && arrayData.map((name, ind) => firstContactsLenght === (ind + 1) ? `${getFirstName(name)}` : `${getFirstName(name)}, `)
+
             const isCardIn = data.cardType === "in";
             const mainHeading =
-            <section className={isCardIn ? `d-flex animated fadeInUp delay-1s` : `delay-1s d-flex animated fadeInDown`}>
-                {isCardIn ? (
-                    <FontAwesomeIcon
-                        icon="arrow-circle-up"
-                        className="mr-2"
-                        style={styles.icon}
-                    />
-                ) : (
-                    <FontAwesomeIcon
-                        icon="arrow-circle-down"
-                        className="mr-2"
-                        style={styles.icon}
-                    />
+            <section className={isCardIn ? `d-flex flex-column align-self-start animated fadeInUp delay-1s` : `d-flex flex-column align-self-start delay-1s animated fadeInDown`}>
+                {displayTotalSMS({ isCardIn, data })}
+                {data.cardType === "out" && (
+                    <p
+                        className="m-0 mt-3 text-normal text-shadow font-weight-bold"
+                        style={{ lineHeight: '19px' }}
+                    >
+                        • Enviado para:
+                        <br />
+                        {areMoreThanOne ? (
+                            <span className="text-small font-weight-bold">
+                                {firstContactsNames} e + {data.totalSMS - firstContactsLenght} outros.
+                            </span>
+                        ) : (
+                            <span className="text-small font-weight-bold">
+                                {data.firstContacts}
+                            </span>
+                        )}
+                    </p>
                 )}
-                <span
-                    className="d-inline-block text-subtitle font-weight-bold text-shadow"
-                    style={{ lineHeight: "25px" }}
-                >
-                    {data.totalSMS} SMS {isCardIn ? "adicionados" : "usados"}
-                </span>
             </section>
 
             const HiddenPanel =
             <PanelHiddenContent
                 data={data}
-                handleWhichTab={handleWhichTab}
-                handleList={handleList}
             />
-            const sideHeading = handleSecHeading(data);
+            const sideHeading = handleSecHeading(data, styles);
 
             return({
                _id: data._id,

@@ -27,7 +27,7 @@ const getStyles = () => ({
     },
 });
 
-export default function PanelHiddenContent({ data, handleWhichTab, handleList }) {
+export default function PanelHiddenContent({ data }) {
     const { runArray } = useStoreState(state => ({
        runArray: state.globalReducer.cases.runArray,
     }));
@@ -80,8 +80,6 @@ export default function PanelHiddenContent({ data, handleWhichTab, handleList })
             isOpen && (
                 <AsyncExtract
                     extractId={data._id}
-                    handleWhichTab={handleWhichTab}
-                    handleList={handleList}
                 />
             )
         )

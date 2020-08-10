@@ -27,6 +27,7 @@ export default function AsyncSMS() {
     const dispatch = useStoreDispatch();
 
     const { showMessage, whichTab, contactList, suggestionMsg } = data;
+    console.log("contactList", contactList);
 
     const handleWhichTab = currTab => {
         setData({ ...data, whichTab: currTab });
@@ -81,10 +82,7 @@ export default function AsyncSMS() {
                 <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />
             )}
             <hr className="lazer-purple" />
-            <SmsHistory
-                handleList={handleList}
-                handleWhichTab={handleWhichTab}
-            />
+            <SmsHistory />
         </Fragment>
     );
 }

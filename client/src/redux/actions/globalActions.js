@@ -10,8 +10,10 @@ export const findAnItem = (dispatch, allItemsList, _id, attachedObj) => {
     return finalItem;
 };
 
-export const setRun = (dispatch, payload) => {
-    return dispatch({ type: 'RUN_SET', payload });
+export const setRun = (dispatch, payload, options = {}) => {
+    const { array } = options;
+    const data = { payload, array };
+    return dispatch({ type: 'RUN_SET', data });
 };
 
 // const defaultVariableOptions = { key: "value" }

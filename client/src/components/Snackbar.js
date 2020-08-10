@@ -57,7 +57,7 @@ const variantIcon = {
   error: <FontAwesomeIcon icon="exclamation-circle" />,
 };
 
-export default function SnackbarMulti() {
+export default function SnackbarRedux() {
     // Redux
     const { isSnackbarOpen, snackbar } = useStoreState(state => ({
         isSnackbarOpen: state.snackbarReducer.cases.isSnackbarOpen,

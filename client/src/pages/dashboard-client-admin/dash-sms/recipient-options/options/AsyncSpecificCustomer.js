@@ -21,6 +21,7 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
 
     const dispatch = useStoreDispatch();
 
+    const { runName, runOneArray } = useRunComp();
     let { name: adminName, _id: userId } = useProfile();
     adminName = getFirstName(adminName);
 
@@ -39,18 +40,18 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
     const [list, setList] = useState([]);
     const [newContactOpen, setNewContactOpen] = useState(false);
 
-    const { runName, runArray } = useRunComp();
     useEffect(() => {
         if(runName === "Contatos Selecionados") handleList(list);
         if(!list.length) handleShowMessage(false);
+        handleList(list);
     }, [list, runName])
 
     useEffect(() => {
-        if(Array.isArray(runArray)) {
-            console.log(JSON.stringify(runArray));
-            setList(runArray);
+        if(runName === "asyncExtractList") {
+            setList(runOneArray);
+            handleList(runOneArray);
         }
-    }, [runArray])
+    }, [runName, runOneArray])
 
 
     const handleRemoveLast = () => {
@@ -58,6 +59,10 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
             data.shift();
             return [...data];
         })
+    }
+
+    const handleClearAll = () => {
+        setList([]);
     }
 
     const handleAddContact = ({ name, phone }) => {
@@ -111,7 +116,13 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
                 <section className="text-center text-subtitle font-weight-bold text-purple my-5">
                     Nenhum selecionado
                 </section>
-            ) : <ShowSelectionArea list={list} handleRemoveLast={handleRemoveLast} />}
+            ) : (
+                <ShowSelectionArea
+                    list={list}
+                    handleRemoveLast={handleRemoveLast}
+                    handleClearAll={handleClearAll}
+                />
+            )}
         </Fragment>
 
     );
@@ -120,7 +131,9 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
         <section>
             {showSearch()}
             {newContactOpen && (
-                <AsyncShowNewContactForm handleAddContact={handleAddContact} />
+                <AsyncShowNewContactForm
+                    handleAddContact={handleAddContact}
+                />
             )}
             {showSelectionArea()}
         </section>

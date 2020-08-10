@@ -56,7 +56,7 @@ const getStyles = ({ color, backgroundColor }) => ({
     trophyPrizes: {
         right: 55,
         bottom: 85,
-    }
+    },
 });
 
 export default function SmsCard({
@@ -92,10 +92,12 @@ export default function SmsCard({
             >
                 {isSmall
                 ? (
-                    <div className="d-flex flex-column align-self-start">
-                        {panel.mainHeading}
+                    <section className="position-relative">
+                        <div>
+                            {panel.mainHeading}
+                        </div>
                         {panel.secondaryHeading}
-                    </div>
+                    </section>
                 ) : (
                 <Fragment>
                     <Typography
