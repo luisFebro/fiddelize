@@ -36,6 +36,7 @@ import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
 import isKeyPressed from '../../utils/event/isKeyPressed';
 import { dateFnsUtils, ptBRLocale } from '../../utils/dates/dateFns';
 import ReactGA from 'react-ga';
+import { handleFocus } from '../../utils/form/handleFocus';
 
 // bizSysId for validation only since when the user is runningthe app
 // for the first time, businessId returns "0"...
@@ -178,10 +179,6 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
         }
     }
 
-    const handleFocus = (nextFieldToFocusId, timeInSec = 0) => {
-        setTimeout(() => document.getElementById(nextFieldToFocusId).focus(), timeInSec);
-    }
-
     const showLoginForm = needLoginBtn => (
         needLoginBtn && (
             <div
@@ -288,9 +285,9 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                     variant="outlined"
                     autoOk={false}
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) { setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
+                        if(isKeyPressed(e, "Enter")) { setShowMoreFields("field3"); handleFocus("field3", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
                     }}
-                    onBlur={() => { setShowMoreFields("field3"); handleFocus("field3", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
+                    onBlur={() => { setShowMoreFields("field3"); handleFocus("field3", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
                     value={cpf}
                     type={switchNumToText ? "text": "tel"}
                     autoComplete="off"
@@ -332,7 +329,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                         onChange={e => {
                             handleDateChange(e._d)
                             setShowMoreFields("otherFields")
-                            handleFocus("field4", 1500)
+                            handleFocus("field4", { delay: 1500 })
                         }}
                         InputProps={{
                           startAdornment: (

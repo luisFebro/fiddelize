@@ -4,7 +4,7 @@ import LoadableVisible from '../../../../components/code-splitting/LoadableVisib
 
 const AsyncSmsCardsList = LoadableVisible({ loading: true, loader: () => import('./cards-list/AsyncCardsList.js'  /* webpackChunkName: "sms-cards-list-session-lazy" */ )});
 
-export default function SmsHistory() {
+export default function SmsHistory({ handleWhichTab, handleList }) {
 
     const showTotals = () => {
         const transitionTotal = 25;
@@ -31,7 +31,10 @@ export default function SmsHistory() {
                 padding=" "
             />
             {showTotals()}
-            <AsyncSmsCardsList />
+            <AsyncSmsCardsList
+                handleList={handleList}
+                handleWhichTab={handleWhichTab}
+            />
         </section>
     );
 }

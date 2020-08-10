@@ -10,8 +10,8 @@ export const findAnItem = (dispatch, allItemsList, _id, attachedObj) => {
     return finalItem;
 };
 
-export const setRun = (dispatch, runName) => {
-    return dispatch({ type: 'RUN_SET', payload: runName });
+export const setRun = (dispatch, payload) => {
+    return dispatch({ type: 'RUN_SET', payload });
 };
 
 // const defaultVariableOptions = { key: "value" }

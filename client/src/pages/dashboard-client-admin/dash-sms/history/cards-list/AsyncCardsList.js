@@ -57,7 +57,7 @@ const handleSecHeading = data => {
 }
 // END HELPERS
 
-export default function AsyncCardsList() {
+export default function AsyncCardsList({ handleWhichTab, handleList }) {
     const { businessId } = useAppSystem();
 
     const styles = getStyles();
@@ -106,7 +106,12 @@ export default function AsyncCardsList() {
                 </span>
             </section>
 
-            const HiddenPanel = <PanelHiddenContent data={data} />
+            const HiddenPanel =
+            <PanelHiddenContent
+                data={data}
+                handleWhichTab={handleWhichTab}
+                handleList={handleList}
+            />
             const sideHeading = handleSecHeading(data);
 
             return({

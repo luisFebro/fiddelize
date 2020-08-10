@@ -3,12 +3,13 @@ import DashSectionTitle from '../../DashSectionTitle';
 import ShowConfigExpansiblePanel from './expansible-panel/ShowExpansiblePanel';
 import './DashAppDesign.scss';
 
+const AppDesignTitle = <Title />
 export default function DashAppDesign() {
     return (
         <Fragment>
             <div style={{marginTop: '16px', display: "block"}}>
                 <DashSectionTitle
-                    title={<Title />}
+                    title={AppDesignTitle}
                 />
             </div>
             <main className="mt-2">
@@ -19,7 +20,7 @@ export default function DashAppDesign() {
 }
 
 // n1
-const Title = () => {
+function Title() {
     return(
         <>
             <span className="text-title  font-weight-bold">

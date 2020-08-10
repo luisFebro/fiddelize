@@ -16,6 +16,7 @@ import SmsHistory from './history/SmsHistory';
 const AsyncSMSSuggestions = Load({ loader: () => import('./message/AsyncSMSSuggestions' /* webpackChunkName: "sms-suggestions-comp-lazy" */)});
 // End Components
 
+const TitleSMS = <Title />
 export default function AsyncSMS() {
     const [data, setData] = useState({
         showMessage: false,
@@ -23,8 +24,6 @@ export default function AsyncSMS() {
         whichTab: "Lista de Clientes",
         suggestionMsg: "",
     });
-    const TitleSMS = <Title />
-
     const dispatch = useStoreDispatch();
 
     const { showMessage, whichTab, contactList, suggestionMsg } = data;
@@ -38,7 +37,7 @@ export default function AsyncSMS() {
     }
 
     useEffect(() => {
-        if(showMessage) handleFocus("messageField", 2000);
+        if(showMessage) handleFocus("messageField", { delay: 2000, duration: 1500 });
     }, [showMessage])
 
     const handleShowMessage = (close) => {
@@ -55,7 +54,7 @@ export default function AsyncSMS() {
 
     const handleSuggestionMsg = text => {
         setData({ ...data, suggestionMsg: text })
-        handleFocus("messageField", 2000);
+        handleFocus("messageField");
     }
 
     return (
@@ -82,12 +81,15 @@ export default function AsyncSMS() {
                 <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />
             )}
             <hr className="lazer-purple" />
-            <SmsHistory />
+            <SmsHistory
+                handleList={handleList}
+                handleWhichTab={handleWhichTab}
+            />
         </Fragment>
     );
 }
 
-const Title = () => {
+function Title() {
     const bizName = useStoreState(state => state.userReducer.cases.clientAdmin.bizName)
 
     return(

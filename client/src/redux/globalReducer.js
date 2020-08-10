@@ -36,7 +36,7 @@ export const globalReducer = {
                 return {
                     ...state,
                     run: !state.run,
-                    runName: action.payload,
+                    runName: action.payload && action.payload.toString(),
                     runArray: newArr,
                 }
             }

@@ -4,6 +4,9 @@ import { useStoreState } from 'easy-peasy';
 import TextField from '@material-ui/core/TextField';
 import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 import { Load } from '../../../../../../../components/code-splitting/LoadableComp'
+import copyTextToClipboard from '../../../../../../../utils/document/copyTextToClipboard';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
 
 const AsyncExtract = Load({ loader: () => import('./AsyncExtract'  /* webpackChunkName: "sms-extract-comp-lazy" */ )});
 
@@ -24,19 +27,25 @@ const getStyles = () => ({
     },
 });
 
-export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
+export default function PanelHiddenContent({ data, handleWhichTab, handleList }) {
     const { runArray } = useStoreState(state => ({
        runArray: state.globalReducer.cases.runArray,
     }));
 
     const styles = getStyles();
 
+    const dispatch = useStoreDispatch();
+
+    const handleCopy = () => {
+        copyTextToClipboard("#msgArea", () => showSnackbar(dispatch, "Mensagem copiada!", "success"))
+    }
+
     const displayCopyBtn = () => (
         <section className="d-flex justify-content-end my-3">
             <ButtonFab
                 size="medium"
                 title="Copiar"
-                onClick={null}
+                onClick={handleCopy}
                 backgroundColor={"var(--themeSDark--default)"}
                 variant = 'extended'
             />
@@ -51,7 +60,7 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
             <TextField
                 multiline
                 rows={5}
-                id="sentMSg"
+                id="msgArea"
                 name="message"
                 InputProps={{
                     style: styles.fieldFormValue,
@@ -67,7 +76,15 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
     const showSmsExtract = () => {
         const isOpen = runArray.includes(data._id);
 
-        return(isOpen && <AsyncExtract extractId={data._id} />);
+        return(
+            isOpen && (
+                <AsyncExtract
+                    extractId={data._id}
+                    handleWhichTab={handleWhichTab}
+                    handleList={handleList}
+                />
+            )
+        )
     }
 
     return (

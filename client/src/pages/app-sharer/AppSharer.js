@@ -140,7 +140,7 @@ export default function AppSharer({ location, match }) {
                 <ButtonMulti
                     title={"Gerar link"}
                     needParse={true}
-                    onClick={() => { handleGeneratedLink(targetBr); scrollIntoView(`#${targetBr}`, 1000); }}
+                    onClick={() => { handleGeneratedLink(targetBr); scrollIntoView(`#${targetBr}`, { delay: 1000 }); }}
                     color="var(--mainWhite)"
                     backgroundColor="var(--themeP)"
                     iconFontAwesome={<FontAwesomeIcon icon="angle-double-right" style={faStyle} />}
@@ -189,7 +189,7 @@ export default function AppSharer({ location, match }) {
                                 id="form1"
                                 onChange={handleChange(setData, data)}
                                 name="clientName"
-                                onKeyPress={e => { handleEnterPress(e, handleGeneratedLink); scrollIntoView("#cliente-usuário", 3000); }}
+                                onKeyPress={e => { handleEnterPress(e, handleGeneratedLink); scrollIntoView("#cliente-usuário", { delay: 2000 }); }}
                                 value={clientName}
                                 variant="outlined"
                                 type="text"

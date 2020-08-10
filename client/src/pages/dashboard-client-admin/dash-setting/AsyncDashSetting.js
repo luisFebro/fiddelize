@@ -6,13 +6,14 @@ import './DashSetting.scss';
 import ShowConfigExpansiblePanel from './expansible-panel/ShowExpansiblePanel';
 import BottomActionBtns from './BottomActionBtns';
 
+const DashSettingTitle = <Title />
 // IMPLEMENT SOME CODE SPLITTING TO THE SETTING COMPONENTS
 export default function DashSetting() {
     return (
         <Fragment>
             <div style={{marginTop: '16px', display: "block"}}>
                 <DashSectionTitle
-                    title={<Title />}
+                    title={DashSettingTitle}
                 />
             </div>
             <main className="mt-2">
@@ -23,7 +24,7 @@ export default function DashSetting() {
     );
 }
 
-const Title = () => {
+function Title() {
     const bizName = useStoreState(state => state.userReducer.cases.clientAdmin.bizName)
 
     return(

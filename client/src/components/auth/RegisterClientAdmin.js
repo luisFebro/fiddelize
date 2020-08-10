@@ -322,9 +322,9 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     variant="outlined"
                     autoOk={false}
                     onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) { setShowThisField("field4"); handleFocus("field4", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
+                        if(isKeyPressed(e, "Enter")) { setShowThisField("field4"); handleFocus("field4", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
                     }}
-                    onBlur={() => { setShowThisField("field4"); handleFocus("field4", 800); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
+                    onBlur={() => { setShowThisField("field4"); handleFocus("field4", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
                     value={cpf}
                     type={switchNumToText ? "text": "tel"}
                     autoComplete="off"
@@ -365,7 +365,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         value={selectedDate}
                         onChange={e => {
                             handleDateChange(e._d)
-                            handleFocus("field5", 1500)
+                            handleFocus("field5", { delay: 1500 })
                             setShowThisField("otherFields")
                         }}
                         InputProps={{

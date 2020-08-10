@@ -9,14 +9,16 @@ export const setRun = (dispatch, compName) => {
 }
 
 export const useRunComp = () => {
-    const { run, runName } = useStoreState(state => ({
+    const { run, runName, runArray } = useStoreState(state => ({
         run: state.globalReducer.cases.run,
         runName: state.globalReducer.cases.runName,
+        runArray: state.globalReducer.cases.runArray,
     }))
 
     return({
         run,
         runName,
+        runArray,
     });
 }
 

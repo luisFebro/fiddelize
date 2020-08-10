@@ -39,11 +39,18 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
     const [list, setList] = useState([]);
     const [newContactOpen, setNewContactOpen] = useState(false);
 
-    const { runName } = useRunComp();
+    const { runName, runArray } = useRunComp();
     useEffect(() => {
         if(runName === "Contatos Selecionados") handleList(list);
         if(!list.length) handleShowMessage(false);
     }, [list, runName])
+
+    useEffect(() => {
+        if(Array.isArray(runArray)) {
+            console.log(JSON.stringify(runArray));
+            setList(runArray);
+        }
+    }, [runArray])
 
 
     const handleRemoveLast = () => {

@@ -3,6 +3,11 @@ import MuSelectTable from '../../../../../../../components/tables/MuSelectTable'
 import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useDelay from '../../../../../../../hooks/useDelay';
+import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
+import click from '../../../../../../../utils/event/click';
+import { setRun } from '../../../../../../../hooks/useRunComp';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -19,7 +24,7 @@ const headCells = [
     { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
 ]
 
-export default function AsyncExtract({ extractId }) {
+export default function AsyncExtract({ extractId, handleWhichTab, handleList }) {
     const loading = false;
     let list = [
         { name: "Febro Feitoza", phone: "(92) 99281-7363", carrier: "oi", "status": "recebido"},
@@ -29,15 +34,43 @@ export default function AsyncExtract({ extractId }) {
         { name: "Gustavo Augusto", phone: "(92) 9555-5555", carrier: "vivo", "status": "recebido"},
     ]
 
+    const dispatch = useStoreDispatch();
+
     const styles = getStyles();
 
     const vanishMsgReady = useDelay(8000);
+
+    const handleResending = () => {
+        const handleTabFunc = () => {
+            handleWhichTab("Contatos Selecionados");
+
+            list.forEach(data => {
+                delete data.carrier;
+                delete data.status;
+            })
+            handleList(list);
+            setRun(dispatch, list);
+            showSnackbar(dispatch, "Pronto!")
+        }
+
+        const postFunction = () => {
+            click("#bubbleTabsBtn2", { callback: () => handleTabFunc() });
+        }
+
+        const config = {
+            mode: "intoView",
+            duration: 1000,
+            onDone: () => postFunction(),
+        }
+        showSnackbar(dispatch, "Um robo da Fiddelize está adicionando contatos. Um momento!", "warning", 7000)
+        scrollIntoView("#recipientOptions", config)
+    }
 
     const displayCTA = () => (
         <ButtonFab
             size="medium"
             title="Novo reenvio"
-            onClick={null}
+            onClick={handleResending}
             position="relative"
             needTxtNoWrap={true}
             backgroundColor={"var(--themeSDark--default)"}

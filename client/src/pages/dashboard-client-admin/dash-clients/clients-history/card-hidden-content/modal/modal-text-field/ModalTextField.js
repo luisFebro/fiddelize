@@ -286,7 +286,7 @@ export default function ModalTextField({
                 </span>*/}
                 <div className="ml-3">
                     <InstructionBtn
-                        onClick={() => { setShowInstruction(!showInstruction); scrollIntoView("#instru", 3000); }}
+                        onClick={() => { setShowInstruction(!showInstruction); scrollIntoView("#instru", { delay: 2000 }); }}
                     />
                 </div>
             </div>

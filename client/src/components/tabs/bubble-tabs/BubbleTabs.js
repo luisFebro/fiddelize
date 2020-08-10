@@ -47,6 +47,7 @@ export default function BubbleTabs({
         <ul className="nav nav-pills">
             <li className="nav-item">
                 <a
+                    id="bubbleTabsBtn1"
                     className="nav-link font-site active"
                     onClick={e => {
                         if(typeof setWhichTab === "function") {
@@ -61,6 +62,7 @@ export default function BubbleTabs({
             </li>
             <li className="nav-item">
                 <a
+                    id="bubbleTabsBtn2"
                     className="nav-link font-site"
                     onClick={e => {
                         if(typeof setWhichTab === "function") {

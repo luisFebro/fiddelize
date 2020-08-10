@@ -10,26 +10,24 @@ const AsyncRecordedClientsList = LoadableVisible({ logo: true, loading: true, lo
 // END COMPONENTS
 
 
-const Title = ({ bizName }) => {
-    return(
-        <span className="text-subtitle font-weight-bold">
-            Clientes da
-            <br />
-            <span className="text-title">{bizName && bizName.cap()}</span>
-        </span>
-    );
-};
+const getTitle = (bizName) => (
+    <span className="text-subtitle font-weight-bold">
+        Clientes da
+        <br />
+        <span className="text-title">{bizName && bizName.cap()}</span>
+    </span>
+);
 
 export default function DashClients() {
     const { bizName } = useClientAdmin();
     const { name } = useProfile();
 
-    const sectionTitle = React.useMemo(() => <Title bizName={bizName} />, [bizName]);
+    const SectionTitle = getTitle(bizName);
 
     return (
         <div>
             <DashSectionTitle
-                title={sectionTitle}
+                title={SectionTitle}
             />
             <AutomaticToDoList />
             <hr className="lazer-purple"/>
