@@ -97,7 +97,7 @@ export default function AsyncCardsList() {
 
             const isCardIn = data.cardType === "in";
             const mainHeading =
-            <section className={isCardIn ? `d-flex flex-column align-self-start animated fadeInUp delay-1s` : `d-flex flex-column align-self-start delay-1s animated fadeInDown`}>
+            <section className={isCardIn ? `d-flex flex-column align-self-start animated fadeInUp` : `d-flex flex-column align-self-start animated fadeInDown`}>
                 {displayTotalSMS({ isCardIn, data })}
                 {data.cardType === "out" && (
                     <p

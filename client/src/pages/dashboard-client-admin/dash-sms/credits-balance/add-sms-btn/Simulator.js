@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import convertToReal from '../../../../../utils/numbers/convertToReal';
 import MuSlider from '../../../../../components/sliders/MuSlider';
+import isKeyPressed from '../../../../../utils/event/isKeyPressed';
+import TextField from '@material-ui/core/TextField';
+import handleChange from '../../../../../utils/form/use-state/handleChange';
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -28,6 +31,13 @@ const getStyles = () => ({
         padding: '5px 8px',
         borderRadius: '30%',
         lineHeight: '18px',
+    },
+    quantityField: {
+        width: '130px',
+        backgroundColor: 'var(--themeP)',
+        color: '#fff',
+        font: 'bold 35px var(--mainFont)',
+        zIndex: 2000
     }
 });
 
@@ -50,6 +60,17 @@ export default function Simulator({ handleData }) {
     const [packages, setPackages] = useState(1);
     const [discountDiff, setDiscountDiff] = useState(null);
     const [increasedPerc, setIncreasedPerc] = useState(null);
+    const [data, setData] = useState({
+        newQuantity: null,
+    })
+
+    const { newQuantity } = data;
+
+    useEffect(() => {
+        if(newQuantity && !Number.isNaN(newQuantity)) {
+            setPackages(newQuantity)
+        } else { setPackages(1) }
+    }, [newQuantity])
 
     const [unit, expires, unitSizeDec, unitSizeInc] = getSMSData(packages)
 
@@ -149,32 +170,66 @@ export default function Simulator({ handleData }) {
         </section>
     );
 
+    const showSlider = () => (
+        <section className="position-relative">
+            <MuSlider
+                color="var(--themeP)"
+                value={packages}
+                callback={handlePackages}
+                disabled={newQuantity ? true : false}
+            />
+            {(packages <= 230 && !Boolean(newQuantity)) && (
+                <div
+                    className="position-absolute font-weight-bold text-shadow text-center"
+                    style={styles.delimeterBoardRight}
+                >
+                    300<br />pacotes
+                </div>
+            )}
+
+            {(packages >= 55 && !Boolean(newQuantity)) && (
+                <div
+                    className="position-absolute font-weight-bold text-shadow text-center"
+                    style={styles.delimeterBoardLeft}
+                >
+                    1<br />pacote
+                </div>
+            )}
+        </section>
+    );
+
+    const showQuantityField = () => (
+        (packages >= 290 || Boolean(newQuantity)) &&
+        <section className="animated fadeInUp slow
+        my-3 d-flex align-items-center justify-content-end">
+            <p className="text-purple font-weight-bold text-normal text-center mr-2">
+                Precisa de mais?
+            </p>
+            <div>
+                <p className="m-0 text-left text-purple text-normal font-weight-bold">
+                    Insira aqui:
+                </p>
+                <TextField
+                    InputProps={{ style: styles.quantityField }}
+                    variant="outlined"
+                    onChange={handleChange(setData)}
+                    onKeyPress={null}
+                    autoComplete="off"
+                    type="number"
+                    name="newQuantity"
+                    value={newQuantity}
+                />
+                <p className="m-0 text-right text-purple text-normal font-weight-bold">
+                    Quantidade
+                </p>
+            </div>
+        </section>
+    );
+
     return (
         <section className="my-5 mx-4">
-            <section className="position-relative">
-                <MuSlider
-                    color="var(--themeP)"
-                    value={packages}
-                    callback={handlePackages}
-                />
-                {packages <= 240 && (
-                    <div
-                        className="position-absolute font-weight-bold text-shadow text-center"
-                        style={styles.delimeterBoardRight}
-                    >
-                        300<br />pacotes
-                    </div>
-                )}
-
-                {packages >= 55 && (
-                    <div
-                        className="position-absolute font-weight-bold text-shadow text-center"
-                        style={styles.delimeterBoardLeft}
-                    >
-                        1<br />pacote
-                    </div>
-                )}
-            </section>
+            {showSlider()}
+            {showQuantityField()}
             {showMultiPrice()}
             {showAutoFinalTotal()}
             {showDiffDiscount()}

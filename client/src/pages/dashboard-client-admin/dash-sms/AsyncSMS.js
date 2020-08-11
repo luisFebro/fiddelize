@@ -12,9 +12,9 @@ import CreditsBalance from './credits-balance/CreditsBalance';
 import RecipientOptions from './recipient-options/RecipientOptions';
 import MessageField from './message/MessageField';
 import SmsHistory from './history/SmsHistory';
+import AutomaticSMS from './automatic-sms/AutomaticSMS';
 
 const AsyncSMSSuggestions = Load({ loader: () => import('./message/AsyncSMSSuggestions' /* webpackChunkName: "sms-suggestions-comp-lazy" */)});
-const AsyncAutomaticSMS = Load({ loader: () => import('./automatic-sms/AsyncAutomaticSMS' /* webpackChunkName: "automatic-sms-comp-lazy" */)});
 // End Components
 
 const TitleSMS = <Title />
@@ -82,7 +82,7 @@ export default function AsyncSMS() {
                 <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />
             )}
             <hr className="lazer-purple" />
-            <AsyncAutomaticSMS />
+            <AutomaticSMS />
             <hr className="lazer-purple" />
             <SmsHistory />
         </Fragment>

@@ -40,6 +40,8 @@ export default function MuSlider({
     step = 1,
     callback,
     value,
+    disabled = false,
+    max = 300,
 }) {
     const [labelSize, setLabelSize] = useState(null);
     const classes = useStyles({ color, labelSize });
@@ -71,8 +73,9 @@ export default function MuSlider({
             step={step}
             value={value}
             min={1}
-            max={300}
+            max={disabled ? 1 : max}
             orientation="horizontal"
+            disabled={disabled}
         />
     );
 }

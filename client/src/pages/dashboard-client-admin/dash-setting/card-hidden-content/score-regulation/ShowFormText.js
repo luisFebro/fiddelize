@@ -182,7 +182,7 @@ function RegulationText({ generateRegulation }) {
                         onChange={handleChange(setData, data)}
                         onKeyPress={e => handleEnterPress(e, () => updateField("deadline"))}
                         autoComplete="off"
-                        type="tel"
+                        type="number"
                         name="deadline"
                         value={deadline}
                     />
