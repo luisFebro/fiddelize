@@ -25,6 +25,7 @@ export default function SwitchBtn({
     titleQuestion = "",
     callback,
     defaultStatus = false,
+    disabled = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
 
@@ -55,7 +56,7 @@ export default function SwitchBtn({
     titleLeft = parse(titleLeft);
     titleRight = parse(titleRight);
     return (
-        <section className="container-center">
+        <section className="d-flex justify-content-center">
             <p className="m-0 mr-2 d-inline-block text-normal font-weight-bold text-purple">
                 {titleQuestion}
             </p>
@@ -64,6 +65,7 @@ export default function SwitchBtn({
                 checked={checked}
                 onChange={handleChange}
                 name="purpleSwitch"
+                disabled={disabled}
             />
             <p className={txtStyle2} onClick={setTrue}>{titleRight}</p>
         </section>

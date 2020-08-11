@@ -157,16 +157,16 @@ export default function Simulator({ handleData }) {
                     value={packages}
                     callback={handlePackages}
                 />
-                {packages <= 750 && (
+                {packages <= 240 && (
                     <div
                         className="position-absolute font-weight-bold text-shadow text-center"
                         style={styles.delimeterBoardRight}
                     >
-                        1000<br />pacotes
+                        300<br />pacotes
                     </div>
                 )}
 
-                {packages >= 220 && (
+                {packages >= 55 && (
                     <div
                         className="position-absolute font-weight-bold text-shadow text-center"
                         style={styles.delimeterBoardLeft}

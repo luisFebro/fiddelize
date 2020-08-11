@@ -10,15 +10,14 @@ import { useAppSystem } from '../../../../../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from '../../../../../utils/string/getFirstName';
 // import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
-
+const isSmall = window.Helper.isSmallScreen();
 // HELPERS
 // const truncate = (name, leng) => window.Helper.truncate(name, leng);
-
 const getStyles = () => ({
     icon: { fontSize: 35, color: "white", filter: "drop-shadow(0.001em 0.001em 0.15em grey)" },
     dateBadge: {
-        left: -15,
-        bottom: -30,
+        left: isSmall ? -15 : 0,
+        bottom: isSmall ? -30 : -20,
         backgroundColor: "var(--themeP)",
         padding: '0px 15px',
         borderRadius: "20%",

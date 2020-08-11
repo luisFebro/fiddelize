@@ -27,11 +27,11 @@ const headCells = [
 export default function AsyncExtract({ extractId }) {
     const loading = false;
     let list = [
-        { name: "Febro Feitoza", phone: "(92) 99281-7363", carrier: "oi", "status": "recebido"},
-        { name: "Patrícia Queiroz", phone: "(92) 9888-8888", carrier: "nextel", "status": "enviando"},
-        { name: "Fernando Lima", phone: "(92) 9777-7777", carrier: "tim", "status": "agendado"},
-        { name: "Kelly Ribeiro", phone: "(92) 9666-6666", carrier: "claro", "status": "falhou"},
-        { name: "Gustavo Augusto", phone: "(92) 9555-5555", carrier: "vivo", "status": "recebido"},
+        { name: "Febro Feitoza", phone: "(92) 99281-7363", carrier: "OI", "status": "recebido"},
+        { name: "Patrícia Queiroz", phone: "(92) 9888-8888", carrier: "NEXTEL", "status": "enviando"},
+        { name: "Fernando Lima", phone: "(92) 9777-7777", carrier: "TIM", "status": "agendado"},
+        { name: "Kelly Ribeiro", phone: "(92) 9666-6666", carrier: "CLARO", "status": "falhou"},
+        { name: "Gustavo Augusto", phone: "(92) 9555-5555", carrier: "VIVO", "status": "recebido"},
     ]
 
     const dispatch = useStoreDispatch();

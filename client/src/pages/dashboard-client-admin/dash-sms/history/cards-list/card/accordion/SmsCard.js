@@ -129,7 +129,7 @@ export default function SmsCard({
             {actions.map(panel => (
                 <div
                     key={panel._id}
-                    className="position-relative mx-3"
+                    className="position-relative mx-3 mb-3"
                 >
                     <Accordion
                         TransitionProps={{ unmountOnExit: true }}

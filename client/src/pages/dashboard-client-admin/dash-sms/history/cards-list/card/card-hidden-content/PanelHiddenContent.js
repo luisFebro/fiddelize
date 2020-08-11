@@ -53,7 +53,7 @@ export default function PanelHiddenContent({ data }) {
     );
 
     const showSentMsg = () => (
-        <section>
+        <section className="my-5">
             <p className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
                 Mensagem Enviada
             </p>

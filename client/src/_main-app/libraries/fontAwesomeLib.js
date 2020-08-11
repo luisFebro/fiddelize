@@ -158,6 +158,12 @@ library.add(
   //end app milestone icons
 );
 
+export const awesomeStyle = {
+    fontSize: '30px',
+    filter:  'drop-shadow(.5px .5px 1.5px black)',
+    color: 'white',
+}
+
 /* COMMENTS
 n1: solution with named destructing
  We weren't able to get tree shaking to work out of the box with Webpack 4. Thankfully, we were able to workaround the issue using babel-plugin-transform-imports with a configuration like this:

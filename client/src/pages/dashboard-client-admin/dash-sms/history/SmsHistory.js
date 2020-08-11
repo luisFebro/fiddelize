@@ -15,7 +15,7 @@ export default function SmsHistory() {
             <div className="mb-5 text-purple text-subtitle font-weight-bold position-relative">
                 <span className="text-title">Totais Gerais:</span>
                 <br />
-                <strong>• {`${transitionTotal} transiç${plural}`}</strong>
+                <strong>• {`${transitionTotal} operaç${plural}`}</strong>
                 <br />
                 <strong>• {`${smsSentTotal} SMS enviados`}</strong>
             </div>

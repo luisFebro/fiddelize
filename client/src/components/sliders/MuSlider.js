@@ -71,7 +71,7 @@ export default function MuSlider({
             step={step}
             value={value}
             min={1}
-            max={1000}
+            max={300}
             orientation="horizontal"
         />
     );

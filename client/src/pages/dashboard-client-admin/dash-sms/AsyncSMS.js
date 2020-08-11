@@ -14,6 +14,7 @@ import MessageField from './message/MessageField';
 import SmsHistory from './history/SmsHistory';
 
 const AsyncSMSSuggestions = Load({ loader: () => import('./message/AsyncSMSSuggestions' /* webpackChunkName: "sms-suggestions-comp-lazy" */)});
+const AsyncAutomaticSMS = Load({ loader: () => import('./automatic-sms/AsyncAutomaticSMS' /* webpackChunkName: "automatic-sms-comp-lazy" */)});
 // End Components
 
 const TitleSMS = <Title />
@@ -27,7 +28,6 @@ export default function AsyncSMS() {
     const dispatch = useStoreDispatch();
 
     const { showMessage, whichTab, contactList, suggestionMsg } = data;
-    console.log("contactList", contactList);
 
     const handleWhichTab = currTab => {
         setData({ ...data, whichTab: currTab });
@@ -81,6 +81,8 @@ export default function AsyncSMS() {
             {showMessage && (
                 <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />
             )}
+            <hr className="lazer-purple" />
+            <AsyncAutomaticSMS />
             <hr className="lazer-purple" />
             <SmsHistory />
         </Fragment>

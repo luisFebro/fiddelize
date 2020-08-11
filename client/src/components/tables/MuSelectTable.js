@@ -360,7 +360,7 @@ const ShowTableBody = ({
                       align="left"
                       style={{ fontSize: '15px', padding: '16px 0px', }}
                   >
-                    {head.id === "status" ? getStatusColor(rowData[head.id]) : rowData[head.id]}
+                    {head.id === "status" ? getStatusColor(rowData[head.id]) : head.id === "name" ? rowData[head.id].cap() : rowData[head.id]}
                 </MyTableCell>
             </Fragment>
         );
