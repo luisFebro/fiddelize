@@ -55,16 +55,17 @@ const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { //
 
     const reader = new FileReader();
     reader.readAsDataURL(blob);
-    reader.onloadend = function() {
+    return reader.onloadend = function() {
         mySrc = reader.result;
         // lStorage("setItems", {collection: 'images', newObj: { [keyToSet]: mySrc } })
-        store.setItem(keyToSet, mySrc)
-        .then(generatedUrl => {
-            const doc = document.querySelectorAll(`.${keyToSet}`);
-            if(doc) {
-                  doc.forEach(elemFound => elemFound.src = generatedUrl);
-            }
-        })
+        return store.setItem(keyToSet, mySrc)
+        // .then(generatedUrl => {
+        //     const doc = document.querySelector(`.${keyToSet}`);
+        //     if(doc) {
+        //           doc.forEach(elemFound => elemFound.src = generatedUrl);
+        //     }
+        //     return generatedUrl;
+        // })
     }
 }
 

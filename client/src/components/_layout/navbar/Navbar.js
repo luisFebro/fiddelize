@@ -13,11 +13,15 @@ import { useClientAdmin } from '../../../hooks/useRoleData';
 import gotArrayThisItem from '../../../utils/arrays/gotArrayThisItem';
 import { useAuthUser } from '../../../hooks/useAuthUser';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
+// import useImg from '../../../hooks/media/useImg';
 // import useCount from '../../../hooks/useCount';
 
 const gotToken = localStorage.getItem("token");
+const isApp = isThisApp();
 
 function Navbar({ history, location }) {
+    // const srcTest = useImg("/img/illustrations/sms-scheduling.svg", { key: "sms-scheduling"})
+
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
     //RT = 2 (OK);
     // useCount();
@@ -137,7 +141,7 @@ function Navbar({ history, location }) {
     );
 
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
-    const needClientLogo = (isThisApp() && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isThisApp());
+    const needClientLogo = (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isApp);
     const fiddelizeLogo = `${CLIENT_URL}/img/official-logo-name.png`;
     const handleLogoSrc = () => {
         if(needClientLogo) {
@@ -149,7 +153,7 @@ function Navbar({ history, location }) {
     const src = React.useCallback(() => handleLogoSrc(), [needClientLogo]);
 
     const showLogo = () => {
-        const isSquared = isThisApp() && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const isSquared = isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
         const handleSize = side => {
             let size;
@@ -167,7 +171,7 @@ function Navbar({ history, location }) {
 
         const handleLogoClick = () => {
             if(isClientAdmin && locationNow.includes("pontos-fidelidade")) return "/mobile-app?client-admin=1";
-            return isThisApp() ? "/mobile-app" : "/";
+            return isApp ? "/mobile-app" : "/";
         }
         return(
             <Link to={handleLogoClick()}>
@@ -200,7 +204,7 @@ function Navbar({ history, location }) {
     return (
         <NavWrapper
             className="navbar navbar-expand-sm text-nav-items"
-            style={{backgroundColor: (!isThisApp() || locationNow.includes("/painel-de-controle")) ? "var(--themePDark--default)" : "var(--themePDark--" + selfThemePColor + ")" }}
+            style={{backgroundColor: (!isApp || locationNow.includes("/painel-de-controle")) ? "var(--themePDark--default)" : "var(--themePDark--" + selfThemePColor + ")" }}
         >
             {showLogo()}
             {showButtons()}
