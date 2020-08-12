@@ -3,8 +3,16 @@
  * @param  {string} date new Date
  * @return {string}
  */
+
+ const treatZero = (number) => {
+     if(Number(number) <= 9) {
+         return `0${number}`;
+     }
+     return number;
+ }
+
 export default function getDayMonthBr(stringDate, options = {}) {
-    const { needYear } = options;
+    const { needYear, short } = options;
     const selectedDate = new Date(stringDate);
 
     let dayMonth;
@@ -19,7 +27,12 @@ export default function getDayMonthBr(stringDate, options = {}) {
 
     if(needYear) {
         const year = selectedDate.getFullYear();
-        dayMonth = `${day} de ${selectedMonth} de ${year}`;
+        if(short) {
+            const month = treatZero(ind + 1);
+            dayMonth = `${treatZero(day)}/${month}/${year}`;
+        } else {
+            dayMonth = `${day} de ${selectedMonth} de ${year}`;
+        }
     } else {
         dayMonth = `${day} de ${selectedMonth}`;
     }

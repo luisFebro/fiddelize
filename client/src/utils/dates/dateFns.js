@@ -5,6 +5,8 @@ import formatDistance from 'date-fns/formatDistance';
 import formatRelative from 'date-fns/formatRelative';
 import subDays from 'date-fns/subDays';
 import addDays from 'date-fns/addDays';
+import getHours from 'date-fns/getHours';
+import getMinutes from 'date-fns/getMinutes';
 
 const localeObj = {
     default: ptBR,
@@ -18,10 +20,12 @@ const ptBRLocale = ptBR;
 const pick = locale => locale ? localeObj[locale] : localeObj.default;
 const now = new Date();
 
-const formatDMY = (date) => getDayMonthBr(date, { needYear: true });
+const formatDMY = (date, short) => getDayMonthBr(date, { needYear: true, short });
 const fromNow = (pastDate, locale) => formatDistance(new Date(pastDate), now, { addSuffix: true, locale: pick(locale) })
 // calendar needs a customformatlike ``{ sameElse: 'll'}`` in moment.
 const calendar = (date, locale) => formatRelative(new Date(date), now, { locale: pick(locale) })
+
+const getLocalHour = (date) => `${getHours(date)}:${getMinutes(date)}`
 
 export {
     dateFnsUtils,
@@ -31,6 +35,7 @@ export {
     calendar,
     addDays,
     subDays,
+    getLocalHour,
 }
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time

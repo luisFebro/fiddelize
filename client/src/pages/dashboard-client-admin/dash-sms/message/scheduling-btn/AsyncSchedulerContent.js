@@ -1,9 +1,201 @@
-import React from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
+import { dateFnsUtils, ptBRLocale } from '../../../../../utils/dates/dateFns';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import getTimezoneDate from '../../../../../utils/dates/getTimezoneDate';
+import { formatDMY, getLocalHour } from '../../../../../utils/dates/dateFns';
+import getWeekDayBr from '../../../../../utils/dates/getWeekDayBr';
 
-export default function AsyncSchedulerContent() {
-    return (
-        <div>
-            I am AsyncSchedulingContent
+const muiTheme = createMuiTheme({
+    overrides: {
+        MuiPickersToolbar: {
+            toolbar: { fontFamily: 'var(--themeP)', backgroundColor: 'var(--themeP)' }
+        },
+        MuiPickersDay: {
+            daySelected: { fontFamily: 'var(--themeP)', backgroundColor: 'var(--themeP)' }
+        },
+        MuiPickersClock: {
+            pin: { backgroundColor: 'var(--themeS)' },
+            clock: {
+                backgroundColor: 'var(--themePLight)'
+            }
+        },
+        MuiPickersClockNumber: {
+            clockNumber: { font: 'bold 18px var(--mainFont)', color: '#fff' },
+            clockNumberSelected: { color: 'black' }
+        },
+        MuiPickersClockPointer: {
+            noPoint: { backgroundColor: 'var(--themeS)' },
+            pointer: { backgroundColor: 'var(--themeS)' },
+            thumb: { border: '14px solid var(--themeS)' },
+        },
+        MuiTypography: {
+            body1: { font: 'bold 18px var(--mainFont)', textTransform: 'uppercase', color: 'var(--themeP)'},
+            caption: { fontSize: '1.1rem' },
+        },
+    }
+});
+
+export default function AsyncSchedulerContent({ modal }) {
+    const { whichTab, numContacts } = modal;
+    const [selectedDate, handleDateChange] = useState(new Date());
+    const [open, setOpen] = useState(false);
+    const [done, setDone] = useState(false);
+    const [data, setData] = useState({
+        uiDay: new Date(),
+        uiHour: new Date(),
+        sysDay: new Date(),
+        sysHour: new Date(),
+    })
+    console.log("data", data);
+
+    const { uiDay, uiHour, sysDay, sysHour } = data;
+
+    useEffect(() => {
+        setData({
+            uiDay: `${formatDMY(selectedDate, { short: true })} (${getWeekDayBr(selectedDate)})`,
+            uiHour: getLocalHour(selectedDate),
+            sysDay: getTimezoneDate('day', { newDate: selectedDate }),
+            sysHour: getTimezoneDate('hour', { newDate: selectedDate }),
+        })
+    }, [selectedDate])
+
+    const handleSchedule = () => {
+        //
+    }
+
+    const openPicker = () => {
+        setOpen(true);
+        setDone(false);
+    }
+
+    const closePicker = () => {
+        setOpen(false);
+        setDone(true);
+    }
+
+    const showTitle = () => (
+        <div className="mt-5">
+            <p
+                className="text-subtitle text-purple text-center font-weight-bold"
+            >
+                Agendamento de Envio
+            </p>
         </div>
+    );
+
+    const picker = () => {
+        const todayLabel =
+        <p className="text-small text-purple">
+            Hoje
+        </p>
+
+        const cancelLabel =
+        <p className="text-small text-purple">
+            Voltar
+        </p>
+
+        const okLabel =
+        <p className="text-small text-purple font-weight-bold">
+            Pronto!
+        </p>
+
+        return(
+            <section className="container-center" style={{visibility: 'hidden'}}>
+                <ThemeProvider theme={muiTheme}>
+                    <MuiPickersUtilsProvider
+                        utils={dateFnsUtils}
+                        locale={ptBRLocale}
+                    >
+                        <DateTimePicker
+                            open={open}
+                            variant="outlined"
+                            minutesStep={5}
+                            autoOk={false}
+                            margin="dense"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            onClose={closePicker}
+                            onOpen={openPicker}
+                            showTodayButton={true}
+                            todayLabel={todayLabel}
+                            cancelLabel={cancelLabel}
+                            okLabel={okLabel}
+                            disablePast
+                            ampm={false}
+                        />
+                    </MuiPickersUtilsProvider>
+                </ThemeProvider>
+            </section>
+        );
+    }
+
+    const datePickerBtn = () => {
+        return(
+            !done &&
+            <section>
+                <p className="font-weight-bold text-normal text-purple text-center" style={{marginTop: '200px'}}>
+                    Escolha dia e horário:
+                </p>
+                <div className="container-center">
+                    <ButtonFab
+                        size="large"
+                        title="ESCOLHER"
+                        position="relative"
+                        onClick={openPicker}
+                        backgroundColor={"var(--themeSDark--default)"}
+                        variant = 'extended'
+                    />
+                </div>
+            </section>
+        );
+    }
+
+    const plural = numContacts > 1 ? "s" : "";
+
+    const showSummary = () => (
+        done &&
+        <Fragment>
+            <section className="my-5 text-purple text-normal text-left ml-3">
+                <p className="text-purple text-subtitle text-center font-weight-bold">
+                    Resumo
+                </p>
+                ✔ ENVIO PARA: <span className="text-purple text-normal font-weight-bold">{whichTab}</span>
+                <br />
+                ✔ TOTAL: <span className="text-purple text-normal font-weight-bold">{numContacts} contato{plural}.</span>
+                <br />
+                ✔ DIA: <span className="text-purple text-normal font-weight-bold">{uiDay}</span>
+                <br />
+                ✔ HORA: <span className="text-purple text-normal font-weight-bold">{uiHour}</span>
+            </section>
+            <div className="d-flex justify-content-around align-items-center">
+                <ButtonFab
+                    size="medium"
+                    title="Mudar"
+                    position="relative"
+                    onClick={openPicker}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant = 'extended'
+                />
+                <ButtonFab
+                    size="large"
+                    title="AGENDAR"
+                    position="relative"
+                    onClick={handleSchedule}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant = 'extended'
+                />
+            </div>
+        </Fragment>
+    );
+
+    return (
+        <section>
+            {showTitle()}
+            {picker()}
+            {datePickerBtn()}
+            {showSummary()}
+        </section>
     );
 }

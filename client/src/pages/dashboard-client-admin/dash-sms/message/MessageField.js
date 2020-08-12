@@ -54,9 +54,14 @@ export default function MessageField({
         setTrigger(true);
     }
 
+    const modal = {
+        numContacts: contactList.length,
+        whichTab,
+    }
+
     const showCTABtn = () => (
         <section className="d-flex align-items-center justify-content-around mt-5 mb-3">
-            <SchedulingBtn />
+            <SchedulingBtn modal={modal} />
             <ButtonFab
                 size="large"
                 title="Enviar agora"

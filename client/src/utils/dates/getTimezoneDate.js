@@ -10,8 +10,11 @@ const getConfig = ({ mode, hour12 }) => {
                 minute: 'numeric',
                 hour12,
             })
-        case "date":
-            return null;
+        case "day":
+            return({
+                timeZone: 'America/Sao_Paulo',
+                year: 'numeric', month: 'numeric', day: 'numeric',
+            });
         default:
             return console.log("Smt wrong with getConfig")
     }
@@ -28,6 +31,14 @@ export default function getTimezoneDate(mode = "hour", options = {}) {
     const config = getConfig({ mode, hour12 });
 
     const date = new Intl.DateTimeFormat(locale, config);
+
+    if(mode === "day") {
+        let [{ value: day },,{ value: month },,{ value: year }] = date.formatToParts(newDate);
+        // day = treatZero(day);
+        // month = treatZero(month);
+        return `${day}/${month}/${year}`;
+    }
+
     return date.format(new Date(newDate)); // n1
 
 }

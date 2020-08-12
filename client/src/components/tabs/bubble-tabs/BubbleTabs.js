@@ -104,7 +104,6 @@ export default function BubbleTabs({
                 variant = 'extended'
                 position = 'relative'
                 top={-30}
-                zIndex={2000}
             />
         </section>
     );

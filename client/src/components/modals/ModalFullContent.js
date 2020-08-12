@@ -12,6 +12,12 @@ ModalFullContent.propTypes = {
     style: PropTypes.object,
 }
 
+const getStyles = ({ needIndex }) => ({ // assign as false when you need to open other modals above this component like calendar dialog
+    root: {
+        zIndex: needIndex ? 3000 : undefined, overflowX: 'hidden',
+    },
+});
+
 export default function ModalFullContent({
     contentComp,
     fullOpen,
@@ -20,9 +26,12 @@ export default function ModalFullContent({
     animatedClass,
     exitBtn,
     showBackBtn = false,
+    needIndex = true,
 }) {
     const { runName } = useRunComp();
-    let defaultStyle = { zIndex: 3000, overflowX: 'hidden', };
+
+    const styles = getStyles({ needIndex });
+
     const handleOpen = () => {
         if(runName === "closeModalFullContent") return false;
         return fullOpen;
@@ -37,7 +46,7 @@ export default function ModalFullContent({
             PaperProps={{ style: {backgroundColor: 'var(--mainWhite)', maxWidth: '500px', overflowX: 'hidden'}}}
             maxWidth="md"
             fullWidth
-            style={defaultStyle}
+            style={styles.root}
             fullScreen={true}
             open={handleOpen()}
             aria-labelledby="form-dialog-title"
