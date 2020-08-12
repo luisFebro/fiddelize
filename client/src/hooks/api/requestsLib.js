@@ -18,4 +18,4 @@ export const readNotifications = (userId) => `/api/notification/read/${userId}`;
 
 // SMS
 export const readContacts = (userId) => `/api/sms/read/contacts?userId=${userId}`;
-export const sendSMS = (userId) => `/api/sms/send/${userId}`; // POST
+export const sendSMS = () => `/api/sms/send`; // POST

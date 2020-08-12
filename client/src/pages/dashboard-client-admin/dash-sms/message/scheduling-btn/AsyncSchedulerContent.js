@@ -38,7 +38,8 @@ const muiTheme = createMuiTheme({
 });
 
 export default function AsyncSchedulerContent({ modal }) {
-    const { whichTab, numContacts } = modal;
+    console.log("modal", modal);
+    const { whichTab, numContacts, message } = modal;
     const [selectedDate, handleDateChange] = useState(new Date());
     const [open, setOpen] = useState(false);
     const [done, setDone] = useState(false);
@@ -135,10 +136,10 @@ export default function AsyncSchedulerContent({ modal }) {
         return(
             !done &&
             <section>
-                <p className="font-weight-bold text-normal text-purple text-center" style={{marginTop: '200px'}}>
+                <p className="font-weight-bold text-normal text-purple text-center">
                     Escolha dia e horário:
                 </p>
-                <div className="container-center">
+                <div className="mb-5 container-center">
                     <ButtonFab
                         size="large"
                         title="ESCOLHER"
@@ -157,19 +158,21 @@ export default function AsyncSchedulerContent({ modal }) {
     const showSummary = () => (
         done &&
         <Fragment>
-            <section className="my-5 text-purple text-normal text-left ml-3">
-                <p className="text-purple text-subtitle text-center font-weight-bold">
-                    Resumo
+            <section className="mb-5 text-purple text-normal text-left ml-3">
+                <p className="m-0 mb-3 text-purple text-subtitle text-center font-weight-bold">
+                    RESUMO
                 </p>
+                ✔ DIA: <span className="text-purple text-normal font-weight-bold">{uiDay}</span>
+                <br />
+                ✔ HORA: <span className="text-purple text-normal font-weight-bold">{uiHour}</span>
+                <br />
                 ✔ ENVIO PARA: <span className="text-purple text-normal font-weight-bold">{whichTab}</span>
                 <br />
                 ✔ TOTAL: <span className="text-purple text-normal font-weight-bold">{numContacts} contato{plural}.</span>
                 <br />
-                ✔ DIA: <span className="text-purple text-normal font-weight-bold">{uiDay}</span>
-                <br />
-                ✔ HORA: <span className="text-purple text-normal font-weight-bold">{uiHour}</span>
+                ✔ MENSAGEM: <span className="text-purple text-normal font-weight-bold">{message}</span>
             </section>
-            <div className="d-flex justify-content-around align-items-center">
+            <div className="mb-5 d-flex justify-content-around align-items-center">
                 <ButtonFab
                     size="medium"
                     title="Mudar"
@@ -190,9 +193,20 @@ export default function AsyncSchedulerContent({ modal }) {
         </Fragment>
     );
 
+    const showIllustra = () => (
+        <section className="my-5 mx-5">
+            <img
+                className="img-fluid"
+                src="/img/illustrations/sms-scheduling.svg"
+                alt="agendamento"
+            />
+        </section>
+    );
+
     return (
         <section>
             {showTitle()}
+            {showIllustra()}
             {picker()}
             {datePickerBtn()}
             {showSummary()}

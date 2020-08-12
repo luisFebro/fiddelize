@@ -3,16 +3,21 @@ import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ModalFullContent from '../../../../../components/modals/ModalFullContent';
 import { Load } from '../../../../../components/code-splitting/LoadableComp'
-// import AsyncSchedulerContent from './AsyncSchedulerContent';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 
-const Async = Load({ loader: () => import('./AsyncSchedulerContent'  /* webpackChunkName: "scheduler-full-page-lazy" */ )});
+// change webpackMode: "eager" to "lazy" to production. This is because it is delaying to load wiin lazy mode.
+const Async = Load({ loader: () => import('./AsyncSchedulerContent'  /* webpackChunkName: "scheduler-full-page-lazy", webpackMode: "eager", webpackIgnore: false */ )});
 
 export default function SchedulingBtn({ modal }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncSchedulerContent = <Async modal={modal} />
+    const dispatch = useStoreDispatch();
+
+    const AsyncSchedulerContent = <Async modal={modal} />;
 
     const handleFullOpen = () => {
+        if(!modal.message) return showSnackbar(dispatch, "Insira alguma mensagem", "error")
         setFullOpen(true);
     }
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../utils/form/use-state/handleChange';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
-import useAPI, { sendSMS } from '../../../../hooks/api/useAPI';
+import useAPI, { sendSMS, getUniqueId } from '../../../../hooks/api/useAPI';
 import { useAppSystem } from '../../../../hooks/useRoleData';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
@@ -25,7 +25,6 @@ const getStyles = () => ({
     },
 });
 
-
 export default function MessageField({
     whichTab,
     contactList,
@@ -43,20 +42,24 @@ export default function MessageField({
     const { businessId: userId } = useAppSystem();
     useAPI({
         method: 'post',
-        url: sendSMS(userId),
-        body: { contactList, msg: message },
+        url: sendSMS(),
+        body: { userId, contactList, msg: message },
         needAuth: true,
-        trigger })
+        snackbar: { txtPending: "Enviando agora...", txtSuccess: "Mensagem Enviada!" },
+        trigger
+    })
 
     const dispatch = useStoreDispatch();
     const handleSendNow = () => {
         if(!message.length) return showSnackbar(dispatch, "Insira alguma mensagem ou selecione uma sugestão abaixo", "error", 6000);
-        setTrigger(true);
+        const uniqueId = getUniqueId();
+        setTrigger(uniqueId);
     }
 
     const modal = {
         numContacts: contactList.length,
-        whichTab,
+        whichTab: whichTab ? whichTab : "Lista de Clientes",
+        message,
     }
 
     const showCTABtn = () => (

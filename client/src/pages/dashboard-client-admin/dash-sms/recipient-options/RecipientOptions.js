@@ -14,7 +14,7 @@ export default function RecipientOptions({
     const SecondComp = <AsyncSpecificCustomer handleList={handleList} handleShowMessage={handleShowMessage} />
 
     return (
-        <section id="recipientOptions">
+        <section id="recipientOptions" className="container-center-max-width-500">
             <Title
                 title="&#187; Para quem enviar?"
                 color="var(--themeP)"

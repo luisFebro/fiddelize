@@ -17,7 +17,7 @@ const {
 
 // @ routes api/sms/...
 router.get('/read/contacts', readContacts); // mwIsAuth,
-router.post('/send/:userId', mwIsAuth, sendSMS);
+router.post('/send', sendSMS); // mwIsAuth,
 router.get('/read-sms-history', readSMSHistory); // mwIsAuth
 router.get('/read-sms-main', getMainCardInfos); // mwIsAuth
 router.get('/read-total-transitions', getTotalTransitions); // mwIsAuth

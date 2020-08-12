@@ -65,14 +65,14 @@ exports.readContacts = (req, res) => {
 
 // Method: POST
 exports.sendSMS = (req, res) => {
-    const { userId } = req.params;
     const {
-        serviceType = 9, // 9-Sms.
+        userId,
         contactList = [{ name: "Febro", phone: "(92) 99281-7363", countryCode: 55 }],
         msg = "",
         jobdate, // string
         jobtime, // string
-        flash
+        serviceType = 9, // 9-Sms.
+        flash = true,
     } = req.body;
 
     if(!msg) return res.status(400).json({ error: "A message with at least 1 character should be passed"})
