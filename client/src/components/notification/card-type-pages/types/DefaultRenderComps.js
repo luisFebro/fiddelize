@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import ButtonMulti from '../../../../components/buttons/material-ui/ButtonMulti'
 import { Link } from 'react-router-dom';
 import { setRun } from '../../../../hooks/useRunComp';
@@ -6,6 +6,8 @@ import { useStoreDispatch } from 'easy-peasy';
 import { useClientAdmin, useProfile, } from '../../../../hooks/useRoleData';
 import ImgLoader from '../../../../components/ImgLoader';
 import applyTextStyle from '../../../../utils/string/applyTextStyle';
+import { readUser } from "../../../../redux/actions/userActions";
+import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 
 export const textStyle = 'text-purple text-left text-normal mx-3';
 
@@ -21,16 +23,19 @@ export const ShowTitle = ({ text }) => (
 
 export const ShowIllustration = ({ role, mainImg, bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png" }) => {
     const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
+    const boostedImg = React.useMemo(() => (
+        <ImgLoader
+            src={mainImg}
+            className="shadow-elevation-black"
+            alt="ilustração principal"
+            width={150}
+            height="auto"
+        />
+    ), [])
+
     return (
         <div className="container-center position-relative my-5">
-            <ImgLoader
-                src={mainImg}
-                className="shadow-elevation-black"
-                alt="ilustração principal"
-                width={150}
-                height="auto"
-                timeout={4000}
-            />
+            {boostedImg}
             {role === "cliente" && (
                 <div
                     className="position-absolute"
@@ -68,13 +73,22 @@ export const ShowActionBtn = ({
     isConfirmedChall = false,
     children,
 }) => {
+    const [loading, setLoading] = useState(false);
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
-    const { role: loggedUserRole } = useProfile();
+    const { role: loggedUserRole, _id } = useProfile();
 
-    const goDash = () => {
-        if(role === "cliente") window.location.href = loggedUserRole === "cliente-admin" ? "/mobile-app?client-admin=1" : "/mobile-app"
-        if(role === "cliente-admin") setRun(dispatch, "goDash");
+    if(loading) titleCliUser = "processando..."
+
+    const handleBtnClick = () => {
+        setLoading(true);
+        readUser(dispatch, _id)
+        .then(res => {
+            if(res.status !== 200) return showSnackbar(dispatch, "Não foi possível atualizar. Reinicie app.", 'error')
+            if(role === "cliente") window.location.href = loggedUserRole === "cliente-admin" ? "/mobile-app?client-admin=1" : "/mobile-app"
+            if(role === "cliente-admin") setRun(dispatch, "goDash");
+            setLoading(false);
+        })
     }
 
     const handleBtnPath = () => {
@@ -89,7 +103,7 @@ export const ShowActionBtn = ({
                 <Link
                     className="no-text-decoration"
                     to={handleBtnPath}
-                    onClick={goDash}
+                    onClick={handleBtnClick}
                 >
                     <ButtonMulti
                         title={role === "cliente" ? titleCliUser : titleCliAdmin}

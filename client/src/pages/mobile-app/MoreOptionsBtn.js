@@ -143,7 +143,7 @@ function MoreOptionsBtn({
     }
 
     const handleAddScoreClick = () => {
-        if(blockAccess) return showSnackbar(dispatch, `${getFirstName(userName.cap())}, parece que sua pontuação está desatualizada. Verifique a notificação de confirmação para começar novo desafio ou reinicie o app.`, 9000)
+        if(blockAccess) return showSnackbar(dispatch, `${getFirstName(userName.cap())}, parece que sua pontuação está desatualizada. Verifique sua notificação de confirmação para começar novo desafio.`, 9000)
         showComponent(dispatch, "purchaseValue");
         const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
         history.push(path);

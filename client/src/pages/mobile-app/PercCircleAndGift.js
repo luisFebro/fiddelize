@@ -1,9 +1,14 @@
 import ReactjsPercentageCircle from '../../components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import getPercentage from '../../utils/numbers/getPercentage';
 import Tooltip from '../../components/tooltips/Tooltip';
 import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 import PrizesBtn from '../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/prizes-gallery/PrizesBtn';
+import useAPI, { readPrizes } from '../../hooks/api/useAPI';
+import { addDays } from '../../utils/dates/dateFns';
+import getDiffDays from '../../utils/dates/getDiffDays';
+// import useDelay from '../../hooks/useDelay';
+
 // import Tilt from 'react-tilt';
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -11,6 +16,7 @@ const truncate = (name, leng) => window.Helper.truncate(name, leng);
 export default function PercCircleAndGift({
     currScore,
     maxScore,
+    rewardDeadline,
     showPercentage,
     playBeep,
     colorS,
@@ -20,11 +26,22 @@ export default function PercCircleAndGift({
     userName,
     prizeDesc,
     arePrizesVisible,
-    currChall, }) {
+    currChall,
+    userId, }) {
+    const [finalDeadline, setFinalDeadline] = useState("...");
     const percentageAchieved = getPercentage(maxScore, currScore);
     const needResizeFont = percentageAchieved.toString().includes(".");
     const leftScore = currScore >= maxScore ? 0 : maxScore - currScore
     const userBeatedChall = currScore >= maxScore;
+
+    const { data: lastPrizeDate, loading, } = useAPI({ url: readPrizes(userId), params: { lastPrizeDate: true } });
+    // const readyDays = useDelay(3000);
+
+    useEffect(() => {
+        const targetDate = addDays(new Date(lastPrizeDate), rewardDeadline + 1);
+        const res = targetDate ? getDiffDays(targetDate) : new Date();
+        setFinalDeadline(Number.isNaN(res) ? "..." : res);
+    }, [lastPrizeDate, rewardDeadline])
 
     const handleColorSelection = () => {
         if(colorS === "white") {
@@ -45,6 +62,19 @@ export default function PercCircleAndGift({
             fontFamily: 'var(--mainFont)',
             fontSize: needResizeFont ? '1.0em' : 'text-em-1-3',
             color: percentageColor,
+        },
+        deadlineBoard: {
+            borderRadius: '30px',
+            backgroundColor: "var(--themeSDark--" + colorS +")",
+            border: '3px solid white',
+        },
+        timerIcon: {
+            top: '-25px',
+            left: '-25px',
+        },
+        deadlineTitle: {
+            top: '-20px',
+            left: '15px',
         }
     }
 
@@ -69,6 +99,37 @@ export default function PercCircleAndGift({
         <br />
     `;
     const tooltipTxt = arePrizesVisible ? visibleTxt : hiddenTxt;
+
+    const plural = finalDeadline > 1 ? "s" : "";
+    const showPrizeDeadline = () => (
+        <section
+            className="position-absolute"
+            style={{top: '5px', left: '65%'}}
+        >
+            <div className="position-relative">
+                <div style={styles.deadlineBoard}>
+                    <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
+                        {finalDeadline === 0 ? `expirou` : `${finalDeadline} dia${plural}`}
+                    </p>
+                </div>
+                <p
+                    className="text-small text-center font-weight-bold position-absolute text-nowrap"
+                    style={styles.deadlineTitle}
+                >
+                    Prazo Resgate
+                </p>
+                <div className="position-absolute" style={styles.timerIcon}>
+                    <img
+                        className="shadow-elevation-white"
+                        src="/img/icons/timer.svg"
+                        alt="relógio"
+                        width={45}
+                        height={45}
+                    />
+                </div>
+            </div>
+        </section>
+    );
 
     const showPrizesBtn = () => (
         <div
@@ -98,6 +159,7 @@ export default function PercCircleAndGift({
                     <div className="position-relative">
                         {Gift}
                         {showPrizesBtn()}
+                        {showPrizeDeadline()}
                     </div>
                 </section>
             ) : (

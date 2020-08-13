@@ -82,6 +82,14 @@ function ClientScoresPanel({
             fontSize: '2em',
             transform: 'rotate(20deg)',
             color: selectTxtStyle(colorBack, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)",
+        },
+        challN: {
+            backgroundColor: "var(--themePDark--" + colorP + ")",
+            borderRadius: '50%',
+            padding: '8px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            bottom: '-30px',
         }
     }
 
@@ -145,11 +153,12 @@ function ClientScoresPanel({
 
     // RENDER
     const firstName = getFirstName(name) || "Olá";
+    const currChallenge = totalPurchasePrize + 1;
     const showHeader = () => (
-        <div>
-            <span className="ml-3 text-hero text-shadow">
+        <div className="position-relative">
+            <p className="m-0 ml-2 text-hero text-shadow">
                 {firstName},
-            </span>
+            </p>
             <Title
                 title="Sua nova pontuação"
                 color="var(--mainWhite)"
@@ -157,6 +166,11 @@ function ClientScoresPanel({
                 needShadow={true}
                 backgroundColor={"var(--themePDark--" + colorP + ")"}
             />
+            <section className="position-absolute" style={styles.challN}>
+                <p className="text-subtitle font-weight-bold text-white text-shadow text-center m-0 text-nowrap mx-3">
+                    Desafio n.º {currChallenge}
+                </p>
+            </section>
         </div>
     );
 

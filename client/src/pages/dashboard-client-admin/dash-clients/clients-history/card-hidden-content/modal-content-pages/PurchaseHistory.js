@@ -148,7 +148,7 @@ export default function PurchaseHistory({ data }) {
                 className="d-inline-block text-normal text-purple font-weight-bold m-0"
                 style={{ lineHeight: '24px' }}
             >
-                Meta Final Atual:
+                Nova Meta Final:
                 <br />
                 <span style={{fontSize: '28px'}}>{maxScore} pontos</span>
             </p>

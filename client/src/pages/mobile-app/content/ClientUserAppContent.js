@@ -22,6 +22,7 @@ import pickCurrChallData from '../../../utils/biz/pickCurrChallData';
 import defineCurrChallenge from '../../../utils/biz/defineCurrChallenge';
 import useCountNotif from '../../../hooks/notification/useCountNotif';
 import useSendNotif from '../../../hooks/notification/useSendNotif';
+import useAPI, { readPrizes } from '../../../hooks/api/useAPI';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -65,7 +66,7 @@ function ClientUserAppContent({
     name ? name = getFirstName(name) : name = "cliente";
     let { currScore, lastScore, totalPurchasePrize } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
-    let { maxScore, bizCodeName, rewardList, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor, arePrizesVisible } = useClientAdmin();
+    let { maxScore, bizCodeName, rewardList, rewardDeadline, selfMilestoneIcon, selfThemeSColor, selfThemeBackColor, arePrizesVisible } = useClientAdmin();
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
     maxScore = pickedObj.rewardScore
@@ -75,13 +76,14 @@ function ClientUserAppContent({
 
     const { isAuthUser } = useAuthUser();
     useCount("ClientUserAppContent.js"); // RT = 3 before = /
+    const { data: lastPrizeId } = useAPI({ url: readPrizes(_id), params: { lastPrizeId: true } });
     const challNotifOptions = React.useCallback(() => ({
-        trigger: userBeatChallenge,
+        trigger: userBeatChallenge && lastPrizeId,
         storage: { key: "alreadyChallenge",  value: "clientWonChall" },
         senderId: _id,
         role: "cliente-admin",
         subtype: "clientWonChall",
-        content: `rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};`,
+        content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};`,
     }), [userBeatChallenge, _id])
     useSendNotif(businessId, "challenge", challNotifOptions())
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
@@ -159,7 +161,9 @@ function ClientUserAppContent({
                             currScore={currScore}
                             prizeDesc={mainReward}
                             currChall={currChall}
+                            userId={_id}
                             arePrizesVisible={arePrizesVisible}
+                            rewardDeadline={rewardDeadline}
                             userName={name}
                             classNamePerc={`${needAppForPreview && "enabledLink"}`}
                             maxScore={maxScore}

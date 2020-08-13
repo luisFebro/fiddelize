@@ -26,7 +26,7 @@ function areObjsEqual(obj1, obj2) {
 }
 
 exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
-    const { statusType } = opts;
+    const { statusType, newValue, prizeId } = opts;
     let status = "FAIL";
 
     if(!arrayOfData) return { error: "the array should have at least one object, but found none.", status }
@@ -39,13 +39,21 @@ exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
     }
 
     let newChallengeN = 0;
+
+    let thisNewValue = false;
+    if(newValue === "true") thisNewValue = true;
+
     const statusToSet = options[statusType];
+
     const newData = arrayOfData.map(card => {
-        const nonChangedPrize = card.cardType === "prize" && card[statusToSet] === false;
+        const allNonConfirmed = card[statusToSet] === false;
+        const typeSearch = (prizeId && thisNewValue === false) ? card["_id"].toString() === (prizeId) : allNonConfirmed;
+        const nonChangedPrize = card.cardType === "prize" && typeSearch;
+
         const okPrize = card.cardType === "prize" && card[statusToSet] === true;
 
         if(nonChangedPrize) {
-            card[statusToSet] = true;
+            card[statusToSet] = thisNewValue;
             status = "OK";
             ++newChallengeN;
             return card;

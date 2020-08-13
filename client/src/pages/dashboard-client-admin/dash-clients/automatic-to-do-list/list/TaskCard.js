@@ -36,6 +36,7 @@ function TaskCard(props, ref) {
         prizeDesc,
         challNum,
         deadline,
+        prizeId,
     } = extractStrData(content);
 
     const { _id: userId } = useProfile();
@@ -44,7 +45,8 @@ function TaskCard(props, ref) {
     const purchaseSnackbar = { txtSuccess: `Status RECEBIDO marcado no histórico de compra do cliente.`, txtFailure: ""}
     const trigger = toggleDone === undefined ? false : toggleDone;
     useAPI({ method: "put", url: toggleDoneUrl(), body: taskBody, snackbar, trigger, runName: `TaskCard${taskId}` })
-    useAPI({ method: "put", url: changePrizeStatus(cliUserId, "received"), trigger, snackbar: purchaseSnackbar })
+    const prizeParams = { newValue: treatBoolStatus(toggleDone), prizeId };
+    useAPI({ method: "put", url: changePrizeStatus(cliUserId, "received"), params: prizeParams, trigger, snackbar: purchaseSnackbar })
 
     const styles = {
         card: {

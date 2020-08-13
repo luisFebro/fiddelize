@@ -65,6 +65,7 @@ export default function ModalTextField({
         totalPrizes,
         totalActiveScore,
         name,
+        prizeId,
     } = modalData;
 
     const currChall = totalPrizes + 1;
@@ -131,8 +132,8 @@ export default function ModalTextField({
         const taskBody = {
             taskTitle: "Entrega de Prêmio",
             taskType: "pendingDelivery",
-            content: `cliUserId:${userId};cliUserName:${name};prizeDesc:${mainReward};challNum:${currChall};deadline:${deadlineDate};`,
-            madeBy: "Febro",
+            content: `cliUserId:${userId};cliUserName:${name};prizeId:${prizeId};prizeDesc:${mainReward};challNum:${currChall};deadline:${deadlineDate};`,
+            madeBy: cliAdminName,
         }
 
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)

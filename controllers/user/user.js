@@ -345,17 +345,22 @@ exports.readHistoryList = (req, res) => {
 
 // Prizes
 exports.readPrizes = (req, res) => {
-    const cliAdminId = req.query.cliAdminId;
+    const { cliAdminId, lastPrizeDate = false, lastPrizeId = false } = req.query;
     const { clientUserData: { purchaseHistory } } = req.profile;
 
+    const cliUserPrizes = purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
+    if(lastPrizeDate && cliUserPrizes.length) return res.json(cliUserPrizes[0].createdAt);
+    if(lastPrizeId && cliUserPrizes.length) return res.json(cliUserPrizes[0]._id);
+
+    if(!cliAdminId) return res.status(404).json({ error: "cliAdminId query missing"})
     User.findById(cliAdminId)
     .select("clientAdminData.rewardList clientAdminData.arePrizesVisible")
     .exec((err, data) => {
         if(err) return res.status(400).json(msg("error.notFound"));
+
         let { rewardList, arePrizesVisible } = data.clientAdminData;
         arePrizesVisible = Boolean(arePrizesVisible);
         const isProgressiveMode = rewardList.length > 1;
-        const cliUserPrizes = purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
 
         const cliUserPrizesTotal = cliUserPrizes.length;
         const cliAdminPrizesTotal = cliUserPrizes.length;
@@ -384,13 +389,13 @@ exports.readPrizes = (req, res) => {
 
 exports.changePrizeStatus = (req, res) => {
     const { _id, clientUserData } = req.profile;
-    let { statusType } = req.query;
+    let { statusType, newValue = undefined, prizeId } = req.query;
 
     if(!"confirmed, received".includes(statusType)) return res.status(400).json({msg: "This status type is not valid. Choose one of these: confirmed, received"})
     if(!clientUserData) return res.json({ error: "no array data found"})
 
     const historyData = clientUserData.purchaseHistory;
-    const { newData, newChallengeN, error, status } = confirmPrizeStatus(historyData, { statusType });
+    const { newData, newChallengeN, error, status } = confirmPrizeStatus(historyData, { statusType, newValue, prizeId });
 
     if(status === "FAIL") return res.status(404).json({ error });
 

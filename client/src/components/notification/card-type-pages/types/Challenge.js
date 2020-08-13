@@ -29,6 +29,7 @@ export default function Challenge({
         currChall,
         clientFullName,
         // confirmedChall
+        prizeId,
         prizeDeadline,
         prizeDesc,
         prizeConfirmationDate,
@@ -88,6 +89,7 @@ export default function Challenge({
                 userCurrScore: Number(currScore),
                 totalActiveScore: Number(currScore),
                 totalPrizes: Number(totalPrizes),
+                prizeId,
             }}
         />
     );

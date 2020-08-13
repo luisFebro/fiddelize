@@ -72,7 +72,7 @@ export default function Notification({ forceCliUser = false, }) {
                     </p>
                 </div>
                 <div className="container-center my-3">
-                    {totalNotifications >= 5 && (
+                    {totalNotifications >= 3 && (
                         <RadiusBtn
                             size="small"
                             disabled={btnDisabled}
