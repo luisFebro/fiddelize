@@ -3,7 +3,7 @@ import PrizeList from './PrizeList';
 import './_PrizesGallery.scss';
 import { useProfile } from '../../../../../../../hooks/useRoleData';
 
-export default function PrizesGallery() {
+export default function PrizesGallery({ targetId = undefined }) {
     const { _id: userId } = useProfile();
 
     const showTitle = () => (
@@ -20,7 +20,7 @@ export default function PrizesGallery() {
     return (
         <section>
             {showTitle()}
-            <PrizeList userId={userId} />
+            <PrizeList userId={targetId || userId} />
         </section>
     );
 }

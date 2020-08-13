@@ -17,6 +17,7 @@ import { removeField } from '../../../../../redux/actions/userActions';
 import { setRun } from '../../../../../hooks/useRunComp';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import { useClientAdmin } from '../../../../../hooks/useRoleData';
+import PrizesBtn from '../card-hidden-content/modal-content-pages/prizes-gallery/PrizesBtn';
 // End Customized Data
 
 const isSmall = window.Helper.isSmallScreen();
@@ -64,6 +65,11 @@ export default function UserCardExpansiblePanel({
             backgroundColor: backgroundColor, // default is paper color
             margin: '25px 0 0',
         },
+        totalPrizesBadge: {
+            borderRadius: '50px',
+            backgroundColor: "var(--themeP--default)",
+            border: '3px solid white',
+        },
     }
 
     const handleEraseTestCard = cardId => {
@@ -77,6 +83,62 @@ export default function UserCardExpansiblePanel({
             })
         }, 3000)
     };
+
+    const displayCliPrizes = (panel) => (
+        <section className="position-relative" style={styles.trophyPrizes}>
+            <div>
+                <img
+                    src="/img/icons/thophies/fiddelize-trophy.svg"
+                    className="shadow-elevation-black"
+                    height="auto"
+                    width={100}
+                    alt="troféis cliente"
+                />
+            </div>
+            <div className="position-absolute" style={styles.totalPrizesBadge}>
+                <p className="font-weight-bold text-normal m-0 mx-2 text-center text-purple">
+                    <span
+                        className="text-subtitle"
+                    >{panel.needCliPrizes} </span>
+                    x
+                </p>
+            </div>
+            <div className="position-absolute">
+                <PrizesBtn
+                    backgroundColor="var(--themeSDark)"
+                    title= "Ver prêmios"
+                    size="small"
+                    top={0}
+                    targetId={panel._id}
+                />
+            </div>
+        </section>
+    );
+
+
+    const displayTestCardBadgeBtn = (panel) => (
+        <div className="enabledLink">
+            <ButtonFab
+                position="absolute"
+                top={-15}
+                left={70}
+                title="MODO TESTE"
+                variant="extended"
+                fontWeight="bolder"
+                fontSize=".9em"
+                color="var(--mainWhite)"
+                backgroundColor="var(--niceUiYellow)"
+            />
+            <RadiusBtn
+                size="extra-small"
+                title="apagar"
+                onClick={() => handleEraseTestCard(panel._id)}
+                position="absolute"
+                top={-25}
+                left={isSmall ? 210 : 239}
+            />
+        </div>
+    );
 
     const showPanel = panel => (
         <Fragment>
@@ -117,28 +179,8 @@ export default function UserCardExpansiblePanel({
                 </Fragment>
                 )}
             </ExpansionPanelSummary>
-            {panel.needBadgeForTestMode &&
-                <div className="enabledLink">
-                    <ButtonFab
-                        position="absolute"
-                        top={-15}
-                        left={70}
-                        title="MODO TESTE"
-                        variant="extended"
-                        fontWeight="bolder"
-                        fontSize=".9em"
-                        color="var(--mainWhite)"
-                        backgroundColor="var(--niceUiYellow)"
-                    />
-                    <RadiusBtn
-                        size="extra-small"
-                        title="apagar"
-                        onClick={() => handleEraseTestCard(panel._id)}
-                        position="absolute"
-                        top={-25}
-                        left={isSmall ? 210 : 239}
-                    />
-                </div>}
+            {panel.needBadgeForTestMode && displayTestCardBadgeBtn(panel)}
+            {Boolean(panel.needCliPrizes) && displayCliPrizes(panel)}
         </Fragment>
     );
 

@@ -96,7 +96,8 @@ function RegulationText({ generateRegulation }) {
     const dispatch = useStoreDispatch();
 
     const updateField = fieldName => {
-        if(deadline < 0 || isNaN(deadline)) return showSnackbar(dispatch, "Valor Inválido. Insira apenas números positivos", 'error');
+        if(Number(deadline) < 0 || isNaN(deadline)) return showSnackbar(dispatch, "Valor Inválido. Insira apenas números positivos", 'error');
+        if(Number(deadline) > 365) return showSnackbar(dispatch, "Prazo máximo é de até 365 dias.", 'error');
 
         showSnackbar(dispatch, "Atualizando...");
         if(fieldName === "deadline") {

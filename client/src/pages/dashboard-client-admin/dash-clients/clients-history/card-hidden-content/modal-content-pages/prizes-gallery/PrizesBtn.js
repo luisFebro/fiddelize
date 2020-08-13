@@ -9,6 +9,9 @@ export default function PrizesBtn({
     position = "relative",
     top = -10,
     shadowColor = null,
+    size,
+    backgroundColor,
+    targetId,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -20,13 +23,14 @@ export default function PrizesBtn({
         setFullOpen(false);
     }
 
-    const gallery = <PrizesGallery />
+    const gallery = <PrizesGallery targetId={targetId} />
 
     return (
         <section>
              <ButtonFab
                 position={position}
                 top={top}
+                size={size}
                 onClick={handleFullOpen}
                 title={title}
                 shadowColor={shadowColor}
@@ -34,7 +38,7 @@ export default function PrizesBtn({
                 needTxtNoWrap={true}
                 variant="extended"
                 color="white"
-                backgroundColor={"var(--themeSDark--" + colorS +  ")"}
+                backgroundColor={backgroundColor ? backgroundColor : "var(--themeSDark--" + colorS +  ")"}
             />
             <ModalFullContent
                 contentComp={gallery}

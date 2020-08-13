@@ -2,12 +2,11 @@ import ReactjsPercentageCircle from '../../components/progressIndicators/Reactjs
 import React, { Fragment, useEffect, useState } from 'react';
 import getPercentage from '../../utils/numbers/getPercentage';
 import Tooltip from '../../components/tooltips/Tooltip';
-import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 import PrizesBtn from '../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal-content-pages/prizes-gallery/PrizesBtn';
 import useAPI, { readPrizes } from '../../hooks/api/useAPI';
 import { addDays } from '../../utils/dates/dateFns';
 import getDiffDays from '../../utils/dates/getDiffDays';
-// import useDelay from '../../hooks/useDelay';
+import GiftBox from './gift-box/GiftBox';
 
 // import Tilt from 'react-tilt';
 
@@ -35,11 +34,10 @@ export default function PercCircleAndGift({
     const userBeatedChall = currScore >= maxScore;
 
     const { data: lastPrizeDate, loading, } = useAPI({ url: readPrizes(userId), params: { lastPrizeDate: true } });
-    // const readyDays = useDelay(3000);
 
     useEffect(() => {
         const targetDate = addDays(new Date(lastPrizeDate), rewardDeadline + 1);
-        const res = targetDate ? getDiffDays(targetDate) : new Date();
+        const res = targetDate ? getDiffDays(targetDate) : "...";
         setFinalDeadline(Number.isNaN(res) ? "..." : res);
     }, [lastPrizeDate, rewardDeadline])
 
@@ -73,19 +71,19 @@ export default function PercCircleAndGift({
             left: '-25px',
         },
         deadlineTitle: {
-            top: '-20px',
+            top: '-25px',
             left: '15px',
         }
     }
 
-    const Gift =
-    <ImgLoader
-        className="app_gift animated bounce shadow-elevation-white"
-        src={imgLib.app_gift}
-        width={100}
-        height="auto"
-        style={{ opacity: userBeatedChall ? 1 : 0.5 }}
-    />
+    // const Gift =
+    // <ImgLoader
+    //     className="app_gift animated bounce shadow-elevation-white"
+    //     src={imgLib.app_gift}
+    //     width={100}
+    //     height="auto"
+    //     style={{ opacity: userBeatedChall ? 1 : 0.5 }}
+    // />
 
     const visibleTxt = `
         <p class="text-center">PRÊMIO DO DESAFIO n.º ${currChall}</p>
@@ -108,9 +106,16 @@ export default function PercCircleAndGift({
         >
             <div className="position-relative">
                 <div style={styles.deadlineBoard}>
-                    <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
-                        {finalDeadline === 0 ? `expirou` : `${finalDeadline} dia${plural}`}
-                    </p>
+                    {(loading || finalDeadline > 365)
+                    ? (
+                        <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
+                            ... dias
+                        </p>
+                    ) : (
+                        <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
+                            {finalDeadline === 0 ? `expirou` : `${finalDeadline} dia${plural}`}
+                        </p>
+                    )}
                 </div>
                 <p
                     className="text-small text-center font-weight-bold position-absolute text-nowrap"
@@ -157,7 +162,7 @@ export default function PercCircleAndGift({
                         <span className="text-title"> {truncate(prizeDesc, 20)}</span>.
                     </p>
                     <div className="position-relative">
-                        {Gift}
+                        <GiftBox />
                         {showPrizesBtn()}
                         {showPrizeDeadline()}
                     </div>
@@ -170,7 +175,7 @@ export default function PercCircleAndGift({
                             whiteSpace
                             width={325}
                             text={tooltipTxt}
-                            element={Gift}
+                            element={<GiftBox />}
                             backgroundColor={"var(--themeS--" + colorS +")"}
                         />
                         <p

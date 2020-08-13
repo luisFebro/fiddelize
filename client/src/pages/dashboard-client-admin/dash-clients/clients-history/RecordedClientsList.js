@@ -126,6 +126,8 @@ export default function RecordedClientsList() {
 
     // ExpansionPanel Content
     const actions = list.map(user => {
+        const { clientUserData: cliUser } = user;
+
         const handleSecHeading = user => (
             <div>
                 <p className="text-subtitle text-shadow font-weight-bold mb-1">
@@ -153,6 +155,7 @@ export default function RecordedClientsList() {
 
         const truncate = (name, leng) => window.Helper.truncate(name, leng);
         const isTestMode = name === user.name.cap();
+        const needCliPrizes = cliUser.totalPurchasePrize; // 0 by default.
 
         return({
            _id: user._id,
@@ -162,6 +165,7 @@ export default function RecordedClientsList() {
            secondaryHeading: handleSecHeading(user),
            userData: user,
            needBadgeForTestMode: isTestMode,
+           needCliPrizes,
            hiddenContent: <PanelHiddenContent data={user} needBadgeForTestMode={isTestMode} />
         });
     })

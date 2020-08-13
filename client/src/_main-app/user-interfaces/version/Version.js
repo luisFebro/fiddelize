@@ -2,8 +2,8 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.23.3"
-const updateDescription = "cronômetro do prazo de dias do resgate do prêmio || botão de acesso galeria de prêmios para cards no histórico || painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios) - pt 1";
+const latestVersion = "3.2302.3"
+const updateDescription = "cronômetro do prazo de dias do resgate do prêmio || botão de acesso galeria de prêmios para cards no histórico || painel - sessão design - botão revelar prêmios e metas para clientes? (sempre revelado ou escondido durante desafios) || caixa de presente animada - pt 2";
 const history = [
     "painel de controle admin - lista automática de tarefas - rolagem infinita",
     "Galeria de Prêmios (finalizado)",
