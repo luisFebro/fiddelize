@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import { logout } from '../../../redux/actions/authActions';
-import { CLIENT_URL } from '../../../config/clientUrl';
 import { Link } from 'react-router-dom';
 import RadiusBtn from '../../../components/buttons/RadiusBtn';
 import styled from 'styled-components';
@@ -12,25 +11,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from '../../../hooks/useRoleData';
 import gotArrayThisItem from '../../../utils/arrays/gotArrayThisItem';
 import { useAuthUser } from '../../../hooks/useAuthUser';
-import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
-// import useImg from '../../../hooks/media/useImg';
+import useImg, { Img } from '../../../hooks/media/useImg';
 // import useCount from '../../../hooks/useCount';
 
 const gotToken = localStorage.getItem("token");
 const isApp = isThisApp();
+const isSmall = window.Helper.isSmallScreen();
 
 function Navbar({ history, location }) {
-    // const srcTest = useImg("/img/illustrations/sms-scheduling.svg", { key: "sms-scheduling"})
-
-    const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
     //RT = 2 (OK);
     // useCount();
-    // const [showSkeleton, setShowSkeleton] = useState(true);
     const [isSearchOpen, setSearchOpen] = useState(false);
     const {  role, _idStaff } = useStoreState(state => ({
        role: state.userReducer.cases.currentUser.role,
        _idStaff: state.userReducer.cases.currentUser._id,
     }));
+
+    const [url, setUrl] = useState({
+        logoBiz: "",
+        logoFid: "",
+    });
+
+    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: url.logoBiz })
+    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: url.logoFid })
+    const logoSrc = logoBiz ? logoBiz : logoFid;
 
     const { isAuthUser } = useAuthUser();
     const { bizCodeName, selfBizLogoImg, selfThemePColor } = useClientAdmin();
@@ -142,15 +146,18 @@ function Navbar({ history, location }) {
 
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo = (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isApp);
-    const fiddelizeLogo = `${CLIENT_URL}/img/official-logo-name.png`;
+    const fiddelizeLogo = `/img/official-logo-name.png`;
     const handleLogoSrc = () => {
         if(needClientLogo) {
-            return imgLib.app_biz_logo(selfBizLogoImg);
+            return setUrl({ ...url, logoBiz: selfBizLogoImg });
         } else {
-            return fiddelizeLogo;
+            return setUrl({ ...url, logoFid: fiddelizeLogo });
         }
     };
-    const src = React.useCallback(() => handleLogoSrc(), [needClientLogo]);
+
+    useEffect(() => {
+        handleLogoSrc();
+    }, [needClientLogo])
 
     const showLogo = () => {
         const isSquared = isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
@@ -175,10 +182,10 @@ function Navbar({ history, location }) {
         }
         return(
             <Link to={handleLogoClick()}>
-                <ImgLoader
-                    className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                <Img
+                    className="animated zoomIn slow"
                     style={{position: 'absolute', top: isAuthUser ? 0 : '12px', left: isSmall ? '10px' : '20px'}}
-                    src={locationNow === "/" ? fiddelizeLogo : src()}
+                    src={locationNow === "/" ? fiddelizeLogo : logoSrc}
                     alt="Logomarca Principal"
                     width={handleSize("width")}
                     height={handleSize("height")}

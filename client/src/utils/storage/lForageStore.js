@@ -31,17 +31,6 @@ const imgLib = {
     get dash_podium() { return handleStorage(`/img/icons/podium.png`, getOptions("icons", "dash_podium")) },
     // Shapes - check for multiple request found after inserting the first svg shape...
     get dash_title_shape() { return handleStorage(`/img/shapes/blob-dashboard-header.svg`, getOptions("shapes", "dash_title_shape", null, null, "multi")) },
-    get app_start_shape_default() { return handleStorage(`/img/shapes/blob-app-start--default.svg`, getOptions("shapes", "app_start_shape_default")) },
-    get app_start_shape_pink() { return handleStorage(`/img/shapes/blob-app-start--pink.svg`, getOptions("shapes", "app_start_shape_pink")) },
-    get app_start_shape_purple() { return handleStorage(`/img/shapes/blob-app-start--purple.svg`, getOptions("shapes", "app_start_shape_purple")) },
-    get app_start_shape_red() { return handleStorage(`/img/shapes/blob-app-start--red.svg`, getOptions("shapes", "app_start_shape_red")) },
-    get app_start_shape_orange() { return handleStorage(`/img/shapes/blob-app-start--orange.svg`, getOptions("shapes", "app_start_shape_orange")) },
-    get app_start_shape_black() { return handleStorage(`/img/shapes/blob-app-start--black.svg`, getOptions("shapes", "app_start_shape_black")) },
-    get app_start_shape_white() { return handleStorage(`/img/shapes/blob-app-start--white.svg`, getOptions("shapes", "app_start_shape_white")) },
-    get app_start_shape_blue() { return handleStorage(`/img/shapes/blob-app-start--blue.svg`, getOptions("shapes", "app_start_shape_blue")) },
-    get app_start_shape_green() { return handleStorage(`/img/shapes/blob-app-start--green.svg`, getOptions("shapes", "app_start_shape_green")) },
-    get app_start_shape_brown() { return handleStorage(`/img/shapes/blob-app-start--brown.svg`, getOptions("shapes", "app_start_shape_brown")) },
-    get app_start_shape_yellow() { return handleStorage(`/img/shapes/blob-app-start--yellow.svg`, getOptions("shapes", "app_start_shape_yellow")) },
     // Illustration
     get app_chat_illustra() { return handleStorage(`/img/illustrations/online-chat.svg`, getOptions("illustrations", "app_chat_illustra")) },
     get app_empty_purchase_illustra() { return handleStorage(`/img/illustrations/empty-woman-card.svg`, getOptions("illustrations", "app_empty_purchase_illustra")) },
@@ -78,7 +67,7 @@ function handleStorage(url, options = {}) {
         if(!generatedUrl) {
             return setImage(coll, key, urlPath)
             .then(res => {
-                console.log(`New image set to indexedDB. Collection: ${coll}, dataKey: ${key}`)
+                console.log(`NEW IMG SET TO: Coll: ${coll}, Key: ${key}`)
                 return urlPath;
             })
             .catch(err => console.log(err))

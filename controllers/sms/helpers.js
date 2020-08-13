@@ -1,3 +1,5 @@
+const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
+
 // HELPERS
 function getContactDetails(contactList) {
     let finalStr = "";
@@ -5,9 +7,7 @@ function getContactDetails(contactList) {
     contactList.map((data, ind) => {
         const n = ind + 1;
         const client = data.name;
-        const code = data.countryCode;
-        const phone = convertPhoneStrToInt(data.phone);
-        const finalPhoneNumber = Number(`${code}${phone}`);
+        const finalPhoneNumber = convertPhoneStrToInt(data.phone);
 
         finalStr += `&refer${n}=${client}&number${n}=${finalPhoneNumber}`;
     })
@@ -45,7 +45,7 @@ async function requestInBatch(data, options = {}) {
 
         // Promise.all will wait till all the promises got resolves and then take the next batch.
         await Promise.all([requestBatch()])
-        .then(res => console.log(`batch N° ${++batchCount} OK. - details: ${res}`))
+        .then(res => console.log(`batch N° ${++batchCount} OK. - details: ${JSON.stringify(res)}`))
         .catch(e => console.log(`Error in requesting the batch N.° ${i + 1} - ${e}`)) // Catch the error.
     }
 }

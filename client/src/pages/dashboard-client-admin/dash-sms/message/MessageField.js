@@ -57,7 +57,8 @@ export default function MessageField({
     }
 
     const modal = {
-        numContacts: contactList.length,
+        userId,
+        contactList,
         whichTab: whichTab ? whichTab : "Lista de Clientes",
         message,
     }

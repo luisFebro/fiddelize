@@ -1,6 +1,5 @@
 const User = require('../../models/user');
 const { msgG } = require('../_msgs/globalMsgs');
-const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
 const httpRequest = require("../../utils/http/httpRequest");
 const { getContactDetails, setCustomConfig, requestInBatch } = require("./helpers");
 // const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
@@ -50,7 +49,7 @@ exports.readContacts = (req, res) => {
                 if(autocomplete) {
                     finalRes.push(user.name);
                 } else {
-                    finalRes.push({ name: user.name, phone: user.phone, countryCode: 55 })
+                    finalRes.push({ name: user.name, phone: user.phone })
                 }
             }
         })
@@ -83,7 +82,7 @@ exports.sendSMS = (req, res) => {
 
     const moreConfig = { msg, secret, serviceType, jobdateQuery, jobtimeQuery, flashQuery }
     requestInBatch(contactList, { promise: httpRequest, batchSize: 2, moreConfig })
-    .then(dataRes => res.json({ msg: `All SMS sent. details: ${dataRes}`}))
+    .then(dataRes => res.json({ msg: `All SMS sent.`}))
     .catch(err => console.log(err));
 
 }
@@ -122,6 +121,9 @@ Single SMS response:
         "descricao": "MENSAGEM NA FILA"
     }
 ]
+
+Multiple Responses:
+[{"number":"92984784629","id":"799601748","refer":"Maria","situacao":"OK","descricao":"MENSAGEM NA FILA"},{"number":"92992576121","id":"799601749","refer":"Lucas","situacao":"OK","descricao":"MENSAGEM NA FILA"}]]
 
 n2:
 // reference: https://www.freecodecamp.org/news/promise-all-in-javascript-with-example-6c8c5aea3e32/

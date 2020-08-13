@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { handleStorage } from '../../utils/storage/lForageStore';
+import { default as Img } from '../../components/ImgLoader';
+
+export { Img };
 
 export default function useImg(url, options = {}) {
-    const { coll = "imgs", key } = options;
+    const {
+        coll = "imgs",
+        key,
+        trigger = true,
+    } = options;
 
     const [src, setSrc] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [done, setDone] = useState(false);
 
+    const isWeb = url.indexOf("https://") !== -1
+
+
     useEffect(() => {
-        setLoading(true);
-        if(!done && url) {
-            console.log("RUNNING USEIMG BITCH")
-            const options = { coll, key, needSelector: false }
+        if(trigger && !done && url) {
+            const options = { coll, key, isFromInternet: isWeb, needSelector: false }
             handleStorage(url, options)
             .then(generatedSrc => {
                 setSrc(generatedSrc);
-                setLoading(false);
                 setDone(true);
             })
         }
-    }, [url])
+    }, [url, trigger])
 
-    return { src, loading };
+    return src; // n1
 }
+
+
+/* COMMENTS
+n1: does not need loading because there is an img loader which handles it Img compoenent
+*/

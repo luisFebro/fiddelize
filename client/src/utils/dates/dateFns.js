@@ -7,6 +7,7 @@ import subDays from 'date-fns/subDays';
 import addDays from 'date-fns/addDays';
 import getHours from 'date-fns/getHours';
 import getMinutes from 'date-fns/getMinutes';
+import { default as today } from 'date-fns/isToday';
 
 const localeObj = {
     default: ptBR,
@@ -27,6 +28,7 @@ const calendar = (date, locale) => formatRelative(new Date(date), now, { locale:
 
 const getLocalHour = (date) => `${getHours(date)}:${getMinutes(date)}`
 
+const isToday = today(new Date());
 export {
     dateFnsUtils,
     ptBRLocale,
@@ -36,6 +38,7 @@ export {
     addDays,
     subDays,
     getLocalHour,
+    isToday,
 }
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time

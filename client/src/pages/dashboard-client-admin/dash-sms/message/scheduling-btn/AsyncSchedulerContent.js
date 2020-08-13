@@ -4,8 +4,9 @@ import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import { dateFnsUtils, ptBRLocale } from '../../../../../utils/dates/dateFns';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import getTimezoneDate from '../../../../../utils/dates/getTimezoneDate';
-import { formatDMY, getLocalHour } from '../../../../../utils/dates/dateFns';
+import { formatDMY, getLocalHour, isToday } from '../../../../../utils/dates/dateFns';
 import getWeekDayBr from '../../../../../utils/dates/getWeekDayBr';
+import useAPI, { sendSMS, getUniqueId } from '../../../../../hooks/api/useAPI';
 
 const muiTheme = createMuiTheme({
     overrides: {
@@ -38,8 +39,8 @@ const muiTheme = createMuiTheme({
 });
 
 export default function AsyncSchedulerContent({ modal }) {
-    console.log("modal", modal);
-    const { whichTab, numContacts, message } = modal;
+    const { userId, whichTab, contactList, message } = modal;
+
     const [selectedDate, handleDateChange] = useState(new Date());
     const [open, setOpen] = useState(false);
     const [done, setDone] = useState(false);
@@ -49,13 +50,28 @@ export default function AsyncSchedulerContent({ modal }) {
         sysDay: new Date(),
         sysHour: new Date(),
     })
-    console.log("data", data);
-
     const { uiDay, uiHour, sysDay, sysHour } = data;
+    const [trigger, setTrigger] = useState(false);
+
+    useAPI({
+        method: 'post',
+        url: sendSMS(),
+        body: {
+            userId,
+            contactList,
+            msg: message,
+            jobdate: sysDay,
+            jobtime: sysHour,
+        },
+        needAuth: true,
+        snackbar: { txtPending: "Agendando o envio. Um momento...", txtSuccess: `Agendamento realizado para ${isToday ? "Hoje" : uiDay} às ${uiHour}!` },
+        trigger
+    })
+
 
     useEffect(() => {
         setData({
-            uiDay: `${formatDMY(selectedDate, { short: true })} (${getWeekDayBr(selectedDate)})`,
+            uiDay: `${formatDMY(selectedDate, { short: true })} (${isToday ? "Hoje" : getWeekDayBr(selectedDate)})`,
             uiHour: getLocalHour(selectedDate),
             sysDay: getTimezoneDate('day', { newDate: selectedDate }),
             sysHour: getTimezoneDate('hour', { newDate: selectedDate }),
@@ -63,7 +79,8 @@ export default function AsyncSchedulerContent({ modal }) {
     }, [selectedDate])
 
     const handleSchedule = () => {
-        //
+        const uniqueId = getUniqueId();
+        setTrigger(uniqueId);
     }
 
     const openPicker = () => {
@@ -153,6 +170,7 @@ export default function AsyncSchedulerContent({ modal }) {
         );
     }
 
+    const numContacts = contactList.length;
     const plural = numContacts > 1 ? "s" : "";
 
     const showSummary = () => (

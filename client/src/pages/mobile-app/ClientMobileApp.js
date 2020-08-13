@@ -15,7 +15,6 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { useAppSystem } from '../../hooks/useRoleData';
 import { useRunComp } from '../../hooks/useRunComp';
 import ClientUserAppContent from './content/ClientUserAppContent';
-import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import isThisApp from '../../utils/window/isThisApp';
 import AsyncBellNotifBtn from '../../components/notification/AsyncBellNotifBtn';
@@ -27,6 +26,7 @@ import useCount from '../../hooks/useCount';
 import CompLoader from '../../components/CompLoader';
 import useBackColor from '../../hooks/useBackColor';
 import useCountNotif from '../../hooks/notification/useCountNotif';
+import useImg, { Img } from '../../hooks/media/useImg';
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -35,6 +35,11 @@ const isApp = isThisApp();
 
 function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
+
+    const [url, setUrl] = useState({
+        logoBiz: "",
+        logoFid: "",
+    });
 
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
@@ -46,6 +51,13 @@ function ClientMobileApp({ location, history }) {
         selfThemeSColor,
         selfThemeBackColor, } = useClientAdmin();
     const { currScore } = useClientUser();
+
+    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: url.logoBiz })
+    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: url.logoFid })
+
+    const shapeSrc = useImg(`/img/shapes/blob-app-start--${selfThemePColor}.svg`, { coll: "shapes", key: `app_start_shape_${selfThemePColor}` })
+    const logoSrc = logoBiz ? logoBiz : logoFid;
+
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
@@ -79,9 +91,9 @@ function ClientMobileApp({ location, history }) {
     const needClientLogo = (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
     const handleLogoSrc = () => {
         if(needClientLogo) {
-            return imgLib.app_biz_logo(selfBizLogoImg);
+            return setUrl({ ...url, logoBiz: selfBizLogoImg });
         } else {
-            return imgLib.app_fiddelize_logo;
+            return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
         }
     }
     useEffect(() => {
@@ -93,8 +105,9 @@ function ClientMobileApp({ location, history }) {
 
         return(
             <div className="container-center">
-                <ImgLoader
-                    className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow`}
+                <Img
+                    src={logoSrc}
+                    className="animated zoomIn slow"
                     style={{position: 'relative', margin: '15px 0'}}
                     width={isSquared ? 100 : 190}
                     height={isSquared ? 100 : 85}
@@ -134,7 +147,6 @@ function ClientMobileApp({ location, history }) {
     );
 
     const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
-    const shapeColor = `app_start_shape_${selfThemePColor}`;
     const showAppType = () => (
         roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin &&
         <div className="container-center">
@@ -143,9 +155,8 @@ function ClientMobileApp({ location, history }) {
                     style={{animationIterationCount: 1}}
                     className="animated rubberBand delay-1s"
                 >
-                    <ImgLoader
-                        className={shapeColor}
-                        src={imgLib[shapeColor]}
+                    <Img
+                        src={shapeSrc}
                         width={460}
                         needLoader={false}
                         height={130}
