@@ -44,8 +44,11 @@ async function requestInBatch(data, options = {}) {
         }
 
         // Promise.all will wait till all the promises got resolves and then take the next batch.
-        await Promise.all([requestBatch()])
-        .then(res => console.log(`batch N° ${++batchCount} OK. - details: ${JSON.stringify(res)}`))
+        return await Promise.all([requestBatch()])
+        .then(data => {
+            console.log(`batch N° ${++batchCount} OK.`)
+            return data;
+        })
         .catch(e => console.log(`Error in requesting the batch N.° ${i + 1} - ${e}`)) // Catch the error.
     }
 }

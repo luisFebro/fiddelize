@@ -1,6 +1,7 @@
 import { useStoreState } from 'easy-peasy';
 import lStorage, { appSystemColl, userProfileColl } from '../utils/storage/lStorage';
-
+import getFirstName from '../utils/string/getFirstName';
+export { getFirstName };
 const sys = lStorage("getItems", appSystemColl);
 const systemRole = sys && sys.roleWhichDownloaded;
 const systemBizId = sys && sys.businessId;

@@ -60,7 +60,7 @@ export default function AutomaticSMS() {
                     <section className="position-relative">
                         <div className="position-absolute automatic-sms-robot" style={styles.robot}>
                             <img
-                                className="shadow-elevation-black animated fadeInUp slow delay-3s"
+                                className="shadow-elevation-black animated fadeInUp slow delay-1s"
                                 src="/img/icons/sms-fiddelize-robot.svg"
                                 height="auto"
                                 width={100}

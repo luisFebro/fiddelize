@@ -15,7 +15,7 @@ const smsHistoryData = {
     sentMsgDesc: String, // description of the msg sent in this batch
     totalSMS: Number, // length of contact list
     firstContacts: Array, // the first 3 names from easy identification.
-    contactList: [ContactListSchema], // add smsId to each contactList to get carrier and sms status
+    contactIdList: Array, // add smsId to each contactList to get carrier and sms status
     createdAt: { type: Date, default: Date.now },
 }
 const SmsHistorySchema = new Schema(smsHistoryData, { _id: true });

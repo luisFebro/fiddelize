@@ -63,7 +63,7 @@ exports.readContacts = (req, res) => {
 }
 
 // Method: POST
-exports.sendSMS = (req, res) => {
+exports.mwSendSMS = (req, res, next) => {
     const {
         userId,
         contactList = [{ name: "Febro", phone: "(92) 99281-7363", countryCode: 55 }],
@@ -82,9 +82,34 @@ exports.sendSMS = (req, res) => {
 
     const moreConfig = { msg, secret, serviceType, jobdateQuery, jobtimeQuery, flashQuery }
     requestInBatch(contactList, { promise: httpRequest, batchSize: 2, moreConfig })
-    .then(dataRes => res.json({ msg: `All SMS sent.`}))
+    .then(data => {
+        if(!data) return res.status(400).json({ error: "No data received"})
+
+        const providerRes = data[0];
+        if(providerRes.length) {
+            const firstContacts = [];
+            const contactIdList = providerRes.map((contact, ind) => {
+                if(ind <= 2) { firstContacts.push(contact.refer); } // get up to the first 3 names
+                return contact.id;
+            });
+            const numCredits = providerRes.length;
+
+            req.userId = userId;
+            req.msg = msg;
+            req.numCredits = numCredits;
+            req.firstContacts = firstContacts;
+            req.contactIdList = contactIdList;
+
+            next();
+        }
+    })
     .catch(err => console.log(err));
 
+}
+
+// for scheduled sms.
+exports.cancelSMS = (req, res) => {
+    // https://api.smsdev.com.br/get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
 }
 
 exports.getTotalTransitions = (req, res) => {
@@ -92,11 +117,76 @@ exports.getTotalTransitions = (req, res) => {
     // Transition Total (each card)
 }
 
-exports.getMainCardInfos = (req, res) => {
-    // .select("-contactList")
-    // Total amount of each tansition SMS
-    // get the two first name of the list, if only one, ignore the second
-    // Sent msg
+// SMS CREDITS
+
+// METHOD: GET
+exports.readCredits = (req, res) => {
+    const { userId } = req.query;
+
+    User.findById(userId)
+    .select("clientAdminData.smsBalance -_id")
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+
+        const balance = doc.clientAdminData.smsBalance;
+        res.json(balance);
+    })
+}
+
+exports.mwDiscountCredits = (req, res, next) => {
+    const { userId, numCredits } = req; // numCredits is the length of contactList
+
+    const discountThis = { "clientAdminData.smsBalance": Number(`-${numCredits}`) };
+
+    User.findOneAndUpdate(
+        { _id: userId },
+        { $inc: discountThis },
+        { new: true })
+    .select("clientAdminData.smsBalance -_id")
+    .exec((err, data) => {
+        const balance = data.clientAdminData.smsBalance;
+        if(err) return res.status(500).json(msgG("error.systemError", err));
+
+        console.log(`OK! it was discounted ${numCredits}. new Balance: ${balance}.`);
+        next();
+    })
+}
+
+exports.addCredits = (req, res) => {
+}
+
+// END SMS CREDITS
+
+// SMS HISTORY
+exports.addSMSHistory = (req, res) => {
+    const {
+        userId,
+        contactIdList,
+        firstContacts,
+        numCredits,
+        msg } = req;
+
+    const historyData = {
+        sentMsgDesc: msg,
+        totalSMS: numCredits,
+        firstContacts,
+        contactIdList,
+    }
+    console.log("historyData", historyData);
+
+    const objToPush = { "clientAdminData.smsHistory": { $each: [historyData], $position: 0 } }
+
+    User.findOneAndUpdate(
+        { _id: userId },
+        { $push: objToPush },
+        { new: false })
+    .select("clientAdminData.smsHistory")
+    .exec(err => {
+        if(err) return res.status(500).json(msgG("error.systemError", err));
+
+        console.log(`OK! All SMS sending operations done!`);
+        res.json({ msg: "all SMS sent successfully!"});
+    })
 }
 
 exports.readSMSHistory = (req, res) => { // n2
@@ -108,6 +198,19 @@ exports.readSMSHistory = (req, res) => { // n2
      */
 }
 
+exports.getMainCardInfos = (req, res) => {
+    // .select("-contactList")
+    // Total amount of each tansition SMS
+    // get the two first name of the list, if only one, ignore the second
+    // Sent msg
+}
+
+// statement = extrato.
+exports.readHistoryStatement = (req, res) => {
+
+}
+
+// END SMS HISTORY
 
 /* COMMENTS
 n1:

@@ -1,6 +1,8 @@
 import React from 'react';
 import AddSMSBtn from './add-sms-btn/AddSMSBtn';
 import convertToReal from '../../../../utils/numbers/convertToReal';
+import useAPI, { readCredits } from '../../../../hooks/api/useAPI';
+import { useAppSystem } from '../../../../hooks/useRoleData';
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -13,7 +15,11 @@ const getStyles = () => ({
 
 export default function CreditsBalance() {
     const styles = getStyles();
-    const smsBalance = convertToReal(1450);
+
+    const { businessId: userId } = useAppSystem();
+
+    let { data: smsBalance, loading } = useAPI({ url: readCredits(userId), needAuth: true })
+    smsBalance = convertToReal(smsBalance);
 
     return (
         <section className="mt-5 my-3">
@@ -24,7 +30,7 @@ export default function CreditsBalance() {
                         className="d-inline-block ml-2 font-size text-em-1-5"
                         style={styles.balance}
                     >
-                        {smsBalance}
+                        {loading ? "..." : smsBalance}
                     </span>
                     <p
                         className="position-absolute m-0 text-subtitle font-weight-bold text-purple text-center"

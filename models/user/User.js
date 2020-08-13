@@ -170,7 +170,7 @@ const clientAdminData = {
     notifications: [NotificationsSchema],
     tasks: [TasksListSchema],
 
-    smsBalance: Number,
+    smsBalance: { type: Number, default: 0 },
     smsHistory: [SmsHistorySchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
