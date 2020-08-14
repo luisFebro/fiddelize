@@ -1,8 +1,11 @@
 import React from 'react';
 import { useProfile, getFirstName } from '../../../../../hooks/useRoleData';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import AddSMSBtn from '../../credits-balance/add-sms-btn/AddSMSBtn';
 
-export default function AsyncChargeCredits() {
+export default function AsyncChargeCredits({
+    currBalance,
+    totalRecipients,
+}) {
     const { name } = useProfile();
 
     const showTitle = () => (
@@ -27,23 +30,16 @@ export default function AsyncChargeCredits() {
 
     const showMsg = () => (
         <section className="mb-5 text-purple text-normal mx-3">
-            Poxa, {getFirstName(name)}! Seu saldo de 100 créditos não é suficiente para 150 envios.
+            Poxa, {getFirstName(name)}! Seu <strong>saldo de {currBalance} créditos</strong> não é suficiente para {totalRecipients} envios.
             <br />
             <br />
-            Recarregue seus créditos ou continue enviando para mais 100 contatos.
+            Recarregue seus créditos ou continue enviando para mais {currBalance} contatos.
         </section>
     );
 
     const showCTA = () => (
         <section className="container-center my-5">
-            <ButtonFab
-                size="large"
-                title="Recarregar"
-                position="relative"
-                onClick={null}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
-            />
+            <AddSMSBtn btnTitle="Recarregar" />
         </section>
     );
 

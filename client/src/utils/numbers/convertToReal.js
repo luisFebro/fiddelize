@@ -9,7 +9,7 @@ export default function convertToReal(number, options = {}) {
         toDefault = false, // transform back to american format (later update)
     } = options;
 
-    if(!number) return "need a number as the first parameter";
+    if(!number && number !== 0) return console.log("need a number as the first parameter");
     if(number.toString().indexOf(",") > 0) return "the number should not contain a comma";
 
     if(typeof number === "string") { // n1

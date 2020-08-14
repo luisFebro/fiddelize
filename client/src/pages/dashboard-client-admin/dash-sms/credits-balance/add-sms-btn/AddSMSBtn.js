@@ -14,7 +14,7 @@ const getStyles = props => ({
     }
 })
 
-export default function AddSMSBtn() {
+export default function AddSMSBtn({ btnTitle = "Adicionar" }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const AsyncAddSMSContent = <Async />
@@ -31,14 +31,14 @@ export default function AddSMSBtn() {
     }
 
     return (
-        <section className="mt-5 ml-3">
+        <section className={btnTitle !== "Adicionar" ? "" : "mt-5 ml-3"} >
             <ButtonFab
                 size="large"
-                title="Adicionar"
+                title={btnTitle}
                 onClick={handleFullOpen}
                 backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
-                position = 'relative'
+                variant= 'extended'
+                position= 'relative'
                 iconMu={PlusIcon}
             />
             <ModalFullContent

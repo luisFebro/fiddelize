@@ -3,6 +3,7 @@ const getUniqueId = () => uuidv1();
 
 // trigger if there is the name of the component which is sending request from redux
 // the component should be followed by an unique id so that it can be trigger.
+// use it for useAPIList only since trigger does not return nothing as data, only works for updating if necessary later...
 function getTrigger(runNameWithId, targetName) {
     if(!runNameWithId || !targetName) return false;
 
@@ -10,6 +11,15 @@ function getTrigger(runNameWithId, targetName) {
 
     return runNameWithId.includes(targetName)
     ? runNameWithId : false;
+}
+
+// used for useAPI since requires the trigger to be true in the start.
+function needTrigger(runNameWithId, targetName) {
+    if(!runNameWithId || !targetName) return true;
+
+    // if runNameWithId is an Array, then it returns -1
+    return runNameWithId.indexOf(targetName) !== -1
+    ? runNameWithId : true;
 }
 
 
@@ -29,4 +39,4 @@ function treatBoolStatus(boolStr) {
 // const falseStatus = "false_1321321432432434323"
 // const res = treatFalseStatus(falseStatus); // false boolean
 
-export { getTrigger, getUniqueId, treatBoolStatus };
+export { getTrigger, needTrigger, getUniqueId, treatBoolStatus };

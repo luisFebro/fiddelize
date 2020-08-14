@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AddSMSBtn from './add-sms-btn/AddSMSBtn';
 import convertToReal from '../../../../utils/numbers/convertToReal';
-import useAPI, { readCredits } from '../../../../hooks/api/useAPI';
+import useAPI, { readCredits, needTrigger } from '../../../../hooks/api/useAPI';
 import { useAppSystem } from '../../../../hooks/useRoleData';
+import { useRunComp } from '../../../../hooks/useRunComp';
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -13,13 +14,27 @@ const getStyles = () => ({
 });
 
 
-export default function CreditsBalance() {
+export default function CreditsBalance({ handleBalance }) {
     const styles = getStyles();
 
     const { businessId: userId } = useAppSystem();
 
-    let { data: smsBalance, loading } = useAPI({ url: readCredits(userId), needAuth: true })
+    const { runName } = useRunComp();
+
+    const trigger = needTrigger(runName, "CreditsBalance");
+
+    let { data: smsBalance, loading } = useAPI({
+        url: readCredits(userId),
+        needAuth: true,
+        trigger,
+    })
     smsBalance = convertToReal(smsBalance);
+
+    useEffect(() => {
+        if(!loading) {
+            handleBalance(smsBalance);
+        }
+    }, [smsBalance, loading])
 
     return (
         <section className="mt-5 my-3">

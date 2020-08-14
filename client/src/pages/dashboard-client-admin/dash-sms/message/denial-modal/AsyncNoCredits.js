@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProfile, getFirstName } from '../../../../../hooks/useRoleData';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import AddSMSBtn from '../../credits-balance/add-sms-btn/AddSMSBtn';
 
 export default function AsyncNoCredits() {
     const { name } = useProfile();
@@ -33,14 +33,7 @@ export default function AsyncNoCredits() {
 
     const showCTA = () => (
         <section className="container-center my-5">
-            <ButtonFab
-                size="large"
-                title="Investir"
-                position="relative"
-                onClick={null}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
-            />
+            <AddSMSBtn btnTitle="Investir" />
         </section>
     );
 

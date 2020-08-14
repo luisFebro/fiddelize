@@ -24,10 +24,16 @@ export default function AsyncSMS() {
         contactList: [],
         whichTab: "Lista de Clientes",
         suggestionMsg: "",
+        currBalance: 0,
     });
     const dispatch = useStoreDispatch();
 
-    const { showMessage, whichTab, contactList, suggestionMsg } = data;
+    const {
+        showMessage,
+        whichTab,
+        contactList,
+        suggestionMsg,
+        currBalance } = data;
 
     const handleWhichTab = currTab => {
         setData({ ...data, whichTab: currTab });
@@ -58,6 +64,10 @@ export default function AsyncSMS() {
         handleFocus("messageField");
     }
 
+    const handleBalance = balance => {
+        setData({ ...data, currBalance: balance })
+    }
+
     return (
         <Fragment>
             <div className="async-sms-title">
@@ -65,7 +75,7 @@ export default function AsyncSMS() {
                     title={TitleSMS}
                 />
             </div>
-            <CreditsBalance />
+            <CreditsBalance handleBalance={handleBalance} />
             <RecipientOptions
                 whichTab={whichTab}
                 setWhichTab={handleWhichTab}
@@ -77,6 +87,9 @@ export default function AsyncSMS() {
                 suggestionMsg={suggestionMsg}
                 whichTab={whichTab}
                 contactList={contactList}
+                currBalance={currBalance}
+                totalRecipients={contactList.length}
+                handleShowMessage={handleShowMessage}
             />
             {showMessage && (
                 <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />

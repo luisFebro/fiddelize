@@ -57,7 +57,7 @@ export default function AsyncExtract({ extractId }) {
         const config = {
             mode: "center",
             offset: 10,
-            duration: 1000,
+            duration: 3000,
             onDone: () => postFunction(),
         }
         showSnackbar(dispatch, "Adicionando contatos... Um momento!", "warning", 7000)

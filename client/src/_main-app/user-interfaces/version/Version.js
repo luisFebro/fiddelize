@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.3907.3"
+const latestVersion = "3.3908.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
 const updateDescription = "painel de controle cliente-admin - sessão SMS pt23";

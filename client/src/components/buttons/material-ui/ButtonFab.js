@@ -65,7 +65,8 @@ export default function ButtonFab({
     needBtnShadow,
     onMouseOver,
     zIndex,
-    width, }) {
+    width,
+    disabled = false, }) {
     const [toggle, setToggle] = useState('');
 
     const styles = {
@@ -142,6 +143,7 @@ export default function ButtonFab({
             size={ size || "small" }
             aria-label={title}
             style={styles.fab}
+            disabled={disabled}
         >
             <span
                 className={`${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`}

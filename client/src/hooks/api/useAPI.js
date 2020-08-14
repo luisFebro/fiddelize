@@ -66,7 +66,7 @@ export default function useAPI({
     }
 
     const handleUpdateData = () => {
-        // same unique component name which is being requesting with uniqueId alongside if needed more than once...
+        // same target component NAME which is being requesting to...
         if(!runName) return;
         setRun(dispatch, runName);
     }

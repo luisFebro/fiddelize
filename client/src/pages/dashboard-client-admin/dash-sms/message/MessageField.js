@@ -2,13 +2,14 @@ import React, { useState, useEffect, Fragment } from 'react';
 import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../utils/form/use-state/handleChange';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
-import useAPI, { sendSMS } from '../../../../hooks/api/useAPI';
+import useAPI, { sendSMS, getUniqueId } from '../../../../hooks/api/useAPI';
 import { useAppSystem } from '../../../../hooks/useRoleData';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
 import Title from '../../../../components/Title';
 import SchedulingBtn from './scheduling-btn/SchedulingBtn';
 import AccessDenialModal from './denial-modal/AccessDenialModal';
+import scrollIntoView from '../../../../utils/document/scrollIntoView';
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -26,13 +27,24 @@ const getStyles = () => ({
     },
 });
 
+const getModalData = ({ whichTab, userId, contactList, message }) => ({
+    userId,
+    contactList,
+    whichTab: whichTab ? whichTab : "Lista de Clientes",
+    message,
+});
+
 export default function MessageField({
     whichTab,
     contactList,
     showMessage,
     suggestionMsg,
+    currBalance = 0,
+    totalRecipients,
+    handleShowMessage,
 }) {
     const [message, setMessage] = useState("");
+    const [disabled, setDisabled] = useState(false);
     const [whichDenial, setWhichDenial] = useState(null);
     const [trigger, setTrigger] = useState(false);
     const styles = getStyles();
@@ -42,38 +54,56 @@ export default function MessageField({
     }, [suggestionMsg])
 
     const { businessId: userId } = useAppSystem();
-    useAPI({
+    const uniqueId = getUniqueId();
+    const runName = `CreditsBalance ${uniqueId}`
+
+    const { data: doneMsg } = useAPI({
         method: 'post',
         url: sendSMS(),
         body: { userId, contactList, msg: message },
         needAuth: true,
         snackbar: { txtPending: "Enviando agora...", txtSuccess: "Mensagem Enviada!" },
-        trigger
+        trigger,
+        runName,
     })
+
+    useEffect(() => {
+        if(doneMsg) {
+            setMessage("");
+            setDisabled(false);
+
+            const handleCallback = () => {
+                handleShowMessage(false);
+            }
+
+            const config = {
+                mode: "center",
+                duration: 3000,
+                onDone: () => handleCallback(),
+            }
+
+            scrollIntoView("#smsHistoryTotals", config);
+        }
+    }, [doneMsg])
 
     const dispatch = useStoreDispatch();
     const handleSendNow = () => {
-        const currBalance = 0;
-        const totalRecipients = 150;
         if(!message.length) return showSnackbar(dispatch, "Insira alguma mensagem ou selecione uma sugestão abaixo", "error", 6000);
         if(currBalance === 0) return setWhichDenial("NoCredits");
         if(currBalance < totalRecipients) return setWhichDenial("ChargeCredits");
 
+        setDisabled(true);
         setTrigger(true);
     }
 
-    const modal = {
-        userId,
-        contactList,
-        whichTab: whichTab ? whichTab : "Lista de Clientes",
-        message,
-    }
+    const modal = getModalData({ whichTab, userId, contactList, message });
 
     const showCTABtn = () => (
         <section className="d-flex align-items-center justify-content-around mt-5 mb-3">
             <SchedulingBtn modal={modal} />
             <ButtonFab
                 size="large"
+                disabled={disabled}
                 title="Enviar agora"
                 position="relative"
                 onClick={handleSendNow}
@@ -87,7 +117,7 @@ export default function MessageField({
 
     return (
         <Fragment>
-            {(showMessage && contactList.length) && (
+            {Boolean(showMessage && contactList.length) && (
                 <section className="animated fadeInUp slow">
                     <hr className="lazer-purple" />
                     <Title
@@ -146,6 +176,8 @@ export default function MessageField({
             )}
             <AccessDenialModal
                 whichDenial={whichDenial}
+                currBalance={currBalance}
+                totalRecipients={totalRecipients}
             />
         </Fragment>
     );

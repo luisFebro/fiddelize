@@ -8,10 +8,13 @@ const AsyncChargeCredits = Load({ loader: () => import('./AsyncChargeCredits'  /
 
 export default function AccessDenialModal({
     whichDenial = null,
+    currBalance,
+    totalRecipients,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncDenialPage = whichDenial === "NoCredits" ? <AsyncNoCredits /> : <AsyncChargeCredits />;
+    const AsyncDenialPage =
+    whichDenial === "NoCredits" ? <AsyncNoCredits /> : <AsyncChargeCredits currBalance={currBalance} totalRecipients={totalRecipients} />;
 
     const handleFullOpen = () => {
         setFullOpen(true);

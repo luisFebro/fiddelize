@@ -12,7 +12,10 @@ export default function SmsHistory() {
         const plural = transitionTotal >= 2 ? "ões" : "ão"
 
         return(
-            <div className="mb-5 text-purple text-subtitle font-weight-bold position-relative">
+            <div
+                className="mb-5 text-purple text-subtitle font-weight-bold position-relative"
+                id="smsHistoryTotals"
+            >
                 <span className="text-title">Totais Gerais:</span>
                 <br />
                 <strong>• {`${transitionTotal} operaç${plural}`}</strong>
