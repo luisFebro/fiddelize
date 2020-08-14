@@ -5,10 +5,10 @@ const {
     readContacts,
     mwSendSMS,
     getMainCardInfos,
-    getTotalTransitions,
-    readSMSHistory,
+    getGeneralTotals,
+    readSMSMainHistory,
+    readSMSHistoryStatement,
     addSMSHistory,
-    readHistoryStatement,
     readCredits,
     mwDiscountCredits,
 } = require("../controllers/sms");
@@ -22,13 +22,10 @@ const {
 // @ routes api/sms/...
 router.get('/read/contacts', readContacts); // mwIsAuth,
 router.post('/send', mwSendSMS, mwDiscountCredits, addSMSHistory); // mwIsAuth,
-router.get('/read-sms-main', getMainCardInfos); // mwIsAuth
-router.get('/read-total-transitions', getTotalTransitions); // mwIsAuth
-router.get('/history/read', readSMSHistory); // mwIsAuth
-router.get('/history/read-statement', readHistoryStatement); // mwIsAuth
-// router.put('/history/add', addSMSHistory);
+router.get('/history/general-totals', getGeneralTotals);
+router.get('/history/read-main', readSMSMainHistory); // mwIsAuth
+router.get('/history/read-statement', readSMSHistoryStatement); // mwIsAuth
 router.get('/credits/read', readCredits);
-// router.put('/credits/discount', mwDiscountCredits);
 
 // router.param("userId", mwUserId);
 

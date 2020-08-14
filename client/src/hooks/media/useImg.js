@@ -14,11 +14,9 @@ export default function useImg(url, options = {}) {
     const [src, setSrc] = useState(null);
     const [done, setDone] = useState(false);
 
-    const isWeb = url.indexOf("https://") !== -1
-
-
     useEffect(() => {
         if(trigger && !done && url) {
+            const isWeb = url.indexOf("https://") !== -1
             const options = { coll, key, isFromInternet: isWeb, needSelector: false }
             handleStorage(url, options)
             .then(generatedSrc => {

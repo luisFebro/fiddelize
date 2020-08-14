@@ -2,10 +2,10 @@ import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
 import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
 
-const latestVersion = "3.3908.3"
+const latestVersion = "3.3909.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "painel de controle cliente-admin - sessão SMS pt23";
+const updateDescription = "painel de controle cliente-admin - sessão SMS pt24";
 const history = [
     "página de notificações - otimização com rolagem infinita e ajustes finais (Finalizado)",
     "historico de compras - otimização com rolagem infinita e ajustes finais pt4 (finalizado) || docs",

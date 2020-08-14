@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // SMS
-const contactListData = {
-    name: String,
-    contact: String, //"(92) 99281-7363",
-    carrier: String, // operadora: oi, claro, tim, vivo, nextel
-    status: { type: String, default: "enviando",  enum: ["recebido", "enviando", "agendado", "falhou"]}
-}
-const ContactListSchema = new Schema(contactListData, { _id: false });
+// const contactListData = {
+//     name: String,
+//     contact: String, //"(92) 99281-7363",
+//     carrier: String, // operadora: oi, claro, tim, vivo, nextel
+//     status: { type: String, default: "enviando",  enum: ["recebido", "enviando", "agendado", "falhou"]}
+// }
+// const ContactListSchema = new Schema(contactListData, { _id: false });
 
 const smsHistoryData = {
     cardType: { type: String, default: "out",  enum: ["out", "in"]},

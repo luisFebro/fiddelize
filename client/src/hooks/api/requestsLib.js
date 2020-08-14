@@ -20,3 +20,5 @@ export const readNotifications = (userId) => `/api/notification/read/${userId}`;
 export const readContacts = (userId) => `/api/sms/read/contacts?userId=${userId}`;
 export const sendSMS = () => `/api/sms/send`; // POST
 export const readCredits = (userId) => `/api/sms/credits/read?userId=${userId}`;
+export const getGeneralTotals = (userId) => `/api/sms/history/general-totals?userId=${userId}`;
+export const readSMSMainHistory = (userId) => `/api/sms/history/read-main?userId=${userId}`;

@@ -4,6 +4,7 @@ import Spinner from './loadingIndicators/Spinner';
 import PropTypes from 'prop-types';
 import { makeStyles } from "@material-ui/core/styles";
 import { IS_DEV } from '../config/clientUrl';
+import useImg from '../hooks/media/useImg';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,6 +40,7 @@ ImgLoader.propTypes = {
 
 export default function ImgLoader({
     align,
+    offline = false,
     marginY,
     src,
     dataSrc, // for dynamic image loading
@@ -56,8 +58,11 @@ export default function ImgLoader({
     skelWidth,
     skelHeight,
     skelBackColor,
+    title,
 }) {
     let [status, setStatus] = useState(true);
+
+    const thisSrc = useImg(src, { trigger: offline, key: alt || src })
 
     const classes = useStyles();
 
@@ -96,7 +101,7 @@ export default function ImgLoader({
                     id={id}
                     data-src={dataSrc}
                     className={className}
-                    src={src}
+                    src={thisSrc || src}
                     alt={alt || id}
                     style={style}
                     width={width}
@@ -104,6 +109,11 @@ export default function ImgLoader({
                     onLoad={() => !timeout && setStatus(false)}
                     onError={e => e.src = "/img/error.png"}
                 />
+                {title && (
+                    <p className="text-purple text-subtitle font-weight-bold text-center">
+                        {title}
+                    </p>
+                )}
             </section>
         </div>
     );

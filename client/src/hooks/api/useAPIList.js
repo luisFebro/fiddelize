@@ -282,7 +282,7 @@ export default function useAPIList({
 
     const noBlocking = !loading && !error;
 
-    const needEmptyIllustra = noBlocking && Boolean(!listTotal);
+    const needEmptyIllustra = noBlocking && (list && !list.length);
     const needEmptySearch = noBlocking && Boolean(!listTotal) && search;
     const readyShowElems = noBlocking && !needEmptyIllustra;
 

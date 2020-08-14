@@ -21,14 +21,14 @@ export default function CreditsBalance({ handleBalance }) {
 
     const { runName } = useRunComp();
 
-    const trigger = needTrigger(runName, "CreditsBalance");
+    const trigger = needTrigger(runName, "UpdateSMSAll");
 
     let { data: smsBalance, loading } = useAPI({
         url: readCredits(userId),
         needAuth: true,
         trigger,
     })
-    smsBalance = convertToReal(smsBalance);
+    const thisSMSBalance = convertToReal(smsBalance);
 
     useEffect(() => {
         if(!loading) {
@@ -45,7 +45,7 @@ export default function CreditsBalance({ handleBalance }) {
                         className="d-inline-block ml-2 font-size text-em-1-5"
                         style={styles.balance}
                     >
-                        {loading ? "..." : smsBalance}
+                        {loading ? "..." : thisSMSBalance}
                     </span>
                     <p
                         className="position-absolute m-0 text-subtitle font-weight-bold text-purple text-center"

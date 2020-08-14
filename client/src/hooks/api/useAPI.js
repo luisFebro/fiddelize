@@ -67,6 +67,7 @@ export default function useAPI({
 
     const handleUpdateData = () => {
         // same target component NAME which is being requesting to...
+        // you can use it in the target component since setRun and dispatch is passed as parameter
         if(!runName) return;
         setRun(dispatch, runName);
     }
@@ -127,7 +128,7 @@ export default function useAPI({
         return () => { cancel(); clearTimeout(stopRequest); };
     }, [trigger])
 
-    return { data, loading };
+    return { data, loading, setRun, dispatch };
 }
 
 /* COMMENTS

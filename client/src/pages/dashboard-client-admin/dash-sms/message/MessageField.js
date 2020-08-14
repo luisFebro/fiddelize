@@ -5,7 +5,6 @@ import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
 import useAPI, { sendSMS, getUniqueId } from '../../../../hooks/api/useAPI';
 import { useAppSystem } from '../../../../hooks/useRoleData';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import { useStoreDispatch } from 'easy-peasy';
 import Title from '../../../../components/Title';
 import SchedulingBtn from './scheduling-btn/SchedulingBtn';
 import AccessDenialModal from './denial-modal/AccessDenialModal';
@@ -54,26 +53,27 @@ export default function MessageField({
     }, [suggestionMsg])
 
     const { businessId: userId } = useAppSystem();
-    const uniqueId = getUniqueId();
-    const runName = `CreditsBalance ${uniqueId}`
 
-    const { data: doneMsg } = useAPI({
+    const uniqueId = getUniqueId();
+    const runName = `UpdateSMSAll ${uniqueId}`
+
+    const { data: doneMsg, loading, setRun, dispatch } = useAPI({
         method: 'post',
         url: sendSMS(),
         body: { userId, contactList, msg: message },
         needAuth: true,
         snackbar: { txtPending: "Enviando agora...", txtSuccess: "Mensagem Enviada!" },
         trigger,
-        runName,
     })
 
     useEffect(() => {
-        if(doneMsg) {
-            setMessage("");
+        if(doneMsg && !loading) {
             setDisabled(false);
 
             const handleCallback = () => {
+                setMessage("");
                 handleShowMessage(false);
+                setRun(dispatch, runName);
             }
 
             const config = {
@@ -84,16 +84,15 @@ export default function MessageField({
 
             scrollIntoView("#smsHistoryTotals", config);
         }
-    }, [doneMsg])
+    }, [doneMsg, loading])
 
-    const dispatch = useStoreDispatch();
     const handleSendNow = () => {
         if(!message.length) return showSnackbar(dispatch, "Insira alguma mensagem ou selecione uma sugestão abaixo", "error", 6000);
         if(currBalance === 0) return setWhichDenial("NoCredits");
         if(currBalance < totalRecipients) return setWhichDenial("ChargeCredits");
 
         setDisabled(true);
-        setTrigger(true);
+        setTrigger(uniqueId);
     }
 
     const modal = getModalData({ whichTab, userId, contactList, message });

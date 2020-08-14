@@ -93,7 +93,7 @@ export default function SearchResult({
                                 {isLoading
                                 ? ""
                                 : (
-                                    <div className="position-relative" style={{top: '30px'}}>
+                                    <div className="ml-3 position-relative" style={{top: '30px'}}>
                                         <span className="text-title">Totais Gerais:</span>
                                         <br />
                                         <strong>• {`${allUsersLength} ${pluralizeBr(mainSubject)}`}</strong>

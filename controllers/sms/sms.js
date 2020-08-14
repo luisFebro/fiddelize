@@ -109,12 +109,26 @@ exports.mwSendSMS = (req, res, next) => {
 
 // for scheduled sms.
 exports.cancelSMS = (req, res) => {
-    // https://api.smsdev.com.br/get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
+    // https://api.smsdev.com.br/multiple?get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
 }
 
-exports.getTotalTransitions = (req, res) => {
-    // Sent SMS Total
-    // Transition Total (each card)
+exports.getGeneralTotals = (req, res) => {
+    const { userId } = req.query;
+
+    User.findById(userId)
+    .select("clientAdminData.smsHistory -_id")
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+
+        const history = doc.clientAdminData.smsHistory;
+        const operations = history.length;
+        const totalSMS = history.reduce((acc, next) => acc + next.totalSMS, 0);
+
+        res.json({
+            operations,
+            totalSMS,
+        });
+    })
 }
 
 // SMS CREDITS
@@ -153,6 +167,7 @@ exports.mwDiscountCredits = (req, res, next) => {
 }
 
 exports.addCredits = (req, res) => {
+    //
 }
 
 // END SMS CREDITS
@@ -172,7 +187,6 @@ exports.addSMSHistory = (req, res) => {
         firstContacts,
         contactIdList,
     }
-    console.log("historyData", historyData);
 
     const objToPush = { "clientAdminData.smsHistory": { $each: [historyData], $position: 0 } }
 
@@ -189,25 +203,33 @@ exports.addSMSHistory = (req, res) => {
     })
 }
 
-exports.readSMSHistory = (req, res) => { // n2
+exports.readSMSMainHistory = (req, res) => {
+    const { userId, skip, } = req.query;
+
+    User.findById(userId)
+    .select("clientAdminData.smsHistory")
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+
+        const history = doc.clientAdminData.smsHistory;
+
+        const thisHistory = history.map(operation => {
+            delete operation.contactIdList;
+            return operation;
+        })
+
+        res.json({ list: thisHistory });
+    })
+}
+
+// statement = extrato.
+exports.readSMSHistoryStatement = (req, res) => {
     // This is all about extract of each contact transition in the table
     // This will be read only after user click plus btn to see more in each card.
     // both DB and provider API to get carrier and msg status....
     /*
     /multiple?get?key=SUA_CHAVE_KEY&action=status&id=123456789"
      */
-}
-
-exports.getMainCardInfos = (req, res) => {
-    // .select("-contactList")
-    // Total amount of each tansition SMS
-    // get the two first name of the list, if only one, ignore the second
-    // Sent msg
-}
-
-// statement = extrato.
-exports.readHistoryStatement = (req, res) => {
-
 }
 
 // END SMS HISTORY

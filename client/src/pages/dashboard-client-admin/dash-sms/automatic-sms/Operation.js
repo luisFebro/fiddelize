@@ -7,6 +7,8 @@ export default function Operation({
 }) {
     usage = convertToReal(usage);
 
+    const plural = usage > 1 ? "s" : "";
+
     const handleSwitchClick = () => {
         //null
     }
@@ -31,7 +33,7 @@ export default function Operation({
                 style={{ lineHeight: '10px' }}
             >
                 <span className="text-title">{usage} </span>
-                SMS usados
+                SMS usado{plural}
             </div>
         </section>
     );
