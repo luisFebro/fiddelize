@@ -26,11 +26,12 @@ const getStyles = () => ({
     },
 });
 
-const getModalData = ({ whichTab, userId, contactList, message }) => ({
+const getModalData = ({ whichTab, userId, contactList, message, handleShowMessage }) => ({
     userId,
     contactList,
     whichTab: whichTab ? whichTab : "Lista de Clientes",
     message,
+    handleShowMessage,
 });
 
 export default function MessageField({
@@ -95,7 +96,7 @@ export default function MessageField({
         setTrigger(uniqueId);
     }
 
-    const modal = getModalData({ whichTab, userId, contactList, message });
+    const modal = getModalData({ whichTab, userId, contactList, message, handleShowMessage });
 
     const showCTABtn = () => (
         <section className="d-flex align-items-center justify-content-around mt-5 mb-3">

@@ -4,9 +4,10 @@ import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import { dateFnsUtils, ptBRLocale } from '../../../../../utils/dates/dateFns';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import getTimezoneDate from '../../../../../utils/dates/getTimezoneDate';
-import { formatDMY, getLocalHour, isToday } from '../../../../../utils/dates/dateFns';
+import { formatDMY, getLocalHour, checkToday } from '../../../../../utils/dates/dateFns';
 import getWeekDayBr from '../../../../../utils/dates/getWeekDayBr';
 import useAPI, { sendSMS, getUniqueId } from '../../../../../hooks/api/useAPI';
+import scrollIntoView from '../../../../../utils/document/scrollIntoView';
 
 const muiTheme = createMuiTheme({
     overrides: {
@@ -38,11 +39,18 @@ const muiTheme = createMuiTheme({
     }
 });
 
-export default function AsyncSchedulerContent({ modal }) {
-    const { userId, whichTab, contactList, message } = modal;
+export default function AsyncSchedulerContent({ modal, handleFullClose }) {
+    const {
+        userId,
+        whichTab,
+        contactList,
+        message,
+        handleShowMessage,
+    } = modal;
 
     const [selectedDate, handleDateChange] = useState(new Date());
     const [open, setOpen] = useState(false);
+    const [disabled, setDisabled] = useState(false);
     const [done, setDone] = useState(false);
     const [data, setData] = useState({
         uiDay: new Date(),
@@ -53,7 +61,12 @@ export default function AsyncSchedulerContent({ modal }) {
     const { uiDay, uiHour, sysDay, sysHour } = data;
     const [trigger, setTrigger] = useState(false);
 
-    useAPI({
+    const uniqueId = getUniqueId();
+    const runName = `UpdateSMSAll ${uniqueId}`; // This should run inside useAPI because when close Modal, the data is wasted and not updated.
+
+    const isToday = checkToday(selectedDate);
+
+    const { data: doneMsg, loading, setRun, dispatch } = useAPI({
         method: 'post',
         url: sendSMS(),
         body: {
@@ -65,8 +78,28 @@ export default function AsyncSchedulerContent({ modal }) {
         },
         needAuth: true,
         snackbar: { txtPending: "Agendando o envio. Um momento...", txtSuccess: `Agendamento realizado para ${isToday ? "Hoje" : uiDay} às ${uiHour}!` },
-        trigger
+        trigger,
+        runName,
     })
+
+    useEffect(() => {
+        if(doneMsg && !loading) {
+            setDisabled(false);
+            handleFullClose();
+            handleShowMessage(false);
+
+            // const handleCallback = () => {
+            // }
+
+            const config = {
+                mode: "center",
+                duration: 3000,
+                onDone: () => null,
+            }
+
+            scrollIntoView("#smsHistoryTotals", config);
+        }
+    }, [doneMsg, loading])
 
 
     useEffect(() => {
@@ -79,7 +112,6 @@ export default function AsyncSchedulerContent({ modal }) {
     }, [selectedDate])
 
     const handleSchedule = () => {
-        const uniqueId = getUniqueId();
         setTrigger(uniqueId);
     }
 
@@ -202,6 +234,7 @@ export default function AsyncSchedulerContent({ modal }) {
                 <ButtonFab
                     size="large"
                     title="AGENDAR"
+                    disabled={disabled}
                     position="relative"
                     onClick={handleSchedule}
                     backgroundColor={"var(--themeSDark--default)"}

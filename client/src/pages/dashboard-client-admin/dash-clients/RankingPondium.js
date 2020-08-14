@@ -7,7 +7,7 @@ import { readHighestScores } from '../../../redux/actions/userActions';
 import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  { useAppSystem } from '../../../hooks/useRoleData';
-import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
+import Img from '../../../components/Img';
 
 export default function RankingPondium() {
     let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
@@ -72,9 +72,11 @@ export default function RankingPondium() {
                 </p>
             )}
             <div className="position-relative" style={{marginTop: '30px'}}>
-                <ImgLoader
-                    className="dash_podium shadow-elevation-black"
-                    src={imgLib.dash_podium}
+                <Img
+                    className="shadow-elevation-black"
+                    src="/img/icons/podium.png"
+                    offline={true}
+                    alt="pódio da fiddelize"
                     width={300}
                     height={250}
                 />

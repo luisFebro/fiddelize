@@ -1,5 +1,5 @@
 import React from 'react';
-import ImgLoader from '../../components/ImgLoader';
+import Img from '../../components/Img';
 import useElemShowOnScroll from '../../hooks/scroll/useElemShowOnScroll';
 
 export { useElemShowOnScroll };
@@ -36,7 +36,7 @@ export const ShowPicture = ({
     // images loaded with intersection observer...
     return (
         <div className={`img-center position-relative ${main ? "mt-1 mb-5" : "my-3"}`}>
-            <ImgLoader
+            <Img
                 dataSrc={dataSrc}
                 timeout={timeout}
                 src={src}

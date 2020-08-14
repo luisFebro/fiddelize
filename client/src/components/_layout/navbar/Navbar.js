@@ -32,8 +32,8 @@ function Navbar({ history, location }) {
         logoFid: "",
     });
 
-    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: url.logoBiz })
-    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: url.logoFid })
+    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: "app_biz_logo" })
+    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: "app_fiddelize_logo" })
     const logoSrc = logoBiz ? logoBiz : logoFid;
 
     const { isAuthUser } = useAuthUser();
@@ -151,7 +151,7 @@ function Navbar({ history, location }) {
         if(needClientLogo) {
             return setUrl({ ...url, logoBiz: selfBizLogoImg });
         } else {
-            return setUrl({ ...url, logoFid: fiddelizeLogo });
+            return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
         }
     };
 

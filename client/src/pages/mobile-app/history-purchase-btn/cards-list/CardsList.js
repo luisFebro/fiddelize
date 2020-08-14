@@ -7,7 +7,6 @@ import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
 import PrizeCard from './PrizeCard';
 import { useClientAdmin, useProfile } from '../../../../hooks/useRoleData';
 import defineCurrChallenge from '../../../../utils/biz/defineCurrChallenge';
-import imgLib from '../../../../utils/storage/lForageStore';
 import getFirstName from '../../../../utils/string/getFirstName';
 import { formatDMY, fromNow } from '../../../../utils/dates/dateFns';
 import Spinner from '../../../../components/loadingIndicators/Spinner';
@@ -128,7 +127,7 @@ export default function CardsList({ data }) {
 
     const illustrationIfEmpty = () => (
         <Illustration
-            img={imgLib.app_empty_purchase_illustra}
+            img="/img/illustrations/empty-woman-card.svg"
             className="app_empty_purchase_illustra"
             alt="Sem Compras"
             imgStyle={{

@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import OptionCard from './OptionCard';
 import { useClientAdmin } from '../../../../../hooks/useRoleData';
 import { useAuthUser } from '../../../../../hooks/useAuthUser';
-import imgLib, { ImgLoader } from '../../../../../utils/storage/lForageStore';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './style.scss';
 import { translateColorToPtBr } from '../../../../../global-data/uiColors';
+import useImg, { Img } from '../../../../../hooks/media/useImg';
 
 export default function ShowCards({ setOpenComp }) {
     const {
@@ -17,13 +17,22 @@ export default function ShowCards({ setOpenComp }) {
     } = useClientAdmin();
     const { isAuthUser } = useAuthUser();
 
+    const [url, setUrl] = useState({
+        logoBiz: "",
+        logoFid: "",
+    });
+
+    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: "app_biz_logo" })
+    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: "app_fiddelize_logo" })
+    const logoSrc = logoBiz ? logoBiz : logoFid;
+
     const needClientLogo = selfBizLogoImg || isAuthUser;
 
     const handleLogoSrc = () => {
         if(needClientLogo) {
-            return imgLib.app_biz_logo(selfBizLogoImg);
+            return setUrl({ ...url, logoBiz: selfBizLogoImg });
         } else {
-            return imgLib.app_fiddelize_logo;
+            return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
         }
     }
 
@@ -37,8 +46,10 @@ export default function ShowCards({ setOpenComp }) {
         return(
             <div className="container-center">
                 {selfBizLogoImg ? (
-                    <ImgLoader
-                        className={`${needClientLogo ? "app_biz_logo" : "app_fiddelize_logo"} animated zoomIn slow shadow-elevation`}
+                    <Img
+                        src={logoSrc}
+                        alt="logo negócio"
+                        className={`animated zoomIn slow shadow-elevation`}
                         style={{position: 'relative', margin: '15px 0', boxShadow: '0 30px 40px 8px rgba(0, 0, 0, 0.35)'}}
                         width={isSquared ? 100 : 190}
                         height={isSquared ? 100 : 85}

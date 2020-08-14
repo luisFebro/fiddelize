@@ -14,16 +14,18 @@ export default function SchedulingBtn({ modal }) {
 
     const dispatch = useStoreDispatch();
 
-    const AsyncSchedulerContent = <Async modal={modal} />;
-
     const handleFullOpen = () => {
         if(!modal.message) return showSnackbar(dispatch, "Insira alguma mensagem", "error")
         setFullOpen(true);
     }
 
+
+
     const handleFullClose = () => {
         setFullOpen(false);
     }
+
+    const AsyncSchedulerContent = <Async modal={modal} handleFullClose={handleFullClose} />;
 
     return (
         <section>

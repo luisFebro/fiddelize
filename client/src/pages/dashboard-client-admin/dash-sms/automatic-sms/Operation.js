@@ -3,7 +3,7 @@ import SwitchBtn from '../../../../components/buttons/material-ui/SwitchBtn'
 import convertToReal from '../../../../utils/numbers/convertToReal';
 
 export default function Operation({
-    title, isOn = false, usage = 1200, disabled = false,
+    title, isOn = false, usage = 0, disabled = false,
 }) {
     usage = convertToReal(usage);
 

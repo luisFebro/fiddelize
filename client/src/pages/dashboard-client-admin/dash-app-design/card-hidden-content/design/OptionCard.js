@@ -22,7 +22,7 @@ export default function OptionCard({
             style={{
                 width: '100%',
                 maxWidth: 305,
-                height: 380,
+                height: 430,
                 backgroundColor: 'var(--mainWhite)',
                 boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)',
             }}

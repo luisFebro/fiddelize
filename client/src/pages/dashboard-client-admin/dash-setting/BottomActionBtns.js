@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import ButtonFab, { faStyleSmall } from '../../../components/buttons/material-ui/ButtonFab';
 import ButtonMulti, {faStyle} from '../../../components/buttons/material-ui/ButtonMulti';
@@ -11,7 +11,7 @@ import { useProfile, useCentralAdmin } from '../../../hooks/useRoleData';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import animateCSS from '../../../utils/animateCSS';
-import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
+import Img from '../../../components/Img';
 import useAnimateElem from '../../../hooks/scroll/useAnimateElem';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -72,10 +72,6 @@ const ContactComp = () => {
     const [openThisComp, setOpenThisComp] = useState("");
     const [hideMain, setHideMain] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
-
-    useEffect(() => {
-        const imgSrc = imgLib.app_chat_illustra;
-    }, [])
 
     const showTitle = () => (
         <div className="my-4">
@@ -182,11 +178,14 @@ const ContactComp = () => {
         <Fragment>
             {showTitle()}
             <div className="container-center mx-3">
-                <ImgLoader
-                    className="app_chat_illustra img-fluid"
+                <Img
+                    src="/img/illustrations/online-chat.svg"
+                    className="img-fluid"
+                    offline={true}
+                    coll="illustrations"
                     height="auto"
                     style={{maxHeight: !isSmall ? '210px' : '220px', width: '100%'}}
-                    alt="chat online"
+                    alt="chat_online"
                 />
             </div>
             {showMainContent()}

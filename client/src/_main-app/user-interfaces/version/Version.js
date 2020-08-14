@@ -1,11 +1,13 @@
 import React, { useEffect, Fragment } from 'react';
 import ModalBtn from '../../../components/buttons/ModalBtn';
-import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
+import Img from '../../../components/Img';
 
-const latestVersion = "3.3909.3"
+const isSmall = window.Helper.isSmallScreen();
+
+const latestVersion = "3.3910.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "painel de controle cliente-admin - sessão SMS pt24";
+const updateDescription = "painel de controle cliente-admin - sessão SMS pt25";
 const history = [
     "página de notificações - otimização com rolagem infinita e ajustes finais (Finalizado)",
     "historico de compras - otimização com rolagem infinita e ajustes finais pt4 (finalizado) || docs",
@@ -25,29 +27,39 @@ const history = [
     "Login/Acesso - Novo status para verificar novidades em funcionalidades com página de atualização",
 ]
 
-
+const getStyles = () => ({
+    root: {
+        width: '200px',
+    },
+    versionBtn: {
+        backgroundColor: 'black',
+        borderRadius: '30px',
+        color: 'white',
+        padding: '4px 5px',
+        fontSize: '18px',
+        border: '3px solid white',
+        marginBottom: '10px',
+        marginLeft: '10px',
+    },
+    cta: {
+        right: '-15px',
+        top: '-20px',
+    }
+});
 
 export default function AppVersion({ position = "relative", bottom, left }) {
+    const styles = getStyles();
+
     return (
         <section className={`position-${position}`} style={{bottom, left}}>
-            <section className="position-relative">
+            <section className="position-relative" style={styles.root}>
                 <main
-                    style={{
-                        backgroundColor: 'black',
-                        borderRadius: '30px',
-                        color: 'white',
-                        padding: '4px 5px',
-                        fontSize: '18px',
-                        border: '3px solid white',
-                        marginBottom: '10px',
-                        marginLeft: '10px',
-                        width: '140px',
-                    }}
-                    className="app-version text-small text-center"
+                    style={styles.versionBtn}
+                    className="app-version text-nowrap text-small text-center"
                 >
                     Versão {latestVersion}
                 </main>
-                <div className="position-absolute" style={{left: 155, top: 0}}>
+                <div className="position-absolute" style={styles.cta}>
                     <ModalBtn modalComp={<FeatureUpdates />} />
                 </div>
             </section>
@@ -55,11 +67,7 @@ export default function AppVersion({ position = "relative", bottom, left }) {
     );
 }
 
-const FeatureUpdates = () => {
-    const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
-
-    useEffect(() => imgLib.app_version_feature_illustra2, [])
-
+function FeatureUpdates() {
     const showTitle = () => (
         <div className="my-4">
             <p
@@ -91,8 +99,10 @@ const FeatureUpdates = () => {
         <Fragment>
             {showTitle()}
             <div className="container-center mx-3">
-                <ImgLoader
-                    className="app_version_feature_illustra2 img-fluid"
+                <Img
+                    className="img-fluid"
+                    src="/img/illustrations/new.png"
+                    offline={true}
                     height="auto"
                     style={{maxHeight: !isSmall ? '110px' : '120px', width: '120px'}}
                     alt="novidades"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ImgLoader from '../../../../components/ImgLoader';
+import Img from '../../../../components/Img';
 
 const trophyTypes = {
     custom: '/img/icons/trophies/gallery-trophy.svg',
@@ -66,7 +66,7 @@ export default function Trophy({ data }) {
             </h2>
             <section className="trophy-design">
                 <div className="d-block">
-                    <ImgLoader
+                    <Img
                         mode="skeleton"
                         skelWidth={125}
                         src={trophyTypes[type]}

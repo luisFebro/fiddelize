@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { handleStorage } from '../../utils/storage/lForageStore';
-import { default as Img } from '../../components/ImgLoader';
+import { default as Img } from '../../components/Img';
 
 export { Img };
 

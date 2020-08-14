@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from '../../../../../utils/string/getFirstName';
 import useAPIList, { readSMSMainHistory, needTrigger } from '../../../../../hooks/api/useAPIList';
 import { useRunComp } from '../../../../../hooks/useRunComp';
-import ImgLoader from '../../../../../components/ImgLoader';
+import Img from '../../../../../components/Img';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import scrollIntoView from '../../../../../utils/document/scrollIntoView';
 // import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
@@ -162,7 +162,7 @@ export default function AsyncCardsList() {
 
         return(
             <section>
-                <ImgLoader
+                <Img
                     className="img-fluid margin-auto-90"
                     src="/img/illustrations/empty-sms-history.png"
                     offline={true}

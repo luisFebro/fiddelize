@@ -226,7 +226,7 @@ export default function PickLogo({
         isFromDash &&
         <div className="container-center my-3" >
             <img
-                className="app_biz_logo animated zoomIn slow shadow-elevation"
+                className="animated zoomIn slow shadow-elevation"
                 src={selfBizLogoImg}
                 style={{position: 'relative', margin: '15px 0', boxShadow: '0 30px 40px 8px rgba(0, 0, 0, 0.35)'}}
                 width={isSquared ? 100 : 190}

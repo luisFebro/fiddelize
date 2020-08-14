@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Illustration from '../Illustration';
 import { CLIENT_URL } from '../../config/clientUrl';
-import imgLib from '../../utils/storage/lForageStore';
 import InstructionBtn from '../../components/buttons/InstructionBtn';
 
 SearchResult.propTypes = {
@@ -58,7 +57,7 @@ export default function SearchResult({
                 <Fragment>
                     {!isLoading && (
                         <Illustration
-                            img={imgLib.dash_no_search_illustra}
+                            img="/img/illustrations/empty-search.svg"
                             className="dash_no_search_illustra"
                             alt="Busca Vazia"
                             imgStyle={{

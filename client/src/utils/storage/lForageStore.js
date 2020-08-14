@@ -1,45 +1,5 @@
 import { readImage, setImage } from './lForage';
 import { CLIENT_URL } from '../../config/clientUrl';
-import ImgLoader from '../../components/ImgLoader';
-
-// USE: import imgLib, { ImgLoader } from '../../../utils/storage/lForageStore';
-/*
-e.g
-the width and height should be number and if there is not one of them,
-just write an empty string ("")
-<ImgLoader
-    id="dash_podium"
-    width={300}
-    height={250}
-    className="shadow-elevation-black"
-/>
- */
-// dataKey syntax: location_description
-// Rules: it should not fetch multiple images from one single instance like prior convert_any_illustration. This duplicates worngly images. Each image should have its own instance.
-const getOptions = (coll, key, isFromInternet, onlySet, selectorType) => ({
-    coll,
-    key,
-    isFromInternet,
-    onlySet,
-    selectorType,
-})
-
-const imgLib = {
-    get app_fiddelize_logo() { return handleStorage(`/img/official-logo-name.png`, getOptions("logos", "app_fiddelize_logo", false, true)) },
-    app_biz_logo: url => handleStorage(url, getOptions("logos", "app_biz_logo", true)),
-    // Custom Icons
-    get dash_podium() { return handleStorage(`/img/icons/podium.png`, getOptions("icons", "dash_podium")) },
-    // Shapes - check for multiple request found after inserting the first svg shape...
-    get dash_title_shape() { return handleStorage(`/img/shapes/blob-dashboard-header.svg`, getOptions("shapes", "dash_title_shape", null, null, "multi")) },
-    // Illustration
-    get app_chat_illustra() { return handleStorage(`/img/illustrations/online-chat.svg`, getOptions("illustrations", "app_chat_illustra")) },
-    get app_empty_purchase_illustra() { return handleStorage(`/img/illustrations/empty-woman-card.svg`, getOptions("illustrations", "app_empty_purchase_illustra")) },
-    get dash_no_search_illustra() { return handleStorage(`/img/illustrations/empty-search.svg`, getOptions("illustrations", "dash_no_search_illustra")) },
-    get app_version_feature_illustra2() { return handleStorage(`/img/illustrations/new.png`, getOptions("illustrations", "app_version_feature_illustra2")) },
-}
-
-export default imgLib;
-export { ImgLoader }
 
 // requires declare className to the img.
 // The same name as the key. Priorly it was an ID, but there were issues when more then one src is need
@@ -49,19 +9,11 @@ function handleStorage(url, options = {}) {
         coll,
         key,
         isFromInternet = false,
-        onlySet = false,
-        selectorType = "single",
         needSelector = true,
     } = options;
 
     const localUrl = `${CLIENT_URL}${url}`;
     const urlPath = isFromInternet ? url : localUrl;
-    console.log("urlPath", urlPath);
-
-    if(onlySet) {
-        findElemAndSet(key, urlPath)
-        return;
-    }
 
     return readImage(coll, key).then(generatedUrl => { // LESSON: promises can not return an async value at all. Use methods like attribute to src, setData to get the value.
         if(!generatedUrl) {
@@ -72,13 +24,16 @@ function handleStorage(url, options = {}) {
             })
             .catch(err => console.log(err))
         } else {
-            if(needSelector) {
-                findElemAndSet(key, generatedUrl, { type: selectorType })
-            } else { return generatedUrl; }
+            return generatedUrl;
         }
     })
 }
 
+export { handleStorage }
+
+
+/*
+ARCHIVES
 function findElemAndSet(query, value,  opts = {}) {
     let { type } = opts;
 
@@ -102,5 +57,4 @@ function findElemAndSet(query, value,  opts = {}) {
     : setMulti()
 
 }
-
-export { handleStorage }
+ */

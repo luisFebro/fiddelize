@@ -4,7 +4,7 @@ import ClientUserAppContent from './content/ClientUserAppContent';
 import { withRouter } from 'react-router-dom';
 import getQueryByName from '../../utils/string/getQueryByName';
 import useCount from '../../hooks/useCount';
-import imgLib, { ImgLoader } from '../../utils/storage/lForageStore';
+import Img  from '../../components/Img';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -34,7 +34,7 @@ function ClientAppPreview({ location }) {
     const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
     const showLogo = () => (
         <div className="container-center">
-            <ImgLoader
+            <Img
                 className={`${logoUrlPreview ? "app_biz_logo" : null} animated zoomIn slow`}
                 style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
                 src={logoSrc}

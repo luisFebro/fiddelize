@@ -52,8 +52,8 @@ function ClientMobileApp({ location, history }) {
         selfThemeBackColor, } = useClientAdmin();
     const { currScore } = useClientUser();
 
-    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: url.logoBiz })
-    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: url.logoFid })
+    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: "app_biz_logo" })
+    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: "app_fiddelize_logo" })
 
     const shapeSrc = useImg(`/img/shapes/blob-app-start--${selfThemePColor}.svg`, { coll: "shapes", key: `app_start_shape_${selfThemePColor}` })
     const logoSrc = logoBiz ? logoBiz : logoFid;

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useProfile } from '../../../../../hooks/useRoleData';
 import getFirstName from '../../../../../utils/string/getFirstName';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import ImgLoader from '../../../../../components/ImgLoader';
+import Img from '../../../../../components/Img';
 
 export default function AsyncAddSMSContent() {
     const [data, setData] = useState({
@@ -64,7 +64,7 @@ export default function AsyncAddSMSContent() {
     );
 
     const showIllustration = () => (
-        <ImgLoader
+        <Img
             src="/img/illustrations/sms-message.svg"
             className=""
             alt="ilustração principal"

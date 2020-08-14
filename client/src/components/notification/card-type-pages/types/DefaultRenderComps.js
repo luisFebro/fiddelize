@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { setRun } from '../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
 import { useClientAdmin, useProfile, } from '../../../../hooks/useRoleData';
-import ImgLoader from '../../../../components/ImgLoader';
+import Img from '../../../../components/Img';
 import applyTextStyle from '../../../../utils/string/applyTextStyle';
 import { readUser } from "../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
@@ -24,7 +24,7 @@ export const ShowTitle = ({ text }) => (
 export const ShowIllustration = ({ role, mainImg, bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png" }) => {
     const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
     const BoostedImg = React.useMemo(() => (
-        <ImgLoader
+        <Img
             src={mainImg}
             className="shadow-elevation-black"
             alt="ilustração principal"

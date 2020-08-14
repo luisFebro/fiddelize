@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-ImgLoader.propTypes = {
+Img.propTypes = {
     align: PropTypes.string,
     marginY: PropTypes.number,
     mode: PropTypes.oneOf(['skeleton', 'spinner']),
@@ -38,9 +38,10 @@ ImgLoader.propTypes = {
     skelBackColor: PropTypes.string,
 }
 
-export default function ImgLoader({
+export default function Img({
     align,
     offline = false,
+    coll, // collection for the offline db.
     marginY,
     src,
     dataSrc, // for dynamic image loading
@@ -62,7 +63,7 @@ export default function ImgLoader({
 }) {
     let [status, setStatus] = useState(true);
 
-    const thisSrc = useImg(src, { trigger: offline, key: alt || src })
+    const thisSrc = useImg(src, { trigger: offline, coll, key: alt || src })
 
     const classes = useStyles();
 
