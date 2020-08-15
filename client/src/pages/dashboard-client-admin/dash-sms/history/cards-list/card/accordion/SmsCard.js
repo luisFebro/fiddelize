@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import { useStoreState } from 'easy-peasy';
 import './Accordion.scss';
 import ToggleBtn from './ToggleBtn';
+import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 // End Customized Data
 
 const isSmall = window.Helper.isSmallScreen();
@@ -72,6 +73,24 @@ export default function SmsCard({
        runArray: state.globalReducer.cases.runArray,
     }));
 
+    const displayScheduledCard = panel => {
+        return(
+            <div className="enabledLink">
+                <ButtonFab
+                    position="absolute"
+                    top={-20}
+                    right={0}
+                    title="AGENDADO"
+                    variant="extended"
+                    fontWeight="bolder"
+                    fontSize=".6em"
+                    color="var(--mainWhite)"
+                    backgroundColor="var(--mainDark)"
+                />
+            </div>
+        );
+    }
+
 
     const showPanel = panel => (
         <section>
@@ -113,6 +132,7 @@ export default function SmsCard({
                 </Fragment>
                 )}
             </AccordionSummary>
+            {true && displayScheduledCard()}
         </section>
     );
 

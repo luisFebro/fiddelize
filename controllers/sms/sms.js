@@ -1,7 +1,10 @@
 const User = require('../../models/user');
 const { msgG } = require('../_msgs/globalMsgs');
 const httpRequest = require("../../utils/http/httpRequest");
-const { getContactDetails, setCustomConfig, requestInBatch } = require("./helpers");
+const requestPromisePool = require("../../utils/http/requestRequestPool");
+const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
+
+const { requestMultiBatch, handleSmsStatus, } = require("./helpers");
 // const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
 
 const secret = process.env.SMS_DEV_KEY;
@@ -13,6 +16,11 @@ O número máximo de números por requisição nesse método é de 300.
 Portanto o último parâmetro number deve ser o &number300=11988887777.
 Lidando com isso com requisições em lotes (batch requests) via Javascript.
  */
+
+// GET
+exports.getCurrBalance = (req, res) => {
+    // "/v1/balance?get?key=SUA_CHAVE_KEY"
+}
 
 // GET
 exports.readContacts = (req, res) => {
@@ -66,12 +74,13 @@ exports.readContacts = (req, res) => {
 exports.mwSendSMS = (req, res, next) => {
     const {
         userId,
-        contactList = [{ name: "Febro", phone: "(92) 99281-7363", countryCode: 55 }],
+        contactList = [{ name: "Febro", phone: "(92) 99281-7363" }],
         msg = "",
         jobdate, // string
         jobtime, // string
         serviceType = 9, // 9-Sms.
         flash = true,
+        scheduledDate,
     } = req.body;
 
     if(!msg) return res.status(400).json({ error: "A message with at least 1 character should be passed"})
@@ -80,17 +89,36 @@ exports.mwSendSMS = (req, res, next) => {
     if(jobdate) { jobdateQuery = `&jobdate=${jobdate}`; } // Data de agendamento para envio Ex: 01/01/2016.
     if(jobtime) { jobtimeQuery = `&jobtime=${jobtime}`; } // Hora de agendamento para envio Ex: 10:30.
 
-    const moreConfig = { msg, secret, serviceType, jobdateQuery, jobtimeQuery, flashQuery }
-    requestInBatch(contactList, { promise: httpRequest, batchSize: 2, moreConfig })
-    .then(data => {
-        if(!data) return res.status(400).json({ error: "No data received"})
+    function getParams({ name, phone }) {
+        const finalPhoneNumber = convertPhoneStrToInt(phone);
 
-        const providerRes = data[0];
+        return({
+            "method": "GET",
+            "hostname": "api.smsdev.com.br",
+            "port": null,
+            "path": `/v1/send?key=${secret}&type=9&refer=${encodeURI(name)}&number=${finalPhoneNumber}&msg=${encodeURI(msg)}${jobdateQuery}${jobtimeQuery}${flashQuery}`,
+            "headers": {}
+        });
+    }
+
+    requestPromisePool(contactList, { promise: httpRequest, getParams })
+    .then(data => {
+        const {
+            results: providerRes,
+            error: errorArray
+        } = data;
+        if(errorArray && errorArray.length) { console.log(errorArray)}
+        console.log("providerRes", providerRes);
+
         if(providerRes.length) {
             const firstContacts = [];
-            const contactIdList = providerRes.map((contact, ind) => {
+            const contactStatements = providerRes.map((contact, ind) => {
                 if(ind <= 2) { firstContacts.push(contact.refer); } // get up to the first 3 names
-                return contact.id;
+                return {
+                    id: contact.id,
+                    name: contact.refer,
+                    phone: contactList[ind].phone,
+                };
             });
             const numCredits = providerRes.length;
 
@@ -98,7 +126,8 @@ exports.mwSendSMS = (req, res, next) => {
             req.msg = msg;
             req.numCredits = numCredits;
             req.firstContacts = firstContacts;
-            req.contactIdList = contactIdList;
+            req.contactStatements = contactStatements;
+            req.scheduledDate = scheduledDate;
 
             next();
         }
@@ -109,7 +138,44 @@ exports.mwSendSMS = (req, res, next) => {
 
 // for scheduled sms.
 exports.cancelSMS = (req, res) => {
-    // https://api.smsdev.com.br/multiple?get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
+    const { userId, cardId } = req.query;
+
+    User.findById(userId)
+    .select("clientAdminData.smsHistory")
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+
+        const history = doc.clientAdminData.smsHistory;
+
+        const getContactIds = () => {
+            let foundContactIds;
+            history.forEach(card => {
+                if(card._id.toString() === cardId) {
+                   foundContactIds = card.contactStatements;
+                }
+            });
+
+            return foundContactIds;
+        }
+
+        const contacts = getContactIds();
+
+        const moreConfig = {
+            "method": "GET",
+            "hostname": "api.smsdev.com.br",
+            "port": null,
+            "headers": {}
+        }
+
+        const getUrl = (iteratedElem) => ({ "path": `/get?key=${secret}&action=cancelar&id=${iteratedElem}`})
+        requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
+        .then(data => {
+            res.json(data);
+        })
+        .catch(err => console.log(err))
+
+    })
+    // https://api.smsdev.com.br/get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
 }
 
 exports.getGeneralTotals = (req, res) => {
@@ -176,16 +242,18 @@ exports.addCredits = (req, res) => {
 exports.addSMSHistory = (req, res) => {
     const {
         userId,
-        contactIdList,
+        contactStatements,
         firstContacts,
         numCredits,
-        msg } = req;
+        msg,
+        scheduledDate, } = req;
 
     const historyData = {
         sentMsgDesc: msg,
         totalSMS: numCredits,
         firstContacts,
-        contactIdList,
+        contactStatements,
+        scheduledDate,
     }
 
     const objToPush = { "clientAdminData.smsHistory": { $each: [historyData], $position: 0 } }
@@ -214,7 +282,7 @@ exports.readSMSMainHistory = (req, res) => {
         const history = doc.clientAdminData.smsHistory;
 
         const thisHistory = history.map(operation => {
-            delete operation.contactIdList;
+            operation.contactStatements = undefined;
             return operation;
         })
 
@@ -224,12 +292,52 @@ exports.readSMSMainHistory = (req, res) => {
 
 // statement = extrato.
 exports.readSMSHistoryStatement = (req, res) => {
-    // This is all about extract of each contact transition in the table
-    // This will be read only after user click plus btn to see more in each card.
-    // both DB and provider API to get carrier and msg status....
-    /*
-    /multiple?get?key=SUA_CHAVE_KEY&action=status&id=123456789"
-     */
+    const { userId, cardId } = req.query;
+
+    User.findById(userId)
+    .select("clientAdminData.smsHistory")
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+
+        const history = doc.clientAdminData.smsHistory;
+
+        const getContactIds = () => {
+            let foundContactIds;
+            history.forEach(card => {
+                if(card._id.toString() === cardId) {
+                   foundContactIds = card.contactStatements;
+                }
+            });
+
+            return foundContactIds;
+        }
+
+        const contacts = getContactIds();
+
+        const moreConfig = {
+            "method": "GET",
+            "hostname": "api.smsdev.com.br",
+            "port": null,
+            "headers": {}
+        }
+
+        const getUrl = (iteratedElem) => ({ "path": `/v1/dlr?key=${secret}&action=status&id=${iteratedElem}`})
+        requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
+        .then(data => {
+            const finalRes = contacts.map((elem, ind) => {
+                return {
+                    id: elem.id,
+                    name: elem.name,
+                    phone: elem.phone,
+                    carrier: data[ind].operadora,
+                    status: handleSmsStatus(data[ind].descricao), // status only for frontend
+                }
+            })
+            res.json(finalRes);
+        })
+        .catch(err => console.log(err))
+
+    })
 }
 
 // END SMS HISTORY

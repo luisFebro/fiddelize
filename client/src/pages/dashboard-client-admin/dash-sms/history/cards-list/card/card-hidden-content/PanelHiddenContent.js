@@ -52,6 +52,35 @@ export default function PanelHiddenContent({ data }) {
         </section>
     );
 
+    const handleCancel = () => {
+
+    }
+
+    const needScheduled = true;
+    const showScheduledDate = () => (
+        needScheduled &&
+        <section className="my-5">
+            <p className="text-white text-normal text-shadow font-weight-bold">
+                ⏰ ENVIO AGENDADO:
+            </p>
+            <section className="d-flex flex-column flex-md-row">
+                <span className="text-shadow">
+                    11/12/20 às 18:35 (Sábado)
+                </span>
+                <div className="ml-md-3">
+                    <ButtonFab
+                        size="small"
+                        position="relative"
+                        title="Cancelar"
+                        onClick={handleCancel}
+                        backgroundColor="var(--expenseRed)"
+                        variant = 'extended'
+                    />
+                </div>
+            </section>
+        </section>
+    );
+
     const showSentMsg = () => (
         <section className="my-5">
             <p className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
@@ -89,6 +118,7 @@ export default function PanelHiddenContent({ data }) {
         <section
             className="position-relative text-normal enabledLink panel-hidden-content--root"
         >
+            {showScheduledDate()}
             {showSentMsg()}
             {showSmsExtract()}
         </section>
@@ -99,3 +129,4 @@ export default function PanelHiddenContent({ data }) {
 <p className="animated flip slow delay-2s"> first flip that I was looking for with the style of  a n entire 360 with zooming.
 <CreatedAtBr createdAt={createdAt} />
 */
+

@@ -36,12 +36,12 @@ const getStyles = () => ({
 });
 
 const handleEvents = (e, options) => {
-    const { setData, newValue, field } = options;
+    const { setData, newValue, field, eventName } = options;
     let { name, value } = e.target;
 
     if(newValue) value = newValue;
 
-    if(isKeyPressed(e, "Enter")) {
+    if(isKeyPressed(e, "Enter") || eventName === "blur") {
         setData(prevData => ({ ...prevData, [name]: value }));
         field && handleFocus(field);
     }
@@ -97,7 +97,7 @@ export default function AsyncShowNewContactForm({ handleAddContact }) {
                     id="name"
                     name="name"
                     onKeyPress={e => handleEvents(e, { setData, newValue: name.cap(), field: "field2" })}
-                    onBlur={e => handleEvents(e, { setData, newValue: name.cap() })}
+                    onBlur={e => handleEvents(e, { setData, newValue: name.cap(), eventName: 'blur' })}
                     autoComplete="off"
                     value={name}
                     type="text"
@@ -113,8 +113,8 @@ export default function AsyncShowNewContactForm({ handleAddContact }) {
                     margin="dense"
                     onChange={handleChange(setData)}
                     error={error === "phone" ? true : false}
-                    onBlur={e => handleEvents(e, { setData, newValue: phoneMaskBr(phone) })}
                     onKeyPress={e => handleEvents(e, { setData, newValue: phoneMaskBr(phone) })}
+                    onBlur={e => handleEvents(e, { setData, newValue: phoneMaskBr(phone), eventName: 'blur' })}
                     name="phone"
                     helperText={"Digite apenas números com DDD"}
                     FormHelperTextProps={{ style: styles.helperFromField }}

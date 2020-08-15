@@ -35,6 +35,14 @@ const calendar = (date, locale) => formatRelative(new Date(date), now, { locale:
 
 const getLocalHour = (date) => `${getHours(date)}:${treatZero(getMinutes(date))}`
 
+const isScheduledDate = (targetDate) => {
+    if(Date.parse(new Date()) < Date.parse(targetDate)){
+       return true;
+    }
+
+    return false;
+}
+
 const checkToday = (date) =>  isToday(new Date(date));
 export {
     dateFnsUtils,
@@ -46,6 +54,7 @@ export {
     subDays,
     getLocalHour,
     checkToday,
+    isScheduledDate,
 }
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time

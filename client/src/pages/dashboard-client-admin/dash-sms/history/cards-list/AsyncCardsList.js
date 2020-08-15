@@ -38,7 +38,7 @@ const handleSecHeading = (data, styles) => {
                 style={styles.dateBadge}
             >
                 <span className="text-small text-shadow font-weight-bold">
-                    {calendar(data.createdAt)}.
+                    Enviado {calendar(data.createdAt)}.
                 </span>
             </p>
         </section>

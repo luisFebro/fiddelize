@@ -8,6 +8,8 @@ import click from '../../../../../../../utils/event/click';
 import { setRun } from '../../../../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
+import { useAppSystem } from '../../../../../../../hooks/useRoleData';
+import useAPI, { readSMSHistoryStatement } from '../../../../../../../hooks/api/useAPI';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -26,13 +28,15 @@ const headCells = [
 
 export default function AsyncExtract({ extractId }) {
     const loading = false;
-    let list = [
-        { name: "Febro Feitoza", phone: "(92) 99281-7363", carrier: "OI", "status": "recebido"},
-        { name: "Patrícia Queiroz", phone: "(92) 9888-8888", carrier: "NEXTEL", "status": "enviando"},
-        { name: "Fernando Lima", phone: "(92) 9777-7777", carrier: "TIM", "status": "agendado"},
-        { name: "Kelly Ribeiro", phone: "(92) 9666-6666", carrier: "CLARO", "status": "falhou"},
-        { name: "Gustavo Augusto", phone: "(92) 9555-5555", carrier: "VIVO", "status": "recebido"},
-    ]
+
+    const { businessId: userId } = useAppSystem();
+
+    let { data: list } = useAPI({
+        url: readSMSHistoryStatement(userId, extractId),
+        needAuth: true,
+    })
+
+    list = !list ? list = [] : list;
 
     const dispatch = useStoreDispatch();
 

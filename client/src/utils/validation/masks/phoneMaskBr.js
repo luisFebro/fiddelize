@@ -5,6 +5,7 @@
 
 export default function phoneMaskBr(telefone){
     const isNotString = typeof telefone !== "string";
+    if(!telefone) return console.log("Invalid Phone");
     if(isNotString) {
         telefone = telefone.toString().trim(); // replace(/\s/g, '')
     } else {

@@ -7,7 +7,7 @@ const isSmall = window.Helper.isSmallScreen();
 const latestVersion = "3.3910.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "painel de controle cliente-admin - sessão SMS pt25";
+const updateDescription = "painel de controle cliente-admin - sessão SMS pt26";
 const history = [
     "página de notificações - otimização com rolagem infinita e ajustes finais (Finalizado)",
     "historico de compras - otimização com rolagem infinita e ajustes finais pt4 (finalizado) || docs",

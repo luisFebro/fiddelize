@@ -1,33 +1,49 @@
-const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
+// REQUEST IN BATCHES
+async function requestMultiBatch(data, options = {}) {
+    const {
+        promise,
+        moreConfig,
+        getUrl,
+        prop = "id",
+    } = options;
 
-// HELPERS
-function getContactDetails(contactList) {
-    let finalStr = "";
+    const requestBatch = async (elem) => {
+        const path = getUrl(elem[prop]);
+        return await promise({ ...moreConfig, ...path })
+       .catch(e => console.log(`Error in requesting the following ${each} - ${e}`))
+    }
 
-    contactList.map((data, ind) => {
-        const n = ind + 1;
-        const client = data.name;
-        const finalPhoneNumber = convertPhoneStrToInt(data.phone);
-
-        finalStr += `&refer${n}=${client}&number${n}=${finalPhoneNumber}`;
-    })
-
-    return finalStr;
+    return await Promise.all(data.map(elem => requestBatch(elem)))
+    .then(data => data)
+    .catch(e => console.log(`Error in requesting the batch N.° ${i + 1} - ${e}`))
 }
-// END HELPERS
+// END REQUEST IN BATCHES
 
-// REQUEST IN BATCHES n2
-const setCustomConfig = ({
-    contactsStr, msg, secret, serviceType, jobdateQuery, jobtimeQuery, flashQuery
-}) => ({
-    "method": "GET",
-    "hostname": "api.smsdev.com.br",
-    "port": null,
-    "path": encodeURI(`/multiple?key=${secret}&type=${serviceType}${contactsStr}&msg=${msg}${jobdateQuery}${jobtimeQuery}${flashQuery}`),
-    "headers": {}
-})
+const handleSmsStatus = (status) => {
+    switch(status) {
+        case "RECEBIDA":
+            return "VISTO ✔";
+        case "ENVIADA":
+            return "enviado";
+        case "FILA":
+            return "agendado";
+        case "ERRO":
+        case "BLACK LIST":
+            return "falhou";
+        case "CANCELADA":
+            return "cancelado";
+        default:
+            return "falhou";
+    }
+}
 
-async function requestInBatch(data, options = {}) {
+module.exports = {
+    requestMultiBatch,
+    handleSmsStatus,
+};
+
+/* ARCHIVES
+async function requestInBatch(data = [], options = {}) {
     const { batchSize = 300, promise, moreConfig } = options;
 
     const dataLength = data.length
@@ -52,10 +68,4 @@ async function requestInBatch(data, options = {}) {
         .catch(e => console.log(`Error in requesting the batch N.° ${i + 1} - ${e}`)) // Catch the error.
     }
 }
-// END REQUEST IN BATCHES
-
-module.exports = {
-    getContactDetails,
-    setCustomConfig,
-    requestInBatch,
-};
+*/

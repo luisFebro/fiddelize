@@ -422,16 +422,18 @@ function getStatusColor(status) {
     );
 
     switch(status) {
-        case "recebido":
+        case "VISTO ✔":
             return getPill(status, 'var(--mainGreen)');
+        case "enviado":
+            return getPill(status, 'var(--lightBlue)');
         case "agendado":
             return getPill(status, 'grey');
-        case "enviando":
-            return getPill(status, 'var(--niceUiYellow)');
+        case "cancelado":
+            return getPill(status, 'var(--mainRed)');
         case "falhou":
             return getPill(status, 'var(--expenseRed)');
         default:
-            return getPill(status, 'grey');
+            return getPill(status, 'var(--expenseRed)');
     }
 }
 
