@@ -10,12 +10,12 @@ async function requestMultiBatch(data, options = {}) {
     const requestBatch = async (elem) => {
         const path = getUrl(elem[prop]);
         return await promise({ ...moreConfig, ...path })
-       .catch(e => console.log(`Error in requesting the following ${each} - ${e}`))
+       .catch(e => console.log(`Error in requesting specific batch: - ${e}`))
     }
 
     return await Promise.all(data.map(elem => requestBatch(elem)))
     .then(data => data)
-    .catch(e => console.log(`Error in requesting the batch N.° ${i + 1} - ${e}`))
+    .catch(e => console.log(`Error in requesting one of the batches: ${e}`))
 }
 // END REQUEST IN BATCHES
 

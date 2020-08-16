@@ -57,7 +57,7 @@ export default function ModalConfYesNo({
 
     const showSubTitle = () => (
         <DialogContentText>
-            <div className="text-normal text-center">
+            <div className="mx-3 text-normal text-center">
                 {subTitle && parse(subTitle)}
                 <br />
             </div>

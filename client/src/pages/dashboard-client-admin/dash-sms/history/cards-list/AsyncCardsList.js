@@ -9,11 +9,12 @@ import { convertDotToComma } from '../../../../../utils/numbers/convertDotComma'
 import { useAppSystem } from '../../../../../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from '../../../../../utils/string/getFirstName';
-import useAPIList, { readSMSMainHistory, needTrigger } from '../../../../../hooks/api/useAPIList';
+import useAPIList, { readSMSMainHistory, getTrigger } from '../../../../../hooks/api/useAPIList';
 import { useRunComp } from '../../../../../hooks/useRunComp';
 import Img from '../../../../../components/Img';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import scrollIntoView from '../../../../../utils/document/scrollIntoView';
+import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 // import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 const isSmall = window.Helper.isSmallScreen();
 // HELPERS
@@ -31,15 +32,22 @@ const getStyles = () => ({
 
 
 const handleSecHeading = (data, styles) => {
+    const isScheduled = isScheduledDate(data.scheduledDate);
     return(
         <section>
             <p
-                className="position-absolute d-block m-0 mt-3"
+                className="text-nowrap position-absolute d-block m-0 mt-3"
                 style={styles.dateBadge}
             >
-                <span className="text-small text-shadow font-weight-bold">
-                    Enviado {calendar(data.createdAt)}.
-                </span>
+                {!data.isCanceled ? (
+                    <span className="text-small text-shadow font-weight-bold">
+                        {isScheduled ? "Agendado em " : "Enviado "}{calendar(data.createdAt)}.
+                    </span>
+                ) : (
+                    <span className="text-small text-shadow font-weight-bold">
+                        Não enviado em {calendar(data.createdAt)}.
+                    </span>
+                )}
             </p>
         </section>
     );
@@ -53,7 +61,7 @@ export default function AsyncCardsList() {
     const styles = getStyles();
 
     const { runName } = useRunComp();
-    const trigger = needTrigger(runName, "UpdateSMSAll");
+    const trigger = getTrigger(runName, "UpdateSMSAll");
     const { list, needEmptyIllustra } = useAPIList({ url: readSMSMainHistory(businessId), skip, trigger })
 
     const displayTotalSMS = ({ isCardIn, data }) => {
@@ -88,9 +96,9 @@ export default function AsyncCardsList() {
 
         const actions = list.map(data => {
             const arrayData = data.firstContacts;
-            const firstContactsLenght = arrayData && arrayData.length;
-            const areMoreThanOne = firstContactsLenght > 2;
-            const firstContactsNames = arrayData && arrayData.map((name, ind) => (firstContactsLenght !== (ind + 1) && areMoreThanOne) ? `${getFirstName(name.cap())}, ` : `${getFirstName(name.cap())}`)
+            const contactsLength = data.totalSMS;
+            const areMoreThanOne = contactsLength > 2;
+            const firstContactsNames = arrayData && arrayData.map((name, ind) => (arrayData && arrayData.length !== (ind + 1) && areMoreThanOne) ? `${getFirstName(name.cap())}, ` : `${getFirstName(name.cap())}`)
 
             const isCardIn = data.cardType === "in";
             const mainHeading =
@@ -105,17 +113,17 @@ export default function AsyncCardsList() {
                         <br />
                         {areMoreThanOne && (
                             <span className="text-small font-weight-bold">
-                                {firstContactsNames} e + {data.totalSMS - firstContactsLenght} outros.
+                                {firstContactsNames} e + {data.totalSMS - 2} outros.
                             </span>
                         )}
 
-                        {firstContactsLenght === 2 && (
+                        {contactsLength === 2 && (
                             <span className="text-small font-weight-bold">
                                 {firstContactsNames && firstContactsNames[0]} e {firstContactsNames && firstContactsNames[1]}
                             </span>
                         )}
 
-                        {firstContactsLenght === 1 && (
+                        {contactsLength === 1 && (
                             <span className="text-small font-weight-bold">
                                 {firstContactsNames}
                             </span>

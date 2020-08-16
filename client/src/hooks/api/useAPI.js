@@ -35,6 +35,7 @@ export default function useAPI({
     runName = null,
     snackbar = {},
     needAuth = false,
+    callback,
 }) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -69,7 +70,11 @@ export default function useAPI({
         // same target component NAME which is being requesting to...
         // you can use it in the target component since setRun and dispatch is passed as parameter
         if(!runName) return;
+
         setRun(dispatch, runName);
+        if(typeof callback === "function") {
+            callback();
+        }
     }
 
     function handleSuccess({ response, stopRequest }) {

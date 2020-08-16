@@ -56,10 +56,14 @@ module.exports = findKeyAndAssign;
 
 // const newArray = findKeyAndAssign({
 //     objArray: array,
-//     compareValue: 'saf2432fdsfds',
-//     keyValueObj })
+//     compareProp: '_id', compareValue: "saf2432fdsfds",
+//     targetProp: 'isCanceled', targetValue: true,
+// })
 // console.log(newArray);
-// [ { _id: 'saf2432fdsfds',
-//     done: true,
-//     madeDate: 2020-07-14T17:14:40.555Z },
-//   { _id: 'saf24fdsfdd334fdsfds', done: false, madeDate: '432' } ]
+/*
+[ { _id: 'saf2432fdsfds',
+    done: false,
+    madeDate: '123',
+    isCanceled: true },
+  { _id: 'saf24fdsfdd334fdsfds', done: false, madeDate: '432' } ]
+ */

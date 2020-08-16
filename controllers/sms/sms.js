@@ -3,6 +3,7 @@ const { msgG } = require('../_msgs/globalMsgs');
 const httpRequest = require("../../utils/http/httpRequest");
 const requestPromisePool = require("../../utils/http/requestRequestPool");
 const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
+const findKeyAndAssign = require('../../utils/array/findKeyAndAssign');
 
 const { requestMultiBatch, handleSmsStatus, } = require("./helpers");
 // const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
@@ -113,7 +114,7 @@ exports.mwSendSMS = (req, res, next) => {
         if(providerRes.length) {
             const firstContacts = [];
             const contactStatements = providerRes.map((contact, ind) => {
-                if(ind <= 2) { firstContacts.push(contact.refer); } // get up to the first 3 names
+                if(ind < 2) { firstContacts.push(contact.refer); } // get up to the first 3 names
                 return {
                     id: contact.id,
                     name: contact.refer,
@@ -145,35 +146,46 @@ exports.cancelSMS = (req, res) => {
     .exec((err, doc) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
 
-        const history = doc.clientAdminData.smsHistory;
+        let smsHistory = doc.clientAdminData.smsHistory;
 
-        const getContactIds = () => {
-            let foundContactIds;
-            history.forEach(card => {
-                if(card._id.toString() === cardId) {
-                   foundContactIds = card.contactStatements;
-                }
-            });
+        const newData = findKeyAndAssign({
+            objArray: smsHistory,
+            compareProp: '_id', compareValue: cardId,
+            targetProp: 'isCanceled', targetValue: true,
+        });
 
-            return foundContactIds;
-        }
+        smsHistory = newData;
+        doc.markModified("clientAdminData.smsHistory");
 
-        const contacts = getContactIds();
+        doc.save(err => {
+            const getContactIds = () => {
+                let foundContactIds;
+                smsHistory.forEach(card => {
+                    if(card._id.toString() === cardId) {
+                       foundContactIds = card.contactStatements;
+                    }
+                });
 
-        const moreConfig = {
-            "method": "GET",
-            "hostname": "api.smsdev.com.br",
-            "port": null,
-            "headers": {}
-        }
+                return foundContactIds;
+            }
 
-        const getUrl = (iteratedElem) => ({ "path": `/get?key=${secret}&action=cancelar&id=${iteratedElem}`})
-        requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
-        .then(data => {
-            res.json(data);
+            const contacts = getContactIds();
+
+            const moreConfig = {
+                "method": "GET",
+                "hostname": "api.smsdev.com.br",
+                "port": null,
+                "headers": {}
+            }
+
+            const getUrl = (iteratedElem) => ({ "path": `/get?key=${secret}&action=cancelar&id=${iteratedElem}`})
+            requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
+            .then(data => {
+                console.log("data", data);
+                res.json({ msg: `all ${data.length} contacts called off`})
+            })
+            .catch(err => console.log(err))
         })
-        .catch(err => console.log(err))
-
     })
     // https://api.smsdev.com.br/get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
 }

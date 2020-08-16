@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 // Customized Data
+import { isScheduledDate } from '../../../../../../../utils/dates/dateFns';
 import { useStoreState } from 'easy-peasy';
 import './Accordion.scss';
 import ToggleBtn from './ToggleBtn';
@@ -73,68 +74,76 @@ export default function SmsCard({
        runArray: state.globalReducer.cases.runArray,
     }));
 
-    const displayScheduledCard = panel => {
+    const displayScheduledBadge = panel => {
+        const isCanceled = panel.data.isCanceled;
+
         return(
             <div className="enabledLink">
                 <ButtonFab
                     position="absolute"
                     top={-20}
                     right={0}
-                    title="AGENDADO"
+                    disabled={true}
+                    title={isCanceled ? "CANCELADO" : "AGENDADO"}
                     variant="extended"
                     fontWeight="bolder"
                     fontSize=".6em"
                     color="var(--mainWhite)"
-                    backgroundColor="var(--mainDark)"
+                    backgroundColor={isCanceled ? "var(--expenseRed)" : "var(--mainDark)"}
                 />
             </div>
         );
     }
 
+    const showPanel = panel => {
+        const isCanceled = panel.data.isCanceled;
+        const scheduledDate = panel.data.scheduledDate;
+        const needScheduledBadge = (isScheduledDate(scheduledDate) || isCanceled);
 
-    const showPanel = panel => (
-        <section>
-            <AccordionSummary
-                expandIcon={
-                    <div
-                        className="enabledLink"
-                    >
-                        {(needToggleButton && panel.data.cardType === "out") && (
-                            <ToggleBtn
-                                cardId={panel._id}
-                            />
-                        )}
-                    </div>
-                }
-                aria-controls={`panel${panel._id}bh-content`}
-                id={`panel${panel._id}bh-header`}
-            >
-                {isSmall
-                ? (
-                    <section className="position-relative">
-                        <div>
-                            {panel.mainHeading}
+        return(
+            <section>
+                <AccordionSummary
+                    expandIcon={
+                        <div
+                            className="enabledLink"
+                        >
+                            {(needToggleButton && panel.data.cardType === "out") && (
+                                <ToggleBtn
+                                    cardId={panel._id}
+                                />
+                            )}
                         </div>
-                        {panel.secondaryHeading}
-                    </section>
-                ) : (
-                <Fragment>
-                    <Typography
-                        className="ex-pa-main-heading ex-pa--headings"
-                    >
-                        {panel.mainHeading}
-                    </Typography>
-                    <Typography
-                        className="ex-pa--headings"
-                    >
-                        {panel.secondaryHeading}
-                    </Typography>
-                </Fragment>
-                )}
-            </AccordionSummary>
-            {true && displayScheduledCard()}
-        </section>
-    );
+                    }
+                    aria-controls={`panel${panel._id}bh-content`}
+                    id={`panel${panel._id}bh-header`}
+                >
+                    {isSmall
+                    ? (
+                        <section className="position-relative">
+                            <div>
+                                {panel.mainHeading}
+                            </div>
+                            {panel.secondaryHeading}
+                        </section>
+                    ) : (
+                    <Fragment>
+                        <Typography
+                            className="ex-pa-main-heading ex-pa--headings"
+                        >
+                            {panel.mainHeading}
+                        </Typography>
+                        <Typography
+                            className="ex-pa--headings"
+                        >
+                            {panel.secondaryHeading}
+                        </Typography>
+                    </Fragment>
+                    )}
+                </AccordionSummary>
+                {needScheduledBadge && displayScheduledBadge(panel)}
+            </section>
+        );
+    }
 
     const showHiddenPanel = panel => (
         <AccordionDetails>
@@ -149,7 +158,7 @@ export default function SmsCard({
             {actions.map(panel => (
                 <div
                     key={panel._id}
-                    className="position-relative mx-3 mb-3"
+                    className="position-relative mx-3 mb-5"
                 >
                     <Accordion
                         TransitionProps={{ unmountOnExit: true }}

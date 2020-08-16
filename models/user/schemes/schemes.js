@@ -18,6 +18,7 @@ const smsHistoryData = {
     firstContacts: Array, // the first 3 names from easy identification.
     contactStatements: [ContactListSchema],
     scheduledDate: Date,
+    isCanceled: Boolean,
     createdAt: { type: Date, default: Date.now },
 }
 const SmsHistorySchema = new Schema(smsHistoryData, { _id: true });

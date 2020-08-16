@@ -7,6 +7,9 @@ import { Load } from '../../../../../../../components/code-splitting/LoadableCom
 import copyTextToClipboard from '../../../../../../../utils/document/copyTextToClipboard';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
+import CancelBtn from './CancelBtn';
+import { formatDMY, isScheduledDate, checkToday, getLocalHour } from '../../../../../../../utils/dates/dateFns';
+import getWeekDayBr from '../../../../../../../utils/dates/getWeekDayBr';
 
 const AsyncExtract = Load({ loader: () => import('./AsyncExtract'  /* webpackChunkName: "sms-extract-comp-lazy" */ )});
 
@@ -23,7 +26,6 @@ const getStyles = () => ({
         color: 'var(--themeP)',
         fontSize: '20px',
         fontFamily: 'var(--mainFont)',
-        zIndex: 2000
     },
 });
 
@@ -52,11 +54,13 @@ export default function PanelHiddenContent({ data }) {
         </section>
     );
 
-    const handleCancel = () => {
+    const selectedDate = data.scheduledDate;
+    const isToday = checkToday(selectedDate);
+    const uiHour = getLocalHour(selectedDate);
+    const isCanceled = data.isCanceled;
 
-    }
-
-    const needScheduled = true;
+    const needScheduled = (isScheduledDate(selectedDate) && !isCanceled);
+    const uiDate = `${formatDMY(selectedDate, { short: true })} às ${uiHour} (${isToday ? "Hoje" : getWeekDayBr(selectedDate)})`;
     const showScheduledDate = () => (
         needScheduled &&
         <section className="my-5">
@@ -65,17 +69,10 @@ export default function PanelHiddenContent({ data }) {
             </p>
             <section className="d-flex flex-column flex-md-row">
                 <span className="text-shadow">
-                    11/12/20 às 18:35 (Sábado)
+                    {uiDate}
                 </span>
                 <div className="ml-md-3">
-                    <ButtonFab
-                        size="small"
-                        position="relative"
-                        title="Cancelar"
-                        onClick={handleCancel}
-                        backgroundColor="var(--expenseRed)"
-                        variant = 'extended'
-                    />
+                    <CancelBtn cardId={data._id} date={`${formatDMY(selectedDate, { short: true })} às ${uiHour}`} />
                 </div>
             </section>
         </section>

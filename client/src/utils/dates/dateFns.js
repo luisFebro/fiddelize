@@ -33,7 +33,7 @@ const fromNow = (pastDate, locale) => formatDistance(new Date(pastDate), now, { 
 // calendar needs a customformatlike ``{ sameElse: 'll'}`` in moment.
 const calendar = (date, locale) => formatRelative(new Date(date), now, { locale: pick(locale) })
 
-const getLocalHour = (date) => `${getHours(date)}:${treatZero(getMinutes(date))}`
+const getLocalHour = (date) => `${getHours(new Date(date))}:${treatZero(getMinutes(new Date(date)))}`
 
 const isScheduledDate = (targetDate) => {
     if(Date.parse(new Date()) < Date.parse(targetDate)){
@@ -44,6 +44,7 @@ const isScheduledDate = (targetDate) => {
 }
 
 const checkToday = (date) =>  isToday(new Date(date));
+
 export {
     dateFnsUtils,
     ptBRLocale,

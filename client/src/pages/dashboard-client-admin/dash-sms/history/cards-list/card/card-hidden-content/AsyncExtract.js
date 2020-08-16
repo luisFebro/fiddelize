@@ -9,7 +9,8 @@ import { setRun } from '../../../../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
 import { useAppSystem } from '../../../../../../../hooks/useRoleData';
-import useAPI, { readSMSHistoryStatement } from '../../../../../../../hooks/api/useAPI';
+import useAPI, { readSMSHistoryStatement, needTrigger } from '../../../../../../../hooks/api/useAPI';
+import { useRunComp } from '../../../../../../../hooks/useRunComp';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -31,9 +32,13 @@ export default function AsyncExtract({ extractId }) {
 
     const { businessId: userId } = useAppSystem();
 
+    const { runName } = useRunComp();
+    const trigger = needTrigger(runName, "UpdateSMSAll");
+
     let { data: list } = useAPI({
         url: readSMSHistoryStatement(userId, extractId),
         needAuth: true,
+        trigger,
     })
 
     list = !list ? list = [] : list;
@@ -51,7 +56,7 @@ export default function AsyncExtract({ extractId }) {
                 delete data.status;
             })
             setRun(dispatch, "asyncExtractList", { array: list });
-            showSnackbar(dispatch, "Pronto!")
+            showSnackbar(dispatch, "Pronto!", "success")
         }
 
         const postFunction = () => {
