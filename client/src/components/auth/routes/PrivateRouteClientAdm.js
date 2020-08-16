@@ -6,8 +6,10 @@ import isThisApp from '../../../utils/window/isThisApp';
 import { useRunComp } from '../../../hooks/useRunComp';
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
 
+const isApp = isThisApp();
+
 const checkPath = runName => {
-    if(isThisApp()) {
+    if(isApp) {
         const runDash = runName === "goDash";
         if(runDash) {
             return false;
@@ -25,7 +27,7 @@ export default function PrivateRouteClientAdm({ component: Component, history, .
     const { isAuthUser } = useAuthUser();
     // const dispatch = useStoreDispatch();
 
-    const whichPath = isThisApp() ? "/mobile-app" : "/";
+    const whichPath = isApp ? "/mobile-app" : "/";
     const alertAndRedirect = props => {
         //THIS SHOWS EVEN IF THE USER IS ADMIN > showSnackbar(dispatch, 'Oops! Você não tem acesso a essa sessão', 'error', 5000);
         return (

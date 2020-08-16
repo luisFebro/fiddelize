@@ -25,7 +25,6 @@ export default function CreditsBalance({ handleBalance }) {
 
     let { data: smsBalance, loading } = useAPI({
         url: readCredits(userId),
-        needAuth: true,
         trigger,
     })
     const thisSMSBalance = convertToReal(smsBalance);

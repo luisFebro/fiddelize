@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -63,7 +63,8 @@ const getStyles = ({ color, backgroundColor }) => ({
 
 export default function SmsCard({
     actions,
-    needToggleButton = false, }) {
+    needToggleButton = false,
+    forceCancel, }) {
 
     const classes = useStyles();
     const styles = getStyles({ color: "var(--mainWhite)", backgroundColor: "var(--themePLight)" });
@@ -84,12 +85,12 @@ export default function SmsCard({
                     top={-20}
                     right={0}
                     disabled={true}
-                    title={isCanceled ? "CANCELADO" : "AGENDADO"}
+                    title={(isCanceled || forceCancel) ? "CANCELADO" : "AGENDADO"}
                     variant="extended"
                     fontWeight="bolder"
                     fontSize=".6em"
                     color="var(--mainWhite)"
-                    backgroundColor={isCanceled ? "var(--expenseRed)" : "var(--mainDark)"}
+                    backgroundColor={(isCanceled || forceCancel) ? "var(--expenseRed)" : "var(--mainDark)"}
                 />
             </div>
         );

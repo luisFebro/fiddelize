@@ -12,6 +12,7 @@ const initialState = {
     currentItemFound: null,
     run: false,
     runName: '',
+    runName2: '',
     runArray: [], // for history of executed elements...
     runOneArray: [],
     // variables: {},
@@ -39,6 +40,7 @@ export const globalReducer = {
                     ...state,
                     run: !state.run,
                     runName: payload && payload.toString(),
+                    runName2: action.data.runName2,
                     runArray: newArr,
                     runOneArray: action.data.array, // for arrays which does not change
                 }

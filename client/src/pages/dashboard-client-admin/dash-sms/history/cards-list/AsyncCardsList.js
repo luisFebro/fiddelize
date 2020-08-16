@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import SmsCard from './card/accordion/SmsCard';
 import PanelHiddenContent from './card/card-hidden-content/PanelHiddenContent';
 // import SearchFilter from "../../../../../components/search/SearchFilter";
@@ -9,7 +9,7 @@ import { convertDotToComma } from '../../../../../utils/numbers/convertDotComma'
 import { useAppSystem } from '../../../../../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from '../../../../../utils/string/getFirstName';
-import useAPIList, { readSMSMainHistory, getTrigger } from '../../../../../hooks/api/useAPIList';
+import useAPIList, { readSMSMainHistory, needTrigger, getTrigger } from '../../../../../hooks/api/useAPIList';
 import { useRunComp } from '../../../../../hooks/useRunComp';
 import Img from '../../../../../components/Img';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
@@ -31,7 +31,7 @@ const getStyles = () => ({
 });
 
 
-const handleSecHeading = (data, styles) => {
+const handleSecHeading = (data, styles, forceCancel) => {
     const isScheduled = isScheduledDate(data.scheduledDate);
     return(
         <section>
@@ -39,13 +39,13 @@ const handleSecHeading = (data, styles) => {
                 className="text-nowrap position-absolute d-block m-0 mt-3"
                 style={styles.dateBadge}
             >
-                {!data.isCanceled ? (
+                {(data.isCanceled || forceCancel) ? (
                     <span className="text-small text-shadow font-weight-bold">
-                        {isScheduled ? "Agendado em " : "Enviado "}{calendar(data.createdAt)}.
+                        Não enviado em {calendar(data.createdAt)}.
                     </span>
                 ) : (
                     <span className="text-small text-shadow font-weight-bold">
-                        Não enviado em {calendar(data.createdAt)}.
+                        {isScheduled ? "Agendado em " : "Enviado "}{calendar(data.createdAt)}.
                     </span>
                 )}
             </p>
@@ -56,13 +56,23 @@ const handleSecHeading = (data, styles) => {
 
 export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
+    const [forceCancel, setForceCancel] = useState(false); // solve real time update after calling off a scheduled date.
     const { businessId } = useAppSystem();
 
     const styles = getStyles();
 
-    const { runName } = useRunComp();
-    const trigger = getTrigger(runName, "UpdateSMSAll");
-    const { list, needEmptyIllustra } = useAPIList({ url: readSMSMainHistory(businessId), skip, trigger })
+    const { runName, runName2 } = useRunComp();
+    const trigger = needTrigger(runName, "UpdateSMSAll");
+    const triggerForce = getTrigger(runName2, "ForceCancelScheduled");
+    const { list, needEmptyIllustra } = useAPIList({
+        url: readSMSMainHistory(businessId),
+        skip,
+        trigger,
+    })
+
+    useEffect(() => {
+        if(triggerForce) setForceCancel(true);
+    }, [triggerForce])
 
     const displayTotalSMS = ({ isCardIn, data }) => {
         const plural = data.totalSMS > 1 ? "s" : "";
@@ -136,7 +146,7 @@ export default function AsyncCardsList() {
             <PanelHiddenContent
                 data={data}
             />
-            const sideHeading = handleSecHeading(data, styles);
+            const sideHeading = handleSecHeading(data, styles, forceCancel);
 
             return({
                _id: data._id,
@@ -153,6 +163,7 @@ export default function AsyncCardsList() {
                 backgroundColor="var(--themePLight)"
                 color="white"
                 needToggleButton={true}
+                forceCancel={forceCancel}
             />
         );
     }

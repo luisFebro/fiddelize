@@ -11,8 +11,8 @@ export const findAnItem = (dispatch, allItemsList, _id, attachedObj) => {
 };
 
 export const setRun = (dispatch, payload, options = {}) => {
-    const { array } = options;
-    const data = { payload, array };
+    const { array, runName2 } = options;
+    const data = { payload, array, runName2 };
     return dispatch({ type: 'RUN_SET', data });
 };
 

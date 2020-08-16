@@ -2,6 +2,7 @@
 // cipher and decipler strings to store safely.
 
 const handleCipherVault = salt => {
+    if(!salt) return;
     const textToChars = text => text.split('').map(c => c.charCodeAt(0));
     const byteHex = n => ("0" + Number(n).toString(16)).substr(-2);
     const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
@@ -14,6 +15,7 @@ const handleCipherVault = salt => {
 }
 
 const handleDecipherVault = salt => {
+    if(!salt) return;
     const textToChars = text => text.split('').map(c => c.charCodeAt(0));
     const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
     return encoded => encoded.match(/.{1,2}/g)
@@ -39,7 +41,15 @@ function compareThis(options = {}) {
 
 module.exports = { cipherThis, decipherThis, compareThis }; // both returns string
 
-
+/* TESTS
+const { cipherThis, decipherThis, compareThis } = require("./utils/security/xCipher");
+const resCipher = cipherThis('023.248.892-42');
+console.log("resCipher", resCipher);
+const resDecipher = decipherThis(resCipher);
+console.log("resDecipher", resDecipher);
+const res = compareThis({ str: '023.248.892-42', cipher: "1b191805191f1305131219061f19" });
+console.log("resCompare", res);
+ */
 
 
 /* COMMENTS

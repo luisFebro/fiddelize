@@ -4,7 +4,7 @@ import Img from '../../../components/Img';
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.3912.3"
+const latestVersion = "3.3913.3"
 // PRÓXIMO:
 // artigo exemplo de pontos .
 const updateDescription = "painel de controle cliente-admin - sessão SMS pt27";

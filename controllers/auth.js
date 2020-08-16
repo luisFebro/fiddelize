@@ -6,6 +6,8 @@ const selectObjKeys = require("../utils/objects/selectObjKeys");
 const getFirstName = require("../utils/string/getFirstName");
 
 // MIDDLEWARES
+// WARNING: if some error, probably it is _id which is not being read
+// bacause not found. To avoid this, try write userId if in a parameter as default.
 exports.mwIsAuth = (req, res, next) => {
     //condition for testing without token
     if(req.query.isFebroBoss || req.query.noToken && req.query.cardType === "welcome") {
@@ -14,7 +16,7 @@ exports.mwIsAuth = (req, res, next) => {
     const profile = req.profile;
     const query = req.query;
     const body = req.body;
-    const _id = profile && profile._id || query && query.bizId || body && body.senderId; // add here all means to get id to compare against the JWT verification
+    const _id =  query && query.userId || body && body.userId || profile && profile._id || query && query.bizId || body && body.senderId; // add here all means to get id to compare against the JWT verification
     let token = req.header('x-auth-token') || req.header("authorization"); // authrization for postman tests
     if(token && token.includes("Bearer ")) {
         token = token.slice(7);
@@ -25,6 +27,7 @@ exports.mwIsAuth = (req, res, next) => {
         process.env.JWT_SECRET,
         (err, decoded) => {
             let isAuthUser = Boolean(_id && decoded && decoded.id === _id.toString());
+
             if(err) {
                 if(err && err.message.includes("expired")) return res.status(403).json({ error: "jwt expired" });
                 console.log(`JWT ERROR: ${err.message}`)
