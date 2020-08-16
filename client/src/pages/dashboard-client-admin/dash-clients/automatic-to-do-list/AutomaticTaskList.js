@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import Title from '../../../../components/Title';
-import { useProfile } from '../../../../hooks/useRoleData';
+import { useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
 import { useRunComp } from '../../../../hooks/useRunComp';
 import useAPIList, { readTasks, getTrigger } from '../../../../hooks/api/useAPIList';
 import getFirstName from '../../../../utils/string/getFirstName';
@@ -11,6 +11,7 @@ import DoneTasksBtn from './done-tasks-modal/DoneTasksBtn';
 export default function AutomaticTaskList() {
     const [skip, setSkip] = useState(0);
     const { name: userName, _id: userId } = useProfile();
+    const { rewardDeadline } = useClientAdmin();
     const { runName } = useRunComp();
 
     const trigger = getTrigger(runName, "TaskCard");
@@ -56,7 +57,7 @@ export default function AutomaticTaskList() {
 
             {showWarning()}
 
-            <TaskList list={list} />
+            <TaskList list={list} rewardDeadline={rewardDeadline} />
             {loading && <ShowLoading />}
             {error && <ShowError />}
 

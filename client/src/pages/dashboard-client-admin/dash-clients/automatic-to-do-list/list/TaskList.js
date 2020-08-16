@@ -1,10 +1,14 @@
 import React from 'react';
 import TaskCard from './TaskCard';
 
-export default function TaskList({ list }) {
+export default function TaskList({ list, rewardDeadline }) {
 
     const listMap = list.map(task => (
-        <TaskCard key={task._id} data={task} />
+        <TaskCard
+            key={task._id}
+            data={task}
+            rewardDeadline={rewardDeadline}
+        />
     ))
 
     return (

@@ -12,17 +12,6 @@ import { ShowLoadingComp } from './Comps';
 export * from './requestsLib.js';
 export * from './trigger.js';
 
-/*
-use default:
-const {
-    data: list = [],
-    loading, ShowLoading,
-    error, ShowError,
-} = useAPI({ method: "put", url: readPrizes(userId), params: { cliAdminId: businessId } })
-{listMap}
-{loading && <ShowLoading />}
-{error && <ShowError />}
- */
 
 //Global axios defaults
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -51,6 +40,7 @@ export default function useAPI({
 
     const {
         txtPending,
+        timePending,
         txtSuccess = "Operação realizada com sucesso!",
         txtFailure = "Não foi possível realizar operação. Tente novamente."
     } = snackbar;
@@ -59,9 +49,13 @@ export default function useAPI({
     const needSnack = !isObjEmpty(snackbar);
 
     const getSnack = (msg, opts = {}) => {
-        const { type = "warning" } = opts;
+        const { type = "warning", status = "success" } = opts;
         if(!needSnack || !msg) return true;
-        showSnackbar(dispatch, msg, type);
+
+        let time = 4000;
+        if(status === "pending" && timePending) time = timePending;
+
+        showSnackbar(dispatch, msg, type, time);
         return true;
     }
 
@@ -111,7 +105,7 @@ export default function useAPI({
 
         async function doRequest() {
             try {
-                getSnack(txtPending);
+                getSnack(txtPending, { status: "pending"});
                 const response = await axios(config);
                 handleSuccess({ response, stopRequest });
             } catch(e) {

@@ -17,7 +17,11 @@ exports.insertElemWithPlaceholder = ({ elemList, placeholderList }) => {
 // console.log("res", res); // res [ { type: 'secret', challN: 2 }, { type: 'new', challN: 1 } ]
 
 exports.getTrophyData = (cliPrize, trophyType = "custom") => {
-    const { _id, challengeN, isPrizeReceived, isPrizeConfirmed, icon, desc, value, createdAt, } = cliPrize;
+    const {
+        _id,
+        challengeN,
+        isPrizeReceived, isPrizeConfirmed, isPrizeExpired,
+        icon, desc, value, createdAt, } = cliPrize;
 
     const data = {
         _id,
@@ -27,6 +31,7 @@ exports.getTrophyData = (cliPrize, trophyType = "custom") => {
         prizeDesc: desc,
         isConfirmed: isPrizeConfirmed,
         isDelivered: isPrizeReceived,
+        isExpired: isPrizeExpired,
         finalGoal: value,
         createdAt,
     };

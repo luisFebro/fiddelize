@@ -16,6 +16,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
     const currChallengeN = historyData.challengeN;
     const isPrizeConfirmed = historyData.isPrizeConfirmed;
     const isPrizeReceived = historyData.isPrizeReceived;
+    const isPrizeExpired = historyData.isPrizeExpired;
 
     let { mainReward, rewardList } = useClientAdmin();
 
@@ -67,15 +68,22 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
                     )}
                 </div>
                 <div className="received-status text-small">
-                    <p className="font-weight-bold">Recebido:</p>
-                    {isPrizeReceived
-                    ? (
-                        <div className="icon animated rubberBand delay-4s repeat-2">
+                    <p className="font-weight-bold">{isPrizeExpired ? "Expirado" : "Recebido:"}</p>
+                    {isPrizeReceived && !isPrizeExpired && (
+                        <div className="icon animated rubberBand delay-2s repeat-2">
                             <FontAwesomeIcon icon="check-circle" style={{color: 'green', fontSize: '20px'}} />
                         </div>
-                    ) : (
+                    )}
+
+                    {!isPrizeReceived && !isPrizeExpired && (
                         <div className="icon">
                             <FontAwesomeIcon icon="times-circle" style={{color: 'grey', fontSize: '20px'}} />
+                        </div>
+                    )}
+
+                    {isPrizeExpired && (
+                        <div className="icon">
+                            <FontAwesomeIcon icon="times-circle" style={{color: 'var(--expenseRed)', fontSize: '20px'}} />
                         </div>
                     )}
                 </div>

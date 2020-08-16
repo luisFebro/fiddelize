@@ -68,6 +68,11 @@
         opacity: .5;
     }
 
+    & .status-icon .pending-icon.expired {
+        color: #fff;
+        opacity: 1;
+    }
+
     & .icon {
         align-items: center;
         display: flex;
@@ -84,6 +89,11 @@
     & .icon.pending {
         color: #95a5a6;
         background-color: var(--mainWhite);
+    }
+
+    & .icon.pending.expired {
+        color: var(--mainWhite);
+        background-color: var(--expenseRed);
     }
 
     & .icon svg.shadow {

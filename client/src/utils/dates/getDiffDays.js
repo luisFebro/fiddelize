@@ -7,9 +7,11 @@ const { countdownLimit /*number*/ } = options;
     if(!targetDate) targetDate = new Date();
     const currDate = new Date();
 
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const didPassCurrDate = (currDate > targetDate) ? true : false;
+    if(didPassCurrDate) return 0;
 
-    const diffDays = Math.round(Math.abs((currDate - targetDate) / oneDay));
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const diffDays = Math.ceil(Math.abs((currDate - targetDate) / oneDay));
 
     if(diffDays < 0) return 0;
 

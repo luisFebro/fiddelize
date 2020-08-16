@@ -5,6 +5,7 @@ const {
     readTasks,
     addAutomaticTask,
     toggleDone,
+    removeTask,
 } = require("../../controllers/user/task");
 
 const { mwIsAuth } = require("../../controllers/auth");
@@ -17,6 +18,7 @@ const {
 router.get('/read/:userId', readTasks); // mwIsAuth
 router.put('/add', addAutomaticTask); // mwIsAuth
 router.put('/toggle', toggleDone); // mwIsAuth
+router.put('/remove-and-expire', removeTask);
 
 router.param("userId", mwUserId);
 

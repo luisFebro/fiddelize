@@ -5,6 +5,7 @@ import useAPI, { toggleDoneUrl, changePrizeStatus, treatBoolStatus } from '../..
 import ActionBtn from './ActionBtn';
 import { useProfile } from '../../../../../hooks/useRoleData';
 import extractStrData from '../../../../../utils/string/extractStrData';
+import useDatesCountdown from '../../../../../hooks/dates/useDatesCountdown';
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
@@ -15,7 +16,13 @@ Atividade Feita:
  */
 
 function TaskCard(props, ref) {
-    const { data = {}, defaultStatus = false, className, } = props;
+    const {
+        data = {},
+        defaultStatus = false,
+        className,
+        rewardDeadline = 30
+    } = props;
+
     const [moreInfo, setMoreInfo] = useState(false);
     const [toggleDone, setToggleDone] = useState(undefined);
 
@@ -24,7 +31,7 @@ function TaskCard(props, ref) {
         done = false,
         taskType = "pendingDelivery",
         taskTitle = "Entrega de Prêmio",
-        content = "userName:Ana Rodrigues;prizeDesc:tickets 1;challNum:5;deadline:14/07/20;",
+        content = "cliUserId:123;cliUserName:Ana Rodrigues;prizeDesc:tickets 1;challNum:5;deadline:14/07/20;",
         madeBy = "Febro",
         madeDate = "11/08/20 às 10:50",
         createdAt = new Date(),
@@ -44,13 +51,30 @@ function TaskCard(props, ref) {
     const snackbar = { txtSuccess: treatBoolStatus(toggleDone) ? `Status alterado para FEITO! Movendo para tarefas feitas...` : `Tarefa movida para o PAINEL PRINCIPAL!`}
     const purchaseSnackbar = { txtSuccess: `Status RECEBIDO marcado no histórico de compra do cliente.`, txtFailure: ""}
     const trigger = toggleDone === undefined ? false : toggleDone;
-    useAPI({ method: "put", url: toggleDoneUrl(), body: taskBody, snackbar, trigger, runName: `TaskCard${taskId}` })
     const prizeParams = { newValue: treatBoolStatus(toggleDone), prizeId };
+
+    useAPI({ method: "put", url: toggleDoneUrl(), body: taskBody, snackbar, trigger, runName: `TaskCard${taskId}` })
     useAPI({ method: "put", url: changePrizeStatus(cliUserId, "received"), params: prizeParams, trigger, snackbar: purchaseSnackbar })
+
+    const { finalDeadline } = useDatesCountdown({ deadline: rewardDeadline, userId: cliUserId })
+    const didPrizeExpired = finalDeadline === 0;
+
+    const handleCardBackColor = () => {
+        if(didPrizeExpired) return "var(--expenseRed)";
+        if(!done) return 'var(--themePDark--default)';
+        return 'grey';
+    }
+
+    const dataExpired = React.useMemo({
+        adminId: userId,
+        taskId,
+        cliUserId,
+        prizeId
+    }, [userId, taskId, cliUserId, prizeId])
 
     const styles = {
         card: {
-            backgroundColor: !done ? 'var(--themePDark--default)' : 'grey',
+            backgroundColor: handleCardBackColor(),
             overflow: 'visible',
             padding: '5px 10px',
             marginBottom: '45px',
@@ -116,6 +140,8 @@ function TaskCard(props, ref) {
                 type="pendingDelivery"
                 callback={handleToggleBtnRes}
                 defaultStatus={defaultStatus}
+                expired={didPrizeExpired}
+                dataExpired={dataExpired}
             />
         </section>
     );

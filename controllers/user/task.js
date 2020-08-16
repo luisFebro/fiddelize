@@ -92,3 +92,35 @@ exports.toggleDone = (req, res) => {
     });
 
 }
+
+
+// Method: Put
+exports.removeTask = (req, res) => {
+    const { adminId, taskId, cliUserId, prizeId } = req.body;
+
+    const objToRemove = { "clientAdminData.tasks": { _id: taskId } }
+    User.findByIdAndUpdate(adminId, { $pull: objToRemove }, { new: true })
+    .exec(err => {
+        if(err) return res.status(500).json(msgG('error.systemError', err))
+
+        // Expiring client user prize
+        User.findById(cliUserId) // LESSON - IMPORTANT: do not use select with SAVE because will delete all other not selected data in the object...
+        .exec((err, doc) => {
+            if(err) return res.status(500).json(msgG('error.systemError', err));
+
+            let purchaseHistory = doc.clientUserData.purchaseHistory;
+
+            const newData = findKeyAndAssign({
+                objArray: purchaseHistory,
+                compareProp: '_id', compareValue: prizeId,
+                targetProp: 'isPrizeExpired', targetValue: true,
+            });
+
+            purchaseHistory = newData;
+
+            doc.markModified("clientUserData.purchaseHistory");
+
+            doc.save(err => res.json({ msg: `Task with id ${taskId} was removed and client-user prize with id ${prizeId} was marked as expired!` }))
+        });
+    });
+}

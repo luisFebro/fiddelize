@@ -17,8 +17,9 @@ export default function Trophy({ data }) {
         challN = 1,
         challIcon = "heart",
         prizeDesc = "Um par de ingressos",
-        isConfirmed = true,
-        isDelivered = true,
+        isConfirmed = false,
+        isDelivered = false,
+        isExpired = false,
     } = data;
 
     const isTypeSecret = type === "secret";
@@ -29,10 +30,11 @@ export default function Trophy({ data }) {
         challIcon = "";
     }
 
-    const showIconStatus = status => {
+    const showIconStatus = (status, needExpired) => {
+        const expiredCss = (needExpired && isExpired) ? "expired" : "";
         return status
         ? <FontAwesomeIcon icon="check" className="ok-icon" />
-        : <FontAwesomeIcon icon="times" className="pending-icon" />
+        : <FontAwesomeIcon icon="times" className={`pending-icon ${expiredCss}`} />
     };
 
     const showPrizeStatusIcons = () => (
@@ -47,10 +49,10 @@ export default function Trophy({ data }) {
             </section>
             <section className="delivered">
                 <div className="status-icon">
-                    {showIconStatus(isDelivered)}
+                    {showIconStatus(isDelivered, true)}
                 </div>
-                <div className={`icon ${isDelivered ? "ok" : "pending"}`}>
-                    <FontAwesomeIcon icon="hand-holding" className={`${isDelivered ? "shadow" : ""}`} />
+                <div className={`icon ${isDelivered ? "ok" : "pending"} ${isExpired ? "expired" : ""}`}>
+                    <FontAwesomeIcon icon="hand-holding" className={`${(isDelivered || isExpired) ? "shadow" : ""}`} />
                 </div>
             </section>
         </section>

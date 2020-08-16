@@ -1,19 +1,39 @@
 .task-card--root {
     padding: 5px;
-}
 
-.task-card--root .title {
-    text-align: center;
-    position: relative;
-    // top: 5px;
-}
+    & .title {
+        text-align: center;
+        position: relative;
+        // top: 5px;
+    }
 
-.task-card--root .desc {
-    padding-left: 10px;
+    & .desc {
+        padding-left: 10px;
+    }
 }
 
 .action-btn-pending-delivery {
     position: absolute;
     bottom: -34px;
     right: 0;
+}
+.action-btn-pending-delivery.expired  {
+    bottom: -27px;
+}
+
+.task-card--expired-msg {
+    display: flex;
+
+    & .msg-board {
+        border-radius: 20%;
+        background-color: var(--expenseRed);
+        border: 3px solid var(--mainWhite);
+        margin-right: 5px;
+
+        & p {
+            color: white;
+            text-shadow: 1px 1px 3px black;
+        }
+    }
+
 }

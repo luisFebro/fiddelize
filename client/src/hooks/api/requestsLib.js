@@ -8,4 +8,4 @@ export const changePrizeStatus = (cliUserId, statusType) => `/api/user/purchase-
 export const readTasks = (userId, doneStatus) => `/api/task/read/${userId}?doneStatus=${doneStatus}`; // GET
 export const addTask = (userId) => `/api/task/add?userId=${userId}`; // PUT
 export const toggleDoneUrl = () => `/api/task/toggle`;  // PUT
-
+export const removeTaskAndExpireCliPrize = () => `/api/task/remove-and-expire`
