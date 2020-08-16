@@ -30,7 +30,7 @@ export default function useAPI({
     url,
     params = null,
     body = null,
-    timeout = 30000, // prod 10000 dev 30000
+    timeout = 10000, // prod 10000 dev 30000
     trigger = true,
     runName = null,
     snackbar = {},

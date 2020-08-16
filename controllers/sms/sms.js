@@ -352,8 +352,82 @@ exports.readSMSHistoryStatement = (req, res) => {
 
     })
 }
-
 // END SMS HISTORY
+
+// AUTOMATIC SMS
+
+exports.readAutoService = (req, res) => {
+    const { userId } = req.query;
+
+    User.findById(userId)
+    .select("clientAdminData.smsAutomation -_id")
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+
+        const automationData = doc.clientAdminData.smsAutomation;
+        res.json(automationData);
+    })
+}
+
+exports.runAutoService = (req, res) => {
+    // use mwSendSMS middleware...res
+}
+
+// Method: put
+exports.activateAutoService = (req, res) => {
+    const {
+        userId,
+        service,
+        msg,
+        afterDay,
+        isDisabled = false,
+        serviceId,
+    } = req.body;
+
+    if(!userId) return res.status(400).json({ error: "Missing userId"});
+    if(!service) return res.status(400).json({ error: "Missing service name"});
+
+    if(isDisabled && serviceId) {
+        User.findById(userId)
+        .select("clientAdminData.smsAutomation")
+        .exec((err, doc) => {
+            if(err) return res.status(500).json(msgG('error.systemError', err));
+
+            let smsAutomation = doc.clientAdminData.smsAutomation;
+
+            const newData = findKeyAndAssign({
+                objArray: smsAutomation,
+                compareProp: '_id', compareValue: serviceId,
+                targetProp: 'active', targetValue: false,
+            });
+
+            smsAutomation = newData;
+            doc.markModified("clientAdminData.smsAutomation");
+
+            doc.save(err => res.json({ msg: `Automatic Service ${service.toUpperCase()} disabled` }));
+        })
+
+        return;
+    }
+
+    const newService = { service, msg, afterDay, active: true };
+
+    const objToPush = {
+        "clientAdminData.smsAutomation": { $each: [newService], $position: 0 }
+    }
+
+    User.findOneAndUpdate(
+        { _id: userId },
+        { $push: objToPush },
+        { new: false })
+    .select("clientAdminData.smsAutomation")
+    .exec(err => {
+        if(err) return res.status(500).json(msgG("error.systemError", err));
+
+        res.json({ msg: `Automatic Service ${service.toUpperCase()} activated` });
+    })
+}
+// END AUTOMATIC SMS
 
 /* COMMENTS
 n1:

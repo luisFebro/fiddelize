@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const collectionName = "all-clients";
 const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
-const { SmsHistorySchema } = require("./schemes");
+const {
+    SmsHistorySchema,
+    SmsAutomationSchema
+} = require("./schemes");
 // GENERAL SCHEMAS
 const enumTypes = [
     // pattern: (role_desc);
@@ -172,6 +175,7 @@ const clientAdminData = {
 
     smsBalance: { type: Number, default: 0 },
     smsHistory: [SmsHistorySchema],
+    smsAutomation: [SmsAutomationSchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {

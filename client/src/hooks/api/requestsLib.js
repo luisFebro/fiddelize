@@ -24,3 +24,5 @@ export const getGeneralTotals = (userId) => `/api/sms/history/general-totals?use
 export const readSMSMainHistory = (userId) => `/api/sms/history/read-main?userId=${userId}`;
 export const readSMSHistoryStatement = (userId, cardId) => `/api/sms/history/read-statement?userId=${userId}&cardId=${cardId}`;
 export const cancelSMS = (userId, cardId) => `/api/sms/cancel?userId=${userId}&cardId=${cardId}`;
+export const readAutoService = (userId) => `/api/sms/automatic/read?userId=${userId}`;
+export const activateAutoService = () => `/api/sms/automatic/activate`; // POST

@@ -22,6 +22,15 @@ const smsHistoryData = {
     createdAt: { type: Date, default: Date.now },
 }
 const SmsHistorySchema = new Schema(smsHistoryData, { _id: true });
+
+const smsAutomationData = {
+    service: { type: String, enum: ["missingPurchase", "confirmedChall"] },
+    active: Boolean,
+    usage: { type: Number, default: 0 },
+    msg: String,
+    afterDay: Number,
+}
+const SmsAutomationSchema = new Schema(smsAutomationData, { _id: true });
 // END SMS
 
-module.exports = { SmsHistorySchema };
+module.exports = { SmsHistorySchema, SmsAutomationSchema };

@@ -44,7 +44,7 @@ export default function useAPIList({
     body = null,
     skip = null,
     search = null, // query
-    timeout = 15000, // default: 15000
+    timeout = 10000, // default: 15000
     trigger,
     triggerIncludes,
     listName, // offline usage

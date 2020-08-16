@@ -12,6 +12,8 @@ const {
     readCredits,
     mwDiscountCredits,
     cancelSMS,
+    activateAutoService,
+    readAutoService,
 } = require("../controllers/sms");
 
 const { mwIsAuth } = require("../controllers/auth");
@@ -28,6 +30,8 @@ router.get('/history/general-totals', getGeneralTotals);
 router.get('/history/read-main', mwIsAuth, readSMSMainHistory);
 router.get('/history/read-statement', mwIsAuth, readSMSHistoryStatement);
 router.put('/cancel', mwIsAuth, cancelSMS);
+router.get('/automatic/read', mwIsAuth, readAutoService);
+router.put('/automatic/activate', mwIsAuth, activateAutoService);
 
 // router.param("userId", mwUserId);
 

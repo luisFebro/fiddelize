@@ -3,7 +3,10 @@ import SwitchBtn from '../../../../components/buttons/material-ui/SwitchBtn'
 import convertToReal from '../../../../utils/numbers/convertToReal';
 
 export default function Operation({
-    title, isOn = false, usage = 0, disabled = false,
+    title,
+    active = false,
+    usage = 0,
+    loading = false,
 }) {
     usage = convertToReal(usage);
 
@@ -23,16 +26,18 @@ export default function Operation({
 
     const showSwitchBtn = () => (
         <section className="mr-3">
-            <SwitchBtn
-                callback={handleSwitchClick}
-                defaultStatus={isOn}
-                disabled={disabled}
-            />
+            {!loading && (
+                <SwitchBtn
+                    callback={handleSwitchClick}
+                    defaultStatus={active}
+                    disabled={false}
+                />
+            )}
             <div
-                className={`text-normal text-center ${isOn ? "text-purple" : "text-grey"}`}
+                className={`text-normal text-center ${active ? "text-purple" : "text-grey"}`}
                 style={{ lineHeight: '10px' }}
             >
-                <span className="text-title">{usage} </span>
+                <span className="text-title">{loading ? "..." : usage} </span>
                 SMS usado{plural}
             </div>
         </section>
