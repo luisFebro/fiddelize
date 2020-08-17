@@ -17,12 +17,14 @@ const serviceOptions = [
         service: "missingPurchase",
         title: "Mensagem automática de saudade, quando cliente tiver 30 dias sem realizar uma compra.",
         usage: 0,
+        msg: "",
     },
     {
         _id: 2,
         service: "confirmedChall",
         title: "Aviso automático para o cliente quando você confirmar um desafio concluído",
         usage: 0,
+        msg: "",
     },
 ]
 

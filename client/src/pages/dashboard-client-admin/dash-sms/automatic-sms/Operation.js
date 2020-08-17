@@ -1,6 +1,7 @@
 import React from 'react';
 import SwitchBtn from '../../../../components/buttons/material-ui/SwitchBtn'
 import convertToReal from '../../../../utils/numbers/convertToReal';
+import RadiusBtn from '../../../../components/buttons/RadiusBtn';
 
 export default function Operation({
     title,
@@ -40,6 +41,12 @@ export default function Operation({
                 <span className="text-title">{loading ? "..." : usage} </span>
                 SMS usado{plural}
             </div>
+            <section>
+                <RadiusBtn
+                    title="Ver mensagem"
+                    position="relative"
+                />
+            </section>
         </section>
     );
 

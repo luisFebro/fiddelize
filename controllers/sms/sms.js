@@ -4,7 +4,7 @@ const httpRequest = require("../../utils/http/httpRequest");
 const requestPromisePool = require("../../utils/http/requestRequestPool");
 const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
 const findKeyAndAssign = require('../../utils/array/findKeyAndAssign');
-const { cipherThis, decipherThis } = require("../../utils/security/xCipher");
+const { encrypt, decrypt } = require("../../utils/security/xCipher");
 
 const { requestMultiBatch, handleSmsStatus, } = require("./helpers");
 // const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
@@ -124,7 +124,7 @@ exports.mwSendSMS = (req, res, next) => {
             const numCredits = providerRes.length;
 
             req.userId = userId;
-            req.msg = cipherThis(msg);
+            req.msg = encrypt(msg);
             req.numCredits = numCredits;
             req.firstContacts = firstContacts;
             req.contactStatements = contactStatements;
@@ -294,7 +294,7 @@ exports.readSMSMainHistory = (req, res) => {
         const history = doc.clientAdminData.smsHistory;
 
         const thisHistory = history.map(operation => {
-            operation.sentMsgDesc = decipherThis(operation.sentMsgDesc);
+            operation.sentMsgDesc = decrypt(operation.sentMsgDesc);
             operation.contactStatements = undefined;
             return operation;
         })
