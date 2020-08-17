@@ -22,9 +22,8 @@ async function requestMultiBatch(data, options = {}) {
 const handleSmsStatus = (status) => {
     switch(status) {
         case "RECEBIDA":
-            return "VISTO ✔";
         case "ENVIADA":
-            return "enviado";
+            return "VISTO ✔";
         case "FILA":
             return "agendado";
         case "ERRO":

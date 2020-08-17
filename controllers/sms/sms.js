@@ -4,7 +4,7 @@ const httpRequest = require("../../utils/http/httpRequest");
 const requestPromisePool = require("../../utils/http/requestRequestPool");
 const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
 const findKeyAndAssign = require('../../utils/array/findKeyAndAssign');
-const { encrypt, decrypt } = require("../../utils/security/xCipher");
+const { encryptSync, decryptSync } = require("../../utils/security/xCipher");
 
 const { requestMultiBatch, handleSmsStatus, } = require("./helpers");
 // const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
@@ -77,12 +77,14 @@ exports.mwSendSMS = (req, res, next) => {
     const {
         userId,
         contactList = [{ name: "Febro", phone: "(92) 99281-7363" }],
-        msg = "",
+        msg = "testTemp", // msg is not being put in the body - checking...
         jobdate, // string
         jobtime, // string
         serviceType = 9, // 9-Sms.
         flash = true,
         scheduledDate,
+        isAutomatic = false,
+        serviceId, // for automation only
     } = req.body;
 
     if(!msg) return res.status(400).json({ error: "A message with at least 1 character should be passed"})
@@ -124,11 +126,13 @@ exports.mwSendSMS = (req, res, next) => {
             const numCredits = providerRes.length;
 
             req.userId = userId;
-            req.msg = encrypt(msg);
+            req.msg = encryptSync(msg);
             req.numCredits = numCredits;
             req.firstContacts = firstContacts;
             req.contactStatements = contactStatements;
             req.scheduledDate = scheduledDate;
+            req.isAutomatic = isAutomatic;
+            req.serviceId = serviceId;
 
             next();
         }
@@ -258,11 +262,15 @@ exports.addSMSHistory = (req, res) => {
         firstContacts,
         numCredits,
         msg,
-        scheduledDate, } = req;
+        scheduledDate,
+        isAutomatic,
+        serviceId,
+    } = req;
 
     const historyData = {
         sentMsgDesc: msg,
         totalSMS: numCredits,
+        isAutomatic: isAutomatic ? isAutomatic : undefined,
         firstContacts,
         contactStatements,
         scheduledDate,
@@ -277,9 +285,36 @@ exports.addSMSHistory = (req, res) => {
     .select("clientAdminData.smsHistory")
     .exec(err => {
         if(err) return res.status(500).json(msgG("error.systemError", err));
+        console.log("typeof isAutomatic", typeof isAutomatic)
+        if(isAutomatic) {
+            User.findById(userId)
+            .select("clientAdminData.smsAutomation")
+            .exec((err, doc) => {
+                if(err) return res.status(500).json(msgG('error.systemError', err));
 
-        console.log(`OK! All SMS sending operations done!`);
-        res.json({ msg: "all SMS sent successfully!"});
+                let smsAutomation = doc.clientAdminData.smsAutomation;
+
+                let priorUsage = 0;
+                if(searchByName) {
+                    const found = smsAutomation.find(opt => opt.service === service)
+                    priorUsage = found ? found._id : priorUsage;
+                }
+
+                const newData = findKeyAndAssign({
+                    objArray: smsAutomation,
+                    compareProp: '_id', compareValue: serviceId,
+                    targetProp: 'usage', targetValue: ++priorUsage,
+                });
+
+                smsAutomation = newData;
+                doc.markModified("clientAdminData.smsAutomation");
+
+                doc.save(err => res.json({ msg: "all SMS sent successfully!"}));
+            })
+        } else {
+            console.log(`OK! All SMS sending operations done!`);
+            res.json({ msg: "all SMS sent successfully!"});
+        }
     })
 }
 
@@ -294,7 +329,7 @@ exports.readSMSMainHistory = (req, res) => {
         const history = doc.clientAdminData.smsHistory;
 
         const thisHistory = history.map(operation => {
-            operation.sentMsgDesc = decrypt(operation.sentMsgDesc);
+            operation.sentMsgDesc = decryptSync(operation.sentMsgDesc);
             operation.contactStatements = undefined;
             return operation;
         })
@@ -338,6 +373,8 @@ exports.readSMSHistoryStatement = (req, res) => {
         requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
         .then(data => {
             const finalRes = contacts.map((elem, ind) => {
+                console.log("STATUS ENVIO", data[ind].descricao);
+
                 return {
                     id: elem.id,
                     name: elem.name,
@@ -369,63 +406,101 @@ exports.readAutoService = (req, res) => {
     })
 }
 
-exports.runAutoService = (req, res) => {
-    // use mwSendSMS middleware...res
-}
-
 // Method: put
+const handleStatus = ({
+    res, userId, service, serviceId, active, searchByName }) => {
+    User.findById(userId)
+    .select("clientAdminData.smsAutomation")
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
+
+        let smsAutomation = doc.clientAdminData.smsAutomation;
+
+        if(searchByName) {
+            const found = smsAutomation.find(opt => opt.service === service)
+            serviceId = found ? found._id : serviceId;
+        }
+
+        const newData = findKeyAndAssign({
+            objArray: smsAutomation,
+            compareProp: '_id', compareValue: serviceId,
+            targetProp: 'active', targetValue: active,
+        });
+
+        smsAutomation = newData;
+        doc.markModified("clientAdminData.smsAutomation");
+
+        doc.save(err => res.json({ msg: `Automatic Service ${service.toUpperCase()} disabled` }));
+    })
+}
 exports.activateAutoService = (req, res) => {
     const {
         userId,
-        service,
+        service, // service's name only for activation required
         msg,
         afterDay,
-        isDisabled = false,
+        active = false,
         serviceId,
     } = req.body;
 
     if(!userId) return res.status(400).json({ error: "Missing userId"});
     if(!service) return res.status(400).json({ error: "Missing service name"});
 
-    if(isDisabled && serviceId) {
-        User.findById(userId)
-        .select("clientAdminData.smsAutomation")
-        .exec((err, doc) => {
-            if(err) return res.status(500).json(msgG('error.systemError', err));
+    console.log("serviceId", serviceId);
+    console.log("serviceId.toString()", serviceId.toString().length)
+    const gotValidId = serviceId.toString().length > 5;
+    console.log("gotValidId", gotValidId);
 
-            let smsAutomation = doc.clientAdminData.smsAutomation;
-
-            const newData = findKeyAndAssign({
-                objArray: smsAutomation,
-                compareProp: '_id', compareValue: serviceId,
-                targetProp: 'active', targetValue: false,
+    if(active) {
+        if(gotValidId) {
+            handleStatus({
+                res,
+                userId,
+                service,
+                serviceId,
+                active: true
             });
+        } else {
+            const newService = { service, msg, afterDay, active: true };
 
-            smsAutomation = newData;
-            doc.markModified("clientAdminData.smsAutomation");
+            User.findOneAndUpdate(
+                { _id: userId },
+                { $push: { "clientAdminData.smsAutomation": newService } },
+                { new: true })
+            .select("clientAdminData.smsAutomation")
+            .exec((err, data) => {
+                console.log("data", data);
+                if(err) return res.status(500).json(msgG("error.systemError", err));
 
-            doc.save(err => res.json({ msg: `Automatic Service ${service.toUpperCase()} disabled` }));
-        })
+                res.json({ msg: `Automatic Service ${service.toUpperCase()} added and activated` });
+            })
+        }
 
         return;
     }
 
-    const newService = { service, msg, afterDay, active: true };
+    if(!active && serviceId) {
+        if(!gotValidId) {
+            handleStatus({
+                res,
+                userId,
+                service,
+                serviceId,
+                searchByName: true,
+                active: false
+            });
+        } else {
+            handleStatus({
+                res,
+                userId,
+                service,
+                serviceId,
+                active: false
+            });
+        }
 
-    const objToPush = {
-        "clientAdminData.smsAutomation": { $each: [newService], $position: 0 }
+        return;
     }
-
-    User.findOneAndUpdate(
-        { _id: userId },
-        { $push: objToPush },
-        { new: false })
-    .select("clientAdminData.smsAutomation")
-    .exec(err => {
-        if(err) return res.status(500).json(msgG("error.systemError", err));
-
-        res.json({ msg: `Automatic Service ${service.toUpperCase()} activated` });
-    })
 }
 // END AUTOMATIC SMS
 

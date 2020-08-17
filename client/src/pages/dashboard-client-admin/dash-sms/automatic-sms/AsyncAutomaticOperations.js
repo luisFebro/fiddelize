@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Operation from './Operation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  useAppSystem } from '../../../../hooks/useRoleData';
+import {  useAppSystem, useClientAdmin } from '../../../../hooks/useRoleData';
 import useAPI, { readAutoService } from '../../../../hooks/api/useAPI';
 
 const getStyles = () => ({
@@ -11,37 +11,40 @@ const getStyles = () => ({
     },
 });
 
-const serviceOptions = [
+const serviceOptions = ({ bizName }) => ([
     {
         _id: 1,
         service: "missingPurchase",
-        title: "Mensagem automática de saudade, quando cliente tiver 30 dias sem realizar uma compra.",
+        title: "Mensagem de Saudade",
+        subtitle: "Mensagem automática de saudade, quando cliente tiver 30 dias sem realizar uma compra.",
         usage: 0,
-        msg: "",
+        msg: `Sentimos sua falta. A ${bizName.toUpperCase()} não esqueceu de você e está sempre de portas abertas.`,
     },
     {
         _id: 2,
         service: "confirmedChall",
-        title: "Aviso automático para o cliente quando você confirmar um desafio concluído",
+        title: "Confimação de desafio",
+        subtitle: "Aviso automático para o cliente quando você confirmar um desafio concluído",
         usage: 0,
-        msg: "",
+        msg: `Opa! Seu desafio foi confirmado pela ${bizName.toUpperCase()}. Abrir app aqui: https://fiddelize.com.br/mobile-app?is_app=1`,
     },
-]
+]);
 
 export default function AutomaticOperations() {
     const [services, setServices] = useState([]);
+    const [already, setAlready] = useState(false);
     const styles = getStyles();
 
     const { businessId: userId } = useAppSystem();
+    const { bizName } = useClientAdmin();
 
     const { data, loading } = useAPI({ url: readAutoService(userId), needAuth: true })
 
     useEffect(() => {
-        if(data && !loading) {
-            setServices([data, ...services])
+        if(data && !loading && !already) {
             const serviceArray = [];
             data.forEach((db, ind) => {
-                serviceOptions.forEach(option => {
+                serviceOptions({ bizName }).forEach(option => {
                     if(option.service === db.service) {
                         const newOption = {
                             ...option,
@@ -55,12 +58,12 @@ export default function AutomaticOperations() {
                     }
                 })
             });
-
+            setAlready(true);
             setServices([...serviceArray]);
         }
 
-        if(!data && !loading) {
-            setServices([...serviceOptions]);
+        if(data && !data.length && !loading) {
+            setServices([...serviceOptions({ bizName })]);
         }
     }, [data, loading])
 
@@ -86,12 +89,17 @@ export default function AutomaticOperations() {
         <section>
             {showHeader()}
             {loading
-            ? "Carregando serviços..."
-            : (services && services.length) && services.map(service => (
+            ? (
+                <p className="my-5 text-center text-purple text-subtitle font-weight-bold">
+                    Carregando serviços...
+                </p>
+            ) : (services && services.length) && services.map(service => (
                 <Fragment key={service._id}>
                     <Operation
+                        dataSwitch={{ id: service._id, service: service.service }}
                         title={service.title}
                         usage={service.usage}
+                        msg={service.msg}
                         active={service.active}
                         loading={loading}
                     />

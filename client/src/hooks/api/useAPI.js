@@ -38,7 +38,7 @@ export default function useAPI({
     callback,
 }) {
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(null);
     const [alreadyReqId, setAlreadyReqId] = useState(null);
 
     const {

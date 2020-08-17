@@ -93,8 +93,8 @@ export default function AsyncCardsList() {
                     />
                 )}
                 <span
-                    className={`d-inline-block ${!isCardIn ? "text-nowrap" : ""} text-subtitle font-weight-bold text-shadow`}
-                    style={{ lineHeight: "25px" }}
+                    className={`position-relative  d-inline-block ${!isCardIn ? "text-nowrap" : ""} text-subtitle font-weight-bold text-shadow`}
+                    style={{ lineHeight: "25px", top: 5 }}
                 >
                     {data.totalSMS} SMS {isCardIn ? "adicionados" : `usado${plural}`}
                 </span>

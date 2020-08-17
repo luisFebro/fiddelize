@@ -49,6 +49,16 @@ function encrypt(text) { // criptografar
     return new Promise(promiseEncrypt);
 }
 
+function encryptSync(text) { // criptografar
+    const iv = crypto.randomBytes(IV_LENGTH);
+    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(KRYPTO_SECRET), iv);
+    let encrypted = cipher.update(text);
+
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+    return iv.toString('hex') + ':' + encrypted.toString('hex');
+}
+
 function decrypt(hashTxt) {
     const promiseDecript = (resolve, reject) => {
         const run = () => {
@@ -73,6 +83,18 @@ function decrypt(hashTxt) {
     return new Promise(promiseDecript);
 }
 
+function decryptSync(hashTxt) {
+    const textParts = hashTxt.split(':');
+    const iv = Buffer.from(textParts.shift(), 'hex');
+    const encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(KRYPTO_SECRET), iv);
+    let decrypted = decipher.update(encryptedText);
+
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+    return decrypted.toString();
+}
+
 // TEST
 // encrypt("fjskda fsdajfsdlafjsdaklf sdalfjsdalfsda fsadlkfjsdal fsdalkfjsdalkfjdsalk fjdsaklfjsdalkfjdsal fjsadlfjlsdajflkdsjfklds afjkldsafjkldsfjkdsaflds")
 // .then(res => console.log(res))
@@ -84,7 +106,14 @@ function decrypt(hashTxt) {
 // .catch(e => console.log(e))
 // END ENCRYPTION AND DECRYPTION
 
-module.exports = { encrypt, decrypt, hashPassword, comparePassword }; // both returns string
+module.exports = {
+    encrypt,
+    encryptSync,
+    decrypt,
+    decryptSync,
+    hashPassword,
+    comparePassword,
+}; // both returns string
 
 // reference:
 // https://vancelucas.com/blog/stronger-encryption-and-decryption-in-node-js/

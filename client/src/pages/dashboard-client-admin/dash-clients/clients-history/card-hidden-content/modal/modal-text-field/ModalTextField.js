@@ -29,6 +29,7 @@ import { sendNotification } from '../../../../../../../redux/actions/notificatio
 import getFirstName from '../../../../../../../utils/string/getFirstName';
 import { addDays } from '../../../../../../../utils/dates/dateFns';
 import useAPI, { readPrizes } from '../../../../../../../hooks/api/useAPI';
+import useSendAutoSMS from '../../../../../../../hooks/useSendAutoSMS';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -53,6 +54,8 @@ export default function ModalTextField({
 
     const dispatch = useStoreDispatch();
 
+    useSendAutoSMS({ trigger: true });
+
     let {
         title,
         subTitle,
@@ -75,9 +78,9 @@ export default function ModalTextField({
     const mainReward = pickedObj.mainReward;
 
     const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true, rewardScore } });
-    const currRemainder = loading ? "..." : updatedValues.remainder;
-    const nextScore = loading ? "..." : updatedValues.nextScore;
-    const currUserScoring = loading ? "..." : convertDotToComma(updatedValues.updatedCurrScore);
+    const currRemainder = loading ? "..." : updatedValues && updatedValues.remainder;
+    const nextScore = loading ? "..." : updatedValues && updatedValues.nextScore;
+    const currUserScoring = loading ? "..." : updatedValues ? convertDotToComma(updatedValues.updatedCurrScore) : 0;
     const additionalScore = loading ? "..." : convertDotToComma(nextScore);
     const ultimateCurrScore = loading ? "..." : (Number(currRemainder) + Number(nextScore)) // before updatedValues.updatedCurrScore - rewardScore
     const userBeatScore = userCurrScore >= rewardScore;

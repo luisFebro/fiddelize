@@ -77,6 +77,19 @@ export default function SmsCard({
 
     const displayScheduledBadge = panel => {
         const isCanceled = panel.data.isCanceled;
+        const isAutomatic = panel.data.isAutomatic;
+
+        const handleTitle = () => {
+            if((isCanceled || forceCancel)) return "CANCELADO";
+            if(isAutomatic) return "AUTOMÁTICO";
+            return "AGENDADO";
+        }
+
+        const handleBack = () => {
+            if((isCanceled || forceCancel)) return "var(--expenseRed)";
+            if(isAutomatic) return "var(--themePDark--blue)";
+            return "var(--mainDark)";
+        }
 
         return(
             <div className="enabledLink">
@@ -85,12 +98,12 @@ export default function SmsCard({
                     top={-20}
                     right={0}
                     disabled={true}
-                    title={(isCanceled || forceCancel) ? "CANCELADO" : "AGENDADO"}
+                    title={handleTitle()}
                     variant="extended"
                     fontWeight="bolder"
                     fontSize=".6em"
                     color="var(--mainWhite)"
-                    backgroundColor={(isCanceled || forceCancel) ? "var(--expenseRed)" : "var(--mainDark)"}
+                    backgroundColor={handleBack()}
                 />
             </div>
         );
@@ -98,8 +111,9 @@ export default function SmsCard({
 
     const showPanel = panel => {
         const isCanceled = panel.data.isCanceled;
+        const isAutomatic = panel.data.isAutomatic;
         const scheduledDate = panel.data.scheduledDate;
-        const needScheduledBadge = (isScheduledDate(scheduledDate) || isCanceled);
+        const needScheduledBadge = (isScheduledDate(scheduledDate) || isCanceled || isAutomatic);
 
         return(
             <section>

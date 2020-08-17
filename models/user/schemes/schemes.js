@@ -19,6 +19,7 @@ const smsHistoryData = {
     contactStatements: [ContactListSchema],
     scheduledDate: Date,
     isCanceled: Boolean,
+    isAutomatic: Boolean,
     createdAt: { type: Date, default: Date.now },
 }
 const SmsHistorySchema = new Schema(smsHistoryData, { _id: true });

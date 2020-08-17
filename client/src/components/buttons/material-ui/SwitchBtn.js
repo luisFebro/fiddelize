@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import uuidv1 from 'uuid/v1';
 import parse from 'html-react-parser';
+import { useStoreDispatch } from 'easy-peasy';
+import { showSnackbar } from '../../../redux/actions/snackbarActions';
 
 const PurpleSwitch = withStyles({
   switchBase: {
@@ -19,6 +21,8 @@ const PurpleSwitch = withStyles({
   track: {},
 })(Switch);
 
+const getStatusWithId = bool => `${bool}_${uuidv1()}`;
+
 export default function SwitchBtn({
     titleLeft = "Não",
     titleRight = "Sim",
@@ -26,26 +30,36 @@ export default function SwitchBtn({
     callback,
     defaultStatus = false,
     disabled = false,
+    data = "",
+    loading = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
 
-    const getStatusWithId = bool => `${bool}_${uuidv1()}`;
+    const switchData = useRef(data);
+
+    const dispatch = useStoreDispatch();
+
 
     const handleChange = (event) => {
         const status = event.target.checked;
         const statusId = getStatusWithId(status);
+
+        if(loading) return // showSnackbar(dispatch, "Aguarde finalização do último");
+
         setChecked(status);
-        if(typeof callback === "function") callback(statusId);
+        if(typeof callback === "function") callback(statusId, switchData.current);
     };
 
     const setTrue = () => {
+        if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(true);
-        if(typeof callback === "function") callback(getStatusWithId(true));
+        if(typeof callback === "function") callback(getStatusWithId(true), switchData.current);
     };
 
     const setFalse = () => {
+        if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(false);
-        if(typeof callback === "function") callback(getStatusWithId(false));
+        if(typeof callback === "function") callback(getStatusWithId(false), switchData.current);
     }
 
     const on = 'm-0 animated rubberBand text-normal text-purple font-weight-bold';
@@ -65,7 +79,7 @@ export default function SwitchBtn({
                 checked={checked}
                 onChange={handleChange}
                 name="purpleSwitch"
-                disabled={disabled}
+                disabled={disabled || loading}
             />
             <p className={txtStyle2} onClick={setTrue}>{titleRight}</p>
         </section>
