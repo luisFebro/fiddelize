@@ -1,6 +1,9 @@
 var bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
+const KRYPTO_SECRET = process.env.KRYPTO_SECRET; // Must be 256 bits (32 characters)
+const IV_LENGTH = 16; // For AES, this is always 16
+
 // BCRYPT FOR DB PASSWORDS
 async function hashPassword(pass) {
     try {
@@ -46,7 +49,6 @@ function encrypt(text) { // criptografar
     return new Promise(promiseEncrypt);
 }
 
-
 function decrypt(hashTxt) {
     const promiseDecript = (resolve, reject) => {
         const run = () => {
@@ -71,28 +73,18 @@ function decrypt(hashTxt) {
     return new Promise(promiseDecript);
 }
 
-encrypt("c")
-.then(res => console.log(res))
+// TEST
+// encrypt("fjskda fsdajfsdlafjsdaklf sdalfjsdalfsda fsadlkfjsdal fsdalkfjsdalkfjdsalk fjdsaklfjsdalkfjdsal fjsadlfjlsdajflkdsjfklds afjkldsafjkldsfjkdsaflds")
+// .then(res => console.log(res))
 
-decrypt("1f3d4149c0bbd3be485529afb26aced:3f0993e834ca8d5a2084a5c31cc24228")
-.then(res => {
-    console.log(res);
-})
-.catch(e => console.log(e))
-
+// decrypt("ef4b68527e5c7ba47bf9d46fbf22e6b9:4af17605662877a552b813e0242ae0f82131cfec2de8433f2780c07b5dbe7ec780048947e10337c3fd6f4232ef3477e92b779646903d9b1a5fa52c660e44a44ecd53c05f4f5a12575e55026b2dbf486bf24dea67bcc1e8f267b2b315c287a526fd8374a83687244e407cce66300b2df3875387df940778c67354dc6e37f73373aa16f3d1272ae89905ede7d1485763ef601015300ea5c1669db70ed68f612595")
+// .then(res => {
+//     console.log(res);
+// })
+// .catch(e => console.log(e))
 // END ENCRYPTION AND DECRYPTION
 
-
 module.exports = { encrypt, decrypt, hashPassword, comparePassword }; // both returns string
-
-
-
-
-
-
-
-const KRYPTO_SECRET = process.env.KRYPTO_SECRET; // Must be 256 bits (32 characters)
-const IV_LENGTH = 16; // For AES, this is always 16
 
 // reference:
 // https://vancelucas.com/blog/stronger-encryption-and-decryption-in-node-js/
