@@ -24,9 +24,9 @@ const serviceOptions = ({ bizName }) => ([
         _id: 2,
         service: "confirmedChall",
         title: "Confimação de desafio",
-        subtitle: "Aviso automático para o cliente quando você confirmar um desafio concluído",
+        subtitle: "Aviso automático para o cliente quando você confirmar/descontar um desafio concluído",
         usage: 0,
-        msg: `Opa! Seu desafio foi confirmado pela ${bizName.toUpperCase()}. Abrir app aqui: https://fiddelize.com.br/mobile-app?is_app=1`,
+        msg: `Opa! Seu desafio foi confirmado pela ${bizName.toUpperCase()}. Abra app aqui: https://fiddelize.com.br/mobile-app?is_app=1`,
     },
 ]);
 
@@ -93,13 +93,14 @@ export default function AutomaticOperations() {
                 <p className="my-5 text-center text-purple text-subtitle font-weight-bold">
                     Carregando serviços...
                 </p>
-            ) : (services && services.length) && services.map(service => (
+            ) : (Boolean(services && services.length)) && services.map(service => (
                 <Fragment key={service._id}>
                     <Operation
                         dataSwitch={{ id: service._id, service: service.service }}
-                        title={service.title}
                         usage={service.usage}
                         msg={service.msg}
+                        title={service.title}
+                        subtitle={service.subtitle}
                         active={service.active}
                         loading={loading}
                     />

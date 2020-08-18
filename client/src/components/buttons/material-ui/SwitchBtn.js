@@ -7,6 +7,14 @@ import parse from 'html-react-parser';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../redux/actions/snackbarActions';
 
+const getStyles = ({ pillStyle }) => ({
+    pill: pillStyle ? {
+        background: 'rgb(202, 211, 200, .4)',
+        padding: '5px 8px',
+        borderRadius: "20px",
+    } : undefined,
+});
+
 const PurpleSwitch = withStyles({
   switchBase: {
     color: purple[300],
@@ -31,14 +39,16 @@ export default function SwitchBtn({
     defaultStatus = false,
     disabled = false,
     data = "",
+    pillStyle=false,
     loading = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
 
     const switchData = useRef(data);
 
-    const dispatch = useStoreDispatch();
+    const styles = getStyles({ pillStyle });
 
+    const dispatch = useStoreDispatch();
 
     const handleChange = (event) => {
         const status = event.target.checked;
@@ -70,7 +80,7 @@ export default function SwitchBtn({
     titleLeft = parse(titleLeft);
     titleRight = parse(titleRight);
     return (
-        <section className="d-flex justify-content-center">
+        <section className="d-flex justify-content-center" style={styles.pill}>
             <p className="m-0 mr-2 d-inline-block text-normal font-weight-bold text-purple">
                 {titleQuestion}
             </p>

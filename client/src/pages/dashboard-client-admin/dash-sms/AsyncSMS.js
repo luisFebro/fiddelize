@@ -6,6 +6,7 @@ import { Load } from '../../../components/code-splitting/LoadableComp';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../redux/actions/snackbarActions';
 import { handleFocus } from '../../../utils/form/handleFocus';
+import InstructionBtn from '../../../components/buttons/InstructionBtn';
 
 //Components
 import CreditsBalance from './credits-balance/CreditsBalance';
@@ -68,6 +69,19 @@ export default function AsyncSMS() {
         setData({ ...data, currBalance: balance })
     }
 
+    const showInstruBtn = () => (
+        <section className="position-relative m-0 d-flex justify-content-end">
+            <p className="m-0 text-normal font-weight-bold text-purple">
+            Por que SMS ?  </p>
+            <section className="align-self-end">
+                <InstructionBtn
+                    mode="modal"
+                    article="WhySMS_art4"
+                />
+            </section>
+        </section>
+    );
+
     return (
         <Fragment>
             <div className="async-sms-title">
@@ -75,6 +89,7 @@ export default function AsyncSMS() {
                     title={TitleSMS}
                 />
             </div>
+            {showInstruBtn()}
             <CreditsBalance handleBalance={handleBalance} />
             <RecipientOptions
                 whichTab={whichTab}

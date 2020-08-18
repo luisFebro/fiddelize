@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import SwitchBtn from '../../../../components/buttons/material-ui/SwitchBtn'
 import convertToReal from '../../../../utils/numbers/convertToReal';
-import RadiusBtn from '../../../../components/buttons/RadiusBtn';
+import DetailsBtn from './details-btn/DetailsBtn';
 import useAPI, { activateAutoService, treatBoolStatus } from '../../../../hooks/api/useAPI';
 import { useAppSystem } from '../../../../hooks/useRoleData';
 
 export default function Operation({
-    title,
     active = false,
     usage = 0,
     loading = false,
     dataSwitch,
     msg,
+    title,
+    subtitle,
 }) {
     const [trigger, setTrigger] = useState(false);
     const [data, setData] = useState({
@@ -57,6 +58,12 @@ export default function Operation({
         })
     }
 
+    const modal = {
+        msg,
+        title,
+        subtitle,
+    }
+
     const showTitle = () => (
         <section className="container-center-col">
             <div
@@ -65,11 +72,7 @@ export default function Operation({
                 {title}
             </div>
             <section>
-                <RadiusBtn
-                    title="Ver detalhes"
-                    position="relative"
-                    size="small"
-                />
+                <DetailsBtn modal={modal} />
             </section>
         </section>
     );
@@ -83,6 +86,7 @@ export default function Operation({
                     disabled={false}
                     loading={loadingSwitch}
                     data={dataSwitch}
+                    pillStyle={true}
                 />
             )}
             <div

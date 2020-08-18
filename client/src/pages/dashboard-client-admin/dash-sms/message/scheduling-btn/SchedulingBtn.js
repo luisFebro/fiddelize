@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ModalFullContent from '../../../../../components/modals/ModalFullContent';
 import { Load } from '../../../../../components/code-splitting/LoadableComp'
 import { useStoreDispatch } from 'easy-peasy';

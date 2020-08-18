@@ -36,7 +36,7 @@ export default function CreditsBalance({ handleBalance }) {
     }, [smsBalance, loading])
 
     return (
-        <section className="mt-5 my-3">
+        <section className="my-3">
             <div className="container-center">
                 <div className="position-relative text-title text-purple text-center">
                     Saldo:

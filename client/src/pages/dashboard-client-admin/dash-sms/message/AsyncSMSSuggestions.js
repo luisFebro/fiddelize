@@ -22,6 +22,10 @@ const data = ({ bizName }) => [
         msg: `REUNIÃO ${bizName.toUpperCase()} - Aviso para toda equipe de vendas que teremos uma reunião amanhã às 15:00 na sala de apresentação.`,
     },
     {
+        title: "Convite para eventos",
+        msg: `EVENTO DA ${bizName.toUpperCase()} - Estamos convidando todos nossos clientes especiais a um evento X que aconterá às 18:00 no próximo Sábado.`,
+    },
+    {
         title: "Negócio não abre",
         msg: `${bizName.toUpperCase()} informa aos nossos clientes que Sábado não abriremos devido a (motivo). Agradecemos sua compreensão!`,
     },
