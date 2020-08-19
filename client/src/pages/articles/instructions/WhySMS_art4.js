@@ -179,6 +179,17 @@ const Body = () => {
             </p>
 
             <p>
+                <strong>✔ Agendamentos de Envio.</strong> Escolha uma data e hora para envio de seus SMS. Você pode agendar que uma mensagem seja enviada em datas importantes ou comemorativas como lembretes de reuniões, eventos, Ano Novo, Natal e outras datas especiais como o aniversário. Agende o envio para um ou vários contatos que receberão simultanemente sua mensagem.
+            </p>
+
+            <ShowPicture
+                imgContainerClass="why-sms--picture"
+                dataSrc="/img/articles/why-sms/pic-9-a.png"
+                reference=""
+                subtitle="agende o envio para quem e quando precisar"
+            />
+
+            <p>
                 <strong>✔ Suas mensagens são privadas e estamos constantemente melhorando nossa segurança.</strong>. Somente você e os contatos de destino poderão ler as mensagens porque no nosso banco de dados todas as mensagens são criptografados com algoritmos fortes que somente poderão ser lidos com um chave codificada única que a cada novo envio é uma diferente. Isso aumenta significativamente a nossa base de  dados e sua privacidade.
             </p>
 
@@ -188,7 +199,7 @@ const Body = () => {
 
             <ShowPicture
                 imgContainerClass="why-sms--picture"
-                dataSrc="/img/articles/why-sms/pic-9.png"
+                dataSrc="/img/articles/why-sms/pic-9-b.png"
                 reference=""
                 subtitle="resultado de performance da Fiddelize via Pagespeed Insights"
             />
