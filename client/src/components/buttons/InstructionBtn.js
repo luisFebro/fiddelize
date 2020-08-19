@@ -42,8 +42,8 @@ export default function InstructionBtn({
     <div className="animated zoomIn delay-2s disable-blur">
         <ButtonFab
             position="relative"
-            color="var(--mainDark)"
-            backgroundColor="#CAD3C8" // light grey
+            color="var(--themePLight)"
+            backgroundColor="var(--mainWhite)"
             iconFontAwesome={<FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}
             needIconShadow={false}
         />
@@ -100,8 +100,8 @@ export default function InstructionBtn({
                     <ButtonFab
                         position="relative"
                         onClick={handleFullOpen}
-                        color="var(--mainDark)"
-                        backgroundColor="#CAD3C8" // light grey
+                        color="var(--themePLight)"
+                        backgroundColor="var(--mainWhite)" // light grey
                         iconFontAwesome={DefaultIcon}
                         needIconShadow={false}
                     />
