@@ -4,6 +4,7 @@ const { msgG } = require('./_msgs/globalMsgs');
 const { msg } = require('./_msgs/auth');
 const selectObjKeys = require("../utils/objects/selectObjKeys");
 const getFirstName = require("../utils/string/getFirstName");
+const { encryptSync, decryptSync, jsEncrypt } = require("../utils/security/xCipher");
 
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
@@ -85,6 +86,9 @@ exports.loadAuthUser = (req, res) => {
         User.findById(userIdInsideJwt)
         .select(select)
         .exec((err, profile) => {
+            profile.email = decryptSync(profile.email);
+            profile.phone = decryptSync(profile.phone);
+
             if(err) return res.status(500).json(msgG('error.systemError', err))
             res.json({ profile });
         })
@@ -112,10 +116,10 @@ exports.register = (req, res) => {
     const newUser = new User({
         role,
         name,
-        email,
-        cpf,
+        email: encryptSync(cpf),
+        cpf: jsEncrypt(cpf),
+        phone: encryptSync(phone),
         birthday,
-        phone,
         maritalStatus,
         clientAdminData,
         clientUserData,

@@ -19,6 +19,8 @@ const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
 const { getDataChunk, getChunksTotal, } = require("../../utils/array/getDataChunk");
 const filterAndCount = require("../../utils/array/filterAndCount");
+const { decryptSync, jsDecrypt } = require("../../utils/security/xCipher");
+
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
@@ -59,6 +61,7 @@ const handleUserRole = (isAdmin, profile, opts = {}) => {
 
     if(isAdmin) {
         const cliAdminObj = profile.clientAdminData;
+
         cliAdminObj.verificationPass = undefined;
         cliAdminObj.bizPlanCode = undefined;
         cliAdminObj.notifications = undefined;
@@ -66,6 +69,9 @@ const handleUserRole = (isAdmin, profile, opts = {}) => {
 
         return cliAdminObj;
     } else {
+        profile.phone = decryptSync(profile.phone);
+        profile.email = decryptSync(profile.email);
+
         profile.password = undefined;
         profile.clientAdminData = undefined;
         if(profile.clientUserData) { // for cli-admin login conflict avoidance...
@@ -248,8 +254,16 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
         const isCliAdmin = list[0].role === "cliente-admin"; // always the first object if available
         if(isCliAdmin) { delete list[0].clientAdminData }
 
+        const treatedList = list.map(profile => {
+            return {
+                ...profile,
+                cpf: jsDecrypt(profile.cpf),
+                email: decryptSync(profile.email),
+                phone: decryptSync(profile.phone),
+            }
+        })
         res.json({
-            list,
+            list: treatedList,
             chunkSize: chunkSize[0] === undefined ? 0 : chunkSize[0].value,
             totalSize: totalSize[0] === undefined ? 0 : totalSize[0].value,
             totalCliUserScores: totalCliUserScores[0] === undefined ? 0 : totalCliUserScores[0].value,

@@ -60,6 +60,7 @@ function encryptSync(text) { // criptografar
 }
 
 function decrypt(hashTxt) {
+    if(!hashTxt) return;
     const promiseDecript = (resolve, reject) => {
         const run = () => {
             const textParts = hashTxt.split(':');
@@ -84,6 +85,7 @@ function decrypt(hashTxt) {
 }
 
 function decryptSync(hashTxt) {
+    if(!hashTxt) return;
     const textParts = hashTxt.split(':');
     const iv = Buffer.from(textParts.shift(), 'hex');
     const encryptedText = Buffer.from(textParts.join(':'), 'hex');
@@ -104,23 +106,9 @@ function decryptSync(hashTxt) {
 //     console.log(res);
 // })
 // .catch(e => console.log(e))
-// END ENCRYPTION AND DECRYPTION
 
-module.exports = {
-    encrypt,
-    encryptSync,
-    decrypt,
-    decryptSync,
-    hashPassword,
-    comparePassword,
-}; // both returns string
 
-// reference:
-// https://vancelucas.com/blog/stronger-encryption-and-decryption-in-node-js/
-// more: https://www.sohamkamani.com/nodejs/rsa-encryption/
-
-/* ARCHIVES
-https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
+// less secure for authentication which requires decryption.
 const handleCipherVault = salt => {
     if(!salt) return;
     const textToChars = text => text.split('').map(c => c.charCodeAt(0));
@@ -144,6 +132,32 @@ const handleDecipherVault = salt => {
         .map(charCode => String.fromCharCode(charCode))
         .join('');
 }
+
+const jsEncrypt = handleCipherVault(KRYPTO_SECRET);
+const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
+
+// TEST
+// const resCipher = jsEncrypt('11');
+// const resDecipher = jsDecrypt(resCipher);
+// END ENCRYPTION AND DECRYPTION
+
+module.exports = {
+    encrypt,
+    encryptSync,
+    decrypt,
+    decryptSync,
+    hashPassword,
+    comparePassword,
+    jsEncrypt,
+    jsDecrypt,
+}; // both returns string
+
+// reference:
+// https://vancelucas.com/blog/stronger-encryption-and-decryption-in-node-js/
+// more: https://www.sohamkamani.com/nodejs/rsa-encryption/
+
+/* ARCHIVES
+https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
 
 const KRYPTO_SECRET = process.env.KRYPTO_SECRET;
 const cipherThis = handleCipherVault(KRYPTO_SECRET);

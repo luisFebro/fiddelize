@@ -29,13 +29,17 @@ export default function needAlertBirthday(strBirthDate, options = {}) {
     }
 }
 
+const monthesDetails = getMonthesDetails();
+let already = false; // this is returning a second type like August and then Abri incomplete causing error...
 function getDateCode(strDate) {
-    if(!strDate) return {
+    if(!strDate || already) return {
         code: 0,
         monthCode: 0,
         maxDayMonth: 0,
     }
-    const monthesDetails = getMonthesDetails();
+
+    already = true;
+
     const indFirstSpacing = strDate.indexOf(" ");
     let day = strDate.slice(0, indFirstSpacing);
     if(day === "1º") day = "01";
@@ -43,8 +47,10 @@ function getDateCode(strDate) {
 
     const indFirstMonthSpacing = strDate.lastIndexOf(" ", 8) // n1
     const slicedMonthDate = strDate.slice(indFirstMonthSpacing).trim();
+    console.log("slicedMonthDate", slicedMonthDate);
     const indLastMonthSpacing = slicedMonthDate.indexOf(" ");
     const month = slicedMonthDate.slice(0, indLastMonthSpacing).toLowerCase();
+    console.log("month", month);
     const { codeNum: monthCode, maxDay: maxDayMonth } = monthesDetails[month];
 
     return {

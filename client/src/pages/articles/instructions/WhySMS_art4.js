@@ -194,8 +194,15 @@ const Body = () => {
             </p>
 
             <p>
-                <strong>✔ Suas mensagens são privadas e estamos constantemente melhorando nossa segurança.</strong>. Somente você e os contatos de destino poderão ler as mensagens porque no nosso banco de dados todas as mensagens são criptografados com algoritmos fortes que somente poderão ser lidos com um chave codificada única que a cada novo envio é uma diferente. Isso aumenta significativamente a nossa base de  dados e sua privacidade.
+                <strong>✔ Suas mensagens são privadas e estamos constantemente melhorando nossa segurança.</strong>. Somente você e os contatos de destino poderão ler as mensagens porque no nosso banco de dados todas as mensagens são criptografadas com algoritmos fortes que somente poderão ser lidos com um chave codificada única que a cada novo envio muda para uma diferente. Isso aumenta significativamente a segurança e privacidade de nossa base de dados.
             </p>
+
+            <ShowPicture
+                imgContainerClass="why-sms--picture"
+                dataSrc="/img/articles/why-sms/pic-9-aa.png"
+                reference=""
+                subtitle="100% transparência: Sua mensagem criptografada no banco de dados da Fiddelize"
+            />
 
             <p>
                 <strong>✔ Investimos em Performance e experiência personalizada</strong>. Todas as sessão do seu painel de controle são microsserviços que só são carregados quando você estiver usando. Além de que cada componente só é carregado quando visível na tela. Isso aumenta a <strong>rapidez de acesso em qualquer velocidade de conexão com a internet</strong>. Inclusive você pode acessar offline.

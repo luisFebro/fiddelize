@@ -5,6 +5,7 @@ const isValidName = require('../../utils/validation/isValidName');
 const CPF = require('../../utils/validation/validateCpf');
 const { msg } = require('../_msgs/auth');
 const { msgG } = require('../_msgs/globalMsgs');
+const { jsEncrypt } = require("../../utils/security/xCipher");
 
 const handleRoles = (currRoles, rolesQueryObj) => {
     const { cliAdmin, cliUser } = rolesQueryObj;
@@ -36,11 +37,11 @@ exports.mwValidateRegister = (req, res, next) => {
     // const queryCliAdmin = { $and: [cpf, {role: "cliente-admin"}] }
     // const queryCliUser = { $and: [cpf, bizId]}
     // let query = handleRoles(role, {cliAdmin: queryCliAdmin, cliUser: queryCliUser});
-    User.findOne({ cpf })
+    User.findOne({ cpf: jsEncrypt(cpf) })
     .then(user => {
         // profile validation
         // This CPF will be modified because this will be cheched according to roles..
-        if(user && user.cpf === cpf) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
+        if(user && user.cpf === jsEncrypt(cpf)) return res.status(400).json(msg('error.cpfAlreadyRegistered'));
         if(!name && !email && !cpf && !phone) return res.status(400).json(msg('error.anyFieldFilled'));
         if(!name) return res.status(400).json(msg('error.noName'));
         if(!isValidName(name)) return res.status(400).json(msg('error.invalidLengthName'));
@@ -80,7 +81,7 @@ function runTestException(cpf, user, req, next) {
     // For testing purpose, it will be allowed:]
     // 111.111.111-11 for cli-admin free version testing
     // 222.222.222-22 for cli-user free version testing
-    if(cpf === "111.111.111-11" || cpf === "222.222.222-22") {
+    if(cpf === "111.111.111-11" || cpf === "222.222.222-22" || cpf === "333.333.333-33") {
         req.profile = user;
         next();
         return true;
@@ -92,7 +93,7 @@ exports.mwValidateLogin = (req, res, next) => {
     const { cpf, roleWhichDownloaded } = req.body;
     const isCpfValid = new CPF().validate(cpf);
 
-    User.findOne({ cpf })
+    User.findOne({ cpf: jsEncrypt(cpf) })
     .then(user => {
         if(!cpf) return res.status(400).json(msg('error.noCpf'));
         const detected = runTestException(cpf, user, req, next);
