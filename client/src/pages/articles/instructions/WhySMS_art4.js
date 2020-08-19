@@ -190,6 +190,10 @@ const Body = () => {
             />
 
             <p>
+                <strong>✔ Flexibilidade da plataforma.</strong> Você pode escolher de qual dispositivo enviar, visto que a plataforma da Fiddelize roda em  diversos dispositivos modernos como smartphones, tabletes, notebooks e computadores. Além do mais, você pode acessar seu painel de controle diretamente pelo nosso site além do app.
+            </p>
+
+            <p>
                 <strong>✔ Suas mensagens são privadas e estamos constantemente melhorando nossa segurança.</strong>. Somente você e os contatos de destino poderão ler as mensagens porque no nosso banco de dados todas as mensagens são criptografados com algoritmos fortes que somente poderão ser lidos com um chave codificada única que a cada novo envio é uma diferente. Isso aumenta significativamente a nossa base de  dados e sua privacidade.
             </p>
 
