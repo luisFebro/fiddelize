@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SwitchBtn from '../../../../components/buttons/material-ui/SwitchBtn'
 import convertToReal from '../../../../utils/numbers/convertToReal';
 import DetailsBtn from './details-btn/DetailsBtn';
@@ -25,6 +25,10 @@ export default function Operation({
 
     const { service, serviceId, innerActive } = data;
 
+    useEffect(() => {
+        setData({ ...data, service: dataSwitch.service , serviceId: dataSwitch.id  });
+    }, [])
+
     usage = convertToReal(usage);
 
     const body = {
@@ -32,6 +36,7 @@ export default function Operation({
         serviceId,
         service,
         active: innerActive,
+        msg,
     };
 
     const { loading: loadingSwitch } = useAPI({
@@ -40,21 +45,21 @@ export default function Operation({
         body,
         trigger,
         needAuth: true,
-        snackbar: { txtSuccess: innerActive ? "SMS automático ativado!" : " " }
+        snackbar: { txtSuccess: innerActive ? "SMS automático ativado!" : "" }
     })
 
     const plural = usage > 1 ? "s" : "";
 
     const handleSwitch = (status, data = {}) => {
-        const { id, service } = data;
+        const { serviceId, service } = data;
         const treatedStatus = treatBoolStatus(status);
 
         setTrigger(status);
         setData({
             ...data,
-            serviceId: id,
-            innerActive: treatedStatus,
             service,
+            serviceId: serviceId,
+            innerActive: treatedStatus,
         })
     }
 
@@ -62,6 +67,7 @@ export default function Operation({
         msg,
         title,
         subtitle,
+        body,
     }
 
     const showTitle = () => (

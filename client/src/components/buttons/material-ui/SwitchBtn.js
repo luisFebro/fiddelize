@@ -4,8 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import uuidv1 from 'uuid/v1';
 import parse from 'html-react-parser';
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../redux/actions/snackbarActions';
+// import { useStoreDispatch } from 'easy-peasy';
+// import { showSnackbar } from '../../../redux/actions/snackbarActions';
 
 const getStyles = ({ pillStyle }) => ({
     pill: pillStyle ? {
@@ -40,7 +40,7 @@ export default function SwitchBtn({
     disabled = false,
     data = "",
     pillStyle=false,
-    loading = false,
+    // loading = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
 
@@ -48,26 +48,26 @@ export default function SwitchBtn({
 
     const styles = getStyles({ pillStyle });
 
-    const dispatch = useStoreDispatch();
+    // const dispatch = useStoreDispatch();
 
     const handleChange = (event) => {
         const status = event.target.checked;
         const statusId = getStatusWithId(status);
 
-        if(loading) return // showSnackbar(dispatch, "Aguarde finalização do último");
+        // if(loading) return // showSnackbar(dispatch, "Aguarde finalização do último");
 
         setChecked(status);
         if(typeof callback === "function") callback(statusId, switchData.current);
     };
 
     const setTrue = () => {
-        if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
+        // if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(true);
         if(typeof callback === "function") callback(getStatusWithId(true), switchData.current);
     };
 
     const setFalse = () => {
-        if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
+        // if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(false);
         if(typeof callback === "function") callback(getStatusWithId(false), switchData.current);
     }
@@ -89,7 +89,7 @@ export default function SwitchBtn({
                 checked={checked}
                 onChange={handleChange}
                 name="purpleSwitch"
-                disabled={disabled || loading}
+                disabled={disabled}
             />
             <p className={txtStyle2} onClick={setTrue}>{titleRight}</p>
         </section>

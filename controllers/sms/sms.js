@@ -59,7 +59,7 @@ exports.readContacts = (req, res) => {
                 if(autocomplete) {
                     finalRes.push(user.name);
                 } else {
-                    finalRes.push({ name: user.name, phone: user.phone })
+                    finalRes.push({ name: user.name, phone: decryptSync(user.phone) })
                 }
             }
         })
@@ -407,100 +407,60 @@ exports.readAutoService = (req, res) => {
 }
 
 // Method: put
-const handleStatus = ({
-    res, userId, service, serviceId, active, searchByName }) => {
-    User.findById(userId)
-    .select("clientAdminData.smsAutomation")
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
-
-        let smsAutomation = doc.clientAdminData.smsAutomation;
-
-        if(searchByName) {
-            const found = smsAutomation.find(opt => opt.service === service)
-            serviceId = found ? found._id : serviceId;
-        }
-
-        const newData = findKeyAndAssign({
-            objArray: smsAutomation,
-            compareProp: '_id', compareValue: serviceId,
-            targetProp: 'active', targetValue: active,
-        });
-
-        smsAutomation = newData;
-        doc.markModified("clientAdminData.smsAutomation");
-
-        doc.save(err => res.json({ msg: `Automatic Service ${service.toUpperCase()} disabled` }));
-    })
-}
 exports.activateAutoService = (req, res) => {
     const {
         userId,
+        serviceId,
         service, // service's name only for activation required
         msg,
         afterDay,
         active = false,
-        serviceId,
+        targetKey = "active",
     } = req.body;
 
     if(!userId) return res.status(400).json({ error: "Missing userId"});
     if(!service) return res.status(400).json({ error: "Missing service name"});
 
-    console.log("serviceId", serviceId);
-    console.log("serviceId.toString()", serviceId.toString().length)
-    const gotValidId = serviceId.toString().length > 5;
-    console.log("gotValidId", gotValidId);
+    User.findById(userId)
+    .exec((err, doc) => {
+        if(err) return res.status(500).json(msgG('error.systemError', err));
 
-    if(active) {
-        if(gotValidId) {
-            handleStatus({
-                res,
-                userId,
-                service,
-                serviceId,
-                active: true
-            });
-        } else {
-            const newService = { service, msg, afterDay, active: true };
+        let smsAutomation = doc.clientAdminData.smsAutomation;
 
-            User.findOneAndUpdate(
-                { _id: userId },
-                { $push: { "clientAdminData.smsAutomation": newService } },
-                { new: true })
-            .select("clientAdminData.smsAutomation")
-            .exec((err, data) => {
-                console.log("data", data);
-                if(err) return res.status(500).json(msgG("error.systemError", err));
-
-                res.json({ msg: `Automatic Service ${service.toUpperCase()} added and activated` });
-            })
+        const getKeys = (mode) => {
+            if(mode === "active") return { key: 'active', value: active };
+            if(mode === "msg") return { key: 'msg', value: msg };
         }
 
-        return;
-    }
+        const { key, value } = getKeys(targetKey);
 
-    if(!active && serviceId) {
-        if(!gotValidId) {
-            handleStatus({
-                res,
-                userId,
-                service,
-                serviceId,
-                searchByName: true,
-                active: false
+        const foundService = smsAutomation && smsAutomation.find(service => service.serviceId === serviceId);
+
+        if(foundService) {
+            const newData = findKeyAndAssign({
+                objArray: smsAutomation,
+                compareProp: 'serviceId', compareValue: serviceId,
+                targetProp: key, targetValue: value,
             });
+
+            smsAutomation = newData;
         } else {
-            handleStatus({
-                res,
-                userId,
-                service,
-                serviceId,
-                active: false
-            });
+            const newService = { serviceId, service, msg, afterDay, active };
+            doc.clientAdminData.smsAutomation = [ ...smsAutomation, newService ];
         }
 
-        return;
-    }
+        doc.markModified("clientAdminData.smsAutomation");
+
+        doc.save(err => res.json({ msg: `Automatic Service status changed` }));
+    });
+
+    // if(smsAutomation && smsAutomation.length) {
+    //     const newData = findKeyAndAssign({
+    //         objArray: smsAutomation,
+    //         compareProp: '_id', compareValue: serviceId,
+    //         targetProp: 'active', targetValue: active,
+    //     });
+    // } else {
 }
 // END AUTOMATIC SMS
 

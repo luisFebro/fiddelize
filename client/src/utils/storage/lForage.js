@@ -39,6 +39,7 @@ export const deleteImage = (collection, dataKey) => {
             store.removeItem(dataKey)
             .then(deletedImage => {
                 console.log(`The image ${dataKey.toUpperCase()} was deleted successfully.`)
+                return;
             }).catch(err => console.log("There was an issue while deleting your image. Details: " + err))
         } else { console.log("No image found in the IndexedDB to be deleted") }
     })

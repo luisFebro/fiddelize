@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Operation from './Operation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  useAppSystem, useClientAdmin } from '../../../../hooks/useRoleData';
+import { useAppSystem, useClientAdmin } from '../../../../hooks/useRoleData';
 import useAPI, { readAutoService } from '../../../../hooks/api/useAPI';
 
 const getStyles = () => ({
@@ -13,7 +13,7 @@ const getStyles = () => ({
 
 const serviceOptions = ({ bizName }) => ([
     {
-        _id: 1,
+        serviceId: 1,
         service: "missingPurchase",
         title: "Mensagem de Saudade",
         subtitle: "Mensagem automática de saudade, quando cliente tiver 30 dias sem realizar uma compra.",
@@ -21,7 +21,7 @@ const serviceOptions = ({ bizName }) => ([
         msg: `Sentimos sua falta. A ${bizName.toUpperCase()} não esqueceu de você e está sempre de portas abertas.`,
     },
     {
-        _id: 2,
+        serviceId: 2,
         service: "confirmedChall",
         title: "Confimação de desafio",
         subtitle: "Aviso automático para o cliente quando você confirmar/descontar um desafio concluído",
@@ -32,40 +32,39 @@ const serviceOptions = ({ bizName }) => ([
 
 export default function AutomaticOperations() {
     const [services, setServices] = useState([]);
-    const [already, setAlready] = useState(false);
     const styles = getStyles();
 
     const { businessId: userId } = useAppSystem();
     const { bizName } = useClientAdmin();
 
-    const { data, loading } = useAPI({ url: readAutoService(userId), needAuth: true })
+    const { data, gotData, loading } = useAPI({ url: readAutoService(userId), needAuth: true })
 
     useEffect(() => {
-        if(data && !loading && !already) {
-            const serviceArray = [];
-            data.forEach((db, ind) => {
-                serviceOptions({ bizName }).forEach(option => {
+        if(!loading) {
+            if(gotData) {
+                const serviceArray = [];
+
+                serviceOptions({ bizName }).forEach((option, ind) => {
+                    const db = data[ind];
                     if(option.service === db.service) {
                         const newOption = {
                             ...option,
-                            _id: db._id,
+                            serviceId: db.serviceId,
                             active: db.active,
                             usage: db.usage,
+                            msg: db.msg,
                         }
                         serviceArray.push(newOption);
                     } else {
                         serviceArray.push(option);
                     }
                 })
-            });
-            setAlready(true);
-            setServices([...serviceArray]);
-        }
+                setServices(serviceArray);
+            }
 
-        if(data && !data.length && !loading) {
-            setServices([...serviceOptions({ bizName })]);
+            if(!gotData) setServices(serviceOptions({ bizName }));
         }
-    }, [data, loading])
+    }, [data, gotData, loading])
 
     const showHeader = () => (
         <header className="d-flex justify-content-around">
@@ -94,9 +93,9 @@ export default function AutomaticOperations() {
                     Carregando serviços...
                 </p>
             ) : (Boolean(services && services.length)) && services.map(service => (
-                <Fragment key={service._id}>
+                <Fragment key={service.serviceId}>
                     <Operation
-                        dataSwitch={{ id: service._id, service: service.service }}
+                        dataSwitch={{ id: service.serviceId, service: service.service }}
                         usage={service.usage}
                         msg={service.msg}
                         title={service.title}

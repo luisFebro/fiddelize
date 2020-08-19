@@ -63,7 +63,7 @@ function Login({ history, setLoginOrRegister }) {
             }
 
             // clean up whatever logo from prior login to set new one (especially another account)
-            deleteImage("logos", "app_biz_logo");
+            deleteImage("logos", "app_biz_logo")
 
             const {
                 msg,
@@ -74,8 +74,9 @@ function Login({ history, setLoginOrRegister }) {
                 bizCodeName,
                 verificationPass,
                 needCliUserWelcomeNotif,
-                // selfMilestoneIcon,
+                // selfBizLogoImg,
             } = res.data;
+
 
             if(role === "admin") {
                 showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);

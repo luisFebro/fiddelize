@@ -4,6 +4,7 @@ import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import EditButton from '../../../../../components/buttons/EditButton';
 import TextField from '@material-ui/core/TextField';
 import handleChange from '../../../../../utils/form/use-state/handleChange';
+import useAPI, { activateAutoService, readAutoService, getUniqueId } from '../../../../../hooks/api/useAPI';
 
 const getStyles = () => ({
     msgField: {
@@ -19,15 +20,39 @@ const getStyles = () => ({
 });
 
 export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
+    const [trigger, setTrigger] = useState(false);
     const [message, setMessage] = useState("");
     const [edit, setEdit] = useState(false);
-    const { msg, title, subtitle } = modal;
+    const { msg, title, subtitle, body } = modal;
+    const userId = body.userId;
 
     useEffect(() => {
         setMessage(msg);
     }, [])
 
+    const { data: serviceData, loading } = useAPI({ url: readAutoService(userId), needAuth: true })
+
+    const { loading: loadingChange } = useAPI({
+        method: 'put',
+        url: activateAutoService(),
+        body: { ...body, targetKey: "msg", msg: message, active: true },
+        trigger,
+        needAuth: true,
+        snackbar: { txtSuccess: "Mudanças Salvas!" }
+    })
+
     const styles = getStyles();
+
+    const handleEdit = () => {
+        setEdit(prev => !prev);
+    }
+
+    const handleUpdate = () => {
+        handleEdit();
+
+        const randomId = getUniqueId();
+        setTrigger(randomId);
+    }
 
     const showTitle = () => (
         <div className="my-5">
@@ -44,14 +69,6 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
         </div>
     );
 
-    const handleEdit = () => {
-        setEdit(prev => !prev);
-    }
-
-    const handleUpdate = () => {
-        handleEdit();
-    }
-
     const showMsg = () => (
         <section>
             <h2 className="text-normal text-center text-purple font-weight-bold">
@@ -63,13 +80,13 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
                         multiline
                         rows={5}
                         id="messageField"
-                        name="message"
                         InputProps={{
                             style: styles.fieldFormValue,
                         }}
                         inputProps={{
                             maxLength: 160
                         }}
+                        name="message"
                         value={message}
                         onChange={handleChange(setMessage)}
                         onBlur={null}
@@ -89,7 +106,7 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
                     className="position-relative p-3 text-normal text-white text-break text-left mx-3"
                     style={styles.msgField}
                 >
-                    {msg}
+                    {message}
                     <div className="position-absolute" style={{ bottom: -15, right: -20 }}>
                         <EditButton
                             onClick={handleEdit}
@@ -102,12 +119,16 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
 
     const showCTABtns = () => (
         <section className="d-flex justify-content-around align-items-center mt-2 mb-5">
-            <ButtonMulti
-                title="Voltar"
-                onClick={handleFullClose}
-                onClick={handleFullClose}
-                variant="link"
-            />
+            {loadingChange ? (
+                <ButtonMulti
+                    title="Voltar"
+                    onClick={handleFullClose}
+                    onClick={handleFullClose}
+                    variant="link"
+                />
+            ) : (
+                <p className="text-center text-normal text-grey">Mudando...</p>
+            )}
             {edit && (
                 <div className="animated zoomIn">
                     <ButtonFab

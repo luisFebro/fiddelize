@@ -137,7 +137,8 @@ const jsEncrypt = handleCipherVault(KRYPTO_SECRET);
 const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
 
 // TEST
-// const resCipher = jsEncrypt('11');
+// const resCipher = jsEncrypt('023.248.892-42');
+// console.log("resCipher", resCipher);
 // const resDecipher = jsDecrypt(resCipher);
 // END ENCRYPTION AND DECRYPTION
 

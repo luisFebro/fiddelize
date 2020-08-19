@@ -143,7 +143,7 @@ const handleRolesData = (role, ...allKeys) => {
 
     switch(role) {
         case "cliente-admin":
-            const array1 = [ 'token', 'role', 'name', 'bizCodeName', 'verificationPass', 'authUserId', 'msg', 'selfMilestoneIcon' ];
+            const array1 = [ 'token', 'role', 'name', 'bizCodeName', 'verificationPass', 'authUserId', 'msg', 'selfBizLogoImg' ];
             objToSend = selectObjKeys(allKeysStore, array1);
             break;
         case "cliente":
@@ -167,7 +167,7 @@ exports.login = (req, res) => {
         bizId: clientUserData && clientUserData.bizId || "0",
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
         verificationPass: clientAdminData && clientAdminData.verificationPass,
-        selfMilestoneIcon: clientAdminData && clientAdminData.selfMilestoneIcon,
+        selfBizLogoImg: clientAdminData && clientAdminData.selfBizLogoImg,
         authUserId: _id,
         msg: msg('ok.welcomeBack', getFirstName(name), 'onlyMsg'),
         needCliUserWelcomeNotif: clientUserData && !clientUserData.notifications.length,

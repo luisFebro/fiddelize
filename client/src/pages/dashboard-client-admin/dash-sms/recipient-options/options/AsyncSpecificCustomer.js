@@ -31,6 +31,7 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
 
     useEffect(() => {
         if(newAddedContact) {
+            if(!newAddedContact.length) return showSnackbar(dispatch, "Contato não está mais disponível!", "error");
             const { name, phone } = newAddedContact[0];
             handleAddContact({ name, phone });
         }

@@ -38,7 +38,7 @@ export default function useAPI({
     callback,
 }) {
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(null);
+    const [loading, setLoading] = useState(true); // WARNING> do not change to null since many request depend on the truthness to disnnull undefied object values...
     const [alreadyReqId, setAlreadyReqId] = useState(null);
 
     const {
@@ -133,7 +133,8 @@ export default function useAPI({
         return () => { cancel(); clearTimeout(stopRequest); };
     }, [trigger])
 
-    return { data, loading, setRun, dispatch };
+    const gotData = data && data.length;
+    return { data, gotData, loading, setRun, dispatch };
 }
 
 /* COMMENTS

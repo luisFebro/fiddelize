@@ -201,7 +201,7 @@ const Body = () => {
                 imgContainerClass="why-sms--picture"
                 dataSrc="/img/articles/why-sms/pic-9-aa.png"
                 reference=""
-                subtitle="100% transparência: Sua mensagem criptografada no banco de dados da Fiddelize"
+                subtitle="sua mensagem é criptografada no banco de dados da Fiddelize"
             />
 
             <p>

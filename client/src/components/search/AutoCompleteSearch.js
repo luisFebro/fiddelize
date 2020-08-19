@@ -11,6 +11,8 @@ import parse from 'html-react-parser';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getVar, setVar } from '../../hooks/storage/useVar';
 import isKeyPressed from '../../utils/event/isKeyPressed';
+import { useToken } from '../../hooks/useRoleData';
+import { chooseHeader } from '../../utils/server/getHeaders';
 
 // 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
@@ -84,6 +86,7 @@ export default function AutoCompleteSearch({
     placeholder = "Procure alguma coisa...",
     formWidth = "100%",
     needArrowEndAdornment = false,
+    needAuth = true,
     autoHighlight = true,
 }) {
     const [open, setOpen] = useState(false);
@@ -92,6 +95,8 @@ export default function AutoCompleteSearch({
     const [searchChange, setSearchChange] = useState("");
     const [loading, setLoading] = useState(false);
     const [needHistory, setNeedHistory] = useState(true);
+
+    const token = useToken();
 
     const styles = getStyles({ fieldBack, themeColor, txtFont });
 
@@ -146,7 +151,7 @@ export default function AutoCompleteSearch({
         const config = {
             url: newSearchUrl,
             method: 'get',
-            // headers: chooseHeader({ token: token, needAuth }),
+            headers: chooseHeader({ token: token, needAuth }),
             cancelToken: new axios.CancelToken(c => cancel = c)
         }
 
