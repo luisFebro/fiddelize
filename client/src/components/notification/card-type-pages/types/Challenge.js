@@ -53,6 +53,7 @@ export default function Challenge({
         rewardScore,
         currChall,
         clientFullName,
+        phone,
         // confirmedChall
         prizeId,
         prizeDeadline,
@@ -109,6 +110,7 @@ export default function Challenge({
                 rewardScore,
                 userId: senderId,
                 name: clientFullName,
+                phone,
                 userCurrScore: Number(currScore),
                 totalActiveScore: Number(currScore),
                 totalPrizes: Number(totalPrizes),

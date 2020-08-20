@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 import PropTypes from 'prop-types';
-import ModalTextField from './ModalTextField';
 import { buttonFabType } from '../../../../../../../types';
 import handleChange from '../../../../../../../utils/form/use-state/handleChange';
 import { setRun } from '../../../../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
+import { Load } from '../../../../../../../components/code-splitting/LoadableComp';
+
+const AsyncModalTextField = Load({ loader: () => import('./ModalTextField' /* webpackChunkName: "discount-score-comp-lazy" */)});
 
 ModalBtn.propTypes = {
     modalData: PropTypes.object.isRequired,
@@ -56,12 +58,14 @@ export default function ModalBtn({
                 position={position}
                 size={size}
             />
-            <ModalTextField
-                open={open}
-                onClose={onClose}
-                modalData={modalData}
-                closeOtherModals={handleCloseModals}
-            />
+            {open && (
+                <AsyncModalTextField
+                    open={open}
+                    onClose={onClose}
+                    modalData={modalData}
+                    closeOtherModals={handleCloseModals}
+                />
+            )}
         </div>
     );
 }

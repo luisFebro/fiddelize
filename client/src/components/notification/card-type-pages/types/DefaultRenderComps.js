@@ -23,19 +23,16 @@ export const ShowTitle = ({ text }) => (
 
 export const ShowIllustration = ({ role, mainImg, bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png" }) => {
     const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
-    const BoostedImg = React.useMemo(() => (
-        <Img
-            src={mainImg}
-            className="shadow-elevation-black"
-            alt="ilustração principal"
-            width={150}
-            height="auto"
-        />
-    ), [])
 
     return (
         <div className="container-center position-relative my-5">
-            {BoostedImg}
+            <Img
+                src={mainImg}
+                className="shadow-elevation-black"
+                alt="ilustração principal"
+                width={150}
+                height="auto"
+            />
             {role === "cliente" && (
                 <div
                     className="position-absolute"

@@ -38,6 +38,7 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
         body: { ...body, targetKey: "msg", msg: message, active: true },
         trigger,
         needAuth: true,
+        loadingStart: false,
         snackbar: { txtSuccess: "Mudanças Salvas!" }
     })
 
@@ -120,14 +121,14 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
     const showCTABtns = () => (
         <section className="d-flex justify-content-around align-items-center mt-2 mb-5">
             {loadingChange ? (
+                <p className="my-3 text-center text-normal text-grey">Mudando...</p>
+            ) : (
                 <ButtonMulti
                     title="Voltar"
                     onClick={handleFullClose}
                     onClick={handleFullClose}
                     variant="link"
                 />
-            ) : (
-                <p className="text-center text-normal text-grey">Mudando...</p>
             )}
             {edit && (
                 <div className="animated zoomIn">

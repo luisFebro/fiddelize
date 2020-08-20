@@ -35,11 +35,23 @@ export default function useAPI({
     runName = null,
     snackbar = {},
     needAuth = false,
+    loadingStart, // change default initial loading status
+    needOnlyOnce = false,
     callback,
 }) {
     const [data, setData] = useState(null);
+    const [onlyOnce, setOnlyOnce] = useState(false);
     const [loading, setLoading] = useState(true); // WARNING> do not change to null since many request depend on the truthness to disnnull undefied object values...
     const [alreadyReqId, setAlreadyReqId] = useState(null);
+
+    useEffect(() => {
+        if(needOnlyOnce && data) setOnlyOnce(true);
+    }, [data, needOnlyOnce])
+
+
+    useEffect(() => {
+        if(typeof loadingStart === "boolean") setLoading(loadingStart);
+    }, [loadingStart])
 
     const {
         txtPending,
@@ -98,6 +110,7 @@ export default function useAPI({
         let cancel;
         const alreadyPassed = alreadyReqId === trigger;
         if(alreadyPassed) return;
+        if(onlyOnce) return;
         if(!trigger) return;
 
         const stopRequest = setTimeout(() => {
@@ -131,7 +144,7 @@ export default function useAPI({
         doRequest();
 
         return () => { cancel(); clearTimeout(stopRequest); };
-    }, [trigger])
+    }, [trigger, onlyOnce])
 
     const gotData = data && data.length;
     return { data, gotData, loading, setRun, dispatch };

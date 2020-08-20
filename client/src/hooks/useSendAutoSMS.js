@@ -4,8 +4,8 @@ import { useAppSystem } from '../hooks/useRoleData';
 
 export default function useSendAutoSMS({
     trigger,
-    msgType = "confirmedChall",
-    contactList = [{ name: "Febro Feitoza Auto SMS", phone: "(92) 99281-7363" }]
+    serviceType = "confirmedChall",
+    contactList,
 }) {
     const [innerTrigger, setTrigger] = useState(false);
     const [message, setMessage] = useState("test")
@@ -14,42 +14,31 @@ export default function useSendAutoSMS({
 
     const { businessId: userId } = useAppSystem();
 
-    const { data: doneServices } = useAPI({ url: readAutoService(userId), needAuth: true })
-    const { data: credits } = useAPI({ url: readCredits(userId) })
+    const { data: doneServices, gotData } = useAPI({ url: readAutoService(userId), needAuth: true, needOnlyOnce: true })
+    const { data: credits } = useAPI({ url: readCredits(userId), needOnlyOnce: true })
 
     useEffect(() => {
-        if(doneServices && doneServices.length) {
-            const service = doneServices.find(opt => opt.service === msgType);
+        if(gotData) {
+            const service = doneServices.find(opt => opt.service === serviceType);
+            const isServiceOn = service && service.active;
 
-            if(service && service.active) {
+            if(isServiceOn) {
                 setMessage(service.msg);
-                setServiceId(service._id);
+                setServiceId(service.serviceId);
                 setTrigger(true);
             }
         }
-    }, [doneServices])
+    }, [gotData, serviceType])
 
-    const handleTrigger = () => {
-        if(!already) {
-            return innerTrigger && trigger && credits >= 1;
-        } else {
-            return false;
-        }
-    }
-
-    const { data: sentMsg, loading } = useAPI({
+    const { data: sentMsg } = useAPI({
         method: 'post',
         url: sendSMS(),
         timeout: 25000,
         body: { userId, contactList, msg: message, isAutomatic: true, serviceId },
         needAuth: true,
-        trigger: handleTrigger(),
+        needOnlyOnce: true,
+        trigger: innerTrigger && trigger && (credits >= 1),
     })
 
-    useEffect(() => {
-        if(sentMsg) {
-            setAlready(true);
-        }
-    }, [sentMsg])
     return;
 }

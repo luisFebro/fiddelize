@@ -53,6 +53,7 @@ const defaultUserProfile = {
     _id: "123abc",
     role: "",
     name: "...",
+    phone: "",
     birthday: "29 de Fevereiro de 2020",
     updatedAt: "...",
     createdAt: "...",

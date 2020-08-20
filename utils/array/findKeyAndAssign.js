@@ -6,8 +6,8 @@ function findKeyAndAssign({
     targetValue = true,
     keyValueObj,
 }) {
-    if(!compareValue) throw new Error("need a compareValue ")
-    compareValue = compareValue.toString();
+    if(!compareValue) return console.log("need a compareValue ")
+    compareValue = JSON.stringify(compareValue);
 
     return objArray.map(obj =>
         {

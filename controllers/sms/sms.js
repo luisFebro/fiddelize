@@ -285,7 +285,6 @@ exports.addSMSHistory = (req, res) => {
     .select("clientAdminData.smsHistory")
     .exec(err => {
         if(err) return res.status(500).json(msgG("error.systemError", err));
-        console.log("typeof isAutomatic", typeof isAutomatic)
         if(isAutomatic) {
             User.findById(userId)
             .select("clientAdminData.smsAutomation")
@@ -295,16 +294,16 @@ exports.addSMSHistory = (req, res) => {
                 let smsAutomation = doc.clientAdminData.smsAutomation;
 
                 let priorUsage = 0;
-                if(searchByName) {
-                    const found = smsAutomation.find(opt => opt.service === service)
-                    priorUsage = found ? found._id : priorUsage;
-                }
+                const found = smsAutomation.find(opt => opt.serviceId === serviceId)
+                priorUsage = found ? found.usage : priorUsage;
 
                 const newData = findKeyAndAssign({
                     objArray: smsAutomation,
-                    compareProp: '_id', compareValue: serviceId,
+                    compareProp: 'serviceId', compareValue: serviceId,
                     targetProp: 'usage', targetValue: ++priorUsage,
                 });
+
+                console.log("newData", newData);
 
                 smsAutomation = newData;
                 doc.markModified("clientAdminData.smsAutomation");
@@ -407,6 +406,7 @@ exports.readAutoService = (req, res) => {
 }
 
 // Method: put
+// LESSON> if there is data to sync between frontend and bd like the services options, follow KISS and keep simple using id equally for both db and front if as less code as possible
 exports.activateAutoService = (req, res) => {
     const {
         userId,

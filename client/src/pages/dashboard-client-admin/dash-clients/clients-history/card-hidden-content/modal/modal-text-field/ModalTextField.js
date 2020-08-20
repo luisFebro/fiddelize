@@ -38,6 +38,27 @@ ModalTextField.propTypes = {
     modalData: modalTextFieldDashboardType,
 };
 
+const getStyles = () => ({
+    form: {
+        margin: 'auto',
+        width: '80%'
+    },
+    actionButtons: {
+        display: 'flex',
+        justifyContent: 'center',
+        margin: '28px 0',
+    },
+    fieldFormValue: {
+        backgroundColor: 'var(--mainWhite)',
+        color: 'var(--themeP)',
+        fontSize: '36px',
+        fontFamily: 'var(--mainFont)',
+        padding: '0 5px',
+        zIndex: 2000
+    },
+});
+
+
 export default function ModalTextField({
     open, onClose, modalData, closeOtherModals }) {
     const [data, setData] = useState({
@@ -46,6 +67,9 @@ export default function ModalTextField({
     });
     const [gotError, setGotError] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
+    const [trigger, setTrigger] = useState(false);
+
+    const styles = getStyles();
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
@@ -54,7 +78,6 @@ export default function ModalTextField({
 
     const dispatch = useStoreDispatch();
 
-    useSendAutoSMS({ trigger: true });
 
     let {
         title,
@@ -68,8 +91,11 @@ export default function ModalTextField({
         totalPrizes,
         totalActiveScore,
         name,
+        phone,
         prizeId,
     } = modalData;
+
+    useSendAutoSMS({ trigger, contactList: [{ name: getFirstName(name, { addSurname: true }), phone }] });
 
     const currChall = totalPrizes + 1;
 
@@ -78,34 +104,14 @@ export default function ModalTextField({
     const mainReward = pickedObj.mainReward;
 
     const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true, rewardScore } });
-    const currRemainder = loading ? "..." : updatedValues.remainder;
-    const nextScore = loading ? "..." :  updatedValues.nextScore;
-    const currUserScoring = loading ? "..." : convertDotToComma(updatedValues.updatedCurrScore);
+    const currRemainder = loading ? "..." : updatedValues ? updatedValues.remainder : 0;
+    const nextScore = loading ? "..." :  updatedValues ? updatedValues.nextScore : 0;
+    const currUserScoring = loading ? "..." : updatedValues ? convertDotToComma(updatedValues.updatedCurrScore) : 0;
     const additionalScore = loading ? "..." : convertDotToComma(nextScore);
     const ultimateCurrScore = loading ? "..." : (Number(currRemainder) + Number(nextScore)) // before updatedValues.updatedCurrScore - rewardScore
     const userBeatScore = userCurrScore >= rewardScore;
 
-    const styles = {
-        form: {
-            margin: 'auto',
-            width: '80%'
-        },
-        actionButtons: {
-            display: 'flex',
-            justifyContent: 'center',
-            margin: '28px 0',
-        },
-        fieldFormValue: {
-            backgroundColor: 'var(--mainWhite)',
-            color: 'var(--themeP)',
-            fontSize: '36px',
-            fontFamily: 'var(--mainFont)',
-            padding: '0 5px',
-            zIndex: 2000
-        },
-    }
-
-    const handleSubmit = async () => {
+    const handleDiscount = async () => {
         if(loading) return;
 
         const updateUserBody = {
@@ -158,6 +164,11 @@ export default function ModalTextField({
 
         setTimeout(() => onClose(), 3900);
     };
+
+    const handleSubmit = () => {
+        setTrigger(true);
+        handleDiscount();
+    }
 
     const showTitle = () => (
         <div className="mt-4 mb-3 margin-auto-90 text-center">

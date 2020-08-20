@@ -62,11 +62,14 @@ function ClientUserAppContent({
 
     if(!colorP) { colorP = "default" }
     if(!colorS) { colorS = "default" }
-    let { role, name, _id } = useProfile();
+    let { role, name, _id, phone } = useProfile();
     const fullName = name;
     const totalNotifications = useCountNotif(_id, { role, forceCliUser: true });
     name ? name = getFirstName(name) : name = "cliente";
-    let { currScore, lastScore, totalPurchasePrize, totalGeneralScore } = useClientUser();
+    let {
+        currScore,
+        lastScore,
+        totalPurchasePrize, totalGeneralScore } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
 
     let {
@@ -136,7 +139,7 @@ function ClientUserAppContent({
         senderId: _id,
         role: "cliente-admin",
         subtype: "clientWonChall",
-        content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};`,
+        content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};phone:${phone};`,
     }), [userBeatChallenge, lastPrizeId, _id])
     useSendNotif(businessId, "challenge", challNotifOptions())
 
