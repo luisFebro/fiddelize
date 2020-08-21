@@ -11,7 +11,7 @@ function findKeyAndAssign({
 
     return objArray.map(obj =>
         {
-            if(obj[compareProp].toString() === compareValue) {
+            if(JSON.stringify(obj[compareProp]) === compareValue) {
                 keyValueObj
                 ? handleMultiAssignment({ obj, keyValueObj })
                 : obj[targetProp] = targetValue

@@ -26,7 +26,7 @@ export default function Operation({
 
 
     useEffect(() => {
-        setData({ ...data, service: dataSwitch.service , serviceId: dataSwitch.id  });
+        setData({ ...data, service: dataSwitch.service , serviceId: dataSwitch.serviceId  });
     }, [])
 
     usage = convertToReal(usage);

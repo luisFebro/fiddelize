@@ -98,7 +98,7 @@ function decryptSync(hashTxt) {
 }
 
 // console.log(decryptSync("2aa11588694c5cf87e84d9d72d092962:f4bc0cc535647851f6f449a55c95d648"))
-// console.log(encryptSync("(92) 99281-7363"))
+// console.log(encryptSync("(92) 99257-6121"))
 
 // TEST
 // encrypt("fjskda fsdajfsdlafjsdaklf sdalfjsdalfsda fsadlkfjsdal fsdalkfjsdalkfjdsalk fjdsaklfjsdalkfjdsal fjsadlfjlsdajflkdsjfklds afjkldsafjkldsfjkdsaflds")
