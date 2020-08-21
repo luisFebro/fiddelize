@@ -75,6 +75,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
             msg: message,
             jobdate: sysDay,
             jobtime: sysHour,
+            isScheduled: true,
             scheduledDate: selectedDate, // this will be used for card design `${formatDMY(selectedDate, { short: true })} às ${uiHour} (${getWeekDayBr(selectedDate)})`
         },
         needAuth: true,

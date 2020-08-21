@@ -29,7 +29,7 @@ import { sendNotification } from '../../../../../../../redux/actions/notificatio
 import getFirstName from '../../../../../../../utils/string/getFirstName';
 import { addDays } from '../../../../../../../utils/dates/dateFns';
 import useAPI, { readPrizes } from '../../../../../../../hooks/api/useAPI';
-import useSendAutoSMS from '../../../../../../../hooks/useSendAutoSMS';
+import sendAutoSMS from '../../../../../../../hooks/sms/sendAutoSMS';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -95,8 +95,6 @@ export default function ModalTextField({
         prizeId,
     } = modalData;
 
-    useSendAutoSMS({ trigger, contactList: [{ name: getFirstName(name, { addSurname: true }), phone }] });
-
     const currChall = totalPrizes + 1;
 
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
@@ -143,15 +141,22 @@ export default function ModalTextField({
             if(prizeStatusRes.data.error.indexOf("critical") !== -1) return showSnackbar(dispatch, `Não foi possível descontar pontos. Por favor, contate suporte técnico da Fiddelize.`, 'error')
             return showSnackbar(dispatch, `Pontos deste desafio já foram descontados e podem está desatualizados.`, 'error')
         }
-        const [updateRes, notifRes, taskRes] = await Promise.all([
+        const [updateRes, notifRes, taskRes, smsRes] = await Promise.all([
             updateUser(dispatch, updateUserBody, userId, false),
             sendNotification(userId, "challenge", sendNotifBody),
             addAutomaticTask(businessId, taskBody),
+            sendAutoSMS({
+                userId: businessId,
+                smsId: prizeId,
+                dispatch,
+                contactList: [{ name: getFirstName(name, { addSurname: true }), phone }]
+            }),
         ]);
 
         if(notifRes.status !== 200) return showSnackbar(dispatch, "Um problema aconteceu ao enviar notificação para o cliente", 'error')
         if(updateRes.status !== 200) return showSnackbar(dispatch, "Algo deu errado ao atualizar cliente", 'error')
         if(taskRes.status !== 200) return showSnackbar(dispatch, `Ocorreu um problema ao adicionar tarefa automática.`, 'error')
+        if(smsRes.status !== 200) console.log("An error happened when sending SMS");
 
         setTimeout(() => showSnackbar(dispatch, `Ok, ${getFirstName(cliAdminName)}! Cliente foi notificado e ${rewardScore} pontos foram descontados de ${name}.`, 'success', 7000), 4900);
 
@@ -249,6 +254,7 @@ export default function ModalTextField({
             )}
         </div>
     );
+
 
     // const showForm = () => (
     //     <form

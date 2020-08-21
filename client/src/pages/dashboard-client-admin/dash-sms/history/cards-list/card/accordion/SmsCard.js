@@ -78,17 +78,19 @@ export default function SmsCard({
     const displayScheduledBadge = panel => {
         const isCanceled = panel.data.isCanceled;
         const isAutomatic = panel.data.isAutomatic;
+        const isScheduled = panel.data.isScheduled;
 
         const handleTitle = () => {
-            if((isCanceled || forceCancel)) return "CANCELADO";
+            if(((isCanceled && isScheduled) || forceCancel)) return "CANCELADO";
             if(isAutomatic) return "AUTOMÁTICO";
             return "AGENDADO";
         }
 
         const handleBack = () => {
-            if((isCanceled || forceCancel)) return "var(--expenseRed)";
-            if(isAutomatic) return "var(--themePDark--blue)";
-            return "var(--mainDark)";
+            const title = handleTitle();
+            if(title === "CANCELADO") return "var(--expenseRed)";
+            if(title === "AUTOMÁTICO") return "var(--themePDark--blue)";
+            if(title === "AGENDADO") return "var(--mainDark)";
         }
 
         return(

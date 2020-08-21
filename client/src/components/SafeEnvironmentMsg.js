@@ -7,8 +7,8 @@ export default function SafeEnviromentMsg() {
                 <FontAwesomeIcon icon="lock" />{" "}
                 <span>Ambiente seguro!</span><br />
                 <p style={{textHeight: '2px'}} className="text-nowrap">
-                    Envio de dados encriptografados<br/>
-                    e mantidos de forma privada.
+                    Seus dados são encriptografados<br/>
+                    antes de salvar no banco de dados.
                 </p>
             </span>
         </div>

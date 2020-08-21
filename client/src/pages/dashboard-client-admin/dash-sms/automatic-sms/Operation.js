@@ -20,10 +20,10 @@ export default function Operation({
         serviceId: '',
         innerActive: false,
     });
+    const { service, serviceId, innerActive } = data;
 
     const { businessId: userId } = useAppSystem();
 
-    const { service, serviceId, innerActive } = data;
 
     useEffect(() => {
         setData({ ...data, service: dataSwitch.service , serviceId: dataSwitch.id  });
@@ -45,7 +45,7 @@ export default function Operation({
         body,
         trigger,
         needAuth: true,
-        snackbar: { txtSuccess: innerActive ? "SMS automático ativado!" : "" }
+        snackbar: { txtSuccess: innerActive ? `Pronto! Serviço ${title} ativado.` : "" }
     })
 
     const plural = usage > 1 ? "s" : "";
@@ -56,9 +56,8 @@ export default function Operation({
 
         setTrigger(status);
         setData({
-            ...data,
             service,
-            serviceId: serviceId,
+            serviceId,
             innerActive: treatedStatus,
         })
     }

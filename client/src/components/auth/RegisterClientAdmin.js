@@ -54,7 +54,8 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
 
     const dateNow = new Date();
-    const maxYear = dateNow.getFullYear() - 18;
+    const minAge = 16;
+    const maxYear = dateNow.getFullYear() - minAge;
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
@@ -358,13 +359,13 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         autoOk={false}
                         disableFuture={true}
                         allowKeyboardControl={true}
-                        maxDate={new Date(`${maxYear}-12-31`)}
-                        minDate={new Date("1940-01-01")}
+                        maxDate={new Date(`12-31-${maxYear}`)}
+                        minDate={new Date("01-01-1940")}
                         views={["year", "month", "date"]}
                         name="birthday"
                         value={selectedDate}
                         onChange={e => {
-                            handleDateChange(e._d)
+                            handleDateChange(e)
                             handleFocus("field5", { delay: 1500 })
                             setShowThisField("otherFields")
                         }}

@@ -83,6 +83,7 @@ exports.mwSendSMS = (req, res, next) => {
         serviceType = 9, // 9-Sms.
         flash = true,
         scheduledDate,
+        isScheduled = false,
         isAutomatic = false,
         serviceId, // for automation only
     } = req.body;
@@ -133,6 +134,7 @@ exports.mwSendSMS = (req, res, next) => {
             req.scheduledDate = scheduledDate;
             req.isAutomatic = isAutomatic;
             req.serviceId = serviceId;
+            req.isScheduled = isScheduled;
 
             next();
         }
@@ -185,7 +187,6 @@ exports.cancelSMS = (req, res) => {
             const getUrl = (iteratedElem) => ({ "path": `/get?key=${secret}&action=cancelar&id=${iteratedElem}`})
             requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
             .then(data => {
-                console.log("data", data);
                 res.json({ msg: `all ${data.length} contacts called off`})
             })
             .catch(err => console.log(err))
@@ -264,6 +265,7 @@ exports.addSMSHistory = (req, res) => {
         msg,
         scheduledDate,
         isAutomatic,
+        isScheduled,
         serviceId,
     } = req;
 
@@ -271,6 +273,7 @@ exports.addSMSHistory = (req, res) => {
         sentMsgDesc: msg,
         totalSMS: numCredits,
         isAutomatic: isAutomatic ? isAutomatic : undefined,
+        isScheduled: isScheduled ? isScheduled : undefined,
         firstContacts,
         contactStatements,
         scheduledDate,
@@ -302,8 +305,6 @@ exports.addSMSHistory = (req, res) => {
                     compareProp: 'serviceId', compareValue: serviceId,
                     targetProp: 'usage', targetValue: ++priorUsage,
                 });
-
-                console.log("newData", newData);
 
                 smsAutomation = newData;
                 doc.markModified("clientAdminData.smsAutomation");

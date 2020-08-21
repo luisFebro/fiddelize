@@ -62,7 +62,8 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     });
 
     const dateNow = new Date();
-    const maxYear = dateNow.getFullYear() - 18;
+    const minAge = 16;
+    const maxYear = dateNow.getFullYear() - minAge;
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
@@ -327,7 +328,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                         name="birthday"
                         value={selectedDate}
                         onChange={e => {
-                            handleDateChange(e._d)
+                            handleDateChange(e)
                             setShowMoreFields("otherFields")
                             handleFocus("field4", { delay: 1500 })
                         }}

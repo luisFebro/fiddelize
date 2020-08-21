@@ -24,9 +24,17 @@ const serviceOptions = ({ bizName }) => ([
         serviceId: 2,
         service: "confirmedChall",
         title: "Confimação de desafio",
-        subtitle: "Aviso automático para o cliente quando você confirmar/descontar um desafio concluído",
+        subtitle: "Aviso automático para o cliente quando você confirma/desconta um desafio concluído para resgate de prêmio",
         usage: 0,
-        msg: `Opa! Seu desafio foi confirmado pela ${bizName.toUpperCase()}. Abra app aqui: https://fiddelize.com.br/mobile-app?is_app=1`,
+        msg: `DESAFIO CONFIRMADO DA ${bizName.toUpperCase()} - Opa! Seu desafio foi confirmado. Abra seu app e confira: https://fiddelize.com.br/mobile-app?is_app=1`,
+    },
+    {
+        serviceId: 3,
+        service: "finishedChall",
+        title: "Conclusão de desafio",
+        subtitle: "Saiba em tempo real quando seu cliente bater a meta em pontos e concluir um desafio.",
+        usage: 0,
+        msg: `CONCLUSÃO DE DESAFIO - [Nome Cliente] acabou de concluir desafio N.º [Número Desafio].`,
     },
 ]);
 
@@ -46,6 +54,8 @@ export default function AutomaticOperations() {
 
                 serviceOptions({ bizName }).forEach((option, ind) => {
                     const db = data[ind];
+                    if(!db) return serviceArray.push(option);
+
                     if(option.service === db.service) {
                         const newOption = {
                             ...option,
@@ -84,6 +94,23 @@ export default function AutomaticOperations() {
         </header>
     );
 
+    const MapServices = (Boolean(services && services.length)) && services.map(service => {
+        return(
+            <Fragment key={service.serviceId}>
+                <Operation
+                    dataSwitch={{ serviceId: service.serviceId, service: service.service }}
+                    usage={service.usage}
+                    msg={service.msg}
+                    title={service.title}
+                    subtitle={service.subtitle}
+                    active={service.active}
+                    loading={loading}
+                />
+            </Fragment>
+        );
+    });
+
+
     return (
         <section>
             {showHeader()}
@@ -92,18 +119,6 @@ export default function AutomaticOperations() {
                 <p className="my-5 text-center text-purple text-subtitle font-weight-bold">
                     Carregando serviços...
                 </p>
-            ) : (Boolean(services && services.length)) && services.map(service => (
-                <Fragment key={service.serviceId}>
-                    <Operation
-                        dataSwitch={{ id: service.serviceId, service: service.service }}
-                        usage={service.usage}
-                        msg={service.msg}
-                        title={service.title}
-                        subtitle={service.subtitle}
-                        active={service.active}
-                        loading={loading}
-                    />
-                </Fragment>
-            ))}
+            ) : MapServices}
         </section>
     );}

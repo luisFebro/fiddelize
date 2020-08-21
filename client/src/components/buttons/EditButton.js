@@ -23,13 +23,16 @@ const muStyle = {
     color: '#fff',
 }
 
-export default function EditButton({ position, top, right, left, bottom, onClick }) {
+export default function EditButton({
+    disabled, position, top, right, left, bottom, onClick
+}) {
     const classes = useStyles();
 
     return (
         <Fab
             onClick={onClick}
             size="small"
+            disabled={disabled}
             style={{
                 position: position || 'relative',
                 top: `${top || 0}px`,

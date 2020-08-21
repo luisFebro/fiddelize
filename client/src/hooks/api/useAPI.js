@@ -103,7 +103,7 @@ export default function useAPI({
     function handleError() {
         setAlreadyReqId(null);
         setLoading(false);
-        getSnack(txtFailure, { type: "error"});
+        getSnack(txtFailure, { type: "error" });
     }
 
     useEffect(() => {

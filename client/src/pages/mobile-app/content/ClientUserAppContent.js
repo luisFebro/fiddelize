@@ -25,6 +25,7 @@ import useSendNotif from '../../../hooks/notification/useSendNotif';
 import useAPI, { readPrizes } from '../../../hooks/api/useAPI';
 import { getVar, removeVar, setVar } from '../../../hooks/storage/useVar';
 import { readPurchaseHistory } from "../../../redux/actions/userActions";
+import useSendAutoSMS from '../../../hooks/sms/useSendAutoSMS';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -41,6 +42,17 @@ const styles = {
         cursor: "pointer",
     }
 }
+
+const getAutoSMSObj = ({
+    userBeatChallenge, lastPrizeId, businessId, name, currChall, bizWhatsapp
+}) => ({
+    trigger: Boolean(userBeatChallenge && lastPrizeId),
+    serviceType: "finishedChall",
+    userId: businessId,
+    smsId: lastPrizeId,
+    customMsg: `CONCLUSÃO DE DESAFIO - ${getFirstName(name, { addSurname: true })} acabou de concluir desafio N.º ${currChall}.`,
+    contactList: [{ name: "Você", phone: bizWhatsapp }]
+})
 
 const greeting = getDayGreetingBr();
 
@@ -78,7 +90,7 @@ function ClientUserAppContent({
         rewardList,
         rewardDeadline,
         selfMilestoneIcon, selfThemeSColor, selfThemeBackColor,
-        arePrizesVisible } = useClientAdmin();
+        arePrizesVisible, bizWhatsapp, bizName } = useClientAdmin();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     if(rewardScoreTest) { maxScore = Number(rewardScoreTest); }
@@ -142,6 +154,9 @@ function ClientUserAppContent({
         content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};phone:${phone};`,
     }), [userBeatChallenge, lastPrizeId, _id])
     useSendNotif(businessId, "challenge", challNotifOptions())
+
+    const autoSMSObj = getAutoSMSObj({ userBeatChallenge, lastPrizeId, businessId, name, currChall, bizWhatsapp });
+    useSendAutoSMS(autoSMSObj);
 
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
     useAnimateConfetti(confettiOptions());

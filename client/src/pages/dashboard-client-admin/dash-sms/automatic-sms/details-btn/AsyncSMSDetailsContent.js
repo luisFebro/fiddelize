@@ -73,7 +73,7 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
     const showMsg = () => (
         <section>
             <h2 className="text-normal text-center text-purple font-weight-bold">
-                Esta mensagem é enviada:
+                Este SMS é enviado:
             </h2>
             {edit ? (
                 <section className="margin-auto-90">
@@ -108,11 +108,13 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
                     style={styles.msgField}
                 >
                     {message}
-                    <div className="position-absolute" style={{ bottom: -15, right: -20 }}>
-                        <EditButton
-                            onClick={handleEdit}
-                        />
-                    </div>
+                    {title !== "Conclusão de desafio" && (
+                        <div className="position-absolute" style={{ bottom: -15, right: -20 }}>
+                            <EditButton
+                                onClick={handleEdit}
+                            />
+                        </div>
+                    )}
                 </section>
             )}
         </section>

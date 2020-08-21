@@ -15,10 +15,8 @@ import Img from '../../../../../components/Img';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import scrollIntoView from '../../../../../utils/document/scrollIntoView';
 import { isScheduledDate } from '../../../../../utils/dates/dateFns';
-// import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 const isSmall = window.Helper.isSmallScreen();
-// HELPERS
-// const truncate = (name, leng) => window.Helper.truncate(name, leng);
+
 const getStyles = () => ({
     icon: { fontSize: 35, color: "white", filter: "drop-shadow(0.001em 0.001em 0.15em grey)" },
     dateBadge: {
@@ -32,22 +30,27 @@ const getStyles = () => ({
 
 
 const handleSecHeading = (data, styles, forceCancel) => {
-    const isScheduled = isScheduledDate(data.scheduledDate);
+    const isScheduled = data.isScheduled;
+    const isCanceled = data.isCanceled;
+    const needScheduling = isScheduledDate(data.scheduledDate);
+
+    const handleDate = () => {
+        if(isScheduled) {
+            if(isCanceled || forceCancel) return `Não enviado ${calendar(data.scheduledDate)}`;
+            return needScheduling ? `Agendado para ${calendar(data.scheduledDate)}.` : `Agendado e Enviado ${calendar(data.scheduledDate)}.`
+        }
+        return `Enviado ${calendar(data.createdAt)}.`;
+    }
+
     return(
         <section>
             <p
                 className="text-nowrap position-absolute d-block m-0 mt-3"
                 style={styles.dateBadge}
             >
-                {(data.isCanceled || forceCancel) ? (
-                    <span className="text-small text-shadow font-weight-bold">
-                        Não enviado em {calendar(data.createdAt)}.
-                    </span>
-                ) : (
-                    <span className="text-small text-shadow font-weight-bold">
-                        {isScheduled ? "Agendado em " : "Enviado "}{calendar(data.createdAt)}.
-                    </span>
-                )}
+                <span className="text-small text-shadow font-weight-bold">
+                    {handleDate()}
+                </span>
             </p>
         </section>
     );

@@ -18,6 +18,7 @@ const smsHistoryData = {
     firstContacts: Array, // the first 3 names from easy identification.
     contactStatements: [ContactListSchema],
     scheduledDate: Date,
+    isScheduled: Boolean,
     isCanceled: Boolean,
     isAutomatic: Boolean,
     createdAt: { type: Date, default: Date.now },
@@ -26,7 +27,7 @@ const SmsHistorySchema = new Schema(smsHistoryData, { _id: true });
 
 const smsAutomationData = {
     serviceId: Number,
-    service: { type: String, enum: ["missingPurchase", "confirmedChall"] },
+    service: { type: String, enum: ["missingPurchase", "confirmedChall", "finishedChall"] },
     active: Boolean,
     usage: { type: Number, default: 0 },
     msg: String,
