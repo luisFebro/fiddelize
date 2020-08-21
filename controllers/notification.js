@@ -117,9 +117,9 @@ exports.sendNotification = (req, res) => {
 }
 
 // method: PUT
+// LESSON: only need to compare like yourVar === true if it is a "true" as string, if you are using a body as for a put method, it does not need it.
 exports.markOneClicked = (req, res) => {
     let forceCliUser = req.body.forceCliUser;
-    forceCliUser = forceCliUser === "true";
 
     let { _id, role } = req.profile;
     if(forceCliUser) role = "cliente";
@@ -144,7 +144,6 @@ exports.markOneClicked = (req, res) => {
 // if isImportant is true, then ignore it.
 exports.markAllAsClicked = (req, res) => {
     let forceCliUser = req.body.forceCliUser;
-    forceCliUser = forceCliUser === "true";
 
     let { _id, role } = req.profile;
     if(forceCliUser) role = "cliente";
@@ -165,7 +164,6 @@ exports.markAllAsClicked = (req, res) => {
 // desc: this will set all isCardNew cards to false
 exports.markAllAsSeen = (req, res) => {
     let forceCliUser = req.body.forceCliUser;
-    forceCliUser = forceCliUser === "true";
 
     let { _id, role } = req.profile;
     if(forceCliUser) role = "cliente";
