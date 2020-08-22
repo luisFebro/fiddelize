@@ -5,6 +5,7 @@ import './_AsyncSMS.scss';
 import { Load } from '../../../components/code-splitting/LoadableComp';
 import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../redux/actions/snackbarActions';
+import scrollIntoView from '../../../utils/document/scrollIntoView';
 import { handleFocus } from '../../../utils/form/handleFocus';
 import InstructionBtn from '../../../components/buttons/InstructionBtn';
 
@@ -61,8 +62,12 @@ export default function AsyncSMS() {
     }
 
     const handleSuggestionMsg = text => {
-        setData({ ...data, suggestionMsg: text })
-        handleFocus("messageField");
+        const config = {
+            mode: "center",
+            duration: 1500,
+            onDone: () => setData({ ...data, suggestionMsg: text }),
+        }
+        scrollIntoView("#messageField", config);
     }
 
     const handleBalance = balance => {

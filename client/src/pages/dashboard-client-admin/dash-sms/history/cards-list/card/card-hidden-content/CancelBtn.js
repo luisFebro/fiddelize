@@ -12,7 +12,7 @@ export default function CancelBtn({ cardId, date }) {
 
     const uniqueId = getUniqueId();
     const runName = `UpdateSMSAll ${uniqueId}`;
-    const runName2 = `ForceCancelScheduled ${uniqueId}`;
+    const runName2 = `ForceCancelScheduled ${cardId}`;
     const snackbar = { txtPending: "Cancelando agendamento...", txtSuccess: "Cancelado! Atualizando..." }
 
     const { data, loading, setRun, dispatch } = useAPI({

@@ -81,7 +81,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
         needAuth: true,
         snackbar: { txtPending: "Agendando o envio. Um momento...", txtSuccess: `Agendamento realizado para ${isToday ? "Hoje" : uiDay} às ${uiHour}!` },
         trigger,
-        runName,
+        // runName,
     })
 
     useEffect(() => {
@@ -90,13 +90,14 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
             handleFullClose();
             handleShowMessage(false);
 
-            // const handleCallback = () => {
-            // }
+            const handleCallback = () => {
+                setRun(dispatch, runName);
+            }
 
             const config = {
                 mode: "center",
                 duration: 3000,
-                onDone: () => null,
+                onDone: () => handleCallback(),
             }
 
             scrollIntoView("#smsHistoryTotals", config);

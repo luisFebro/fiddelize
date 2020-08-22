@@ -9,7 +9,7 @@ import { convertDotToComma } from '../../../../../utils/numbers/convertDotComma'
 import { useAppSystem } from '../../../../../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from '../../../../../utils/string/getFirstName';
-import useAPIList, { readSMSMainHistory, needTrigger, getTrigger } from '../../../../../hooks/api/useAPIList';
+import useAPIList, { readSMSMainHistory, getTrigger } from '../../../../../hooks/api/useAPIList';
 import { useRunComp } from '../../../../../hooks/useRunComp';
 import Img from '../../../../../components/Img';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
@@ -36,7 +36,7 @@ const handleSecHeading = (data, styles, forceCancel) => {
 
     const handleDate = () => {
         if(isScheduled) {
-            if(isCanceled || forceCancel) return `Não enviado ${calendar(data.scheduledDate)}`;
+            if(isCanceled || forceCancel === data._id) return `Não enviado ${calendar(data.scheduledDate)}`;
             return needScheduling ? `Agendado para ${calendar(data.scheduledDate)}.` : `Agendado e Enviado ${calendar(data.scheduledDate)}.`
         }
         return `Enviado ${calendar(data.createdAt)}.`;
@@ -65,7 +65,7 @@ export default function AsyncCardsList() {
     const styles = getStyles();
 
     const { runName, runName2 } = useRunComp();
-    const trigger = needTrigger(runName, "UpdateSMSAll");
+    const trigger = getTrigger(runName, "UpdateSMSAll");
     const triggerForce = getTrigger(runName2, "ForceCancelScheduled");
     const { list, needEmptyIllustra } = useAPIList({
         url: readSMSMainHistory(businessId),
@@ -74,7 +74,11 @@ export default function AsyncCardsList() {
     })
 
     useEffect(() => {
-        if(triggerForce) setForceCancel(true);
+        if(triggerForce) {
+            const indSpace = triggerForce.indexOf(" ");
+            const thisCardId = triggerForce.slice(indSpace + 1);
+            setForceCancel(thisCardId);
+        }
     }, [triggerForce])
 
     const displayTotalSMS = ({ isCardIn, data }) => {
@@ -111,6 +115,7 @@ export default function AsyncCardsList() {
             const arrayData = data.firstContacts;
             const contactsLength = data.totalSMS;
             const areMoreThanOne = contactsLength > 2;
+            const needScheduling = isScheduledDate(data.scheduledDate);
             const firstContactsNames = arrayData && arrayData.map((name, ind) => (arrayData && arrayData.length !== (ind + 1) && areMoreThanOne) ? `${getFirstName(name.cap())}, ` : `${getFirstName(name.cap())}`)
 
             const isCardIn = data.cardType === "in";
@@ -122,7 +127,7 @@ export default function AsyncCardsList() {
                         className="m-0 mt-3 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: '19px' }}
                     >
-                        • Enviado para:
+                        {needScheduling ? "• Enviar para:" : "• Enviado para:"}
                         <br />
                         {areMoreThanOne && (
                             <span className="text-small font-weight-bold">

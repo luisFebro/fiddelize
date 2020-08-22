@@ -36,6 +36,7 @@ const calendar = (date, locale) => formatRelative(new Date(date), now, { locale:
 const getLocalHour = (date) => `${getHours(new Date(date))}:${treatZero(getMinutes(new Date(date)))}`
 
 const isScheduledDate = (targetDate) => {
+    if(!targetDate) return;
     if(Date.parse(new Date()) < Date.parse(targetDate)){
        return true;
     }

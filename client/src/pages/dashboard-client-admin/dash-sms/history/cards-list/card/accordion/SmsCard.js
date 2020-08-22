@@ -81,7 +81,7 @@ export default function SmsCard({
         const isScheduled = panel.data.isScheduled;
 
         const handleTitle = () => {
-            if(((isCanceled && isScheduled) || forceCancel)) return "CANCELADO";
+            if(((isCanceled && isScheduled) || forceCancel === panel.data._id)) return "CANCELADO";
             if(isAutomatic) return "AUTOMÁTICO";
             return "AGENDADO";
         }
