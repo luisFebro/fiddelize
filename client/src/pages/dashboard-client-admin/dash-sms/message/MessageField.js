@@ -147,7 +147,7 @@ export default function MessageField({
                             </p>
                             <TextField
                                 multiline
-                                rows={5}
+                                rows={8}
                                 id="messageField"
                                 name="message"
                                 InputProps={{

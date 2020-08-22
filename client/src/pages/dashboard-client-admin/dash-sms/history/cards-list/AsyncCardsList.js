@@ -114,9 +114,16 @@ export default function AsyncCardsList() {
         const actions = list.map(data => {
             const arrayData = data.firstContacts;
             const contactsLength = data.totalSMS;
+            const isCanceled = data.isCanceled;
             const areMoreThanOne = contactsLength > 2;
             const needScheduling = isScheduledDate(data.scheduledDate);
             const firstContactsNames = arrayData && arrayData.map((name, ind) => (arrayData && arrayData.length !== (ind + 1) && areMoreThanOne) ? `${getFirstName(name.cap())}, ` : `${getFirstName(name.cap())}`)
+
+            const handleSendingTitle = () => {
+                if(isCanceled) return "• Cancelado para:";
+                if(needScheduling) return "• Enviar para:";
+                return "• Enviado para:";
+            }
 
             const isCardIn = data.cardType === "in";
             const mainHeading =
@@ -127,7 +134,7 @@ export default function AsyncCardsList() {
                         className="m-0 mt-3 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: '19px' }}
                     >
-                        {needScheduling ? "• Enviar para:" : "• Enviado para:"}
+                        {handleSendingTitle()}
                         <br />
                         {areMoreThanOne && (
                             <span className="text-small font-weight-bold">
