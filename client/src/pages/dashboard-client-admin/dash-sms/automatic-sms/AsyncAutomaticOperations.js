@@ -18,7 +18,7 @@ const serviceOptions = ({ bizName }) => ([
         title: "Mensagem de Saudade",
         subtitle: "Mensagem automática de saudade, quando cliente tiver 30 dias sem realizar uma compra.",
         usage: 0,
-        msg: `Sentimos sua falta. A ${bizName.toUpperCase()} não esqueceu de você e está sempre de portas abertas.`,
+        msg: `Sentimos sua falta. Estamos aqui ao seu dispor para te atender novamente. Faça nos uma visita da saudade. Fechado? ;) Abçs - ${bizName.toUpperCase()}`,
     },
     {
         serviceId: 2,

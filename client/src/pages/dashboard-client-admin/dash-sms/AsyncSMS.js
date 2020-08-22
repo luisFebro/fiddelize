@@ -107,7 +107,10 @@ export default function AsyncSMS() {
                 handleShowMessage={handleShowMessage}
             />
             {showMessage && (
-                <AsyncSMSSuggestions handleSuggestionMsg={handleSuggestionMsg} />
+                <AsyncSMSSuggestions
+                    handleSuggestionMsg={handleSuggestionMsg}
+                    contactList={contactList}
+                />
             )}
             <hr className="lazer-purple" />
             <AutomaticSMS />

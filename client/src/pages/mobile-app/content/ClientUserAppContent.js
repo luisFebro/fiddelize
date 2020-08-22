@@ -26,6 +26,7 @@ import useAPI, { readPrizes } from '../../../hooks/api/useAPI';
 import { getVar, removeVar, setVar } from '../../../hooks/storage/useVar';
 import { readPurchaseHistory } from "../../../redux/actions/userActions";
 import useSendAutoSMS from '../../../hooks/sms/useSendAutoSMS';
+import useDidDateExpire from '../../../hooks/dates/date-expires/useDidDateExpire';
 
 // APP COMPONENTS
 import RatingIcons from '../RatingIcons';
@@ -43,15 +44,16 @@ const styles = {
     }
 }
 
+const now = new Date();
 const getAutoSMSObj = ({
-    userBeatChallenge, lastPrizeId, businessId, name, currChall, bizWhatsapp
+    needMissingMsg, userBeatChallenge, lastPrizeId, businessId, name, currChall, bizWhatsapp
 }) => ({
-    trigger: Boolean(userBeatChallenge && lastPrizeId),
-    serviceType: "finishedChall",
+    trigger: needMissingMsg ? needMissingMsg : Boolean(userBeatChallenge && lastPrizeId),
+    serviceType: needMissingMsg ? "missingPurchase" : "finishedChall",
     userId: businessId,
-    smsId: lastPrizeId,
-    customMsg: `CONCLUSÃO DE DESAFIO - ${getFirstName(name, { addSurname: true })} acabou de concluir desafio N.º ${currChall}.`,
-    contactList: [{ name: "Você", phone: bizWhatsapp }]
+    smsId: needMissingMsg ? now.getMonth() : lastPrizeId,
+    customMsg: needMissingMsg ? "" : `CONCLUSÃO DE DESAFIO - ${getFirstName(name, { addSurname: true })} acabou de concluir desafio N.º ${currChall}.`,
+    contactList: [{ name: needMissingMsg ? getFirstName(name) : "Você", phone: bizWhatsapp }]
 })
 
 const greeting = getDayGreetingBr();
@@ -154,6 +156,10 @@ function ClientUserAppContent({
         content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};phone:${phone};`,
     }), [userBeatChallenge, lastPrizeId, _id])
     useSendNotif(businessId, "challenge", challNotifOptions())
+
+    const needMissingMsg = useDidDateExpire({ userId: _id })
+    const autoSMSMissingPurchase = getAutoSMSObj({ needMissingMsg, businessId, name, bizWhatsapp });
+    useSendAutoSMS(autoSMSMissingPurchase);
 
     const autoSMSObj = getAutoSMSObj({ userBeatChallenge, lastPrizeId, businessId, name, currChall, bizWhatsapp });
     useSendAutoSMS(autoSMSObj);

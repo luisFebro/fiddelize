@@ -2,9 +2,10 @@ import React, { Fragment } from 'react';
 import CarouselCard from '../../../../components/carousels/CarouselCard';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
 import { useClientAdmin } from '../../../../hooks/useRoleData';
+import generateAppDownloadLink from '../../../../utils/biz/generateAppDownloadLink';
 
 // todo: automation of scores with SMS optionally.
-const data = ({ bizName }) => [
+const data = ({ bizName, downloadLink }) => [
     {
         title: "Aniversário",
         msg: `Parabéns pelo seu aniversario! Você ganhou na ${bizName.toUpperCase()} 10% de desconto para comemorar esse dia especial.`,
@@ -15,14 +16,18 @@ const data = ({ bizName }) => [
     },
     {
         title: "Baixe App",
-        msg: `Baixe o app da ${bizName.toUpperCase()} e ganhe prêmios nas suas compras. Acesse https://fiddelize.com.br/app/ycds123`,
+        msg: `Baixe o app da ${bizName.toUpperCase()} e ganhe prêmios nas suas compras. Acesse ${downloadLink}`,
     },
     {
-        title: "Colaboradores",
+        title: "Desconto",
+        msg: `Estamos com desconto em toda linha [produtos] até Sábado. Aproveite e faça-nos uam visita. Equipe da ${bizName.toUpperCase()}`,
+    },
+    {
+        title: "Equipe",
         msg: `REUNIÃO ${bizName.toUpperCase()} - Aviso para toda equipe de vendas que teremos uma reunião amanhã às 15:00 na sala de apresentação.`,
     },
     {
-        title: "Eventos",
+        title: "Evento",
         msg: `EVENTO DA ${bizName.toUpperCase()} - Estamos convidando todos nossos clientes especiais para um coquetel especial de lançamento que aconterá às 18:00 no próximo Sábado.`,
     },
     {
@@ -35,7 +40,7 @@ const data = ({ bizName }) => [
     },
     {
         title: "Promoção",
-        msg: `Estamos com uma super promoção especial para você. (Descrição promoção)`,
+        msg: `Estamos com uma super promoção especial para você. [Descrição promoção]`,
     },
     {
         title: "Sentimos sua falta",
@@ -81,10 +86,16 @@ const CardList = ({ data, handleSuggestionMsg }) => {
     );
 }
 
-export default function AsyncSMSSuggestions({ handleSuggestionMsg }) {
-    const { bizName } = useClientAdmin();
+export default function AsyncSMSSuggestions({
+    handleSuggestionMsg, contactList,
+}) {
+    const { bizName, bizCodeName } = useClientAdmin();
     // const [selectedCard, setSelectedCard] = useState(null);
-    const thisData = data({ bizName });
+    const isSingleContact = contactList.length === 1;
+    const singleName = contactList.length && contactList[0].name;
+
+    const downloadLink = generateAppDownloadLink({ bizCodeName, name: isSingleContact ? singleName : "" });
+    const thisData = data({ bizName, downloadLink });
     const ThisCardList = <CardList data={thisData} handleSuggestionMsg={handleSuggestionMsg} />
     return (
         <Fragment>

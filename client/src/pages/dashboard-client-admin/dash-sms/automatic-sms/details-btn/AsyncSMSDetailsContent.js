@@ -24,7 +24,6 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
     const [message, setMessage] = useState("");
     const [edit, setEdit] = useState(false);
     const { msg, title, subtitle, body } = modal;
-    console.log("body", body);
     const userId = body.userId;
 
     useEffect(() => {

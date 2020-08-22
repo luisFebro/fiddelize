@@ -443,7 +443,6 @@ exports.activateAutoService = (req, res) => {
                 compareProp: 'serviceId', compareValue: serviceId,
                 targetProp: key, targetValue: value,
             });
-            console.log("newData", newData);
 
             smsAutomation = newData;
         } else {
