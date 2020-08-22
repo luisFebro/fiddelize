@@ -78,10 +78,16 @@ export default function PanelHiddenContent({ data }) {
         </section>
     );
 
+    const handleTitle = () => {
+        if(isCanceled) return "Rascunho";
+        if(needScheduled) return "Mensagem na Fila";
+        return "Mensagem Enviada";
+    }
+
     const showSentMsg = () => (
         <section className="my-5">
             <p className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
-                Mensagem Enviada
+                {handleTitle()}
             </p>
             <TextField
                 multiline
