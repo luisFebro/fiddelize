@@ -62,6 +62,8 @@ const getStyles = ({ color, backgroundColor }) => ({
 });
 
 export default function SmsCard({
+    detectedCard,
+    checkDetectedElem,
     actions,
     needToggleButton = false,
     forceCancel, }) {
@@ -168,25 +170,40 @@ export default function SmsCard({
         </AccordionDetails>
     );
 
+    const showAccordion = ({ panel }) => (
+        <Accordion
+            TransitionProps={{ unmountOnExit: true }}
+            className="disabledLink"
+            style={{ ...styles.accordion, backgroundColor: panel.data.cardType === "out" ? "var(--themePLight)" : "#00b894" }} // data mint green
+        >
+            {showPanel(panel)}
+            {showHiddenPanel(panel)}
+        </Accordion>
+    );
+
+    const ActionsMap = actions.map((panel, ind) => {
+        const props = {
+            key: panel._id,
+            className: "position-relative mx-3 mb-5",
+        }
+
+        return checkDetectedElem({ list: actions, ind, indFromLast: 3 })
+        ? (
+            <div { ...props } ref={detectedCard}>
+                {showAccordion({ panel })}
+            </div>
+        ) : (
+            <div { ...props }>
+                {showAccordion({ panel })}
+            </div>
+        )
+    });
+
     return (
         <div
             className={classes.root}
         >
-            {actions.map(panel => (
-                <div
-                    key={panel._id}
-                    className="position-relative mx-3 mb-5"
-                >
-                    <Accordion
-                        TransitionProps={{ unmountOnExit: true }}
-                        className="disabledLink"
-                        style={{ ...styles.accordion, backgroundColor: panel.data.cardType === "out" ? "var(--themePLight)" : "#00b894" }} // data mint green
-                    >
-                        {showPanel(panel)}
-                        {showHiddenPanel(panel)}
-                    </Accordion>
-                </div>
-            ))}
+            {ActionsMap}
         </div>
     );
 }

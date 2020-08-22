@@ -91,7 +91,7 @@ export default function PanelHiddenContent({ data }) {
             </p>
             <TextField
                 multiline
-                rows={5}
+                rows={8}
                 id="msgArea"
                 name="message"
                 InputProps={{

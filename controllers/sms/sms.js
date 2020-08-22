@@ -5,6 +5,7 @@ const requestPromisePool = require("../../utils/http/requestRequestPool");
 const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
 const findKeyAndAssign = require('../../utils/array/findKeyAndAssign');
 const { encryptSync, decryptSync } = require("../../utils/security/xCipher");
+const { getDataChunk, getChunksTotal } = require("../../utils/array/getDataChunk");
 
 const { requestMultiBatch, handleSmsStatus, } = require("./helpers");
 // const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
@@ -46,8 +47,8 @@ exports.readContacts = (req, res) => {
         findThis = { "clientUserData.bizId": userId, name: regexSearch };
     }
 
+    // .limit(limit)
     User.find(findThis)
-    .limit(limit)
     .select("phone name")
     .sort({ name: 1 })
     .exec((err, data) => {
@@ -319,7 +320,7 @@ exports.addSMSHistory = (req, res) => {
 }
 
 exports.readSMSMainHistory = (req, res) => {
-    const { userId, skip, } = req.query;
+    const { userId, skip, limit = 5 } = req.query;
 
     User.findById(userId)
     .select("clientAdminData.smsHistory")
@@ -328,13 +329,21 @@ exports.readSMSMainHistory = (req, res) => {
 
         const history = doc.clientAdminData.smsHistory;
 
-        const thisHistory = history.map(operation => {
+        const data = history.map(operation => {
             operation.sentMsgDesc = decryptSync(operation.sentMsgDesc);
             operation.contactStatements = undefined;
             return operation;
         })
 
-        res.json({ list: thisHistory });
+        const dataSize = data.length;
+        const dataRes = {
+            list: getDataChunk(data, { skip, limit }),
+            chunksTotal: getChunksTotal(dataSize, limit),
+            listTotal: dataSize,
+            content: undefined,
+        }
+
+        res.json(dataRes);
     })
 }
 

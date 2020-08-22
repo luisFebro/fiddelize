@@ -6,7 +6,7 @@ import SearchResult from "../../../../../components/search/SearchResult";
 import { calendar } from '../../../../../utils/dates/dateFns';
 import parse from 'html-react-parser';
 import { convertDotToComma } from '../../../../../utils/numbers/convertDotComma';
-import { useAppSystem } from '../../../../../hooks/useRoleData';
+import { useAppSystem, useProfile } from '../../../../../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from '../../../../../utils/string/getFirstName';
 import useAPIList, { readSMSMainHistory, getTrigger } from '../../../../../hooks/api/useAPIList';
@@ -15,6 +15,7 @@ import Img from '../../../../../components/Img';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import scrollIntoView from '../../../../../utils/document/scrollIntoView';
 import { isScheduledDate } from '../../../../../utils/dates/dateFns';
+import useElemDetection, { checkDetectedElem } from '../../../../../hooks/api/useElemDetection';
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -61,17 +62,29 @@ export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
     const [forceCancel, setForceCancel] = useState(false); // solve real time update after calling off a scheduled date.
     const { businessId } = useAppSystem();
+    const { name } = useProfile();
+    const firstName = getFirstName(name);
 
     const styles = getStyles();
 
     const { runName, runName2 } = useRunComp();
     const trigger = getTrigger(runName, "UpdateSMSAll");
     const triggerForce = getTrigger(runName2, "ForceCancelScheduled");
-    const { list, needEmptyIllustra } = useAPIList({
+    const {
+        list,
+        loading, ShowLoadingSkeleton,
+        error, ShowError,
+        needEmptyIllustra,
+        readyShowElems,
+        hasMore,
+        isOffList,
+    } = useAPIList({
         url: readSMSMainHistory(businessId),
         skip,
         trigger,
+        listName: "smsCardsList"
     })
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
 
     useEffect(() => {
         if(triggerForce) {
@@ -174,6 +187,8 @@ export default function AsyncCardsList() {
 
         return(
             <SmsCard
+                detectedCard={detectedCard}
+                checkDetectedElem={checkDetectedElem}
                 actions={actions}
                 backgroundColor="var(--themePLight)"
                 color="white"
@@ -217,9 +232,29 @@ export default function AsyncCardsList() {
         );
     }
 
+    const showOverMsg = () => (
+        <Fragment>
+            {!hasMore && readyShowElems && (
+                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                    Isso é tudo, {firstName}.
+                </p>
+
+            )}
+
+            {isOffList && (
+                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                    Isso é tudo armazenado offline.
+                </p>
+            )}
+        </Fragment>
+    );
+
     return (
         <Fragment>
             {needEmptyIllustra ? showEmptyData() : showAccordion()}
+            {loading && <ShowLoadingSkeleton size="large" />}
+            {error && <ShowError />}
+            {showOverMsg()}
         </Fragment>
     );
 }
