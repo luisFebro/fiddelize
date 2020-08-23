@@ -45,7 +45,7 @@ export default function useAPIList({
     body = null,
     skip = null,
     search = null, // query
-    timeout = IS_DEV ? 30000 : 10000, // default: 15000
+    timeout = IS_DEV ? 30000 : 10000, // default: 10000
     trigger,
     listName, // offline usage
     needAuth = true,
@@ -55,8 +55,8 @@ export default function useAPIList({
         listTotal: 0,
         chunksTotal: null,
         content: null, });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    let [loading, setLoading] = useState(false);
+    let [error, setError] = useState(false);
     const [reload, setReload] = useState(false);
     const [hasMore, setHasMore] = useState(false);
     const [reachedChunksLimit, setReachedChunksLimit] = useState(false);
@@ -301,6 +301,9 @@ export default function useAPIList({
     const readyShowElems = noBlocking && !needEmptyIllustra;
 
     const isOffList = offlineBtn;
+
+    error = (error || !isOffline);
+    loading = loading && !isOffline;
     return {
         list: gotListItems ? list : [],
         listTotal,
