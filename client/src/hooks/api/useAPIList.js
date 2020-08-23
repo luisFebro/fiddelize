@@ -44,9 +44,8 @@ export default function useAPIList({
     body = null,
     skip = null,
     search = null, // query
-    timeout = 10000, // default: 15000
+    timeout = 15000, // default: 15000
     trigger,
-    triggerIncludes,
     listName, // offline usage
     needAuth = true,
 }) {
@@ -61,6 +60,8 @@ export default function useAPIList({
     const [hasMore, setHasMore] = useState(false);
     const [reachedChunksLimit, setReachedChunksLimit] = useState(false);
     const [offlineBtn, setOfflineBtn] = useState(false);
+    const [updateFirstChunkOnly, setUpdateFirstChunkOnly] = useState("");
+    console.log("updateFirstChunkOnly", updateFirstChunkOnly);
     const [ignore, setIgnore] = useState(false);
 
     const dispatch = useStoreDispatch();
@@ -73,6 +74,12 @@ export default function useAPIList({
 
     const { name: userName } = useProfile();
     const { isOffline, offlineList } = useOfflineListData({ listName, list, trigger: (offlineBtn && !ignore) });
+
+    useEffect(() => {
+       if(trigger) {
+          setUpdateFirstChunkOnly(true);
+       }
+    }, [trigger])
 
     useEffect(() => {
         if((isOffline || offlineBtn)) {
@@ -118,6 +125,7 @@ export default function useAPIList({
         setReachedChunksLimit(skip >= chunksTotal);
         setOfflineBtn(false);
         setLoading(false);
+        setUpdateFirstChunkOnly(false);
     }
 
     function handleError(status = 200) {
@@ -135,7 +143,8 @@ export default function useAPIList({
         let cancel;
         if(reachedChunksLimit) { if(hasMore) setHasMore(false); return; };
 
-        const updateOnly = skip === 0 || (trigger && trigger.toString().includes(triggerIncludes || "TaskCard"));
+        const updateOnly = skip === 0 || updateFirstChunkOnly;
+        console.log("updateOnly", updateOnly);
         if(updateOnly) skip = 0;
 
         const stopRequest = setTimeout(() => {

@@ -8,7 +8,8 @@ import { showSnackbar } from '../../../redux/actions/snackbarActions';
 import scrollIntoView from '../../../utils/document/scrollIntoView';
 import { handleFocus } from '../../../utils/form/handleFocus';
 import InstructionBtn from '../../../components/buttons/InstructionBtn';
-
+import { getUniqueId } from '../../../hooks/api/useAPI';
+import { setRun } from '../../../hooks/useRunComp';
 //Components
 import CreditsBalance from './credits-balance/CreditsBalance';
 import RecipientOptions from './recipient-options/RecipientOptions';
@@ -36,6 +37,13 @@ export default function AsyncSMS() {
         contactList,
         suggestionMsg,
         currBalance } = data;
+
+    const handleUpdateSession = () => {
+        showSnackbar(dispatch, "Atualizando Histórico...")
+        const uniqueId = getUniqueId();
+        const runName = `UpdateSMSAll ${uniqueId}`;
+        setRun(dispatch, runName);
+    }
 
     const handleWhichTab = currTab => {
         setData({ ...data, whichTab: currTab });
@@ -105,6 +113,7 @@ export default function AsyncSMS() {
             <MessageField
                 showMessage={showMessage}
                 suggestionMsg={suggestionMsg}
+                handleUpdateSession={handleUpdateSession}
                 whichTab={whichTab}
                 contactList={contactList}
                 currBalance={currBalance}
@@ -120,7 +129,7 @@ export default function AsyncSMS() {
             <hr className="lazer-purple" />
             <AutomaticSMS />
             <hr className="lazer-purple" />
-            <SmsHistory />
+            <SmsHistory handleUpdateSession={handleUpdateSession} />
         </Fragment>
     );
 }

@@ -46,6 +46,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
         contactList,
         message,
         handleShowMessage,
+        handleUpdateSession,
     } = modal;
 
     const [selectedDate, handleDateChange] = useState(new Date());
@@ -62,11 +63,11 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
     const [trigger, setTrigger] = useState(false);
 
     const uniqueId = getUniqueId();
-    const runName = `UpdateSMSAll ${uniqueId}`; // This should run inside useAPI because when close Modal, the data is wasted and not updated.
+    const runName = `UpdateSMSAll ${uniqueId}`;
 
     const isToday = checkToday(selectedDate);
 
-    const { data: doneMsg, loading, setRun, dispatch } = useAPI({
+    const { data: doneMsg, loading } = useAPI({
         method: 'post',
         url: sendSMS(),
         body: {
@@ -87,11 +88,11 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
     useEffect(() => {
         if(doneMsg && !loading) {
             setDisabled(false);
-            handleFullClose();
             handleShowMessage(false);
+            handleFullClose();
 
             const handleCallback = () => {
-                setRun(dispatch, runName);
+                handleUpdateSession();
             }
 
             const config = {

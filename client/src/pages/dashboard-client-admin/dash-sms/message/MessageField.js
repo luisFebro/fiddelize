@@ -26,7 +26,8 @@ const getStyles = () => ({
     },
 });
 
-const getModalData = ({ whichTab, userId, contactList, message, handleShowMessage }) => ({
+const getModalData = ({ handleUpdateSession, whichTab, userId, contactList, message, handleShowMessage }) => ({
+    handleUpdateSession,
     userId,
     contactList,
     whichTab: whichTab ? whichTab : "Lista de Clientes",
@@ -42,6 +43,7 @@ export default function MessageField({
     currBalance = 0,
     totalRecipients,
     handleShowMessage,
+    handleUpdateSession,
 }) {
     const [message, setMessage] = useState("");
     const [disabled, setDisabled] = useState(false);
@@ -63,7 +65,8 @@ export default function MessageField({
         url: sendSMS(),
         body: { userId, contactList, msg: message },
         needAuth: true,
-        snackbar: { txtPending: "Enviando agora...", txtSuccess: "Mensagem Enviada!" },
+        timeout: 30000,
+        snackbar: { txtPending: "Enviando agora...", txtSuccess: "Mensagem Enviada!", txtFailure: "" },
         trigger,
     })
 
@@ -72,6 +75,7 @@ export default function MessageField({
             setDisabled(false);
 
             const handleCallback = () => {
+                setTimeout(() => showSnackbar(dispatch, "Atualizando Histórico...", "warning", 5500), 4000);
                 setMessage("");
                 handleShowMessage(false);
                 setRun(dispatch, runName);
@@ -96,7 +100,7 @@ export default function MessageField({
         setTrigger(uniqueId);
     }
 
-    const modal = getModalData({ whichTab, userId, contactList, message, handleShowMessage });
+    const modal = getModalData({ handleUpdateSession, whichTab, userId, contactList, message, handleShowMessage });
 
     const showCTABtn = () => (
         <section className="d-flex align-items-center justify-content-around mt-5 mb-3">

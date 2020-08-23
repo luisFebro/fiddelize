@@ -320,7 +320,7 @@ exports.addSMSHistory = (req, res) => {
 }
 
 exports.readSMSMainHistory = (req, res) => {
-    const { userId, skip, limit = 5 } = req.query;
+    const { userId, skip, limit = 10 } = req.query;
 
     User.findById(userId)
     .select("clientAdminData.smsHistory")

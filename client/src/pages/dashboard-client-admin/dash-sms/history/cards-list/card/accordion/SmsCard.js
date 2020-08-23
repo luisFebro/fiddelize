@@ -183,7 +183,7 @@ export default function SmsCard({
 
     const ActionsMap = actions.map((panel, ind) => {
         const props = {
-            key: panel._id,
+            key: ind,
             className: "position-relative mx-3 mb-5",
         }
 
