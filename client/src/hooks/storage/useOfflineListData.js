@@ -2,6 +2,39 @@ import { useEffect, useState } from 'react';
 import { setVar, getVar, store } from './useVar';
 import { useStoreState } from 'easy-peasy';
 
+export const useOfflineData = ({ dataName, data, trigger, }) => {
+    const [offlineData, setOfflineData] = useState(null);
+    const [already, setAlready] = useState(false);
+
+    const { isOnline } = useStoreState(state => ({
+        isOnline: state.authReducer.cases.isUserOnline,
+    }));
+
+
+    useEffect(() => {
+        if(!dataName) return;
+
+        if(data && isOnline) {
+            setVar({ [dataName]: data }, store.request_api_data)
+        }
+
+        if((!isOnline || trigger) && !already) {
+            getVar(dataName, store.request_api_data)
+            .then(offData => {
+                setOfflineData(offData);
+                setAlready(true);
+            })
+        }
+
+        return () => null;
+
+    }, [data, dataName, isOnline, trigger])
+
+    const isOffline = Boolean(!isOnline && data);
+
+    return { isOffline, offlineData };
+}
+
 export default function useOfflineListData({ listName, list, trigger, }) {
     const [offlineList, setOfflineList] = useState(null);
     const [already, setAlready] = useState(false);

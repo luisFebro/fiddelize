@@ -9,6 +9,7 @@ import isObjEmpty from '../../utils/objects/isObjEmpty';
 import { ShowLoadingComp } from './Comps';
 import { chooseHeader } from '../../utils/server/getHeaders';
 import { useToken } from '../../hooks/useRoleData';
+import { useOfflineData } from '../../hooks/storage/useOfflineListData';
 
 export * from './requestsLib.js';
 export * from './trigger.js';
@@ -37,12 +38,22 @@ export default function useAPI({
     needAuth = false,
     loadingStart, // change default initial loading status
     needOnlyOnce = false,
+    dataName, // offline usage
     callback,
 }) {
     const [data, setData] = useState(null);
     const [onlyOnce, setOnlyOnce] = useState(false);
     const [loading, setLoading] = useState(true); // WARNING> do not change to null since many request depend on the truthness to disnnull undefied object values...
     const [alreadyReqId, setAlreadyReqId] = useState(null);
+
+    const thisData = data;
+    const { offlineData } = useOfflineData({ dataName, data: thisData });
+    useEffect(() => {
+        if(offlineData) {
+            setData(offlineData);
+            setLoading(false);
+        }
+    }, [offlineData])
 
     useEffect(() => {
         if(needOnlyOnce && data) setOnlyOnce(true);

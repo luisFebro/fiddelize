@@ -4,6 +4,7 @@ import localforage from 'localforage';
 const getObj = (name) => ({ storeName: name });
 export const store = {
     offline_lists: getObj("offline_lists"),
+    request_api_data: getObj("request_api_data"),
 }
 
 const variablesStore = (storeName = "global_variables") => localforage.createInstance({

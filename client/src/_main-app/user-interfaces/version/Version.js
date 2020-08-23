@@ -4,10 +4,10 @@ import Img from '../../../components/Img';
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.4019.4"
+const latestVersion = "3.4020.4"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "painel de controle cliente-admin - sessão SMS pt39";
+const updateDescription = "painel de controle cliente-admin - sessão SMS pt40";
 const history = [
     "página de notificações - otimização com rolagem infinita e ajustes finais (Finalizado)",
     "historico de compras - otimização com rolagem infinita e ajustes finais pt4 (finalizado) || docs",

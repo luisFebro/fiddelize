@@ -12,7 +12,7 @@ export default function SmsHistory() {
 
     const { runName } = useRunComp();
     const trigger = needTrigger(runName, "UpdateSMSAll");
-    const { data, loading } = useAPI({ url: getGeneralTotals(userId), trigger })
+    const { data, loading } = useAPI({ url: getGeneralTotals(userId), dataName: "smsGeneralTotals", trigger })
     const transitionTotal = loading ? "..." : data ? data.operations : "";
     const smsSentTotal = loading ? "..." : data ? data.totalSMS : "";
 
