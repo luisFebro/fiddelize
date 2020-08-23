@@ -15,7 +15,7 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     const [init, setInit] = useState(true);
 
     const { _id: userId } = useProfile();
-    let { data: list, loading } = useAPI({ url: readContacts(userId), needAuth: true })
+    let { data: list, loading } = useAPI({ url: readContacts(userId), needAuth: true, dataName: "allSMSContactList" })
     if(!list) list = [];
 
     const { runName } = useRunComp();

@@ -212,6 +212,7 @@ export default function useAPIList({
             </section>
         );
     }
+
     const ShowError = () => (
         <section>
             {(!isOffline && !offlineBtn) && (
