@@ -69,11 +69,8 @@ export default function AsyncCardsList() {
 
     const { runName, runName2 } = useRunComp();
     const trigger = getTrigger(runName, "UpdateSMSAll");
-
-    useEffect(() => {
-        setSkip(0);
-    }, [trigger]);
     const triggerForce = getTrigger(runName2, "ForceCancelScheduled");
+
     const {
         list,
         loading, ShowLoadingSkeleton,

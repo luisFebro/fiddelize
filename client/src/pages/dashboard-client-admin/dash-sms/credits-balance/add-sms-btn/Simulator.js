@@ -203,7 +203,7 @@ export default function Simulator({ handleData }) {
         <section className="animated fadeInUp slow
         my-3 d-flex align-items-center justify-content-end">
             <p className="text-purple font-weight-bold text-normal text-center mr-2">
-                Precisa de mais?
+                Precisa de mais pacotes?
             </p>
             <div>
                 <p className="m-0 text-left text-purple text-normal font-weight-bold">
@@ -215,7 +215,7 @@ export default function Simulator({ handleData }) {
                     onChange={handleChange(setData)}
                     onKeyPress={null}
                     autoComplete="off"
-                    type="number"
+                    type="tel"
                     name="newQuantity"
                     value={newQuantity}
                 />

@@ -4,7 +4,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { ShowLoadingComp } from './Comps';
 import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
-import { useOfflineListData } from '../../hooks/storage/useVar';
+import useOfflineListData from '../../hooks/storage/useOfflineListData';
 import getFirstName from '../../utils/string/getFirstName';
 import { useProfile } from '../../hooks/useRoleData';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
@@ -13,6 +13,7 @@ import { logout } from '../../redux/actions/authActions';
 import { chooseHeader } from '../../utils/server/getHeaders';
 import { useToken } from '../../hooks/useRoleData';
 import Skeleton, { skeletonRoot } from '../../components/multimedia/Skeleton';
+import { IS_DEV } from '../../config/clientUrl';
 
 export * from './requestsLib.js';
 export * from './trigger.js';
@@ -44,7 +45,7 @@ export default function useAPIList({
     body = null,
     skip = null,
     search = null, // query
-    timeout = 15000, // default: 15000
+    timeout = IS_DEV ? 30000 : 10000, // default: 15000
     trigger,
     listName, // offline usage
     needAuth = true,
@@ -59,9 +60,8 @@ export default function useAPIList({
     const [reload, setReload] = useState(false);
     const [hasMore, setHasMore] = useState(false);
     const [reachedChunksLimit, setReachedChunksLimit] = useState(false);
-    const [offlineBtn, setOfflineBtn] = useState(false);
     const [updateFirstChunkOnly, setUpdateFirstChunkOnly] = useState("");
-    console.log("updateFirstChunkOnly", updateFirstChunkOnly);
+    const [offlineBtn, setOfflineBtn] = useState(false);
     const [ignore, setIgnore] = useState(false);
 
     const dispatch = useStoreDispatch();
@@ -73,7 +73,9 @@ export default function useAPIList({
     const gotListItems = list && list.length;
 
     const { name: userName } = useProfile();
-    const { isOffline, offlineList } = useOfflineListData({ listName, list, trigger: (offlineBtn && !ignore) });
+
+    const thisList = list;
+    const { isOffline, offlineList } = useOfflineListData({ listName, list: thisList, trigger: (offlineBtn && !ignore) });
 
     useEffect(() => {
        if(trigger) {
@@ -111,26 +113,27 @@ export default function useAPIList({
         const listTotal = response.data.listTotal;
         const chunksTotal = response.data.chunksTotal;
         const content = response.data.content; // for all other kind of data
+        console.log("listType", listType);
 
         setData({
             ...data,
-            list: listType,
+            list: [...listType],
             listTotal,
             chunksTotal,
             content,
         })
+
         const hasCards = listTotal > skip ? true : false
         const firstCards = 5 >= listTotal;
         setHasMore(hasCards && !firstCards);
         setReachedChunksLimit(skip >= chunksTotal);
         setOfflineBtn(false);
         setLoading(false);
-        setUpdateFirstChunkOnly(false);
     }
 
     function handleError(status = 200) {
-        setLoading(false);
         setError(true);
+        setLoading(false);
 
         const gotExpiredToken = status === 403;
         if(gotExpiredToken) {
@@ -164,6 +167,8 @@ export default function useAPIList({
             cancelToken: new axios.CancelToken(c => cancel = c) // n1
         }
 
+        setUpdateFirstChunkOnly(false);
+
         async function doRequest() {
             try {
                 const response = await axios(config);
@@ -175,8 +180,8 @@ export default function useAPIList({
 
                     const { status } = e.response;
                     handleError(status);
-                }
 
+                }
             }
         }
 

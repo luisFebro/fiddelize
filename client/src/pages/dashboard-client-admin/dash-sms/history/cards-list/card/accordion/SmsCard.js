@@ -187,7 +187,7 @@ export default function SmsCard({
             className: "position-relative mx-3 mb-5",
         }
 
-        return checkDetectedElem({ list: actions, ind, indFromLast: 3 })
+        return checkDetectedElem({ list: actions, ind, indFromLast: 5 })
         ? (
             <div { ...props } ref={detectedCard}>
                 {showAccordion({ panel })}
