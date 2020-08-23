@@ -97,7 +97,6 @@ export default function useAPIList({
 
     }, [isOffline, offlineBtn, offlineList])
 
-
     // For search only - Every time a query changes, then clean previous data. Otherwise it will accumulative with the new one....
     useEffect(() => {
         if(search) setData({ ...data, list: [] });

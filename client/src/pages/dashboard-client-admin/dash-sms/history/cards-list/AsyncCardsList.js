@@ -253,7 +253,7 @@ export default function AsyncCardsList() {
     return (
         <Fragment>
             {needEmptyIllustra ? showEmptyData() : showAccordion()}
-            {loading && <ShowLoadingSkeleton size="large" />}
+            {loading && !isOffline && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
             {showOverMsg()}
         </Fragment>
