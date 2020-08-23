@@ -78,14 +78,14 @@ export default function AsyncCardsList() {
         needEmptyIllustra,
         readyShowElems,
         hasMore,
-        isOffList,
+        isOffline,
     } = useAPIList({
         url: readSMSMainHistory(businessId),
         skip,
         trigger,
         listName: "smsCardsList"
     })
-    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip, isOffline });
 
     useEffect(() => {
         if(triggerForce) {
@@ -242,7 +242,7 @@ export default function AsyncCardsList() {
 
             )}
 
-            {isOffList && (
+            {isOffline && (
                 <p className="my-5 text-normal text-center font-weight-bold text-purple">
                     Isso é tudo armazenado offline.
                 </p>

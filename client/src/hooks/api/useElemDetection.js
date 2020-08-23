@@ -1,12 +1,23 @@
 import { useCallback } from 'react';
 
-export const checkDetectedElem = ({ list, ind: currInd, indFromLast = 0 }) => {
+export const checkDetectedElem = ({
+    list,
+    ind: currInd,
+    indFromLast = 0,
+}) => {
     // lastCard ind is 0;
     return (list.length - indFromLast) === currInd;
 }
 
-export default function useElemDetection({ loading, hasMore, setSkip, handleSkip }) {
+export default function useElemDetection({
+    loading,
+    hasMore,
+    setSkip,
+    handleSkip,
+    isOffline = false,
+}) {
     return useCallback(elem => {
+        if(isOffline) return;
         if(loading) return; // constantly calls the API ifwe do not return...
 
         const currObserver = new IntersectionObserver((entries, self) => {

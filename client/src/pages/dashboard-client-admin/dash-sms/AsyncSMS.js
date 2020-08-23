@@ -86,7 +86,7 @@ export default function AsyncSMS() {
         <section className="position-relative m-0 d-flex justify-content-end">
             <p className="m-0 text-normal font-weight-bold text-purple">
             Por que SMS ?  </p>
-            <section className="align-self-end">
+            <section className="align-self-end ml-2">
                 <InstructionBtn
                     mode="modal"
                     article="WhySMS_art4"
