@@ -11,7 +11,7 @@ export default function useCustomerBirthDayToday() {
     const role = lStorage("getItem", {collection: "userProfile", property: "role"});
 
     useEffect(() => {
-        let alreadyAlerted = localStorage.getItem("alreadyBirthAlert");
+        let alreadyAlerted = getVar("alreadyBirthAlert");
         const { alert: needAlert, isBelated } = needAlertBirthday(userBirthDate, { trigger: !alreadyAlerted });
 
         const currYear = new Date().getFullYear();
@@ -21,7 +21,7 @@ export default function useCustomerBirthDayToday() {
             const lastYear = Number(alreadyAlerted.slice(dotInd + 1));
             if(currYear > lastYear) {
                 alreadyAlerted = false
-                localStorage.removeItem("alreadyBirthAlert");
+                removeVar("alreadyBirthAlert");
             }
         }
 
@@ -31,7 +31,7 @@ export default function useCustomerBirthDayToday() {
             .then(res => {
                 if(res.status !== 200) return console.log("wrong with sendNotification")
                 console.log(`${isBelated ? "BELATED BIRTHDAY" : "BIRTHDAY"}'s note sent to ${role}`);
-                localStorage.setItem("alreadyBirthAlert", `true.${currYear}`)
+                setVar({ alreadyBirthAlert: `true.${currYear}` })
             })
         }
     }, [today, userBirthDate])
