@@ -3,14 +3,14 @@
 // Brasilian description: “it’s a capital R followed by the money sign”
 
 export default function convertToReal(number, options = {}) {
+    if(!number && number !== 0) return;
+    if(number.toString().indexOf(",") > 0) return console.log("the number should not contain a comma");
+
     const {
         moneySign = false,
         needFraction = false,
         toDefault = false, // transform back to american format (later update)
     } = options;
-
-    if(!number && number !== 0) return console.log("need a number as the first parameter");
-    if(number.toString().indexOf(",") > 0) return "the number should not contain a comma";
 
     if(typeof number === "string") { // n1
         number = Number(number);

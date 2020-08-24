@@ -4,14 +4,12 @@ const {
     read,
     update,
     remove,
-    getList,
     confirmUserAccount,
     addElementArray,
     removeElementArray,
     removeField,
     readBackup,
     createBooking,
-    getHighestScores,
     mwUserId,
     mwBackup,
     addPurchaseHistory,
@@ -24,6 +22,11 @@ const {
     gotUsersInThisChallenge,
     readPrizes,
 } = require("../../controllers/user");
+
+const {
+    getRecordedClientList,
+    getHighestScores
+} = require("../../controllers/user/clients-session/recordedClients");
 
 const { mwIsCliAdmin, mwIsAuth, } = require("../../controllers/auth");
 // @route  api/user
@@ -43,7 +46,7 @@ router.get("/list/purchase-history/prizes/:userId", readPrizes);
 // end purchase history
 
 // LISTS
-router.get("/list/all", mwIsAuth, getList); // list with all clients
+router.get("/list/all", mwIsAuth, getRecordedClientList);
 router.get("/list/highest-scores", getHighestScores);
 router.get("/:userId/backup/list", mwIsCliAdmin, readBackup); // mwIsAuth
 

@@ -2,8 +2,8 @@ import React from 'react';
 import Spinner from '../loadingIndicators/Spinner';
 import LoadableVisibility from "react-loadable-visibility/react-loadable";
 
-// LESSON: this makes a screen empty and without errors apparently...
 // only works if using LoadableVisible directly..
+// WARNING AND LESSON: do not use loading: false... remove loading altogether this makes a screen empty and without errors apparently....
 // export const LoadVisible = ({ loader, loading, ...otherProps }) => LoadableVisible({ loader, loading: loading ? loading : false });
 export default function LoadableVisible(opts) {
     if(opts.loading === true) {

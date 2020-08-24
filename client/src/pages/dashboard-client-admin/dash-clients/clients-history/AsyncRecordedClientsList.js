@@ -1,11 +1,9 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { calendar } from '../../../../utils/dates/dateFns';
 import parse from 'html-react-parser';
-import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
-import { Link } from 'react-router-dom';
-import getFirstName from '../../../../utils/string/getFirstName';
+import convertToReal from '../../../../utils/numbers/convertToReal';
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
+import { useStoreDispatch } from 'easy-peasy';
 import { updateUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import UserCardExpansiblePanel from './expansible-panel/UserCardExpansiblePanel';
@@ -13,31 +11,26 @@ import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
 // End Redux
 import Spinner from '../../../../components/loadingIndicators/Spinner';
 import Title from '../../../../components/Title';
-import { useAppSystem, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAppSystem, useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
 import useAPIList, { readUserList } from '../../../../hooks/api/useAPIList';
 import useElemDetection, { checkDetectedElem } from '../../../../hooks/api/useElemDetection';
 import extractStrData from '../../../../utils/string/extractStrData';
+import { Load } from '../../../../components/code-splitting/LoadableComp';
 // import ClientsSearch from './search/ClientsSearch';
+
+const AsyncFreeAccountsLimitMsg = Load({ loader: () => import('./AsyncFreeAccountsLimitMsg' /* webpackChunkName: "free-limit-msg-lazy" */)});
 
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
     const { businessId } = useAppSystem();
-    const { limitFreePlanNewUsers } = useCentralAdmin();
-    const { bizPlan, totalClientUsers } = useClientAdmin();
-
     const { name } = useProfile();
+    const { bizPlan } = useClientAdmin();
 
     const [data, setData] = useState({
         totalCliUserScores: 0,
         totalActiveScores: 0,
     });
     const { totalCliUserScores, totalActiveScores } = data;
-
-    const { run, runName } = useStoreState(state => ({
-        run: state.globalReducer.cases.run,
-        runName: state.globalReducer.cases.runName,
-    }));
 
     const dispatch = useStoreDispatch();
 
@@ -78,15 +71,9 @@ export default function AsyncRecordedClientsList() {
                 totalCliUserScores, // NEED IMPLEMENT IN BACKEND
                 totalActiveScores
             } = extractStrData(content);
-            console.log("totalActiveScores", totalActiveScores);
-            console.log("totalCliUserScores", totalCliUserScores);
             setData({ ...data, totalCliUserScores, totalActiveScores });
         }
     }, [content])
-
-    useEffect(() => {
-        if(runName === "registered") localStorage.removeItem("userProfile");
-    }, [run, runName])
 
     // Accordion Content
     const actions = list.map(user => {
@@ -100,7 +87,7 @@ export default function AsyncRecordedClientsList() {
                 >
                     {!user.clientUserData.totalPurchasePrize
                     ? "• 0 Pontos"
-                    : ` • ${convertDotToComma(user.clientUserData.currScore)} Pontos`}
+                    : ` • ${convertToReal(user.clientUserData.currScore)} Pontos`}
                     {Boolean(user.clientUserData.totalPurchasePrize) && (
                         <Fragment>
                             <br />
@@ -159,6 +146,7 @@ export default function AsyncRecordedClientsList() {
         </p>
     );
 
+    const needFreeAlert = Boolean(listTotal >= 7 && bizPlan === "gratis");
     return (
         <Fragment>
             <Title
@@ -181,61 +169,11 @@ export default function AsyncRecordedClientsList() {
                     {loading && <ShowLoadingSkeleton size="large" />}
                     {error && <ShowError />}
                     <ShowOverMsg />
-                    {listTotal >= 7 && generateMsgToFreeAccounts(bizPlan, {
-                        totalClientUsers,
-                        limitFreePlanNewUsers,
-                        name,
-                    })}
+                    {needFreeAlert && <AsyncFreeAccountsLimitMsg />}
                 </Fragment>
             )}
         </Fragment>
     );
-}
-
-// Need to reload to update. And even after reloaded, there's a delay to update...
-const  generateMsgToFreeAccounts = (plan, opts) => {
-    const { totalClientUsers, limitFreePlanNewUsers, name } = opts;
-
-    const showTxtDefault = txt => (
-        <div className="text-center text-normal animated rubberBand my-5">
-            <p className="text-purple text-subtitle font-weight-bold m-0">
-                Nota <FontAwesomeIcon icon="info-circle" />
-            </p>
-            {txt}
-        </div>
-    );
-
-    const aboutToExpireMsg = () => {
-        const leftRegisters = limitFreePlanNewUsers - totalClientUsers;
-        const txt =
-        <span>
-            - {getFirstName(name)}, faltam mais
-            <br />
-            <strong>{leftRegisters} cadastros</strong> para atingir limite do seu plano gratis.{" "}
-            <Link to="/planos?cliente-admin=1" className="text-purple font-weight-bold">Escolha um PLANO PREMIUM para mais cadastros!</Link>
-        </span>
-        return showTxtDefault(txt);
-    }
-
-    const expiredMsg = () => {
-        const txt =
-        <span>
-            - O limite de cadastros para seu plano terminou.{" "}
-            <br />
-            <Link to="/planos?cliente-admin=1" className="text-purple font-weight-bold">Escolha um PLANO PREMIUM para mais cadastros!</Link>
-        </span>
-        return showTxtDefault(txt);
-    };
-
-    if(plan === "gratis") {
-        if(totalClientUsers >= limitFreePlanNewUsers) {
-            return expiredMsg();
-        } else if(totalClientUsers >= 7) {
-            return aboutToExpireMsg();
-        }
-    }
-
-    return null;
 }
 
 /* COMMENTS

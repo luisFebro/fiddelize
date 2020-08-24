@@ -2,32 +2,33 @@ import React, { Fragment } from 'react';
 import Title from '../../../components/Title';
 import truncateWords from '../../../utils/string/truncateWords';
 import styled from 'styled-components';
-import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
+import convertToReal from '../../../utils/numbers/convertToReal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  { useAppSystem } from '../../../hooks/useRoleData';
 import Img from '../../../components/Img';
-import useAPIList, { readHighestScores } from '../../../hooks/api/useAPIList';
+import useAPI, { readHighestScores } from '../../../hooks/api/useAPI';
 
 export default function RankingPondium() {
     const { businessId } = useAppSystem();
 
     const {
-        list,
-        gotListItems = true,
-    } =  useAPIList({
+        data: highestScores,
+        gotData,
+        loading,
+    } =  useAPI({
         url: readHighestScores(businessId),
         needAuth: false,
-        listName: "rankingPodium",
+        dataName: "rankingPodium",
     })
-    const highestScores = [{name: "febro feitoza", score: 1200}, {name: "fernanda lima", score: 500}]
-    console.log("gotListItems", gotListItems);
-    console.log("highestScores", highestScores);
 
     const showScores = () => (
         <Fragment>
-            {gotListItems && [0, 1, 2].map(ind => {
+            {gotData && [0, 1, 2].map(ind => {
                 const css = ["first-place", "second-place", "third-place"];
                 const itemsList = highestScores[ind];
+
+                const clientScore = convertToReal(itemsList && itemsList.score);
+                const clientName = truncateWords(itemsList && itemsList.name.cap(), 10);
 
                 return(
                     <div
@@ -40,25 +41,23 @@ export default function RankingPondium() {
                                 icon="question"
                                 style={{fontSize: '2.3em', color: 'var(--themeP)'}}
                             />
-                        ) : (
-                            <p className={ind === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
-                                <span style={{top: '14px'}} className="position-relative text-subtitle font-weight-bold text-shadow-white">
-                                    {convertDotToComma(itemsList.score)}
-                                    {ind === 0 && " Pontos"}
-                                </span>
-                                <br />
-                                <span className="text-normal font-weight-bold text-shadow-white">
-                                    {truncateWords(itemsList.name.cap(), 10)}
-                                </span>
-                            </p>
-                        )}
-                    </div>
-                );
+                         ) : (
+                             <p className={ind === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
+                                 <span style={{top: '14px'}} className="position-relative text-subtitle font-weight-bold text-shadow-white">
+                                     {clientScore}
+                                     {ind === 0 && " Pontos"}
+                                 </span>
+                                 <br />
+                                 <span className="text-normal font-weight-bold text-shadow-white">
+                                     {clientName}
+                                 </span>
+                             </p>
+                         )}
+                     </div>
+                 );
             })}
         </Fragment>
     );
-
-    const gotAtLeastOne = highestScores && highestScores[0];
 
     return (
         <DivPodium
@@ -70,7 +69,7 @@ export default function RankingPondium() {
                 margin="my-5"
                 padding=" "
             />
-            {!gotAtLeastOne && (
+            {(!gotData && !loading) && (
                 <p className="text-normal" style={{color: 'grey'}}>
                     Aqui você acompanha as
                     <br />3 maiores pontuações
@@ -78,6 +77,11 @@ export default function RankingPondium() {
                 </p>
             )}
             <div className="position-relative" style={{marginTop: '30px'}}>
+                {(loading && !gotData) && (
+                    <p className="text-purple font-weight-bold text-center text-normal">
+                       carregando...
+                    </p>
+                )}
                 <Img
                     className="shadow-elevation-black"
                     src="/img/icons/podium.png"
@@ -88,6 +92,7 @@ export default function RankingPondium() {
                 />
                 {showScores()}
             </div>
+            <hr className="lazer-purple"/>
         </DivPodium>
     );
 }
@@ -99,7 +104,7 @@ const DivPodium = styled.div`
     }
 
     & .bounce-repeat {
-        animation-iteration-count: 5;
+        animation-iteration-count: 2;
     }
 
     & .podium-title {

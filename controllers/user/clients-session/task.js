@@ -1,7 +1,7 @@
-const User = require('../../models/user');
-const { msgG } = require('../_msgs/globalMsgs');
-const findKeyAndAssign = require("../../utils/array/findKeyAndAssign");
-const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
+const User = require('../../../models/user');
+const { msgG } = require('../../_msgs/globalMsgs');
+const findKeyAndAssign = require("../../../utils/array/findKeyAndAssign");
+const { getChunksTotal, getDataChunk } = require("../../../utils/array/getDataChunk");
 
 // UTILS
 const pickDataByProfile = ({ profileData, role = 'cliente-admin' }) => {

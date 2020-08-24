@@ -1,0 +1,64 @@
+import React from 'react';
+import { useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
+import getFirstName from '../../../../utils/string/getFirstName';
+
+const showTxtDefault = txt => (
+    <div className="text-center text-normal animated rubberBand my-5">
+        <p className="text-purple text-subtitle font-weight-bold m-0">
+            Nota <FontAwesomeIcon icon="info-circle" />
+        </p>
+        {txt}
+    </div>
+);
+
+// EXPIRING MSGS
+const aboutToExpireMsg = ({
+    limitFreePlanNewUsers,
+    totalClientUsers,
+    name,
+}) => {
+    const leftRegisters = limitFreePlanNewUsers - totalClientUsers;
+    const txt =
+    <span>
+        - {getFirstName(name)}, faltam mais
+        <br />
+        <strong>{leftRegisters} cadastros</strong> para atingir limite do seu plano gratis.{" "}
+        <Link to="/planos?cliente-admin=1" className="text-purple font-weight-bold">Escolha um PLANO PREMIUM para mais cadastros!</Link>
+    </span>
+
+    return showTxtDefault(txt);
+}
+
+const expiredMsg = () => {
+    const txt =
+    <span>
+        - O limite de cadastros para seu plano terminou.{" "}
+        <br />
+        <Link to="/planos?cliente-admin=1" className="text-purple font-weight-bold">Escolha um PLANO PREMIUM para mais cadastros!</Link>
+    </span>
+    return showTxtDefault(txt);
+};
+// END EXPIRING MSGS
+
+// Need to reload to update. And even after reloaded, there's a delay to update...
+// insert bizPlan checking in the component which holds this.
+export default function AsyncFreeAccountsLimitMsg() {
+    const { name } = useProfile();
+    const { totalClientUsers } = useClientAdmin();
+    const { limitFreePlanNewUsers } = useCentralAdmin();
+
+    if(totalClientUsers >= limitFreePlanNewUsers) {
+        return expiredMsg();
+    } else if(totalClientUsers >= 7) {
+        return aboutToExpireMsg({
+            limitFreePlanNewUsers,
+            totalClientUsers,
+            name,
+        });
+    } else {
+        return null;
+    }
+
+}

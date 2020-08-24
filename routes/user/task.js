@@ -6,7 +6,7 @@ const {
     addAutomaticTask,
     toggleDone,
     removeTask,
-} = require("../../controllers/user/task");
+} = require("../../controllers/user/clients-session/task");
 
 const { mwIsAuth } = require("../../controllers/auth");
 

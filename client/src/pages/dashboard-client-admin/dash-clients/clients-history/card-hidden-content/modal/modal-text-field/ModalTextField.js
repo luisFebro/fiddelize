@@ -23,7 +23,6 @@ import { fluidTextAlign } from '../../../../../../../utils/string/fluidTextAlign
 import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
 import { useAppSystem, useClientAdmin, useProfile } from '../../../../../../../hooks/useRoleData';
 import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
-import { setRun } from '../../../../../../../redux/actions/globalActions';
 import { changePrizeStatus } from '../../../../../../../redux/actions/userActions';
 import { sendNotification } from '../../../../../../../redux/actions/notificationActions';
 import getFirstName from '../../../../../../../utils/string/getFirstName';
@@ -160,13 +159,7 @@ export default function ModalTextField({
 
         setTimeout(() => showSnackbar(dispatch, `Ok, ${getFirstName(cliAdminName)}! Cliente foi notificado e ${rewardScore} pontos foram descontados de ${name}.`, 'success', 7000), 4900);
 
-        if(closeOtherModals) {
-            closeOtherModals() // use to close other open notification pages.
-        } else {
-            setRun(dispatch, "registered");
-            setTimeout(() => null/*readHighestScores(dispatch, businessId), 2000);*/ )
-        }
-
+        closeOtherModals(); // use to close other open notification pages.
         setTimeout(() => onClose(), 3900);
     };
 
