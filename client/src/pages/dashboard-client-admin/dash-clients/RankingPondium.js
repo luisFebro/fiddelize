@@ -33,7 +33,7 @@ export default function RankingPondium() {
                 return(
                     <div
                         key={ind}
-                        className={`${css[ind]} text-purple position-absolute animated zoomIn delay-5s`}
+                        className={`${css[ind]} text-purple position-absolute animated zoomIn delay-2s`}
                     >
                         {!itemsList
                         ? (
@@ -61,7 +61,7 @@ export default function RankingPondium() {
 
     return (
         <DivPodium
-            className="animated zoomIn delay-1s my-3 container-center flex-column"
+            className="animated zoomIn my-3 container-center flex-column"
         >
             <Title
                 title="&#187; Pódio Fidelidade"

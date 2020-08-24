@@ -18,7 +18,7 @@ const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
 const { getDataChunk, getChunksTotal, } = require("../../utils/array/getDataChunk");
 const filterAndCount = require("../../utils/array/filterAndCount");
-const { decryptSync, jsDecrypt } = require("../../utils/security/xCipher");
+const { decryptSync } = require("../../utils/security/xCipher");
 
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]

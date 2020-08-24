@@ -1,6 +1,7 @@
 const User = require("../../../models/user");
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
+const { decryptSync, jsDecrypt } = require("../../../utils/security/xCipher");
 
 const getQuery = (role) => {
     let mainQuery;

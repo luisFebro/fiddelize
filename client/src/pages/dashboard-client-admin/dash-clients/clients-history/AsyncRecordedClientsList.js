@@ -19,6 +19,7 @@ import { Load } from '../../../../components/code-splitting/LoadableComp';
 // import ClientsSearch from './search/ClientsSearch';
 
 const AsyncFreeAccountsLimitMsg = Load({ loader: () => import('./AsyncFreeAccountsLimitMsg' /* webpackChunkName: "free-limit-msg-lazy" */)});
+const AsyncShowIllustra = Load({ loader: () => import('./AsyncShowIllustra' /* webpackChunkName: "empty-illustra-comp-lazy" */)});
 
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
@@ -164,12 +165,18 @@ export default function AsyncRecordedClientsList() {
                 />
             ): (
                 <Fragment>
-                    {showFilteredListTitle()}
-                    {showExpansionPanel()}
-                    {loading && <ShowLoadingSkeleton size="large" />}
-                    {error && <ShowError />}
-                    <ShowOverMsg />
-                    {needFreeAlert && <AsyncFreeAccountsLimitMsg />}
+                    {needEmptyIllustra
+                    ? (<AsyncShowIllustra />)
+                    : (
+                        <Fragment>
+                            {showExpansionPanel()}
+                            {showFilteredListTitle()}
+                            {loading && <ShowLoadingSkeleton size="large" />}
+                            {error && <ShowError />}
+                            <ShowOverMsg />
+                            {needFreeAlert && <AsyncFreeAccountsLimitMsg />}
+                        </Fragment>
+                    )}
                 </Fragment>
             )}
         </Fragment>
