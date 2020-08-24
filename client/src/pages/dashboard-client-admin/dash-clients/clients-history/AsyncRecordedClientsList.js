@@ -1,6 +1,4 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
-import SearchFilter from "../../../../components/search/SearchFilter";
-import SearchResult from "../../../../components/search/SearchResult";
 import { calendar } from '../../../../utils/dates/dateFns';
 import parse from 'html-react-parser';
 import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
@@ -8,47 +6,37 @@ import { Link } from 'react-router-dom';
 import getFirstName from '../../../../utils/string/getFirstName';
 // Redux
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { readUserList, updateUser } from '../../../../redux/actions/userActions';
+import { updateUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import UserCardExpansiblePanel from './expansible-panel/UserCardExpansiblePanel';
 import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
 // End Redux
 import Spinner from '../../../../components/loadingIndicators/Spinner';
-import LoadMoreItemsButton from '../../../../components/buttons/LoadMoreItemsButton';
 import Title from '../../../../components/Title';
-import { useAppSystem, useToken, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
-import PremiumButton from '../../../../components/buttons/PremiumButton';
+import { useAppSystem, useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useAPIList, { readUserList } from '../../../../hooks/api/useAPIList';
+import useElemDetection, { checkDetectedElem } from '../../../../hooks/api/useElemDetection';
+import extractStrData from '../../../../utils/string/extractStrData';
+// import ClientsSearch from './search/ClientsSearch';
 
-const initialSkip = 0;
-let searchTerm = "";
-// let accumulatedChunks = 5;
 export default function AsyncRecordedClientsList() {
-    const [init, setInit] = useState(true);
+    const [skip, setSkip] = useState(0);
     const { businessId } = useAppSystem();
-    const { name } = useProfile();
-    const { bizPlan, totalClientUsers } = useClientAdmin();
     const { limitFreePlanNewUsers } = useCentralAdmin();
+    const { bizPlan, totalClientUsers } = useClientAdmin();
 
-    const token = useToken();
+    const { name } = useProfile();
 
-    const [clientsData, setClientsData] = useState({
-        list: [],
-        chunkSize: 0,
-        totalSize: 0,
+    const [data, setData] = useState({
         totalCliUserScores: 0,
         totalActiveScores: 0,
     });
-    let {
-        chunkSize,
-        list,
-        totalSize,
-        totalCliUserScores, totalActiveScores } = clientsData;
+    const { totalCliUserScores, totalActiveScores } = data;
 
-    const { isLoading, run, runName } = useStoreState(state => ({
+    const { run, runName } = useStoreState(state => ({
         run: state.globalReducer.cases.run,
         runName: state.globalReducer.cases.runName,
-        isLoading: state.globalReducer.cases.isLinearPLoading,
     }));
 
     const dispatch = useStoreDispatch();
@@ -64,65 +52,41 @@ export default function AsyncRecordedClientsList() {
         updateUser(dispatch, objToSend, businessId)
     }, [totalCliUserScores, totalActiveScores])
 
+    const params = { role: "cliente" };
+
+    const {
+        list,
+        content,
+        loading, ShowLoadingSkeleton,
+        error, ShowError,
+        needEmptyIllustra,
+        hasMore,
+        isOffline,
+        listTotal,
+        ShowOverMsg,
+    } = useAPIList({
+        url: readUserList(businessId),
+        skip,
+        params,
+        // trigger,
+        listName: "recordedClientsList"
+    })
+
     useEffect(() => {
-        if(init || runName === "registered") {
-            const listOptions = { token, role: "cliente", skip: initialSkip}
-            readUserList(dispatch, businessId, listOptions)
-            .then(res => {
-                if(res.status !== 200) return console.log("Something went wrong with readUserList");
-                setClientsData({
-                    ...clientsData,
-                    list: res.data.list,
-                    chunkSize: res.data.chunkSize,
-                    totalSize: res.data.totalSize,
-                    totalCliUserScores: res.data.totalCliUserScores,
-                    totalActiveScores: res.data.totalActiveScores,
-                })
-                setInit(false);
-                if(runName === "registered") localStorage.removeItem("userProfile");
-            })
+        if(content) {
+            const {
+                totalCliUserScores, // NEED IMPLEMENT IN BACKEND
+                totalActiveScores
+            } = extractStrData(content);
+            console.log("totalActiveScores", totalActiveScores);
+            console.log("totalCliUserScores", totalCliUserScores);
+            setData({ ...data, totalCliUserScores, totalActiveScores });
         }
+    }, [content])
+
+    useEffect(() => {
+        if(runName === "registered") localStorage.removeItem("userProfile");
     }, [run, runName])
-
-    // search
-    const onSearchChange = e => {
-        const targetValue = e ? e.target.value : " ";
-        const querySearched = targetValue;
-        searchTerm = querySearched;
-
-        const listOptions = { token, role: "cliente", skip: initialSkip, search: querySearched}
-        readUserList(dispatch, businessId, listOptions)
-        .then(res => {
-
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            setClientsData({
-                ...clientsData,
-                list: res.data.list,
-                chunkSize: res.data.chunkSize,
-                totalSize: res.data.totalSize,
-                totalCliUserScores: res.data.totalCliUserScores,
-                totalActiveScores: res.data.totalActiveScores,
-            })
-        })
-    }
-
-    const showSearchBar = () => (
-        <section className="container-center my-4">
-            <span className="position-relative">
-                <SearchFilter
-                    placeholder="Admin, procure cliente"
-                    searchChange={onSearchChange}
-                />
-                <PremiumButton
-                    needAttentionWaves={true}
-                    onClick={null}
-                    left={10}
-                    top={-20}
-                />
-            </span>
-        </section>
-    );
-    // end search
 
     // Accordion Content
     const actions = list.map(user => {
@@ -188,28 +152,6 @@ export default function AsyncRecordedClientsList() {
     );
     //End Accordion Content
 
-
-    const showMoreItemsBtn = () => (
-        <LoadMoreItemsButton
-            token={token}
-            url={`/api/user/list/all?skip=${"SKIP"}&role=cliente&bizId=${businessId}`}
-            objPathes={{
-                strList: "data.list",
-                strChunkSize: "data.chunkSize",
-                strTotalSize: "data.totalSize",
-            }}
-            setData={setClientsData}
-            data={clientsData}
-            remainingText="Clientes Restantes:"
-            msgAfterDone={`${getFirstName(name)}, Isso é tudo! Não há mais Clientes`}
-            button={{
-                title: "Carregar mais Clientes",
-                loadingIndicator: "Carregando mais agora...",
-                backgroundColor: 'var(--themeP)',
-            }}
-        />
-    );
-
     const showFilteredListTitle = () => (
         list.length !== 0 &&
         <p style={{top: '40px'}} className="text-p position-relative text-normal text-left pl-2 font-weight-bold">
@@ -224,17 +166,8 @@ export default function AsyncRecordedClientsList() {
                 color="var(--themeP)"
                 margin="my-4"
             />
-            {showSearchBar()}
-            <SearchResult
-                isLoading={isLoading}
-                filteredUsersLength={totalSize}
-                totalCliUserScores={totalCliUserScores}
-                totalActiveScores={totalActiveScores}
-                allUsersLength={totalSize}
-                searchTerm={searchTerm}
-                mainSubject="cliente"
-            />
-            {isLoading
+            {/*<ClientsSearch />*/}
+            {loading
             ? (
                 <Spinner
                     marginY={100}
@@ -245,8 +178,10 @@ export default function AsyncRecordedClientsList() {
                 <Fragment>
                     {showFilteredListTitle()}
                     {showExpansionPanel()}
-                    {showMoreItemsBtn()}
-                    {totalSize >= 7 && generateMsgToFreeAccounts(bizPlan, {
+                    {loading && <ShowLoadingSkeleton size="large" />}
+                    {error && <ShowError />}
+                    <ShowOverMsg />
+                    {listTotal >= 7 && generateMsgToFreeAccounts(bizPlan, {
                         totalClientUsers,
                         limitFreePlanNewUsers,
                         name,

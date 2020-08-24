@@ -114,7 +114,6 @@ exports.mwSendSMS = (req, res, next) => {
             error: errorArray
         } = data;
         if(errorArray && errorArray.length) { console.log(errorArray)}
-
         if(providerRes.length) {
             const firstContacts = [];
             const contactStatements = providerRes.map((contact, ind) => {

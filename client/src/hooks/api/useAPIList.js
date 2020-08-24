@@ -55,6 +55,8 @@ export default function useAPIList({
         listTotal: 0,
         chunksTotal: null,
         content: null, });
+    const { list, listTotal, chunksTotal, content } = data;
+
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState(false);
     const [reload, setReload] = useState(false);
@@ -66,13 +68,18 @@ export default function useAPIList({
 
     const dispatch = useStoreDispatch();
     const token = useToken();
+    let { name: userName } = useProfile();
+    userName = getFirstName(userName);
 
-    const { list, listTotal, chunksTotal, content } = data;
-
+    // IMPORTABLE VARIABLES
     const isPlural = listTotal > 1 ? "s" : "";
     const gotListItems = list && list.length;
+    const noBlocking = !loading && !error;
+    const needEmptyIllustra = noBlocking && (list && !list.length);
+    const needEmptySearch = noBlocking && Boolean(!listTotal) && search;
+    const readyShowElems = noBlocking && !needEmptyIllustra;
+    // END IMPORTABLE VARIABLES
 
-    const { name: userName } = useProfile();
 
     const thisList = list;
     const { isOffline, offlineList } = useOfflineListData({ listName, list: thisList, trigger: (offlineBtn && !ignore) });
@@ -280,7 +287,7 @@ export default function useAPIList({
 
                     {((!gotListItems && offlineBtn && !isOffline) || (!listTotal && !isOffline && !error)) && (
                         <div className="text-normal font-weight-bold text-grey">
-                            {getFirstName(userName)}, {noItemsTxt}.
+                            {userName}, {noItemsTxt}.
                         </div>
                     )}
 
@@ -294,16 +301,27 @@ export default function useAPIList({
         </Fragment>
     );
 
-    const noBlocking = !loading && !error;
+    const ShowOverMsg = () => (
+        <Fragment>
+            {!hasMore && readyShowElems && (
+                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                    Isso é tudo, {userName}.
+                </p>
 
-    const needEmptyIllustra = noBlocking && (list && !list.length);
-    const needEmptySearch = noBlocking && Boolean(!listTotal) && search;
-    const readyShowElems = noBlocking && !needEmptyIllustra;
+            )}
+
+            {isOffline && (
+                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                    Isso é tudo guardado offline.
+                </p>
+            )}
+        </Fragment>
+    );
 
     const isOffList = offlineBtn;
-
-    error = (error || !isOffline);
+    error = (error || isOffline);
     loading = loading && !isOffline;
+
     return {
         list: gotListItems ? list : [],
         listTotal,
@@ -318,6 +336,7 @@ export default function useAPIList({
         ShowLoadingSkeleton,
         ShowError,
         ShowListTotals,
+        ShowOverMsg,
         hasMore,
         isOffline,
         isOffList,

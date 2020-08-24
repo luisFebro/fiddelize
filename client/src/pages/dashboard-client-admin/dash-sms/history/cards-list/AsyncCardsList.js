@@ -9,12 +9,12 @@ import { convertDotToComma } from '../../../../../utils/numbers/convertDotComma'
 import { useAppSystem, useProfile } from '../../../../../hooks/useRoleData';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from '../../../../../utils/string/getFirstName';
-import useAPIList, { readSMSMainHistory, getTrigger } from '../../../../../hooks/api/useAPIList';
 import { useRunComp } from '../../../../../hooks/useRunComp';
 import Img from '../../../../../components/Img';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import scrollIntoView from '../../../../../utils/document/scrollIntoView';
 import { isScheduledDate } from '../../../../../utils/dates/dateFns';
+import useAPIList, { readSMSMainHistory, getTrigger } from '../../../../../hooks/api/useAPIList';
 import useElemDetection, { checkDetectedElem } from '../../../../../hooks/api/useElemDetection';
 const isSmall = window.Helper.isSmallScreen();
 
@@ -63,7 +63,6 @@ export default function AsyncCardsList() {
     const [forceCancel, setForceCancel] = useState(false); // solve real time update after calling off a scheduled date.
     const { businessId } = useAppSystem();
     const { name } = useProfile();
-    const firstName = getFirstName(name);
 
     const styles = getStyles();
 
@@ -76,9 +75,9 @@ export default function AsyncCardsList() {
         loading, ShowLoadingSkeleton,
         error, ShowError,
         needEmptyIllustra,
-        readyShowElems,
         hasMore,
         isOffline,
+        ShowOverMsg,
     } = useAPIList({
         url: readSMSMainHistory(businessId),
         skip,
@@ -233,29 +232,12 @@ export default function AsyncCardsList() {
         );
     }
 
-    const showOverMsg = () => (
-        <Fragment>
-            {!hasMore && readyShowElems && (
-                <p className="my-5 text-normal text-center font-weight-bold text-purple">
-                    Isso é tudo, {firstName}.
-                </p>
-
-            )}
-
-            {isOffline && (
-                <p className="my-5 text-normal text-center font-weight-bold text-purple">
-                    Isso é tudo armazenado offline.
-                </p>
-            )}
-        </Fragment>
-    );
-
     return (
         <Fragment>
             {needEmptyIllustra ? showEmptyData() : showAccordion()}
             {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
-            {showOverMsg()}
+            <ShowOverMsg />
         </Fragment>
     );
 }

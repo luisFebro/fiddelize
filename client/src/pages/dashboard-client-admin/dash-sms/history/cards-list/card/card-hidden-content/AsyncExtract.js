@@ -47,7 +47,7 @@ export default function AsyncExtract({ extractId }) {
 
     const styles = getStyles();
 
-    const vanishMsgReady = useDelay(8000);
+    const vanishMsgReady = useDelay(6000);
 
     const handleResending = () => {
         const handleTabFunc = () => {

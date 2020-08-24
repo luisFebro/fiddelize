@@ -213,7 +213,7 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
     const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
     const sortQuery = {$sort: { ...defaultSort, createdAt: -1 }};
     const skipQuery = {$skip: skip};
-    const limitQuery = {$limit: 5};
+    const limitQuery = {$limit: 10};
     const countQuery = {$count: 'value'};
     const searchQuery = {name: {$regex: `${search}`, $options: 'i'}};
     const bizIdQuery = {"clientUserData.bizId": bizId};
@@ -262,12 +262,15 @@ exports.getList = (req, res) => { // n3 - New way of fetching data with $facet a
                 phone: decryptSync(profile.phone),
             }
         })
+
+        totalCliUserScores = totalCliUserScores[0] === undefined ? 0 : totalCliUserScores[0].value,
+        totalActiveScores = totalActiveScores[0] === undefined ? 0 : totalActiveScores[0].value,
+
         res.json({
             list: treatedList,
-            chunkSize: chunkSize[0] === undefined ? 0 : chunkSize[0].value,
-            totalSize: totalSize[0] === undefined ? 0 : totalSize[0].value,
-            totalCliUserScores: totalCliUserScores[0] === undefined ? 0 : totalCliUserScores[0].value,
-            totalActiveScores: totalActiveScores[0] === undefined ? 0 : totalActiveScores[0].value,
+            chunksTotal: chunkSize[0] === undefined ? 0 : chunkSize[0].value,
+            listTotal: totalSize[0] === undefined ? 0 : totalSize[0].value,
+            content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};`,
         })
     })
 }

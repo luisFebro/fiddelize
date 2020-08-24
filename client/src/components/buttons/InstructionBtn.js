@@ -71,6 +71,7 @@ export default function InstructionBtn({
                 >
                     <Tooltip
                         text={text}
+                        hover={true}
                         onClickAway={() => setShowCloseBtn(false)}
                         padding="10px"
                         whiteSpace

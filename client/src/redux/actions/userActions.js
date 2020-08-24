@@ -126,28 +126,28 @@ export const addAutomaticTask = async (userId, options = {}) => { // n1
 
 // LISTS
 // note: requires JWT token
-export const readUserList = async (dispatch, bizId, options = {}) => {
-    let { role, skip, search, token } = options;
-    if(!bizId) return console.log("You should specify the bizId argument");
-    if(!skip) skip = 0;
-    bizId = `&bizId=${bizId}`;
+// export const readUserList = async (dispatch, bizId, options = {}) => {
+//     let { role, skip, search, token } = options;
+//     if(!bizId) return console.log("You should specify the bizId argument");
+//     if(!skip) skip = 0;
+//     bizId = `&bizId=${bizId}`;
 
-    const searchQuery = search ? `&search=${search}` : "";
-    const roleQuery = role ? `&role=${role}` : "";
-    // This Loading is activated because is required to
-    // display the current status of loading in RecordedClientsList...
-    setLoadingProgress(dispatch, true);
-    try {
-        const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}${bizId}`, getHeaderToken(token));
-        setLoadingProgress(dispatch, false);
-        console.log('==ALL USERS UPDATED==');
-        dispatch({ type: 'USER_READ_LIST', payload: res.data.list });
-        return res;
-    } catch (err) {
-        // setLoadingProgress(dispatch, false);
-        return err;
-    }
-};
+//     const searchQuery = search ? `&search=${search}` : "";
+//     const roleQuery = role ? `&role=${role}` : "";
+//     // This Loading is activated because is required to
+//     // display the current status of loading in RecordedClientsList...
+//     setLoadingProgress(dispatch, true);
+//     try {
+//         const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}${bizId}`, getHeaderToken(token));
+//         setLoadingProgress(dispatch, false);
+//         console.log('==ALL USERS UPDATED==');
+//         dispatch({ type: 'USER_READ_LIST', payload: res.data.list });
+//         return res;
+//     } catch (err) {
+//         // setLoadingProgress(dispatch, false);
+//         return err;
+//     }
+// };
 
 export const readHighestScores = async (dispatch, bizId) => {
     try {
