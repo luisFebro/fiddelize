@@ -279,12 +279,15 @@ exports.getHighestScores = (req, res) => {
     const bizId = req.query.bizId;
 
     User.find({ 'clientUserData.bizId': bizId })
-    .select("name clientUserData.currScore -_id")
-    .sort({ 'clientUserData.currScore': -1 })
+    .select("name clientUserData.totalGeneralScore -_id")
+    .sort({ 'clientUserData.totalGeneralScore': -1 })
     .limit(3)
     .exec((err, data) => {
         if(err) return res.status(500).json(msgG('error.systemError', err));
-        res.json(data);
+
+        const name = data.name;
+        const score = data.clientUserData.totalGeneralScore;
+        res.json({ name, score });
     });
 }
 

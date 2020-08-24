@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStoreDispatch } from 'easy-peasy';
-import { readHighestScores, addAutomaticTask } from '../../../../../../../redux/actions/userActions';
+import { addAutomaticTask } from '../../../../../../../redux/actions/userActions';
 import isMoneyBrValidAndAlert from '../../../../../../../utils/numbers/isMoneyBrValidAndAlert';
 import Button from '@material-ui/core/Button';
 import ButtonMulti from '../../../../../../../components/buttons/material-ui/ButtonMulti';
@@ -164,7 +164,7 @@ export default function ModalTextField({
             closeOtherModals() // use to close other open notification pages.
         } else {
             setRun(dispatch, "registered");
-            setTimeout(() => readHighestScores(dispatch, businessId), 2000);
+            setTimeout(() => null/*readHighestScores(dispatch, businessId), 2000);*/ )
         }
 
         setTimeout(() => onClose(), 3900);

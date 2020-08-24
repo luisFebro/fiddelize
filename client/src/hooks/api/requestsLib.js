@@ -1,7 +1,11 @@
 // URLs ONLY
 // user
 export const updateUser = userId => `/api/user/${userId}?noResponse=true`;
+
+// client's register
 export const readUserList = cliAdminId => `/api/user/list/all?bizId=${cliAdminId}`;
+export const readHighestScores = cliAdminId => `/api/user/list/highest-scores?bizId=${cliAdminId}`;
+
 // Purchase's History
 export const readPurchaseCardsList = userId => `/api/user/list/purchase-history/${userId}`;
 export const readPrizes = userId => `/api/user/list/purchase-history/prizes/${userId}`;

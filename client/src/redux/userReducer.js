@@ -54,14 +54,11 @@ const currCentralAdminData = {
     mainTechWhatsapp: centralAdminData && centralAdminData.mainTechWhatsapp,
 }
 
-const highestScoreData = clientAdminData && clientAdminData.highestScores;
-
 // REDUCERS
 const initialState = {
     centralAdmin: currCentralAdminData,
     clientAdmin: currClientAdminData,
     currentUser: currUserData,
-    highestScores: highestScoreData,
     allUsers: [],
 };
 
@@ -97,15 +94,6 @@ export const userReducer = {
                 return {
                     ...state,
                     allUsers: action.payload,
-                };
-            case 'HIGHEST_SCORES_READ':
-                let payload;
-                action.payload && action.payload.length === 0
-                ? payload = [{name: "nome1"}, {name: "nome2"}, {name: "nome3"}]
-                : payload = action.payload
-                return {
-                    ...state,
-                    highestScores: payload,
                 };
             // CUSTOMIZED DATA HANDLING from social network
             case 'USER_GOOGLE_DATA':

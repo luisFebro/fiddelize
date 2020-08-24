@@ -17,13 +17,6 @@ const centralAdminColl = { collection: "centralAdmin", newObj: defaultCentralAdm
 // end central admin
 
 // client Admin
-const highestScoresArray =
-[
-    { name: "nome1",  "clientUserData": {"currScore": 0} },
-    { name: "nome2", "clientUserData": {"currScore": 0}  },
-    { name: "nome3", "clientUserData": {"currScore": 0} }
-]
-
 const defaultClientAdmin = {
     bizName: "...",
     bizCodeName: "empresa-teste-et2d@yd",
@@ -33,7 +26,6 @@ const defaultClientAdmin = {
     mainReward: "Free Product",
     rewardList: [{ id: '123', icon: 'star', rewardScore: 500, rewardDesc: 'desc. prêmio', }],
     regulation: { text: "...", updatedAt: '...' },
-    highestScores: highestScoresArray,
     rewardDeadline: 0,
     totalClientUserActiveScores: 0, //not used,fetched from db in recordeduserslist, but can be useful to display in home all results so far for instance,,,
     totalClientUserScores: 0, //not used,fetched from db in recordeduserslist

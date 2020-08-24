@@ -1,48 +1,54 @@
-import React, { useEffect, Fragment } from 'react';
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
+import React, { Fragment } from 'react';
 import Title from '../../../components/Title';
 import truncateWords from '../../../utils/string/truncateWords';
 import styled from 'styled-components';
-import { readHighestScores } from '../../../redux/actions/userActions';
 import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  { useAppSystem } from '../../../hooks/useRoleData';
 import Img from '../../../components/Img';
+import useAPIList, { readHighestScores } from '../../../hooks/api/useAPIList';
 
 export default function RankingPondium() {
-    let highestScores = useStoreState(state => state.userReducer.cases.highestScores);
-    const dispatch = useStoreDispatch();
     const { businessId } = useAppSystem();
 
-    useEffect(() => {
-        readHighestScores(dispatch, businessId);
-    }, [])
+    const {
+        list,
+        gotListItems = true,
+    } =  useAPIList({
+        url: readHighestScores(businessId),
+        needAuth: false,
+        listName: "rankingPodium",
+    })
+    const highestScores = [{name: "febro feitoza", score: 1200}, {name: "fernanda lima", score: 500}]
+    console.log("gotListItems", gotListItems);
+    console.log("highestScores", highestScores);
 
     const showScores = () => (
         <Fragment>
-            {highestScores && highestScores.length !== 0 && highestScores.map((user, id) => {
-                const { name, clientUserData } = user;
+            {gotListItems && [0, 1, 2].map(ind => {
                 const css = ["first-place", "second-place", "third-place"];
+                const itemsList = highestScores[ind];
+
                 return(
                     <div
-                        key={id}
-                        className={`${css[id]} text-purple position-absolute animated zoomIn delay-5s`}
+                        key={ind}
+                        className={`${css[ind]} text-purple position-absolute animated zoomIn delay-5s`}
                     >
-                        {name === `nome${id + 1}`
+                        {!itemsList
                         ? (
                             <FontAwesomeIcon
                                 icon="question"
                                 style={{fontSize: '2.3em', color: 'var(--themeP)'}}
                             />
                         ) : (
-                            <p className={id === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
+                            <p className={ind === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
                                 <span style={{top: '14px'}} className="position-relative text-subtitle font-weight-bold text-shadow-white">
-                                    {clientUserData && convertDotToComma(clientUserData.currScore)}
-                                    {id === 0 && " Pontos"}
+                                    {convertDotToComma(itemsList.score)}
+                                    {ind === 0 && " Pontos"}
                                 </span>
                                 <br />
                                 <span className="text-normal font-weight-bold text-shadow-white">
-                                    {truncateWords(name.cap(), 10)}
+                                    {truncateWords(itemsList.name.cap(), 10)}
                                 </span>
                             </p>
                         )}
@@ -52,7 +58,7 @@ export default function RankingPondium() {
         </Fragment>
     );
 
-    const gotAtLeastOne = highestScores && highestScores[0] && highestScores[0].name !== "nome1";
+    const gotAtLeastOne = highestScores && highestScores[0];
 
     return (
         <DivPodium

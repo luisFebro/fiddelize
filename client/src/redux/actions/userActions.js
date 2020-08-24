@@ -149,14 +149,14 @@ export const addAutomaticTask = async (userId, options = {}) => { // n1
 //     }
 // };
 
-export const readHighestScores = async (dispatch, bizId) => {
-    try {
-        const res = await axios.get(`/api/user/list/highest-scores?bizId=${bizId}`, getHeaderJson);
-        dispatch({ type: "HIGHEST_SCORES_READ", payload: res.data})
-    } catch (err) {
-        return err;
-    }
-};
+// export const readHighestScores = async (dispatch, bizId) => {
+//     try {
+//         const res = await axios.get(`/api/user/list/highest-scores?bizId=${bizId}`, getHeaderJson);
+//         dispatch({ type: "HIGHEST_SCORES_READ", payload: res.data})
+//     } catch (err) {
+//         return err;
+//     }
+// };
 
 // END LIST
 
