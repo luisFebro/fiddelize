@@ -8,7 +8,7 @@ const loadVanillaToast = async (txt, time) => {
 let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 isToastActivated = isToastActivated && isThisApp();
 // WARNING: The currentVersion needsfds to be actually the NEXT ONE because the next cache client receives is not updated.
-const currentVersion = "3.6.0";
+// const currentVersion = "";
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -91,7 +91,7 @@ function registerValidSW(swUrl, config) {
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               // isToastActivated &&
-              loadVanillaToast(`App foi atualizado para versão ${currentVersion} com sucesso!`, 7000)
+              loadVanillaToast(`App foi atualizado para mais recente versão!`, 5000)
               console.log('Content is cached for offline use.');
 
               // Execute callback
