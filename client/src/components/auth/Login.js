@@ -24,7 +24,8 @@ import { sendNotification } from '../../redux/actions/notificationActions';
 
 const isApp = isThisApp();
 
-function Login({ history, setLoginOrRegister }) {
+function Login({
+    history, setLoginOrRegister, dontNeedRegister }) {
     useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
     const dispatch = useStoreDispatch();
     let { roleWhichDownloaded } = useAppSystem();
@@ -164,7 +165,7 @@ function Login({ history, setLoginOrRegister }) {
     }
 
     const showRegisterForm = () => (
-        isApp && (
+        isApp && !dontNeedRegister && (
             <div
                 className="animated zoomIn delay-2s p-2 mt-3"
             >

@@ -91,7 +91,7 @@ function registerValidSW(swUrl, config) {
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               // isToastActivated &&
-              loadVanillaToast(`App foi atualizado para mais recente versão!`, 5000)
+              loadVanillaToast(`App foi atualizado para a mais recente versão!`, 5000)
               console.log('Content is cached for offline use.');
 
               // Execute callback

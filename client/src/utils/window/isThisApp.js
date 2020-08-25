@@ -24,8 +24,10 @@ export default function isThisApp() {
 
 // https://stackoverflow.com/questions/53378576/detect-web-app-running-as-homescreen-app-on-android-stock-browser
 function checkIfStockBrowser() {
-    if (!(window.sessionStorage || false)) return false; // Session storage not supported
-    if (window.location.href.indexOf('?abrir=1') >= 0) {
+    if(!(window.sessionStorage || false)) return false; // Session storage not supported
+    const condition = window.location.href.indexOf('?abrir=1') >= 0 || window.location.href.indexOf('?abrir=sim') >= 0
+
+    if(condition) {
         window.sessionStorage.setItem('isPWA', '1');
     }
 
