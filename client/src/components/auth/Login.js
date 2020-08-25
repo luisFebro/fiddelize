@@ -31,8 +31,6 @@ function Login({
     let { roleWhichDownloaded } = useAppSystem();
     // disable restriction of user during early estages of tests.
     roleWhichDownloaded = "";
-    // if(!isThisApp()) {
-    // }
 
     const { selfThemeSColor, selfThemePColor, selfThemeBackColor } = useClientAdmin();
 
@@ -151,7 +149,7 @@ function Login({
     const showKeypadButton = () => (
         <div className="mt-3 mb-2 animated fadeInDown normal delay-1s d-flex justify-content-center">
             <KeypadButton
-                title={`${isApp ? "Informe o seu CPF" : "Informe CPF"}`}
+                title="Informe CPF"
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
                 confirmFunction={signInThisUser}
