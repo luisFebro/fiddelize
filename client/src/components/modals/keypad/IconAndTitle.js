@@ -18,6 +18,8 @@ export default function IconAndTitle({
                 borderBottom: '4px solid var(--mainWhite)',
                 textAlign: 'center',
                 overflow: 'hidden',
+                paddingLeft: "2rem",
+                paddingRight: "2rem",
             }}
             className="d-flex flex-row text-white align-items-center"
         >
