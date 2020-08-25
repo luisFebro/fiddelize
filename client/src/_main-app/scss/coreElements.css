@@ -14,7 +14,7 @@ html, body {
     /*max-width: 100%;*/
     /* Disables pull-to-refresh and overscroll glow effect for PWA.
          Still keeps swipe navigations. Try contain value for only disable pull to refresh */
-    overscroll-behavior-y: none;
+    /*overscroll-behavior-y: none;*/
 }
 html {
     line-height: 1.15;
@@ -32,7 +32,7 @@ body {
     /*height: 100%; /* the side scroll got an spacing after set this to 100% */
     width: 100%;
     overflow-x: hidden;
-    overscroll-behavior-y: none;
+    /*overscroll-behavior-y: none;*/
 }
 
 article, aside, footer, header, nav, section, figcaption, figure, main {
