@@ -2,7 +2,7 @@
   "name": "Fiddelize - Pontos de Fidelidade",
   "short_name": "Fiddelize",
   "description": "Plataforma de pontos de fidelidade e valorização do consumo de clientes",
-  "start_url": "/mobile-app?is_pwa=1",
+  "start_url": "/mobile-app?abrir=1",
   "display": "standalone",
   "scope": ".",
   "categories": ["business", "lifestyle", "utilities"],

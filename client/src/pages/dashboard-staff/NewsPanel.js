@@ -51,7 +51,7 @@ export default function NewsPanel({ handleUpdateList }) {
                 <p
                     className="animated fadeInUp delay-3s text-subtitle text-white text-center font-weight-bold"
                 >
-                    Painel de Novos
+                    Painel de Cadastro
                 </p>
             </div>
         </Fragment>

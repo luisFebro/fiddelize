@@ -108,9 +108,9 @@ export const useClientAdmin = () => {
     const totalClientUsers = clientAdmin && clientAdmin.totalClientUsers;
     const selfBizLogoImg = clientAdmin && clientAdmin.selfBizLogoImg;
     const selfMilestoneIcon = clientAdmin && clientAdmin.selfMilestoneIcon;
-    const selfThemePColor = clientAdmin && clientAdmin.selfThemePColor;
-    const selfThemeSColor = clientAdmin && clientAdmin.selfThemeSColor;
-    const selfThemeBackColor = clientAdmin && clientAdmin.selfThemeBackColor;
+    const selfThemePColor = clientAdmin && clientAdmin.selfThemePColor || "default";
+    const selfThemeSColor = clientAdmin && clientAdmin.selfThemeSColor || "default";
+    const selfThemeBackColor = clientAdmin && clientAdmin.selfThemeBackColor || "default";
     const arePrizesVisible = clientAdmin && clientAdmin.arePrizesVisible;
 
     return({

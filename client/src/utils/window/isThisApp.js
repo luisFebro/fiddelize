@@ -25,11 +25,11 @@ export default function isThisApp() {
 // https://stackoverflow.com/questions/53378576/detect-web-app-running-as-homescreen-app-on-android-stock-browser
 function checkIfStockBrowser() {
     if (!(window.sessionStorage || false)) return false; // Session storage not supported
-    if (window.location.href.indexOf('?is_pwa=1') >= 0) {
+    if (window.location.href.indexOf('?abrir=1') >= 0) {
         window.sessionStorage.setItem('isPWA', '1');
     }
 
-    return window.sessionStorage.getItem('isPWA') == '1';
+    return window.sessionStorage.getItem('isPWA') === '1';
 }
 
 /*

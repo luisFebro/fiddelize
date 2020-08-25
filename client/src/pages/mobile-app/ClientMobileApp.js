@@ -68,6 +68,7 @@ function ClientMobileApp({ location, history }) {
 
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
+    const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
 
     useEffect(() => {
         if(role === "cliente") {
@@ -147,8 +148,10 @@ function ClientMobileApp({ location, history }) {
     );
 
     const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
+    const gotEmptyData = typeof role === "object" && selfThemePColor === "default";
+    const conditionShowAppBubble = (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) || gotEmptyData
     const showAppType = () => (
-        roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin &&
+        conditionShowAppBubble &&
         <div className="container-center">
             <div className="position-relative" style={{top: -55, marginTop: 90, marginBottom: 40}}>
                 <div
@@ -178,8 +181,8 @@ function ClientMobileApp({ location, history }) {
                         className="text-title text-nowrap"
                     >
                         do {
-                            roleWhichDownloaded === "cliente"
-                            ? "Cliente" : "Admin"
+                            (roleWhichDownloaded === "cliente-admin" || isUrlAdmin)
+                            ? "Admin" : "Cliente"
                         }
                     </span>
                 </p>
@@ -244,6 +247,7 @@ function ClientMobileApp({ location, history }) {
     const conditionLogin = loginOrRegister === "login" && showLogin()
 
     let isCliAdminConnected = role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
+
     const isCliUserConnected = needAppForCliAdmin || role === "cliente" || roleWhichDownloaded === "cliente";
     if(needAppForCliAdmin) {
         isCliAdminConnected = false;
