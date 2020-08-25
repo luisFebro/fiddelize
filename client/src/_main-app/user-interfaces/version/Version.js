@@ -4,11 +4,12 @@ import Img from '../../../components/Img';
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.4104.4"
+const latestVersion = "3.4105.4"
 // PRÓXIMO:
 // artigo exemplo de pontos .
-const updateDescription = "painel de controle cliente-admin - nova lista clientes cadastrados com rolagem infinita, filtros, pesquisa premium, modal pesquisa premium, botão dinâmico adicionar clientes, página de adição de clientes pt2";
+const updateDescription = "painel de controle cliente-admin - nova lista clientes cadastrados com rolagem infinita, filtros, pesquisa premium, modal pesquisa premium pt3";
 const history = [
+    "painel de controle cliente-admin - botão dinâmico adicionar clientes, página de adição de clientes pt3",
     "painel de controle cliente-admin - sessão SMS pt41 - finalizado",
     "página de notificações - otimização com rolagem infinita e ajustes finais (Finalizado)",
     "historico de compras - otimização com rolagem infinita e ajustes finais pt4 (finalizado) || docs",

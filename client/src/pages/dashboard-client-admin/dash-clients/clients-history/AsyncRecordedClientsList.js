@@ -1,31 +1,35 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { calendar } from '../../../../utils/dates/dateFns';
 import parse from 'html-react-parser';
+import RegisteredClientsAccordion from './accordion/RegisteredClientsAccordion';
+import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
 import convertToReal from '../../../../utils/numbers/convertToReal';
-// Redux
 import { useStoreDispatch } from 'easy-peasy';
 import { updateUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import UserCardExpansiblePanel from './expansible-panel/UserCardExpansiblePanel';
-import PanelHiddenContent from './card-hidden-content/PanelHiddenContent';
-// End Redux
-import Spinner from '../../../../components/loadingIndicators/Spinner';
 import Title from '../../../../components/Title';
 import { useAppSystem, useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
-import useAPIList, { readUserList } from '../../../../hooks/api/useAPIList';
+import useAPIList, { readUserList, getUniqueId } from '../../../../hooks/api/useAPIList';
+// import { setRun } from '../../../../hooks/useRunComp';
 import useElemDetection, { checkDetectedElem } from '../../../../hooks/api/useElemDetection';
 import extractStrData from '../../../../utils/string/extractStrData';
 import { Load } from '../../../../components/code-splitting/LoadableComp';
+import NewsPanelBtn from './news-panel-btn/NewsPanelBtn';
+import useElemShowOnScroll from '../../../../hooks/scroll/useElemShowOnScroll';
 // import ClientsSearch from './search/ClientsSearch';
 
 const AsyncFreeAccountsLimitMsg = Load({ loader: () => import('./AsyncFreeAccountsLimitMsg' /* webpackChunkName: "free-limit-msg-lazy" */)});
 const AsyncShowIllustra = Load({ loader: () => import('./AsyncShowIllustra' /* webpackChunkName: "empty-illustra-comp-lazy" */)});
+const Filters = Load({ loader: () => import('./search/Filters' /* webpackChunkName: "filters-comp-lazy" */)});
 
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
+    const [trigger, setTrigger] = useState(false);
     const { businessId } = useAppSystem();
     const { name } = useProfile();
     const { bizPlan } = useClientAdmin();
+
+    const showCTA = useElemShowOnScroll("#showNewCTA");
 
     const [data, setData] = useState({
         totalCliUserScores: 0,
@@ -46,6 +50,11 @@ export default function AsyncRecordedClientsList() {
         updateUser(dispatch, objToSend, businessId)
     }, [totalCliUserScores, totalActiveScores])
 
+    const handleUpdateList = () => {
+        const uniqueId = getUniqueId();
+        setTrigger(uniqueId);
+    }
+
     const params = { role: "cliente" };
 
     const {
@@ -62,9 +71,10 @@ export default function AsyncRecordedClientsList() {
         url: readUserList(businessId),
         skip,
         params,
-        // trigger,
+        trigger,
         listName: "recordedClientsList"
     })
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip, isOffline });
 
     useEffect(() => {
         if(content) {
@@ -130,21 +140,30 @@ export default function AsyncRecordedClientsList() {
         });
     })
 
-    const showExpansionPanel = () => (
-        <UserCardExpansiblePanel
-            actions={actions}
-            backgroundColor="var(--themePLight)"
-            color="white"
-            needToggleButton={true}
-        />
+    const showAccordion = () => (
+        <session id="showNewCTA">
+            <RegisteredClientsAccordion
+                detectedCard={detectedCard}
+                checkDetectedElem={checkDetectedElem}
+                handleUpdateList={handleUpdateList}
+                actions={actions}
+                backgroundColor="var(--themePLight)"
+                color="white"
+                needToggleButton={true}
+            />
+        </session>
     );
     //End Accordion Content
 
-    const showFilteredListTitle = () => (
-        list.length !== 0 &&
-        <p style={{top: '40px'}} className="text-p position-relative text-normal text-left pl-2 font-weight-bold">
-            Últimos Registros:
-        </p>
+
+    const showFixedCTA = () => (
+        showCTA &&
+        <section className="animated fadeInUp" style={{ position: 'fixed', bottom: '10px', right: '10px' }}>
+            <NewsPanelBtn
+               title="Novo Cliente"
+               size="medium"
+            />
+        </section>
     );
 
     const needFreeAlert = Boolean(listTotal >= 7 && bizPlan === "gratis");
@@ -156,29 +175,21 @@ export default function AsyncRecordedClientsList() {
                 margin="my-4"
             />
             {/*<ClientsSearch />*/}
-            {loading
-            ? (
-                <Spinner
-                    marginY={100}
-                    size="large"
-                    logo="purple"
-                />
-            ): (
-                <Fragment>
-                    {needEmptyIllustra
-                    ? (<AsyncShowIllustra />)
-                    : (
-                        <Fragment>
-                            {showExpansionPanel()}
-                            {showFilteredListTitle()}
-                            {loading && <ShowLoadingSkeleton size="large" />}
-                            {error && <ShowError />}
-                            <ShowOverMsg />
-                            {needFreeAlert && <AsyncFreeAccountsLimitMsg />}
-                        </Fragment>
-                    )}
-                </Fragment>
-            )}
+            <Fragment>
+                {needEmptyIllustra
+                ? (<AsyncShowIllustra handleUpdateList={handleUpdateList} />)
+                : (
+                    <Fragment>
+                        <Filters listTotal={listTotal} />
+                        {showAccordion()}
+                        {loading && <ShowLoadingSkeleton size="large" />}
+                        {error && <ShowError />}
+                        <ShowOverMsg />
+                        {needFreeAlert && <AsyncFreeAccountsLimitMsg />}
+                        {showFixedCTA()}
+                    </Fragment>
+                )}
+            </Fragment>
         </Fragment>
     );
 }

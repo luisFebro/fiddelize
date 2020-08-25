@@ -46,7 +46,30 @@ const bizSysId = appSystem && appSystem.businessId;
 
 const isSmall = window.Helper.isSmallScreen();
 
-function Register({ setLoginOrRegister, needLoginBtn = false }) {
+
+const getStyles = () => ({
+    fieldForm: {
+        backgroundColor: 'var(--mainWhite)',
+        zIndex: 2000,
+        font: 'normal 1em Poppins, sans-serif',
+    },
+    helperFromField: {
+        color: 'grey',
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: isSmall ? '.8em' : '.6em',
+    },
+    card: {
+        margin: 'auto',
+        width: '90%',
+        maxWidth: isSmall ? "" : 360,
+    }
+});
+
+function Register({
+    isStaff = false,
+    callback,
+    setLoginOrRegister,
+    needLoginBtn = false }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
@@ -60,6 +83,8 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
         maritalStatus: 'selecione estado civil',
         clientUserData: { bizId: bizSysId },
     });
+
+    const styles = getStyles();
 
     const dateNow = new Date();
     const minAge = 16;
@@ -157,9 +182,13 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
             countField(bizSysId, objToSend)
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                setLoginOrRegister("login");
-                showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
-                // sendEmail(res.data.authUserId);
+                if(isStaff) {
+                    callback();
+                } else {
+                    setLoginOrRegister("login");
+                    showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)
+                    // sendEmail(res.data.authUserId);
+                }
             })
         })
     };
@@ -206,32 +235,14 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
     const showTitle = () => (
         <div className="position-relative">
             <Title
-                title="Cadastre-se!"
-                subTitle="É rápido e fácil."
+                title={isStaff ? "Cadastro" : "Cadastre-se!"}
+                subTitle={isStaff ? "Novo Cliente" : "É rápido e fácil."}
                 color="var(--mainWhite)"
                 needShadow={true}
                 backgroundColor={"var(--themePDark--" +  selfThemePColor + ")"}
             />
         </div>
     );
-
-    const styles = {
-        fieldForm: {
-            backgroundColor: 'var(--mainWhite)',
-            zIndex: 2000,
-            font: 'normal 1em Poppins, sans-serif',
-        },
-        helperFromField: {
-            color: 'grey',
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: isSmall ? '.8em' : '.6em',
-        },
-        card: {
-            margin: 'auto',
-            width: '90%',
-            maxWidth: isSmall ? "" : 360,
-        }
-    }
 
     const showForm = () => (
         <form
@@ -243,7 +254,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
             }}
         >
             <div className="mt-3">
-                Qual é o seu nome?
+                {isStaff ? "Qual nome do cliente?" : "Qual é o seu nome?"}
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
@@ -275,7 +286,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 />
             </div>
             <div className={`animated slideInDown fast mt-3 ${handleShowFields("field2") ? "d-block" : "d-none"}`}>
-                Ok, informe seu CPF
+                {isStaff ? "Ok, informe CPF do cliente" : "Ok, informe seu CPF"}
                 <TextField
                     id="field2"
                     required
@@ -306,7 +317,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 />
             </div>
             <div className={`animated slideInDown fast mt-3 ${handleShowFields("field3") ? "d-block" : "d-none"}`}>
-                {name
+                {isStaff ? "Quando é aniversário do cliente?" : name
                 ? <span>{name.cap()}, quando é o seu aniversário?</span>
                 : <span>Quando é o seu aniversário?</span>}
                 <MuiPickersUtilsProvider
@@ -345,7 +356,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
                 </MuiPickersUtilsProvider>
             </div>
             <section className={`animated slideInLeft fast ${handleShowFields("otherFields")  ? "d-block" : "d-none"}`}>
-                <p className="text-left my-2">Para finalizar seu cadastro...</p>
+                <p className="text-left my-2">Para finalizar o cadastro...</p>
                 <div className="mt-3">
                     Email
                     <TextField
@@ -446,6 +457,7 @@ function Register({ setLoginOrRegister, needLoginBtn = false }) {
             <Card
                 className="animated zoomIn fast card-elevation"
                 style={styles.card}
+                elevation={isStaff ? false : undefined}
             >
                 {showTitle()}
                 {showForm()}

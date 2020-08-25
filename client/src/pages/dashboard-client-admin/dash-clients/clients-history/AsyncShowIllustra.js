@@ -1,8 +1,8 @@
 import React from 'react';
 import Img from '../../../../components/Img';
-import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
+import NewsPanelBtn from './news-panel-btn/NewsPanelBtn';
 
-export default function AsyncShowIllustra() {
+export default function AsyncShowIllustra({ handleUpdateList }) {
     return (
         <section>
             <Img
@@ -10,17 +10,10 @@ export default function AsyncShowIllustra() {
                 src="/img/illustrations/empty-recorded-customers.svg"
                 offline={true}
                 alt="sem clientes cadastrados"
-                title="Seus clientes prestes a participarem do seu jogo de compras"
+                title="Seus clientes estão prestes a participar do seu jogo de compras"
             />
             <div className=" mb-5 container-center">
-                <ButtonFab
-                    size="large"
-                    title="CADASTRE O PRIMEIRO"
-                    position="relative"
-                    onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
-                    variant = 'extended'
-                />
+                <NewsPanelBtn handleUpdateList={handleUpdateList} />
             </div>
         </section>
     );

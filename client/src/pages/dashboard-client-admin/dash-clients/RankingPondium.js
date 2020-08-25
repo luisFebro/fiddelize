@@ -23,9 +23,9 @@ export default function RankingPondium() {
 
     const showScores = () => (
         <Fragment>
-            {gotData && [0, 1, 2].map(ind => {
+            {[0, 1, 2].map(ind => {
                 const css = ["first-place", "second-place", "third-place"];
-                const itemsList = highestScores[ind];
+                const itemsList = gotData && highestScores[ind];
 
                 const clientScore = convertToReal(itemsList && itemsList.score);
                 const clientName = truncateWords(itemsList && itemsList.name.cap(), 10);
@@ -45,7 +45,7 @@ export default function RankingPondium() {
                              <p className={ind === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
                                  <span style={{top: '14px'}} className="position-relative text-subtitle font-weight-bold text-shadow-white">
                                      {clientScore}
-                                     {ind === 0 && " Pontos"}
+                                     {Boolean(ind === 0) && " Pontos"}
                                  </span>
                                  <br />
                                  <span className="text-normal font-weight-bold text-shadow-white">
@@ -70,9 +70,9 @@ export default function RankingPondium() {
                 padding=" "
             />
             {(!gotData && !loading) && (
-                <p className="text-normal" style={{color: 'grey'}}>
+                <p className="text-normal mb-5" style={{color: 'grey'}}>
                     Aqui você acompanha as
-                    <br />3 maiores pontuações
+                    <br /><strong>3 maiores pontuações gerais</strong>
                     <br />de todos seus clientes com atualizações em tempo real.
                 </p>
             )}

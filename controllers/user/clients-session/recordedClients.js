@@ -40,7 +40,7 @@ exports.getRecordedClientList = (req, res) => { // n3 - New way of fetching data
     const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
     const sortQuery = {$sort: { ...defaultSort, createdAt: -1 }};
     const skipQuery = {$skip: skip};
-    const limitQuery = {$limit: 10};
+    const limitQuery = {$limit: 5};
     const countQuery = {$count: 'value'};
     const searchQuery = {name: {$regex: `${search}`, $options: 'i'}};
     const bizIdQuery = {"clientUserData.bizId": bizId};
@@ -166,7 +166,7 @@ exports.getRecordedClientList = (req, res) => { // n1 - New way of fetching data
 
         // remove sensitive cli-admin data
         // note: check if notification will be include to be excluded too
-        const isCliAdmin = list[0].role === "cliente-admin"; // always the first object if available
+        const isCliAdmin = list.length && list[0].role === "cliente-admin"; // always the first object if available
         if(isCliAdmin) { delete list[0].clientAdminData }
 
         const treatedList = list.map(profile => {

@@ -8,13 +8,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 // Customized Data
-import { useStoreDispatch, useStoreState } from 'easy-peasy';
-import './ExpansiblePanel.scss';
+import './RecordedClientsAccordion.scss';
 import ToggleBtn from './ToggleBtn';
+import { useStoreDispatch, useStoreState } from 'easy-peasy';
 import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
 import { removeField } from '../../../../../redux/actions/userActions';
-import { setRun } from '../../../../../hooks/useRunComp';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import { useClientAdmin, useAppSystem } from '../../../../../hooks/useRoleData';
 import { readUser } from "../../../../../redux/actions/userActions";
@@ -23,7 +22,7 @@ import PrizesBtn from '../../../../mobile-app/history-purchase-btn/prizes-galler
 
 const isSmall = window.Helper.isSmallScreen();
 
-UserCardExpansiblePanel.propTypes = {
+RegisteredClientsAccordion.propTypes = {
     actions: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string,
@@ -48,11 +47,40 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function UserCardExpansiblePanel({
+const getStyles = ({ color, backgroundColor }) => ({
+    Accordion: {
+        color: color,
+        backgroundColor: backgroundColor, // default is paper color
+        margin: '25px 0 0',
+    },
+    totalPrizesBadge: {
+        top: 0,
+        right: -33,
+        borderRadius: '50px',
+        backgroundColor: "var(--niceUiYellow)",
+        border: '3px solid grey',
+        zIndex: 10,
+    },
+    trophyPrizes: {
+        right: 55,
+        bottom: 85,
+    },
+    prizesBtn: {
+        bottom: -25,
+        left: '50%',
+        transform: 'translateX(-50%)',
+    }
+});
+
+export default function RegisteredClientsAccordion({
     actions,
     backgroundColor,
     color,
-    needToggleButton = false, }) {
+    needToggleButton = false,
+    handleUpdateList,
+    checkDetectedElem,
+    detectedCard,
+}) {
 
     const classes = useStyles();
 
@@ -64,32 +92,7 @@ export default function UserCardExpansiblePanel({
        runArray: state.globalReducer.cases.runArray,
     }));
 
-
-    const styles = {
-        Accordion: {
-            color: color,
-            backgroundColor: backgroundColor, // default is paper color
-            margin: '25px 0 0',
-        },
-        totalPrizesBadge: {
-            top: 0,
-            right: -33,
-            borderRadius: '50px',
-            backgroundColor: "var(--niceUiYellow)",
-            border: '3px solid grey',
-            zIndex: 10,
-        },
-        trophyPrizes: {
-            right: 55,
-            bottom: 85,
-        },
-        prizesBtn: {
-            bottom: -25,
-            left: '50%',
-            transform: 'translateX(-50%)',
-        }
-
-    }
+    const styles = getStyles({ color, backgroundColor });
 
     const handleEraseTestCard = cardId => {
         showSnackbar(dispatch, "Apagando card de teste...");
@@ -104,7 +107,7 @@ export default function UserCardExpansiblePanel({
                 })
                 if(res.status !== 200) return console.log("smt wrong while updating")
                 showSnackbar(dispatch, "APAGADO! Para mostrar o card de teste de novo, adicione pontos no MODO APP CLIENTE.", "success", 7000);
-                setRun(dispatch, "registered");
+                handleUpdateList();
             })
         }, 3000)
     };
@@ -221,23 +224,38 @@ export default function UserCardExpansiblePanel({
         </AccordionDetails>
     );
 
+    const showAccordion = ({ panel }) => (
+        <Accordion
+            TransitionProps={{ unmountOnExit: true }}
+            className="disabledLink"
+            style={styles.Accordion}
+        >
+            {showPanel(panel)}
+            {showHiddenPanel(panel)}
+        </Accordion>
+    );
+
+    const ActionsMap = actions.map((panel, ind) => {
+        const props = {
+            key: panel._id,
+            className: "position-relative mb-3",
+        }
+
+        return checkDetectedElem({ list: actions, ind, indFromLast: 2 })
+        ? (
+            <div { ...props } ref={detectedCard}>
+                {showAccordion({ panel })}
+            </div>
+        ) : (
+            <div { ...props }>
+                {showAccordion({ panel })}
+            </div>
+        )
+    });
+
     return (
-        <div className={classes.root}>
-            {actions.map(panel => (
-                <div
-                    key={panel._id}
-                    className="position-relative"
-                >
-                    <Accordion
-                        TransitionProps={{ unmountOnExit: true }}
-                        className="disabledLink"
-                        style={styles.Accordion}
-                    >
-                        {showPanel(panel)}
-                        {showHiddenPanel(panel)}
-                    </Accordion>
-                </div>
-            ))}
-        </div>
+        <section className={classes.root}>
+            {ActionsMap}
+        </section>
     );
 }

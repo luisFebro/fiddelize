@@ -157,7 +157,7 @@ export default function useAPI({
         return () => { cancel(); clearTimeout(stopRequest); };
     }, [trigger, onlyOnce])
 
-    const gotData = data && data.length;
+    const gotData = Boolean(data && data.length);
     return { data, gotData, loading, setRun, dispatch };
 }
 
