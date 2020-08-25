@@ -68,8 +68,7 @@ function ClientMobileApp({ location, history }) {
 
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
-    const isUrlAdmin = searchQuery.indexOf("abrir=sim&admin=sim") !== -1;
-    const dontNeedRegister = searchQuery.indexOf("abrir=sim") !== -1;
+    const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
 
     useEffect(() => {
         if(role === "cliente") {
@@ -129,7 +128,6 @@ function ClientMobileApp({ location, history }) {
                 >
                     <AsyncLogin
                         setLoginOrRegister={setLoginOrRegister}
-                        dontNeedRegister={dontNeedRegister}
                     />
                 </div>
             }

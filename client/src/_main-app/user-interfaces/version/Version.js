@@ -4,7 +4,7 @@ import Img from '../../../components/Img';
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.4108.4"
+const latestVersion = "3.4109.4"
 // PRÓXIMO:
 // artigo exemplo de pontos .
 const updateDescription = "painel de controle cliente-admin - nova lista clientes cadastrados com rolagem infinita, filtros, pesquisa premium, modal pesquisa premium pt3";

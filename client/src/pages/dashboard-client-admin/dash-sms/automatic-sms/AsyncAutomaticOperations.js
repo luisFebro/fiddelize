@@ -26,7 +26,7 @@ const serviceOptions = ({ bizName }) => ([
         title: "Confimação de desafio",
         subtitle: "Aviso automático para o cliente quando você confirma/desconta um desafio concluído para resgate de prêmio",
         usage: 0,
-        msg: `DESAFIO CONFIRMADO DA ${bizName.toUpperCase()} - Opa! Seu desafio foi confirmado. Abra seu app e confira: https://fiddelize.com.br/mobile-app?abrir=sim`,
+        msg: `DESAFIO CONFIRMADO DA ${bizName.toUpperCase()} - Opa! Seu desafio foi confirmado. Abra seu app e confira: https://fiddelize.com.br/mobile-app?abrir=1`,
     },
     {
         serviceId: 3,

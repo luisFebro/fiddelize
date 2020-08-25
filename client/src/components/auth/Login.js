@@ -165,7 +165,7 @@ function Login({
     }
 
     const showRegisterForm = () => (
-        isApp && !dontNeedRegister && (
+        isApp && !dontNeedRegister && false && ( // disable and replaced by dashboard register
             <div
                 className="animated zoomIn delay-2s p-2 mt-3"
             >
