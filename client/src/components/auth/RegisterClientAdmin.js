@@ -19,9 +19,13 @@ import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
 import detectErrorField from '../../utils/validation/detectErrorField';
 import handleChange from '../../utils/form/use-state/handleChange';
-import { handleFocus } from '../../utils/form';
 import lStorage from '../../utils/storage/lStorage';
-// Material UI
+import { handleNextField } from '../../utils/form/kit';
+import setValObjWithStr from '../../utils/objects/setValObjWithStr';
+import { getUniqueCodeName } from '../../utils/string/generateAlphaNumeric';
+import addDashesToString from '../../utils/string/addDashesToString';
+import { dateFnsUtils, ptBRLocale } from '../../utils/dates/dateFns';
+// Material Ui
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -32,13 +36,7 @@ import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
 import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
-import isKeyPressed from '../../utils/event/isKeyPressed';
-import setValObjWithStr from '../../utils/objects/setValObjWithStr';
-import { getUniqueCodeName } from '../../utils/string/generateAlphaNumeric';
-import addDashesToString from '../../utils/string/addDashesToString';
-import { dateFnsUtils, ptBRLocale } from '../../utils/dates/dateFns';
 import ReactGA from 'react-ga';
-
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -49,8 +47,26 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+const getStyles = () => ({
+    fieldForm: {
+        backgroundColor: 'var(--mainWhite)',
+        zIndex: 2000,
+        font: 'normal 1em Poppins, sans-serif',
+    },
+    helperFromField: {
+        color: 'grey',
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: isSmall ? '.8em' : '.6em',
+    },
+    card: {
+        margin: 'auto',
+        width: '90%',
+        maxWidth: isSmall ? "" : 360,
+        boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
+    }
+});
+
 function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
-    const [showThisField, setShowThisField] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
 
     const dateNow = new Date();
@@ -91,6 +107,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const dispatch = useStoreDispatch();
 
     const classes = useStyles();
+    const styles = getStyles();
 
     useEffect(() => {
         const opts = { needYear: true };
@@ -179,25 +196,6 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         })
     };
 
-    const handleShowCurrField = field => {
-        const field2 =  showThisField === "field2" && name.length >= 1 || showThisField === "field3" || showThisField === "field4" || showThisField === "otherFields";
-        const field3 = showThisField === "field3" && clientAdminData.bizName.length >= 1 || showThisField === "field4" || showThisField === "otherFields";
-        const field4 = showThisField === "field4" && cpf.length >= 1 || showThisField === "otherFields";
-
-        switch(field) {
-            case "field2":
-                return field2;
-            case "field3":
-                return field3;
-            case "field4":
-                return field4;
-            case "otherFields":
-                return showThisField === "otherFields";
-            default:
-                console.log("something went wrong with handleShowCurrField...")
-        }
-    }
-
     const showLoginForm = needLoginBtn => (
         needLoginBtn && (
             <div
@@ -222,32 +220,13 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         </div>
     );
 
-    const styles = {
-        fieldForm: {
-            backgroundColor: 'var(--mainWhite)',
-            zIndex: 2000,
-            font: 'normal 1em Poppins, sans-serif',
-        },
-        helperFromField: {
-            color: 'grey',
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: isSmall ? '.8em' : '.6em',
-        },
-        card: {
-            margin: 'auto',
-            width: '90%',
-            maxWidth: isSmall ? "" : 360,
-            boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
-        }
-    }
-
     const showForm = () => (
         <form
             style={{margin: 'auto', width: '90%'}}
             className="text-p text-normal"
             onBlur={() => setFieldError(null)}
         >
-            <div className="mt-3">
+            <div id="field1" className="mt-3">
                 Empreendedor(a),<br />qual é o seu nome?
                 <TextField
                     required
@@ -255,17 +234,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     error={errorName ? true : false}
                     variant="outlined"
                     margin="dense"
-                    id="field1"
                     name="name"
                     value={name}
-                    onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowThisField("field2", 1500); setData({ ...data, name: name.cap()}); handleFocus("field2");}
-                    }}
-                    onBlur={() => {
-                        setShowThisField("field2", 1500);
-                        handleFocus("field2");
-                        setData({ ...data, name: name.cap()})
-                    }}
+                    onKeyPress={e => { handleNextField(e, "field1", { callback: () => setData({ ...data, name: name.cap()}) }); }}
+                    onBlur={e => { handleNextField(e, "field1", { event: "onBlur", callback: () => setData({ ...data, name: name.cap()}) }); }}
                     autoComplete="off"
                     type="text"
                     fullWidth
@@ -279,10 +251,9 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowCurrField("field2") ? "d-block" : "d-none"}`}>
+            <div id="field2" className={`d-none animated slideInDown fast mt-3`}>
                 Qual é o nome do<br />seu projeto/empresa?
                 <TextField
-                    id="field2"
                     required
                     onChange={handleChange(setData, data, true)}
                     error={errorBizName ? true : false}
@@ -290,13 +261,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     margin="dense"
                     name="clientAdminData.bizName"
                     value={clientAdminData.bizName}
-                    onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowThisField("field3", 1500); setValObjWithStr(data, "clientAdminData.bizName", clientAdminData.bizName.cap()); handleFocus("field3");}
-                    }}
-                    onBlur={() => {
-                        setShowThisField("field3", 1500);
-                        handleFocus("field3");
-                        setData({ ...data, name: name.cap()})
+                    onKeyPress={e => { handleNextField(e, "field2"); setValObjWithStr(data, "clientAdminData.bizName", clientAdminData.bizName.cap()); }}
+                    onBlur={e => {
+                        handleNextField(e, "field2", { event: "onBlur" });
+                        setValObjWithStr(data, "clientAdminData.bizName", clientAdminData.bizName.cap());
                     }}
                     autoComplete="off"
                     type="text"
@@ -307,14 +275,14 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                           <AccountCircle />
                         </InputAdornment>
                       ),
-                      style: styles.fieldForm
+                      style: styles.fieldForm,
+                      id: "value2"
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowCurrField("field3") ? "d-block" : "d-none"}`}>
+            <div id="field3" className={`d-none animated slideInDown fast mt-3`}>
                 Ok, informe seu CPF
                 <TextField
-                    id="field3"
                     required
                     margin="dense"
                     onChange={handleChange(setData, data)}
@@ -322,10 +290,8 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
-                    onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) { setShowThisField("field4"); handleFocus("field4", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
-                    }}
-                    onBlur={() => { setShowThisField("field4"); handleFocus("field4", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
+                    onKeyPress={e => {  handleNextField(e, "field3", { callback: () => { setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); } }); }}
+                    onBlur={e => { handleNextField(e, "field3", { event: "onBlur", callback: () => { setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); } }); }}
                     value={cpf}
                     type={switchNumToText ? "text": "tel"}
                     autoComplete="off"
@@ -338,11 +304,12 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                           <MoneyIcon />
                         </InputAdornment>
                       ),
-                      style: styles.fieldForm
+                      style: styles.fieldForm,
+                      id: "value3"
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowCurrField("field4") ? "d-block" : "d-none"}`}>
+            <div id="field4" className={`d-none animated slideInDown fast mt-3`}>
                 {name
                 ? <span>{name.cap()}, quando é o seu aniversário?</span>
                 : <span>Quando é o seu aniversário?</span>}
@@ -366,8 +333,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         value={selectedDate}
                         onChange={e => {
                             handleDateChange(e)
-                            handleFocus("field5", { delay: 1500 })
-                            setShowThisField("otherFields")
+                            handleNextField(e, "field4", { event: "onChange", ignoreValue: true });
                         }}
                         InputProps={{
                           startAdornment: (
@@ -376,21 +342,21 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                             </InputAdornment>
                           ),
                           style: styles.fieldForm,
-                          id: "field4"
+                          id: "value4"
                         }}
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section className={`animated slideInLeft fast ${handleShowCurrField("otherFields")  ? "d-block" : "d-none"}`}>
+            <section id="field5" className={`d-none animated slideInLeft fast`}>
                 <p className="text-left my-2">Para finalizar seu cadastro...</p>
                 <div className="mt-3">
                     Email
                     <TextField
-                        id="field5"
                         required
                         margin="dense"
                         onChange={handleChange(setData, data)}
-                        onKeyPress={e => isKeyPressed(e, "Enter") && handleFocus("field6")}
+                        onKeyPress={e => handleNextField(e, "field5")}
+                        onBlur={e => handleNextField(e, "field5", { event: "onBlur" })}
                         error={errorEmail ? true : false}
                         name="email"
                         variant="outlined"
@@ -404,20 +370,20 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                               <EmailIcon />
                             </InputAdornment>
                           ),
-                          style: styles.fieldForm
+                          style: styles.fieldForm,
+                          id: "value5",
                         }}
                     />
                 </div>
-                <div className="mt-3">
+                <div id="field6" className="mt-3">
                     Contato/Whatsapp
                     <TextField
                         required
-                        id="field6"
                         margin="dense"
-                        onChange={handleChange(setData, data)}
+                        onChange={handleChange(setData)}
                         error={errorPhone ? true : false}
-                        onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
-                        onKeyPress={e => isKeyPressed(e, "Enter") && setData({ ...data, phone: phoneMaskBr(phone)}) && handleFocus("field7")}
+                        onKeyPress={e => { handleNextField(e, "field6", { callback: () => setData({ ...data, phone: phoneMaskBr(phone)}) });  }}
+                        onBlur={e => { handleNextField(e, "field6", { event: "onBlur", callback: () => setData({ ...data, phone: phoneMaskBr(phone)}) });  }}
                         name="phone"
                         value={phone}
                         helperText={"Digite apenas números com DDD"}
@@ -432,13 +398,14 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                               <PhoneIphoneIcon />
                             </InputAdornment>
                           ),
-                          style: styles.fieldForm
+                          style: styles.fieldForm,
+                          id: "value6",
                         }}
                     />
                 </div>
-                <div className="my-3">
+                <div id="field7" className="my-3">
                     <Select
-                      id="field7"
+                      id="value7"
                       margin="dense"
                       labelId="maritalStatus"
                       onChange={handleChange(setData, data)}

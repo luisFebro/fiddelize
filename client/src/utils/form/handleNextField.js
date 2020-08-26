@@ -5,7 +5,11 @@ import isKeyPressed from '../event/isKeyPressed';
 // you should have an id to the element wrapper like field1 and in the target input field another id like value1
 const passedFields = [];
 export const handleNextField = (e, currField, options = {}) => {
-    const { event = "onKeyPress", ignoreValue = false } = options;
+    const {
+        event = "onKeyPress",
+        ignoreValue = false,
+        callback,
+    } = options;
 
     const currValue = e && e.target && e.target.value.length;
     if(!currValue && !ignoreValue) return;
@@ -28,16 +32,26 @@ export const handleNextField = (e, currField, options = {}) => {
         const elemToDisplay = document.getElementById(nextField);
 
         elemToDisplay.classList.add("d-block");
-        handleFocus(nextValueField, { delay: 1000 });
+        handleFocus(nextValueField, { delay: 500 });
+    }
+
+    const runCallback = () => {
+        if(typeof callback === "function") {
+            return callback();
+        }
     }
 
     if(event === "onKeyPress") {
         if(isKeyPressed(e, "Enter")) {
            const needRun = addFieldToQueue();
            if(needRun) runNextField();
+
+           runCallback();
         }
     } else {
         const needRun = addFieldToQueue(true);
         if(needRun) runNextField();
+
+        runCallback();
     }
 }

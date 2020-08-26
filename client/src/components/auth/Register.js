@@ -35,7 +35,7 @@ import Card from '@material-ui/core/Card';
 import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
 import { dateFnsUtils, ptBRLocale } from '../../utils/dates/dateFns';
 import ReactGA from 'react-ga';
-import { handleFocus, handleNextField } from '../../utils/form/kit';
+import { handleNextField } from '../../utils/form/kit';
 
 // bizSysId for validation only since when the user is runningthe app
 // for the first time, businessId returns "0"...
@@ -245,11 +245,8 @@ function Register({
                     margin="dense"
                     id="name"
                     name="name"
-                    onKeyPress={e => { handleNextField(e, "field1"); setData({ ...data, name: name.cap()}); }}
-                    onBlur={e => {
-                        handleNextField(e, "field1", { event: "onBlur" });
-                        setData({ ...data, name: name.cap()})
-                    }}
+                    onKeyPress={e => { handleNextField(e, "field1", { callback: () => setData({ ...data, name: name.cap()}) }); }}
+                    onBlur={e => { handleNextField(e, "field1", { event: "onBlur", callback: () => setData({ ...data, name: name.cap()}) }); }}
                     autoComplete="off"
                     value={name}
                     type="text"
@@ -274,8 +271,8 @@ function Register({
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
-                    onKeyPress={e => {  handleNextField(e, "field2"); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
-                    onBlur={e => { handleNextField(e, "field2", { event: "onBlur" }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
+                    onKeyPress={e => {  handleNextField(e, "field2", { callback: () => { setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); } }); }}
+                    onBlur={e => { handleNextField(e, "field2", { event: "onBlur", callback: () => { setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); } }); }}
                     value={cpf}
                     type={switchNumToText ? "text": "tel"}
                     autoComplete="off"
@@ -366,8 +363,8 @@ function Register({
                         margin="dense"
                         onChange={handleChange(setData, data)}
                         error={errorPhone ? true : false}
-                        onKeyPress={e => { handleNextField(e, "field5"); setData({ ...data, phone: phoneMaskBr(phone)}); }}
-                        onBlur={e => { handleNextField(e, "field5", { event: "onBlur" }); setData({ ...data, phone: phoneMaskBr(phone)}); }}
+                        onKeyPress={e => { handleNextField(e, "field5", { callback: () => setData({ ...data, phone: phoneMaskBr(phone)}) });  }}
+                        onBlur={e => { handleNextField(e, "field5", { event: "onBlur", callback: () => setData({ ...data, phone: phoneMaskBr(phone)}) });  }}
                         name="phone"
                         helperText={"Digite apenas números com DDD"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
@@ -391,7 +388,7 @@ function Register({
                     <Select
                       margin="dense"
                       labelId="maritalStatus"
-                      className="value6"
+                      id="value6"
                       onChange={handleChange(setData, data)}
                       name="maritalStatus"
                       fullWidth

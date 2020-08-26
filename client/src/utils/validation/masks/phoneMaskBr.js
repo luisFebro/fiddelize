@@ -2,7 +2,7 @@
 // usage:
 // onblur="mascaraDeTelefone(this)"
 // onfocus="tiraHifen(this)"
-
+// console.log(phoneMaskBr("92992817363"))
 export default function phoneMaskBr(telefone){
     const isNotString = typeof telefone !== "string";
     if(!telefone) return console.log("Invalid Phone");
