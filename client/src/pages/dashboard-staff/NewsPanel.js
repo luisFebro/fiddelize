@@ -20,6 +20,7 @@ const getStyles = () => ({
         margin: 'auto',
         width: '90%',
         maxWidth: isSmall ? "" : 320,
+        zIndex: 0,
     }
 });
 
@@ -49,7 +50,7 @@ export default function NewsPanel({ handleUpdateList }) {
                     alt="logo"
                 />
                 <p
-                    className="animated fadeInUp delay-3s text-subtitle text-white text-center font-weight-bold"
+                    className="mt-3 animated fadeInUp delay-3s text-subtitle text-white text-center font-weight-bold"
                 >
                     Painel de Cadastro
                 </p>
@@ -72,7 +73,7 @@ export default function NewsPanel({ handleUpdateList }) {
         <Card
             className="mt-0 my-5 animated zoomIn fast shadow-elevation"
             style={styles.card}
-            elevation={false}
+            raised={false}
         >
             <p className="text-subtitle font-weight-bold text-center text-purple">
                Cliente Cadastrado!

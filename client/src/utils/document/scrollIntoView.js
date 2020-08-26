@@ -1,5 +1,7 @@
 import zenscroll from 'zenscroll';
 
+// LESSON:
+// do not use offset (in center mode) if inside an modal.
 export default function scrollIntoView(thisElem, options = {}) {
     const {
         delay = 0, // ms

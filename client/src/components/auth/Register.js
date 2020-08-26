@@ -33,10 +33,9 @@ import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import CakeIcon from '@material-ui/icons/Cake';
 import Card from '@material-ui/core/Card';
 import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
-import isKeyPressed from '../../utils/event/isKeyPressed';
 import { dateFnsUtils, ptBRLocale } from '../../utils/dates/dateFns';
 import ReactGA from 'react-ga';
-import { handleFocus } from '../../utils/form/handleFocus';
+import { handleFocus, handleNextField } from '../../utils/form/kit';
 
 // bizSysId for validation only since when the user is runningthe app
 // for the first time, businessId returns "0"...
@@ -50,7 +49,7 @@ const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
     fieldForm: {
         backgroundColor: 'var(--mainWhite)',
-        zIndex: 2000,
+        // zIndex: 2000,
         font: 'normal 1em Poppins, sans-serif',
     },
     helperFromField: {
@@ -71,7 +70,6 @@ function Register({
     setLoginOrRegister,
     needLoginBtn = false }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
-    const [showMoreFields, setShowMoreFields] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
     const [data, setData] = useState({
         role: 'cliente',
@@ -193,22 +191,6 @@ function Register({
         })
     };
 
-    const handleShowFields = field => {
-        const field2 =  showMoreFields === "field2" && name.length >= 1 || showMoreFields === "field3" || showMoreFields === "otherFields";
-        const field3 = showMoreFields === "field3" && cpf.length >= 1 || showMoreFields === "otherFields";
-
-        switch(field) {
-            case "field2":
-                return field2;
-            case "field3":
-                return field3;
-            case "otherFields":
-                return showMoreFields === "otherFields";
-            default:
-                console.log("something went wrong with handleShowFields...")
-        }
-    }
-
     const showLoginForm = needLoginBtn => (
         needLoginBtn && (
             <div
@@ -253,7 +235,7 @@ function Register({
                 setActionBtnDisabled(false);
             }}
         >
-            <div className="mt-3">
+            <div id="field1" className="mt-3">
                 {isStaff ? "Qual nome do cliente?" : "Qual é o seu nome?"}
                 <TextField
                     required
@@ -263,12 +245,9 @@ function Register({
                     margin="dense"
                     id="name"
                     name="name"
-                    onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) {setShowMoreFields("field2", 1500); setData({ ...data, name: name.cap()}); handleFocus("field2");}
-                    }}
-                    onBlur={() => {
-                        setShowMoreFields("field2", 1500);
-                        handleFocus("field2");
+                    onKeyPress={e => { handleNextField(e, "field1"); setData({ ...data, name: name.cap()}); }}
+                    onBlur={e => {
+                        handleNextField(e, "field1", { event: "onBlur" });
                         setData({ ...data, name: name.cap()})
                     }}
                     autoComplete="off"
@@ -285,10 +264,9 @@ function Register({
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowFields("field2") ? "d-block" : "d-none"}`}>
+            <div id="field2" className={`d-none animated slideInDown fast mt-3`}>
                 {isStaff ? "Ok, informe CPF do cliente" : "Ok, informe seu CPF"}
                 <TextField
-                    id="field2"
                     required
                     margin="dense"
                     onChange={handleChange(setData, data)}
@@ -296,10 +274,8 @@ function Register({
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
-                    onKeyPress={e => {
-                        if(isKeyPressed(e, "Enter")) { setShowMoreFields("field3"); handleFocus("field3", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }
-                    }}
-                    onBlur={() => { setShowMoreFields("field3"); handleFocus("field3", { delay: 800 }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
+                    onKeyPress={e => {  handleNextField(e, "field2"); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
+                    onBlur={e => { handleNextField(e, "field2", { event: "onBlur" }); setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); }}
                     value={cpf}
                     type={switchNumToText ? "text": "tel"}
                     autoComplete="off"
@@ -312,11 +288,12 @@ function Register({
                           <MoneyIcon />
                         </InputAdornment>
                       ),
-                      style: styles.fieldForm
+                      style: styles.fieldForm,
+                      id: "value2",
                     }}
                 />
             </div>
-            <div className={`animated slideInDown fast mt-3 ${handleShowFields("field3") ? "d-block" : "d-none"}`}>
+            <div id="field3" className={`d-none animated slideInDown fast mt-3`}>
                 {isStaff ? "Quando é aniversário do cliente?" : name
                 ? <span>{name.cap()}, quando é o seu aniversário?</span>
                 : <span>Quando é o seu aniversário?</span>}
@@ -339,9 +316,8 @@ function Register({
                         name="birthday"
                         value={selectedDate}
                         onChange={e => {
-                            handleDateChange(e)
-                            setShowMoreFields("otherFields")
-                            handleFocus("field4", { delay: 1500 })
+                            handleDateChange(e);
+                            handleNextField(e, "field3", { event: "onChange", ignoreValue: true });
                         }}
                         InputProps={{
                           startAdornment: (
@@ -350,21 +326,21 @@ function Register({
                             </InputAdornment>
                           ),
                           style: styles.fieldForm,
-                          id: "field3"
+                          id: "value3",
                         }}
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section className={`animated slideInLeft fast ${handleShowFields("otherFields")  ? "d-block" : "d-none"}`}>
+            <section id="field4" className={`d-none animated slideInLeft fast`}>
                 <p className="text-left my-2">Para finalizar o cadastro...</p>
                 <div className="mt-3">
                     Email
                     <TextField
-                        id="field4"
                         required
                         margin="dense"
                         onChange={handleChange(setData, data)}
-                        onKeyPress={e => isKeyPressed(e, "Enter") && handleFocus("field5")}
+                        onKeyPress={e => handleNextField(e, "field4")}
+                        onBlur={e => handleNextField(e, "field4", { event: "onBlur" })}
                         error={errorEmail ? true : false}
                         name="email"
                         variant="outlined"
@@ -378,20 +354,20 @@ function Register({
                               <EmailIcon />
                             </InputAdornment>
                           ),
-                          style: styles.fieldForm
+                          style: styles.fieldForm,
+                          id: "value4",
                         }}
                     />
                 </div>
-                <div className="mt-3">
+                <div id="field5" className="mt-3">
                     Contato
                     <TextField
                         required
-                        id="field5"
                         margin="dense"
                         onChange={handleChange(setData, data)}
                         error={errorPhone ? true : false}
-                        onBlur={() => setData({ ...data, phone: phoneMaskBr(phone)})}
-                        onKeyPress={e => isKeyPressed(e, "Enter") && setData({ ...data, phone: phoneMaskBr(phone)}) && handleFocus("field6")}
+                        onKeyPress={e => { handleNextField(e, "field5"); setData({ ...data, phone: phoneMaskBr(phone)}); }}
+                        onBlur={e => { handleNextField(e, "field5", { event: "onBlur" }); setData({ ...data, phone: phoneMaskBr(phone)}); }}
                         name="phone"
                         helperText={"Digite apenas números com DDD"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
@@ -406,15 +382,16 @@ function Register({
                               <PhoneIphoneIcon />
                             </InputAdornment>
                           ),
-                          style: styles.fieldForm
+                          style: styles.fieldForm,
+                          id: "value5",
                         }}
                     />
                 </div>
-                <div className="my-3">
+                <div id="field6" className="my-3">
                     <Select
-                      id="field6"
                       margin="dense"
                       labelId="maritalStatus"
+                      className="value6"
                       onChange={handleChange(setData, data)}
                       name="maritalStatus"
                       fullWidth

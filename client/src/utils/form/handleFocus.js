@@ -5,8 +5,15 @@ const getFocus = (elem) => {
 }
 
 export const handleFocus = (fieldToFocus, options = {}) => {
-    const { mode, delay, offset, duration } = options;
+    const { mode, delay, offset, duration, querySelector = false } = options;
 
-    const elem = document.getElementById(fieldToFocus);
+    let elem;
+    if(querySelector) {
+        elem = document.querySelector(fieldToFocus);
+    } else {
+        elem = document.getElementById(fieldToFocus);
+    }
+
+    if(!elem) return;
     scrollIntoView(elem, { mode, delay, offset, duration, onDone: () => getFocus(elem) })
 }

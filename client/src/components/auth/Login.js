@@ -101,7 +101,7 @@ function Login({
                             setTimeout(() => history.push(whichRoute), 5000);
                         })
                     } else {
-                        whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle`;
+                        whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
 
                         if(isThisApp()) {
                             setTimeout(() => showSnackbar(dispatch, msg, 'success', 3000), 1400);

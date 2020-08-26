@@ -36,6 +36,7 @@ export default function NewsPanelBtn({
                 contentComp={AsyncNewsPanel}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
+                needIndex={false}
             />
         </section>
     );
