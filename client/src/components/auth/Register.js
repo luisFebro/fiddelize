@@ -45,7 +45,6 @@ const bizSysId = appSystem && appSystem.businessId;
 
 const isSmall = window.Helper.isSmallScreen();
 
-
 const getStyles = () => ({
     fieldForm: {
         backgroundColor: 'var(--mainWhite)',
@@ -174,7 +173,7 @@ function Register({
                 transport: 'beacon',
             });
 
-            lStorage("removeCol", {collection: 'onceChecked'})
+            !isStaff && lStorage("removeCol", {collection: 'onceChecked'})
 
             const objToSend = { field: "clientAdminData.totalClientUsers", type: 'inc' }
             countField(bizSysId, objToSend)

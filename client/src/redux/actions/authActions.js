@@ -91,9 +91,6 @@ export const registerEmail = async (dispatch, objToSend) => { // registerEmail d
         dispatch({ type: 'USER_ONLINE', payload: true });
         return res;
     } catch(err) {
-        dispatch({
-            type: 'REGISTER_ERROR'
-        });
         setLoadingProgress(dispatch, false);
         return err.response;
     }

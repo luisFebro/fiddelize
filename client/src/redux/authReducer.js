@@ -41,7 +41,6 @@ export const authReducer = {
                     isUserAuthenticated: true,
                 };
             case 'LOGIN_ERROR':
-            case 'REGISTER_ERROR':
             case 'LOGOUT_SUCCESS':
                 localStorage.removeItem('token');
                 return {
