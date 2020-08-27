@@ -3,7 +3,7 @@ import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
 import ModalFullContent from '../../../../../components/modals/ModalFullContent';
 import { Load } from '../../../../../components/code-splitting/LoadableComp';
 
-const Async = Load({ loading: true, loader: () => import('../../../../dashboard-staff/NewsPanel' /* webpackChunkName: "news-panel-lazy" */)});
+const Async = Load({ loading: true, loader: () => import('../../../../dashboard-staff/registers-panel/RegistersPanel' /* webpackChunkName: "news-panel-lazy" */)});
 
 export default function NewsPanelBtn({
     title = "CADASTRE O PRIMEIRO",

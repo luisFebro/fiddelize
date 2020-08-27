@@ -44,7 +44,7 @@ export default function InstructionBtn({
             position="relative"
             color="var(--themePLight)"
             backgroundColor="var(--mainWhite)"
-            iconFontAwesome={<FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}
+            iconFontAwesome={<FontAwesomeIcon icon="info-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}
             needIconShadow={false}
         />
     </div>

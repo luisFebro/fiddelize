@@ -66,7 +66,9 @@ export default function ButtonFab({
     onMouseOver,
     zIndex,
     width,
-    disabled = false, }) {
+    disabled = false,
+    padding,
+}) {
     const [toggle, setToggle] = useState('');
 
     const styles = {
@@ -84,6 +86,7 @@ export default function ButtonFab({
             right,
             zIndex,
             width,
+            padding,
             outline: 'none',
             color: color || 'var(--mainWhite)',
             backgroundColor:  backgroundColor || "#4834d4",
@@ -123,10 +126,12 @@ export default function ButtonFab({
         }
     }
 
+    const isClickFunc = typeof onClick === "function";
+
     const handleOnClick = () => {
         if(iconAfterClick && needClickAndToggle) {
             handleToggle();
-            onClick();
+            if(isClickFunc) onClick();
         } else if (iconAfterClick) {
             handleToggle();
         } else {
@@ -138,7 +143,7 @@ export default function ButtonFab({
         <Fab
             id={id}
             variant={variant || "round"}
-            onClick={() => handleOnClick() === false ? onClick() : handleOnClick()}
+            onClick={() => handleOnClick() === false ? (isClickFunc && onClick()) : handleOnClick()}
             onMouseOver={onMouseOver}
             size={ size || "small" }
             aria-label={title}

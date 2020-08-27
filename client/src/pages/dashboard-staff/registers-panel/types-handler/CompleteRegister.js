@@ -1,21 +1,13 @@
-import React, { Fragment, useState } from 'react';
-import { useClientAdmin } from '../../hooks/useRoleData';
-import { Load } from '../../components/code-splitting/LoadableComp';
-import useDelay from '../../hooks/useDelay';
+import React, { useState } from 'react';
+import { Load } from '../../../../components/code-splitting/LoadableComp';
 import Card from '@material-ui/core/Card';
-import ButtonFab from '../../components/buttons/material-ui/ButtonFab';
-const AsyncRegister = Load({ loading: true, loader: () => import("../../components/auth/Register" /* webpackChunkName: "cli-user-register-comp-lazy" */) });
+import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
+
+const AsyncRegister = Load({ loading: true, loader: () => import("../../../../components/auth/Register" /* webpackChunkName: "cli-user-register-comp-lazy" */) });
 
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
-    clipPathBack: {
-        position: "absolute",
-        background: "var(--themeP)",
-        clipPath: 'circle(77.5% at 23% 0)',
-        webPackClipPath: 'circle(77.5% at 23% 0)',
-        padding: '250px',
-    },
     card: {
         margin: 'auto',
         width: '90%',
@@ -24,13 +16,11 @@ const getStyles = () => ({
     }
 });
 
-export default function NewsPanel({ handleUpdateList }) {
+
+export default function CompleteRegister() {
     const [hidePanel, setHidePanel] = useState(false);
-    const { selfBizLogoImg } = useClientAdmin();
 
     const styles = getStyles();
-
-    const readyRegister = useDelay(3000);
 
     const togglePanel = () => {
         setHidePanel(prev => !prev);
@@ -38,28 +28,11 @@ export default function NewsPanel({ handleUpdateList }) {
 
     const handleSuccessfulRegister = () => {
          togglePanel();
-         handleUpdateList();
+         // handleUpdateList();
     }
 
-    const showHeader = () => (
-        <Fragment>
-            <div className="animated slideInLeft delay-1s" style={styles.clipPathBack}></div>
-            <div className="position-relative container-center-col my-3">
-                <img
-                    src={selfBizLogoImg}
-                    alt="logo"
-                />
-                <p
-                    className="mt-3 animated fadeInUp delay-3s text-subtitle text-white text-center font-weight-bold"
-                >
-                    Painel de Cadastro
-                </p>
-            </div>
-        </Fragment>
-    );
-
     const showNewCliRegister = () => (
-        (!hidePanel && readyRegister) &&
+        !hidePanel &&
         <section className="my-5">
             <AsyncRegister
                 isStaff={true}
@@ -93,9 +66,8 @@ export default function NewsPanel({ handleUpdateList }) {
 
     return (
         <section>
-           {showHeader()}
            {showNewCliRegister()}
-           {showSuccessOp}
+           {showSuccessOp()}
         </section>
     );
 }

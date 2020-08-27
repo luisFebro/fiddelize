@@ -141,7 +141,7 @@ export default function AsyncRecordedClientsList() {
     })
 
     const showAccordion = () => (
-        <session id="showNewCTA">
+        <section id="showNewCTA">
             <RegisteredClientsAccordion
                 detectedCard={detectedCard}
                 checkDetectedElem={checkDetectedElem}
@@ -151,7 +151,7 @@ export default function AsyncRecordedClientsList() {
                 color="white"
                 needToggleButton={true}
             />
-        </session>
+        </section>
     );
     //End Accordion Content
 
