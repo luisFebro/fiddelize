@@ -77,11 +77,6 @@ export default function RankingPondium() {
                 </p>
             )}
             <div className="position-relative" style={{marginTop: '30px'}}>
-                {(loading && !gotData) && (
-                    <p className="text-purple font-weight-bold text-center text-normal">
-                       carregando...
-                    </p>
-                )}
                 <Img
                     className="shadow-elevation-black"
                     src="/img/icons/podium.png"

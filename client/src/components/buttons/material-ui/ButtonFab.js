@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import Fab from '@material-ui/core/Fab';
+import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import { buttonFabType } from '../../../types';
 
 ButtonFab.propTypes = buttonFabType;
+
+const useStyles = makeStyles({
+    label: {
+        display: "nothing",
+        alignItems: "nothing",
+        justifyContent: "nothing",
+    }
+});
 
 export const muStyle = {
     transform: 'scale(1.2)',
@@ -93,6 +102,7 @@ export default function ButtonFab({
             filter: needBtnShadow && handleBtnShadow(shadowColor, shadowColorCustom),
         }
     }
+    const classes = useStyles();
 
     const showIcon = iconFontAwesome => {
         if(iconFontAwesome && typeof iconFontAwesome !== "string") {
@@ -139,31 +149,32 @@ export default function ButtonFab({
         }
     }
 
-    const handleClassName = () => {
-        if(padding) return `${needTxtNoWrap ? "text-nowrap" : ""} text-shadow text-normal font-weight-bold`;
-        return `${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`
-    }
-    const className = handleClassName();
-
     return (
         <Fab
             id={id}
             variant={variant || "round"}
             onClick={() => handleOnClick() === false ? (isClickFunc && onClick()) : handleOnClick()}
             onMouseOver={onMouseOver}
+            classes={{ label: classes.label }}
             size={ size || "small" }
             aria-label={title}
             style={styles.fab}
             disabled={disabled}
         >
-            <span
-                className={className}
-                style={{textTransform: textTransform || 'capitalize'}}
-            >
-                {title}
-                {showIcon(iconFontAwesome)}
-                {showMuIcon(iconMu)}
-            </span>
+            {padding ? (
+                <span className="text-shadow text-normal font-weight-bold">
+                    {title}
+                </span>
+            ) : (
+                <span
+                    className={`${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`}
+                    style={{textTransform: textTransform || 'capitalize'}}
+                >
+                    {title}
+                    {showIcon(iconFontAwesome)}
+                    {showMuIcon(iconMu)}
+                </span>
+            )}
         </Fab>
     );
 }
