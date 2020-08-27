@@ -11,7 +11,7 @@ import parse from 'html-react-parser';
 import PropTypes from 'prop-types';
 // CUSTOM DATA
 import { deleteUser, updateUser } from '../../../../../../../redux/actions/userActions';
-import { setRun } from '../../../../../../../redux/actions/globalActions';
+import { setRun } from '../../../../../../../hooks/useRunComp';
 import { countField } from '../../../../../../../redux/actions/userActions';
 import { useAppSystem } from '../../../../../../../hooks/useRoleData';
 
@@ -35,7 +35,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
         setIsYesBtnDisabled(true);
         if(itemData._id === '5e890d185162091014c53b56') return showSnackbar(dispatch, "O usuário de teste não pode ser excluido.", "error")
         showSnackbar(dispatch, "Processando...", 'warning', 3000);
-        setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 5000), 2900);
+        setTimeout(() => showSnackbar(dispatch, `Excluindo cliente ${itemData.name.cap()}...`, 'warning', 5000), 2900);
         setTimeout(() => {
             deleteUser(dispatch, itemData._id)
             .then(res => {
@@ -43,8 +43,8 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 countField(businessId, { field: "clientAdminData.totalClientUsers", type: 'dec' })
                 .then(res => {
                     if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                    showSnackbar(dispatch, `O Usuário ${itemData.name.cap()} foi excluído com sucesso!`, 'success', 6000);
-                    setRun(dispatch, "registered");
+                    showSnackbar(dispatch, `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`, 'success', 6000);
+                    setRun(dispatch, "RecordedClientsList");
                 })
             })
         }, 5900)

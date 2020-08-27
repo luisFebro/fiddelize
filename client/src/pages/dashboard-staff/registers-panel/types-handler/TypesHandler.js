@@ -56,7 +56,7 @@ export default function TypesHandler() {
                     <FontAwesomeIcon icon={thisIcon} style={{...styles.titleIcon, fontSize: open === "complete" ? "40px" : "60px" }} />
                 )}
                 <h2
-                    className="mx-4 text-nowrap position-relative text-center text-white text-subtitle font-weight-bold"
+                    className="mx-4 text-shadow text-nowrap position-relative text-center text-white text-subtitle font-weight-bold"
                     style={styles.title}
                 >
                     {currTitle}

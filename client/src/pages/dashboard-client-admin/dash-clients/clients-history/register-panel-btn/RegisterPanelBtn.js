@@ -5,10 +5,9 @@ import { Load } from '../../../../../components/code-splitting/LoadableComp';
 
 const Async = Load({ loading: true, loader: () => import('../../../../dashboard-staff/registers-panel/RegistersPanel' /* webpackChunkName: "news-panel-lazy" */)});
 
-export default function NewsPanelBtn({
+export default function RegisterPanelBtn({
     title = "CADASTRE O PRIMEIRO",
     size = "large",
-    handleUpdateList
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -20,7 +19,7 @@ export default function NewsPanelBtn({
         setFullOpen(false);
     }
 
-    const AsyncNewsPanel = <Async handleUpdateList={handleUpdateList} />
+    const AsyncRegisterPanel = <Async />
 
     return (
         <section>
@@ -33,7 +32,7 @@ export default function NewsPanelBtn({
                 variant = 'extended'
             />
             <ModalFullContent
-                contentComp={AsyncNewsPanel}
+                contentComp={AsyncRegisterPanel}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 needIndex={false}

@@ -17,6 +17,7 @@ import { removeField } from '../../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import { useClientAdmin, useAppSystem } from '../../../../../hooks/useRoleData';
 import { readUser } from "../../../../../redux/actions/userActions";
+import { setRun } from '../../../../../hooks/useRunComp';
 import PrizesBtn from '../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn';
 // End Customized Data
 
@@ -77,7 +78,6 @@ export default function RegisteredClientsAccordion({
     backgroundColor,
     color,
     needToggleButton = false,
-    handleUpdateList,
     checkDetectedElem,
     detectedCard,
 }) {
@@ -107,7 +107,7 @@ export default function RegisteredClientsAccordion({
                 })
                 if(res.status !== 200) return console.log("smt wrong while updating")
                 showSnackbar(dispatch, "APAGADO! Para mostrar o card de teste de novo, adicione pontos no MODO APP CLIENTE.", "success", 7000);
-                handleUpdateList();
+                setRun(dispatch, "RecordedClientsList");
             })
         }, 3000)
     };

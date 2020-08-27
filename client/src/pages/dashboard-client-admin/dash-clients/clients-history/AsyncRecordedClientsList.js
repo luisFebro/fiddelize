@@ -9,12 +9,12 @@ import { updateUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import Title from '../../../../components/Title';
 import { useAppSystem, useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
-import useAPIList, { readUserList, getUniqueId } from '../../../../hooks/api/useAPIList';
-// import { setRun } from '../../../../hooks/useRunComp';
+import useAPIList, { readUserList, getTrigger } from '../../../../hooks/api/useAPIList';
+import { useRunComp } from '../../../../hooks/useRunComp';
 import useElemDetection, { checkDetectedElem } from '../../../../hooks/api/useElemDetection';
 import extractStrData from '../../../../utils/string/extractStrData';
 import { Load } from '../../../../components/code-splitting/LoadableComp';
-import NewsPanelBtn from './news-panel-btn/NewsPanelBtn';
+import RegisterPanelBtn from './register-panel-btn/RegisterPanelBtn';
 import useElemShowOnScroll from '../../../../hooks/scroll/useElemShowOnScroll';
 // import ClientsSearch from './search/ClientsSearch';
 
@@ -24,7 +24,6 @@ const Filters = Load({ loader: () => import('./search/Filters' /* webpackChunkNa
 
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
-    const [trigger, setTrigger] = useState(false);
     const { businessId } = useAppSystem();
     const { name } = useProfile();
     const { bizPlan } = useClientAdmin();
@@ -50,12 +49,10 @@ export default function AsyncRecordedClientsList() {
         updateUser(dispatch, objToSend, businessId)
     }, [totalCliUserScores, totalActiveScores])
 
-    const handleUpdateList = () => {
-        const uniqueId = getUniqueId();
-        setTrigger(uniqueId);
-    }
-
     const params = { role: "cliente" };
+
+    const { runName } = useRunComp();
+    const trigger = getTrigger(runName, "RecordedClientsList");
 
     const {
         list,
@@ -145,7 +142,6 @@ export default function AsyncRecordedClientsList() {
             <RegisteredClientsAccordion
                 detectedCard={detectedCard}
                 checkDetectedElem={checkDetectedElem}
-                handleUpdateList={handleUpdateList}
                 actions={actions}
                 backgroundColor="var(--themePLight)"
                 color="white"
@@ -159,8 +155,8 @@ export default function AsyncRecordedClientsList() {
     const showFixedCTA = () => (
         showCTA &&
         <section className="animated fadeInUp" style={{ position: 'fixed', bottom: '10px', right: '10px' }}>
-            <NewsPanelBtn
-               title="Novo Cliente"
+            <RegisterPanelBtn
+               title="Novo Cadastro"
                size="medium"
             />
         </section>
@@ -177,7 +173,7 @@ export default function AsyncRecordedClientsList() {
             {/*<ClientsSearch />*/}
             <Fragment>
                 {needEmptyIllustra
-                ? (<AsyncShowIllustra handleUpdateList={handleUpdateList} />)
+                ? (<AsyncShowIllustra />)
                 : (
                     <Fragment>
                         <Filters listTotal={listTotal} />

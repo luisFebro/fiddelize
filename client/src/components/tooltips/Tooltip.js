@@ -11,6 +11,8 @@ import  '../../keyframes/pulseWaves.css';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
 import { useClientAdmin } from '../../hooks/useRoleData';
 
+const isSmall = window.Helper.isSmallScreen();
+
 Tooltip.propTypes = {
     text: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     element: PropTypes.element.isRequired,
@@ -48,7 +50,10 @@ export default function Tooltip({
     padding,
     onClickAway,
     hover = false,
-    needClickAway = true, }) {
+    needClickAway = true,
+    arrowBottom,
+
+}) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
     // this useEffect solves the problem with uncontrolled vs controlled components handling.
@@ -92,6 +97,7 @@ export default function Tooltip({
         arrow: {
             fontSize: 25,
             color: backgroundColor || 'var(--themeSDark)',
+            bottom: arrowBottom ? arrowBottom : undefined,
         },
     }));
 
@@ -114,11 +120,11 @@ export default function Tooltip({
                     classes={classes}
                     onClick={handleTooltipOpen}
                     disableFocusListener={true}
-                    disableHoverListener={hover ? false : true}
+                    disableHoverListener={(hover && !isSmall) ? false : true}
                     disableTouchListener={true}
                     interactive
                     onClose={handleTooltipClose}
-                    open={hover ? undefined : open}
+                    open={(hover && !isSmall) ? undefined : open}
                     placement={placement || "top"}
                     TransitionComponent={Zoom}
                     TransitionProps={{ timeout: 200 }}

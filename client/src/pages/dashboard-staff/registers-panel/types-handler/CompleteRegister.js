@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Load } from '../../../../components/code-splitting/LoadableComp';
 import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
+import { setRun } from '../../../../hooks/useRunComp';
+import { useStoreDispatch } from 'easy-peasy';
 
 const AsyncRegister = Load({ loading: true, loader: () => import("../../../../components/auth/Register" /* webpackChunkName: "cli-user-register-comp-lazy" */) });
 
@@ -20,6 +22,8 @@ const getStyles = () => ({
 export default function CompleteRegister() {
     const [hidePanel, setHidePanel] = useState(false);
 
+    const dispatch = useStoreDispatch();
+
     const styles = getStyles();
 
     const togglePanel = () => {
@@ -28,7 +32,7 @@ export default function CompleteRegister() {
 
     const handleSuccessfulRegister = () => {
          togglePanel();
-         // handleUpdateList();
+         setRun(dispatch, "RecordedClientsList");
     }
 
     const showNewCliRegister = () => (

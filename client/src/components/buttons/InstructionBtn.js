@@ -67,13 +67,14 @@ export default function InstructionBtn({
             {mode === "tooltip" && (
                 <section
                     className="position-relative disable-blur"
-                    onClick={() => setShowCloseBtn(true)}
+                    onClick={null}
                 >
                     <Tooltip
                         text={text}
                         hover={true}
-                        onClickAway={() => setShowCloseBtn(false)}
+                        onClickAway={null}
                         padding="10px"
+                        arrowBottom="4px !important"
                         whiteSpace
                         needArrow
                         needOpen={needOpen ? true : false }
@@ -82,12 +83,12 @@ export default function InstructionBtn({
                         width={325}
                         element={TooltipBtn}
                     />
-                    {closeBtn && (
+                    {false && (
                         <CloseButton
                             delay={0}
                             color='var(--mainDark)'
                             position="absolute"
-                            onClick={() => { setShowCloseBtn(false); setNeedOpen(false); }}
+                            onClick={() => { setNeedOpen(false); }}
                             top={-20}
                             right={-25}
                             size="1.4em"

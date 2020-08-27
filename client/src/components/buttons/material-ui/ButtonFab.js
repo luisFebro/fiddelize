@@ -139,6 +139,12 @@ export default function ButtonFab({
         }
     }
 
+    const handleClassName = () => {
+        if(padding) return `${needTxtNoWrap ? "text-nowrap" : ""} text-shadow text-normal font-weight-bold`;
+        return `${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`
+    }
+    const className = handleClassName();
+
     return (
         <Fab
             id={id}
@@ -151,7 +157,7 @@ export default function ButtonFab({
             disabled={disabled}
         >
             <span
-                className={`${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`}
+                className={className}
                 style={{textTransform: textTransform || 'capitalize'}}
             >
                 {title}

@@ -13,7 +13,7 @@ const getStyles = () => ({
     },
 });
 
-export default function RegistersPanel({ handleUpdateList }) {
+export default function RegistersPanel() {
     const { selfBizLogoImg } = useClientAdmin();
 
     const styles = getStyles();
@@ -29,7 +29,7 @@ export default function RegistersPanel({ handleUpdateList }) {
                     alt="logo"
                 />
                 <p
-                    className="mt-3 animated fadeInUp delay-3s text-title text-white text-center"
+                    className="mt-3 text-shadow animated fadeInUp delay-3s text-title text-white text-center"
                 >
                     Painel de Cadastros
                 </p>
