@@ -14,7 +14,7 @@ export default function convertToReal(number, options = {}) {
 
     if(typeof number === "string") { // n1
         number = Number(number);
-        if(Number.isNaN(number)) return "invalid number";
+        if(Number.isNaN(number)) return;
     }
 
     let res;

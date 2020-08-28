@@ -260,7 +260,7 @@ function Register({
                     }}
                 />
             </div>
-            <div id="field2" className={`d-none animated slideInDown fast mt-3`}>
+            <div id="field2" className={`d-none animated fadeInUp fast mt-3`}>
                 {isStaff ? "Ok, informe CPF do cliente" : "Ok, informe seu CPF"}
                 <TextField
                     required
@@ -289,7 +289,7 @@ function Register({
                     }}
                 />
             </div>
-            <div id="field3" className={`d-none animated slideInDown fast mt-3`}>
+            <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
                 {isStaff ? "Quando é aniversário do cliente?" : name
                 ? <span>{name.cap()}, quando é o seu aniversário?</span>
                 : <span>Quando é o seu aniversário?</span>}
@@ -327,7 +327,7 @@ function Register({
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section id="field4" className={`d-none animated slideInLeft fast`}>
+            <section id="field4" className={`d-none animated slideInUp fast`}>
                 <p className="text-left my-2">Para finalizar o cadastro...</p>
                 <div className="mt-3">
                     Email

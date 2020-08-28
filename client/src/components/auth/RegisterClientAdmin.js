@@ -251,7 +251,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div id="field2" className={`d-none animated slideInDown fast mt-3`}>
+            <div id="field2" className={`d-none animated fadeInUp fast mt-3`}>
                 Qual é o nome do<br />seu projeto/empresa?
                 <TextField
                     required
@@ -280,7 +280,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div id="field3" className={`d-none animated slideInDown fast mt-3`}>
+            <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
                 Ok, informe seu CPF
                 <TextField
                     required
@@ -309,7 +309,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div id="field4" className={`d-none animated slideInDown fast mt-3`}>
+            <div id="field4" className={`d-none animated fadeInUp fast mt-3`}>
                 {name
                 ? <span>{name.cap()}, quando é o seu aniversário?</span>
                 : <span>Quando é o seu aniversário?</span>}
@@ -347,7 +347,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section id="field5" className={`d-none animated slideInLeft fast`}>
+            <section id="field5" className={`d-none animated slideInUp fast`}>
                 <p className="text-left my-2">Para finalizar seu cadastro...</p>
                 <div className="mt-3">
                     Email

@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncShowNewContactForm from '../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
 import generateAppDownloadLink from '../../../../utils/biz/generateAppDownloadLink';
 import { useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
+import validatePhone from '../../../../utils/validation/validatePhone';
+import validateEmail from '../../../../utils/validation/validateEmail';
+import { showSnackbar } from '../../../../redux/actions/snackbarActions';
+import { useStoreDispatch } from 'easy-peasy';
+import convertPhoneStrToInt from '../../../../utils/numbers/convertPhoneStrToInt';
 
 const getStyles = () => ({
     msgField: {
@@ -11,20 +16,66 @@ const getStyles = () => ({
     },
 });
 
+const runLink = (url) => {
+    let a = document.createElement('a');
+    a.target = '_blank';
+    a.rel="noopener noreferrer";
+    a.href= url;
+    a.click();
+}
 
 export default function QuickRegister() {
-    const [data, setData] = useState({ mean: "", meanType: "", name: "" }); // number or email
-    const { mean, meanType, name } = data;
+    const [data, setData] = useState({ meanPayload: "", meanType: "", name: "" }); // number or email
+    const { meanPayload, meanType, name } = data;
+    const [msg, setMsg] = useState("");
     const { bizName, bizCodeName } = useClientAdmin();
     const { name: userName } = useProfile();
 
+    const downloadLink = generateAppDownloadLink({ bizCodeName, name });
+
+    useEffect(() => {
+       if(name) {
+          const text = `${name.toUpperCase()}, segue convite para o programa de fidelidade da ${bizName && bizName.toUpperCase()}. Acesse seu link exclusivo: ${downloadLink}`
+          setMsg(text);
+       }
+    }, [name])
+
     const styles = getStyles();
+    const dispatch = useStoreDispatch();
 
     const handleMeanData = (data) => {
-        console.log("data", data);
-        const { mean, meanType, name } = data;
-        setData({ mean, meanType, name });
+        const { meanPayload, meanType, name } = data;
+        setData({ meanPayload, meanType, name });
     }
+
+    // Actions
+    const handleNumberCTA = (type = "sms") => {
+        const number = meanPayload;
+        if(!name) return showSnackbar(dispatch, "Insira primeiro nome do cliente", "error");
+        if(!number) return showSnackbar(dispatch, "Insira contato do cliente", "error");
+        if(!validatePhone(number)) return showSnackbar(dispatch, "Formato telefone inválido. exemplo:<br />95 9 9999 8888", "error");
+
+        if(type === "sms") {
+            //
+        }
+        if(type === "whatsapp") {
+            const convertedWhatsapp = convertPhoneStrToInt(number);
+            const whatsUrl = `https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${msg}`;
+            runLink(whatsUrl);
+        }
+    }
+
+    const handleEmailCTA = () => {
+        const email = meanPayload;
+        if(!name) return showSnackbar(dispatch, "Insira primeiro nome do cliente", "error");
+        if(!validateEmail(email)) return showSnackbar(dispatch, "Formato de e-mail inválido.", "error");
+
+        const subject = `${name.cap()}, convite da ${bizName && bizName.cap()}`
+        const emailUrl = `mailto:${email}?subject=${subject}&body=${msg}`;
+
+        runLink(emailUrl);
+    }
+    // End Actions
 
 
     const showNumberCTAs = () => (
@@ -35,7 +86,7 @@ export default function QuickRegister() {
                         size="medium"
                         needTxtNoWrap={true}
                         title="Enviar SMS"
-                        onClick={null}
+                        onClick={() => handleNumberCTA("sms")}
                         backgroundColor={"var(--themeSDark--default)"}
                         variant = 'extended'
                         position = 'relative'
@@ -45,7 +96,7 @@ export default function QuickRegister() {
                     size="medium"
                     needTxtNoWrap={true}
                     title="Enviar W"
-                    onClick={null}
+                    onClick={() => handleNumberCTA("whatsapp")}
                     backgroundColor={"var(--themeSDark--default)"}
                     variant = 'extended'
                     position = 'relative'
@@ -60,7 +111,7 @@ export default function QuickRegister() {
                 size="medium"
                 needTxtNoWrap={true}
                 title="Enviar Email"
-                onClick={null}
+                onClick={handleEmailCTA}
                 backgroundColor={"var(--themeSDark--default)"}
                 variant = 'extended'
                 position = 'relative'
@@ -68,7 +119,6 @@ export default function QuickRegister() {
         </section>
     );
 
-    const downloadLink = generateAppDownloadLink({ bizCodeName, name });
 
     return (
         <section>
@@ -85,11 +135,12 @@ export default function QuickRegister() {
                     {name ? "Convite gerado:" : ""}
                 </p>
                 <main
+                    className="mx-3"
                     style={styles.msgField}
                 >
                     {name ? (
                         <p className="m-0 p-3 text-normal text-white text-break text-left mx-3" >
-                            {name.toUpperCase()}, segue convite para o programa de fidelidade da {bizName && bizName.toUpperCase()}. Acesse seu link exclusivo: {downloadLink}
+                            {msg}
                        </p>
                     ) : (
                         <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">

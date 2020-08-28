@@ -23,6 +23,7 @@ flipInY
 rotateIn
 rotateOut
 rubberBand
+slideInUp
 slideInDown
 slideInLeft
 slideInRight
@@ -451,6 +452,24 @@ print {
         -webkit-transform: scaleX(1);
         transform: scaleX(1)
     }
+}
+
+.slideInUp {
+  -webkit-animation-name: slideInUp;
+  animation-name: slideInUp;
+}
+
+@keyframes slideInUp {
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .slideInDown {

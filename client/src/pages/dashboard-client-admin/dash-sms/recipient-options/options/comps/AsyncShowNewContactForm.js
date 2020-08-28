@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useCallback } from 'react';
 import Card from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -14,6 +14,9 @@ import { handleFocus } from '../../../../../../utils/form/handleFocus';
 import isKeyPressed from '../../../../../../utils/event/isKeyPressed';
 import phoneMaskBr from '../../../../../../utils/validation/masks/phoneMaskBr';
 import validatePhone from '../../../../../../utils/validation/validatePhone';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import debounce from '../../../../../../utils/performance/debounce';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -37,14 +40,34 @@ const getStyles = () => ({
 });
 
 const handleEvents = (e, options) => {
-    const { setData, newValue, field, eventName } = options;
+    const {
+        setData,
+        newValue,
+        field,
+        eventName,
+        callback,
+        onlyFocus = false,
+        delay = 0,
+    } = options;
+    if(onlyFocus) {
+        if(field) {
+           setTimeout(() => handleFocus(field), 2000);
+        }
+        return;
+    }
+
     let { name, value } = e.target;
 
     if(newValue) value = newValue;
 
     if(isKeyPressed(e, "Enter") || eventName === "blur") {
         setData(prevData => ({ ...prevData, [name]: value }));
-        field && handleFocus(field);
+        if(field) {
+           setTimeout(() => handleFocus(field), delay);
+        }
+        if(typeof callback === "function") {
+            callback();
+        }
     }
 }
 
@@ -67,35 +90,49 @@ export default function AsyncShowNewContactForm({
         phone: '',
     });
     const { name, phone } = data;
+    const [dataMean, setDataMean] = useState({
+        selectedMean: 'selecione um meio:',
+        email: null,
+    })
+    const { selectedMean, email } = dataMean;
     const [error, setError] = useState(null);
-    const [selectedMean, setSelectedMean] = useState(null); // number or email
-    const [email, setEmail] = useState(null);
+    const [readyMean, setReadyMean] = useState(false);
+
+    const delayedType = useCallback(debounce(value => { setReadyMean(true) }, 5000), []);
+    const onChangeMean = (e, setObj) => {
+        // LESSON: do not import the whole event element to debounce/throttle cuz react pooling or smt
+        const name = e.target.name;
+        const value = e.target.value;
+        if(isQuickRegister) {
+            setObj(prev => ({ ...prev, [name]: value }))
+            delayedType();
+            return;
+        }
+        handleChange(setObj)(e);
+    }
 
     useEffect(() => {
-        const means = phone || email;
-        if(selectedMean && means) {
+        const mean = selectedMean === "number" ? phone : email;
+
+        if(isQuickRegister && selectedMean && mean && readyMean) {
             handleMeanData({
                 meanType: selectedMean,
-                mean: means,
+                meanPayload: mean,
                 name
             });
         }
-    }, [selectedMean, email, phone, name])
-    const handleMean = (name) => {
-        setSelectedMean(name);
-    }
+    }, [isQuickRegister, readyMean, selectedMean, email, phone, name])
     const needPhoneField = !isQuickRegister || selectedMean === "number";
-    const needEmailField = !isQuickRegister || selectedMean === "email";
+    const needEmailField = selectedMean === "email";
 
     const dispatch = useStoreDispatch();
-
 
     const styles = getStyles();
 
     const handleCTA = () => {
         if(!name) { showSnackbar(dispatch, "Insira o nome do destinatário", "error"); setError("name"); return; }
         if(!phone) { showSnackbar(dispatch, "Insira um telefone", "error"); setError("phone"); return; }
-        if(!validatePhone(phone)) { showSnackbar(dispatch, "Formato telefone inválido. exemplo: 95977779999", "error"); setError("phone"); return; }
+        if(!validatePhone(phone)) { showSnackbar(dispatch, "Formato telefone inválido. exemplo:<br />95 9 9999 8888", "error"); setError("phone"); return; }
         clearForm(setData);
         handleAddContact({ name, phone })
     }
@@ -109,7 +146,7 @@ export default function AsyncShowNewContactForm({
             }}
         >
             <div className="mt-3">
-                {!isQuickRegister ? "Nome" : "Primeiro nome do cliente"}
+                {!isQuickRegister ? "Nome" : "Primeiro nome"}
                 <TextField
                     required
                     onChange={handleChange(setData)}
@@ -118,8 +155,8 @@ export default function AsyncShowNewContactForm({
                     margin="dense"
                     id="name"
                     name="name"
-                    onKeyPress={e => handleEvents(e, { setData, newValue: name.cap(), field: "field2" })}
-                    onBlur={e => handleEvents(e, { setData, newValue: name.cap(), eventName: 'blur' })}
+                    onKeyPress={e => handleEvents(e, { setData, newValue: name.cap(), field: isQuickRegister ? "fieldMean" : "selectedOpt" })}
+                    onBlur={e => handleEvents(e, { setData, newValue: name.cap(), eventName: 'blur', field: isQuickRegister ? "fieldMean" : "selectedOpt" })}
                     autoComplete="off"
                     value={name}
                     type="text"
@@ -127,21 +164,50 @@ export default function AsyncShowNewContactForm({
                     InputProps={getAdornmentIcon(<AccountCircle />, styles)}
                 />
             </div>
+            {isQuickRegister && (
+                <section className="my-4">
+                    Modo de Envio
+                    <Select
+                      margin="dense"
+                      labelId="selectedMean"
+                      id="fieldMean"
+                      onChange={e => {
+                        handleChange(setDataMean)(e);
+                        handleEvents(e, { onlyFocus: true, field: "selectedOpt" })
+                        setReadyMean(false);
+                      }}
+                      name="selectedMean"
+                      fullWidth
+                      value={selectedMean}
+                      variant="outlined"
+                      style={{backgroundColor: 'var(--mainWhite)'}}
+                    >
+                      <MenuItem value={selectedMean}>
+                        <span className="text-p text-normal" style={{fontSize: isSmall ? '1.1em' : "", fontFamily: 'Poppins, sans-serif'}}>
+                            selecione um meio:
+                        </span>
+                      </MenuItem>
+                      <MenuItem value={"number"}>Número de Contato</MenuItem>
+                      <MenuItem value={"email"}>Email</MenuItem>
+                    </Select>
+                </section>
+            )}
+
             {needPhoneField && (
-                <div className="mt-3">
+                <div className={`${isQuickRegister ? "animated fadeInUp fast mt-3 mb-5" : "mt-3"}`}>
                     Contato
                     <TextField
                         required
-                        id="field2"
+                        id="selectedOpt"
                         margin="dense"
-                        onChange={handleChange(setData)}
+                        name="phone"
+                        value={phone}
+                        onChange={e => onChangeMean(e, setData)}
                         error={error === "phone" ? true : false}
                         onKeyPress={e => handleEvents(e, { setData, newValue: phoneMaskBr(phone) })}
                         onBlur={e => handleEvents(e, { setData, newValue: phoneMaskBr(phone), eventName: 'blur' })}
-                        name="phone"
                         helperText={"Digite apenas números com DDD"}
                         FormHelperTextProps={{ style: styles.helperFromField }}
-                        value={phone}
                         type="tel"
                         autoComplete="off"
                         fullWidth
@@ -152,12 +218,13 @@ export default function AsyncShowNewContactForm({
             )}
 
             {needEmailField && (
-                <div className="mt-3 mb-5">
+                <div className="animated fadeInUp fast mt-3 mb-5">
                     Email
                     <TextField
                         required
+                        id="selectedOpt"
                         margin="dense"
-                        onChange={handleChange(setEmail)}
+                        onChange={e => onChangeMean(e, setDataMean)}
                         error={false ? true : false}
                         name="email"
                         variant="outlined"
@@ -182,7 +249,7 @@ export default function AsyncShowNewContactForm({
 
     const showButtonActions = () => (
         <Fragment>
-            {!isQuickRegister ? (
+            {!isQuickRegister && (
                 <section className="container-center my-3">
                     <ButtonFab
                         size="medium"
@@ -193,37 +260,6 @@ export default function AsyncShowNewContactForm({
                         variant = 'extended'
                         position = 'relative'
                     />
-                </section>
-            ) : (
-                !selectedMean &&
-                <section className="container-center my-4">
-                    <p className="text-center text-normal text-purple font-weight-bold">
-                        Enviar para:
-                    </p>
-                    <section className="container-center">
-                        <div className="mr-4">
-                            <ButtonFab
-                                size="medium"
-                                needTxtNoWrap={true}
-                                title="NÚMERO"
-                                iconMarginLeft=" "
-                                onClick={() => handleMean("number")}
-                                backgroundColor={"var(--themeSDark--default)"}
-                                variant = 'extended'
-                                position = 'relative'
-                            />
-                        </div>
-                        <ButtonFab
-                            size="medium"
-                            needTxtNoWrap={true}
-                            title="EMAIL"
-                            iconMarginLeft=" "
-                            onClick={() => handleMean("email")}
-                            backgroundColor={"var(--themeSDark--default)"}
-                            variant = 'extended'
-                            position = 'relative'
-                        />
-                    </section>
                 </section>
             )}
         </Fragment>
