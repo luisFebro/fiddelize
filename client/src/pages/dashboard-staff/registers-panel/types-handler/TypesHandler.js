@@ -105,7 +105,7 @@ export default function TypesHandler() {
                      backgroundColor={"var(--themeSDark--default)"}
                      variant = 'extended'
                      width={160}
-                     padding="40px 16px"
+                     height={90}
                  />
                  <ButtonFab
                      size="large"
@@ -115,7 +115,7 @@ export default function TypesHandler() {
                      backgroundColor={"var(--themeSDark--default)"}
                      variant = 'extended'
                      width={160}
-                     padding="40px 16px"
+                     height={90}
                  />
              </div>
          </Fragment>

@@ -93,7 +93,7 @@ export default function QuickRegister() {
                        </p>
                     ) : (
                         <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
-                          {userName.cap()}, no aguardo do nome do ciente e um meio de envio...
+                          {userName.cap()}, no aguardo do nome do cliente e um meio de envio...
                         </p>
                     )}
                 </main>

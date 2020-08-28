@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
 import Fab from '@material-ui/core/Fab';
-import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import { buttonFabType } from '../../../types';
 
 ButtonFab.propTypes = buttonFabType;
-
-const useStyles = makeStyles({
-    label: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    }
-});
 
 export const muStyle = {
     transform: 'scale(1.2)',
@@ -75,8 +66,8 @@ export default function ButtonFab({
     onMouseOver,
     zIndex,
     width,
+    height,
     disabled = false,
-    padding,
 }) {
     const [toggle, setToggle] = useState('');
 
@@ -95,14 +86,13 @@ export default function ButtonFab({
             right,
             zIndex,
             width,
-            padding,
+            height,
             outline: 'none',
             color: color || 'var(--mainWhite)',
             backgroundColor:  backgroundColor || "#4834d4",
             filter: needBtnShadow && handleBtnShadow(shadowColor, shadowColorCustom),
         }
     }
-    const classes = useStyles();
 
     const showIcon = iconFontAwesome => {
         if(iconFontAwesome && typeof iconFontAwesome !== "string") {
@@ -155,13 +145,12 @@ export default function ButtonFab({
             variant={variant || "round"}
             onClick={() => handleOnClick() === false ? (isClickFunc && onClick()) : handleOnClick()}
             onMouseOver={onMouseOver}
-            classes={{ label: classes.label }}
             size={ size || "small" }
             aria-label={title}
             style={styles.fab}
             disabled={disabled}
         >
-            {padding ? (
+            {height ? (
                 <span className="text-shadow text-normal font-weight-bold">
                     {title}
                 </span>
