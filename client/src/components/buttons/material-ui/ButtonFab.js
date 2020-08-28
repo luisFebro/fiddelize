@@ -45,6 +45,7 @@ export default function ButtonFab({
     left,
     color,
     fontSize,
+    fontSizeTxt,
     fontWeight,
     backgroundColor,
     iconMu,
@@ -151,7 +152,7 @@ export default function ButtonFab({
             disabled={disabled}
         >
             {height ? (
-                <span className="text-shadow text-normal font-weight-bold">
+                <span style={{fontSize: fontSizeTxt }} className="text-shadow text-normal font-weight-bold">
                     {title}
                 </span>
             ) : (

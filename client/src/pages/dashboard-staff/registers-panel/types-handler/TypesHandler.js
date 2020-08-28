@@ -99,23 +99,25 @@ export default function TypesHandler() {
              <div style={styles.ctasArea} className="d-flex justify-content-around">
                  <ButtonFab
                      size="large"
-                     title="CADASTRO RÁPIDO"
+                     title="RÁPIDO"
                      position="relative"
+                     fontSizeTxt="35px"
                      onClick={() => handleOpen("quick")}
                      backgroundColor={"var(--themeSDark--default)"}
                      variant = 'extended'
                      width={160}
-                     height={90}
+                     height={70}
                  />
                  <ButtonFab
                      size="large"
-                     title="CADASTRO COMPLETO"
+                     title="COMPLETO"
+                     fontSizeTxt="35px"
                      position="relative"
                      onClick={() => handleOpen("complete")}
                      backgroundColor={"var(--themeSDark--default)"}
                      variant = 'extended'
                      width={160}
-                     height={90}
+                     height={70}
                  />
              </div>
          </Fragment>
