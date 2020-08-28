@@ -36,4 +36,17 @@ const smsAutomationData = {
 const SmsAutomationSchema = new Schema(smsAutomationData, { _id: false });
 // END SMS
 
-module.exports = { SmsHistorySchema, SmsAutomationSchema };
+// CLIENTS HISTORY
+const pendingRegistersData = {
+    clientName: { type: String, trim: true },
+    registeredBy: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+}
+const PendingRegistersSchema = new Schema(smsAutomationData, { _id: true });
+// END CLIENTS HISTORY
+
+module.exports = {
+    SmsHistorySchema,
+    SmsAutomationSchema,
+    PendingRegistersSchema,
+};

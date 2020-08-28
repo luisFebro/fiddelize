@@ -10,9 +10,9 @@ ButtonFab.propTypes = buttonFabType;
 
 const useStyles = makeStyles({
     label: {
-        display: "nothing",
-        alignItems: "nothing",
-        justifyContent: "nothing",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
     }
 });
 

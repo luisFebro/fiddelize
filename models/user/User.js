@@ -4,7 +4,8 @@ const collectionName = "all-clients";
 const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
 const {
     SmsHistorySchema,
-    SmsAutomationSchema
+    SmsAutomationSchema,
+    PendingRegistersSchema,
 } = require("./schemes");
 // GENERAL SCHEMAS
 const enumTypes = [
@@ -176,6 +177,7 @@ const clientAdminData = {
     smsBalance: { type: Number, default: 0 },
     smsHistory: [SmsHistorySchema],
     smsAutomation: [SmsAutomationSchema],
+    pendingRegisters: [PendingRegistersSchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 ClientAdminDataSchema.pre('save', function(next) {
