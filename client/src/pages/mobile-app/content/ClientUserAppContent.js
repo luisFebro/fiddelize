@@ -25,7 +25,7 @@ import useSendNotif from '../../../hooks/notification/useSendNotif';
 import useAPI, { readPrizes } from '../../../hooks/api/useAPI';
 import { getVar, removeVar, setVar } from '../../../hooks/storage/useVar';
 import { readPurchaseHistory } from "../../../redux/actions/userActions";
-import useSendAutoSMS from '../../../hooks/sms/useSendAutoSMS';
+import useSendSMS from '../../../hooks/sms/useSendSMS';
 import useDidDateExpire from '../../../hooks/dates/date-expires/useDidDateExpire';
 
 // APP COMPONENTS
@@ -159,10 +159,10 @@ function ClientUserAppContent({
 
     const needMissingMsg = useDidDateExpire({ userId: _id })
     const autoSMSMissingPurchase = getAutoSMSObj({ needMissingMsg, businessId, name, bizWhatsapp });
-    useSendAutoSMS(autoSMSMissingPurchase);
+    useSendSMS(autoSMSMissingPurchase);
 
     const autoSMSObj = getAutoSMSObj({ userBeatChallenge, lastPrizeId, businessId, name, currChall, bizWhatsapp });
-    useSendAutoSMS(autoSMSObj);
+    useSendSMS(autoSMSObj);
 
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
     useAnimateConfetti(confettiOptions());

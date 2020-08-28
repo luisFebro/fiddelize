@@ -19,7 +19,7 @@ export default function AsyncChargeCredits({
     );
 
     const showIllustra = () => (
-        <section className="my-5 mx-5">
+        <section className="my-5 mx-2">
             <img
                 className="img-fluid"
                 src="/img/illustrations/sms-charge.svg"

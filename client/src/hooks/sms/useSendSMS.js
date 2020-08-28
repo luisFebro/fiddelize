@@ -1,23 +1,25 @@
 import React, { useEffect } from 'react';
-import sendAutoSMS from './sendAutoSMS';
+import sendSMS from './sendSMS';
 // import { useAppSystem } from '../hooks/useRoleData';
 
-export default function useSendAutoSMS({
+export default function useSendSMS({
     trigger,
     serviceType = "confirmedChall",
     contactList,
     userId,
     smsId,
     customMsg,
+    isAutomatic = true,
 }) {
     useEffect(() => {
         if(trigger) {
-            sendAutoSMS({
+            sendSMS({
                 serviceType,
                 userId,
                 smsId,
                 customMsg,
                 contactList,
+                isAutomatic,
             })
         }
     }, [trigger])

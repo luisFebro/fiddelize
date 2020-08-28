@@ -1,21 +1,22 @@
 import getAPI, {
     readCredits,
     readAutoService,
-    sendSMS,
+    sendSMS as sendThisSMS,
 } from '../../utils/promises/getAPI';
 import didRunOnce from '../../utils/storage/didRunOnce';
 
-export default function sendAutoSMS({
+export default function sendSMS({
     userId,
-    smsId,
+    smsId = "", // for automatic only
     serviceType = "confirmedChall",
     contactList,
     dispatch,
     customMsg,
+    isAutomatic = true,
 }) {
     const promiseAutoSMS = async (resolve, reject) => {
         try {
-            const alreadySent = await didRunOnce(`autoSMS_${serviceType}_${smsId}`)
+            const alreadySent = await didRunOnce(`autoSMS_${serviceType}_${smsId = ""} // for automatic only`)
             if(alreadySent) return resolve("Already sent");
 
             const { data: credits } = await getAPI({ url: readCredits(userId) })
@@ -37,9 +38,9 @@ export default function sendAutoSMS({
 
             const response = await getAPI({
                 method: 'post',
-                url: sendSMS(),
+                url: sendThisSMS(),
                 timeout: 15000,
-                body: { userId, contactList, msg, serviceId, isAutomatic: true },
+                body: { userId, contactList, msg, serviceId, isAutomatic },
                 needAuth: true,
                 trigger: trigger && (credits >= 1),
             })

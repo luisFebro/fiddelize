@@ -16,7 +16,7 @@ export default function AsyncNoCredits() {
     );
 
     const showIllustra = () => (
-        <section className="my-5 mx-5">
+        <section className="my-5 mx-2">
             <img
                 className="img-fluid"
                 src="/img/illustrations/empty-sms-credits.svg"

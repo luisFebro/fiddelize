@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import AsyncShowNewContactForm from '../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
 import generateAppDownloadLink from '../../../../utils/biz/generateAppDownloadLink';
-import { useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
+import { useProfile, useClientAdmin, useAppSystem } from '../../../../hooks/useRoleData';
 import validatePhone from '../../../../utils/validation/validatePhone';
 import validateEmail from '../../../../utils/validation/validateEmail';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import { useStoreDispatch } from 'easy-peasy';
 import convertPhoneStrToInt from '../../../../utils/numbers/convertPhoneStrToInt';
+import useCheckBalance from '../../../../hooks/sms/useCheckBalance';
+import ModalFullContent from '../../../../components/modals/ModalFullContent';
+import { Load } from '../../../../components/code-splitting/LoadableComp'
+import sendSMS from '../../../../hooks/sms/sendSMS';
+
+const AsyncNoCredits = Load({ loader: () => import('../../../dashboard-client-admin/dash-sms/message/denial-modal/AsyncNoCredits'  /* webpackChunkName: "denial-page-lazy", webpackMode: "lazy", webpackIgnore: false */ )});
 
 const getStyles = () => ({
     msgField: {
@@ -28,8 +34,16 @@ export default function QuickRegister() {
     const [data, setData] = useState({ meanPayload: "", meanType: "", name: "" }); // number or email
     const { meanPayload, meanType, name } = data;
     const [msg, setMsg] = useState("");
+    const [fullOpen, setFullOpen] = useState(false);
+    const handleFullClose = () => {
+        setFullOpen(false);
+    }
+
+    const { businessId } = useAppSystem();
     const { bizName, bizCodeName } = useClientAdmin();
     const { name: userName } = useProfile();
+
+    const smsBalance = useCheckBalance();
 
     const downloadLink = generateAppDownloadLink({ bizCodeName, name });
 
@@ -56,7 +70,18 @@ export default function QuickRegister() {
         if(!validatePhone(number)) return showSnackbar(dispatch, "Formato telefone inválido. exemplo:<br />95 9 9999 8888", "error");
 
         if(type === "sms") {
-            //
+            if(smsBalance === 0) return setFullOpen(true);
+            showSnackbar(dispatch, `Enviando convite para ${name.cap()}!`, 'success', 6000);
+            sendSMS({
+                isAutomatic: false,
+                userId: businessId,
+                dispatch,
+                contactList: [{ name: name, phone: number }]
+            })
+            .then(res => {
+                // Create a card to display result istead
+                showSnackbar(dispatch, `Convite Enviado!`, 'success', 6000);
+            })
         }
         if(type === "whatsapp") {
             const convertedWhatsapp = convertPhoneStrToInt(number);
@@ -149,6 +174,12 @@ export default function QuickRegister() {
                     )}
                 </main>
             </section>
+            <ModalFullContent
+                contentComp={<AsyncNoCredits />}
+                fullOpen={fullOpen}
+                setFullOpen={handleFullClose}
+                needIndex={false}
+            />
         </section>
     );
 }

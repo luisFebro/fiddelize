@@ -28,7 +28,7 @@ import { sendNotification } from '../../../../../../../redux/actions/notificatio
 import getFirstName from '../../../../../../../utils/string/getFirstName';
 import { addDays } from '../../../../../../../utils/dates/dateFns';
 import useAPI, { readPrizes } from '../../../../../../../hooks/api/useAPI';
-import sendAutoSMS from '../../../../../../../hooks/sms/sendAutoSMS';
+import sendSMS from '../../../../../../../hooks/sms/sendSMS';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -144,7 +144,7 @@ export default function ModalTextField({
             updateUser(dispatch, updateUserBody, userId, false),
             sendNotification(userId, "challenge", sendNotifBody),
             addAutomaticTask(businessId, taskBody),
-            sendAutoSMS({
+            sendSMS({
                 userId: businessId,
                 smsId: prizeId,
                 dispatch,
