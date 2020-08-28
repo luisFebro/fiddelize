@@ -101,7 +101,7 @@ export default function TypesHandler() {
                      size="large"
                      title="RÁPIDO"
                      position="relative"
-                     fontSizeTxt="35px"
+                     fontSizeTxt="25px"
                      onClick={() => handleOpen("quick")}
                      backgroundColor={"var(--themeSDark--default)"}
                      variant = 'extended'
@@ -111,7 +111,7 @@ export default function TypesHandler() {
                  <ButtonFab
                      size="large"
                      title="COMPLETO"
-                     fontSizeTxt="35px"
+                     fontSizeTxt="25px"
                      position="relative"
                      onClick={() => handleOpen("complete")}
                      backgroundColor={"var(--themeSDark--default)"}
