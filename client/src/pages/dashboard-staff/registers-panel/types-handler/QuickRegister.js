@@ -62,7 +62,7 @@ export default function QuickRegister() {
         newOne: false,
     });
     const { successOp, title, ctaFunc, newOne } = successOpData;
-
+    const [smsDisabled, setSmsDisabled] = useState(false);
     const AsyncNoCredits = <Async />
 
     const styles = getStyles();
@@ -105,6 +105,7 @@ export default function QuickRegister() {
     const handleNewRegister = () => {
         handleFocus("field1");
         handleSuccessOp("", null, false, true);
+        setSmsDisabled(false);
         const uniqueId = getUniqueId();
         setClearForm(uniqueId);
     }
@@ -117,8 +118,10 @@ export default function QuickRegister() {
         if(!validatePhone(number)) return showSnackbar(dispatch, "Formato telefone inválido. exemplo:<br />95 9 9999 8888", "error");
 
         if(type === "sms") {
+            setSmsDisabled(true);
             if(smsBalance === 0) return setFullOpen(true);
             showSnackbar(dispatch, `Enviando convite para ${name.cap()}!`, 'warning', 3000);
+
             const smsObj = getSmsObj({ businessId, dispatch, name, meanPayload });
             sendSMS(smsObj)
             .then(res => {
@@ -128,7 +131,7 @@ export default function QuickRegister() {
         if(type === "whatsapp") {
             const convertedWhatsapp = convertPhoneStrToInt(number);
             const whatsUrl = `https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${msg}`;
-            runLink(whatsUrl);
+            // runLink(whatsUrl);
             handleSuccessOp("Encaminhado", handleNewRegister, true);
         }
     }
@@ -157,6 +160,7 @@ export default function QuickRegister() {
                         needTxtNoWrap={true}
                         title="Enviar"
                         height="60px"
+                        disabled={smsDisabled}
                         onClick={() => handleNumberCTA("sms")}
                         backgroundColor={"var(--themeSDark--default)"}
                         iconFontAwesome={<FontAwesomeIcon icon="sms" style={muStyle} />}
@@ -219,6 +223,7 @@ export default function QuickRegister() {
     );
 
     const showSuccessOp = () => (
+        successOp &&
         <SuccessOp
             trigger={successOp}
             title={title}

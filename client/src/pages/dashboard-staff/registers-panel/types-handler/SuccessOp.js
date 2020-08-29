@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useDelay from '../../../../hooks/useDelay';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -24,11 +25,24 @@ export default function SuccessOp({
     trigger = false,
     ctaFunc,
 }) {
+    const [mainTitle, setMainTitle] = useState("");
+    const readyForwarding = useDelay(3500);
+    const isQuickRegister = title === "Convite Enviado!" || title === "Encaminhado";
+
+    useEffect(() => {
+        if(title === "Cliente Cadastrado!") return setMainTitle("Cliente Cadastrado!");
+
+        if(!readyForwarding || !title) {
+            setMainTitle("Processando...")
+        } else {
+            setMainTitle(title);
+        }
+    }, [readyForwarding, title]);
 
     const styles = getStyles();
 
     const handleBtnTitle = () => {
-        if("Convite Enviado!" || "Encaminhado") return "Novo Envio";
+        if(isQuickRegister) return "Novo Envio";
         return "Novo Cadastro";
     }
 
@@ -42,23 +56,27 @@ export default function SuccessOp({
             raised={false}
         >
             <p className="mx-2 my-4 text-subtitle font-weight-bold text-center text-purple">
-               {title}
-               <FontAwesomeIcon
-                    icon="check-circle"
-                    style={styles.checkIcon}
-                    className="animated rubberBand delay-2s repeat-2"
-                />
+               {mainTitle}
+               {readyForwarding && (
+                   <FontAwesomeIcon
+                        icon="check-circle"
+                        style={styles.checkIcon}
+                        className="animated rubberBand delay-2s repeat-2"
+                    />
+               )}
             </p>
-            <div className="container-center my-3">
-                <ButtonFab
-                    size="medium"
-                    title={btnTitle}
-                    position="relative"
-                    onClick={ctaFunc}
-                    backgroundColor={"var(--themeSDark--default)"}
-                    variant = 'extended'
-                />
-            </div>
+            {readyForwarding && (
+                <div className="container-center my-3">
+                    <ButtonFab
+                        size="medium"
+                        title={btnTitle}
+                        position="relative"
+                        onClick={ctaFunc}
+                        backgroundColor={"var(--themeSDark--default)"}
+                        variant = 'extended'
+                    />
+                </div>
+            )}
         </Card>
     );
 }
