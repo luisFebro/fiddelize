@@ -26,7 +26,7 @@ export default function SuccessOp({
     ctaFunc,
 }) {
     const [mainTitle, setMainTitle] = useState("");
-    const readyForwarding = useDelay(3500);
+    const readyForwarding = useDelay(6000);
     const isQuickRegister = title === "Convite Enviado!" || title === "Encaminhado";
 
     useEffect(() => {

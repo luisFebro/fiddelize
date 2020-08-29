@@ -131,7 +131,7 @@ export default function QuickRegister() {
         if(type === "whatsapp") {
             const convertedWhatsapp = convertPhoneStrToInt(number);
             const whatsUrl = `https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${msg}`;
-            // runLink(whatsUrl);
+            runLink(whatsUrl);
             handleSuccessOp("Encaminhado", handleNewRegister, true);
         }
     }
