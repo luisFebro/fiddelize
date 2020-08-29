@@ -14,17 +14,26 @@ export default function sendSMS({
     dispatch,
     customMsg,
     isAutomatic = true,
+    trigger = true,
+    needCheckCredits = false,
     // txtPending,
 }) {
     const promiseSMS = async (resolve, reject) => {
         try {
-            const { data: credits } = await getAPI({ url: readCredits(userId) })
-            if(!credits) return resolve("No credits");
 
-            let trigger = false;
+            let triggerInner = false;
             let msg;
             let serviceId;
+            let credits;
+
+            if(isAutomatic || needCheckCredits) {
+                const { data } = await getAPI({ url: readCredits(userId) })
+                if(!data) return resolve("No credits");
+                credits = data;
+            }
+
             if(isAutomatic) {
+
                 const alreadySent = await didRunOnce(`autoSMS_${serviceType}_${smsId = ""} // for automatic only`)
                 if(alreadySent) return resolve("Already sent");
 
@@ -36,8 +45,14 @@ export default function sendSMS({
                 if(isServiceOn) {
                     msg = customMsg ? customMsg : foundService.msg;
                     serviceId = foundService.serviceId;
-                    trigger = true;
+                    triggerInner = true;
                 }
+            }
+
+            const handleTrigger = () => {
+                if(!isAutomatic && needCheckCredits) return trigger && (credits >= 1);
+                if(!isAutomatic) return trigger;
+                return triggerInner && (credits >= 1);
             }
 
             const response = await getAPI({
@@ -46,7 +61,7 @@ export default function sendSMS({
                 timeout: 15000,
                 body: { userId, contactList, msg, serviceId, isAutomatic },
                 needAuth: true,
-                trigger: trigger && (isAutomatic && credits >= 1),
+                trigger: handleTrigger(),
             })
 
             resolve(response);

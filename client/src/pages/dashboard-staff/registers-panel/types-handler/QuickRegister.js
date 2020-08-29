@@ -12,8 +12,19 @@ import useCheckBalance from '../../../../hooks/sms/useCheckBalance';
 import ModalFullContent from '../../../../components/modals/ModalFullContent';
 import { Load } from '../../../../components/code-splitting/LoadableComp'
 import sendSMS from '../../../../hooks/sms/sendSMS';
+import { getUniqueId } from '../../../../hooks/api/useAPI';
+import SuccessOp from './SuccessOp';
+import useCount from '../../../../hooks/useCount';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import { handleFocus } from '../../../../utils/form/handleFocus';
 
-const AsyncNoCredits = Load({ loader: () => import('../../../dashboard-client-admin/dash-sms/message/denial-modal/AsyncNoCredits'  /* webpackChunkName: "denial-page-lazy", webpackMode: "lazy", webpackIgnore: false */ )});
+const Async = Load({ loader: () => import('../../../dashboard-client-admin/dash-sms/message/denial-modal/AsyncNoCredits'  /* webpackChunkName: "denial-page-lazy", webpackMode: "lazy", webpackIgnore: false */ )});
+
+export const muStyle = {
+    transform: 'scale(1.6)',
+    marginLeft: '3px',
+}
 
 const getStyles = () => ({
     msgField: {
@@ -30,20 +41,51 @@ const runLink = (url) => {
     a.click();
 }
 
+const getSmsObj = ({ businessId, dispatch, name, meanPayload }) => ({
+    isAutomatic: false,
+    userId: businessId,
+    dispatch,
+    contactList: [{ name: name, phone: meanPayload }]
+})
+
 export default function QuickRegister() {
+    useCount("QuickRegister");
     const [data, setData] = useState({ meanPayload: "", meanType: "", name: "" }); // number or email
     const { meanPayload, meanType, name } = data;
     const [msg, setMsg] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
-    const handleFullClose = () => {
-        setFullOpen(false);
-    }
+    const [clearForm, setClearForm] = useState(false);
+    const [successOpData, setSuccessOpData] = useState({
+        successOp: false,
+        title: "",
+        ctaFunc: "",
+        newOne: false,
+    });
+    const { successOp, title, ctaFunc, newOne } = successOpData;
+
+    const AsyncNoCredits = <Async />
+
+    const styles = getStyles();
+    const dispatch = useStoreDispatch();
 
     const { businessId } = useAppSystem();
     const { bizName, bizCodeName } = useClientAdmin();
     const { name: userName } = useProfile();
 
     const smsBalance = useCheckBalance();
+
+    const handleSuccessOp = (title, ctaFunc, status, newOne) => {
+        setSuccessOpData({
+            successOp: status,
+            title,
+            ctaFunc,
+            newOne,
+        });
+    }
+
+    const handleFullClose = () => {
+        setFullOpen(false);
+    }
 
     const downloadLink = generateAppDownloadLink({ bizCodeName, name });
 
@@ -54,12 +96,17 @@ export default function QuickRegister() {
        }
     }, [name])
 
-    const styles = getStyles();
-    const dispatch = useStoreDispatch();
-
     const handleMeanData = (data) => {
         const { meanPayload, meanType, name } = data;
         setData({ meanPayload, meanType, name });
+        setSuccessOpData({ ...successOpData, newOne: false })
+    }
+
+    const handleNewRegister = () => {
+        handleFocus("field1");
+        handleSuccessOp("", null, false, true);
+        const uniqueId = getUniqueId();
+        setClearForm(uniqueId);
     }
 
     // Actions
@@ -71,22 +118,18 @@ export default function QuickRegister() {
 
         if(type === "sms") {
             if(smsBalance === 0) return setFullOpen(true);
-            showSnackbar(dispatch, `Enviando convite para ${name.cap()}!`, 'success', 6000);
-            sendSMS({
-                isAutomatic: false,
-                userId: businessId,
-                dispatch,
-                contactList: [{ name: name, phone: number }]
-            })
+            showSnackbar(dispatch, `Enviando convite para ${name.cap()}!`, 'warning', 3000);
+            const smsObj = getSmsObj({ businessId, dispatch, name, meanPayload });
+            sendSMS(smsObj)
             .then(res => {
-                // Create a card to display result istead
-                showSnackbar(dispatch, `Convite Enviado!`, 'success', 6000);
+                if(res.status === 200) handleSuccessOp("Convite Enviado!", handleNewRegister, true);
             })
         }
         if(type === "whatsapp") {
             const convertedWhatsapp = convertPhoneStrToInt(number);
             const whatsUrl = `https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${msg}`;
             runLink(whatsUrl);
+            handleSuccessOp("Encaminhado", handleNewRegister, true);
         }
     }
 
@@ -99,20 +142,24 @@ export default function QuickRegister() {
         const emailUrl = `mailto:${email}?subject=${subject}&body=${msg}`;
 
         runLink(emailUrl);
+        handleSuccessOp("Encaminhado", handleNewRegister, true);
     }
     // End Actions
 
 
     const showNumberCTAs = () => (
+        (!successOp && !newOne) &&
         <section className="animated fadeInUp delay-1s container-center my-4">
             <section className="d-flex justify-content-center">
                 <div className="mr-4">
                     <ButtonFab
                         size="medium"
                         needTxtNoWrap={true}
-                        title="Enviar SMS"
+                        title="Enviar"
+                        height="60px"
                         onClick={() => handleNumberCTA("sms")}
                         backgroundColor={"var(--themeSDark--default)"}
+                        iconFontAwesome={<FontAwesomeIcon icon="sms" style={muStyle} />}
                         variant = 'extended'
                         position = 'relative'
                     />
@@ -120,9 +167,11 @@ export default function QuickRegister() {
                 <ButtonFab
                     size="medium"
                     needTxtNoWrap={true}
-                    title="Enviar W"
+                    title="Enviar"
+                    height="60px"
                     onClick={() => handleNumberCTA("whatsapp")}
                     backgroundColor={"var(--themeSDark--default)"}
+                    iconMu={<WhatsAppIcon style={muStyle} />}
                     variant = 'extended'
                     position = 'relative'
                 />
@@ -131,11 +180,13 @@ export default function QuickRegister() {
     );
 
     const showEmailCTA = () => (
+        (!successOp && !newOne) &&
         <section className="animated fadeInUp delay-1s container-center my-4">
             <ButtonFab
                 size="medium"
                 needTxtNoWrap={true}
                 title="Enviar Email"
+                height="60px"
                 onClick={handleEmailCTA}
                 backgroundColor={"var(--themeSDark--default)"}
                 variant = 'extended'
@@ -144,38 +195,52 @@ export default function QuickRegister() {
         </section>
     );
 
+    const showGeneratedMsg = () => (
+        (!successOp && !newOne) &&
+        <section>
+            <p className="mt-5 text-purple text-subtitle text-center font-weight-bold">
+                {name ? "Convite gerado:" : ""}
+            </p>
+            <main
+                className="mx-3"
+                style={styles.msgField}
+            >
+                {name ? (
+                    <p className="m-0 p-3 text-normal text-white text-break text-left mx-3" >
+                        {msg}
+                   </p>
+                ) : (
+                    <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
+                      {userName.cap()}, no aguardo do nome do cliente e um meio de envio...
+                    </p>
+                )}
+            </main>
+        </section>
+    );
+
+    const showSuccessOp = () => (
+        <SuccessOp
+            trigger={successOp}
+            title={title}
+            ctaFunc={ctaFunc}
+        />
+    );
 
     return (
         <section>
             <div className="my-5">
                 <AsyncShowNewContactForm
                    isQuickRegister={true}
+                   clearForm={clearForm}
                    handleMeanData={handleMeanData}
                 />
             </div>
             {meanType && meanType === "number" && showNumberCTAs()}
             {meanType && meanType === "email" && showEmailCTA()}
-            <section>
-                <p className="mt-5 text-purple text-subtitle text-center font-weight-bold">
-                    {name ? "Convite gerado:" : ""}
-                </p>
-                <main
-                    className="mx-3"
-                    style={styles.msgField}
-                >
-                    {name ? (
-                        <p className="m-0 p-3 text-normal text-white text-break text-left mx-3" >
-                            {msg}
-                       </p>
-                    ) : (
-                        <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
-                          {userName.cap()}, no aguardo do nome do cliente e um meio de envio...
-                        </p>
-                    )}
-                </main>
-            </section>
+            {showSuccessOp()}
+            {showGeneratedMsg()}
             <ModalFullContent
-                contentComp={<AsyncNoCredits />}
+                contentComp={AsyncNoCredits}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 needIndex={false}

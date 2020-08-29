@@ -151,20 +151,14 @@ export default function ButtonFab({
             style={styles.fab}
             disabled={disabled}
         >
-            {height ? (
-                <span style={{fontSize: fontSizeTxt }} className="text-shadow text-normal font-weight-bold">
-                    {title}
-                </span>
-            ) : (
-                <span
-                    className={`${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`}
-                    style={{textTransform: textTransform || 'capitalize'}}
-                >
-                    {title}
-                    {showIcon(iconFontAwesome)}
-                    {showMuIcon(iconMu)}
-                </span>
-            )}
+            <span
+                className={`${needTxtNoWrap ? "text-nowrap" : ""} d-flex align-self-items text-shadow text-normal font-weight-bold`}
+                style={{textTransform: textTransform || 'capitalize'}}
+            >
+                {title}
+                {showIcon(iconFontAwesome)}
+                {showMuIcon(iconMu)}
+            </span>
         </Fab>
     );
 }

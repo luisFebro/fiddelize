@@ -9,7 +9,7 @@ import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../../../redux/actions/snackbarActions';
 import ButtonFab from '../../../../../../components/buttons/material-ui/ButtonFab';
 import handleChange from '../../../../../../utils/form/use-state/handleChange';
-import clearForm from '../../../../../../utils/form/use-state/clearForm';
+import { default as clearThisForm } from '../../../../../../utils/form/use-state/clearForm';
 import { handleFocus } from '../../../../../../utils/form/handleFocus';
 import isKeyPressed from '../../../../../../utils/event/isKeyPressed';
 import phoneMaskBr from '../../../../../../utils/validation/masks/phoneMaskBr';
@@ -84,6 +84,7 @@ export default function AsyncShowNewContactForm({
     handleAddContact,
     isQuickRegister = false,
     handleMeanData,
+    clearForm,
 }) {
     const [data, setData] = useState({
         name: '',
@@ -98,7 +99,7 @@ export default function AsyncShowNewContactForm({
     const [error, setError] = useState(null);
     const [readyMean, setReadyMean] = useState(false);
 
-    const delayedType = useCallback(debounce(value => { setReadyMean(true) }, 5000), []);
+    const delayedType = useCallback(debounce(value => { setReadyMean(true) }, 2500), []);
     const onChangeMean = (e, setObj) => {
         // LESSON: do not import the whole event element to debounce/throttle cuz react pooling or smt
         const name = e.target.name;
@@ -110,6 +111,13 @@ export default function AsyncShowNewContactForm({
         }
         handleChange(setObj)(e);
     }
+
+    useEffect(() => {
+       if(clearForm) {
+          clearThisForm(setData);
+          clearThisForm(setDataMean);
+       }
+    }, [clearForm])
 
     useEffect(() => {
         const mean = selectedMean === "number" ? phone : email;
@@ -133,7 +141,7 @@ export default function AsyncShowNewContactForm({
         if(!name) { showSnackbar(dispatch, "Insira o nome do destinatário", "error"); setError("name"); return; }
         if(!phone) { showSnackbar(dispatch, "Insira um telefone", "error"); setError("phone"); return; }
         if(!validatePhone(phone)) { showSnackbar(dispatch, "Formato telefone inválido. exemplo:<br />95 9 9999 8888", "error"); setError("phone"); return; }
-        clearForm(setData);
+        clearThisForm(setData);
         handleAddContact({ name, phone })
     }
 
@@ -153,7 +161,7 @@ export default function AsyncShowNewContactForm({
                     error={error === "name" ? true : false}
                     variant="outlined"
                     margin="dense"
-                    id="name"
+                    id="field1"
                     name="name"
                     onKeyPress={e => handleEvents(e, { setData, newValue: name.cap(), field: isQuickRegister ? "fieldMean" : "selectedOpt" })}
                     onBlur={e => handleEvents(e, { setData, newValue: name.cap(), eventName: 'blur', field: isQuickRegister ? "fieldMean" : "selectedOpt" })}

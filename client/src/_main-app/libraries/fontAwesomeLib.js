@@ -54,6 +54,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faHistory } from '@fortawesome/free-solid-svg-icons/faHistory';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons/faArrowCircleDown';
 import { faArrowCircleUp } from '@fortawesome/free-solid-svg-icons/faArrowCircleUp';
+import { faSms } from '@fortawesome/free-solid-svg-icons/faSms';
 // app milestone icons
 import { faAppleAlt } from '@fortawesome/free-solid-svg-icons/faAppleAlt';
 import { faCar } from '@fortawesome/free-solid-svg-icons/faCar';
@@ -129,6 +130,7 @@ library.add(
   faHistory,
   faArrowCircleDown,
   faArrowCircleUp,
+  faSms,
   // app milestone icons
   faAppleAlt,
   faCar,
