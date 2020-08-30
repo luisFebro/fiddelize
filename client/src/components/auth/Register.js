@@ -199,7 +199,7 @@ function Register({
                     className={`${selectTxtStyle(selfThemeBackColor)} m-0 font-weight-bold text-small`}
                     style={{whiteSpace: 'nowrap'}}
                 >
-                    Já é cadastrado(a)?{"  "}
+                    Já foi cadastrado(a)?{"  "}
                 </p>
                 <div className="pl-2">
                     <RadiusBtn

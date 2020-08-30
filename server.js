@@ -4,8 +4,8 @@ const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const helmet = require("helmet");
-var sslRedirect = require('heroku-ssl-redirect');
-var compression = require('compression');
+const sslRedirect = require('heroku-ssl-redirect');
+const compression = require('compression');
 require('dotenv').config(); // n4
 require('./utils/globalHelpers');
 

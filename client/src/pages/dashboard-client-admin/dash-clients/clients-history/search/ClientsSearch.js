@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchResult from "../../../../../components/search/SearchResult";
 import SearchFilter from "../../../../../components/search/SearchFilter";
-import PremiumButton from '../../../../components/buttons/PremiumButton';
+import PremiumButton from '../../../../components/buttons/premium/PremiumButton';
 
 const initialSkip = 0;
 let searchTerm = "";

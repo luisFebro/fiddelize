@@ -85,6 +85,7 @@ export default function AsyncShowNewContactForm({
     isQuickRegister = false,
     handleMeanData,
     clearForm,
+    entryAnimation,
 }) {
     const [data, setData] = useState({
         name: '',
@@ -197,6 +198,7 @@ export default function AsyncShowNewContactForm({
                       </MenuItem>
                       <MenuItem value={"number"}>Número de Contato</MenuItem>
                       <MenuItem value={"email"}>Email</MenuItem>
+                      <MenuItem value={"email"}>Copiar Convite</MenuItem>
                     </Select>
                 </section>
             )}
@@ -275,7 +277,7 @@ export default function AsyncShowNewContactForm({
 
     return(
         <Card
-            className={`mt-0 mb-5 animated zoomIn fast shadow-elevation`}
+            className={`mt-0 mb-5 ${entryAnimation ? entryAnimation : "animated zoomIn fast"} shadow-elevation`}
             style={styles.card}
             elevation={false}
         >

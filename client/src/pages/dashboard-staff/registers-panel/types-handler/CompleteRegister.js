@@ -30,10 +30,14 @@ export default function CompleteRegister() {
         </section>
     );
 
+    const handleNewInvitation = () => {
+        togglePanel();
+    }
+
     const showSuccessOp = () => (
         <SuccessOp
             trigger={hidePanel}
-            ctaFunc={togglePanel}
+            ctaFunc={handleNewInvitation}
         />
     );
 

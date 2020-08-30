@@ -266,7 +266,7 @@ export default function useAPIList({
     const ShowListTotals = ({
         analysingTxt = "Analisando...",
         offlineTxt = "Lista offline gerada",
-        noItemsTxt = "Sem tarefas geradas",
+        noItemsTxt = "sem tarefas geradas",
         foundItemsTxt = `tarefa${isPlural} gerada${isPlural}`,
     }) => (
         <Fragment>

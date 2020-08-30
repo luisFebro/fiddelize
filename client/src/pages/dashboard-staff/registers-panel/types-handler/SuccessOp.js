@@ -43,7 +43,7 @@ export default function SuccessOp({
 
     const handleBtnTitle = () => {
         if(isQuickRegister) return "Novo Envio";
-        return "Novo Cadastro";
+        return "Enviar Convite";
     }
 
     const btnTitle = handleBtnTitle();

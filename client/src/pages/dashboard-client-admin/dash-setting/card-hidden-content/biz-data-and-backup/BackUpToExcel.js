@@ -4,7 +4,7 @@ import { useStoreDispatch, useStoreState } from 'easy-peasy';
 import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
 import ButtonDropdown from '../../../../../components/buttons/material-ui/ButtonDropdown';
 import parse from 'html-react-parser';
-import PremiumButton from '../../../../../components/buttons/PremiumButton';
+import PremiumButton from '../../../../../components/buttons/premium/PremiumButton';
 
 import { readAllDbFromModels } from '../../../../../redux/actions/adminActions';
 

@@ -16,20 +16,21 @@ const getStyles = () => ({
     },
     titleIcon: {
         position: 'absolute',
-        left: '10px',
+        left: '5px',
+        top: '-15px',
         fontSize: '60px',
         filter:  'drop-shadow(.5px .5px 1.5px black)',
         color: 'white',
         zIndex: 10,
     },
     infoBtn: {
-        top: 0,
-        right: 0,
+        top: 3,
+        right: 20,
     }
 });
 
 export default function TypesHandler() {
-    const [open, setOpen] = useState(""); // complete or quick
+    const [open, setOpen] = useState("quick"); // complete or quick
 
     const styles = getStyles();
 
@@ -38,22 +39,22 @@ export default function TypesHandler() {
     }
 
     const handleTitle = () => {
-        if(!open) return "Qual tipo de cadastro?";
-        if(open === "complete") return "Cadastro Completo";
-        if(open === "quick") return "Cadastro Rápido";
+        if(!open) return "Adicionar pontos para cliente?";
+        if(open === "complete") return "Cadastre agora";
+        if(open === "quick") return "Envio de Convite";
     }
     const currTitle = handleTitle();
     const showTitle = () => {
-        const thisIcon = open === "quick" ? "bolt" : "file-alt"
+        const thisIcon = open === "quick" ? "paper-plane" : "file-alt"
 
-        const quickTxt = "Envie o link do seu app com o formulário e deixe seu cliente fazer o cadastro direto por lá.";
-        const completeTxt = "Faça todo o cadastro e envio o link para o cliente acessar o app direto com CPF."
+        const quickTxt = "Envie o convite com o link do seu app junto com o formulário de cadastro e deixe os clientes se cadastrarem direto do conforto de seus dispositivos.";
+        const completeTxt = "É opcional, somente se o cliente precisar que faça todo cadastro na hora para ele. Após cadastro, envie para o cliente o link do app para acesso."
         const thisInfo = open === "quick" ? quickTxt : completeTxt;
 
         return(
             <section className="position-relative">
                 {open && (
-                    <FontAwesomeIcon icon={thisIcon} style={{...styles.titleIcon, fontSize: open === "complete" ? "40px" : "60px" }} />
+                    <FontAwesomeIcon icon={thisIcon} style={{...styles.titleIcon, left: open === "complete" ? "10px" : "5px", top: open === "complete" ? "-10px" : "-15px" }} />
                 )}
                 <h2
                     className="mx-4 text-shadow text-nowrap position-relative text-center text-white text-subtitle font-weight-bold"
@@ -76,7 +77,7 @@ export default function TypesHandler() {
 
     const showSwitchBtnLeft = () => {
         const openThis = open === "quick" ? "complete" : "quick";
-        const thisTitle = open === "quick" ? "⬅️ Completo" : "⬅️ Rápido"
+        const thisTitle = open === "quick" ? "⬅ Na hora" : "⬅️ Envio"
 
         return(
             open &&
@@ -93,41 +94,11 @@ export default function TypesHandler() {
         );
     }
 
-    const showCTAs = () => (
-        !open &&
-         <Fragment>
-             <div style={styles.ctasArea} className="d-flex justify-content-around">
-                 <ButtonFab
-                     size="large"
-                     title="RÁPIDO"
-                     position="relative"
-                     fontSizeTxt="25px"
-                     onClick={() => handleOpen("quick")}
-                     backgroundColor={"var(--themeSDark--default)"}
-                     variant = 'extended'
-                     width={160}
-                     height={70}
-                 />
-                 <ButtonFab
-                     size="large"
-                     title="COMPLETO"
-                     fontSizeTxt="25px"
-                     position="relative"
-                     onClick={() => handleOpen("complete")}
-                     backgroundColor={"var(--themeSDark--default)"}
-                     variant = 'extended'
-                     width={160}
-                     height={70}
-                 />
-             </div>
-         </Fragment>
-    );
-
     return (
         <section>
             {showTitle()}
             {showSwitchBtnLeft()}
-            {showCTAs()}
+            {/*showCTAs()*/}
 
             {open === "complete" && (
                 <CompleteRegister />
@@ -138,3 +109,41 @@ export default function TypesHandler() {
         </section>
     );
 }
+
+/* ARCHIVES
+This will be replaced by:
+Adicionar pontos para cliente?
+SIM NÃO
+
+this will be made when team session and staff system is being developed.
+const showCTAs = () => (
+    !open &&
+     <Fragment>
+         <div style={styles.ctasArea} className="d-flex justify-content-around">
+             <ButtonFab
+                 size="large"
+                 title="SIM"
+                 position="relative"
+                 fontSizeTxt="25px"
+                 onClick={() => handleOpen("quick")}
+                 backgroundColor={"var(--themeSDark--default)"}
+                 variant = 'extended'
+                 width={160}
+                 height={70}
+             />
+             <ButtonFab
+                 size="large"
+                 title="NÃO"
+                 fontSizeTxt="25px"
+                 position="relative"
+                 onClick={() => handleOpen("complete")}
+                 backgroundColor={"var(--themeSDark--default)"}
+                 variant = 'extended'
+                 width={160}
+                 height={70}
+             />
+         </div>
+     </Fragment>
+);
+
+ */

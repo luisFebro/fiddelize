@@ -18,6 +18,7 @@ import useCount from '../../../../hooks/useCount';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import { handleFocus } from '../../../../utils/form/handleFocus';
+import PremiumButton from '../../../../components/buttons/premium/PremiumButton';
 
 const Async = Load({ loader: () => import('../../../dashboard-client-admin/dash-sms/message/denial-modal/AsyncNoCredits'  /* webpackChunkName: "denial-page-lazy", webpackMode: "lazy", webpackIgnore: false */ )});
 
@@ -168,17 +169,23 @@ export default function QuickRegister() {
                         position = 'relative'
                     />
                 </div>
-                <ButtonFab
-                    size="medium"
-                    needTxtNoWrap={true}
-                    title="Enviar"
-                    height="60px"
-                    onClick={() => handleNumberCTA("whatsapp")}
-                    backgroundColor={"var(--themeSDark--default)"}
-                    iconMu={<WhatsAppIcon style={muStyle} />}
-                    variant = 'extended'
-                    position = 'relative'
-                />
+                <section className="position-relative">
+                    <PremiumButton
+                        top={-10}
+                        right={0}
+                    />
+                    <ButtonFab
+                        size="medium"
+                        needTxtNoWrap={true}
+                        title="Enviar"
+                        height="60px"
+                        onClick={() => handleNumberCTA("whatsapp")}
+                        backgroundColor={"var(--themeSDark--default)"}
+                        iconMu={<WhatsAppIcon style={muStyle} />}
+                        variant = 'extended'
+                        position = 'relative'
+                    />
+                </section>
             </section>
         </section>
     );
@@ -236,6 +243,7 @@ export default function QuickRegister() {
             <div className="my-5">
                 <AsyncShowNewContactForm
                    isQuickRegister={true}
+                   entryAnimation="animated fadeInUp delay-2s"
                    clearForm={clearForm}
                    handleMeanData={handleMeanData}
                 />
