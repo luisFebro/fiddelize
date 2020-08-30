@@ -4,7 +4,7 @@ import Img from '../../../components/Img';
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.4307.4"
+const latestVersion = "3.4308.4"
 // PRÓXIMO:
 // artigo exemplo de pontos.
 const updateDescription = "filtros, pesquisa premium pt13";
