@@ -43,7 +43,7 @@ export default function RegistersPanel() {
         <section className="my-3 text-right mr-3">
             <Link
                 to={`/${bizCodeName}/compartilhar-app`}
-                className="text-link text-normal"
+                className="text-link text-small"
             >
                 Mais opções de divulgação
             </Link>

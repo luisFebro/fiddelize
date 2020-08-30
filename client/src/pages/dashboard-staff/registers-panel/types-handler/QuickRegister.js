@@ -17,6 +17,7 @@ import SuccessOp from './SuccessOp';
 import useCount from '../../../../hooks/useCount';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import EmailIcon from '@material-ui/icons/Email';
 import { handleFocus } from '../../../../utils/form/handleFocus';
 import PremiumButton from '../../../../components/buttons/premium/PremiumButton';
 
@@ -68,16 +69,16 @@ export default function QuickRegister({
     const [smsDisabled, setSmsDisabled] = useState(false);
     const AsyncNoCredits = <Async />
 
-    useEffect(() => {
-        if(formPayload) {
-            const { name: thisName, phone, email } = formPayload;
-            setData({
-                ...data,
-                meanPayload: meanType === "number" ? phone : email,
-                name: thisName,
-            })
-        }
-    }, [formPayload, meanType])
+    // useEffect(() => {
+    //     if(formPayload) {
+    //         const { name: thisName, phone, email } = formPayload;
+    //         setData({
+    //             ...data,
+    //             meanPayload: meanType === "number" ? phone : email,
+    //             name: thisName,
+    //         })
+    //     }
+    // }, [formPayload, meanType])
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -209,10 +210,11 @@ export default function QuickRegister({
             <ButtonFab
                 size="medium"
                 needTxtNoWrap={true}
-                title="Enviar Email"
+                title="Enviar"
                 height="60px"
                 onClick={handleEmailCTA}
                 backgroundColor={"var(--themeSDark--default)"}
+                iconMu={<EmailIcon style={muStyle} />}
                 variant = 'extended'
                 position = 'relative'
             />

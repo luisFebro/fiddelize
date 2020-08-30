@@ -102,7 +102,9 @@ export default function AsyncShowNewContactForm({
     const [readyMean, setReadyMean] = useState(false);
 
     useEffect(() => {
-        if(loadData) {
+        const needTransfer = loadData && selectedMean !== 'selecione um meio:';
+
+        if(loadData && !needTransfer) {
             const {
                 name: thisName,
                 phone: thisPhone,
@@ -111,7 +113,15 @@ export default function AsyncShowNewContactForm({
             setData({ ...data, name: thisName, phone: thisPhone })
             setDataMean({ ...dataMean, email: thisEmail });
         }
-    }, [loadData]);
+
+        if(needTransfer) {
+            handleMeanData({
+                meanType: selectedMean,
+                meanPayload: selectedMean === "number" ? phone : email,
+                name
+            });
+        }
+    }, [loadData, selectedMean]);
 
     const delayedType = useCallback(debounce(value => { setReadyMean(true) }, 2500), []);
     const onChangeMean = (e, setObj) => {
