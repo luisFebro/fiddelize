@@ -49,10 +49,12 @@ const getSmsObj = ({ businessId, dispatch, name, meanPayload }) => ({
     contactList: [{ name: name, phone: meanPayload }]
 })
 
-export default function QuickRegister() {
+export default function QuickRegister({
+    formPayload,
+}) {
     useCount("QuickRegister");
     const [data, setData] = useState({ meanPayload: "", meanType: "", name: "" }); // number or email
-    const { meanPayload, meanType, name } = data;
+    const { meanPayload, meanType, name } = data; // meanType = number, email
     const [msg, setMsg] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
     const [clearForm, setClearForm] = useState(false);
@@ -65,6 +67,17 @@ export default function QuickRegister() {
     const { successOp, title, ctaFunc, newOne } = successOpData;
     const [smsDisabled, setSmsDisabled] = useState(false);
     const AsyncNoCredits = <Async />
+
+    useEffect(() => {
+        if(formPayload) {
+            const { name: thisName, phone, email } = formPayload;
+            setData({
+                ...data,
+                meanPayload: meanType === "number" ? phone : email,
+                name: thisName,
+            })
+        }
+    }, [formPayload, meanType])
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -246,6 +259,7 @@ export default function QuickRegister() {
                    entryAnimation="animated fadeInUp delay-2s"
                    clearForm={clearForm}
                    handleMeanData={handleMeanData}
+                   loadData={formPayload}
                 />
             </div>
             {meanType && meanType === "number" && showNumberCTAs()}

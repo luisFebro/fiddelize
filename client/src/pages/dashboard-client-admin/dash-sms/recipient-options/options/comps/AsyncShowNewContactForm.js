@@ -86,6 +86,7 @@ export default function AsyncShowNewContactForm({
     handleMeanData,
     clearForm,
     entryAnimation,
+    loadData,
 }) {
     const [data, setData] = useState({
         name: '',
@@ -99,6 +100,18 @@ export default function AsyncShowNewContactForm({
     const { selectedMean, email } = dataMean;
     const [error, setError] = useState(null);
     const [readyMean, setReadyMean] = useState(false);
+
+    useEffect(() => {
+        if(loadData) {
+            const {
+                name: thisName,
+                phone: thisPhone,
+                email: thisEmail,
+            } = loadData;
+            setData({ ...data, name: thisName, phone: thisPhone })
+            setDataMean({ ...dataMean, email: thisEmail });
+        }
+    }, [loadData]);
 
     const delayedType = useCallback(debounce(value => { setReadyMean(true) }, 2500), []);
     const onChangeMean = (e, setObj) => {
@@ -198,7 +211,6 @@ export default function AsyncShowNewContactForm({
                       </MenuItem>
                       <MenuItem value={"number"}>Número de Contato</MenuItem>
                       <MenuItem value={"email"}>Email</MenuItem>
-                      <MenuItem value={"email"}>Copiar Convite</MenuItem>
                     </Select>
                 </section>
             )}

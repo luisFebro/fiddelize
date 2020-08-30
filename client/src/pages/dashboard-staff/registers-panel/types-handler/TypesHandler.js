@@ -31,11 +31,17 @@ const getStyles = () => ({
 
 export default function TypesHandler() {
     const [open, setOpen] = useState("quick"); // complete or quick
+    const [formPayload, setFormPayload] = useState(null);
 
     const styles = getStyles();
 
     const handleOpen = (nameComp) => {
         setOpen(nameComp);
+    }
+
+    const handleNewSendingEnv = (payload) => {
+        setOpen("quick");
+        setFormPayload(payload);
     }
 
     const handleTitle = () => {
@@ -101,10 +107,10 @@ export default function TypesHandler() {
             {/*showCTAs()*/}
 
             {open === "complete" && (
-                <CompleteRegister />
+                <CompleteRegister handleNewSendingEnv={handleNewSendingEnv} />
             )}
             {open === "quick" && (
-                <QuickRegister />
+                <QuickRegister formPayload={formPayload} />
             )}
         </section>
     );

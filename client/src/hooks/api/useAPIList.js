@@ -119,11 +119,11 @@ export default function useAPIList({
         const listTotal = response.data.listTotal;
         const chunksTotal = response.data.chunksTotal;
         const content = response.data.content; // for all other kind of data
-        console.log("listType", listType);
+        IS_DEV && console.log("listType", listType);
 
         setData({
             ...data,
-            list: [...listType],
+            list: listType,
             listTotal,
             chunksTotal,
             content,

@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { useClientAdmin } from '../../../hooks/useRoleData';
 import useDelay from '../../../hooks/useDelay';
 import TypesHandler from './types-handler/TypesHandler';
+import { Link } from 'react-router-dom'
 
 const getStyles = () => ({
     clipPathBack: {
@@ -14,7 +15,7 @@ const getStyles = () => ({
 });
 
 export default function RegistersPanel() {
-    const { selfBizLogoImg } = useClientAdmin();
+    const { selfBizLogoImg, bizCodeName } = useClientAdmin();
 
     const styles = getStyles();
 
@@ -37,6 +38,18 @@ export default function RegistersPanel() {
         </Fragment>
     );
 
+    const showSharerPageLink = () => (
+        readyTypesHandler &&
+        <section className="my-3 text-right mr-3">
+            <Link
+                to={`/${bizCodeName}/compartilhar-app`}
+                className="text-link text-normal"
+            >
+                Mais opções de divulgação
+            </Link>
+        </section>
+    );
+
     const showTypesHandler = () => (
         readyTypesHandler &&
         <section className="my-5">
@@ -48,6 +61,7 @@ export default function RegistersPanel() {
         <section>
            {showHeader()}
            {showTypesHandler()}
+           {showSharerPageLink()}
         </section>
     );
 }

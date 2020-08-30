@@ -19,6 +19,7 @@ import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import { useStoreDispatch } from 'easy-peasy';
 import copyTextToClipboard from '../../utils/document/copyTextToClipboard';
 import { showSnackbar } from '../../redux/actions/snackbarActions';
+import { useClientAdmin, useAppSystem, useProfile } from '../../hooks/useRoleData';
 
 
 const addSpace = str => addSpacingPlusToQuery(str);
@@ -26,6 +27,42 @@ const addSpace = str => addSpacingPlusToQuery(str);
 const isSmall = window.Helper.isSmallScreen();
 const fluidTextAlign = `${isSmall ? "ml-2 text-left" : "text-center"}`;
 
+const getStyles = () => ({
+    form: {
+        maxWidth: isSmall ? '' : '350px',
+        width: '100%',
+        background: 'var(--themeSDark)',
+        borderRadius: '10px',
+        padding: '25px'
+    },
+    fieldFormValue: {
+        backgroundColor: 'var(--mainWhite)',
+        zIndex: 2000,
+        color: 'var(--themeP)',
+        font: 'normal 26px Poppins, sans-serif',
+        paddingLeft: 5,
+    },
+    fieldLink: {
+        font: 'normal 20px Poppins, sans-serif',
+        color: 'var(--mainPurple)',
+        textAlign: 'center',
+    },
+    helperFromField: {
+        color: 'white',
+        backgroundColor: 'var(--themeSDark)',
+        textShadow: '1px 1px 3px black',
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: '16px',
+        margin: 0,
+        padding: '10px 0',
+        border: 0,
+    },
+    megaPhoneIcon: {
+        top: '-20%',
+        transform: 'translateX(-70%)',
+        zIndex: 3000,
+    },
+});
 export default function AppSharer({ location, match }) {
     const [showLink, setShowLink] = useState(false);
     const [data, setData] = useState({
@@ -34,58 +71,27 @@ export default function AppSharer({ location, match }) {
         generatedLink: '',
     })
     const {
-        clientName,
-        openSharingAreaTo,
-        generatedLink,
+        clientName, openSharingAreaTo, generatedLink,
     } = data;
 
     const dispatch = useStoreDispatch();
+    const styles = getStyles();
+    const {
+        bizCodeName: codeName,
+        bizName: businessName,
+    } = useClientAdmin();
+    const { name: cliName, } = useProfile();
+    const { businessId } = useAppSystem();
 
-    const role = getQueryByName("role", location.search);
-    const bizCodeName = match.params.bizCodeName;
-    const bizName = getQueryByName("negocio", location.search);
-    const cliAdminName = getQueryByName("adminName", location.search);
-    const bizId = getQueryByName("id", location.search);
+    const role = getQueryByName("role", location.search) || "cliente-admin";
+    const bizCodeName = match.params.bizCodeName || codeName;
+    const bizName = getQueryByName("negocio", location.search) || businessName;
+    const cliAdminName = getQueryByName("adminName", location.search) || cliName;
+    const bizId = getQueryByName("id", location.search) || businessId;
 
     const indLastSlash = bizCodeName.lastIndexOf("-");
     const onlyBizCode = bizCodeName.slice(indLastSlash + 1);
 
-    const styles = {
-        form: {
-            maxWidth: isSmall ? '' : '350px',
-            width: '100%',
-            background: 'var(--themeSDark)',
-            borderRadius: '10px',
-            padding: '25px'
-        },
-        fieldFormValue: {
-            backgroundColor: 'var(--mainWhite)',
-            zIndex: 2000,
-            color: 'var(--themeP)',
-            font: 'normal 26px Poppins, sans-serif',
-            paddingLeft: 5,
-        },
-        fieldLink: {
-            font: 'normal 20px Poppins, sans-serif',
-            color: 'var(--mainPurple)',
-            textAlign: 'center',
-        },
-        helperFromField: {
-            color: 'white',
-            backgroundColor: 'var(--themeSDark)',
-            textShadow: '1px 1px 3px black',
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: '16px',
-            margin: 0,
-            padding: '10px 0',
-            border: 0,
-        },
-        megaPhoneIcon: {
-            top: '-20%',
-            transform: 'translateX(-70%)',
-            zIndex: 3000,
-        },
-    }
 
     const showBackBtn = () => (
         <div className="mt-2 ml-5 d-flex align-self-start">
@@ -283,7 +289,7 @@ export default function AppSharer({ location, match }) {
                     <section className="container-center mx-2">
                         <Card style={{maxWidth: 350, width: '100%', backgroundColor: 'var(--mainWhite)'}} className="align-self-center animated zoomIn delay-2s fast card-elevation p-4">
                             <p className="text-center text-normal font-weight-bold">
-                                {targetBr === "cliente-admin" ? "Baixe app via:" : "Escolha meio de divulgação:"}
+                                {targetBr === "cliente-admin" ? "Enviar app via:" : "Escolha meio de divulgação:"}
                             </p>
                             <ShareSocialMediaButtons
                                 config={{size: 50, radius: 50}}

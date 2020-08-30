@@ -180,7 +180,8 @@ function Register({
             .then(res => {
                 if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
                 if(isStaff) {
-                    callback();
+                    const payload = { name, phone, email };
+                    callback(payload);
                 } else {
                     setLoginOrRegister("login");
                     showSnackbar(dispatch, `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`, "success", 9000)

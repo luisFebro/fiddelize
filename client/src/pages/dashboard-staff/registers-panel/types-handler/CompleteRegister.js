@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Load } from '../../../../components/code-splitting/LoadableComp';
 import { setRun } from '../../../../hooks/useRunComp';
 import { useStoreDispatch } from 'easy-peasy';
@@ -6,8 +6,11 @@ import SuccessOp from './SuccessOp';
 
 const AsyncRegister = Load({ loading: true, loader: () => import("../../../../components/auth/Register" /* webpackChunkName: "cli-user-register-comp-lazy" */) });
 
-export default function CompleteRegister() {
+export default function CompleteRegister({
+    handleNewSendingEnv,
+}) {
     const [hidePanel, setHidePanel] = useState(false);
+    const payload = useRef({});
 
     const dispatch = useStoreDispatch();
 
@@ -15,9 +18,10 @@ export default function CompleteRegister() {
         setHidePanel(prev => !prev);
     }
 
-    const handleSuccessfulRegister = () => {
-         togglePanel();
-         setRun(dispatch, "RecordedClientsList");
+    const handleSuccessfulRegister = (payL) => {
+        togglePanel();
+        payload.current = payL;
+        setRun(dispatch, "RecordedClientsList");
     }
 
     const showNewCliRegister = () => (
@@ -31,7 +35,9 @@ export default function CompleteRegister() {
     );
 
     const handleNewInvitation = () => {
+        const thisPayload = payload.current;
         togglePanel();
+        handleNewSendingEnv(thisPayload);
     }
 
     const showSuccessOp = () => (
