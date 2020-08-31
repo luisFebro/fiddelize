@@ -16,11 +16,15 @@ import extractStrData from '../../../../utils/string/extractStrData';
 import { Load } from '../../../../components/code-splitting/LoadableComp';
 import RegisterPanelBtn from './register-panel-btn/RegisterPanelBtn';
 import useElemShowOnScroll from '../../../../hooks/scroll/useElemShowOnScroll';
+import getFirstName from '../../../../utils/string/getFirstName';
 // import ClientsSearch from './search/ClientsSearch';
 
 const AsyncFreeAccountsLimitMsg = Load({ loader: () => import('./AsyncFreeAccountsLimitMsg' /* webpackChunkName: "free-limit-msg-lazy" */)});
 const AsyncShowIllustra = Load({ loader: () => import('./AsyncShowIllustra' /* webpackChunkName: "empty-illustra-comp-lazy" */)});
 const Filters = Load({ loader: () => import('./search/Filters' /* webpackChunkName: "filters-comp-lazy" */)});
+
+const truncate = (name, leng) => window.Helper.truncate(name, leng);
+const isSmall = window.Helper.isSmallScreen();
 
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
@@ -120,15 +124,15 @@ export default function AsyncRecordedClientsList() {
             </div>
         );
 
-        const truncate = (name, leng) => window.Helper.truncate(name, leng);
         const isTestMode = name === user.name.cap();
         const needCliPrizes = cliUser.totalPurchasePrize; // 0 by default.
 
         return({
            _id: user._id,
            mainHeading: <span
-                className="text-subtitle font-weight-bold text-shadow">
-                {truncate(user.name.cap(), window.Helper.isSmallScreen() ? 17 : 40)}</span>,
+                className="text-subtitle text-nowrap font-weight-bold text-shadow">
+                {truncate(getFirstName(user.name.cap(), { addSurname: true }), isSmall ? 17 : 40)}
+            </span>,
            secondaryHeading: handleSecHeading(user),
            userData: user,
            needBadgeForTestMode: isTestMode,

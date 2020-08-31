@@ -20,7 +20,13 @@ function getDataChunk(arrayData, options = {}) {
     return arrayData.slice(skip, finalLimit);
 }
 
-module.exports = { getDataChunk, getChunksTotal };
+const getSkip = (skip, limit) => {
+    if(Number.isNaN(skip) || !limit) return console.log("missing arguments");
+    if(skip === 0) return skip;
+    return limit * skip;
+}
+
+module.exports = { getDataChunk, getChunksTotal, getSkip };
 
 // e.g
 // const array = [{a: "a"}, {b: "b"}, {c: "c"}, {d: "d"}, {e: "e"}, {f: "f"}];

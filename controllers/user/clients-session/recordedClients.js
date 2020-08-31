@@ -2,7 +2,7 @@ const User = require("../../../models/user");
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
 const { decryptSync, jsDecrypt } = require("../../../utils/security/xCipher");
-const { getChunksTotal } = require("../../../utils/array/getDataChunk");
+const { getChunksTotal, getSkip } = require("../../../utils/array/getDataChunk");
 
 const getQuery = (role) => {
     let mainQuery;
@@ -34,10 +34,10 @@ const getQuery = (role) => {
 
 exports.getRecordedClientList = (req, res) => { // n3 - New way of fetching data with $facet aggreagtion
     const {
-        role, search, bizId, limit = 5
+        role, search, bizId,
     } = req.query;
-    const skip = parseInt(req.query.skip);
-    console.log("skip", skip);
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = getSkip(parseInt(req.query.skip), limit);
 
     const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
     const sortQuery = {$sort: { ...defaultSort, createdAt: -1 }};
