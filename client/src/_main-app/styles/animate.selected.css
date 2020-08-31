@@ -331,6 +331,21 @@ print {
     }
 }
 
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .fadeInUp {
     -webkit-animation-name: fadeInUp;
     animation-name: fadeInUp

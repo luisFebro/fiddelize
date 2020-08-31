@@ -10,9 +10,13 @@
 }
 
 @media only screen and (min-width: 768px) {
+    ::-webkit-scrollbar {
+        overflow: visible !important;
+        -webkit-appearance: none;
+        width: 9px;
+    }
     ::-webkit-scrollbar-thumb {
         background-color: #00e5ff; // cyan
         -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
-        width: 6px;
     }
 }
