@@ -14,6 +14,11 @@ export const setRun = (dispatch, runName) => {
     return dispatch({ type: 'RUN_SET', payload: runName });
 };
 
+// const defaultVariableOptions = { key: "value" }
+// export const setVariable = (dispatch, keyValueObj = defaultVariableOptions) => {
+//     return dispatch({ type: 'VARIABLE', payload: keyValueObj });
+// };
+
 // SET LOADING
 // On: loading indicator displaying for miliseconds as long as the data is being fetched
 // Off: no loading indicator displaying

@@ -7,12 +7,13 @@ export default function ActionBtn({
     type = "pendingDelivery",
     callback,
     defaultStatus = false,
+    taskId,
     expired = false,
     dataExpired, }) {
     if(type === "pendingDelivery") {
 
         const selectedCardType = () => {
-            if(expired) return <ShowExpiredCardFunc dataExpired={dataExpired} />;
+            if(expired) return <ShowExpiredCardFunc dataExpired={dataExpired} taskId={taskId} />;
 
             return(
                 <SwitchBtn
@@ -39,12 +40,12 @@ const defaultBody = {
     cliUserId: "123",
     prizeId: "123"
 }
-function ShowExpiredCardFunc({ dataExpired = defaultBody }) {
+function ShowExpiredCardFunc({ dataExpired = defaultBody, taskId }) {
     const [trigger, setTrigger] = useState(false);
 
     const snackbar = { txtPending: `Apagando tarefa e marcando prêmio do cliente como expirado...`, timePending: 6000, txtSuccess: "Tarefa apagada e prêmio expirado!" }
 
-    useAPI({ url: removeTaskAndExpireCliPrize(), body: dataExpired, trigger, snackbar })
+    useAPI({ method: 'put', url: removeTaskAndExpireCliPrize(), body: dataExpired, trigger, snackbar, runName: `TaskCard${taskId}` })
 
     const handleExpiredRequest = () => {
         const randomId = getUniqueId();

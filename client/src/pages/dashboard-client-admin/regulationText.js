@@ -10,7 +10,7 @@ Basta realizar sua compra normalmente, acessar seu app e clicar no *botão amare
 
 @META NO DESAFIO ATUAL@
 Você já deve ter visto uma bandeirinha no app indicando sua meta.
-Neste primeiro desafio, você precisa alcançar:
+No primeiro desafio, por exemplo, você precisa alcançar:
 • ##ponto-premio.
 • O desafio possui 5 níveis com ##ponto-nivel.
 

@@ -25,7 +25,7 @@ useAPI.propTypes = {
 }
 
 export default function useAPI({
-    method = 'GET',
+    method = 'get',
     url,
     params = null,
     body = null,
@@ -110,7 +110,7 @@ export default function useAPI({
                 handleSuccess({ response, stopRequest });
             } catch(e) {
                 if(axios.isCancel(e)) return
-                if(e.response) console.log(`${e.response.data}. STATUS: ${e.response.status}`)
+                if(e.response) console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
                 handleError();
             }
         }

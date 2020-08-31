@@ -78,14 +78,15 @@ function ClientUserAppContent({
     useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const { data: lastPrizeId } = useAPI({ url: readPrizes(_id), params: { lastPrizeId: true } });
     const challNotifOptions = React.useCallback(() => ({
-        trigger: userBeatChallenge && lastPrizeId,
-        storage: { key: "alreadyChallenge",  value: "clientWonChall" },
+        trigger: Boolean(userBeatChallenge && lastPrizeId),
+        storage: { key: "alreadyAlertChallenge",  value: `challenge_${currChall}` },
         senderId: _id,
         role: "cliente-admin",
         subtype: "clientWonChall",
         content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};`,
-    }), [userBeatChallenge, _id])
+    }), [userBeatChallenge, lastPrizeId, _id])
     useSendNotif(businessId, "challenge", challNotifOptions())
+
     const confettiOptions = React.useCallback(() => ({ trigger: userBeatChallenge, showMoreComps }), [userBeatChallenge, showMoreComps])
     useAnimateConfetti(confettiOptions());
     const triggerNumberAnima = isAuthUser && role === "cliente" || needAppForCliAdmin || needAppForPreview;
@@ -312,7 +313,7 @@ function ClientUserAppContent({
 
 export default withRouter(ClientUserAppContent);
 
-ClientUserAppContent.whyDidYouRender = true;
+ClientUserAppContent.whyDidYouRender = false;
 /* COMMENTS
 n1:
 a) React.useCallback is essential to avoid to render + 15 times at start

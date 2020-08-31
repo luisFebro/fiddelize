@@ -24,10 +24,11 @@ import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
 import { useAppSystem, useClientAdmin, useProfile } from '../../../../../../../hooks/useRoleData';
 import pickCurrChallData from '../../../../../../../utils/biz/pickCurrChallData';
 import { setRun } from '../../../../../../../redux/actions/globalActions';
-import { changePrizeStatus, readPurchaseHistory } from '../../../../../../../redux/actions/userActions';
+import { changePrizeStatus } from '../../../../../../../redux/actions/userActions';
 import { sendNotification } from '../../../../../../../redux/actions/notificationActions';
 import getFirstName from '../../../../../../../utils/string/getFirstName';
 import { addDays } from '../../../../../../../utils/dates/dateFns';
+import useAPI, { readPrizes } from '../../../../../../../hooks/api/useAPI';
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -44,7 +45,6 @@ export default function ModalTextField({
     });
     const [gotError, setGotError] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
-    const [moreRemainder, setMoreRemainder] = useState(0); //score which user did during non-confirmation
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
@@ -74,24 +74,18 @@ export default function ModalTextField({
     rewardScore = pickedObj.rewardScore;
     const mainReward = pickedObj.mainReward;
 
-    useEffect(() => {
-        let ignore;
-        readPurchaseHistory(userId, rewardScore, { challScore: `${currChall + 1}_only` })
-        .then(res => {
-            if(res.status !== 200) return console.log("error on readPurchaseHistory")
-            if(!ignore) setMoreRemainder(res.data);
-        })
-
-        return () => { ignore = true };
-    }, [])
+    const { data: updatedValues, loading } = useAPI({ url: readPrizes(userId), params: { updatedValues: true, currRewardScore: rewardScore } });
+    const currRemainder = loading ? "..." : updatedValues.remainder;
+    const nextScore = loading ? "..." : updatedValues.nextScore;
+    const currUserScoring = loading ? "..." : convertDotToComma(rewardScore + nextScore);
 
     const userBeatScore = userCurrScore >= rewardScore;
-    useEffect(() => {
-        if(userCurrScore >= rewardScore) {
-            const leftValue = userCurrScore - rewardScore;
-            setData({ ...data, remainValue: leftValue.toString() })
-        }
-    }, [userCurrScore, rewardScore])
+    // useEffect(() => {
+    //     if(userCurrScore >= rewardScore) {
+    //         const leftValue = userCurrScore - rewardScore;
+    //         setData({ ...data, remainValue: leftValue.toString() })
+    //     }
+    // }, [userCurrScore, rewardScore])
 
     const styles = {
         form: {
@@ -114,8 +108,10 @@ export default function ModalTextField({
     }
 
     const handleSubmit = async () => {
+        if(loading) return;
+
         const updateUserBody = {
-            "clientUserData.currScore": moreRemainder,
+            "clientUserData.currScore": nextScore,
             "clientUserData.totalActiveScore": parseFloat(totalActiveScore - rewardScore), // the same as currScore, this is only used to differentiate from totalGeneralScore.
             // This is handled in the backend with changePrizeStatus
             // "clientUserData.totalPurchasePrize": totalPrizes + 1, // the same as currScore, this is only used to differentiate from totalGeneralScore.
@@ -138,8 +134,8 @@ export default function ModalTextField({
 
         showSnackbar(dispatch, `Atualizando pontuação...`, 'success', 5000)
 
-        const prizeStatusRes = await changePrizeStatus(userId, { statusType: "confirmed" });
-        if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Já foram descontados ${rewardScore} pontos deste desafio.`, 'error')
+        const prizeStatusRes = await changePrizeStatus(userId, { statusType: "confirmed", prizeId });
+        if(prizeStatusRes.status !== 200) return showSnackbar(dispatch, `Pontos deste desafio já foram descontados e podem está desatualizados.`, 'error')
 
         const [updateRes, notifRes, taskRes] = await Promise.all([
             updateUser(dispatch, updateUserBody, userId, false),
@@ -174,6 +170,7 @@ export default function ModalTextField({
         </div>
     );
 
+    const displayMoreRemainder = Boolean(nextScore > currRemainder);
     const showSubtitleAndInfos = () => (
         <div className="margin-auto-90 text-center">
             <p
@@ -200,17 +197,41 @@ export default function ModalTextField({
                 <p className="m-0">
                    ✔ Pontuação Atual:
                 </p>
-                <p><strong>• {convertDotToComma(userCurrScore)} Pontos</strong></p>
+                <p><strong>• {currUserScoring} Pontos</strong></p>
             </div>
             {userBeatScore && (
                 <div className="text-left text-normal text-purple my-1">
                     <p className="m-0">
                         ✔ Cliente fica com:
                     </p>
-                    <p className="font-weight-bold text-nowrap">
-                        • {convertDotToComma(moreRemainder)} Pontos Restantes
-                        {moreRemainder !== 0 && (
-                            <span className="text-small font-weight-bold"><br />(pontos feitos enquanto desafio não<br />estava confirmado.)</span>
+                    <p className={`font-weight-bold text-nowrap ${displayMoreRemainder ? "text-blue" : ""}`}>
+                        • {convertDotToComma(nextScore)} Pontos Restantes
+                        {displayMoreRemainder && (
+                            <span
+                                className="text-blue text-small font-weight-bold d-block"
+                            >
+                                <br />
+                                <span
+                                    className="d-block"
+                                    style={{ fontSize: '18px', lineHeight: '23px'}}
+                                >
+                                    &#187; {loading ? "..." : convertDotToComma(currRemainder)} pontos
+                                </span> que sobraram do desafio atual
+                                <br />
+                                <br />
+                                <span
+                                    className="d-block"
+                                    style={{fontSize: "18px", lineHeight: "23px" }}
+                                >
+                                    + {loading ? "..." : convertDotToComma(nextScore - currRemainder)} pontos adicionais
+                                    <br />
+                                    <span
+                                        className="text-small font-weight-bold"
+                                    >
+                                        (feitos enquanto desafio não<br />estava confirmado.)
+                                    </span>
+                                </span>
+                            </span>
                         )}
                     </p>
                 </div>

@@ -14,7 +14,7 @@ const { findOneAndUpdate, confirmPrizeStatus } = require("./helpers/purchase-his
 const { getTrophyData, insertElemWithPlaceholder, defaultSemisecret, defaultSecret } = require("./helpers/prizes-gallery");
 const cloudinary = require('cloudinary').v2;
 const { CLIENT_URL } = require('../../config');
-const getDataChunk = require("../../utils/array/getDataChunk");
+const { getDataChunk } = require("../../utils/array/getDataChunk");
 const filterAndCount = require("../../utils/array/filterAndCount");
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
@@ -321,10 +321,10 @@ exports.readHistoryList = (req, res) => {
     const msgOk ={ msg: "the history list with the latest prizes was read and updated!" };
     const handleFinalRes = () => {
         // challScore = "10_only"
-        const scoreOnly = challScore && challScore.includes("only");
-        const getScoreNumber = challScore => { const _ind = challScore.indexOf("_"); return Number(challScore.slice(0, _ind)) }
-        const rules = [{ challengeN: scoreOnly ? getScoreNumber(challScore) : challScore }, { cardType: "record || remainder" }]
-        if(scoreOnly) return filterAndCount(newHistoryData, { count: "value", rules });
+        // const scoreOnly = challScore && challScore.includes("only");
+        // const getScoreNumber = challScore => { const _ind = challScore.indexOf("_"); return Number(challScore.slice(0, _ind)) }
+        const rules = [{ challengeN: challScore }, { cardType: "record || remainder" }]
+        // if(scoreOnly) return filterAndCount(newHistoryData, { count: "value", rules });
         if(challScore) return { list: newHistoryData, challScore: filterAndCount(newHistoryData, { count: "value", rules }) }
         return noResponse === "true" ? msgOk : newHistoryData;
     }
@@ -346,10 +346,31 @@ exports.readHistoryList = (req, res) => {
 // Prizes
 exports.readPrizes = (req, res) => {
     // INFINITE SCROLLING NOT IMPLEMNTED
-    const { cliAdminId, lastPrizeDate = false, lastPrizeId = false, skip, limit = 5 } = req.query;
-    const { clientUserData: { purchaseHistory } } = req.profile;
+    const {
+        cliAdminId,
+        lastPrizeDate = false, lastPrizeId = false, updatedValues = false,
+        currRewardScore = 0,
+        skip, limit = 5 } = req.query;
 
-    const cliUserPrizes = purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
+    const { clientUserData = {} } = req.profile;
+    const { purchaseHistory, totalPurchasePrize = 0 } = clientUserData;
+
+    if(updatedValues) {
+        const currChall = !totalPurchasePrize ? (totalPurchasePrize + 1) : totalPurchasePrize;
+        const nextChall = currChall + 1;
+
+        const lastRemainder = purchaseHistory && purchaseHistory.find(card => card.cardType === "remainder" && card.challengeN === nextChall);
+        let remainderValue = lastRemainder && lastRemainder.value;
+
+        const rules = [{ challengeN: nextChall }, { cardType: "record || remainder" }]
+        const nextScore = filterAndCount(purchaseHistory, { count: "value", rules });
+
+        if(!remainderValue) remainderValue = 0;
+        return res.json({ remainder: remainderValue, nextScore: nextScore - currRewardScore });
+    }
+
+    const cliUserPrizes = purchaseHistory && purchaseHistory.filter(card => card.cardType === "prize"); //returns [] if none
+    if(!cliUserPrizes) return res.status(404).json({"error": "no prizes found"})
     if(lastPrizeDate && cliUserPrizes.length) return res.json(cliUserPrizes[0].createdAt);
     if(lastPrizeId && cliUserPrizes.length) return res.json(cliUserPrizes[0]._id);
 

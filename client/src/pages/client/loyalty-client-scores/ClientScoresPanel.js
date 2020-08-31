@@ -48,7 +48,7 @@ function ClientScoresPanel({
 
     useCount("ClientScoresPanel") // RT = 46
     const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
-    let { currScore: currentScore, totalGeneralScore, totalActiveScore, totalPurchasePrize } = useClientUser();
+    let { currScore: currentScore, totalGeneralScore, totalActiveScore, totalPurchasePrize = 0 } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { bizName, rewardList, bizCodeName } = useClientAdmin();
 

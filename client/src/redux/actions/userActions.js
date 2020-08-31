@@ -99,10 +99,10 @@ export const readPurchaseHistory = async (_idUser, rewardScore, options = {}) =>
 };
 
 export const changePrizeStatus = async (userId, options = {}) => { // n1
-    const { statusType } = options;
+    const { statusType, prizeId } = options;
 
     try {
-        return await axios.put(`/api/user/purchase-history/update-status/${userId}?statusType=${statusType}`, getHeaderJson);
+        return await axios.put(`/api/user/purchase-history/update-status/${userId}?statusType=${statusType}&prizeId=${prizeId}&newValue=true`, getHeaderJson);
     } catch(err) {
         return err.response;
     }

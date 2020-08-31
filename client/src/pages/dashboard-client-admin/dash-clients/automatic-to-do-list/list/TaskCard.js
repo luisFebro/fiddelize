@@ -65,12 +65,12 @@ function TaskCard(props, ref) {
         return 'grey';
     }
 
-    const dataExpired = React.useMemo({
+    const dataExpired = React.useMemo(() => ({
         adminId: userId,
         taskId,
         cliUserId,
         prizeId
-    }, [userId, taskId, cliUserId, prizeId])
+    }), [userId, taskId, cliUserId, prizeId])
 
     const styles = {
         card: {
@@ -138,6 +138,7 @@ function TaskCard(props, ref) {
             </Card>
             <ActionBtn
                 type="pendingDelivery"
+                taskId={taskId}
                 callback={handleToggleBtnRes}
                 defaultStatus={defaultStatus}
                 expired={didPrizeExpired}

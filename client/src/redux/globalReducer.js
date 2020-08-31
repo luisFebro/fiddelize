@@ -13,12 +13,18 @@ const initialState = {
     run: false,
     runName: '',
     runArray: [], // for history of executed elements...
+    // variables: {},
 };
 
 export const globalReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
             // Objs
+            // case 'VARIABLE':
+            //     return {
+            //         ...state,
+            //         variables: { ...initialState.variable, ...action.payload }
+            //     };
             case 'CURRENT_ITEM_FOUND':
                 return {
                     ...state,

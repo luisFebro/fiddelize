@@ -27,9 +27,9 @@ function areObjsEqual(obj1, obj2) {
 
 exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
     const { statusType, newValue, prizeId } = opts;
-    let status = "FAIL";
+    let status = "OK";
 
-    if(!arrayOfData) return { error: "the array should have at least one object, but found none.", status }
+    if(!arrayOfData) return { error: "the array should have at least one object, but found none.", status: "FAIL" }
     // if(!challengeN || typeof challengeN !== "number") return { error: "no challengeN specified as option or invalid format. it should be number", status };
     if(!"received, confirmed".includes(statusType)) return { error: `the option statusType should be either "confirmed" or "received"`, status };
 
@@ -46,15 +46,18 @@ exports.confirmPrizeStatus = (arrayOfData, opts = {}) => {
     const statusToSet = options[statusType];
 
     const newData = arrayOfData.map(card => {
-        const allNonConfirmed = card[statusToSet] === false;
-        const typeSearch = (prizeId && thisNewValue === false) ? card["_id"].toString() === (prizeId) : allNonConfirmed;
+        const typeSearch = card["_id"].toString() === (prizeId);
         const nonChangedPrize = card.cardType === "prize" && typeSearch;
 
         const okPrize = card.cardType === "prize" && card[statusToSet] === true;
 
+        if(statusType === "confirmed") {
+            const alreadyPrizeTrue = typeSearch && card[statusToSet] === true
+            if(alreadyPrizeTrue) status = "FAIL";
+        }
+
         if(nonChangedPrize) {
             card[statusToSet] = thisNewValue;
-            status = "OK";
             ++newChallengeN;
             return card;
         }

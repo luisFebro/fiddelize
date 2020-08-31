@@ -20,7 +20,7 @@ export default function PercCircleAndGift({
     classNamePerc,
     userName,
     prizeDesc,
-    arePrizesVisible = true,
+    arePrizesVisible,
     currChall,
     userId, }) {
     const [isGiftOpen, setIsGiftOpen] = useState(false);
@@ -33,6 +33,7 @@ export default function PercCircleAndGift({
     const userBeatedChall = currScore >= maxScore;
 
     const { finalDeadline } = useDatesCountdown({ deadline: rewardDeadline, userId })
+    const didPrizeExpired = finalDeadline === 0;
 
     const handleColorSelection = () => {
         if(colorS === "white") {
@@ -56,7 +57,7 @@ export default function PercCircleAndGift({
         },
         deadlineBoard: {
             borderRadius: '30px',
-            backgroundColor: "var(--themeSDark--" + colorS +")",
+            backgroundColor: didPrizeExpired ? "var(--expenseRed)" : "var(--themeSDark--" + colorS +")",
             border: '3px solid white',
         },
         timerIcon: {
@@ -90,14 +91,16 @@ export default function PercCircleAndGift({
         >
             <div className="position-relative">
                 <div style={styles.deadlineBoard}>
-                    {!finalDeadline
+                    {(!finalDeadline && !didPrizeExpired)
                     ? (
                         <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
                             ... dias
                         </p>
                     ) : (
-                        <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
-                            {finalDeadline === 0 ? `expirou` : `${finalDeadline} dia${plural}`}
+                        <p
+                            className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap"
+                        >
+                            {didPrizeExpired ? `expirou` : `${finalDeadline} dia${plural}`}
                         </p>
                     )}
                 </div>

@@ -4,6 +4,10 @@ import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
 // import lStorage from '../../utils/storage/lStorage';
 // export * from './lForageStore';
 
+export const setVariables = () => {
+    return null;
+}
+
 // convert the blob (image) into a data-url (a base64 string) and set that as the src for your image element.
 // createInstance and config is required especially if you are reading or deleting a file. Requires the right collection to process.
 export const setImage = (collection, dataKey, imageUrlValue) => {
