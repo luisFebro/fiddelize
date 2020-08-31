@@ -1,6 +1,10 @@
 import React from 'react';
+import AnimaIconsSelect from '../../../../../components/selects/anima-icons-select/AnimaIconsSelect';
 
 export default function Filters({ listTotal }) {
+    const showSelect = () => (
+        <AnimaIconsSelect/>
+    );
 
     const showFilteredListTitle = () => (
         listTotal !== 0 &&
@@ -11,6 +15,7 @@ export default function Filters({ listTotal }) {
 
     return (
         <section>
+            {showSelect()}
             {showFilteredListTitle()}
         </section>
     );
