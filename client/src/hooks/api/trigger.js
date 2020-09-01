@@ -6,8 +6,9 @@ const getUniqueId = () => uuidv1();
 // use it for useAPIList only since trigger does not return nothing as data, only works for updating if necessary later...
 function getTrigger(runNameWithId, targetName, options = {}) {
     const { cond2 } = options;
-
+    let trigger1 = runNameWithId;
     let trigger2 = false;
+
     if(cond2) {
         const gotCond2 = window.sessionStorage.getItem(cond2);
         if(!gotCond2) {
@@ -17,6 +18,7 @@ function getTrigger(runNameWithId, targetName, options = {}) {
         if(gotCond2 !== cond2) {
             window.sessionStorage.setItem("cond2", cond2);
             trigger2 = cond2;
+            if(trigger2) trigger1 = false;
         }
     }
 
@@ -24,10 +26,12 @@ function getTrigger(runNameWithId, targetName, options = {}) {
 
     if(typeof runNameWithId !== "string") return;
 
-    // need better logics
-    const condTrigger = trigger2 || runNameWithId.includes(targetName);
+    if(trigger1) trigger2 = false;
 
-    return condTrigger ? (trigger2 || runNameWithId) : false;
+    const condTrigger = trigger2 || runNameWithId.toString().includes(targetName);
+    console.log("condTrigger", condTrigger);
+    console.log((trigger2 || trigger1))
+    return condTrigger ? (trigger2 || trigger1) : false;
 }
 
 // used for useAPI since requires the trigger to be true in the start.

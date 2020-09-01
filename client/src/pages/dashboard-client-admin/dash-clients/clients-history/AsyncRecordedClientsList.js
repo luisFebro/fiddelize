@@ -67,7 +67,6 @@ export default function AsyncRecordedClientsList() {
     const params = { role: "cliente", filter: filterName };
 
     const { runName } = useRunComp();
-    console.log("getTrigger", getTrigger(runName, "RecordedClientsList", { cond2: filterName }))
     const trigger = getTrigger(runName, "RecordedClientsList", { cond2: filterName });
 
     const {
@@ -194,6 +193,7 @@ export default function AsyncRecordedClientsList() {
                     <Fragment>
                         <Filters
                             listTotal={listTotal}
+                            loading={loading}
                             handleSelectedFilter={handleSelectedFilter}
                         />
                         {showAccordion()}

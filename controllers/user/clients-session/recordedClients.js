@@ -35,9 +35,38 @@ const getQuery = (role) => {
 const handleFilter = (filter) => {
     const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
 
+    // not working alphabeticOrderZA
+    if(filter === "alphabeticOrder" || filter === "alphabeticOrderZA") {
+        return {$sort: { ...defaultSort, name: filter === "alphabeticOrder" ? 1 : -1 }}
+    }
+
+    // the date should be converted from 23 de Janeiro de 1994 format...
+    if(filter === "birthdayCustomers") {
+        return {$sort: { ...defaultSort, birthday: null }}
+    }
+
+    // not lworking buyLessCustomers
+    if(filter === "buyMoreCustomers" || filter === "buyLessCustomers") {
+        return {$sort: { ...defaultSort, "clientUserData.totalGeneralScore": filter === "buyMoreCustomers" ? -1 : 1 }}
+    }
+
     if(filter === "newCustomers" || filter === "veteranCustomers") {
         return {$sort: { ...defaultSort, createdAt: filter === "newCustomers" ? -1 : 1 }}
     }
+
+    // not wolrin glowestActiveScores
+    if(filter === "highestActiveScores" || filter === "lowestActiveScores") {
+        return {$sort: { ...defaultSort, "clientUserData.currScore": filter === "highestActiveScores" ? -1 : 1 }}
+    }
+
+    // if(filter === "highestSinglePurchases" || filter === "lowestSinglePurchases") {
+    //     return {$sort: { ...defaultSort, "clientUserData.smt": filter === "highestSinglePurchases" ? -1 : 1 }}
+    // }
+
+    // if(filter === "lastPurchases" || filter === "firstPurchases") {
+    //     return {$sort: { ...defaultSort, "clientUserData.smt": filter === "lastPurchases" ? -1 : 1 }}
+    // }
+
 }
 
 exports.getRecordedClientList = (req, res) => { // n3 - New way of fetching data with $facet aggreagtion

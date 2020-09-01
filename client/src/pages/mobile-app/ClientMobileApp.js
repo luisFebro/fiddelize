@@ -1,5 +1,5 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, Fragment } from 'react';
 import AsyncLogin from '../../components/auth/AsyncLogin';
 import { Link, withRouter } from 'react-router-dom';
 import { useStoreDispatch } from 'easy-peasy';
@@ -124,7 +124,7 @@ function ClientMobileApp({ location, history }) {
             comp={
                 <div
                     className="container-center position-relative"
-                    style={{top: -78}}
+                    style={{top: roleWhichDownloaded ? -78 : 10 }}
                 >
                     <AsyncLogin
                         setLoginOrRegister={setLoginOrRegister}
@@ -135,18 +135,26 @@ function ClientMobileApp({ location, history }) {
     );
 
     const showRegister = (needLoginBtn, needSetFunc) => (
-        <CompLoader
-            width={200}
-            height={300}
-            comp={
-                <div className="position-relative" style={{top: -120}}>
-                    <AsyncRegisterCliUser
-                        setLoginOrRegister={setLoginOrRegister || true}
-                        needLoginBtn={needLoginBtn}
-                    />
-                </div>
-            }
-        />
+        <Fragment>
+            <p
+                className="mx-2 mt-3 text-normal font-weight-bold text-center text-white"
+                style={{ marginBottom: 100 }}
+            >
+                Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de compras feito para você!
+            </p>
+            <CompLoader
+                width={200}
+                height={300}
+                comp={
+                    <div className="position-relative" style={{top: -120}}>
+                        <AsyncRegisterCliUser
+                            setLoginOrRegister={setLoginOrRegister || true}
+                            needLoginBtn={needLoginBtn}
+                        />
+                    </div>
+                }
+            />
+        </Fragment>
     );
 
     const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.

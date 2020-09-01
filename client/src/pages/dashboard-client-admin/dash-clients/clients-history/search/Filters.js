@@ -2,7 +2,7 @@ import React from 'react';
 import AnimaIconsSelect from '../../../../../components/selects/anima-icons-select/AnimaIconsSelect';
 
 export default function Filters({
-    listTotal, handleSelectedFilter,
+    listTotal, handleSelectedFilter, loading
 }) {
 
     const showCategories = () => (
@@ -12,6 +12,7 @@ export default function Filters({
             <br />
             <AnimaIconsSelect
                 callback={handleSelectedFilter}
+                loading={loading}
             />
         </section>
     );

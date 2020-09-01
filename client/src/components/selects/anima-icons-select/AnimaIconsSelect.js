@@ -6,7 +6,6 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import handleChange from '../../../utils/form/use-state/handleChange';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 // custom icons
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import CakeIcon from '@material-ui/icons/Cake';
@@ -37,7 +36,7 @@ const optionsArray = [
         Icon: <CakeIcon />,
     },
     {
-        titleBr: "Clientes Compram Mais",
+        titleBr: "Clientes Fãs (compram mais)",
         title: "buyMoreCustomers",
         reverseBr: "Clientes Compram Menos",
         reverse: "buyLessCustomers",
@@ -55,10 +54,10 @@ const optionsArray = [
         Icon: <StarsIcon />,
     },
     {
-        titleBr: "Maiores Pontos Gerais",
-        title: "highestScores",
-        reverseBr: "Menores Pontos Gerais",
-        reverse: "lowestScores",
+        titleBr: "Maiores Pontos Ativos",
+        title: "highestActiveScores",
+        reverseBr: "Menores Pontos Ativos",
+        reverse: "lowestActiveScores",
         removeEmptyOpt: true,
         isPremium: true,
         Icon: <FiberManualRecordIcon />,
@@ -97,13 +96,19 @@ const getStyles = () => ({
         left: '75%',
         transform: 'translateX(-75%)',
         zIndex: 14,
+    },
+    checkIcon: {
+        fontSize: '15px',
+        marginLeft: '10px',
+        color: "var(--themeP)",
     }
 });
 
 export default function AnimaIconsSelect({
-    callback,
+    callback, loading = false,
 }) {
     const [panel, setPanel] = useState(false);
+    const [status, setStatus] = useState("Organizado!");
     const [data, setData] = useState({
         selected: "Clientes Novos",
         selectedOptionBr: "Clientes Novos",
@@ -111,7 +116,10 @@ export default function AnimaIconsSelect({
         CurrIcon: <StarsIcon />,
         title: "newCustomers",
         reverse: "veteranCustomers",
+        isReversed: undefined,
     });
+
+    const styles = getStyles();
 
     const toggleReverse = useRef(false);
 
@@ -122,6 +130,7 @@ export default function AnimaIconsSelect({
         CurrIcon,
         title,
         reverse,
+        isReversed,
     } = data;
 
     useEffect(() => {
@@ -144,11 +153,35 @@ export default function AnimaIconsSelect({
 
     useEffect(() => {
         if(typeof callback === "function") {
-            callback({ selected: title });
+            callback({ selected: title, isReversed: false });
         }
     }, [selected, title]);
 
-    const styles = getStyles();
+    // fix this logic
+    const thisLoading = useRef(loading ? false : true);
+    console.log("thisLoading", thisLoading);
+    const thisReversed = useRef(isReversed ? true : false);
+    console.log("thisReversed", thisReversed);
+    useEffect(() => {
+        const handleStatus = () => {
+            if(thisLoading.current) {
+                return "organizando agora...";
+            } else {
+                thisLoading.current = false;
+                return "Organizado!";
+            }
+            if(thisReversed.current) {
+                return "invertendo ordem...";
+            } else {
+                thisReversed.current = false;
+                return "Organizado e invertido!";
+            }
+        }
+
+        const thisTitle = handleStatus();
+        setStatus(thisTitle);
+    }, [loading, isReversed, thisLoading, thisReversed]);
+
 
     const togglePanel = () => {
         setPanel(prev => !prev);
@@ -201,12 +234,22 @@ export default function AnimaIconsSelect({
     const handleReverse = () => {
         // LESSON: .current should not be destructed or assigned to variable, otherwise it won't work.
         if(!toggleReverse.current) {
-            setData({ ...data, selected: reverseOptionBr, title: reverse, })
+            setData({ ...data, selected: reverseOptionBr, title: reverse, isReversed: true })
             toggleReverse.current = true;
         } else {
-            setData({ ...data, selected: selectedOptionBr, title: title, })
+            setData({ ...data, selected: selectedOptionBr, title: title, isReversed: false })
             toggleReverse.current = false;
         }
+    }
+
+    const showStatus = () => {
+        const needCheckIcon = status === "Organizado e invertido!" || status === "Organizado!";
+        return(
+            <p className="mt-1 text-purple text-small font-weight-bold">
+                {status}
+                {needCheckIcon && <FontAwesomeIcon className="animated rubberband repeat-2" icon="check-circle" style={styles.checkIcon} />}
+            </p>
+        );
     }
 
     return (
@@ -223,6 +266,7 @@ export default function AnimaIconsSelect({
                         {showPanelOptions(optionsArray)}
                     </section>
                 </form>
+                {showStatus()}
                 <div style={styles.currIcon} className="position-absolute">
                     {CurrIcon}
                 </div>
