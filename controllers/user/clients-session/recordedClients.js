@@ -32,15 +32,23 @@ const getQuery = (role) => {
     }
 }
 
+const handleFilter = (filter) => {
+    const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
+
+    if(filter === "newCustomers" || filter === "veteranCustomers") {
+        return {$sort: { ...defaultSort, createdAt: filter === "newCustomers" ? -1 : 1 }}
+    }
+}
+
 exports.getRecordedClientList = (req, res) => { // n3 - New way of fetching data with $facet aggreagtion
     const {
-        role, search, bizId,
+        role, filter, search, bizId,
     } = req.query;
     const limit = parseInt(req.query.limit) || 5;
     const skip = getSkip(parseInt(req.query.skip), limit);
 
-    const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
-    const sortQuery = {$sort: { ...defaultSort, createdAt: -1 }};
+    console.log("selectedFItlerr", handleFilter(filter))
+    const sortQuery = handleFilter(filter);
     const skipQuery = {$skip: skip};
     const limitQuery = {$limit: limit};
     const countQuery = {$count: 'value'};

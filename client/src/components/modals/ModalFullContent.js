@@ -14,7 +14,7 @@ ModalFullContent.propTypes = {
 
 const getStyles = ({ needIndex }) => ({ // assign as false when you need to open other modals above this component like calendar dialog
     root: {
-        zIndex: needIndex ? 3000 : undefined, overflowX: 'hidden',
+        zIndex: needIndex ? 3000 : 15, overflowX: 'hidden',
     },
 });
 

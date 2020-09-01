@@ -251,7 +251,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div id="field2" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field2" className={`d-none animated slideInLeft fast mt-3`}>
                 Qual é o nome do<br />seu projeto/empresa?
                 <TextField
                     required

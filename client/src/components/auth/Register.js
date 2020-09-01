@@ -261,7 +261,7 @@ function Register({
                     }}
                 />
             </div>
-            <div id="field2" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field2" className={`d-none animated slideInLeft fast mt-3`}>
                 {isStaff ? "Ok, informe CPF do cliente" : "Ok, informe seu CPF"}
                 <TextField
                     required

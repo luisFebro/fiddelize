@@ -32,6 +32,8 @@ export default function AsyncRecordedClientsList() {
     const { name } = useProfile();
     const { bizPlan } = useClientAdmin();
 
+    const dispatch = useStoreDispatch();
+
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
     const [data, setData] = useState({
@@ -39,8 +41,17 @@ export default function AsyncRecordedClientsList() {
         totalActiveScores: 0,
     });
     const { totalCliUserScores, totalActiveScores } = data;
+    const [filter, setFilter] = useState({
+        filterName: "newCustomers",
+        period: "all",
+    })
+    console.log("filter", filter);
 
-    const dispatch = useStoreDispatch();
+    const { filterName, period, filterName2 } = filter;
+
+    const handleSelectedFilter = (name) => {
+        setFilter({ ...filter, filterName: name.selected })
+    }
 
     // update current amount of accumulative and active scores from all cli-users of which cli-admin.
     // this is necessary so that we can have variables to gather these numbers sincedatabase just process them on the fly
@@ -53,10 +64,11 @@ export default function AsyncRecordedClientsList() {
         updateUser(dispatch, objToSend, businessId)
     }, [totalCliUserScores, totalActiveScores])
 
-    const params = { role: "cliente" };
+    const params = { role: "cliente", filter: filterName };
 
     const { runName } = useRunComp();
-    const trigger = getTrigger(runName, "RecordedClientsList");
+    console.log("getTrigger", getTrigger(runName, "RecordedClientsList", { cond2: filterName }))
+    const trigger = getTrigger(runName, "RecordedClientsList", { cond2: filterName });
 
     const {
         list,
@@ -180,7 +192,10 @@ export default function AsyncRecordedClientsList() {
                 ? (<AsyncShowIllustra />)
                 : (
                     <Fragment>
-                        <Filters listTotal={listTotal} />
+                        <Filters
+                            listTotal={listTotal}
+                            handleSelectedFilter={handleSelectedFilter}
+                        />
                         {showAccordion()}
                         {loading && <ShowLoadingSkeleton size="large" />}
                         {error && <ShowError />}

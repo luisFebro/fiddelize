@@ -13,8 +13,8 @@
     position: relative;
     width: 300px;
     height: 42px;
-    margin: 100px auto 0 auto;
-    z-index: 10;
+    margin: 20px auto 0 auto;
+    z-index: 5;
 }
 
 #anima-icons-select-button {
@@ -26,9 +26,12 @@
     cursor: pointer;
 
     #selected-value {
-        font-size: 16px;
         line-height: 1;
-        // margin-right: 26px;
+        position: absolute;
+        left: 12px;
+        width: 217px;
+        margin-left: 25px;
+        height: 25px;
     }
 
     #chevrons {
@@ -72,8 +75,8 @@
 
 .option, .label
 {
-    color: #2d3667;
-    font-size: 16px;
+    color: var(--themeP);
+    // font-size: 16px;
 }
 
 #options-view-button:checked + #select-button #chevrons svg
@@ -100,7 +103,7 @@
 
     .option svg {
         position: absolute;
-        left: 14px;
+        left: 7px;
         padding: 0;
         display: none;
     }
@@ -196,13 +199,15 @@ input[type="radio"]
 
 .label {
     transition: 0.3s ease all;
+    margin-left: 25px;
 }
 
 .opt-val {
     position: absolute;
-    left: 14px;
+    left: 12px;
     width: 217px;
-    height: 21px;
+    margin-left: 25px;
+    height: 25px;
     opacity: 0;
     background-color: #fff;
     transform: scale(0);
@@ -253,31 +258,27 @@ input[type="radio"]
 }
 
 .option:nth-child(2) input[type="radio"]:checked ~ .opt-val {
-    top: -71px;
+    top: -76px;
 }
 
 .option:nth-child(3) input[type="radio"]:checked ~ .opt-val {
-    top: -111px;
+    top: -121px;
 }
 
 .option:nth-child(4) input[type="radio"]:checked ~ .opt-val {
-    top: -151px;
+    top: -166px;
 }
 
 .option:nth-child(5) input[type="radio"]:checked ~ .opt-val {
-    top: -191px;
+    top: -211px;
 }
 
 .option:nth-child(6) input[type="radio"]:checked ~ .opt-val {
-    top: -231px;
+    top: -256px;
 }
 
 .option:nth-child(7) input[type="radio"]:checked ~ .opt-val {
-    top: -271px;
-}
-
-.option:nth-child(8) input[type="radio"]:checked ~ .opt-val {
-    top: -311px;
+    top: -301px;
 }
 
 #option-bg {
@@ -306,29 +307,25 @@ input[type="radio"]
 }
 
 .option:nth-child(2):hover ~ #option-bg {
-    top: 40px;
+    top: 44px;
 }
 
 .option:nth-child(3):hover ~ #option-bg {
-    top: 80px;
+    top: 88px;
 }
 
 .option:nth-child(4):hover ~ #option-bg {
-    top: 120px;
+    top: 132px;
 }
 
 .option:nth-child(5):hover ~ #option-bg {
-    top: 160px;
+    top: 176px;
 }
 
 .option:nth-child(6):hover ~ #option-bg {
-    top: 200px;
+    top: 224px;
 }
 
 .option:nth-child(7):hover ~ #option-bg {
-    top: 240px;
-}
-
-.option:nth-child(8):hover ~ #option-bg {
-    top: 280px;
+    top: 268px;
 }

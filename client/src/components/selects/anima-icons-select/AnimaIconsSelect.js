@@ -1,9 +1,11 @@
 // reference: https://codepen.io/himalayasingh/pen/pxKKgd
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './AnimaIconsSelect.scss';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import handleChange from '../../../utils/form/use-state/handleChange';
+import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // custom icons
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
@@ -80,13 +82,73 @@ const optionsArray = [
         Icon: <LocalMallIcon />,
     },
 ]
-export default function AnimaIconsSelect() {
+
+const getStyles = () => ({
+    root: { width: 300 },
+    currIcon: {
+        top: 3,
+        transform: 'scale(1.8)',
+        zIndex: 11,
+        left: 0,
+        color: 'var(--themeP)',
+    },
+    reverseBtn: {
+        top: -35,
+        left: '75%',
+        transform: 'translateX(-75%)',
+        zIndex: 14,
+    }
+});
+
+export default function AnimaIconsSelect({
+    callback,
+}) {
     const [panel, setPanel] = useState(false);
     const [data, setData] = useState({
+        selected: "Clientes Novos",
         selectedOptionBr: "Clientes Novos",
+        reverseOptionBr: "Clientes Veteranos",
+        CurrIcon: <StarsIcon />,
+        title: "newCustomers",
+        reverse: "veteranCustomers",
     });
-    const { selectedOptionBr } = data;
-    console.log("selectedOption", selectedOptionBr);
+
+    const toggleReverse = useRef(false);
+
+    const {
+        selected,
+        selectedOptionBr,
+        reverseOptionBr,
+        CurrIcon,
+        title,
+        reverse,
+    } = data;
+
+    useEffect(() => {
+        const foundElem = optionsArray.find(opt => opt.titleBr === selected);
+        if(foundElem) {
+            const {
+                Icon, title, reverse, titleBr, reverseBr
+            } = foundElem;
+            setData({
+                ...data,
+                selected: titleBr,
+                selectedOptionBr: titleBr,
+                reverseOptionBr: reverseBr,
+                title,
+                reverse,
+                CurrIcon: Icon,
+            })
+        }
+    }, [selected])
+
+    useEffect(() => {
+        if(typeof callback === "function") {
+            callback({ selected: title });
+        }
+    }, [selected, title]);
+
+    const styles = getStyles();
 
     const togglePanel = () => {
         setPanel(prev => !prev);
@@ -97,9 +159,9 @@ export default function AnimaIconsSelect() {
             id="anima-icons-select-button"
             className="anima-icons-border"
         >
-            <div id="selected-value">
-                <span className="text-purple text-small font-weight-bold">
-                    {selectedOptionBr}
+            <div>
+                <span id="selected-value" className="text-purple text-small font-weight-bold">
+                    {selected}
                 </span>
             </div>
             <div id="chevrons">
@@ -116,38 +178,65 @@ export default function AnimaIconsSelect() {
                     <input
                         className="s-c top"
                         type="radio"
-                        name="selectedOptionBr"
+                        name="selected"
                         value={opt.titleBr}
                         onChange={handleChange(setData)}
                     />
                     <input
                         className="s-c bottom"
                         type="radio"
-                        name="selectedOptionBr"
+                        name="selected"
                         value={opt.titleBr}
                         onChange={handleChange(setData)}
                     />
                     {opt.Icon}
-                    <span className="label">{opt.titleBr}</span>
-                    <span className="opt-val">{opt.titleBr}</span>
+                    <span className="label text-small font-weight-bold">{opt.titleBr}</span>
+                    <span className="opt-val text-small font-weight-bold">{opt.titleBr}</span>
                 </div>
             ))}
             <div id="option-bg"></div>
         </section>
     );
 
+    const handleReverse = () => {
+        // LESSON: .current should not be destructed or assigned to variable, otherwise it won't work.
+        if(!toggleReverse.current) {
+            setData({ ...data, selected: reverseOptionBr, title: reverse, })
+            toggleReverse.current = true;
+        } else {
+            setData({ ...data, selected: selectedOptionBr, title: title, })
+            toggleReverse.current = false;
+        }
+    }
+
     return (
-        <form id="app-cover">
-            <section id="select-box">
-                <input
-                    onClick={togglePanel}
-                    type="checkbox"
-                    id="options-view-button"
-                />
-                {showFieldSelector()}
-                {showPanelOptions(optionsArray)}
+        <section className="container-center-max-width-500">
+            <section className="position-relative" style={styles.root}>
+                <form id="app-cover">
+                    <section id="select-box">
+                        <input
+                            onClick={togglePanel}
+                            type="checkbox"
+                            id="options-view-button"
+                        />
+                        {showFieldSelector()}
+                        {showPanelOptions(optionsArray)}
+                    </section>
+                </form>
+                <div style={styles.currIcon} className="position-absolute">
+                    {CurrIcon}
+                </div>
+                <div style={styles.reverseBtn} className="position-absolute">
+                    <ButtonFab
+                       size="small"
+                       position="relative"
+                       iconFontAwesome={<FontAwesomeIcon icon="sync-alt" />}
+                       onClick={handleReverse}
+                       backgroundColor={"var(--themeSDark--default)"}
+                    />
+                </div>
             </section>
-        </form>
+        </section>
     );
 }
 
