@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const collectionName = "all-clients";
-const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
+// const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
+
 const {
     SmsHistorySchema,
     SmsAutomationSchema,
@@ -143,7 +144,7 @@ const clientAdminData = {
         default: "gratis",
         enum: ["gratis", "bronze", "prata", "ouro"]
     },
-    payActiveId: String, // uniqueId_nextExpiresDate
+    payActiveId: String, // NOT IMPLEMENTED uniqueId_nextExpiresDate
     payServiceList: PayServicesListSchema,
     // end premium plans
 
@@ -182,10 +183,11 @@ const clientAdminData = {
     pendingRegisters: [PendingRegistersSchema],
 }
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
-ClientAdminDataSchema.pre('save', function(next) {
-    this.bizPlanCode = generatePlanCodes();
-    next();
-});
+// depracated but it was working well.
+// ClientAdminDataSchema.pre('save', function(next) {
+//     this.bizPlanCode = generatePlanCodes();
+//     next();
+// });
 // End Client Admin
 
 // Central Admin

@@ -12,6 +12,13 @@ function generateAlphaNumeric(length, chars) {
     return result;
 }
 
+module.exports = generateAlphaNumeric;
+
+// Other working exemple:
+// const length = 11; // max lenght is 11 characters.
+// const until11alphanumericGenerator = Math.random().toString(36).substr(2, length)
+//
+/*
 const generatePlanCodes = () => {
     const codesObj = { bronze: null, silver: null, gold: null };
     let plan;
@@ -21,9 +28,4 @@ const generatePlanCodes = () => {
 
     return codesObj;
 }
-
-module.exports = generatePlanCodes;
-
-// Other working exemple:
-// const length = 11; // max lenght is 11 characters.
-// const until11alphanumericGenerator = Math.random().toString(36).substr(2, length)
+// */
