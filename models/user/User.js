@@ -99,12 +99,12 @@ const regulationData = {
 }
 const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true does  not work as a subdocument
 
-const planCodesData = {
-    bronze: String, // self-service functionalities - 3 options
-    silver: String,
-    gold: String,
+const PayServicesList = {
+    func: { type: String,  enum: ["orgganize_clients", "proccure_clients"] }, // funcName_local
+    expires: Date,
+    period: { type: Number,  enum: [30, 360] }, // monthly or yearly
 }
-const PaidPlanCodesSchema = new Schema(planCodesData, { _id: false });
+const PayServicesListSchema = new Schema(PayServicesList, { _id: true });
 
 // where_what_description
 const onceCheckedData = {
@@ -143,9 +143,8 @@ const clientAdminData = {
         default: "gratis",
         enum: ["gratis", "bronze", "prata", "ouro"]
     },
-    bizPlanCode: PaidPlanCodesSchema,
-    bizPlanStarts: Date, // NOT IMPLEMENTED YET
-    bizPlanExpires: Date, // NOT IMPLEMENTED YET
+    payActiveId: String, // uniqueId_nextExpiresDate
+    payServiceList: PayServicesListSchema,
     // end premium plans
 
     // address

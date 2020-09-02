@@ -29,7 +29,6 @@ function getTrigger(runNameWithId, targetName, options = {}) {
     if(trigger1) trigger2 = false;
 
     const condTrigger = trigger2 || runNameWithId.toString().includes(targetName);
-    console.log("(trigger2 || trigger1)", (trigger2 || trigger1))
     return condTrigger ? (trigger2 || trigger1) : false;
 }
 

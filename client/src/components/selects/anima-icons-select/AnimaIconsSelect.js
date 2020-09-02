@@ -6,6 +6,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import handleChange from '../../../utils/form/use-state/handleChange';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import usePro from '../../../hooks/pro/usePro';
 // custom icons
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import CakeIcon from '@material-ui/icons/Cake';
@@ -16,7 +17,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 
 // show a yellow badge for premium options aside the name.
-const optionsArray = [
+const optionsArray = (isUserPro) => ([
     {
         titleBr: "Ordem Alfabética A-Z",
         title: "alphabeticOrder",
@@ -24,7 +25,7 @@ const optionsArray = [
         reverse: "alphabeticOrderZA",
         removeEmptyOpt: false,
         isPro: false,
-        Icon: <SortByAlphaIcon style={{ color: 'var(--themeP)' }} />,
+        Icon: <SortByAlphaIcon />,
     },
     {
         titleBr: "Clientes Novos",
@@ -33,7 +34,7 @@ const optionsArray = [
         reverse: "veteranCustomers",
         removeEmptyOpt: false,
         isPro: false,
-        Icon: <StarsIcon style={{ color: 'var(--themeP)' }} />,
+        Icon: <StarsIcon />,
     },
     {
         titleBr: "Clientes Aniversariantes",
@@ -42,7 +43,7 @@ const optionsArray = [
         reverse: null,
         removeEmptyOpt: false,
         isPro: true,
-        Icon: <CakeIcon style={{ color: 'grey' }} />,
+        Icon: <CakeIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
     },
     {
         titleBr: "Clientes Fãs (compram mais)",
@@ -51,7 +52,7 @@ const optionsArray = [
         reverse: "buyLessCustomers",
         removeEmptyOpt: true,
         isPro: true,
-        Icon: <LoyaltyIcon style={{ color: 'grey' }} />,
+        Icon: <LoyaltyIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
     },
     {
         titleBr: "Maiores Pontos Ativos",
@@ -60,7 +61,7 @@ const optionsArray = [
         reverse: "lowestActiveScores",
         removeEmptyOpt: true,
         isPro: true,
-        Icon: <FiberManualRecordIcon style={{ color: 'grey' }} />,
+        Icon: <FiberManualRecordIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
     },
     {
         titleBr: "Maiores Valores por Compra",
@@ -69,7 +70,7 @@ const optionsArray = [
         reverse: "lowestSinglePurchases",
         removeEmptyOpt: true,
         isPro: true,
-        Icon: <MonetizationOnIcon style={{ color: 'grey' }} />,
+        Icon: <MonetizationOnIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
     },
     {
         titleBr: "Últimas Compras",
@@ -78,9 +79,9 @@ const optionsArray = [
         reverse: "firstPurchases",
         removeEmptyOpt: true,
         isPro: true,
-        Icon: <LocalMallIcon style={{ color: 'grey' }} />,
+        Icon: <LocalMallIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
     },
-]
+]);
 
 const getStyles = () => ({
     root: { width: 300 },
@@ -89,7 +90,7 @@ const getStyles = () => ({
         transform: 'scale(1.8)',
         zIndex: 11,
         left: 0,
-        color: 'var(--themeP)',
+        color: 'var(--themeP) !important',
     },
     reverseBtn: {
         bottom: -5,
@@ -129,6 +130,9 @@ export default function AnimaIconsSelect({
 
     const styles = getStyles();
 
+    const { isUserPro } = usePro({ feature: 'orgganize_clients' });
+    console.log("isUserPro", isUserPro);
+
     const toggleReverse = useRef(false);
 
     const {
@@ -142,7 +146,7 @@ export default function AnimaIconsSelect({
     } = data;
 
     useEffect(() => {
-        const foundElem = optionsArray.find(opt => opt.titleBr === selected);
+        const foundElem = optionsArray(isUserPro).find(opt => opt.titleBr === selected);
         if(foundElem) {
             const {
                 Icon, title, reverse, titleBr, reverseBr
@@ -212,8 +216,8 @@ export default function AnimaIconsSelect({
 
     const showPanelOptions = (optionsArray) => (
         <section className={`${panel ? "d-block animated fadeIn" : "d-none"}`} id="options">
-            {optionsArray.map(opt => (
-                <div onClick={null} key={opt.title} className="option">
+            {optionsArray(isUserPro).map(opt => (
+                <div onClick={null} key={opt.title} className={`option ${(isUserPro || !opt.isPro) ? "" : "disabled-link"}`}>
                     <input
                         className="s-c top"
                         type="radio"
@@ -225,22 +229,21 @@ export default function AnimaIconsSelect({
                         className="s-c bottom"
                         type="radio"
                         name="selected"
+                        disabled={opt.pro ? true : false}
                         value={opt.titleBr}
                         onChange={handleChange(setData)}
                     />
                     {opt.Icon}
-                    <section className="position-relative">
-                        <span style={{ color: opt.isPro ? 'grey' : 'var(--themeP)' }} className="label text-small font-weight-bold">{opt.titleBr}</span>
-                        <span className="opt-val text-small font-weight-bold">{opt.titleBr}</span>
-                        {opt.isPro && (
-                            <div
-                                className="position-absolute ml-3 font-weight-bold text-small text-black"
-                                style={styles.proBadge}
-                            >
-                                pro
-                            </div>
-                        )}
-                    </section>
+                    <span style={{ color: (isUserPro || !opt.isPro) ? undefined : 'grey' }} className="label text-small font-weight-bold">{opt.titleBr}</span>
+                    <span className="opt-val text-small font-weight-bold">{opt.titleBr}</span>
+                    {(!isUserPro && opt.isPro) && (
+                        <div
+                            className="position-absolute ml-3 font-weight-bold text-small text-black"
+                            style={styles.proBadge}
+                        >
+                            pro
+                        </div>
+                    )}
                 </div>
             ))}
             <div id="option-bg"></div>
