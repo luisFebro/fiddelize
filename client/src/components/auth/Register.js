@@ -22,6 +22,8 @@ import handleChange from '../../utils/form/use-state/handleChange';
 import lStorage from '../../utils/storage/lStorage';
 import { useClientAdmin } from '../../hooks/useRoleData';
 import selectTxtStyle from '../../utils/biz/selectTxtStyle';
+import setValObjWithStr from '../../utils/objects/setValObjWithStr';
+import getDateCode from '../../utils/dates/getDateCode';
 // Material UI
 // import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -78,7 +80,7 @@ function Register({
         birthday: '',
         cpf: '',
         maritalStatus: 'selecione estado civil',
-        clientUserData: { bizId: bizSysId },
+        clientUserData: { bizId: bizSysId, filterBirthday: '' },
     });
 
     const styles = getStyles();
@@ -111,8 +113,14 @@ function Register({
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        const opts = { needYear: true }
-        setData({ ...data, birthday: getDayMonthBr(selectedDate, opts) })
+        if(selectedDate) {
+            const opts = { needYear: true }
+            const thisBirthDate = getDayMonthBr(selectedDate, opts);
+            const { code: thisBirthCode } = getDateCode(thisBirthDate);
+
+            setData({ ...data, birthday: thisBirthDate });
+            setValObjWithStr(data, "clientUserData.filterBirthday", thisBirthCode);
+        }
     }, [selectedDate])
 
     const clearData = () => {

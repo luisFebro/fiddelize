@@ -32,7 +32,7 @@ export default function convertToReal(number, options = {}) {
     ? res = number.toLocaleString('pt-BR', config)
     : res = number.toLocaleString('pt-BR', config)
 
-    const needComma = number => number <= 1000;
+    const needComma = number => number < 1000;
     if(needComma(number)) {
         res = res.toString().replace(".", ",");
     }

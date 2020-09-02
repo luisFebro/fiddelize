@@ -1,4 +1,5 @@
 import getDayMonthBr from '../getDayMonthBr';
+import getDateCode from '../getDateCode';
 
 export default function needAlertBirthday(strBirthDate, options = {}) {
     let { daySpan, trigger } = options;
@@ -26,33 +27,6 @@ export default function needAlertBirthday(strBirthDate, options = {}) {
     return {
         isBelated: isBirthdayBelated,
         alert
-    }
-}
-
-const monthesDetails = getMonthesDetails();
-// let already = false; // DETECTED> bd was set the date incompletely like 19 de Abril wihtout year this is returning a second type like August and then Abri incomplete causing error...
-function getDateCode(strDate) {
-    if(!strDate) return {
-        code: 0,
-        monthCode: 0,
-        maxDayMonth: 0,
-    }
-
-    const indFirstSpacing = strDate.indexOf(" ");
-    let day = strDate.slice(0, indFirstSpacing);
-    if(day === "1º") day = "01";
-    if(day.length === 1) day = `0${day}`;
-
-    const indFirstMonthSpacing = strDate.lastIndexOf(" ", 8) // n1
-    const slicedMonthDate = strDate.slice(indFirstMonthSpacing).trim();
-    const indLastMonthSpacing = slicedMonthDate.indexOf(" ");
-    const month = slicedMonthDate.slice(0, indLastMonthSpacing).toLowerCase();
-    const { codeNum: monthCode, maxDay: maxDayMonth } = monthesDetails[month];
-
-    return {
-        code: Number(monthCode + day),
-        monthCode,
-        maxDayMonth,
     }
 }
 

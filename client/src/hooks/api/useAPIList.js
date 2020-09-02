@@ -56,6 +56,7 @@ export default function useAPIList({
         chunksTotal: null,
         content: null, });
     const { list, listTotal, chunksTotal, content } = data;
+    console.log("chunksTotal", chunksTotal);
 
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState(false);
@@ -150,7 +151,10 @@ export default function useAPIList({
 
     useEffect(() => {
         let cancel;
-        if(reachedChunksLimit) { if(hasMore) setHasMore(false); return; };
+        console.log("Running trigger and check reachedChunksLimit", reachedChunksLimit);
+        const skipReachedChunks = trigger && trigger.indexOf(" ") === -1; // setRun will always have a space. For filtering, for isntance will have only the name
+        console.log("skipReachedChunks", skipReachedChunks);
+        if(reachedChunksLimit && !skipReachedChunks) { if(hasMore) setHasMore(false); return; };
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
         console.log("updateOnly", updateOnly);

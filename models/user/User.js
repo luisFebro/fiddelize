@@ -82,6 +82,9 @@ const clientUserData = {
     totalVisits: { type: Number, default: 0 },
     purchaseHistory: [HistorySchema],
     notifications: [NotificationsSchema],
+    filterBirthday: Number, // 23 de Agosto de 1994 => 823 (month code + day code)
+    filterLastPurchase: Date,
+    filterHighestPurchase: Number,
 }
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 // End Client-User

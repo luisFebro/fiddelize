@@ -23,26 +23,8 @@ const optionsArray = [
         reverseBr: "Ordem Alfabética Z-A",
         reverse: "alphabeticOrderZA",
         removeEmptyOpt: false,
-        isPremium: false,
-        Icon: <SortByAlphaIcon />,
-    },
-    {
-        titleBr: "Clientes Aniversariantes",
-        title: "birthdayCustomers",
-        reverseBr: null,
-        reverse: null,
-        removeEmptyOpt: false,
-        isPremium: true,
-        Icon: <CakeIcon />,
-    },
-    {
-        titleBr: "Clientes Fãs (compram mais)",
-        title: "buyMoreCustomers",
-        reverseBr: "Clientes Compram Menos",
-        reverse: "buyLessCustomers",
-        removeEmptyOpt: true,
-        isPremium: true,
-        Icon: <LoyaltyIcon />,
+        isPro: false,
+        Icon: <SortByAlphaIcon style={{ color: 'var(--themeP)' }} />,
     },
     {
         titleBr: "Clientes Novos",
@@ -50,8 +32,26 @@ const optionsArray = [
         reverseBr: "Clientes Veteranos",
         reverse: "veteranCustomers",
         removeEmptyOpt: false,
-        isPremium: false,
-        Icon: <StarsIcon />,
+        isPro: false,
+        Icon: <StarsIcon style={{ color: 'var(--themeP)' }} />,
+    },
+    {
+        titleBr: "Clientes Aniversariantes",
+        title: "birthdayCustomers",
+        reverseBr: null,
+        reverse: null,
+        removeEmptyOpt: false,
+        isPro: true,
+        Icon: <CakeIcon style={{ color: 'grey' }} />,
+    },
+    {
+        titleBr: "Clientes Fãs (compram mais)",
+        title: "buyMoreCustomers",
+        reverseBr: "Clientes Compram Menos",
+        reverse: "buyLessCustomers",
+        removeEmptyOpt: true,
+        isPro: true,
+        Icon: <LoyaltyIcon style={{ color: 'grey' }} />,
     },
     {
         titleBr: "Maiores Pontos Ativos",
@@ -59,8 +59,8 @@ const optionsArray = [
         reverseBr: "Menores Pontos Ativos",
         reverse: "lowestActiveScores",
         removeEmptyOpt: true,
-        isPremium: true,
-        Icon: <FiberManualRecordIcon />,
+        isPro: true,
+        Icon: <FiberManualRecordIcon style={{ color: 'grey' }} />,
     },
     {
         titleBr: "Maiores Valores por Compra",
@@ -68,8 +68,8 @@ const optionsArray = [
         reverseBr: "Menores Valores por Compra",
         reverse: "lowestSinglePurchases",
         removeEmptyOpt: true,
-        isPremium: true,
-        Icon: <MonetizationOnIcon />,
+        isPro: true,
+        Icon: <MonetizationOnIcon style={{ color: 'grey' }} />,
     },
     {
         titleBr: "Últimas Compras",
@@ -77,8 +77,8 @@ const optionsArray = [
         reverseBr: "Primeiras Compras",
         reverse: "firstPurchases",
         removeEmptyOpt: true,
-        isPremium: true,
-        Icon: <LocalMallIcon />,
+        isPro: true,
+        Icon: <LocalMallIcon style={{ color: 'grey' }} />,
     },
 ]
 
@@ -92,21 +92,29 @@ const getStyles = () => ({
         color: 'var(--themeP)',
     },
     reverseBtn: {
-        top: -35,
-        left: '75%',
-        transform: 'translateX(-75%)',
+        bottom: -5,
+        left: '90%',
+        transform: 'translateX(-90%)',
         zIndex: 14,
     },
     checkIcon: {
         fontSize: '15px',
         marginLeft: '10px',
         color: "var(--themeP)",
+    },
+    proBadge: {
+        top: 0,
+        right: 10,
+        borderRadius: '20px',
+        padding: '3px 5px',
+        background: 'var(--niceUiYellow)',
     }
 });
 
 export default function AnimaIconsSelect({
     callback, loading = false,
 }) {
+    console.info("loading", loading);
     const [panel, setPanel] = useState(false);
     const [status, setStatus] = useState("Organizado!");
     const [data, setData] = useState({
@@ -158,29 +166,27 @@ export default function AnimaIconsSelect({
     }, [selected, title]);
 
     // fix this logic
-    const thisLoading = useRef(loading ? false : true);
-    console.log("thisLoading", thisLoading);
-    const thisReversed = useRef(isReversed ? true : false);
-    console.log("thisReversed", thisReversed);
+    // const thisLoading = useRef(loading ? false : true);
+    // console.log("thisLoading", thisLoading);
     useEffect(() => {
         const handleStatus = () => {
-            if(thisLoading.current) {
-                return "organizando agora...";
+            // if(thisLoading.current) {
+            //     return "organizando agora...";
+            // } else {
+            //     thisLoading.current = false;
+            //     return "Organizado!";
+            // }
+            if(isReversed === undefined) return "Organizado!"
+            if(loading) {
+                return "organizando...";
             } else {
-                thisLoading.current = false;
                 return "Organizado!";
-            }
-            if(thisReversed.current) {
-                return "invertendo ordem...";
-            } else {
-                thisReversed.current = false;
-                return "Organizado e invertido!";
             }
         }
 
         const thisTitle = handleStatus();
         setStatus(thisTitle);
-    }, [loading, isReversed, thisLoading, thisReversed]);
+    }, [loading, isReversed]);
 
 
     const togglePanel = () => {
@@ -223,8 +229,18 @@ export default function AnimaIconsSelect({
                         onChange={handleChange(setData)}
                     />
                     {opt.Icon}
-                    <span className="label text-small font-weight-bold">{opt.titleBr}</span>
-                    <span className="opt-val text-small font-weight-bold">{opt.titleBr}</span>
+                    <section className="position-relative">
+                        <span style={{ color: opt.isPro ? 'grey' : 'var(--themeP)' }} className="label text-small font-weight-bold">{opt.titleBr}</span>
+                        <span className="opt-val text-small font-weight-bold">{opt.titleBr}</span>
+                        {opt.isPro && (
+                            <div
+                                className="position-absolute ml-3 font-weight-bold text-small text-black"
+                                style={styles.proBadge}
+                            >
+                                pro
+                            </div>
+                        )}
+                    </section>
                 </div>
             ))}
             <div id="option-bg"></div>
@@ -270,15 +286,17 @@ export default function AnimaIconsSelect({
                 <div style={styles.currIcon} className="position-absolute">
                     {CurrIcon}
                 </div>
-                <div style={styles.reverseBtn} className="position-absolute">
-                    <ButtonFab
-                       size="small"
-                       position="relative"
-                       iconFontAwesome={<FontAwesomeIcon icon="sync-alt" />}
-                       onClick={handleReverse}
-                       backgroundColor={"var(--themeSDark--default)"}
-                    />
-                </div>
+                {title !== "birthdayCustomers" && (
+                    <div style={styles.reverseBtn} className="position-absolute">
+                        <ButtonFab
+                           size="small"
+                           position="relative"
+                           iconFontAwesome={<FontAwesomeIcon icon="sync-alt" />}
+                           onClick={handleReverse}
+                           backgroundColor={"var(--themeSDark--default)"}
+                        />
+                    </div>
+                )}
             </section>
         </section>
     );

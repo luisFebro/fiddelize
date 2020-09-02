@@ -92,7 +92,7 @@ function ClientScoresPanel({
 
     useCount("ClientScoresPanel") // RT = 46
     const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
-    let { currScore: currentScore, totalGeneralScore, totalActiveScore, totalPurchasePrize = 0 } = useClientUser();
+    let { currScore: currentScore, lastScore: lastCurrScore, totalGeneralScore, totalActiveScore, totalPurchasePrize = 0 } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
     const { bizName, rewardList, bizCodeName } = useClientAdmin();
 
@@ -128,12 +128,15 @@ function ClientScoresPanel({
                 setShowTotalPoints
             );
 
+            const newHighestScore = parseFloat(cashCurrScore) >= parseFloat(lastCurrScore) ? parseFloat(cashCurrScore) : parseFloat(lastCurrScore);
             let objToSend = {
                 "clientUserData.bizId": businessId, // for cli-admin or if not it will not override <again className=""></again>
                 "clientUserData.cashCurrScore": cashCurrScore,
                 "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
                 "clientUserData.totalActiveScore": currScoreNow, // the same as currScore | active is passive to be discounted and general it is accumulative without discount.
                 "clientUserData.totalGeneralScore": totalGeneralScore + Number(cashCurrScore),
+                "clientUserData.filterLastPurchase": new Date(),
+                "clientUserData.filterHighestPurchase": newHighestScore,
             }
 
             // This is for cli-admin test client mode which does not have a totalPurchasePrize when it is updated.

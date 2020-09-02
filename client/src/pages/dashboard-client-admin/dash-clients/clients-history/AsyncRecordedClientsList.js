@@ -9,7 +9,7 @@ import { updateUser } from '../../../../redux/actions/userActions';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import Title from '../../../../components/Title';
 import { useAppSystem, useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
-import useAPIList, { readUserList, getTrigger } from '../../../../hooks/api/useAPIList';
+import useAPIList, { readUserList, getTrigger, getUniqueId } from '../../../../hooks/api/useAPIList';
 import { useRunComp } from '../../../../hooks/useRunComp';
 import useElemDetection, { checkDetectedElem } from '../../../../hooks/api/useElemDetection';
 import extractStrData from '../../../../utils/string/extractStrData';
@@ -45,11 +45,12 @@ export default function AsyncRecordedClientsList() {
         filterName: "newCustomers",
         period: "all",
     })
-    console.log("filter", filter);
+    console.log("filterName", filter.filterName);
 
     const { filterName, period, filterName2 } = filter;
 
     const handleSelectedFilter = (name) => {
+        setSkip(0);
         setFilter({ ...filter, filterName: name.selected })
     }
 
@@ -108,7 +109,7 @@ export default function AsyncRecordedClientsList() {
                     className="text-subtitle text-shadow font-weight-bold m-0 mt-4"
                     style={{ lineHeight: '19px' }}
                 >
-                    {!user.clientUserData.totalPurchasePrize
+                    {!user.clientUserData.currScore
                     ? "• 0 Pontos"
                     : ` • ${convertToReal(user.clientUserData.currScore)} Pontos`}
                     {Boolean(user.clientUserData.totalPurchasePrize) && (
@@ -124,11 +125,11 @@ export default function AsyncRecordedClientsList() {
                 >
                     • Última compra:
                     <br />
-                    {!(user.clientUserData && user.clientUserData.purchaseHistory && user.clientUserData.purchaseHistory[0])
+                    {!(user.clientUserData && user.clientUserData.filterLastPurchase)
                     ? <span className="text-small font-weight-bold">Sem data registrada.</span>
                     : (
                         <span className="text-small font-weight-bold">
-                            {calendar(user.clientUserData.purchaseHistory[0].createdAt)}.
+                            {calendar(user.clientUserData.filterLastPurchase)}.
                         </span>
                     )}
                 </span>

@@ -1,4 +1,6 @@
 export default function setValObjWithStr(obj, path, value) {
+    if(!obj || !value || !path) return;
+
     var curr = obj;
     var paths = path.split('.');
     var len = paths.length;
