@@ -151,10 +151,10 @@ export default function useAPIList({
 
     useEffect(() => {
         let cancel;
-        console.log("Running trigger and check reachedChunksLimit", reachedChunksLimit);
-        const skipReachedChunks = trigger && trigger.indexOf(" ") === -1; // setRun will always have a space. For filtering, for isntance will have only the name
-        console.log("skipReachedChunks", skipReachedChunks);
-        if(reachedChunksLimit && !skipReachedChunks) { if(hasMore) setHasMore(false); return; };
+        // TEST MODE - CHANGE THIS
+        // const skipReachedChunks = trigger && trigger.indexOf(" ") === -1; // setRun will always have a space. For filtering, for isntance will have only the name
+        // console.log("skipReachedChunks", skipReachedChunks);
+        if(reachedChunksLimit && !true) { if(hasMore) setHasMore(false); return; };
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
         console.log("updateOnly", updateOnly);

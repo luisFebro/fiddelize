@@ -17,6 +17,8 @@ import { Load } from '../../../../components/code-splitting/LoadableComp';
 import RegisterPanelBtn from './register-panel-btn/RegisterPanelBtn';
 import useElemShowOnScroll from '../../../../hooks/scroll/useElemShowOnScroll';
 import getFirstName from '../../../../utils/string/getFirstName';
+import './_RecordedClientsList.scss';
+import gotArrayThisItem from '../../../../utils/arrays/gotArrayThisItem';
 // import ClientsSearch from './search/ClientsSearch';
 
 const AsyncFreeAccountsLimitMsg = Load({ loader: () => import('./AsyncFreeAccountsLimitMsg' /* webpackChunkName: "free-limit-msg-lazy" */)});
@@ -25,6 +27,63 @@ const Filters = Load({ loader: () => import('./search/Filters' /* webpackChunkNa
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
+
+const activeArray = [
+    "newCustomers", "veteranCustomers",
+    "birthdayCustomers",
+    "buyMoreCustomers", "buyLessCustomers",
+    "highestSinglePurchases", "lowestSinglePurchases",
+    "lastPurchases", "firstPurchases",
+]
+
+const getInfoElem = (target, options = {}) => {
+    const { user } = options;
+    const getElemMaker = (condition, value, emptyMsg, size) => (
+        <Fragment>
+            {!(condition)
+            ? <span className={`${size ? "text-normal" : "text-small"} font-weight-bold`}>{emptyMsg}</span>
+            : (
+                <span className={`${size ? "text-normal" : "text-small"} font-weight-bold`}>
+                    {value}.
+                </span>
+            )}
+        </Fragment>
+    );
+    if(target === "newCustomers") {
+        const condition = user.createdAt;
+        const value = calendar(user.createdAt);
+        const emptyMsg = "Sem data.";
+        return getElemMaker(condition, value, emptyMsg);
+    }
+
+    if(target === "lastPurchases") {
+        const condition = user.clientUserData && user.clientUserData.filterLastPurchase;
+        const value = condition && calendar(user.clientUserData.filterLastPurchase);
+        const emptyMsg = "Sem data registrada.";
+        return getElemMaker(condition, value, emptyMsg);
+    }
+
+    if(target === "birthdayCustomers") {
+        const condition = user.clientUserData && user.clientUserData.filterBirthday;
+        const value = condition && user.birthday;
+        const emptyMsg = "Sem data de aniversário.";
+        return getElemMaker(condition, value, emptyMsg);
+    }
+
+    if(target === "buyMoreCustomers") {
+        const condition = user.clientUserData && user.clientUserData.totalGeneralScore;
+        const value = convertToReal(condition && user.clientUserData.totalGeneralScore);
+        const emptyMsg = "R$ 0.00";
+        return getElemMaker(condition, `R$ ${value}`, emptyMsg, true);
+    }
+
+    if(target === "highestSinglePurchases") {
+        const condition = user.clientUserData && user.clientUserData.filterHighestPurchase;
+        const value = convertToReal(condition && user.clientUserData.filterHighestPurchase);
+        const emptyMsg = "R$ 0.00";
+        return getElemMaker(condition, `R$ ${value}`, emptyMsg, true);
+    }
+}
 
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
@@ -92,7 +151,7 @@ export default function AsyncRecordedClientsList() {
     useEffect(() => {
         if(content) {
             const {
-                totalCliUserScores, // NEED IMPLEMENT IN BACKEND
+                totalCliUserScores,
                 totalActiveScores
             } = extractStrData(content);
             setData({ ...data, totalCliUserScores, totalActiveScores });
@@ -103,46 +162,89 @@ export default function AsyncRecordedClientsList() {
     const actions = list.map(user => {
         const { clientUserData: cliUser } = user;
 
-        const handleSecHeading = user => (
-            <div>
-                <p
-                    className="text-subtitle text-shadow font-weight-bold m-0 mt-4"
-                    style={{ lineHeight: '19px' }}
-                >
-                    {!user.clientUserData.currScore
-                    ? "• 0 Pontos"
-                    : ` • ${convertToReal(user.clientUserData.currScore)} Pontos`}
-                    {Boolean(user.clientUserData.totalPurchasePrize) && (
-                        <Fragment>
-                            <br />
-                            <span className="text-small font-weight-bold">(Desafio Atual N.º {user.clientUserData.totalPurchasePrize + 1})</span>
-                        </Fragment>
-                    )}
-                </p>
-                <span
-                    className="text-shadow text-normal font-weight-bold d-block m-0 mt-3"
-                    style={{lineHeight: '20px'}}
-                >
-                    • Última compra:
-                    <br />
-                    {!(user.clientUserData && user.clientUserData.filterLastPurchase)
-                    ? <span className="text-small font-weight-bold">Sem data registrada.</span>
-                    : (
-                        <span className="text-small font-weight-bold">
-                            {calendar(user.clientUserData.filterLastPurchase)}.
-                        </span>
-                    )}
-                </span>
-            </div>
-        );
+        const handleSecHeading = user => {
+            const highlightActiveScore = filterName.indexOf("highestActiveScores") !== -1 || filterName.indexOf("lowestActiveScores") !== -1;
+
+            const getHighlightInfo = (filterName) => {
+                const needHighlight = gotArrayThisItem(activeArray, filterName);
+                let infoTitle;
+                let infoData;
+
+                const defaultCond =
+                filterName === "newCustomers" || filterName === "veteranCustomers" ||
+                highlightActiveScore || filterName.indexOf("alphabeticOrder") !== -1
+                if(defaultCond) {
+                    infoTitle = "• Cadastro feito:";
+                    infoData = getInfoElem("newCustomers", { user });
+                }
+
+                if(filterName === "lastPurchases" || filterName === "firstPurchases") {
+                    infoTitle = "• Última compra:";
+                    infoData = getInfoElem("lastPurchases", { user });
+                }
+
+                if(filterName === "birthdayCustomers") {
+                    infoTitle = "• Aniversário em:";
+                    infoData = getInfoElem("birthdayCustomers", { user });
+                }
+
+                if(filterName === "buyMoreCustomers" || filterName === "buyLessCustomers") {
+                    infoTitle = "• Já comprou:";
+                    infoData = getInfoElem("buyMoreCustomers", { user });
+                }
+
+                if(filterName === "highestSinglePurchases" || filterName === "lowestSinglePurchases") {
+                    infoTitle = "• Maior Compra:";
+                    infoData = getInfoElem("highestSinglePurchases", { user });
+                }
+
+                return {
+                    hightlightThisInfo: needHighlight,
+                    infoTitle,
+                    infoData,
+                }
+            }
+
+            const {
+                hightlightThisInfo,
+                infoTitle, infoData
+            } = getHighlightInfo(filterName);
+
+            return(
+                <div style={{ marginTop: 45 }}>
+                    <p
+                        className={`${highlightActiveScore ? "recorded-clients-badge" : "" } text-subtitle text-shadow font-weight-bold m-0 mt-4`}
+                        style={{ lineHeight: '19px' }}
+                    >
+                        {!user.clientUserData.currScore
+                        ? "• 0 Pontos"
+                        : ` • ${convertToReal(user.clientUserData.currScore)} Pontos`}
+                        {Boolean(user.clientUserData.totalPurchasePrize) && (
+                            <Fragment>
+                                <br />
+                                <span className="text-small font-weight-bold">(Desafio Atual N.º {user.clientUserData.totalPurchasePrize + 1})</span>
+                            </Fragment>
+                        )}
+                    </p>
+                    <span
+                        className={`${hightlightThisInfo ? "recorded-clients-badge" : "" } text-shadow text-normal font-weight-bold d-block m-0 mt-3`}
+                        style={{lineHeight: '20px'}}
+                    >
+                        {infoTitle}
+                        <br />
+                        {infoData}
+                    </span>
+                </div>
+            );
+        }
 
         const isTestMode = name === user.name.cap();
         const needCliPrizes = cliUser.totalPurchasePrize; // 0 by default.
-
+        const highlightName = filterName.indexOf("alphabeticOrder") !== -1;
         return({
            _id: user._id,
            mainHeading: <span
-                className="text-subtitle text-nowrap font-weight-bold text-shadow">
+                className={`${highlightName ? "recorded-clients-badge" : ""} position-absolute text-subtitle font-weight-bold text-shadow`}>
                 {truncate(getFirstName(user.name.cap(), { addSurname: true }), isSmall ? 17 : 40)}
             </span>,
            secondaryHeading: handleSecHeading(user),

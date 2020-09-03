@@ -1,6 +1,6 @@
 // reference: https://codepen.io/himalayasingh/pen/pxKKgd
 import React, { useState, useEffect, useRef } from 'react';
-import './AnimaIconsSelect.scss';
+import './_AnimaIconsSelect.scss';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import handleChange from '../../../utils/form/use-state/handleChange';
@@ -28,6 +28,15 @@ const optionsArray = (isUserPro) => ([
         Icon: <SortByAlphaIcon />,
     },
     {
+        titleBr: "Maiores Pontos Ativos",
+        title: "highestActiveScores",
+        reverseBr: "Menores Pontos Ativos",
+        reverse: "lowestActiveScores",
+        removeEmptyOpt: true,
+        isPro: false,
+        Icon: <FiberManualRecordIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
+    },
+    {
         titleBr: "Clientes Novos",
         title: "newCustomers",
         reverseBr: "Clientes Veteranos",
@@ -53,15 +62,6 @@ const optionsArray = (isUserPro) => ([
         removeEmptyOpt: true,
         isPro: true,
         Icon: <LoyaltyIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
-    },
-    {
-        titleBr: "Maiores Pontos Ativos",
-        title: "highestActiveScores",
-        reverseBr: "Menores Pontos Ativos",
-        reverse: "lowestActiveScores",
-        removeEmptyOpt: true,
-        isPro: true,
-        Icon: <FiberManualRecordIcon style={{ color: isUserPro ? undefined : 'grey' }} />,
     },
     {
         titleBr: "Maiores Valores por Compra",
@@ -217,7 +217,7 @@ export default function AnimaIconsSelect({
     const showPanelOptions = (optionsArray) => (
         <section className={`${panel ? "d-block animated fadeIn" : "d-none"}`} id="options">
             {optionsArray(isUserPro).map(opt => (
-                <div onClick={null} key={opt.title} className={`option ${(isUserPro || !opt.isPro) ? "" : "disabled-link"}`}>
+                <div key={opt.title} className={`option ${(isUserPro || !opt.isPro) ? "" : "disabled-link"}`}>
                     <input
                         className="s-c top"
                         type="radio"
@@ -274,12 +274,12 @@ export default function AnimaIconsSelect({
     return (
         <section className="container-center-max-width-500">
             <section className="position-relative" style={styles.root}>
-                <form id="app-cover">
+                <form id="app-cover" onChange={togglePanel}>
                     <section id="select-box">
                         <input
-                            onClick={togglePanel}
                             type="checkbox"
                             id="options-view-button"
+                            checked
                         />
                         {showFieldSelector()}
                         {showPanelOptions(optionsArray)}
@@ -289,7 +289,7 @@ export default function AnimaIconsSelect({
                 <div style={styles.currIcon} className="position-absolute">
                     {CurrIcon}
                 </div>
-                {title !== "birthdayCustomers" && (
+                {(!panel && title !== "birthdayCustomers") && (
                     <div style={styles.reverseBtn} className="position-absolute">
                         <ButtonFab
                            size="small"
@@ -301,6 +301,7 @@ export default function AnimaIconsSelect({
                     </div>
                 )}
             </section>
+            <div className={panel ? "anima-icons-overlay" : ""} onClick={togglePanel}></div>
         </section>
     );
 }

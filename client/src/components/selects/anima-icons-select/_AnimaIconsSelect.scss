@@ -7,6 +7,17 @@
 // {
 //     outline: none;
 // }
+.anima-icons-overlay { // close panel in any part of screen and still select option
+    z-index: 3;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 100%;
+    opacity: 0;
+    background-color: black;
+    display: block;
+}
 
 #app-cover
 {
@@ -156,7 +167,7 @@
 
     &:hover ~ svg {
         color: #fff;
-        opacity: 0;
+        opacity: 1;
     }
 
     &:hover {
