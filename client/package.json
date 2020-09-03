@@ -42,8 +42,7 @@
     "build": "CI=false && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "analyse": "node scripts/analyse.js",
-    "precommit": "pretty-quick --staged"
+    "analyse": "node scripts/analyse.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -64,9 +63,17 @@
     "cypress": "^4.9.0",
     "fs": "0.0.1-security",
     "gulp": "^4.0.2",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.13",
     "path": "^0.12.7",
     "prettier": "2.1.1",
+    "pretty-quick": "^3.0.0",
     "progress-bar-webpack-plugin": "^2.1.0",
     "webpack-bundle-analyzer": "^3.8.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
