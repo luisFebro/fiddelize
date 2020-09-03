@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePro from "../../../hooks/pro/usePro";
 import { useOfflineData } from "../../../hooks/storage/useOfflineListData";
 import CheckboxBoxForm from "../../../components/CheckBoxForm";
+import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 // custom icons
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import CakeIcon from "@material-ui/icons/Cake";
@@ -25,7 +26,7 @@ const optionsArray = (isUserPro) => [
     title: "alphabeticOrder",
     reverseBr: "Ordem Alfabética Z-A",
     reverse: "alphabeticOrderZA",
-    removeEmptyOpt: false,
+    showEmptyOption: false,
     isPro: false,
     Icon: <SortByAlphaIcon />,
   },
@@ -34,6 +35,7 @@ const optionsArray = (isUserPro) => [
     title: "highestActiveScores",
     reverseBr: "Menores Pontos Ativos",
     reverse: "lowestActiveScores",
+    showEmptyOption: true,
     isPro: false,
     Icon: (
       <FiberManualRecordIcon
@@ -46,6 +48,7 @@ const optionsArray = (isUserPro) => [
     title: "newCustomers",
     reverseBr: "Clientes Veteranos",
     reverse: "veteranCustomers",
+    showEmptyOption: false,
     isPro: false,
     Icon: <StarsIcon />,
   },
@@ -53,6 +56,7 @@ const optionsArray = (isUserPro) => [
     titleBr: "Clientes Aniversariantes",
     title: "birthdayCustomers",
     reverseBr: null,
+    showEmptyOption: false,
     reverse: null,
     isPro: true,
     Icon: <CakeIcon style={{ color: isUserPro ? undefined : "grey" }} />,
@@ -62,6 +66,7 @@ const optionsArray = (isUserPro) => [
     title: "buyMoreCustomers",
     reverseBr: "Clientes Compram Menos",
     reverse: "buyLessCustomers",
+    showEmptyOption: true,
     isPro: true,
     Icon: <LoyaltyIcon style={{ color: isUserPro ? undefined : "grey" }} />,
   },
@@ -70,6 +75,7 @@ const optionsArray = (isUserPro) => [
     title: "highestSinglePurchases",
     reverseBr: "Menores Valores por Compra",
     reverse: "lowestSinglePurchases",
+    showEmptyOption: true,
     isPro: true,
     Icon: (
       <MonetizationOnIcon style={{ color: isUserPro ? undefined : "grey" }} />
@@ -80,6 +86,7 @@ const optionsArray = (isUserPro) => [
     title: "lastPurchases",
     reverseBr: "Primeiras Compras",
     reverse: "firstPurchases",
+    showEmptyOption: true,
     isPro: true,
     Icon: <LocalMallIcon style={{ color: isUserPro ? undefined : "grey" }} />,
   },
@@ -114,6 +121,27 @@ const getStyles = () => ({
   },
 });
 
+const handleTrigger = (dataArray, selected) => {
+  const reverseBrOnlyOptions = dataArray().map((rev) => rev.reverseBr);
+  const needSkipReverse = gotArrayThisItem(reverseBrOnlyOptions, selected);
+
+  if (needSkipReverse) return false;
+  return !selected ? true : selected; // update at launch to fetch any offline data there is. Else update in every selected changing
+};
+
+const handleNeedEmptyOption = (dataArray, selected) => {
+  const emptyOptions = [];
+  dataArray().forEach((emp) => {
+    if (emp.showEmptyOption === true) {
+      emptyOptions.push(emp.reverseBr);
+    }
+  });
+  console.log("emptyOptions", emptyOptions);
+  const needEmptyOpt = gotArrayThisItem(emptyOptions, selected);
+  console.log("needEmptyOpt", needEmptyOpt);
+  return needEmptyOpt;
+};
+
 export default function AnimaIconsSelect({ callback, loading = false }) {
   const [panel, setPanel] = useState(false);
   const [status, setStatus] = useState("Organizado!");
@@ -137,10 +165,13 @@ export default function AnimaIconsSelect({ callback, loading = false }) {
   } = data;
 
   const styles = getStyles();
+
+  const needEmptyOpt = handleNeedEmptyOption(optionsArray, selected);
+  const needTriggerOffData = handleTrigger(optionsArray, selected);
   const { offlineData, loading: loadingOffline } = useOfflineData({
     dataName: "selectedMainFilter",
     data: selected,
-    trigger: !selected ? true : selected,
+    trigger: needTriggerOffData,
   });
 
   const { isUserPro } = usePro({ feature: "orgganize_clients" });
@@ -159,7 +190,7 @@ export default function AnimaIconsSelect({ callback, loading = false }) {
     }
 
     const foundElem = optionsArray(isUserPro).find(
-      (opt) => opt.titleBr === thisSelected || opt.reverseBr === thisSelected
+      (opt) => opt.titleBr === thisSelected
     );
     if (foundElem && alreadyOffline.current) {
       const { Icon, title, reverse, titleBr, reverseBr } = foundElem;
@@ -177,9 +208,15 @@ export default function AnimaIconsSelect({ callback, loading = false }) {
 
   useEffect(() => {
     if (typeof callback === "function") {
-      callback({ selected: title, isReversed: false });
+      callback({ selected: title, isReversed: false, needEmpty: false });
     }
   }, [selected, title]);
+
+  const handleShowEmptyCards = (isChecked) => {
+    if (typeof callback === "function") {
+      callback({ selected: title, isReversed: false, needEmpty: isChecked });
+    }
+  };
 
   useEffect(() => {
     const handleStatus = () => {
@@ -302,10 +339,6 @@ export default function AnimaIconsSelect({ callback, loading = false }) {
     );
   };
 
-  const handleShowEmptyCards = () => {
-    console.log("running handleShowEmptyCards");
-  };
-
   return (
     <section className="container-center-max-width-500">
       <section className="position-relative" style={styles.root}>
@@ -317,10 +350,6 @@ export default function AnimaIconsSelect({ callback, loading = false }) {
           </section>
         </form>
         {showStatus()}
-        <CheckboxBoxForm
-          text="mostrar resultados vazios."
-          callback={handleShowEmptyCards}
-        />
         <div style={styles.currIcon} className="position-absolute">
           {CurrIcon}
         </div>
@@ -334,6 +363,13 @@ export default function AnimaIconsSelect({ callback, loading = false }) {
               backgroundColor={"var(--themeSDark--default)"}
             />
           </div>
+        )}
+        {needEmptyOpt && (
+          <CheckboxBoxForm
+            text="mostrar resultados vazios."
+            callback={handleShowEmptyCards}
+            position="position-absolute"
+          />
         )}
       </section>
       <div

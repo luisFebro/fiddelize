@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-export default function CheckBoxForm({ text, setIsBoxChecked, callback }) {
+export default function CheckBoxForm({
+  text,
+  setIsBoxChecked,
+  callback,
+  position,
+}) {
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     setIsBoxChecked && setIsBoxChecked(isChecked);
-
-    if (typeof callback === "function" && isChecked) {
-      // only checked.
-      callback();
-    }
+    callback && callback(isChecked);
   }, [isChecked]);
 
   const handleChange = (event) => {
@@ -25,7 +26,10 @@ export default function CheckBoxForm({ text, setIsBoxChecked, callback }) {
   );
 
   return (
-    <div className="d-flex justify-content-center" style={{ width: "100%" }}>
+    <div
+      className={`${position ? position : "d-flex justify-content-center"}`}
+      style={{ width: "100%" }}
+    >
       <FormControlLabel
         className="ml-2"
         control={

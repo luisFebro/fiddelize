@@ -64,7 +64,6 @@
     "fs": "0.0.1-security",
     "gulp": "^4.0.2",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.13",
     "path": "^0.12.7",
     "prettier": "2.1.1",
     "pretty-quick": "^3.0.0",

@@ -143,14 +143,19 @@ export default function AsyncRecordedClientsList() {
   const [filter, setFilter] = useState({
     filterName: "newCustomers",
     period: "all",
+    needEmpty: false,
   });
   console.log("filterName", filter.filterName);
 
-  const { filterName, period, filterName2 } = filter;
+  const { filterName, period, needEmpty } = filter;
 
-  const handleSelectedFilter = (name) => {
+  const handleSelectedFilter = (filterData) => {
     setSkip(0);
-    setFilter({ ...filter, filterName: name.selected });
+    setFilter({
+      ...filter,
+      filterName: filterData.selected,
+      needEmpty: filterData.needEmpty,
+    });
   };
 
   // update current amount of accumulative and active scores from all cli-users of which cli-admin.
@@ -304,21 +309,27 @@ export default function AsyncRecordedClientsList() {
     const needCliPrizes = cliUser.totalPurchasePrize; // 0 by default.
     const highlightName = filterName.indexOf("alphabeticOrder") !== -1;
     const handleVisible = () => {
+      if (needEmpty) return true;
       if (filterName === "birthdayCustomers") {
         return cliUser.filterBirthday ? true : false;
       }
-      if (filterName === "highestSinglePurchases") {
-        return cliUser.filterHighestPurchase ? true : false;
-      }
-      if (filterName === "buyMoreCustomers") {
+      if (filterName === "buyLessCustomers") {
         return cliUser.totalGeneralScore ? true : false;
       }
-      if (filterName === "lastPurchases") {
+      if (filterName === "firstPurchases") {
         return cliUser.filterLastPurchase ? true : false;
+      }
+      if (filterName === "lowestActiveScores") {
+        return cliUser.currScore ? true : false;
+      }
+      if (filterName === "lowestSinglePurchases") {
+        return cliUser.filterHighestPurchase ? true : false;
       }
       if (defaultCond) {
         return true;
       }
+
+      return true;
     };
     const isVisible = handleVisible();
     return {
