@@ -42,7 +42,8 @@
     "build": "CI=false && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "analyse": "node scripts/analyse.js"
+    "analyse": "node scripts/analyse.js",
+    "precommit": "pretty-quick --staged"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -64,6 +65,7 @@
     "fs": "0.0.1-security",
     "gulp": "^4.0.2",
     "path": "^0.12.7",
+    "prettier": "2.1.1",
     "progress-bar-webpack-plugin": "^2.1.0",
     "webpack-bundle-analyzer": "^3.8.0"
   }
