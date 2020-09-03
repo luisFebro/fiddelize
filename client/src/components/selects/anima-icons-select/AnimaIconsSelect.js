@@ -7,6 +7,7 @@ import handleChange from '../../../utils/form/use-state/handleChange';
 import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePro from '../../../hooks/pro/usePro';
+import { useOfflineData } from '../../../hooks/storage/useOfflineListData';
 // custom icons
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import CakeIcon from '@material-ui/icons/Cake';
@@ -115,11 +116,10 @@ const getStyles = () => ({
 export default function AnimaIconsSelect({
     callback, loading = false,
 }) {
-    console.info("loading", loading);
     const [panel, setPanel] = useState(false);
     const [status, setStatus] = useState("Organizado!");
     const [data, setData] = useState({
-        selected: "Clientes Novos",
+        selected: "",
         selectedOptionBr: "Clientes Novos",
         reverseOptionBr: "Clientes Veteranos",
         CurrIcon: <StarsIcon />,
@@ -127,14 +127,6 @@ export default function AnimaIconsSelect({
         reverse: "veteranCustomers",
         isReversed: undefined,
     });
-
-    const styles = getStyles();
-
-    const { isUserPro } = usePro({ feature: 'orgganize_clients' });
-    console.log("isUserPro", isUserPro);
-
-    const toggleReverse = useRef(false);
-
     const {
         selected,
         selectedOptionBr,
@@ -145,9 +137,24 @@ export default function AnimaIconsSelect({
         isReversed,
     } = data;
 
+    const styles = getStyles();
+    const { offlineData, loading: loadingOffline } = useOfflineData({ dataName: "selectedMainFilter", data: selected, trigger: !selected ? true : selected });
+
+    const { isUserPro } = usePro({ feature: 'orgganize_clients' });
+
+    const toggleReverse = useRef(false);
+
+    const alreadyOffline = useRef(false);
     useEffect(() => {
-        const foundElem = optionsArray(isUserPro).find(opt => opt.titleBr === selected);
-        if(foundElem) {
+        let thisSelected;
+
+        if(!alreadyOffline.current && !loadingOffline) {
+            thisSelected = !offlineData ? "Clientes Novos" : offlineData;
+            alreadyOffline.current = true;
+        } else { thisSelected = selected }
+
+        const foundElem = optionsArray(isUserPro).find(opt => opt.titleBr === thisSelected);
+        if(foundElem && alreadyOffline.current) {
             const {
                 Icon, title, reverse, titleBr, reverseBr
             } = foundElem;
@@ -161,7 +168,7 @@ export default function AnimaIconsSelect({
                 CurrIcon: Icon,
             })
         }
-    }, [selected])
+    }, [selected, offlineData, alreadyOffline.current, loadingOffline])
 
     useEffect(() => {
         if(typeof callback === "function") {
@@ -169,20 +176,10 @@ export default function AnimaIconsSelect({
         }
     }, [selected, title]);
 
-    // fix this logic
-    // const thisLoading = useRef(loading ? false : true);
-    // console.log("thisLoading", thisLoading);
     useEffect(() => {
         const handleStatus = () => {
-            // if(thisLoading.current) {
-            //     return "organizando agora...";
-            // } else {
-            //     thisLoading.current = false;
-            //     return "Organizado!";
-            // }
-            if(isReversed === undefined) return "Organizado!"
             if(loading) {
-                return "organizando...";
+                return isReversed ? "invertendo ordem..." : "organizando...";
             } else {
                 return "Organizado!";
             }

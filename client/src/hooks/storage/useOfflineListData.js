@@ -3,8 +3,12 @@ import { setVar, getVar, store } from './useVar';
 import { useStoreState } from 'easy-peasy';
 
 export const useOfflineData = ({ dataName, data, trigger, }) => {
-    const [offlineData, setOfflineData] = useState(null);
-    const [already, setAlready] = useState(false);
+    const [dataOff, setDataOff] = useState({
+        offlineData: null,
+        loading: true,
+        already: false,
+    });
+    const { offlineData, loading, already } = dataOff;
 
     const { isOnline } = useStoreState(state => ({
         isOnline: state.authReducer.cases.isUserOnline,
@@ -14,6 +18,8 @@ export const useOfflineData = ({ dataName, data, trigger, }) => {
     useEffect(() => {
         if(!dataName) return;
 
+        setDataOff({ ...dataOff, loading: true });
+
         if(data && isOnline) {
             setVar({ [dataName]: data }, store.request_api_data)
         }
@@ -21,8 +27,12 @@ export const useOfflineData = ({ dataName, data, trigger, }) => {
         if((!isOnline || trigger) && !already) {
             getVar(dataName, store.request_api_data)
             .then(offData => {
-                setOfflineData(offData);
-                setAlready(true);
+                setDataOff({
+                    ...dataOff,
+                    offlineData: offData,
+                    loading: false,
+                    already: true,
+                })
             })
         }
 
@@ -32,7 +42,7 @@ export const useOfflineData = ({ dataName, data, trigger, }) => {
 
     const isOffline = Boolean(!isOnline && data);
 
-    return { isOffline, offlineData };
+    return { isOffline, offlineData, loading };
 }
 
 export default function useOfflineListData({ listName, list, trigger, }) {
