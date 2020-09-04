@@ -1,99 +1,115 @@
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
-const { msgG } = require('./_msgs/globalMsgs');
-const { msg } = require('./_msgs/auth');
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const { msgG } = require("./_msgs/globalMsgs");
+const { msg } = require("./_msgs/auth");
 const selectObjKeys = require("../utils/objects/selectObjKeys");
 const getFirstName = require("../utils/string/getFirstName");
-const { encryptSync, decryptSync, jsEncrypt } = require("../utils/security/xCipher");
+const {
+    encryptSync,
+    decryptSync,
+    jsEncrypt,
+} = require("../utils/security/xCipher");
 
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
 // bacause not found. To avoid this, try write userId if in a parameter as default.
 exports.mwIsAuth = (req, res, next) => {
     //condition for testing without token
-    if(req.query.isFebroBoss || req.query.noToken && req.query.cardType === "welcome") {
+    if (
+        req.query.isFebroBoss ||
+        (req.query.noToken && req.query.cardType === "welcome")
+    ) {
         return next();
     }
     const profile = req.profile;
     const query = req.query;
     const body = req.body;
-    const _id =  query && query.userId || body && body.userId || profile && profile._id || query && query.bizId || body && body.senderId; // add here all means to get id to compare against the JWT verification
-    let token = req.header('x-auth-token') || req.header("authorization"); // authrization for postman tests
-    if(token && token.includes("Bearer ")) {
+    const _id =
+        (query && query.userId) ||
+        (body && body.userId) ||
+        (profile && profile._id) ||
+        (query && query.bizId) ||
+        (body && body.senderId); // add here all means to get id to compare against the JWT verification
+    let token = req.header("x-auth-token") || req.header("authorization"); // authrization for postman tests
+    if (token && token.includes("Bearer ")) {
         token = token.slice(7);
     }
 
-    jwt.verify(
-        token,
-        process.env.JWT_SECRET,
-        (err, decoded) => {
-            let isAuthUser = Boolean(_id && decoded && decoded.id === _id.toString());
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        let isAuthUser = Boolean(
+            _id && decoded && decoded.id === _id.toString()
+        );
 
-            if(err) {
-                if(err && err.message.includes("expired")) return res.status(403).json({ error: "jwt expired" });
-                console.log(`JWT ERROR: ${err.message}`)
-            }
-            if(err || !isAuthUser) return res.status(403).json(msg('error.notAuthorized'));  // n4 401 and 403 http code difference
-            next();
-        })
+        if (err) {
+            if (err && err.message.includes("expired"))
+                return res.status(403).json({ error: "jwt expired" });
+            console.log(`JWT ERROR: ${err.message}`);
+        }
+        if (err || !isAuthUser)
+            return res.status(403).json(msg("error.notAuthorized")); // n4 401 and 403 http code difference
+        next();
+    });
 };
 
 exports.mwIsAdmin = (req, res, next) => {
-    if(req.profile.role !== "admin") {
-        return res.status(403).json(msg('error.accessDenied')); // n4 401 and 403 http code difference
+    if (req.profile.role !== "admin") {
+        return res.status(403).json(msg("error.accessDenied")); // n4 401 and 403 http code difference
     }
     next();
 };
 
 exports.mwIsCliAdmin = (req, res, next) => {
-    if(req.profile.role !== "cliente-admin") {
-        return res.status(403).json(msg('error.accessDenied')); // n4 401 and 403 http code difference
+    if (req.profile.role !== "cliente-admin") {
+        return res.status(403).json(msg("error.accessDenied")); // n4 401 and 403 http code difference
     }
     next();
 };
 
 exports.mwIsClientAdmin = (req, res, next) => {
-    if(req.profile.role !== "cliente-admin") {
-        return res.status(403).json(msg('error.accessDenied'));
+    if (req.profile.role !== "cliente-admin") {
+        return res.status(403).json(msg("error.accessDenied"));
     }
     next();
 };
 
-exports.mwSession = (req, res, next) => { // n1
+exports.mwSession = (req, res, next) => {
+    // n1
     const token = req.header("x-auth-token"); // this does not work with authorization header // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkYjQzMDFlZDM5YTRlMTI1NDYyNzdhOCIsImlhdCI6MTU3NDIxMDUwNCwiZXhwIjoxNTc0ODE1MzA0fQ.HAUlZ6lCHxRuieN5nizug_ZMTEuAmJ2Ck22uCcBkmeY"
 
-    if(!token) return console.log("New user accessed without JWT Token!");
+    if (!token) return console.log("New user accessed without JWT Token!");
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.authObj = decoded; // eg { id: '5db4301ed39a4e12546277a8', iat: 1574210504, exp: 1574815304 } // iat refers to JWT_SECRET. This data is generated from jwt.sign
         next();
-    } catch(err) {
-        console.log("This user has an Invalid or Expired JWT Token! " + err)
-        return res.status(401).json(msg('error.sessionEnded'));
+    } catch (err) {
+        console.log("This user has an Invalid or Expired JWT Token! " + err);
+        return res.status(401).json(msg("error.sessionEnded"));
     }
-}
+};
 // END MIDDLEWARES
 
 // this will load the authorized user's data after and only if the token is valid in mwAuth
 exports.loadAuthUser = (req, res) => {
     const userIdInsideJwt = req.authObj && req.authObj.id;
-    const select = '-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications -clientUserData.purchaseHistory'
+    const select =
+        "-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications -clientUserData.purchaseHistory";
 
-    if(!userIdInsideJwt) {
-        console.log("Warning: user loaded without ID")
+    if (!userIdInsideJwt) {
+        console.log("Warning: user loaded without ID");
     } else {
         User.findById(userIdInsideJwt)
-        .select(select)
-        .exec((err, profile) => {
-            profile.email = decryptSync(profile.email);
-            profile.phone = decryptSync(profile.phone);
+            .select(select)
+            .exec((err, profile) => {
+                profile.email = decryptSync(profile.email);
+                profile.phone = decryptSync(profile.phone);
 
-            if(err) return res.status(500).json(msgG('error.systemError', err))
-            res.json({ profile });
-        })
+                if (err)
+                    return res.status(500).json(msgG("error.systemError", err));
+                res.json({ profile });
+            });
     }
-}
+};
 
 exports.register = (req, res) => {
     let {
@@ -106,10 +122,10 @@ exports.register = (req, res) => {
         maritalStatus,
         clientAdminData,
         clientUserData,
+        filterRegister,
     } = req.body;
 
-
-    if(maritalStatus === "selecione estado civil") {
+    if (maritalStatus === "selecione estado civil") {
         maritalStatus = "cliente não informou";
     }
 
@@ -123,40 +139,58 @@ exports.register = (req, res) => {
         maritalStatus,
         clientAdminData,
         clientUserData,
+        filterRegister,
     });
 
-    newUser.save()
-    .then(user => {
+    newUser.save().then((user) => {
         res.json({
-            msg: msg('ok.successRegister', getFirstName(name), 'onlyMsg'),
+            msg: msg("ok.successRegister", getFirstName(name), "onlyMsg"),
             authUserId: user._id,
             roleRegistered: role,
         });
     });
-}
-
+};
 
 const handleRolesData = (role, ...allKeys) => {
     let objToSend;
     const allKeysStore = Object.assign({}, ...allKeys);
     // console.log(Object.keys(allKeysStore))
 
-    switch(role) {
+    switch (role) {
         case "cliente-admin":
-            const array1 = [ 'token', 'role', 'name', 'bizCodeName', 'verificationPass', 'authUserId', 'msg', 'selfBizLogoImg' ];
+            const array1 = [
+                "token",
+                "role",
+                "name",
+                "bizCodeName",
+                "verificationPass",
+                "authUserId",
+                "msg",
+                "selfBizLogoImg",
+            ];
             objToSend = selectObjKeys(allKeysStore, array1);
             break;
         case "cliente":
-            const array2 = [ 'bizId', 'token', 'role', 'name', 'authUserId', 'msg', 'needCliUserWelcomeNotif' ];
+            const array2 = [
+                "bizId",
+                "token",
+                "role",
+                "name",
+                "authUserId",
+                "msg",
+                "needCliUserWelcomeNotif",
+            ];
             objToSend = selectObjKeys(allKeysStore, array2);
             break;
         default:
             objToSend = allKeysStore;
-            console.log("All keys are included in handleRolesData function at auth");
+            console.log(
+                "All keys are included in handleRolesData function at auth"
+            );
     }
 
     return objToSend;
-}
+};
 exports.login = (req, res) => {
     // const { password, needKeepLoggedIn } = req.body;
     const { _id, name, role, clientAdminData, clientUserData } = req.profile;
@@ -164,52 +198,59 @@ exports.login = (req, res) => {
     let keysStore = {
         role,
         name,
-        bizId: clientUserData && clientUserData.bizId || "0",
+        bizId: (clientUserData && clientUserData.bizId) || "0",
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
         verificationPass: clientAdminData && clientAdminData.verificationPass,
         selfBizLogoImg: clientAdminData && clientAdminData.selfBizLogoImg,
         authUserId: _id,
-        msg: msg('ok.welcomeBack', getFirstName(name), 'onlyMsg'),
-        needCliUserWelcomeNotif: clientUserData && !clientUserData.notifications.length,
-    }
+        msg: msg("ok.welcomeBack", getFirstName(name), "onlyMsg"),
+        needCliUserWelcomeNotif:
+            clientUserData && !clientUserData.notifications.length,
+    };
 
     let expiringTime;
-    role !== "cliente" ? expiringTime = "24h" : expiringTime = "90d"; // default: 30m (enum: 30s, 30m, 1h, 7d)
+    role !== "cliente" ? (expiringTime = "24h") : (expiringTime = "90d"); // default: 30m (enum: 30s, 30m, 1h, 7d)
 
     jwt.sign(
         { id: _id },
         process.env.JWT_SECRET,
         { expiresIn: expiringTime },
         (err, token) => {
-            if(err) return res.status(500).json(msgG('error.systemError', err));
-            res.json(handleRolesData(role, {...keysStore, token}));
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
+            res.json(handleRolesData(role, { ...keysStore, token }));
         }
-    )
-
-}
+    );
+};
 
 exports.changePassword = (req, res) => {
     const { password, authToken } = req.body;
     const { id } = req.query;
 
-    User.findOne({ _id: id })
-    .then(user => {
-        if(!user.tempAuthUserToken) return res.status(400).json(msg('error.noAuthToken'))
-        if(user.tempAuthUserToken.this !== authToken) return res.status(400).json(msg('error.expiredAuthToken'))
+    User.findOne({ _id: id }).then((user) => {
+        if (!user.tempAuthUserToken)
+            return res.status(400).json(msg("error.noAuthToken"));
+        if (user.tempAuthUserToken.this !== authToken)
+            return res.status(400).json(msg("error.expiredAuthToken"));
 
         user.tempAuthUserToken.this = undefined;
-        bcrypt.genSalt(10, (err, salt) => { // n3
+        bcrypt.genSalt(10, (err, salt) => {
+            // n3
             bcrypt.hash(password, salt, (err, hash) => {
-                if(err) return res.status(500).json(msgG('error.systemError', err));
+                if (err)
+                    return res.status(500).json(msgG("error.systemError", err));
                 user.password = hash;
-                user.save(err => {
-                    if(err) return res.status(500).json(msgG('error.systemError', err));
-                    res.json(msg('ok.changedPassword', user.name));
-                })
-            })
-        })
-    })
-}
+                user.save((err) => {
+                    if (err)
+                        return res
+                            .status(500)
+                            .json(msgG("error.systemError", err));
+                    res.json(msg("ok.changedPassword", user.name));
+                });
+            });
+        });
+    });
+};
 
 /* COMMENTS
 n1:
@@ -231,4 +272,3 @@ hash - $2a$10$qggYRlcaPWU296DD7M3RyujYuDVnKKxo91rAHIKJKMXCmsnQVGn/2
 n4:
 a 401 Unauthorized response should be used for missing or bad authentication, and a 403 Forbidden response should be used afterwards, when the user is authenticated but isn’t authorized to perform the requested operation on the given resource.
 */
-

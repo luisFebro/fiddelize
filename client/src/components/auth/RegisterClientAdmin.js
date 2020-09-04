@@ -1,69 +1,72 @@
-import React, { Fragment,useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import Title from '../Title';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import phoneMaskBr from '../../utils/validation/masks/phoneMaskBr';
-import cpfMaskBr from '../../utils/validation/masks/cpfMaskBr';
-import getDayMonthBr from '../../utils/dates/getDayMonthBr';
-import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
-import RadiusBtn from '../../components/buttons/RadiusBtn';
+import Title from "../Title";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
+import cpfMaskBr from "../../utils/validation/masks/cpfMaskBr";
+import getDayMonthBr from "../../utils/dates/getDayMonthBr";
+import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
+import RadiusBtn from "../../components/buttons/RadiusBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { withRouter } from 'react-router-dom';
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
-import { registerEmail } from '../../redux/actions/authActions';
-import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import { registerEmail } from "../../redux/actions/authActions";
+import { sendWelcomeConfirmEmail } from "../../redux/actions/emailActions";
 // Helpers
-import detectErrorField from '../../utils/validation/detectErrorField';
-import handleChange from '../../utils/form/use-state/handleChange';
-import lStorage from '../../utils/storage/lStorage';
-import { handleNextField } from '../../utils/form/kit';
-import setValObjWithStr from '../../utils/objects/setValObjWithStr';
-import { getUniqueCodeName } from '../../utils/string/generateAlphaNumeric';
-import addDashesToString from '../../utils/string/addDashesToString';
-import { dateFnsUtils, ptBRLocale } from '../../utils/dates/dateFns';
+import detectErrorField from "../../utils/validation/detectErrorField";
+import handleChange from "../../utils/form/use-state/handleChange";
+import lStorage from "../../utils/storage/lStorage";
+import { handleNextField } from "../../utils/form/kit";
+import setValObjWithStr from "../../utils/objects/setValObjWithStr";
+import { getUniqueCodeName } from "../../utils/string/generateAlphaNumeric";
+import addDashesToString from "../../utils/string/addDashesToString";
+import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
+import getFilterDate from "../../utils/dates/getFilterDate";
 // Material Ui
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import EmailIcon from '@material-ui/icons/Email';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MoneyIcon from '@material-ui/icons/Money';
-import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
-import CakeIcon from '@material-ui/icons/Cake';
-import Card from '@material-ui/core/Card';
-import ButtonMulti, {faStyle} from '../buttons/material-ui/ButtonMulti';
-import ReactGA from 'react-ga';
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import EmailIcon from "@material-ui/icons/Email";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MoneyIcon from "@material-ui/icons/Money";
+import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
+import CakeIcon from "@material-ui/icons/Cake";
+import Card from "@material-ui/core/Card";
+import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
+import ReactGA from "react-ga";
+
+const filterRegister = getFilterDate();
 
 const isSmall = window.Helper.isSmallScreen();
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     card: {
         maxWidth: 345,
-        filter: 'drop-shadow(.001em .001em .15em var(--mainDark))',
-    }
+        filter: "drop-shadow(.001em .001em .15em var(--mainDark))",
+    },
 }));
 
 const getStyles = () => ({
     fieldForm: {
-        backgroundColor: 'var(--mainWhite)',
+        backgroundColor: "var(--mainWhite)",
         zIndex: 2000,
-        font: 'normal 1em Poppins, sans-serif',
+        font: "normal 1em Poppins, sans-serif",
     },
     helperFromField: {
-        color: 'grey',
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: isSmall ? '.8em' : '.6em',
+        color: "grey",
+        fontFamily: "Poppins, sans-serif",
+        fontSize: isSmall ? ".8em" : ".6em",
     },
     card: {
-        margin: 'auto',
-        width: '90%',
+        margin: "auto",
+        width: "90%",
         maxWidth: isSmall ? "" : 360,
-        boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
-    }
+        boxShadow: "0 31px 120px -6px rgba(0, 0, 0, 0.35)",
+    },
 });
 
 function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
@@ -76,18 +79,28 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [selectedDate, handleDateChange] = useState(dateNow);
 
     const [data, setData] = useState({
-        role: 'cliente-admin',
-        name: '',
-        clientAdminData: { bizName: '', bizCodeName: '', bizWhatsapp: ''},
-        email: '',
-        phone: '',
-        birthday: '',
-        cpf: '',
-        maritalStatus: 'selecione estado civil',
+        role: "cliente-admin",
+        name: "",
+        clientAdminData: { bizName: "", bizCodeName: "", bizWhatsapp: "" },
+        email: "",
+        phone: "",
+        birthday: "",
+        cpf: "",
+        maritalStatus: "selecione estado civil",
+        filterRegister,
     });
-    let { role, name, clientAdminData, email, maritalStatus, birthday, cpf, phone } = data;
+    let {
+        role,
+        name,
+        clientAdminData,
+        email,
+        maritalStatus,
+        birthday,
+        cpf,
+        phone,
+    } = data;
 
-    const { bizInfo } = useStoreState(state => ({
+    const { bizInfo } = useStoreState((state) => ({
         bizInfo: state.adminReducer.cases.businessInfo,
     }));
 
@@ -111,102 +124,123 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
 
     useEffect(() => {
         const opts = { needYear: true };
-        setData({ ...data, birthday: getDayMonthBr(selectedDate, opts) })
-    }, [selectedDate])
+        setData({ ...data, birthday: getDayMonthBr(selectedDate, opts) });
+    }, [selectedDate]);
 
     useEffect(() => {
         const thisBizName = clientAdminData.bizName;
-        if(thisBizName) {
+        if (thisBizName) {
             const bizCode = getUniqueCodeName(thisBizName);
-            const finalDashedName = `${addDashesToString(`${thisBizName}`)}-${bizCode}`
-            setValObjWithStr(data, "clientAdminData.bizCodeName", finalDashedName);
+            const finalDashedName = `${addDashesToString(
+                `${thisBizName}`
+            )}-${bizCode}`;
+            setValObjWithStr(
+                data,
+                "clientAdminData.bizCodeName",
+                finalDashedName
+            );
         }
-    }, [clientAdminData.bizName])
+    }, [clientAdminData.bizName]);
 
     useEffect(() => {
         phone && setValObjWithStr(data, "clientAdminData.bizWhatsapp", phone);
-    }, [phone])
+    }, [phone]);
 
     const clearData = () => {
         setData({
-            role: 'cliente-admin',
-            name: '',
-            email: '',
-            phone: '',
-            birthday: '',
-            cpf: '',
-            maritalStatus: 'selecione estado civil',
-        })
+            role: "cliente-admin",
+            name: "",
+            email: "",
+            phone: "",
+            birthday: "",
+            cpf: "",
+            maritalStatus: "selecione estado civil",
+        });
         setFieldError(null);
-    }
+    };
 
-    const sendEmail = userId => {
+    const sendEmail = (userId) => {
         const dataEmail = {
             name,
             email,
             bizName,
             bizWebsite,
-            bizInstagram
+            bizInstagram,
         };
-        sendWelcomeConfirmEmail(dataEmail, userId)
-        .then(res => {
-            if (res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
+        sendWelcomeConfirmEmail(dataEmail, userId).then((res) => {
+            if (res.status !== 200)
+                return showSnackbar(dispatch, res.data.msg, "error");
             // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
             clearData();
         });
     };
 
-    const registerThisUser = e => {
+    const registerThisUser = (e) => {
         clientAdminData.bizWhatsapp = phone;
         const newUser = {
             ...data,
         };
 
-        showSnackbar(dispatch, 'Registrando... Aguarde um momento.', 'warning', 7000)
-        registerEmail(dispatch, newUser)
-        .then(res => {
-            if(res.status !== 200) {
-                showSnackbar(dispatch, res.data.msg, 'error', 6000);
+        showSnackbar(
+            dispatch,
+            "Registrando... Aguarde um momento.",
+            "warning",
+            7000
+        );
+        registerEmail(dispatch, newUser).then((res) => {
+            if (res.status !== 200) {
+                showSnackbar(dispatch, res.data.msg, "error", 6000);
                 // detect field errors
                 const thisModalFields = Object.keys(data);
-                const foundObjError = detectErrorField(res.data.msg, thisModalFields);
+                const foundObjError = detectErrorField(
+                    res.data.msg,
+                    thisModalFields
+                );
                 setFieldError(foundObjError);
                 return;
             }
 
             const userId = res.data.authUserId;
 
-            ReactGA.event({ // n1
-                label: 'Form',
-                category: 'UserCliAdmin',
-                action: 'Created an account',
-                transport: 'beacon',
+            ReactGA.event({
+                // n1
+                label: "Form",
+                category: "UserCliAdmin",
+                action: "Created an account",
+                transport: "beacon",
             });
 
             const removalOptions = {
                 collection: "onceChecked",
-            }
+            };
             lStorage("removeItems", removalOptions);
 
             // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            setTimeout(() => window.location.href = `/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`, 500);
+            setTimeout(
+                () =>
+                    (window.location.href = `/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`),
+                500
+            );
 
             sendEmail(userId);
-
-        })
+        });
     };
 
-    const showLoginForm = needLoginBtn => (
+    const showLoginForm = (needLoginBtn) =>
         needLoginBtn && (
             <div
                 className="text-white position-absolute text-small font-weight-bold p-2"
-                style={{top: isSmall ? '105px' : '130px', left: '50px'}}
+                style={{ top: isSmall ? "105px" : "130px", left: "50px" }}
             >
-                <p style={{whiteSpace: 'nowrap'}}>Já é cadastrado?{" "}
-                <RadiusBtn title="Faça login" onClick={() => setLoginOrRegister("login")} /></p>
+                <p style={{ whiteSpace: "nowrap" }}>
+                    Já é cadastrado?{" "}
+                    <RadiusBtn
+                        title="Faça login"
+                        onClick={() => setLoginOrRegister("login")}
+                    />
+                </p>
             </div>
-        )
-    );
+        );
 
     const showTitle = () => (
         <div className="position-relative">
@@ -222,12 +256,14 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
 
     const showForm = () => (
         <form
-            style={{margin: 'auto', width: '90%'}}
+            style={{ margin: "auto", width: "90%" }}
             className="text-p text-normal"
             onBlur={() => setFieldError(null)}
         >
             <div id="field1" className="mt-3">
-                Empreendedor(a),<br />qual é o seu nome?
+                Empreendedor(a),
+                <br />
+                qual é o seu nome?
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
@@ -236,23 +272,39 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     margin="dense"
                     name="name"
                     value={name}
-                    onKeyPress={e => { handleNextField(e, "field1", { callback: () => setData({ ...data, name: name.cap()}) }); }}
-                    onBlur={e => { handleNextField(e, "field1", { event: "onBlur", callback: () => setData({ ...data, name: name.cap()}) }); }}
+                    onKeyPress={(e) => {
+                        handleNextField(e, "field1", {
+                            callback: () =>
+                                setData({ ...data, name: name.cap() }),
+                        });
+                    }}
+                    onBlur={(e) => {
+                        handleNextField(e, "field1", {
+                            event: "onBlur",
+                            callback: () =>
+                                setData({ ...data, name: name.cap() }),
+                        });
+                    }}
                     autoComplete="off"
                     type="text"
                     fullWidth
                     InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      style: styles.fieldForm
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <AccountCircle />
+                            </InputAdornment>
+                        ),
+                        style: styles.fieldForm,
                     }}
                 />
             </div>
-            <div id="field2" className={`d-none animated slideInLeft fast mt-3`}>
-                Qual é o nome do<br />seu projeto/empresa?
+            <div
+                id="field2"
+                className={`d-none animated slideInLeft fast mt-3`}
+            >
+                Qual é o nome do
+                <br />
+                seu projeto/empresa?
                 <TextField
                     required
                     onChange={handleChange(setData, data, true)}
@@ -261,22 +313,33 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     margin="dense"
                     name="clientAdminData.bizName"
                     value={clientAdminData.bizName}
-                    onKeyPress={e => { handleNextField(e, "field2"); setValObjWithStr(data, "clientAdminData.bizName", clientAdminData.bizName.cap()); }}
-                    onBlur={e => {
+                    onKeyPress={(e) => {
+                        handleNextField(e, "field2");
+                        setValObjWithStr(
+                            data,
+                            "clientAdminData.bizName",
+                            clientAdminData.bizName.cap()
+                        );
+                    }}
+                    onBlur={(e) => {
                         handleNextField(e, "field2", { event: "onBlur" });
-                        setValObjWithStr(data, "clientAdminData.bizName", clientAdminData.bizName.cap());
+                        setValObjWithStr(
+                            data,
+                            "clientAdminData.bizName",
+                            clientAdminData.bizName.cap()
+                        );
                     }}
                     autoComplete="off"
                     type="text"
                     fullWidth
                     InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      style: styles.fieldForm,
-                      id: "value2"
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <AccountCircle />
+                            </InputAdornment>
+                        ),
+                        style: styles.fieldForm,
+                        id: "value2",
                     }}
                 />
             </div>
@@ -290,29 +353,46 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
-                    onKeyPress={e => {  handleNextField(e, "field3", { callback: () => { setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); } }); }}
-                    onBlur={e => { handleNextField(e, "field3", { event: "onBlur", callback: () => { setData({ ...data, cpf: cpfMaskBr(cpf)}); setSwitchNumToText(true); } }); }}
+                    onKeyPress={(e) => {
+                        handleNextField(e, "field3", {
+                            callback: () => {
+                                setData({ ...data, cpf: cpfMaskBr(cpf) });
+                                setSwitchNumToText(true);
+                            },
+                        });
+                    }}
+                    onBlur={(e) => {
+                        handleNextField(e, "field3", {
+                            event: "onBlur",
+                            callback: () => {
+                                setData({ ...data, cpf: cpfMaskBr(cpf) });
+                                setSwitchNumToText(true);
+                            },
+                        });
+                    }}
                     value={cpf}
-                    type={switchNumToText ? "text": "tel"}
+                    type={switchNumToText ? "text" : "tel"}
                     autoComplete="off"
                     helperText="Digite apenas números."
                     FormHelperTextProps={{ style: styles.helperFromField }}
                     fullWidth
                     InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <MoneyIcon />
-                        </InputAdornment>
-                      ),
-                      style: styles.fieldForm,
-                      id: "value3"
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <MoneyIcon />
+                            </InputAdornment>
+                        ),
+                        style: styles.fieldForm,
+                        id: "value3",
                     }}
                 />
             </div>
             <div id="field4" className={`d-none animated fadeInUp fast mt-3`}>
-                {name
-                ? <span>{name.cap()}, quando é o seu aniversário?</span>
-                : <span>Quando é o seu aniversário?</span>}
+                {name ? (
+                    <span>{name.cap()}, quando é o seu aniversário?</span>
+                ) : (
+                    <span>Quando é o seu aniversário?</span>
+                )}
                 <MuiPickersUtilsProvider
                     utils={dateFnsUtils}
                     locale={ptBRLocale}
@@ -331,18 +411,21 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         views={["year", "month", "date"]}
                         name="birthday"
                         value={selectedDate}
-                        onChange={e => {
-                            handleDateChange(e)
-                            handleNextField(e, "field4", { event: "onChange", ignoreValue: true });
+                        onChange={(e) => {
+                            handleDateChange(e);
+                            handleNextField(e, "field4", {
+                                event: "onChange",
+                                ignoreValue: true,
+                            });
                         }}
                         InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <CakeIcon />
-                            </InputAdornment>
-                          ),
-                          style: styles.fieldForm,
-                          id: "value4"
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <CakeIcon />
+                                </InputAdornment>
+                            ),
+                            style: styles.fieldForm,
+                            id: "value4",
                         }}
                     />
                 </MuiPickersUtilsProvider>
@@ -355,8 +438,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         required
                         margin="dense"
                         onChange={handleChange(setData, data)}
-                        onKeyPress={e => handleNextField(e, "field5")}
-                        onBlur={e => handleNextField(e, "field5", { event: "onBlur" })}
+                        onKeyPress={(e) => handleNextField(e, "field5")}
+                        onBlur={(e) =>
+                            handleNextField(e, "field5", { event: "onBlur" })
+                        }
                         error={errorEmail ? true : false}
                         name="email"
                         variant="outlined"
@@ -365,13 +450,13 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         autoComplete="off"
                         fullWidth
                         InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <EmailIcon />
-                            </InputAdornment>
-                          ),
-                          style: styles.fieldForm,
-                          id: "value5",
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <EmailIcon />
+                                </InputAdornment>
+                            ),
+                            style: styles.fieldForm,
+                            id: "value5",
                         }}
                     />
                 </div>
@@ -382,8 +467,25 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         margin="dense"
                         onChange={handleChange(setData)}
                         error={errorPhone ? true : false}
-                        onKeyPress={e => { handleNextField(e, "field6", { callback: () => setData({ ...data, phone: phoneMaskBr(phone)}) });  }}
-                        onBlur={e => { handleNextField(e, "field6", { event: "onBlur", callback: () => setData({ ...data, phone: phoneMaskBr(phone)}) });  }}
+                        onKeyPress={(e) => {
+                            handleNextField(e, "field6", {
+                                callback: () =>
+                                    setData({
+                                        ...data,
+                                        phone: phoneMaskBr(phone),
+                                    }),
+                            });
+                        }}
+                        onBlur={(e) => {
+                            handleNextField(e, "field6", {
+                                event: "onBlur",
+                                callback: () =>
+                                    setData({
+                                        ...data,
+                                        phone: phoneMaskBr(phone),
+                                    }),
+                            });
+                        }}
                         name="phone"
                         value={phone}
                         helperText={"Digite apenas números com DDD"}
@@ -393,36 +495,46 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         fullWidth
                         variant="outlined"
                         InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <PhoneIphoneIcon />
-                            </InputAdornment>
-                          ),
-                          style: styles.fieldForm,
-                          id: "value6",
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PhoneIphoneIcon />
+                                </InputAdornment>
+                            ),
+                            style: styles.fieldForm,
+                            id: "value6",
                         }}
                     />
                 </div>
                 <div id="field7" className="my-3">
                     <Select
-                      id="value7"
-                      margin="dense"
-                      labelId="maritalStatus"
-                      onChange={handleChange(setData, data)}
-                      name="maritalStatus"
-                      fullWidth
-                      value={maritalStatus}
-                      variant="outlined"
-                      error={errorMaritalStatus ? true : false}
-                      style={{backgroundColor: 'var(--mainWhite)'}}
+                        id="value7"
+                        margin="dense"
+                        labelId="maritalStatus"
+                        onChange={handleChange(setData, data)}
+                        name="maritalStatus"
+                        fullWidth
+                        value={maritalStatus}
+                        variant="outlined"
+                        error={errorMaritalStatus ? true : false}
+                        style={{ backgroundColor: "var(--mainWhite)" }}
                     >
-                      <MenuItem value={maritalStatus}>
-                        <span className="text-p text-normal" style={{fontSize: isSmall ? '1.1em' : "", fontFamily: 'Poppins, sans-serif'}}>selecione estado civil:</span>
-                      </MenuItem>
-                      <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
-                      <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
-                      <MenuItem value={"Divorciado(a)"}>Divorciado(a)</MenuItem>
-                      <MenuItem value={"Viúvo(a)"}>Viúvo(a)</MenuItem>
+                        <MenuItem value={maritalStatus}>
+                            <span
+                                className="text-p text-normal"
+                                style={{
+                                    fontSize: isSmall ? "1.1em" : "",
+                                    fontFamily: "Poppins, sans-serif",
+                                }}
+                            >
+                                selecione estado civil:
+                            </span>
+                        </MenuItem>
+                        <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
+                        <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
+                        <MenuItem value={"Divorciado(a)"}>
+                            Divorciado(a)
+                        </MenuItem>
+                        <MenuItem value={"Viúvo(a)"}>Viúvo(a)</MenuItem>
                     </Select>
                 </div>
             </section>
@@ -439,8 +551,10 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"
-                iconFontAwesome={<FontAwesomeIcon icon="save" style={faStyle} />}
-                textTransform='uppercase'
+                iconFontAwesome={
+                    <FontAwesomeIcon icon="save" style={faStyle} />
+                }
+                textTransform="uppercase"
             >
                 Registrar
             </ButtonMulti>

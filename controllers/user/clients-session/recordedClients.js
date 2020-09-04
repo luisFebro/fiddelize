@@ -114,13 +114,31 @@ const handleFilter = (filter) => {
     }
 };
 
+const handlePeriod = (period, options = {}) => {
+    const { day, week, month, year } = options;
+    return {
+        period,
+        options,
+    };
+};
+
 exports.getRecordedClientList = (req, res) => {
     // n3 - New way of fetching data with $facet aggreagtion
-    const { role, filter, period, search, bizId } = req.query;
+    const {
+        role,
+        filter,
+        search,
+        period,
+        day,
+        week,
+        month,
+        year,
+        bizId,
+    } = req.query;
     const limit = parseInt(req.query.limit) || 10;
     const skip = getSkip(parseInt(req.query.skip), limit);
 
-    console.log("period", period);
+    const resPeriod = handlePeriod(period, { day, week, month, year });
     const sortQuery = handleFilter(filter);
     const skipQuery = { $skip: skip };
     const limitQuery = { $limit: limit };

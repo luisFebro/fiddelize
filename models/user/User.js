@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "all-clients";
 // const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
@@ -19,7 +19,7 @@ const enumTypes = [
     // "newClientsToday", // cliAdmin (deactivated)
 ];
 
-const enumSubtypes =  [
+const enumSubtypes = [
     // CHALLENGES
     "clientWonChall", // cliAdmin
     "confirmedChall", // cliUser - sent after cli-admin confirm discounts scores
@@ -32,12 +32,12 @@ const enumSubtypes =  [
     "deadlineWarning",
     "lowBalanceWarning", // e.g sms usage is about to end..
     "promotion",
-]
+];
 const notificationsData = {
     // recipient.id and senderId should be equal for all notifications from Fiddelize.
     // recipient: { id: String (REQUIRED), role: (REQUIRED){ type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
     cardType: { required: true, type: String, enum: [...enumTypes] },
-    subtype: { type: String, enum: [...enumSubtypes]},
+    subtype: { type: String, enum: [...enumSubtypes] },
     senderId: { required: true, type: String }, // for authorization verification and for chat request
     senderName: { type: String, trim: true, lowercase: true }, // only for chat request
     content: { type: String }, // msgs for chat or infos about variable in such data format: key1:value1;key2:value2;
@@ -45,7 +45,7 @@ const notificationsData = {
     clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
     isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead
     createdAt: { type: Date, default: Date.now },
-}
+};
 const NotificationsSchema = new Schema(notificationsData, { _id: true });
 // END GENERAL SCHEMAS
 
@@ -53,29 +53,35 @@ const NotificationsSchema = new Schema(notificationsData, { _id: true });
 // Client-User
 const historyData = {
     challengeN: Number,
-    cardType: { type: String, default: "record",  enum: ["prize", "record", "brief", "remainder"]},
+    cardType: {
+        type: String,
+        default: "record",
+        enum: ["prize", "record", "brief", "remainder"],
+    },
     isLastRecordCard: Boolean, // for insert desc/score in the last record card dynamically...
     icon: String,
     desc: String,
     finishedScore: Number, // cardType: brief - the total of scores from a challenge after user has finished.
-    createdAt: {type: Date, default: new Date()},
+    createdAt: { type: Date, default: new Date() },
     value: { type: Number, default: 0 },
     // For "prize" cartType variables. both false as default but not explicit at start.
     isPrizeExpired: Boolean,
     isPrizeReceived: Boolean,
     isPrizeConfirmed: Boolean, // archive: default: function() { return this.cardType === "prize" ? false : undefined }},
-}
+};
 const HistorySchema = new Schema(historyData, { _id: true });
 
 const clientUserData = {
-    bizId: { type: String, default: "0"},
-    cashCurrScore: { // last score/purchase value
+    bizId: { type: String, default: "0" },
+    cashCurrScore: {
+        // last score/purchase value
         type: String,
-        default: "0"
+        default: "0",
     },
-    currScore: { // last score + cashCurrenScore
+    currScore: {
+        // last score + cashCurrenScore
         type: Number, // need to be number to ranking the values property.
-        default: 0
+        default: 0,
     },
     totalPurchasePrize: { type: Number, default: 0 },
     totalActiveScore: { type: Number, default: 0 }, // Same as currScore, only used on client history to differentiate from totalGeneralScore, active score is total of user's current challenge score.
@@ -86,7 +92,7 @@ const clientUserData = {
     filterBirthday: Number, // 23 de Agosto de 1994 => 823 (month code + day code)
     filterLastPurchase: Date,
     filterHighestPurchase: Number,
-}
+};
 const ClientUserDataSchema = new Schema(clientUserData, { _id: false });
 // End Client-User
 
@@ -96,21 +102,21 @@ const regulationData = {
         type: String,
         trim: true,
     },
-    updatedAt: Date
-}
+    updatedAt: Date,
+};
 const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true does  not work as a subdocument
 
 const PayServicesList = {
-    func: { type: String,  enum: ["orgganize_clients", "proccure_clients"] }, // funcName_local
+    func: { type: String, enum: ["orgganize_clients", "proccure_clients"] }, // funcName_local
     expires: Date,
-    period: { type: Number,  enum: [30, 360] }, // monthly or yearly
-}
+    period: { type: Number, enum: [30, 360] }, // monthly or yearly
+};
 const PayServicesListSchema = new Schema(PayServicesList, { _id: true });
 
 // where_what_description
 const onceCheckedData = {
     cliAdminDash_feature_proSearch: Boolean, // avoid declare default false to not declare unessary fields to DB.
-}
+};
 const OnceCheckedSchema = new Schema(onceCheckedData, { _id: false });
 
 const rewardListData = {
@@ -118,18 +124,23 @@ const rewardListData = {
     icon: String,
     rewardScore: Number,
     rewardDesc: String,
-}
+};
 const RewardListSchema = new Schema(rewardListData, { _id: false });
 
-const tasksListData = { // or to do list
+const tasksListData = {
+    // or to do list
     done: { type: Boolean, default: false },
-    taskType: { type: String, default: "pendingDelivery",  enum: ["pendingDelivery", ]},
+    taskType: {
+        type: String,
+        default: "pendingDelivery",
+        enum: ["pendingDelivery"],
+    },
     taskTitle: String,
     content: String, // e.g dataFormat: "cliUserId:123;cliUserName:febro;prizeDesc:tickets;challNum:2;deadline:30/12/20;"
     madeDate: Date,
     madeBy: String,
     createdAt: { type: Date, default: Date.now },
-}
+};
 const TasksListSchema = new Schema(tasksListData, { _id: true });
 
 const clientAdminData = {
@@ -142,7 +153,7 @@ const clientAdminData = {
     bizPlan: {
         type: String,
         default: "gratis",
-        enum: ["gratis", "bronze", "prata", "ouro"]
+        enum: ["gratis", "bronze", "prata", "ouro"],
     },
     payActiveId: String, // NOT IMPLEMENTED uniqueId_nextExpiresDate
     payServiceList: PayServicesListSchema,
@@ -181,7 +192,7 @@ const clientAdminData = {
     smsHistory: [SmsHistorySchema],
     smsAutomation: [SmsAutomationSchema],
     pendingRegisters: [PendingRegistersSchema],
-}
+};
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 // depracated but it was working well.
 // ClientAdminDataSchema.pre('save', function(next) {
@@ -195,14 +206,14 @@ const centralAdminData = {
     subRole: {
         type: String,
         default: "rep-vendas",
-        enum: ["dev", "rep-vendas", "ops-vendas"]
+        enum: ["dev", "rep-vendas", "ops-vendas"],
     },
     payments: {
         grossIncome: Number,
         liquidIncome: Number,
         transitionTax: Number,
     },
-}
+};
 const CentralAdminDataSchema = new Schema(centralAdminData, { _id: false });
 // End Central Admin
 // END USER'S ROLES
@@ -212,7 +223,7 @@ const data = {
     role: {
         type: String,
         default: "cliente-admin",
-        enum: ["admin", "cliente-admin", "cliente"]
+        enum: ["admin", "cliente-admin", "cliente"],
     },
     name: {
         type: String,
@@ -226,7 +237,7 @@ const data = {
         required: true,
         lowercase: true,
     },
-    cpf:{
+    cpf: {
         type: String,
         unique: true,
     },
@@ -238,17 +249,23 @@ const data = {
     },
     maritalStatus: {
         type: String,
-        default: "Não selecionado"
+        default: "Não selecionado",
     },
     clientUserData: ClientUserDataSchema,
     clientAdminData: ClientAdminDataSchema,
     centralAdminData: CentralAdminDataSchema,
+    filterRegister: {
+        day: Number,
+        week: String, // e.g m:9.w:31_6 => startMonths.tartOfWeek_endOfWeek
+        month: Number,
+        year: Number,
+    },
     // staffBookingList: Array, // L
-}
+};
 // End Profile
 
 const UserSchema = new Schema(data, { timestamps: true });
-module.exports = mongoose.model('User', UserSchema, collectionName);
+module.exports = mongoose.model("User", UserSchema, collectionName);
 
 /* COMMENTS
 n1: LESSON: JSON does not accept numbers which starts with 0
@@ -264,7 +281,6 @@ By the way, this field will not be sorted at all
 This is how I sorted by the largest length of items, and then sorted by name:
 .sort({ staffBookingList: 1, name: 1 })
 */
-
 
 /* ARCHIVES
 // TEMP AUTH USER ID
