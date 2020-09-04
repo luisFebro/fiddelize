@@ -1,32 +1,42 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import TextField from '@material-ui/core/TextField';
-import handleChange from '../../../../utils/form/use-state/handleChange';
-import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
-import useAPI, { sendSMS, getUniqueId } from '../../../../hooks/api/useAPI';
-import { useAppSystem } from '../../../../hooks/useRoleData';
-import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import Title from '../../../../components/Title';
-import SchedulingBtn from './scheduling-btn/SchedulingBtn';
-import AccessDenialModal from './denial-modal/AccessDenialModal';
-import scrollIntoView from '../../../../utils/document/scrollIntoView';
+import React, { useState, useEffect, Fragment } from "react";
+import TextField from "@material-ui/core/TextField";
+import handleChange from "../../../../utils/form/use-state/handleChange";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import useAPI, { sendSMS, getUniqueId } from "../../../../hooks/api/useAPI";
+import { useAppSystem } from "../../../../hooks/useRoleData";
+import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import Title from "../../../../components/Title";
+import SchedulingBtn from "./scheduling-btn/SchedulingBtn";
+import AccessDenialModal from "./denial-modal/AccessDenialModal";
+import scrollIntoView from "../../../../utils/document/scrollIntoView";
+import getFilterDate from "../../../../utils/dates/getFilterDate";
 // const isSmall = window.Helper.isSmallScreen();
+
+const filter = getFilterDate();
 
 const getStyles = () => ({
     form: {
-        background: 'var(--themePLight)',
-        borderRadius: '10px',
-        padding: '25px 5px',
+        background: "var(--themePLight)",
+        borderRadius: "10px",
+        padding: "25px 5px",
     },
     fieldFormValue: {
-        backgroundColor: 'var(--mainWhite)',
-        color: 'var(--themeP)',
-        fontSize: '20px',
-        fontFamily: 'var(--mainFont)',
-        zIndex: 2000
+        backgroundColor: "var(--mainWhite)",
+        color: "var(--themeP)",
+        fontSize: "20px",
+        fontFamily: "var(--mainFont)",
+        zIndex: 2000,
     },
 });
 
-const getModalData = ({ handleUpdateSession, whichTab, userId, contactList, message, handleShowMessage }) => ({
+const getModalData = ({
+    handleUpdateSession,
+    whichTab,
+    userId,
+    contactList,
+    message,
+    handleShowMessage,
+}) => ({
     handleUpdateSession,
     userId,
     contactList,
@@ -52,55 +62,82 @@ export default function MessageField({
     const styles = getStyles();
 
     useEffect(() => {
-        if(suggestionMsg) setMessage(suggestionMsg);
-    }, [suggestionMsg])
+        if (suggestionMsg) setMessage(suggestionMsg);
+    }, [suggestionMsg]);
 
     const { businessId: userId } = useAppSystem();
 
     const uniqueId = getUniqueId();
-    const runName = `UpdateSMSAll ${uniqueId}`
+    const runName = `UpdateSMSAll ${uniqueId}`;
 
     const { data: doneMsg, loading, setRun, dispatch } = useAPI({
-        method: 'post',
+        method: "post",
         url: sendSMS(),
-        body: { userId, contactList, msg: message },
+        body: { userId, contactList, msg: message, filter },
         needAuth: true,
         timeout: 30000,
-        snackbar: { txtPending: "Enviando agora...", txtSuccess: "Mensagem Enviada!", txtFailure: "" },
+        snackbar: {
+            txtPending: "Enviando agora...",
+            txtSuccess: "Mensagem Enviada!",
+            txtFailure: "",
+        },
         trigger,
-    })
+    });
 
     useEffect(() => {
-        if(doneMsg && !loading) {
+        if (doneMsg && !loading) {
             setDisabled(false);
 
             const handleCallback = () => {
-                setTimeout(() => showSnackbar(dispatch, "Atualizando Histórico...", "warning", 5500), 4000);
+                setTimeout(
+                    () =>
+                        showSnackbar(
+                            dispatch,
+                            "Atualizando Histórico...",
+                            "warning",
+                            5500
+                        ),
+                    4000
+                );
                 setMessage("");
                 handleShowMessage(false);
                 setRun(dispatch, runName);
-            }
+            };
 
             const config = {
                 mode: "center",
                 duration: 3000,
                 onDone: () => handleCallback(),
-            }
+            };
 
             scrollIntoView("#smsHistoryTotals", config);
         }
-    }, [doneMsg, loading])
+    }, [doneMsg, loading]);
 
     const handleSendNow = () => {
-        if(!message.length) return showSnackbar(dispatch, "Insira alguma mensagem ou selecione uma sugestão abaixo", "error", 6000);
-        if(currBalance === 0) return setWhichDenial("NoCredits");
-        if(currBalance < totalRecipients) return setWhichDenial("ChargeCredits");
+        if (!message.length)
+            return showSnackbar(
+                dispatch,
+                "Insira alguma mensagem ou selecione uma sugestão abaixo",
+                "error",
+                6000
+            );
+        if (currBalance === 0) return setWhichDenial("NoCredits");
+        if (currBalance < totalRecipients)
+            return setWhichDenial("ChargeCredits");
 
         setDisabled(true);
         setTrigger(uniqueId);
-    }
+    };
 
-    const modal = getModalData({ handleUpdateSession, whichTab, userId, contactList, message, handleShowMessage });
+    const modal = getModalData({
+        handleUpdateSession,
+        whichTab,
+        userId,
+        contactList,
+        message,
+        handleShowMessage,
+    });
 
     const showCTABtn = () => (
         <section className="d-flex align-items-center justify-content-around mt-5 mb-3">
@@ -112,7 +149,7 @@ export default function MessageField({
                 position="relative"
                 onClick={handleSendNow}
                 backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
+                variant="extended"
             />
         </section>
     );
@@ -134,18 +171,14 @@ export default function MessageField({
                         <form className="shadow-elevation" style={styles.form}>
                             <p className="text-center text-shadow text-white text-subtitle font-weight-bold">
                                 MENSAGEM SMS
-                                <span
-                                    className="mt-3 ml-2 d-block text-left text-shadow text-white text-normal font-weight-bold"
-                                >
+                                <span className="mt-3 ml-2 d-block text-left text-shadow text-white text-normal font-weight-bold">
                                     ✔ ENVIO PARA:
-                                    <br/>
+                                    <br />
                                     {whichTab}
                                 </span>
-                                <span
-                                    className="mt-3 ml-2 d-block text-left text-shadow text-white text-normal font-weight-bold"
-                                >
+                                <span className="mt-3 ml-2 d-block text-left text-shadow text-white text-normal font-weight-bold">
                                     ✔ TOTAL:
-                                    <br/>
+                                    <br />
                                     {contactList.length} contato{plural}.
                                 </span>
                             </p>
@@ -158,7 +191,7 @@ export default function MessageField({
                                     style: styles.fieldFormValue,
                                 }}
                                 inputProps={{
-                                    maxLength: 160
+                                    maxLength: 160,
                                 }}
                                 value={message}
                                 onChange={handleChange(setMessage)}
@@ -166,10 +199,11 @@ export default function MessageField({
                                 variant="outlined"
                                 fullWidth
                             />
-                            <div className="position-relative text-white text-shadow text-nowrap pl-1" style={{top: '10px'}}>
-                                <span
-                                    className="font-weight-bold"
-                                >
+                            <div
+                                className="position-relative text-white text-shadow text-nowrap pl-1"
+                                style={{ top: "10px" }}
+                            >
+                                <span className="font-weight-bold">
                                     {message.length}/160 characteres
                                 </span>
                             </div>

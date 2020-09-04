@@ -100,7 +100,7 @@ const periodOptions = (isUserPro) => [
     },
     {
         titleBr: "Hoje",
-        title: "today",
+        title: "day",
         reverseBr: null,
         reverse: null,
         showEmptyOption: null,

@@ -40,7 +40,7 @@ import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 
-const filterRegister = getFilterDate();
+const filter = getFilterDate();
 // bizSysId for validation only since when the user is runningthe app
 // for the first time, businessId returns "0"...
 const collection = { collection: "appSystem" };
@@ -84,7 +84,7 @@ function Register({
         cpf: "",
         maritalStatus: "selecione estado civil",
         clientUserData: { bizId: bizSysId, filterBirthday: "" },
-        filterRegister,
+        filter,
     });
 
     const styles = getStyles();

@@ -29,18 +29,8 @@ import useElemShowOnScroll from "../../../../hooks/scroll/useElemShowOnScroll";
 import getFirstName from "../../../../utils/string/getFirstName";
 import "./_RecordedClientsList.scss";
 import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
-import {
-    getDay,
-    getWeekCode,
-    getMonth,
-    getYear,
-} from "../../../../utils/dates/getFilterDate";
+import getFilterDate from "../../../../utils/dates/getFilterDate";
 // import ClientsSearch from './search/ClientsSearch';
-
-const filterDay = getDay();
-const weekCode = getWeekCode();
-const filterMonth = getMonth();
-const filterYear = getYear();
 
 const AsyncFreeAccountsLimitMsg = Load({
     loader: () =>
@@ -142,7 +132,9 @@ const getInfoElem = (target, options = {}) => {
     }
 };
 
-const handleParams = ({ filterName, filter, period }) => {
+const handleParams = ({ filterName = "all", period, getFilterDate }) => {
+    const { day, week: weekCode, month: monthCode, year } = getFilterDate();
+
     switch (period) {
         case "all":
             return { role: "cliente", filter: filterName };
@@ -151,30 +143,31 @@ const handleParams = ({ filterName, filter, period }) => {
                 role: "cliente",
                 filter: filterName,
                 period,
-                day: filter.day,
+                day,
             };
         case "week":
             return {
                 role: "cliente",
                 filter: filterName,
                 period,
-                week: filter.week,
+                week: weekCode,
             };
         case "month":
             return {
                 role: "cliente",
                 filter: filterName,
                 period,
-                month: filter.month,
-                year: filter.year,
+                month: monthCode,
             };
         case "year":
             return {
                 role: "cliente",
                 filter: filterName,
                 period,
-                year: filter.year,
+                year,
             };
+        default:
+            return { role: "cliente", filter: filterName };
     }
 };
 
@@ -196,15 +189,11 @@ export default function AsyncRecordedClientsList() {
     const [filter, setFilter] = useState({
         filterName: "newCustomers",
         period: "all",
-        day: filterDay,
-        week: weekCode,
-        month: filterMonth,
-        year: filterYear,
         needEmpty: false,
     });
-    console.log("filterName", filter);
 
     const { filterName, period, needEmpty } = filter;
+    console.log("period", period);
 
     const handleSelectedFilter = (filterData) => {
         setSkip(0);
@@ -234,11 +223,11 @@ export default function AsyncRecordedClientsList() {
         updateUser(dispatch, objToSend, businessId);
     }, [totalCliUserScores, totalActiveScores]);
 
-    const params = handleParams({ filterName, filter, period });
+    const params = handleParams({ filterName, period, getFilterDate });
 
     const { runName } = useRunComp();
     const trigger = getTrigger(runName, "RecordedClientsList", {
-        cond2: filterName,
+        cond2: `${filterName}_${period}`,
     });
 
     const {
@@ -253,6 +242,7 @@ export default function AsyncRecordedClientsList() {
         isOffline,
         listTotal,
         ShowOverMsg,
+        emptyType,
     } = useAPIList({
         url: readUserList(businessId),
         skip,
@@ -260,6 +250,7 @@ export default function AsyncRecordedClientsList() {
         trigger,
         listName: "recordedClientsList",
     });
+    console.log("emptyType", emptyType);
     const detectedCard = useElemDetection({
         loading,
         hasMore,

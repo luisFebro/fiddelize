@@ -1,22 +1,23 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
-import axios from 'axios';
-import React, { useEffect, useState, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { ShowLoadingComp } from './Comps';
-import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
-import useOfflineListData from '../../hooks/storage/useOfflineListData';
-import getFirstName from '../../utils/string/getFirstName';
-import { useProfile } from '../../hooks/useRoleData';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
-import { useStoreDispatch } from 'easy-peasy';
-import { logout } from '../../redux/actions/authActions';
-import { chooseHeader } from '../../utils/server/getHeaders';
-import { useToken } from '../../hooks/useRoleData';
-import Skeleton, { skeletonRoot } from '../../components/multimedia/Skeleton';
-import { IS_DEV } from '../../config/clientUrl';
+import axios from "axios";
+import React, { useEffect, useState, Fragment } from "react";
+import PropTypes from "prop-types";
+import { ShowLoadingComp } from "./Comps";
+import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
+import useOfflineListData from "../../hooks/storage/useOfflineListData";
+import getFirstName from "../../utils/string/getFirstName";
+import { useProfile } from "../../hooks/useRoleData";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import { useStoreDispatch } from "easy-peasy";
+import { logout } from "../../redux/actions/authActions";
+import { chooseHeader } from "../../utils/server/getHeaders";
+import { useToken } from "../../hooks/useRoleData";
+import Skeleton, { skeletonRoot } from "../../components/multimedia/Skeleton";
+import { IS_DEV } from "../../config/clientUrl";
+import extractStrData from "../../utils/string/extractStrData";
 
-export * from './requestsLib.js';
-export * from './trigger.js';
+export * from "./requestsLib.js";
+export * from "./trigger.js";
 
 /*
 use default:
@@ -36,10 +37,10 @@ useAPIList.propTypes = {
     params: PropTypes.object, // e.g { q: query, page: pageNumber } the same as ?q=${query}&page=${pageNumber}
     body: PropTypes.object, // body is the data to be sent as the request body - Only applicable for request methods 'PUT', 'POST', 'DELETE , and 'PATCH'
     timeout: PropTypes.number, // `timeout` specifies the number of milliseconds before the request times out. -- If the request takes longer than `timeout`, the request will be aborted.
-}
+};
 
 export default function useAPIList({
-    method = 'GET',
+    method = "GET",
     url,
     params = null,
     body = null,
@@ -54,7 +55,8 @@ export default function useAPIList({
         list: [],
         listTotal: 0,
         chunksTotal: null,
-        content: null, });
+        content: null,
+    });
     const { list, listTotal, chunksTotal, content } = data;
     console.log("chunksTotal", chunksTotal);
 
@@ -76,23 +78,33 @@ export default function useAPIList({
     const isPlural = listTotal > 1 ? "s" : "";
     const gotListItems = list && list.length;
     const noBlocking = !loading && !error;
-    const needEmptyIllustra = noBlocking && (list && !list.length);
+    const needEmptyIllustra = noBlocking && list && !list.length;
     const needEmptySearch = noBlocking && Boolean(!listTotal) && search;
     const readyShowElems = noBlocking && !needEmptyIllustra;
+    let emptyType = "virgin";
     // END IMPORTABLE VARIABLES
 
+    if (content) {
+        // most common content needs
+        const extractedData = extractStrData(content);
+        if (extractedData.emptyType) emptyType = extractedData.emptyType;
+    }
 
     const thisList = list;
-    const { isOffline, offlineList } = useOfflineListData({ listName, list: thisList, trigger: (offlineBtn && !ignore) });
+    const { isOffline, offlineList } = useOfflineListData({
+        listName,
+        list: thisList,
+        trigger: offlineBtn && !ignore,
+    });
 
     useEffect(() => {
-       if(trigger) {
-          setUpdateFirstChunkOnly(true);
-       }
-    }, [trigger])
+        if (trigger) {
+            setUpdateFirstChunkOnly(true);
+        }
+    }, [trigger]);
 
     useEffect(() => {
-        if((isOffline || offlineBtn)) {
+        if (isOffline || offlineBtn) {
             setData({ ...data, list: offlineList });
             setError(false);
             setReload(true);
@@ -102,21 +114,22 @@ export default function useAPIList({
         }
 
         return () => setIgnore(true);
-
-    }, [isOffline, offlineBtn, offlineList])
+    }, [isOffline, offlineBtn, offlineList]);
 
     // For search only - Every time a query changes, then clean previous data. Otherwise it will accumulative with the new one....
     useEffect(() => {
-        if(search) setData({ ...data, list: [] });
-    }, [search])
+        if (search) setData({ ...data, list: [] });
+    }, [search]);
 
     useEffect(() => {
         setLoading(false);
-    }, [data.list])
+    }, [data.list]);
 
     function handleSuccess({ response, stopRequest, updateOnly }) {
         clearTimeout(stopRequest);
-        const listType = updateOnly ? response.data.list : [...list, ...response.data.list];
+        const listType = updateOnly
+            ? response.data.list
+            : [...list, ...response.data.list];
         const listTotal = response.data.listTotal;
         const chunksTotal = response.data.chunksTotal;
         const content = response.data.content; // for all other kind of data
@@ -128,9 +141,9 @@ export default function useAPIList({
             listTotal,
             chunksTotal,
             content,
-        })
+        });
 
-        const hasCards = listTotal > skip ? true : false
+        const hasCards = listTotal > skip ? true : false;
         const firstCards = 5 >= listTotal;
         setHasMore(hasCards && !firstCards);
         setReachedChunksLimit(skip >= chunksTotal);
@@ -143,9 +156,9 @@ export default function useAPIList({
         setLoading(false);
 
         const gotExpiredToken = status === 403;
-        if(gotExpiredToken) {
-            showSnackbar(dispatch, "Sua sessão terminou.", "warning")
-            logout(dispatch, {needSnackbar: false});
+        if (gotExpiredToken) {
+            showSnackbar(dispatch, "Sua sessão terminou.", "warning");
+            logout(dispatch, { needSnackbar: false });
         }
     }
 
@@ -154,11 +167,14 @@ export default function useAPIList({
         // TEST MODE - CHANGE THIS
         // const skipReachedChunks = trigger && trigger.indexOf(" ") === -1; // setRun will always have a space. For filtering, for isntance will have only the name
         // console.log("skipReachedChunks", skipReachedChunks);
-        if(reachedChunksLimit && !true) { if(hasMore) setHasMore(false); return; };
+        if (reachedChunksLimit && !true) {
+            if (hasMore) setHasMore(false);
+            return;
+        }
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
         console.log("updateOnly", updateOnly);
-        if(updateOnly) skip = 0;
+        if (updateOnly) skip = 0;
 
         const stopRequest = setTimeout(() => {
             cancel();
@@ -174,8 +190,8 @@ export default function useAPIList({
             data: body,
             params: { ...params, skip },
             headers: chooseHeader({ token: token, needAuth }),
-            cancelToken: new axios.CancelToken(c => cancel = c) // n1
-        }
+            cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
+        };
 
         setUpdateFirstChunkOnly(false);
 
@@ -183,37 +199,43 @@ export default function useAPIList({
             try {
                 const response = await axios(config);
                 handleSuccess({ response, stopRequest, updateOnly });
-            } catch(e) {
-                if(axios.isCancel(e)) return
-                if(e.response) {
-                    console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
+            } catch (e) {
+                if (axios.isCancel(e)) return;
+                if (e.response) {
+                    console.log(
+                        `${JSON.stringify(e.response.data)}. STATUS: ${
+                            e.response.status
+                        }`
+                    );
 
                     const { status } = e.response;
                     handleError(status);
-
                 }
             }
         }
 
         doRequest();
 
-        return () => { cancel(); clearTimeout(stopRequest); };
-    }, [trigger, reload, skip, reachedChunksLimit])
+        return () => {
+            cancel();
+            clearTimeout(stopRequest);
+        };
+    }, [trigger, reload, skip, reachedChunksLimit]);
 
     const handleReloadBtn = () => {
-        if(isOffline) window.location.href = "/mobile-app";
-        setReload(reload => !reload);
-    }
+        if (isOffline) window.location.href = "/mobile-app";
+        setReload((reload) => !reload);
+    };
 
     const handleOfflineBtn = () => {
         setLoading(true);
         setOfflineBtn(true);
         setLoading(false);
-    }
+    };
 
     const ShowLoading = ({ size = "small" }) => <ShowLoadingComp size={size} />; // n2
     const ShowLoadingSkeleton = () => {
-        return(
+        return (
             <section className="mx-2" style={skeletonRoot}>
                 <Skeleton />
                 <Skeleton />
@@ -222,11 +244,11 @@ export default function useAPIList({
                 <Skeleton />
             </section>
         );
-    }
+    };
 
     const ShowError = () => (
         <section>
-            {(!isOffline && !offlineBtn) && (
+            {!isOffline && !offlineBtn && (
                 <Fragment>
                     <h1 className="text-title text-center text-expense-red">
                         Oops!
@@ -234,14 +256,19 @@ export default function useAPIList({
                     <p className="text-normal mx-2 text-grey text-left">
                         Não foi possível carregar esta lista.
                         <br />
-                        <strong>Se sua conexão estiver lenta,</strong> tente acesso offline da última lista carregada.
+                        <strong>Se sua conexão estiver lenta,</strong> tente
+                        acesso offline da última lista carregada.
                     </p>
                 </Fragment>
             )}
 
             {(isOffline || offlineBtn) && (
-                <p className="text-normal mx-2 text-grey text-left" style={{marginTop: '100px'}}>
-                    Ufa! Ainda bem que o <strong>modo offline</strong> salvou sua lista.
+                <p
+                    className="text-normal mx-2 text-grey text-left"
+                    style={{ marginTop: "100px" }}
+                >
+                    Ufa! Ainda bem que o <strong>modo offline</strong> salvou
+                    sua lista.
                     <br />
                     Você pode ter mais dados online.
                 </p>
@@ -254,7 +281,7 @@ export default function useAPIList({
                     color="var(--mainWhite)"
                     backgroundColor="var(--mainDark)"
                 />
-                {(!isOffline && !offlineBtn) && (
+                {!isOffline && !offlineBtn && (
                     <ButtonMulti
                         titleNowrap={true}
                         title="Acesso offline"
@@ -274,11 +301,8 @@ export default function useAPIList({
         foundItemsTxt = `tarefa${isPlural} gerada${isPlural}`,
     }) => (
         <Fragment>
-            {loading
-            ? (
-                <p
-                    className="text-normal text-center font-weight-bold text-purple"
-                >
+            {loading ? (
+                <p className="text-normal text-center font-weight-bold text-purple">
                     {analysingTxt}
                 </p>
             ) : (
@@ -289,15 +313,20 @@ export default function useAPIList({
                         </div>
                     )}
 
-                    {((!gotListItems && offlineBtn && !isOffline) || (!listTotal && !isOffline && !error)) && (
+                    {((!gotListItems && offlineBtn && !isOffline) ||
+                        (!listTotal && !isOffline && !error)) && (
                         <div className="text-normal font-weight-bold text-grey">
                             {userName}, {noItemsTxt}.
                         </div>
                     )}
 
-                    {(!offlineBtn && Boolean(listTotal) && !error) && (
+                    {!offlineBtn && Boolean(listTotal) && !error && (
                         <div className="text-normal font-weight-bold text-purple">
-                            Você tem <span style={{fontSize: '25px'}}>{listTotal}</span> {foundItemsTxt}.
+                            Você tem{" "}
+                            <span style={{ fontSize: "25px" }}>
+                                {listTotal}
+                            </span>{" "}
+                            {foundItemsTxt}.
                         </div>
                     )}
                 </Fragment>
@@ -311,7 +340,6 @@ export default function useAPIList({
                 <p className="my-5 text-normal text-center font-weight-bold text-purple">
                     Isso é tudo, {userName}.
                 </p>
-
             )}
 
             {isOffline && (
@@ -323,7 +351,7 @@ export default function useAPIList({
     );
 
     const isOffList = offlineBtn;
-    error = (error || isOffline);
+    error = error || isOffline;
     loading = loading && !isOffline;
 
     return {
@@ -332,7 +360,7 @@ export default function useAPIList({
         isPlural,
         noBlocking,
         readyShowElems,
-        needEmptyIllustra,
+        needEmptyIllustra: needEmptyIllustra && emptyType === "virgin",
         needEmptySearch,
         loading,
         error,
@@ -344,7 +372,9 @@ export default function useAPIList({
         hasMore,
         isOffline,
         isOffList,
-        content, };
+        content,
+        emptyType,
+    };
 }
 
 /* COMMENTS

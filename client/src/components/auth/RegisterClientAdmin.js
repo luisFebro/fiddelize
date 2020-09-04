@@ -39,7 +39,7 @@ import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import ReactGA from "react-ga";
 
-const filterRegister = getFilterDate();
+const filter = getFilterDate();
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -87,7 +87,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         birthday: "",
         cpf: "",
         maritalStatus: "selecione estado civil",
-        filterRegister,
+        filter,
     });
     let {
         role,

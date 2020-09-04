@@ -1,13 +1,16 @@
-const User = require('../../models/user');
-const { msgG } = require('../_msgs/globalMsgs');
+const User = require("../../models/user");
+const { msgG } = require("../_msgs/globalMsgs");
 const httpRequest = require("../../utils/http/httpRequest");
 const requestPromisePool = require("../../utils/http/requestRequestPool");
-const convertPhoneStrToInt = require('../../utils/number/convertPhoneStrToInt');
-const findKeyAndAssign = require('../../utils/array/findKeyAndAssign');
+const convertPhoneStrToInt = require("../../utils/number/convertPhoneStrToInt");
+const findKeyAndAssign = require("../../utils/array/findKeyAndAssign");
 const { encryptSync, decryptSync } = require("../../utils/security/xCipher");
-const { getDataChunk, getChunksTotal } = require("../../utils/array/getDataChunk");
+const {
+    getDataChunk,
+    getChunksTotal,
+} = require("../../utils/array/getDataChunk");
 
-const { requestMultiBatch, handleSmsStatus, } = require("./helpers");
+const { requestMultiBatch, handleSmsStatus } = require("./helpers");
 // const { getChunksTotal, getDataChunk } = require("../../utils/array/getDataChunk");
 
 const secret = process.env.SMS_DEV_KEY;
@@ -23,7 +26,7 @@ Lidando com isso com requisições em lotes (batch requests) via Javascript.
 // GET
 exports.getCurrBalance = (req, res) => {
     // "/v1/balance?get?key=SUA_CHAVE_KEY"
-}
+};
 
 // GET
 exports.readContacts = (req, res) => {
@@ -36,42 +39,47 @@ exports.readContacts = (req, res) => {
         autocompleteLimit = 4,
     } = req.query;
 
-    if(!search && !autocomplete) limit = "";
+    if (!search && !autocomplete) limit = "";
 
-    if(!userId) return res.status(400).json({msg: "Missing admin ID"})
+    if (!userId) return res.status(400).json({ msg: "Missing admin ID" });
 
     let findThis = { "clientUserData.bizId": userId };
-    if(contactFrom) findThis = { "clientUserData.bizId": userId, name: contactFrom };
-    if(search && autocomplete) {
-        const regexSearch = { $regex: `${search}`, $options: 'i'};
+    if (contactFrom)
+        findThis = { "clientUserData.bizId": userId, name: contactFrom };
+    if (search && autocomplete) {
+        const regexSearch = { $regex: `${search}`, $options: "i" };
         findThis = { "clientUserData.bizId": userId, name: regexSearch };
     }
 
     // .limit(limit)
     User.find(findThis)
-    .select("phone name")
-    .sort({ name: 1 })
-    .exec((err, data) => {
-        if (err) return res.status(500).json(msgG('error.systemError', err))
+        .select("phone name")
+        .sort({ name: 1 })
+        .exec((err, data) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        let finalRes = [];
-        data.forEach(user => {
-            if(user._id.toString() !== userId) {
-                if(autocomplete) {
-                    finalRes.push(user.name);
-                } else {
-                    finalRes.push({ name: user.name, phone: decryptSync(user.phone) })
+            let finalRes = [];
+            data.forEach((user) => {
+                if (user._id.toString() !== userId) {
+                    if (autocomplete) {
+                        finalRes.push(user.name);
+                    } else {
+                        finalRes.push({
+                            name: user.name,
+                            phone: decryptSync(user.phone),
+                        });
+                    }
                 }
+            });
+
+            if (autocomplete) {
+                finalRes = finalRes.slice(0, autocompleteLimit);
             }
-        })
 
-        if(autocomplete) {
-            finalRes = finalRes.slice(0, autocompleteLimit);
-        }
-
-        res.json(finalRes);
-    });
-}
+            res.json(finalRes);
+        });
+};
 
 // Method: POST
 exports.mwSendSMS = (req, res, next) => {
@@ -87,132 +95,167 @@ exports.mwSendSMS = (req, res, next) => {
         isScheduled = false,
         isAutomatic = false,
         serviceId, // for automation only
+        filter,
     } = req.body;
 
-    if(!msg) return res.status(400).json({ error: "A message with at least 1 character should be passed"})
+    if (!msg)
+        return res
+            .status(400)
+            .json({
+                error: "A message with at least 1 character should be passed",
+            });
 
-    let flashQuery = ""; let jobtimeQuery = ""; let jobdateQuery = ""; if(flash) { flashQuery = "&flash=1"; }// Determina se a mensagem é do tipo Flash (Pop-up).
-    if(jobdate) { jobdateQuery = `&jobdate=${jobdate}`; } // Data de agendamento para envio Ex: 01/01/2016.
-    if(jobtime) { jobtimeQuery = `&jobtime=${jobtime}`; } // Hora de agendamento para envio Ex: 10:30.
+    let flashQuery = "";
+    let jobtimeQuery = "";
+    let jobdateQuery = "";
+    if (flash) {
+        flashQuery = "&flash=1";
+    } // Determina se a mensagem é do tipo Flash (Pop-up).
+    if (jobdate) {
+        jobdateQuery = `&jobdate=${jobdate}`;
+    } // Data de agendamento para envio Ex: 01/01/2016.
+    if (jobtime) {
+        jobtimeQuery = `&jobtime=${jobtime}`;
+    } // Hora de agendamento para envio Ex: 10:30.
 
     function getParams({ name, phone }) {
         const finalPhoneNumber = convertPhoneStrToInt(phone);
 
-        return({
-            "method": "GET",
-            "hostname": "api.smsdev.com.br",
-            "port": null,
-            "path": `/v1/send?key=${secret}&type=9&refer=${encodeURI(name)}&number=${finalPhoneNumber}&msg=${encodeURI(msg)}${jobdateQuery}${jobtimeQuery}${flashQuery}`,
-            "headers": {}
-        });
+        return {
+            method: "GET",
+            hostname: "api.smsdev.com.br",
+            port: null,
+            path: `/v1/send?key=${secret}&type=9&refer=${encodeURI(
+                name
+            )}&number=${finalPhoneNumber}&msg=${encodeURI(
+                msg
+            )}${jobdateQuery}${jobtimeQuery}${flashQuery}`,
+            headers: {},
+        };
     }
 
     requestPromisePool(contactList, { promise: httpRequest, getParams })
-    .then(data => {
-        const {
-            results: providerRes,
-            error: errorArray
-        } = data;
-        if(errorArray && errorArray.length) { console.log(errorArray)}
-        if(providerRes.length) {
-            const firstContacts = [];
-            const contactStatements = providerRes.map((contact, ind) => {
-                if(ind < 2) { firstContacts.push(contact.refer); } // get up to the first 3 names
-                return {
-                    id: contact.id,
-                    name: contact.refer,
-                    phone: contactList[ind].phone,
-                };
-            });
-            const numCredits = providerRes.length;
+        .then((data) => {
+            const { results: providerRes, error: errorArray } = data;
+            if (errorArray && errorArray.length) {
+                console.log(errorArray);
+            }
+            if (providerRes.length) {
+                const firstContacts = [];
+                const contactStatements = providerRes.map((contact, ind) => {
+                    if (ind < 2) {
+                        firstContacts.push(contact.refer);
+                    } // get up to the first 3 names
+                    return {
+                        id: contact.id,
+                        name: contact.refer,
+                        phone: contactList[ind].phone,
+                    };
+                });
+                const numCredits = providerRes.length;
 
-            req.userId = userId;
-            req.msg = encryptSync(msg);
-            req.numCredits = numCredits;
-            req.firstContacts = firstContacts;
-            req.contactStatements = contactStatements;
-            req.scheduledDate = scheduledDate;
-            req.isAutomatic = isAutomatic;
-            req.serviceId = serviceId;
-            req.isScheduled = isScheduled;
+                req.userId = userId;
+                req.msg = encryptSync(msg);
+                req.numCredits = numCredits;
+                req.firstContacts = firstContacts;
+                req.contactStatements = contactStatements;
+                req.scheduledDate = scheduledDate;
+                req.isAutomatic = isAutomatic;
+                req.serviceId = serviceId;
+                req.isScheduled = isScheduled;
+                req.filter = filter;
 
-            next();
-        }
-    })
-    .catch(err => console.log(err));
-
-}
+                next();
+            }
+        })
+        .catch((err) => console.log(err));
+};
 
 // for scheduled sms.
 exports.cancelSMS = (req, res) => {
     const { userId, cardId } = req.query;
 
     User.findById(userId)
-    .select("clientAdminData.smsHistory")
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
+        .select("clientAdminData.smsHistory")
+        .exec((err, doc) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        let smsHistory = doc.clientAdminData.smsHistory;
+            let smsHistory = doc.clientAdminData.smsHistory;
 
-        const newData = findKeyAndAssign({
-            objArray: smsHistory,
-            compareProp: '_id', compareValue: cardId,
-            targetProp: 'isCanceled', targetValue: true,
-        });
+            const newData = findKeyAndAssign({
+                objArray: smsHistory,
+                compareProp: "_id",
+                compareValue: cardId,
+                targetProp: "isCanceled",
+                targetValue: true,
+            });
 
-        smsHistory = newData;
-        doc.markModified("clientAdminData.smsHistory");
+            smsHistory = newData;
+            doc.markModified("clientAdminData.smsHistory");
 
-        doc.save(err => {
-            const getContactIds = () => {
-                let foundContactIds;
-                smsHistory.forEach(card => {
-                    if(card._id.toString() === cardId) {
-                       foundContactIds = card.contactStatements;
-                    }
+            doc.save((err) => {
+                const getContactIds = () => {
+                    let foundContactIds;
+                    smsHistory.forEach((card) => {
+                        if (card._id.toString() === cardId) {
+                            foundContactIds = card.contactStatements;
+                        }
+                    });
+
+                    return foundContactIds;
+                };
+
+                const contacts = getContactIds();
+
+                const moreConfig = {
+                    method: "GET",
+                    hostname: "api.smsdev.com.br",
+                    port: null,
+                    headers: {},
+                };
+
+                const getUrl = (iteratedElem) => ({
+                    path: `/get?key=${secret}&action=cancelar&id=${iteratedElem}`,
                 });
-
-                return foundContactIds;
-            }
-
-            const contacts = getContactIds();
-
-            const moreConfig = {
-                "method": "GET",
-                "hostname": "api.smsdev.com.br",
-                "port": null,
-                "headers": {}
-            }
-
-            const getUrl = (iteratedElem) => ({ "path": `/get?key=${secret}&action=cancelar&id=${iteratedElem}`})
-            requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
-            .then(data => {
-                res.json({ msg: `all ${data.length} contacts called off`})
-            })
-            .catch(err => console.log(err))
-        })
-    })
+                requestMultiBatch(contacts, {
+                    promise: httpRequest,
+                    moreConfig,
+                    getUrl,
+                })
+                    .then((data) => {
+                        res.json({
+                            msg: `all ${data.length} contacts called off`,
+                        });
+                    })
+                    .catch((err) => console.log(err));
+            });
+        });
     // https://api.smsdev.com.br/get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
-}
+};
 
 exports.getGeneralTotals = (req, res) => {
     const { userId } = req.query;
 
     User.findById(userId)
-    .select("clientAdminData.smsHistory -_id")
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
+        .select("clientAdminData.smsHistory -_id")
+        .exec((err, doc) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        const history = doc.clientAdminData.smsHistory;
-        const operations = history.length;
-        const totalSMS = history.reduce((acc, next) => acc + next.totalSMS, 0);
+            const history = doc.clientAdminData.smsHistory;
+            const operations = history.length;
+            const totalSMS = history.reduce(
+                (acc, next) => acc + next.totalSMS,
+                0
+            );
 
-        res.json({
-            operations,
-            totalSMS,
+            res.json({
+                operations,
+                totalSMS,
+            });
         });
-    })
-}
+};
 
 // SMS CREDITS
 
@@ -221,37 +264,44 @@ exports.readCredits = (req, res) => {
     const { userId } = req.query;
 
     User.findById(userId)
-    .select("clientAdminData.smsBalance -_id")
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
+        .select("clientAdminData.smsBalance -_id")
+        .exec((err, doc) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        const balance = doc.clientAdminData.smsBalance;
-        res.json(balance);
-    })
-}
+            const balance = doc.clientAdminData.smsBalance;
+            res.json(balance);
+        });
+};
 
 exports.mwDiscountCredits = (req, res, next) => {
     const { userId, numCredits } = req; // numCredits is the length of contactList
 
-    const discountThis = { "clientAdminData.smsBalance": Number(`-${numCredits}`) };
+    const discountThis = {
+        "clientAdminData.smsBalance": Number(`-${numCredits}`),
+    };
 
     User.findOneAndUpdate(
         { _id: userId },
         { $inc: discountThis },
-        { new: true })
-    .select("clientAdminData.smsBalance -_id")
-    .exec((err, data) => {
-        const balance = data.clientAdminData.smsBalance;
-        if(err) return res.status(500).json(msgG("error.systemError", err));
+        { new: true }
+    )
+        .select("clientAdminData.smsBalance -_id")
+        .exec((err, data) => {
+            const balance = data.clientAdminData.smsBalance;
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        console.log(`OK! it was discounted ${numCredits}. new Balance: ${balance}.`);
-        next();
-    })
-}
+            console.log(
+                `OK! it was discounted ${numCredits}. new Balance: ${balance}.`
+            );
+            next();
+        });
+};
 
 exports.addCredits = (req, res) => {
     //
-}
+};
 
 // END SMS CREDITS
 
@@ -267,6 +317,7 @@ exports.addSMSHistory = (req, res) => {
         isAutomatic,
         isScheduled,
         serviceId,
+        filter,
     } = req;
 
     const historyData = {
@@ -277,126 +328,143 @@ exports.addSMSHistory = (req, res) => {
         firstContacts,
         contactStatements,
         scheduledDate,
-    }
+        filter,
+    };
 
-    const objToPush = { "clientAdminData.smsHistory": { $each: [historyData], $position: 0 } }
+    const objToPush = {
+        "clientAdminData.smsHistory": { $each: [historyData], $position: 0 },
+    };
 
-    User.findOneAndUpdate(
-        { _id: userId },
-        { $push: objToPush },
-        { new: false })
-    .select("clientAdminData.smsHistory")
-    .exec(err => {
-        if(err) return res.status(500).json(msgG("error.systemError", err));
-        if(isAutomatic) {
-            User.findById(userId)
-            .select("clientAdminData.smsAutomation")
-            .exec((err, doc) => {
-                if(err) return res.status(500).json(msgG('error.systemError', err));
+    User.findOneAndUpdate({ _id: userId }, { $push: objToPush }, { new: false })
+        .select("clientAdminData.smsHistory")
+        .exec((err) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
+            if (isAutomatic) {
+                User.findById(userId)
+                    .select("clientAdminData.smsAutomation")
+                    .exec((err, doc) => {
+                        if (err)
+                            return res
+                                .status(500)
+                                .json(msgG("error.systemError", err));
 
-                let smsAutomation = doc.clientAdminData.smsAutomation;
+                        let smsAutomation = doc.clientAdminData.smsAutomation;
 
-                let priorUsage = 0;
-                const found = smsAutomation.find(opt => opt.serviceId === serviceId)
-                priorUsage = found ? found.usage : priorUsage;
+                        let priorUsage = 0;
+                        const found = smsAutomation.find(
+                            (opt) => opt.serviceId === serviceId
+                        );
+                        priorUsage = found ? found.usage : priorUsage;
 
-                const newData = findKeyAndAssign({
-                    objArray: smsAutomation,
-                    compareProp: 'serviceId', compareValue: serviceId,
-                    targetProp: 'usage', targetValue: ++priorUsage,
-                });
+                        const newData = findKeyAndAssign({
+                            objArray: smsAutomation,
+                            compareProp: "serviceId",
+                            compareValue: serviceId,
+                            targetProp: "usage",
+                            targetValue: ++priorUsage,
+                        });
 
-                smsAutomation = newData;
-                doc.markModified("clientAdminData.smsAutomation");
+                        smsAutomation = newData;
+                        doc.markModified("clientAdminData.smsAutomation");
 
-                doc.save(err => res.json({ msg: "all SMS sent successfully!"}));
-            })
-        } else {
-            console.log(`OK! All SMS sending operations done!`);
-            res.json({ msg: "all SMS sent successfully!"});
-        }
-    })
-}
+                        doc.save((err) =>
+                            res.json({ msg: "all SMS sent successfully!" })
+                        );
+                    });
+            } else {
+                console.log(`OK! All SMS sending operations done!`);
+                res.json({ msg: "all SMS sent successfully!" });
+            }
+        });
+};
 
 exports.readSMSMainHistory = (req, res) => {
     const { userId, skip, limit = 10 } = req.query;
 
     User.findById(userId)
-    .select("clientAdminData.smsHistory")
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
+        .select("clientAdminData.smsHistory")
+        .exec((err, doc) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        const history = doc.clientAdminData.smsHistory;
+            const history = doc.clientAdminData.smsHistory;
 
-        const data = history.map(operation => {
-            operation.sentMsgDesc = decryptSync(operation.sentMsgDesc);
-            operation.contactStatements = undefined;
-            return operation;
-        })
+            const data = history.map((operation) => {
+                operation.sentMsgDesc = decryptSync(operation.sentMsgDesc);
+                operation.contactStatements = undefined;
+                return operation;
+            });
 
-        const dataSize = data.length;
-        const dataRes = {
-            list: getDataChunk(data, { skip, limit }),
-            chunksTotal: getChunksTotal(dataSize, limit),
-            listTotal: dataSize,
-            content: undefined,
-        }
+            const dataSize = data.length;
+            const dataRes = {
+                list: getDataChunk(data, { skip, limit }),
+                chunksTotal: getChunksTotal(dataSize, limit),
+                listTotal: dataSize,
+                content: undefined,
+            };
 
-        res.json(dataRes);
-    })
-}
+            res.json(dataRes);
+        });
+};
 
 // statement = extrato.
 exports.readSMSHistoryStatement = (req, res) => {
     const { userId, cardId } = req.query;
 
     User.findById(userId)
-    .select("clientAdminData.smsHistory")
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
+        .select("clientAdminData.smsHistory")
+        .exec((err, doc) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        const history = doc.clientAdminData.smsHistory;
+            const history = doc.clientAdminData.smsHistory;
 
-        const getContactIds = () => {
-            let foundContactIds;
-            history.forEach(card => {
-                if(card._id.toString() === cardId) {
-                   foundContactIds = card.contactStatements;
-                }
+            const getContactIds = () => {
+                let foundContactIds;
+                history.forEach((card) => {
+                    if (card._id.toString() === cardId) {
+                        foundContactIds = card.contactStatements;
+                    }
+                });
+
+                return foundContactIds;
+            };
+
+            const contacts = getContactIds();
+
+            const moreConfig = {
+                method: "GET",
+                hostname: "api.smsdev.com.br",
+                port: null,
+                headers: {},
+            };
+
+            const getUrl = (iteratedElem) => ({
+                path: `/v1/dlr?key=${secret}&action=status&id=${iteratedElem}`,
             });
-
-            return foundContactIds;
-        }
-
-        const contacts = getContactIds();
-
-        const moreConfig = {
-            "method": "GET",
-            "hostname": "api.smsdev.com.br",
-            "port": null,
-            "headers": {}
-        }
-
-        const getUrl = (iteratedElem) => ({ "path": `/v1/dlr?key=${secret}&action=status&id=${iteratedElem}`})
-        requestMultiBatch(contacts, { promise: httpRequest, moreConfig, getUrl, })
-        .then(data => {
-            const finalRes = contacts.map((elem, ind) => {
-                console.log("STATUS ENVIO", data[ind].descricao);
-
-                return {
-                    id: elem.id,
-                    name: elem.name,
-                    phone: elem.phone,
-                    carrier: data[ind].operadora,
-                    status: handleSmsStatus(data[ind].descricao), // status only for frontend
-                }
+            requestMultiBatch(contacts, {
+                promise: httpRequest,
+                moreConfig,
+                getUrl,
             })
-            res.json(finalRes);
-        })
-        .catch(err => console.log(err))
+                .then((data) => {
+                    const finalRes = contacts.map((elem, ind) => {
+                        console.log("STATUS ENVIO", data[ind].descricao);
 
-    })
-}
+                        return {
+                            id: elem.id,
+                            name: elem.name,
+                            phone: elem.phone,
+                            carrier: data[ind].operadora,
+                            status: handleSmsStatus(data[ind].descricao), // status only for frontend
+                        };
+                    });
+                    res.json(finalRes);
+                })
+                .catch((err) => console.log(err));
+        });
+};
 // END SMS HISTORY
 
 // AUTOMATIC SMS
@@ -405,14 +473,15 @@ exports.readAutoService = (req, res) => {
     const { userId } = req.query;
 
     User.findById(userId)
-    .select("clientAdminData.smsAutomation -_id")
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
+        .select("clientAdminData.smsAutomation -_id")
+        .exec((err, doc) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        const automationData = doc.clientAdminData.smsAutomation;
-        res.json(automationData);
-    })
-}
+            const automationData = doc.clientAdminData.smsAutomation;
+            res.json(automationData);
+        });
+};
 
 // Method: put
 // LESSON> if there is data to sync between frontend and bd like the services options, follow KISS and keep simple using id equally for both db and front if as less code as possible
@@ -427,40 +496,46 @@ exports.activateAutoService = (req, res) => {
         targetKey = "active",
     } = req.body;
 
-    if(!userId) return res.status(400).json({ error: "Missing userId"});
-    if(!service) return res.status(400).json({ error: "Missing service name"});
+    if (!userId) return res.status(400).json({ error: "Missing userId" });
+    if (!service)
+        return res.status(400).json({ error: "Missing service name" });
 
-    User.findById(userId)
-    .exec((err, doc) => {
-        if(err) return res.status(500).json(msgG('error.systemError', err));
+    User.findById(userId).exec((err, doc) => {
+        if (err) return res.status(500).json(msgG("error.systemError", err));
 
         let smsAutomation = doc.clientAdminData.smsAutomation;
 
         const getKeys = (mode) => {
-            if(mode === "active") return { key: 'active', value: active };
-            if(mode === "msg") return { key: 'msg', value: msg };
-        }
+            if (mode === "active") return { key: "active", value: active };
+            if (mode === "msg") return { key: "msg", value: msg };
+        };
 
         const { key, value } = getKeys(targetKey);
 
-        const foundService = smsAutomation && smsAutomation.find(service => service.serviceId === serviceId);
+        const foundService =
+            smsAutomation &&
+            smsAutomation.find((service) => service.serviceId === serviceId);
 
-        if(foundService) {
+        if (foundService) {
             const newData = findKeyAndAssign({
                 objArray: smsAutomation,
-                compareProp: 'serviceId', compareValue: serviceId,
-                targetProp: key, targetValue: value,
+                compareProp: "serviceId",
+                compareValue: serviceId,
+                targetProp: key,
+                targetValue: value,
             });
 
             smsAutomation = newData;
         } else {
             const newService = { serviceId, service, msg, afterDay, active };
-            doc.clientAdminData.smsAutomation = [ ...smsAutomation, newService ];
+            doc.clientAdminData.smsAutomation = [...smsAutomation, newService];
         }
 
         doc.markModified("clientAdminData.smsAutomation");
 
-        doc.save(err => res.json({ msg: `Automatic Service status changed` }));
+        doc.save((err) =>
+            res.json({ msg: `Automatic Service status changed` })
+        );
     });
 
     // if(smsAutomation && smsAutomation.length) {
@@ -470,7 +545,7 @@ exports.activateAutoService = (req, res) => {
     //         targetProp: 'active', targetValue: active,
     //     });
     // } else {
-}
+};
 // END AUTOMATIC SMS
 
 /* COMMENTS
@@ -492,7 +567,6 @@ Multiple Responses:
 n2:
 // reference: https://www.freecodecamp.org/news/promise-all-in-javascript-with-example-6c8c5aea3e32/
 */
-
 
 /*
 "/multiple?key=SUA_CHAVE_KEY&type=9&number1=11988887777&number2=21966667777&msg1="+encodeURIComponent("Teste de envio 1") + "&msg2="+encodeURIComponent("Teste de envio 2"),

@@ -1,45 +1,43 @@
 import { startWeek, endWeek } from "./dateFns";
 
-const getDay = () => {
+function getDay() {
     const now = new Date();
     return now.getDate();
-};
+}
 
-const getWeekCode = () => {
+function getWeekCode() {
     const startWeekDay = startWeek.getDate();
     const endWeekDay = endWeek.getDate();
     const startMonth = startWeek.getMonth() + 1;
+    const startYear = startWeek.getFullYear();
 
-    return `m:${startMonth}.w:${startWeekDay}_${endWeekDay}`;
-};
+    return `w:${startWeekDay}_${endWeekDay}.m:${startMonth}.y:${startYear}`;
+}
 
-const getMonth = () => {
+function getMonth() {
     const now = new Date();
-    return now.getMonth() + 1;
-};
+    return now.getMonth() + 1; // january starts with zero.
+}
 
-const getYear = () => {
+function getMonthCode() {
+    const currMonth = getMonth();
+    const currYear = getYear();
+
+    return `m:${currMonth}.y:${currYear}`;
+}
+
+function getYear() {
     const now = new Date();
     return now.getFullYear();
-};
+}
 
-export { getDay, getWeekCode, getMonth, getYear };
+export { getDay, getMonth, getYear, getWeekCode, getMonthCode };
 
 export default function getFilterDate() {
-    const now = new Date();
+    const day = getDay();
+    const week = getWeekCode();
+    const month = getMonthCode();
+    const year = getYear();
 
-    const day = now.getDate();
-    const month = now.getMonth() + 1; // january starts with zero.
-    const year = now.getFullYear();
-
-    const startWeekDay = startWeek.getDate();
-    const endWeekDay = endWeek.getDate();
-    const startMonth = startWeek.getMonth() + 1;
-
-    return {
-        day,
-        week: `m:${startMonth}.w:${startWeekDay}_${endWeekDay}`,
-        month,
-        year,
-    };
+    return { day, week, month, year };
 }

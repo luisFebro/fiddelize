@@ -7,6 +7,7 @@ const {
     SmsHistorySchema,
     SmsAutomationSchema,
     PendingRegistersSchema,
+    DefaultFilterSchema,
 } = require("./schemes");
 // GENERAL SCHEMAS
 const enumTypes = [
@@ -254,12 +255,7 @@ const data = {
     clientUserData: ClientUserDataSchema,
     clientAdminData: ClientAdminDataSchema,
     centralAdminData: CentralAdminDataSchema,
-    filterRegister: {
-        day: Number,
-        week: String, // e.g m:9.w:31_6 => startMonths.tartOfWeek_endOfWeek
-        month: Number,
-        year: Number,
-    },
+    filter: DefaultFilterSchema,
     // staffBookingList: Array, // L
 };
 // End Profile

@@ -116,10 +116,28 @@ const handleFilter = (filter) => {
 
 const handlePeriod = (period, options = {}) => {
     const { day, week, month, year } = options;
-    return {
-        period,
-        options,
-    };
+
+    switch (period) {
+        case "all":
+            return;
+        case "day":
+            return { "filter.day": parseInt(day) }; // e.g 4
+        case "week":
+            return { "filter.week": week }; // e.g w:31_6.m:9.y:2020
+        case "month":
+            return { "filter.month": month }; // e.g m:9.y:2020
+        case "year":
+            return { "filter.year": parseInt(year) }; // e.g 2020
+        default:
+            return;
+    }
+};
+
+const handleEmptyType = ({ search, listTotal }) => {
+    // choose the right illustration on frontend
+    if (!listTotal) return "virgin";
+    if (search) return "search";
+    return "filter";
 };
 
 exports.getRecordedClientList = (req, res) => {
@@ -138,7 +156,7 @@ exports.getRecordedClientList = (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = getSkip(parseInt(req.query.skip), limit);
 
-    const resPeriod = handlePeriod(period, { day, week, month, year });
+    const periodQuery = handlePeriod(period, { day, week, month, year });
     const sortQuery = handleFilter(filter);
     const skipQuery = { $skip: skip };
     const limitQuery = { $limit: limit };
@@ -160,8 +178,8 @@ exports.getRecordedClientList = (req, res) => {
 
     let { mainQuery } = getQuery(role);
 
-    // For new bizId implementation
-    mainQuery = Object.assign({}, mainQuery, bizIdQuery);
+    mainQuery = Object.assign({}, mainQuery, bizIdQuery, periodQuery);
+    console.log("mainQuery", mainQuery);
 
     if (search) {
         mainQuery = Object.assign({}, mainQuery, searchQuery);
@@ -214,11 +232,13 @@ exports.getRecordedClientList = (req, res) => {
             totalActiveScores[0] === undefined ? 0 : totalActiveScores[0].value;
 
         const listTotal = totalSize[0] === undefined ? 0 : totalSize[0].value;
+        const emptyType = handleEmptyType({ search, listTotal });
+
         res.json({
             list: treatedList,
             chunksTotal: getChunksTotal(listTotal, limit),
             listTotal,
-            content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};`,
+            content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};emptyType:${emptyType}`,
         });
     });
 };
