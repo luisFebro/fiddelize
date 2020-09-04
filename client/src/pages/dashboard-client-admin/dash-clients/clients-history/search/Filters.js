@@ -1,5 +1,6 @@
 import React from "react";
 import AnimaIconsSelect from "../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
+import FilterStatus from "../../../../../components/selects/anima-icons-select/FilterStatus";
 // custom icons
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import CakeIcon from "@material-ui/icons/Cake";
@@ -135,33 +136,44 @@ const periodOptions = (isUserPro) => [
     },
 ];
 
-export default function Filters({ listTotal, handleSelectedFilter, loading }) {
+export default function Filters({
+    listTotal,
+    handleSelectedFilter,
+    loading,
+    handlePeriodFilter,
+}) {
     const defaultMainIcon = <StarsIcon />;
     const defaultPeriodIcon = <DateRangeIcon />;
 
     const showCategories = () =>
         listTotal !== 0 && (
-            <section className="my-5 text-p position-relative text-subtitle text-left pl-2 font-weight-bold">
-                Organize por:
+            <section className="mt-5 position-relative text-p text-left pl-2">
+                <span className="d-inline-block mb-3 text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
+                    Organize por:
+                </span>
                 <br />
                 <AnimaIconsSelect
                     callback={handleSelectedFilter}
-                    loading={loading}
                     optionsArray={mainOptions}
                     defaultSideIcon={defaultMainIcon}
                     offlineKey="selectedMainFilter"
                 />
-                <span className="text-p text-normal text-left font-weight-bold">
+                <span className="d-inline-block mt-4 mb-1 text-p text-normal text-left font-weight-bold">
                     Período:
                 </span>
-                <br />
                 <AnimaIconsSelect
-                    callback={null}
-                    loading={loading}
+                    callback={handlePeriodFilter}
+                    defaultSelected="Tudo"
                     optionsArray={periodOptions}
                     defaultSideIcon={defaultPeriodIcon}
                     offlineKey="selectedPeriodFilter"
+                    width={200}
+                    needReverseBtn={false}
+                    zIndex={4}
                 />
+                <section className="my-3">
+                    <FilterStatus loading={loading} />
+                </section>
             </section>
         );
 

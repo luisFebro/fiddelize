@@ -1,13 +1,5 @@
-// *
-// {
-//     user-select: none;
-// }
-
-// *:focus
-// {
-//     outline: none;
-// }
-.anima-icons-overlay { // close panel in any part of screen and still select option
+.anima-icons-overlay {
+    // close panel in any part of screen and still select option
     z-index: 3;
     position: fixed;
     width: 100%;
@@ -19,12 +11,11 @@
     display: block;
 }
 
-#app-cover
-{
+#app-cover {
     position: relative;
     width: 300px;
     height: 42px;
-    margin: 20px auto 0 auto;
+    margin: 0px auto 0 auto;
     z-index: 5;
 }
 
@@ -61,7 +52,6 @@
         transform: scale(1.9);
         // text-align: right;
     }
-
 }
 
 .anima-icons-border {
@@ -69,8 +59,7 @@
     border-radius: 20px !important;
 }
 
-#options-view-button
-{
+#options-view-button {
     position: absolute;
     top: 0;
     right: 0;
@@ -84,22 +73,20 @@
     z-index: 3;
 }
 
-.option, .label
-{
+.option,
+.label {
     color: var(--themeP);
     // font-size: 16px;
 }
 
-#options-view-button:checked + #select-button #chevrons svg
-{
+#options-view-button:checked + #select-button #chevrons svg {
     color: #2d3667;
 }
 
-.options
-{
+.options {
     position: absolute;
     left: 0;
-    width: 250px;
+    width: inherit;
 }
 
 #options {
@@ -107,7 +94,7 @@
     top: 42px;
     right: 0;
     left: 0;
-    width: 298px;
+    width: inherit;
     margin: 0 auto;
     background-color: #fff;
     border-radius: 4px;
@@ -120,8 +107,7 @@
     }
 }
 
-#options-view-button:checked ~ #options
-{
+#options-view-button:checked ~ #options {
     border: 1px solid #e2eded;
     border-color: #eaf1f1 #e4eded #dbe7e7 #e4eded;
 }
@@ -155,13 +141,11 @@
     width: 100%;
     height: 50%;
 
-    &.top
-    {
+    &.top {
         top: 0;
     }
 
-    &.bottom
-    {
+    &.bottom {
         bottom: 0;
     }
 
@@ -175,29 +159,42 @@
         z-index: 1;
     }
 
-    &.bottom:hover + svg, &.bottom:focus + svg {
+    &.bottom:hover + svg,
+    &.bottom:focus + svg {
         bottom: -25px;
         animation: moveup 0.3s ease 0.1s forwards;
     }
 
-    &.top:hover ~ svg, &.top:focus + svg {
+    &.top:hover ~ svg,
+    &.top:focus + svg {
         top: -25px;
         animation: movedown 0.3s ease 0.1s forwards;
     }
 }
 
 @keyframes moveup {
-    0%{ bottom: -25px; opacity: 0;}
-    100%{ bottom: 0; opacity: 1;}
+    0% {
+        bottom: -25px;
+        opacity: 0;
+    }
+    100% {
+        bottom: 0;
+        opacity: 1;
+    }
 }
 
 @keyframes movedown {
-    0% { top: -25px; opacity: 0;}
-    100% { top: 0; opacity: 1;}
+    0% {
+        top: -25px;
+        opacity: 0;
+    }
+    100% {
+        top: 0;
+        opacity: 1;
+    }
 }
 
-input[type="radio"]
-{
+input[type="radio"] {
     position: absolute;
     right: 0;
     left: 0;
@@ -216,7 +213,7 @@ input[type="radio"]
 .opt-val {
     position: absolute;
     left: 12px;
-    width: 217px;
+    width: inherit;
     margin-left: 25px;
     height: 25px;
     opacity: 0;
@@ -224,28 +221,25 @@ input[type="radio"]
     transform: scale(0);
 }
 
-.option input[type="radio"]:checked ~ .opt-val
-{
+.option input[type="radio"]:checked ~ .opt-val {
     opacity: 1;
     transform: scale(1);
 }
 
-.option input[type="radio"]:checked ~ svg
-{
+.option input[type="radio"]:checked ~ svg {
     top: 50%;
     transform: translateY(-50%);
     opacity: 1;
     animation: unset;
 }
 
-.option input[type="radio"]:checked ~ svg, .option input[type="radio"]:checked ~ .label
-{
-    color:#fff;
+.option input[type="radio"]:checked ~ svg,
+.option input[type="radio"]:checked ~ .label {
+    color: #fff;
 }
 
-.option input[type="radio"]:checked ~ .label:before
-{
-    content: '';
+.option input[type="radio"]:checked ~ .label:before {
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
@@ -254,8 +248,11 @@ input[type="radio"]
     z-index: -1;
 }
 
-#options-view-button:not(:checked) ~ #options .option input[type="radio"]:checked ~ .opt-val
-{
+#options-view-button:not(:checked)
+    ~ #options
+    .option
+    input[type="radio"]:checked
+    ~ .opt-val {
     top: -30px;
 }
 

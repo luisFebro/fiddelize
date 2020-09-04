@@ -1,5 +1,5 @@
 // reference: https://codepen.io/himalayasingh/pen/pxKKgd
-import React, { useState, useEffect, useRef } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import "./_AnimaIconsSelect.scss";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -12,24 +12,18 @@ import CheckboxBoxForm from "../../../components/CheckBoxForm";
 import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 
 const getStyles = () => ({
-    root: { width: 300 },
     currIcon: {
-        top: 3,
+        top: 5,
         transform: "scale(1.8)",
         zIndex: 11,
         left: 0,
         color: "var(--themeP) !important",
     },
     reverseBtn: {
-        bottom: -5,
-        left: "90%",
-        transform: "translateX(-90%)",
+        bottom: -25,
+        left: "80%",
+        transform: "translateX(-80%)",
         zIndex: 14,
-    },
-    checkIcon: {
-        fontSize: "15px",
-        marginLeft: "10px",
-        color: "var(--themeP)",
     },
     proBadge: {
         top: 0,
@@ -63,19 +57,21 @@ const handleNeedEmptyOption = (dataArray, selected) => {
 export default function AnimaIconsSelect({
     optionsArray,
     defaultSideIcon,
+    defaultSelected = "Clientes Novos",
     offlineKey,
     callback,
-    loading = false,
+    width,
+    needReverseBtn = true,
+    zIndex,
 }) {
     const [panel, setPanel] = useState(false);
-    const [status, setStatus] = useState("Organizado!");
     const [data, setData] = useState({
         selected: "",
-        selectedOptionBr: "Clientes Novos",
-        reverseOptionBr: "Clientes Veteranos",
+        selectedOptionBr: "",
+        reverseOptionBr: "",
         CurrIcon: defaultSideIcon,
-        title: "newCustomers",
-        reverse: "veteranCustomers",
+        title: "",
+        reverse: "",
         isReversed: undefined,
     });
     const {
@@ -107,7 +103,7 @@ export default function AnimaIconsSelect({
         let thisSelected;
 
         if (!alreadyOffline.current && !loadingOffline) {
-            thisSelected = !offlineData ? "Clientes Novos" : offlineData;
+            thisSelected = !offlineData ? defaultSelected : offlineData;
             alreadyOffline.current = true;
         } else {
             thisSelected = selected;
@@ -145,19 +141,6 @@ export default function AnimaIconsSelect({
             });
         }
     };
-
-    useEffect(() => {
-        const handleStatus = () => {
-            if (loading) {
-                return isReversed ? "invertendo ordem..." : "organizando...";
-            } else {
-                return "Organizado!";
-            }
-        };
-
-        const thisTitle = handleStatus();
-        setStatus(thisTitle);
-    }, [loading, isReversed]);
 
     const togglePanel = () => {
         setPanel((prev) => !prev);
@@ -254,27 +237,42 @@ export default function AnimaIconsSelect({
         }
     };
 
-    const showStatus = () => {
-        const needCheckIcon =
-            status === "Organizado e invertido!" || status === "Organizado!";
-        return (
-            <p className="mt-1 text-purple text-small font-weight-bold">
-                {status}
-                {needCheckIcon && (
-                    <FontAwesomeIcon
-                        className="animated rubberband repeat-2"
-                        icon="check-circle"
-                        style={styles.checkIcon}
+    const showReverseBtn = () => (
+        <Fragment>
+            {needReverseBtn && !panel && title !== "birthdayCustomers" && (
+                <div style={styles.reverseBtn} className="position-absolute">
+                    <ButtonFab
+                        size="small"
+                        iconFontSize="20px"
+                        position="relative"
+                        iconFontAwesome={
+                            <FontAwesomeIcon
+                                icon={
+                                    isReversed
+                                        ? "sort-amount-down-alt"
+                                        : "sort-amount-down"
+                                }
+                            />
+                        }
+                        onClick={handleReverse}
+                        backgroundColor={"var(--themeSDark--default)"}
                     />
-                )}
-            </p>
-        );
-    };
+                </div>
+            )}
+        </Fragment>
+    );
 
     return (
-        <section className="container-center-max-width-500">
-            <section className="position-relative" style={styles.root}>
-                <form id="app-cover" onChange={togglePanel}>
+        <section className="d-flex justify-content-start">
+            <section className="position-relative">
+                <form
+                    id="app-cover"
+                    onChange={togglePanel}
+                    style={{
+                        width: width ? width : 300,
+                        zIndex: zIndex ? zIndex : 5,
+                    }}
+                >
                     <section id="select-box">
                         <input
                             type="checkbox"
@@ -285,26 +283,13 @@ export default function AnimaIconsSelect({
                         {showPanelOptions(optionsArray)}
                     </section>
                 </form>
-                {showStatus()}
-                <div style={styles.currIcon} className="position-absolute">
+                <div
+                    style={{ ...styles.currIcon, zIndex: zIndex ? zIndex : 11 }}
+                    className="position-absolute"
+                >
                     {CurrIcon}
                 </div>
-                {!panel && title !== "birthdayCustomers" && (
-                    <div
-                        style={styles.reverseBtn}
-                        className="position-absolute"
-                    >
-                        <ButtonFab
-                            size="small"
-                            position="relative"
-                            iconFontAwesome={
-                                <FontAwesomeIcon icon="sync-alt" />
-                            }
-                            onClick={handleReverse}
-                            backgroundColor={"var(--themeSDark--default)"}
-                        />
-                    </div>
-                )}
+                {showReverseBtn()}
                 {needEmptyOpt && (
                     <CheckboxBoxForm
                         text="mostrar resultados vazios."
