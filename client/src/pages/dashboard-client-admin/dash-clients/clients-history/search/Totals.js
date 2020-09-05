@@ -14,7 +14,6 @@ const getStyles = () => ({
 });
 
 export default function Totals({
-    needHide = false,
     period = "all",
     loading,
     allUsersLength,
@@ -49,12 +48,12 @@ export default function Totals({
     return (
         <section>
             <h2 className="text-purple">
-                {needHide ? (
+                {allUsersLength === 0 ? (
                     ""
                 ) : (
                     <div
                         className="animated fadeInUp ml-3 position-relative"
-                        style={{ top: "30px" }}
+                        style={{ margin: "40px 0px 20px" }}
                     >
                         <span className="text-subtitle font-weight-bold">
                             {period === "all"
