@@ -53,7 +53,7 @@ export default function Totals({
     return (
         <section>
             <h2 className="text-purple">
-                {allUsersLength === 0 ? (
+                {allUsersLength === "0" ? (
                     ""
                 ) : (
                     <div
