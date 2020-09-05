@@ -173,6 +173,7 @@ const handleParams = ({ filterName = "all", period, getFilterDate }) => {
 
 export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
+    const [isFiltering, setIsFiltering] = useState(false);
     const { businessId } = useAppSystem();
     const { name } = useProfile();
     const { bizPlan } = useClientAdmin();
@@ -193,7 +194,15 @@ export default function AsyncRecordedClientsList() {
     });
 
     const { filterName, period, needEmpty } = filter;
-    console.log("period", period);
+
+    useEffect(() => {
+        if (filterName && period) {
+            setIsFiltering(true);
+            setTimeout(() => {
+                setIsFiltering(false);
+            }, 4000);
+        }
+    }, [filterName, period]);
 
     const handleSelectedFilter = (filterData) => {
         setSkip(0);
@@ -238,24 +247,26 @@ export default function AsyncRecordedClientsList() {
         error,
         ShowError,
         needEmptyIllustra,
+        emptyType,
         hasMore,
         isOffline,
         listTotal,
         ShowOverMsg,
-        emptyType,
     } = useAPIList({
         url: readUserList(businessId),
         skip,
         params,
         trigger,
+        isFiltering,
         listName: "recordedClientsList",
     });
-    console.log("emptyType", emptyType);
+
     const detectedCard = useElemDetection({
         loading,
         hasMore,
         setSkip,
         isOffline,
+        isFiltering,
     });
 
     useEffect(() => {
@@ -453,23 +464,19 @@ export default function AsyncRecordedClientsList() {
     const needFreeAlert = Boolean(listTotal >= 7 && bizPlan === "gratis");
     return (
         <Fragment>
-            <Title
-                title="&#187; Histórico de Cadastro"
-                color="var(--themeP)"
-                margin="my-4"
-            />
             {/*<ClientsSearch />*/}
+            <Filters
+                listTotal={listTotal}
+                loading={loading}
+                handleSelectedFilter={handleSelectedFilter}
+                handlePeriodFilter={handlePeriodFilter}
+                emptyType={emptyType}
+            />
             <Fragment>
                 {needEmptyIllustra ? (
-                    <AsyncShowIllustra />
+                    <AsyncShowIllustra emptyType={emptyType} />
                 ) : (
                     <Fragment>
-                        <Filters
-                            listTotal={listTotal}
-                            loading={loading}
-                            handleSelectedFilter={handleSelectedFilter}
-                            handlePeriodFilter={handlePeriodFilter}
-                        />
                         {showAccordion()}
                         {loading && <ShowLoadingSkeleton size="large" />}
                         {error && <ShowError />}

@@ -50,7 +50,9 @@ export default function useAPIList({
     trigger,
     listName, // offline usage
     needAuth = true,
+    isFiltering = false,
 }) {
+    console.log("isFiltering", isFiltering);
     const [data, setData] = useState({
         list: [],
         listTotal: 0,
@@ -58,7 +60,6 @@ export default function useAPIList({
         content: null,
     });
     const { list, listTotal, chunksTotal, content } = data;
-    console.log("chunksTotal", chunksTotal);
 
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState(false);
@@ -164,10 +165,8 @@ export default function useAPIList({
 
     useEffect(() => {
         let cancel;
-        // TEST MODE - CHANGE THIS
-        // const skipReachedChunks = trigger && trigger.indexOf(" ") === -1; // setRun will always have a space. For filtering, for isntance will have only the name
-        // console.log("skipReachedChunks", skipReachedChunks);
-        if (reachedChunksLimit && !true) {
+
+        if (reachedChunksLimit && !isFiltering) {
             if (hasMore) setHasMore(false);
             return;
         }
@@ -360,8 +359,8 @@ export default function useAPIList({
         isPlural,
         noBlocking,
         readyShowElems,
-        needEmptyIllustra: needEmptyIllustra && emptyType === "virgin",
-        needEmptySearch,
+        needEmptyIllustra: needEmptyIllustra,
+        emptyType,
         loading,
         error,
         ShowLoading,

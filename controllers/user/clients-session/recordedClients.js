@@ -133,9 +133,9 @@ const handlePeriod = (period, options = {}) => {
     }
 };
 
-const handleEmptyType = ({ search, listTotal }) => {
+const handleEmptyType = ({ search, sideTotalSize }) => {
     // choose the right illustration on frontend
-    if (!listTotal) return "virgin";
+    if (!sideTotalSize) return "virgin";
     if (search) return "search";
     return "filter";
 };
@@ -179,7 +179,7 @@ exports.getRecordedClientList = (req, res) => {
     let { mainQuery } = getQuery(role);
 
     mainQuery = Object.assign({}, mainQuery, bizIdQuery, periodQuery);
-    console.log("mainQuery", mainQuery);
+    const sideQuery = Object.assign({}, mainQuery, bizIdQuery); // track total of items to set period illustration when empty
 
     if (search) {
         mainQuery = Object.assign({}, mainQuery, searchQuery);
@@ -188,6 +188,7 @@ exports.getRecordedClientList = (req, res) => {
     User.aggregate([
         {
             $facet: {
+                sideTotalSize: [{ $match: sideQuery }, countQuery],
                 list: [{ $match: mainQuery }, sortQuery, skipQuery, limitQuery],
                 totalSize: [{ $match: mainQuery }, countQuery],
                 totalCliUserScores: [
@@ -202,11 +203,14 @@ exports.getRecordedClientList = (req, res) => {
         },
     ]).then((docs) => {
         let {
+            sideTotalSize,
             list,
             totalSize,
             totalCliUserScores,
             totalActiveScores,
         } = docs[0];
+
+        const emptyType = handleEmptyType({ search, sideTotalSize });
 
         // remove sensitive cli-admin data
         // note: check if notification will be include to be excluded too
@@ -232,13 +236,12 @@ exports.getRecordedClientList = (req, res) => {
             totalActiveScores[0] === undefined ? 0 : totalActiveScores[0].value;
 
         const listTotal = totalSize[0] === undefined ? 0 : totalSize[0].value;
-        const emptyType = handleEmptyType({ search, listTotal });
 
         res.json({
             list: treatedList,
             chunksTotal: getChunksTotal(listTotal, limit),
             listTotal,
-            content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};emptyType:${emptyType}`,
+            content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};emptyType:${emptyType};`,
         });
     });
 };

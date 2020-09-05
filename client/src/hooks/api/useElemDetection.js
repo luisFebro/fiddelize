@@ -1,13 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
-export const checkDetectedElem = ({
-    list,
-    ind: currInd,
-    indFromLast = 0,
-}) => {
+export const checkDetectedElem = ({ list, ind: currInd, indFromLast = 0 }) => {
     // lastCard ind is 0;
-    return (list.length - indFromLast) === currInd;
-}
+    return list.length - indFromLast === currInd;
+};
 
 export default function useElemDetection({
     loading,
@@ -15,26 +11,31 @@ export default function useElemDetection({
     setSkip,
     handleSkip,
     isOffline = false,
+    isFiltering = false,
 }) {
-    return useCallback(elem => {
-        if(isOffline) return;
-        if(loading) return; // constantly calls the API ifwe do not return...
+    return useCallback(
+        (elem) => {
+            if (isFiltering) return;
+            if (isOffline) return;
+            if (loading) return; // constantly calls the API ifwe do not return...
 
-        const currObserver = new IntersectionObserver((entries, self) => {
-            console.log("entries", entries);
-            const entry = entries[0];
-            const detection = entry.isIntersecting && hasMore;
-            if(detection) {
-                console.log("VISIBLE CARD DETECTED")
-                if(handleSkip) {
-                    handleSkip();
-                } else {
-                    setSkip(prevSkip => prevSkip + 1);
+            const currObserver = new IntersectionObserver((entries, self) => {
+                console.log("entries", entries);
+                const entry = entries[0];
+                const detection = entry.isIntersecting && hasMore;
+                if (detection) {
+                    console.log("VISIBLE CARD DETECTED");
+                    if (handleSkip) {
+                        handleSkip();
+                    } else {
+                        setSkip((prevSkip) => prevSkip + 1);
+                    }
+                    self.unobserve(entry.target);
                 }
-                self.unobserve(entry.target);
-            }
-        })
+            });
 
-        if(elem) currObserver.observe(elem)
-    }, [loading, hasMore])
+            if (elem) currObserver.observe(elem);
+        },
+        [loading, hasMore]
+    );
 }

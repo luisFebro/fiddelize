@@ -141,12 +141,13 @@ export default function Filters({
     handleSelectedFilter,
     loading,
     handlePeriodFilter,
+    emptyType,
 }) {
     const defaultMainIcon = <StarsIcon />;
     const defaultPeriodIcon = <DateRangeIcon />;
 
     const showCategories = () =>
-        listTotal !== 0 && (
+        (listTotal !== 0 || emptyType === "filter") && (
             <section className="mt-5 position-relative text-p text-left pl-2">
                 <span className="d-inline-block mb-3 text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
                     Organize por:
@@ -158,12 +159,10 @@ export default function Filters({
                     defaultSideIcon={defaultMainIcon}
                     offlineKey="selectedMainFilter"
                 />
-                <span className="d-inline-block mt-4 mb-1 text-p text-normal text-left font-weight-bold">
-                    Período:
-                </span>
+                <span className="d-inline-block mt-4 mb-1 text-p text-normal text-left font-weight-bold"></span>
                 <AnimaIconsSelect
                     callback={handlePeriodFilter}
-                    defaultSelected="Tudo"
+                    defaultSelected="Hoje"
                     optionsArray={periodOptions}
                     defaultSideIcon={defaultPeriodIcon}
                     offlineKey="selectedPeriodFilter"

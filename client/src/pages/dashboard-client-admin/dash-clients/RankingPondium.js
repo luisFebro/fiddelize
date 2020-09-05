@@ -1,82 +1,85 @@
-import React, { Fragment } from 'react';
-import Title from '../../../components/Title';
-import truncateWords from '../../../utils/string/truncateWords';
-import styled from 'styled-components';
-import convertToReal from '../../../utils/numbers/convertToReal';
+import React, { Fragment } from "react";
+import truncateWords from "../../../utils/string/truncateWords";
+import styled from "styled-components";
+import convertToReal from "../../../utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import  { useAppSystem } from '../../../hooks/useRoleData';
-import Img from '../../../components/Img';
-import useAPI, { readHighestScores } from '../../../hooks/api/useAPI';
+import { useAppSystem } from "../../../hooks/useRoleData";
+import Img from "../../../components/Img";
+import useAPI, { readHighestScores } from "../../../hooks/api/useAPI";
 
 export default function RankingPondium() {
     const { businessId } = useAppSystem();
 
-    const {
-        data: highestScores,
-        gotData,
-        loading,
-    } =  useAPI({
+    const { data: highestScores, gotData, loading } = useAPI({
         url: readHighestScores(businessId),
         needAuth: false,
         dataName: "rankingPodium",
-    })
+    });
 
     const showScores = () => (
         <Fragment>
-            {[0, 1, 2].map(ind => {
+            {[0, 1, 2].map((ind) => {
                 const css = ["first-place", "second-place", "third-place"];
                 const itemsList = gotData && highestScores[ind];
 
                 const clientScore = convertToReal(itemsList && itemsList.score);
-                const clientName = truncateWords(itemsList && itemsList.name.cap(), 10);
+                const clientName = truncateWords(
+                    itemsList && itemsList.name.cap(),
+                    10
+                );
 
-                return(
+                return (
                     <div
                         key={ind}
                         className={`${css[ind]} text-purple position-absolute animated zoomIn delay-2s`}
                     >
-                        {!itemsList
-                        ? (
+                        {!itemsList ? (
                             <FontAwesomeIcon
                                 icon="question"
-                                style={{fontSize: '2.3em', color: 'var(--themeP)'}}
+                                style={{
+                                    fontSize: "2.3em",
+                                    color: "var(--themeP)",
+                                }}
                             />
-                         ) : (
-                             <p className={ind === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
-                                 <span style={{top: '14px'}} className="position-relative text-subtitle font-weight-bold text-shadow-white">
-                                     {clientScore}
-                                     {Boolean(ind === 0) && " Pontos"}
-                                 </span>
-                                 <br />
-                                 <span className="text-normal font-weight-bold text-shadow-white">
-                                     {clientName}
-                                 </span>
-                             </p>
-                         )}
-                     </div>
-                 );
+                        ) : (
+                            <p
+                                className={
+                                    ind === 0
+                                        ? `bounce-repeat animated bounce delay-3s`
+                                        : ""
+                                }
+                            >
+                                <span
+                                    style={{ top: "14px" }}
+                                    className="position-relative text-subtitle font-weight-bold text-shadow-white"
+                                >
+                                    {clientScore}
+                                    {Boolean(ind === 0) && " Pontos"}
+                                </span>
+                                <br />
+                                <span className="text-normal font-weight-bold text-shadow-white">
+                                    {clientName}
+                                </span>
+                            </p>
+                        )}
+                    </div>
+                );
             })}
         </Fragment>
     );
 
     return (
-        <DivPodium
-            className="animated zoomIn my-3 container-center flex-column"
-        >
-            <Title
-                title="&#187; Pódio Fidelidade"
-                color="var(--themeP)"
-                margin="my-5"
-                padding=" "
-            />
-            {(!gotData && !loading) && (
-                <p className="text-normal mb-5" style={{color: 'grey'}}>
+        <DivPodium className="animated zoomIn my-3 container-center flex-column">
+            {!gotData && !loading && (
+                <p className="text-normal mb-5" style={{ color: "grey" }}>
                     Aqui você acompanha as
-                    <br /><strong>3 maiores pontuações gerais</strong>
-                    <br />de todos seus clientes com atualizações em tempo real.
+                    <br />
+                    <strong>3 maiores pontuações gerais</strong>
+                    <br />
+                    de todos seus clientes com atualizações em tempo real.
                 </p>
             )}
-            <div className="position-relative" style={{marginTop: '30px'}}>
+            <div className="position-relative" style={{ marginTop: "30px" }}>
                 <Img
                     className="shadow-elevation-black"
                     src="/img/icons/podium.png"
@@ -87,7 +90,7 @@ export default function RankingPondium() {
                 />
                 {showScores()}
             </div>
-            <hr className="lazer-purple"/>
+            <hr className="lazer-purple" />
         </DivPodium>
     );
 }
@@ -107,8 +110,8 @@ const DivPodium = styled.div`
     }
 
     & .first-place,
-      .second-place,
-      .third-place {
+    .second-place,
+    .third-place {
         text-align: center;
         font-weight: bold;
         min-width: 200px;
