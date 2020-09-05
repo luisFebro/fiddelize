@@ -122,7 +122,7 @@ exports.register = (req, res) => {
         maritalStatus,
         clientAdminData,
         clientUserData,
-        filterRegister,
+        filter,
     } = req.body;
 
     if (maritalStatus === "selecione estado civil") {
@@ -139,7 +139,7 @@ exports.register = (req, res) => {
         maritalStatus,
         clientAdminData,
         clientUserData,
-        filterRegister,
+        filter,
     });
 
     newUser.save().then((user) => {

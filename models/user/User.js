@@ -9,6 +9,7 @@ const {
     PendingRegistersSchema,
     DefaultFilterSchema,
 } = require("./schemes");
+
 // GENERAL SCHEMAS
 const enumTypes = [
     // pattern: (role_desc);

@@ -171,6 +171,8 @@ export default function useAPIList({
             return;
         }
 
+        console.log("passing after reachedChunks");
+
         const updateOnly = skip === 0 || updateFirstChunkOnly;
         console.log("updateOnly", updateOnly);
         if (updateOnly) skip = 0;
@@ -219,7 +221,7 @@ export default function useAPIList({
             cancel();
             clearTimeout(stopRequest);
         };
-    }, [trigger, reload, skip, reachedChunksLimit]);
+    }, [trigger, reload, skip, reachedChunksLimit, isFiltering]);
 
     const handleReloadBtn = () => {
         if (isOffline) window.location.href = "/mobile-app";

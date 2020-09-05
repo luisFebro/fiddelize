@@ -8,7 +8,7 @@ import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePro from "../../../hooks/pro/usePro";
 import { useOfflineData } from "../../../hooks/storage/useOfflineListData";
-import CheckboxBoxForm from "../../../components/CheckBoxForm";
+import CheckBoxForm from "../../../components/CheckBoxForm";
 import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 
 const getStyles = () => ({
@@ -20,7 +20,7 @@ const getStyles = () => ({
         color: "var(--themeP) !important",
     },
     reverseBtn: {
-        bottom: -25,
+        bottom: -30,
         left: "80%",
         transform: "translateX(-80%)",
         zIndex: 14,
@@ -128,7 +128,7 @@ export default function AnimaIconsSelect({
 
     useEffect(() => {
         if (typeof callback === "function") {
-            callback({ selected: title, isReversed: false, needEmpty: false });
+            callback({ selected: title, isReversed: false, needEmpty: true });
         }
     }, [selected, title]);
 
@@ -291,7 +291,10 @@ export default function AnimaIconsSelect({
                 </div>
                 {showReverseBtn()}
                 {needEmptyOpt && (
-                    <CheckboxBoxForm
+                    <CheckBoxForm
+                        margin="120px 0"
+                        txtFontweight={true}
+                        defaultState={true}
                         text="mostrar resultados vazios."
                         callback={handleShowEmptyCards}
                         position="position-absolute"

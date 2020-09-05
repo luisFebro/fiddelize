@@ -158,6 +158,7 @@ exports.getRecordedClientList = (req, res) => {
 
     const periodQuery = handlePeriod(period, { day, week, month, year });
     const sortQuery = handleFilter(filter);
+    console.log("sortQuery", sortQuery);
     const skipQuery = { $skip: skip };
     const limitQuery = { $limit: limit };
     const countQuery = { $count: "value" };

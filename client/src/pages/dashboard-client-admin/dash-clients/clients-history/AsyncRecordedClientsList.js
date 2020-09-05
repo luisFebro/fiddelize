@@ -30,6 +30,7 @@ import getFirstName from "../../../../utils/string/getFirstName";
 import "./_RecordedClientsList.scss";
 import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
+import Totals from "./search/Totals";
 // import ClientsSearch from './search/ClientsSearch';
 
 const AsyncFreeAccountsLimitMsg = Load({
@@ -190,19 +191,20 @@ export default function AsyncRecordedClientsList() {
     const [filter, setFilter] = useState({
         filterName: "newCustomers",
         period: "all",
-        needEmpty: false,
+        needEmpty: true,
     });
 
     const { filterName, period, needEmpty } = filter;
+    const { runName } = useRunComp();
 
     useEffect(() => {
-        if (filterName && period) {
+        if ((filterName && period) || runName === "RecordedClientsList") {
             setIsFiltering(true);
             setTimeout(() => {
                 setIsFiltering(false);
             }, 4000);
         }
-    }, [filterName, period]);
+    }, [filterName, period, runName]);
 
     const handleSelectedFilter = (filterData) => {
         setSkip(0);
@@ -234,7 +236,6 @@ export default function AsyncRecordedClientsList() {
 
     const params = handleParams({ filterName, period, getFilterDate });
 
-    const { runName } = useRunComp();
     const trigger = getTrigger(runName, "RecordedClientsList", {
         cond2: `${filterName}_${period}`,
     });
@@ -471,6 +472,13 @@ export default function AsyncRecordedClientsList() {
                 handleSelectedFilter={handleSelectedFilter}
                 handlePeriodFilter={handlePeriodFilter}
                 emptyType={emptyType}
+            />
+            <Totals
+                loading={loading}
+                allUsersLength={listTotal}
+                totalActiveScores={totalActiveScores}
+                totalCliUserScores={totalCliUserScores}
+                period={period}
             />
             <Fragment>
                 {needEmptyIllustra ? (
