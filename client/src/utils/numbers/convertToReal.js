@@ -3,8 +3,9 @@
 // Brasilian description: “it’s a capital R followed by the money sign”
 
 export default function convertToReal(number, options = {}) {
-    if(!number && number !== 0) return;
-    if(number.toString().indexOf(",") > 0) return console.log("the number should not contain a comma");
+    if (!number && number !== 0) return;
+    if (number.toString().indexOf(",") > 0)
+        return console.log("the number should not contain a comma");
 
     const {
         moneySign = false,
@@ -12,28 +13,26 @@ export default function convertToReal(number, options = {}) {
         toDefault = false, // transform back to american format (later update)
     } = options;
 
-    if(typeof number === "string") { // n1
+    if (typeof number === "string") {
+        // n1
         number = Number(number);
-        if(Number.isNaN(number)) return;
+        if (Number.isNaN(number)) return;
     }
 
     let res;
 
-    const config =
-    moneySign
-    ? {
-        style: 'currency',
-        currency: 'BRL',
-        minimumFractionDigits: needFraction ? 2 : 0
-    }
-    : { minimumFractionDigits: needFraction ? 2 : 0 }
+    const config = moneySign
+        ? {
+              style: "currency",
+              currency: "BRL",
+              minimumFractionDigits: needFraction ? 2 : 0,
+          }
+        : { minimumFractionDigits: needFraction ? 2 : 0 };
 
-    moneySign
-    ? res = number.toLocaleString('pt-BR', config)
-    : res = number.toLocaleString('pt-BR', config)
+    res = number.toLocaleString("pt-BR", config);
 
-    const needComma = number => number < 1000;
-    if(needComma(number)) {
+    const needComma = (number) => number < 1000;
+    if (needComma(number)) {
         res = res.toString().replace(".", ",");
     }
 

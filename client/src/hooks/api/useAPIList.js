@@ -52,7 +52,6 @@ export default function useAPIList({
     needAuth = true,
     isFiltering = false,
 }) {
-    console.log("isFiltering", isFiltering);
     const [data, setData] = useState({
         list: [],
         listTotal: 0,
@@ -170,8 +169,6 @@ export default function useAPIList({
             if (hasMore) setHasMore(false);
             return;
         }
-
-        console.log("passing after reachedChunks");
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
         console.log("updateOnly", updateOnly);

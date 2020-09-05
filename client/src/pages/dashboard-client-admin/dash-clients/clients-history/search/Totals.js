@@ -1,6 +1,7 @@
 import React from "react";
 import pluralizeBr from "../../../../../utils/string/pluralizeBr";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
+import convertToReal from "../../../../../utils/numbers/convertToReal";
 
 const getStyles = () => ({
     accumulativeScore: {
@@ -22,6 +23,10 @@ export default function Totals({
     totalCliUserScores,
 }) {
     const styles = getStyles();
+
+    totalActiveScores = convertToReal(totalActiveScores);
+    totalCliUserScores = convertToReal(totalCliUserScores);
+    allUsersLength = convertToReal(allUsersLength);
 
     const textInstru =
         "É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos.";
