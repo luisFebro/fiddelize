@@ -1,18 +1,25 @@
-import React, { useState, Fragment, useEffect } from 'react';
-import AutoCompleteSearch from '../../../../../components/search/AutoCompleteSearch';
-import { useProfile } from '../../../../../hooks/useRoleData';
-import getFirstName from '../../../../../utils/string/getFirstName';
-import RadiusBtn from '../../../../../components/buttons/RadiusBtn';
-import { Load } from '../../../../../components/code-splitting/LoadableComp';
-import ShowSelectionArea from './comps/ShowSelectionArea';
-import { useRunComp } from '../../../../../hooks/useRunComp';
-import useAPI, { readContacts } from '../../../../../hooks/api/useAPI';
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
+import React, { useState, Fragment, useEffect } from "react";
+import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
+import { useProfile } from "../../../../../hooks/useRoleData";
+import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
+import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import ShowSelectionArea from "./comps/ShowSelectionArea";
+import { useRunComp } from "../../../../../hooks/useRunComp";
+import useAPI, { readContacts } from "../../../../../hooks/api/useAPI";
+import { useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 
-const AsyncShowNewContactForm = Load({ loader: () => import('./comps/AsyncShowNewContactForm' /* webpackChunkName: "form-specific-client-sms-lazy" */)});
+const AsyncShowNewContactForm = Load({
+    loader: () =>
+        import(
+            "./comps/AsyncShowNewContactForm" /* webpackChunkName: "form-specific-client-sms-lazy" */
+        ),
+});
 
-export default function AsyncSpecificCustomer({ handleList, handleShowMessage }) {
+export default function AsyncSpecificCustomer({
+    handleList,
+    handleShowMessage,
+}) {
     const [data, setData] = useState({
         selectedValue: "",
     });
@@ -22,79 +29,97 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
     const dispatch = useStoreDispatch();
 
     const { runName, runOneArray } = useRunComp();
-    let { name: adminName, _id: userId } = useProfile();
-    adminName = getFirstName(adminName);
+    let { _id: userId } = useProfile();
 
-    const params = { contactFrom: selectedValue }
+    const params = { contactFrom: selectedValue };
     const trigger = selectedValue;
-    const { data: newAddedContact } = useAPI({ url: readContacts(userId), params, trigger, needAuth: true })
+    const { data: newAddedContact } = useAPI({
+        url: readContacts(userId),
+        params,
+        trigger,
+        needAuth: true,
+    });
 
     useEffect(() => {
-        if(newAddedContact) {
-            if(!newAddedContact.length) return showSnackbar(dispatch, "Contato não está mais disponível!", "error");
+        if (newAddedContact) {
+            if (!newAddedContact.length)
+                return showSnackbar(
+                    dispatch,
+                    "Contato não está mais disponível!",
+                    "error"
+                );
             const { name, phone } = newAddedContact[0];
             handleAddContact({ name, phone });
         }
-    }, [newAddedContact])
-
+    }, [newAddedContact]);
 
     const [list, setList] = useState([]);
     const [newContactOpen, setNewContactOpen] = useState(false);
 
     useEffect(() => {
-        if(runName === "Contatos Selecionados") handleList(list);
-        if(!list.length) handleShowMessage(false);
+        if (runName === "Contatos Selecionados") handleList(list);
+        if (!list.length) handleShowMessage(false);
         handleList(list);
-    }, [list, runName])
+    }, [list, runName]);
 
     useEffect(() => {
-        if(runName === "asyncExtractList") {
+        if (runName === "asyncExtractList") {
             setList(runOneArray);
             handleList(runOneArray);
         }
-    }, [runName, runOneArray])
-
+    }, [runName, runOneArray]);
 
     const handleRemoveLast = () => {
-        setList(data => {
+        setList((data) => {
             data.shift();
             return [...data];
-        })
-    }
+        });
+    };
 
     const handleClearAll = () => {
         setList([]);
-    }
+    };
 
     const handleAddContact = ({ name, phone }) => {
-        setList(data => {
-            const namesAddedList = data.map(contact => contact.name.toLowerCase());
-            if(namesAddedList.indexOf(name.toLowerCase()) !== -1) {
-                showSnackbar(dispatch, "Nome de contato já adicionado.", "error");
+        setList((data) => {
+            const namesAddedList = data.map((contact) =>
+                contact.name.toLowerCase()
+            );
+            if (namesAddedList.indexOf(name.toLowerCase()) !== -1) {
+                showSnackbar(
+                    dispatch,
+                    "Nome de contato já adicionado.",
+                    "error"
+                );
                 return [...data];
             }
-            data.unshift({ name, phone })
+            data.unshift({ name, phone });
             return [...data];
-        })
-    }
+        });
+    };
 
     const showSearch = () => {
         const autocompleteUrl = `/api/sms/read/contacts?userId=${userId}&autocomplete=true`;
 
         const handleNewContact = () => {
-            setNewContactOpen(prev => !prev);
-        }
+            setNewContactOpen((prev) => !prev);
+        };
 
-        return(
+        return (
             <section className="my-3">
                 <AutoCompleteSearch
                     autocompleteUrl={autocompleteUrl}
                     setData={setData}
                     placeholder="Procure cliente"
-                    noOptionsText={`Nenhum cliente encontrado, ${adminName}`}
+                    noOptionsText="Nenhum cliente encontrado"
                     disableOpenOnFocus={true}
+                    offlineKey="valuesHistory_specificCustomerSMS"
                 />
-                <div className={`d-flex justify-content-end ${!newContactOpen ? "mt-2" : "mt-5"}`}>
+                <div
+                    className={`d-flex justify-content-end ${
+                        !newContactOpen ? "mt-2" : "mt-5"
+                    }`}
+                >
                     {!newContactOpen && (
                         <span className="d-inline-block text-normal text-purple font-weight-bold mr-2">
                             ou
@@ -104,7 +129,11 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
                         title={newContactOpen ? "fechar" : "novo contato"}
                         position="relative"
                         onClick={handleNewContact}
-                        backgroundColor={newContactOpen ? 'var(--mainDark)' : 'var(--themeSDark)'}
+                        backgroundColor={
+                            newContactOpen
+                                ? "var(--mainDark)"
+                                : "var(--themeSDark)"
+                        }
                     />
                 </div>
             </section>
@@ -125,16 +154,13 @@ export default function AsyncSpecificCustomer({ handleList, handleShowMessage })
                 />
             )}
         </Fragment>
-
     );
 
     return (
         <section>
             {showSearch()}
             {newContactOpen && (
-                <AsyncShowNewContactForm
-                    handleAddContact={handleAddContact}
-                />
+                <AsyncShowNewContactForm handleAddContact={handleAddContact} />
             )}
             {showSelectionArea()}
         </section>

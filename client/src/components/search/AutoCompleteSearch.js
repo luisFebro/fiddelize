@@ -1,72 +1,72 @@
 // reference: https://material-ui.com/components/autocomplete/
-import React, { useState, useEffect, Fragment } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
-import PropTypes from 'prop-types';
-import axios from 'axios';
-import parse from 'html-react-parser';
+import React, { useState, useEffect, Fragment } from "react";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import SearchIcon from "@material-ui/icons/Search";
+import PropTypes from "prop-types";
+import axios from "axios";
+import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getVar, setVar } from '../../hooks/storage/useVar';
-import isKeyPressed from '../../utils/event/isKeyPressed';
-import { useToken } from '../../hooks/useRoleData';
-import { chooseHeader } from '../../utils/server/getHeaders';
-
+import { getVar, setVar } from "../../hooks/storage/useVar";
+import isKeyPressed from "../../utils/event/isKeyPressed";
+import { useToken, useProfile } from "../../hooks/useRoleData";
+import { chooseHeader } from "../../utils/server/getHeaders";
+import getFirstName from "../../utils/string/getFirstName";
 // 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
 AutoCompleteSearch.propTypes = {
     data: PropTypes.arrayOf(PropTypes.string),
-}
+};
 
-const getStyles = ({
-    fieldBack, themeColor, txtFont, formWidth,
-}) => ({
+const getStyles = ({ fieldBack, themeColor, txtFont, formWidth }) => ({
     asyncAutoSearch: {
         backgroundColor: fieldBack,
         color: themeColor,
         fontSize: txtFont,
-        fontFamily: 'var(--mainFont)',
+        fontFamily: "var(--mainFont)",
     },
     icon: {
         color: themeColor,
-        transform: 'scale(1.4)'
+        transform: "scale(1.4)",
     },
     loadingIcon: {
         color: themeColor,
     },
     autocomplete: {
-       width: formWidth,
-    }
+        width: formWidth,
+    },
 });
 
 function highlightSearchResult(string, search) {
-    const reg = new RegExp(search, 'gi');
-    let newString = string.replace(reg, `<span class="theme-back--default d-inline-block font-site text-white">${search}</span>`);
+    const reg = new RegExp(search, "gi");
+    let newString = string.replace(
+        reg,
+        `<span class="theme-back--default d-inline-block font-site text-white">${search}</span>`
+    );
     newString = parse(newString.toLowerCase());
     return newString;
 }
 
-function handlePickedValuesHistory(pickedValue) {
-    const targetKey = "valuesHistory_specificCustomerSMS";
-    getVar(targetKey)
-    .then(data => {
-        if(data) {
+function handlePickedValuesHistory(pickedValue, options = {}) {
+    const { offlineKey, maxHistory } = options;
+
+    getVar(offlineKey).then((data) => {
+        if (data) {
             const dataArray = [pickedValue, ...data].filter(Boolean);
             const newValue = [...new Set(dataArray)]; // to avoid the array to turn into <object data="" type=""></object>
 
-            if(data.length >= 4) {
+            if (data.length >= maxHistory) {
                 data.pop();
-                setVar({ [targetKey]: newValue });
+                setVar({ [offlineKey]: newValue });
             } else {
-                setVar({ [targetKey]: newValue });
+                setVar({ [offlineKey]: newValue });
             }
         } else {
-            setVar({ [targetKey]: [pickedValue] });
+            setVar({ [offlineKey]: [pickedValue] });
         }
-
-    })
+    });
 }
 
 export default function AutoCompleteSearch({
@@ -74,7 +74,7 @@ export default function AutoCompleteSearch({
     setData,
     noOptionsText = "",
     timeout = 5000,
-    fieldBack = "#fff" ,
+    fieldBack = "#fff",
     themeColor = "var(--themeP)",
     txtFont = "1.4em",
     clearOnEscape = true,
@@ -88,6 +88,8 @@ export default function AutoCompleteSearch({
     needArrowEndAdornment = false,
     needAuth = true,
     autoHighlight = true,
+    offlineKey = "",
+    maxHistory = 4,
 }) {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
@@ -97,43 +99,49 @@ export default function AutoCompleteSearch({
     const [needHistory, setNeedHistory] = useState(true);
 
     const token = useToken();
+    let { name } = useProfile();
+    name = getFirstName(name);
 
     const styles = getStyles({ fieldBack, themeColor, txtFont });
 
-    const onSelectedValue = pickedValue => {
-        setData(data => ({ ...data, selectedValue: pickedValue }));
-        handlePickedValuesHistory(pickedValue);
-    }
+    const onSelectedValue = (pickedValue) => {
+        console.log("pickedValue", pickedValue);
+        setData((data) => ({
+            ...data,
+            selectedValue: pickedValue || "_cleared",
+        }));
+        handlePickedValuesHistory(pickedValue, { offlineKey, maxHistory });
+    };
 
-    const onSearchChange = e => {
+    const onSearchChange = (e) => {
         const currValue = e.target.value;
         setSearchChange(currValue);
-    }
+    };
 
-    const onKeyPress = e => {
-        if(isKeyPressed(e, "Enter")) {
-            if(options) {
+    const onKeyPress = (e) => {
+        if (isKeyPressed(e, "Enter")) {
+            if (options) {
                 const selectFirst = options[0];
                 onSelectedValue(selectFirst);
             }
         }
-    }
+    };
 
     const getValuesHistory = () => {
-        getVar("valuesHistory_specificCustomerSMS")
-        .then(data => {
-            if(data) {
+        getVar(offlineKey).then((data) => {
+            if (data) {
                 setNeedHistory(true);
                 setOptions(data);
             } else {
-                setOptions([" "])
+                setOptions([" "]);
             }
-        })
-    }
+        });
+    };
 
     useEffect(() => {
-        if(searchChange) setNewSearchUrl(`${autocompleteUrl}&search=${searchChange}`);
-    }, [searchChange])
+        if (searchChange)
+            setNewSearchUrl(`${autocompleteUrl}&search=${searchChange}`);
+    }, [searchChange]);
 
     useEffect(() => {
         let active = true;
@@ -150,10 +158,10 @@ export default function AutoCompleteSearch({
 
         const config = {
             url: newSearchUrl,
-            method: 'get',
+            method: "get",
             headers: chooseHeader({ token: token, needAuth }),
-            cancelToken: new axios.CancelToken(c => cancel = c)
-        }
+            cancelToken: new axios.CancelToken((c) => (cancel = c)),
+        };
 
         async function doRequest() {
             try {
@@ -162,113 +170,137 @@ export default function AutoCompleteSearch({
                 clearTimeout(stopRequest);
                 setNeedHistory(false);
 
-                if(active && Array.isArray(response.data)) {
-                    if(response.data.length === 0) {
+                if (active && Array.isArray(response.data)) {
+                    if (response.data.length === 0) {
                         getValuesHistory();
                     } else {
-                        setOptions(response.data)
+                        setOptions(response.data);
                     }
                 }
 
                 setLoading(false);
-            } catch(e) {
-                if(axios.isCancel(e)) return
-                if(e.response) {
-                    console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
+            } catch (e) {
+                if (axios.isCancel(e)) return;
+                if (e.response) {
+                    console.log(
+                        `${JSON.stringify(e.response.data)}. STATUS: ${
+                            e.response.status
+                        }`
+                    );
 
                     const { status } = e.response;
                     setLoading(false);
                 }
             }
-
         }
 
         doRequest();
 
-        return () => { cancel(); clearTimeout(stopRequest); active = false; };
+        return () => {
+            cancel();
+            clearTimeout(stopRequest);
+            active = false;
+        };
     }, [newSearchUrl]);
 
     useEffect(() => {
-        if(!open) {
+        if (!open) {
             setOptions([]);
         }
-        if(needHistory || searchChange.length === 0) {
+        if (needHistory || searchChange.length === 0) {
             getValuesHistory();
         }
     }, [open, needHistory, searchChange]);
 
     return (
         <Autocomplete
-          id="asynchronous-demo"
-          style={styles.autocomplete}
-          open={open}
-          onOpen={() => {
-            setOpen(true);
-          }}
-          onClose={() => {
-            setOpen(false);
-          }}
-          onChange={(event, value) => onSelectedValue(value)}
-          getOptionSelected={(option, value) => option.toLowerCase() === value.toLowerCase()}
-          getOptionLabel={option => option}
-          options={options}
-          loading={loading}
-          loadingText="Carregando..."
-          clearText="Limpar"
-          closeText="Fechar"
-          noOptionsText={noOptionsText}
-          autoHighlight={autoHighlight}
-          includeInputInList
-          freeSolo={freeSolo}
-          clearOnEscape={clearOnEscape}
-          clearOnBlur={clearOnBlur}
-          selectOnFocus={selectOnFocus}
-          autoSelect= {autoSelect}
-          autoComplete
-          openOnFocus={openOnFocus}
-          renderOption={option => (
-              <div className="text-em-1-4 font-site">
-                {needHistory ? (
-                    <FontAwesomeIcon icon="history" className="text-light-purple" />
-                ) : (
-                    <FontAwesomeIcon icon="search" className="text-light-purple" />
-                )}{" "}
-                {searchChange ? highlightSearchResult(option, searchChange) : option}
-              </div>
-          )}
-          renderInput={params => (
-            <TextField
-              {...params}
-              style={styles.asyncAutoSearch}
-              placeholder={placeholder}
-              fullWidth
-              onChange={onSearchChange}
-              onKeyPress={e => onKeyPress(e)}
-              variant="outlined"
-              InputProps={{
-                ...params.InputProps,
-                type: 'search',
-                style: {
-                    fontSize: '1em',
-                    color: themeColor,
-                    paddingRight: '10px',
-                },
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <SearchIcon style={styles.icon} />
-                    </InputAdornment>
-                ),
-                endAdornment: (
-                    <Fragment>
-                        {loading ? <CircularProgress color={"inherit"} size={35} /> : null}
-                        {needArrowEndAdornment ? params.InputProps.endAdornment : null}
-                    </Fragment>
-                ),
+            id="asynchronous-demo"
+            style={styles.autocomplete}
+            open={open}
+            onOpen={() => {
+                setOpen(true);
             }}
+            onClose={() => {
+                setOpen(false);
+            }}
+            onInputChange={(event, value) => onSelectedValue(value)}
+            getOptionSelected={(option, value) =>
+                option.toLowerCase() === value.toLowerCase()
+            }
+            getOptionLabel={(option) => option}
+            options={options}
+            loading={loading}
+            loadingText="Carregando..."
+            clearText="Limpar"
+            closeText="Fechar"
+            noOptionsText={`${noOptionsText}, ${name}`}
+            autoHighlight={autoHighlight}
+            includeInputInList
+            freeSolo={freeSolo}
+            clearOnEscape={clearOnEscape}
+            clearOnBlur={clearOnBlur}
+            selectOnFocus={selectOnFocus}
+            autoSelect={autoSelect}
+            autoComplete
+            openOnFocus={openOnFocus}
+            renderOption={(option) => (
+                <div className="text-em-1-4 font-site">
+                    {needHistory ? (
+                        <FontAwesomeIcon
+                            icon="history"
+                            className="text-light-purple"
+                        />
+                    ) : (
+                        <FontAwesomeIcon
+                            icon="search"
+                            className="text-light-purple"
+                        />
+                    )}{" "}
+                    {searchChange
+                        ? highlightSearchResult(option, searchChange)
+                        : option}
+                </div>
+            )}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    style={styles.asyncAutoSearch}
+                    placeholder={placeholder}
+                    fullWidth
+                    onChange={onSearchChange}
+                    onKeyPress={(e) => onKeyPress(e)}
+                    variant="outlined"
+                    InputProps={{
+                        ...params.InputProps,
+                        type: "search",
+                        style: {
+                            fontSize: "1em",
+                            color: themeColor,
+                            paddingRight: "10px",
+                        },
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon style={styles.icon} />
+                            </InputAdornment>
+                        ),
+                        endAdornment: (
+                            <Fragment>
+                                {loading ? (
+                                    <CircularProgress
+                                        color={"inherit"}
+                                        size={35}
+                                    />
+                                ) : null}
+                                {needArrowEndAdornment
+                                    ? params.InputProps.endAdornment
+                                    : null}
+                            </Fragment>
+                        ),
+                    }}
+                />
+            )}
         />
-      )}
-    />
-  );
+    );
 }
 
 /* ARCHIVES

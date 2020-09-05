@@ -74,7 +74,7 @@ exports.readContacts = (req, res) => {
             });
 
             if (autocomplete) {
-                finalRes = finalRes.slice(0, autocompleteLimit);
+                finalRes = finalRes.slice(0, parseInt(autocompleteLimit));
             }
 
             res.json(finalRes);
@@ -99,11 +99,9 @@ exports.mwSendSMS = (req, res, next) => {
     } = req.body;
 
     if (!msg)
-        return res
-            .status(400)
-            .json({
-                error: "A message with at least 1 character should be passed",
-            });
+        return res.status(400).json({
+            error: "A message with at least 1 character should be passed",
+        });
 
     let flashQuery = "";
     let jobtimeQuery = "";

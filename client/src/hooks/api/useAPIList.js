@@ -45,7 +45,6 @@ export default function useAPIList({
     params = null,
     body = null,
     skip = null,
-    search = null, // query
     timeout = IS_DEV ? 30000 : 10000, // default: 10000
     trigger,
     listName, // offline usage
@@ -79,7 +78,6 @@ export default function useAPIList({
     const gotListItems = list && list.length;
     const noBlocking = !loading && !error;
     const needEmptyIllustra = noBlocking && list && !list.length;
-    const needEmptySearch = noBlocking && Boolean(!listTotal) && search;
     const readyShowElems = noBlocking && !needEmptyIllustra;
     let emptyType = "virgin";
     // END IMPORTABLE VARIABLES
@@ -115,11 +113,6 @@ export default function useAPIList({
 
         return () => setIgnore(true);
     }, [isOffline, offlineBtn, offlineList]);
-
-    // For search only - Every time a query changes, then clean previous data. Otherwise it will accumulative with the new one....
-    useEffect(() => {
-        if (search) setData({ ...data, list: [] });
-    }, [search]);
 
     useEffect(() => {
         setLoading(false);

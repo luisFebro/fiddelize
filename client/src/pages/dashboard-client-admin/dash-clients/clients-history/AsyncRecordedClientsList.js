@@ -31,7 +31,7 @@ import "./_RecordedClientsList.scss";
 import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
 import Totals from "./search/Totals";
-// import ClientsSearch from './search/ClientsSearch';
+import ClientsSearch from "./search/ClientsSearch";
 
 const AsyncFreeAccountsLimitMsg = Load({
     loader: () =>
@@ -133,8 +133,10 @@ const getInfoElem = (target, options = {}) => {
     }
 };
 
-const handleParams = ({ filterName = "all", period, getFilterDate }) => {
+const handleParams = ({ search, filterName, period, getFilterDate }) => {
     const { day, week: weekCode, month: monthCode, year } = getFilterDate();
+
+    if (search) return { role: "cliente", filter: "alphabeticOrder", search };
 
     switch (period) {
         case "all":
@@ -186,8 +188,13 @@ export default function AsyncRecordedClientsList() {
     const [data, setData] = useState({
         totalCliUserScores: 0,
         totalActiveScores: 0,
+        search: "",
+        cleared: "",
     });
-    const { totalCliUserScores, totalActiveScores } = data;
+    const { totalCliUserScores, totalActiveScores, search, cleared } = data;
+    console.log("cleared", cleared);
+    console.log("search", search);
+
     const [filter, setFilter] = useState({
         filterName: "newCustomers",
         period: "all",
@@ -204,7 +211,13 @@ export default function AsyncRecordedClientsList() {
                 setIsFiltering(false);
             }, 4000);
         }
-    }, [filterName, period, runName]);
+    }, [filterName, period, runName, search, cleared]);
+
+    const handleSearch = (query) => {
+        if (query === "_cleared")
+            return setData({ ...data, search: "", cleared: true });
+        setData({ ...data, search: query, cleared: "" });
+    };
 
     const handleSelectedFilter = (filterData) => {
         setSkip(0);
@@ -234,10 +247,10 @@ export default function AsyncRecordedClientsList() {
         updateUser(dispatch, objToSend, businessId);
     }, [totalCliUserScores, totalActiveScores]);
 
-    const params = handleParams({ filterName, period, getFilterDate });
+    const params = handleParams({ search, filterName, period, getFilterDate });
 
     const trigger = getTrigger(runName, "RecordedClientsList", {
-        cond2: `${filterName}_${period}`,
+        cond2: `${filterName}_${period}_${search}_${cleared}`,
     });
 
     const {
@@ -465,7 +478,7 @@ export default function AsyncRecordedClientsList() {
     const needFreeAlert = Boolean(listTotal >= 7 && bizPlan === "gratis");
     return (
         <Fragment>
-            {/*<ClientsSearch />*/}
+            <ClientsSearch handleSearch={handleSearch} />
             <Filters
                 listTotal={listTotal}
                 loading={loading}

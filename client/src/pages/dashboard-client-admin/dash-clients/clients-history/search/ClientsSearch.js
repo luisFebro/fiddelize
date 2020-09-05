@@ -1,60 +1,40 @@
-import React from "react";
-import SearchFilter from "../../../../../components/search/SearchFilter";
-import PremiumButton from "../../../../components/buttons/premium/PremiumButton";
+import React, { useState, useEffect } from "react";
+import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
+import { useProfile } from "../../../../../hooks/useRoleData";
+// import SearchFilter from "../../../../../components/search/SearchFilter";
 
-// const initialSkip = 0;
-// let searchTerm = "";
-export default function ClientsSearch() {
-    const onSearchChange = (e) => {
-        const targetValue = e ? e.target.value : " ";
-        const querySearched = targetValue;
-        searchTerm = querySearched;
+export default function ClientsSearch({ handleSearch }) {
+    const [data, setData] = useState({
+        selectedValue: "",
+    });
+    const { selectedValue } = data;
 
-        const listOptions = {
-            token,
-            role: "cliente",
-            skip: initialSkip,
-            search: querySearched,
-        };
-        readUserList(dispatch, businessId, listOptions).then((res) => {
-            if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
-            setData({
-                ...data,
-                totalCliUserScores: res.data.totalCliUserScores,
-                totalActiveScores: res.data.totalActiveScores,
-            });
-        });
+    useEffect(() => {
+        if (selectedValue) {
+            handleSearch(selectedValue);
+        }
+    }, [selectedValue]);
+
+    const { _id: adminId } = useProfile();
+
+    const showSearchBar = () => {
+        // sms but it works for this since we need only the names of the clients which it is exactly this is requesting.
+        const autocompleteUrl = `/api/sms/read/contacts?userId=${adminId}&autocomplete=true&autocompleteLimit=7`;
+
+        return (
+            <section className="my-4">
+                <AutoCompleteSearch
+                    autocompleteUrl={autocompleteUrl}
+                    setData={setData}
+                    placeholder="Ei, procure um cliente"
+                    noOptionsText="Nenhum cliente encontrado"
+                    disableOpenOnFocus={true}
+                    offlineKey="history_adminClients"
+                    maxHistory={7}
+                />
+            </section>
+        );
     };
 
-    const showSearchBar = () => (
-        <section className="container-center my-4">
-            <span className="position-relative">
-                <SearchFilter
-                    placeholder="Admin, procure cliente"
-                    searchChange={onSearchChange}
-                />
-                <PremiumButton
-                    needAttentionWaves={true}
-                    onClick={null}
-                    left={10}
-                    top={-20}
-                />
-            </span>
-        </section>
-    );
-
-    return (
-        <section>
-            <SearchResult
-                isLoading={loading}
-                filteredUsersLength={totalSize}
-                totalCliUserScores={totalCliUserScores}
-                totalActiveScores={totalActiveScores}
-                allUsersLength={totalSize}
-                searchTerm={searchTerm}
-                mainSubject="cliente"
-            />
-        </section>
-    );
+    return showSearchBar();
 }
