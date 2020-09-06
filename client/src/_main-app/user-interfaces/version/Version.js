@@ -4,10 +4,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.45.4";
+const latestVersion = "3.46.4";
 // PRÓXIMO:
 // artigo exemplo de pontos.
-const updateDescription = "filtros, pesquisa premium pt27";
+const updateDescription =
+    "nova customização página de download, filtros, pesquisa premium pt28";
 const history = [
     "painel de controle cliente-admin - painel de cadastros (staff), nova lista clientes cadastrados com rolagem infinita",
     "painel de controle cliente-admin - botão dinâmico adicionar clientes, página de adição de clientes pt3",
