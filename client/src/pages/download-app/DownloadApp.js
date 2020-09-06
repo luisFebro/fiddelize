@@ -275,7 +275,7 @@ export default function DownloadApp({ match, location }) {
             <div className="ml-2">
                 {isClientUser && (
                     <Fragment>
-                        <p>Você foi convidado(a) para baixar o app de </p>
+                        <p>Você foi convidado(a) para baixar o app da </p>
                         <p className="text-hero text-center">
                             {bizName && bizName.cap()}
                         </p>
