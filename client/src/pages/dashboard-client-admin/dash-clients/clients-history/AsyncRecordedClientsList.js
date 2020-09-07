@@ -478,35 +478,39 @@ export default function AsyncRecordedClientsList() {
     const needFreeAlert = Boolean(listTotal >= 7 && bizPlan === "gratis");
     return (
         <Fragment>
-            <ClientsSearch handleSearch={handleSearch} />
-            <Filters
-                listTotal={listTotal}
-                loading={loading}
-                handleSelectedFilter={handleSelectedFilter}
-                handlePeriodFilter={handlePeriodFilter}
-                emptyType={emptyType}
-            />
-            <Totals
-                loading={loading}
-                allUsersLength={listTotal}
-                totalActiveScores={totalActiveScores}
-                totalCliUserScores={totalCliUserScores}
-                period={period}
-            />
-            <Fragment>
-                {needEmptyIllustra ? (
-                    <AsyncShowIllustra emptyType={emptyType} />
-                ) : (
-                    <Fragment>
-                        {showAccordion()}
-                        {loading && <ShowLoadingSkeleton size="large" />}
-                        {error && <ShowError />}
-                        <ShowOverMsg />
-                        {needFreeAlert && <AsyncFreeAccountsLimitMsg />}
-                        {showFixedCTA()}
-                    </Fragment>
-                )}
-            </Fragment>
+            {needEmptyIllustra ? (
+                <AsyncShowIllustra emptyType={emptyType} />
+            ) : (
+                <Fragment>
+                    {listTotal !== 0 ? (
+                        <ClientsSearch handleSearch={handleSearch} />
+                    ) : (
+                        <p className="my-2 font-weight-bold text-purple text-normal text-center">
+                            Preparando tudo...
+                        </p>
+                    )}
+                    <Filters
+                        listTotal={listTotal}
+                        loading={loading}
+                        handleSelectedFilter={handleSelectedFilter}
+                        handlePeriodFilter={handlePeriodFilter}
+                        emptyType={emptyType}
+                    />
+                    <Totals
+                        loading={loading}
+                        allUsersLength={listTotal}
+                        totalActiveScores={totalActiveScores}
+                        totalCliUserScores={totalCliUserScores}
+                        period={period}
+                    />
+                    {showAccordion()}
+                    {loading && <ShowLoadingSkeleton size="large" />}
+                    {error && <ShowError />}
+                    <ShowOverMsg />
+                    {needFreeAlert && <AsyncFreeAccountsLimitMsg />}
+                    {showFixedCTA()}
+                </Fragment>
+            )}
         </Fragment>
     );
 }

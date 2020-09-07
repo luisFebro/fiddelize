@@ -1,68 +1,87 @@
-import React, { useState } from 'react';
-import ButtonFab, {faStyle} from '../material-ui/ButtonFab';
+import React, { useState, useEffect } from "react";
+import ButtonFab, { faStyle } from "../material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AttentionWaves from './AttentionWaves';
-import ModalFullContent from '../../modals/ModalFullContent';
-// import { Load } from '../code-splitting/LoadableComp'
-// const Async = Load({ loader: () => import('./AsyncPurchaseHistory'  /* webpackChunkName: "premium-feature-full-page-lazy" */ )});
-
-const Test = () => (
-   <div className="text-purple text-center text-hero">Hello</div>
-);
-
-
-
+import AttentionWaves from "./AttentionWaves";
+import ModalFullContent from "../../modals/ModalFullContent";
+import useStorage from "../../../hooks/storage/useStorage";
+import pickFeature from "./pickFeature";
+import usePro from "../../../hooks/pro/usePro";
 
 export default function PremiumButton({
-    onClick,
+    callback,
+    proFeature = "OrgganizeClients_1",
     top,
     left,
     right,
-    needAttentionWaves,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
+    const [trigger, setTrigger] = useState(false);
+    const [waveOn, setWaveOn] = useState(false);
+
+    let { isProUser } = usePro();
+    isProUser = false;
+
+    const { gotData, loading } = useStorage({ key: proFeature, trigger });
+
+    useEffect(() => {
+        if (!loading && !gotData) {
+            setWaveOn(true);
+        }
+    }, [gotData, loading]);
+
+    const handlePickedComp = () => {
+        const PickedComp = pickFeature({ feature: proFeature });
+        return <PickedComp />;
+    };
+
+    const PickedFeature = handlePickedComp();
 
     const handleFullOpen = () => {
+        setTrigger(true);
+        setWaveOn(false);
         setFullOpen(true);
-    }
+    };
 
     const handleFullClose = () => {
         setFullOpen(false);
-    }
+    };
 
     const showPremiumBtn = () => (
         <section
-            style={{zIndex: 500, top, left, right}}
+            style={{ zIndex: 1000, top, left, right }}
             className="position-absolute"
         >
             <AttentionWaves
-                isActive={needAttentionWaves}
+                isActive={waveOn ? true : false}
                 waveColor="rgba(255, 242, 0, 0.3)"
                 waveSize="40px"
-                style={{ top, left, right }}
             />
             <ButtonFab
-                position="absolute"
-                top={top}
-                left={left}
-                right={right}
+                position="relative"
                 size="small"
                 onClick={handleFullOpen}
                 color="var(--mainWhite)"
                 backgroundColor="#fbc531" // nice ui yellow
-                iconFontAwesome={<FontAwesomeIcon icon="crown" style={{ ...faStyle, fontSize: '23px' }} />}
+                iconFontAwesome={
+                    <FontAwesomeIcon
+                        icon="crown"
+                        style={{ ...faStyle, fontSize: "23px" }}
+                    />
+                }
             />
         </section>
     );
 
     return (
-        <section>
-            {showPremiumBtn()}
-            <ModalFullContent
-                contentComp={<Test/>}
-                fullOpen={fullOpen}
-                setFullOpen={handleFullClose}
-            />
-        </section>
+        !isProUser && (
+            <section className="animated fadeIn delay-2s">
+                {showPremiumBtn()}
+                <ModalFullContent
+                    contentComp={PickedFeature}
+                    fullOpen={fullOpen}
+                    setFullOpen={handleFullClose}
+                />
+            </section>
+        )
     );
 }

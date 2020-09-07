@@ -24,6 +24,7 @@ import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import EmailIcon from "@material-ui/icons/Email";
 import { handleFocus } from "../../../../utils/form/handleFocus";
 import PremiumButton from "../../../../components/buttons/premium/PremiumButton";
+import usePro from "../../../../hooks/pro/usePro";
 
 const Async = Load({
     loader: () =>
@@ -80,6 +81,8 @@ export default function QuickRegister({ formPayload }) {
     const [smsDisabled, setSmsDisabled] = useState(false);
     const AsyncNoCredits = <Async />;
 
+    let { isUserPro } = usePro();
+    isUserPro = false;
     // useEffect(() => {
     //     if(formPayload) {
     //         const { name: thisName, phone, email } = formPayload;
@@ -234,12 +237,17 @@ export default function QuickRegister({ formPayload }) {
                         />
                     </div>
                     <section className="position-relative">
-                        <PremiumButton top={-10} right={0} />
+                        <PremiumButton
+                            top={-40}
+                            right={-10}
+                            proFeature="EnvvioWhatsapp_2"
+                        />
                         <ButtonFab
                             size="medium"
                             needTxtNoWrap={true}
                             title="Enviar"
                             height="60px"
+                            disabled={isUserPro ? false : true}
                             onClick={() => handleNumberCTA("whatsapp")}
                             backgroundColor={"var(--themeSDark--default)"}
                             iconMu={<WhatsAppIcon style={muStyle} />}

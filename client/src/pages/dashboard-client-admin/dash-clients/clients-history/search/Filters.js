@@ -1,6 +1,7 @@
 import React from "react";
 import AnimaIconsSelect from "../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
 import FilterStatus from "../../../../../components/selects/anima-icons-select/FilterStatus";
+import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 // custom icons
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import CakeIcon from "@material-ui/icons/Cake";
@@ -149,9 +150,13 @@ export default function Filters({
     const showCategories = () =>
         (listTotal !== 0 || emptyType === "filter") && (
             <section className="mt-5 position-relative text-p text-left pl-2">
-                <span className="d-inline-block mb-3 text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
-                    Organize por:
-                </span>
+                <div className="d-flex">
+                    <span className="mr-5 d-inline-block mb-3 text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
+                        Organize por:
+                    </span>
+                    <PremiumButton right={20} proFeature="OrgganizeClients_1" />
+                </div>
+
                 <br />
                 <AnimaIconsSelect
                     callback={handleSelectedFilter}

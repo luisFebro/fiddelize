@@ -105,7 +105,6 @@ export default function AutoCompleteSearch({
     const styles = getStyles({ fieldBack, themeColor, txtFont });
 
     const onSelectedValue = (pickedValue) => {
-        console.log("pickedValue", pickedValue);
         setData((data) => ({
             ...data,
             selectedValue: pickedValue || "_cleared",
