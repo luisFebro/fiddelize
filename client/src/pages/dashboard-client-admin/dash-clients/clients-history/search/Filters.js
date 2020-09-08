@@ -13,6 +13,7 @@ import LocalMallIcon from "@material-ui/icons/LocalMall";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import EventIcon from "@material-ui/icons/Event";
 
+// do not include btn styling for free options...
 const mainOptions = (isUserPro) => [
     {
         titleBr: "Ordem Alfabética A-Z",
@@ -30,11 +31,7 @@ const mainOptions = (isUserPro) => [
         reverse: "lowestActiveScores",
         showEmptyOption: true,
         isPro: false,
-        Icon: (
-            <FiberManualRecordIcon
-                style={{ color: isUserPro ? undefined : "grey" }}
-            />
-        ),
+        Icon: <FiberManualRecordIcon />,
     },
     {
         titleBr: "Clientes Novos",
@@ -97,7 +94,7 @@ const periodOptions = (isUserPro) => [
         reverse: null,
         showEmptyOption: null,
         isPro: false,
-        Icon: <EventIcon style={{ color: isUserPro ? undefined : "grey" }} />,
+        Icon: <EventIcon />,
     },
     {
         titleBr: "Hoje",
@@ -106,7 +103,7 @@ const periodOptions = (isUserPro) => [
         reverse: null,
         showEmptyOption: null,
         isPro: false,
-        Icon: <EventIcon style={{ color: isUserPro ? undefined : "grey" }} />,
+        Icon: <EventIcon />,
     },
     {
         titleBr: "Semana atual",
@@ -151,7 +148,7 @@ export default function Filters({
         (listTotal !== 0 || emptyType === "filter") && (
             <section className="mt-5 position-relative text-p text-left pl-2">
                 <div className="d-flex">
-                    <span className="mr-5 d-inline-block mb-3 text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
+                    <span className="mr-5 d-inline-block text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
                         Organize por:
                     </span>
                     <PremiumButton right={20} proFeature="OrgganizeClients_1" />

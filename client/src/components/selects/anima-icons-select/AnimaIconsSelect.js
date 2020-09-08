@@ -34,17 +34,23 @@ const getStyles = () => ({
     },
 });
 
-const handleTrigger = (dataArray, selected) => {
-    const reverseBrOnlyOptions = dataArray().map((rev) => rev.reverseBr);
+const handleTrigger = (dataArray, options = {}) => {
+    const { selected, isUserPro } = options;
+
+    const reverseBrOnlyOptions = dataArray(isUserPro).map(
+        (rev) => rev.reverseBr
+    );
     const needSkipReverse = gotArrayThisItem(reverseBrOnlyOptions, selected);
 
     if (needSkipReverse) return false;
     return !selected ? true : selected; // update at launch to fetch any offline data there is. Else update in every selected changing
 };
 
-const handleNeedEmptyOption = (dataArray, selected) => {
+const handleNeedEmptyOption = (dataArray, options = {}) => {
+    const { selected, isUserPro } = options;
+
     const emptyOptions = [];
-    dataArray().forEach((emp) => {
+    dataArray(isUserPro).forEach((emp) => {
         if (emp.showEmptyOption === true) {
             emptyOptions.push(emp.reverseBr);
         }
@@ -84,17 +90,23 @@ export default function AnimaIconsSelect({
         isReversed,
     } = data;
 
+    const { isUserPro } = usePro({ feature: "orgganize_clients" });
+
     const styles = getStyles();
 
-    const needEmptyOpt = handleNeedEmptyOption(optionsArray, selected);
-    const needTriggerOffData = handleTrigger(optionsArray, selected);
+    const needEmptyOpt = handleNeedEmptyOption(optionsArray, {
+        selected,
+        isUserPro,
+    });
+    const needTriggerOffData = handleTrigger(optionsArray, {
+        selected,
+        isUserPro,
+    });
     const { offlineData, loading: loadingOffline } = useOfflineData({
         dataName: offlineKey,
         data: selected,
         trigger: needTriggerOffData,
     });
-
-    const { isUserPro } = usePro({ feature: "orgganize_clients" });
 
     const toggleReverse = useRef(false);
 

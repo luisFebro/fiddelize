@@ -32,6 +32,8 @@ import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
 import Totals from "./search/Totals";
 import ClientsSearch from "./search/ClientsSearch";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AsyncFreeAccountsLimitMsg = Load({
     loader: () =>
@@ -476,19 +478,57 @@ export default function AsyncRecordedClientsList() {
         );
 
     const needFreeAlert = Boolean(listTotal >= 7 && bizPlan === "gratis");
+
+    const [openSearch, setOpenSearch] = useState(false);
+
     return (
         <Fragment>
-            {needEmptyIllustra ? (
-                <AsyncShowIllustra emptyType={emptyType} />
+            {listTotal !== 0 || emptyType === "filter" ? (
+                <Fragment>
+                    {openSearch === false ? (
+                        <section className="container-center">
+                            <ButtonFab
+                                position="relative"
+                                size="large"
+                                onClick={() => setOpenSearch(true)}
+                                color="var(--mainWhite)"
+                                backgroundColor="var(--themeSDark)"
+                                iconFontAwesome={
+                                    <FontAwesomeIcon
+                                        icon="search"
+                                        style={{ fontSize: 30 }}
+                                    />
+                                }
+                                needIconShadow={true}
+                            />
+                        </section>
+                    ) : (
+                        <section className="animated slideInLeft fast">
+                            <ClientsSearch handleSearch={handleSearch} />
+                        </section>
+                    )}
+                </Fragment>
+            ) : (
+                <p className="my-2 font-weight-bold text-purple text-normal text-center">
+                    Preparando tudo...
+                </p>
+            )}
+            {openSearch ? (
+                <section className="my-3 d-flex justify-content-start">
+                    <ButtonFab
+                        position="relative"
+                        size="small"
+                        onClick={() => setOpenSearch(null)}
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeSDark)"
+                        needIconShadow={true}
+                        variant="extended"
+                        title="Filtros e Totais"
+                        textTransform=" "
+                    />
+                </section>
             ) : (
                 <Fragment>
-                    {listTotal !== 0 ? (
-                        <ClientsSearch handleSearch={handleSearch} />
-                    ) : (
-                        <p className="my-2 font-weight-bold text-purple text-normal text-center">
-                            Preparando tudo...
-                        </p>
-                    )}
                     <Filters
                         listTotal={listTotal}
                         loading={loading}
@@ -503,6 +543,12 @@ export default function AsyncRecordedClientsList() {
                         totalCliUserScores={totalCliUserScores}
                         period={period}
                     />
+                </Fragment>
+            )}
+            {needEmptyIllustra ? (
+                <AsyncShowIllustra emptyType={emptyType} />
+            ) : (
+                <Fragment>
                     {showAccordion()}
                     {loading && <ShowLoadingSkeleton size="large" />}
                     {error && <ShowError />}

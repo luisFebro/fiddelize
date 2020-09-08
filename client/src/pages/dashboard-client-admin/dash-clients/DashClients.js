@@ -51,7 +51,7 @@ export default function DashClients() {
             <Title
                 title="&#187; Histórico de Cadastro"
                 color="var(--themeP)"
-                margin="mb-5"
+                margin=""
             />
             <AsyncRecordedClientsList />
         </div>

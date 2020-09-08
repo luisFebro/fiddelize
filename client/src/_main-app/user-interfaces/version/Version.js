@@ -4,10 +4,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.4608.4";
+const latestVersion = "3.47.4";
 // PRÓXIMO:
 // artigo exemplo de pontos.
-const updateDescription = "fiddelize pro botão, painel e sistema pt1";
+const updateDescription = "fiddelize pro botão, painel e sistema pt2";
 const history = [
     "nova customização página de download, filtros, pesquisa premium",
     "painel de controle cliente-admin - painel de cadastros (staff), nova lista clientes cadastrados com rolagem infinita",
