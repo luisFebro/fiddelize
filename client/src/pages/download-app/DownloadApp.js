@@ -235,7 +235,7 @@ export default function DownloadApp({ match, location }) {
                         className="img-fluid"
                         width={bizLogo === "undefined" && 200}
                         height={bizLogo === "undefined" && 200}
-                        title={`conte da ${bizName}`}
+                        title={`logo da ${bizName}`}
                         alt={`logo empresa ${bizName}`}
                     />
                 </div>
