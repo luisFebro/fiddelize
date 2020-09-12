@@ -9,6 +9,7 @@ const getStyles = () => ({
         transform: "rotate(40deg)",
         color: "#fff",
         fontSize: "35px",
+        filter: "drop-shadow(.5px .5px 1.5px black)",
     },
 });
 

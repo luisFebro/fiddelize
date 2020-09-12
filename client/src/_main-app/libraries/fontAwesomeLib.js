@@ -57,6 +57,9 @@ import { faArrowCircleUp } from "@fortawesome/free-solid-svg-icons/faArrowCircle
 import { faSms } from "@fortawesome/free-solid-svg-icons/faSms";
 import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons/faSortAmountDown";
 import { faSortAmountDownAlt } from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
+// services
+import { faFilter } from "@fortawesome/free-solid-svg-icons/faFilter";
+import { faMagic } from "@fortawesome/free-solid-svg-icons/faMagic";
 // app milestone icons
 import { faAppleAlt } from "@fortawesome/free-solid-svg-icons/faAppleAlt";
 import { faCar } from "@fortawesome/free-solid-svg-icons/faCar";
@@ -135,6 +138,9 @@ library.add(
     faSms,
     faSortAmountDown,
     faSortAmountDownAlt,
+    // services
+    faFilter,
+    faMagic,
     // app milestone icons
     faAppleAlt,
     faCar,

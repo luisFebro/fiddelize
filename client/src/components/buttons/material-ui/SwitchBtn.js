@@ -1,35 +1,37 @@
-import React, { useState, useRef } from 'react';
-import Switch from '@material-ui/core/Switch';
-import { withStyles } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import uuidv1 from 'uuid/v1';
-import parse from 'html-react-parser';
+import React, { useState, useRef } from "react";
+import Switch from "@material-ui/core/Switch";
+import { withStyles } from "@material-ui/core/styles";
+import purple from "@material-ui/core/colors/purple";
+import uuidv1 from "uuid/v1";
+import parse from "html-react-parser";
 // import { useStoreDispatch } from 'easy-peasy';
 // import { showSnackbar } from '../../../redux/actions/snackbarActions';
 
-const getStyles = ({ pillStyle }) => ({
-    pill: pillStyle ? {
-        background: 'rgb(202, 211, 200, .4)',
-        padding: '5px 8px',
-        borderRadius: "20px",
-    } : undefined,
+const getStyles = ({ pillStyle, pillBack }) => ({
+    pill: pillStyle
+        ? {
+              background: pillBack ? pillBack : "rgb(202, 211, 200, .4)",
+              padding: "5px 8px",
+              borderRadius: "30px",
+          }
+        : undefined,
 });
 
 const PurpleSwitch = withStyles({
-  switchBase: {
-    color: purple[300],
-    '&$checked': {
-      color: purple[500],
+    switchBase: {
+        color: purple[300],
+        "&$checked": {
+            color: purple[500],
+        },
+        "&$checked + $track": {
+            backgroundColor: purple[500],
+        },
     },
-    '&$checked + $track': {
-      backgroundColor: purple[500],
-    },
-  },
-  checked: {},
-  track: {},
+    checked: {},
+    track: {},
 })(Switch);
 
-const getStatusWithId = bool => `${bool}_${uuidv1()}`;
+const getStatusWithId = (bool) => `${bool}_${uuidv1()}`;
 
 export default function SwitchBtn({
     titleLeft = "Não",
@@ -39,14 +41,15 @@ export default function SwitchBtn({
     defaultStatus = false,
     disabled = false,
     data = "",
-    pillStyle=false,
+    pillStyle = false,
+    pillBack,
     // loading = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
 
     const switchData = useRef(data);
 
-    const styles = getStyles({ pillStyle });
+    const styles = getStyles({ pillStyle, pillBack });
 
     // const dispatch = useStoreDispatch();
 
@@ -57,22 +60,26 @@ export default function SwitchBtn({
         // if(loading) return // showSnackbar(dispatch, "Aguarde finalização do último");
 
         setChecked(status);
-        if(typeof callback === "function") callback(statusId, switchData.current);
+        if (typeof callback === "function")
+            callback(statusId, switchData.current);
     };
 
     const setTrue = () => {
         // if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(true);
-        if(typeof callback === "function") callback(getStatusWithId(true), switchData.current);
+        if (typeof callback === "function")
+            callback(getStatusWithId(true), switchData.current);
     };
 
     const setFalse = () => {
         // if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(false);
-        if(typeof callback === "function") callback(getStatusWithId(false), switchData.current);
-    }
+        if (typeof callback === "function")
+            callback(getStatusWithId(false), switchData.current);
+    };
 
-    const on = 'm-0 animated rubberBand text-normal text-purple font-weight-bold';
+    const on =
+        "m-0 animated rubberBand text-normal text-purple font-weight-bold";
     const off = "m-0 text-normal text-grey";
     const txtStyle1 = checked ? off : on;
     const txtStyle2 = !checked ? off : on;
@@ -84,14 +91,18 @@ export default function SwitchBtn({
             <p className="m-0 mr-2 d-inline-block text-normal font-weight-bold text-purple">
                 {titleQuestion}
             </p>
-            <p className={txtStyle1} onClick={setFalse}>{titleLeft}</p>
+            <p className={txtStyle1} onClick={setFalse}>
+                {titleLeft}
+            </p>
             <PurpleSwitch
                 checked={checked}
                 onChange={handleChange}
                 name="purpleSwitch"
                 disabled={disabled}
             />
-            <p className={txtStyle2} onClick={setTrue}>{titleRight}</p>
+            <p className={txtStyle2} onClick={setTrue}>
+                {titleRight}
+            </p>
         </section>
     );
 }

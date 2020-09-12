@@ -1,0 +1,164 @@
+import React, { useState, useEffect, Fragment } from "react";
+import Card from "@material-ui/core/Card";
+import convertToReal from "../../../../../utils/numbers/convertToReal";
+import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
+import getServices from "./getServices";
+import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
+import parse from "html-react-parser";
+
+const isSmall = window.Helper.isSmallScreen();
+
+const getStyles = () => ({
+    card: {
+        margin: "auto",
+        width: "95%",
+        maxWidth: isSmall ? "" : 320,
+        top: -190,
+    },
+    muStyle: {
+        transform: "scale(1.5)",
+        marginRight: "10px",
+        color: "var(--themeP)",
+    },
+    muStyleGrey: {
+        transform: "scale(1.5)",
+        marginRight: "10px",
+        color: "grey",
+    },
+    freeTitle: {
+        background: "var(--themeP)",
+        padding: "4px 8px",
+        borderRadius: 30,
+        display: "table",
+    },
+});
+
+export default function ServicesCard({
+    period = "yearly",
+    plan = "gold",
+    handleTotalInvest,
+}) {
+    const [openFree, setOpenFree] = useState(false);
+
+    const styles = getStyles();
+
+    useEffect(() => {
+        const newProTotal = getServices("pro", {
+            styles,
+            total: true,
+            plan,
+            period,
+        });
+        handleTotalInvest(newProTotal);
+    }, [plan, period]);
+
+    const showFreeServices = () => {
+        const FreeServicesList = getServices("gratis", { styles }).map(
+            (serv) => (
+                <section
+                    key={serv.name}
+                    className="d-flex justify-content-between my-3 mx-3"
+                >
+                    <section className="d-flex align-items-center">
+                        {serv.Icon}
+                        <div>
+                            <span
+                                className={`ml-1 mr-2 text-normal text-nowrap ${
+                                    serv.greyedout ? "text-grey" : "text-purple"
+                                }`}
+                            >
+                                {parse(serv.name)}
+                            </span>
+                            {serv.proPage && (
+                                <PremiumButton
+                                    btnType="pill"
+                                    proFeature={serv.proPage}
+                                />
+                            )}
+                        </div>
+                    </section>
+                    <span className="text-normal text-purple">
+                        {convertToReal(serv.price, { moneySign: true })}
+                    </span>
+                </section>
+            )
+        );
+
+        return (
+            <Fragment>
+                {!openFree ? (
+                    <section className="container-center">
+                        <RadiusBtn
+                            size="small"
+                            title="Tudo do gratis"
+                            onClick={() => setOpenFree(true)}
+                            backgroundColor="var(--themeSDark)"
+                        />
+                    </section>
+                ) : (
+                    <Fragment>
+                        <section className="container-center">
+                            <h2
+                                className="my-3 text-center text-em-1-4 main-font text-white font-weight-bold"
+                                style={styles.freeTitle}
+                            >
+                                Recursos Grátis
+                            </h2>
+                        </section>
+                        {FreeServicesList}
+                        <hr className="lazer-purple" />
+                    </Fragment>
+                )}
+            </Fragment>
+        );
+    };
+
+    const ServicesList = getServices("pro", { styles }).map((serv) => (
+        <section
+            key={serv[plan].name}
+            className="d-flex justify-content-between my-3 mx-3"
+        >
+            <section className="d-flex align-items-center">
+                {serv.Icon}
+                <div>
+                    <span className="text-normal text-nowrap text-purple ml-1 mr-2">
+                        {parse(serv[plan].name)}
+                    </span>
+                    {serv.proPage && (
+                        <PremiumButton
+                            btnType="pill"
+                            proFeature={serv.proPage}
+                        />
+                    )}
+                </div>
+            </section>
+            <span className="text-normal text-purple">
+                {convertToReal(serv[plan][period].price, { moneySign: true })}
+            </span>
+        </section>
+    ));
+
+    return (
+        <Card
+            className="position-relative animated fadeInUp mt-0 mb-5 shadow-elevation"
+            style={styles.card}
+            elevation={false}
+        >
+            <h1 className="my-3 text-purple font-weight-bold text-subtitle text-center">
+                Serviços incluem:
+            </h1>
+            {showFreeServices()}
+            {ServicesList}
+
+            <section className="mx-3 my-5">
+                <div className="text-subtitle text-purple">
+                    Seu desconto, Febro:
+                </div>
+                <p className="text-normal text-p-light">
+                    Você economiza - a longo prazo - <strong>R$ 200</strong>{" "}
+                    comparado com o mensal deste plano.
+                </p>
+            </section>
+        </Card>
+    );
+}

@@ -56,6 +56,7 @@ export const ShowPicture = ({
     imgContainerClass, // for reading intersection observer
     iconWidth,
     iconHeight,
+    floatit = true,
 }) => {
     // images loaded with intersection observer...
     const showImg = () => (
@@ -81,7 +82,7 @@ export const ShowPicture = ({
                         <Img
                             dataSrc={dataSrc}
                             timeout={timeout}
-                            className="float-it-5"
+                            className={floatit ? "float-it-5" : ""}
                             src={srcIcon}
                             width={iconWidth}
                             height={iconHeight}

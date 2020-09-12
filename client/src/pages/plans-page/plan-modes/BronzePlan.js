@@ -1,6 +1,9 @@
 import React from "react";
 import { GoldBtn, SilverBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
+import MainTitle, { CircleBack } from "./comps/MainTitle";
+import useBackColor from "../../../hooks/useBackColor";
+import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
 
 const getStyles = () => ({
     root: {
@@ -13,6 +16,8 @@ const getStyles = () => ({
 export default function BronzePlan({ setCurrPlan }) {
     const styles = getStyles();
 
+    useBackColor("var(--mainWhite)");
+
     const showPlanSwitchBtns = () => (
         <section style={styles.root}>
             <div className="d-flex justify-content-end">
@@ -24,16 +29,16 @@ export default function BronzePlan({ setCurrPlan }) {
         </section>
     );
 
+    const planMsg = "Faça seu próprio plano.<br />Escolha seu preço.";
     return (
         <section>
+            <CircleBack />
             <ReturnBtn />
             {showPlanSwitchBtns()}
-            <p
-                style={{ marginTop: 100 }}
-                className="text-center text-white text-hero"
-            >
-                bronze plan
-            </p>
+            <MainTitle customPlanTitle="Meu" plan="Bronze" planMsg={planMsg} />
+            <PeriodSelection />
+            <TotalInvest />
+            <ContinueBtn />
         </section>
     );
 }
