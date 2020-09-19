@@ -4,10 +4,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.50.4";
+const latestVersion = "3.53.4";
 // PRÓXIMO:
 // artigo exemplo de pontos.
-const updateDescription = "página de planos pt7";
+const updateDescription =
+    "página de planos | sistema de pagamento PAGSEGURO | club pro pt15";
 const history = [
     "fiddelize pro botão, painel e sistema pt2",
     "nova customização página de download, filtros, pesquisa premium",

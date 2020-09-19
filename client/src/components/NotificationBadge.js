@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 // import IconButton from '@material-ui/core/IconButton';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import Badge from '@material-ui/core/Badge';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import Badge from "@material-ui/core/Badge";
+import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
 NotificationBadge.propTypes = {
     badgeValue: PropTypes.number.isRequired,
@@ -12,7 +12,7 @@ NotificationBadge.propTypes = {
     fontSize: PropTypes.string,
     right: PropTypes.number,
     top: PropTypes.number,
-}
+};
 
 function NotificationBadge({
     children,
@@ -23,30 +23,32 @@ function NotificationBadge({
     backgroundColor,
     borderColor,
     right,
-    top, }) {
-
-    const BorderedBadge = withStyles(theme => ({
+    top,
+}) {
+    const BorderedBadge = withStyles((theme) => ({
         badge: {
             right: right || 0, //14
             top: top || 1, //18
             height: 0,
-            maxWidth: '14px',
-            padding: '14px',
-            border: `3px solid ${borderColor ? borderColor : "var(--mainDark)"}`,
-            font: `bold ${fontSize || '20px'} var(--mainFont)`,
-            backgroundColor: backgroundColor || 'var(--themeSDark)',
-            color: 'white',
-            borderRadius: '50%',
-            textShadow: '1px 1px 3px black',
+            maxWidth: "14px",
+            padding: padding || "14px",
+            border: `3px solid ${
+                borderColor ? borderColor : "var(--mainDark)"
+            }`,
+            font: `bold ${fontSize || "20px"} var(--mainFont)`,
+            backgroundColor: backgroundColor || "var(--themeSDark)",
+            color: "white",
+            borderRadius: "50%",
+            textShadow: "1px 1px 3px black",
             animationName: "zoomIn",
-            animationDuration: '1s',
-        }
+            animationDuration: "1s",
+        },
     }))(Badge);
 
     return (
         <BorderedBadge
             badgeContent={badgeValue}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
             invisible={!badgeValue ? true : false}
             showZero={false}
             max={99}

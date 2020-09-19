@@ -1,6 +1,30 @@
-const removeDiacritics = require("./removeDiacritics");
-// This will be the SKU (Stock Keeping Unit - Unidade de Manuntenção de Estoque)
-const generateRefCode = (productName) => {
+import generateAlphaNumeric from "./generateAlphaNumeric";
+import removeDiacritics from "./removeDiacritics";
+// SKU (Stock Keeping Unit - Unidade de Manuntenção de Estoque)
+
+// code exemple: GO-Q3-1F3C2DEW (plano-quantidade-id)
+const getPlan = (plan) => {
+    if (plan === "gold") return "GO";
+    if (plan === "silver") return "SI";
+    if (plan === "bronze") return "BR";
+};
+
+const getQuantity = (total) => {
+    return `Q${total}`;
+};
+
+const getServiceSKU = (options = {}) => {
+    const { plan = "gold", serviceTotal = 6 } = options;
+
+    const SKU = [
+        getPlan(plan),
+        getQuantity(serviceTotal),
+        generateAlphaNumeric(7, "A#"),
+    ];
+    return SKU.join("-");
+};
+
+const getProductSKU = (productName) => {
     productName = removeDiacritics(productName);
     let abbrev = productName.split(" ").map((each) => {
         return each.substr(0, 1).toUpperCase();
@@ -9,9 +33,10 @@ const generateRefCode = (productName) => {
     return abbrev.join("");
 };
 
-module.exports = generateRefCode;
+export { getProductSKU, getServiceSKU };
 
 /* COMMENTS
+ideally generate the SKU on the orders page right before payment.
 n1: ABOUT SKU
 O código SKU deve trazer em sua numeração algumas informações sobre o produto, o que torna mais simples a sua identificação. As informações contidas podem ser:
 

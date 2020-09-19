@@ -1,16 +1,37 @@
 import React, { Fragment } from "react";
-import GoldPlan from "./GoldPlan";
-import SilverPlan from "./SilverPlan";
-import BronzePlan from "./BronzePlan";
+import { Load } from "../../../components/code-splitting/LoadableComp";
+
+const AsyncGoldPlan = Load({
+    loader: () =>
+        import("./GoldPlan" /* webpackChunkName: "pro-gold-session-lazy" */),
+});
+
+const AsyncSilverPlan = Load({
+    loader: () =>
+        import(
+            "./SilverPlan" /* webpackChunkName: "pro-silver-session-lazy" */
+        ),
+});
+
+const AsyncBronzePlan = Load({
+    loader: () =>
+        import(
+            "./BronzePlan" /* webpackChunkName: "pro-bronze-session-lazy" */
+        ),
+});
 
 export default function HandlePlan({ currPlan: status, setCurrPlan }) {
     return (
         <Fragment>
-            {status === "gold" && <GoldPlan setCurrPlan={setCurrPlan} />}
+            {status === "gold" && <AsyncGoldPlan setCurrPlan={setCurrPlan} />}
 
-            {status === "silver" && <SilverPlan setCurrPlan={setCurrPlan} />}
+            {status === "silver" && (
+                <AsyncSilverPlan setCurrPlan={setCurrPlan} />
+            )}
 
-            {status === "bronze" && <BronzePlan setCurrPlan={setCurrPlan} />}
+            {status === "bronze" && (
+                <AsyncBronzePlan setCurrPlan={setCurrPlan} />
+            )}
         </Fragment>
     );
 }

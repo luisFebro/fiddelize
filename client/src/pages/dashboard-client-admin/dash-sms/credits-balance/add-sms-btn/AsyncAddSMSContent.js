@@ -1,34 +1,37 @@
-import React, { useState } from 'react';
-import Simulator from './Simulator';
+import React, { useState } from "react";
+import Simulator from "./Simulator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useProfile } from '../../../../../hooks/useRoleData';
-import getFirstName from '../../../../../utils/string/getFirstName';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import Img from '../../../../../components/Img';
+import { useProfile } from "../../../../../hooks/useRoleData";
+import getFirstName from "../../../../../utils/string/getFirstName";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import Img from "../../../../../components/Img";
 
-export default function AsyncAddSMSContent() {
+export default function AsyncAddSMSContent({
+    handleNewOrder,
+    handleFullClose,
+    needRemoveCurrValue,
+    currValues,
+}) {
     const [data, setData] = useState({
         totalPackage: 0,
         totalSMS: 0,
         inv: 0,
-    })
+    });
+    const { inv, totalSMS, totalPackage } = data;
 
-    const handleData = newData => {
+    const handleData = (newData) => {
         setData({
             ...data,
             ...newData,
-        })
-    }
+        });
+    };
 
     let { name: userName } = useProfile();
     userName = getFirstName(userName);
 
-
     const showTitle = () => (
         <div className="mt-4">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
+            <p className="text-subtitle text-purple text-center font-weight-bold">
                 &#187; Créditos SMS
             </p>
         </div>
@@ -39,26 +42,41 @@ export default function AsyncAddSMSContent() {
             <p className="text-purple text-left text-subtitle font-weight-bold m-0">
                 Notas <FontAwesomeIcon icon="info-circle" />
             </p>
-            <p
-                className="text-small text-left text-purple mt-3"
-            >
-                - Os créditos são <strong>liberados automaticamente</strong> após a aprovação do pagamento.
+            <p className="text-small text-left text-purple mt-3">
+                - Os créditos são <strong>liberados automaticamente</strong>{" "}
+                após a aprovação do pagamento.
             </p>
         </section>
     );
 
+    const handleCTA = () => {
+        const needCurrRemoval = needRemoveCurrValue; // && currValues.amount !== totalSMS;
+        const isFunc = typeof handleNewOrder === "function";
+
+        const orderObj = {
+            totalPackage,
+            amount: totalSMS,
+            price: inv,
+            removeCurr: needCurrRemoval ? true : false,
+        };
+        isFunc && handleNewOrder("sms", { order: orderObj });
+
+        handleFullClose();
+    };
+
     const showCTA = () => (
         <section className="my-5 container-center">
             <p className="mx-3 mb-5 text-purple text-left text-subtitle font-weight-bold m-0">
-                {userName}, preparado(a) para ganhar novos superpoderes de comunicação?
+                {userName}, preparado(a) para ganhar novos superpoderes de
+                comunicação?
             </p>
             <ButtonFab
                 size="large"
                 title="Sim, quero investir"
-                onClick={null}
+                onClick={handleCTA}
                 backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
-                position = 'relative'
+                variant="extended"
+                position="relative"
             />
         </section>
     );

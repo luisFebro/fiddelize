@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import ButtonFab, {
     faStyle,
 } from "../../components/buttons/material-ui/ButtonFab";
@@ -14,6 +14,8 @@ import lStorage from "../../utils/storage/lStorage";
 import { logout } from "../../redux/actions/authActions";
 import { useStoreDispatch } from "easy-peasy";
 import isThisApp from "../../utils/window/isThisApp";
+import useGetVar from "../../hooks/storage/useVar";
+import NotificationBadge from "../../components/NotificationBadge";
 
 // IMPORTANT: This was moved from navbar since it was not running the buttons at the start.
 export default function ActionBtns({ location }) {
@@ -88,6 +90,38 @@ let PlanBadges = ({ history }) => {
     const { role } = useProfile();
     const { bizPlan } = useClientAdmin();
 
+    const { data } = useGetVar("orders_clientAdmin");
+    const { data: totalServs } = useGetVar("totalServices_clientAdmin");
+
+    const destiny = data ? "/pedidos/admin" : "/planos?cliente-admin=1";
+    const showUpdateBtn = () => (
+        <NotificationBadge
+            badgeValue={totalServs ? totalServs : 0}
+            badgeInvisible={false}
+            backgroundColor="var(--mainRed)"
+            borderColor="var(--mainWhite)"
+            top={-1}
+            right={30}
+            fontSize="15px"
+            padding="10px"
+        >
+            <div className="upgrade-btn position-relative">
+                <RadiusBtn
+                    title="atualizar"
+                    onClick={() => history.push(destiny)}
+                    backgroundColor="var(--mainYellow)"
+                    padding="5px 10px"
+                    fontSize="18px"
+                    color="black"
+                    needTxtShadow={false}
+                />
+                <div className="crown-icon position-absolute">
+                    <FontAwesomeIcon icon="crown" />
+                </div>
+            </div>
+        </NotificationBadge>
+    );
+
     return (
         <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-3s">
             <div className={`${bizPlan}`}>
@@ -99,20 +133,7 @@ let PlanBadges = ({ history }) => {
                 </span>
             </div>
             {bizPlan === "gratis" ? (
-                <div className="upgrade-btn position-relative">
-                    <RadiusBtn
-                        title="atualizar"
-                        onClick={() => history.push("/planos?cliente-admin=1")}
-                        backgroundColor="var(--mainYellow)"
-                        padding="5px 10px"
-                        fontSize="18px"
-                        color="black"
-                        needTxtShadow={false}
-                    />
-                    <div className="crown-icon position-absolute">
-                        <FontAwesomeIcon icon="crown" />
-                    </div>
-                </div>
+                <Fragment>{showUpdateBtn()}</Fragment>
             ) : (
                 <div className={`${bizPlan}-icon position-absolute`}>
                     <FontAwesomeIcon icon="crown" />

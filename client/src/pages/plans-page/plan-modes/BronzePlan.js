@@ -10,6 +10,7 @@ const getStyles = () => ({
         position: "fixed",
         top: 15,
         right: 15,
+        zIndex: 2000,
     },
 });
 
@@ -37,7 +38,8 @@ export default function BronzePlan({ setCurrPlan }) {
             {showPlanSwitchBtns()}
             <MainTitle customPlanTitle="Meu" plan="Bronze" planMsg={planMsg} />
             <PeriodSelection />
-            <TotalInvest />
+
+            <TotalInvest totalInvest={0} />
             <ContinueBtn />
         </section>
     );

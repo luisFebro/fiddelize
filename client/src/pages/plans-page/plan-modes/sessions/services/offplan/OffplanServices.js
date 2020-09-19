@@ -1,15 +1,121 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import CarouselCard from "../../../../../../components/carousels/CarouselCard";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import getServices from "../getServices";
 import OffplanBtn from "./offplan-btn/OffplanBtn";
+import CheckBoxForm from "../../../../../../components/CheckBoxForm";
+import convertToReal from "../../../../../../utils/numbers/convertToReal";
 
 const data = () => getServices("offplan");
 
-const CardList = ({ data }) => {
+const getStyles = () => ({
+    priceBadge: {
+        borderRadius: "30px",
+        padding: "4px 40px 4px 8px",
+        background: "var(--mainDark)",
+        color: "#fff",
+        textAlign: "center",
+        display: "table",
+        zIndex: 20,
+    },
+    discountBadge: {
+        right: 25,
+        borderRadius: "30px",
+        padding: "4px 8px",
+        backgroundColor: "var(--mainWhite)",
+        textAlign: "center",
+        display: "table",
+        zIndex: 30,
+    },
+    checkbox: {
+        top: -5,
+        right: -15,
+        zIndex: 10,
+    },
+});
+
+function getDiscount(normalPrice, options = {}) {
+    const { perc = 0.3 } = options;
+
+    const discount = perc * normalPrice;
+
+    let finalValue = normalPrice - discount;
+
+    return finalValue;
+}
+
+const getGroupServices = (selectedServices) => {
+    let groupServices = {};
+    let groupPrice = 0;
+    const map = selectedServices.forEach((each) => {
+        const servKey = Object.keys(each);
+        const currObj = each[servKey];
+
+        groupPrice += currObj ? currObj.price : 0;
+        groupServices = { ...groupServices, ...each };
+    });
+
+    return { groupPrice, groupServices };
+};
+
+const CardList = ({ data, handleNewOrder, period }) => {
+    const [currService, setCurrService] = useState("");
+    const [isChecked, setIsChecked] = useState(false);
+
+    const selectedServices = useRef(new Map()).current;
+    useEffect(() => {
+        if (!selectedServices.has(currService) && isChecked) {
+            const targetService = data().find(
+                (serv) => serv.title === currService
+            );
+
+            if (targetService) {
+                let servicePrice = targetService[period].price;
+                servicePrice = getDiscount(servicePrice);
+                const serviceObj = {
+                    amount: 1,
+                    price: servicePrice,
+                    isPreSale: servicePrice,
+                };
+
+                selectedServices.set(currService, {
+                    [currService]: serviceObj,
+                });
+
+                const { groupPrice, groupServices } = getGroupServices(
+                    selectedServices
+                );
+                handleNewOrder(currService, {
+                    orderGroup: groupServices,
+                    orderGroupPrice: groupPrice,
+                });
+            }
+        }
+    }, [isChecked, currService]);
+
+    const handleUncheck = (deleteThisServ) => {
+        setIsChecked(false);
+        selectedServices.delete(deleteThisServ); // deleteThisServ, { amount: 0, price: 0 }
+
+        handleNewOrder(currService, { removeOrderGroup: deleteThisServ }); // orderGroup: groupServices,
+    };
+
+    const handleCheck = (status, serviceName) => {
+        setIsChecked(status);
+        setCurrService(serviceName);
+    };
+
+    const styles = getStyles();
+
     return (
         <Fragment>
             {data().map((card) => {
+                const modalData = {
+                    title: card.title,
+                    img: card.img,
+                    callback: handleCheck,
+                };
+
                 const showImgDesc = () => (
                     <section className="my-2">
                         <img
@@ -24,6 +130,43 @@ const CardList = ({ data }) => {
                     </section>
                 );
 
+                const normalPrice = card[period].price;
+                const discountPrice = convertToReal(getDiscount(normalPrice));
+
+                const showPrice = () =>
+                    selectedServices.has(card.title) && (
+                        <section className="d-flex justify-content-center position-relative">
+                            <section
+                                className="position-absolute"
+                                style={styles.checkbox}
+                            >
+                                <CheckBoxForm
+                                    defaultState={isChecked && true}
+                                    data={card.title}
+                                    color="#a3ffa3" // light green
+                                    onClick={() => handleUncheck(card.title)}
+                                />
+                            </section>
+                            <div
+                                className="font-weight-bold text-normal"
+                                style={styles.priceBadge}
+                            >
+                                R$ {discountPrice}
+                            </div>
+                            <div
+                                className="position-relative"
+                                style={styles.discountBadge}
+                            >
+                                <span
+                                    className="font-weight-bold text-grey"
+                                    style={{ textDecoration: "line-through" }}
+                                >
+                                    R$ {normalPrice}
+                                </span>
+                            </div>
+                        </section>
+                    );
+
                 return (
                     <section
                         key={card.title}
@@ -33,9 +176,12 @@ const CardList = ({ data }) => {
                             {card.title}
                         </p>
                         {showImgDesc()}
-                        <section className="my-1 container-center">
-                            <OffplanBtn />
-                        </section>
+                        {showPrice()}
+                        {!selectedServices.has(card.title) && (
+                            <section className="my-1 container-center">
+                                <OffplanBtn modalData={modalData} />
+                            </section>
+                        )}
                     </section>
                 );
             })}
@@ -43,15 +189,20 @@ const CardList = ({ data }) => {
     );
 };
 
-export default function OffplanServices() {
-    const ThisCardList = <CardList data={data} />;
+export default function OffplanServices({ handleNewOrder, period }) {
+    const ThisCardList = (
+        <CardList data={data} period={period} handleNewOrder={handleNewOrder} />
+    );
 
     return (
-        <section className="position-relative theme-p" style={{ top: -160 }}>
+        <section
+            className="pb-2 position-relative theme-p"
+            style={{ top: -160 }}
+        >
             <h2 className="py-3 text-subtitle font-weight-bold text-white mx-3">
-                Próximas Novidades
+                Serviços em pré-venda
                 <span className="d-block text-normal">
-                    Seja os primeiros clientes a investir. Você ganha{" "}
+                    Seja um dos primeiros fiddelizadores a investir e ganhe{" "}
                     <strong>desconto de 30% fixo!</strong>
                 </span>
             </h2>

@@ -1,23 +1,45 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import isSmallScreen from '../../utils/isSmallScreen';
+import React from "react";
+import PropTypes from "prop-types";
+import isSmallScreen from "../../utils/isSmallScreen";
 // material-ui
-import TabSessions from '../../components/tabs/TabSessions';
+import TabSessions from "../../components/tabs/TabSessions";
 // Icons from Tabs
-import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
-import BuildIcon from '@material-ui/icons/Build';
-import ChatIcon from '@material-ui/icons/Chat';
-import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-import DashClients from './dash-clients';
-import LoadableVisible from '../../components/code-splitting/LoadableVisible';
+import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
+import BuildIcon from "@material-ui/icons/Build";
+import ChatIcon from "@material-ui/icons/Chat";
+import PhonelinkSetupIcon from "@material-ui/icons/PhonelinkSetup";
+import DashClients from "./dash-clients";
+import LoadableVisible from "../../components/code-splitting/LoadableVisible";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const AsyncAppDesign = LoadableVisible({ loader: () => import('./dash-app-design'  /* webpackChunkName: "cli-admin-app-design-session-lazy" */ )});
-const AsyncSMS = LoadableVisible({ loader: () => import('./dash-sms'  /* webpackChunkName: "cli-admin-sms-session-lazy" */ )});
-const AsyncDashSetting = LoadableVisible({ loader: () => import('./dash-setting'  /* webpackChunkName: "cli-admin-settings-session-lazy" */ )});
+const AsyncAppDesign = LoadableVisible({
+    loader: () =>
+        import(
+            "./dash-app-design" /* webpackChunkName: "cli-admin-app-design-session-lazy" */
+        ),
+});
+const AsyncSMS = LoadableVisible({
+    loader: () =>
+        import(
+            "./dash-sms" /* webpackChunkName: "cli-admin-sms-session-lazy" */
+        ),
+});
+const AsyncDashSetting = LoadableVisible({
+    loader: () =>
+        import(
+            "./dash-setting" /* webpackChunkName: "cli-admin-settings-session-lazy" */
+        ),
+});
+const AsyncPro = LoadableVisible({
+    loader: () =>
+        import(
+            "./dash-pro" /* webpackChunkName: "cli-admin-pro-session-lazy" */
+        ),
+});
 
 const muStyle = {
     fontSize: 35,
-}
+};
 
 const data = [
     {
@@ -38,22 +60,27 @@ const data = [
         boxPadding: 1,
     },
     {
+        tabLabel: "Pro",
+        tabIcon: (
+            <FontAwesomeIcon
+                icon="crown"
+                style={{ ...muStyle, fontSize: 30 }}
+            />
+        ),
+        tabContentPanel: <AsyncPro />,
+        boxPadding: 1,
+    },
+    {
         tabLabel: "Ajustes",
         tabIcon: <BuildIcon style={muStyle} />,
         tabContentPanel: <AsyncDashSetting />,
         boxPadding: 1,
     },
-]
+];
 
 export default function GroupedDashSessions() {
-    return (
-        <TabSessions
-            data={data}
-            needTabFullWidth={true}
-        />
-    );
+    return <TabSessions data={data} needTabFullWidth={false} />;
 }
-
 
 /* ARCHIVES
 import DashClients from './dash-clients';

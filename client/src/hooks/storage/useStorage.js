@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { setVar, getVar, store } from "./useVar";
 
 // Useful for actions which require only one action in the app like instructions and so on...
-export default function useOfflineData({
+export default function useStorage({
     key,
     value = true,
     trigger,
-    storeName = "once_checked",
+    storeName = "once_checked", // global_variables for everything else
 }) {
     const [storageData, setStorageData] = useState({
         data: null,

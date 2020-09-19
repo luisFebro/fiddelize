@@ -1,67 +1,101 @@
-import React, { Fragment } from 'react';
-import { Switch, Route, withRouter } from 'react-router-dom';
+import React, { Fragment } from "react";
+import { Switch, Route, withRouter } from "react-router-dom";
 
 //LAYOUT
-import Navbar from '../../components/_layout/navbar';
-import Footer from '../../components/_layout/footer/Footer';
+import Navbar from "../../components/_layout/navbar";
+import Footer from "../../components/_layout/footer/Footer";
 // END LAYOUT
 
 // COMPONENTS
-import SnackbarRedux from '../../components/Snackbar';
-import LinearProgress from '../../components/loadingIndicators/LinearProgress';
-import PrivateRouteAdm from '../../components/auth/routes/PrivateRouteAdm';
-import PrivateRouteClientAdm from '../../components/auth/routes/PrivateRouteClientAdm';
+import SnackbarRedux from "../../components/Snackbar";
+import LinearProgress from "../../components/loadingIndicators/LinearProgress";
+import PrivateRouteAdm from "../../components/auth/routes/PrivateRouteAdm";
+import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
 // PAGES
-import Home from '../../pages/home/Home';
-import LoginPage from '../../pages/auth/LoginPage';
-import Dashboard from '../../pages/dashboard-admin';
-import DashboardClientAdmin from '../../pages/dashboard-client-admin';
-import AsyncLoyaltyScoreHandler from '../../pages/client/loyalty-client-scores';
-import RegulationPage from '../../pages/RegulationPage';
-import AsyncDownloadApp from '../../pages/download-app/AsyncDownloadApp';
-import AsyncIntroPage from '../../pages/new-app';
-import AsyncPasswordPage from '../../pages/dashboard-client-admin/AsyncPasswordPage';
-import AsyncAppSharer from '../../pages/app-sharer/AsyncAppSharer';
-import AsyncSelfServicePage from '../../pages/new-app/self-service/AsyncSelfServicePage';
-import PlansPage from '../../pages/plans-page/PlansPage';
-import RedirectLink from '../../pages/RedirectLink';
-import ClientAppPreview from '../../pages/mobile-app/ClientAppPreview';
-import Default from '../../pages/Default';
-import UnavailableService from '../../pages/UnavailableService';
+import Home from "../../pages/home/Home";
+import LoginPage from "../../pages/auth/LoginPage";
+import Dashboard from "../../pages/dashboard-admin";
+import DashboardClientAdmin from "../../pages/dashboard-client-admin";
+import AsyncLoyaltyScoreHandler from "../../pages/client/loyalty-client-scores";
+import RegulationPage from "../../pages/RegulationPage";
+import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
+import AsyncIntroPage from "../../pages/new-app";
+import AsyncPasswordPage from "../../pages/dashboard-client-admin/AsyncPasswordPage";
+import AsyncAppSharer from "../../pages/app-sharer/AsyncAppSharer";
+import AsyncSelfServicePage from "../../pages/new-app/self-service/AsyncSelfServicePage";
+import PlansPage from "../../pages/plans-page/PlansPage";
+import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
+import RedirectLink from "../../pages/RedirectLink";
+import ClientAppPreview from "../../pages/mobile-app/ClientAppPreview";
+import Default from "../../pages/Default";
+import UnavailableService from "../../pages/UnavailableService";
 //END PAGES
 
 function Website({ location }) {
-
     const locationNow = location.pathname;
     const dontNeedLayout = !locationNow.includes("/mobile-app/preview");
 
     return (
         <Fragment>
             <LinearProgress />
-            {dontNeedLayout &&
-            <Navbar />}
+            {dontNeedLayout && <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/acesso/verificacao" exact component={LoginPage} />
-                <Route path="/cliente/pontos-fidelidade" exact component={AsyncLoyaltyScoreHandler} />
+                <Route
+                    path="/cliente/pontos-fidelidade"
+                    exact
+                    component={AsyncLoyaltyScoreHandler}
+                />
                 <Route path="/regulamento" exact component={RegulationPage} />
-                <Route path="/baixe-app/:userName" exact component={AsyncDownloadApp} />
+                <Route
+                    path="/baixe-app/:userName"
+                    exact
+                    component={AsyncDownloadApp}
+                />
                 <Route path="/baixe-app" exact component={AsyncDownloadApp} />
-                <Route path="/:bizCodeName/novo-app" exact component={AsyncIntroPage} />
-                <Route path="/:bizCodeName/novo-app/self-service/:bizId" exact component={AsyncSelfServicePage} />
-                <Route path="/:bizCodeName/nova-senha-verificacao" exact component={AsyncPasswordPage} />
-                <Route path="/:bizCodeName/compartilhar-app" exact component={AsyncAppSharer} />
+                <Route
+                    path="/:bizCodeName/novo-app"
+                    exact
+                    component={AsyncIntroPage}
+                />
+                <Route
+                    path="/:bizCodeName/novo-app/self-service/:bizId"
+                    exact
+                    component={AsyncSelfServicePage}
+                />
+                <Route
+                    path="/:bizCodeName/nova-senha-verificacao"
+                    exact
+                    component={AsyncPasswordPage}
+                />
+                <Route
+                    path="/:bizCodeName/compartilhar-app"
+                    exact
+                    component={AsyncAppSharer}
+                />
                 <Route path="/planos" exact component={PlansPage} />
-                <Route path="/mobile-app/preview" component={ClientAppPreview} />
+                <Route
+                    path="/mobile-app/preview"
+                    component={ClientAppPreview}
+                />
                 <Route path="/app/:nameAndCode" component={RedirectLink} />
-                <PrivateRouteClientAdm path="/:bizCodeName/cliente-admin/painel-de-controle" exact component={DashboardClientAdmin} />
+                <PrivateRouteClientAdm
+                    path="/:bizCodeName/cliente-admin/painel-de-controle"
+                    exact
+                    component={DashboardClientAdmin}
+                />
+                <Route
+                    path="/temporariamente-indisponivel-503"
+                    exact
+                    component={UnavailableService}
+                />
+                <Route path="/pedidos/admin" exact component={OrdersAndPay} />
                 <Route component={Default} />
-                <Route path="/temporariamente-indisponivel-503" exact component={UnavailableService} />
             </Switch>
             <SnackbarRedux />
-            {dontNeedLayout &&
-            <Footer />}
+            {dontNeedLayout && <Footer />}
         </Fragment>
     );
 }

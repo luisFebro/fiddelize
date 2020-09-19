@@ -1,4 +1,4 @@
-@import '../../functions/setContrastedColor';
+@import "../../functions/setContrastedColor";
 
 :root {
     /*purple 900*/
@@ -13,7 +13,7 @@
     --mainBlack: black;
     --mainWhite: #ecf0f1;
 
-        --mainFont: 'Poppins', sans-serif;
+    --mainFont: "Poppins", sans-serif;
     /*THEMING*/
     /*default*/
     --themeP--default: #4a148c;
@@ -49,7 +49,7 @@
     --themeP--white: #ecf0f1;
     --themePLight--white: #ecf0f1; /* prior: #ffffff */
     --themePDark--white: #808080;
-    --themeBackground--white: #cac5c5; /*prior: #babebe  */;
+    --themeBackground--white: #cac5c5; /*prior: #babebe  */
     /*blue*/
     --themeP--blue: #009ffd;
     --themePLight--blue: #68d0ff;
@@ -57,7 +57,7 @@
     --themeBackground--blue: #0071c9;
     /*green*/
     --themeP--green: #2ecc71;
-    --themePLight--green: #2ecc71 ; /* prior: #6effa0; */
+    --themePLight--green: #2ecc71; /* prior: #6effa0; */
     --themePDark--green: #006a18;
     --themeBackground--green: #009a44;
     /*brown*/
@@ -73,26 +73,70 @@
     /*END THEMING*/
 }
 /* THEMING */
-.theme-back--default { background-color: #4a148c; }
-.theme-back--pink { background-color: var(--themeBackground--pink); }
-.theme-back--red { background-color: var(--themeBackground--red); }
-.theme-back--purple { background-color: var(--themeBackground--purple); }
-.theme-back--orange { background-color: var(--themeBackground--orange); }
-.theme-back--black { background-color: var(--themeBackground--black); }
-.theme-back--white { background-color: var(--themeBackground--white); }
-.theme-back--blue { background-color: var(--themeBackground--blue); }
-.theme-back--green { background-color: var(--themeBackground--green); }
-.theme-back--brown { background-color: var(--themeBackground--brown); }
-.theme-back--yellow { background-color: var(--themeBackground--yellow); }
+.theme-back--default {
+    background-color: #4a148c;
+}
+.theme-back--pink {
+    background-color: var(--themeBackground--pink);
+}
+.theme-back--red {
+    background-color: var(--themeBackground--red);
+}
+.theme-back--purple {
+    background-color: var(--themeBackground--purple);
+}
+.theme-back--orange {
+    background-color: var(--themeBackground--orange);
+}
+.theme-back--black {
+    background-color: var(--themeBackground--black);
+}
+.theme-back--white {
+    background-color: var(--themeBackground--white);
+}
+.theme-back--blue {
+    background-color: var(--themeBackground--blue) !important;
+}
+.theme-back--green {
+    background-color: var(--themeBackground--green);
+}
+.theme-back--brown {
+    background-color: var(--themeBackground--brown);
+}
+.theme-back--yellow {
+    background-color: var(--themeBackground--yellow);
+}
 
-.txt-color--default { color: setContrastedColor(#4a148c); }
-.txt-color--pink { color: setContrastedColor(#b10065); }
-.txt-color--red { color: setContrastedColor(#ff4757); }
-.txt-color--purple { color: setContrastedColor(#4a148c); }
-.txt-color--orange { color: setContrastedColor(#c68400); }
-.txt-color--black { color: setContrastedColor(#232528); }
-.txt-color--white { color: setContrastedColor(#babebe); }
-.txt-color--blue { color: setContrastedColor(#0071c9); }
-.txt-color--green { color: setContrastedColor(#009a44); }
-.txt-color--brown { color: setContrastedColor(#4b2c20); }
-.txt-color--yellow { color: setContrastedColor(#c9bc1f); }
+.txt-color--default {
+    color: setContrastedColor(#4a148c);
+}
+.txt-color--pink {
+    color: setContrastedColor(#b10065);
+}
+.txt-color--red {
+    color: setContrastedColor(#ff4757);
+}
+.txt-color--purple {
+    color: setContrastedColor(#4a148c);
+}
+.txt-color--orange {
+    color: setContrastedColor(#c68400);
+}
+.txt-color--black {
+    color: setContrastedColor(#232528);
+}
+.txt-color--white {
+    color: setContrastedColor(#babebe);
+}
+.txt-color--blue {
+    color: setContrastedColor(#0071c9);
+}
+.txt-color--green {
+    color: setContrastedColor(#009a44);
+}
+.txt-color--brown {
+    color: setContrastedColor(#4b2c20);
+}
+.txt-color--yellow {
+    color: setContrastedColor(#c9bc1f);
+}

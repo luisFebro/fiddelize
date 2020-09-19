@@ -53,7 +53,9 @@ function Navbar({ history, location }) {
     const locationNow = location.pathname;
     const isClientAdmin = location.search.includes("client-admin=1");
     const isBlackList =
-        locationNow.includes("baixe-app") || locationNow.includes("planos");
+        locationNow.includes("baixe-app") ||
+        locationNow.includes("planos") ||
+        locationNow.includes("pedidos");
 
     const btnLogout = () => (
         <button

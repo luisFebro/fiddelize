@@ -1,138 +1,72 @@
 import React from "react";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const proVersion = (styles, FontAwesomeIcon) => [
+/*
+devGrade - development or difficulty grade from 10 to 20
+resGrade - Resource Comsumption grade from 10 to 20
+More in getProPrice
+ */
+const proVersion = (styles) => [
     {
-        gold: {
-            name: "3 apps (admin, <br />equipe e clientes)",
-            monthly: {
-                price: null,
-            },
-            yearly: {
-                price: null,
-            },
-        },
-        silver: {
-            name: "3 apps (admin, <br />equipe e clientes)",
-            monthly: {
-                price: null,
-            },
-            yearly: {
-                price: null,
-            },
-        },
-        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
-        proPage: "",
-    },
-    {
+        devGrade: 19,
+        resGrade: 15,
         gold: {
             name: "Opções de prêmios  <br />ilimitados",
-            monthly: {
-                price: null,
-            },
-            yearly: {
-                price: null,
-            },
         },
         silver: {
             name: "Opções de prêmios  <br />ilimitados",
-            monthly: {
-                price: null,
-            },
-            yearly: {
-                price: null,
-            },
         },
         Icon: <FontAwesomeIcon icon="trophy" style={styles.muStyle} />,
         proPage: "",
     },
     {
+        devGrade: 18,
+        resGrade: 18,
         gold: {
             name: "10.000 Novvos<br /> clientes",
-            monthly: {
-                price: 109,
-            },
-            yearly: {
-                price: 1090,
-            },
         },
         silver: {
-            name: "1.000 Novvos clientes",
-            monthly: {
-                price: 39,
-            },
-            yearly: {
-                price: 390,
-            },
+            name: "1.000 Novvos<br /> clientes",
         },
-        Icon: <PersonAddIcon style={styles.muStyle} />,
+        Icon: <GroupAddIcon style={styles.muStyle} />,
         proPage: "",
     },
     {
+        devGrade: 15,
+        resGrade: 15,
         gold: {
             name: "Jogos/Desafios  <br />ilimitados",
-            monthly: {
-                price: null,
-            },
-            yearly: {
-                price: null,
-            },
         },
         silver: {
             name: "Jogos/Desafios  <br />ilimitados",
-            monthly: {
-                price: null,
-            },
-            yearly: {
-                price: null,
-            },
         },
         Icon: <SportsEsportsIcon style={styles.muStyle} />,
         proPage: "",
     },
     {
+        devGrade: 16,
+        resGrade: 16,
         gold: {
             name: "Envvio Whatsapp",
-            monthly: {
-                price: 25,
-            },
-            yearly: {
-                price: 45,
-            },
         },
         silver: {
             name: "Envvio Whatsapp",
-            monthly: {
-                price: 10,
-            },
-            yearly: {
-                price: 24,
-            },
         },
         Icon: <WhatsAppIcon style={styles.muStyle} />,
         proPage: "EnvvioWhatsapp_2",
     },
     {
+        devGrade: 17,
+        resGrade: 16,
         gold: {
             name: "Orgganize Clientes",
-            monthly: {
-                price: 60,
-            },
-            yearly: {
-                price: 100,
-            },
         },
         silver: {
             name: "Orgganize Clientes",
-            monthly: {
-                price: 20,
-            },
-            yearly: {
-                price: 40,
-            },
         },
         Icon: (
             <FontAwesomeIcon
@@ -146,5 +80,31 @@ const proVersion = (styles, FontAwesomeIcon) => [
         proPage: "OrgganizeClients_1",
     },
 ];
+
+/*
+{
+    gold: {
+        name: "3 apps (admin, <br />equipe e clientes)",
+        resGrade: 15,
+        monthly: {
+            price: 10,
+        },
+        yearly: {
+            price: 10,
+        },
+    },
+    silver: {
+        name: "3 apps (admin, <br />equipe e clientes)",
+        monthly: {
+            price: 1,
+        },
+        yearly: {
+            price: 1,
+        },
+    },
+    Icon: <ImportantDevicesIcon style={styles.muStyle} />,
+    proPage: "",
+},
+ */
 
 export { proVersion };

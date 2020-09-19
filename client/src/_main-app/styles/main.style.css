@@ -1,16 +1,16 @@
 * {
-    box-sizing: inherit
+    box-sizing: inherit;
 }
 
 body,
 html {
     overflow-x: hidden;
-    overscroll-behavior-y: none
+    overscroll-behavior-y: none;
 }
 
 html {
     -ms-text-size-adjust: 100%;
-    height: 100%
+    height: 100%;
 }
 
 body {
@@ -25,34 +25,34 @@ body {
     user-select: none;
     width: 100%;
     overflow-x: hidden;
-    overscroll-behavior-y: none
+    overscroll-behavior-y: none;
 }
 
 figure {
-    margin: 1em 40px
+    margin: 1em 40px;
 }
 
 hr {
     font-size: 20px;
-    width: 250px
+    width: 250px;
 }
 
 pre {
     font-family: monospace, monospace;
-    font-size: 1em
+    font-size: 1em;
 }
 
 a {
-    -webkit-text-decoration-skip: objects
+    -webkit-text-decoration-skip: objects;
 }
 
 code {
     font-family: monospace, monospace;
-    font-size: 1em
+    font-size: 1em;
 }
 
 button {
-    border: 2 outset #fff !important
+    border: 2 outset #fff !important;
 }
 
 :root {
@@ -75,65 +75,65 @@ button {
     --mainPurple: #4a148c;
     --lightPurple: #7c43bd;
     --mainCyan: #00b2cc;
-    --mainCyanLight: #00e5ff
+    --mainCyanLight: #00e5ff;
 }
 
 .text-red {
     color: #ed213a;
-    color: var(--mainRed)
+    color: var(--mainRed);
 }
 
 .text-yellow {
     color: #ffee58;
-    color: var(--mainYellow)
+    color: var(--mainYellow);
 }
 
 .text-blue {
     color: #2a2a72;
-    color: var(--mainBlue)
+    color: var(--mainBlue);
 }
 
 .text-purple {
     color: #4a148c;
-    color: var(--mainPurple)
+    color: var(--mainPurple);
 }
 
 .text-sys-green {
-    color: green
+    color: green;
 }
 
 .text-grey {
-    color: grey
+    color: grey !important;
 }
 
 .text-cyan-light {
     color: #00e5ff;
-    color: var(--mainCyanLight)
+    color: var(--mainCyanLight);
 }
 
 .theme-p-dark {
     background-color: #12005e;
-    background-color: var(--themePDark)
+    background-color: var(--themePDark);
 }
 
 .text-p {
     color: #4a148c;
-    color: var(--themeP)
+    color: var(--themeP);
 }
 
 .text-s {
     color: #00e5ff;
-    color: var(--themeS)
+    color: var(--themeS);
 }
 
 .text-white {
     color: #ecf0f1;
-    color: var(--mainWhite)
+    color: var(--mainWhite);
 }
 
 .text-black {
     color: #000;
-    color: var(--mainBlack)
+    color: var(--mainBlack);
 }
 
 :root {
@@ -224,350 +224,355 @@ button {
     --themeSDark--brown: #4b2c20;
     --themeS--yellow: #ffee58;
     --themeSLight--yellow: #ffff8b;
-    --themeSDark--yellow: #c9bc1f
+    --themeSDark--yellow: #c9bc1f;
 }
 
 .text-align {
     text-align: left;
-    margin: 20px
+    margin: 20px;
 }
 
-@media screen and (min-width:780px) {
+@media screen and (min-width: 780px) {
     .text-align {
         text-align: justify;
         word-spacing: -2px;
-        margin: 50px
+        margin: 50px;
     }
 }
 
 .text-border-black {
-    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 
 .text-shadow {
-    text-shadow: 1px 1px 3px #000
+    text-shadow: 1px 1px 3px #000;
 }
 
 .no-text-shadow {
-    text-shadow: none
+    text-shadow: none;
 }
 
 .text-shadow-white {
-    text-shadow: 1px 1px 3px #fff
+    text-shadow: 1px 1px 3px #fff;
 }
 
 .no-text-decoration,
 .text-decoration-none {
-    text-decoration: none
+    text-decoration: none;
 }
 
 .text-em-0-7 {
-    font-size: .7em
+    font-size: 0.7em;
 }
 
 .text-em-1 {
-    font-size: 1em
+    font-size: 1em;
 }
 
 .text-em-1-3 {
-    font-size: 1.3em
+    font-size: 1.3em;
 }
 
 .text-em-1-4 {
-    font-size: 1.4em
+    font-size: 1.4em;
 }
 
 .text-em-1-5 {
-    font-size: 1.5em
+    font-size: 1.5em;
 }
 
 .text-em-1-9 {
-    font-size: 1.9em
+    font-size: 1.9em;
 }
 
 .text-em-2 {
-    font-size: 2em
+    font-size: 2em;
 }
 
 .text-em-2-5 {
-    font-size: 2.5em
+    font-size: 2.5em;
 }
 
 .main-font {
-    font-family: "Poppins", sans-serif
+    font-family: "Poppins", sans-serif;
 }
 
 .text-hero {
     font: normal 60px "Poppins", sans-serif;
-    letter-spacing: .01em;
-    line-height: 1.2em
+    letter-spacing: 0.01em;
+    line-height: 1.2em;
 }
 
 .text-title {
     font: bolder 30px "Poppins", sans-serif;
-    letter-spacing: .01em
+    letter-spacing: 0.01em;
 }
 
 .text-subtitle {
     font: normal 25px "Poppins", sans-serif;
-    letter-spacing: .01em
+    letter-spacing: 0.01em;
 }
 
 .text-normal {
     font: normal 20px "Poppins", sans-serif;
-    letter-spacing: .01em
+    letter-spacing: 0.01em;
 }
 
 .text-small {
     font: normal 14px "Poppins", sans-serif;
-    letter-spacing: .01em
+    letter-spacing: 0.01em;
 }
 
-@media screen and (min-width:320px) {
+@media screen and (min-width: 320px) {
     .text-hero {
-        font: normal calc(60px + 30*(100vw - 300px)/700), "Poppins", sans-serif;
-        letter-spacing: .01em;
-        line-height: 1.2em
+        font: normal calc(60px + 30 * (100vw - 300px) / 700), "Poppins",
+            sans-serif;
+        letter-spacing: 0.01em;
+        line-height: 1.2em;
     }
     .text-title {
-        font: bolder calc(30px + 15*(100vw - 300px)/700), "Poppins", sans-serif;
-        letter-spacing: .01em
+        font: bolder calc(30px + 15 * (100vw - 300px) / 700), "Poppins",
+            sans-serif;
+        letter-spacing: 0.01em;
     }
     .text-subtitle {
-        font: normal calc(25px + 5*(100vw - 300px)/700), "Poppins", sans-serif;
-        letter-spacing: .01em
+        font: normal calc(25px + 5 * (100vw - 300px) / 700), "Poppins",
+            sans-serif;
+        letter-spacing: 0.01em;
     }
     .text-normal {
-        font: normal calc(20px + 6*(100vw - 300px)/700), "Poppins", sans-serif;
-        letter-spacing: .01em
+        font: normal calc(20px + 6 * (100vw - 300px) / 700), "Poppins",
+            sans-serif;
+        letter-spacing: 0.01em;
     }
     .text-small {
-        font: normal calc(14px + 2*(100vw - 300px)/700), "Poppins", sans-serif;
-        letter-spacing: .01em
+        font: normal calc(14px + 2 * (100vw - 300px) / 700), "Poppins",
+            sans-serif;
+        letter-spacing: 0.01em;
     }
 }
 
-@media screen and (min-width:1000px) {
+@media screen and (min-width: 1000px) {
     .text-hero {
         font: normal 90px "Poppins", sans-serif;
-        letter-spacing: .01em;
-        line-height: 1.2em
+        letter-spacing: 0.01em;
+        line-height: 1.2em;
     }
     .text-title {
         font: bolder 45px "Poppins", sans-serif;
-        letter-spacing: .01em
+        letter-spacing: 0.01em;
     }
     .text-subtitle {
         font: normal 30px "Poppins", sans-serif;
-        letter-spacing: .01em
+        letter-spacing: 0.01em;
     }
     .text-normal {
         font: normal 26px "Poppins", sans-serif;
-        letter-spacing: .01em
+        letter-spacing: 0.01em;
     }
     .text-small {
         font: normal 16px "Poppins", sans-serif;
-        letter-spacing: .01em
+        letter-spacing: 0.01em;
     }
 }
 
 .container-center {
-    flex-flow: row wrap
+    flex-flow: row wrap;
 }
 
 .container-center,
 .container-center-col {
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
 }
 
 .container-center-col {
-    flex-flow: column wrap
+    flex-flow: column wrap;
 }
 
 .item-align-center {
     display: flex;
-    align-items: center
+    align-items: center;
 }
 
 .margin-auto-95 {
     margin: auto;
-    width: 95%
+    width: 95%;
 }
 
 .margin-auto-90 {
     margin: 0 20px;
-    width: 90%
+    width: 90%;
 }
 
 .margin-auto-80 {
     margin: auto;
-    width: 80%
+    width: 80%;
 }
 
 .center-to-img {
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
 }
 
-@media screen and (min-width:600px) {
+@media screen and (min-width: 600px) {
     .margin-auto-90 {
         margin: auto;
-        width: 90%
+        width: 90%;
     }
 }
 
 .image-center {
     max-width: 80%;
-    height: auto
+    height: auto;
 }
 
 .image-apresentation {
     width: 100%;
-    height: auto
+    height: auto;
 }
 
 .full-height {
     height: 20em;
-    height: 100vh
+    height: 100vh;
 }
 
-@media screen and (min-width:768px) {
+@media screen and (min-width: 768px) {
     .image-center {
-        max-width: 60%
+        max-width: 60%;
     }
     .image-apresentation {
         width: "200px";
-        height: "100px"
+        height: "100px";
     }
 }
 
 .c-pointer,
 .cursor-pointer {
-    cursor: pointer
+    cursor: pointer;
 }
 
 .no-outline:focus,
 .no-outline:hover {
-    outline: none
+    outline: none;
 }
 
 .disabled-link,
 .disabledLink {
-    pointer-events: none
+    pointer-events: none;
 }
 
 .enabledLink {
-    pointer-events: auto
+    pointer-events: auto;
 }
 
 .user-select-text {
     -webkit-user-select: text;
     -moz-user-select: text;
     -ms-user-select: text;
-    user-select: text
+    user-select: text;
 }
 
 .float-it-5 {
     -webkit-animation: floatit 1s linear 0s 5;
     animation: floatit 1s linear 0s 5;
-    -webkit-filter: drop-shadow(.001em .1em .1em #232528);
-    filter: drop-shadow(.001em .1em .1em #232528);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainDark));
-    filter: drop-shadow(.001em .1em .1em var(--mainDark))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 }
 
 @keyframes floatit {
     0% {
         -webkit-transform: translateY(0);
-        transform: translateY(0)
+        transform: translateY(0);
     }
     50% {
-        -webkit-transform: translateY(.55em);
-        transform: translateY(.55em)
+        -webkit-transform: translateY(0.55em);
+        transform: translateY(0.55em);
     }
     to {
         -webkit-transform: translateY(0);
-        transform: translateY(0)
+        transform: translateY(0);
     }
 }
 
 .shake-it:hover {
-    -webkit-animation: shake .82s cubic-bezier(.36, .07, .19, .97) both;
-    animation: shake .82s cubic-bezier(.36, .07, .19, .97) both;
+    -webkit-animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    cursor: pointer
+    cursor: pointer;
 }
 
 @keyframes shake {
     10%,
     90% {
         -webkit-transform: translate3d(-1px, 0, 0);
-        transform: translate3d(-1px, 0, 0)
+        transform: translate3d(-1px, 0, 0);
     }
     20%,
     80% {
         -webkit-transform: translate3d(2px, 0, 0);
-        transform: translate3d(2px, 0, 0)
+        transform: translate3d(2px, 0, 0);
     }
     30%,
     50%,
     70% {
         -webkit-transform: translate3d(-4px, 0, 0);
-        transform: translate3d(-4px, 0, 0)
+        transform: translate3d(-4px, 0, 0);
     }
     40%,
     60% {
         -webkit-transform: translate3d(4px, 0, 0);
-        transform: translate3d(4px, 0, 0)
+        transform: translate3d(4px, 0, 0);
     }
 }
 
 .pulse-it {
     -webkit-animation: pulseit 1s linear 0s infinite;
     animation: pulseit 1s linear 0s infinite;
-    -webkit-filter: drop-shadow(.001em .1em .1em #232528);
-    filter: drop-shadow(.001em .1em .1em #232528);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainDark));
-    filter: drop-shadow(.001em .1em .1em var(--mainDark))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 }
 
 @keyframes pulseit {
     0% {
         -webkit-transform: scale(1);
-        transform: scale(1)
+        transform: scale(1);
     }
     30% {
         -webkit-transform: scale(1);
-        transform: scale(1)
+        transform: scale(1);
     }
     40% {
         -webkit-transform: scale(1.21);
-        transform: scale(1.21)
+        transform: scale(1.21);
     }
     50% {
         -webkit-transform: scale(1);
-        transform: scale(1)
+        transform: scale(1);
     }
     60% {
         -webkit-transform: scale(1);
-        transform: scale(1)
+        transform: scale(1);
     }
     70% {
         -webkit-transform: scale(1.18);
-        transform: scale(1.18)
+        transform: scale(1.18);
     }
     80% {
         -webkit-transform: scale(1);
-        transform: scale(1)
+        transform: scale(1);
     }
     to {
         -webkit-transform: scale(1);
-        transform: scale(1)
+        transform: scale(1);
     }
 }
 
@@ -576,7 +581,7 @@ button {
     top: 1px;
     left: 1px;
     border-color: #e5e5e5;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .zoom-it:active,
@@ -584,16 +589,16 @@ button {
     z-index: 3000;
     outline: none;
     border: none;
-    transition: -webkit-transform .5s;
-    transition: transform .5s;
-    transition: transform .5s, -webkit-transform .5s;
+    transition: -webkit-transform 0.5s;
+    transition: transform 0.5s;
+    transition: transform 0.5s, -webkit-transform 0.5s;
     -webkit-transform: scale(1.3);
-    transform: scale(1.3)
+    transform: scale(1.3);
 }
 
 ::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 9px
+    width: 9px;
 }
 
 .blur-back {
@@ -604,73 +609,73 @@ button {
     bottom: 0;
     z-index: 2000;
     -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px)
+    backdrop-filter: blur(4px);
 }
 
 .disable-blur {
     -webkit-filter: none;
     filter: none;
-    z-index: 3000
+    z-index: 3000;
 }
 
 .shadow-elevation-white {
-    -webkit-filter: drop-shadow(.001em .1em .1em #ecf0f1);
-    filter: drop-shadow(.001em .1em .1em #ecf0f1);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainWhite));
-    filter: drop-shadow(.001em .1em .1em var(--mainWhite))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #ecf0f1);
+    filter: drop-shadow(0.001em 0.1em 0.1em #ecf0f1);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainWhite));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainWhite));
 }
 
 .shadow-elevation-black {
-    -webkit-filter: drop-shadow(.001em .001em .15em #232528);
-    filter: drop-shadow(.001em .001em .15em #232528);
-    -webkit-filter: drop-shadow(.001em .001em .15em var(--mainDark));
-    filter: drop-shadow(.001em .001em .15em var(--mainDark))
+    -webkit-filter: drop-shadow(0.001em 0.001em 0.15em #232528);
+    filter: drop-shadow(0.001em 0.001em 0.15em #232528);
+    -webkit-filter: drop-shadow(0.001em 0.001em 0.15em var(--mainDark));
+    filter: drop-shadow(0.001em 0.001em 0.15em var(--mainDark));
 }
 
 .shadow-elevation {
-    box-shadow: 0 31px 120px -6px rgba(0, 0, 0, .35)
+    box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
 }
 
 .icon-shadow {
-    -webkit-filter: drop-shadow(.5px .5px 1.5px #000);
-    filter: drop-shadow(.5px .5px 1.5px black)
+    -webkit-filter: drop-shadow(0.5px 0.5px 1.5px #000);
+    filter: drop-shadow(0.5px 0.5px 1.5px black);
 }
 
 .card-elevation,
 .shape-elevation,
 .svg-elevation {
-    -webkit-filter: drop-shadow(.001em .1em .1em #232528);
-    filter: drop-shadow(.001em .1em .1em #232528);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainDark));
-    filter: drop-shadow(.001em .1em .1em var(--mainDark))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 }
 
 .shadow-elevation-soft {
-    box-shadow: 0 14px 34px rgba(0, 0, 0, .2), 0 10px 8px rgba(0, 0, 0, .12)
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2), 0 10px 8px rgba(0, 0, 0, 0.12);
 }
 
 .main-letters-shadow,
 .tranparent-img-shadow {
     font-size: 1.9rem;
-    -webkit-filter: drop-shadow(.001em .1em .1em #232528);
-    filter: drop-shadow(.001em .1em .1em #232528);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainDark));
-    filter: drop-shadow(.001em .1em .1em var(--mainDark))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 }
 
 .main-letters-shadow:hover {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
-    -webkit-filter: drop-shadow(.001em .1em .1em #ffee58);
-    filter: drop-shadow(.001em .1em .1em #ffee58);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainYellow));
-    filter: drop-shadow(.001em .1em .1em var(--mainYellow))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #ffee58);
+    filter: drop-shadow(0.001em 0.1em 0.1em #ffee58);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainYellow));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainYellow));
 }
 
 .icon-mu,
 .icon-svg {
     -webkit-transform: scale(2);
-    transform: scale(2)
+    transform: scale(2);
 }
 
 .icon-default {
@@ -678,52 +683,52 @@ button {
     color: var(--mainWhite);
     cursor: pointer;
     font-size: 2.1rem;
-    -webkit-filter: drop-shadow(.001em .1em .1em #232528);
-    filter: drop-shadow(.001em .1em .1em #232528);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainDark));
-    filter: drop-shadow(.001em .1em .1em var(--mainDark))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    filter: drop-shadow(0.001em 0.1em 0.1em #232528);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 }
 
 .icon-default:hover {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
-    -webkit-filter: drop-shadow(.001em .1em .1em #ffee58);
-    filter: drop-shadow(.001em .1em .1em #ffee58);
-    -webkit-filter: drop-shadow(.001em .1em .1em var(--mainYellow));
-    filter: drop-shadow(.001em .1em .1em var(--mainYellow))
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em #ffee58);
+    filter: drop-shadow(0.001em 0.1em 0.1em #ffee58);
+    -webkit-filter: drop-shadow(0.001em 0.1em 0.1em var(--mainYellow));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainYellow));
 }
 
 .btn {
-    text-decoration: none
+    text-decoration: none;
 }
 
 .btn:hover {
-    opacity: .8
+    opacity: 0.8;
 }
 
 .btn-icon {
     width: 15px;
-    display: inline-block
+    display: inline-block;
 }
 
 .btn-icon,
 .btn-txt {
-    vertical-align: middle
+    vertical-align: middle;
 }
 
 .btn-txt {
     color: #ecf0f1;
     color: var(--mainWhite);
-    padding-left: 10px
+    padding-left: 10px;
 }
 
 .login-btn {
     width: 95%;
     margin: auto;
-    border-radius: 3px
+    border-radius: 3px;
 }
 
 .anima-iteration-2 {
     -webkit-animation-iteration-count: 2;
-    animation-iteration-count: 2
+    animation-iteration-count: 2;
 }

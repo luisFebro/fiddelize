@@ -67,7 +67,7 @@ export const setVar = (obj, options = {}) => {
 
     return variablesStore(storeName)
         .setItem(key, value)
-        .then((res) => console.log(`key ${key} was set in local DB`))
+        .then((res) => null) // console.log(`key ${key} was set in local DB`)
         .catch((err) =>
             console.log(`the was an error setting key ${key}. Details: ${err}`)
         );

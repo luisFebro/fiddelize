@@ -1,15 +1,61 @@
 import React from "react";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
+import ListAltIcon from "@material-ui/icons/ListAlt";
+import LocalMallIcon from "@material-ui/icons/LocalMall";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { proVersion } from "./proVersion";
+import getProPrice from "../../../../../utils/biz/getProPrice";
 
 const freeVersion = (styles) => [
     {
+        name: "Convites de <br />cadastro com sua logo",
+        Icon: <MailOutlineIcon style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
+        name: "Sistema de entrega<br />de prêmios",
+        Icon: <ListAltIcon style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
+        name: "Histórico Automático de <br />compras ilimitados",
+        Icon: <LocalMallIcon style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
         name: "App cliente<br />personalizável completo",
         Icon: <FontAwesomeIcon icon="magic" style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
+        name: "Pódio Fidelidade",
+        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
+        name: "Atendimento com seu <br />negócio via Whatsapp",
+        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
+        name: "Gerador/Editor de regulamento e senha",
+        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
         greyedout: false,
@@ -19,7 +65,7 @@ const freeVersion = (styles) => [
         Icon: <ImportantDevicesIcon style={styles.muStyleGrey} />,
         price: null,
         proPage: "",
-        greyedout: true,
+        greyedout: false,
     },
     {
         name: "3 opções de prêmios",
@@ -30,7 +76,7 @@ const freeVersion = (styles) => [
     },
     {
         name: "10 Novvos clientes",
-        Icon: <PersonAddIcon style={styles.muStyleGrey} />,
+        Icon: <GroupAddIcon style={styles.muStyleGrey} />,
         price: null,
         proPage: "",
         greyedout: true,
@@ -42,8 +88,12 @@ const offplanVersion = () => [
         title: "Coppia Segurança",
         img: "/img/pro-features/coppia-seguranca/coppia-seguranca.svg",
         desc: "Baixe os cadastros dos seus clientes para Excel",
-        normalPrice: 25,
-        discountPrice: 15,
+        monthly: {
+            price: 15,
+        },
+        yearly: {
+            price: 35,
+        },
         isPerPackage: false,
     },
     {
@@ -51,8 +101,12 @@ const offplanVersion = () => [
         img: "/img/pro-features/sattisfacao-clientes/sattisfacao-clientes.svg",
         desc:
             "Use uma métrica eficaz para pesquisa de satisfação dos clientes.", // "Use uma métrica aprovada pelas melhores empresas para medir a satisfação dos seus clientes",
-        normalPrice: 0,
-        discountPrice: 0,
+        monthly: {
+            price: 25,
+        },
+        yearly: {
+            price: 45,
+        },
         isPerPackage: true,
     },
     {
@@ -60,26 +114,49 @@ const offplanVersion = () => [
         img: "/img/pro-features/eqquipe-kit/eqquipe.svg",
         desc:
             "Um app de fidelidade intuitivo pensado na eficácia do trabalho dos seus colaboradores.",
-        normalPrice: 0,
-        discountPrice: 0,
+        monthly: {
+            price: 45,
+        },
+        yearly: {
+            price: 85,
+        },
         isPerPackage: false,
     },
 ];
 
+const styles = {
+    muStyle: {
+        transform: "scale(1.5)",
+        marginRight: "10px",
+        color: "var(--themeP)",
+    },
+    muStyleGrey: {
+        transform: "scale(1.5)",
+        marginRight: "10px",
+        color: "grey",
+    },
+};
+
 export default function getServices(version = "gratis", options = {}) {
-    const { styles, total = false, period, plan } = options;
+    const { total = false, period, plan } = options;
 
     if (total && (plan === "gold" || plan === "silver")) {
-        const totalInvestPro = proVersion(styles).reduce(
-            (acc, next) => acc + next[plan][period].price,
-            0
-        );
+        let newAmount = 0;
+        const newTotal = proVersion(styles).reduce((acc, next) => {
+            const thisPrice = getProPrice(next.devGrade, next.resGrade, {
+                plan,
+                period,
+            });
+            if (thisPrice) newAmount++;
 
-        return totalInvestPro;
+            return acc + thisPrice;
+        }, 0);
+
+        return { newAmount, newTotal };
     }
 
     if (version === "gratis") return freeVersion(styles);
-    if (version === "pro") return proVersion(styles, FontAwesomeIcon);
+    if (version === "pro") return proVersion(styles);
     //discountPerc: 30%
     if (version === "offplan") return offplanVersion();
 }

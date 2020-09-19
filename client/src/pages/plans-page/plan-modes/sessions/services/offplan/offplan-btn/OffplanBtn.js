@@ -19,7 +19,7 @@ const getStyles = (props) => ({
     },
 });
 
-export default function PurchaseHistoryBtn({
+export default function OffplanBtn({
     colorS = "white",
     right,
     bottom,

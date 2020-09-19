@@ -10,8 +10,12 @@ const getStyles = () => ({
     credits: { top: isSmall ? "50px" : "70px", right: "0px" },
 });
 
-export default function AddSMS({ smsNewBalance = 1200 }) {
-    const addedSMS = convertToReal(smsNewBalance);
+export default function AddSMS({
+    smsOrder = { amount: 0, price: 0 },
+    handleNewOrder,
+}) {
+    const addedSMS = convertToReal(smsOrder.amount);
+    const smsPrice = convertToReal(smsOrder.price, { moneySign: true });
 
     const styles = getStyles();
 
@@ -36,7 +40,14 @@ export default function AddSMS({ smsNewBalance = 1200 }) {
                         créditos
                     </p>
                 </div>
-                <AddSMSBtn />
+                <p className="ml-5 mt-3 text-center text-subtitle font-weight-bold text-purple">
+                    {smsPrice}
+                </p>
+                <AddSMSBtn
+                    btnTitle={smsOrder.amount ? "Alterar" : "Adicionar"}
+                    handleNewOrder={handleNewOrder}
+                    smsOrder={smsOrder}
+                />
             </div>
         </section>
     );

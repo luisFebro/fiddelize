@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import uuidv1 from "uuid/v1";
+
+const getStatusWithId = (bool) => `${bool}_${uuidv1()}`;
 
 export default function CheckBoxForm({
     text,
     setIsBoxChecked,
     defaultState = false,
+    data = "",
     callback,
     position,
     margin,
     txtFontweight,
+    onClick,
+    needId = false,
+    color,
 }) {
     const [isChecked, setIsChecked] = useState(false);
 
@@ -17,9 +24,12 @@ export default function CheckBoxForm({
         if (defaultState) setIsChecked(defaultState);
     }, [defaultState]);
 
+    const embededData = useRef(data).current;
+
     useEffect(() => {
-        setIsBoxChecked && setIsBoxChecked(isChecked);
-        callback && callback(isChecked);
+        const thisIsChecked = needId ? getStatusWithId(isChecked) : isChecked;
+        setIsBoxChecked && setIsBoxChecked(thisIsChecked, embededData);
+        callback && callback();
     }, [isChecked]);
 
     const handleChange = (event) => {
@@ -48,9 +58,11 @@ export default function CheckBoxForm({
                 className={position ? "" : "ml-2"}
                 control={
                     <Checkbox
-                        checked={isChecked}
+                        checked={Boolean(isChecked)}
+                        onClick={onClick}
                         onChange={() => handleChange()}
                         color="primary"
+                        style={{ color: color ? color : undefined }}
                     />
                 }
                 label={showText()}
