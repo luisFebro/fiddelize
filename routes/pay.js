@@ -1,20 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
-const { checkout, transparentCheckout } = require("../controllers/pay");
+const { checkout, init, transactions } = require("../controllers/pay");
 
 const { mwIsAuth } = require("../controllers/auth");
 
 const { mwUserId } = require("../controllers/user");
 
 // @ routes api/pay/...
-router.get("/transactions/history", mwIsAuth, checkout.readHistory);
-router.get("/transactions/read-one", mwIsAuth, checkout.readTransaction);
-router.post("/checkout", mwIsAuth, checkout.createCode);
-router.post("/transactions/refunds", mwIsAuth, checkout.refundTransaction);
-router.post("/transactions/cancels", mwIsAuth, checkout.cancelTransaction);
+router.post("/transparent-checkout/code", init.createTransparentCode);
+router.post("/default-checkout/code", init.createDefaultCode);
+router.get("/transactions/history", mwIsAuth, transactions.readHistory);
+router.get("/transactions/read-one", mwIsAuth, transactions.readTransaction);
+router.post("/transactions/refunds", mwIsAuth, transactions.refundTransaction);
+router.post("/transactions/cancels", mwIsAuth, transactions.cancelTransaction);
 // transparent Checkout - full control
-router.post("/sessions", mwIsAuth, transparentCheckout.createSessionCode);
 
 // router.param("userId", mwUserId);
 

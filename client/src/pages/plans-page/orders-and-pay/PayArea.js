@@ -7,8 +7,14 @@ import { setRun } from "../../../redux/actions/globalActions";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import { getVar } from "../../../hooks/storage/useVar";
 import { getServiceSKU } from "../../../utils/string/getSKU";
+import useAPI, { createDefaultCode } from "../../../hooks/api/useAPI";
 
-export default function PayArea({ handleCancel, plan }) {
+const sandboxMode = true;
+const payUrl = sandboxMode
+    ? "https://stc.sandbox.pagseguro.uol.com.br"
+    : "https://stc.pagseguro.uol.com.br";
+
+export default function PayArea({ handleCancel, plan, servicesTotal = 135 }) {
     const [data, setData] = useState({
         SKU: "",
     });
@@ -18,6 +24,21 @@ export default function PayArea({ handleCancel, plan }) {
     const dispatch = useStoreDispatch();
 
     const { bizCodeName } = useClientAdmin();
+
+    const params = {
+        reference: SKU,
+        itemId1: SKU,
+        itemDescription1: `Plano ${plan} com ${servicesTotal} serviços`,
+        itemAmount1: servicesTotal.toFixed(2).toString(),
+    };
+
+    const { data: authPayCode } = useAPI({
+        method: "post",
+        url: createDefaultCode(),
+        params,
+        trigger: SKU,
+    });
+    console.log("authPayCode", authPayCode);
 
     useEffect(() => {
         getVar("totalServices_clientAdmin").then((totalServ) => {
@@ -31,8 +52,7 @@ export default function PayArea({ handleCancel, plan }) {
         const script = document.createElement("script");
 
         script.type = "text/javascript";
-        script.src =
-            "https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js";
+        script.src = `${payUrl}/pagseguro/api/v2/checkout/pagseguro.lightbox.js`;
         script.async = true;
 
         document.body.appendChild(script);
@@ -70,7 +90,7 @@ export default function PayArea({ handleCancel, plan }) {
 
                         window.PagSeguroLightbox(
                             {
-                                code: "98E216BBC9C9EBDFF45CBF8D02377ACF",
+                                code: authPayCode,
                             },
                             callbacks
                         );

@@ -1,5 +1,5 @@
-const checkout = require("./checkout");
-const transparentCheckout = require("./transparentCheckout");
+const init = require("./init");
+const transactions = require("./transactions");
 /* NOTAS
 1.
 Comprador Teste:
@@ -22,8 +22,8 @@ Bandeiras: MasterCard (Crédito e Débito); VISA (Crédito e Débito); ELO (Cré
 */
 
 module.exports = {
-    checkout,
-    transparentCheckout,
+    init,
+    transactions,
 };
 
 // exports.generateBoleto = (req, res) => {
