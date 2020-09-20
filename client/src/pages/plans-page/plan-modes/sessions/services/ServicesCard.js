@@ -13,7 +13,7 @@ const getStyles = () => ({
     card: {
         margin: "auto",
         width: "95%",
-        maxWidth: isSmall ? "" : 320,
+        maxWidth: isSmall ? "" : 450,
         top: -190,
     },
     freeTitle: {

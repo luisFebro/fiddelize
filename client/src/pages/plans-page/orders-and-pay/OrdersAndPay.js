@@ -73,7 +73,7 @@ export default function OrdersAndPay({
                 setNextPage={setNextPage}
                 handleCancel={handleCancel}
             />
-            <PayArea handleCancel={handleCancel} />
+            <PayArea plan={plan} handleCancel={handleCancel} />
         </section>
     );
 }

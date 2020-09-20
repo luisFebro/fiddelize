@@ -4,9 +4,11 @@ import removeDiacritics from "./removeDiacritics";
 
 // code exemple: GO-Q3-1F3C2DEW (plano-quantidade-id)
 const getPlan = (plan) => {
-    if (plan === "gold") return "GO";
-    if (plan === "silver") return "SI";
-    if (plan === "bronze") return "BR";
+    if (typeof plan !== "string") return;
+
+    if (plan.toLowerCase() === "ouro") return "GO";
+    if (plan.toLowerCase() === "prata") return "PR";
+    if (plan.toLowerCase() === "bronze") return "BR";
 };
 
 const getQuantity = (total) => {
@@ -14,11 +16,11 @@ const getQuantity = (total) => {
 };
 
 const getServiceSKU = (options = {}) => {
-    const { plan = "gold", serviceTotal = 6 } = options;
+    const { plan = "gold", total = 0 } = options;
 
     const SKU = [
         getPlan(plan),
-        getQuantity(serviceTotal),
+        getQuantity(total),
         generateAlphaNumeric(7, "A#"),
     ];
     return SKU.join("-");

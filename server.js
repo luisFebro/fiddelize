@@ -1,13 +1,13 @@
-const express = require('express');
-const formData = require('express-form-data');
-const path = require('path');
-const cors = require('cors');
-const mongoose = require('mongoose');
+const express = require("express");
+const formData = require("express-form-data");
+const path = require("path");
+const cors = require("cors");
+const mongoose = require("mongoose");
 const helmet = require("helmet");
-const sslRedirect = require('heroku-ssl-redirect');
-const compression = require('compression');
-require('dotenv').config(); // n4
-require('./utils/globalHelpers');
+const sslRedirect = require("heroku-ssl-redirect");
+const compression = require("compression");
+require("dotenv").config(); // n4
+require("./utils/globalHelpers");
 
 //Init Express
 const app = express();
@@ -19,8 +19,8 @@ app.use(helmet.hidePoweredBy());
 // compress all responses
 app.use(compression());
 
-const ENVIRONMENT = process.env.NODE_ENV || 'development';
-const isProduction = ENVIRONMENT === 'production';
+const ENVIRONMENT = process.env.NODE_ENV || "development";
+const isProduction = ENVIRONMENT === "production";
 console.log("env", ENVIRONMENT);
 
 // DATABASE
@@ -30,12 +30,12 @@ const options = {
     useUnifiedTopology: true, //Applied after DeprecationWarning and goal: new Server Discover and Monitoring engine || // comment this out when this error occurs: MongoTimeoutError: Server selection timed out after 30000 ms || || But be aware that things can not work properly
     useFindAndModify: false, // DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated
     keepAlive: true,
-}
+};
 
 mongoose
     .connect(process.env.MONGO_KEY, options)
     .then(() => console.log(`MongoDB Connected...`))
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 // END DATABASE
 
 // MIDDLEWARES
@@ -45,26 +45,33 @@ app.use(cors()); //n2
 app.use(sslRedirect()); // n5
 
 // routes
-app.use('/api/email', require('./routes/email'));
-app.use('/api/user', require('./routes/user'));
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/database', require('./routes/database'));
-app.use('/api/push-notification', require('./routes/push-notification'));
-app.use('/api/notification', require('./routes/notification'));
-app.use('/api/task', require('./routes/user/task'));
-app.use('/api/sms', require('./routes/sms'));
+app.use("/api/email", require("./routes/email"));
+app.use("/api/user", require("./routes/user"));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/admin", require("./routes/admin"));
+app.use("/api/database", require("./routes/database"));
+app.use("/api/push-notification", require("./routes/push-notification"));
+app.use("/api/notification", require("./routes/notification"));
+app.use("/api/task", require("./routes/user/task"));
+app.use("/api/sms", require("./routes/sms"));
+app.use("/api/pay", require("./routes/pay"));
 // Serve static files such as images, CSS files, and JavaScript files for the React frontend <app></app>
-isProduction && app.use(express.static(path.join(__dirname, 'client/build')))
+isProduction && app.use(express.static(path.join(__dirname, "client/build")));
 // END MIDDLEWARES
 
 // This solves the "Not found" issue when loading an URL other than index.html.
 isProduction &&
-app.get('/*', (req, res) => { //n3
-  res.sendFile(path.join(__dirname + '/client/build/index.html'), err => {
-    if (err) { res.status(500).send(err) }
-  })
-})
+    app.get("/*", (req, res) => {
+        //n3
+        res.sendFile(
+            path.join(__dirname + "/client/build/index.html"),
+            (err) => {
+                if (err) {
+                    res.status(500).send(err);
+                }
+            }
+        );
+    });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
