@@ -64,6 +64,13 @@ function createDefaultCode(req, res) {
         itemDescription1,
         itemQuantity1 = 1,
         itemAmount1 = 0.0,
+        extraAmount,
+        senderCPF,
+        senderAreaCode = 92,
+        senderPhone,
+        senderName,
+        senderEmail,
+        redirectURL,
     } = req.query;
 
     // LESSONS:
@@ -77,38 +84,47 @@ function createDefaultCode(req, res) {
         itemDescription1, // * up until 100 characters
         itemQuantity1, // *
         itemAmount1, // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
+        extraAmount, // StRING!!! Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
         currency: "BRL",
         itemWeight: undefined, // Um número inteiro correspondendo ao peso em gramas do item. A soma dos pesos de todos os produtos não pode ultrapassar 30000 gramas (30 kg).
         itemShippingCost1: undefined, // String Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00
-        //address obj
+        //address
         addressRequired: false,
-        shippingAddressStreet: "Rua da Indústria, n* 13 B", // Livre, com limite de 80 caracteres.
-        shippingAddressNumber: "13 B", //Livre, com limite de 20 caracteres.
-        shippingAddressComplement: "perto do mercadinho", // Livre, com limite de 40 caracteres.
-        shippingAddressDistrict: "Compensa 1", // Bairro - Livre, com limite de 60 caracteres - Este campo é opcional e você pode enviá-lo caso já tenha capturado os dados do comprador em seu sistema e queira evitar que ele preencha esses dados novamente no PagSeguro.
-        shippingAddressState: "AM", // Duas letras, representando a sigla do estado brasileiro correspondente
-        shippingAddressCity: "Manaus", // Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
-        shippingAddressCountry: "BRA", // No momento, apenas o valor BRA é permitido.
-        shippingAddressPostalCode: "69030070", // STRING Um número de 8 dígitos
-        shippingType: 2, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado.
+        shippingAddressStreet: undefined, // Livre, com limite de 80 caracteres.
+        shippingAddressNumber: undefined, //Livre, com limite de 20 caracteres.
+        shippingAddressComplement: undefined, // Livre, com limite de 40 caracteres.
+        shippingAddressDistrict: undefined, // Bairro - Livre, com limite de 60 caracteres - Este campo é opcional e você pode enviá-lo caso já tenha capturado os dados do comprador em seu sistema e queira evitar que ele preencha esses dados novamente no PagSeguro.
+        shippingAddressState: undefined, // Duas letras, representando a sigla do estado brasileiro correspondente
+        shippingAddressCity: undefined, // Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
+        shippingAddressCountry: undefined, // No momento, apenas o valor BRA é permitido.
+        shippingAddressPostalCode: undefined, // STRING Um número de 8 dígitos
+        shippingType: undefined, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado.
         shippingCost: undefined, // STRING!!! Informa o valor total de frete do pedido. // Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00.
         // sender (buyer) object
-        senderName: "Luis Febro", //No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
-        senderEmail: "mr.febro@gmail.com", // um e-mail válido (p.e., usuario@site.com.br), com no máximo 60 caracteres
-        senderAreaCode: 92, // Um número de 2 dígitos correspondente a um DDD válido.
-        senderPhone: "992817363", // STRING Um número de 7 a 9 dígitos
-        senderCPF: "02324889242", // STRING in order to display leading and trailing zeros!!!
+        senderName, //No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
+        senderEmail, // um e-mail válido (p.e., usuario@site.com.br), com no máximo 60 caracteres
+        senderAreaCode, // Um número de 2 dígitos correspondente a um DDD válido.
+        senderPhone, // STRING Um número de 7 a 9 dígitos
+        senderCPF, // STRING in order to display leading and trailing zeros!!!
         senderCNPJ: undefined,
         reference, // SKU Define um código para fazer referência ao pagamento. Este código fica associado à transação criada pelo pagamento e é útil para vincular as transações do PagSeguro às vendas registradas no seu sistema. Livre, com o limite de 200 caracteres
-        redirectURL: "https://fiddelize.com.br", //Uma URL válida, com limite de 255 caractere Determina a URL para a qual o comprador será redirecionado após o final do fluxo de pagamento. Este parâmetro permite que seja informado um endereço de específico para cada pagamento realizado.
-        // receiver (salesperson) object
+        redirectURL, //Uma URL válida, com limite de 255 caractere Determina a URL para a qual o comprador será redirecionado após o final do fluxo de pagamento. Este parâmetro permite que seja informado um endereço de específico para cada pagamento realizado.
+        // payment
+        paymentMethodGroup1: "BOLETO", // Para oferecer um parcelamento sem juros, você deverá utilizar três parâmetros: Grupo, Chave e Valor
+        paymentMethodConfigKey1_1: "DISCOUNT_PERCENT", // desconto de 5% para o meio de pagamento boleto
+        paymentMethodConfigValue1_1: "0.01", // Value must be between 0.01 and 99.99
+        paymentMethodGroup2: "CREDIT_CARD", // Para o campo chave, utilize o parâmetro MAX_INSTALLMENTS_NO_INTEREST que configura o parcelamento sem juros. Já no campo valor, você deve informar o número de parcelas que você deseja assumir.
+        paymentMethodConfigKey2_1: "MAX_INSTALLMENTS_NO_INTEREST",
+        paymentMethodConfigValue2_1: 2,
+        excludePaymentMethodGroup: undefined, // e.x: "CREDIT_CARD,BOLETO"
+        excludePaymentMethodName: undefined, // e.x DEBITO_ITAU,DEBITO_BRADESCO
+        // receiver (salesperson)
         receiverEmail: "mr.febro@gmail.com", // O e-mail informado deve estar vinculado à conta PagSeguro que está realizando a chamada à API.
         enableRecover: false, //Parâmetro utilizado para desabilitar a funcionalidade recuperação de carrinho.
-        timeout: 180, // O tempo mínimo da duração do checkout é de 20 minutos e máximo de 100000 minutos.
+        timeout: undefined, // O tempo mínimo da duração do checkout é de 20 minutos e máximo de 100000 minutos.
         // security
         maxUses: 3, // Um número inteiro maior que 0 e menor ou igual a 999. , Determina o número máximo de vezes que o código de pagamento criado pela chamada à API de Pagamentos poderá ser usado. Este parâmetro pode ser usado como um controle de segurança.
         maxAge: 86400, // 86400 = um dia. Um número inteiro maior ou igual a 30 e menor ou igual a 999999999. Prazo de validade do código de pagamento. Determina o prazo (em segundos) durante o qual o código de pagamento criado pela chamada à API de Pagamentos poderá ser usado.
-        extraAmount: "-2.00", // StRING!!! Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
     };
 
     const config = {
@@ -142,6 +158,49 @@ module.exports = {
 };
 
 /*
+Exemplo de checkout padrão:
+const params = {
+email,
+token,
+// items
+itemId1, // * SKU Livre, com limite de 100 caracteres.
+itemDescription1, // * up until 100 characters
+itemQuantity1, // *
+itemAmount1, // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
+currency: "BRL",
+itemWeight: undefined, // Um número inteiro correspondendo ao peso em gramas do item. A soma dos pesos de todos os produtos não pode ultrapassar 30000 gramas (30 kg).
+itemShippingCost1: undefined, // String Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00
+//address obj
+addressRequired: false,
+shippingAddressStreet: "Rua da Indústria, n* 13 B", // Livre, com limite de 80 caracteres.
+shippingAddressNumber: "13 B", //Livre, com limite de 20 caracteres.
+shippingAddressComplement: "perto do mercadinho", // Livre, com limite de 40 caracteres.
+shippingAddressDistrict: "Compensa 1", // Bairro - Livre, com limite de 60 caracteres - Este campo é opcional e você pode enviá-lo caso já tenha capturado os dados do comprador em seu sistema e queira evitar que ele preencha esses dados novamente no PagSeguro.
+shippingAddressState: "AM", // Duas letras, representando a sigla do estado brasileiro correspondente
+shippingAddressCity: "Manaus", // Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
+shippingAddressCountry: "BRA", // No momento, apenas o valor BRA é permitido.
+shippingAddressPostalCode: "69030070", // STRING Um número de 8 dígitos
+shippingType: 2, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado.
+shippingCost: undefined, // STRING!!! Informa o valor total de frete do pedido. // Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00.
+// sender (buyer) object
+senderName: "Luis Febro", //No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
+senderEmail: "mr.febro@gmail.com", // um e-mail válido (p.e., usuario@site.com.br), com no máximo 60 caracteres
+senderAreaCode: 92, // Um número de 2 dígitos correspondente a um DDD válido.
+senderPhone: "992817363", // STRING Um número de 7 a 9 dígitos
+senderCPF: "02324889242", // STRING in order to display leading and trailing zeros!!!
+senderCNPJ: undefined,
+reference, // SKU Define um código para fazer referência ao pagamento. Este código fica associado à transação criada pelo pagamento e é útil para vincular as transações do PagSeguro às vendas registradas no seu sistema. Livre, com o limite de 200 caracteres
+redirectURL: "https://fiddelize.com.br", //Uma URL válida, com limite de 255 caractere Determina a URL para a qual o comprador será redirecionado após o final do fluxo de pagamento. Este parâmetro permite que seja informado um endereço de específico para cada pagamento realizado.
+// receiver (salesperson) object
+receiverEmail: "mr.febro@gmail.com", // O e-mail informado deve estar vinculado à conta PagSeguro que está realizando a chamada à API.
+enableRecover: false, //Parâmetro utilizado para desabilitar a funcionalidade recuperação de carrinho.
+timeout: 180, // O tempo mínimo da duração do checkout é de 20 minutos e máximo de 100000 minutos.
+// security
+maxUses: 3, // Um número inteiro maior que 0 e menor ou igual a 999. , Determina o número máximo de vezes que o código de pagamento criado pela chamada à API de Pagamentos poderá ser usado. Este parâmetro pode ser usado como um controle de segurança.
+maxAge: 86400, // 86400 = um dia. Um número inteiro maior ou igual a 30 e menor ou igual a 999999999. Prazo de validade do código de pagamento. Determina o prazo (em segundos) durante o qual o código de pagamento criado pela chamada à API de Pagamentos poderá ser usado.
+extraAmount: "-2.00", // StRING!!! Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
+};
+
 Exemplo de checkout com BOLETO:
 paymentMode=default
 &paymentMethod=boleto

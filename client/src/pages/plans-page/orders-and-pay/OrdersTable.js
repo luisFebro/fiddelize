@@ -28,6 +28,7 @@ export default function OrdersTable({
     orderTotal,
     setVar,
     handleCancel,
+    handleServicesData,
     useGetVar,
 }) {
     const [list, setList] = useState([]);
@@ -41,6 +42,7 @@ export default function OrdersTable({
         "totalMoney_clientAdmin"
     );
     orderTotal = !orderTotal ? totalMoney : orderTotal;
+    const rawOrderTotal = orderTotal; // because it receives R$ and becames string in the first run
 
     if (!loadMoney) setVar({ totalMoney_clientAdmin: orderTotal });
 
@@ -105,6 +107,10 @@ export default function OrdersTable({
         setList(newList);
         setTotalServs(thisTotalServ);
         setVar({ totalServices_clientAdmin: thisTotalServ });
+        handleServicesData({
+            servicesTotal: thisTotalServ,
+            servicesAmount: rawOrderTotal,
+        }); // it is here for cases when orderTotal loads as undefined when user jumps right to checkout page if h/s decides to come back later.
     }, [orders]);
 
     // useEffect(() => {

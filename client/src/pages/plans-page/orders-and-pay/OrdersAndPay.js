@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import OrdersTable from "./OrdersTable";
 import PayArea from "./PayArea";
@@ -15,6 +15,16 @@ export default function OrdersAndPay({
     plan,
     setNextPage,
 }) {
+    const [dataSer, setDataSer] = useState({
+        servicesAmount: null,
+        servicesTotal: null,
+    });
+    let { servicesAmount, servicesTotal } = dataSer;
+
+    const handleServicesData = (payload) => {
+        setDataSer({ ...data, ...payload });
+    };
+
     const dispatch = useStoreDispatch();
 
     useBackColor("var(--mainWhite)");
@@ -72,8 +82,14 @@ export default function OrdersAndPay({
                 useGetVar={useGetVar}
                 setNextPage={setNextPage}
                 handleCancel={handleCancel}
+                handleServicesData={handleServicesData}
             />
-            <PayArea plan={plan} handleCancel={handleCancel} />
+            <PayArea
+                plan={plan}
+                handleCancel={handleCancel}
+                servicesTotal={servicesTotal}
+                servicesAmount={servicesAmount}
+            />
         </section>
     );
 }
