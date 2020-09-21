@@ -6,7 +6,7 @@ import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import { getVar } from "../../../hooks/storage/useVar";
-import { getServiceSKU } from "../../../utils/string/getSKU";
+import { getServiceSKU } from "../../../utils/string/getSKUCode.js";
 import useAPI, { createDefaultCode } from "../../../hooks/api/useAPI";
 
 const sandboxMode = true;

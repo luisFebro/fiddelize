@@ -1,4 +1,4 @@
-// Hello
+//
 import generateAlphaNumeric from "./generateAlphaNumeric";
 import removeDiacritics from "./removeDiacritics";
 // SKU (Stock Keeping Unit - Unidade de Manuntenção de Estoque)
