@@ -1,19 +1,18 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useStoreDispatch } from 'easy-peasy';
-import { setRun } from '../../hooks/useRunComp';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
-import isObjEmpty from '../../utils/objects/isObjEmpty';
-import { ShowLoadingComp } from './Comps';
-import { chooseHeader } from '../../utils/server/getHeaders';
-import { useToken } from '../../hooks/useRoleData';
-import { useOfflineData } from '../../hooks/storage/useOfflineListData';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useStoreDispatch } from "easy-peasy";
+import { setRun } from "../../hooks/useRunComp";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import isObjEmpty from "../../utils/objects/isObjEmpty";
+import { ShowLoadingComp } from "./Comps";
+import { chooseHeader } from "../../utils/server/getHeaders";
+import { useToken } from "../../hooks/useRoleData";
+import { useOfflineData } from "../../hooks/storage/useOfflineListData";
 
-export * from './requestsLib.js';
-export * from './trigger.js';
-
+export * from "./requestsLib.js";
+export * from "./trigger.js";
 
 //Global axios defaults
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -24,10 +23,10 @@ useAPI.propTypes = {
     params: PropTypes.object, // e.g { q: query, page: pageNumber } the same as ?q=${query}&page=${pageNumber}
     body: PropTypes.object, // body is the data to be sent as the request body - Only applicable for request methods 'PUT', 'POST', 'DELETE , and 'PATCH'
     timeout: PropTypes.number, // `timeout` specifies the number of milliseconds before the request times out. -- If the request takes longer than `timeout`, the request will be aborted.
-}
+};
 
 export default function useAPI({
-    method = 'get',
+    method = "get",
     url,
     params = null,
     body = null,
@@ -45,31 +44,31 @@ export default function useAPI({
     const [onlyOnce, setOnlyOnce] = useState(false);
     const [loading, setLoading] = useState(true); // WARNING> do not change to null since many request depend on the truthness to disnnull undefied object values...
     const [alreadyReqId, setAlreadyReqId] = useState(null);
+    const [error, setError] = useState(false);
 
     const thisData = data;
     const { offlineData } = useOfflineData({ dataName, data: thisData });
     useEffect(() => {
-        if(offlineData) {
+        if (offlineData) {
             setData(offlineData);
             setLoading(false);
         }
-    }, [offlineData])
+    }, [offlineData]);
 
     useEffect(() => {
-        if(needOnlyOnce && data) setOnlyOnce(true);
-    }, [data, needOnlyOnce])
-
+        if (needOnlyOnce && data) setOnlyOnce(true);
+    }, [data, needOnlyOnce]);
 
     useEffect(() => {
-        if(typeof loadingStart === "boolean") setLoading(loadingStart);
-    }, [loadingStart])
+        if (typeof loadingStart === "boolean") setLoading(loadingStart);
+    }, [loadingStart]);
 
     const {
         txtPending,
         timePending,
         txtSuccess = "Operação realizada com sucesso!",
         timeSuccess,
-        txtFailure = "Não foi possível realizar operação. Tente novamente."
+        txtFailure = "Não foi possível realizar operação. Tente novamente.",
     } = snackbar;
 
     const dispatch = useStoreDispatch();
@@ -79,30 +78,30 @@ export default function useAPI({
 
     const getSnack = (msg, opts = {}) => {
         const { type = "warning", status = "success" } = opts;
-        if(!needSnack || !msg) return true;
+        if (!needSnack || !msg) return true;
 
         let time = 4000;
-        if(status === "pending" && timePending) time = timePending;
-        if(status === "success" && timeSuccess) time = timeSuccess;
+        if (status === "pending" && timePending) time = timePending;
+        if (status === "success" && timeSuccess) time = timeSuccess;
 
         showSnackbar(dispatch, msg, type, time);
         return true;
-    }
+    };
 
     const handleUpdateData = () => {
         // same target component NAME which is being requesting to...
         // you can use it in the target component since setRun and dispatch is passed as parameter
-        if(!runName) return;
+        if (!runName) return;
 
         setRun(dispatch, runName);
-        if(typeof callback === "function") {
+        if (typeof callback === "function") {
             callback();
         }
-    }
+    };
 
     function handleSuccess({ response, stopRequest }) {
         const ok = getSnack(txtSuccess, { type: "success" });
-        if(ok) {
+        if (ok) {
             clearTimeout(stopRequest);
             setData(response.data);
             handleUpdateData();
@@ -120,9 +119,9 @@ export default function useAPI({
     useEffect(() => {
         let cancel;
         const alreadyPassed = alreadyReqId === trigger;
-        if(alreadyPassed) return;
-        if(onlyOnce) return;
-        if(!trigger) return;
+        if (alreadyPassed) return;
+        if (onlyOnce) return;
+        if (!trigger) return;
 
         const stopRequest = setTimeout(() => {
             cancel();
@@ -137,28 +136,45 @@ export default function useAPI({
             data: body,
             params,
             headers: chooseHeader({ token: token, needAuth }),
-            cancelToken: new axios.CancelToken(c => cancel = c) // n1
-        }
+            cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
+        };
 
         async function doRequest() {
             try {
-                getSnack(txtPending, { status: "pending"});
+                getSnack(txtPending, { status: "pending" });
                 const response = await axios(config);
                 handleSuccess({ response, stopRequest });
-            } catch(e) {
-                if(axios.isCancel(e)) return
-                if(e.response) console.log(`${JSON.stringify(e.response.data)}. STATUS: ${e.response.status}`)
+            } catch (e) {
+                if (axios.isCancel(e)) return;
+                if (e.response) {
+                    const thisStatus = e.response.status;
+                    if (thisStatus !== 200) setError(true);
+                    console.log(
+                        `${JSON.stringify(
+                            e.response.data
+                        )}. STATUS: ${thisStatus}`
+                    );
+                }
                 handleError();
             }
         }
 
         doRequest();
 
-        return () => { cancel(); clearTimeout(stopRequest); };
-    }, [trigger, onlyOnce])
+        return () => {
+            cancel();
+            clearTimeout(stopRequest);
+        };
+    }, [trigger, onlyOnce]);
 
     const gotData = Boolean(data && data.length);
-    return { data, gotData, loading, setRun, dispatch };
+
+    const ShowError = () => (
+        <p className="text-center font-weight-bold text-red text-normal">
+            Oops! Esta parte não funcionou como esperado. Tente recarregar.
+        </p>
+    );
+    return { data, gotData, loading, setRun, dispatch, error, ShowError };
 }
 
 /* COMMENTS

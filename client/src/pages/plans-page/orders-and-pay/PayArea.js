@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
@@ -7,12 +6,18 @@ import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import { getVar } from "../../../hooks/storage/useVar";
 import { getServiceSKU } from "../../../utils/string/getSKUCode.js";
-import useAPI, { createDefaultCode } from "../../../hooks/api/useAPI";
+import useAPI, { startCheckout } from "../../../hooks/api/useAPI";
+import PayBtn from "./modal-pay/PayBtn";
 
 const sandboxMode = true;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";
+
+const getModalData = ({ authToken, PagSeguro }) => ({
+    authToken,
+    PagSeguro,
+});
 
 export default function PayArea({
     handleCancel,
@@ -32,7 +37,7 @@ export default function PayArea({
     const dispatch = useStoreDispatch();
 
     const { bizCodeName } = useClientAdmin();
-    const { name: userName, email: userEmail } = useProfile();
+    const { _id, name: userName, email: userEmail } = useProfile();
 
     const params = {
         reference: SKU,
@@ -48,13 +53,13 @@ export default function PayArea({
         redirectURL: "http://localhost:3000/planos?cliente-admin=1",
     };
 
-    const { data: authPayCode } = useAPI({
+    const { data: authToken, loading, error, ShowError } = useAPI({
         method: "post",
-        url: createDefaultCode(),
-        params,
+        url: startCheckout(),
+        params: { userId: _id },
         trigger: SKU && servicesTotal && servicesAmount,
+        needAuth: true,
     });
-    console.log("authPayCode", authPayCode);
 
     useEffect(() => {
         getVar("totalServices_clientAdmin").then((totalServ) => {
@@ -68,7 +73,7 @@ export default function PayArea({
         const script = document.createElement("script");
 
         script.type = "text/javascript";
-        script.src = `${payUrl}/pagseguro/api/v2/checkout/pagseguro.lightbox.js`;
+        script.src = `${payUrl}/pagseguro/api/v2/checkout/pagseguro.directpayment.js`;
         script.async = true;
 
         document.body.appendChild(script);
@@ -77,6 +82,11 @@ export default function PayArea({
             document.body.removeChild(script);
         };
     }, []);
+
+    const modalData = getModalData({
+        authToken,
+        PagSeguro: window.PagSeguroDirectPayment,
+    });
 
     return (
         <section className="my-5">
@@ -91,12 +101,13 @@ export default function PayArea({
                 da Fiddelize?
             </p>
             <section className="container-center-col">
-                {authPayCode ? (
-                    <ButtonFab
+                {authToken && (
+                    <PayBtn
                         size="large"
                         title="VAMOS LÁ!"
                         position="relative"
-                        onClick={() => {
+                        modalData={modalData}
+                        callback={() => {
                             handleCancel("noMsg");
                             const callbacks = {
                                 success: (transactionCode) =>
@@ -106,19 +117,18 @@ export default function PayArea({
                                 },
                             };
 
-                            window.PagSeguroLightbox(
-                                { code: authPayCode },
-                                callbacks
-                            );
+                            // window.PagSeguroLightbox(authToken, callbacks);
                         }}
                         backgroundColor={"var(--themeSDark)"}
                         variant="extended"
                     />
-                ) : (
+                )}
+                {loading && (
                     <p className="font-weight-bold text-normal text-purple text-center">
                         Preparando tudo...
                     </p>
                 )}
+                {error && <ShowError />}
                 <Link
                     to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}

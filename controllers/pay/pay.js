@@ -1,4 +1,4 @@
-const init = require("./init");
+const checkout = require("./checkout");
 const transactions = require("./transactions");
 const {
     getCompoundInterest,
@@ -23,7 +23,25 @@ Independentemente do formato de dados utilizado, a codificação de caracteres p
 4. Modalidades permitidas através do PagSeguro
 Crédito (Parcelado Vendedor / também conhecido como parcelado Loja ou Sem Juros);
 Bandeiras: MasterCard (Crédito e Débito); VISA (Crédito e Débito); ELO (Crédito e Débito Cabal (Crédito e Débito); Hiper (Hipercard) (Crédito e Débito); Dinners; BrasilCard; Aura; Up; PersonalCard; SoroCred; ValeCard; Mais!;
-VISA, MASTERCARD, AMEX, DINERS, HIPERCARD, AURA, ELO, PLENOCARD, PERSONALCARD, JCB, DISCOVER, BRASILCARD, FORTBRASIL, CARDBAN, VALECARD, CABAL, MAIS, AVISTA, GRANDCARD e SOROCRED
+VISA (OK),
+MASTERCARD (OK),
+JCB (OK),
+DISCOVER (OK),
+DINERS (OK),
+ELO (OK),
+HIPERCARD,
+AMEX,
+AURA,
+PLENOCARD,
+PERSONALCARD,
+BRASILCARD,
+FORTBRASIL,
+CARDBAN,
+VALECARD,
+CABAL,
+MAIS,
+AVISTA,
+GRANDCARD e SOROCRED
 
 TAXAS:
 Recebimento em 14 dias (Plano Atual):
@@ -93,7 +111,7 @@ const getPagseguroPay = (paidValue, options = {}) => {
 // const simulation = getPagseguroPay(100, { totalInstallments: 18 });
 
 module.exports = {
-    init,
+    checkout,
     transactions,
 };
 

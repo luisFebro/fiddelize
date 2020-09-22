@@ -44,4 +44,4 @@ export const readAutoService = (userId) =>
 export const activateAutoService = () => `/api/sms/automatic/activate`; // POST
 
 // PAY
-export const createDefaultCode = () => `/api/pay/default-checkout/code`; // POST
+export const startCheckout = () => `/api/pay/transparent-checkout/start`; // POST
