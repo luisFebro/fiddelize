@@ -7,7 +7,6 @@ import "./_PayContent.scss";
 IMPORTANT:
 As chamadas para os meios de pagamento do Checkout Transparente deverão ser efetuadas para o endpoint abaixo utilizando o método POST:
 POST https://ws.pagseguro.uol.com.br/v2/transactions?{{credenciais}}
-
  */
 
 export default function AsyncPayContent({ modalData }) {

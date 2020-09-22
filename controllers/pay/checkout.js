@@ -1,6 +1,7 @@
 // TRANSPARENT CHECKOUT - full control of PAGSEGURO's API to run payment in my own app/website
 // start and finish checkout flow - página de pagamento
 const xml2js = require("xml2js");
+const qs = require("querystring");
 
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
@@ -33,6 +34,20 @@ function startCheckout(req, res) {
                 if (error === null) {
                     const [checkoutCode] = result.session.id;
                     res.json(checkoutCode);
+                    /*
+                        need keep in the database:
+                        transactionCode,
+                        reference,
+                        paymentLink,
+                        paymentMethodCode // 2 is boleto
+                        // for biz
+                        feeAmount // fee transaction
+                        netAmount
+                        extraAmount // if discounts
+                        installmentCount
+                        items
+
+                     */
                 } else {
                     console.log(error);
                 }
@@ -55,16 +70,19 @@ const finishCheckout = (req, res) => {
         senderAreaCode = 92,
         senderPhone = "992817363",
         senderName = "Luis Fernando",
-        senderEmail = "fernando@gmail.com",
+        senderEmail = "captainGreat@sandbox.pagseguro.com.br",
     } = req.query;
 
-    const theseParams = {
+    const params = {
         email,
         token,
+    };
+
+    const body = {
         reference,
         paymentMethod,
         // sender (buyer) object
-        senderHash, // * hash_obtido_no_passo_2.3
+        senderHash, // (fingerprint) gerado pelo JavaScript do PagSeguro. Formato: Obtido a partir de uma chamada javascript PagseguroDirectPayment.onSenderHashReady().
         senderName, // * No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
         senderEmail, // * um e-mail válido (p.e., usuario@site.com.br), com no máximo 60 caracteres
         senderAreaCode, // * Um número de 2 dígitos correspondente a um DDD válido.
@@ -78,7 +96,7 @@ const finishCheckout = (req, res) => {
         itemAmount1, // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
         extraAmount, // StRING!!! Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
         //address
-        addressRequired: false,
+        shippingAddressRequired: false, // if no address is sent, then ((Av. Brigadeiro Faria Lima, 1.384 - CEP: 01452002 Sao Paulo-São Paulo)) will be displayed at the bottom of the boleto's doc.
         shippingAddressStreet: undefined, // Livre, com limite de 80 caracteres.
         shippingAddressNumber: undefined, //Livre, com limite de 20 caracteres.
         shippingAddressComplement: undefined, // Livre, com limite de 40 caracteres.
@@ -99,7 +117,8 @@ const finishCheckout = (req, res) => {
     const config = {
         method: "post",
         url: `${payUrl}/transactions`,
-        params: theseParams,
+        params,
+        data: qs.stringify(body),
         headers: {
             charset: "ISO-8859-1",
             "Content-Type": "application/x-www-form-urlencoded",
@@ -109,16 +128,15 @@ const finishCheckout = (req, res) => {
 
     axios(config)
         .then((response) => {
-            console.log("response", response);
-            // const xml = response.data;
-            // parser.parseString(xml, function (error, result) {
-            //     if (error === null) {
-            //         // const [checkoutCode] = result.session.id;
-            //         res.json(result);
-            //     } else {
-            //         console.log(error);
-            //     }
-            // });
+            const xml = response.data;
+            parser.parseString(xml, function (error, result) {
+                if (error === null) {
+                    // const [checkoutCode] = result.session.id;
+                    res.json(result);
+                } else {
+                    console.log(error);
+                }
+            });
         })
         .catch((e) => res.json(e.response.data));
 };
@@ -129,6 +147,67 @@ module.exports = {
 };
 
 /*
+Handling responses - BOLETO:
+<transaction>
+    <date>2011-02-05T15:46:12.000-02:00</date>
+    <lastEventDate>2011-02-15T17:39:14.000-03:00</lastEventDate>
+    <code>9E884542-81B3-4419-9A75-BCC6FB495EF1</code>
+    <reference>REF1234</reference>
+    <type>1</type>
+    <status>3</status>
+    <paymentMethod>
+        <type>1</type>
+        <code>101</code>
+    </paymentMethod>
+<paymentLink>
+https://pagseguro.uol.com.br/checkout/imprimeBoleto.jhtml?code=314601B208B24A5CA53260000F7BB0D
+</paymentLink>
+    <grossAmount>49900.00</grossAmount>
+    <discountAmount>0.00</discountAmount>
+    <feeAmount>0.00</feeAmount>
+    <netAmount>49900.50</netAmount>
+    <extraAmount>0.00</extraAmount>
+    <installmentCount>1</installmentCount>
+    <itemCount>2</itemCount>
+    <items>
+        <item>
+            <id>0001</id>
+            <description>Notebook Prata</description>
+            <quantity>1</quantity>
+            <amount>24300.00</amount>
+        </item>
+        <item>
+            <id>0002</id>
+            <description>Notebook Rosa</description>
+            <quantity>1</quantity>
+            <amount>25600.00</amount>
+        </item>
+    </items>
+    <sender>
+        <name>José Comprador</name>
+        <email>comprador@uol.com.br</email>
+        <phone>
+            <areaCode>11</areaCode>
+            <number>56273440</number>
+        </phone>
+    </sender>
+    <shipping>
+        <address>
+            <street>Av. Brig. Faria Lima</street>
+            <number>1384</number>
+            <complement>5o andar</complement>
+            <district>Jardim Paulistano</district>
+            <postalCode>01452002</postalCode>
+            <city>Sao Paulo</city>
+            <state>SP</state>
+            <country>BRA</country>
+        </address>
+        <type>1</type>
+        <cost>21.50</cost>
+    </shipping>
+</transaction>
+paymentLink . Esse parâmetro pode ser um link de acesso para a imagem do boleto ou para a página de pagamento do banco selecionado. Lembrando que a página do banco não deve ser aberta em um IFrame.
+
 Exemplo de checkout com DÉBITO ONLINE:
 paymentMode=default
 &paymentMethod=deft

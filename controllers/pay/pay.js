@@ -1,5 +1,7 @@
 const checkout = require("./checkout");
 const transactions = require("./transactions");
+const boleto = require("./boleto");
+
 const {
     getCompoundInterest,
     getSuggestPrice,
@@ -113,6 +115,7 @@ const getPagseguroPay = (paidValue, options = {}) => {
 module.exports = {
     checkout,
     transactions,
+    boleto,
 };
 
 // exports.generateBoleto = (req, res) => {
