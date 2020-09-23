@@ -15,6 +15,9 @@ import { useToken } from "../../hooks/useRoleData";
 import Skeleton, { skeletonRoot } from "../../components/multimedia/Skeleton";
 import { IS_DEV } from "../../config/clientUrl";
 import extractStrData from "../../utils/string/extractStrData";
+import isThisApp from "../../utils/window/isThisApp";
+
+const isApp = isThisApp();
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
@@ -150,6 +153,9 @@ export default function useAPIList({
 
         const gotExpiredToken = status === 403;
         if (gotExpiredToken) {
+            window.location.href = isApp
+                ? "/mobile-app"
+                : "/acesso/verificacao";
             showSnackbar(dispatch, "Sua sessão terminou.", "warning");
             logout(dispatch, { needSnackbar: false });
         }

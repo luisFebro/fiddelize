@@ -10,6 +10,10 @@ import { ShowLoadingComp } from "./Comps";
 import { chooseHeader } from "../../utils/server/getHeaders";
 import { useToken } from "../../hooks/useRoleData";
 import { useOfflineData } from "../../hooks/storage/useOfflineListData";
+import { logout } from "../../redux/actions/authActions";
+import isThisApp from "../../utils/window/isThisApp";
+
+const isApp = isThisApp();
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
@@ -110,10 +114,20 @@ export default function useAPI({
         }
     }
 
-    function handleError() {
+    function handleError(status = 200) {
         setAlreadyReqId(null);
         setLoading(false);
         getSnack(txtFailure, { type: "error" });
+
+        const gotExpiredToken = status === 403;
+
+        if (gotExpiredToken) {
+            window.location.href = isApp
+                ? "/mobile-app"
+                : "/acesso/verificacao";
+            showSnackbar(dispatch, "Sua sessão terminou.", "warning");
+            logout(dispatch, { needSnackbar: false });
+        }
     }
 
     useEffect(() => {
@@ -148,6 +162,7 @@ export default function useAPI({
                 if (axios.isCancel(e)) return;
                 if (e.response) {
                     const thisStatus = e.response.status;
+                    handleError(thisStatus);
                     if (thisStatus !== 200) setError(true);
                     console.log(
                         `${JSON.stringify(
@@ -155,7 +170,6 @@ export default function useAPI({
                         )}. STATUS: ${thisStatus}`
                     );
                 }
-                handleError();
             }
         }
 

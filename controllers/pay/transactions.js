@@ -13,7 +13,7 @@ const readTransaction = () => {
 
     const config = {
         method: "post",
-        url: `${payUrl}/transactions/${transactionCode}`,
+        url: `${payUrl}/v2/transactions/${transactionCode}`,
         data: body,
         params,
         headers: {
@@ -44,7 +44,7 @@ const readHistory = () => {
 
     const config = {
         method: "post",
-        url: `${payUrl}/transactions`,
+        url: `${payUrl}/v2/transactions`,
         data: body,
         params,
         headers: {
@@ -70,7 +70,7 @@ const refundTransaction = () => {
 
     const config = {
         method: "post",
-        url: `${payUrl}/transactions/refunds`,
+        url: `${payUrl}/v2/transactions/refunds`,
         data: body,
         params,
         headers: {
@@ -94,7 +94,7 @@ const cancelTransaction = () => {
 
     const config = {
         method: "post",
-        url: `${payUrl}/transactions/cancels`,
+        url: `${payUrl}/v2/transactions/cancels`,
         data: body,
         params,
         headers: {

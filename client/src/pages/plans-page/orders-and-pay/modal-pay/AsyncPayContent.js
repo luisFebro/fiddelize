@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from "react";
-// import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import { ShowTitle } from "../../../../components/buttons/premium/feature-pages/DefaultProComps";
 import "./_PayContent.scss";
+import PayCategories from "./payment-methods/PayCategories";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Load } from "../../../../components/code-splitting/LoadableComp";
+
+const AsyncBoleto = Load({
+    loader: () =>
+        import(
+            "./payment-methods/boleto/AsyncBoleto" /* webpackChunkName: "boleto-comp-lazy" */
+        ),
+});
+
+export const faStyle = {
+    fontSize: "25px",
+    color: "var(--themeP)",
+};
 
 /*
 IMPORTANT:
@@ -17,28 +30,44 @@ export default function AsyncPayContent({ modalData }) {
     console.log("senderHash", senderHash);
     console.log("payMethods", payMethods);
 
-    useEffect(() => {
-        PagSeguro.setSessionId(authToken);
-        PagSeguro.getPaymentMethods({
-            amount: 500.0,
-            success: function (response) {
-                // n2
-                setPayMethods(response.paymentMethods);
-            },
-            error: function (response) {
-                console.log("Callback para chamadas que falharam", response);
-            },
-            complete: function (response) {
-                console.log("Callback para todas chamadas", response);
-            },
-        });
+    // useEffect(() => {
+    //     PagSeguro.setSessionId(authToken);
+    //     PagSeguro.getPaymentMethods({
+    //         amount: undefined, // returns all methods if not defined.
+    //         success: function (response) {
+    //             // n2
+    //             setPayMethods(response.paymentMethods);
+    //         },
+    //         error: function (response) {
+    //             console.log("Callback para chamadas que falharam", response);
+    //         },
+    //         complete: function (response) {
+    //             console.log("Callback para todas chamadas", response);
+    //         },
+    //     });
 
-        const fetchHash = setTimeout(() => getSenderHash(), 5000);
+    //     const fetchHash = setTimeout(() => getSenderHash(), 5000);
 
-        return () => {
-            clearTimeout(fetchHash);
-        };
-    }, []);
+    //     return () => {
+    //         clearTimeout(fetchHash);
+    //     };
+    // }, []);
+
+    const showTitle = () => (
+        <div className="mt-2">
+            <p className="text-em-1-9 main-font text-purple text-center font-weight-bold">
+                Fiddelize Invista
+            </p>
+        </div>
+    );
+
+    const showSubtitle = () => (
+        <div className="mx-2 my-5">
+            <p className="text-subtitle main-font text-purple text-center font-weight-bold">
+                Selecione a sua forma de investir favorita.
+            </p>
+        </div>
+    );
 
     function getSenderHash() {
         PagSeguro.onSenderHashReady(function (response) {
@@ -54,15 +83,29 @@ export default function AsyncPayContent({ modalData }) {
 
     const showPayWatermarks = () => (
         <section className="d-flex justify-content-around">
-            <p className="paycontent--watermarks shadow-elevation-black">
-                Conexão segura
-            </p>
-            <section className="container-center-col">
+            <div className="d-flex paycontent--safe-msg">
+                <section className="d-flex align-items-cnter position-relative">
+                    <FontAwesomeIcon
+                        icon="lock"
+                        className="mr-2"
+                        style={faStyle}
+                    />
+                    <p
+                        className="text-purple font-weight-bold text-small"
+                        style={{ lineHeight: "20px" }}
+                    >
+                        Ambiente
+                        <br />
+                        Seguro
+                    </p>
+                </section>
+            </div>
+            <section className="animated fadeInUp delay-3s pagseguro-mark container-center-col">
                 <p
                     className="position-relative m-0 shadow-elevation-black text-left text-white font-weight-bold"
                     style={{ left: "10px" }}
                 >
-                    protegido por:
+                    protegido pelo
                 </p>
                 <img
                     className="shadow-elevation-black"
@@ -77,10 +120,10 @@ export default function AsyncPayContent({ modalData }) {
 
     return (
         <section>
-            <ShowTitle title="Fiddelize Invista" />
-            <p className="my-5 text-center text-purple text-normal">
-                {authToken}
-            </p>
+            {showTitle()}
+            {showSubtitle()}
+            <PayCategories />
+            <AsyncBoleto />
             {showPayWatermarks()}
         </section>
     );

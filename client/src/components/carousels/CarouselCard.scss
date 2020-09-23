@@ -1,7 +1,7 @@
 .carousel--root {
-  /*background: var(--mainWhite);*/
-  height: 440px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 31px 120px -6px;
+    /*background: var(--mainWhite);*/
+    height: 440px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 31px 120px -6px;
 }
 
 .flickity-viewport {
@@ -9,17 +9,28 @@
 }
 
 .carousel-cell {
-  box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
-  width: 62%;
-  margin: 5px;
-  padding: 10px;
-  height: 420px;
-  background: var(--mainWhite);
-  color: var(--mainPurple);
-  cursor: pointer;
-  border: none;
-  text-align: center;
-  border-radius: 15px;
+    box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
+    width: 62%;
+    margin: 5px;
+    padding: 10px;
+    height: 420px;
+    background: var(--mainWhite);
+    color: var(--mainPurple);
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    border-radius: 15px;
+}
+.carousel--root.compact {
+    height: 240px;
+
+    & .flickity-viewport {
+        height: 240px !important;
+    }
+
+    .carousel-cell {
+        height: 230px;
+    }
 }
 
 .card-icons {
@@ -38,19 +49,20 @@
 }
 
 .flickity-prev-next-button .arrow {
-  fill: var(--mainWhite);
-  height: 20px;
+    fill: var(--mainWhite);
+    height: 20px;
 }
 .flickity-prev-next-button.no-svg {
-  fill: var(--themeS);
+    fill: var(--themeS);
 }
 
 .is-selected {
-  background-color: var(--lightPurple) !important; /* var(--lightPurple) */
+    background-color: var(--lightPurple) !important; /* var(--lightPurple) */
 }
 
-.is-selected p, .is-selected div {
-  color: #fff !important;
+.is-selected p,
+.is-selected div {
+    color: #fff !important;
 }
 
 /* cell number */

@@ -19,10 +19,10 @@ function startCheckout(req, res) {
 
     const config = {
         method: "post",
-        url: `${payUrl}/sessions`,
+        url: `${payUrl}/v2/sessions`,
         params,
         headers: {
-            "Accept-Charset": "ISO-8859-1",
+            charset: "ISO-8859-1",
             "Content-Type": "application/x-www-form-urlencoded",
         },
     };
@@ -116,7 +116,7 @@ const finishCheckout = (req, res) => {
 
     const config = {
         method: "post",
-        url: `${payUrl}/transactions`,
+        url: `${payUrl}/v2/transactions`,
         params,
         data: qs.stringify(body),
         headers: {
@@ -407,7 +407,7 @@ function createDefaultCode(req, res) {
 
     const config = {
         method: "post",
-        url: `${payUrl}/checkout`,
+        url: `${payUrl}/v2/checkout`,
         params,
         headers: {
             "Accept-Charset": "ISO-8859-1",

@@ -10,7 +10,7 @@ const { mwUserId } = require("../controllers/user");
 // @ routes api/pay/...
 router.post("/transparent-checkout/start", mwIsAuth, checkout.startCheckout);
 router.post("/transparent-checkout/finish", mwIsAuth, checkout.finishCheckout);
-router.post("/create/boleto", mwIsAuth, boleto.generateBoleto);
+router.post("/boleto/create", mwIsAuth, boleto.createBoleto);
 router.get("/transactions/history", mwIsAuth, transactions.readHistory);
 router.get("/transactions/read-one", mwIsAuth, transactions.readTransaction);
 router.post("/transactions/refunds", mwIsAuth, transactions.refundTransaction);
