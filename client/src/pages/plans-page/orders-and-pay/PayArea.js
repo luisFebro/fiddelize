@@ -29,8 +29,16 @@ export default function PayArea({
         senderCPF: "",
         senderAreaCode: "",
         senderPhone: "",
+        firstDueDate: "2020-09-28",
     });
-    let { SKU, servDesc, senderCPF, senderAreaCode, senderPhone } = data;
+    let {
+        SKU,
+        servDesc,
+        senderCPF,
+        senderAreaCode,
+        senderPhone,
+        firstDueDate,
+    } = data;
 
     const { bizCodeName } = useClientAdmin();
     const { _id, phone, name: userName, email: senderEmail } = useProfile();
@@ -106,6 +114,7 @@ export default function PayArea({
         senderAreaCode,
         senderPhone,
         senderEmail,
+        firstDueDate,
         PagSeguro: window.PagSeguroDirectPayment,
     };
 

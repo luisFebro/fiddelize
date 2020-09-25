@@ -47,6 +47,7 @@ export default function AsyncPayContent({ modalData }) {
         senderPhone,
         senderEmail,
         PagSeguro,
+        firstDueDate,
     } = modalData; // n1 notes about PagSeguro Methods
     const [payMethods, setPayMethods] = useState({});
     const [senderHash, setSenderHash] = useState("");
@@ -77,6 +78,7 @@ export default function AsyncPayContent({ modalData }) {
             /ç/gi,
             "c"
         )}R$ ${itemAmount}`,
+        firstDueDate,
     };
 
     const { data, loading } = useAPI({
@@ -85,6 +87,7 @@ export default function AsyncPayContent({ modalData }) {
         params,
         needAuth: true,
         trigger: senderHash && selectedCategory,
+        timeout: 30000,
     });
 
     const showTitle = () => (

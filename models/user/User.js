@@ -6,8 +6,9 @@ const collectionName = "all-clients";
 const {
     SmsHistorySchema,
     SmsAutomationSchema,
-    PendingRegistersSchema,
+    // PendingRegistersSchema,
     DefaultFilterSchema,
+    OrdersSchema,
 } = require("./schemes");
 
 // GENERAL SCHEMAS
@@ -193,7 +194,8 @@ const clientAdminData = {
     smsBalance: { type: Number, default: 0 },
     smsHistory: [SmsHistorySchema],
     smsAutomation: [SmsAutomationSchema],
-    pendingRegisters: [PendingRegistersSchema],
+    orders: [OrdersSchema],
+    // pendingRegisters: [PendingRegistersSchema],
 };
 const ClientAdminDataSchema = new Schema(clientAdminData, { _id: false });
 // depracated but it was working well.

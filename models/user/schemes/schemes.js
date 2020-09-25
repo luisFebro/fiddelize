@@ -47,18 +47,36 @@ const smsAutomationData = {
 const SmsAutomationSchema = new Schema(smsAutomationData, { _id: false });
 // END SMS
 
-// CLIENTS HISTORY
-const pendingRegistersData = {
-    clientName: { type: String, trim: true },
-    registeredBy: { type: String, required: true },
+// ORDERS
+const ordersData = {
+    reference: String,
+    investAmount: String,
+    barcode: String,
+    transaction: {
+        code: String,
+        status: Number,
+    },
+    paymentLink: String,
+    dueDate: String,
+    planDueDate: Date,
     createdAt: { type: Date, default: Date.now },
 };
-const PendingRegistersSchema = new Schema(smsAutomationData, { _id: true });
+const OrdersSchema = new Schema(ordersData, { _id: true });
+// END ORDERS
+
+// CLIENTS HISTORY
+// const pendingRegistersData = {
+//     clientName: { type: String, trim: true },
+//     registeredBy: { type: String, required: true },
+//     createdAt: { type: Date, default: Date.now },
+// };
+// const PendingRegistersSchema = new Schema(smsAutomationData, { _id: true });
 // END CLIENTS HISTORY
 
 module.exports = {
     SmsHistorySchema,
     SmsAutomationSchema,
-    PendingRegistersSchema,
+    // PendingRegistersSchema,
     DefaultFilterSchema,
+    OrdersSchema,
 };

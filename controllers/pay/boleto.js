@@ -1,3 +1,5 @@
+const User = require("../../models/user/User");
+const Admin = require("../../models/admin/Admin");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 
@@ -32,12 +34,14 @@ Isso ajuda na a possibilidade de pagar um boleto vencido em qualquer banco ou in
  */
 
 function createBoleto(req, res) {
-    const payload = {};
     const {
+        userId,
+        transactionCode, // Transaction code needs to be from here because finishCheckout and this method generated different transaction codes.
         reference = "123",
         amount = "150.00",
         numberOfPayments = 1,
-        instructions = "Plano Ouro com 5 servicos",
+        instructions,
+        description = "nenhuma descrição",
         cpf = "02324889242",
         cnpj,
         name = "Ana Maria",
@@ -51,7 +55,8 @@ function createBoleto(req, res) {
         city = "Sao Paulo",
         state = "SP",
         complement,
-    } = payload;
+        firstDueDate = "2020-09-25",
+    } = req.payload;
 
     const params = {
         email: authEmail,
@@ -77,14 +82,14 @@ function createBoleto(req, res) {
     };
     const data = {
         reference, // Campo destinado a controles internos do vendedor. Tamanho máximo: 200 caracteres.
-        firstDueDate: "2020-09-25", // Formato: aaaa-mm-dd Data de vencimento para qual será gerado o primeiro boleto - permitido 1 dia à partir da data presente até D+30. // Se o parâmetro numberOfPayments > 1, os próximos vencimentos seguirão com a mesma data informada no na data dd nos períodos subsequentes. // Para meses onde não existirem a data informada, será considerado sempre um dia anterior.
         numberOfPayments, // int32 Permitido preencher de 1 a 12.Permitido preencher de 1 a 12. // Informar a quantidade de boletos a serem gerados para cada comprador. n1 exemplo
         amount, // Informar o valor em reais a ser cobrado em cada boleto. Mínimo 5.00 e máximo 1000000.00 decimal, com duas casas decimais separadas por ponto (ex: 1234.56)
-        description: instructions, // This does not insert anything in the Boleto Descrição do produto objeto da cobrança.
-        periodicity: "monthly", // Atualmente a chamada não aceita nenhum outro valor diferente.
         instructions: `REFERENTE À FIDDELIZE INVISTA - ${instructions}`, // This will appear in the boleto's main instruction button - Campo instruções do boleto, personalizado para uso do vendedor, restrito a 100 caracteres
+        description, // This does not insert anything in the Boleto Descrição do produto objeto da cobrança.
+        periodicity: "monthly", // Atualmente a chamada não aceita nenhum outro valor diferente.
         customer: customerData,
         notificationURL: "https://fiddelize.com.br/notificações", // URL para recebimento de notificação. Realiza validação de url válida.
+        firstDueDate, // Formato: aaaa-mm-dd Data de vencimento para qual será gerado o primeiro boleto - permitido 1 dia à partir da data presente até D+30. // Se o parâmetro numberOfPayments > 1, os próximos vencimentos seguirão com a mesma data informada no na data dd nos períodos subsequentes. // Para meses onde não existirem a data informada, será considerado sempre um dia anterior.
     };
     // END DATA BODY
 
@@ -101,7 +106,43 @@ function createBoleto(req, res) {
 
     axios(config)
         .then((response) => {
-            res.json(response.data);
+            const { boletos } = response.data;
+            const [boletoData] = boletos;
+
+            const dataCliAdmin = {
+                reference,
+                investAmount: amount,
+                barcode: boletoData.barcode,
+                transaction: {
+                    code: boletoData.code,
+                    status: 1,
+                },
+                paymentLink: boletoData.paymentLink,
+                dueDate: boletoData.dueDate,
+                planDueDate: "2020-09-25T08:06:27.888Z",
+            };
+
+            User.findById(userId).exec((err, doc) => {
+                if (err)
+                    return res.status(500).json(msgG("error.systemError", err));
+                const orders = doc.clientAdminData.orders;
+                doc.clientAdminData.orders = [...orders, dataCliAdmin];
+                // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+                doc.markModified("clientAdminData");
+                doc.save((err) =>
+                    Admin.findOneAndUpdate(
+                        { reference },
+                        { "transaction.code": boletoData.code },
+                        { new: false }
+                    ).exec((err) => {
+                        res.json({
+                            barcode: boletoData.barcode,
+                            dueDate: boletoData.dueDate,
+                            paymentLink: boletoData.paymentLink,
+                        });
+                    })
+                );
+            });
         })
         .catch((e) => {
             res.json({ error: e.response.data.errors });

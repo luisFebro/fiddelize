@@ -41,12 +41,19 @@ const getBarcodeSplit = (code) => {
     );
 };
 
-export default function AsyncBoleto({
-    modalData,
-    barcode = "03399853012970000076264045701014383890000015100", // 47 characters
-    paymentLink = "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=879c2cdba048c4d86c035b595b0fa02ae3356f147e87a05379bc7d76ab79d5c6a68df7782e6e16ff",
-}) {
+function adjustDate(dateStr) {
+    const [year, month, day] = dateStr.split("-");
+    return `${day}/${month}/${year.slice(2)}`;
+}
+
+export default function AsyncBoleto({ modalData }) {
     const [copy, setCopy] = useState(false);
+    const [data, setData] = useState({
+        paymentLink: "",
+        barcode: "",
+        dueDate: "",
+    });
+    const { paymentLink, barcode, dueDate } = data;
 
     const {
         responseData,
@@ -65,6 +72,14 @@ export default function AsyncBoleto({
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
+        if (responseData)
+            setData({
+                ...responseData,
+                dueDate: adjustDate(responseData.dueDate),
+            });
+    }, [responseData]);
+
+    useEffect(() => {
         PagSeguro.setSessionId(authToken);
         PagSeguro.getPaymentMethods({
             amount: undefined, // returns all methods if not defined.
@@ -81,7 +96,7 @@ export default function AsyncBoleto({
         });
 
         handleSelected("No Boleto");
-        setTimeout(() => getSenderHash(), 5000);
+        setTimeout(() => getSenderHash(), 3500);
     }, []);
 
     const showTitle = () => (
@@ -112,7 +127,7 @@ export default function AsyncBoleto({
                     <span className="text-em-1-5">3 </span>
                     <span className="text-em-1-3">dias</span>
                     <br />
-                    <span>(21/10/20)</span>
+                    <span>({dueDate})</span>
                 </div>
             </section>
         </section>

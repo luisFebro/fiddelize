@@ -2,12 +2,27 @@
 // start and finish checkout flow - página de pagamento
 const xml2js = require("xml2js");
 const qs = require("querystring");
+const Order = require("../../models/order/Order");
 
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 
 const parser = new xml2js.Parser({ attrkey: "ATTR" });
 const { payUrl, sandboxMode, email, token } = globalVar;
+
+function handleAmounts(num1, num2, options = {}) {
+    const { op = "+" } = options;
+
+    let sumNums;
+    if (op === "+") {
+        sumNums = Number(num1) - Number(num2);
+    } else {
+        sumNums = Number(num1) + Number(num2);
+    }
+
+    sumNums = sumNums.toFixed(2).toString();
+    return sumNums;
+}
 
 // POST - generate a authorization session token
 // This will be the choice for my own checkout customization
@@ -42,22 +57,25 @@ function startCheckout(req, res) {
         .catch((e) => res.json(e.response.data));
 }
 
-const finishCheckout = (req, res) => {
-    const {
+const finishCheckout = (req, res, next) => {
+    let {
+        userId,
         reference = 123,
         paymentMethod = "boleto",
         itemId1 = "123",
         itemDescription1 = "Cool Service",
         itemQuantity1 = 1,
-        itemAmount1 = -1.0,
-        extraAmount,
+        itemAmount1 = "0.00",
+        extraAmount = "-1.00",
         senderCPF,
         senderHash,
-        senderAreaCode = 92,
-        senderPhone = "992817363",
-        senderName = "Luis Fernando",
+        senderAreaCode,
+        senderPhone,
+        senderName,
         senderEmail = "captainGreat@sandbox.pagseguro.com.br",
+        firstDueDate,
     } = req.query;
+    if (paymentMethod !== "boleto") extraAmount = "0.00";
 
     const params = {
         email,
@@ -116,37 +134,57 @@ const finishCheckout = (req, res) => {
             const xml = response.data;
             parser.parseString(xml, function (error, result) {
                 if (error === null) {
-                    // const [checkoutCode] = result.session.id;
                     const data = result.transaction;
-                    console.log("data", data);
-                    console.log(result);
                     const [transactionCode] = data.code;
-                    console.log("transactionCode", transactionCode);
                     const [reference] = data.reference;
-                    console.log("reference", reference);
-                    const [paymentLink] = data.paymentLink;
-                    console.log("paymentLink", paymentLink);
                     const [feeAmount] = data.feeAmount;
-                    console.log("feeAmount", feeAmount);
                     const [netAmount] = data.netAmount;
-                    console.log("netAmount", netAmount);
                     const [grossAmount] = data.grossAmount;
-                    console.log("grossAmount", grossAmount);
                     const [extraAmount] = data.extraAmount;
-                    console.log("extraAmount", extraAmount);
-                    const payload = {
-                        // userId,
-                        // paymentMethod,
-                        transactionCode,
+
+                    const newOrder = new Order({
+                        agentName: "Fiddelize",
+                        agentId: "5db4301ed39a4e12546277a8",
+                        clientAdmin: {
+                            name: senderName,
+                            id: userId,
+                        },
+                        transaction: {
+                            // transaction code should be generate in next createBoleto Method.
+                            status: 1,
+                        },
+                        paymentMethod,
                         reference,
-                        paymentLink,
-                        feeAmount,
-                        netAmount,
-                        grossAmount,
-                        extraAmount, // if discounts
-                    };
-                    console.log("payload", payload);
-                    res.json(payload);
+                        amount: {
+                            fee: handleAmounts(feeAmount, extraAmount, {
+                                op: "+",
+                            }),
+                            net: netAmount,
+                            gross: handleAmounts(grossAmount, extraAmount, {
+                                op: "+",
+                            }),
+                            extra: extraAmount,
+                        },
+                    });
+
+                    newOrder.save().then((order) => {
+                        const payload = {
+                            userId,
+                            transactionCode,
+                            reference,
+                            amount: grossAmount,
+                            instructions: itemDescription1,
+                            cpf: senderCPF,
+                            name: senderName,
+                            phoneAreaCode: senderAreaCode,
+                            phoneNumber: senderPhone,
+                            email: senderEmail,
+                            firstDueDate,
+                        };
+
+                        req.payload = payload;
+                        next();
+                    });
                 } else {
                     console.log(error);
                 }
