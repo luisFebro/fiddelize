@@ -7,6 +7,8 @@ import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
 import TextField from "@material-ui/core/TextField";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getFirstName from "../../../../../../utils/string/getFirstName";
+import getSlashDayMonthYear from "../../../../../../utils/dates/getSlashDayMonthYear";
+import { ShowPayWatermarks } from "../../comps/GlobalComps";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
@@ -41,11 +43,6 @@ const getBarcodeSplit = (code) => {
     );
 };
 
-function adjustDate(dateStr) {
-    const [year, month, day] = dateStr.split("-");
-    return `${day}/${month}/${year.slice(2)}`;
-}
-
 export default function AsyncBoleto({ modalData }) {
     const [copy, setCopy] = useState(false);
     const [data, setData] = useState({
@@ -75,7 +72,7 @@ export default function AsyncBoleto({ modalData }) {
         if (responseData)
             setData({
                 ...responseData,
-                dueDate: adjustDate(responseData.dueDate),
+                dueDate: getSlashDayMonthYear(responseData.dueDate),
             });
     }, [responseData]);
 
@@ -96,7 +93,7 @@ export default function AsyncBoleto({ modalData }) {
         });
 
         handleSelected("No Boleto");
-        setTimeout(() => getSenderHash(), 3500);
+        setTimeout(() => getSenderHash(), 2500);
     }, []);
 
     const showTitle = () => (
@@ -220,7 +217,7 @@ export default function AsyncBoleto({ modalData }) {
             id="PayContent--boleto-msg"
             className="container-center-col mx-3 full-height my-4 text-subtitle font-weight-bold text-purple text-left"
         >
-            <span className="text-em-1-5">Boleto</span>
+            <span className="text-em-1-5">Boleto Automático</span>
             <br />
             <br />É para já, {getFirstName(adminName)}!
             <br />
@@ -229,7 +226,7 @@ export default function AsyncBoleto({ modalData }) {
     );
 
     const showBoleto = () => (
-        <section className="container-center">
+        <section className="container-center" style={{ marginBottom: "50px" }}>
             <h1 className="animated fadeInDown delay-3s text-nowrap text-purple font-weight-bold text-subtitle text-left">
                 Prontinho!
             </h1>
@@ -250,6 +247,7 @@ export default function AsyncBoleto({ modalData }) {
         <Fragment>
             {showTitle()}
             {processing ? showMsgProcessing() : showBoleto()}
+            <ShowPayWatermarks needAnima={false} />
         </Fragment>
     );
 }

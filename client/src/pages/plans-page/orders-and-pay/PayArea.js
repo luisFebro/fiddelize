@@ -11,6 +11,8 @@ import PayBtn from "./modal-pay/PayBtn";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
 import convertToReal from "../../../utils/numbers/convertToReal";
+import { addDays } from "../../../utils/dates/dateFns";
+import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 
 const sandboxMode = true;
 const payUrl = sandboxMode
@@ -29,7 +31,7 @@ export default function PayArea({
         senderCPF: "",
         senderAreaCode: "",
         senderPhone: "",
-        firstDueDate: "2020-09-28",
+        firstDueDate: "",
     });
     let {
         SKU,
@@ -58,6 +60,7 @@ export default function PayArea({
         const thisSenderPhone = convertPhoneStrToInt(phone, {
             phoneOnly: true,
         });
+        const thisFirstDueDate = getDashYearMonthDay(addDays(new Date(), 3));
 
         setData({
             ...data,
@@ -65,6 +68,7 @@ export default function PayArea({
             senderCPF: thisSenderCPF,
             senderAreaCode: thisSenderAreaCode,
             senderPhone: thisSenderPhone,
+            firstDueDate: thisFirstDueDate,
         });
     }, [plan, servicesTotal, phone, servicesAmount]);
 

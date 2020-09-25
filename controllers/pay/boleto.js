@@ -41,7 +41,7 @@ function createBoleto(req, res) {
         amount = "150.00",
         numberOfPayments = 1,
         instructions,
-        description = "nenhuma descrição",
+        description,
         cpf = "02324889242",
         cnpj,
         name = "Ana Maria",
@@ -84,8 +84,8 @@ function createBoleto(req, res) {
         reference, // Campo destinado a controles internos do vendedor. Tamanho máximo: 200 caracteres.
         numberOfPayments, // int32 Permitido preencher de 1 a 12.Permitido preencher de 1 a 12. // Informar a quantidade de boletos a serem gerados para cada comprador. n1 exemplo
         amount, // Informar o valor em reais a ser cobrado em cada boleto. Mínimo 5.00 e máximo 1000000.00 decimal, com duas casas decimais separadas por ponto (ex: 1234.56)
-        instructions: `REFERENTE À FIDDELIZE INVISTA - ${instructions}`, // This will appear in the boleto's main instruction button - Campo instruções do boleto, personalizado para uso do vendedor, restrito a 100 caracteres
-        description, // This does not insert anything in the Boleto Descrição do produto objeto da cobrança.
+        instructions: `REFERENTE À FIDDELIZE INVISTA - ${instructions}`, // BOLETO = This will appear in the boleto's main instruction button - Campo instruções do boleto, personalizado para uso do vendedor, restrito a 100 caracteres
+        description: reference, // EMAIL - Description appears in the email ITENS DO PEDIDO. use SKU. This does not insert anything in the Boleto Descrição do produto objeto da cobrança.
         periodicity: "monthly", // Atualmente a chamada não aceita nenhum outro valor diferente.
         customer: customerData,
         notificationURL: "https://fiddelize.com.br/notificações", // URL para recebimento de notificação. Realiza validação de url válida.

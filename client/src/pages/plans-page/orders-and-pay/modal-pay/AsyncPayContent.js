@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./_PayContent.scss";
 import PayCategories from "./payment-methods/PayCategories";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { Load } from "../../../../components/code-splitting/LoadableComp";
 import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
 import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
+import { ShowPayWatermarks } from "./comps/GlobalComps";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
 const AsyncBoleto = LoadableVisible({
@@ -15,11 +15,6 @@ const AsyncBoleto = LoadableVisible({
             "./payment-methods/boleto/AsyncBoleto" /* webpackChunkName: "boleto-comp-lazy" */
         ),
 });
-
-export const faStyle = {
-    fontSize: "25px",
-    color: "var(--themeP)",
-};
 
 /*
 IMPORTANT:
@@ -118,43 +113,6 @@ export default function AsyncPayContent({ modalData }) {
         });
     }
 
-    const showPayWatermarks = () => (
-        <section className="d-flex justify-content-around">
-            <div className="d-flex paycontent--safe-msg">
-                <section className="d-flex align-items-cnter position-relative">
-                    <FontAwesomeIcon
-                        icon="lock"
-                        className="mr-2"
-                        style={faStyle}
-                    />
-                    <p
-                        className="text-purple font-weight-bold text-small"
-                        style={{ lineHeight: "20px" }}
-                    >
-                        Ambiente
-                        <br />
-                        Seguro
-                    </p>
-                </section>
-            </div>
-            <section className="animated fadeInUp delay-3s pagseguro-mark container-center-col">
-                <p
-                    className="main-font position-relative m-0 shadow-elevation-black text-left text-white font-weight-bold"
-                    style={{ left: "10px" }}
-                >
-                    protegido pelo
-                </p>
-                <img
-                    className="shadow-elevation-black"
-                    src="/img/icons/pay/logo-pagseguro-uol.png"
-                    width={160}
-                    height={30}
-                    alt="pagamento processado via PagSeguro Transparente"
-                />
-            </section>
-        </section>
-    );
-
     const methodsModalData = {
         processing: loading,
         responseData: data,
@@ -173,7 +131,7 @@ export default function AsyncPayContent({ modalData }) {
             {showTitle()}
             {showSubtitle()}
             <PayCategories modalData={methodsModalData} />
-            {showPayWatermarks()}
+            <ShowPayWatermarks />
         </section>
     );
 }

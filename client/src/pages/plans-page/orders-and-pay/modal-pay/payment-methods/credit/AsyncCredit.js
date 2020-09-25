@@ -7,6 +7,7 @@ import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
 import TextField from "@material-ui/core/TextField";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getFirstName from "../../../../../../utils/string/getFirstName";
+import { ShowPayWatermarks } from "../../comps/GlobalComps";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
@@ -114,6 +115,7 @@ export default function AsyncCredit({ modalData }) {
         <Fragment>
             {showTitle()}
             {showMaintenanceMsg()}
+            <ShowPayWatermarks needAnima={false} />
         </Fragment>
     );
 }
