@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import EventIcon from "@material-ui/icons/Event";
+import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 // Customized Data
 // import { isScheduledDate } from '../../../../../../../utils/dates/dateFns';
 import "./Accordion.scss";
@@ -75,9 +76,13 @@ export default function InvestCard({
 
     // const dispatch = useStoreDispatch();
 
-    const displayExpiryCounter = (isPaid = true) => {
+    const displayExpiryCounter = (isPaid = true, planDueDate, periodDays) => {
+        const daysLeft = getDatesCountdown(planDueDate, {
+            deadline: periodDays,
+        });
+
         return (
-            isPaid && (
+            true && (
                 <section
                     className="enabledLink position-absolute"
                     style={styles.expiryCounter}
@@ -96,7 +101,7 @@ export default function InvestCard({
                             top: -5,
                         }}
                     >
-                        30 dias
+                        {daysLeft || 0} dias
                     </p>
                 </section>
             )
@@ -104,17 +109,25 @@ export default function InvestCard({
     };
 
     const displayStatusBadge = (panel) => {
-        let { transactionStatus } = panel.data;
+        let { transactionStatus, planDueDate, periodDays } = panel.data;
+        const daysLeft = getDatesCountdown(planDueDate, {
+            deadline: periodDays,
+        });
 
         transactionStatus =
             transactionStatus && transactionStatus.toUpperCase();
         if (!transactionStatus) transactionStatus = "SEM STATUS";
         if (transactionStatus === "disponível") transactionStatus = "PAGO";
+        if (daysLeft === 0) transactionStatus = "EXPIROU";
 
         const handleBack = () => {
             if (transactionStatus === "PENDENTE") return "grey";
             if (transactionStatus === "PAGO") return "var(--incomeGreen)";
-            if (transactionStatus === "CANCELADO") return "var(--expenseRed)";
+            if (
+                transactionStatus === "CANCELADO" ||
+                transactionStatus === "EXPIROU"
+            )
+                return "var(--expenseRed)";
             return "var(--mainDark)";
         };
 
@@ -138,6 +151,8 @@ export default function InvestCard({
 
     const showPanel = (panel) => {
         const isPaid = panel.data.transactionStatus === "pago";
+        const expiryDate = panel.data.planDueDate;
+        const periodDays = panel.data.periodDays;
 
         return (
             <section>
@@ -169,7 +184,7 @@ export default function InvestCard({
                     )}
                 </AccordionSummary>
                 {displayStatusBadge(panel)}
-                {displayExpiryCounter(isPaid)}
+                {displayExpiryCounter(isPaid, expiryDate, periodDays)}
             </section>
         );
     };

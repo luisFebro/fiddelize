@@ -44,7 +44,7 @@ const handleSecHeading = (data, styles) => {
                 style={styles.dateBadge}
             >
                 <span className="text-small text-shadow font-weight-bold">
-                    Em {calendar(data.createdAt)}.
+                    Gerado em: {calendar(data.createdAt)}.
                 </span>
             </p>
         </section>
@@ -94,12 +94,12 @@ export default function AsyncCardsList() {
         if (per === "M") return "Mensal";
     };
 
-    const displayPlanType = (data) => {
-        const reference = data.reference;
+    const handlePeriodDays = (per) => {
+        if (per === "A") return 365;
+        if (per === "M") return 30;
+    };
 
-        const referenceArray = reference && reference.split("-");
-        const [planCode, qtt, period] = referenceArray;
-
+    const displayPlanType = (planCode, period) => {
         const plan = handlePlanCode(planCode);
         const generatedPeriod = handlePeriod(period);
         const planDesc = `P. ${plan && plan.cap()} ${generatedPeriod}`;
@@ -136,11 +136,18 @@ export default function AsyncCardsList() {
 
     const showAccordion = () => {
         const actions = list.map((data) => {
+            const reference = data.reference;
+
+            const referenceArray = reference && reference.split("-");
+            const [planCode, qtt, period] = referenceArray;
+
             const payCategory = data.paymentCategory; // boleto, crédito, débito.
+
+            const periodDays = handlePeriodDays(period);
 
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayPlanType(data)}
+                    {displayPlanType(planCode, period)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}
@@ -165,7 +172,7 @@ export default function AsyncCardsList() {
                 _id: data._id,
                 mainHeading,
                 secondaryHeading: sideHeading,
-                data,
+                data: { ...data, periodDays },
                 hiddenContent: HiddenPanel,
             };
         });

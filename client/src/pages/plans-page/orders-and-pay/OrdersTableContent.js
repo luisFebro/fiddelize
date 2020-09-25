@@ -54,6 +54,15 @@ export default function OrdersTableContent({
             <br />- As quantidades disponíveis em cada serviço{" "}
             <strong>não são acumulativas</strong>.
             <br />
+            <br />- Você pode renovar seu plano mesmo durante sua ativação. Por
+            exemplo, se renovar um plano mensal por mais 1 mês, logo você terá
+            60 dias de tempo de uso acumulados. O sistema da Fiddelize analisa
+            se você já tem o serviço a ser renovado e atualiza o plano
+            considerando o tempo de uso anterior restante somado com o atual.
+            <br />
+            <br />- Você consegue renovar um plano mensal para anual ou
+            vice-versa quantas vezes precisar.
+            <br />
             <br />- Você pode fazer investimentos em{" "}
             <strong>diferentes planos</strong> tanto mensais ou anuais. Cada
             transação de plano possui seu próprio tempo de uso que você

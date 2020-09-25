@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreState } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
@@ -7,6 +7,8 @@ import { Load } from "../../../../../../../components/code-splitting/LoadableCom
 import copyTextToClipboard from "../../../../../../../utils/document/copyTextToClipboard";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
+import { setVar } from "../../../../../../../hooks/storage/useVar";
+import { withRouter } from "react-router-dom";
 
 const AsyncOrdersTableContent = Load({
     loader: () =>
@@ -24,14 +26,18 @@ const getStyles = () => ({
         position: "relative",
     },
     fieldFormValue: {
-        backgroundColor: "var(--mainWhite)",
+        backgroundColor: "#fff",
         color: "var(--themeP)",
         fontSize: "20px",
+        fontWeight: "bold",
         fontFamily: "var(--mainFont)",
     },
 });
 
-export default function PanelHiddenContent({ data }) {
+function PanelHiddenContent({ history, data }) {
+    const [copy, setCopy] = useState(false);
+    const [loadingOrderPage, setLoadingOrderPage] = useState(false);
+
     const { runArray } = useStoreState((state) => ({
         runArray: state.globalReducer.cases.runArray,
     }));
@@ -39,12 +45,6 @@ export default function PanelHiddenContent({ data }) {
     const styles = getStyles();
 
     const dispatch = useStoreDispatch();
-
-    const handleCopy = () => {
-        copyTextToClipboard("#msgArea", () =>
-            showSnackbar(dispatch, "Mensagem copiada!", "success")
-        );
-    };
 
     const displayCopyBtn = () => (
         <section className="d-flex justify-content-end my-3">
@@ -56,6 +56,40 @@ export default function PanelHiddenContent({ data }) {
                 variant="extended"
             />
         </section>
+    );
+
+    const handleCopy = () => {
+        setCopy(true);
+        showSnackbar(
+            dispatch,
+            "Linha Copiada! Use no App do seu banco favorito.",
+            "success"
+        );
+        setTimeout(
+            () => copyTextToClipboard("#barcodeLineArea", () => null),
+            3000
+        );
+    };
+
+    const showBarcodeLine = (data) => (
+        <Fragment>
+            {!copy ? (
+                <Fragment>{data.barcode}</Fragment>
+            ) : (
+                <TextField
+                    multiline
+                    rows={2}
+                    id="barcodeLineArea"
+                    name="message"
+                    InputProps={{
+                        style: styles.fieldFormValue,
+                    }}
+                    value={data.barcode}
+                    variant="outlined"
+                    fullWidth
+                />
+            )}
+        </Fragment>
     );
 
     const showBoletoDetails = (data) => (
@@ -77,12 +111,12 @@ export default function PanelHiddenContent({ data }) {
                                 position="relative"
                                 size="small"
                                 title="copiar"
-                                onClick={null}
+                                onClick={handleCopy}
                                 backgroundColor={"var(--themeSDark--default)"}
                                 variant="extended"
                             />
                         </div>
-                        {data.barcode}
+                        {showBarcodeLine(data)}
                     </section>
                     <section className="mt-4 mb-5 container-center">
                         <a
@@ -128,6 +162,9 @@ export default function PanelHiddenContent({ data }) {
             if (code === "BR") return "bronze";
         };
 
+        const orders = data.ordersStatement;
+        const investAmount = data.investAmount;
+
         const reference = data.reference;
         const referenceArray = reference && reference.split("-");
         const [planCode, qtt, period] = referenceArray;
@@ -143,8 +180,8 @@ export default function PanelHiddenContent({ data }) {
                     </h2>
                     <AsyncOrdersTableContent
                         needGenerateList={true}
-                        orders={data.ordersStatement}
-                        loading={!data.ordersStatement ? true : false}
+                        orders={orders}
+                        loading={!orders ? true : false}
                         plan={thisPlan}
                         period={thisPeriod}
                         notesColor="white"
@@ -152,8 +189,34 @@ export default function PanelHiddenContent({ data }) {
                     <section className="my-5 container-center">
                         <ButtonFab
                             size="medium"
-                            title="Renovar Plano"
-                            onClick={null}
+                            title={
+                                loadingOrderPage
+                                    ? "Carregando..."
+                                    : "Renovar Plano"
+                            }
+                            onClick={() => {
+                                setLoadingOrderPage(true);
+                                async function setAllVars() {
+                                    const readyVar = await Promise.all([
+                                        setVar({ orders_clientAdmin: orders }),
+                                        setVar({
+                                            totalMoney_clientAdmin: investAmount,
+                                        }),
+                                        setVar({
+                                            planPeriod_clientAdmin: thisPeriod,
+                                        }),
+                                        setVar({
+                                            ordersPlan_clientAdmin: thisPlan,
+                                        }),
+                                        // setVar({ totalServices_clientAdmin: 100 }),
+                                    ]);
+
+                                    setLoadingOrderPage(false);
+                                    history.push("/pedidos/admin");
+                                }
+
+                                setAllVars();
+                            }}
                             backgroundColor={"var(--themeSDark--default)"}
                             variant="extended"
                         />
@@ -170,6 +233,8 @@ export default function PanelHiddenContent({ data }) {
         </section>
     );
 }
+
+export default withRouter(PanelHiddenContent);
 
 /* ARCHIVES
 <TextField

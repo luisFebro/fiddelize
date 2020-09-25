@@ -44,7 +44,7 @@ export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {
 
     const handleFullOpen = () => {
         setFullOpen(true);
-        isProUser && handleCancel("noMsg"); // remove curr order.
+        isProUser && handleCancel(); // remove curr order.
     };
 
     const handleFullClose = () => {

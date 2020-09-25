@@ -5,7 +5,6 @@ import PayCategories from "./payment-methods/PayCategories";
 import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
 import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
-import { getVar, removeVar } from "../../../../hooks/storage/useVar";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
 import { addDays } from "../../../../utils/dates/dateFns";
 import getFirstName from "../../../../utils/string/getFirstName";
@@ -44,18 +43,11 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         senderEmail,
         PagSeguro,
         firstDueDate,
+        ordersStatement,
     } = modalData; // n1 notes about PagSeguro Methods
     const [payMethods, setPayMethods] = useState({});
     const [senderHash, setSenderHash] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [ordersStatement, setOrdersStatement] = useState(null);
-
-    useEffect(() => {
-        getVar("orders_clientAdmin").then((theseOrders) => {
-            setOrdersStatement(theseOrders);
-            removeVar("orders_clientAdmin");
-        });
-    }, []);
 
     const { businessId } = useAppSystem();
     const { name: adminName } = useProfile();

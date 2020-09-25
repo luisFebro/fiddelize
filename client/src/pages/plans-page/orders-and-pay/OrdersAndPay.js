@@ -23,7 +23,7 @@ export default function OrdersAndPay({
     let { servicesAmount, servicesTotal } = dataSer;
 
     const handleServicesData = (payload) => {
-        setDataSer({ ...data, ...payload });
+        setDataSer({ ...dataSer, ...payload });
     };
 
     const dispatch = useStoreDispatch();
@@ -36,13 +36,18 @@ export default function OrdersAndPay({
     const { data: dataPlan, loading: loadPlan } = useGetVar(
         "ordersPlan_clientAdmin"
     );
+    const { data: dataPeriod, loading: loadPeriod } = useGetVar(
+        "planPeriod_clientAdmin"
+    );
     orders = !orders ? data : orders;
     plan = !plan ? dataPlan : plan;
+    period = !period ? dataPeriod : period;
 
     useEffect(() => {
         if (!loading) setVar({ orders_clientAdmin: orders });
         if (!loadPlan) setVar({ ordersPlan_clientAdmin: plan });
-    }, [orders, loading, loadPlan]);
+        if (!loadPeriod) setVar({ planPeriod_clientAdmin: period });
+    }, [loading, loadPlan, loadPeriod]);
 
     const showTitle = () => (
         <div className="my-3">
@@ -66,6 +71,7 @@ export default function OrdersAndPay({
         removeVar("totalServices_clientAdmin");
         removeVar("totalMoney_clientAdmin");
         removeVar("ordersPlan_clientAdmin");
+        removeVar("planPeriod_clientAdmin");
     };
 
     return (
@@ -94,6 +100,7 @@ export default function OrdersAndPay({
                 handleCancel={handleCancel}
                 servicesTotal={servicesTotal}
                 servicesAmount={servicesAmount}
+                ordersStatement={orders}
             />
         </section>
     );

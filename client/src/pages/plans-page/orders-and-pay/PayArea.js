@@ -24,7 +24,7 @@ const AsyncPayMethods = Load({
         ),
 });
 
-const sandboxMode = IS_DEV ? true : false;
+const sandboxMode = true; // IS_DEV ? true : false;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";
@@ -35,6 +35,7 @@ export default function PayArea({
     period = "yearly",
     servicesAmount,
     servicesTotal,
+    ordersStatement,
 }) {
     const [data, setData] = useState({
         SKU: "",
@@ -143,6 +144,7 @@ export default function PayArea({
         senderPhone,
         senderEmail,
         firstDueDate,
+        ordersStatement,
         PagSeguro: window.PagSeguroDirectPayment,
     };
 
@@ -174,7 +176,7 @@ export default function PayArea({
                         position="relative"
                         modalData={modalData}
                         callback={() => {
-                            handleCancel("noMsg");
+                            handleCancel();
                         }}
                         backgroundColor={"var(--themeSDark)"}
                         variant="extended"
