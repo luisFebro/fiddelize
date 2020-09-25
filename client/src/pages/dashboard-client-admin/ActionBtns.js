@@ -123,7 +123,7 @@ let PlanBadges = ({ history }) => {
     );
 
     return (
-        <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-3s">
+        <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-1s">
             <div className={`${bizPlan}`}>
                 <span className="title">
                     {bizPlan === "gratis" && "Sua versão:"}

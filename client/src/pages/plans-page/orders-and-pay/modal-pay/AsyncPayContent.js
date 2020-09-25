@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./_PayContent.scss";
 import PayCategories from "./payment-methods/PayCategories";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Load } from "../../../../components/code-splitting/LoadableComp";
+// import { Load } from "../../../../components/code-splitting/LoadableComp";
+import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
+import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
+import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
+// import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
-const AsyncBoleto = Load({
+const AsyncBoleto = LoadableVisible({
+    loading: true,
     loader: () =>
         import(
             "./payment-methods/boleto/AsyncBoleto" /* webpackChunkName: "boleto-comp-lazy" */
@@ -22,36 +27,65 @@ As chamadas para os meios de pagamento do Checkout Transparente deverão ser efe
 POST https://ws.pagseguro.uol.com.br/v2/transactions?{{credenciais}}
  */
 
+const getPayMethod = (selected) => {
+    if (!selected) return "boleto";
+
+    if ("No Boleto") return "boleto";
+    if ("No Cartão") return "creditCard";
+    if ("No Débito") return "eft";
+};
+
 export default function AsyncPayContent({ modalData }) {
-    const { authToken, PagSeguro } = modalData; // n1 notes about PagSeguro Methods
+    const {
+        sandboxMode,
+        authToken,
+        reference,
+        itemDescription,
+        itemAmount,
+        senderCPF,
+        senderAreaCode,
+        senderPhone,
+        senderEmail,
+        PagSeguro,
+    } = modalData; // n1 notes about PagSeguro Methods
     const [payMethods, setPayMethods] = useState({});
     const [senderHash, setSenderHash] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
-    console.log("senderHash", senderHash);
-    console.log("payMethods", payMethods);
+    const { businessId } = useAppSystem();
+    const { name: adminName } = useProfile();
 
-    // useEffect(() => {
-    //     PagSeguro.setSessionId(authToken);
-    //     PagSeguro.getPaymentMethods({
-    //         amount: undefined, // returns all methods if not defined.
-    //         success: function (response) {
-    //             // n2
-    //             setPayMethods(response.paymentMethods);
-    //         },
-    //         error: function (response) {
-    //             console.log("Callback para chamadas que falharam", response);
-    //         },
-    //         complete: function (response) {
-    //             console.log("Callback para todas chamadas", response);
-    //         },
-    //     });
+    const handleSelected = (selection) => {
+        setSelectedCategory(selection);
+    };
 
-    //     const fetchHash = setTimeout(() => getSenderHash(), 5000);
+    const params = {
+        userId: businessId,
+        senderHash,
+        reference,
+        senderName: adminName,
+        senderCPF,
+        senderAreaCode,
+        senderPhone,
+        senderEmail: sandboxMode
+            ? `teste@sandbox.pagseguro.com.br`
+            : senderEmail,
+        paymentMethod: getPayMethod(selectedCategory),
+        itemId: reference,
+        itemAmount1: itemAmount,
+        itemDescription1: `${itemDescription.replace(
+            /ç/gi,
+            "c"
+        )}R$ ${itemAmount}`,
+    };
 
-    //     return () => {
-    //         clearTimeout(fetchHash);
-    //     };
-    // }, []);
+    const { data, loading } = useAPI({
+        method: "post",
+        url: finishCheckout(),
+        params,
+        needAuth: true,
+        trigger: senderHash && selectedCategory,
+    });
 
     const showTitle = () => (
         <div className="mt-2">
@@ -102,7 +136,7 @@ export default function AsyncPayContent({ modalData }) {
             </div>
             <section className="animated fadeInUp delay-3s pagseguro-mark container-center-col">
                 <p
-                    className="position-relative m-0 shadow-elevation-black text-left text-white font-weight-bold"
+                    className="main-font position-relative m-0 shadow-elevation-black text-left text-white font-weight-bold"
                     style={{ left: "10px" }}
                 >
                     protegido pelo
@@ -118,12 +152,24 @@ export default function AsyncPayContent({ modalData }) {
         </section>
     );
 
+    const methodsModalData = {
+        processing: loading,
+        responseData: data,
+        authToken,
+        getSenderHash,
+        handleSelected,
+        setPayMethods,
+        itemDescription,
+        itemAmount,
+        adminName,
+        PagSeguro,
+    };
+
     return (
         <section>
             {showTitle()}
             {showSubtitle()}
-            <PayCategories />
-            <AsyncBoleto />
+            <PayCategories modalData={methodsModalData} />
             {showPayWatermarks()}
         </section>
     );
@@ -143,3 +189,17 @@ Esse método recebe opcionalmente o valor da transação e retorna um JSON conte
 n2:
 Observe que os meios de pagamento Balance e Deposit são retornados, porém atualmente não podem ser implementados.
 */
+
+/* ARCHIVES
+const handleView = (targetCategory) => {
+        let elem = "";
+        if(targetCategory === "No Boleto") elem = "#PayContent--boleto-msg";
+        // if("No Cartão") return "creditCard";
+        // if("No Débito") return "eft";
+
+        var element = document.querySelector(elem)
+        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+        // scrollIntoView(elem, { mainContainer: "#mainContainer-PayContent" });
+    }
+
+ */

@@ -34,20 +34,6 @@ function startCheckout(req, res) {
                 if (error === null) {
                     const [checkoutCode] = result.session.id;
                     res.json(checkoutCode);
-                    /*
-                        need keep in the database:
-                        transactionCode,
-                        reference,
-                        paymentLink,
-                        paymentMethodCode // 2 is boleto
-                        // for biz
-                        feeAmount // fee transaction
-                        netAmount
-                        extraAmount // if discounts
-                        installmentCount
-                        items
-
-                     */
                 } else {
                     console.log(error);
                 }
@@ -63,7 +49,7 @@ const finishCheckout = (req, res) => {
         itemId1 = "123",
         itemDescription1 = "Cool Service",
         itemQuantity1 = 1,
-        itemAmount1 = 0.0,
+        itemAmount1 = -1.0,
         extraAmount,
         senderCPF,
         senderHash,
@@ -124,7 +110,6 @@ const finishCheckout = (req, res) => {
             "Content-Type": "application/x-www-form-urlencoded",
         },
     };
-    console.log("config", config);
 
     axios(config)
         .then((response) => {
@@ -132,7 +117,36 @@ const finishCheckout = (req, res) => {
             parser.parseString(xml, function (error, result) {
                 if (error === null) {
                     // const [checkoutCode] = result.session.id;
-                    res.json(result);
+                    const data = result.transaction;
+                    console.log("data", data);
+                    console.log(result);
+                    const [transactionCode] = data.code;
+                    console.log("transactionCode", transactionCode);
+                    const [reference] = data.reference;
+                    console.log("reference", reference);
+                    const [paymentLink] = data.paymentLink;
+                    console.log("paymentLink", paymentLink);
+                    const [feeAmount] = data.feeAmount;
+                    console.log("feeAmount", feeAmount);
+                    const [netAmount] = data.netAmount;
+                    console.log("netAmount", netAmount);
+                    const [grossAmount] = data.grossAmount;
+                    console.log("grossAmount", grossAmount);
+                    const [extraAmount] = data.extraAmount;
+                    console.log("extraAmount", extraAmount);
+                    const payload = {
+                        // userId,
+                        // paymentMethod,
+                        transactionCode,
+                        reference,
+                        paymentLink,
+                        feeAmount,
+                        netAmount,
+                        grossAmount,
+                        extraAmount, // if discounts
+                    };
+                    console.log("payload", payload);
+                    res.json(payload);
                 } else {
                     console.log(error);
                 }
@@ -210,7 +224,7 @@ paymentLink . Esse parâmetro pode ser um link de acesso para a imagem do boleto
 
 Exemplo de checkout com DÉBITO ONLINE:
 paymentMode=default
-&paymentMethod=deft
+&paymentMethod=eft
 &bankName=itau
 &receiverEmail=suporte@lojamodelo.com.br
 &currency=BRL

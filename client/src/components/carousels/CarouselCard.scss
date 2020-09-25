@@ -22,14 +22,14 @@
     border-radius: 15px;
 }
 .carousel--root.compact {
-    height: 240px;
+    height: 260px;
 
     & .flickity-viewport {
-        height: 240px !important;
+        height: 260px !important;
     }
 
     .carousel-cell {
-        height: 230px;
+        height: 240px;
     }
 }
 

@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import styled from 'styled-components';
-import { spin } from '../../keyframes/spin';
-import Picture from '../../components/Picture';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, useCallback } from "react";
+import styled from "styled-components";
+import { spin } from "../../keyframes/spin";
+import Picture from "../../components/Picture";
+import PropTypes from "prop-types";
 
 const logoOpts = {
-    large: '100px',
-    small: '50px',
-    mini: '20px',
-}
+    large: "100px",
+    small: "50px",
+    mini: "20px",
+};
 
 const SpinnerInner = styled.div`
     position: relative;
@@ -19,56 +19,66 @@ const SpinnerInner = styled.div`
     border-top: 3px solid var(--lightPurple);
     border-radius: 100%;
 
-    animation: ${spin} .8s linear infinite;
+    animation: ${spin} 0.8s linear infinite;
 `;
 
 Spinner.propTypes = {
     expireSec: PropTypes.number,
-    size: PropTypes.oneOf(['mini', 'small', 'large']),
-    logo: PropTypes.oneOf(['white', 'purple', '']),
-}
+    size: PropTypes.oneOf(["mini", "small", "large"]),
+    logo: PropTypes.oneOf(["white", "purple", ""]),
+};
 
 export default function Spinner({
     expireSec,
-    marginX, marginY,
+    marginX,
+    marginY,
     isCenter = true,
-    size = "small"
-    ,logo }) {
+    size = "small",
+    logo,
+    margin,
+}) {
     const [run, setRun] = useState(true);
     // Not working with callback
     const stopSpinnerAfter = useCallback(() => {
         const milisecs = expireSec * 1000;
-        console.log(milisecs)
+        console.log(milisecs);
         return expireSec && setTimeout(() => setRun(false), milisecs);
-    }, [expireSec])
+    }, [expireSec]);
 
     useEffect(() => {
         const timer = stopSpinnerAfter;
-        return () => { clearTimeout(timer) }
-    }, [stopSpinnerAfter])
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [stopSpinnerAfter]);
 
-    const showSpinner = isRunning => (
-        isRunning &&
-        <SpinnerInner size={size} />
-    );
+    const showSpinner = (isRunning) =>
+        isRunning && <SpinnerInner size={size} />;
 
-    const heightCond = typeof marginY === "number" ? (marginY - logoOpts[size]) / 2  : (marginX - logoOpts[size]) / 2;
+    const heightCond =
+        typeof marginY === "number"
+            ? (marginY - logoOpts[size]) / 2
+            : (marginX - logoOpts[size]) / 2;
     const widthCond = (marginX - logoOpts[size]) / 2;
     const calculatedRelativeMargin = `${heightCond}px ${widthCond}px`;
 
     return (
         <section
-            className={`${isCenter && "container-center"} ${logo ? "container-center-col" : null}`}
-            style={{minHeight: marginY ? marginY : "85px"}}
+            className={`${isCenter && "container-center"} ${
+                logo ? "container-center-col" : null
+            }`}
+            style={{ minHeight: marginY ? marginY : "85px", margin }}
         >
-            <div style={{margin: !marginX ? 0 : calculatedRelativeMargin }}>
+            <div style={{ margin: !marginX ? 0 : calculatedRelativeMargin }}>
                 {logo && (
                     <Picture
                         path={`/img/official-logo-${logo}`}
-                        className={`${logo === "purple" ? "" : 'svg-elevation'} mb-4`}
+                        className={`${
+                            logo === "purple" ? "" : "svg-elevation"
+                        } mb-4`}
                         alt="logo"
                         width={70}
-                        height='auto'
+                        height="auto"
                     />
                 )}
             </div>
@@ -76,7 +86,6 @@ export default function Spinner({
         </section>
     );
 }
-
 
 /* ARCHIVES
 const SpinnerInner = styled(Wrapper)`

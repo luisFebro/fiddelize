@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import Card from "@material-ui/core/Card";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import copyTextToClipboard from "../../../../../../utils/document/copyTextToClipboard";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
 import TextField from "@material-ui/core/TextField";
+import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import getFirstName from "../../../../../../utils/string/getFirstName";
+// import animateCSS from '../../../../utils/animateCSS';
+// import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -14,9 +18,10 @@ const getStyles = () => ({
         maxWidth: isSmall ? "" : 450,
     },
     fieldFormValue: {
-        backgroundColor: "var(--mainWhite)",
+        backgroundColor: "#fff",
         color: "var(--themeP)",
         fontSize: "20px",
+        fontWeight: "bold",
         fontFamily: "var(--mainFont)",
     },
 });
@@ -37,33 +42,98 @@ const getBarcodeSplit = (code) => {
 };
 
 export default function AsyncBoleto({
+    modalData,
     barcode = "03399853012970000076264045701014383890000015100", // 47 characters
     paymentLink = "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=879c2cdba048c4d86c035b595b0fa02ae3356f147e87a05379bc7d76ab79d5c6a68df7782e6e16ff",
 }) {
     const [copy, setCopy] = useState(false);
 
+    const {
+        responseData,
+        processing,
+        handleSelected,
+        setPayMethods,
+        authToken,
+        getSenderHash,
+        itemDescription,
+        itemAmount,
+        adminName,
+        PagSeguro,
+    } = modalData;
+
     const styles = getStyles();
     const dispatch = useStoreDispatch();
 
-    const showLogo = () => (
-        <section className="mx-3 my-3">
-            <div className="d-flex justify-content-start">
-                <img
-                    className="img-fluid"
-                    width={120}
-                    height={75}
-                    src="/img/icons/pay/boleto.png"
-                    alt="código de barras"
-                />
+    useEffect(() => {
+        PagSeguro.setSessionId(authToken);
+        PagSeguro.getPaymentMethods({
+            amount: undefined, // returns all methods if not defined.
+            success: function (response) {
+                // n2
+                setPayMethods(response.paymentMethods);
+            },
+            error: function (response) {
+                console.log("Callback para chamadas que falharam", response);
+            },
+            complete: function (response) {
+                // console.log("Callback para todas chamadas", response);
+            },
+        });
+
+        handleSelected("No Boleto");
+        setTimeout(() => getSenderHash(), 5000);
+    }, []);
+
+    const showTitle = () => (
+        <div className="mt-2">
+            <p className="text-em-1-9 main-font text-purple text-center font-weight-bold">
+                Fiddelize Invista
+            </p>
+        </div>
+    );
+
+    const showLogoAndDueDate = () => (
+        <section className="mx-3 my-3 d-flex justify-content-between">
+            <section>
+                <div>
+                    <img
+                        className="img-fluid"
+                        width={120}
+                        height={75}
+                        src="/img/icons/pay/boleto.png"
+                        alt="código de barras"
+                    />
+                </div>
+            </section>
+            <section className="text-p-light font-weight-bold text-normal text-right">
+                Vence em
+                <br />
+                <div className="text-left" style={{ lineHeight: "30px" }}>
+                    <span className="text-em-1-5">3 </span>
+                    <span className="text-em-1-3">dias</span>
+                    <br />
+                    <span>(21/10/20)</span>
+                </div>
+            </section>
+        </section>
+    );
+
+    const showDescription = () => (
+        <section className="mx-3 mt-3 mb-5">
+            <p className="m-0 text-purple font-weight-bold text-subtitle text-left">
+                Referente a:
+            </p>
+            <div className="text-purple font-weight-bold text-normal text-left">
+                {itemDescription}
+                <span className="text-pill">
+                    {convertToReal(itemAmount, { moneySign: true })}
+                </span>
             </div>
-            <h1 className="text-purple font-weight-bold text-subtitle text-left">
-                Está pronto!
-            </h1>
         </section>
     );
 
     const showBarcode = () => (
-        <div className="my-5 container-center">
+        <div className="mx-3 mb-5 container-center">
             {!copy ? (
                 <p className="m-0 text-center">{getBarcodeSplit(barcode)}</p>
             ) : (
@@ -91,16 +161,14 @@ export default function AsyncBoleto({
 
     const handleCopy = () => {
         setCopy(true);
+        showSnackbar(
+            dispatch,
+            "Linha Copiada! Use no App do seu banco favorito.",
+            "success"
+        );
         setTimeout(
-            () =>
-                copyTextToClipboard("#barcodeLineArea", () =>
-                    showSnackbar(
-                        dispatch,
-                        "Linha Copiada!<br />Use o App do seu banco favorito.",
-                        "success"
-                    )
-                ),
-            2000
+            () => copyTextToClipboard("#barcodeLineArea", () => null),
+            3000
         );
     };
 
@@ -132,17 +200,41 @@ export default function AsyncBoleto({
         </section>
     );
 
-    return (
-        <section className="my-5 container-center">
+    const showMsgProcessing = () => (
+        <section
+            id="PayContent--boleto-msg"
+            className="container-center-col mx-3 full-height my-4 text-subtitle font-weight-bold text-purple text-left"
+        >
+            <span className="text-em-1-5">Boleto</span>
+            <br />
+            <br />É para já, {getFirstName(adminName)}!
+            <br />
+            Seu Boleto está sendo feito agora! Um momento, carregando...
+        </section>
+    );
+
+    const showBoleto = () => (
+        <section className="container-center">
+            <h1 className="animated fadeInDown delay-3s text-nowrap text-purple font-weight-bold text-subtitle text-left">
+                Prontinho!
+            </h1>
             <Card
-                className="position-relative animated fadeInUp mt-0 mb-5 shadow-elevation"
+                className="position-relative mt-0 mb-5 animated fadeInUp normal shadow-elevation"
                 style={styles.card}
                 elevation={false}
             >
-                {showLogo()}
+                {showLogoAndDueDate()}
+                {showDescription()}
                 {showBarcode()}
                 {showCTA()}
             </Card>
         </section>
+    );
+
+    return (
+        <Fragment>
+            {showTitle()}
+            {processing ? showMsgProcessing() : showBoleto()}
+        </Fragment>
     );
 }

@@ -25,7 +25,7 @@ import {
     bool,
     oneOf,
     oneOfType,
-} from 'prop-types';
+} from "prop-types";
 
 export const buttonMultiType = {
     title: string,
@@ -34,18 +34,17 @@ export const buttonMultiType = {
     onClick: func,
     component: string,
     iconFontAwesome: oneOfType([string, element]),
-    variant: oneOf(['link', 'contained', 'outlined']),
+    variant: oneOf(["link", "contained", "outlined"]),
     color: string,
     backgroundColor: string,
     backColorOnHover: string,
-    textTransform: oneOf(['uppercase', 'lowercase', 'capitalize']),
+    textTransform: oneOf(["uppercase", "lowercase", "capitalize"]),
     disabled: bool,
     shadowColor: string,
-}
-
+};
 
 export const buttonFabType = {
-    title: string,
+    title: oneOfType([string, element]),
     icon: element,
     variant: oneOf(["extended", "round"]),
     size: oneOf(["small", "medium", "large"]),
@@ -66,9 +65,7 @@ export const buttonFabType = {
         status: bool,
     }),
     onClick: func,
-}
-
-
+};
 
 /* COMMENTS
 n1: Anything that can be rendered: numbers, strings, elements or an array

@@ -8,16 +8,14 @@ import { getVar } from "../../../hooks/storage/useVar";
 import { getServiceSKU } from "../../../utils/string/getSKUCode.js";
 import useAPI, { startCheckout } from "../../../hooks/api/useAPI";
 import PayBtn from "./modal-pay/PayBtn";
+import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
+import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
+import convertToReal from "../../../utils/numbers/convertToReal";
 
 const sandboxMode = true;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";
-
-const getModalData = ({ authToken, PagSeguro }) => ({
-    authToken,
-    PagSeguro,
-});
 
 export default function PayArea({
     handleCancel,
@@ -27,31 +25,45 @@ export default function PayArea({
 }) {
     const [data, setData] = useState({
         SKU: "",
+        servDesc: "",
+        senderCPF: "",
+        senderAreaCode: "",
+        senderPhone: "",
     });
+    let { SKU, servDesc, senderCPF, senderAreaCode, senderPhone } = data;
 
-    let { SKU } = data;
+    const { bizCodeName } = useClientAdmin();
+    const { _id, phone, name: userName, email: senderEmail } = useProfile();
+
+    useEffect(() => {
+        let desc = `Plano ${plan} com ${
+            servicesTotal ? servicesTotal : ""
+        } serviços no valor total de: `;
+        // if(servicesTotal > planServiceTotal) {
+        //     const leftover = serviceTotal - planServiceTotal;
+        //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `
+        // }
+        const thisSenderCPF = getOnlyNumbersFromStr("023.248.892-42");
+        const thisSenderAreaCode = convertPhoneStrToInt(phone, {
+            dddOnly: true,
+        });
+        const thisSenderPhone = convertPhoneStrToInt(phone, {
+            phoneOnly: true,
+        });
+
+        setData({
+            ...data,
+            servDesc: desc,
+            senderCPF: thisSenderCPF,
+            senderAreaCode: thisSenderAreaCode,
+            senderPhone: thisSenderPhone,
+        });
+    }, [plan, servicesTotal, phone, servicesAmount]);
 
     servicesAmount =
         servicesAmount && Number(servicesAmount).toFixed(2).toString();
 
     const dispatch = useStoreDispatch();
-
-    const { bizCodeName } = useClientAdmin();
-    const { _id, name: userName, email: userEmail } = useProfile();
-
-    const params = {
-        reference: SKU,
-        itemId1: SKU,
-        itemDescription1: `Plano ${plan} com ${servicesTotal} servicos`,
-        itemAmount1: servicesAmount,
-        extraAmount: undefined, // ex -30.00 for discount coupon system
-        senderCPF: "02324889242",
-        senderAreaCode: 92,
-        senderPhone: "992817363",
-        senderName: userName,
-        senderEmail: "ana@gmail.com",
-        redirectURL: "http://localhost:3000/planos?cliente-admin=1",
-    };
 
     const { data: authToken, loading, error, ShowError } = useAPI({
         method: "post",
@@ -64,17 +76,18 @@ export default function PayArea({
     useEffect(() => {
         getVar("totalServices_clientAdmin").then((totalServ) => {
             const thisCode = getServiceSKU({ plan, total: totalServ });
-            setData({ ...data, SKU: thisCode });
+            // if you want to access data inside of a promise, use innerData, never external data because it returns undefined.
+            setData((innerData) => ({ ...innerData, SKU: thisCode }));
         });
     }, [plan]);
 
     useEffect(() => {
-        // WARNING: LIGHTBOX does not work for mobile, only desktop;
         const script = document.createElement("script");
 
         script.type = "text/javascript";
         script.src = `${payUrl}/pagseguro/api/v2/checkout/pagseguro.directpayment.js`;
         script.async = true;
+        script.crossorigin = "anonymous";
 
         document.body.appendChild(script);
 
@@ -83,10 +96,18 @@ export default function PayArea({
         };
     }, []);
 
-    const modalData = getModalData({
+    const modalData = {
+        sandboxMode,
         authToken,
+        reference: SKU,
+        itemDescription: servDesc,
+        itemAmount: servicesAmount,
+        senderCPF,
+        senderAreaCode,
+        senderPhone,
+        senderEmail,
         PagSeguro: window.PagSeguroDirectPayment,
-    });
+    };
 
     return (
         <section className="my-5">

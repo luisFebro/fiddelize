@@ -11,6 +11,7 @@ export default function convertToReal(number, options = {}) {
         moneySign = false,
         needFraction = false,
         toDefault = false, // transform back to american format (later update)
+        comma = false,
     } = options;
 
     if (typeof number === "string") {
@@ -31,7 +32,7 @@ export default function convertToReal(number, options = {}) {
 
     res = number.toLocaleString("pt-BR", config);
 
-    const needComma = (number) => number < 1000;
+    const needComma = (number) => number < 1000 && comma;
     if (needComma(number)) {
         res = res.toString().replace(".", ",");
     }

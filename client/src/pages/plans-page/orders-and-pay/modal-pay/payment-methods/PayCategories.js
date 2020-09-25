@@ -1,71 +1,127 @@
-import React, { useState, Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
+import Spinner from "../../../../../components/loadingIndicators/Spinner";
+import useDelay from "../../../../../hooks/useDelay";
 import CarouselCard from "../../../../../components/carousels/CarouselCard";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import PayMethodsBtn from "./PayMethodsBtn";
 
-export default function PayCategories() {
-    const [selected, setSelected] = useState("");
+const thisData = [
+    {
+        title: "No Boleto",
+        img: "/img/icons/pay/categories/boleto-selection.svg",
+    },
+    {
+        title: "No Crédito",
+        img: "/img/icons/pay/categories/credit-card-selection.svg",
+    },
+    {
+        title: "No Débito",
+        img: "/img/icons/pay/categories/online-debt-selection.png",
+    },
+];
 
-    const CardList = () => {
-        const thisData = [
-            {
-                title: "No Boleto",
-                img: "/img/icons/pay/categories/boleto-selection.svg",
-            },
-            {
-                title: "No Crédito",
-                img: "/img/icons/pay/categories/credit-card-selection.svg",
-            },
-            {
-                title: "No Débito",
-                img: "/img/icons/pay/categories/online-debt-selection.png",
-            },
-        ];
+const CardList = ({ modalData }) => {
+    return (
+        <Fragment>
+            {thisData.map((card) => {
+                const ShowIcon = () => (
+                    <section style={{ minHeight: "80px" }}>
+                        <img
+                            className="img-fluid"
+                            width={100}
+                            src={card.img}
+                            alt="categorias de pagamento"
+                        />
+                    </section>
+                );
 
-        return (
-            <Fragment>
-                {thisData.map((card) => {
-                    const ShowIcon = () => (
-                        <section style={{ minHeight: "80px" }}>
-                            <img
-                                className="img-fluid"
-                                width={100}
-                                src={card.img}
-                                alt="categorias de pagamento"
+                return (
+                    <section
+                        key={card.title}
+                        className="carousel-cell no-outline"
+                    >
+                        <p className="mt-3 text-grey text-subtitle text-center font-weight-bold">
+                            {card.title}
+                        </p>
+                        <ShowIcon />
+                        <section className="my-3 container-center">
+                            <PayMethodsBtn
+                                method={card.title}
+                                modalData={modalData}
                             />
                         </section>
-                    );
+                    </section>
+                );
+            })}
+        </Fragment>
+    );
+};
 
-                    return (
-                        <section
-                            key={card.title}
-                            className="carousel-cell no-outline"
-                        >
-                            <p className="mt-3 text-grey text-subtitle text-center font-weight-bold">
-                                {card.title}
-                            </p>
-                            <ShowIcon />
-                            <section className="my-3 container-center">
-                                <ButtonFab
-                                    size="medium"
-                                    title="Esta aqui"
-                                    onClick={null}
-                                    backgroundColor={
-                                        "var(--themeSDark--default)"
-                                    }
-                                    variant="extended"
-                                    position="relative"
-                                />
-                            </section>
-                        </section>
-                    );
-                })}
-            </Fragment>
-        );
-    };
+export default function PayCategories({ modalData }) {
+    const ThisCard = <CardList modalData={modalData} />;
 
     return (
         <section>
-            <CarouselCard CardList={<CardList />} size="compact" />
+            <CarouselCard CardList={ThisCard} size="compact" />
         </section>
     );
 }
+
+/*
+useEffect(() => {
+    // Hide undesired cards in the panel.
+    // setTimeout(() => {
+    //     const hideTheseCards = document.querySelectorAll("section #carouselCard--root div > section");
+    //     if(hideTheseCards.length) {
+    //         hideTheseCards.forEach((hiddenCard, ind) => {
+    //             if(ind >= 3) {
+    //                 hiddenCard.style.display = "none";
+    //             }
+    //         })
+    //     }
+    // }, 8000);
+
+}, [])
+
+// SOLVE THIS ISSUE: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+// https://stackoverflow.com/questions/21926083/failed-to-execute-removechild-on-node
+if (typeof Node === 'function' && Node.prototype) {
+  const originalRemoveChild = Node.prototype.removeChild;
+  Node.prototype.removeChild = function(child) {
+    if (child.parentNode !== this) {
+      if (console) {
+        console.log('Cannot remove a child from a different parent');
+        // console.error('Cannot remove a child from a different parent', child, this);
+      }
+      return child;
+    }
+    return originalRemoveChild.apply(this, arguments);
+  }
+
+  const originalInsertBefore = Node.prototype.insertBefore;
+  Node.prototype.insertBefore = function(newNode, referenceNode) {
+    if (referenceNode && referenceNode.parentNode !== this) {
+      if (console) {
+        console.error('Cannot insert before a reference node from a different parent', referenceNode, this);
+      }
+      return newNode;
+    }
+    return originalInsertBefore.apply(this, arguments);
+  }
+}
+
+// const ready = useDelay(8000);
+// console.log("ready", ready);
+// useEffect(() => {
+//     if(ready) {
+//         const payBtns = document.querySelectorAll(".pay-methods-btns button");
+//         console.log("payBtns", payBtns);
+//         if(payBtns){
+//             payBtns.forEach(pBtn => {
+//                 pBtn.innerHTML = '<span class="text-normal font-weight-bold text-shadow text-center" style="text-transform: none">Esta aqui</span>';
+//                 pBtn.disabled = false;
+//                 pBtn.addEventListener("click", () => handleSelected("MOTHERFUCKER WORKS"))
+//             })
+//         }
+//     }
+// }, [ready])
+ */

@@ -1,10 +1,11 @@
-import zenscroll from 'zenscroll';
+import zenscroll from "zenscroll";
 
 // LESSON:
 // do not use offset (in center mode) if inside an modal.
 export default function scrollIntoView(thisElem, options = {}) {
     const {
         delay = 0, // ms
+        mainContainer, // for scrollable div
         duration = 1500, // ms
         onDone = () => null,
         offset = 47, // only center mode
@@ -12,28 +13,51 @@ export default function scrollIntoView(thisElem, options = {}) {
         mode = "center", // center, toY, to
     } = options;
 
-    if(!thisElem) throw new Error("You have to specify an element with # (id) or . (class)");
+    if (mainContainer) {
+        const defaultDuration = 500;
+        const edgeOffset = 30;
+        const container = document.querySelector(mainContainer);
+        const myScroller = zenscroll.createScroller(container); // defaultDuration, edgeOffset
+        const target = document.querySelector(thisElem);
+        myScroller.center(target);
+        return;
+    }
+
+    if (!thisElem)
+        throw new Error(
+            "You have to specify an element with # (id) or . (class)"
+        );
 
     let elem;
-    if(typeof thisElem === "object") {
+    if (typeof thisElem === "object") {
         elem = thisElem;
     } else {
-        if(!thisElem.includes('#')) throw new Error("Insert # (id) along with the element's name");
+        if (!thisElem.includes("#"))
+            throw new Error("Insert # (id) along with the element's name");
         elem = document.querySelector(thisElem);
     }
 
-    if(elem) {
-        if(mode === "intoView") {
-            setTimeout(() => zenscroll.intoView(elem, duration, () => onDone()), delay);
+    if (elem) {
+        if (mode === "intoView") {
+            setTimeout(
+                () => zenscroll.intoView(elem, duration, () => onDone()),
+                delay
+            );
         }
-        if(mode === "center") {
-            setTimeout(() => zenscroll.center(elem, duration, offset, () => onDone()), delay);
+        if (mode === "center") {
+            setTimeout(
+                () => zenscroll.center(elem, duration, offset, () => onDone()),
+                delay
+            );
         }
-        if(mode === "toY") {
+        if (mode === "toY") {
             setTimeout(() => zenscroll.toY(y, duration, () => onDone()), delay);
         }
-        if(mode === "to") {
-            setTimeout(() => zenscroll.to(elem, duration, () => onDone()), delay);
+        if (mode === "to") {
+            setTimeout(
+                () => zenscroll.to(elem, duration, () => onDone()),
+                delay
+            );
         }
     }
 }
