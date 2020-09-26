@@ -27,7 +27,7 @@ const {
     getChunksTotal,
 } = require("../../utils/array/getDataChunk");
 const filterAndCount = require("../../utils/array/filterAndCount");
-const { decryptSync } = require("../../utils/security/xCipher");
+const { decryptSync, jsDecrypt } = require("../../utils/security/xCipher");
 
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
@@ -42,6 +42,9 @@ exports.mwUserId = (req, res, next, id) => {
         .exec((err, user) => {
             if (err || !user)
                 return res.status(400).json(msg("error.notFound"));
+            if (user.cpf) {
+                user.cpf = jsDecrypt(user.cpf);
+            }
             req.profile = user;
             next();
         });
@@ -476,27 +479,23 @@ exports.changePrizeStatus = (req, res) => {
     let { statusType, newValue = undefined, prizeId } = req.query;
 
     if (!"confirmed, received".includes(statusType))
-        return res
-            .status(400)
-            .json({
-                msg:
-                    "This status type is not valid. Choose one of these: confirmed, received",
-            });
+        return res.status(400).json({
+            msg:
+                "This status type is not valid. Choose one of these: confirmed, received",
+        });
     if (!clientUserData) return res.json({ error: "no array data found" });
 
     const historyData = clientUserData.purchaseHistory;
     let totalPrizes = clientUserData.totalPurchasePrize;
-    const {
-        newData,
-        newChallengeN,
-        error,
-        status,
-    } = confirmPrizeStatus(historyData, {
-        statusType,
-        newValue,
-        prizeId,
-        totalPrizes,
-    });
+    const { newData, newChallengeN, error, status } = confirmPrizeStatus(
+        historyData,
+        {
+            statusType,
+            newValue,
+            prizeId,
+            totalPrizes,
+        }
+    );
 
     if (status === "FAIL") return res.status(404).json({ error });
 
@@ -525,12 +524,9 @@ exports.countField = (req, res) => {
     const { field, type } = req.body;
 
     if (!field)
-        return res
-            .status(400)
-            .json({
-                msg:
-                    "A field from DB should be specified and sent inside object",
-            });
+        return res.status(400).json({
+            msg: "A field from DB should be specified and sent inside object",
+        });
     // default is "asc" or "inc" which does not need to bespecified.
     let countingField = { [field]: 1 };
     if (type === "dec") {

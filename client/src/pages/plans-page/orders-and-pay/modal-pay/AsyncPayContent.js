@@ -6,6 +6,7 @@ import LoadableVisible from "../../../../components/code-splitting/LoadableVisib
 import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
 import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
+import { getVar, removeVar } from "../../../../hooks/storage/useVar";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
 const AsyncBoleto = LoadableVisible({
@@ -47,6 +48,15 @@ export default function AsyncPayContent({ modalData }) {
     const [payMethods, setPayMethods] = useState({});
     const [senderHash, setSenderHash] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [ordersStatement, setOrdersStatement] = useState(null);
+    console.log("ordersStatement", ordersStatement);
+
+    useEffect(() => {
+        getVar("orders_clientAdmin").then((theseOrders) => {
+            setOrdersStatement(theseOrders);
+            removeVar("orders_clientAdmin");
+        });
+    }, []);
 
     const { businessId } = useAppSystem();
     const { name: adminName } = useProfile();
@@ -74,6 +84,7 @@ export default function AsyncPayContent({ modalData }) {
             "c"
         )}R$ ${itemAmount}`,
         firstDueDate,
+        ordersStatement,
     };
 
     const { data, loading } = useAPI({
@@ -81,8 +92,8 @@ export default function AsyncPayContent({ modalData }) {
         url: finishCheckout(),
         params,
         needAuth: true,
-        trigger: senderHash && selectedCategory,
-        timeout: 30000,
+        trigger: ordersStatement && senderHash && selectedCategory,
+        timeout: 40000,
     });
 
     const showTitle = () => (
@@ -131,6 +142,12 @@ export default function AsyncPayContent({ modalData }) {
             {showTitle()}
             {showSubtitle()}
             <PayCategories modalData={methodsModalData} />
+            <p className="text-center mx-2 text-normal text-break">
+                {JSON.stringify(ordersStatement)}
+                <br />
+                <br />
+                {JSON.stringify(params)}
+            </p>
             <ShowPayWatermarks />
         </section>
     );

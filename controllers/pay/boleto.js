@@ -1,5 +1,5 @@
 const User = require("../../models/user/User");
-const Admin = require("../../models/admin/Admin");
+const Order = require("../../models/order/Order");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 
@@ -56,6 +56,7 @@ function createBoleto(req, res) {
         state = "SP",
         complement,
         firstDueDate = "2020-09-25",
+        ordersStatement,
     } = req.payload;
 
     const params = {
@@ -118,8 +119,9 @@ function createBoleto(req, res) {
                     status: 1,
                 },
                 paymentLink: boletoData.paymentLink,
-                dueDate: boletoData.dueDate,
+                payDueDate: boletoData.dueDate,
                 planDueDate: "2020-09-25T08:06:27.888Z",
+                ordersStatement,
             };
 
             User.findById(userId).exec((err, doc) => {
@@ -129,19 +131,22 @@ function createBoleto(req, res) {
                 doc.clientAdminData.orders = [...orders, dataCliAdmin];
                 // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
                 doc.markModified("clientAdminData");
-                doc.save((err) =>
-                    Admin.findOneAndUpdate(
+                doc.save((err) => {
+                    console.log("boletoData.code", boletoData.code);
+                    console.log("reference", reference);
+                    Order.findOneAndUpdate(
                         { reference },
                         { "transaction.code": boletoData.code },
-                        { new: false }
-                    ).exec((err) => {
+                        { new: true }
+                    ).exec((err, data) => {
+                        console.log("data", data);
                         res.json({
                             barcode: boletoData.barcode,
                             dueDate: boletoData.dueDate,
                             paymentLink: boletoData.paymentLink,
                         });
-                    })
-                );
+                    });
+                });
             });
         })
         .catch((e) => {

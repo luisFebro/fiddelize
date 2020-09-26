@@ -167,7 +167,7 @@ export default function OrdersTable({
                 >
                     <ButtonMulti
                         title="cancelar pedido"
-                        onClick={handleCancel}
+                        onClick={() => handleCancel("explicit")}
                         variant="link"
                         margin={"0px"}
                         color="var(--mainRed)"

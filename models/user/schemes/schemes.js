@@ -51,13 +51,14 @@ const SmsAutomationSchema = new Schema(smsAutomationData, { _id: false });
 const ordersData = {
     reference: String,
     investAmount: String,
+    ordersStatement: Object, // n1 e.g
     barcode: String,
     transaction: {
         code: String,
         status: Number,
     },
     paymentLink: String,
-    dueDate: String,
+    payDueDate: String,
     planDueDate: Date,
     createdAt: { type: Date, default: Date.now },
 };
@@ -80,3 +81,13 @@ module.exports = {
     DefaultFilterSchema,
     OrdersSchema,
 };
+
+/*
+n1
+Object of objects.
+{
+    Coppia Segurança: {amount: 1, price: 24.5, isPreSale: 24.5}
+    currPlan: {amount: 5, price: 520}
+    sms: {totalPackage: 24, amount: 4800, price: 576, removeCurr: false}
+}
+ */

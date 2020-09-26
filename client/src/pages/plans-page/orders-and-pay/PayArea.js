@@ -13,6 +13,7 @@ import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
 import convertToReal from "../../../utils/numbers/convertToReal";
 import { addDays } from "../../../utils/dates/dateFns";
 import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
+import { readUser } from "../../../redux/actions/userActions";
 
 const sandboxMode = true;
 const payUrl = sandboxMode
@@ -45,37 +46,44 @@ export default function PayArea({
     const { bizCodeName } = useClientAdmin();
     const { _id, phone, name: userName, email: senderEmail } = useProfile();
 
-    useEffect(() => {
-        let desc = `Plano ${plan} com ${
-            servicesTotal ? servicesTotal : ""
-        } serviços no valor total de: `;
-        // if(servicesTotal > planServiceTotal) {
-        //     const leftover = serviceTotal - planServiceTotal;
-        //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `
-        // }
-        const thisSenderCPF = getOnlyNumbersFromStr("023.248.892-42");
-        const thisSenderAreaCode = convertPhoneStrToInt(phone, {
-            dddOnly: true,
-        });
-        const thisSenderPhone = convertPhoneStrToInt(phone, {
-            phoneOnly: true,
-        });
-        const thisFirstDueDate = getDashYearMonthDay(addDays(new Date(), 3));
+    const dispatch = useStoreDispatch();
 
-        setData({
-            ...data,
-            servDesc: desc,
-            senderCPF: thisSenderCPF,
-            senderAreaCode: thisSenderAreaCode,
-            senderPhone: thisSenderPhone,
-            firstDueDate: thisFirstDueDate,
+    useEffect(() => {
+        readUser(dispatch, _id, { select: "cpf -_id" }).then((res) => {
+            let thisCPF = res.data.cpf;
+            if (thisCPF === "111.111.111-11") thisCPF = "431.711.242-62";
+
+            let desc = `Plano ${plan} com ${
+                servicesTotal ? servicesTotal : ""
+            } serviços no valor total de: `;
+            // if(servicesTotal > planServiceTotal) {
+            //     const leftover = serviceTotal - planServiceTotal;
+            //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `
+            // }
+            const thisSenderCPF = getOnlyNumbersFromStr(thisCPF);
+            const thisSenderAreaCode = convertPhoneStrToInt(phone, {
+                dddOnly: true,
+            });
+            const thisSenderPhone = convertPhoneStrToInt(phone, {
+                phoneOnly: true,
+            });
+            const thisFirstDueDate = getDashYearMonthDay(
+                addDays(new Date(), 3)
+            );
+
+            setData((thisData) => ({
+                ...thisData,
+                servDesc: desc,
+                senderCPF: thisSenderCPF,
+                senderAreaCode: thisSenderAreaCode,
+                senderPhone: thisSenderPhone,
+                firstDueDate: thisFirstDueDate,
+            }));
         });
     }, [plan, servicesTotal, phone, servicesAmount]);
 
     servicesAmount =
         servicesAmount && Number(servicesAmount).toFixed(2).toString();
-
-    const dispatch = useStoreDispatch();
 
     const { data: authToken, loading, error, ShowError } = useAPI({
         method: "post",
@@ -83,6 +91,7 @@ export default function PayArea({
         params: { userId: _id },
         trigger: SKU && servicesTotal && servicesAmount,
         needAuth: true,
+        timeout: 30000,
     });
 
     useEffect(() => {
@@ -176,6 +185,9 @@ export default function PayArea({
                     />
                 </Link>
             </section>
+            <p className="text-center mx-2 text-normal text-break">
+                {JSON.stringify(authToken)}
+            </p>
         </section>
     );
 }

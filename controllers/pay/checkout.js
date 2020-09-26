@@ -74,6 +74,7 @@ const finishCheckout = (req, res, next) => {
         senderName,
         senderEmail = "captainGreat@sandbox.pagseguro.com.br",
         firstDueDate,
+        ordersStatement,
     } = req.query;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
 
@@ -180,6 +181,7 @@ const finishCheckout = (req, res, next) => {
                             phoneNumber: senderPhone,
                             email: senderEmail,
                             firstDueDate,
+                            ordersStatement,
                         };
 
                         req.payload = payload;
