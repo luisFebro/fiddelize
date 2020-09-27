@@ -60,18 +60,18 @@ isProduction && app.use(express.static(path.join(__dirname, "client/build")));
 // END MIDDLEWARES
 
 // This solves the "Not found" issue when loading an URL other than index.html.
-isProduction &&
-    app.get("/*", (req, res) => {
-        //n3
-        res.sendFile(
-            path.join(__dirname + "/client/build/index.html"),
-            (err) => {
-                if (err) {
-                    res.status(500).send(err);
-                }
-            }
-        );
-    });
+// isProduction &&
+//     app.get("/*", (req, res) => {
+//         //n3
+//         res.sendFile(
+//             path.join(__dirname + "/client/build/index.html"),
+//             (err) => {
+//                 if (err) {
+//                     res.status(500).send(err);
+//                 }
+//             }
+//         );
+//     });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
