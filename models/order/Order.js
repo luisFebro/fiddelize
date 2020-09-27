@@ -8,8 +8,6 @@ const collectionName = "orders";
 3 - Pago,
 4 - Disponível,
 5 - Em Disputa,
-12 - Bloqueado,
- - Negado ?
 */
 
 const data = {
@@ -21,7 +19,7 @@ const data = {
     },
     transaction: {
         code: String,
-        status: { type: Number, default: 1, enum: [1, 2, 3, 5, 12] }, // VEJA STATUS ACIMA
+        status: { type: Number, default: 1, enum: [1, 2, 3, 4, 5, 6, 7, 8, 9] }, // VEJA STATUS ACIMA
     },
     paymentMethod: String,
     reference: String,
@@ -31,6 +29,7 @@ const data = {
         fee: String, // e.g  26.35
         extra: String, // e.g 0.00 for discounts
     },
+    headers: Object, // test pagseguro notification only!!!
 };
 
 const orderSchema = new Schema(data, { timestamps: true });

@@ -14,11 +14,29 @@ Note que a notificação não possui nenhuma informação sobre a transação.
 */
 
 const getPagNotify = (req, res) => {
+    console.log(req.headers);
     // res.header("Access-Control-Allow-Origin", "*");
     // consulting notification transaction
     // const notificationCode = "123312";
-    res.json({ msg: "working..." });
+    const newOrder = new Order({
+        agentName: "PagSEGURO BOSS",
+        agentId: "5db4301ed39a4e12546277a8",
+        clientAdmin: {
+            name: "senderName",
+            id: "userId",
+        },
+        transaction: {
+            // transaction code should be generate in next createBoleto Method.
+            status: 1,
+        },
+        paymentMethod: "shit",
+        reference: "sdffsdfds",
+        headers: req.headers,
+    });
 
+    newOrder.save().then((order) => {
+        res.json({ msg: "pAGSEGURO CONNECTION WORKING AND DB SAVED..." });
+    });
     // const params = {
     //     email,
     //     token,
