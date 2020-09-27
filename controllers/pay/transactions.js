@@ -12,7 +12,6 @@ Note que a notificação não possui nenhuma informação sobre a transação.
 */
 
 const getPagNotify = (req, res) => {
-    console.log("req", req);
     res.header("Access-Control-Allow-Origin", "*");
     // consulting notification transaction
     const notificationCode = "123312";
@@ -22,17 +21,19 @@ const getPagNotify = (req, res) => {
         token,
     };
 
-    const config = {
-        method: "get",
-        url: `${payUrl}/v3/transactions/notifications/${notificationCode}`,
-        params,
-        headers: {
-            charset: "ISO-8859-1",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
+    res.json({ msg: "working..." });
 
-    axios(config);
+    // const config = {
+    //     method: "get",
+    //     url: `${payUrl}/v3/transactions/notifications/${notificationCode}`,
+    //     params,
+    //     headers: {
+    //         charset: "ISO-8859-1",
+    //         "Content-Type": "application/x-www-form-urlencoded",
+    //     },
+    // };
+
+    // axios(config);
 };
 
 const readTransaction = () => {
