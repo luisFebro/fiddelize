@@ -14,16 +14,15 @@ Note que a notificação não possui nenhuma informação sobre a transação.
 */
 
 const getPagNotify = (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Origin", "*");
     // consulting notification transaction
-    const notificationCode = "123312";
-
-    const params = {
-        email,
-        token,
-    };
-
+    // const notificationCode = "123312";
     res.json({ msg: "working..." });
+
+    // const params = {
+    //     email,
+    //     token,
+    // };
 
     // const config = {
     //     method: "get",
