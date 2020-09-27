@@ -1,5 +1,5 @@
 exports.globalVar = {
-    sandboxMode: true,
+    sandboxMode: false,
     get payUrl() {
         return this.sandboxMode
             ? "https://ws.sandbox.pagseguro.uol.com.br"

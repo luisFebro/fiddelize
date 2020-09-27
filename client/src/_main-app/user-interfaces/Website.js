@@ -30,6 +30,7 @@ import RedirectLink from "../../pages/RedirectLink";
 import ClientAppPreview from "../../pages/mobile-app/ClientAppPreview";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
+import PayNotify from "../../pages/PayNotify";
 //END PAGES
 
 function Website({ location }) {
@@ -92,6 +93,7 @@ function Website({ location }) {
                     component={UnavailableService}
                 />
                 <Route path="/pedidos/admin" exact component={OrdersAndPay} />
+                <Route path="/pay-notify" exact component={PayNotify} />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

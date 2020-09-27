@@ -77,7 +77,7 @@ GRANDCARD e SOROCRED
 122 Cartão de crédito Up Policard.
 123 Cartão de crédito Banese Card.
 201 Boleto Bradesco.
-202 Boleto Santander.
+202 Boleto Santander. ****
 301 Débito online Bradesco.
 302 Débito online Itaú.
 303 Débito online Unibanco.

@@ -17,6 +17,7 @@ import PlansPage from "../../pages/plans-page/PlansPage";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
+import PayNotify from "../../pages/PayNotify";
 //END PAGES
 
 // COMPONENTS
@@ -66,7 +67,11 @@ function Mobile({ location }) {
                     component={AsyncAppSharer}
                 />
                 <Route path="/baixe-app" exact component={InstallMsg} />
-                <Route path="/baixe-app/:userName" component={InstallMsg} />
+                <Route
+                    path="/baixe-app/:userName"
+                    exact
+                    component={InstallMsg}
+                />
                 <Route path="/planos" exact component={PlansPage} />
                 <PrivateRouteClientAdm
                     path="/:bizCodeName/cliente-admin/painel-de-controle"
@@ -79,6 +84,7 @@ function Mobile({ location }) {
                     component={UnavailableService}
                 />
                 <Route path="/pedidos/admin" exact component={OrdersAndPay} />
+                <Route path="/pay-notify" exact component={PayNotify} />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

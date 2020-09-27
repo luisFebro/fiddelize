@@ -2,6 +2,8 @@ const User = require("../../models/user/User");
 const Order = require("../../models/order/Order");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
+const xml2js = require("xml2js");
+const parser = new xml2js.Parser({ attrkey: "ATTR" });
 
 const { payUrl, sandboxMode, email, token } = globalVar;
 
@@ -36,7 +38,8 @@ const getPagNotify = (req, res) => {
     // axios(config);
 };
 
-const readTransaction = () => {
+// GET
+const readTransaction = (req, res) => {
     const { transactionCode } = req.query;
 
     const params = {
@@ -45,18 +48,42 @@ const readTransaction = () => {
     };
 
     const config = {
-        method: "post",
+        method: "get",
         url: `${payUrl}/v2/transactions/${transactionCode}`,
-        data: body,
         params,
         headers: {
             "Accept-Charset": "ISO-8859-1",
             "Content-Type": "application/x-www-form-urlencoded",
         },
     };
+
+    axios(config)
+        .then((response) => {
+            const xml = response.data;
+            parser.parseString(xml, function (error, result) {
+                if (error === null) {
+                    const data = result.transaction;
+
+                    const [status] = data.status;
+                    const [lastEventDate] = data.lastEventDate;
+                    const [paymentMethod] = data.paymentMethod;
+                    const [paymentMethodCode] = paymentMethod.code;
+
+                    res.json({
+                        status,
+                        lastEventDate,
+                        paymentMethodCode,
+                    });
+                } else {
+                    console.log(error);
+                }
+            });
+        })
+        .catch((e) => res.json(e.response.data));
 };
 
-const readHistory = () => {
+// GET
+const readHistory = (req, res) => {
     const {
         reference,
         initialDate,
@@ -88,7 +115,7 @@ const readHistory = () => {
 };
 
 // Estornar transação.
-const refundTransaction = () => {
+const refundTransaction = (req, res) => {
     const { transactionCode } = req.body;
 
     const params = {
@@ -113,7 +140,7 @@ const refundTransaction = () => {
     };
 };
 
-const cancelTransaction = () => {
+const cancelTransaction = (req, res) => {
     const { transactionCode } = req.body;
 
     const params = {
