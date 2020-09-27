@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { GoldBtn, SilverBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
 import useBackColor from "../../../hooks/useBackColor";
 import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
+// Sessions
+import AddCustomerPackages from "./sessions/customer-packages/AddCustomerPackages";
+import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
+import AddSMS from "./sessions/AddSMS";
+import OffplanServices from "./sessions/services/offplan/OffplanServices";
+
+import { Load } from "../../../components/code-splitting/LoadableComp";
+const AsyncOrdersAndPay = Load({
+    loader: () =>
+        import(
+            "../orders-and-pay/OrdersAndPay" /* webpackChunkName: "orders-and-pay-page-lazy" */
+        ),
+});
 
 const getStyles = () => ({
     root: {
@@ -15,7 +28,71 @@ const getStyles = () => ({
 });
 
 export default function BronzePlan({ setCurrPlan }) {
+    const [nextPage, setNextPage] = useState(false);
+    const [data, setData] = useState({
+        totalInvest: 0,
+        totalServices: 0,
+        period: "yearly",
+        orders: {}, // e.g { customers: { amount: 0, price: 0, expiryDate: dateFormat }
+    });
+    const { totalInvest, totalServices, period, orders } = data;
+    console.log("orders", orders);
+
+    useEffect(() => {
+        let total = 0;
+
+        let totalServ = 0;
+        for (let serv in orders) {
+            ++totalServ;
+            total += orders[serv].price;
+        }
+
+        setData({
+            ...data,
+            totalInvest: total,
+            totalServices: totalServ,
+        });
+    }, [orders]);
+
     const styles = getStyles();
+
+    const handleNewOrder = (serviceName, options = {}) => {
+        const {
+            order,
+            orderGroup,
+            orderGroupPrice = 0,
+            removeOrderGroup,
+        } = options;
+
+        const orderPrice = order ? order.price : orderGroupPrice;
+        let newTotal = orderPrice;
+
+        // for SMS logics
+        const needCurrRemoval = order && order.removeCurr;
+        needCurrRemoval &&
+            setData({
+                ...data,
+                orders: { ...orders, [serviceName]: orders[serviceName] },
+            });
+
+        const handleOrderShape = () => {
+            if (removeOrderGroup) {
+                const newOrder = orders;
+                delete newOrder[removeOrderGroup];
+                return { ...orders, ...newOrder };
+            }
+            return orderGroup
+                ? { ...orders, ...orderGroup }
+                : { ...orders, [serviceName]: order };
+        };
+        const ordersObj = handleOrderShape();
+
+        setData({ ...data, orders: ordersObj });
+    };
+
+    const handlePeriod = (newPeriod) => {
+        setData({ ...data, period: newPeriod });
+    };
 
     useBackColor("var(--mainWhite)");
 
@@ -30,17 +107,55 @@ export default function BronzePlan({ setCurrPlan }) {
         </section>
     );
 
-    const planMsg = "Faça seu próprio plano.<br />Escolha seu preço.";
-    return (
-        <section>
-            <CircleBack />
-            <ReturnBtn />
-            {showPlanSwitchBtns()}
-            <MainTitle customPlanTitle="Meu" plan="Bronze" planMsg={planMsg} />
-            <PeriodSelection />
+    const modalCustomersData = {
+        handleNewOrder,
+        period,
+    };
 
-            <TotalInvest totalInvest={0} />
-            <ContinueBtn />
-        </section>
+    return (
+        <Fragment>
+            {!nextPage ? (
+                <section>
+                    <CircleBack />
+                    <ReturnBtn />
+                    {showPlanSwitchBtns()}
+                    <MainTitle
+                        customPlanTitle="Meu"
+                        plan="Bronze"
+                        planMsg="Faça seu próprio plano.<br />Escolha seu preço."
+                    />
+                    <PeriodSelection handlePeriod={handlePeriod} />
+
+                    <AddCustomerPackages
+                        modalData={modalCustomersData}
+                        customersOrder={orders.customers}
+                    />
+                    <ServicesGallery />
+                    <AddSMS
+                        smsOrder={orders.sms}
+                        handleNewOrder={handleNewOrder}
+                        top={-100}
+                    />
+                    <OffplanServices
+                        handleNewOrder={handleNewOrder}
+                        period={period}
+                    />
+
+                    <TotalInvest
+                        totalInvest={totalInvest}
+                        totalServices={totalServices}
+                    />
+                    <ContinueBtn onClick={() => setNextPage(true)} />
+                </section>
+            ) : (
+                <AsyncOrdersAndPay
+                    plan="bronze"
+                    period={period}
+                    setNextPage={setNextPage}
+                    orders={orders}
+                    orderTotal={totalInvest}
+                />
+            )}
+        </Fragment>
     );
 }

@@ -163,6 +163,7 @@ export default function SilverPlan({ setCurrPlan }) {
             ) : (
                 <AsyncOrdersAndPay
                     plan="prata"
+                    period={period}
                     setNextPage={setNextPage}
                     orders={orders}
                     orderTotal={totalInvest}

@@ -34,7 +34,7 @@ Isso ajuda na a possibilidade de pagar um boleto vencido em qualquer banco ou in
  */
 
 function createBoleto(req, res) {
-    const {
+    let {
         userId,
         transactionCode, // Transaction code needs to be from here because finishCheckout and this method generated different transaction codes.
         reference = "123",
@@ -89,7 +89,7 @@ function createBoleto(req, res) {
         description: reference, // EMAIL - Description appears in the email ITENS DO PEDIDO. use SKU. This does not insert anything in the Boleto Descrição do produto objeto da cobrança.
         periodicity: "monthly", // Atualmente a chamada não aceita nenhum outro valor diferente.
         customer: customerData,
-        notificationURL: "https://fiddelize.com.br/notificações", // URL para recebimento de notificação. Realiza validação de url válida.
+        notificationURL: "https://fiddelize.com.br/api/pay/pag-notify", // URL para recebimento de notificação. Realiza validação de url válida.
         firstDueDate, // Formato: aaaa-mm-dd Data de vencimento para qual será gerado o primeiro boleto - permitido 1 dia à partir da data presente até D+30. // Se o parâmetro numberOfPayments > 1, os próximos vencimentos seguirão com a mesma data informada no na data dd nos períodos subsequentes. // Para meses onde não existirem a data informada, será considerado sempre um dia anterior.
     };
     // END DATA BODY
@@ -112,7 +112,7 @@ function createBoleto(req, res) {
 
             const dataCliAdmin = {
                 reference,
-                investAmount: amount,
+                investAmount: (Number(amount) + 1).toFixed(2).toString(), // I discounted R$1, then replacing again to displace the correct price to cliAdmin
                 barcode: boletoData.barcode,
                 transaction: {
                     code: boletoData.code,
@@ -132,14 +132,11 @@ function createBoleto(req, res) {
                 // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
                 doc.markModified("clientAdminData");
                 doc.save((err) => {
-                    console.log("boletoData.code", boletoData.code);
-                    console.log("reference", reference);
                     Order.findOneAndUpdate(
                         { reference },
                         { "transaction.code": boletoData.code },
                         { new: true }
                     ).exec((err, data) => {
-                        console.log("data", data);
                         res.json({
                             barcode: boletoData.barcode,
                             dueDate: boletoData.dueDate,

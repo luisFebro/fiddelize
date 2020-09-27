@@ -13,6 +13,7 @@ const getStyles = () => ({
 export default function AddSMS({
     smsOrder = { amount: 0, price: 0 },
     handleNewOrder,
+    top = -150,
 }) {
     const addedSMS = convertToReal(smsOrder.amount);
     const smsPrice = convertToReal(smsOrder.price, { moneySign: true });
@@ -21,7 +22,7 @@ export default function AddSMS({
 
     return (
         <section
-            style={{ margin: "0 0 100px", top: -150 }}
+            style={{ margin: "0 0 100px", top }}
             className="position-relative"
         >
             <div className="container-center-col">
@@ -47,6 +48,7 @@ export default function AddSMS({
                     btnTitle={smsOrder.amount ? "Alterar" : "Adicionar"}
                     handleNewOrder={handleNewOrder}
                     smsOrder={smsOrder}
+                    classPosition="mt-2"
                 />
             </div>
         </section>

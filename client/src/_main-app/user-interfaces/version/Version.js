@@ -6,7 +6,7 @@ const isSmall = window.Helper.isSmallScreen();
 
 const latestVersion = "3.5604.4";
 // PRÓXIMO:
-// artigo exemplo de pontos.
+//
 const updateDescription =
     "página de planos | sistema de pagamento PAGSEGURO | club pro pt26";
 const history = [

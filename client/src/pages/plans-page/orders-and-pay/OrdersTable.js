@@ -24,6 +24,7 @@ const headCells = [
 
 export default function OrdersTable({
     plan,
+    period,
     orders,
     orderTotal,
     setVar,
@@ -56,9 +57,9 @@ export default function OrdersTable({
                 needFraction: true,
             });
 
-            let smsQtt;
+            let packageQtt;
             if (totalPackage) {
-                smsQtt = amount;
+                packageQtt = amount;
                 amount = 1;
             }
 
@@ -66,13 +67,20 @@ export default function OrdersTable({
 
             const handleServiceName = () => {
                 if (serv === "currPlan")
-                    return `Plano ${
-                        plan ? plan : "profissional"
+                    return `Plano ${plan ? plan : "profissional"} ${
+                        period === "yearly" ? "anual" : "mensal"
                     } com ${amount} serviços`;
+
                 if (serv === "sms")
                     return `${totalPackage} ${
                         totalPackage === 1 ? "pacote" : "pacotes"
-                    } com ${convertToReal(smsQtt)} SMS`;
+                    } com ${convertToReal(packageQtt)} SMS`;
+
+                if (serv === "customers")
+                    return `Novvos Clientes - ${totalPackage} ${
+                        totalPackage === 1 ? "pacote" : "pacotes"
+                    } com ${convertToReal(packageQtt)} clientes`;
+
                 return serv;
             };
 
@@ -123,7 +131,7 @@ export default function OrdersTable({
     return (
         <section className="animated fadeInUp normal">
             <p className="mt-3 mx-3 text-subtitle font-weight-bold text-purple">
-                Plano {plan}
+                Plano {plan} {period === "yearly" ? "anual" : "mensal"}
             </p>
             {isSmall && (
                 <p

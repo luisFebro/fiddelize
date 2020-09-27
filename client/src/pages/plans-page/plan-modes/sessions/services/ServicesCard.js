@@ -89,10 +89,18 @@ export default function ServicesCard({ period = "yearly", plan = "gold" }) {
     };
 
     const ServicesList = getServices("pro").map((serv) => {
-        const rawValue = getProPrice(serv.devGrade, serv.resGrade, {
-            plan,
-            period,
-        }); // serv[plan][period].price;
+        let rawValue;
+
+        const gotFixedPrice = serv[plan].fixedPrice;
+        if (gotFixedPrice) {
+            rawValue = gotFixedPrice;
+        } else {
+            rawValue = getProPrice(serv.devGrade, serv.resGrade, {
+                plan,
+                period,
+            });
+        }
+
         const serviceValue = convertToReal(rawValue, { moneySign: true });
 
         return (

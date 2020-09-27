@@ -27,7 +27,11 @@ const {
     getChunksTotal,
 } = require("../../utils/array/getDataChunk");
 const filterAndCount = require("../../utils/array/filterAndCount");
-const { decryptSync, jsDecrypt } = require("../../utils/security/xCipher");
+const {
+    jsEncrypt,
+    decryptSync,
+    jsDecrypt,
+} = require("../../utils/security/xCipher");
 
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
@@ -117,6 +121,10 @@ exports.update = (req, res) => {
     const selectedString = req.query.selectedKeys
         ? `${req.query.selectedKeys}`
         : ""; //-cpf -clientAdminData.bizPlanCode -clientAdminData.verificationPass
+
+    req.body.phone = encryptSync(req.body.phone);
+    req.body.email = encryptSync(req.body.email);
+    req.body.cpf = jsEncrypt(req.body.cpf);
 
     User.findOneAndUpdate(
         { _id: req.profile._id },

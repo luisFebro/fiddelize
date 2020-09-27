@@ -137,16 +137,23 @@ const styles = {
     },
 };
 
+const handleProPrice = (next, plan, period) => {
+    const gotFixedPrice = next[plan].fixedPrice;
+    if (gotFixedPrice) return gotFixedPrice;
+
+    return getProPrice(next.devGrade, next.resGrade, {
+        plan,
+        period,
+    });
+};
+
 export default function getServices(version = "gratis", options = {}) {
     const { total = false, period, plan } = options;
 
     if (total && (plan === "gold" || plan === "silver")) {
         let newAmount = 0;
         const newTotal = proVersion(styles).reduce((acc, next) => {
-            const thisPrice = getProPrice(next.devGrade, next.resGrade, {
-                plan,
-                period,
-            });
+            const thisPrice = handleProPrice(next, plan, period);
             if (thisPrice) newAmount++;
 
             return acc + thisPrice;

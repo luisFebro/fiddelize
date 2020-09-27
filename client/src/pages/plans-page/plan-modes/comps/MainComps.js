@@ -20,7 +20,7 @@ const getStyles = () => ({
         padding: 180,
         position: "fixed",
         background: "var(--themeP)",
-        clipPath: "ellipse(49% 13% at 13% 96%)",
+        clipPath: "ellipse(49% 13% at 13% 96%)", // alternative : clip-path: circle(50.5% at 10% 0%); padding: 330px
         webPackClipPath: "ellipse(49% 13% at 13% 96%)",
     },
     muStyle: {

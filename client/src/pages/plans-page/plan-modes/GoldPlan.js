@@ -4,11 +4,12 @@ import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
 import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
 import useBackColor from "../../../hooks/useBackColor";
+import getServices from "./sessions/services/getServices";
+
 // sessions
 import ServicesCard from "./sessions/services/ServicesCard";
 import AddSMS from "./sessions/AddSMS";
 import OffplanServices from "./sessions/services/offplan/OffplanServices";
-import getServices from "./sessions/services/getServices";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
 const AsyncOrdersAndPay = Load({
@@ -114,8 +115,6 @@ export default function GoldPlan({ setCurrPlan }) {
             plan: "gold",
             period,
         });
-        console.log("newTotal", newTotal);
-        console.log("newAmount", newAmount);
 
         handleStartInvest(newAmount, newTotal);
     }, [period]);
@@ -164,6 +163,7 @@ export default function GoldPlan({ setCurrPlan }) {
             ) : (
                 <AsyncOrdersAndPay
                     plan="ouro"
+                    period={period}
                     setNextPage={setNextPage}
                     orders={orders}
                     orderTotal={totalInvest}

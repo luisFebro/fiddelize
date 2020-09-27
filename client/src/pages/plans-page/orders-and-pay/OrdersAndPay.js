@@ -12,6 +12,7 @@ import useScrollUp from "../../../hooks/scroll/useScrollUp";
 export default function OrdersAndPay({
     orders,
     orderTotal,
+    period,
     plan,
     setNextPage,
 }) {
@@ -77,6 +78,7 @@ export default function OrdersAndPay({
             <OrdersTable
                 orders={orders}
                 plan={plan}
+                period={period}
                 orderTotal={orderTotal}
                 setVar={setVar}
                 removeVar={removeVar}
@@ -87,6 +89,7 @@ export default function OrdersAndPay({
             />
             <PayArea
                 plan={plan}
+                period={period}
                 handleCancel={handleCancel}
                 servicesTotal={servicesTotal}
                 servicesAmount={servicesAmount}

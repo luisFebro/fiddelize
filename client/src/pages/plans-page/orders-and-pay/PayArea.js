@@ -23,6 +23,7 @@ const payUrl = sandboxMode
 export default function PayArea({
     handleCancel,
     plan,
+    period = "yearly",
     servicesAmount,
     servicesTotal,
 }) {
@@ -53,7 +54,9 @@ export default function PayArea({
             let thisCPF = res.data.cpf;
             if (thisCPF === "111.111.111-11") thisCPF = "431.711.242-62";
 
-            let desc = `Plano ${plan} com ${
+            let desc = `Plano ${plan} ${
+                period === "yearly" ? "anual" : "mensal"
+            } com ${
                 servicesTotal ? servicesTotal : ""
             } serviços no valor total de: `;
             // if(servicesTotal > planServiceTotal) {
@@ -96,11 +99,11 @@ export default function PayArea({
 
     useEffect(() => {
         getVar("totalServices_clientAdmin").then((totalServ) => {
-            const thisCode = getServiceSKU({ plan, total: totalServ });
+            const thisCode = getServiceSKU({ plan, total: totalServ, period });
             // if you want to access data inside of a promise, use innerData, never external data because it returns undefined.
             setData((innerData) => ({ ...innerData, SKU: thisCode }));
         });
-    }, [plan]);
+    }, [plan, period]);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -185,9 +188,6 @@ export default function PayArea({
                     />
                 </Link>
             </section>
-            <p className="text-center mx-2 text-normal text-break">
-                {JSON.stringify(authToken)}
-            </p>
         </section>
     );
 }

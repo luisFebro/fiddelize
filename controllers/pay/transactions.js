@@ -1,7 +1,39 @@
+const User = require("../../models/user/User");
+const Order = require("../../models/order/Order");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 
 const { payUrl, sandboxMode, email, token } = globalVar;
+
+// real time notification to Fiddelize's system every time a transation's status change like pending to paid.
+/*
+Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas
+Note que a notificação não possui nenhuma informação sobre a transação.
+*/
+
+const getPagNotify = (req, res) => {
+    console.log("req", req);
+    res.header("Access-Control-Allow-Origin", "*");
+    // consulting notification transaction
+    const notificationCode = "123312";
+
+    const params = {
+        email,
+        token,
+    };
+
+    const config = {
+        method: "get",
+        url: `${payUrl}/v3/transactions/notifications/${notificationCode}`,
+        params,
+        headers: {
+            charset: "ISO-8859-1",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    };
+
+    axios(config);
+};
 
 const readTransaction = () => {
     const { transactionCode } = req.query;
@@ -109,4 +141,5 @@ module.exports = {
     readHistory,
     refundTransaction,
     cancelTransaction,
+    getPagNotify,
 };

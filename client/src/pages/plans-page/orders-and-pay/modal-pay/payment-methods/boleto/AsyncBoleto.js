@@ -247,9 +247,6 @@ export default function AsyncBoleto({ modalData }) {
         <Fragment>
             {showTitle()}
             {processing ? showMsgProcessing() : showBoleto()}
-            <p className="text-center mx-2 text-normal text-break">
-                {JSON.stringify(modalData)}
-            </p>
             <ShowPayWatermarks needAnima={false} />
         </Fragment>
     );

@@ -1,35 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Slider from '@material-ui/core/Slider';
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Slider from "@material-ui/core/Slider";
 
-const useStyles = makeStyles(() => ({ // LESSON
+const useStyles = makeStyles(() => ({
+    // LESSON
     root: {
-      color: props => props.color || '#52af77',
-      height: 8,
+        color: (props) => props.color || "#52af77",
+        height: 8,
     },
     valueLabel: {
-      left: 'calc(-50% + 4px)',
-      font: props => `bold ${props.labelSize || "17px"} var(--mainFont)`,
+        left: "calc(-50% + 4px)",
+        font: (props) => `bold ${props.labelSize || "17px"} var(--mainFont)`,
     },
     thumb: {
-      height: 28,
-      width: 28,
-      backgroundColor: '#fff',
-      border: '4px solid currentColor',
-      marginTop: -12,
-      marginLeft: -12,
-      '&:focus, &:hover, &$active': {
-        boxShadow: 'inherit',
-      },
+        height: 28,
+        width: 28,
+        backgroundColor: "#fff",
+        border: "4px solid currentColor",
+        marginTop: -12,
+        marginLeft: -12,
+        "&:focus, &:hover, &$active": {
+            boxShadow: "inherit",
+        },
     },
     active: {},
     track: {
-      height: 8,
-      borderRadius: 4,
+        height: 8,
+        borderRadius: 4,
     },
     rail: {
-      height: 8,
-      borderRadius: 4,
+        height: 8,
+        borderRadius: 4,
     },
 }));
 
@@ -39,6 +40,7 @@ export default function MuSlider({
     valueLabelDisplay = "on",
     step = 1,
     callback,
+    marks,
     value,
     disabled = false,
     max = 300,
@@ -47,16 +49,16 @@ export default function MuSlider({
     const classes = useStyles({ color, labelSize });
 
     useEffect(() => {
-        if(value === 1000) {
-            setLabelSize("13px")
+        if (value === 1000) {
+            setLabelSize("13px");
         } else {
-            setLabelSize(null)
+            setLabelSize(null);
         }
-    }, [value])
+    }, [value]);
 
     const handleChange = (e, newValue) => {
-        if(typeof callback === "function") callback(newValue);
-    }
+        if (typeof callback === "function") callback(newValue);
+    };
 
     return (
         <Slider
@@ -76,10 +78,10 @@ export default function MuSlider({
             max={disabled ? 1 : max}
             orientation="horizontal"
             disabled={disabled}
+            marks={marks}
         />
     );
 }
-
 
 /* COMMENTS
 n1: LESSON: do not use custom component with onChange in material ui

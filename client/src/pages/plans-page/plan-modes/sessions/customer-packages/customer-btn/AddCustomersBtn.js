@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import ModalFullContent from "../../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import ModalFullContent from "../../../../../../components/modals/ModalFullContent";
+import { Load } from "../../../../../../components/code-splitting/LoadableComp";
 
 const Async = Load({
     loader: () =>
         import(
-            "./AsyncAddSMSContent" /* webpackChunkName: "sms-credits-full-page-lazy" */
+            "./AsyncAddCustomersContent" /* webpackChunkName: "add-customers-full-page-lazy" */
         ),
 });
 
@@ -19,13 +19,9 @@ const getStyles = (props) => ({
     },
 });
 
-export default function AddSMSBtn({
-    btnTitle = "Adicionar",
-    handleNewOrder,
-    smsOrder,
-    classPosition = "mt-5 ml-3",
-}) {
+export default function AddCustomersBtn({ btnTitle = "Adicionar", modalData }) {
     const [fullOpen, setFullOpen] = useState(false);
+    console.log("modalData", modalData);
 
     const styles = getStyles();
     const PlusIcon = <AddCircleOutlineIcon style={styles.muStyle} />;
@@ -38,17 +34,22 @@ export default function AddSMSBtn({
         setFullOpen(false);
     };
 
-    const AsyncAddSMSContent = (
+    const AsyncAddCustomersContent = (
         <Async
-            currValues={smsOrder}
-            needRemoveCurrValue={btnTitle === "Alterar"}
-            handleNewOrder={handleNewOrder}
+            modalData={modalData}
             handleFullClose={handleFullClose}
+            needRemoveCurrValue={btnTitle === "Alterar"}
         />
     );
 
     return (
-        <section className={btnTitle !== "Adicionar" ? "" : classPosition}>
+        <section
+            className={
+                btnTitle !== "Adicionar"
+                    ? "container-center"
+                    : "container-center mt-2"
+            }
+        >
             <ButtonFab
                 size="large"
                 title={btnTitle}
@@ -59,7 +60,7 @@ export default function AddSMSBtn({
                 iconMu={PlusIcon}
             />
             <ModalFullContent
-                contentComp={AsyncAddSMSContent}
+                contentComp={AsyncAddCustomersContent}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />

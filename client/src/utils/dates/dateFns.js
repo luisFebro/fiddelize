@@ -3,6 +3,7 @@ import ptBR from "date-fns/locale/pt-BR";
 import getDayMonthBr from "./getDayMonthBr"; // 20 de Junho de 2020 is better than 20º de junho, 2020...
 import formatDistance from "date-fns/formatDistance";
 import formatRelative from "date-fns/formatRelative";
+import format from "date-fns/format";
 import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import getHours from "date-fns/getHours";
@@ -57,10 +58,13 @@ const checkToday = (date) => isToday(new Date(date));
 const endWeek = endOfWeek(new Date(), { weekStartsOn: 1 });
 const startWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
 
+const formatSlashDMY = (newDate = new Date()) => format(newDate, "dd/MM/yyyy");
+
 export {
     dateFnsUtils,
     ptBRLocale,
     formatDMY,
+    formatSlashDMY,
     fromNow,
     calendar,
     addDays,

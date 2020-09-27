@@ -49,7 +49,6 @@ export default function AsyncPayContent({ modalData }) {
     const [senderHash, setSenderHash] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [ordersStatement, setOrdersStatement] = useState(null);
-    console.log("ordersStatement", ordersStatement);
 
     useEffect(() => {
         getVar("orders_clientAdmin").then((theseOrders) => {
@@ -65,6 +64,7 @@ export default function AsyncPayContent({ modalData }) {
         setSelectedCategory(selection);
     };
 
+    console.log("senderCPF", senderCPF);
     const params = {
         userId: businessId,
         senderHash,
@@ -142,12 +142,6 @@ export default function AsyncPayContent({ modalData }) {
             {showTitle()}
             {showSubtitle()}
             <PayCategories modalData={methodsModalData} />
-            <p className="text-center mx-2 text-normal text-break">
-                {JSON.stringify(ordersStatement)}
-                <br />
-                <br />
-                {JSON.stringify(params)}
-            </p>
             <ShowPayWatermarks />
         </section>
     );

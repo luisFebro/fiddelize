@@ -28,9 +28,11 @@ const proVersion = (styles) => [
         resGrade: 18,
         gold: {
             name: "10.000 Novvos<br /> clientes",
+            fixedPrice: 600,
         },
         silver: {
             name: "1.000 Novvos<br /> clientes",
+            fixedPrice: 200,
         },
         Icon: <GroupAddIcon style={styles.muStyle} />,
         proPage: "",

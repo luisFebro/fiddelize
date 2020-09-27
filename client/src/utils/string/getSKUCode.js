@@ -12,16 +12,22 @@ const getPlan = (plan) => {
     if (plan.toLowerCase() === "bronze") return "BR";
 };
 
+const getPeriod = (per) => {
+    if (per === "yearly") return "A";
+    if (per === "monthly") return "M";
+};
+
 const getQuantity = (total) => {
     return `Q${total}`;
 };
 
 const getServiceSKU = (options = {}) => {
-    const { plan = "gold", total = 0 } = options;
+    const { plan = "gold", total = 0, period } = options;
 
     const SKU = [
         getPlan(plan),
         getQuantity(total),
+        getPeriod(period),
         generateAlphaNumeric(7, "A#"),
     ];
     return SKU.join("-");

@@ -115,7 +115,7 @@ const finishCheckout = (req, res, next) => {
         // defaults
         currency: "BRL",
         paymentMode: "default",
-        notificationURL: "https://fiddelize.com.br/notifica.html",
+        notificationURL: "https://fiddelize.com.br/api/pay/pag-notify",
         receiverEmail: "mr.febro@gmail.com",
     };
 

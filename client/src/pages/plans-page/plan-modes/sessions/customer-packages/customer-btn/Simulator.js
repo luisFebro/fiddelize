@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import convertToReal from "../../../../../utils/numbers/convertToReal";
-import MuSlider from "../../../../../components/sliders/MuSlider";
-import isKeyPressed from "../../../../../utils/event/isKeyPressed";
+import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import MuSlider from "../../../../../../components/sliders/MuSlider";
+import isKeyPressed from "../../../../../../utils/event/isKeyPressed";
 import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../../../utils/form/use-state/handleChange";
-import getIncreasedPerc from "../../../../../utils/numbers/getIncreasedPerc";
+import handleChange from "../../../../../../utils/form/use-state/handleChange";
+import getIncreasedPerc from "../../../../../../utils/numbers/getIncreasedPerc";
+import { addDays, formatSlashDMY } from "../../../../../../utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
@@ -12,7 +13,7 @@ const getStyles = () => ({
         top: isSmall ? "50px" : "70px",
         left: "10px",
     },
-    totalSMS: {
+    totalCustomers: {
         fontWeight: "normal",
     },
     delimeterBoardLeft: {
@@ -42,24 +43,77 @@ const getStyles = () => ({
     },
 });
 
-const getSMSData = (packages) => {
+const packageMarks = [
+    {
+        value: 1,
+        label: "",
+    },
+    {
+        value: 5,
+        label: "",
+    },
+    {
+        value: 10,
+        label: "",
+    },
+    {
+        value: 50,
+        label: "",
+    },
+    {
+        value: 100,
+        label: "",
+    },
+    {
+        value: 200,
+        label: "",
+    },
+];
+
+const getCustomersData = (packages, options = {}) => {
+    const { initialPrice, period } = options;
+    const isYearly = period === "yearly";
     // unit, expires, unitSizeDec, unitSizeInc
-    if (packages < 10) return [0.14, null, "1-1", "1-1"];
-    if (packages >= 10 && packages < 100) return [0.12, null, "1", "1-2"];
-    if (packages >= 100 && packages < 500) return [0.1, null, "0-9", "1-3"];
-    if (packages >= 500 && packages < 1000) return [0.09, null, "0-8", "1-4"];
-    if (packages >= 1000) return [0.08, null, "0-6", "1-5"];
+    if (packages === 1)
+        return [isYearly ? initialPrice : 0.3, null, "1-1", "1-1"];
+    if (packages === 5) return [isYearly ? 0.3 : 0.12, null, "1", "1-2"];
+    if (packages === 10) return [isYearly ? 0.2 : 0.1, null, "0-9", "1-3"];
+    if (packages === 50) return [0.08, null, "0-9", "1-3"];
+    if (packages === 100) return [0.06, null, "0-9", "1-3"];
+    if (packages === 200) return [0.04, null, "0-9", "1-3"];
+    // if(packages >= 500 && packages < 1000) return [0.09, null, "0-8", "1-4"];
+    // if(packages >= 1000) return [0.08, null, "0-6", "1-5"];
 };
 
-export default function Simulator({ handleData }) {
+export default function Simulator({ handleData, period }) {
     const [packages, setPackages] = useState(1);
     const [discountDiff, setDiscountDiff] = useState(null);
     const [increasedPerc, setIncreasedPerc] = useState(null);
     const [data, setData] = useState({
         newQuantity: null,
+        expiryDate: "",
+        usageDays: 30,
+        formattedExpiryDate: "",
     });
+    const { newQuantity, expiryDate, usageDays, formattedExpiryDate } = data;
 
-    const { newQuantity } = data;
+    const isYearly = period === "yearly";
+
+    const initialPrice = period === "yearly" ? 1.0 : 0.3;
+
+    useEffect(() => {
+        let thisUsageDays = 30;
+        if (period === "yearly") thisUsageDays = 365;
+        const thisExpiryDate = addDays(new Date(), thisUsageDays);
+        const thisFormattedDate = formatSlashDMY(thisExpiryDate);
+
+        setData({
+            ...data,
+            expiryDate: thisExpiryDate,
+            formattedExpiryDate: thisFormattedDate,
+            usageDays: thisUsageDays,
+        });
+    }, [period]);
 
     useEffect(() => {
         if (newQuantity && !Number.isNaN(newQuantity)) {
@@ -69,7 +123,10 @@ export default function Simulator({ handleData }) {
         }
     }, [newQuantity]);
 
-    const [unit, expires, unitSizeDec, unitSizeInc] = getSMSData(packages);
+    const [unit, expires, unitSizeDec, unitSizeInc] = getCustomersData(
+        packages,
+        { initialPrice, period }
+    );
 
     const handlePackages = (newValue) => {
         setPackages(newValue);
@@ -77,14 +134,14 @@ export default function Simulator({ handleData }) {
 
     const styles = getStyles();
 
-    const oneSMSPackage = 200;
-    const totalSMS = oneSMSPackage * packages;
-    const smsUnit = unit;
-    const totalFinalMoney = totalSMS * smsUnit;
-    const firstPhasePrice = totalSMS * 0.14;
+    const oneCustomersPackage = 100;
+    const totalCustomers = oneCustomersPackage * packages;
+    const customersUnit = unit;
+    const totalFinalMoney = totalCustomers * customersUnit;
+    const firstPhasePrice = totalCustomers * initialPrice;
 
-    const totalSMSReal = convertToReal(totalSMS);
-    const smsUnitReal = convertToReal(smsUnit, {
+    const totalCustomersReal = convertToReal(totalCustomers);
+    const customersUnitReal = convertToReal(customersUnit, {
         moneySign: true,
         needFraction: true,
     });
@@ -97,7 +154,7 @@ export default function Simulator({ handleData }) {
     useEffect(() => {
         handleData({
             totalPackage: packages,
-            totalSMS,
+            totalCustomers,
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
     }, [packages]);
@@ -117,10 +174,10 @@ export default function Simulator({ handleData }) {
         <section className="mt-3 text-center">
             <span
                 className="d-inline-block ml-2 text-title text-purple"
-                style={styles.totalSMS}
+                style={styles.totalCustomers}
             >
                 <span className={`text-em-${unitSizeInc} font-site`}>
-                    {totalSMSReal} SMS
+                    {totalCustomersReal} clientes
                 </span>
                 <br />
                 <span className="text-title"> X </span>
@@ -129,7 +186,7 @@ export default function Simulator({ handleData }) {
                         unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
                     }`}
                 >
-                    {smsUnitReal}
+                    {customersUnitReal}
                 </span>
             </span>
         </section>
@@ -143,7 +200,7 @@ export default function Simulator({ handleData }) {
     );
 
     const showDiffDiscount = () =>
-        discountDiff && (
+        Boolean(discountDiff) && (
             <section className="my-5 zoomIn animated">
                 <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
                     Automatizador de Desconto
@@ -153,8 +210,8 @@ export default function Simulator({ handleData }) {
                     <span className="text-subtitle font-weight-bold">
                         {discountDiffReal} ({Math.ceil(increasedPerc)}%)
                     </span>{" "}
-                    comparado com o preço total de {firstPhasePriceReal} (R$
-                    0,14 por unidade);
+                    comparado com o preço total de {firstPhasePriceReal} - R$
+                    1,00 por cliente (preço de 1 pacote);
                 </p>
             </section>
         );
@@ -165,17 +222,21 @@ export default function Simulator({ handleData }) {
                 Resumo de Investimento
             </h2>
             <div className="text-normal text-left text-purple">
-                ✔ Total de Pacotes:{" "}
+                ✔ Plano: Meu Bronze {period === "yearly" ? "Anual" : "Mensal"}
+                <br />✔ Total de Pacotes:{" "}
                 <span className="text-subtitle font-weight-bold">
                     {packages}
                 </span>
-                <br />✔ Total de SMS:{" "}
+                <br />✔ Total de clientes:{" "}
                 <span className="text-subtitle font-weight-bold">
-                    {totalSMSReal}
+                    {totalCustomersReal}
                 </span>
                 <br />✔ Validade:{" "}
-                <span className="text-subtitle font-weight-bold">
-                    não expira.
+                <span className="text-normal font-weight-bold">
+                    {usageDays} dias{" "}
+                    <span className="text-small font-weight-bold">
+                        - {formattedExpiryDate}
+                    </span>
                 </span>
                 <br />✔ Desconto:{" "}
                 <span className="text-subtitle font-weight-bold">
@@ -195,22 +256,25 @@ export default function Simulator({ handleData }) {
         <section className="position-relative">
             <MuSlider
                 color="var(--themeP)"
+                max={isYearly ? 200 : 10}
+                step={null}
+                marks={packageMarks}
                 value={packages}
                 callback={handlePackages}
                 disabled={newQuantity ? true : false}
             />
-            {packages <= 230 && !Boolean(newQuantity) && (
+            {packages <= (isYearly ? 130 : 3) && !Boolean(newQuantity) && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardRight}
                 >
-                    300
+                    {isYearly ? 200 : 10}
                     <br />
                     pacotes
                 </div>
             )}
 
-            {packages >= 55 && !Boolean(newQuantity) && (
+            {packages >= (isYearly ? 55 : 3) && !Boolean(newQuantity) && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardLeft}
@@ -222,40 +286,37 @@ export default function Simulator({ handleData }) {
         </section>
     );
 
-    const showQuantityField = () =>
-        (packages >= 290 || Boolean(newQuantity)) && (
-            <section
-                className="animated fadeInUp slow
-        my-3 d-flex align-items-center justify-content-end"
-            >
-                <p className="text-purple font-weight-bold text-normal text-center mr-2">
-                    Precisa de mais pacotes?
-                </p>
-                <div>
-                    <p className="m-0 text-left text-purple text-normal font-weight-bold">
-                        Insira aqui:
-                    </p>
-                    <TextField
-                        InputProps={{ style: styles.quantityField }}
-                        variant="outlined"
-                        onChange={handleChange(setData)}
-                        onKeyPress={null}
-                        autoComplete="off"
-                        type="tel"
-                        name="newQuantity"
-                        value={newQuantity}
-                    />
-                    <p className="m-0 text-right text-purple text-normal font-weight-bold">
-                        Quantidade
-                    </p>
-                </div>
-            </section>
-        );
+    // const showQuantityField = () => (
+    //     (packages >= 290 || Boolean(newQuantity)) &&
+    //     <section className="animated fadeInUp slow
+    //     my-3 d-flex align-items-center justify-content-end">
+    //         <p className="text-purple font-weight-bold text-normal text-center mr-2">
+    //             Precisa de mais pacotes?
+    //         </p>
+    //         <div>
+    //             <p className="m-0 text-left text-purple text-normal font-weight-bold">
+    //                 Insira aqui:
+    //             </p>
+    //             <TextField
+    //                 InputProps={{ style: styles.quantityField }}
+    //                 variant="outlined"
+    //                 onChange={handleChange(setData)}
+    //                 onKeyPress={null}
+    //                 autoComplete="off"
+    //                 type="tel"
+    //                 name="newQuantity"
+    //                 value={newQuantity}
+    //             />
+    //             <p className="m-0 text-right text-purple text-normal font-weight-bold">
+    //                 Quantidade
+    //             </p>
+    //         </div>
+    //     </section>
+    // );
 
     return (
         <section className="my-5 mx-4">
             {showSlider()}
-            {showQuantityField()}
             {showMultiPrice()}
             {showAutoFinalTotal()}
             {showDiffDiscount()}
