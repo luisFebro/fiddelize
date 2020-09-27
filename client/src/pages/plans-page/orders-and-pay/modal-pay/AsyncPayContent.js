@@ -64,7 +64,6 @@ export default function AsyncPayContent({ modalData }) {
         setSelectedCategory(selection);
     };
 
-    console.log("senderCPF", senderCPF);
     const params = {
         userId: businessId,
         senderHash,
