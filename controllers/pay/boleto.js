@@ -36,7 +36,7 @@ Isso ajuda na a possibilidade de pagar um boleto vencido em qualquer banco ou in
 function createBoleto(req, res) {
     let {
         userId,
-        transactionCode, // Transaction code needs to be from here because finishCheckout and this method generated different transaction codes.
+        paymentCategory,
         reference = "123",
         amount = "150.00",
         numberOfPayments = 1,
@@ -114,10 +114,7 @@ function createBoleto(req, res) {
                 reference,
                 investAmount: (Number(amount) + 1).toFixed(2).toString(), // I discounted R$1, then replacing again to displace the correct price to cliAdmin
                 barcode: boletoData.barcode,
-                transaction: {
-                    code: boletoData.code,
-                    status: 1,
-                },
+                paymentCategory,
                 paymentLink: boletoData.paymentLink,
                 payDueDate: boletoData.dueDate,
                 planDueDate: "2020-09-25T08:06:27.888Z",
@@ -132,16 +129,10 @@ function createBoleto(req, res) {
                 // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
                 doc.markModified("clientAdminData");
                 doc.save((err) => {
-                    Order.findOneAndUpdate(
-                        { reference },
-                        { "transaction.code": boletoData.code },
-                        { new: true }
-                    ).exec((err, data) => {
-                        res.json({
-                            barcode: boletoData.barcode,
-                            dueDate: boletoData.dueDate,
-                            paymentLink: boletoData.paymentLink,
-                        });
+                    res.json({
+                        barcode: boletoData.barcode,
+                        dueDate: boletoData.dueDate,
+                        paymentLink: boletoData.paymentLink,
                     });
                 });
             });

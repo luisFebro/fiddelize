@@ -40,6 +40,7 @@ mongoose
 
 // MIDDLEWARES
 app.use(express.json()); //n1
+app.use(express.urlencoded({ extended: true }));
 app.use(formData.parse()); // for images and multimedia in forms.
 app.use(cors()); //n2
 app.use(sslRedirect()); // n5

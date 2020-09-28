@@ -3,7 +3,7 @@
 const xml2js = require("xml2js");
 const qs = require("querystring");
 const Order = require("../../models/order/Order");
-
+const { getPayCategoryType } = require("./helpers/getTypes");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 
@@ -136,7 +136,6 @@ const finishCheckout = (req, res, next) => {
             parser.parseString(xml, function (error, result) {
                 if (error === null) {
                     const data = result.transaction;
-                    const [transactionCode] = data.code;
                     const [reference] = data.reference;
                     const [feeAmount] = data.feeAmount;
                     const [netAmount] = data.netAmount;
@@ -144,18 +143,14 @@ const finishCheckout = (req, res, next) => {
                     const [extraAmount] = data.extraAmount;
 
                     const newOrder = new Order({
+                        reference,
                         agentName: "Fiddelize",
                         agentId: "5db4301ed39a4e12546277a8",
                         clientAdmin: {
                             name: senderName,
                             id: userId,
                         },
-                        transaction: {
-                            // transaction code should be generate in next createBoleto Method.
-                            status: 1,
-                        },
-                        paymentMethod,
-                        reference,
+                        paymentCategory: getPayCategoryType(paymentMethod),
                         amount: {
                             fee: handleAmounts(feeAmount, extraAmount, {
                                 op: "+",
@@ -171,7 +166,7 @@ const finishCheckout = (req, res, next) => {
                     newOrder.save().then((order) => {
                         const payload = {
                             userId,
-                            transactionCode,
+                            paymentCategory: getPayCategoryType(paymentMethod),
                             reference,
                             amount: grossAmount,
                             instructions: itemDescription1,

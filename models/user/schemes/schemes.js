@@ -53,14 +53,27 @@ const ordersData = {
     investAmount: String,
     ordersStatement: Object, // n1 e.g
     barcode: String,
-    transaction: {
-        code: String,
-        status: Number,
+    transactionStatus: {
+        type: String,
+        enum: [
+            "pendente",
+            "em análise",
+            "paga",
+            "disponível",
+            "em disputa",
+            "devolvido",
+            "cancelado",
+            "debitado",
+            "em retenção",
+        ],
     },
     paymentLink: String,
+    paymentCategory: { type: String, enum: ["boleto", "crédito", "débito"] },
+    paymentMethod: String, // boleto santander, nomes das bandeiras aqui...
     payDueDate: String,
     planDueDate: Date,
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now }, // timestamps do not work for subdocuments on mondodb...
+    updatedAt: { type: Date, default: Date.now },
 };
 const OrdersSchema = new Schema(ordersData, { _id: true });
 // END ORDERS

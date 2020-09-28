@@ -4,6 +4,10 @@ const axios = require("axios");
 const { globalVar } = require("./globalVar");
 const xml2js = require("xml2js");
 const parser = new xml2js.Parser({ attrkey: "ATTR" });
+const {
+    getTransitionStatusTypes,
+    getPaymentMethod,
+} = require("./helpers/getTypes");
 
 const { payUrl, sandboxMode, email, token } = globalVar;
 
@@ -14,45 +18,94 @@ Note que a notificação não possui nenhuma informação sobre a transação.
 */
 
 const getPagNotify = (req, res) => {
-    console.log(req.headers);
-    // res.header("Access-Control-Allow-Origin", "*");
-    // consulting notification transaction
-    // const notificationCode = "123312";
-    const newOrder = new Order({
-        agentName: "PagSEGURO BOSS",
-        agentId: "5db4301ed39a4e12546277a8",
-        clientAdmin: {
-            name: "senderName",
-            id: "userId",
+    const notificationCode = req.body.notificationCode;
+
+    // Consulting notification transaction - requiring auth data related to received notification's code.
+    const params = {
+        email,
+        token,
+    };
+
+    const config = {
+        method: "get",
+        url: `${payUrl}/v3/transactions/notifications/${notificationCode}`,
+        params,
+        headers: {
+            charset: "ISO-8859-1",
+            "Content-Type": "application/x-www-form-urlencoded",
         },
-        transaction: {
-            // transaction code should be generate in next createBoleto Method.
-            status: 1,
-        },
-        paymentMethod: "shit",
-        reference: "sdffsdfds",
-        headers: req.headers,
-    });
+    };
 
-    newOrder.save().then((order) => {
-        res.json({ msg: "pAGSEGURO CONNECTION WORKING AND DB SAVED..." });
-    });
-    // const params = {
-    //     email,
-    //     token,
-    // };
+    axios(config)
+        .then((response) => {
+            const xml = response.data;
+            parser.parseString(xml, function (error, result) {
+                if (error === null) {
+                    const data = result.transaction;
 
-    // const config = {
-    //     method: "get",
-    //     url: `${payUrl}/v3/transactions/notifications/${notificationCode}`,
-    //     params,
-    //     headers: {
-    //         charset: "ISO-8859-1",
-    //         "Content-Type": "application/x-www-form-urlencoded",
-    //     },
-    // };
+                    const [status] = data.status;
+                    const [reference] = data.reference;
+                    const [lastEventDate] = data.lastEventDate;
+                    const [paymentMethod] = data.paymentMethod;
+                    const [paymentMethodCode] = paymentMethod.code;
 
-    // axios(config);
+                    Order.findOne({ reference }).exec((err, doc) => {
+                        if (err)
+                            return res
+                                .status(500)
+                                .json(msgG("error.systemError", err));
+
+                        doc.paymentMethod = getPaymentMethod(paymentMethodCode);
+                        doc.updatedAt = lastEventDate;
+                        doc.transactionStatus = getTransitionStatusTypes(
+                            status
+                        );
+
+                        // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+                        // doc.markModified("clientAdminData");
+                        const clientAdminId = doc.clientAdmin.id;
+
+                        doc.save((err) => {
+                            User.findOne({ _id: clientAdminId })
+                                .select("clientAdminData.orders")
+                                .exec((err, data2) => {
+                                    let orders = data2.clientAdminData.orders;
+                                    const modifiedOrders = orders.map(
+                                        (targetOr) => {
+                                            if (
+                                                targetOr.reference === reference
+                                            ) {
+                                                targetOr.paymentMethod = getPaymentMethod(
+                                                    paymentMethodCode
+                                                );
+                                                targetOr.transactionStatus = getTransitionStatusTypes(
+                                                    status
+                                                );
+                                                targetOr.updatedAt = lastEventDate;
+                                                return targetOr;
+                                            }
+
+                                            return targetOr;
+                                        }
+                                    );
+                                    data2.clientAdminData.orders = modifiedOrders;
+                                    // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+                                    // orders.markModified("clientAdminData.orders");
+                                    data2.save((err) => {
+                                        res.json({
+                                            msg:
+                                                "both agent and cliAdmin updated on db",
+                                        });
+                                    });
+                                });
+                        });
+                    });
+                } else {
+                    console.log(error);
+                }
+            });
+        })
+        .catch((e) => res.json(e.response.data));
 };
 
 // GET
