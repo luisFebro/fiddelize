@@ -22,29 +22,6 @@ CVV: 123
 3.
 Independentemente do formato de dados utilizado, a codificação de caracteres padrão para a integração é a ISO-8859-1. Tome o cuidado de sempre enviar os dados com este encoding de caracteres. Os dados enviados pelo PagSeguro sempre estarão neste encoding.
 
-4. Modalidades permitidas através do PagSeguro
-Crédito (Parcelado Vendedor / também conhecido como parcelado Loja ou Sem Juros);
-Bandeiras: MasterCard (Crédito e Débito); VISA (Crédito e Débito); ELO (Crédito e Débito Cabal (Crédito e Débito); Hiper (Hipercard) (Crédito e Débito); Dinners; BrasilCard; Aura; Up; PersonalCard; SoroCred; ValeCard; Mais!;
-VISA (OK),
-MASTERCARD (OK),
-JCB (OK),
-DISCOVER (OK),
-DINERS (OK),
-ELO (OK),
-HIPERCARD,
-AMEX,
-AURA,
-PLENOCARD,
-PERSONALCARD,
-BRASILCARD,
-FORTBRASIL,
-CARDBAN,
-VALECARD,
-CABAL,
-MAIS,
-AVISTA,
-GRANDCARD e SOROCRED
-
 5. Tipos de meio de pagamentos e seus códigos
 1   Cartão de crédito: o comprador escolheu pagar a transação com cartão de crédito.
 2   Boleto: o comprador optou por pagar com um boleto bancário.
@@ -76,8 +53,8 @@ GRANDCARD e SOROCRED
 120 Cartão de crédito Sorocred.
 122 Cartão de crédito Up Policard.
 123 Cartão de crédito Banese Card.
-201 Boleto Bradesco.
-202 Boleto Santander. ****
+201 Boleto Bradesco. (X)
+202 Boleto Santander.
 301 Débito online Bradesco.
 302 Débito online Itaú.
 303 Débito online Unibanco.
@@ -85,11 +62,11 @@ GRANDCARD e SOROCRED
 305 Débito online Banco Real.
 306 Débito online Banrisul.
 307 Débito online HSBC.
-401 Saldo PagSeguro.
-501 Oi Paggo.
-701 Depósito em conta - Banco do Brasil
+401 Saldo PagSeguro. (X)
+501 Oi Paggo. (X)
+701 Depósito em conta - Banco do Brasil (X)
 
-7. Tipos de Status de Transição
+7. Tipos de Status de Transição OK
 1 Aguardando pagamento - O comprador iniciou a transação, mas até o momento o PagSeguro não recebeu nenhuma informação sobre o pagamento. Quando a resposta da instituição financeira é muito rápida, omitimos esta notificação.
 Transições:
 Para Paga: Quando a operação é confirmada pela instituição financeira.
@@ -112,23 +89,17 @@ Transições:
 Para Devolvida: Quando você entrar em acordo com o comprador para devolver o valor da transação, pois não possui mais o produto em estoque ou não pode mais prestar o serviço contratado.
 Para Em disputa: Quando o comprador indicar que não recebeu o produto ou serviço adquirido, ou que o mesmo foi entregue com problemas. Este processo é chamado de disputa e é mediado pela equipe do PagSeguro. Para saber mais, veja a página de explicação sobre disputas. Uma transação pode entrar em disputa, mesmo após a finalização do prazo de liberação do pagamento.
 
-5 Em disputa - O comprador, dentro do prazo de liberação da transação, abriu uma disputa. A disputa é um processo iniciado pelo comprador para indicar que não recebeu o produto ou serviço adquirido, ou que o mesmo foi entregue com problemas. Este é um mecanismo de segurança oferecido pelo PagSeguro. A equipe do PagSeguro é responsável por mediar a resolução de todas as disputas, quando solicitado pelo comprador. Para mais informações, veja a página de explicação sobre disputas.
+5 Em disputa - O comprador, dentro do prazo de liberação da transação, abriu uma disputa direto com a PagSeguro. A disputa é um processo iniciado pelo comprador para indicar que não recebeu o produto ou serviço adquirido, ou que o mesmo foi entregue com problemas. Este é um mecanismo de segurança oferecido pelo PagSeguro. A equipe do PagSeguro é responsável por mediar a resolução de todas as disputas, quando solicitado pelo comprador. Para mais informações, veja a página de explicação sobre disputas.
 Transições:
 Para Disponível: Quando a disputa é resolvida em favor do vendedor, indicando que o produto ou serviço foi efetivamente entregue corretamente.
 Para Devolvida: Quando a disputa é resolvida em favor do comprador, indicando que o produto não foi entregue ou foi entregue fora das especificações e deve ser devolvido.
 Para Paga: Quando a disputa é resolvida em favor do vendedor, porém antes da finalização do prazo de liberação do pagamento.
 
-6 Devolvida - O *valor da transação foi devolvido para o comprador. Se você não possui mais o produto vendido em estoque, ou não pode por alguma razão prestar o serviço contratado, você pode devolver o valor da transação para o comprador. Esta também é a ação tomada quando uma disputa é resolvida em favor do comprador. Transações neste status não afetam o seu saldo no PagSeguro, pois não são nem um crédito e nem um débito.
-Transições:
-Nenhuma.
-7 Cancelada - A transação foi cancelada sem ter sido finalizada. Quando o comprador opta por pagar com débito online ou boleto bancário e não finaliza o pagamento, a transação assume este status. Isso também ocorre quando o comprador escolhe pagar com um cartão de crédito e o pagamento não é aprovado pelo PagSeguro ou pela operadora.
-Transições:
-Nenhuma.
+6. Devolvida - O *valor da transação foi devolvido para o comprador. Se você não possui mais o produto vendido em estoque, ou não pode por alguma razão prestar o serviço contratado, você pode devolver o valor da transação para o comprador. Esta também é a ação tomada quando uma disputa é resolvida em favor do comprador.
+7. Cancelada - A transação foi cancelada sem ter sido finalizada. Quando o comprador opta por pagar com débito online ou boleto bancário e não finaliza o pagamento, a transação assume este status. Isso também ocorre quando o comprador escolhe pagar com um cartão de crédito e o pagamento não é aprovado pelo PagSeguro ou pela operadora.
 
-8 Debitado - A valor da transação foi devolvido para o comprador.
-Transições:
-Nenhuma.
-9 Retenção temporária - O comprador abriu uma solicitação de chargeback junto à operadora do cartão de crédito.
+8 Debitado - Chargeback (estorno) debitado após status Em retenção. O valor da transação foi devolvido para o comprador.
+9 Em Retenção temporária / Em contestação - O comprador abriu uma solicitação de chargeback junto à operadora do cartão de crédito.
 
 
 reference: https://dev.pagseguro.uol.com.br/docs/api-notificacao-v1

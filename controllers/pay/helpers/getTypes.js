@@ -7,7 +7,7 @@ exports.getPayCategoryType = (type) => {
 exports.getTransitionStatusTypes = (codeNum) => {
     if (codeNum === "1") return "pendente";
     if (codeNum === "2") return "em análise";
-    if (codeNum === "3") return "paga";
+    if (codeNum === "3") return "pago";
     if (codeNum === "4") return "disponível";
     if (codeNum === "5") return "em disputa";
     if (codeNum === "6") return "devolvido";

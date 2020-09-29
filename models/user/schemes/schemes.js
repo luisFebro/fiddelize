@@ -58,7 +58,7 @@ const ordersData = {
         enum: [
             "pendente",
             "em análise",
-            "paga",
+            "pago",
             "disponível",
             "em disputa",
             "devolvido",

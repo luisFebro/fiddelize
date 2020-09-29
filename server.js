@@ -13,8 +13,8 @@ require("./utils/globalHelpers");
 const app = express();
 
 // protect app with secure headers
-// app.use(helmet());
-// app.use(helmet.hidePoweredBy());
+app.use(helmet());
+app.use(helmet.hidePoweredBy());
 
 // compress all responses
 app.use(compression());
@@ -44,18 +44,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(formData.parse()); // for images and multimedia in forms.
 app.use(cors()); //n2
 app.use(sslRedirect()); // n5
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    res.header(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    next();
-});
 
 // routes
 app.use("/api/email", require("./routes/email"));

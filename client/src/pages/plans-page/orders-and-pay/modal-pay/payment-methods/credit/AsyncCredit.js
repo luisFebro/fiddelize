@@ -89,9 +89,8 @@ export default function AsyncCredit({ modalData }) {
     );
 
     const showMaintenanceMsg = () => (
-        <section className="container-center-col mx-3 full-height my-4 text-subtitle font-weight-bold text-purple text-left">
+        <section className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left">
             <span className="text-em-1-5">Cartão de Crédito</span>
-            <br />
             <br />
             {getFirstName(adminName)}, ainda estamos trabalhando nesta opção de
             pagamento. Logo ficará disponível!

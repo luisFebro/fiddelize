@@ -215,10 +215,9 @@ export default function AsyncBoleto({ modalData }) {
     const showMsgProcessing = () => (
         <section
             id="PayContent--boleto-msg"
-            className="container-center-col mx-3 full-height my-4 text-subtitle font-weight-bold text-purple text-left"
+            className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left"
         >
             <span className="text-em-1-5">Boleto Automático</span>
-            <br />
             <br />É para já, {getFirstName(adminName)}!
             <br />
             Seu Boleto está sendo feito agora! Um momento, carregando...
