@@ -1,11 +1,11 @@
 // MANIFEST FILE
-@import 'coreElements';
-@import 'color-palettes/core';
-@import 'typography/core';
-@import 'responsiveness/core';
-@import 'styling-utils/coreCssUtils';
-@import 'effects/core';
-@import 'customization/core';
+@import "coreElements";
+@import "color-palettes/core";
+@import "typography/core";
+@import "responsiveness/core";
+@import "styling-utils/coreCssUtils";
+@import "effects/core";
+@import "customization/core";
 // @import 'shapes/core';
 .disable-animation {
     -webkit-animation: none;
@@ -33,7 +33,7 @@
     font-size: 1.1rem !important;
     color: var(--mainDark);
     border-radius: 0 !important;
-    border: .1rem solid var(--mainDark) !important;
+    border: 0.1rem solid var(--mainDark) !important;
 }
 
 .btn-black:hover {
@@ -55,7 +55,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, .8);
+    background: rgba(0, 0, 0, 0.8);
     z-index: 989;
 }
 
@@ -65,7 +65,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 989;
 }
 
@@ -90,58 +90,65 @@
 }
 
 .enable-blur > * {
-  filter: blur(1.2px);
+    filter: blur(1.2px);
 }
 
 .disable-blur {
-  filter: none;
-  z-index: 3000;
+    filter: none;
+    z-index: 3000;
 }
 
 /*MAIN SHADOW AND HOVER*/
 .shadow-elevation-white {
-    filter: drop-shadow(.001em .1em .1em var(--mainWhite));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainWhite));
 }
 
-.shadow-elevation-black { /*recommended*/
-    filter: drop-shadow(.001em .001em .15em var(--mainDark))
+.shadow-babadoo {
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.2), 0 15px 12px rgba(0, 0, 0, 0.12);
 }
 
-.shadow-elevation { /*recommendaded only squared pictures, cards and static square shapes*/
+.shadow-elevation-black {
+    /*recommended*/
+    filter: drop-shadow(0.001em 0.001em 0.15em var(--mainDark));
+}
+
+.shadow-elevation {
+    /*recommendaded only squared pictures, cards and static square shapes*/
     //z-index: -1;
     box-shadow: 0 31px 120px -6px rgba(0, 0, 0, 0.35);
 }
 
 .icon-shadow {
-    filter:  drop-shadow(.5px .5px 1.5px black);
+    filter: drop-shadow(0.5px 0.5px 1.5px black);
 }
 
 .shape-elevation,
 .card-elevation,
 .svg-elevation {
-    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 }
 
 .shadow-elevation-soft {
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.20), 0 10px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2), 0 10px 8px rgba(0, 0, 0, 0.12);
 }
 
 .tranparent-img-shadow,
 .main-letters-shadow {
     font-size: 1.9rem;
-    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 }
 
 .main-letters-shadow:hover {
     transform: scale(1.1);
-    filter: drop-shadow(.001em .1em .1em var(--mainYellow));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainYellow));
 }
 
 /*END MAIN SHADOW AND HOVER*/
 
 /*ICON DEFAULT*/
 /*Material UI icon*/
-.icon-svg, .icon-mu {
+.icon-svg,
+.icon-mu {
     transform: scale(2);
 }
 
@@ -158,7 +165,6 @@
 }
 
 /*END ICON DEFAULT*/
-
 
 /*BUTTONS*/
 .btn {

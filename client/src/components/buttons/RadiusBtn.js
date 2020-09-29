@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function RadiusBtn({
     title,
@@ -16,8 +16,8 @@ export default function RadiusBtn({
     right,
     bottom,
     display,
-    zIndex, }) {
-
+    zIndex,
+}) {
     let styles = {
         btn: {
             position,
@@ -26,14 +26,14 @@ export default function RadiusBtn({
             right,
             display: display || "block",
             color: color || "white",
-            padding: padding || '2px 8px',
-            borderRadius: '20px',
-            backgroundColor: backgroundColor || 'var(--themeSDark)',
+            padding: padding || "2px 8px",
+            borderRadius: "20px",
+            backgroundColor: backgroundColor || "var(--themeSDark)",
             outline: "none",
-            fontSize: fontSize || '20px',
+            fontSize: fontSize || "20px",
             zIndex,
-        }
-    }
+        },
+    };
 
     const extraSmallConfig = {
         position,
@@ -42,29 +42,47 @@ export default function RadiusBtn({
         right,
         bottom,
         color: "white",
-        padding: '2px 5px',
-        borderRadius: '20px',
-        backgroundColor: backgroundColor || 'var(--themeSDark)',
+        padding: "2px 5px",
+        borderRadius: "20px",
+        backgroundColor: backgroundColor || "var(--themeSDark)",
         outline: "none",
         fontSize: "12px",
         zIndex,
-    }
+    };
 
-    if(size === 'small') {
+    if (size === "small") {
         className = "my-1";
         fontSize = "15px";
     }
 
-    if(size === "extra-small") {
+    if (size === "extra-small") {
         styles.btn = extraSmallConfig;
+    }
+
+    if (size === "compact") {
+        styles.btn = {
+            ...extraSmallConfig,
+            padding: "2px 7px",
+            fontSize: "16px",
+        };
     }
 
     return (
         <button
-            className={className + ` text-small ${needTxtShadow ? 'text-shadow' : ''} font-weight-bold cursor-pointer`}
-            style={{...styles.btn, borderWidth: 2, borderStyle: 'outset', borderColor: 'white',}}
+            className={
+                className +
+                ` text-small ${
+                    needTxtShadow ? "text-shadow" : ""
+                } font-weight-bold cursor-pointer`
+            }
+            style={{
+                ...styles.btn,
+                borderWidth: 2,
+                borderStyle: "outset",
+                borderColor: "white",
+            }}
             onClick={onClick}
-            type='button'
+            type="button"
         >
             {title}
         </button>

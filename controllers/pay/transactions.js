@@ -108,82 +108,6 @@ const getPagNotify = (req, res) => {
         .catch((e) => res.json(e.response.data));
 };
 
-// GET
-const readTransaction = (req, res) => {
-    const { transactionCode } = req.query;
-
-    const params = {
-        email,
-        token,
-    };
-
-    const config = {
-        method: "get",
-        url: `${payUrl}/v2/transactions/${transactionCode}`,
-        params,
-        headers: {
-            "Accept-Charset": "ISO-8859-1",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
-
-    axios(config)
-        .then((response) => {
-            const xml = response.data;
-            parser.parseString(xml, function (error, result) {
-                if (error === null) {
-                    const data = result.transaction;
-
-                    const [status] = data.status;
-                    const [lastEventDate] = data.lastEventDate;
-                    const [paymentMethod] = data.paymentMethod;
-                    const [paymentMethodCode] = paymentMethod.code;
-
-                    res.json({
-                        status,
-                        lastEventDate,
-                        paymentMethodCode,
-                    });
-                } else {
-                    console.log(error);
-                }
-            });
-        })
-        .catch((e) => res.json(e.response.data));
-};
-
-// GET
-const readHistory = (req, res) => {
-    const {
-        reference,
-        initialDate,
-        finalDate,
-        page = 1,
-        maxPageResults = 10,
-    } = req.query;
-
-    const params = {
-        email,
-        token,
-        reference, // * Código de referência da transação. Código informado na criação da transação para fazer referência ao pagamento.
-        initialDate, // Obrigatório:** Se estiver utilizando o finalDate Especifica a data inicial do intervalo de pesquisa. Somente transações criadas a partir desta data serão retornadas. Esta data não pode ser anterior a 6 meses da data corrente. Formato:YYYY-MM-DDThh:mm:ss.sTZD
-        finalDate,
-        page, // O número de resultados retornado pela consulta por código de referência pode ser grande, portanto é possível fazer a paginação dos resultados. A primeira página retornada é 1 e assim por diante. Este parâmetro especifica qual é a página de resultados a ser retornada.
-        maxPageResults, //Número máximo de resultados por página. Para limitar o tamanho da resposta de cada chamada à consulta, é possível especificar um número máximo de resultados por página.
-    };
-
-    const config = {
-        method: "post",
-        url: `${payUrl}/v2/transactions`,
-        data: body,
-        params,
-        headers: {
-            "Accept-Charset": "ISO-8859-1",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
-};
-
 // Estornar transação.
 const refundTransaction = (req, res) => {
     const { transactionCode } = req.body;
@@ -235,9 +159,87 @@ const cancelTransaction = (req, res) => {
 };
 
 module.exports = {
-    readTransaction,
-    readHistory,
+    getPagNotify,
     refundTransaction,
     cancelTransaction,
-    getPagNotify,
 };
+
+/* ARCHIVES
+GET
+it is no longer needed because pagseguroro reads every transaction ans send notification about them in every transaction change
+const readTransaction = (req, res) => {
+    const { transactionCode } = req.query;
+
+    const params = {
+        email,
+        token,
+    };
+
+    const config = {
+        method: "get",
+        url: `${payUrl}/v2/transactions/${transactionCode}`,
+        params,
+        headers: {
+            "Accept-Charset": "ISO-8859-1",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    };
+
+    axios(config)
+        .then((response) => {
+            const xml = response.data;
+            parser.parseString(xml, function (error, result) {
+                if (error === null) {
+                    const data = result.transaction;
+
+                    const [status] = data.status;
+                    const [lastEventDate] = data.lastEventDate;
+                    const [paymentMethod] = data.paymentMethod;
+                    const [paymentMethodCode] = paymentMethod.code;
+
+                    res.json({
+                        status,
+                        lastEventDate,
+                        paymentMethodCode,
+                    });
+                } else {
+                    console.log(error);
+                }
+            });
+        })
+        .catch((e) => res.json(e.response.data));
+};
+
+GET
+it is depracated because i already have history stored on db
+const readHistory = (req, res) => {
+    const {
+        reference,
+        initialDate,
+        finalDate,
+        page = 1,
+        maxPageResults = 10,
+    } = req.query;
+
+    const params = {
+        email,
+        token,
+        reference, // * Código de referência da transação. Código informado na criação da transação para fazer referência ao pagamento.
+        initialDate, // Obrigatório:** Se estiver utilizando o finalDate Especifica a data inicial do intervalo de pesquisa. Somente transações criadas a partir desta data serão retornadas. Esta data não pode ser anterior a 6 meses da data corrente. Formato:YYYY-MM-DDThh:mm:ss.sTZD
+        finalDate,
+        page, // O número de resultados retornado pela consulta por código de referência pode ser grande, portanto é possível fazer a paginação dos resultados. A primeira página retornada é 1 e assim por diante. Este parâmetro especifica qual é a página de resultados a ser retornada.
+        maxPageResults, //Número máximo de resultados por página. Para limitar o tamanho da resposta de cada chamada à consulta, é possível especificar um número máximo de resultados por página.
+    };
+
+    const config = {
+        method: "post",
+        url: `${payUrl}/v2/transactions`,
+        data: body,
+        params,
+        headers: {
+            "Accept-Charset": "ISO-8859-1",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    };
+};
+*/

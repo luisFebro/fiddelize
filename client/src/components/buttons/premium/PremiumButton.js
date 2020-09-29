@@ -15,6 +15,7 @@ export default function PremiumButton({
     top,
     left,
     right,
+    size,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [trigger, setTrigger] = useState(false);
@@ -52,7 +53,7 @@ export default function PremiumButton({
         <Fragment>
             {btnType === "pill" && (
                 <RadiusBtn
-                    size="extra-small"
+                    size={`${size ? size : "extra-small"}`}
                     title="conhecer"
                     onClick={handleFullOpen}
                     backgroundColor="var(--themeSDark)"

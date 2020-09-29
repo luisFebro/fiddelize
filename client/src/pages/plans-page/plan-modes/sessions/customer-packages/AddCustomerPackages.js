@@ -20,7 +20,7 @@ export default function AddCustomerPackages({
         >
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 Novvos Clientes
-                <span className="text-normal font-weight-bold d-block">
+                <span className="text-normal d-block">
                     Selecione e aumente seu alcance de cadastros
                 </span>
             </p>

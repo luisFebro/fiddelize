@@ -8,6 +8,8 @@ import convertToReal from "../../../../utils/numbers/convertToReal";
 import animateCSS from "../../../../utils/animateCSS";
 import NotificationBadge from "../../../../components/NotificationBadge";
 
+const isSmall = window.Helper.isSmallScreen();
+
 const getStyles = () => ({
     continueBtn: {
         position: "fixed",
@@ -20,8 +22,10 @@ const getStyles = () => ({
         padding: 180,
         position: "fixed",
         background: "var(--themeP)",
-        clipPath: "ellipse(49% 13% at 13% 96%)", // alternative : clip-path: circle(50.5% at 10% 0%); padding: 330px
-        webPackClipPath: "ellipse(49% 13% at 13% 96%)",
+        clipPath: `ellipse(${isSmall ? "49% 13%" : "40% 17%"} at 13% 96%)`, // alternative : clip-path: circle(50.5% at 10% 0%); padding: 330px
+        webPackClipPath: `ellipse(${
+            isSmall ? "49% 13%" : "40% 17%"
+        } at 13% 96%)`,
     },
     muStyle: {
         transform: "scale(1.7)",
