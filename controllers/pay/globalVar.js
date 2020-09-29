@@ -1,5 +1,7 @@
+const { IS_PROD } = require("../../config");
+
 exports.globalVar = {
-    sandboxMode: true,
+    sandboxMode: IS_PROD ? false : true,
     get payUrl() {
         return this.sandboxMode
             ? "https://ws.sandbox.pagseguro.uol.com.br"

@@ -30,6 +30,7 @@ const filterAndCount = require("../../utils/array/filterAndCount");
 const {
     jsEncrypt,
     decryptSync,
+    encryptSync,
     jsDecrypt,
 } = require("../../utils/security/xCipher");
 
@@ -122,9 +123,15 @@ exports.update = (req, res) => {
         ? `${req.query.selectedKeys}`
         : ""; //-cpf -clientAdminData.bizPlanCode -clientAdminData.verificationPass
 
-    req.body.phone = encryptSync(req.body.phone);
-    req.body.email = encryptSync(req.body.email);
-    req.body.cpf = jsEncrypt(req.body.cpf);
+    if (req.body.phone) {
+        req.body.phone = encryptSync(req.body.phone);
+    }
+    if (req.body.email) {
+        req.body.email = encryptSync(req.body.email);
+    }
+    if (req.body.cpf) {
+        req.body.cpf = jsEncrypt(req.body.cpf);
+    }
 
     User.findOneAndUpdate(
         { _id: req.profile._id },

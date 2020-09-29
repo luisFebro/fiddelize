@@ -1,10 +1,14 @@
-import React from 'react';
-import { useProfile, useClientAdmin, useCentralAdmin } from '../../../../hooks/useRoleData';
+import React from "react";
+import {
+    useProfile,
+    useClientAdmin,
+    useCentralAdmin,
+} from "../../../../hooks/useRoleData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from 'react-router-dom';
-import getFirstName from '../../../../utils/string/getFirstName';
+import { Link } from "react-router-dom";
+import getFirstName from "../../../../utils/string/getFirstName";
 
-const showTxtDefault = txt => (
+const showTxtDefault = (txt) => (
     <div className="mx-2 text-left text-normal animated rubberBand my-5">
         <p className="text-purple text-subtitle font-weight-bold m-0">
             Nota <FontAwesomeIcon icon="info-circle" />
@@ -20,24 +24,32 @@ const aboutToExpireMsg = ({
     name,
 }) => {
     const leftRegisters = limitFreePlanNewUsers - totalClientUsers;
-    const txt =
-    <span>
-        - Seus clientes estão começando a aparecer, {getFirstName(name)}. Ótimo! Faltam mais
-        <br />
-        <strong>{leftRegisters} cadastros</strong> na versão grátis. Que tal ganhar mais alcance e resultado?{" "}
-        <Link to="/planos?cliente-admin=1" className="text-link">Invista em mais cadastros aqui e faça seu negócio brilhar.</Link>
-    </span>
+    const txt = (
+        <span>
+            - Seus clientes estão começando a aparecer, {getFirstName(name)}.
+            Ótimo! Faltam mais
+            <br />
+            <strong>{leftRegisters} cadastros</strong> na versão grátis. Que tal
+            ganhar mais alcance e resultado?{" "}
+            <Link to="/planos?cliente-admin=1" className="text-link">
+                Invista em mais cadastros aqui e faça seu negócio brilhar.
+            </Link>
+        </span>
+    );
 
     return showTxtDefault(txt);
-}
+};
 
 const expiredMsg = () => {
-    const txt =
-    <span>
-        - O limite de cadastros para seu plano terminou. Mas calma, esse é só o começo.{" "}
-        <br />
-        <Link to="/planos?cliente-admin=1" className="text-link">Invista em mais cadastros aqui e continue crescendo.</Link>
-    </span>
+    const txt = (
+        <span>
+            - O limite de cadastros para seu plano terminou. Mas calma, esse é
+            só o começo. <br />
+            <Link to="/planos?cliente-admin=1" className="text-link">
+                Invista em mais cadastros aqui e continue fidelizando.
+            </Link>
+        </span>
+    );
     return showTxtDefault(txt);
 };
 // END EXPIRING MSGS
@@ -49,9 +61,9 @@ export default function AsyncFreeAccountsLimitMsg() {
     const { totalClientUsers } = useClientAdmin();
     const { limitFreePlanNewUsers } = useCentralAdmin();
 
-    if(totalClientUsers >= limitFreePlanNewUsers) {
+    if (totalClientUsers >= limitFreePlanNewUsers) {
         return expiredMsg();
-    } else if(totalClientUsers >= 7) {
+    } else if (totalClientUsers >= 7) {
         return aboutToExpireMsg({
             limitFreePlanNewUsers,
             totalClientUsers,
@@ -60,5 +72,4 @@ export default function AsyncFreeAccountsLimitMsg() {
     } else {
         return null;
     }
-
 }

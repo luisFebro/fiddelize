@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const sslRedirect = require("heroku-ssl-redirect");
 const compression = require("compression");
+const { IS_PROD } = require("./config");
 require("dotenv").config(); // n4
 require("./utils/globalHelpers");
 
@@ -19,9 +20,8 @@ app.use(helmet.hidePoweredBy());
 // compress all responses
 app.use(compression());
 
-const ENVIRONMENT = process.env.NODE_ENV || "development";
-const isProduction = ENVIRONMENT === "production";
-console.log("env", ENVIRONMENT);
+const isProduction = IS_PROD;
+console.log("env", isProduction ? "production" : "development");
 
 // DATABASE
 const options = {

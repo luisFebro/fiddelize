@@ -14,8 +14,9 @@ import convertToReal from "../../../utils/numbers/convertToReal";
 import { addDays } from "../../../utils/dates/dateFns";
 import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 import { readUser } from "../../../redux/actions/userActions";
+import { IS_DEV } from "../../../config/clientUrl";
 
-const sandboxMode = true;
+const sandboxMode = IS_DEV ? true : false;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";

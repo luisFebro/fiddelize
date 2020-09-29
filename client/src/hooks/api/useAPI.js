@@ -1,4 +1,5 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
+// use GETAPI  on utils/promises for progaramatically make requests.
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";

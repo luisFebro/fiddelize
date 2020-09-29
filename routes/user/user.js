@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
     read,
@@ -25,22 +25,22 @@ const {
 
 const {
     getRecordedClientList,
-    getHighestScores
+    getHighestScores,
 } = require("../../controllers/user/clients-session/recordedClients");
 
-const { mwIsCliAdmin, mwIsAuth, } = require("../../controllers/auth");
+const { mwIsCliAdmin, mwIsAuth } = require("../../controllers/auth");
 // @route  api/user
 // RUD
 router.get("/:userId", read); // mwIsAuth JWT ERROR: jwt must be provided when log it
-router.put("/:userId", update); // mwIsAuth
-router.delete('/:userId', mwBackup, remove);
+router.put("/:userId", update); // mwIsAuth highly vulnarable if attacker knows the id
+router.delete("/:userId", mwIsAuth, mwBackup, remove);
 // END RUD
 
 router.get("/confirm-account/:authUserId", confirmUserAccount);
 
 // purchase history
-router.put('/purchase-history/:userId', addPurchaseHistory);
-router.put('/purchase-history/update-status/:userId', changePrizeStatus);
+router.put("/purchase-history/:userId", addPurchaseHistory);
+router.put("/purchase-history/update-status/:userId", changePrizeStatus);
 router.get("/list/purchase-history/:userId", readHistoryList);
 router.get("/list/purchase-history/prizes/:userId", readPrizes);
 // end purchase history
@@ -60,10 +60,9 @@ router.put("/image/update", updateImages);
 
 // FIELDS
 // Array Fields handled: none
-router.put('/field/array/push/:id', addElementArray);
-router.put('/field/array/pull/:id', removeElementArray);
-router.put('/field/remove/:id', removeField);
-
+router.put("/field/array/push/:id", addElementArray);
+router.put("/field/array/pull/:id", removeElementArray);
+router.put("/field/remove/:id", removeField);
 
 router.param("userId", mwUserId); // n1
 
@@ -75,9 +74,6 @@ router.delete('/:userId', mwRemoveAllBookingsFromAStaff, mwBackup, remove);
 
 const { mwRemoveAllBookingsFromAStaff } = require("../../controllers/staffBooking");
  */
-
-
-
 
 // THIS WILL REFACTORATED TO RECEIVE IDS LIKE I DID WITH FAVORITES AND UPDATE WITH FIELD ROUTES.
 // NOTIFICATION SYSTEM
@@ -113,8 +109,6 @@ const { mwRemoveAllBookingsFromAStaff } = require("../../controllers/staffBookin
 //     })
 // });
 // // END NOTIFICATION SYSTEM
-
-
 
 /* COMMENTS
 n1: // Everytime there is a userId, this router will run and make this user info available in the request object

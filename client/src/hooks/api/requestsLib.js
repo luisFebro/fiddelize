@@ -1,6 +1,7 @@
 // URLs ONLY
 // user
 export const updateUser = (userId) => `/api/user/${userId}?noResponse=true`;
+export const removeUser = (userId) => `/api/user/${userId}`;
 
 // client's register
 export const readUserList = (cliAdminId) =>
