@@ -75,6 +75,7 @@ const finishCheckout = (req, res, next) => {
         senderEmail = "captainGreat@sandbox.pagseguro.com.br",
         firstDueDate,
         ordersStatement,
+        filter,
     } = req.query;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
 
@@ -161,6 +162,7 @@ const finishCheckout = (req, res, next) => {
                             }),
                             extra: extraAmount,
                         },
+                        filter: JSON.parse(filter),
                     });
 
                     newOrder.save().then((order) => {

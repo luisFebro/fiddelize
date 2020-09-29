@@ -118,7 +118,7 @@ function createBoleto(req, res) {
                 paymentLink: boletoData.paymentLink,
                 payDueDate: boletoData.dueDate,
                 planDueDate: "2020-09-25T08:06:27.888Z",
-                ordersStatement,
+                ordersStatement: JSON.parse(ordersStatement),
             };
 
             User.findById(userId).exec((err, doc) => {

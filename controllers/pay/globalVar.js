@@ -1,7 +1,9 @@
 const { IS_PROD } = require("../../config");
 
+// On production, sandbox request will return "Not found" because the host address will be production's, not dev.
+// In order to work, we have to set sandboxMode to TRUE and deploy both here and PayArea Compenent.
 exports.globalVar = {
-    sandboxMode: IS_PROD ? false : true,
+    sandboxMode: true, //IS_PROD ? false : true,
     get payUrl() {
         return this.sandboxMode
             ? "https://ws.sandbox.pagseguro.uol.com.br"

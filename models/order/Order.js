@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "orders";
 
+const { DefaultFilterSchema } = require("../user/schemes");
+
 const data = {
     reference: String,
     agentName: String, // for future salesperson id
@@ -32,6 +34,7 @@ const data = {
         fee: String, // e.g  26.35
         extra: String, // e.g 0.00 for discounts
     },
+    filter: DefaultFilterSchema,
 };
 
 const orderSchema = new Schema(data, { timestamps: true });

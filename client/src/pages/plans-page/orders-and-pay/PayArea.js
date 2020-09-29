@@ -16,7 +16,7 @@ import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 import { readUser } from "../../../redux/actions/userActions";
 import { IS_DEV } from "../../../config/clientUrl";
 
-const sandboxMode = IS_DEV ? true : false;
+const sandboxMode = true; //IS_DEV ? true : false;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";

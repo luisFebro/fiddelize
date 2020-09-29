@@ -21,7 +21,6 @@ const getStyles = (props) => ({
 
 export default function AddCustomersBtn({ btnTitle = "Adicionar", modalData }) {
     const [fullOpen, setFullOpen] = useState(false);
-    console.log("modalData", modalData);
 
     const styles = getStyles();
     const PlusIcon = <AddCircleOutlineIcon style={styles.muStyle} />;

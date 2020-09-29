@@ -238,12 +238,6 @@ export default function Simulator({ handleData, period }) {
                         - {formattedExpiryDate}
                     </span>
                 </span>
-                <br />✔ Desconto:{" "}
-                <span className="text-subtitle font-weight-bold">
-                    {discountDiff
-                        ? `${discountDiffReal} (${Math.ceil(increasedPerc)}%)`
-                        : "nenhum."}
-                </span>
                 <br />✔ Valor a investir:{" "}
                 <span className="text-subtitle font-weight-bold">
                     R$ {totalFinalMoneyReal}
@@ -319,7 +313,6 @@ export default function Simulator({ handleData, period }) {
             {showSlider()}
             {showMultiPrice()}
             {showAutoFinalTotal()}
-            {showDiffDiscount()}
             {showSummary()}
         </section>
     );

@@ -7,7 +7,10 @@ import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
 import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
 import { getVar, removeVar } from "../../../../hooks/storage/useVar";
+import getFilterDate from "../../../../utils/dates/getFilterDate";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
+
+const filter = getFilterDate();
 
 const AsyncBoleto = LoadableVisible({
     loading: true,
@@ -84,6 +87,7 @@ export default function AsyncPayContent({ modalData }) {
         )}R$ ${itemAmount}`,
         firstDueDate,
         ordersStatement,
+        filter,
     };
 
     const { data, loading } = useAPI({
