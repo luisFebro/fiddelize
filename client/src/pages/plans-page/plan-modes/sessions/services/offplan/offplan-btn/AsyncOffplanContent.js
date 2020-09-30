@@ -4,9 +4,17 @@ import {
     ShowTitle,
     ShowPicture,
 } from "../../../../../../../components/buttons/premium/feature-pages/DefaultProComps";
+import pickFeature from "../../../../../../../components/buttons/premium/pickFeature";
 
 export default function AsyncOffplanContent({ modalData }) {
-    const { title, img: iconImg, callback } = modalData;
+    const {
+        title,
+        img: iconImg,
+        callback,
+        feature = "CoppiaSeguranca",
+        discountPrice,
+        normalPrice,
+    } = modalData;
 
     const handleCTA = () => {
         callback(true, title);
@@ -25,9 +33,17 @@ export default function AsyncOffplanContent({ modalData }) {
         </section>
     );
 
+    const data = { discountPrice, normalPrice };
+    const handlePickedComp = () => {
+        const PickedComp = pickFeature({ feature, data });
+        return <PickedComp />;
+    };
+
+    const PickedFeature = handlePickedComp();
+
     return (
         <section>
-            <ShowTitle title={title} />
+            <ShowTitle title={title} offplan={true} />
             <ShowPicture
                 floatit={false}
                 src="/img/pro-features/feature-development.svg"
@@ -38,6 +54,7 @@ export default function AsyncOffplanContent({ modalData }) {
                 reference=""
                 main={true}
             />
+            {PickedFeature}
             {showCTA()}
         </section>
     );

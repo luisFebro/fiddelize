@@ -49,7 +49,11 @@ export default function OffplanBtn({
                 size="medium"
                 title={disabledTeamFeature ? "Em breve" : "Saiba mais"}
                 onClick={handleFullOpen}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor={
+                    disabledTeamFeature
+                        ? "var(--themePLight)"
+                        : "var(--themeSDark--default)"
+                }
                 variant="extended"
                 position="relative"
             />

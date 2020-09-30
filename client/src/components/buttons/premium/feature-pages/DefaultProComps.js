@@ -26,7 +26,10 @@ const getStyles = () => ({
     },
 });
 
-export const ShowTitle = ({ title = "Orgganize Clientes" }) => {
+export const ShowTitle = ({
+    title = "Orgganize Clientes",
+    offplan = false,
+}) => {
     const styles = getStyles();
 
     return (
@@ -34,10 +37,19 @@ export const ShowTitle = ({ title = "Orgganize Clientes" }) => {
             <div style={styles.clipPathBack}></div>
             <h1 className="text-shadow position-relative text-white text-subtitle text-purple text-center font-weight-bold">
                 Fiddelize{" "}
-                <span className="d-inline-block position-relative">
-                    Pro{" "}
-                    <FontAwesomeIcon icon="crown" style={styles.crownIcon} />
-                </span>
+                {offplan ? (
+                    <span className="d-inline-block position-relative">
+                        Pré-venda
+                    </span>
+                ) : (
+                    <span className="d-inline-block position-relative">
+                        Pro{" "}
+                        <FontAwesomeIcon
+                            icon="crown"
+                            style={styles.crownIcon}
+                        />
+                    </span>
+                )}
                 <br />
                 <span className="text-em-1-2">{title}</span>
             </h1>

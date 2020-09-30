@@ -151,6 +151,7 @@ export default function SilverPlan({ setCurrPlan }) {
                     />
                     <OffplanServices
                         handleNewOrder={handleNewOrder}
+                        plan="silver"
                         period={period}
                     />
 

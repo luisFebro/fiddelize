@@ -155,6 +155,7 @@ export default function BronzePlan({ setCurrPlan }) {
                     />
                     <OffplanServices
                         handleNewOrder={handleNewOrder}
+                        plan="bronze"
                         period={period}
                     />
 

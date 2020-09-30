@@ -6,8 +6,6 @@ import OffplanBtn from "./offplan-btn/OffplanBtn";
 import CheckBoxForm from "../../../../../../components/CheckBoxForm";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 
-const data = () => getServices("offplan");
-
 const getStyles = () => ({
     priceBadge: {
         borderRadius: "30px",
@@ -58,19 +56,19 @@ const getGroupServices = (selectedServices) => {
     return { groupPrice, groupServices };
 };
 
-const CardList = ({ data, handleNewOrder, period }) => {
+const CardList = ({ data, handleNewOrder, period, plan }) => {
     const [currService, setCurrService] = useState("");
     const [isChecked, setIsChecked] = useState(false);
 
     const selectedServices = useRef(new Map()).current;
     useEffect(() => {
         if (!selectedServices.has(currService) && isChecked) {
-            const targetService = data().find(
+            const targetService = getServices("offplan").find(
                 (serv) => serv.title === currService
             );
 
             if (targetService) {
-                let servicePrice = targetService[period].price;
+                let servicePrice = targetService[plan].price[period];
                 servicePrice = getDiscount(servicePrice);
                 const serviceObj = {
                     amount: 1,
@@ -109,11 +107,17 @@ const CardList = ({ data, handleNewOrder, period }) => {
 
     return (
         <Fragment>
-            {data().map((card) => {
+            {getServices("offplan").map((card) => {
+                const normalPrice = card[plan].price[period];
+                const discountPrice = convertToReal(getDiscount(normalPrice));
+
                 const modalData = {
                     title: card.title,
                     img: card.img,
                     callback: handleCheck,
+                    feature: card.proPage,
+                    normalPrice,
+                    discountPrice,
                 };
 
                 const showImgDesc = () => (
@@ -129,9 +133,6 @@ const CardList = ({ data, handleNewOrder, period }) => {
                         </p>
                     </section>
                 );
-
-                const normalPrice = card[period].price;
-                const discountPrice = convertToReal(getDiscount(normalPrice));
 
                 const showPrice = () =>
                     selectedServices.has(card.title) && (
@@ -189,9 +190,16 @@ const CardList = ({ data, handleNewOrder, period }) => {
     );
 };
 
-export default function OffplanServices({ handleNewOrder, period }) {
+export default function OffplanServices({ handleNewOrder, period, plan }) {
+    const data = getServices("offplan");
+
     const ThisCardList = (
-        <CardList data={data} period={period} handleNewOrder={handleNewOrder} />
+        <CardList
+            data={data}
+            period={period}
+            handleNewOrder={handleNewOrder}
+            plan={plan}
+        />
     );
 
     return (
@@ -206,7 +214,13 @@ export default function OffplanServices({ handleNewOrder, period }) {
                     <strong>desconto de 50% fixo!</strong>
                 </span>
             </h2>
-            <CarouselCard CardList={ThisCardList} />
+            {period === "yearly" ? (
+                <CarouselCard CardList={ThisCardList} />
+            ) : (
+                <p className="mx-3 text-subtitle text-white font-weight-bold">
+                    Disponível apenas para período anual.
+                </p>
+            )}
         </section>
     );
 }

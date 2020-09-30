@@ -14,18 +14,36 @@ const AsyncEnvvioWhatsapp = Load({
         ),
 });
 
-const featureStore = {
+// OFFPLAN FEATURES
+const AsyncCoppiaSeguranca = Load({
+    loader: () =>
+        import(
+            "./feature-pages/offplan-features/CoppiaSeguranca" /* webpackChunkName: "pro-feature-page-lazy" */
+        ),
+});
+
+const AsyncSattisfacaoClientes = Load({
+    loader: () =>
+        import(
+            "./feature-pages/offplan-features/SattisfacaoClientes" /* webpackChunkName: "pro-feature-page-lazy" */
+        ),
+});
+
+const featureStore = (data) => ({
     OrgganizeClients_1: <AsyncOrgganizeClients />,
     EnvvioWhatsapp_2: <AsyncEnvvioWhatsapp />,
-};
+    CoppiaSeguranca: <AsyncCoppiaSeguranca data={data} />,
+    SattisfacaoClientes: <AsyncSattisfacaoClientes data={data} />,
+});
 
 export default function pickFeature({
     category = "proFeature", // only used if there is the need for other categories to be managed...
-    feature = "FilterOrgganizeClients_func1",
+    feature = "OrgganizeClients_1",
     options = {},
+    data,
 }) {
     const pickComp = () => {
-        return featureStore[feature];
+        return featureStore(data)[feature];
     };
 
     return pickComp;

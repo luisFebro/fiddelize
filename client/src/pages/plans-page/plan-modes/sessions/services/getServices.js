@@ -95,39 +95,75 @@ const offplanVersion = () => [
         title: "Coppia Segurança",
         img: "/img/pro-features/coppia-seguranca/coppia-seguranca.svg",
         desc: "Baixe os cadastros dos seus clientes para Excel",
-        monthly: {
-            price: 15,
+        bronze: {
+            price: {
+                yearly: 60,
+                monthly: 30,
+            },
         },
-        yearly: {
-            price: 35,
+        silver: {
+            price: {
+                yearly: 50,
+                monthly: 25,
+            },
         },
-        isPerPackage: false,
+        gold: {
+            price: {
+                yearly: 40,
+                monthly: 20,
+            },
+        },
+        proPage: "CoppiaSeguranca",
     },
     {
         title: "Sattisfação Clientes",
         img: "/img/pro-features/sattisfacao-clientes/sattisfacao-clientes.svg",
         desc:
             "Use uma métrica eficaz para pesquisa de satisfação dos clientes.", // "Use uma métrica aprovada pelas melhores empresas para medir a satisfação dos seus clientes",
-        monthly: {
-            price: 25,
+        bronze: {
+            price: {
+                yearly: 80,
+                monthly: 40,
+            },
         },
-        yearly: {
-            price: 45,
+        silver: {
+            price: {
+                yearly: 70,
+                monthly: 35,
+            },
         },
-        isPerPackage: true,
+        gold: {
+            price: {
+                yearly: 60,
+                monthly: 30,
+            },
+        },
+        proPage: "SattisfacaoClientes",
     },
     {
         title: "Kit da Eqquipe",
         img: "/img/pro-features/eqquipe-kit/eqquipe.svg",
         desc:
             "Um app de fidelidade intuitivo pensado na eficácia do trabalho dos seus colaboradores.",
-        monthly: {
-            price: 45,
+        bronze: {
+            price: {
+                yearly: 80,
+                monthly: 40,
+            },
         },
-        yearly: {
-            price: 85,
+        silver: {
+            price: {
+                yearly: 70,
+                monthly: 35,
+            },
         },
-        isPerPackage: false,
+        gold: {
+            price: {
+                yearly: 60,
+                monthly: 30,
+            },
+        },
+        proPage: "",
     },
 ];
 

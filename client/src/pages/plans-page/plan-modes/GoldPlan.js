@@ -151,6 +151,7 @@ export default function GoldPlan({ setCurrPlan }) {
                     />
                     <OffplanServices
                         handleNewOrder={handleNewOrder}
+                        plan="gold"
                         period={period}
                     />
 
