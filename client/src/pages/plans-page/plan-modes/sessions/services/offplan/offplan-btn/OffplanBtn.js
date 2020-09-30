@@ -32,7 +32,10 @@ export default function OffplanBtn({
 
     const styles = getStyles();
 
+    const disabledTeamFeature =
+        modalData && modalData.title === "Kit da Eqquipe";
     const handleFullOpen = () => {
+        if (disabledTeamFeature) return;
         setFullOpen(true);
     };
 
@@ -44,7 +47,7 @@ export default function OffplanBtn({
         <section>
             <ButtonFab
                 size="medium"
-                title="Saiba mais"
+                title={disabledTeamFeature ? "Em breve" : "Saiba mais"}
                 onClick={handleFullOpen}
                 backgroundColor={"var(--themeSDark--default)"}
                 variant="extended"

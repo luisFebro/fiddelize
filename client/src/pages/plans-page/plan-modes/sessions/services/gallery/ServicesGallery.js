@@ -1,7 +1,31 @@
 import React from "react";
 import ServicesGalleryCard from "./ServicesGalleryCard";
+import getServices from "../getServices";
 
-export default function ServicesGallery({ handleNewOrder }) {
+export default function ServicesGallery({ handleNewOrder, period }) {
+    const list = getServices("pro", { plan: "bronze" }).map((service) => {
+        // const servPrice = getProPrice(service.devGrade, service.resGrade, {
+        //     plan: "bronze",
+        //     period,
+        // });
+
+        const serviceData = {
+            serviceName: service.name,
+            servicePrice: service.price[period],
+            serviceDesc: service.cardDesc,
+            servicePage: service.proPage,
+            serviceIcon: service.customIcon,
+        };
+
+        return (
+            <ServicesGalleryCard
+                key={service.name}
+                data={serviceData}
+                handleNewOrder={handleNewOrder}
+            />
+        );
+    });
+
     return (
         <section
             className="position-relative my-5 text-purple"
@@ -14,25 +38,11 @@ export default function ServicesGallery({ handleNewOrder }) {
                 </span>
             </p>
             <section className="container">
-                <div className="row">
-                    <ServicesGalleryCard
-                        handleNewOrder={handleNewOrder}
-                        serviceName="Envvio Whatsapp"
-                    />
-                    <ServicesGalleryCard
-                        handleNewOrder={handleNewOrder}
-                        serviceName="Filtro Clientes"
-                    />
-                    <ServicesGalleryCard
-                        handleNewOrder={handleNewOrder}
-                        serviceName="Envvio Whatsapp"
-                    />
-                    <ServicesGalleryCard
-                        handleNewOrder={handleNewOrder}
-                        serviceName="Envvio Whatsapp"
-                    />
-                </div>
+                <div className="row">{list}</div>
             </section>
         </section>
     );
 }
+
+/*
+ */

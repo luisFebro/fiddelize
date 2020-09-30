@@ -1,6 +1,7 @@
-import getRemainder from "../numbers/getRemainder";
+// import getRemainder from "../numbers/getRemainder";
 
 /*
+DEPRACATED
 PRICING SYSTEM
 Fiddelize's Services Price Building
 */
@@ -80,7 +81,7 @@ function getSimplifiedUnit(p) {
     return p;
 }
 
-export default function getProPrice(
+function getProPrice(
     timeDevGrade,
     resourceGrade,
     { plan = "gold", period = "yearly" }

@@ -19,8 +19,8 @@ const getStyles = () => ({
         maxWidth: 228,
         overflow: "visible",
     },
-    cardTitle: {
-        minHeight: "60px",
+    titleContainer: {
+        height: isSmall ? "60px" : "80px",
     },
     imgContainer: {
         position: "relative",
@@ -44,11 +44,15 @@ const getStyles = () => ({
     },
 });
 
-export default function ServicesGalleryCard({
-    handleNewOrder,
-    serviceName,
-    servicePrice = 25,
-}) {
+export default function ServicesGalleryCard({ handleNewOrder, data }) {
+    const {
+        serviceName,
+        servicePrice,
+        serviceDesc,
+        servicePage,
+        serviceIcon,
+    } = data;
+
     const [selected, setSelected] = useState(false);
     const styles = getStyles();
 
@@ -66,13 +70,28 @@ export default function ServicesGalleryCard({
         });
     };
 
+    const showTitle = () => (
+        <section style={styles.titleContainer}>
+            <p
+                className={`${
+                    selected ? "text-white" : "text-purple"
+                } d-flex justify-content-center align-items-center mb-0 mx-2 pt-3 text-normal text-center font-weight-bold`}
+            >
+                {serviceName}
+            </p>
+        </section>
+    );
+
     const showServiceIcon = () => (
-        <section className="my-3 container-center" style={styles.imgContainer}>
+        <section
+            className="p-1 p-sm-3 my-3 mx-auto container-center"
+            style={styles.imgContainer}
+        >
             <img
                 className="img-fluid"
-                width={100}
-                src="img/pro-features/whatsapp-invitation/fiddelize-whatsapp.svg"
-                alt="serviço novidade"
+                width={80}
+                src={serviceIcon}
+                alt="serviço varejo"
             />
         </section>
     );
@@ -85,10 +104,7 @@ export default function ServicesGalleryCard({
                 } text-left mx-2 mt-2`}
                 style={styles.descTxt}
             >
-                {truncateWords(
-                    "Agilize o processo de compra de seus clientes enviando o convite",
-                    40
-                )}
+                {truncateWords(serviceDesc, 40)}
             </p>
         </div>
     );
@@ -98,7 +114,7 @@ export default function ServicesGalleryCard({
             <PremiumButton
                 size="compact"
                 btnType="pill"
-                proFeature="EnvvioWhatsapp_2"
+                proFeature={servicePage}
             />
         </div>
     );
@@ -157,14 +173,7 @@ export default function ServicesGalleryCard({
                 }}
                 elevation={false}
             >
-                <p
-                    style={styles.cardTitle}
-                    className={`${
-                        selected ? "text-white" : "text-purple"
-                    } d-flex justify-content-center align-items-center mx-2 pt-3 text-normal text-center font-weight-bold`}
-                >
-                    {serviceName}
-                </p>
+                {showTitle()}
                 {showServiceIcon()}
                 {showDesc()}
                 {showPremiumBtn()}

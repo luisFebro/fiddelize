@@ -4,6 +4,9 @@ import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
 import useBackColor from "../../../hooks/useBackColor";
 import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import { useStoreDispatch } from "easy-peasy";
+
 // Sessions
 import AddCustomerPackages from "./sessions/customer-packages/AddCustomerPackages";
 import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
@@ -38,6 +41,7 @@ export default function BronzePlan({ setCurrPlan }) {
     const { totalInvest, totalServices, period, orders } = data;
     console.log("orders", orders);
     // console.table(data); // for objects without the necessary of using JSON.stringify(obj)
+    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         let total = 0;
@@ -113,6 +117,15 @@ export default function BronzePlan({ setCurrPlan }) {
         period,
     };
 
+    const handleNextPage = () => {
+        if (!totalInvest)
+            return showSnackbar(
+                dispatch,
+                "Carrinho Vazio! Selecione algum serviço."
+            );
+        setNextPage(true);
+    };
+
     return (
         <Fragment>
             {!nextPage ? (
@@ -131,7 +144,10 @@ export default function BronzePlan({ setCurrPlan }) {
                         modalData={modalCustomersData}
                         customersOrder={orders.customers}
                     />
-                    <ServicesGallery handleNewOrder={handleNewOrder} />
+                    <ServicesGallery
+                        handleNewOrder={handleNewOrder}
+                        period={period}
+                    />
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}
@@ -146,7 +162,7 @@ export default function BronzePlan({ setCurrPlan }) {
                         totalInvest={totalInvest}
                         totalServices={totalServices}
                     />
-                    <ContinueBtn onClick={() => setNextPage(true)} />
+                    <ContinueBtn onClick={handleNextPage} />
                 </section>
             ) : (
                 <AsyncOrdersAndPay

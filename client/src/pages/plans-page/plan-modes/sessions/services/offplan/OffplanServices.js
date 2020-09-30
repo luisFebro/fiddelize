@@ -35,7 +35,7 @@ const getStyles = () => ({
 });
 
 function getDiscount(normalPrice, options = {}) {
-    const { perc = 0.3 } = options;
+    const { perc = 0.5 } = options;
 
     const discount = perc * normalPrice;
 
@@ -203,7 +203,7 @@ export default function OffplanServices({ handleNewOrder, period }) {
                 Serviços em pré-venda
                 <span className="d-block text-normal">
                     Seja um dos primeiros fiddelizadores a investir e ganhe{" "}
-                    <strong>desconto de 30% fixo!</strong>
+                    <strong>desconto de 50% fixo!</strong>
                 </span>
             </h2>
             <CarouselCard CardList={ThisCardList} />

@@ -5,7 +5,6 @@ import PremiumButton from "../../../../../components/buttons/premium/PremiumButt
 import getServices from "./getServices";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import parse from "html-react-parser";
-import getProPrice from "../../../../../utils/biz/getProPrice";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -89,17 +88,7 @@ export default function ServicesCard({ period = "yearly", plan = "gold" }) {
     };
 
     const ServicesList = getServices("pro").map((serv) => {
-        let rawValue;
-
-        const gotFixedPrice = serv[plan].fixedPrice;
-        if (gotFixedPrice) {
-            rawValue = gotFixedPrice;
-        } else {
-            rawValue = getProPrice(serv.devGrade, serv.resGrade, {
-                plan,
-                period,
-            });
-        }
+        const rawValue = serv[plan].price[period];
 
         const serviceValue = convertToReal(rawValue, { moneySign: true });
 
@@ -127,6 +116,22 @@ export default function ServicesCard({ period = "yearly", plan = "gold" }) {
         );
     });
 
+    const showDiscount = () => (
+        <Fragment>
+            {period === "yearly" && false && (
+                <section className="mx-3 my-5">
+                    <div className="text-subtitle text-purple">
+                        Seu desconto, Febro:
+                    </div>
+                    <p className="text-normal text-p-light">
+                        Você economiza <strong>R$ 200</strong> comparado com o
+                        mensal deste plano a longo prazo.
+                    </p>
+                </section>
+            )}
+        </Fragment>
+    );
+
     return (
         <Card
             className="position-relative animated fadeInUp mt-0 mb-5 shadow-elevation"
@@ -138,17 +143,7 @@ export default function ServicesCard({ period = "yearly", plan = "gold" }) {
             </h1>
             {showFreeServices()}
             {ServicesList}
-            {period === "yearly" && (
-                <section className="mx-3 my-5">
-                    <div className="text-subtitle text-purple">
-                        Seu desconto, Febro:
-                    </div>
-                    <p className="text-normal text-p-light">
-                        Você economiza <strong>R$ 200</strong> comparado com o
-                        mensal deste plano a longo prazo.
-                    </p>
-                </section>
-            )}
+            {showDiscount()}
         </Card>
     );
 }

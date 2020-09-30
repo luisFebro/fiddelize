@@ -189,9 +189,12 @@ export default function PayArea({
                     />
                 </Link>
             </section>
-            <p className="text-break text-normal mx-2">
-                {JSON.stringify(authToken)}
-            </p>
         </section>
     );
 }
+
+/*
+<p className="text-break text-normal mx-2">
+    {JSON.stringify(authToken)}
+</p>
+ */

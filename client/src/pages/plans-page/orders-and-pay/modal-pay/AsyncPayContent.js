@@ -146,9 +146,6 @@ export default function AsyncPayContent({ modalData }) {
             {showSubtitle()}
             <PayCategories modalData={methodsModalData} />
             <ShowPayWatermarks />
-            <p className="text-break text-normal mx-2">
-                {JSON.stringify(params)}
-            </p>
         </section>
     );
 }
@@ -169,6 +166,11 @@ Observe que os meios de pagamento Balance e Deposit são retornados, porém atua
 */
 
 /* ARCHIVES
+// FOR TESTING
+<p className="text-break text-normal mx-2 my-5">
+    {JSON.stringify(params)}
+</p>
+
 const handleView = (targetCategory) => {
         let elem = "";
         if(targetCategory === "No Boleto") elem = "#PayContent--boleto-msg";

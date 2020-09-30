@@ -6,9 +6,10 @@ import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import AmpStoriesIcon from "@material-ui/icons/AmpStories";
+import PermPhoneMsgIcon from "@material-ui/icons/PermPhoneMsg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { proVersion } from "./proVersion";
-import getProPrice from "../../../../../utils/biz/getProPrice";
 
 const freeVersion = (styles) => [
     {
@@ -26,6 +27,19 @@ const freeVersion = (styles) => [
         greyedout: false,
     },
     {
+        name: "Jogos/Desafios  <br />ilimitados para clientes",
+        gold: {
+            name: "Jogos/Desafios  <br />ilimitados para clientes",
+        },
+        silver: {
+            name: "Jogos/Desafios  <br />ilimitados para clientes",
+        },
+        Icon: <SportsEsportsIcon style={styles.muStyle} />,
+        customIcon: "",
+        cardDesc: "",
+        proPage: "",
+    },
+    {
         name: "Histórico Automático de <br />compras ilimitados",
         Icon: <LocalMallIcon style={styles.muStyle} />,
         price: null,
@@ -41,34 +55,27 @@ const freeVersion = (styles) => [
     },
     {
         name: "Pódio Fidelidade",
-        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
+        Icon: <AmpStoriesIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
         greyedout: false,
     },
     {
         name: "Atendimento com seu <br />negócio via Whatsapp",
-        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
-        price: null,
-        proPage: "",
-        greyedout: false,
-    },
-    {
-        name: "Gerador/Editor de regulamento e senha",
-        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
+        Icon: <PermPhoneMsgIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
         greyedout: false,
     },
     {
         name: "2 apps (admin <br /> e clientes)",
-        Icon: <ImportantDevicesIcon style={styles.muStyleGrey} />,
+        Icon: <ImportantDevicesIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
         greyedout: false,
     },
     {
-        name: "3 opções de prêmios",
+        name: "3 opções de Prêmmios<br /> para clientes",
         Icon: <FontAwesomeIcon icon="trophy" style={styles.muStyleGrey} />,
         price: null,
         proPage: "",
@@ -137,23 +144,17 @@ const styles = {
     },
 };
 
-const handleProPrice = (next, plan, period) => {
-    const gotFixedPrice = next[plan].fixedPrice;
-    if (gotFixedPrice) return gotFixedPrice;
-
-    return getProPrice(next.devGrade, next.resGrade, {
-        plan,
-        period,
-    });
-};
-
 export default function getServices(version = "gratis", options = {}) {
     const { total = false, period, plan } = options;
 
+    if (plan === "bronze")
+        return proVersion(styles).filter((serv) => serv.name);
+
+    // get total plan only!
     if (total && (plan === "gold" || plan === "silver")) {
         let newAmount = 0;
         const newTotal = proVersion(styles).reduce((acc, next) => {
-            const thisPrice = handleProPrice(next, plan, period);
+            const thisPrice = next[plan].price[period];
             if (thisPrice) newAmount++;
 
             return acc + thisPrice;
