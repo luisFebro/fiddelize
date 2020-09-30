@@ -5,6 +5,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveIcon from "@material-ui/icons/Remove";
 import PremiumButton from "../../../../../../components/buttons/premium/PremiumButton";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
+import convertToReal from "../../../../../../utils/numbers/convertToReal";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -35,23 +36,29 @@ const getStyles = () => ({
     },
     addCardBtn: {
         bottom: -10,
-        left: -10,
+        right: -10,
     },
     addedBadge: {
         bottom: -10,
-        left: 40,
+        right: 40,
     },
 });
 
-export default function ServicesGalleryCard({ handleNewOrder, serviceName }) {
+export default function ServicesGalleryCard({
+    handleNewOrder,
+    serviceName,
+    servicePrice = 25,
+}) {
     const [selected, setSelected] = useState(false);
     const styles = getStyles();
+
+    const servicePriceReal = convertToReal(servicePrice, { moneySign: true });
 
     const toggleSelection = (cardName) => {
         setSelected((prev) => !prev);
         const orderObj = {
             amount: 1,
-            price: 25,
+            price: servicePrice,
         };
         handleNewOrder(serviceName, {
             order: orderObj,
@@ -100,9 +107,9 @@ export default function ServicesGalleryCard({ handleNewOrder, serviceName }) {
         <div
             className={`${
                 selected ? "text-white text-shadow" : "text-purple"
-            } text-right p-3 font-weight-bold text-normal`}
+            } text-left p-3 font-weight-bold text-normal`}
         >
-            R$ 30,0
+            {servicePriceReal}
         </div>
     );
 

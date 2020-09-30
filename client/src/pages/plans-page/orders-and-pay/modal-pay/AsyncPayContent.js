@@ -146,6 +146,9 @@ export default function AsyncPayContent({ modalData }) {
             {showSubtitle()}
             <PayCategories modalData={methodsModalData} />
             <ShowPayWatermarks />
+            <p className="text-break text-normal mx-2">
+                {JSON.stringify(params)}
+            </p>
         </section>
     );
 }
