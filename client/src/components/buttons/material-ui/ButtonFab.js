@@ -60,6 +60,7 @@ export default function ButtonFab({
     shadowColor,
     shadowColorCustom,
     title,
+    titleSize,
     id,
     textTransform,
     needTxtNoWrap,
@@ -168,7 +169,9 @@ export default function ButtonFab({
                 <span
                     className={`${
                         needTxtNoWrap ? "text-nowrap" : ""
-                    } d-flex align-self-items text-shadow text-normal font-weight-bold`}
+                    } d-flex align-self-items text-shadow ${
+                        titleSize ? `text-${titleSize}` : "text-normal"
+                    } font-weight-bold`}
                     style={{ textTransform: textTransform || "capitalize" }}
                 >
                     {title}

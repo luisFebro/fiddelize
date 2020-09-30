@@ -37,6 +37,7 @@ export default function BronzePlan({ setCurrPlan }) {
     });
     const { totalInvest, totalServices, period, orders } = data;
     console.log("orders", orders);
+    // console.table(data); // for objects without the necessary of using JSON.stringify(obj)
 
     useEffect(() => {
         let total = 0;
@@ -130,7 +131,7 @@ export default function BronzePlan({ setCurrPlan }) {
                         modalData={modalCustomersData}
                         customersOrder={orders.customers}
                     />
-                    <ServicesGallery />
+                    <ServicesGallery handleNewOrder={handleNewOrder} />
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}

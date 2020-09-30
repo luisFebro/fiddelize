@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import Card from "@material-ui/core/Card";
 import truncateWords from "../../../../../../utils/string/truncateWords";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import RemoveIcon from "@material-ui/icons/Remove";
 import PremiumButton from "../../../../../../components/buttons/premium/PremiumButton";
-import ButtonFab, {
-    muStyle,
-} from "../../../../../../components/buttons/material-ui/ButtonFab";
+import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
+
+const isSmall = window.Helper.isSmallScreen();
+
+const muStyle = {
+    transform: "scale(1.5)",
+    zIndex: 1,
+};
 
 const getStyles = () => ({
     card: {
@@ -20,30 +26,37 @@ const getStyles = () => ({
         overflow: "hidden",
     },
     descContainer: {
-        height: "7em",
+        height: isSmall ? "7em" : "5em",
         overflow: "hidden",
     },
     descTxt: {
-        font: "normal 1.3rem var(--mainFont)",
+        font: "normal 1.3rem Poppins, sans-serif",
         lineHeight: "25px",
     },
     addCardBtn: {
         bottom: -10,
         left: -10,
     },
+    addedBadge: {
+        bottom: -10,
+        left: 40,
+    },
 });
 
-export default function ServicesGalleryCard() {
+export default function ServicesGalleryCard({ handleNewOrder, serviceName }) {
     const [selected, setSelected] = useState(false);
     const styles = getStyles();
 
     const toggleSelection = (cardName) => {
         setSelected((prev) => !prev);
-        //     if(!selected) {
-        //         setSelected(cardName);
-        //     } else {
-        //         setSelected("");
-        //     }
+        const orderObj = {
+            amount: 1,
+            price: 30,
+        };
+        handleNewOrder(serviceName, {
+            order: orderObj,
+            removeOrderGroup: !selected ? undefined : serviceName,
+        });
     };
 
     const showServiceIcon = () => (
@@ -86,7 +99,7 @@ export default function ServicesGalleryCard() {
     const showPrice = () => (
         <div
             className={`${
-                selected ? "text-white" : "text-purple"
+                selected ? "text-white text-shadow" : "text-purple"
             } text-right p-3 font-weight-bold text-normal`}
         >
             R$ 30,0
@@ -94,16 +107,37 @@ export default function ServicesGalleryCard() {
     );
 
     const showAddCartBtn = () => (
-        <div className="position-absolute" style={styles.addCardBtn}>
+        <section className="position-absolute" style={styles.addCardBtn}>
             <ButtonFab
                 size="medium"
                 position="relative"
                 color="var(--mainWhite)"
-                backgroundColor="var(--themeSDark)"
-                iconMu={<AddShoppingCartIcon style={muStyle} />}
+                backgroundColor={
+                    !selected ? "var(--themeSDark)" : "var(--expenseRed)"
+                }
+                iconMu={
+                    !selected ? (
+                        <AddShoppingCartIcon style={muStyle} />
+                    ) : (
+                        <RemoveIcon style={muStyle} />
+                    )
+                }
                 onClick={toggleSelection}
             />
-        </div>
+            {selected && (
+                <div className="position-absolute" style={styles.addedBadge}>
+                    <ButtonFab
+                        title="ADICIONADO!"
+                        titleSize="small"
+                        position="relative"
+                        disabled={true}
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeP)"
+                        variant="extended"
+                    />
+                </div>
+            )}
+        </section>
     );
 
     return (
@@ -120,9 +154,9 @@ export default function ServicesGalleryCard() {
                     style={styles.cardTitle}
                     className={`${
                         selected ? "text-white" : "text-purple"
-                    } d-flex justify-content-center align-items-center mx-2 mt-2  text-normal text-center font-weight-bold`}
+                    } d-flex justify-content-center align-items-center mx-2 pt-3 text-normal text-center font-weight-bold`}
                 >
-                    Envvio Whatsapp
+                    {serviceName}
                 </p>
                 {showServiceIcon()}
                 {showDesc()}
