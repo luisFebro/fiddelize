@@ -51,7 +51,7 @@ export default function ServicesGalleryCard({ handleNewOrder, serviceName }) {
         setSelected((prev) => !prev);
         const orderObj = {
             amount: 1,
-            price: 30,
+            price: 25,
         };
         handleNewOrder(serviceName, {
             order: orderObj,
