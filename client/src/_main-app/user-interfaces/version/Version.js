@@ -4,11 +4,12 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.5802.4";
+const latestVersion = "3.5803.4";
 // PRÓXIMO:
 //
-const updateDescription = "página de planos | club pro pt36";
+const updateDescription = "club pro pt37";
 const history = [
+    "página de planos",
     "sistema de pagamento PAGSEGURO - boleto automático",
     "fiddelize pro botão, painel e sistema pt2",
     "nova customização página de download, filtros, pesquisa premium",

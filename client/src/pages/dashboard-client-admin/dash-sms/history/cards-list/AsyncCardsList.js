@@ -1,34 +1,42 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import SmsCard from './card/accordion/SmsCard';
-import PanelHiddenContent from './card/card-hidden-content/PanelHiddenContent';
+import React, { Fragment, useState, useEffect } from "react";
+import SmsCard from "./card/accordion/SmsCard";
+import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 // import SearchFilter from "../../../../../components/search/SearchFilter";
 import SearchResult from "../../../../../components/search/SearchResult";
-import { calendar } from '../../../../../utils/dates/dateFns';
-import parse from 'html-react-parser';
-import { convertDotToComma } from '../../../../../utils/numbers/convertDotComma';
-import { useAppSystem, useProfile } from '../../../../../hooks/useRoleData';
+import { calendar } from "../../../../../utils/dates/dateFns";
+import parse from "html-react-parser";
+import { convertDotToComma } from "../../../../../utils/numbers/convertDotComma";
+import { useAppSystem, useProfile } from "../../../../../hooks/useRoleData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getFirstName from '../../../../../utils/string/getFirstName';
-import { useRunComp } from '../../../../../hooks/useRunComp';
-import Img from '../../../../../components/Img';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import scrollIntoView from '../../../../../utils/document/scrollIntoView';
-import { isScheduledDate } from '../../../../../utils/dates/dateFns';
-import useAPIList, { readSMSMainHistory, getTrigger } from '../../../../../hooks/api/useAPIList';
-import useElemDetection, { checkDetectedElem } from '../../../../../hooks/api/useElemDetection';
+import getFirstName from "../../../../../utils/string/getFirstName";
+import { useRunComp } from "../../../../../hooks/useRunComp";
+import Img from "../../../../../components/Img";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import scrollIntoView from "../../../../../utils/document/scrollIntoView";
+import { isScheduledDate } from "../../../../../utils/dates/dateFns";
+import useAPIList, {
+    readSMSMainHistory,
+    getTrigger,
+} from "../../../../../hooks/api/useAPIList";
+import useElemDetection, {
+    checkDetectedElem,
+} from "../../../../../hooks/api/useElemDetection";
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
-    icon: { fontSize: 35, color: "white", filter: "drop-shadow(0.001em 0.001em 0.15em grey)" },
+    icon: {
+        fontSize: 35,
+        color: "white",
+        filter: "drop-shadow(0.001em 0.001em 0.15em grey)",
+    },
     dateBadge: {
         left: isSmall ? -15 : 0,
         bottom: isSmall ? -30 : -20,
         backgroundColor: "var(--themeP)",
-        padding: '0px 15px',
+        padding: "0px 15px",
         borderRadius: "20%",
-    }
+    },
 });
-
 
 const handleSecHeading = (data, styles, forceCancel) => {
     const isScheduled = data.isScheduled;
@@ -36,14 +44,17 @@ const handleSecHeading = (data, styles, forceCancel) => {
     const needScheduling = isScheduledDate(data.scheduledDate);
 
     const handleDate = () => {
-        if(isScheduled) {
-            if(isCanceled || forceCancel === data._id) return `Não enviado ${calendar(data.scheduledDate)}`;
-            return needScheduling ? `Agendado para ${calendar(data.scheduledDate)}.` : `Agendado e Enviado ${calendar(data.scheduledDate)}.`
+        if (isScheduled) {
+            if (isCanceled || forceCancel === data._id)
+                return `Não enviado ${calendar(data.scheduledDate)}`;
+            return needScheduling
+                ? `Agendado para ${calendar(data.scheduledDate)}.`
+                : `Agendado e Enviado ${calendar(data.scheduledDate)}.`;
         }
         return `Enviado ${calendar(data.createdAt)}.`;
-    }
+    };
 
-    return(
+    return (
         <section>
             <p
                 className="text-nowrap position-absolute d-block m-0 mt-3"
@@ -55,7 +66,7 @@ const handleSecHeading = (data, styles, forceCancel) => {
             </p>
         </section>
     );
-}
+};
 // END HELPERS
 
 export default function AsyncCardsList() {
@@ -72,8 +83,10 @@ export default function AsyncCardsList() {
 
     const {
         list,
-        loading, ShowLoadingSkeleton,
-        error, ShowError,
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
         needEmptyIllustra,
         hasMore,
         isOffline,
@@ -82,22 +95,27 @@ export default function AsyncCardsList() {
         url: readSMSMainHistory(businessId),
         skip,
         trigger,
-        listName: "smsCardsList"
-    })
-    const detectedCard = useElemDetection({ loading, hasMore, setSkip, isOffline });
+        listName: "smsCardsList",
+    });
+    const detectedCard = useElemDetection({
+        loading,
+        hasMore,
+        setSkip,
+        isOffline,
+    });
 
     useEffect(() => {
-        if(triggerForce) {
+        if (triggerForce) {
             const indSpace = triggerForce.indexOf(" ");
             const thisCardId = triggerForce.slice(indSpace + 1);
             setForceCancel(thisCardId);
         }
-    }, [triggerForce])
+    }, [triggerForce]);
 
     const displayTotalSMS = ({ isCardIn, data }) => {
         const plural = data.totalSMS > 1 ? "s" : "";
 
-        return(
+        return (
             <section className="d-flex">
                 {isCardIn ? (
                     <FontAwesomeIcon
@@ -113,79 +131,96 @@ export default function AsyncCardsList() {
                     />
                 )}
                 <span
-                    className={`position-relative  d-inline-block ${!isCardIn ? "text-nowrap" : ""} text-subtitle font-weight-bold text-shadow`}
+                    className={`position-relative  d-inline-block ${
+                        !isCardIn ? "text-nowrap" : ""
+                    } text-subtitle font-weight-bold text-shadow`}
                     style={{ lineHeight: "25px", top: 5 }}
                 >
-                    {data.totalSMS} SMS {isCardIn ? "adicionados" : `usado${plural}`}
+                    {data.totalSMS} SMS{" "}
+                    {isCardIn ? "adicionados" : `usado${plural}`}
                 </span>
             </section>
         );
-    }
+    };
 
     const showAccordion = () => {
-
-        const actions = list.map(data => {
+        const actions = list.map((data) => {
             const arrayData = data.firstContacts;
             const contactsLength = data.totalSMS;
             const isCanceled = data.isCanceled;
             const areMoreThanOne = contactsLength > 2;
             const needScheduling = isScheduledDate(data.scheduledDate);
-            const firstContactsNames = arrayData && arrayData.map((name, ind) => (arrayData && arrayData.length !== (ind + 1) && areMoreThanOne) ? `${getFirstName(name.cap())}, ` : `${getFirstName(name.cap())}`)
+            const firstContactsNames =
+                arrayData &&
+                arrayData.map((name, ind) =>
+                    arrayData && arrayData.length !== ind + 1 && areMoreThanOne
+                        ? `${getFirstName(name && name.cap())}, `
+                        : `${getFirstName(name && name.cap())}`
+                );
 
             const handleSendingTitle = () => {
-                if(isCanceled) return "• Cancelado para:";
-                if(needScheduling) return "• Enviar para:";
+                if (isCanceled) return "• Cancelado para:";
+                if (needScheduling) return "• Enviar para:";
                 return "• Enviado para:";
-            }
+            };
 
             const isCardIn = data.cardType === "in";
-            const mainHeading =
-            <section className={isCardIn ? `d-flex flex-column align-self-start animated fadeInUp` : `d-flex flex-column align-self-start animated fadeInDown`}>
-                {displayTotalSMS({ isCardIn, data })}
-                {data.cardType === "out" && (
-                    <p
-                        className="m-0 mt-3 text-normal text-shadow font-weight-bold"
-                        style={{ lineHeight: '19px' }}
-                    >
-                        {handleSendingTitle()}
-                        <br />
-                        {areMoreThanOne && (
-                            <span className="text-small font-weight-bold">
-                                {firstContactsNames} e + {data.totalSMS - 2} outros.
-                            </span>
-                        )}
+            const mainHeading = (
+                <section
+                    className={
+                        isCardIn
+                            ? `d-flex flex-column align-self-start animated fadeInUp`
+                            : `d-flex flex-column align-self-start animated fadeInDown`
+                    }
+                >
+                    {displayTotalSMS({ isCardIn, data })}
+                    {data.cardType === "out" && (
+                        <p
+                            className="m-0 mt-3 text-normal text-shadow font-weight-bold"
+                            style={{ lineHeight: "19px" }}
+                        >
+                            {handleSendingTitle()}
+                            <br />
+                            {areMoreThanOne && (
+                                <span className="text-small font-weight-bold">
+                                    {firstContactsNames} e + {data.totalSMS - 2}{" "}
+                                    outros.
+                                </span>
+                            )}
 
-                        {contactsLength === 2 && (
-                            <span className="text-small font-weight-bold">
-                                {firstContactsNames && firstContactsNames[0]} e {firstContactsNames && firstContactsNames[1]}
-                            </span>
-                        )}
+                            {contactsLength === 2 && (
+                                <span className="text-small font-weight-bold">
+                                    {firstContactsNames &&
+                                        firstContactsNames[0]}{" "}
+                                    e{" "}
+                                    {firstContactsNames &&
+                                        firstContactsNames[1]}
+                                </span>
+                            )}
 
-                        {contactsLength === 1 && (
-                            <span className="text-small font-weight-bold">
-                                {firstContactsNames}
-                            </span>
-                        )}
-                    </p>
-                )}
-            </section>
+                            {contactsLength === 1 && (
+                                <span className="text-small font-weight-bold">
+                                    {firstContactsNames}
+                                </span>
+                            )}
+                        </p>
+                    )}
+                </section>
+            );
 
-            const HiddenPanel =
-            <PanelHiddenContent
-                data={data}
-            />
+            const HiddenPanel = <PanelHiddenContent data={data} />;
             const sideHeading = handleSecHeading(data, styles, forceCancel);
 
-            return({
-               _id: data._id,
-               mainHeading,
-               secondaryHeading: sideHeading,
-               data,
-               hiddenContent: HiddenPanel,
-            });
-        })
+            return {
+                _id: data._id,
+                mainHeading,
+                secondaryHeading: sideHeading,
+                data,
+                hiddenContent: HiddenPanel,
+            };
+        });
 
-        return(
+        return (
             <SmsCard
                 detectedCard={detectedCard}
                 checkDetectedElem={checkDetectedElem}
@@ -196,20 +231,19 @@ export default function AsyncCardsList() {
                 forceCancel={forceCancel}
             />
         );
-    }
+    };
 
     const showEmptyData = () => {
-
         const handleClick = () => {
             const config = {
                 mode: "intoView",
                 duration: 3000,
                 onDone: () => null,
-            }
-            scrollIntoView("#recipientOptions", config)
-        }
+            };
+            scrollIntoView("#recipientOptions", config);
+        };
 
-        return(
+        return (
             <section>
                 <Img
                     className="img-fluid margin-auto-90"
@@ -225,12 +259,12 @@ export default function AsyncCardsList() {
                         position="relative"
                         onClick={handleClick}
                         backgroundColor={"var(--themeSDark--default)"}
-                        variant = 'extended'
+                        variant="extended"
                     />
                 </div>
             </section>
         );
-    }
+    };
 
     return (
         <Fragment>
@@ -241,7 +275,6 @@ export default function AsyncCardsList() {
         </Fragment>
     );
 }
-
 
 /*
 const showSearchBar = () => (
