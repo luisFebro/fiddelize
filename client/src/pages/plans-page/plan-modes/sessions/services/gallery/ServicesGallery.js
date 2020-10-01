@@ -29,7 +29,7 @@ export default function ServicesGallery({ handleNewOrder, period }) {
     return (
         <section
             className="position-relative my-5 text-purple"
-            style={{ top: -100 }}
+            style={{ top: -120 }}
         >
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 Vitrine de Serviços

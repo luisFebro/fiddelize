@@ -41,7 +41,7 @@ export default function CoppiaSeguranca({ data }) {
     const showProposition = () => (
         <section className="mt-5">
             <h2 className="text-subtitle text-center font-weight-bold text-purple">
-                Propostas e Ideais
+                Propostas e Ideias
             </h2>
             <p className="text-normal text-purple">
                 <FontAwesomeIcon icon="check" style={styles.check} />

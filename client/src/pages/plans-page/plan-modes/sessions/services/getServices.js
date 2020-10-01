@@ -92,30 +92,6 @@ const freeVersion = (styles) => [
 
 const offplanVersion = () => [
     {
-        title: "Coppia Segurança",
-        img: "/img/pro-features/coppia-seguranca/coppia-seguranca.svg",
-        desc: "Baixe os cadastros dos seus clientes para Excel",
-        bronze: {
-            price: {
-                yearly: 60,
-                monthly: 30,
-            },
-        },
-        silver: {
-            price: {
-                yearly: 50,
-                monthly: 25,
-            },
-        },
-        gold: {
-            price: {
-                yearly: 40,
-                monthly: 20,
-            },
-        },
-        proPage: "CoppiaSeguranca",
-    },
-    {
         title: "Sattisfação Clientes",
         img: "/img/pro-features/sattisfacao-clientes/sattisfacao-clientes.svg",
         desc:
@@ -139,6 +115,30 @@ const offplanVersion = () => [
             },
         },
         proPage: "SattisfacaoClientes",
+    },
+    {
+        title: "Coppia Segurança",
+        img: "/img/pro-features/coppia-seguranca/coppia-seguranca.svg",
+        desc: "Baixe os cadastros dos seus clientes para Excel",
+        bronze: {
+            price: {
+                yearly: 60,
+                monthly: 30,
+            },
+        },
+        silver: {
+            price: {
+                yearly: 50,
+                monthly: 25,
+            },
+        },
+        gold: {
+            price: {
+                yearly: 40,
+                monthly: 20,
+            },
+        },
+        proPage: "CoppiaSeguranca",
     },
     {
         title: "Kit da Eqquipe",

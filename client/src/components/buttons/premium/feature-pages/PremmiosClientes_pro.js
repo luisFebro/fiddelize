@@ -22,7 +22,7 @@ export default function ProFeature({ data }) {
     const showIllustration = () => (
         <ShowPicture
             src="/img/pro-features/fiddelize-throne.svg"
-            srcIcon="/img/pro-features/orgganize/admin-clients/organnize-funnel.svg"
+            srcIcon="/img/pro-features/premmios-clientes/premmios-clientes.svg"
             iconWidth={100}
             iconHeight={100}
             timeout={2000}
@@ -34,8 +34,8 @@ export default function ProFeature({ data }) {
     const showMainBenefit = () => (
         <section>
             <p className="mx-3 text-purple text-normal font-weight-bold">
-                Encontre e conheça sua carteira de clientes com filtros feitos
-                sob medida para seu negócio.
+                Mantenha seus clientes ainda mais engajados oferecendo mais
+                opções de desafios, prêmios e metas.
             </p>
         </section>
     );
@@ -161,10 +161,10 @@ export default function ProFeature({ data }) {
 
     return (
         <section>
-            <ShowTitle title="Orgganize Clientes" />
+            <ShowTitle title="Prêmmios Clientes" />
             {showIllustration()}
             {showMainBenefit()}
-            <section className="mx-3">
+            <section className="d-none mx-3">
                 {showMainFeatures()}
                 {showWhereFind()}
                 {callToAction()}

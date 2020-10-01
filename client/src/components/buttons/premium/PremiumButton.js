@@ -32,13 +32,6 @@ export default function PremiumButton({
         }
     }, [gotData, loading]);
 
-    const handlePickedComp = () => {
-        const PickedComp = pickFeature({ feature: proFeature });
-        return <PickedComp />;
-    };
-
-    const PickedFeature = handlePickedComp();
-
     const handleFullOpen = () => {
         setTrigger(true);
         setWaveOn(false);
@@ -48,6 +41,17 @@ export default function PremiumButton({
     const handleFullClose = () => {
         setFullOpen(false);
     };
+
+    const data = {
+        handleFullClose,
+    };
+
+    const handlePickedComp = () => {
+        const PickedComp = pickFeature({ feature: proFeature, data });
+        return <PickedComp />;
+    };
+
+    const PickedFeature = handlePickedComp();
 
     const showPremiumBtn = () => (
         <Fragment>

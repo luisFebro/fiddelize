@@ -13,6 +13,12 @@ const AsyncEnvvioWhatsapp = Load({
             "./feature-pages/EnvvioWhatsapp_2" /* webpackChunkName: "pro-feature-page-lazy" */
         ),
 });
+const AsyncPremmiosClientes = Load({
+    loader: () =>
+        import(
+            "./feature-pages/PremmiosClientes_pro" /* webpackChunkName: "pro-feature-page-lazy" */
+        ),
+});
 
 // OFFPLAN FEATURES
 const AsyncCoppiaSeguranca = Load({
@@ -30,8 +36,10 @@ const AsyncSattisfacaoClientes = Load({
 });
 
 const featureStore = (data) => ({
-    OrgganizeClients_1: <AsyncOrgganizeClients />,
-    EnvvioWhatsapp_2: <AsyncEnvvioWhatsapp />,
+    OrgganizeClients_1: <AsyncOrgganizeClients data={data} />,
+    EnvvioWhatsapp_2: <AsyncEnvvioWhatsapp data={data} />,
+    PremmiosClientes_pro: <AsyncPremmiosClientes data={data} />,
+    // offplan features
     CoppiaSeguranca: <AsyncCoppiaSeguranca data={data} />,
     SattisfacaoClientes: <AsyncSattisfacaoClientes data={data} />,
 });

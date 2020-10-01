@@ -89,7 +89,7 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
         >
             <img
                 className="img-fluid"
-                width={80}
+                width={100}
                 src={serviceIcon}
                 alt="serviço varejo"
             />

@@ -40,7 +40,7 @@ export default function SattisfacaoClientes({ data }) {
     const showProposition = () => (
         <section className="mt-5">
             <h2 className="text-subtitle text-center font-weight-bold text-purple">
-                Propostas e Ideais
+                Propostas e Ideias
             </h2>
             <p className="text-normal text-purple">
                 <FontAwesomeIcon icon="check" style={styles.check} />
@@ -72,14 +72,19 @@ export default function SattisfacaoClientes({ data }) {
             </p>
             <p className="text-normal text-purple">
                 <FontAwesomeIcon icon="check" style={styles.check} />
-                Toda avaliação negativa, você é notificado em tempo real sobre o
-                problema. Assim você pode transformar clientes insatisfeitos em
-                fãs!
+                Se receber alguma avaliação negativa, você é notificado em tempo
+                real sobre o problema. Assim você pode transformar clientes
+                insatisfeitos em fãs!
             </p>
             <p className="text-normal text-purple">
                 <FontAwesomeIcon icon="check" style={styles.check} />
                 Os clientes vão poder avaliar a cada compra. A última avaliação
                 de cada cliente é que será usada.
+            </p>
+            <p className="text-normal text-purple">
+                <FontAwesomeIcon icon="check" style={styles.check} />A pesquisa
+                de satisfação NPS é simples, eficaz, reconhecida e usada por
+                todos os tamanhos de empresas.
             </p>
             <p className="text-normal text-purple">
                 <FontAwesomeIcon icon="check" style={styles.check} />
@@ -105,11 +110,6 @@ export default function SattisfacaoClientes({ data }) {
                     Harvard Business Review - O único número que você precisa
                     aumentar (Inglês)
                 </a>
-            </p>
-            <p className="text-normal text-purple">
-                <FontAwesomeIcon icon="check" style={styles.check} />A pesquisa
-                de satisfação NPS é simples, eficaz, reconhecida e usada por
-                todos os tamanhos de empresas.
             </p>
             <p className="text-normal text-purple">
                 <span className="d-block font-weight-bold">

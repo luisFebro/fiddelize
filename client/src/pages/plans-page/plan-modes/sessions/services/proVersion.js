@@ -68,9 +68,10 @@ const proVersion = (styles) => [
             },
         },
         Icon: <FontAwesomeIcon icon="trophy" style={styles.muStyle} />,
-        cardDesc: "Adicione mais prêmios para seus clientes",
+        cardDesc:
+            "Mantenha seus clientes ainda mais engajados oferecendo mais opções de desafios, prêmios e metas.",
         customIcon: "/img/pro-features/premmios-clientes/premmios-clientes.svg",
-        proPage: "PremmioClientes_3",
+        proPage: "PremmiosClientes_pro",
     },
     {
         name: "Envvio Whatsapp",

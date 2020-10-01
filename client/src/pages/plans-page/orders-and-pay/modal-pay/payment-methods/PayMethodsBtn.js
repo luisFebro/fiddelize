@@ -5,6 +5,7 @@ import ModalFullContent from "../../../../../components/modals/ModalFullContent"
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
 
 const AsyncBoleto = Load({
+    loading: true,
     loader: () =>
         import(
             "./boleto/AsyncBoleto" /* webpackChunkName: "boleto-pay-method-page-lazy" */
@@ -12,6 +13,7 @@ const AsyncBoleto = Load({
 });
 
 const AsyncDebit = Load({
+    loading: true,
     loader: () =>
         import(
             "./debit/AsyncDebit" /* webpackChunkName: "debit-pay-method-page-lazy" */
@@ -19,6 +21,7 @@ const AsyncDebit = Load({
 });
 
 const AsyncCredit = Load({
+    loading: true,
     loader: () =>
         import(
             "./credit/AsyncCredit" /* webpackChunkName: "credit-pay-method-page-lazy" */

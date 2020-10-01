@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./_PayContent.scss";
 import PayCategories from "./payment-methods/PayCategories";
 // import { Load } from "../../../../components/code-splitting/LoadableComp";
-import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
 import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
@@ -11,14 +10,6 @@ import getFilterDate from "../../../../utils/dates/getFilterDate";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
 const filter = getFilterDate();
-
-const AsyncBoleto = LoadableVisible({
-    loading: true,
-    loader: () =>
-        import(
-            "./payment-methods/boleto/AsyncBoleto" /* webpackChunkName: "boleto-comp-lazy" */
-        ),
-});
 
 /*
 IMPORTANT:
@@ -122,8 +113,8 @@ export default function AsyncPayContent({ modalData }) {
                 return false;
             }
             // LESSON: { ...data, something: set } does not work on an asyncronous response, ...data can not be read from outside and returns undefined.
-            const hash = response.senderHash;
-            setSenderHash(hash);
+            const hash = response ? response.senderHash : null;
+            hash && setSenderHash(hash);
         });
     }
 

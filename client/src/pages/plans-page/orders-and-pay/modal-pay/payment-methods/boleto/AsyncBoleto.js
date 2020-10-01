@@ -43,7 +43,7 @@ const getBarcodeSplit = (code) => {
     );
 };
 
-export default function AsyncBoleto({ modalData }) {
+export default function AsyncBoleto({ modalData = {} }) {
     const [copy, setCopy] = useState(false);
     const [data, setData] = useState({
         paymentLink: "",
@@ -77,24 +77,13 @@ export default function AsyncBoleto({ modalData }) {
     }, [responseData]);
 
     useEffect(() => {
-        PagSeguro.setSessionId(authToken);
-        PagSeguro.getPaymentMethods({
-            amount: undefined, // returns all methods if not defined.
-            success: function (response) {
-                // n2
-                setPayMethods(response.paymentMethods);
-            },
-            error: function (response) {
-                console.log("Callback para chamadas que falharam", response);
-            },
-            complete: function (response) {
-                // console.log("Callback para todas chamadas", response);
-            },
-        });
+        if (modalData) {
+            PagSeguro.setSessionId(authToken);
 
-        handleSelected("No Boleto");
-        setTimeout(() => getSenderHash(), 2500);
-    }, []);
+            handleSelected("No Boleto");
+            setTimeout(() => getSenderHash(), 2500);
+        }
+    }, [modalData]);
 
     const showTitle = () => (
         <div className="mt-2">
@@ -138,7 +127,8 @@ export default function AsyncBoleto({ modalData }) {
             <div className="text-purple font-weight-bold text-normal text-left">
                 {itemDescription}
                 <span className="text-pill">
-                    {convertToReal(itemAmount, { moneySign: true })}
+                    {itemAmount &&
+                        convertToReal(itemAmount, { moneySign: true })}
                 </span>
             </div>
         </section>
@@ -218,7 +208,7 @@ export default function AsyncBoleto({ modalData }) {
             className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left"
         >
             <span className="text-em-1-5">Boleto Automático</span>
-            <br />É para já, {getFirstName(adminName)}!
+            <br />É para já, {adminName && getFirstName(adminName)}!
             <br />
             Seu Boleto está sendo feito agora! Um momento, carregando...
         </section>
@@ -250,3 +240,21 @@ export default function AsyncBoleto({ modalData }) {
         </Fragment>
     );
 }
+
+/* ARCHIVES
+// NOT BEING USED WITH BOLETO
+
+PagSeguro.getPaymentMethods({
+    amount: undefined, // returns all methods if not defined.
+    success: function (response) {
+        // n2
+        setPayMethods(response.paymentMethods);
+    },
+    error: function (response) {
+        console.log("Callback para chamadas que falharam", response);
+    },
+    complete: function (response) {
+        // console.log("Callback para todas chamadas", response);
+    },
+});
+ */

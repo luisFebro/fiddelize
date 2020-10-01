@@ -205,7 +205,7 @@ export default function OffplanServices({ handleNewOrder, period, plan }) {
     return (
         <section
             className="pb-2 position-relative theme-p"
-            style={{ top: -160 }}
+            style={{ top: -140 }}
         >
             <h2 className="py-3 text-subtitle font-weight-bold text-white mx-3">
                 Serviços em pré-venda

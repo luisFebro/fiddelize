@@ -151,7 +151,7 @@ export default function BronzePlan({ setCurrPlan }) {
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}
-                        top={-100}
+                        top={-80}
                     />
                     <OffplanServices
                         handleNewOrder={handleNewOrder}
