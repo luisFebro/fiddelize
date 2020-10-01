@@ -76,6 +76,7 @@ const finishCheckout = (req, res, next) => {
         firstDueDate,
         ordersStatement,
         filter,
+        paymentReleaseDate,
     } = req.query;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
 
@@ -152,6 +153,7 @@ const finishCheckout = (req, res, next) => {
                             id: userId,
                         },
                         paymentCategory: getPayCategoryType(paymentMethod),
+                        paymentReleaseDate,
                         amount: {
                             fee: handleAmounts(feeAmount, extraAmount, {
                                 op: "+",

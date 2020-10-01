@@ -7,9 +7,13 @@ import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
 import { getVar, removeVar } from "../../../../hooks/storage/useVar";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
+import { addDays } from "../../../../utils/dates/dateFns";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
+const RELEASE_DATE_SPAN = 15; // 15 or 30 days on PagSeguro
+
 const filter = getFilterDate();
+const paymentReleaseDate = addDays(new Date(), RELEASE_DATE_SPAN);
 
 /*
 IMPORTANT:
@@ -79,6 +83,7 @@ export default function AsyncPayContent({ modalData }) {
         firstDueDate,
         ordersStatement,
         filter,
+        paymentReleaseDate,
     };
 
     const { data, loading } = useAPI({
