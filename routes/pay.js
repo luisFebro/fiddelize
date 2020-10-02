@@ -15,7 +15,7 @@ router.post(
     checkout.finishCheckout,
     boleto.createBoleto
 );
-// router.post("/boleto/create", mwIsAuth, );
+router.get("/transactions/history", mwIsAuth, transactions.readHistory);
 router.post("/transactions/refunds", mwIsAuth, transactions.refundTransaction);
 router.post("/transactions/cancels", mwIsAuth, transactions.cancelTransaction);
 router.post("/pag-notify", transactions.getPagNotify);

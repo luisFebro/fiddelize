@@ -5,9 +5,14 @@ const { globalVar } = require("./globalVar");
 const xml2js = require("xml2js");
 const parser = new xml2js.Parser({ attrkey: "ATTR" });
 const {
-    getTransitionStatusTypes,
+    getTransactionStatusTypes,
     getPaymentMethod,
 } = require("./helpers/getTypes");
+const {
+    getDataChunk,
+    getChunksTotal,
+} = require("../../utils/array/getDataChunk");
+const addDays = require("date-fns/addDays");
 
 const { payUrl, sandboxMode, email, token } = globalVar;
 
@@ -57,7 +62,7 @@ const getPagNotify = (req, res) => {
 
                         doc.paymentMethod = getPaymentMethod(paymentMethodCode);
                         doc.updatedAt = lastEventDate;
-                        doc.transactionStatus = getTransitionStatusTypes(
+                        doc.transactionStatus = getTransactionStatusTypes(
                             status
                         );
 
@@ -75,12 +80,38 @@ const getPagNotify = (req, res) => {
                                             if (
                                                 targetOr.reference === reference
                                             ) {
+                                                const referenceArray =
+                                                    reference &&
+                                                    reference.split("-");
+                                                const [
+                                                    planCode,
+                                                    qtt,
+                                                    period,
+                                                ] = referenceArray;
+                                                const handlePeriodDays = (
+                                                    per
+                                                ) => {
+                                                    if (per === "A") return 365;
+                                                    if (per === "M") return 30;
+                                                };
+                                                const planDays = handlePeriodDays(
+                                                    period
+                                                );
+                                                const currStatus = getTransactionStatusTypes(
+                                                    status
+                                                );
+
+                                                targetOr.planDueDate =
+                                                    currStatus === "pago"
+                                                        ? addDays(
+                                                              new Date(),
+                                                              planDays
+                                                          )
+                                                        : undefined;
                                                 targetOr.paymentMethod = getPaymentMethod(
                                                     paymentMethodCode
                                                 );
-                                                targetOr.transactionStatus = getTransitionStatusTypes(
-                                                    status
-                                                );
+                                                targetOr.transactionStatus = currStatus;
                                                 targetOr.updatedAt = lastEventDate;
                                                 return targetOr;
                                             }
@@ -106,6 +137,29 @@ const getPagNotify = (req, res) => {
             });
         })
         .catch((e) => res.json(e.response.data));
+};
+
+const readHistory = (req, res) => {
+    const { userId, skip, limit = 10 } = req.query;
+
+    User.findById(userId)
+        .select("clientAdminData.orders")
+        .exec((err, user) => {
+            if (err || !user)
+                return res.status(400).json({ error: "Orders not found" });
+
+            const data = user.clientAdminData.orders;
+
+            const dataSize = data.length;
+            const dataRes = {
+                list: getDataChunk(data, { skip, limit }),
+                chunksTotal: getChunksTotal(dataSize, limit),
+                listTotal: dataSize,
+                content: undefined,
+            };
+
+            res.json(dataRes);
+        });
 };
 
 // Estornar transação.
@@ -160,6 +214,7 @@ const cancelTransaction = (req, res) => {
 
 module.exports = {
     getPagNotify,
+    readHistory,
     refundTransaction,
     cancelTransaction,
 };

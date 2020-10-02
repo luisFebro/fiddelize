@@ -4,7 +4,7 @@ exports.getPayCategoryType = (type) => {
     if (type === "eft") return "débito";
 };
 
-exports.getTransitionStatusTypes = (codeNum) => {
+exports.getTransactionStatusTypes = (codeNum) => {
     if (codeNum === "1") return "pendente";
     if (codeNum === "2") return "em análise";
     if (codeNum === "3") return "pago";

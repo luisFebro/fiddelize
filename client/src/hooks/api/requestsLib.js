@@ -47,3 +47,4 @@ export const activateAutoService = () => `/api/sms/automatic/activate`; // POST
 // PAY
 export const startCheckout = () => `/api/pay/transparent-checkout/start`; // POST
 export const finishCheckout = () => `/api/pay/transparent-checkout/finish`; // POST
+export const readTransactionHistory = () => `/api/pay/transactions/history`; // GET

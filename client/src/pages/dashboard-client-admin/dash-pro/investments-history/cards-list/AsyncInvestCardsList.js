@@ -3,7 +3,6 @@ import InvestCard from "./card/accordion/InvestCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
 import parse from "html-react-parser";
-import { convertDotToComma } from "../../../../../utils/numbers/convertDotComma";
 import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from "../../../../../utils/string/getFirstName";
@@ -12,11 +11,14 @@ import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
+    readTransactionHistory,
     readSMSMainHistory,
 } from "../../../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../hooks/api/useElemDetection";
+import convertToReal from "../../../../../utils/numbers/convertToReal";
+
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -56,6 +58,8 @@ export default function AsyncCardsList() {
 
     const styles = getStyles();
 
+    const params = { userId: businessId, skip };
+
     const {
         list,
         loading,
@@ -67,8 +71,9 @@ export default function AsyncCardsList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readSMSMainHistory(businessId),
+        url: readTransactionHistory(),
         skip,
+        params,
         listName: "investCardsList",
     });
     const detectedCard = useElemDetection({
@@ -78,9 +83,26 @@ export default function AsyncCardsList() {
         isOffline,
     });
 
+    const handlePlanCode = (code) => {
+        if (code === "OU") return "ouro";
+        if (code === "PR") return "prata";
+        if (code === "BR") return "bronze";
+    };
+
+    const handlePeriod = (per) => {
+        if (per === "A") return "Anual";
+        if (per === "M") return "Mensal";
+    };
+
     const displayPlanType = (data) => {
-        const planDesc = "P. Bronze Mensal";
-        const plan = "ouro";
+        const reference = data.reference;
+
+        const referenceArray = reference && reference.split("-");
+        const [planCode, qtt, period] = referenceArray;
+
+        const plan = handlePlanCode(planCode);
+        const generatedPeriod = handlePeriod(period);
+        const planDesc = `P. ${plan && plan.cap()} ${generatedPeriod}`;
 
         const handleColor = (plan) => {
             if (plan === "ouro") return "yellow";
@@ -114,6 +136,8 @@ export default function AsyncCardsList() {
 
     const showAccordion = () => {
         const actions = list.map((data) => {
+            const payCategory = data.paymentCategory; // boleto, crédito, débito.
+
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
                     {displayPlanType(data)}
@@ -122,11 +146,13 @@ export default function AsyncCardsList() {
                         style={{ lineHeight: "25px" }}
                     >
                         <span className="main-font text-em-1-4 font-weight-bold">
-                            R$ 150,0
+                            {convertToReal(data.investAmount, {
+                                moneySign: true,
+                            })}
                         </span>
                         <br />
                         <span className="main-font text-em-1 font-weight-bold">
-                            via boleto.
+                            via {payCategory}.
                         </span>
                     </p>
                 </section>
@@ -182,7 +208,7 @@ export default function AsyncCardsList() {
 
     return (
         <Fragment>
-            {needEmptyIllustra ? showEmptyData() : showAccordion()}
+            {needEmptyIllustra ? null : showAccordion()}
             {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
             <ShowOverMsg />

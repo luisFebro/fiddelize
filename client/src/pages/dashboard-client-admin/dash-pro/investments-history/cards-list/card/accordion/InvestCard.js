@@ -103,10 +103,12 @@ export default function InvestCard({
         );
     };
 
-    const displayScheduledBadge = (panel) => {
-        let transactionStatus = "pago";
+    const displayStatusBadge = (panel) => {
+        let { transactionStatus } = panel.data;
+
         transactionStatus =
             transactionStatus && transactionStatus.toUpperCase();
+        if (!transactionStatus) transactionStatus = "SEM STATUS";
         if (transactionStatus === "disponível") transactionStatus = "PAGO";
 
         const handleBack = () => {
@@ -135,7 +137,7 @@ export default function InvestCard({
     };
 
     const showPanel = (panel) => {
-        const isPaid = true;
+        const isPaid = panel.data.transactionStatus === "pago";
 
         return (
             <section>
@@ -166,7 +168,7 @@ export default function InvestCard({
                         </Fragment>
                     )}
                 </AccordionSummary>
-                {displayScheduledBadge(panel)}
+                {displayStatusBadge(panel)}
                 {displayExpiryCounter(isPaid)}
             </section>
         );
@@ -180,13 +182,7 @@ export default function InvestCard({
         <Accordion
             TransitionProps={{ unmountOnExit: true }}
             className="disabledLink"
-            style={{
-                ...styles.accordion,
-                backgroundColor:
-                    panel.data.cardType === "out"
-                        ? "var(--themePLight)"
-                        : "#00b894",
-            }} // data mint green
+            style={styles.accordion}
         >
             {showPanel(panel)}
             {showHiddenPanel(panel)}
