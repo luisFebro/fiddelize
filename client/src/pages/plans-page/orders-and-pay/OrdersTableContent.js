@@ -1,0 +1,91 @@
+import React, { useState, useEffect, Fragment } from "react";
+import MuSelectTable from "../../../components/tables/MuSelectTable";
+import getOrderTableList from "./helpers/getOrderTableList";
+import NotesSwitcher from "../../../components/buttons/NotesSwitcher";
+
+const headCells = [
+    { id: "quantity", numeric: false, disablePadding: false, label: "Qtde." },
+    { id: "service", numeric: false, disablePadding: false, label: "Serviço" },
+    {
+        id: "finalValue",
+        numeric: false,
+        disablePadding: false,
+        label: "Valor final",
+    },
+];
+
+export default function OrdersTableContent({
+    needGenerateList = false,
+    listData,
+    loading,
+    orders,
+    plan,
+    period,
+    notesColor,
+}) {
+    const [list, setList] = useState([]);
+
+    useEffect(() => {
+        if (needGenerateList) {
+            const { newList, thisTotalServ } = getOrderTableList(orders, {
+                period,
+                plan,
+            });
+            setList(newList);
+        } else {
+            setList(listData);
+        }
+    }, [listData, needGenerateList]);
+
+    const notes = (
+        <Fragment>
+            - O tempo de uso dos <strong>serviços em pré-venda</strong> só
+            começam a contar quando for lançado. Você será notificado. E
+            receberá um novo card com devido tempo de uso.
+            <br />
+            <br />
+            - Os pacotes de SMS não tem validade, não expiram.
+            <br />
+            <br />- Você dá acesso sem restrição aos seus clientes e equipe que{" "}
+            <strong>já foram cadastrados</strong>. Eles continuam usando o app
+            mesmo quando o prazo de seu plano terminar. Você precisa renovar seu
+            plano para novos clintes.
+            <br />
+            <br />- As quantidades disponíveis em cada serviço{" "}
+            <strong>não são acumulativas</strong>.
+            <br />
+            <br />- Você pode fazer investimentos em{" "}
+            <strong>diferentes planos</strong> tanto mensais ou anuais. Cada
+            transação de plano possui seu próprio tempo de uso que você
+            acompanha no seu histórico de investimentos.
+            <br />
+            <br />- O seu maior plano investido é o que será identificado como
+            atual. Você pode investir no <strong>plano ouro</strong>, por
+            exemplo, e a qualquer momento investir no{" "}
+            <strong>plano meu bronze</strong> que ainda continuará no plano
+            ouro. Se o seu plano for bronze e atualizar para planos maiores, daí
+            sim você muda de plano atual.
+        </Fragment>
+    );
+
+    return (
+        <Fragment>
+            <MuSelectTable
+                headCells={headCells}
+                rowsData={list}
+                loading={loading}
+                needMainTitle={false}
+                needHighlightColor={false}
+                marginBottom=" "
+                enumeration=" "
+            />
+            <NotesSwitcher
+                color={notesColor === "white" ? "text-white" : "text-purple"}
+                btnStyle={{ top: -35, right: -60 }}
+                notes={notes}
+                rootClassName={notesColor === "purple" ? "mx-3" : undefined}
+                shadowTitle={notesColor === "white" ? "text-shadow" : undefined}
+            />
+        </Fragment>
+    );
+}

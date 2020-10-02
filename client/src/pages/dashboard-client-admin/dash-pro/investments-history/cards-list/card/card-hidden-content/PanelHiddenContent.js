@@ -8,10 +8,10 @@ import copyTextToClipboard from "../../../../../../../utils/document/copyTextToC
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
 
-const AsyncExtract = Load({
+const AsyncOrdersTableContent = Load({
     loader: () =>
         import(
-            "./AsyncExtract" /* webpackChunkName: "sms-extract-comp-lazy" */
+            "../../../../../../../pages/plans-page/orders-and-pay/OrdersTableContent" /* webpackChunkName: "orders-table-content-comp-lazy" */
         ),
 });
 
@@ -119,13 +119,36 @@ export default function PanelHiddenContent({ data }) {
         );
     };
 
-    const showInvestExtract = () => {
+    const showInvestExtract = (data) => {
         const isOpen = runArray.includes(data._id); // only when the card is open is loaded.
+
+        const handlePlanCode = (code) => {
+            if (code === "OU") return "ouro";
+            if (code === "PR") return "prata";
+            if (code === "BR") return "bronze";
+        };
+
+        const reference = data.reference;
+        const referenceArray = reference && reference.split("-");
+        const [planCode, qtt, period] = referenceArray;
+
+        const thisPlan = handlePlanCode(planCode);
+        const thisPeriod = period === "A" ? "yearly" : "monthly";
 
         return (
             isOpen && (
                 <Fragment>
-                    <AsyncExtract extractId={data._id} />
+                    <h2 className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
+                        Extrato
+                    </h2>
+                    <AsyncOrdersTableContent
+                        needGenerateList={true}
+                        orders={data.ordersStatement}
+                        loading={!data.ordersStatement ? true : false}
+                        plan={thisPlan}
+                        period={thisPeriod}
+                        notesColor="white"
+                    />
                     <section className="my-5 container-center">
                         <ButtonFab
                             size="medium"
@@ -140,22 +163,10 @@ export default function PanelHiddenContent({ data }) {
         );
     };
 
-    const showNotes = () => (
-        <section>
-            1. A tempo de uso dos <strong>serviços em pré-venda</strong> só
-            começam a contar quando for lançado. Você será notificado. E
-            receberá um novo card com devido tempo de uso. 2. Os pacotes de SMS
-            não tem validade, não expiram. 3. Você tem acesso aos seus clientes
-            e equipe que você já cadastrou e eles continuam usando o app mesmo
-            quando o prazo de uso terminar. 4. As quantidades disponíveis em
-            cada serviço não são acumulativas.
-        </section>
-    );
-
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
             {showPayDetails(data)}
-            {showInvestExtract()}
+            {showInvestExtract(data)}
         </section>
     );
 }

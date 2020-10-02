@@ -7,7 +7,7 @@ import removeDiacritics from "./removeDiacritics";
 const getPlan = (plan) => {
     if (typeof plan !== "string") return;
 
-    if (plan.toLowerCase() === "ouro") return "GO";
+    if (plan.toLowerCase() === "ouro") return "OU";
     if (plan.toLowerCase() === "prata") return "PR";
     if (plan.toLowerCase() === "bronze") return "BR";
 };

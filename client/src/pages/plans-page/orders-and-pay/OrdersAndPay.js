@@ -86,6 +86,7 @@ export default function OrdersAndPay({
                 setNextPage={setNextPage}
                 handleCancel={handleCancel}
                 handleServicesData={handleServicesData}
+                notesColor="purple"
             />
             <PayArea
                 plan={plan}

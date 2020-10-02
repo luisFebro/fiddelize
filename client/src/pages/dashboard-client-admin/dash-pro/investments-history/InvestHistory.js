@@ -7,7 +7,7 @@ const AsyncInvestCardsList = LoadableVisible({
     loading: true,
     loader: () =>
         import(
-            "./cards-list/AsyncInvestCardsList.js" /* webpackChunkName: "sms-cards-list-session-lazy" */
+            "./cards-list/AsyncInvestCardsList.js" /* webpackChunkName: "invest-pro-cards-list-session-lazy" */
         ),
 });
 
