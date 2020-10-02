@@ -75,6 +75,7 @@ export default function ButtonMulti({
     color,
     underline = false,
     margin,
+    zIndex,
     ...props
 }) {
     const { sText, sBtnColors, sBtnDefaultColors, sIcon } = useStyles({
@@ -110,6 +111,7 @@ export default function ButtonMulti({
             component={component}
             style={{
                 margin: margin ? margin : undefined,
+                zIndex: zIndex ? zIndex : undefined,
             }}
         >
             <span

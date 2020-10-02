@@ -4,7 +4,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.5803.4";
+const latestVersion = "3.5805.4";
 // PRÓXIMO:
 //
 const updateDescription = "club pro pt37";

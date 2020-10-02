@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Card from "@material-ui/core/Card";
 import truncateWords from "../../../../../../utils/string/truncateWords";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -164,8 +163,8 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
     );
 
     return (
-        <section className="mb-5 col-6 col-md-4 col-lg-3">
-            <Card
+        <section className="mb-5 col-6 col-md-4 col-lg-3 mx-auto">
+            <div
                 className="shadow-babadoo position-relative"
                 style={{
                     ...styles.card,
@@ -179,7 +178,7 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
                 {showPremiumBtn()}
                 {showPrice()}
                 {showAddCartBtn()}
-            </Card>
+            </div>
         </section>
     );
 }

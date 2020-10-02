@@ -38,10 +38,13 @@ const pickPayMethod = (payMethod, modalData) => {
 export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {
     const [fullOpen, setFullOpen] = useState(false);
 
+    const { isProUser, handleCancel } = modalData;
+
     const AsyncPayMethod = pickPayMethod(method, modalData);
 
     const handleFullOpen = () => {
         setFullOpen(true);
+        isProUser && handleCancel("noMsg"); // remove curr order.
     };
 
     const handleFullClose = () => {

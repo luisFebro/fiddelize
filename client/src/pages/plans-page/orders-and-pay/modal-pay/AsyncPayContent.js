@@ -8,6 +8,7 @@ import { ShowPayWatermarks } from "./comps/GlobalComps";
 import { getVar, removeVar } from "../../../../hooks/storage/useVar";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
 import { addDays } from "../../../../utils/dates/dateFns";
+import getFirstName from "../../../../utils/string/getFirstName";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
 const RELEASE_DATE_SPAN = 15; // 15 or 30 days on PagSeguro
@@ -29,8 +30,9 @@ const getPayMethod = (selected) => {
     if ("No Débito") return "eft";
 };
 
-export default function AsyncPayContent({ modalData }) {
+export default function AsyncPayContent({ modalData, isProUser = false }) {
     const {
+        handleCancel,
         sandboxMode,
         authToken,
         reference,
@@ -57,6 +59,7 @@ export default function AsyncPayContent({ modalData }) {
 
     const { businessId } = useAppSystem();
     const { name: adminName } = useProfile();
+    const firstAdminName = getFirstName(adminName);
 
     const handleSelected = (selection) => {
         setSelectedCategory(selection);
@@ -105,9 +108,16 @@ export default function AsyncPayContent({ modalData }) {
 
     const showSubtitle = () => (
         <div className="mx-2 my-5">
-            <p className="text-subtitle main-font text-purple text-center font-weight-bold">
-                Selecione a sua forma de investir favorita.
-            </p>
+            {isProUser ? (
+                <p className="text-subtitle main-font text-purple text-center font-weight-bold">
+                    {firstAdminName}, selecione a sua forma de investir
+                    favorita.
+                </p>
+            ) : (
+                <p className="text-subtitle main-font text-purple text-center font-weight-bold">
+                    Selecione a sua forma de investir favorita.
+                </p>
+            )}
         </div>
     );
 
@@ -124,6 +134,8 @@ export default function AsyncPayContent({ modalData }) {
     }
 
     const methodsModalData = {
+        handleCancel,
+        isProUser,
         processing: loading,
         responseData: data,
         authToken,
