@@ -22,6 +22,11 @@ Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la n
 Note que a notificação não possui nenhuma informação sobre a transação.
 */
 
+const handlePeriodDays = (per) => {
+    if (per === "A") return 365;
+    if (per === "M") return 30;
+};
+
 const getPagNotify = (req, res) => {
     const notificationCode = req.body.notificationCode;
 
@@ -75,6 +80,9 @@ const getPagNotify = (req, res) => {
                                 .select("clientAdminData.orders")
                                 .exec((err, data2) => {
                                     let orders = data2.clientAdminData.orders;
+
+                                    // Find if service has already been invested and update it
+
                                     const modifiedOrders = orders.map(
                                         (targetOr) => {
                                             if (
@@ -83,17 +91,13 @@ const getPagNotify = (req, res) => {
                                                 const referenceArray =
                                                     reference &&
                                                     reference.split("-");
+
                                                 const [
                                                     planCode,
                                                     qtt,
                                                     period,
                                                 ] = referenceArray;
-                                                const handlePeriodDays = (
-                                                    per
-                                                ) => {
-                                                    if (per === "A") return 365;
-                                                    if (per === "M") return 30;
-                                                };
+
                                                 const planDays = handlePeriodDays(
                                                     period
                                                 );
@@ -113,6 +117,7 @@ const getPagNotify = (req, res) => {
                                                 );
                                                 targetOr.transactionStatus = currStatus;
                                                 targetOr.updatedAt = lastEventDate;
+
                                                 return targetOr;
                                             }
 

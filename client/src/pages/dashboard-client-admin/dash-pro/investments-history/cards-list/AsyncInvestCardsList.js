@@ -142,7 +142,8 @@ export default function AsyncCardsList() {
             const [planCode, qtt, period] = referenceArray;
 
             const payCategory = data.paymentCategory; // boleto, crédito, débito.
-
+            const chosenPlan = handlePlanCode(planCode);
+            const chosenPeriod = handlePeriod(period);
             const periodDays = handlePeriodDays(period);
 
             const mainHeading = (
@@ -172,7 +173,7 @@ export default function AsyncCardsList() {
                 _id: data._id,
                 mainHeading,
                 secondaryHeading: sideHeading,
-                data: { ...data, periodDays },
+                data: { ...data, periodDays, chosenPlan, chosenPeriod },
                 hiddenContent: HiddenPanel,
             };
         });

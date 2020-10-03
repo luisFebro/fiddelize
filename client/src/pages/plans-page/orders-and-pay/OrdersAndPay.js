@@ -39,14 +39,20 @@ export default function OrdersAndPay({
     const { data: dataPeriod, loading: loadPeriod } = useGetVar(
         "planPeriod_clientAdmin"
     );
+    const { data: dataMoney, loading: loadMoney } = useGetVar(
+        "totalMoney_clientAdmin"
+    );
     orders = !orders ? data : orders;
     plan = !plan ? dataPlan : plan;
     period = !period ? dataPeriod : period;
+    orderTotal = !orderTotal ? dataMoney : orderTotal;
 
     useEffect(() => {
-        if (!loading) setVar({ orders_clientAdmin: orders });
-        if (!loadPlan) setVar({ ordersPlan_clientAdmin: plan });
-        if (!loadPeriod) setVar({ planPeriod_clientAdmin: period });
+        if (!loading) orders && setVar({ orders_clientAdmin: orders });
+        if (!loadPlan) plan && setVar({ ordersPlan_clientAdmin: plan });
+        if (!loadPeriod) period && setVar({ planPeriod_clientAdmin: period });
+        if (!loadMoney)
+            orderTotal && setVar({ totalMoney_clientAdmin: orderTotal });
     }, [loading, loadPlan, loadPeriod]);
 
     const showTitle = () => (

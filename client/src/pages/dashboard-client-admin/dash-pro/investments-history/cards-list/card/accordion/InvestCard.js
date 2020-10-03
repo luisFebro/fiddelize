@@ -8,11 +8,15 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import EventIcon from "@material-ui/icons/Event";
 import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { setVar } from "../../../../../../../hooks/storage/useVar";
+import { withRouter } from "react-router-dom";
 // Customized Data
 // import { isScheduledDate } from '../../../../../../../utils/dates/dateFns';
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import RadiusBtn from "../../../../../../../components/buttons/RadiusBtn";
 // End Customized Data
 
 const isSmall = window.Helper.isSmallScreen();
@@ -62,7 +66,8 @@ const getStyles = ({ color, backgroundColor }) => ({
     },
 });
 
-export default function InvestCard({
+function InvestCard({
+    history,
     detectedCard,
     checkDetectedElem,
     actions,
@@ -76,35 +81,107 @@ export default function InvestCard({
 
     // const dispatch = useStoreDispatch();
 
-    const displayExpiryCounter = (isPaid = true, planDueDate, periodDays) => {
+    const displayExpiryCounter = (panel, planDueDate, periodDays) => {
+        const isPaid =
+            panel.data.transactionStatus === "pago" ||
+            panel.data.transactionStatus === "disponível";
+        // const isPending = panel.data.transactionStatus === "pendente";
         const daysLeft = getDatesCountdown(planDueDate, {
             deadline: periodDays,
         });
 
+        const handleRenewalClick = () => {
+            async function setAllVars(panel) {
+                const readyVar = await Promise.all([
+                    setVar({ orders_clientAdmin: panel.data.ordersStatement }),
+                    setVar({
+                        totalMoney_clientAdmin: panel.data.investAmount,
+                    }),
+                    setVar({
+                        planPeriod_clientAdmin:
+                            panel.data.chosenPeriod === "Anual"
+                                ? "yearly"
+                                : "monthly",
+                    }),
+                    setVar({
+                        ordersPlan_clientAdmin: panel.data.chosenPlan,
+                    }),
+                    // setVar({ totalServices_clientAdmin: 100 }),
+                ]);
+
+                history.push("/pedidos/admin");
+            }
+
+            setAllVars(panel);
+        };
+
         return (
-            true && (
-                <section
-                    className="enabledLink position-absolute"
-                    style={styles.expiryCounter}
-                >
-                    <EventIcon
-                        className="shadow-elevation-black"
-                        style={{ transform: "scale(1.2)", color: "#fff" }}
-                    />
-                    <span className="text-small text-shadow font-weight-bold d-inline-block ml-1">
-                        expira em:
-                    </span>
-                    <p
-                        className="position-relative text-normal text-white text-shadow font-weight-bold"
-                        style={{
-                            left: 30,
-                            top: -5,
-                        }}
+            <Fragment>
+                {isPaid && daysLeft ? (
+                    <section
+                        className="enabledLink position-absolute"
+                        style={styles.expiryCounter}
                     >
-                        {daysLeft || 0} dias
-                    </p>
-                </section>
-            )
+                        <EventIcon
+                            className="shadow-elevation-black"
+                            style={{ transform: "scale(1.2)", color: "#fff" }}
+                        />
+                        <FontAwesomeIcon
+                            icon="bolt"
+                            style={{
+                                color: "var(--incomeGreen)",
+                                fontSize: "20px",
+                            }}
+                        />
+                        <span className="text-small text-shadow font-weight-bold d-inline-block ml-1">
+                            expira em:
+                        </span>
+                        <p
+                            className="position-relative text-normal text-white text-shadow font-weight-bold"
+                            style={{
+                                left: 30,
+                                top: -5,
+                            }}
+                        >
+                            {daysLeft || 0} dias
+                        </p>
+                    </section>
+                ) : (
+                    <Fragment>
+                        <section
+                            className="position-absolute text-normal text-shadow font-weight-bold"
+                            style={{
+                                right: 50,
+                                top: 70,
+                                color: "var(--lightGrey)",
+                            }}
+                        >
+                            <FontAwesomeIcon
+                                icon="bolt"
+                                style={{
+                                    color: "var(--lightGrey)",
+                                    fontSize: "20px",
+                                }}
+                            />{" "}
+                            desativado
+                        </section>
+                        {(!daysLeft || (daysLeft === 0 && !isPaid)) && (
+                            <RadiusBtn
+                                className="enabledLink"
+                                position="absolute"
+                                top={100}
+                                right={50}
+                                title="Renovar"
+                                variant="extended"
+                                onClick={() => handleRenewalClick()}
+                                size="extra-small"
+                                color="var(--mainWhite)"
+                                backgroundColor="var(--themeSDark)"
+                            />
+                        )}
+                    </Fragment>
+                )}
+            </Fragment>
         );
     };
 
@@ -118,7 +195,8 @@ export default function InvestCard({
             transactionStatus && transactionStatus.toUpperCase();
         if (!transactionStatus) transactionStatus = "SEM STATUS";
         if (transactionStatus === "disponível") transactionStatus = "PAGO";
-        if (daysLeft === 0) transactionStatus = "EXPIROU";
+        if (daysLeft === 0 || (!daysLeft && transactionStatus !== "PENDENTE"))
+            transactionStatus = "EXPIROU";
 
         const handleBack = () => {
             if (transactionStatus === "PENDENTE") return "grey";
@@ -150,7 +228,6 @@ export default function InvestCard({
     };
 
     const showPanel = (panel) => {
-        const isPaid = panel.data.transactionStatus === "pago";
         const expiryDate = panel.data.planDueDate;
         const periodDays = panel.data.periodDays;
 
@@ -184,7 +261,7 @@ export default function InvestCard({
                     )}
                 </AccordionSummary>
                 {displayStatusBadge(panel)}
-                {displayExpiryCounter(isPaid, expiryDate, periodDays)}
+                {displayExpiryCounter(panel, expiryDate, periodDays)}
             </section>
         );
     };
@@ -221,3 +298,5 @@ export default function InvestCard({
 
     return <div className={classes.root}>{ActionsMap}</div>;
 }
+
+export default withRouter(InvestCard);
