@@ -1,5 +1,5 @@
 const User = require("../../models/user/User");
-const Order = require("../../models/order/Order");
+// const Order = require("../../models/order/Order");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 
@@ -57,6 +57,8 @@ function createBoleto(req, res) {
         complement,
         firstDueDate = "2020-09-25",
         ordersStatement,
+        isRenewal,
+        renewalHistory,
     } = req.payload;
 
     const params = {
@@ -118,13 +120,28 @@ function createBoleto(req, res) {
                 paymentLink: boletoData.paymentLink,
                 payDueDate: boletoData.dueDate,
                 ordersStatement: JSON.parse(ordersStatement),
+                renewalHistory,
             };
 
             User.findById(userId).exec((err, doc) => {
                 if (err)
                     return res.status(500).json(msgG("error.systemError", err));
                 const orders = doc.clientAdminData.orders;
-                doc.clientAdminData.orders = [...orders, dataCliAdmin];
+
+                if (isRenewal) {
+                    const modifiedOrders = orders.map((ord) => {
+                        if (ord.reference === reference) {
+                            ord = dataCliAdmin;
+                            return ord;
+                        }
+                        return ord;
+                    });
+
+                    doc.clientAdminData.orders = modifiedOrders;
+                } else {
+                    doc.clientAdminData.orders = [...orders, dataCliAdmin];
+                }
+
                 // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
                 doc.markModified("clientAdminData");
                 doc.save((err) => {

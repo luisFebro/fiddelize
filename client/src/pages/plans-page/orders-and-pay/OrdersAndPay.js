@@ -19,8 +19,15 @@ export default function OrdersAndPay({
     const [dataSer, setDataSer] = useState({
         servicesAmount: null,
         servicesTotal: null,
+        renewalDaysLeft: null,
+        renewalReference: null,
     });
-    let { servicesAmount, servicesTotal } = dataSer;
+    let {
+        servicesAmount,
+        servicesTotal,
+        renewalDaysLeft,
+        renewalReference,
+    } = dataSer;
 
     const handleServicesData = (payload) => {
         setDataSer({ ...dataSer, ...payload });
@@ -53,7 +60,23 @@ export default function OrdersAndPay({
         if (!loadPeriod) period && setVar({ planPeriod_clientAdmin: period });
         if (!loadMoney)
             orderTotal && setVar({ totalMoney_clientAdmin: orderTotal });
-    }, [loading, loadPlan, loadPeriod]);
+    }, [loading, loadPlan, loadPeriod, loadMoney]);
+
+    const { data: daysLeftData, loading: loadDaysLeft } = useGetVar(
+        "renewalDaysLeft_clientAdmin"
+    );
+
+    const { data: refData, loading: loadRef } = useGetVar(
+        "renewalRef_clientAdmin"
+    );
+
+    useEffect(() => {
+        if (!loadDaysLeft)
+            daysLeftData &&
+                setDataSer({ ...dataSer, renewalDaysLeft: daysLeftData });
+        if (!loadRef)
+            refData && setDataSer({ ...dataSer, renewalReference: refData });
+    }, [loadDaysLeft, loadRef]);
 
     const showTitle = () => (
         <div className="my-3">
@@ -78,6 +101,8 @@ export default function OrdersAndPay({
         removeVar("totalMoney_clientAdmin");
         removeVar("ordersPlan_clientAdmin");
         removeVar("planPeriod_clientAdmin");
+        removeVar("renewalDaysLeft_clientAdmin");
+        removeVar("renewalRef_clientAdmin");
     };
 
     return (
@@ -107,6 +132,8 @@ export default function OrdersAndPay({
                 servicesTotal={servicesTotal}
                 servicesAmount={servicesAmount}
                 ordersStatement={orders}
+                renewalDaysLeft={renewalDaysLeft}
+                renewalReference={renewalReference}
             />
         </section>
     );

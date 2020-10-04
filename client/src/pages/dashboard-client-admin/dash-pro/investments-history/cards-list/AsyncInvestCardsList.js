@@ -136,12 +136,14 @@ export default function AsyncCardsList() {
 
     const showAccordion = () => {
         const actions = list.map((data) => {
-            const reference = data.reference;
+            const {
+                reference,
+                paymentCategory: payCategory, // boleto, crédito, débito.
+            } = data;
 
             const referenceArray = reference && reference.split("-");
             const [planCode, qtt, period] = referenceArray;
 
-            const payCategory = data.paymentCategory; // boleto, crédito, débito.
             const chosenPlan = handlePlanCode(planCode);
             const chosenPeriod = handlePeriod(period);
             const periodDays = handlePeriodDays(period);
@@ -173,6 +175,7 @@ export default function AsyncCardsList() {
                 _id: data._id,
                 mainHeading,
                 secondaryHeading: sideHeading,
+                // data here is immutable only. If you need handle a mutable data, set it to teh card's actions iteration.
                 data: { ...data, periodDays, chosenPlan, chosenPeriod },
                 hiddenContent: HiddenPanel,
             };

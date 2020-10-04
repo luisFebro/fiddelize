@@ -9,6 +9,8 @@ import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
 import { setVar } from "../../../../../../../hooks/storage/useVar";
 import { withRouter } from "react-router-dom";
+import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
+import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 
 const AsyncOrdersTableContent = Load({
     loader: () =>
@@ -41,6 +43,10 @@ function PanelHiddenContent({ history, data }) {
     const { runArray } = useStoreState((state) => ({
         runArray: state.globalReducer.cases.runArray,
     }));
+
+    const isDuePay =
+        !isScheduledDate(data.payDueDate, { isDashed: true }) &&
+        data.transactionStatus !== "pago"; // for boleto
 
     const styles = getStyles();
 
@@ -100,43 +106,48 @@ function PanelHiddenContent({ history, data }) {
                     {data.reference}
                 </span>
             </p>
-            {data.transactionStatus !== "pago" && (
-                <Fragment>
-                    <section className="mt-4 text-normal text-break font-weight-bold text-shadow">
-                        <div className="d-flex">
-                            <p className="align-items-center mr-4 text-subtitle font-weight-bold text-white text-shadow text-center">
-                                • Linha:
-                            </p>
-                            <ButtonFab
-                                position="relative"
-                                size="small"
-                                title="copiar"
-                                onClick={handleCopy}
-                                backgroundColor={"var(--themeSDark--default)"}
-                                variant="extended"
-                            />
-                        </div>
-                        {showBarcodeLine(data)}
-                    </section>
-                    <section className="mt-4 mb-5 container-center">
-                        <a
-                            rel="noopener noreferrer"
-                            className="no-text-decoration"
-                            href={data.paymentLink}
-                            target="_blank"
-                        >
-                            <ButtonFab
-                                position="relative"
-                                size="medium"
-                                title="Abrir Boleto"
-                                onClick={null}
-                                backgroundColor={"var(--themeSDark--default)"}
-                                variant="extended"
-                            />
-                        </a>
-                    </section>
-                </Fragment>
-            )}
+            {isDuePay ||
+                (data.transactionStatus !== "pago" && (
+                    <Fragment>
+                        <section className="mt-4 text-normal text-break font-weight-bold text-shadow">
+                            <div className="d-flex">
+                                <p className="align-items-center mr-4 text-subtitle font-weight-bold text-white text-shadow text-center">
+                                    • Linha:
+                                </p>
+                                <ButtonFab
+                                    position="relative"
+                                    size="small"
+                                    title="copiar"
+                                    onClick={handleCopy}
+                                    backgroundColor={
+                                        "var(--themeSDark--default)"
+                                    }
+                                    variant="extended"
+                                />
+                            </div>
+                            {showBarcodeLine(data)}
+                        </section>
+                        <section className="mt-4 mb-5 container-center">
+                            <a
+                                rel="noopener noreferrer"
+                                className="no-text-decoration"
+                                href={data.paymentLink}
+                                target="_blank"
+                            >
+                                <ButtonFab
+                                    position="relative"
+                                    size="medium"
+                                    title="Abrir Boleto"
+                                    onClick={null}
+                                    backgroundColor={
+                                        "var(--themeSDark--default)"
+                                    }
+                                    variant="extended"
+                                />
+                            </a>
+                        </section>
+                    </Fragment>
+                ))}
         </Fragment>
     );
 
@@ -162,10 +173,12 @@ function PanelHiddenContent({ history, data }) {
             if (code === "BR") return "bronze";
         };
 
-        const orders = data.ordersStatement;
-        const investAmount = data.investAmount;
+        const daysLeft = getDatesCountdown(data.planDueDate, {
+            deadline: data.periodDays,
+        });
 
-        const reference = data.reference;
+        const { ordersStatement: orders, investAmount, reference } = data;
+
         const referenceArray = reference && reference.split("-");
         const [planCode, qtt, period] = referenceArray;
 
@@ -208,7 +221,12 @@ function PanelHiddenContent({ history, data }) {
                                         setVar({
                                             ordersPlan_clientAdmin: thisPlan,
                                         }),
-                                        // setVar({ totalServices_clientAdmin: 100 }),
+                                        setVar({
+                                            renewalDaysLeft_clientAdmin: daysLeft,
+                                        }),
+                                        setVar({
+                                            renewalRef_clientAdmin: reference,
+                                        }),
                                     ]);
 
                                     setLoadingOrderPage(false);

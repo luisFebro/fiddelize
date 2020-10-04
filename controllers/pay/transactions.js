@@ -8,6 +8,8 @@ const {
     getTransactionStatusTypes,
     getPaymentMethod,
 } = require("./helpers/getTypes");
+const { getNewPlanDays } = require("./helpers/getNewPlanDays");
+
 const {
     getDataChunk,
     getChunksTotal,
@@ -22,9 +24,10 @@ Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la n
 Note que a notificação não possui nenhuma informação sobre a transação.
 */
 
-const handlePeriodDays = (per) => {
-    if (per === "A") return 365;
-    if (per === "M") return 30;
+const handlePlanDueDate = (currStatus, targetOr) => {
+    return currStatus === "pago" && !targetOr.planDueDate
+        ? addDays(new Date(), getNewPlanDays(reference))
+        : targetOr.planDueDate;
 };
 
 const getPagNotify = (req, res) => {
@@ -59,12 +62,17 @@ const getPagNotify = (req, res) => {
                     const [paymentMethod] = data.paymentMethod;
                     const [paymentMethodCode] = paymentMethod.code;
 
+                    const currStatus = getTransactionStatusTypes(status);
+
+                    let thisDueDate;
                     Order.findOne({ reference }).exec((err, doc) => {
                         if (err)
                             return res
                                 .status(500)
                                 .json(msgG("error.systemError", err));
 
+                        thisDueDate = handlePlanDueDate(currStatus, doc);
+                        doc.planDueDate = thisDueDate;
                         doc.paymentMethod = getPaymentMethod(paymentMethodCode);
                         doc.updatedAt = lastEventDate;
                         doc.transactionStatus = getTransactionStatusTypes(
@@ -81,37 +89,12 @@ const getPagNotify = (req, res) => {
                                 .exec((err, data2) => {
                                     let orders = data2.clientAdminData.orders;
 
-                                    // Find if service has already been invested and update it
-
                                     const modifiedOrders = orders.map(
                                         (targetOr) => {
                                             if (
                                                 targetOr.reference === reference
                                             ) {
-                                                const referenceArray =
-                                                    reference &&
-                                                    reference.split("-");
-
-                                                const [
-                                                    planCode,
-                                                    qtt,
-                                                    period,
-                                                ] = referenceArray;
-
-                                                const planDays = handlePeriodDays(
-                                                    period
-                                                );
-                                                const currStatus = getTransactionStatusTypes(
-                                                    status
-                                                );
-
-                                                targetOr.planDueDate =
-                                                    currStatus === "pago"
-                                                        ? addDays(
-                                                              new Date(),
-                                                              planDays
-                                                          )
-                                                        : undefined;
+                                                targetOr.planDueDate = thisDueDate;
                                                 targetOr.paymentMethod = getPaymentMethod(
                                                     paymentMethodCode
                                                 );

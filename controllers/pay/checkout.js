@@ -6,7 +6,7 @@ const Order = require("../../models/order/Order");
 const { getPayCategoryType } = require("./helpers/getTypes");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
-
+const addDays = require("date-fns/addDays");
 const parser = new xml2js.Parser({ attrkey: "ATTR" });
 const { payUrl, sandboxMode, email, token } = globalVar;
 
@@ -77,6 +77,8 @@ const finishCheckout = (req, res, next) => {
         ordersStatement,
         filter,
         paymentReleaseDate,
+        renewalDays,
+        renewalReference,
     } = req.query;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
 
@@ -144,48 +146,88 @@ const finishCheckout = (req, res, next) => {
                     const [grossAmount] = data.grossAmount;
                     const [extraAmount] = data.extraAmount;
 
-                    const newOrder = new Order({
+                    const thisPayCat = getPayCategoryType(paymentMethod);
+
+                    const payload = {
+                        isRenewal: renewalReference ? true : false,
+                        userId,
+                        paymentCategory: thisPayCat,
                         reference,
-                        agentName: "Fiddelize",
-                        agentId: "5db4301ed39a4e12546277a8",
-                        clientAdmin: {
-                            name: senderName,
-                            id: userId,
-                        },
-                        paymentCategory: getPayCategoryType(paymentMethod),
-                        paymentReleaseDate,
-                        amount: {
-                            fee: handleAmounts(feeAmount, extraAmount, {
-                                op: "+",
-                            }),
-                            net: netAmount,
-                            gross: handleAmounts(grossAmount, extraAmount, {
-                                op: "+",
-                            }),
-                            extra: extraAmount,
-                        },
-                        filter: JSON.parse(filter),
-                    });
+                        amount: grossAmount,
+                        instructions: itemDescription1,
+                        cpf: senderCPF,
+                        name: senderName,
+                        phoneAreaCode: senderAreaCode,
+                        phoneNumber: senderPhone,
+                        email: senderEmail,
+                        firstDueDate,
+                        ordersStatement,
+                        renewalHistory,
+                    };
 
-                    newOrder.save().then((order) => {
-                        const payload = {
-                            userId,
-                            paymentCategory: getPayCategoryType(paymentMethod),
+                    if (renewalReference) {
+                        Order.findOne({ reference: renewalReference }).exec(
+                            (err, doc) => {
+                                if (err)
+                                    return res
+                                        .status(500)
+                                        .json(msgG("error.systemError", err));
+
+                                doc.planDueDate = addDays(
+                                    new Date(),
+                                    renewalDays
+                                );
+                                doc.transactionStatus = "pendente";
+                                doc.updatedAt = new Date();
+                                doc.paymentCategory = thisPayCat;
+
+                                const history = {
+                                    reference,
+                                    investAmount: grossAmount,
+                                };
+                                const resRenewal = doc.renewalHistory
+                                    ? doc.renewalHistory.push(history)
+                                    : [history];
+                                doc.renewalHistory = resRenewal;
+
+                                doc.save((err) => {
+                                    payload.reference = renewalReference;
+                                    payload.renewalHistory = resRenewal;
+
+                                    req.payload = payload;
+                                    next();
+                                });
+                            }
+                        );
+                    } else {
+                        const newOrder = new Order({
                             reference,
-                            amount: grossAmount,
-                            instructions: itemDescription1,
-                            cpf: senderCPF,
-                            name: senderName,
-                            phoneAreaCode: senderAreaCode,
-                            phoneNumber: senderPhone,
-                            email: senderEmail,
-                            firstDueDate,
-                            ordersStatement,
-                        };
+                            agentName: "Fiddelize",
+                            agentId: "5db4301ed39a4e12546277a8",
+                            clientAdmin: {
+                                name: senderName,
+                                id: userId,
+                            },
+                            paymentCategory: getPayCategoryType(paymentMethod),
+                            paymentReleaseDate,
+                            amount: {
+                                fee: handleAmounts(feeAmount, extraAmount, {
+                                    op: "+",
+                                }),
+                                net: netAmount,
+                                gross: handleAmounts(grossAmount, extraAmount, {
+                                    op: "+",
+                                }),
+                                extra: extraAmount,
+                            },
+                            filter: JSON.parse(filter),
+                        });
 
-                        req.payload = payload;
-                        next();
-                    });
+                        newOrder.save().then((order) => {
+                            req.payload = payload;
+                            next();
+                        });
+                    }
                 } else {
                     console.log(error);
                 }

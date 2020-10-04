@@ -48,6 +48,13 @@ const SmsAutomationSchema = new Schema(smsAutomationData, { _id: false });
 // END SMS
 
 // ORDERS
+const renewalHistoryData = {
+    reference: String,
+    investAmount: String,
+    createdAt: { type: Date, default: Date.now }, // operadora: oi, claro, tim, vivo, nextel
+};
+const RenewalHistorySchema = new Schema(renewalHistoryData, { _id: true });
+
 const ordersData = {
     reference: String,
     investAmount: String,
@@ -72,11 +79,21 @@ const ordersData = {
     paymentMethod: String, // boleto santander, nomes das bandeiras aqui...
     payDueDate: String,
     planDueDate: Date,
+    renewalHistory: [RenewalHistorySchema],
     createdAt: { type: Date, default: Date.now }, // timestamps do not work for subdocuments on mondodb...
     updatedAt: { type: Date, default: Date.now },
 };
 const OrdersSchema = new Schema(ordersData, { _id: true });
 // END ORDERS
+
+module.exports = {
+    SmsHistorySchema,
+    SmsAutomationSchema,
+    // PendingRegistersSchema,
+    DefaultFilterSchema,
+    OrdersSchema,
+    RenewalHistorySchema,
+};
 
 // CLIENTS HISTORY
 // const pendingRegistersData = {
@@ -86,15 +103,6 @@ const OrdersSchema = new Schema(ordersData, { _id: true });
 // };
 // const PendingRegistersSchema = new Schema(smsAutomationData, { _id: true });
 // END CLIENTS HISTORY
-
-module.exports = {
-    SmsHistorySchema,
-    SmsAutomationSchema,
-    // PendingRegistersSchema,
-    DefaultFilterSchema,
-    OrdersSchema,
-};
-
 /*
 n1
 Object of objects.

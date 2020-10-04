@@ -7,17 +7,15 @@ import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import EventIcon from "@material-ui/icons/Event";
-import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setVar } from "../../../../../../../hooks/storage/useVar";
 import { withRouter } from "react-router-dom";
-// Customized Data
-// import { isScheduledDate } from '../../../../../../../utils/dates/dateFns';
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import RadiusBtn from "../../../../../../../components/buttons/RadiusBtn";
-// End Customized Data
+import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
+import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -81,14 +79,13 @@ function InvestCard({
 
     // const dispatch = useStoreDispatch();
 
-    const displayExpiryCounter = (panel, planDueDate, periodDays) => {
+    const displayExpiryCounter = (panel, daysLeft) => {
+        const { transactionStatus, reference, payDueDate } = panel.data;
+        const isDuePay =
+            !isScheduledDate(payDueDate, { isDashed: true }) &&
+            transactionStatus !== "pago"; // for boleto
         const isPaid =
-            panel.data.transactionStatus === "pago" ||
-            panel.data.transactionStatus === "disponível";
-        // const isPending = panel.data.transactionStatus === "pendente";
-        const daysLeft = getDatesCountdown(planDueDate, {
-            deadline: periodDays,
-        });
+            transactionStatus === "pago" || transactionStatus === "disponível";
 
         const handleRenewalClick = () => {
             async function setAllVars(panel) {
@@ -106,7 +103,12 @@ function InvestCard({
                     setVar({
                         ordersPlan_clientAdmin: panel.data.chosenPlan,
                     }),
-                    // setVar({ totalServices_clientAdmin: 100 }),
+                    setVar({
+                        renewalDaysLeft_clientAdmin: 0,
+                    }),
+                    setVar({
+                        renewalRef_clientAdmin: reference,
+                    }),
                 ]);
 
                 history.push("/pedidos/admin");
@@ -165,6 +167,35 @@ function InvestCard({
                             />{" "}
                             desativado
                         </section>
+                        {isDuePay && (
+                            <section
+                                className="d-flex position-absolute"
+                                style={{
+                                    right: 75,
+                                    top: 95,
+                                }}
+                            >
+                                <p
+                                    className="mr-1 text-small text-shadow font-weight-bold"
+                                    style={{
+                                        color: "var(--lightGrey)",
+                                    }}
+                                >
+                                    boleto expirou
+                                </p>
+                                <RadiusBtn
+                                    className="enabledLink"
+                                    position="absolute"
+                                    right={-50}
+                                    title="novo"
+                                    variant="extended"
+                                    onClick={() => handleRenewalClick()}
+                                    size="extra-small"
+                                    color="var(--mainWhite)"
+                                    backgroundColor="var(--themeSDark)"
+                                />
+                            </section>
+                        )}
                         {(!daysLeft || (daysLeft === 0 && !isPaid)) && (
                             <RadiusBtn
                                 className="enabledLink"
@@ -185,25 +216,29 @@ function InvestCard({
         );
     };
 
-    const displayStatusBadge = (panel) => {
-        let { transactionStatus, planDueDate, periodDays } = panel.data;
-        const daysLeft = getDatesCountdown(planDueDate, {
-            deadline: periodDays,
-        });
+    const displayStatusBadge = (panel, daysLeft) => {
+        let { transactionStatus, payDueDate } = panel.data;
+        const isDuePay =
+            !isScheduledDate(payDueDate, { isDashed: true }) &&
+            transactionStatus !== "pago"; // for boleto
 
         transactionStatus =
             transactionStatus && transactionStatus.toUpperCase();
         if (!transactionStatus) transactionStatus = "SEM STATUS";
         if (transactionStatus === "disponível") transactionStatus = "PAGO";
-        if (daysLeft === 0 || (!daysLeft && transactionStatus !== "PENDENTE"))
-            transactionStatus = "EXPIROU";
+        if (
+            isDuePay ||
+            daysLeft === 0 ||
+            (!daysLeft && transactionStatus !== "PENDENTE")
+        )
+            transactionStatus = "EXPIRADO";
 
         const handleBack = () => {
             if (transactionStatus === "PENDENTE") return "grey";
             if (transactionStatus === "PAGO") return "var(--incomeGreen)";
             if (
                 transactionStatus === "CANCELADO" ||
-                transactionStatus === "EXPIROU"
+                transactionStatus === "EXPIRADO"
             )
                 return "var(--expenseRed)";
             return "var(--mainDark)";
@@ -227,10 +262,7 @@ function InvestCard({
         );
     };
 
-    const showPanel = (panel) => {
-        const expiryDate = panel.data.planDueDate;
-        const periodDays = panel.data.periodDays;
-
+    const showPanel = (panel, daysLeft) => {
         return (
             <section>
                 <AccordionSummary
@@ -260,8 +292,8 @@ function InvestCard({
                         </Fragment>
                     )}
                 </AccordionSummary>
-                {displayStatusBadge(panel)}
-                {displayExpiryCounter(panel, expiryDate, periodDays)}
+                {displayStatusBadge(panel, daysLeft)}
+                {displayExpiryCounter(panel, daysLeft)}
             </section>
         );
     };
@@ -270,18 +302,22 @@ function InvestCard({
         <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
     );
 
-    const showAccordion = ({ panel }) => (
+    const showAccordion = ({ panel, daysLeft }) => (
         <Accordion
             TransitionProps={{ unmountOnExit: true }}
             className="disabledLink"
             style={styles.accordion}
         >
-            {showPanel(panel)}
+            {showPanel(panel, daysLeft)}
             {showHiddenPanel(panel)}
         </Accordion>
     );
 
     const ActionsMap = actions.map((panel, ind) => {
+        const daysLeft = getDatesCountdown(panel.data.planDueDate, {
+            deadline: panel.data.periodDays,
+        });
+
         const props = {
             key: ind,
             className: "position-relative mx-3 mb-5",
@@ -289,10 +325,10 @@ function InvestCard({
 
         return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? (
             <div {...props} ref={detectedCard}>
-                {showAccordion({ panel })}
+                {showAccordion({ panel, daysLeft })}
             </div>
         ) : (
-            <div {...props}>{showAccordion({ panel })}</div>
+            <div {...props}>{showAccordion({ panel, daysLeft })}</div>
         );
     });
 

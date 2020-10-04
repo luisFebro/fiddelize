@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "orders";
 
-const { DefaultFilterSchema } = require("../user/schemes");
+const {
+    DefaultFilterSchema,
+    RenewalHistorySchema,
+} = require("../user/schemes");
 
 const data = {
     reference: String,
@@ -36,6 +39,8 @@ const data = {
         extra: String, // e.g 0.00 for discounts
     },
     filter: DefaultFilterSchema,
+    planDueDate: Date,
+    renewalHistory: [RenewalHistorySchema],
 };
 
 const orderSchema = new Schema(data, { timestamps: true });

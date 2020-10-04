@@ -29,6 +29,14 @@ const getPayMethod = (selected) => {
     if ("No Débito") return "eft";
 };
 
+const handlePeriodDays = (reference) => {
+    const referenceArray = reference && reference.split("-");
+    const [, , per] = referenceArray;
+
+    if (per === "A") return 365;
+    if (per === "M") return 30;
+};
+
 export default function AsyncPayContent({ modalData, isProUser = false }) {
     const {
         handleCancel,
@@ -44,6 +52,8 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         PagSeguro,
         firstDueDate,
         ordersStatement,
+        renewalDaysLeft,
+        renewalReference,
     } = modalData; // n1 notes about PagSeguro Methods
     const [payMethods, setPayMethods] = useState({});
     const [senderHash, setSenderHash] = useState("");
@@ -79,7 +89,10 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         ordersStatement,
         filter,
         paymentReleaseDate,
+        renewalDays: Number(renewalDaysLeft) + handlePeriodDays(reference),
+        renewalReference,
     };
+    console.log("params", params);
 
     const { data, loading } = useAPI({
         method: "post",

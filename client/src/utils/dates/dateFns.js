@@ -11,6 +11,7 @@ import getMinutes from "date-fns/getMinutes";
 import isToday from "date-fns/isToday";
 import startOfWeek from "date-fns/startOfWeek";
 import endOfWeek from "date-fns/endOfWeek";
+import { getPureParsedDate } from "./helpers/dateFnsHelpers";
 
 const localeObj = {
     default: ptBR,
@@ -45,9 +46,14 @@ const calendar = (date, locale) =>
 const getLocalHour = (date) =>
     `${getHours(new Date(date))}:${treatZero(getMinutes(new Date(date)))}`;
 
-const isScheduledDate = (targetDate) => {
+// targetDate is inclusive. it will only be expired after the targetDate has passed.
+const isScheduledDate = (targetDate, options = {}) => {
+    const { isDashed = false } = options; // dashed Date = 2020-12-30 format
     if (!targetDate) return;
-    if (Date.parse(new Date()) < Date.parse(targetDate)) {
+
+    const today = getPureParsedDate(new Date(), { minHour: true });
+    const scheduled = getPureParsedDate(targetDate, { isDashed: true });
+    if (today < scheduled) {
         return true;
     }
 

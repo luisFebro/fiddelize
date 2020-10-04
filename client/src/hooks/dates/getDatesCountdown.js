@@ -2,7 +2,7 @@ import { addDays } from "../../utils/dates/dateFns";
 import getDiffDays from "../../utils/dates/getDiffDays";
 
 export default function getDatesCountdown(endDate, options = {}) {
-    if (!endDate) return;
+    if (!endDate) return 0;
     const { deadline = 30 } = options;
 
     const targetDate = addDays(new Date(endDate), deadline);
