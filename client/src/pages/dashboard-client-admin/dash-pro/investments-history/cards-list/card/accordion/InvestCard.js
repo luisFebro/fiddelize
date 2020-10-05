@@ -80,7 +80,13 @@ function InvestCard({
     // const dispatch = useStoreDispatch();
 
     const displayExpiryCounter = (panel, daysLeft) => {
-        const { transactionStatus, reference, payDueDate } = panel.data;
+        const {
+            transactionStatus,
+            reference,
+            payDueDate,
+            renewal,
+        } = panel.data;
+        const isRenewal = (renewal && renewal.priorRef) === reference;
         const isDuePay =
             !isScheduledDate(payDueDate, { isDashed: true }) &&
             transactionStatus !== "pago"; // for boleto
@@ -167,7 +173,7 @@ function InvestCard({
                             />{" "}
                             desativado
                         </section>
-                        {isDuePay && (
+                        {isDuePay && !isRenewal && (
                             <section
                                 className="d-flex position-absolute"
                                 style={{
@@ -196,7 +202,7 @@ function InvestCard({
                                 />
                             </section>
                         )}
-                        {(!daysLeft || (daysLeft === 0 && !isPaid)) && (
+                        {daysLeft === 0 && !isPaid && (
                             <RadiusBtn
                                 className="enabledLink"
                                 position="absolute"
@@ -217,25 +223,41 @@ function InvestCard({
     };
 
     const displayStatusBadge = (panel, daysLeft) => {
-        let { transactionStatus, payDueDate } = panel.data;
+        let { transactionStatus, payDueDate, renewal, reference } = panel.data;
         const isDuePay =
             !isScheduledDate(payDueDate, { isDashed: true }) &&
             transactionStatus !== "pago"; // for boleto
 
         transactionStatus =
             transactionStatus && transactionStatus.toUpperCase();
-        if (!transactionStatus) transactionStatus = "SEM STATUS";
+        if (!transactionStatus) transactionStatus = "PENDENTE";
         if (transactionStatus === "disponível") transactionStatus = "PAGO";
-        if (
-            isDuePay ||
-            daysLeft === 0 ||
-            (!daysLeft && transactionStatus !== "PENDENTE")
-        )
+        if (isDuePay || (daysLeft === 0 && transactionStatus !== "PENDENTE"))
             transactionStatus = "EXPIRADO";
+        if (renewal) {
+            if (renewal.priorRef === reference) {
+                transactionStatus = "RENOVADO";
+            } else {
+                transactionStatus = "PENDENTE/RENOVADO";
+            }
+
+            if (renewal.isPaid) {
+                transactionStatus = "PAGO/RENOVADO";
+            }
+        }
 
         const handleBack = () => {
-            if (transactionStatus === "PENDENTE") return "grey";
-            if (transactionStatus === "PAGO") return "var(--incomeGreen)";
+            if (
+                transactionStatus === "PENDENTE" ||
+                transactionStatus === "PENDENTE/RENOVADO"
+            )
+                return "grey";
+            if (
+                transactionStatus === "PAGO" ||
+                transactionStatus === "PAGO/RENOVADO"
+            )
+                return "var(--incomeGreen)";
+            if (transactionStatus === "RENOVADO") return "var(--niceUiYellow)";
             if (
                 transactionStatus === "CANCELADO" ||
                 transactionStatus === "EXPIRADO"
@@ -314,9 +336,12 @@ function InvestCard({
     );
 
     const ActionsMap = actions.map((panel, ind) => {
-        const daysLeft = getDatesCountdown(panel.data.planDueDate, {
-            deadline: panel.data.periodDays,
-        });
+        const { planDueDate, periodDays } = panel.data;
+        const daysLeft = !planDueDate
+            ? null
+            : getDatesCountdown(planDueDate, {
+                  deadline: periodDays,
+              });
 
         const props = {
             key: ind,

@@ -48,38 +48,42 @@ const SmsAutomationSchema = new Schema(smsAutomationData, { _id: false });
 // END SMS
 
 // ORDERS
-const renewalHistoryData = {
-    reference: String,
-    investAmount: String,
-    createdAt: { type: Date, default: Date.now }, // operadora: oi, claro, tim, vivo, nextel
+const transStatusObj = {
+    type: String,
+    enum: [
+        "pendente",
+        "em análise",
+        "pago",
+        "disponível",
+        "em disputa",
+        "devolvido",
+        "cancelado",
+        "debitado",
+        "em retenção",
+    ],
 };
-const RenewalHistorySchema = new Schema(renewalHistoryData, { _id: true });
+
+const renewalData = {
+    priorRef: String,
+    priorDaysLeft: Number,
+    currRef: String,
+    totalRenewalDays: Number,
+    isPaid: Boolean, // only when paid on transaction
+};
+const RenewalSchema = new Schema(renewalData, { _id: false });
 
 const ordersData = {
     reference: String,
     investAmount: String,
     ordersStatement: Object, // n1 e.g
     barcode: String,
-    transactionStatus: {
-        type: String,
-        enum: [
-            "pendente",
-            "em análise",
-            "pago",
-            "disponível",
-            "em disputa",
-            "devolvido",
-            "cancelado",
-            "debitado",
-            "em retenção",
-        ],
-    },
+    transactionStatus: transStatusObj,
     paymentLink: String,
     paymentCategory: { type: String, enum: ["boleto", "crédito", "débito"] },
     paymentMethod: String, // boleto santander, nomes das bandeiras aqui...
     payDueDate: String,
     planDueDate: Date,
-    renewalHistory: [RenewalHistorySchema],
+    renewal: RenewalSchema,
     createdAt: { type: Date, default: Date.now }, // timestamps do not work for subdocuments on mondodb...
     updatedAt: { type: Date, default: Date.now },
 };
@@ -92,7 +96,6 @@ module.exports = {
     // PendingRegistersSchema,
     DefaultFilterSchema,
     OrdersSchema,
-    RenewalHistorySchema,
 };
 
 // CLIENTS HISTORY

@@ -177,8 +177,13 @@ function PanelHiddenContent({ history, data }) {
             deadline: data.periodDays,
         });
 
-        const { ordersStatement: orders, investAmount, reference } = data;
-
+        const {
+            ordersStatement: orders,
+            investAmount,
+            reference,
+            renewal,
+        } = data;
+        const isRenewal = (renewal && renewal.priorRef) === reference;
         const referenceArray = reference && reference.split("-");
         const [planCode, qtt, period] = referenceArray;
 
@@ -199,46 +204,50 @@ function PanelHiddenContent({ history, data }) {
                         period={thisPeriod}
                         notesColor="white"
                     />
-                    <section className="my-5 container-center">
-                        <ButtonFab
-                            size="medium"
-                            title={
-                                loadingOrderPage
-                                    ? "Carregando..."
-                                    : "Renovar Plano"
-                            }
-                            onClick={() => {
-                                setLoadingOrderPage(true);
-                                async function setAllVars() {
-                                    const readyVar = await Promise.all([
-                                        setVar({ orders_clientAdmin: orders }),
-                                        setVar({
-                                            totalMoney_clientAdmin: investAmount,
-                                        }),
-                                        setVar({
-                                            planPeriod_clientAdmin: thisPeriod,
-                                        }),
-                                        setVar({
-                                            ordersPlan_clientAdmin: thisPlan,
-                                        }),
-                                        setVar({
-                                            renewalDaysLeft_clientAdmin: daysLeft,
-                                        }),
-                                        setVar({
-                                            renewalRef_clientAdmin: reference,
-                                        }),
-                                    ]);
-
-                                    setLoadingOrderPage(false);
-                                    history.push("/pedidos/admin");
+                    {!isRenewal && (
+                        <section className="my-5 container-center">
+                            <ButtonFab
+                                size="medium"
+                                title={
+                                    loadingOrderPage
+                                        ? "Carregando..."
+                                        : "Renovar Plano"
                                 }
+                                onClick={() => {
+                                    setLoadingOrderPage(true);
+                                    async function setAllVars() {
+                                        const readyVar = await Promise.all([
+                                            setVar({
+                                                orders_clientAdmin: orders,
+                                            }),
+                                            setVar({
+                                                totalMoney_clientAdmin: investAmount,
+                                            }),
+                                            setVar({
+                                                planPeriod_clientAdmin: thisPeriod,
+                                            }),
+                                            setVar({
+                                                ordersPlan_clientAdmin: thisPlan,
+                                            }),
+                                            setVar({
+                                                renewalDaysLeft_clientAdmin: daysLeft,
+                                            }),
+                                            setVar({
+                                                renewalRef_clientAdmin: reference,
+                                            }),
+                                        ]);
 
-                                setAllVars();
-                            }}
-                            backgroundColor={"var(--themeSDark--default)"}
-                            variant="extended"
-                        />
-                    </section>
+                                        setLoadingOrderPage(false);
+                                        history.push("/pedidos/admin");
+                                    }
+
+                                    setAllVars();
+                                }}
+                                backgroundColor={"var(--themeSDark--default)"}
+                                variant="extended"
+                            />
+                        </section>
+                    )}
                 </Fragment>
             )
         );

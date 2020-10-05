@@ -2,10 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "orders";
 
-const {
-    DefaultFilterSchema,
-    RenewalHistorySchema,
-} = require("../user/schemes");
+const { DefaultFilterSchema } = require("../user/schemes");
 
 const data = {
     reference: String,
@@ -40,7 +37,7 @@ const data = {
     },
     filter: DefaultFilterSchema,
     planDueDate: Date,
-    renewalHistory: [RenewalHistorySchema],
+    isCurrRenewal: Boolean, // identify if transaction is renewal on transaction.
 };
 
 const orderSchema = new Schema(data, { timestamps: true });

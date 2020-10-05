@@ -69,6 +69,9 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
 
     const params = {
         userId: businessId,
+    };
+
+    const body = {
         senderHash,
         reference,
         senderName: adminName,
@@ -89,17 +92,20 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         ordersStatement,
         filter,
         paymentReleaseDate,
-        renewalDays: Number(renewalDaysLeft) + handlePeriodDays(reference),
-        renewalReference,
+        renewalDaysLeft: renewalDaysLeft ? Number(renewalDaysLeft) : undefined,
+        renewalCurrDays: renewalReference
+            ? handlePeriodDays(reference)
+            : undefined,
+        renewalReference: renewalReference ? renewalReference : undefined,
     };
-    console.log("params", params);
 
     const { data, loading } = useAPI({
         method: "post",
         url: finishCheckout(),
         params,
+        body,
         needAuth: true,
-        trigger: ordersStatement && senderHash && selectedCategory,
+        trigger: senderCPF && ordersStatement && senderHash && selectedCategory,
         timeout: 40000,
     });
 

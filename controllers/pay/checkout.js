@@ -57,10 +57,12 @@ function startCheckout(req, res) {
         .catch((e) => res.json(e.response.data));
 }
 
+// POST
 const finishCheckout = (req, res, next) => {
+    const { userId } = req.query;
+
     let {
-        userId,
-        reference = 123,
+        reference = "123",
         paymentMethod = "boleto",
         itemId1 = "123",
         itemDescription1 = "Cool Service",
@@ -69,17 +71,28 @@ const finishCheckout = (req, res, next) => {
         extraAmount = "-1.00",
         senderCPF,
         senderHash,
-        senderAreaCode,
-        senderPhone,
-        senderName,
+        senderAreaCode = "92",
+        senderPhone = "992817363",
+        senderName = "captain great",
         senderEmail = "captainGreat@sandbox.pagseguro.com.br",
-        firstDueDate,
+        firstDueDate = "2020-10-08",
         ordersStatement,
         filter,
         paymentReleaseDate,
-        renewalDays,
         renewalReference,
-    } = req.query;
+        renewalDaysLeft,
+        renewalCurrDays,
+        shippingAddressStreet,
+        shippingAddressDistrict,
+        shippingAddressState,
+        shippingAddressNumber,
+        shippingAddressCity,
+        shippingAddressPostalCode,
+        shippingAddressCountry,
+        shippingAddressComplement,
+        shippingType,
+        shippingCost,
+    } = req.body;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
 
     const params = {
@@ -89,7 +102,7 @@ const finishCheckout = (req, res, next) => {
 
     const body = {
         reference,
-        paymentMethod,
+        paymentMethod, // *
         // sender (buyer) object
         senderHash, // (fingerprint) gerado pelo JavaScript do PagSeguro. Formato: Obtido a partir de uma chamada javascript PagseguroDirectPayment.onSenderHashReady().
         senderName, // * No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
@@ -104,18 +117,18 @@ const finishCheckout = (req, res, next) => {
         itemQuantity1, // *
         itemAmount1, // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
         extraAmount, // StRING!!! Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
-        //address
-        shippingAddressRequired: false, // if no address is sent, then ((Av. Brigadeiro Faria Lima, 1.384 - CEP: 01452002 Sao Paulo-São Paulo)) will be displayed at the bottom of the boleto's doc.
-        shippingAddressStreet: undefined, // Livre, com limite de 80 caracteres.
-        shippingAddressNumber: undefined, //Livre, com limite de 20 caracteres.
-        shippingAddressComplement: undefined, // Livre, com limite de 40 caracteres.
-        shippingAddressDistrict: undefined, // Bairro - Livre, com limite de 60 caracteres - Este campo é opcional e você pode enviá-lo caso já tenha capturado os dados do comprador em seu sistema e queira evitar que ele preencha esses dados novamente no PagSeguro.
-        shippingAddressState: undefined, // Duas letras, representando a sigla do estado brasileiro correspondente
-        shippingAddressCity: undefined, // Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
-        shippingAddressCountry: undefined, // No momento, apenas o valor BRA é permitido.
-        shippingAddressPostalCode: undefined, // STRING Um número de 8 dígitos
-        shippingType: undefined, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado.
-        shippingCost: undefined, // STRING!!! Informa o valor total de frete do pedido. // Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00.
+        // address
+        shippingAddressRequired: false, // * if no address is sent, then ((Av. Brigadeiro Faria Lima, 1.384 - CEP: 01452002 Sao Paulo-São Paulo)) will be displayed at the bottom of the boleto's doc.
+        shippingAddressStreet, // Livre, com limite de 80 caracteres.
+        shippingAddressNumber, //Livre, com limite de 20 caracteres.
+        shippingAddressComplement, // Livre, com limite de 40 caracteres.
+        shippingAddressDistrict, // Bairro - Livre, com limite de 60 caracteres - Este campo é opcional e você pode enviá-lo caso já tenha capturado os dados do comprador em seu sistema e queira evitar que ele preencha esses dados novamente no PagSeguro.
+        shippingAddressState, // Duas letras, representando a sigla do estado brasileiro correspondente
+        shippingAddressCity, // Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
+        shippingAddressCountry, // No momento, apenas o valor BRA é permitido.
+        shippingAddressPostalCode, // STRING Um número de 8 dígitos
+        shippingType, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado.
+        shippingCost, // STRING!!! Informa o valor total de frete do pedido. // Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00.
         // defaults
         currency: "BRL",
         paymentMode: "default",
@@ -146,12 +159,9 @@ const finishCheckout = (req, res, next) => {
                     const [grossAmount] = data.grossAmount;
                     const [extraAmount] = data.extraAmount;
 
-                    const thisPayCat = getPayCategoryType(paymentMethod);
-
                     const payload = {
-                        isRenewal: renewalReference ? true : false,
                         userId,
-                        paymentCategory: thisPayCat,
+                        paymentCategory: getPayCategoryType(paymentMethod),
                         reference,
                         amount: grossAmount,
                         instructions: itemDescription1,
@@ -160,86 +170,90 @@ const finishCheckout = (req, res, next) => {
                         phoneAreaCode: senderAreaCode,
                         phoneNumber: senderPhone,
                         email: senderEmail,
-                        firstDueDate,
                         ordersStatement,
-                        renewalHistory,
+                        firstDueDate,
+                        isRenewal: renewalReference ? true : false,
                     };
 
-                    if (renewalReference) {
-                        Order.findOne({ reference: renewalReference }).exec(
-                            (err, doc) => {
-                                if (err)
-                                    return res
-                                        .status(500)
-                                        .json(msgG("error.systemError", err));
+                    const newOrder = new Order({
+                        reference,
+                        agentName: "Fiddelize",
+                        agentId: "5db4301ed39a4e12546277a8",
+                        clientAdmin: {
+                            name: senderName,
+                            id: userId,
+                        },
+                        paymentCategory: getPayCategoryType(paymentMethod),
+                        paymentReleaseDate,
+                        amount: {
+                            fee: handleAmounts(feeAmount, extraAmount, {
+                                op: "+",
+                            }),
+                            net: netAmount,
+                            gross: handleAmounts(grossAmount, extraAmount, {
+                                op: "+",
+                            }),
+                            extra: extraAmount,
+                        },
+                        filter,
+                        isCurrRenewal: renewalReference ? true : undefined,
+                    });
 
-                                doc.planDueDate = addDays(
-                                    new Date(),
-                                    renewalDays
-                                );
-                                doc.transactionStatus = "pendente";
-                                doc.updatedAt = new Date();
-                                doc.paymentCategory = thisPayCat;
-
-                                const history = {
-                                    reference,
-                                    investAmount: grossAmount,
-                                };
-                                const resRenewal = doc.renewalHistory
-                                    ? doc.renewalHistory.push(history)
-                                    : [history];
-                                doc.renewalHistory = resRenewal;
-
-                                doc.save((err) => {
-                                    payload.reference = renewalReference;
-                                    payload.renewalHistory = resRenewal;
-
-                                    req.payload = payload;
-                                    next();
-                                });
-                            }
-                        );
-                    } else {
-                        const newOrder = new Order({
-                            reference,
-                            agentName: "Fiddelize",
-                            agentId: "5db4301ed39a4e12546277a8",
-                            clientAdmin: {
-                                name: senderName,
-                                id: userId,
-                            },
-                            paymentCategory: getPayCategoryType(paymentMethod),
-                            paymentReleaseDate,
-                            amount: {
-                                fee: handleAmounts(feeAmount, extraAmount, {
-                                    op: "+",
-                                }),
-                                net: netAmount,
-                                gross: handleAmounts(grossAmount, extraAmount, {
-                                    op: "+",
-                                }),
-                                extra: extraAmount,
-                            },
-                            filter: JSON.parse(filter),
-                        });
-
-                        newOrder.save().then((order) => {
-                            req.payload = payload;
-                            next();
-                        });
-                    }
+                    newOrder.save().then((err) => {
+                        const renewal = {
+                            priorRef: renewalReference,
+                            currRef: reference,
+                            priorDaysLeft: renewalDaysLeft,
+                            totalRenewalDays:
+                                Number(renewalCurrDays) +
+                                Number(renewalDaysLeft),
+                        };
+                        payload.renewal = renewal;
+                        req.payload = payload;
+                        next();
+                    });
                 } else {
                     console.log(error);
                 }
             });
         })
-        .catch((e) => res.json(e.response.data));
+        .catch((e) => res.json({ error: e.response ? e.response.data : e }));
 };
 
 module.exports = {
     startCheckout,
     finishCheckout,
 };
+
+/*ARCHIVES
+function handleData({ Order, payload, res, createNewOrder, renewal, next }) {
+    const {
+        renewalReference,
+        isRenewal,
+    } = payload;
+        console.log("isRenewal", isRenewal);
+
+    if (isRenewal) {
+        return Order.findOneAndUpdate(
+            { reference: renewalReference },
+            { $set: { isCurrRenewal: true, updatedAt: new Date() } },
+            { new: true }
+        )
+            .select("_id")
+            .exec((err, user) => {
+                if (err)
+                    return res.status(500).json(msgG("error.systemError", err));
+                    res.json(user);
+                    // payload.renewal = renewal;
+                    // req.payload = payload;
+                    // next();
+            });
+        } else {
+            createNewOrder(skipCreation);
+        }
+}
+
+*/
 
 /*
 Handling responses - BOLETO:

@@ -83,6 +83,7 @@ const getPagNotify = (req, res) => {
                         // doc.markModified("clientAdminData");
                         const clientAdminId = doc.clientAdmin.id;
 
+                        const isCurrRenewal = doc.isCurrRenewal;
                         doc.save((err) => {
                             User.findOne({ _id: clientAdminId })
                                 .select("clientAdminData.orders")
@@ -99,9 +100,27 @@ const getPagNotify = (req, res) => {
                                                     paymentMethodCode
                                                 );
                                                 targetOr.transactionStatus = currStatus;
+                                                // targetOr.renewalHistory.transitionStatus
                                                 targetOr.updatedAt = lastEventDate;
 
                                                 return targetOr;
+                                            }
+
+                                            if (
+                                                isRenewal &&
+                                                currStatus === "pago"
+                                            ) {
+                                                const {
+                                                    renewal,
+                                                    reference,
+                                                } = targetOr;
+                                                if (
+                                                    reference ===
+                                                    renewal.currRef
+                                                ) {
+                                                    renewal.isPaid = true;
+                                                    return targetOr;
+                                                }
                                             }
 
                                             return targetOr;

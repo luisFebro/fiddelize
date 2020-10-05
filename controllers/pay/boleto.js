@@ -55,10 +55,10 @@ function createBoleto(req, res) {
         city = "Sao Paulo",
         state = "SP",
         complement,
-        firstDueDate = "2020-09-25",
+        firstDueDate = "2020-10-08",
         ordersStatement,
         isRenewal,
-        renewalHistory,
+        renewal,
     } = req.payload;
 
     const params = {
@@ -119,8 +119,8 @@ function createBoleto(req, res) {
                 paymentCategory,
                 paymentLink: boletoData.paymentLink,
                 payDueDate: boletoData.dueDate,
-                ordersStatement: JSON.parse(ordersStatement),
-                renewalHistory,
+                ordersStatement,
+                renewal,
             };
 
             User.findById(userId).exec((err, doc) => {
@@ -129,19 +129,24 @@ function createBoleto(req, res) {
                 const orders = doc.clientAdminData.orders;
 
                 if (isRenewal) {
-                    const modifiedOrders = orders.map((ord) => {
-                        if (ord.reference === reference) {
-                            ord = dataCliAdmin;
-                            return ord;
-                        }
-                        return ord;
-                    });
+                    const modifiedOrders =
+                        orders &&
+                        orders.map((serv) => {
+                            if (serv.reference === renewal.priorRef) {
+                                serv.renewal = renewal;
+                                return serv;
+                            }
 
-                    doc.clientAdminData.orders = modifiedOrders;
+                            return serv;
+                        });
+
+                    doc.clientAdminData.orders = [
+                        dataCliAdmin,
+                        ...modifiedOrders,
+                    ];
                 } else {
-                    doc.clientAdminData.orders = [...orders, dataCliAdmin];
+                    doc.clientAdminData.orders = [dataCliAdmin, ...orders];
                 }
-
                 // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
                 doc.markModified("clientAdminData");
                 doc.save((err) => {
