@@ -116,7 +116,9 @@ const getPagNotify = (req, res) => {
                                                 } = targetOr;
                                                 if (
                                                     reference ===
-                                                    renewal.currRef
+                                                        renewal.currRef ||
+                                                    reference ===
+                                                        renewal.priorRef
                                                 ) {
                                                     renewal.isPaid = true;
                                                     return targetOr;

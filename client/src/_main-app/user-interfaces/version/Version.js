@@ -4,7 +4,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.5811.4";
+const latestVersion = "3.5812.4";
 // PRÓXIMO:
 //
 const updateDescription =
