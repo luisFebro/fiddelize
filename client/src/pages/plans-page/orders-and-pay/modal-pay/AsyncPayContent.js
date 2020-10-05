@@ -6,15 +6,10 @@ import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
 import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
-import { addDays } from "../../../../utils/dates/dateFns";
 import getFirstName from "../../../../utils/string/getFirstName";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
-const RELEASE_DATE_SPAN = 15; // 15 or 30 days on PagSeguro
-
 const filter = getFilterDate();
-const paymentReleaseDate = addDays(new Date(), RELEASE_DATE_SPAN);
-
 /*
 IMPORTANT:
 As chamadas para os meios de pagamento do Checkout Transparente deverão ser efetuadas para o endpoint abaixo utilizando o método POST:
@@ -91,7 +86,6 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         firstDueDate,
         ordersStatement,
         filter,
-        paymentReleaseDate,
         renewalDaysLeft: renewalDaysLeft ? Number(renewalDaysLeft) : undefined,
         renewalCurrDays: renewalReference
             ? handlePeriodDays(reference)

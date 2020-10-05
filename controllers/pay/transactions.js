@@ -23,11 +23,16 @@ const { payUrl, sandboxMode, email, token } = globalVar;
 Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas
 Note que a notificação não possui nenhuma informação sobre a transação.
 */
+const RELEASE_DATE_SPAN = 15; // 15 or 30 days on PagSeguro
+const paymentReleaseDate = addDays(new Date(), RELEASE_DATE_SPAN);
 
-const handlePlanDueDate = (currStatus, targetOr) => {
-    return currStatus === "pago" && !targetOr.planDueDate
+const handlePlanDueDate = (currStatus, doc, reference, isCurrRenewal) => {
+    const trigger =
+        (currStatus === "pago" && !doc.planDueDate) ||
+        (currStatus === "pago" && isCurrRenewal);
+    return trigger
         ? addDays(new Date(), getNewPlanDays(reference))
-        : targetOr.planDueDate;
+        : doc.planDueDate;
 };
 
 const getPagNotify = (req, res) => {
@@ -62,8 +67,9 @@ const getPagNotify = (req, res) => {
                     const [paymentMethod] = data.paymentMethod;
                     const [paymentMethodCode] = paymentMethod.code;
 
-                    const currStatus = getTransactionStatusTypes(status);
+                    const mainRef = reference;
 
+                    const currStatus = getTransactionStatusTypes(status);
                     let thisDueDate;
                     Order.findOne({ reference }).exec((err, doc) => {
                         if (err)
@@ -71,19 +77,27 @@ const getPagNotify = (req, res) => {
                                 .status(500)
                                 .json(msgG("error.systemError", err));
 
-                        thisDueDate = handlePlanDueDate(currStatus, doc);
-                        doc.planDueDate = thisDueDate;
+                        const isCurrRenewal = doc.isCurrRenewal;
+                        thisDueDate = handlePlanDueDate(
+                            currStatus,
+                            doc,
+                            reference,
+                            isCurrRenewal
+                        );
+                        doc.planDueDate = thisDueDate; // I already modified future date on checkout for renewal.
                         doc.paymentMethod = getPaymentMethod(paymentMethodCode);
                         doc.updatedAt = lastEventDate;
                         doc.transactionStatus = getTransactionStatusTypes(
                             status
                         );
+                        const payRelease = doc.paymentReleaseDate;
+                        doc.paymentReleaseDate = payRelease
+                            ? payRelease
+                            : paymentReleaseDate;
 
                         // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
                         // doc.markModified("clientAdminData");
                         const clientAdminId = doc.clientAdmin.id;
-
-                        const isCurrRenewal = doc.isCurrRenewal;
                         doc.save((err) => {
                             User.findOne({ _id: clientAdminId })
                                 .select("clientAdminData.orders")
@@ -92,9 +106,30 @@ const getPagNotify = (req, res) => {
 
                                     const modifiedOrders = orders.map(
                                         (targetOr) => {
-                                            if (
-                                                targetOr.reference === reference
-                                            ) {
+                                            const priorRef =
+                                                targetOr.renewal &&
+                                                targetOr.renewal.priorRef;
+                                            const condition = isCurrRenewal
+                                                ? targetOr.reference ===
+                                                      mainRef ||
+                                                  targetOr.reference ===
+                                                      priorRef
+                                                : targetOr.reference ===
+                                                  mainRef;
+                                            if (condition) {
+                                                if (currStatus === "pago") {
+                                                    const {
+                                                        renewal,
+                                                    } = targetOr;
+                                                    if (
+                                                        mainRef ===
+                                                        (renewal &&
+                                                            renewal.currRef)
+                                                    ) {
+                                                        targetOr.renewal.isPaid = true;
+                                                    }
+                                                }
+
                                                 targetOr.planDueDate = thisDueDate;
                                                 targetOr.paymentMethod = getPaymentMethod(
                                                     paymentMethodCode
@@ -104,25 +139,6 @@ const getPagNotify = (req, res) => {
                                                 targetOr.updatedAt = lastEventDate;
 
                                                 return targetOr;
-                                            }
-
-                                            if (
-                                                isRenewal &&
-                                                currStatus === "pago"
-                                            ) {
-                                                const {
-                                                    renewal,
-                                                    reference,
-                                                } = targetOr;
-                                                if (
-                                                    reference ===
-                                                        renewal.currRef ||
-                                                    reference ===
-                                                        renewal.priorRef
-                                                ) {
-                                                    renewal.isPaid = true;
-                                                    return targetOr;
-                                                }
                                             }
 
                                             return targetOr;

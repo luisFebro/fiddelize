@@ -235,23 +235,21 @@ function InvestCard({
         if (isDuePay || (daysLeft === 0 && transactionStatus !== "PENDENTE"))
             transactionStatus = "EXPIRADO";
         if (renewal) {
-            if (renewal.priorRef === reference) {
+            const isPriorCardRenewal = renewal.priorRef === reference;
+            const isCurrCardRenewal = renewal.currRef === reference;
+            if (isPriorCardRenewal && renewal.isPaid) {
                 transactionStatus = "RENOVADO";
             } else {
-                transactionStatus = "PENDENTE/RENOVADO";
+                transactionStatus = "PENDENTE/RENOVAÇÃO";
             }
 
-            if (renewal.isPaid) {
+            if (renewal.isPaid && isCurrCardRenewal) {
                 transactionStatus = "PAGO/RENOVADO";
             }
         }
 
         const handleBack = () => {
-            if (
-                transactionStatus === "PENDENTE" ||
-                transactionStatus === "PENDENTE/RENOVADO"
-            )
-                return "grey";
+            if (transactionStatus === "PENDENTE") return "grey";
             if (
                 transactionStatus === "PAGO" ||
                 transactionStatus === "PAGO/RENOVADO"

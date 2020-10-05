@@ -11,6 +11,8 @@ function getNewPlanDays(reference) {
     const [, , period] = referenceArray;
 
     const planDays = handlePeriodDays(period);
+
+    return planDays;
 }
 
 module.exports = { getNewPlanDays };

@@ -6,7 +6,6 @@ const Order = require("../../models/order/Order");
 const { getPayCategoryType } = require("./helpers/getTypes");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
-const addDays = require("date-fns/addDays");
 const parser = new xml2js.Parser({ attrkey: "ATTR" });
 const { payUrl, sandboxMode, email, token } = globalVar;
 
@@ -78,7 +77,6 @@ const finishCheckout = (req, res, next) => {
         firstDueDate = "2020-10-08",
         ordersStatement,
         filter,
-        paymentReleaseDate,
         renewalReference,
         renewalDaysLeft,
         renewalCurrDays,
