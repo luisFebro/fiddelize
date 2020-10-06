@@ -60,6 +60,7 @@ const transStatusObj = {
         "cancelado",
         "debitado",
         "em retenção",
+        "renovado", // fiddelize only
     ],
 };
 
@@ -69,6 +70,7 @@ const renewalData = {
     currRef: String,
     totalRenewalDays: Number,
     isPaid: Boolean, // only when paid on transaction
+    isOldCard: Boolean, // identify the last card and expire it on finish checkout since we create another card with a new usage's time.
 };
 const RenewalSchema = new Schema(renewalData, { _id: false });
 

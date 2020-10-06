@@ -2,7 +2,6 @@ const User = require("../../models/user/User");
 // const Order = require("../../models/order/Order");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
-const addDays = require("date-fns/addDays");
 
 const { email: authEmail } = globalVar;
 /*
@@ -88,9 +87,10 @@ function createBoleto(req, res) {
         reference, // Campo destinado a controles internos do vendedor. Tamanho máximo: 200 caracteres.
         numberOfPayments, // int32 Permitido preencher de 1 a 12.Permitido preencher de 1 a 12. // Informar a quantidade de boletos a serem gerados para cada comprador. n1 exemplo
         amount, // Informar o valor em reais a ser cobrado em cada boleto. Mínimo 5.00 e máximo 1000000.00 decimal, com duas casas decimais separadas por ponto (ex: 1234.56)
-        instructions: `REFERENTE À FIDDELIZE INVISTA -${
-            isRenewal ? " Renovação de " : ""
-        }${instructions}`, // BOLETO = This will appear in the boleto's main instruction button - Campo instruções do boleto, personalizado para uso do vendedor, restrito a 100 caracteres
+        // watch out with the limit of 100 characters. the current avarage is 92. If pass this limit, an error will occur.
+        instructions: `${
+            isRenewal ? "RENOVACAO" : "REFERENTE À"
+        } FIDDELIZE INVISTA - ${instructions}`, // BOLETO = This will appear in the boleto's main instruction button - Campo instruções do boleto, personalizado para uso do vendedor, restrito a 100 caracteres
         description: reference, // EMAIL - Description appears in the email ITENS DO PEDIDO. use SKU. This does not insert anything in the Boleto Descrição do produto objeto da cobrança.
         periodicity: "monthly", // Atualmente a chamada não aceita nenhum outro valor diferente.
         customer: customerData,
@@ -135,22 +135,15 @@ function createBoleto(req, res) {
                     const modifiedOrders =
                         orders &&
                         orders.map((serv) => {
-                            if (serv.reference === renewal.priorRef) {
-                                serv.renewal = renewal;
+                            if (
+                                serv.reference === (renewal && renewal.priorRef)
+                            ) {
+                                serv.renewal = { ...renewal, isOldCard: true };
                                 return serv;
                             }
 
                             return serv;
                         });
-
-                    dataCliAdmin = {
-                        ...dataCliAdmin,
-                        planDueDate: addDays(
-                            new Date(),
-                            renewal.totalRenewalDays
-                        ),
-                        // In the near future, also includes paymentMethod and paymentCategory to check if user paid with different mean.
-                    };
 
                     doc.clientAdminData.orders = [
                         dataCliAdmin,

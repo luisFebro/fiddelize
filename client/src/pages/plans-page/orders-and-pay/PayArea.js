@@ -6,7 +6,10 @@ import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import { getVar } from "../../../hooks/storage/useVar";
 import { getServiceSKU } from "../../../utils/string/getSKUCode.js";
-import useAPI, { startCheckout } from "../../../hooks/api/useAPI";
+import useAPI, {
+    startCheckout,
+    isUserProAlready,
+} from "../../../hooks/api/useAPI";
 import PayBtn from "./modal-pay/PayBtn";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
@@ -46,6 +49,7 @@ export default function PayArea({
         senderAreaCode: "",
         senderPhone: "",
         firstDueDate: "",
+        isUserPro: false,
     });
     let {
         SKU,
@@ -54,12 +58,14 @@ export default function PayArea({
         senderAreaCode,
         senderPhone,
         firstDueDate,
+        // isUserPro,
     } = data;
-
-    const alreadyPaidSomeServ = true;
 
     const { bizCodeName } = useClientAdmin();
     const { _id, phone, name: userName, email: senderEmail } = useProfile();
+    const { data: isUserPro, loading: proLoading } = useAPI({
+        url: isUserProAlready(_id),
+    });
 
     const dispatch = useStoreDispatch();
 
@@ -173,7 +179,7 @@ export default function PayArea({
     const showCTAs = () =>
         !loading && (
             <section className="container-center-col">
-                {authToken && !alreadyPaidSomeServ && (
+                {authToken && !isUserPro && (
                     <PayBtn
                         size="large"
                         title="VAMOS LÁ!"
@@ -196,7 +202,7 @@ export default function PayArea({
                         variant="link"
                         color="var(--themeP)"
                         underline={true}
-                        margin={alreadyPaidSomeServ ? "0 16px 50px" : undefined}
+                        margin={isUserPro ? "0 16px 50px" : undefined}
                         zIndex={-1}
                     />
                 </Link>
@@ -205,11 +211,10 @@ export default function PayArea({
 
     return (
         <section className="my-5">
-            {alreadyPaidSomeServ
-                ? showDirectPayAreaToPros()
-                : showUnpaidUsersMsg()}
+            {isUserPro && !proLoading && showDirectPayAreaToPros()}
+            {!isUserPro && !proLoading && showUnpaidUsersMsg()}
             {showCTAs()}
-            {loading && (
+            {loading && !proLoading && (
                 <p className="font-weight-bold text-subtitle text-purple text-center">
                     Preparando tudo...
                 </p>

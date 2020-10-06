@@ -86,7 +86,10 @@ function InvestCard({
             payDueDate,
             renewal,
         } = panel.data;
-        const isRenewal = (renewal && renewal.priorRef) === reference;
+        console.log("renewal", renewal);
+        const isRenewable =
+            (renewal && renewal.priorRef) !== reference &&
+            transactionStatus !== "pendente";
         const isDuePay =
             !isScheduledDate(payDueDate, { isDashed: true }) &&
             transactionStatus !== "pago"; // for boleto
@@ -173,7 +176,7 @@ function InvestCard({
                             />{" "}
                             desativado
                         </section>
-                        {isDuePay && !isRenewal && (
+                        {isDuePay && isRenewable && (
                             <section
                                 className="d-flex position-absolute"
                                 style={{
@@ -202,7 +205,7 @@ function InvestCard({
                                 />
                             </section>
                         )}
-                        {daysLeft === 0 && !isPaid && (
+                        {daysLeft >= 0 && isPaid && (
                             <RadiusBtn
                                 className="enabledLink"
                                 position="absolute"
@@ -231,7 +234,7 @@ function InvestCard({
         transactionStatus =
             transactionStatus && transactionStatus.toUpperCase();
         if (!transactionStatus) transactionStatus = "PENDENTE";
-        if (transactionStatus === "disponível") transactionStatus = "PAGO";
+        if (transactionStatus === "DISPONÍVEL") transactionStatus = "PAGO";
         if (isDuePay || (daysLeft === 0 && transactionStatus !== "PENDENTE"))
             transactionStatus = "EXPIRADO";
         if (renewal) {

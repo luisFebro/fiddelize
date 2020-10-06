@@ -26,13 +26,27 @@ Note que a notificação não possui nenhuma informação sobre a transação.
 const RELEASE_DATE_SPAN = 15; // 15 or 30 days on PagSeguro
 const paymentReleaseDate = addDays(new Date(), RELEASE_DATE_SPAN);
 
-const handlePlanDueDate = (currStatus, doc, reference, isCurrRenewal) => {
+const isPaid = (currStatus) =>
+    currStatus === "pago" ||
+    currStatus === "disponível" ||
+    currStatus === 1 ||
+    currStatus === 4;
+
+const handlePlanDueDate = (
+    currStatus,
+    doc,
+    reference,
+    isCurrRenewal,
+    totalRenewalDays
+) => {
     const trigger =
-        (currStatus === "pago" && !doc.planDueDate) ||
-        (currStatus === "pago" && isCurrRenewal);
-    return trigger
-        ? addDays(new Date(), getNewPlanDays(reference))
-        : doc.planDueDate;
+        (isPaid(currStatus) && !doc.planDueDate) ||
+        (isPaid(currStatus) && isCurrRenewal);
+
+    const addedDays = totalRenewalDays
+        ? totalRenewalDays
+        : getNewPlanDays(reference);
+    return trigger ? addDays(new Date(), addedDays) : doc.planDueDate;
 };
 
 // Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
@@ -79,12 +93,15 @@ const getPagNotify = (req, res) => {
                                 .json(msgG("error.systemError", err));
 
                         const isCurrRenewal = doc && doc.isCurrRenewal;
+                        const totalRenewalDays = doc && doc.totalRenewalDays;
                         thisDueDate = handlePlanDueDate(
                             currStatus,
                             doc,
                             reference,
-                            isCurrRenewal
+                            isCurrRenewal,
+                            totalRenewalDays
                         );
+
                         doc.planDueDate = thisDueDate; // I already modified future date on checkout for renewal.
                         doc.paymentMethod = getPaymentMethod(paymentMethodCode);
                         doc.updatedAt = lastEventDate;
@@ -131,7 +148,18 @@ const getPagNotify = (req, res) => {
                                                     }
                                                 }
 
-                                                targetOr.planDueDate = thisDueDate;
+                                                if (
+                                                    isPaid(currStatus) &&
+                                                    targetOr.reference ===
+                                                        priorRef
+                                                ) {
+                                                    targetOr.planDueDate = undefined; // make the last card required to be renewal with no date to expire it.
+                                                    targetOr.transactionStatus =
+                                                        "renovado"; // make the last card required to be renewal with no date to expire it.
+                                                } else {
+                                                    targetOr.planDueDate = thisDueDate;
+                                                }
+
                                                 targetOr.paymentMethod = getPaymentMethod(
                                                     paymentMethodCode
                                                 );

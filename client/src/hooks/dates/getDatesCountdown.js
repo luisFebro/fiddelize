@@ -3,9 +3,9 @@ import getDiffDays from "../../utils/dates/getDiffDays";
 
 export default function getDatesCountdown(endDate, options = {}) {
     if (!endDate) return 0;
-    const { deadline = 30 } = options;
-
-    const targetDate = addDays(new Date(endDate), deadline);
+    const { deadline = 30, needAdd = false } = options;
+    // already adding target plan date on the backend from v 3.5810.4
+    const targetDate = needAdd ? addDays(new Date(endDate), deadline) : endDate;
     const res = getDiffDays(targetDate);
 
     return res;

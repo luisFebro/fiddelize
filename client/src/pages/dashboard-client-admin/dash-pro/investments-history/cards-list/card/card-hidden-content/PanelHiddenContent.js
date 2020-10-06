@@ -185,7 +185,7 @@ function PanelHiddenContent({ history, data }) {
             transactionStatus,
         } = data;
         const isRenewable =
-            (renewal && renewal.priorRef) === reference ||
+            (renewal && renewal.priorRef) !== reference &&
             transactionStatus !== "pendente";
         const referenceArray = reference && reference.split("-");
         const [planCode, qtt, period] = referenceArray;
@@ -207,7 +207,7 @@ function PanelHiddenContent({ history, data }) {
                         period={thisPeriod}
                         notesColor="white"
                     />
-                    {!isRenewable && (
+                    {isRenewable && (
                         <section className="my-5 container-center">
                             <ButtonFab
                                 size="medium"

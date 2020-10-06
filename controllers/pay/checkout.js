@@ -194,6 +194,9 @@ const finishCheckout = (req, res, next) => {
                         },
                         filter,
                         isCurrRenewal: renewalReference ? true : undefined,
+                        totalRenewalDays: renewalReference
+                            ? Number(renewalCurrDays) + Number(renewalDaysLeft)
+                            : undefined,
                     });
 
                     newOrder.save().then((err) => {
@@ -201,9 +204,6 @@ const finishCheckout = (req, res, next) => {
                             priorRef: renewalReference,
                             currRef: reference,
                             priorDaysLeft: renewalDaysLeft,
-                            totalRenewalDays:
-                                Number(renewalCurrDays) +
-                                Number(renewalDaysLeft),
                         };
                         payload.renewal = renewalReference
                             ? renewal
