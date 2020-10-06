@@ -182,7 +182,6 @@ const finishCheckout = (req, res, next) => {
                             id: userId,
                         },
                         paymentCategory: getPayCategoryType(paymentMethod),
-                        paymentReleaseDate,
                         amount: {
                             fee: handleAmounts(feeAmount, extraAmount, {
                                 op: "+",
@@ -206,7 +205,9 @@ const finishCheckout = (req, res, next) => {
                                 Number(renewalCurrDays) +
                                 Number(renewalDaysLeft),
                         };
-                        payload.renewal = renewal;
+                        payload.renewal = renewalReference
+                            ? renewal
+                            : undefined;
                         req.payload = payload;
                         next();
                     });
@@ -215,7 +216,7 @@ const finishCheckout = (req, res, next) => {
                 }
             });
         })
-        .catch((e) => res.json({ error: e.response ? e.response.data : e }));
+        .catch((e) => console.log(e)); // LESSON: never use e to be log in a JSON response. it will displayed like error: {} The error log only appears only in CLI.
 };
 
 module.exports = {

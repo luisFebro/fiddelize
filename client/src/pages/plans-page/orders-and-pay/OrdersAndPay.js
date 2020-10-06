@@ -96,7 +96,7 @@ export default function OrdersAndPay({
         const explicitCancel = type === "explicit";
         explicitCancel &&
             showSnackbar(dispatch, "Seu pedido atual foi cancelado.");
-        explicitCancel && removeVar("orders_clientAdmin");
+        removeVar("orders_clientAdmin");
         removeVar("totalServices_clientAdmin");
         removeVar("totalMoney_clientAdmin");
         removeVar("ordersPlan_clientAdmin");

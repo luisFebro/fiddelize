@@ -35,6 +35,7 @@ const handlePlanDueDate = (currStatus, doc, reference, isCurrRenewal) => {
         : doc.planDueDate;
 };
 
+// Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
 const getPagNotify = (req, res) => {
     const notificationCode = req.body.notificationCode;
 
@@ -77,7 +78,7 @@ const getPagNotify = (req, res) => {
                                 .status(500)
                                 .json(msgG("error.systemError", err));
 
-                        const isCurrRenewal = doc.isCurrRenewal;
+                        const isCurrRenewal = doc && doc.isCurrRenewal;
                         thisDueDate = handlePlanDueDate(
                             currStatus,
                             doc,

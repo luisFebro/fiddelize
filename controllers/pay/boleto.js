@@ -160,7 +160,7 @@ function createBoleto(req, res) {
                     doc.clientAdminData.orders = [dataCliAdmin, ...orders];
                 }
                 // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-                doc.markModified("clientAdminData");
+                doc.markModified("clientAdminData.orders");
                 doc.save((err) => {
                     res.json({
                         barcode: boletoData.barcode,
@@ -170,9 +170,7 @@ function createBoleto(req, res) {
                 });
             });
         })
-        .catch((e) => {
-            res.json({ error: e.response.data.errors });
-        });
+        .catch((e) => console.log(e));
 }
 
 module.exports = {
