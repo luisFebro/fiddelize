@@ -60,7 +60,6 @@ const transStatusObj = {
         "cancelado",
         "debitado",
         "em retenção",
-        "renovado", // fiddelize only
     ],
 };
 

@@ -6,16 +6,12 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import EventIcon from "@material-ui/icons/Event";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { setVar } from "../../../../../../../hooks/storage/useVar";
-import { withRouter } from "react-router-dom";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import RadiusBtn from "../../../../../../../components/buttons/RadiusBtn";
 import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
+import DisplayExpiryCounter from "./DisplayExpiryCounter";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -58,14 +54,40 @@ const getStyles = ({ color, backgroundColor }) => ({
         border: "3px solid grey",
         zIndex: 10,
     },
-    expiryCounter: {
-        right: 55,
-        top: 70,
-    },
 });
 
-function InvestCard({
-    history,
+const handleTransactionStatus = ({ panel, daysLeft }) => {
+    let { transactionStatus, payDueDate, renewal, reference } = panel.data;
+
+    const isDuePay =
+        !isScheduledDate(payDueDate, { isDashed: true }) &&
+        transactionStatus !== "pago"; // for boleto
+    const isPaid =
+        transactionStatus === "pago" || transactionStatus === "disponível";
+    const isPriorCardRenewal = renewal && renewal.priorRef === reference;
+    const isCurrCardRenewal = renewal && renewal.currRef === reference;
+
+    if (!transactionStatus) return "PENDENTE";
+    if (isPaid && !isPriorCardRenewal) return "PAGO";
+    if (isDuePay || (daysLeft === 0 && transactionStatus !== "pendente"))
+        return "EXPIRADO";
+
+    if (renewal && (isPaid || transactionStatus === "pendente")) {
+        if (isPriorCardRenewal && renewal.isPaid) {
+            return "RENOVADO";
+        } else {
+            return "PENDENTE/RENOVAÇÃO";
+        }
+
+        if (isPaid && renewal.isPaid && isCurrCardRenewal) {
+            return "PAGO/RENOVADO";
+        }
+    }
+
+    return transactionStatus && transactionStatus.toUpperCase();
+};
+
+export default function InvestCard({
     detectedCard,
     checkDetectedElem,
     actions,
@@ -79,177 +101,8 @@ function InvestCard({
 
     // const dispatch = useStoreDispatch();
 
-    const displayExpiryCounter = (panel, daysLeft) => {
-        const {
-            transactionStatus,
-            reference,
-            payDueDate,
-            renewal,
-        } = panel.data;
-        console.log("renewal", renewal);
-        const isRenewable =
-            (renewal && renewal.priorRef) !== reference &&
-            transactionStatus !== "pendente";
-        const isDuePay =
-            !isScheduledDate(payDueDate, { isDashed: true }) &&
-            transactionStatus !== "pago"; // for boleto
-        const isPaid =
-            transactionStatus === "pago" || transactionStatus === "disponível";
-
-        const handleRenewalClick = () => {
-            async function setAllVars(panel) {
-                const readyVar = await Promise.all([
-                    setVar({ orders_clientAdmin: panel.data.ordersStatement }),
-                    setVar({
-                        totalMoney_clientAdmin: panel.data.investAmount,
-                    }),
-                    setVar({
-                        planPeriod_clientAdmin:
-                            panel.data.chosenPeriod === "Anual"
-                                ? "yearly"
-                                : "monthly",
-                    }),
-                    setVar({
-                        ordersPlan_clientAdmin: panel.data.chosenPlan,
-                    }),
-                    setVar({
-                        renewalDaysLeft_clientAdmin: 0,
-                    }),
-                    setVar({
-                        renewalRef_clientAdmin: reference,
-                    }),
-                ]);
-
-                history.push("/pedidos/admin");
-            }
-
-            setAllVars(panel);
-        };
-
-        return (
-            <Fragment>
-                {isPaid && daysLeft ? (
-                    <section
-                        className="enabledLink position-absolute"
-                        style={styles.expiryCounter}
-                    >
-                        <EventIcon
-                            className="shadow-elevation-black"
-                            style={{ transform: "scale(1.2)", color: "#fff" }}
-                        />
-                        <FontAwesomeIcon
-                            icon="bolt"
-                            style={{
-                                color: "var(--incomeGreen)",
-                                fontSize: "20px",
-                            }}
-                        />
-                        <span className="text-small text-shadow font-weight-bold d-inline-block ml-1">
-                            expira em:
-                        </span>
-                        <p
-                            className="position-relative text-normal text-white text-shadow font-weight-bold"
-                            style={{
-                                left: 30,
-                                top: -5,
-                            }}
-                        >
-                            {daysLeft || 0} dias
-                        </p>
-                    </section>
-                ) : (
-                    <Fragment>
-                        <section
-                            className="position-absolute text-normal text-shadow font-weight-bold"
-                            style={{
-                                right: 50,
-                                top: 70,
-                                color: "var(--lightGrey)",
-                            }}
-                        >
-                            <FontAwesomeIcon
-                                icon="bolt"
-                                style={{
-                                    color: "var(--lightGrey)",
-                                    fontSize: "20px",
-                                }}
-                            />{" "}
-                            desativado
-                        </section>
-                        {isDuePay && isRenewable && (
-                            <section
-                                className="d-flex position-absolute"
-                                style={{
-                                    right: 75,
-                                    top: 95,
-                                }}
-                            >
-                                <p
-                                    className="mr-1 text-small text-shadow font-weight-bold"
-                                    style={{
-                                        color: "var(--lightGrey)",
-                                    }}
-                                >
-                                    boleto expirou
-                                </p>
-                                <RadiusBtn
-                                    className="enabledLink"
-                                    position="absolute"
-                                    right={-50}
-                                    title="novo"
-                                    variant="extended"
-                                    onClick={() => handleRenewalClick()}
-                                    size="extra-small"
-                                    color="var(--mainWhite)"
-                                    backgroundColor="var(--themeSDark)"
-                                />
-                            </section>
-                        )}
-                        {daysLeft >= 0 && isPaid && (
-                            <RadiusBtn
-                                className="enabledLink"
-                                position="absolute"
-                                top={100}
-                                right={50}
-                                title="Renovar"
-                                variant="extended"
-                                onClick={() => handleRenewalClick()}
-                                size="extra-small"
-                                color="var(--mainWhite)"
-                                backgroundColor="var(--themeSDark)"
-                            />
-                        )}
-                    </Fragment>
-                )}
-            </Fragment>
-        );
-    };
-
     const displayStatusBadge = (panel, daysLeft) => {
-        let { transactionStatus, payDueDate, renewal, reference } = panel.data;
-        const isDuePay =
-            !isScheduledDate(payDueDate, { isDashed: true }) &&
-            transactionStatus !== "pago"; // for boleto
-
-        transactionStatus =
-            transactionStatus && transactionStatus.toUpperCase();
-        if (!transactionStatus) transactionStatus = "PENDENTE";
-        if (transactionStatus === "DISPONÍVEL") transactionStatus = "PAGO";
-        if (isDuePay || (daysLeft === 0 && transactionStatus !== "PENDENTE"))
-            transactionStatus = "EXPIRADO";
-        if (renewal) {
-            const isPriorCardRenewal = renewal.priorRef === reference;
-            const isCurrCardRenewal = renewal.currRef === reference;
-            if (isPriorCardRenewal && renewal.isPaid) {
-                transactionStatus = "RENOVADO";
-            } else {
-                transactionStatus = "PENDENTE/RENOVAÇÃO";
-            }
-
-            if (renewal.isPaid && isCurrCardRenewal) {
-                transactionStatus = "PAGO/RENOVADO";
-            }
-        }
+        const transactionStatus = handleTransactionStatus({ panel, daysLeft });
 
         const handleBack = () => {
             if (transactionStatus === "PENDENTE") return "grey";
@@ -316,7 +169,7 @@ function InvestCard({
                     )}
                 </AccordionSummary>
                 {displayStatusBadge(panel, daysLeft)}
-                {displayExpiryCounter(panel, daysLeft)}
+                <DisplayExpiryCounter panel={panel} daysLeft={daysLeft} />
             </section>
         );
     };
@@ -337,7 +190,7 @@ function InvestCard({
     );
 
     const ActionsMap = actions.map((panel, ind) => {
-        const { planDueDate, periodDays } = panel.data;
+        const { planDueDate, periodDays, renewal } = panel.data;
         const daysLeft = !planDueDate
             ? null
             : getDatesCountdown(planDueDate, {
@@ -360,5 +213,3 @@ function InvestCard({
 
     return <div className={classes.root}>{ActionsMap}</div>;
 }
-
-export default withRouter(InvestCard);

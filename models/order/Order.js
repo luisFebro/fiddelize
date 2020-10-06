@@ -24,7 +24,6 @@ const data = {
             "cancelado",
             "debitado",
             "em retenção",
-            // "renovado" // fiddelize
         ],
     },
     paymentCategory: { type: String, enum: ["boleto", "crédito", "débito"] },

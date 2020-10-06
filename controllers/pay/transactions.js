@@ -40,6 +40,7 @@ const handlePlanDueDate = (
     totalRenewalDays
 ) => {
     const trigger =
+        !doc.planDueDate ||
         (isPaid(currStatus) && !doc.planDueDate) ||
         (isPaid(currStatus) && isCurrRenewal);
 
@@ -154,8 +155,6 @@ const getPagNotify = (req, res) => {
                                                         priorRef
                                                 ) {
                                                     targetOr.planDueDate = undefined; // make the last card required to be renewal with no date to expire it.
-                                                    targetOr.transactionStatus =
-                                                        "renovado"; // make the last card required to be renewal with no date to expire it.
                                                 } else {
                                                     targetOr.planDueDate = thisDueDate;
                                                 }
