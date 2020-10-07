@@ -9,6 +9,8 @@ import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import getSlashDayMonthYear from "../../../../../../utils/dates/getSlashDayMonthYear";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RedirectLink from "../../../../../../components/RedirectLink";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
@@ -208,19 +210,19 @@ export default function AsyncBoleto({ modalData = {} }) {
             className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left"
         >
             <span className="text-em-1-5">Boleto Automático</span>
-            <br />É para já, {adminName && getFirstName(adminName)}!
+            <br />É pra já, {adminName && getFirstName(adminName)}!
             <br />
             Seu Boleto está sendo feito agora! Um momento, carregando...
         </section>
     );
 
     const showBoleto = () => (
-        <section className="container-center" style={{ marginBottom: "50px" }}>
+        <section className="container-center" style={{ marginBottom: "30px" }}>
             <h1 className="animated fadeInDown delay-3s text-nowrap text-purple font-weight-bold text-subtitle text-left">
                 Prontinho!
             </h1>
             <Card
-                className="position-relative mt-0 mb-5 animated fadeInUp normal shadow-elevation"
+                className="position-relative mt-0 animated fadeInUp normal shadow-elevation"
                 style={styles.card}
                 elevation={false}
             >
@@ -232,10 +234,42 @@ export default function AsyncBoleto({ modalData = {} }) {
         </section>
     );
 
+    const showNotesAndCTA = () => (
+        <section className="mt-4 text-left mx-3" style={{ marginBottom: 100 }}>
+            <p className="text-purple text-left text-subtitle font-weight-bold m-0">
+                Notas <FontAwesomeIcon icon="info-circle" />
+            </p>
+            <p className="text-small text-left text-purple mt-3">
+                - A aprovação de pagamento por boleto acontece normalmente no{" "}
+                <strong>dia útil seguinte</strong> ou até{" "}
+                <strong>72 horas</strong>.
+                <br />
+                <br />- Você é <strong>notificado</strong> assim que o pagamento
+                estiver aprovado e seu <strong>plano atualizado</strong>.
+            </p>
+            <div className="container-center mt-5">
+                <RedirectLink
+                    toDashTab="Pro"
+                    pendingMsg="Indo para sessão Pro..."
+                >
+                    <ButtonFab
+                        size="large"
+                        title="Ir para Histórico"
+                        onClick={null}
+                        backgroundColor={"var(--themeSDark--default)"}
+                        variant="extended"
+                        position="relative"
+                    />
+                </RedirectLink>
+            </div>
+        </section>
+    );
+
     return (
         <Fragment>
             {showTitle()}
             {processing ? showMsgProcessing() : showBoleto()}
+            {!processing && showNotesAndCTA()}
             <ShowPayWatermarks needAnima={false} />
         </Fragment>
     );

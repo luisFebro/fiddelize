@@ -60,55 +60,6 @@ export default function AsyncCardsList() {
 
     const params = { userId: businessId, skip };
 
-    // const list = [
-    //     {
-    //         barcode: "03399853012970000079619467101010784030000072000",
-    //         createdAt: "2020-10-06T15:02:40.173Z",
-    //         investAmount: "720.00",
-    //         ordersStatement: {currPlan: {amount: 4, price: 720}},
-    //         payDueDate: "2020-10-09",
-    //         paymentCategory: "boleto",
-    //         paymentLink: "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=02628c7427cedc0785b76a449eb74f5bd8776d352c1662e474c5f963a4dd273fca67122e19f74a1f",
-    //         paymentMethod: "boleto santander",
-    //         planDueDate: "2022-10-06T15:08:03.820Z",
-    //         reference: "OU-Q4-A-9FSL3T5",
-    //         renewal: {priorRef: "OU-Q4-A-86QJC5Z", currRef: "OU-Q4-A-9FSL3T5", priorDaysLeft: 365, isPaid: true},
-    //         transactionStatus: "em disputa",
-    //         updatedAt: "2020-10-06T21:07:50.000Z",
-    //         _id: "5f7c87103a90e7080c1e14ac",
-    //     },
-    //     {
-    //         barcode: "03399853012970000079618993101015184030000072000",
-    //         createdAt: "2020-10-06T14:43:15.759Z",
-    //         investAmount: "720.00",
-    //         ordersStatement: {currPlan: {amount: 4, price: 720}},
-    //         payDueDate: "2020-10-09",
-    //         paymentCategory: "boleto",
-    //         paymentLink: "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=bf496edeb9c2476eb07ff6563ebca1272b167c912963b4d00ae5b054e879eeb9aa3886f0f20b3b11",
-    //         paymentMethod: "boleto santander",
-    //         // planDueDate: "2022-10-06T15:08:03.820Z",
-    //         reference: "OU-Q4-A-86QJC5Z",
-    //         renewal: {priorRef: "OU-Q4-A-86QJC5Z", currRef: "OU-Q4-A-9FSL3T5", priorDaysLeft: 365, isOldCard: true, isPaid: true},
-    //         transactionStatus: "em disputa",
-    //         updatedAt: "2020-10-06T21:07:50.000Z",
-    //         _id: "5f7c8283fb3d391368e1d2dd",
-    //     },
-    //     {
-    //         barcode: "03399853012970000078820393701014483970000002500",
-    //         createdAt: "2020-09-30T18:57:42.968Z",
-    //         investAmount: "25.00",
-    //         ordersStatement: {"Prêmmios Clientes": {amount: 4, price: 720}},
-    //         payDueDate: "2020-10-03",
-    //         paymentCategory: "boleto",
-    //         paymentLink: "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=07911e23602053d23cb9008fbce9f709a5d8abfed3896e7fbb4718781ad776053ef892b9188a2674",
-    //         paymentMethod: "boleto santander",
-    //         planDueDate: "2020-11-05T08:06:27.888Z",
-    //         reference: "BR-Q1-M-5384JHV",
-    //         transactionStatus: "pago",
-    //         updatedAt: "2020-10-01T06:08:38.000Z",
-    //         _id: "5f74d5265ca00800177488a9",
-    //     }
-    // ]
     const {
         list,
         loading,
@@ -288,4 +239,57 @@ const showSearchBar = () => (
 
 /* COMMENTS
 n1: <span> does not work with alignments and lineheight, only <p> elemnets...
+*/
+
+/* ARCHIVES
+const list = [
+    {
+        barcode: "03399853012970000079619467101010784030000072000",
+        createdAt: "2020-10-06T15:02:40.173Z",
+        investAmount: "720.00",
+        ordersStatement: {currPlan: {amount: 4, price: 720}},
+        payDueDate: "2020-10-09",
+        paymentCategory: "boleto",
+        paymentLink: "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=02628c7427cedc0785b76a449eb74f5bd8776d352c1662e474c5f963a4dd273fca67122e19f74a1f",
+        paymentMethod: "boleto santander",
+        planDueDate: "2022-10-06T15:08:03.820Z",
+        reference: "OU-Q4-A-9FSL3T5",
+        renewal: {priorRef: "OU-Q4-A-86QJC5Z", currRef: "OU-Q4-A-9FSL3T5", priorDaysLeft: 365, isPaid: true},
+        transactionStatus: "em disputa",
+        updatedAt: "2020-10-06T21:07:50.000Z",
+        _id: "5f7c87103a90e7080c1e14ac",
+    },
+    {
+        barcode: "03399853012970000079618993101015184030000072000",
+        createdAt: "2020-10-06T14:43:15.759Z",
+        investAmount: "720.00",
+        ordersStatement: {currPlan: {amount: 4, price: 720}},
+        payDueDate: "2020-10-09",
+        paymentCategory: "boleto",
+        paymentLink: "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=bf496edeb9c2476eb07ff6563ebca1272b167c912963b4d00ae5b054e879eeb9aa3886f0f20b3b11",
+        paymentMethod: "boleto santander",
+        // planDueDate: "2022-10-06T15:08:03.820Z",
+        reference: "OU-Q4-A-86QJC5Z",
+        renewal: {priorRef: "OU-Q4-A-86QJC5Z", currRef: "OU-Q4-A-9FSL3T5", priorDaysLeft: 365, isOldCard: true, isPaid: true},
+        transactionStatus: "em disputa",
+        updatedAt: "2020-10-06T21:07:50.000Z",
+        _id: "5f7c8283fb3d391368e1d2dd",
+    },
+    {
+        barcode: "03399853012970000078820393701014483970000002500",
+        createdAt: "2020-09-30T18:57:42.968Z",
+        investAmount: "25.00",
+        ordersStatement: {"Prêmmios Clientes": {amount: 4, price: 720}},
+        payDueDate: "2020-10-03",
+        paymentCategory: "boleto",
+        paymentLink: "https://pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=07911e23602053d23cb9008fbce9f709a5d8abfed3896e7fbb4718781ad776053ef892b9188a2674",
+        paymentMethod: "boleto santander",
+        planDueDate: "2020-11-05T08:06:27.888Z",
+        reference: "BR-Q1-M-5384JHV",
+        transactionStatus: "pago",
+        updatedAt: "2020-10-01T06:08:38.000Z",
+        _id: "5f74d5265ca00800177488a9",
+    }
+]
+
 */
