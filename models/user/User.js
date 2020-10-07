@@ -9,6 +9,7 @@ const {
     // PendingRegistersSchema,
     DefaultFilterSchema,
     OrdersSchema,
+    BizPlanListSchema,
 } = require("./schemes");
 
 // GENERAL SCHEMAS
@@ -109,13 +110,6 @@ const regulationData = {
 };
 const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true does  not work as a subdocument
 
-const PayServicesList = {
-    func: { type: String, enum: ["orgganize_clients", "proccure_clients"] }, // funcName_local
-    expires: Date,
-    period: { type: Number, enum: [30, 360] }, // monthly or yearly
-};
-const PayServicesListSchema = new Schema(PayServicesList, { _id: true });
-
 // where_what_description
 const onceCheckedData = {
     cliAdminDash_feature_proSearch: Boolean, // avoid declare default false to not declare unessary fields to DB.
@@ -156,10 +150,9 @@ const clientAdminData = {
     bizPlan: {
         type: String,
         default: "gratis",
-        enum: ["gratis", "bronze", "prata", "ouro"],
+        enum: ["gratis", "bronze", "prata", "ouro"], // 3 paid version and 1 free version
     },
-    payActiveId: String, // NOT IMPLEMENTED uniqueId_nextExpiresDate
-    payServiceList: PayServicesListSchema,
+    bizPlanList: [BizPlanListSchema],
     // end premium plans
 
     // address

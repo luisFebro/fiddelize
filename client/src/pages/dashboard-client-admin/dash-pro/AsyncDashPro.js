@@ -1,9 +1,8 @@
 import React, { Fragment } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import InvestHistory from "./investments-history/InvestHistory";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import ShowConfigExpansiblePanel from './expansible-panel/ShowExpansiblePanel';
-// import BottomActionBtns from './BottomActionBtns';
+import PlanAndServicesArea from "./PlanAndServicesArea";
+import AdminFidelidometro from "./admin-fidelidometro/AdminFidelidometro";
 
 const DashProTitle = <Title />;
 
@@ -13,6 +12,8 @@ export default function AsyncDashPro() {
             <div style={{ marginTop: "16px", display: "block" }}>
                 <DashSectionTitle title={DashProTitle} />
             </div>
+            <PlanAndServicesArea />
+            <AdminFidelidometro />
             <InvestHistory />
         </Fragment>
     );

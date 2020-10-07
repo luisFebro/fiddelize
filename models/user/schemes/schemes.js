@@ -91,12 +91,34 @@ const ordersData = {
 const OrdersSchema = new Schema(ordersData, { _id: true });
 // END ORDERS
 
+// BIZ PLAN
+const bizPlanListData = {
+    plan: { type: String, enum: ["ouro", "prata", "bronze"] },
+    service: {
+        type: String,
+        enum: [
+            "Novvos Clientes",
+            "Envvio Whatsapp",
+            "Orgganize Clientes",
+            "Prêmmios Clientes",
+        ],
+    }, // funcName_local
+    creditStart: { type: Number, default: 10 }, // base to calculate the creditEnd. Minimum value is from the value of free register.
+    creditEnd: Number, // max limit
+    usageTimeEnd: Date,
+    history: Array, // record cred, period, value, date
+    periodicity: { type: String, enum: ["monthly", "yearly"] }, // monthly or yearly
+};
+const BizPlanListSchema = new Schema(bizPlanListData, { _id: true });
+// END BIZ PLAN
+
 module.exports = {
     SmsHistorySchema,
     SmsAutomationSchema,
     // PendingRegistersSchema,
     DefaultFilterSchema,
     OrdersSchema,
+    BizPlanListSchema,
 };
 
 // CLIENTS HISTORY

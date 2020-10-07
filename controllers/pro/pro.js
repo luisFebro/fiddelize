@@ -4,7 +4,7 @@ const User = require("../../models/user/User");
 exports.isUserProAlready = (req, res) => {
     const { userId } = req.query;
     User.findById(userId)
-        .select("clientAdminData.orders")
+        .select("clisentAdminData.orders")
         .exec((err, data) => {
             if (err || !data)
                 return res.status(404).json({ error: "something went wrong" });

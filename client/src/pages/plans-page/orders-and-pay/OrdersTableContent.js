@@ -51,8 +51,8 @@ export default function OrdersTableContent({
             mesmo quando o prazo de seu plano terminar. Você precisa renovar seu
             plano para novos clintes.
             <br />
-            <br />- As quantidades disponíveis em cada serviço{" "}
-            <strong>não são acumulativas</strong>.
+            <br />- Os créditos disponíveis em cada serviço{" "}
+            <strong>não são acumulativos</strong>.
             <br />
             <br />- Você pode renovar seu plano mesmo durante sua ativação. Por
             exemplo, se renovar um plano mensal por mais 1 mês, logo você terá

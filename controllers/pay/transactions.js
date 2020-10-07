@@ -9,12 +9,12 @@ const {
     getPaymentMethod,
 } = require("./helpers/getTypes");
 const { getNewPlanDays } = require("./helpers/getNewPlanDays");
-
 const {
     getDataChunk,
     getChunksTotal,
 } = require("../../utils/array/getDataChunk");
 const addDays = require("date-fns/addDays");
+const getCurrPlan = require("../pro/helpers/getCurrPlan");
 
 const { payUrl, sandboxMode, email, token } = globalVar;
 
@@ -26,11 +26,7 @@ Note que a notificação não possui nenhuma informação sobre a transação.
 const RELEASE_DATE_SPAN = 15; // 15 or 30 days on PagSeguro
 const paymentReleaseDate = addDays(new Date(), RELEASE_DATE_SPAN);
 
-const isPaid = (currStatus) =>
-    currStatus === "pago" ||
-    currStatus === "disponível" ||
-    currStatus === 1 ||
-    currStatus === 4;
+const getPaidStatus = (currStatus) => currStatus === "pago"; // || currStatus === "disponível" available can trigger twice a function...
 
 const handlePlanDueDate = (
     currStatus,
@@ -41,8 +37,8 @@ const handlePlanDueDate = (
 ) => {
     const trigger =
         !doc.planDueDate ||
-        (isPaid(currStatus) && !doc.planDueDate) ||
-        (isPaid(currStatus) && isCurrRenewal);
+        (getPaidStatus(currStatus) && !doc.planDueDate) ||
+        (getPaidStatus(currStatus) && isCurrRenewal);
 
     const addedDays = totalRenewalDays
         ? totalRenewalDays
@@ -86,12 +82,14 @@ const getPagNotify = (req, res) => {
                     const mainRef = reference;
 
                     const currStatus = getTransactionStatusTypes(status);
+                    const isPaid = getPaidStatus(currStatus);
+
                     let thisDueDate;
                     Order.findOne({ reference }).exec((err, doc) => {
-                        if (err)
+                        if (err || !doc)
                             return res
                                 .status(500)
-                                .json(msgG("error.systemError", err));
+                                .json({ error: "order not found!" });
 
                         const isCurrRenewal = doc && doc.isCurrRenewal;
                         const totalRenewalDays = doc && doc.totalRenewalDays;
@@ -118,10 +116,11 @@ const getPagNotify = (req, res) => {
                         // doc.markModified("clientAdminData");
                         const clientAdminId = doc.clientAdmin.id;
                         doc.save((err) => {
-                            User.findOne({ _id: clientAdminId })
-                                .select("clientAdminData.orders")
-                                .exec((err, data2) => {
+                            User.findOne({ _id: clientAdminId }).exec(
+                                (err, data2) => {
                                     let orders = data2.clientAdminData.orders;
+                                    let currBizPlanList =
+                                        data2.clientAdminData.bizPlanList;
 
                                     const modifiedOrders = orders.map(
                                         (targetOr) => {
@@ -136,7 +135,7 @@ const getPagNotify = (req, res) => {
                                                 : targetOr.reference ===
                                                   mainRef;
                                             if (condition) {
-                                                if (currStatus === "pago") {
+                                                if (isPaid) {
                                                     const {
                                                         renewal,
                                                     } = targetOr;
@@ -150,7 +149,7 @@ const getPagNotify = (req, res) => {
                                                 }
 
                                                 if (
-                                                    isPaid(currStatus) &&
+                                                    isPaid &&
                                                     targetOr.reference ===
                                                         priorRef
                                                 ) {
@@ -172,16 +171,46 @@ const getPagNotify = (req, res) => {
                                             return targetOr;
                                         }
                                     );
+
+                                    if (isPaid) {
+                                        const currPlan = getCurrPlan(
+                                            currBizPlanList,
+                                            { mainRef }
+                                        );
+                                        // change status to pro version
+                                        data2.clientAdminData.bizPlan = currPlan;
+
+                                        // insert services in the bizPlanList
+                                        const newBizPlanList = [
+                                            {
+                                                plan: currPlan,
+                                                service: "Novvos Clientes",
+                                                creditStart: 10,
+                                                creditEnd: 100,
+                                                periodicity: "yearly",
+                                                expiryDate: new Date(),
+                                            },
+                                        ];
+                                        data2.clientAdminData.bizPlanList = currBizPlanList
+                                            ? [
+                                                  ...currBizPlanList,
+                                                  ...newBizPlanList,
+                                              ]
+                                            : [...newBizPlanList];
+                                        // send successful pay notification to user
+                                    }
+
                                     data2.clientAdminData.orders = modifiedOrders;
-                                    // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-                                    // orders.markModified("clientAdminData.orders");
+                                    // modifying an array requires we need to manual tell the mongoose the it is modified. All document is updated reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+                                    // data2.markModified("clientAdminData");
                                     data2.save((err) => {
                                         res.json({
                                             msg:
                                                 "both agent and cliAdmin updated on db",
                                         });
                                     });
-                                });
+                                }
+                            );
                         });
                     });
                 } else {
