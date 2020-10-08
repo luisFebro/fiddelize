@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import InvestHistory from "./investments-history/InvestHistory";
 import PlanAndServicesArea from "./PlanAndServicesArea";
-import AdminFidelidometro from "./admin-fidelidometro/AdminFidelidometro";
 
 const DashProTitle = <Title />;
 
@@ -13,7 +12,6 @@ export default function AsyncDashPro() {
                 <DashSectionTitle title={DashProTitle} />
             </div>
             <PlanAndServicesArea />
-            <AdminFidelidometro />
             <InvestHistory />
         </Fragment>
     );
@@ -23,9 +21,9 @@ function Title() {
     return (
         <Fragment>
             <span className="text-subtitle  font-weight-bold">
-                Club Pro
+                CLUB PRO
                 <br />
-                Fiddelize
+                FIDDELIZE
             </span>
         </Fragment>
     );

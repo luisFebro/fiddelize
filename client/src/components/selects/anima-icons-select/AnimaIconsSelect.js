@@ -35,11 +35,9 @@ const getStyles = () => ({
 });
 
 const handleTrigger = (dataArray, options = {}) => {
-    const { selected, isUserPro } = options;
+    const { selected, isPro } = options;
 
-    const reverseBrOnlyOptions = dataArray(isUserPro).map(
-        (rev) => rev.reverseBr
-    );
+    const reverseBrOnlyOptions = dataArray(isPro).map((rev) => rev.reverseBr);
     const needSkipReverse = gotArrayThisItem(reverseBrOnlyOptions, selected);
 
     if (needSkipReverse) return false;
@@ -47,10 +45,10 @@ const handleTrigger = (dataArray, options = {}) => {
 };
 
 const handleNeedEmptyOption = (dataArray, options = {}) => {
-    const { selected, isUserPro } = options;
+    const { selected, isPro } = options;
 
     const emptyOptions = [];
-    dataArray(isUserPro).forEach((emp) => {
+    dataArray(isPro).forEach((emp) => {
         if (emp.showEmptyOption === true) {
             emptyOptions.push(emp.reverseBr);
         }
@@ -90,17 +88,17 @@ export default function AnimaIconsSelect({
         isReversed,
     } = data;
 
-    const { isUserPro } = usePro({ feature: "orgganize_clients" });
+    const { isPro } = usePro({ feature: "orgganize_clients" });
 
     const styles = getStyles();
 
     const needEmptyOpt = handleNeedEmptyOption(optionsArray, {
         selected,
-        isUserPro,
+        isPro,
     });
     const needTriggerOffData = handleTrigger(optionsArray, {
         selected,
-        isUserPro,
+        isPro,
     });
     const { offlineData, loading: loadingOffline } = useOfflineData({
         dataName: offlineKey,
@@ -121,7 +119,7 @@ export default function AnimaIconsSelect({
             thisSelected = selected;
         }
 
-        const foundElem = optionsArray(isUserPro).find(
+        const foundElem = optionsArray(isPro).find(
             (opt) => opt.titleBr === thisSelected
         );
         if (foundElem && alreadyOffline.current) {
@@ -180,11 +178,11 @@ export default function AnimaIconsSelect({
             className={`${panel ? "d-block animated fadeIn" : "d-none"}`}
             id="options"
         >
-            {optionsArray(isUserPro).map((opt) => (
+            {optionsArray(isPro).map((opt) => (
                 <div
                     key={opt.title}
                     className={`option ${
-                        isUserPro || !opt.isPro ? "" : "disabled-link"
+                        isPro || !opt.isPro ? "" : "disabled-link"
                     }`}
                 >
                     <input
@@ -205,7 +203,7 @@ export default function AnimaIconsSelect({
                     {opt.Icon}
                     <span
                         style={{
-                            color: isUserPro || !opt.isPro ? undefined : "grey",
+                            color: isPro || !opt.isPro ? undefined : "grey",
                         }}
                         className="label text-small font-weight-bold"
                     >
@@ -214,7 +212,7 @@ export default function AnimaIconsSelect({
                     <span className="opt-val text-small font-weight-bold">
                         {opt.titleBr}
                     </span>
-                    {!isUserPro && opt.isPro && (
+                    {!isPro && opt.isPro && (
                         <div
                             className="position-absolute ml-3 font-weight-bold text-small text-black"
                             style={styles.proBadge}

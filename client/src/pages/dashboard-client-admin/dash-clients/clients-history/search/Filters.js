@@ -14,7 +14,7 @@ import DateRangeIcon from "@material-ui/icons/DateRange";
 import EventIcon from "@material-ui/icons/Event";
 
 // do not include btn styling for free options...
-const mainOptions = (isUserPro) => [
+const mainOptions = (isPro) => [
     {
         titleBr: "Ordem Alfabética A-Z",
         title: "alphabeticOrder",
@@ -49,7 +49,7 @@ const mainOptions = (isUserPro) => [
         showEmptyOption: false,
         reverse: null,
         isPro: true,
-        Icon: <CakeIcon style={{ color: isUserPro ? undefined : "grey" }} />,
+        Icon: <CakeIcon style={{ color: isPro ? undefined : "grey" }} />,
     },
     {
         titleBr: "Clientes Fãs (compram mais)",
@@ -58,7 +58,7 @@ const mainOptions = (isUserPro) => [
         reverse: "buyLessCustomers",
         showEmptyOption: true,
         isPro: true,
-        Icon: <LoyaltyIcon style={{ color: isUserPro ? undefined : "grey" }} />,
+        Icon: <LoyaltyIcon style={{ color: isPro ? undefined : "grey" }} />,
     },
     {
         titleBr: "Maiores Valores por Compra",
@@ -68,9 +68,7 @@ const mainOptions = (isUserPro) => [
         showEmptyOption: true,
         isPro: true,
         Icon: (
-            <MonetizationOnIcon
-                style={{ color: isUserPro ? undefined : "grey" }}
-            />
+            <MonetizationOnIcon style={{ color: isPro ? undefined : "grey" }} />
         ),
     },
     {
@@ -80,13 +78,11 @@ const mainOptions = (isUserPro) => [
         reverse: "firstPurchases",
         showEmptyOption: true,
         isPro: true,
-        Icon: (
-            <LocalMallIcon style={{ color: isUserPro ? undefined : "grey" }} />
-        ),
+        Icon: <LocalMallIcon style={{ color: isPro ? undefined : "grey" }} />,
     },
 ];
 
-const periodOptions = (isUserPro) => [
+const periodOptions = (isPro) => [
     {
         titleBr: "Tudo",
         title: "all",
@@ -112,7 +108,7 @@ const periodOptions = (isUserPro) => [
         reverse: null,
         showEmptyOption: null,
         isPro: true,
-        Icon: <EventIcon style={{ color: isUserPro ? undefined : "grey" }} />,
+        Icon: <EventIcon style={{ color: isPro ? undefined : "grey" }} />,
     },
     {
         titleBr: "Mês atual",
@@ -121,7 +117,7 @@ const periodOptions = (isUserPro) => [
         reverse: null,
         showEmptyOption: null,
         isPro: true,
-        Icon: <EventIcon style={{ color: isUserPro ? undefined : "grey" }} />,
+        Icon: <EventIcon style={{ color: isPro ? undefined : "grey" }} />,
     },
     {
         titleBr: "Ano atual",
@@ -130,7 +126,7 @@ const periodOptions = (isUserPro) => [
         reverse: null,
         showEmptyOption: null,
         isPro: true,
-        Icon: <EventIcon style={{ color: isUserPro ? undefined : "grey" }} />,
+        Icon: <EventIcon style={{ color: isPro ? undefined : "grey" }} />,
     },
 ];
 

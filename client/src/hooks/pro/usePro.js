@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useClientAdmin } from "../useRoleData";
+import React, { useEffect } from "react";
+import { useAppSystem, useClientAdmin } from "../useRoleData";
+import useAPI, { getProData } from "../api/useAPI";
 
 export default function usePro(options = {}) {
     const { feature } = options;
 
-    const [data, setData] = useState({
-        isUserPro: false,
-    });
-    const { isUserPro } = data;
-
+    const { businessId } = useAppSystem();
     const { bizPlan } = useClientAdmin();
 
-    useEffect(() => {
-        if (bizPlan !== "gratis") {
-            setData({
-                isUserPro: true,
-                // bizPlan,
-            });
-        }
-    }, [bizPlan]);
+    const { data, loading } = useAPI({
+        url: getProData(businessId),
+        dataName: "proData",
+    });
 
     return {
-        isUserPro,
+        loading,
+        isPro: data ? data.isPro : bizPlan,
+        plan: data && data.plan,
+        totalScore: data && data.totalScore,
     };
 }

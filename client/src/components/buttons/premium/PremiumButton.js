@@ -21,8 +21,8 @@ export default function PremiumButton({
     const [trigger, setTrigger] = useState(false);
     const [waveOn, setWaveOn] = useState(false);
 
-    let { isProUser } = usePro();
-    isProUser = false;
+    let { isPro } = usePro();
+    isPro = false;
 
     const { gotData, loading } = useStorage({ key: proFeature, trigger });
 
@@ -93,7 +93,7 @@ export default function PremiumButton({
     );
 
     return (
-        !isProUser && (
+        !isPro && (
             <section className="animated fadeIn delay-2s">
                 {showPremiumBtn()}
                 <ModalFullContent

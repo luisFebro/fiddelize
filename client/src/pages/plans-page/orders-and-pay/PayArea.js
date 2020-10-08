@@ -6,10 +6,7 @@ import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import { getVar } from "../../../hooks/storage/useVar";
 import { getServiceSKU } from "../../../utils/string/getSKUCode.js";
-import useAPI, {
-    startCheckout,
-    isUserProAlready,
-} from "../../../hooks/api/useAPI";
+import useAPI, { startCheckout, getProData } from "../../../hooks/api/useAPI";
 import PayBtn from "./modal-pay/PayBtn";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
@@ -63,9 +60,12 @@ export default function PayArea({
 
     const { bizCodeName } = useClientAdmin();
     const { _id, phone, name: userName, email: senderEmail } = useProfile();
-    const { data: isUserPro, loading: proLoading } = useAPI({
-        url: isUserProAlready(_id),
+    const { data: dataPro, loading: proLoading } = useAPI({
+        url: getProData(_id),
+        dataName: "proData",
     });
+
+    const isUserPro = !proLoading && dataPro.isPro;
 
     const dispatch = useStoreDispatch();
 

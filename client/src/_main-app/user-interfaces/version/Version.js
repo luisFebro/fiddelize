@@ -4,10 +4,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.59.4";
+const latestVersion = "3.5902.4";
 // PRÓXIMO:
 //
-const updateDescription = "club pro - cards de transação e design pt48";
+const updateDescription = "club pro - cards de transação e design pt49";
 const history = [
     "sistema de renovação",
     "página de planos",

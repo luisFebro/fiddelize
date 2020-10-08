@@ -31,6 +31,8 @@ function analysePlanType(bizPlanList) {
 const getCurrPlan = (bizPlanList, options = {}) => {
     const { mainRef } = options;
 
+    if (!mainRef) return;
+
     const [planCode] = mainRef.split("-");
     const currPlan = getBrPlan(planCode);
 

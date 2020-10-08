@@ -81,8 +81,8 @@ export default function QuickRegister({ formPayload }) {
     const [smsDisabled, setSmsDisabled] = useState(false);
     const AsyncNoCredits = <Async />;
 
-    let { isUserPro } = usePro();
-    isUserPro = false;
+    let { isPro } = usePro();
+    isPro = false;
     // useEffect(() => {
     //     if(formPayload) {
     //         const { name: thisName, phone, email } = formPayload;
@@ -247,7 +247,7 @@ export default function QuickRegister({ formPayload }) {
                             needTxtNoWrap={true}
                             title="Enviar"
                             height="60px"
-                            disabled={isUserPro ? false : true}
+                            disabled={isPro ? false : true}
                             onClick={() => handleNumberCTA("whatsapp")}
                             backgroundColor={"var(--themeSDark--default)"}
                             iconMu={<WhatsAppIcon style={muStyle} />}

@@ -1,6 +1,7 @@
 import React from "react";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import convertToReal from "../../../../utils/numbers/convertToReal";
 
 const getStyles = () => ({
     root: {
@@ -19,10 +20,9 @@ const getStyles = () => ({
     },
 });
 
-export default function AdminFidelidometro() {
+export default function AdminFidelidometro({ loading, totalScore }) {
     const styles = getStyles();
-
-    const totalInvest = 500;
+    totalScore = convertToReal(totalScore);
 
     const showScore = () => (
         <section className="container-center">
@@ -34,7 +34,7 @@ export default function AdminFidelidometro() {
                     display: "table",
                 }}
             >
-                {totalInvest} pontos
+                {totalScore ? totalScore : "..."} pontos
             </div>
         </section>
     );

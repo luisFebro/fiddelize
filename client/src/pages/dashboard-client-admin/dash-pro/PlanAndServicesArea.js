@@ -2,6 +2,8 @@ import React, { Fragment } from "react";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import RedirectLink from "../../../components/RedirectLink";
+import AdminFidelidometro from "./admin-fidelidometro/AdminFidelidometro";
+import usePro from "../../../hooks/pro/usePro";
 
 const getStyles = () => ({
     muStyle: {
@@ -16,14 +18,10 @@ export default function PlanAndServicesArea() {
 
     const PlusIcon = <AddCircleOutlineIcon style={styles.muStyle} />;
 
-    let loading = false;
-    let currPlan = "ouro";
-    let period = "anual";
-    currPlan = !loading && currPlan.cap();
-    period = !loading && period.cap();
+    let { loading, plan: currPlan, totalScore } = usePro();
+    currPlan = !loading && currPlan && currPlan.cap();
 
     const isFree = currPlan === "gratis";
-    const adminName = "Febro";
 
     const showClubCTA = () => {
         const getCTABtn = (to, title, noIcon = false) => (
@@ -45,8 +43,8 @@ export default function PlanAndServicesArea() {
                 {isFree ? (
                     <Fragment>
                         <div className="my-5 text-purple text-subtitle font-weight-bold text-center">
-                            {adminName}, vamos entrar para o club pro e começar
-                            a conquistar mais clientes?
+                            Vamos entrar para o club pro e começar a conquistar
+                            mais clientes?
                         </div>
                         <div className="container-center my-5">
                             {getCTABtn(
@@ -76,11 +74,11 @@ export default function PlanAndServicesArea() {
             <div className="text-subtitle font-weight-bold text-purple">
                 Versão {isFree ? "Atual" : "Pro"}:
                 <span className="d-block text-em-1-7">
-                    {isFree ? "" : "Plano"} {currPlan}
+                    {isFree ? "" : "Plano"} {currPlan ? currPlan : "..."}
                 </span>
-                <span className="d-block text-em-1-4">{!isFree && period}</span>
             </div>
             {showClubCTA()}
+            <AdminFidelidometro loading={loading} totalScore={totalScore} />
         </section>
     );
 }

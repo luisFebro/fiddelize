@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isUserProAlready } = require("../controllers/pro/pro.js");
+const { getProData } = require("../controllers/pro/pro.js");
 
 // const { mwIsAuth } = require("../controllers/auth");
 
@@ -10,7 +10,7 @@ const { isUserProAlready } = require("../controllers/pro/pro.js");
 // } = require("../controllers/user");
 
 // @ routes api/pro/...
-router.get("/pro-member-check", isUserProAlready);
+router.get("/pro-member-data", getProData);
 
 // router.param("userId", mwUserId);
 

@@ -50,5 +50,5 @@ export const finishCheckout = () => `/api/pay/transparent-checkout/finish`; // P
 export const readTransactionHistory = () => `/api/pay/transactions/history`; // GET
 
 // PRO
-export const isUserProAlready = (userId) =>
-    `/api/pro/pro-member-check?userId=${userId}`; // POST
+export const getProData = (userId) =>
+    `/api/pro/pro-member-data?userId=${userId}`; // POST
