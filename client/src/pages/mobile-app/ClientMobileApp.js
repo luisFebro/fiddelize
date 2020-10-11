@@ -1,32 +1,37 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
-import React, { useRef, useEffect, useState, Fragment } from 'react';
-import AsyncLogin from '../../components/auth/AsyncLogin';
-import { Link, withRouter } from 'react-router-dom';
-import { useStoreDispatch } from 'easy-peasy';
-import RadiusBtn from '../../components/buttons/RadiusBtn';
-import {CLIENT_URL} from '../../config/clientUrl';
-import lStorage, { needAppRegisterOp } from '../../utils/storage/lStorage';
-import AsyncRegisterCliUser from '../../components/auth/AsyncRegisterCliUser';
-import { useProfile, useClientAdmin, useClientUser } from '../../hooks/useRoleData';
-import { logout } from '../../redux/actions/authActions';
-import { updateUser, countField } from '../../redux/actions/userActions';
-import { setRun } from '../../hooks/useRunComp';
-import { useAuthUser } from '../../hooks/useAuthUser';
-import { useAppSystem } from '../../hooks/useRoleData';
-import { useRunComp } from '../../hooks/useRunComp';
-import ClientUserAppContent from './content/ClientUserAppContent';
-import selectTxtStyle from '../../utils/biz/selectTxtStyle';
-import isThisApp from '../../utils/window/isThisApp';
-import AsyncBellNotifBtn from '../../components/notification/AsyncBellNotifBtn';
+import React, { useRef, useEffect, useState, Fragment } from "react";
+import AsyncLogin from "../../components/auth/AsyncLogin";
+import { Link, withRouter } from "react-router-dom";
+import { useStoreDispatch } from "easy-peasy";
+import RadiusBtn from "../../components/buttons/RadiusBtn";
+import { CLIENT_URL } from "../../config/clientUrl";
+import lStorage, { needAppRegisterOp } from "../../utils/storage/lStorage";
+import AsyncRegisterCliUser from "../../components/auth/AsyncRegisterCliUser";
+import {
+    useProfile,
+    useClientAdmin,
+    useClientUser,
+} from "../../hooks/useRoleData";
+import { logout } from "../../redux/actions/authActions";
+import { updateUser, countField } from "../../redux/actions/userActions";
+import { setRun } from "../../hooks/useRunComp";
+import { useAuthUser } from "../../hooks/useAuthUser";
+import { useAppSystem } from "../../hooks/useRoleData";
+import { useRunComp } from "../../hooks/useRunComp";
+import ClientUserAppContent from "./content/ClientUserAppContent";
+import selectTxtStyle from "../../utils/biz/selectTxtStyle";
+import isThisApp from "../../utils/window/isThisApp";
+import AsyncBellNotifBtn from "../../components/notification/AsyncBellNotifBtn";
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
-import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
-import useDelay from '../../hooks/useDelay';
-import useCount from '../../hooks/useCount';
-import CompLoader from '../../components/CompLoader';
-import useBackColor from '../../hooks/useBackColor';
-import useCountNotif from '../../hooks/notification/useCountNotif';
-import useImg, { Img } from '../../hooks/media/useImg';
+import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
+import useDelay from "../../hooks/useDelay";
+import useCount from "../../hooks/useCount";
+import CompLoader from "../../components/CompLoader";
+import useBackColor from "../../hooks/useBackColor";
+import useCountNotif from "../../hooks/notification/useCountNotif";
+import useImg, { Img } from "../../hooks/media/useImg";
+import useManageProServices from "../../hooks/pro/useManageProServices";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -41,6 +46,8 @@ function ClientMobileApp({ location, history }) {
         logoFid: "",
     });
 
+    useManageProServices();
+
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
     const { _id, role, name } = useProfile();
@@ -49,15 +56,26 @@ function ClientMobileApp({ location, history }) {
         selfBizLogoImg,
         selfThemePColor,
         selfThemeSColor,
-        selfThemeBackColor, } = useClientAdmin();
+        selfThemeBackColor,
+    } = useClientAdmin();
     const { currScore } = useClientUser();
 
-    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: "app_biz_logo" })
-    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: "app_fiddelize_logo" })
+    const logoBiz = useImg(url.logoBiz, {
+        trigger: url.logoBiz,
+        coll: "logos",
+        key: "app_biz_logo",
+    });
+    const logoFid = useImg(url.logoFid, {
+        trigger: url.logoFid,
+        coll: "logos",
+        key: "app_fiddelize_logo",
+    });
 
-    const shapeSrc = useImg(`/img/shapes/blob-app-start--${selfThemePColor}.svg`, { coll: "shapes", key: `app_start_shape_${selfThemePColor}` })
+    const shapeSrc = useImg(
+        `/img/shapes/blob-app-start--${selfThemePColor}.svg`,
+        { coll: "shapes", key: `app_start_shape_${selfThemePColor}` }
+    );
     const logoSrc = logoBiz ? logoBiz : logoFid;
-
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
@@ -71,51 +89,53 @@ function ClientMobileApp({ location, history }) {
     const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
 
     useEffect(() => {
-        if(role === "cliente") {
-            countField(_id, { field: "clientUserData.totalVisits" })
+        if (role === "cliente") {
+            countField(_id, { field: "clientUserData.totalVisits" });
         }
-    }, [_id, role])
+    }, [_id, role]);
 
     useEffect(() => {
-        if(runName === "logout") {
+        if (runName === "logout") {
             history.push("/mobile-app");
         }
-    }, [runName])
+    }, [runName]);
 
     useEffect(() => {
-        if(needAppRegister) {
+        if (needAppRegister) {
             setLoginOrRegister("register");
-            lStorage("setItem", {...needAppRegisterOp, value: false})
+            lStorage("setItem", { ...needAppRegisterOp, value: false });
         }
-    }, [needAppRegister])
+    }, [needAppRegister]);
 
-    const needClientLogo = (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
+    const needClientLogo =
+        (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
     const handleLogoSrc = () => {
-        if(needClientLogo) {
+        if (needClientLogo) {
             return setUrl({ ...url, logoBiz: selfBizLogoImg });
         } else {
             return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
         }
-    }
+    };
     useEffect(() => {
         handleLogoSrc();
-    }, [needClientLogo])
+    }, [needClientLogo]);
 
     const showLogo = () => {
-        const isSquared = isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const isSquared =
+            isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
 
-        return(
+        return (
             <div className="container-center">
                 <Img
                     src={logoSrc}
                     className="animated zoomIn slow"
-                    style={{position: 'relative', margin: '15px 0'}}
+                    style={{ position: "relative", margin: "15px 0" }}
                     width={isSquared ? 100 : 190}
                     height={isSquared ? 100 : 85}
                 />
             </div>
         );
-    }
+    };
 
     const showLogin = () => (
         <CompLoader
@@ -124,11 +144,9 @@ function ClientMobileApp({ location, history }) {
             comp={
                 <div
                     className="container-center position-relative"
-                    style={{top: roleWhichDownloaded ? -78 : 10 }}
+                    style={{ top: roleWhichDownloaded ? -78 : 10 }}
                 >
-                    <AsyncLogin
-                        setLoginOrRegister={setLoginOrRegister}
-                    />
+                    <AsyncLogin setLoginOrRegister={setLoginOrRegister} />
                 </div>
             }
         />
@@ -140,13 +158,14 @@ function ClientMobileApp({ location, history }) {
                 className="mx-2 mt-3 text-normal font-weight-bold text-center text-white"
                 style={{ marginBottom: 100 }}
             >
-                Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de compras feito para você!
+                Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de
+                compras feito para você!
             </p>
             <CompLoader
                 width={200}
                 height={300}
                 comp={
-                    <div className="position-relative" style={{top: -120}}>
+                    <div className="position-relative" style={{ top: -120 }}>
                         <AsyncRegisterCliUser
                             setLoginOrRegister={setLoginOrRegister || true}
                             needLoginBtn={needLoginBtn}
@@ -158,47 +177,57 @@ function ClientMobileApp({ location, history }) {
     );
 
     const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
-    const gotEmptyData = typeof role === "object" && selfThemePColor === "default";
-    const conditionShowAppBubble = (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) || gotEmptyData
-    const showAppType = () => (
-        conditionShowAppBubble &&
-        <div className="container-center">
-            <div className="position-relative" style={{top: -55, marginTop: 90, marginBottom: 40}}>
+    const gotEmptyData =
+        typeof role === "object" && selfThemePColor === "default";
+    const conditionShowAppBubble =
+        (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) ||
+        gotEmptyData;
+    const showAppType = () =>
+        conditionShowAppBubble && (
+            <div className="container-center">
                 <div
-                    style={{animationIterationCount: 1}}
-                    className="animated rubberBand delay-1s"
+                    className="position-relative"
+                    style={{ top: -55, marginTop: 90, marginBottom: 40 }}
                 >
-                    <Img
-                        src={shapeSrc}
-                        width={460}
-                        needLoader={false}
-                        height={130}
-                        alt="tipo de app"
-                    />
+                    <div
+                        style={{ animationIterationCount: 1 }}
+                        className="animated rubberBand delay-1s"
+                    >
+                        <Img
+                            src={shapeSrc}
+                            width={460}
+                            needLoader={false}
+                            height={130}
+                            alt="tipo de app"
+                        />
+                    </div>
+                    <p
+                        style={{
+                            zIndex: 100,
+                            top: "25px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                        }}
+                        className="text-center text-white position-absolute text-shadow"
+                    >
+                        <span
+                            className="position-relative text-subtitle font-weight-bold"
+                            style={{ left: -25 }}
+                        >
+                            App
+                        </span>
+                        <br />
+                        <span className="text-title text-nowrap">
+                            do{" "}
+                            {roleWhichDownloaded === "cliente-admin" ||
+                            isUrlAdmin
+                                ? "Admin"
+                                : "Cliente"}
+                        </span>
+                    </p>
                 </div>
-                <p
-                    style={{zIndex: 100, top: '25px', left: '50%', transform: 'translateX(-50%)'}}
-                    className="text-center text-white position-absolute text-shadow"
-                >
-                    <span
-                        className="position-relative text-subtitle font-weight-bold"
-                        style={{left: -25}}
-                    >
-                        App
-                    </span>
-                    <br />
-                    <span
-                        className="text-title text-nowrap"
-                    >
-                        do {
-                            (roleWhichDownloaded === "cliente-admin" || isUrlAdmin)
-                            ? "Admin" : "Cliente"
-                        }
-                    </span>
-                </p>
             </div>
-        </div>
-    );
+        );
 
     const showNotificationBell = () => (
         <div className="container-center">
@@ -206,8 +235,14 @@ function ClientMobileApp({ location, history }) {
                 position="relative"
                 top={-60}
                 left={0}
-                notifBorderColor={"var(--themeBackground--" + selfThemeBackColor + ")"}
-                notifBackColor={selfThemeBackColor === "red" ? "var(--themePLight--black)" : "var(--expenseRed)"}
+                notifBorderColor={
+                    "var(--themeBackground--" + selfThemeBackColor + ")"
+                }
+                notifBackColor={
+                    selfThemeBackColor === "red"
+                        ? "var(--themePLight--black)"
+                        : "var(--expenseRed)"
+                }
                 badgeValue={totalNotifications}
             />
         </div>
@@ -215,21 +250,28 @@ function ClientMobileApp({ location, history }) {
 
     const handleConnectedStatusClick = () => {
         setRun(dispatch, "goDash");
-    }
+    };
 
     const handleLogout = () => {
         logout(dispatch);
-    }
+    };
 
     const showConnectedStatus = () => (
         <div
             className="position-relative my-5 container-center-col text-white text-normal text-center"
-            style={{top: -68}}
+            style={{ top: -68 }}
         >
-            <span className={`${selectTxtStyle(selfThemeBackColor)} font-weight-bold`}>
+            <span
+                className={`${selectTxtStyle(
+                    selfThemeBackColor
+                )} font-weight-bold`}
+            >
                 Conectado por
-                <br/>
-                <strong className="text-title animated bounce">{name ? name : "..."}</strong><br />
+                <br />
+                <strong className="text-title animated bounce">
+                    {name ? name : "..."}
+                </strong>
+                <br />
             </span>
             <div className="container-center mt-4">
                 <Link
@@ -239,7 +281,9 @@ function ClientMobileApp({ location, history }) {
                 >
                     <RadiusBtn
                         title="acessar"
-                        backgroundColor={'var(--themeSDark--' + selfThemeSColor + ')'}
+                        backgroundColor={
+                            "var(--themeSDark--" + selfThemeSColor + ")"
+                        }
                     />
                 </Link>
                 <span>
@@ -253,19 +297,24 @@ function ClientMobileApp({ location, history }) {
         </div>
     );
 
-    const conditionRegister = loginOrRegister === "register" && showRegister(true)
-    const conditionLogin = loginOrRegister === "login" && showLogin()
+    const conditionRegister =
+        loginOrRegister === "register" && showRegister(true);
+    const conditionLogin = loginOrRegister === "login" && showLogin();
 
-    let isCliAdminConnected = role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
+    let isCliAdminConnected =
+        role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
 
-    const isCliUserConnected = needAppForCliAdmin || role === "cliente" || roleWhichDownloaded === "cliente";
-    if(needAppForCliAdmin) {
+    const isCliUserConnected =
+        needAppForCliAdmin ||
+        role === "cliente" ||
+        roleWhichDownloaded === "cliente";
+    if (needAppForCliAdmin) {
         isCliAdminConnected = false;
     }
 
     return (
         <div
-            style={{overflowX: 'hidden'}}
+            style={{ overflowX: "hidden" }}
             className={`theme-back--${selfThemeBackColor}`}
         >
             <span className="text-right text-white for-version-test">{""}</span>

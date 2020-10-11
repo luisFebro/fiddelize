@@ -76,21 +76,21 @@ const proVersion = (styles) => [
     {
         name: "Envvio Whatsapp",
         price: {
-            yearly: 60,
-            monthly: 30,
+            yearly: 56,
+            monthly: 28,
         },
         silver: {
             name: "Envvio Whatsapp",
             price: {
-                yearly: 50,
-                monthly: 25,
+                yearly: 46,
+                monthly: 23,
             },
         },
         gold: {
             name: "Envvio Whatsapp",
             price: {
-                yearly: 40,
-                monthly: 20,
+                yearly: 36,
+                monthly: 18,
             },
         },
         Icon: <WhatsAppIcon style={styles.muStyle} />,
@@ -103,21 +103,21 @@ const proVersion = (styles) => [
     {
         name: "Orgganize Clientes",
         price: {
-            yearly: 70,
-            monthly: 35,
+            yearly: 62,
+            monthly: 31,
         },
         silver: {
             name: "Orgganize Clientes",
             price: {
-                yearly: 60,
-                monthly: 30,
+                yearly: 52,
+                monthly: 26,
             },
         },
         gold: {
             name: "Orgganize Clientes",
             price: {
-                yearly: 50,
-                monthly: 25,
+                yearly: 42,
+                monthly: 21,
             },
         },
         Icon: (

@@ -1,8 +1,14 @@
 import React, { Fragment } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
-
+import { Load } from "../../components/code-splitting/LoadableComp";
 // LAYOUT
 import Navbar from "../../components/_layout/navbar";
+
+// COMPONENTS
+import SnackbarRedux from "../../components/Snackbar";
+import LinearProgress from "../../components/loadingIndicators/LinearProgress";
+import PrivateRouteAdm from "../../components/auth/routes/PrivateRouteAdm";
+import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
 // PAGES
 import LoginPage from "../../pages/auth/LoginPage"; // is it necessarybecauseit is only usedthe login compo inmobile app
@@ -17,13 +23,14 @@ import PlansPage from "../../pages/plans-page/PlansPage";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
-//END PAGES
+const AsyncFixDatePage = Load({
+    loader: () =>
+        import(
+            "../../pages/AsyncFixDatePage" /* webpackChunkName: "fix-date-page-lazy" */
+        ),
+});
 
-// COMPONENTS
-import SnackbarRedux from "../../components/Snackbar";
-import LinearProgress from "../../components/loadingIndicators/LinearProgress";
-import PrivateRouteAdm from "../../components/auth/routes/PrivateRouteAdm";
-import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
+//END PAGES
 
 // This is the msg to be displayed for desktop users when popping up the
 // new screen right after the download.
@@ -77,12 +84,17 @@ function Mobile({ location }) {
                     exact
                     component={DashboardClientAdmin}
                 />
+                <Route path="/pedidos/admin" exact component={OrdersAndPay} />
                 <Route
                     path="/temporariamente-indisponivel-503"
                     exact
                     component={UnavailableService}
                 />
-                <Route path="/pedidos/admin" exact component={OrdersAndPay} />
+                <Route
+                    path="/conserte-data"
+                    exact
+                    component={AsyncFixDatePage}
+                />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

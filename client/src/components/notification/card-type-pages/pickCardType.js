@@ -1,10 +1,17 @@
-import React from 'react';
+import React from "react";
+import { Load } from "../../../components/code-splitting/LoadableComp";
 // CARD TYPES
-import Welcome from './types/Welcome';
-import FiddelizeSystem from './types/FiddelizeSystem';
-import BirthdayGreeting from './types/BirthdayGreeting';
-import BirthdaysInWeek from './types/BirthdaysInWeek';
-import Challenge from './types/Challenge';
+import Welcome from "./types/Welcome";
+import FiddelizeSystem from "./types/FiddelizeSystem";
+import BirthdayGreeting from "./types/BirthdayGreeting";
+import BirthdaysInWeek from "./types/BirthdaysInWeek";
+import Challenge from "./types/Challenge";
+const AsyncProPay = Load({
+    loader: () =>
+        import(
+            "./types/ProPay" /* webpackChunkName: "picked-notif-page-lazy" */
+        ),
+});
 // END CARD TYPES
 
 export default function pickCardType(cardType, options = {}) {
@@ -23,21 +30,42 @@ export default function pickCardType(cardType, options = {}) {
     const defaultProps = { brief, role, mainImg, bizName, userName };
 
     const chooseBirthday = () => {
-        if(subtype === "greeting") return <BirthdayGreeting {...defaultProps} bizLogo={bizLogo} content={content} />;
-        if(subtype === "weeklyReport") return <BirthdaysInWeek {...defaultProps} />;
-    }
-
+        if (subtype === "greeting")
+            return (
+                <BirthdayGreeting
+                    {...defaultProps}
+                    bizLogo={bizLogo}
+                    content={content}
+                />
+            );
+        if (subtype === "weeklyReport")
+            return <BirthdaysInWeek {...defaultProps} />;
+    };
 
     const typeList = {
         welcome: <Welcome {...defaultProps} bizLogo={bizLogo} />,
-        challenge: <Challenge {...defaultProps} senderId={senderId} subtype={subtype} content={content} />,
-        system: <FiddelizeSystem {...defaultProps} subtype={subtype} content={content} />,
+        challenge: (
+            <Challenge
+                {...defaultProps}
+                senderId={senderId}
+                subtype={subtype}
+                content={content}
+            />
+        ),
+        system: (
+            <FiddelizeSystem
+                {...defaultProps}
+                subtype={subtype}
+                content={content}
+            />
+        ),
         birthday: chooseBirthday(),
-    }
+        pro: <AsyncProPay {...defaultProps} subtype={subtype} />,
+    };
 
     const pickComp = () => {
         return typeList[cardType];
-    }
+    };
 
     return pickComp;
 }

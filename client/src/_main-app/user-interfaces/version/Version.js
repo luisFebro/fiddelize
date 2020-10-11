@@ -4,11 +4,12 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.5902.4";
+const latestVersion = "3.61.4";
 // PRÓXIMO:
 //
-const updateDescription = "club pro - cards de transação e design pt49";
+const updateDescription = "sistema e design de notificação pro pt1";
 const history = [
+    "club pro - cards de transação e design",
     "sistema de renovação",
     "página de planos",
     "sistema de pagamento PAGSEGURO - boleto automático",

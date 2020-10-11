@@ -75,11 +75,6 @@ const finishCheckout = (req, res, next) => {
         senderName = "captain great",
         senderEmail = "captainGreat@sandbox.pagseguro.com.br",
         firstDueDate = "2020-10-08",
-        ordersStatement,
-        filter,
-        renewalReference,
-        renewalDaysLeft,
-        renewalCurrDays,
         shippingAddressStreet,
         shippingAddressDistrict,
         shippingAddressState,
@@ -90,6 +85,11 @@ const finishCheckout = (req, res, next) => {
         shippingAddressComplement,
         shippingType,
         shippingCost,
+        ordersStatement,
+        filter,
+        renewalReference,
+        renewalDaysLeft,
+        renewalCurrDays,
     } = req.body;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
 

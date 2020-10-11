@@ -55,7 +55,8 @@ function Navbar({ history, location }) {
     const isBlackList =
         locationNow.includes("baixe-app") ||
         locationNow.includes("planos") ||
-        locationNow.includes("pedidos");
+        locationNow.includes("pedidos") ||
+        locationNow.includes("conserte-data");
 
     const btnLogout = () => (
         <button

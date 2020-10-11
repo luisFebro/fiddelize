@@ -52,3 +52,7 @@ export const readTransactionHistory = () => `/api/pay/transactions/history`; // 
 // PRO
 export const getProData = (userId) =>
     `/api/pro/pro-member-data?userId=${userId}`; // POST
+export const getNextExpiryDate = (userId) =>
+    `/api/pro/service/next-expiry-date?userId=${userId}`; // GET
+export const removeServices = (userId) =>
+    `/api/pro/service/remove?userId=${userId}`; // DELETE

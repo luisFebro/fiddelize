@@ -1,8 +1,4 @@
-const getBrPlan = (planCode) => {
-    if (planCode === "OU") return "ouro";
-    if (planCode === "PR") return "prata";
-    if (planCode === "BR") return "bronze";
-};
+const getReferenceData = require("./getReferenceData");
 
 function analysePlanType(bizPlanList) {
     let res = "";
@@ -33,8 +29,7 @@ const getCurrPlan = (bizPlanList, options = {}) => {
 
     if (!mainRef) return;
 
-    const [planCode] = mainRef.split("-");
-    const currPlan = getBrPlan(planCode);
+    const { planBr: currPlan } = getReferenceData(mainRef);
 
     if (!bizPlanList) return currPlan;
     if (currPlan === "ouro") return currPlan;

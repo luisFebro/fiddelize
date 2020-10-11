@@ -1,11 +1,11 @@
-import React from 'react';
-import Card from '@material-ui/core/Card';
-import PropTypes from 'prop-types';
-import { useProfile, useClientAdmin } from '../../hooks/useRoleData';
-import useDelay from '../../hooks/useDelay';
-import { fromNow } from '../../utils/dates/dateFns';
-import getCardTypeData from './helpers/getCardTypeData';
-import CardActionBtn from './card-type-pages/CardActionBtn';
+import React from "react";
+import Card from "@material-ui/core/Card";
+import PropTypes from "prop-types";
+import { useProfile, useClientAdmin } from "../../hooks/useRoleData";
+import useDelay from "../../hooks/useDelay";
+import { fromNow } from "../../utils/dates/dateFns";
+import getCardTypeData from "./helpers/getCardTypeData";
+import CardActionBtn from "./card-type-pages/CardActionBtn";
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -13,30 +13,33 @@ NotifCard.propTypes = {
         "chatRequest", // future implementations...
         "welcome", // cliAdmin/cliUser (active)
         "challenge", // cliAdmin (active)
-        "birthday", // clieUser (active)
+        "birthday", // clieUser (active) / cliAdmin
+        "pro", // cliAdmin (active)
     ]),
     isCardNew: PropTypes.bool,
     createdAt: PropTypes.string,
     clicked: PropTypes.bool,
-}
+};
 
 const getStyles = ({ clicked, backColor, grayScaleReady }) => ({
     card: {
-        backgroundColor: !clicked ? 'var(--themePDark--' + backColor + ')' : 'grey',
-        overflow: 'visible',
+        backgroundColor: !clicked
+            ? "var(--themePDark--" + backColor + ")"
+            : "grey",
+        overflow: "visible",
     },
     newBadge: {
-        borderRadius: '40%',
-        padding: '0px 4px',
-        border: '3px solid var(--mainWhite)',
+        borderRadius: "40%",
+        padding: "0px 4px",
+        border: "3px solid var(--mainWhite)",
         background: "var(--niceUiYellow)",
-        color: 'var(--mainDark)',
-        animationDuration: '3s',
+        color: "var(--mainDark)",
+        animationDuration: "3s",
     },
     circularImg: {
         filter: clicked && grayScaleReady ? "grayscale(100%)" : "grayscale(0%)",
         transition: "filter 7s",
-    }
+    },
 });
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -56,7 +59,7 @@ function NotifCard({
 }) {
     const { name: userName, _id: userId } = useProfile();
     let { role } = useProfile();
-    if(forceCliUser) role = "cliente";
+    if (forceCliUser) role = "cliente";
 
     const { bizName } = useClientAdmin();
 
@@ -68,20 +71,18 @@ function NotifCard({
         <div className="time-stamp text-small text-white font-weight-bold">
             {fromNow(createdAt)}
         </div>
-    )
+    );
 
     const opts = { userName, bizName, role, content, subtype };
     const { title, brief, circularImg } = getCardTypeData(cardType, opts);
 
     const showTitle = () => (
-        <div className="title text-white text-normal m-0">
-            {title}
-        </div>
+        <div className="title text-white text-normal m-0">{title}</div>
     );
 
     const cardBrief = brief.replace(/§/gi, "");
-    const showCardDesc = cardType => {
-        return(
+    const showCardDesc = (cardType) => {
+        return (
             <section className="desc text-left text-white font-weight-bold">
                 <p className="brief mb-2 text-small">
                     {truncate(cardBrief, isSmall ? 52 : 75)}
@@ -108,15 +109,15 @@ function NotifCard({
         />
     );
 
-    const showNewCardBadge = () => (
-        isCardNew &&
-        <div
-            style={styles.newBadge}
-            className="font-weight-bold animated fadeInUp delay-3s delay-3s text-small text-center"
-        >
-            Novo
-        </div>
-    );
+    const showNewCardBadge = () =>
+        isCardNew && (
+            <div
+                style={styles.newBadge}
+                className="font-weight-bold animated fadeInUp delay-3s delay-3s text-small text-center"
+            >
+                Novo
+            </div>
+        );
 
     const showCircularImg = () => (
         <div
@@ -134,10 +135,7 @@ function NotifCard({
     );
 
     return (
-        <Card
-            className="mb-3"
-            style={styles.card}
-        >
+        <Card className="mb-3" style={styles.card}>
             <section className="notif-card--root position-relative">
                 {showTitle()}
                 <main className={`font-weight-bold text-normal text-center`}>
@@ -147,9 +145,7 @@ function NotifCard({
                 <section className="visual-assets position-absolute">
                     <div className="d-flex">
                         {showCircularImg()}
-                        <div>
-                            {showNewCardBadge()}
-                        </div>
+                        <div>{showNewCardBadge()}</div>
                     </div>
                 </section>
             </section>

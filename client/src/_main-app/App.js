@@ -1,29 +1,28 @@
-import React, { useEffect, Fragment } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import React, { useEffect, Fragment } from "react";
+import { BrowserRouter } from "react-router-dom";
 // import ScrollToTop from 'react-router-scroll-top';
-import isThisApp from '../utils/window/isThisApp';
-import isWebpSupported from '../utils/media/isWebpSupported';
-import deferJsOnload from '../utils/performance/deferJsOnload';
-import useOffline from '../hooks/useOffline';
-// REDUX
-import { useStoreDispatch } from 'easy-peasy';
-import { loadUser } from '../redux/actions/authActions';
-import { useRecoveryAndDataOffline } from '../hooks/roles-storage-and-data-recovery';
-import ReactGA from 'react-ga'; // google analytics
-import { IS_PROD } from '../config/clientUrl';
-import '../utils/globalHelpers';
+import isThisApp from "../utils/window/isThisApp";
+import isWebpSupported from "../utils/media/isWebpSupported";
+import deferJsOnload from "../utils/performance/deferJsOnload";
+import useOffline from "../hooks/useOffline";
+import { useRecoveryAndDataOffline } from "../hooks/roles-storage-and-data-recovery";
+import ReactGA from "react-ga"; // google analytics
+import { useStoreDispatch } from "easy-peasy";
+import { loadUser } from "../redux/actions/authActions";
+import { IS_PROD } from "../config/clientUrl";
+import "../utils/globalHelpers";
 //STYLING
-import './scss/App.scss';
-import './styles/bootstrap.selected.css';
-import './libraries/fontAwesomeLib';
+import "./scss/App.scss";
+import "./styles/bootstrap.selected.css";
+import "./libraries/fontAwesomeLib";
 //END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
 
 // UIs
-import AsyncWebsite from './user-interfaces/AsyncWebsite';
-import AsyncMobileApp from './user-interfaces/AsyncMobileApp';
+import AsyncWebsite from "./user-interfaces/AsyncWebsite";
+import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 //END UIs
-import useCustomerBirthdayToday from '../hooks/notification/useCustomerBirthdayToday';
+import useCustomerBirthdayToday from "../hooks/notification/useCustomerBirthdayToday";
 export default function App() {
     useRecoveryAndDataOffline();
     useOffline();
@@ -31,30 +30,34 @@ export default function App() {
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        isWebpSupported('lossy', (lossy, res) => res && console.log("This browser suppors webp image: " + res))
+        isWebpSupported(
+            "lossy",
+            (lossy, res) =>
+                res && console.log("This browser suppors webp image: " + res)
+        );
 
         const runGoogleAnalytics = () => {
-            const opts = { testMode: false }
+            const opts = { testMode: false };
             ReactGA.initialize(process.env.REACT_APP_GA_KEY, opts);
             ReactGA.pageview(window.location.pathname + window.location.search);
-        }
+        };
 
         IS_PROD && deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
-            'url',
+            "url",
             {
-                integrity: "sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh",
+                integrity:
+                    "sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh",
                 crossorigin: "anonymous",
-            });
-
-    }, [])
+            }
+        );
+    }, []);
 
     useEffect(() => {
         // loadReCaptcha();
         dispatch(loadUser(dispatch));
     }, [dispatch]);
-
 
     return (
         <BrowserRouter>

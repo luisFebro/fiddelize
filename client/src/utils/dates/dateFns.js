@@ -38,6 +38,7 @@ const fromNow = (pastDate, locale) =>
     formatDistance(new Date(pastDate), now, {
         addSuffix: true,
         locale: pick(locale),
+        includeSeconds: true,
     });
 // calendar needs a customformatlike ``{ sameElse: 'll'}`` in moment.
 const calendar = (date, locale) =>
@@ -52,7 +53,7 @@ const isScheduledDate = (targetDate, options = {}) => {
     if (!targetDate) return;
 
     const today = getPureParsedDate(new Date(), { minHour: true });
-    const scheduled = getPureParsedDate(targetDate, { isDashed: true });
+    const scheduled = getPureParsedDate(targetDate, { isDashed });
     if (today < scheduled) {
         return true;
     }

@@ -76,7 +76,7 @@ const RenewalSchema = new Schema(renewalData, { _id: false });
 const ordersData = {
     reference: String,
     investAmount: String,
-    ordersStatement: Object, // n1 e.g
+    ordersStatement: Object, // n1 e.g { amount: 4, price: 740 }
     barcode: String,
     transactionStatus: transStatusObj,
     paymentLink: String,
@@ -102,12 +102,12 @@ const bizPlanListData = {
             "Orgganize Clientes",
             "Prêmmios Clientes",
         ],
-    }, // funcName_local
-    creditStart: { type: Number, default: 10 }, // base to calculate the creditEnd. Minimum value is from the value of free register.
+    },
+    // creditStart: Number, // For simplification reason, all creditable services will have decrescenting count discount directly from the bizPlanList' s creditEnd
     creditEnd: Number, // max limit
     usageTimeEnd: Date,
-    history: Array, // record cred, period, value, date
-    periodicity: { type: String, enum: ["monthly", "yearly"] }, // monthly or yearly
+    renewalHistory: Array, // e.g { ref: 123, date: dateFormat }
+    periodicityBr: { type: String, enum: ["mensal", "anual"] }, // monthly or yearly
 };
 const BizPlanListSchema = new Schema(bizPlanListData, { _id: true });
 // END BIZ PLAN

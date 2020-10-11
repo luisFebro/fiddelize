@@ -1,5 +1,6 @@
 const User = require("../../models/user/User");
 const Order = require("../../models/order/Order");
+const Pricing = require("../../models/admin/Pricing");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 const xml2js = require("xml2js");
@@ -15,6 +16,12 @@ const {
 } = require("../../utils/array/getDataChunk");
 const addDays = require("date-fns/addDays");
 const getCurrPlan = require("../pro/helpers/getCurrPlan");
+const setCurrPlan = require("../pro/helpers/setCurrPlan");
+const {
+    handleProPlan,
+    handleModifiedOrders,
+} = require("./helpers/transactionHandlers");
+const { sendBackendNotification } = require("../notification");
 
 const { payUrl, sandboxMode, email, token } = globalVar;
 
@@ -66,159 +73,114 @@ const getPagNotify = (req, res) => {
         },
     };
 
-    axios(config)
-        .then((response) => {
-            const xml = response.data;
-            parser.parseString(xml, function (error, result) {
-                if (error === null) {
-                    const data = result.transaction;
+    async function runNotifTransactions() {
+        const response = await axios(config);
+        const xml = response.data;
 
-                    const [status] = data.status;
-                    const [reference] = data.reference;
-                    const [lastEventDate] = data.lastEventDate;
-                    const [paymentMethod] = data.paymentMethod;
-                    const [paymentMethodCode] = paymentMethod.code;
+        parser.parseString(xml, async function (error, result) {
+            if (error === null) {
+                const data = result.transaction;
 
-                    const mainRef = reference;
+                const [status] = data.status;
+                const [reference] = data.reference;
+                const [lastEventDate] = data.lastEventDate;
+                const [paymentMethod] = data.paymentMethod;
+                const [paymentMethodCode] = paymentMethod.code;
 
-                    const currStatus = getTransactionStatusTypes(status);
-                    const isPaid = getPaidStatus(currStatus);
+                const mainRef = reference;
 
-                    let thisDueDate;
-                    Order.findOne({ reference }).exec((err, doc) => {
-                        if (err || !doc)
-                            return res
-                                .status(500)
-                                .json({ error: "order not found!" });
+                const currStatus = getTransactionStatusTypes(status);
+                const isPaid = getPaidStatus(currStatus);
 
-                        const isCurrRenewal = doc && doc.isCurrRenewal;
-                        const totalRenewalDays = doc && doc.totalRenewalDays;
-                        thisDueDate = handlePlanDueDate(
-                            currStatus,
-                            doc,
-                            reference,
-                            isCurrRenewal,
-                            totalRenewalDays
-                        );
+                let thisDueDate;
 
-                        doc.planDueDate = thisDueDate; // I already modified future date on checkout for renewal.
-                        doc.paymentMethod = getPaymentMethod(paymentMethodCode);
-                        doc.updatedAt = lastEventDate;
-                        doc.transactionStatus = getTransactionStatusTypes(
-                            status
-                        );
-                        const payRelease = doc.paymentReleaseDate;
-                        doc.paymentReleaseDate = payRelease
-                            ? payRelease
-                            : paymentReleaseDate;
+                const doc = await Order.findOne({ reference });
+                if (!doc)
+                    return res.status(404).json({ error: "order not found!" });
 
-                        // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-                        // doc.markModified("clientAdminData");
-                        const clientAdminId = doc.clientAdmin.id;
-                        doc.save((err) => {
-                            User.findOne({ _id: clientAdminId }).exec(
-                                (err, data2) => {
-                                    let orders = data2.clientAdminData.orders;
-                                    let currBizPlanList =
-                                        data2.clientAdminData.bizPlanList;
+                const isCurrRenewal = doc && doc.isCurrRenewal;
+                const totalRenewalDays = doc && doc.totalRenewalDays;
 
-                                    const modifiedOrders = orders.map(
-                                        (targetOr) => {
-                                            const priorRef =
-                                                targetOr.renewal &&
-                                                targetOr.renewal.priorRef;
-                                            const condition = isCurrRenewal
-                                                ? targetOr.reference ===
-                                                      mainRef ||
-                                                  targetOr.reference ===
-                                                      priorRef
-                                                : targetOr.reference ===
-                                                  mainRef;
-                                            if (condition) {
-                                                if (isPaid) {
-                                                    const {
-                                                        renewal,
-                                                    } = targetOr;
-                                                    if (
-                                                        mainRef ===
-                                                        (renewal &&
-                                                            renewal.currRef)
-                                                    ) {
-                                                        targetOr.renewal.isPaid = true;
-                                                    }
-                                                }
+                thisDueDate = handlePlanDueDate(
+                    currStatus,
+                    doc,
+                    reference,
+                    isCurrRenewal,
+                    totalRenewalDays
+                );
 
-                                                if (
-                                                    isPaid &&
-                                                    targetOr.reference ===
-                                                        priorRef
-                                                ) {
-                                                    targetOr.planDueDate = undefined; // make the last card required to be renewal with no date to expire it.
-                                                } else {
-                                                    targetOr.planDueDate = thisDueDate;
-                                                }
+                doc.planDueDate = thisDueDate; // I already modified future date on checkout for renewal.
+                doc.paymentMethod = getPaymentMethod(paymentMethodCode);
+                doc.updatedAt = lastEventDate;
+                doc.transactionStatus = getTransactionStatusTypes(status);
+                const payRelease = doc.paymentReleaseDate;
+                doc.paymentReleaseDate = payRelease
+                    ? payRelease
+                    : paymentReleaseDate;
 
-                                                targetOr.paymentMethod = getPaymentMethod(
-                                                    paymentMethodCode
-                                                );
-                                                targetOr.transactionStatus = currStatus;
-                                                // targetOr.renewalHistory.transitionStatus
-                                                targetOr.updatedAt = lastEventDate;
+                const clientAdminId = doc.clientAdmin.id;
 
-                                                return targetOr;
-                                            }
+                await doc.save();
+                const allServices = await Pricing.find({});
+                if (!allServices)
+                    return res
+                        .status(500)
+                        .json({ error: "something went wrong with Pricing" });
 
-                                            return targetOr;
-                                        }
-                                    );
+                const data2 = await User.findOne({ _id: clientAdminId });
+                let orders = data2.clientAdminData.orders;
+                let currBizPlanList = data2.clientAdminData.bizPlanList;
 
-                                    if (isPaid) {
-                                        const currPlan = getCurrPlan(
-                                            currBizPlanList,
-                                            { mainRef }
-                                        );
-                                        // change status to pro version
-                                        data2.clientAdminData.bizPlan = currPlan;
-
-                                        // insert services in the bizPlanList
-                                        const newBizPlanList = [
-                                            {
-                                                plan: currPlan,
-                                                service: "Novvos Clientes",
-                                                creditStart: 10,
-                                                creditEnd: 100,
-                                                periodicity: "yearly",
-                                                expiryDate: new Date(),
-                                            },
-                                        ];
-                                        data2.clientAdminData.bizPlanList = currBizPlanList
-                                            ? [
-                                                  ...currBizPlanList,
-                                                  ...newBizPlanList,
-                                              ]
-                                            : [...newBizPlanList];
-                                        // send successful pay notification to user
-                                    }
-
-                                    data2.clientAdminData.orders = modifiedOrders;
-                                    // modifying an array requires we need to manual tell the mongoose the it is modified. All document is updated reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-                                    // data2.markModified("clientAdminData");
-                                    data2.save((err) => {
-                                        res.json({
-                                            msg:
-                                                "both agent and cliAdmin updated on db",
-                                        });
-                                    });
-                                }
-                            );
-                        });
+                const modifiedOrders = orders.map((targetOr) => {
+                    return handleModifiedOrders({
+                        targetOr,
+                        isCurrRenewal,
+                        mainRef,
+                        isPaid,
+                        thisDueDate,
+                        getPaymentMethod,
+                        paymentMethodCode,
+                        currStatus,
+                        lastEventDate,
                     });
-                } else {
-                    console.log(error);
+                });
+
+                if (isPaid) {
+                    handleProPlan({
+                        data2,
+                        getCurrPlan,
+                        currBizPlanList,
+                        mainRef,
+                        setCurrPlan,
+                        orders,
+                        allServices,
+                        thisDueDate,
+                        mainRef,
+                    });
+
+                    const gotPaidServices =
+                        currBizPlanList && currBizPlanList.length;
+                    const notifData = {
+                        cardType: "pro",
+                        subtype: gotPaidServices ? "proPay" : "welcomeProPay",
+                        recipient: { role: "cliente-admin", id: clientAdminId },
+                        content: `approvalDate:${new Date()};`,
+                    };
+
+                    await sendBackendNotification({ notifData });
                 }
-            });
-        })
-        .catch((e) => res.json(e.response.data));
+
+                data2.clientAdminData.orders = modifiedOrders;
+
+                await data2.save();
+                res.json({
+                    msg: "both agent and cliAdmin updated on db",
+                });
+            }
+        });
+    }
+
+    runNotifTransactions();
 };
 
 const readHistory = (req, res) => {
@@ -302,6 +264,156 @@ module.exports = {
 };
 
 /* ARCHIVES
+// axios(config)
+    //     .then((response) => {
+    //         const xml = response.data;
+    //         parser.parseString(xml, function (error, result) {
+    //             if (error === null) {
+    //                 const data = result.transaction;
+
+    //                 const [status] = data.status;
+    //                 const [reference] = data.reference;
+    //                 const [lastEventDate] = data.lastEventDate;
+    //                 const [paymentMethod] = data.paymentMethod;
+    //                 const [paymentMethodCode] = paymentMethod.code;
+
+    //                 const mainRef = reference;
+
+    //                 const currStatus = getTransactionStatusTypes(status);
+    //                 const isPaid = getPaidStatus(currStatus);
+
+    //                 let thisDueDate;
+    //                 Order.findOne({ reference }).exec((err, doc) => {
+    //                     if (err || !doc)
+    //                         return res
+    //                             .status(404)
+    //                             .json({ error: "order not found!" });
+
+    //                     const isCurrRenewal = doc && doc.isCurrRenewal;
+    //                     const totalRenewalDays = doc && doc.totalRenewalDays;
+
+    //                     thisDueDate = handlePlanDueDate(
+    //                         currStatus,
+    //                         doc,
+    //                         reference,
+    //                         isCurrRenewal,
+    //                         totalRenewalDays
+    //                     );
+
+    //                     doc.planDueDate = thisDueDate; // I already modified future date on checkout for renewal.
+    //                     doc.paymentMethod = getPaymentMethod(paymentMethodCode);
+    //                     doc.updatedAt = lastEventDate;
+    //                     doc.transactionStatus = getTransactionStatusTypes(
+    //                         status
+    //                     );
+    //                     const payRelease = doc.paymentReleaseDate;
+    //                     doc.paymentReleaseDate = payRelease
+    //                         ? payRelease
+    //                         : paymentReleaseDate;
+
+    //                     // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+    //                     // doc.markModified("clientAdminData");
+    //                     const clientAdminId = doc.clientAdmin.id;
+    //                     doc.save((err) => {
+    //                         Pricing.find({})
+    //                         .exec((err, allServices) => {
+    //                             if (err) return res.status(400).json({ error: "something went wrong"});
+
+    //                             User.findOne({ _id: clientAdminId }).exec(
+    //                                 (err, data2) => {
+    //                                     let orders = data2.clientAdminData.orders;
+    //                                     let currBizPlanList =
+    //                                         data2.clientAdminData.bizPlanList;
+
+    //                                     const modifiedOrders = orders.map(
+    //                                         (targetOr) => {
+    //                                             const priorRef =
+    //                                                 targetOr.renewal &&
+    //                                                 targetOr.renewal.priorRef;
+    //                                             const condition = isCurrRenewal
+    //                                                 ? targetOr.reference ===
+    //                                                       mainRef ||
+    //                                                   targetOr.reference ===
+    //                                                       priorRef
+    //                                                 : targetOr.reference ===
+    //                                                   mainRef;
+    //                                             if (condition) {
+    //                                                 if (isPaid) {
+    //                                                     const {
+    //                                                         renewal,
+    //                                                     } = targetOr;
+    //                                                     if (
+    //                                                         mainRef ===
+    //                                                         (renewal &&
+    //                                                             renewal.currRef)
+    //                                                     ) {
+    //                                                         targetOr.renewal.isPaid = true;
+    //                                                     }
+    //                                                 }
+
+    //                                                 if (
+    //                                                     isPaid &&
+    //                                                     targetOr.reference ===
+    //                                                         priorRef
+    //                                                 ) {
+    //                                                     targetOr.planDueDate = undefined; // make the last card required to be renewal with no date to expire it.
+    //                                                 } else {
+    //                                                     targetOr.planDueDate = thisDueDate;
+    //                                                 }
+
+    //                                                 targetOr.paymentMethod = getPaymentMethod(
+    //                                                     paymentMethodCode
+    //                                                 );
+    //                                                 targetOr.transactionStatus = currStatus;
+    //                                                 // targetOr.renewalHistory.transitionStatus
+    //                                                 targetOr.updatedAt = lastEventDate;
+
+    //                                                 return targetOr;
+    //                                             }
+
+    //                                             return targetOr;
+    //                                         }
+    //                                     );
+
+    //                                     if (isPaid) {
+    //                                         const currPlan = getCurrPlan(
+    //                                             currBizPlanList,
+    //                                             { mainRef }
+    //                                         );
+    //                                         // change status to pro version
+    //                                         data2.clientAdminData.bizPlan = currPlan;
+
+    //                                         // insert services in the bizPlanList
+    //                                         data2.clientAdminData.bizPlanList = setCurrPlan(
+    //                                             currBizPlanList,
+    //                                             orders,
+    //                                             { allServices, currPlan, usageTimeEnd: thisDueDate, ref: mainRef }
+    //                                         );
+    //                                         // send successful pay notification to user
+    //                                     }
+
+    //                                     data2.clientAdminData.orders = modifiedOrders;
+    //                                     // modifying an array requires we need to manual tell the mongoose the it is modified. All document is updated reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+    //                                     // data2.markModified("clientAdminData");
+    //                                     data2.save((err) => {
+    //                                         res.json({
+    //                                             msg:
+    //                                                 "both agent and cliAdmin updated on db",
+    //                                         });
+    //                                     });
+    //                                 }
+    //                             );
+    //                         });
+
+    //                     });
+    //                 });
+    //             } else {
+    //                 console.log(error);
+    //             }
+    //         });
+    //     })
+    //     .catch((e) => res.json(e.response.data));
+
 GET
 it is no longer needed because pagseguroro reads every transaction ans send notification about them in every transaction change
 const readTransaction = (req, res) => {

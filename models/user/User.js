@@ -20,6 +20,7 @@ const enumTypes = [
     "system", // cliAdmin/cliUser
     "chatRequest", // future implementations...
     "birthday", // cliAdmin/cliUser
+    "pro",
     // "newClientsToday", // cliAdmin (deactivated)
 ];
 
@@ -31,20 +32,28 @@ const enumSubtypes = [
     "weeklyReport",
     "greeting",
     // SYSTEM
-    "purchaseDetail",
     "newFeature",
-    "deadlineWarning",
     "lowBalanceWarning", // e.g sms usage is about to end..
     "promotion",
+    // PRO
+    "welcomeProPay", // backend
+    "proPay", // backend
+    "proNearExpiryDate", // frontend
+    "proExpiredDate", // frontend
 ];
 const notificationsData = {
     // recipient.id and senderId should be equal for all notifications from Fiddelize.
     // recipient: { id: String (REQUIRED), role: (REQUIRED){ type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
-    cardType: { required: true, type: String, enum: [...enumTypes] },
-    subtype: { type: String, enum: [...enumSubtypes] },
-    senderId: { required: true, type: String }, // for authorization verification and for chat request
-    senderName: { type: String, trim: true, lowercase: true }, // only for chat request
+    cardType: { required: true, type: String, enum: [...enumTypes] }, // *
+    subtype: { type: String, enum: [...enumSubtypes] }, // *
     content: { type: String }, // msgs for chat or infos about variable in such data format: key1:value1;key2:value2;
+    senderId: String, // for authorization verification and for chat request
+    senderName: {
+        default: "fiddelize",
+        type: String,
+        trim: true,
+        lowercase: true,
+    }, // only for chat request
     isCardNew: { type: Boolean, default: true }, // When user visualize notif page, a new badge will be show and then it will be update as false
     clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
     isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead

@@ -1,10 +1,11 @@
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 // e.g  *hello* (bold)
 export default function applyTextStyle(text, module, opts) {
     let newText = "";
-    if(!text) return "";
-    if(!module) return text;
+    if (!text) return "";
+    if (!module) return parse(text);
+
     const { fontSize } = opts;
 
     const regex = {
@@ -12,35 +13,33 @@ export default function applyTextStyle(text, module, opts) {
         italic: /~(.*?)~/gi,
         bold: /\*(.*?)\*/gi,
         fontSize: /§(.*?)§/gi, // exotic symbol to avoid usage from user which causes bug || prior: \%((\w|\s|[áéíóúâêôãç]|[!?@&+-,.;"'*$=º~´`()-_{/}])+)\%
-    }
+    };
 
     const newFormat = {
         center: "<center>$1</center>",
         italic: "<em>$1</em>",
         bold: `<strong>$1</strong>`,
         fontSize: `<span style="font-size:${fontSize};">$1</span>`, // LESSON2 !!! $1 refers to group 1 in the regex wrapped in parentheses.
-    }
+    };
 
     const thisRegex = regex[module];
     const thisNewFormat = newFormat[module];
     const arrayRes = text.match(thisRegex);
-    if(!arrayRes) return text;
-    arrayRes.forEach(res => {
+    if (!arrayRes) return text;
+    arrayRes.forEach((res) => {
         newText = text.replace(thisRegex, thisNewFormat);
-    })
+    });
 
     newText = parse(newText);
 
     return newText;
 }
 
-
 // e.g
 // const text = `Cliente §Cli-Admin§ concluíu desafio de §N.º 20§ e ganhou §Relogio-top%!!!§. Confirme o desafio abaixo.`
 // const res = applyTextStyle(text, "fontSize", {fontSize: "25px"});
 // console.log("res", res);
 // res =>>> Cliente <span style="font-size=25px">DESAFIO</span> concluíu desafio de <span style="font-size=25px">NUMERO</span> e ganhou <span style="font-size=25px">PRIZEDESC</span>. Confirme o desafio abaixo.
-
 
 /* COMMENTS
 n1: LESSON: it is not required to escape especial tokens if you are declaring them in a bracket like

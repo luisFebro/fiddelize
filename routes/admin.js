@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
     createOrUpdate,
@@ -8,7 +8,12 @@ const {
     updateConfig,
     checkVerificationPass,
     readVerificationPass,
-} = require('../controllers/admin');
+} = require("../controllers/central-admin/admin");
+
+const {
+    createOrUpdateService,
+    readServices,
+} = require("../controllers/central-admin/pricing");
 
 const { mwIsAdmin, mwIsClientAdmin } = require("../controllers/auth");
 const { mwUserId } = require("../controllers/user");
@@ -23,8 +28,11 @@ router.put("/business-info/update", updateBusinessInfo);
 router.get("/verification-pass/:userId", mwIsClientAdmin, readVerificationPass);
 router.post("/verification-pass", checkVerificationPass);
 
-router.param('adminId', mwAdminId);
-router.param('userId', mwUserId);
+router.get("/service/list", readServices);
+router.put("/service/pricing", createOrUpdateService);
+
+router.param("adminId", mwAdminId);
+router.param("userId", mwUserId);
 
 module.exports = router;
 

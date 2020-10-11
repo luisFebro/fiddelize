@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
-
+import { Load } from "../../components/code-splitting/LoadableComp";
 //LAYOUT
 import Navbar from "../../components/_layout/navbar";
 import Footer from "../../components/_layout/footer/Footer";
@@ -30,6 +30,13 @@ import RedirectLink from "../../pages/RedirectLink";
 import ClientAppPreview from "../../pages/mobile-app/ClientAppPreview";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
+const AsyncFixDatePage = Load({
+    loader: () =>
+        import(
+            "../../pages/AsyncFixDatePage" /* webpackChunkName: "fix-date-page-lazy" */
+        ),
+});
+
 //END PAGES
 
 function Website({ location }) {
@@ -86,12 +93,17 @@ function Website({ location }) {
                     exact
                     component={DashboardClientAdmin}
                 />
+                <Route path="/pedidos/admin" exact component={OrdersAndPay} />
                 <Route
                     path="/temporariamente-indisponivel-503"
                     exact
                     component={UnavailableService}
                 />
-                <Route path="/pedidos/admin" exact component={OrdersAndPay} />
+                <Route
+                    path="/conserte-data"
+                    exact
+                    component={AsyncFixDatePage}
+                />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

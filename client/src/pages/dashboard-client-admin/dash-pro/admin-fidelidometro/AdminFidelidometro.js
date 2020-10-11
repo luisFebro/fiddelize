@@ -1,7 +1,6 @@
 import React from "react";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import convertToReal from "../../../../utils/numbers/convertToReal";
+import AdminPrizesBtn from "./admin-prizes-modal/AdminPrizesBtn";
 
 const getStyles = () => ({
     root: {
@@ -12,11 +11,6 @@ const getStyles = () => ({
     score: {
         background: "#fff",
         borderRadius: 30,
-    },
-    icon: {
-        fontSize: "30px",
-        filter: "drop-shadow(.5px .5px 1px grey)",
-        color: "var(--mainWhite)",
     },
 });
 
@@ -34,24 +28,14 @@ export default function AdminFidelidometro({ loading, totalScore }) {
                     display: "table",
                 }}
             >
-                {totalScore ? totalScore : "..."} pontos
+                {totalScore ? totalScore || 0 : "..."} pontos
             </div>
         </section>
     );
 
     const showPrizeGalleryBtn = () => (
         <section className="my-3 container-center">
-            <ButtonFab
-                size="large"
-                title="Galeria Prêmios"
-                onClick={null}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant="extended"
-                position="relative"
-                iconFontAwesome={
-                    <FontAwesomeIcon icon="trophy" style={styles.icon} />
-                }
-            />
+            <AdminPrizesBtn />
         </section>
     );
 

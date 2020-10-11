@@ -68,7 +68,7 @@ export default function ButtonMulti({
     component = "button",
     variant = "contained",
     textNowrap = false,
-    textTransform = "capitalize",
+    textTransform = "uppercase",
     disabled,
     needParse = false,
     shadowColor = "black",
@@ -124,7 +124,7 @@ export default function ButtonMulti({
                 }
                 style={{
                     color: color ? color : undefined,
-                    textTransform: textTransform,
+                    textTransform,
                 }}
             >
                 {needParse ? parse(title) : title || children}

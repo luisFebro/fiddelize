@@ -38,7 +38,7 @@ const data = {
     filter: DefaultFilterSchema,
     planDueDate: Date,
     isCurrRenewal: Boolean, // identify if transaction is renewal on transaction.
-    totalRenewalDays: Number, // give the correct quantity of usage time for renewal
+    totalRenewalDays: Number, // includes the prior plan usage time if any, too. give the correct quantity of usage time for renewal
 };
 
 const orderSchema = new Schema(data, { timestamps: true });

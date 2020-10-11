@@ -52,7 +52,16 @@ export default function OrdersTableContent({
             plano para novos clintes.
             <br />
             <br />- Os créditos disponíveis em cada serviço{" "}
-            <strong>não são acumulativos</strong>.
+            <strong>são acumulativos apenas durante o tempo de uso</strong>.
+            Assim, quando um plano é renovado antes de expirar, você não perde
+            os créditos não usados e ganha um novo tempo de uso.
+            <br />
+            <br /> - Porém, quando o tempo de uso termina ou expira, todos os
+            créditos não usados <strong>são zerados automaticamente</strong> de
+            forma permanente.
+            <br />
+            <br /> - O cliente-admin é notificado <strong>5 dias</strong> antes
+            de expirar algum plano.
             <br />
             <br />- Você pode renovar seu plano mesmo durante sua ativação. Por
             exemplo, se renovar um plano mensal por mais 1 mês, logo você terá

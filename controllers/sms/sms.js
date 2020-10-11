@@ -297,9 +297,9 @@ exports.mwDiscountCredits = (req, res, next) => {
         });
 };
 
-exports.addCredits = (req, res) => {
-    //
-};
+// exports.addCredits = (req, res) => { // already implemented in the pro controller
+//     //
+// };
 
 // END SMS CREDITS
 
