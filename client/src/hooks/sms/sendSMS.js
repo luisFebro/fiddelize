@@ -36,8 +36,7 @@ export default function sendSMS({
 
             if (isAutomatic) {
                 const alreadySent = await didRunOnce(
-                    `autoSMS_${serviceType}_${(smsId =
-                        "")} // for automatic only`
+                    `autoSMS_${serviceType}_${(smsId = "")}` // for automatic only
                 );
                 if (alreadySent) return resolve("Already sent");
 

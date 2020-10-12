@@ -156,6 +156,9 @@ const clientAdminData = {
     bizWhatsapp: String,
 
     // premium plans
+    bizFreeCredits: {
+        NovvosClientes: { type: Number, default: 10 },
+    },
     bizPlan: {
         type: String,
         default: "gratis",

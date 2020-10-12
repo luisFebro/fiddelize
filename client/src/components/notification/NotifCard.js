@@ -84,7 +84,7 @@ function NotifCard({
     const showCardDesc = (cardType) => {
         return (
             <section className="desc text-left text-white font-weight-bold">
-                <p className="brief mb-2 text-small">
+                <p className="brief my-2 text-small">
                     {truncate(cardBrief, isSmall ? 52 : 75)}
                 </p>
                 {showDate()}

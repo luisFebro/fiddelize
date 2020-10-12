@@ -64,21 +64,33 @@ export default function getCardTypeData(cardType, options = {}) {
             }
             break;
         case "pro":
-            const { approvalDate } = extractStrData(content);
+            const { approvalDate, expiryDate } = extractStrData(content);
 
             if (subtype === "welcomeProPay") {
                 title = "Clube Pro";
                 brief = `Boas vindas do Clube Pro da Fiddelize! Você já pode usar os serviços Pro. O seu pagamento foi aprovado em ${
                     approvalDate && formatDMY(new Date(approvalDate))
                 }.`;
-                circularImg = "/img/icons/crown.svg";
+                circularImg = "/img/icons/notif/crown.svg";
             }
             if (subtype === "proPay") {
                 title = "Pagamento Aprovado";
                 brief = `Já está disponível os serviços investidos e aprovados no dia ${
                     approvalDate && formatDMY(new Date(approvalDate))
                 }.`;
-                circularImg = "/img/icons/crown.svg";
+                circularImg = "/img/icons/notif/crown-approval.svg";
+            }
+            if (subtype === "proNearExpiryDate") {
+                title = "Lembrete de Vencimento";
+                brief = `O plano ouro com 5 serviços vai expirar nos próximos dias. Você continua usando até ${
+                    expiryDate && formatDMY(new Date(expiryDate))
+                }`;
+                circularImg = "/img/icons/notif/crown-near-expired.svg";
+            }
+            if (subtype === "proExpiredDate") {
+                title = "Plano expirado";
+                brief = `Plano ouro com 5 serviços acabou de expirar. Lembrando que todos os seus clientes ainda continuam utilizando os apps normalmente, somente os serviços atuais são interrompidos.`;
+                circularImg = "/img/icons/notif/crown-expired.svg";
             }
             break;
         case "system":

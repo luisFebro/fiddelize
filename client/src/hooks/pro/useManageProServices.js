@@ -8,7 +8,45 @@ import { default as checkToday } from "date-fns/isToday";
 import { getVar, store } from "../../hooks/storage/useVar";
 import { isScheduledDate, addDays } from "../../utils/dates/dateFns";
 import { IS_PROD } from "../../config/clientUrl";
+import didRunOnce from "../../utils/storage/didRunOnce";
+import { sendNotification } from "../../redux/actions/notificationActions";
 
+/*
+MAKE A FUNCTION TO USE THIS AND PASS TO ORDER PAGE TO RENEWAL
+const daysLeft = getDatesCountdown(data.planDueDate, {
+            deadline: data.periodDays,
+        });
+
+async function setAllVars() {
+const readyVar = await Promise.all([
+setVar({
+    orders_clientAdmin: orders,
+}),
+setVar({
+    totalMoney_clientAdmin: investAmount,
+}),
+setVar({
+    planPeriod_clientAdmin: thisPeriod,
+}),
+setVar({
+    ordersPlan_clientAdmin: thisPlan,
+}),
+setVar({
+    renewalDaysLeft_clientAdmin: daysLeft,
+}),
+setVar({
+    renewalRef_clientAdmin: reference,
+}),
+]);
+
+setLoadingOrderPage(false);
+history.push("/pedidos/admin");
+}
+
+setAllVars();
+
+history.push("/pedidos/admin");
+ */
 export default function useManageProServices() {
     const [data, setData] = useState({
         isToday: null,
@@ -16,7 +54,6 @@ export default function useManageProServices() {
         isExpired: false,
     });
     const { isToday, userId, isExpired } = data;
-    console.log("isToday", isToday);
 
     const { data: nextExpiryDate } = useAPI({
         url: getNextExpiryDate(userId),
@@ -44,28 +81,65 @@ export default function useManageProServices() {
         );
     }, []);
 
-    useEffect(() => {
+    const checkForExpiryServices = async () => {
         if (nextExpiryDate) {
             const isServActive = isScheduledDate(nextExpiryDate);
+            const daysBeforeExpiringDate = addDays(
+                new Date(nextExpiryDate),
+                -10
+            );
 
-            if (!isServActive) {
-                setData({
-                    ...data,
-                    isExpired: true,
+            const needServPreExpiryAlert = !isScheduledDate(
+                daysBeforeExpiringDate
+            );
+            const needServExpiredDateAlert = !isScheduledDate(nextExpiryDate);
+
+            const alreadyNearNotified = await didRunOnce(
+                "pro_nearExpiryDate",
+                daysBeforeExpiringDate,
+                { trigger: needServPreExpiryAlert && isServActive }
+            );
+            if (needServPreExpiryAlert && !alreadyNearNotified) {
+                const totalServ = 5;
+                const planBr = "ouro";
+                const orders = JSON.stringify({});
+                const ref = "OU-Q5-1d3423e";
+
+                sendNotification(userId, "pro", {
+                    role: "cliente-admin",
+                    subtype: "proNearExpiryDate",
+                    content: `ref:${ref};totalServices:${totalServ};plan:${planBr};ordersStatement:${orders};expiryDate:${nextExpiryDate};`,
                 });
             }
 
-            const daysBeforeExpiringDate = addDays(new Date(), -5);
-            const alreadyNotified = false; // set the nextExpiryDate as the unique id to check alreadyNotified
-            if (isScheduledDate(nextExpiryDate) && !alreadyNotified) {
-                // notify user about expiration date
+            if (!isServActive) {
+                setData((prevData) => ({
+                    ...prevData,
+                    isExpired: true,
+                }));
+
+                const alreadyExpiryNotified = await didRunOnce(
+                    "pro_expiredDate",
+                    nextExpiryDate
+                );
+                if (needServExpiredDateAlert && !alreadyExpiryNotified) {
+                    sendNotification(userId, "pro", {
+                        role: "cliente-admin",
+                        subtype: "proExpiredDate",
+                        content: ``,
+                    });
+                }
             }
         }
+    };
+
+    useEffect(() => {
+        checkForExpiryServices();
     }, [nextExpiryDate]);
 
     useEffect(() => {
-        if (isToday === false && userId) {
-            // IS_PROD after testing. fix date redirection will only applied on production env.
+        // fix date redirection will only applied on production env.
+        if (isToday === false && userId && IS_PROD) {
             window.location.href = "/conserte-data";
         }
     }, [isToday, userId]);

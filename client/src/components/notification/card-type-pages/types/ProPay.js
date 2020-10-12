@@ -23,17 +23,14 @@ export default function ProPay({
     subtype,
 }) {
     const isProPayOnly = subtype === "proPay";
+    const isWelcomeProPay = subtype === "welcomeProPay";
+    const isExpiredDate = subtype === "proExpiredDate";
+    const isNearExpiryDate = subtype === "proNearExpiryDate";
 
     // useCount("ProPay");
     const showMainIllustration = () => (
         <Fragment>
-            {isProPayOnly ? (
-                <ShowIllustration
-                    role={role}
-                    mainImg={mainImg}
-                    bizLogo={bizLogo}
-                />
-            ) : (
+            {isWelcomeProPay ? (
                 <img
                     className="img-center"
                     src="/img/illustrations/club-pro-welcome.svg"
@@ -41,21 +38,50 @@ export default function ProPay({
                     height="auto"
                     width="90%"
                 />
+            ) : (
+                <ShowIllustration
+                    role={role}
+                    mainImg={mainImg}
+                    bizLogo={bizLogo}
+                />
             )}
         </Fragment>
     );
 
+    const handleTitle = () => {
+        if (isNearExpiryDate) return "Lembrete de Vencimento";
+        if (isExpiredDate) return "Plano Expirado";
+        return isProPayOnly ? "Pagamento Aprovado" : "Club Pro";
+    };
+
+    const handleBtnTitle = () => {
+        if (isNearExpiryDate || isExpiredDate) return "Renovar plano";
+        return "Ir para painel";
+    };
+
     return (
         <section>
-            <ShowTitle
-                text={isProPayOnly ? "Pagamento Aprovado" : "Club Pro"}
-            />
+            <ShowTitle text={handleTitle()} />
             {showMainIllustration()}
             <ShowBrief brief={brief} />
-            <p className={`${textStyle} mt-y font-weight-bold`}>
-                Agradecemos a sua preferência!
-            </p>
-            <ShowActionBtn role={role} titleCliAdmin="Ir para painel" />
+            {isExpiredDate && (
+                <p className={`${textStyle} mt-y font-weight-bold`}>
+                    Renove, continue usando e cadastre mais clientes!
+                </p>
+            )}
+            {isNearExpiryDate && (
+                <p className={`${textStyle} mt-y font-weight-bold`}>
+                    Renove esse plano a qualquer momento.
+                    <br />
+                    Continue fidelizando!
+                </p>
+            )}
+            {(isWelcomeProPay || isProPayOnly) && (
+                <p className={`${textStyle} mt-y font-weight-bold`}>
+                    Agradecemos a sua preferência!
+                </p>
+            )}
+            <ShowActionBtn role={role} titleCliAdmin={handleBtnTitle()} />
         </section>
     );
 }
