@@ -2,6 +2,7 @@ import React from "react";
 import pluralizeBr from "../../../../../utils/string/pluralizeBr";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
+import ProCreditsBadge from "../../../../../components/pro/ProCreditsBadge";
 
 const getStyles = () => ({
     accumulativeScore: {
@@ -50,6 +51,8 @@ export default function Totals({
         </p>
     );
 
+    const showCredits = () => <ProCreditsBadge service="Novvos Clientes" />;
+
     return (
         <section>
             <h2 className="text-purple">
@@ -66,7 +69,7 @@ export default function Totals({
                                 : "Totais no Período:"}
                         </span>
                         <br />
-                        <span className="text-normal font-weight-bold">
+                        <span className="mr-2 text-normal font-weight-bold">
                             •{" "}
                             {`${loading ? "..." : allUsersLength} ${pluralizeBr(
                                 mainSubject
@@ -75,6 +78,7 @@ export default function Totals({
                         <br />
                         {showActiveScores()}
                         {showGeneralScores()}
+                        {showCredits()}
                     </div>
                 )}
             </h2>

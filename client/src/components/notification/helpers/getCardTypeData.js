@@ -64,7 +64,12 @@ export default function getCardTypeData(cardType, options = {}) {
             }
             break;
         case "pro":
-            const { approvalDate, expiryDate } = extractStrData(content);
+            const {
+                approvalDate,
+                expiryDate,
+                totalServ,
+                planBr,
+            } = extractStrData(content);
 
             if (subtype === "welcomeProPay") {
                 title = "Clube Pro";
@@ -82,14 +87,22 @@ export default function getCardTypeData(cardType, options = {}) {
             }
             if (subtype === "proNearExpiryDate") {
                 title = "Lembrete de Vencimento";
-                brief = `O plano ouro com 5 serviços vai expirar nos próximos dias. Você continua usando até ${
+                brief = `O plano ${
+                    planBr && planBr.cap()
+                } com ${totalServ} serviço${
+                    totalServ > 1 ? "s" : ""
+                } vai expirar nos próximos dias. Você continua usando até ${
                     expiryDate && formatDMY(new Date(expiryDate))
-                }`;
+                }.`;
                 circularImg = "/img/icons/notif/crown-near-expired.svg";
             }
             if (subtype === "proExpiredDate") {
                 title = "Plano expirado";
-                brief = `Plano ouro com 5 serviços acabou de expirar. Lembrando que todos os seus clientes ainda continuam utilizando os apps normalmente, somente os serviços atuais são interrompidos.`;
+                brief = `Plano ${
+                    planBr && planBr.cap()
+                } com ${totalServ} serviço${
+                    totalServ > 1 ? "s" : ""
+                } acabou de expirar. Lembrando que todos os seus clientes ainda continuam utilizando os apps normalmente. Somente os serviços do plano atual são interrompidos.`;
                 circularImg = "/img/icons/notif/crown-expired.svg";
             }
             break;

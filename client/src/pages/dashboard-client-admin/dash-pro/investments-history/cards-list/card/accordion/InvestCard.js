@@ -190,12 +190,8 @@ export default function InvestCard({
     );
 
     const ActionsMap = actions.map((panel, ind) => {
-        const { planDueDate, periodDays, renewal } = panel.data;
-        const daysLeft = !planDueDate
-            ? null
-            : getDatesCountdown(planDueDate, {
-                  deadline: periodDays,
-              });
+        const { planDueDate, renewal } = panel.data;
+        const daysLeft = !planDueDate ? null : getDatesCountdown(planDueDate);
 
         const props = {
             key: ind,

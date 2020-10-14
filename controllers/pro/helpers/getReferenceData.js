@@ -15,13 +15,19 @@ const getBrPeriod = (code) => {
     if (code === "M") return "mensal";
 };
 
+const getQtt = (qttCode) => {
+    if (!qttCode) return;
+    return Number(qttCode.slice(1));
+};
+
 const getReferenceData = (ref) => {
-    const [planCode, qtt, period] = ref.split("-");
+    const [planCode, qttCode, period] = ref.split("-");
 
     return {
         planBr: getBrPlan(planCode),
         period: getBrPeriod(period),
         plan: getPlan(planCode),
+        qtt: getQtt(qttCode), // not used anywhere...
     };
 };
 

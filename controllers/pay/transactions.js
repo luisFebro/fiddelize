@@ -120,6 +120,7 @@ const getPagNotify = (req, res) => {
 
                 const clientAdminId = doc.clientAdmin.id;
 
+                // doc.markModified("clientAdminData");
                 await doc.save();
                 const allServices = await Pricing.find({});
                 if (!allServices)

@@ -17,7 +17,7 @@ exports.mwIsAuth = (req, res, next) => {
     //condition for testing without token
     if (
         req.query.isFebroBoss ||
-        (req.query.noToken && req.query.cardType === "welcome")
+        (req.query.nT && req.body.recipient) // nT === token
     ) {
         return next();
     }

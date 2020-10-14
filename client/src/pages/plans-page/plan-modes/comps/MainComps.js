@@ -116,7 +116,7 @@ const TotalInvest = ({ totalInvest, totalServices }) => {
     );
 };
 
-const PeriodSelection = ({ handlePeriod }) => {
+const PeriodSelection = ({ handlePeriod, containerCenter = false }) => {
     const styles = getStyles();
 
     const handlePeriodChange = (status) => {
@@ -125,7 +125,10 @@ const PeriodSelection = ({ handlePeriod }) => {
     };
 
     return (
-        <section style={styles.rootPeriod}>
+        <section
+            className={containerCenter ? "container-center" : undefined}
+            style={!containerCenter ? styles.rootPeriod : undefined}
+        >
             <SwitchBtn
                 titleQuestion=""
                 titleLeft="Mensal"

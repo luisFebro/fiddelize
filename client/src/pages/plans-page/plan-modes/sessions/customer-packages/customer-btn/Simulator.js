@@ -85,7 +85,12 @@ const getCustomersData = (packages, options = {}) => {
     // if(packages >= 1000) return [0.08, null, "0-6", "1-5"];
 };
 
-export default function Simulator({ handleData, period }) {
+export default function Simulator({
+    handleData,
+    period,
+    currPlan,
+    animaDisabled,
+}) {
     const [packages, setPackages] = useState(1);
     const [discountDiff, setDiscountDiff] = useState(null);
     const [increasedPerc, setIncreasedPerc] = useState(null);
@@ -201,7 +206,9 @@ export default function Simulator({ handleData, period }) {
 
     const showDiffDiscount = () =>
         Boolean(discountDiff) && (
-            <section className="my-5 zoomIn animated">
+            <section
+                className={`my-5 ${animaDisabled ? "" : "zoomIn animated"}`}
+            >
                 <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
                     Automatizador de Desconto
                 </h2>
@@ -216,13 +223,20 @@ export default function Simulator({ handleData, period }) {
             </section>
         );
 
+    const handlePlanName = () => {
+        if (currPlan === "ouro") return currPlan.cap();
+        if (currPlan === "prata") return currPlan.cap();
+        return "Meu Bronze";
+    };
+
     const showSummary = () => (
         <section className="my-5 zoomIn animated">
             <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
                 Resumo de Investimento
             </h2>
             <div className="text-normal text-left text-purple">
-                ✔ Plano: Meu Bronze {period === "yearly" ? "Anual" : "Mensal"}
+                ✔ Plano: {handlePlanName()}{" "}
+                {period === "yearly" ? "Anual" : "Mensal"}
                 <br />✔ Total de Pacotes:{" "}
                 <span className="text-subtitle font-weight-bold">
                     {packages}

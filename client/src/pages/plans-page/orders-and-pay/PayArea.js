@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
-import { getVar } from "../../../hooks/storage/useVar";
-import { getServiceSKU } from "../../../utils/string/getSKUCode.js";
 import useAPI, { startCheckout, getProData } from "../../../hooks/api/useAPI";
 import PayBtn from "./modal-pay/PayBtn";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
@@ -16,6 +14,7 @@ import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 import { readUser } from "../../../redux/actions/userActions";
 import { IS_DEV } from "../../../config/clientUrl";
 import { Load } from "../../../components/code-splitting/LoadableComp";
+import setProRef from "../../../utils/biz/setProRef";
 
 const AsyncPayMethods = Load({
     loader: () =>
@@ -65,7 +64,7 @@ export default function PayArea({
         dataName: "proData",
     });
 
-    const isUserPro = !proLoading && dataPro.isPro;
+    const isUserPro = !proLoading && dataPro && dataPro.isPro;
 
     const dispatch = useStoreDispatch();
 
@@ -118,10 +117,10 @@ export default function PayArea({
     });
 
     useEffect(() => {
-        getVar("totalServices_clientAdmin").then((totalServ) => {
-            const thisCode = getServiceSKU({ plan, total: totalServ, period });
-            // if you want to access data inside of a promise, use innerData, never external data because it returns undefined.
-            setData((innerData) => ({ ...innerData, SKU: thisCode }));
+        setProRef({
+            setData,
+            planBr: plan,
+            period,
         });
     }, [plan, period]);
 

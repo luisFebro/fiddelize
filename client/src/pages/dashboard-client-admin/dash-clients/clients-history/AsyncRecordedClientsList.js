@@ -194,8 +194,6 @@ export default function AsyncRecordedClientsList() {
         cleared: "",
     });
     const { totalCliUserScores, totalActiveScores, search, cleared } = data;
-    console.log("cleared", cleared);
-    console.log("search", search);
 
     const [filter, setFilter] = useState({
         filterName: "newCustomers",

@@ -1,5 +1,6 @@
 const User = require("../../models/user/User");
 const getCurrPlan = require("./helpers/getCurrPlan");
+const getReferenceData = require("./helpers/getReferenceData");
 // const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // America/Manaus
 // DEPRACATED - use isScheduledDate method to not include the current expiring date in the frontend's FNS date lib.
 // Use the nextExpiryDate to compare.
@@ -50,35 +51,76 @@ exports.mwDiscountProCredits = (req, res, next) => {
 
 // GET - goal is to change welcome message to direct pay after first transaction.
 exports.getProData = (req, res) => {
-    const { userId } = req.query;
+    const { userId, nextExpiryDate } = req.query;
     User.findById(userId)
-        .select("clientAdminData.orders")
+        .select("clientAdminData.orders clientAdminData.bizPlanList")
         .exec((err, data) => {
             if (err || !data)
                 return res.status(404).json({ error: "something went wrong" });
             const orders = data.clientAdminData.orders;
+            const bizPlanList = data.clientAdminData.bizPlanList;
+            const isBizPlanValid = bizPlanList && bizPlanList.length;
+            const isOrdersValid = orders && orders.length;
 
             let isPro = false;
             let totalScore = 0;
-            const mainRef = orders.length && orders[0].reference; //first order ref from list
+            let nextExOrdersStat;
+            let nextExRef;
+            let nextExTotalMoney;
+            // To have this  nextEx data, both planDueDate and usageTimeEnd dates should be the same.
+            totalScore =
+                isOrdersValid &&
+                orders.reduce((acc, next) => {
+                    let invest = 0;
+                    if (
+                        JSON.stringify(nextExpiryDate) ===
+                        JSON.stringify(next.planDueDate)
+                    ) {
+                        nextExOrdersStat = next.ordersStatement;
+                        nextExRef = next.reference;
+                        nextExTotalMoney = next.investAmount;
+                    }
+
+                    if (isPaid(next.transactionStatus)) {
+                        isPro = true;
+                        invest = Number(next.investAmount);
+                    }
+
+                    return acc + invest;
+                }, 0);
+
+            let nextExPlan;
+            let nextExTotalServ = 0;
+            isBizPlanValid &&
+                bizPlanList.forEach((s) => {
+                    if (
+                        JSON.stringify(nextExpiryDate) ===
+                        JSON.stringify(s.usageTimeEnd)
+                    ) {
+                        ++nextExTotalServ;
+                        nextExPlan = s.plan;
+                    }
+                });
+
+            let mainRef = orders.length && orders[0].reference; //IMPORTANT: only to verify if the last added order is gold or in case of the first order to return the current plan. first order ref from list
             const plan = !orders.length
                 ? "gratis"
                 : getCurrPlan(orders, { mainRef });
 
-            totalScore = orders.reduce((acc, next) => {
-                let invest = 0;
-                if (isPaid(next.transactionStatus)) {
-                    isPro = true;
-                    invest = Number(next.investAmount);
-                }
-
-                return acc + invest;
-            }, 0);
+            const expiryData = {
+                nextExPlan,
+                nextExTotalServ,
+                nextExOrdersStat,
+                nextExRef,
+                nextExTotalMoney,
+            };
 
             res.json({
                 isPro,
                 totalScore,
                 plan,
+                nextExpiryServData: expiryData,
+                bizPlanList,
             });
         });
 };

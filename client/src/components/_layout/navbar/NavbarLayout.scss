@@ -22,7 +22,6 @@
     }
 }
 
-
 .plan-badge--root {
     display: flex;
     justify-content: center;
@@ -33,33 +32,29 @@
 
 .plan-badge--root .gratis {
     background-color: var(--mainWhite);
-    box-shadow: inset 0 0 .4em #000;
+    box-shadow: inset 0 0 0.4em #000;
     color: var(--themeP);
     padding: 4px 5px;
     font-size: 18px;
 }
 
-.plan-badge--root .prata {
-    background-color: grey;
-    box-shadow: inset 0 0 .4em #000;
-    filter:  drop-shadow(1px 1px 1.5px white);
-    color: white;
-    text-shadow: 1px 1px 3px black;
-    padding: 4px 5px;
-    font-size: 18px;
+.plan-badge--root .plan.ouro {
+    background: yellow;
+    color: black;
 }
 
-.plan-badge--root .ouro {
-    background-color: var(--mainDark);
-    box-shadow: inset 0 0 .4em #000;
-    filter:  drop-shadow(1px 1px 1.5px white);
-    color: var(--mainYellow);
-    text-shadow: 1px 1px 3px black;
-    padding: 4px 5px;
-    font-size: 18px;
+.plan-badge--root .plan.prata {
+    background: var(--lightGrey);
+    color: black;
 }
 
-.plan-badge--root .title, .plan-badge--root .plan {
+.plan-badge--root .plan.bronze {
+    background: #edbead;
+    color: black;
+}
+
+.plan-badge--root .title,
+.plan-badge--root .plan {
     position: relative;
     top: 3px;
 }
@@ -67,37 +62,54 @@
 .plan-badge--root .plan {
     margin: 0;
     padding: 0 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
 }
-
 
 .plan-badge--root .upgrade-btn {
     left: -10px;
-    filter:  drop-shadow(.5px .5px 1.5px black);
+    filter: drop-shadow(0.5px 0.5px 1.5px black);
 }
 
 .plan-badge--root .upgrade-btn .crown-icon {
     top: -5px;
     left: 90px;
     color: var(--mainYellow);
-    filter:  drop-shadow(.5px .5px 1.5px black);
+    filter: drop-shadow(0.5px 0.5px 1.5px black);
     font-size: 34px;
     z-index: 10;
 }
 
 .plan-badge--root .prata-icon {
     top: -10px;
-    left: 60px;
+    // left: 60px;
     color: var(--lightGrey);
     font-size: 38px;
     z-index: 10;
-    filter: drop-shadow(-2px 0 #fff)
+    transform: rotate(-45deg);
+    left: 20px;
+    top: -25px;
 }
 
 .plan-badge--root .ouro-icon {
     top: -10px;
-    left: 60px;
-    color: var(--mainYellow);
+    // left: 60px;
+    color: yellow;
     font-size: 38px;
     z-index: 10;
-    filter: drop-shadow(-2px 0 #fff)
+    transform: rotate(-45deg);
+    left: 20px;
+    top: -25px;
+}
+
+.plan-badge--root .bronze-icon {
+    top: -10px;
+    // left: 60px;
+    color: #edbead;
+    font-size: 38px;
+    filter: drop-shadow(black 0.001em 0.001em 0.5em);
+    z-index: 10;
+    transform: rotate(-45deg);
+    left: 20px;
+    top: -25px;
 }

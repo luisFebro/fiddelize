@@ -1,0 +1,49 @@
+import React, { Fragment } from "react";
+import convertToReal from "../../utils/numbers/convertToReal";
+import usePro from "../../hooks/pro/usePro";
+import ProCreditsBtn from "./pro-credits-btn/ProCreditsBtn";
+
+export default function ProCreditsBadge({
+    isUnlimited = false,
+    service = "Novvos Clientes",
+}) {
+    const { isPro, credits, plan: currPlan, usageTimeEnd, daysLeft } = usePro({
+        service,
+    });
+
+    const modalData = {
+        isCreditsBadge: true, // it will allow period choice and handle individual order
+        currPlan,
+        expiryDate: usageTimeEnd,
+    };
+
+    return (
+        <Fragment>
+            {!isUnlimited ? (
+                <section className="d-table position-relative">
+                    <div className="text-pill main-font text-normal font-weight-bold">
+                        {credits
+                            ? `${convertToReal(credits)} créditos`
+                            : "... créditos"}
+                    </div>
+                    {isPro && (
+                        <p className="text-small text-purple font-weight-bold">
+                            Expira em
+                            <span className="ml-1 d-inline-block text-normal font-weight-bold">
+                                {daysLeft ? `${daysLeft} dias` : "... dias"}
+                            </span>
+                        </p>
+                    )}
+                    <div
+                        className="position-absolute"
+                        style={{ right: -40, top: -10 }}
+                    >
+                        <ProCreditsBtn modalData={modalData} />
+                    </div>
+                </section>
+            ) : (
+                isPro && <section>I am unlimited badge</section>
+            )}
+        </Fragment>
+    );
+}

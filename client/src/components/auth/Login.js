@@ -208,7 +208,7 @@ function Login({ history, setLoginOrRegister, dontNeedRegister }) {
                     );
                     sendNotification(authUserId, "welcome", {
                         role,
-                        noToken: true,
+                        nT: true,
                     }).then((res) => {
                         if (res.status !== 200)
                             return console.log(

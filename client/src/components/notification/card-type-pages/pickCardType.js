@@ -60,7 +60,13 @@ export default function pickCardType(cardType, options = {}) {
             />
         ),
         birthday: chooseBirthday(),
-        pro: <AsyncProPay {...defaultProps} subtype={subtype} />,
+        pro: (
+            <AsyncProPay
+                {...defaultProps}
+                subtype={subtype}
+                content={content ? content : undefined}
+            />
+        ),
     };
 
     const pickComp = () => {

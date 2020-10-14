@@ -114,6 +114,10 @@
     height: 100vh;
 }
 
+.d-table {
+    display: table !important;
+}
+
 /*MOBILE FIRST RESPONSIVE MEDIA QUERIES*/
 /*media portrait tablets and large phones || for large devices, use min-width: 992px and up*/
 @media screen and (min-width: 768px) {

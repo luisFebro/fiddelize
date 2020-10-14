@@ -1,24 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Simulator from "./Simulator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useProfile } from "../../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../../components/Img";
+import { PeriodSelection } from "../../../comps/MainComps";
+import setProRenewal from "../../../../../../utils/biz/setProRenewal";
+import setProRef from "../../../../../../utils/biz/setProRef";
+import { withRouter } from "react-router-dom";
 
-export default function AsyncAddCustomersContent({
+export default withRouter(AsyncAddCustomersContent);
+
+function AsyncAddCustomersContent({
+    history,
     modalData,
     handleFullClose,
     needRemoveCurrValue,
 }) {
-    const { handleNewOrder, period = "yearly" } = modalData;
+    let {
+        handleNewOrder,
+        period,
+        // creditsBadge
+        isCreditsBadge,
+        currPlan,
+        proRenewalData,
+        expiryDate,
+        // end creditsBadge
+    } = modalData;
 
     const [data, setData] = useState({
         totalPackage: 0,
         totalCustomers: 0,
         inv: 0,
+        innerPeriod: "yearly",
+        SKU: "",
     });
-    const { inv, totalCustomers, totalPackage } = data;
+    const { inv, totalCustomers, totalPackage, innerPeriod, SKU } = data;
+
+    period = period ? period : innerPeriod;
+
+    useEffect(() => {
+        isCreditsBadge && setProRef({ setData, period, planBr: currPlan });
+    }, [period, currPlan]);
+
+    const handleInnerPeriod = (newPeriod) => {
+        setData({ ...data, innerPeriod: newPeriod });
+    };
 
     const handleData = (newData) => {
         setData({
@@ -30,12 +58,17 @@ export default function AsyncAddCustomersContent({
     let { name: userName } = useProfile();
     userName = getFirstName(userName);
 
+    const handlePeriodName = () => {
+        if (isCreditsBadge) return "";
+        return period === "yearly" ? "Anual" : "Mensal";
+    };
+
     const showTitle = () => (
         <div className="mt-4">
             <p className="text-subtitle text-purple text-center font-weight-bold">
                 &#187; Novvos Clientes
                 <br />
-                {period === "yearly" ? "Anual" : "Mensal"}
+                {handlePeriodName()}
             </p>
         </div>
     );
@@ -49,6 +82,12 @@ export default function AsyncAddCustomersContent({
                 - Os créditos são <strong>liberados automaticamente</strong>{" "}
                 após a aprovação do pagamento.
             </p>
+            <p className="text-small text-left text-purple mt-3">
+                - Caso ainda possua créditos válidos anteriores, o sistema da
+                Fiddelize <strong>acumula esses créditos com os atuais</strong>.
+                O <strong>tempo de validade</strong> é acumulado da mesma forma
+                também.
+            </p>
         </section>
     );
 
@@ -60,11 +99,27 @@ export default function AsyncAddCustomersContent({
             totalPackage,
             amount: totalCustomers,
             price: inv,
-            removeCurr: needCurrRemoval ? true : false,
+            removeCurr: needCurrRemoval
+                ? true
+                : !isCreditsBadge
+                ? false
+                : undefined,
         };
         isFunc && handleNewOrder("customers", { order: orderObj });
+        isFunc && handleFullClose();
 
-        handleFullClose();
+        if (isCreditsBadge) {
+            setProRenewal({
+                expiryDate,
+                orders: { customers: orderObj },
+                period: innerPeriod,
+                planBr: currPlan,
+                ref: SKU,
+                investAmount: inv,
+            }).then((res) => {
+                history.push("/pedidos/admin");
+            });
+        }
     };
 
     const showCTA = () => (
@@ -90,14 +145,27 @@ export default function AsyncAddCustomersContent({
         />
     );
 
+    const showPeriodSelection = () => (
+        <PeriodSelection
+            containerCenter={true}
+            handlePeriod={handleInnerPeriod}
+        />
+    );
+
     return (
         <section>
             {showTitle()}
             {showIllustration()}
+            {isCreditsBadge && showPeriodSelection()}
             <p className="my-3 text-purple text-center text-subtitle">
                 Deslize para mudar a quantidade de pacotes.
             </p>
-            <Simulator handleData={handleData} period={period} />
+            <Simulator
+                handleData={handleData}
+                period={period}
+                currPlan={currPlan}
+                animaDisabled={true}
+            />
             {showNotes()}
             {showCTA()}
         </section>

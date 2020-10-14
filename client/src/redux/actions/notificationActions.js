@@ -36,7 +36,7 @@ export const countPendingNotif = async (userId, options = {}) => {
 
 // OK
 export const sendNotification = async (userId, cardType, options = {}) => {
-    const { subtype, token, noToken, content, role, name, senderId } = options;
+    const { subtype, token, nT, content, role, name, senderId } = options;
 
     const notificationOpts = {
         userId, // for authorization
@@ -47,15 +47,13 @@ export const sendNotification = async (userId, cardType, options = {}) => {
         content,
     };
     let queryNoToken = "";
-    let queryCardType = "";
-    if (noToken) {
-        queryNoToken = "?noToken=true"; // it is not being used on backend
-        queryCardType = "&cardType=welcome";
+    if (nT) {
+        queryNoToken = "?nT=1"; // it is used in auth controller to send notification without user's login with current condition: req.query.nT && req.query.cardType === "welcome"
     }
 
     try {
         return await axios.put(
-            `/api/notification/send${queryNoToken}${queryCardType}`,
+            `/api/notification/send${queryNoToken}`,
             notificationOpts,
             getHeaderToken(token)
         );

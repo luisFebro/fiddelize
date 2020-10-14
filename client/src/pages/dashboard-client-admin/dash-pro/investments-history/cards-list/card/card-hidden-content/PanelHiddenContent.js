@@ -173,9 +173,7 @@ function PanelHiddenContent({ history, data }) {
             if (code === "BR") return "bronze";
         };
 
-        const daysLeft = getDatesCountdown(data.planDueDate, {
-            deadline: data.periodDays,
-        });
+        const daysLeft = getDatesCountdown(data.planDueDate);
 
         const {
             ordersStatement: orders,

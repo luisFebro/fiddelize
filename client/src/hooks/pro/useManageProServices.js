@@ -10,43 +10,16 @@ import { isScheduledDate, addDays } from "../../utils/dates/dateFns";
 import { IS_PROD } from "../../config/clientUrl";
 import didRunOnce from "../../utils/storage/didRunOnce";
 import { sendNotification } from "../../redux/actions/notificationActions";
+import usePro from "../../hooks/pro/usePro";
 
-/*
-MAKE A FUNCTION TO USE THIS AND PASS TO ORDER PAGE TO RENEWAL
-const daysLeft = getDatesCountdown(data.planDueDate, {
-            deadline: data.periodDays,
-        });
+const getPeriod = (ref) => {
+    if (!ref) return;
+    const [, , per] = ref.split("-");
+    if (per === "A") return "yearly";
 
-async function setAllVars() {
-const readyVar = await Promise.all([
-setVar({
-    orders_clientAdmin: orders,
-}),
-setVar({
-    totalMoney_clientAdmin: investAmount,
-}),
-setVar({
-    planPeriod_clientAdmin: thisPeriod,
-}),
-setVar({
-    ordersPlan_clientAdmin: thisPlan,
-}),
-setVar({
-    renewalDaysLeft_clientAdmin: daysLeft,
-}),
-setVar({
-    renewalRef_clientAdmin: reference,
-}),
-]);
+    return "monthly";
+};
 
-setLoadingOrderPage(false);
-history.push("/pedidos/admin");
-}
-
-setAllVars();
-
-history.push("/pedidos/admin");
- */
 export default function useManageProServices() {
     const [data, setData] = useState({
         isToday: null,
@@ -59,6 +32,20 @@ export default function useManageProServices() {
         url: getNextExpiryDate(userId),
         trigger: isToday && userId,
     });
+
+    const { nextExpiryData: expiryData } = usePro({
+        trigger: nextExpiryDate && userId,
+        nextExpiryDate,
+        userId,
+    });
+
+    const planBr = expiryData && expiryData.nextExPlan;
+    const totalMoney = expiryData && expiryData.nextExTotalMoney;
+    const totalServ = expiryData && expiryData.nextExTotalServ;
+    const orders = expiryData && JSON.stringify(expiryData.nextExOrdersStat);
+    const ref = expiryData && expiryData.nextExRef;
+    const period = getPeriod(ref);
+    const planDays = period === "yearly" ? 365 : 30;
 
     const { data: removalRes } = useAPI({
         method: "delete",
@@ -82,7 +69,7 @@ export default function useManageProServices() {
     }, []);
 
     const checkForExpiryServices = async () => {
-        if (nextExpiryDate) {
+        if (nextExpiryDate && nextExpiryDate) {
             const isServActive = isScheduledDate(nextExpiryDate);
             const daysBeforeExpiringDate = addDays(
                 new Date(nextExpiryDate),
@@ -99,16 +86,13 @@ export default function useManageProServices() {
                 daysBeforeExpiringDate,
                 { trigger: needServPreExpiryAlert && isServActive }
             );
-            if (needServPreExpiryAlert && !alreadyNearNotified) {
-                const totalServ = 5;
-                const planBr = "ouro";
-                const orders = JSON.stringify({});
-                const ref = "OU-Q5-1d3423e";
 
+            if (period && needServPreExpiryAlert && !alreadyNearNotified) {
                 sendNotification(userId, "pro", {
                     role: "cliente-admin",
                     subtype: "proNearExpiryDate",
-                    content: `ref:${ref};totalServices:${totalServ};plan:${planBr};ordersStatement:${orders};expiryDate:${nextExpiryDate};`,
+                    nT: true,
+                    content: `totalMoney:${totalMoney};period:${period};ref:${ref};totalServ:${totalServ};planBr:${planBr};orders:${orders};expiryDate:${nextExpiryDate};planDays:${planDays};`,
                 });
             }
 
@@ -122,11 +106,16 @@ export default function useManageProServices() {
                     "pro_expiredDate",
                     nextExpiryDate
                 );
-                if (needServExpiredDateAlert && !alreadyExpiryNotified) {
+                if (
+                    period &&
+                    needServExpiredDateAlert &&
+                    !alreadyExpiryNotified
+                ) {
                     sendNotification(userId, "pro", {
                         role: "cliente-admin",
                         subtype: "proExpiredDate",
-                        content: ``,
+                        nT: true,
+                        content: `totalMoney:${totalMoney};period:${period};ref:${ref};totalServ:${totalServ};planBr:${planBr};orders:${orders};expiryDate:${nextExpiryDate};planDays:${planDays};`,
                     });
                 }
             }
@@ -135,7 +124,7 @@ export default function useManageProServices() {
 
     useEffect(() => {
         checkForExpiryServices();
-    }, [nextExpiryDate]);
+    }, [nextExpiryDate, expiryData]);
 
     useEffect(() => {
         // fix date redirection will only applied on production env.

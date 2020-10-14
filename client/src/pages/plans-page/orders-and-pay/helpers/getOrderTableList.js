@@ -13,7 +13,7 @@ const handleServiceName = ({
 }) => {
     if (serv === "currPlan")
         return `Plano ${plan ? plan : "profissional"} ${
-            period === "yearly" ? "anual" : "mensal"
+            period === "yearly" ? "anual" : !plan ? "" : "mensal"
         } com ${amount} serviços`;
 
     if (serv === "sms")
