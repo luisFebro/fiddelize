@@ -68,16 +68,20 @@ export default function PayArea({
 
     const dispatch = useStoreDispatch();
 
+    const handlePeriod = () => {
+        if (period === "yearly") return "anual";
+        if (period === "monthly") return "mensal";
+        return "";
+    };
+
     useEffect(() => {
         readUser(dispatch, _id, { select: "cpf -_id" }).then((res) => {
             let thisCPF = res.data.cpf;
             if (thisCPF === "111.111.111-11") thisCPF = "431.711.242-62"; // for testing only
 
-            let desc = `Plano ${plan} ${
-                period === "yearly" ? "anual" : "mensal"
-            } com ${
+            let desc = `Plano ${plan} ${handlePeriod()} com ${
                 servicesTotal ? servicesTotal : ""
-            } serviços no valor total de: `;
+            } serviço${servicesTotal > 1 ? "s" : ""} no valor total de: `;
             // if(servicesTotal > planServiceTotal) {
             //     const leftover = serviceTotal - planServiceTotal;
             //     desc = `Plano ${plan} com ${planServiceTotal} serviços + ${leftover} outros serviços no valor total de: `

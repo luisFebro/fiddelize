@@ -5,19 +5,30 @@ import { useProfile } from "../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../components/Img";
+import { withRouter } from "react-router-dom";
+import setProRenewal from "../../../../../utils/biz/setProRenewal";
 
-export default function AsyncAddSMSContent({
+export default withRouter(AsyncAddSMSContent);
+
+function AsyncAddSMSContent({
+    history,
     handleNewOrder,
     handleFullClose,
     needRemoveCurrValue,
     currValues,
+    modalData,
 }) {
+    // end fromSession
+    const isFromSession = modalData && modalData.isFromSession;
+    const currPlan = modalData ? modalData.currPlan : "bronze";
+    // end fromSession
+
     const [data, setData] = useState({
         totalPackage: 0,
         totalSMS: 0,
         inv: 0,
     });
-    const { inv, totalSMS, totalPackage } = data;
+    const { inv, totalSMS, totalPackage, SKU } = data;
 
     const handleData = (newData) => {
         setData({
@@ -60,8 +71,20 @@ export default function AsyncAddSMSContent({
             removeCurr: needCurrRemoval ? true : false,
         };
         isFunc && handleNewOrder("sms", { order: orderObj });
+        isFunc && handleFullClose();
 
-        handleFullClose();
+        if (isFromSession) {
+            setProRenewal({
+                expiryDate: "2050-11-26T16:51:32.848Z", // a very late hard-coded date cuz it does not expires.
+                orders: { sms: orderObj },
+                period: "yearly",
+                planBr: currPlan,
+                ref: undefined,
+                investAmount: inv,
+            }).then((res) => {
+                history.push("/pedidos/admin");
+            });
+        }
     };
 
     const showCTA = () => (
@@ -72,7 +95,7 @@ export default function AsyncAddSMSContent({
             </p>
             <ButtonFab
                 size="large"
-                title="Sim, quero investir"
+                title="Adicionar"
                 onClick={handleCTA}
                 backgroundColor={"var(--themeSDark--default)"}
                 variant="extended"

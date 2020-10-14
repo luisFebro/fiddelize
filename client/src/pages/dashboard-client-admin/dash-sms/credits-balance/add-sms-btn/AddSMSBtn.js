@@ -24,6 +24,7 @@ export default function AddSMSBtn({
     handleNewOrder,
     smsOrder,
     classPosition = "mt-5 ml-3",
+    modalData,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -44,6 +45,7 @@ export default function AddSMSBtn({
             needRemoveCurrValue={btnTitle === "Alterar"}
             handleNewOrder={handleNewOrder}
             handleFullClose={handleFullClose}
+            modalData={modalData}
         />
     );
 

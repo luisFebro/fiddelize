@@ -82,7 +82,7 @@ export default function OrdersTable({
                 notesColor={notesColor}
             />
             <p className="mt-3 mr-3 d-flex justify-content-end text-normal text-purple">
-                {totalServs} serviços por:{" "}
+                {totalServs} serviço{totalServs > 1 ? "s" : ""} por:{" "}
                 <span className="d-inline-block ml-3 font-weight-bold">
                     {orderTotal}
                 </span>

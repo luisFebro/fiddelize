@@ -44,7 +44,7 @@ const getAllPlanPackage = ({
 }) => {
     return allServices.map((serv, ind) => {
         const currServ = serv.serviceName;
-        const creditEnd = serv[plan].credit[periodicity];
+        const creditEnd = serv ? serv[plan].credit[periodicity] : 888;
 
         return getNewService({
             isRenewal: false,
@@ -89,7 +89,9 @@ const setVirginBizPlanList = ({
             const foundPricingServ = allServices.find(
                 (s) => s.serviceName === currServ
             );
-            const creditEnd = foundPricingServ[plan].credit[periodicity];
+            const creditEnd = foundPricingServ
+                ? foundPricingServ[plan].credit[periodicity]
+                : 888;
 
             return getNewService({
                 isRenewal: false,
@@ -154,8 +156,8 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
             );
             const creditEnd = foundPricingServ[plan].credit[periodicity];
 
-            const lastRenewalHistory = serv.renewalHistory;
-            const lastCreditEnd = serv.creditEnd;
+            const lastRenewalHistory = serv ? serv.renewalHistory : [];
+            const lastCreditEnd = serv ? serv.creditEnd : 0;
             return getNewService({
                 isRenewal: true,
                 lastRenewalHistory,
@@ -177,10 +179,14 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
             const foundPricingServ = allServices.find(
                 (s) => s.serviceName === currServ
             );
-            const creditEnd = foundPricingServ[plan].credit[periodicity];
+            const creditEnd = foundPricingServ
+                ? foundPricingServ[plan].credit[periodicity]
+                : 888;
 
-            const lastRenewalHistory = currDataServ.renewalHistory;
-            const lastCreditEnd = currDataServ.creditEnd;
+            const lastRenewalHistory = currDataServ
+                ? currDataServ.renewalHistory
+                : [];
+            const lastCreditEnd = currDataServ ? currDataServ.creditEnd : 0;
             return getNewService({
                 isRenewal: true,
                 lastRenewalHistory,

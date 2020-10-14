@@ -153,17 +153,22 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         />
     );
 
+    const isUnlimitedService = daysLeft <= 10000; // like SMS with a long hardcoded date;
+
     return (
         <Fragment>
-            {isPaid && daysLeft ? (
-                showActive()
-            ) : (
-                <Fragment>
-                    {showDisabled()}
-                    {isDuePay && isRenewable && showExpiredBoleto()}
-                    {daysLeft >= 0 && isPaid && !isOldCard && showRenewalBtn()}
-                </Fragment>
-            )}
+            {isPaid && daysLeft && isUnlimitedService
+                ? showActive()
+                : isUnlimitedService && (
+                      <Fragment>
+                          {showDisabled()}
+                          {isDuePay && isRenewable && showExpiredBoleto()}
+                          {daysLeft >= 0 &&
+                              isPaid &&
+                              !isOldCard &&
+                              showRenewalBtn()}
+                      </Fragment>
+                  )}
         </Fragment>
     );
 }

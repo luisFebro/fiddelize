@@ -24,7 +24,6 @@ function AsyncAddCustomersContent({
         // creditsBadge
         isCreditsBadge,
         currPlan,
-        proRenewalData,
         expiryDate,
         // end creditsBadge
     } = modalData;

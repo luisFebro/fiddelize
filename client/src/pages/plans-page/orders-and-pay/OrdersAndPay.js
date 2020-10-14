@@ -75,7 +75,11 @@ export default function OrdersAndPay({
             daysLeftData &&
                 setDataSer({ ...dataSer, renewalDaysLeft: daysLeftData });
         if (!loadRef)
-            refData && setDataSer({ ...dataSer, renewalReference: refData });
+            refData &&
+                setDataSer({
+                    ...dataSer,
+                    renewalReference: refData ? refData : undefined,
+                });
     }, [loadDaysLeft, loadRef]);
 
     const showTitle = () => (

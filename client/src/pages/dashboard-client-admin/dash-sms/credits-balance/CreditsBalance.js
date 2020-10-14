@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
-import AddSMSBtn from './add-sms-btn/AddSMSBtn';
-import convertToReal from '../../../../utils/numbers/convertToReal';
-import useAPI, { readCredits, needTrigger } from '../../../../hooks/api/useAPI';
-import { useAppSystem } from '../../../../hooks/useRoleData';
-import { useRunComp } from '../../../../hooks/useRunComp';
+import React, { useEffect } from "react";
+import AddSMSBtn from "./add-sms-btn/AddSMSBtn";
+import convertToReal from "../../../../utils/numbers/convertToReal";
+import useAPI, { readCredits, needTrigger } from "../../../../hooks/api/useAPI";
+import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useRunComp } from "../../../../hooks/useRunComp";
+import usePro from "../../../../hooks/pro/usePro";
 
 const isSmall = window.Helper.isSmallScreen();
 const getStyles = () => ({
     balance: {
-        minWidth: '114px'
+        minWidth: "114px",
     },
-    credits: {top: isSmall ? '50px' : '70px', right: '0px'}
+    credits: { top: isSmall ? "50px" : "70px", right: "0px" },
 });
-
 
 export default function CreditsBalance({ handleBalance }) {
     const styles = getStyles();
@@ -27,14 +27,21 @@ export default function CreditsBalance({ handleBalance }) {
         url: readCredits(userId),
         trigger,
         dataName: "smsCredits",
-    })
+    });
+
+    const { plan: currPlan } = usePro();
     const thisSMSBalance = convertToReal(smsBalance);
 
     useEffect(() => {
-        if(!loading) {
+        if (!loading) {
             handleBalance(smsBalance);
         }
-    }, [smsBalance, loading])
+    }, [smsBalance, loading]);
+
+    const modalData = {
+        isFromSession: true, // it will allow period choice and handle individual order
+        currPlan,
+    };
 
     return (
         <section className="my-3">
@@ -50,9 +57,11 @@ export default function CreditsBalance({ handleBalance }) {
                     <p
                         className="position-absolute m-0 text-subtitle font-weight-bold text-purple text-center"
                         style={styles.credits}
-                    >créditos</p>
+                    >
+                        créditos
+                    </p>
                 </div>
-                <AddSMSBtn />
+                <AddSMSBtn modalData={modalData} />
             </div>
         </section>
     );
