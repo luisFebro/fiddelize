@@ -2,8 +2,9 @@ const { IS_PROD } = require("../../config");
 
 // IMPORTANT! On production for boleto, sandbox request will return "Not found" because the host address will be production's, not dev.
 // In order to work, we have to set sandboxMode to TRUE and deploy both here and PayArea Compenent.
+// if sandboxMode is on, then production status transaction change will return with error 404 or 500
 exports.globalVar = {
-    sandboxMode: true, //
+    sandboxMode: false, ///true, //
     get payUrl() {
         return this.sandboxMode
             ? "https://ws.sandbox.pagseguro.uol.com.br"
