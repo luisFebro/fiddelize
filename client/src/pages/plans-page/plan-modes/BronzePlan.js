@@ -36,7 +36,7 @@ export default function BronzePlan({ setCurrPlan }) {
         totalInvest: 0,
         totalServices: 0,
         period: "yearly",
-        orders: {}, // e.g { customers: { amount: 0, price: 0, expiryDate: dateFormat }
+        orders: {}, // e.g { "Novvos Clientes": { amount: 0, price: 0, expiryDate: dateFormat }
     });
     const { totalInvest, totalServices, period, orders } = data;
     console.log("orders", orders);
@@ -142,7 +142,7 @@ export default function BronzePlan({ setCurrPlan }) {
 
                     <AddCustomerPackages
                         modalData={modalCustomersData}
-                        customersOrder={orders.customers}
+                        customersOrder={orders["Novvos Clientes"]}
                     />
                     <ServicesGallery
                         handleNewOrder={handleNewOrder}

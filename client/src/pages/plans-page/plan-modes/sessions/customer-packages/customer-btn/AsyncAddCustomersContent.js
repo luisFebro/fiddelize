@@ -33,15 +33,15 @@ function AsyncAddCustomersContent({
         totalCustomers: 0,
         inv: 0,
         innerPeriod: "yearly",
-        SKU: "",
+        // SKU: "",
     });
-    const { inv, totalCustomers, totalPackage, innerPeriod, SKU } = data;
+    const { inv, totalCustomers, totalPackage, innerPeriod } = data;
 
     period = period ? period : innerPeriod;
 
-    useEffect(() => {
-        isCreditsBadge && setProRef({ setData, period, planBr: currPlan });
-    }, [period, currPlan]);
+    // useEffect(() => {
+    //     isCreditsBadge && setProRef({ setData, period, planBr: currPlan });
+    // }, [period, currPlan]);
 
     const handleInnerPeriod = (newPeriod) => {
         setData({ ...data, innerPeriod: newPeriod });
@@ -104,17 +104,18 @@ function AsyncAddCustomersContent({
                 ? false
                 : undefined,
         };
-        isFunc && handleNewOrder("customers", { order: orderObj });
+        isFunc && handleNewOrder("Novvos Clientes", { order: orderObj });
         isFunc && handleFullClose();
 
         if (isCreditsBadge) {
             setProRenewal({
                 expiryDate,
-                orders: { customers: orderObj },
+                orders: { "Novvos Clientes": orderObj },
                 period: innerPeriod,
                 planBr: currPlan,
-                ref: SKU,
+                ref: undefined,
                 investAmount: inv,
+                isSingleRenewal: true,
             }).then((res) => {
                 history.push("/pedidos/admin");
             });

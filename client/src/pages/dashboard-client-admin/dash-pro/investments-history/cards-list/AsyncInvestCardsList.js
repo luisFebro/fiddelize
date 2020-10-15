@@ -100,9 +100,15 @@ export default function AsyncCardsList() {
         if (per === "M") return 30;
     };
 
-    const displayPlanType = (planCode, period) => {
+    const displayPlanType = (planCode, period, ordersStatement) => {
         const plan = handlePlanCode(planCode);
-        const generatedPeriod = handlePeriod(period);
+
+        const keys = ordersStatement && Object.keys(ordersStatement);
+        const isUnlimitedService = ordersStatement && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
+
+        const generatedPeriod = isUnlimitedService
+            ? "Ilimitado"
+            : handlePeriod(period);
         const planDesc = `P. ${plan && plan.cap()} ${generatedPeriod}`;
 
         const handleColor = (plan) => {
@@ -140,6 +146,7 @@ export default function AsyncCardsList() {
             const {
                 reference,
                 paymentCategory: payCategory, // boleto, crédito, débito.
+                ordersStatement,
             } = data;
 
             const referenceArray = reference && reference.split("-");
@@ -151,7 +158,7 @@ export default function AsyncCardsList() {
 
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayPlanType(planCode, period)}
+                    {displayPlanType(planCode, period, ordersStatement)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}

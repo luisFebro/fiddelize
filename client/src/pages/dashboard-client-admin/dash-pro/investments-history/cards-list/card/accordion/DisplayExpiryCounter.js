@@ -45,7 +45,13 @@ const getStyles = () => ({
 function DisplayExpiryCounter({ history, panel, daysLeft }) {
     const styles = getStyles();
 
-    const { transactionStatus, reference, payDueDate, renewal } = panel.data;
+    const {
+        ordersStatement,
+        transactionStatus,
+        reference,
+        payDueDate,
+        renewal,
+    } = panel.data;
 
     const isRenewable =
         (renewal && renewal.priorRef) !== reference &&
@@ -153,13 +159,14 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         />
     );
 
-    const isUnlimitedService = daysLeft <= 10000; // like SMS with a long hardcoded date;
+    const keys = ordersStatement && Object.keys(ordersStatement);
+    const isUnlimitedService = ordersStatement && keys && keys[0] === "sms"; // like SMS with a long hardcoded date;
 
     return (
         <Fragment>
-            {isPaid && daysLeft && isUnlimitedService
+            {isPaid && daysLeft && !isUnlimitedService
                 ? showActive()
-                : isUnlimitedService && (
+                : !isUnlimitedService && (
                       <Fragment>
                           {showDisabled()}
                           {isDuePay && isRenewable && showExpiredBoleto()}

@@ -1,3 +1,13 @@
+exports.handleProSMSCredits = ({ data2, isSMS }) => {
+    const priorCredits = data2.clientAdminData.smsBalance;
+    const newCredits =
+        isSMS.ordersStatement &&
+        isSMS.ordersStatement.sms &&
+        isSMS.ordersStatement.sms.amount;
+
+    return priorCredits + newCredits;
+};
+
 exports.handleModifiedOrders = ({
     targetOr,
     isCurrRenewal,

@@ -21,7 +21,7 @@ const handleServiceName = ({
             totalPackage === 1 ? "pacote" : "pacotes"
         } com ${convertToReal(packageQtt)} SMS`;
 
-    if (serv === "customers")
+    if (serv === "Novvos Clientes")
         return `Novvos Clientes - ${totalPackage} ${
             totalPackage === 1 ? "pacote" : "pacotes"
         } com ${convertToReal(packageQtt)} clientes`;

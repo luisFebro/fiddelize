@@ -8,6 +8,7 @@ export default async function setProRenewal({
     planBr,
     ref,
     period,
+    isSingleRenewal = false, // update a single service
     // planDays,
 }) {
     const daysLeft = getDatesCountdown(expiryDate);
@@ -30,6 +31,9 @@ export default async function setProRenewal({
         }),
         setVar({
             renewalRef_clientAdmin: ref,
+        }),
+        setVar({
+            isSingleRenewal_clientAdmin: isSingleRenewal,
         }),
     ]);
 }

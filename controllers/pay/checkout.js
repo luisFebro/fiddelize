@@ -90,6 +90,7 @@ const finishCheckout = (req, res, next) => {
         renewalReference,
         renewalDaysLeft,
         renewalCurrDays,
+        isSingleRenewal,
     } = req.body;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
 
@@ -194,9 +195,12 @@ const finishCheckout = (req, res, next) => {
                         },
                         filter,
                         isCurrRenewal: renewalReference ? true : undefined,
-                        totalRenewalDays: renewalReference
-                            ? Number(renewalCurrDays) + Number(renewalDaysLeft)
-                            : undefined,
+                        totalRenewalDays:
+                            renewalReference || isSingleRenewal
+                                ? Number(renewalCurrDays) +
+                                  Number(renewalDaysLeft)
+                                : undefined,
+                        isSingleRenewal: isSingleRenewal ? true : undefined,
                     });
 
                     newOrder.save().then((err) => {

@@ -37,6 +37,7 @@ export default function PayArea({
     ordersStatement,
     renewalDaysLeft,
     renewalReference,
+    isSingleRenewal,
 }) {
     const [data, setData] = useState({
         SKU: "",
@@ -159,6 +160,7 @@ export default function PayArea({
         PagSeguro: window.PagSeguroDirectPayment,
         renewalDaysLeft,
         renewalReference,
+        isSingleRenewal,
     };
 
     const showDirectPayAreaToPros = () =>

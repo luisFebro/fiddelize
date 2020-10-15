@@ -70,6 +70,8 @@ export default function OrdersAndPay({
         "renewalRef_clientAdmin"
     );
 
+    const { data: isSingleRenewal } = useGetVar("isSingleRenewal_clientAdmin");
+
     useEffect(() => {
         if (!loadDaysLeft)
             daysLeftData &&
@@ -107,6 +109,7 @@ export default function OrdersAndPay({
         removeVar("planPeriod_clientAdmin");
         removeVar("renewalDaysLeft_clientAdmin");
         removeVar("renewalRef_clientAdmin");
+        removeVar("isSingleRenewal_clientAdmin");
     };
 
     return (
@@ -138,6 +141,7 @@ export default function OrdersAndPay({
                 ordersStatement={orders}
                 renewalDaysLeft={renewalDaysLeft}
                 renewalReference={renewalReference}
+                isSingleRenewal={isSingleRenewal}
             />
         </section>
     );

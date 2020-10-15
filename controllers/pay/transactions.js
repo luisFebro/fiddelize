@@ -20,6 +20,7 @@ const setCurrPlan = require("../pro/helpers/setCurrPlan");
 const {
     handleProPlan,
     handleModifiedOrders,
+    handleProSMSCredits,
 } = require("./helpers/transactionHandlers");
 const { sendBackendNotification } = require("../notification");
 
@@ -40,17 +41,19 @@ const handlePlanDueDate = (
     doc,
     reference,
     isCurrRenewal,
+    isSingleRenewal,
     totalRenewalDays
 ) => {
     const trigger =
         !doc.planDueDate ||
         (getPaidStatus(currStatus) && !doc.planDueDate) ||
-        (getPaidStatus(currStatus) && isCurrRenewal);
+        (getPaidStatus(currStatus) && isCurrRenewal) ||
+        (getPaidStatus(currStatus) && isSingleRenewal);
 
     const addedDays = totalRenewalDays
-        ? totalRenewalDays
-        : getNewPlanDays(reference);
-    return trigger ? addDays(new Date(), addedDays) : doc.planDueDate;
+        ? totalRenewalDays // add days left and curr renewal days to the current date.
+        : getNewPlanDays(reference); //  for new transactions. totalRenewalDays will be undefiend.
+    return trigger ? addDays(new Date(), addedDays) : doc.planDueDate; // doc.planDueDate returns the same date if not paid, triggered.
 };
 
 // Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
@@ -99,6 +102,7 @@ const getPagNotify = (req, res) => {
                     return res.status(404).json({ error: "order not found!" });
 
                 const isCurrRenewal = doc && doc.isCurrRenewal;
+                const isSingleRenewal = doc && doc.isSingleRenewal;
                 const totalRenewalDays = doc && doc.totalRenewalDays;
 
                 thisDueDate = handlePlanDueDate(
@@ -106,6 +110,7 @@ const getPagNotify = (req, res) => {
                     doc,
                     reference,
                     isCurrRenewal,
+                    isSingleRenewal,
                     totalRenewalDays
                 );
 
@@ -147,6 +152,21 @@ const getPagNotify = (req, res) => {
                 });
 
                 if (isPaid) {
+                    const isSMS = orders.find(
+                        (o) =>
+                            o.reference === reference &&
+                            o.ordersStatement &&
+                            o.ordersStatement.sms
+                    );
+
+                    if (isSMS) {
+                        // This is an exception because SMS was built firstly and has a different reasoning to add credits
+                        data2.clientAdminData.smsBalance = handleProSMSCredits({
+                            data2,
+                            isSMS,
+                        });
+                    }
+
                     handleProPlan({
                         data2,
                         getCurrPlan,
