@@ -40,7 +40,7 @@ export default function CreditsBalance({ handleBalance }) {
 
     const modalData = {
         isFromSession: true, // it will allow period choice and handle individual order
-        currPlan,
+        currPlan: currPlan === "gratis" ? "bronze" : currPlan,
     };
 
     return (

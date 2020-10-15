@@ -2,6 +2,7 @@ import React from "react";
 import { ShowTitle, ShowPicture, useElemShowOnScroll } from "./DefaultProComps";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 const checkIcon = {
     fontSize: "25px",
@@ -10,7 +11,7 @@ const checkIcon = {
 };
 
 export default function ProFeature({ data }) {
-    const { handleFullClose } = data;
+    const { handleFullClose, isFromDash } = data;
 
     const opts = {
         withObserver: true,
@@ -143,18 +144,31 @@ export default function ProFeature({ data }) {
         <section>
             <p className="my-5 text-subtitle text-purple">
                 Parabéns! Agora você conhece o serviço da Orgganize Clientes.
-                Continue conquistando mais clientes!
             </p>
             <section className="my-5 container-center">
-                <ButtonFab
-                    title="Voltar"
-                    iconMarginLeft=" "
-                    backgroundColor="var(--themeSDark--default)"
-                    onClick={handleFullClose}
-                    position="relative"
-                    variant="extended"
-                    size="large"
-                />
+                {isFromDash ? (
+                    <Link to="/planos?cliente-admin=1">
+                        <ButtonFab
+                            title="Ver Planos"
+                            iconMarginLeft=" "
+                            backgroundColor="var(--themeSDark--default)"
+                            onClick={handleFullClose}
+                            position="relative"
+                            variant="extended"
+                            size="large"
+                        />
+                    </Link>
+                ) : (
+                    <ButtonFab
+                        title="Voltar"
+                        iconMarginLeft=" "
+                        backgroundColor="var(--themeSDark--default)"
+                        onClick={handleFullClose}
+                        position="relative"
+                        variant="extended"
+                        size="large"
+                    />
+                )}
             </section>
         </section>
     );

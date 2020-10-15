@@ -30,6 +30,7 @@ const { payUrl, sandboxMode, email, token } = globalVar;
 /*
 Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas
 Note que a notificação não possui nenhuma informação sobre a transação.
+Só pode transferir apenas uma vez ao dia de forma gratuita.
 */
 const RELEASE_DATE_SPAN = 15; // 15 or 30 days on PagSeguro
 const paymentReleaseDate = addDays(new Date(), RELEASE_DATE_SPAN);

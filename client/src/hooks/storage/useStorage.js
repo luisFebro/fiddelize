@@ -23,7 +23,6 @@ export default function useStorage({
         if (!already) {
             getVar(key, store[storeName]).then((thisData) => {
                 if (!thisData) {
-                    setVar({ [key]: value }, store[storeName]);
                     setStorageData({
                         ...storageData,
                         data: false,
@@ -33,12 +32,16 @@ export default function useStorage({
                 } else {
                     setStorageData({
                         ...storageData,
-                        data: thisData,
+                        data: true,
                         loading: false,
                         already: true,
                     });
                 }
             });
+        }
+
+        if (trigger) {
+            setVar({ [key]: value }, store[storeName]);
         }
 
         return () => null;

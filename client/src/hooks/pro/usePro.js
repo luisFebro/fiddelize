@@ -79,6 +79,7 @@ export default function usePro(options = {}) {
 
         return {
             isPro,
+            isActive: Boolean(usageTimeEnd || freeCredits),
             credits,
             plan,
             usageTimeEnd,

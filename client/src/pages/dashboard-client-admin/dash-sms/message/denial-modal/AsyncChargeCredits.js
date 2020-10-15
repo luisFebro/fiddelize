@@ -40,7 +40,7 @@ export default function AsyncChargeCredits({ currBalance, totalRecipients }) {
 
     const modalData = {
         isFromSession: true, // it will allow period choice and handle individual order
-        currPlan,
+        currPlan: currPlan === "gratis" ? "bronze" : currPlan,
     };
 
     const showCTA = () => (

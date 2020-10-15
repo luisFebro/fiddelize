@@ -23,6 +23,7 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
+// import { setRun } from '../../hooks/useRunComp';
 // Material UI
 // import { makeStyles } from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
@@ -144,6 +145,7 @@ function Register({
             maritalStatus: "selecione estado civil",
         });
         setFieldError(null);
+        handleNextField(null, null, { clearFields: true });
     };
 
     // Temporarily disabled (Not sending emails)
@@ -197,6 +199,8 @@ function Register({
                 return;
             }
 
+            // setRun(dispatch, "ProCreditsBadge") // update total credits after registration...
+
             ReactGA.event({
                 category: "UserCliUser",
                 action: "Created an account",
@@ -206,6 +210,8 @@ function Register({
             });
 
             !isStaff && lStorage("removeCol", { collection: "onceChecked" });
+
+            clearData();
 
             if (isStaff) {
                 const payload = { name, phone, email };

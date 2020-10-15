@@ -8,23 +8,37 @@ import useStorage from "../../../hooks/storage/useStorage";
 import pickFeature from "./pickFeature";
 import usePro from "../../../hooks/pro/usePro";
 
+const isSmall = window.Helper.isSmallScreen();
+
+const getStyles = () => ({
+    crownIcon: {
+        transform: "rotate(45deg)",
+        top: -8,
+        right: -8,
+        color: "var(--themeP)",
+        fontSize: "20px",
+    },
+});
+
 export default function PremiumButton({
     btnType = "crown", // crown or pill (conhecer)
     callback,
-    proFeature = "OrgganizeClients_1",
+    service, // "Orgganize Clientes"
+    proPage = "OrgganizeClients_1",
     top,
     left,
     right,
     size,
 }) {
+    const styles = getStyles();
+
     const [fullOpen, setFullOpen] = useState(false);
     const [trigger, setTrigger] = useState(false);
     const [waveOn, setWaveOn] = useState(false);
 
-    let { isPro } = usePro();
-    isPro = false;
+    let { isActive } = usePro({ service });
 
-    const { gotData, loading } = useStorage({ key: proFeature, trigger });
+    const { gotData, loading } = useStorage({ key: service, trigger });
 
     useEffect(() => {
         if (!loading && !gotData) {
@@ -44,10 +58,11 @@ export default function PremiumButton({
 
     const data = {
         handleFullClose,
+        isFromDash: true,
     };
 
     const handlePickedComp = () => {
-        const PickedComp = pickFeature({ feature: proFeature, data });
+        const PickedComp = pickFeature({ feature: proPage, data });
         return <PickedComp />;
     };
 
@@ -92,16 +107,41 @@ export default function PremiumButton({
         </Fragment>
     );
 
-    return (
-        !isPro && (
-            <section className="animated fadeIn delay-2s">
-                {showPremiumBtn()}
-                <ModalFullContent
-                    contentComp={PickedFeature}
-                    fullOpen={fullOpen}
-                    setFullOpen={handleFullClose}
+    const showProActiveBadge = () => (
+        <section
+            style={{ zIndex: 1000, top, left, right }}
+            className="position-absolute"
+        >
+            <section
+                className="animated fadeIn delay-2s position-relative"
+                style={{ width: isSmall ? 85 : 95 }}
+            >
+                <p className="text-pill d-table text-small font-weight-bold">
+                    Pro Ativo
+                </p>
+                <FontAwesomeIcon
+                    icon="crown"
+                    style={styles.crownIcon}
+                    className="position-absolute"
                 />
             </section>
-        )
+        </section>
+    );
+
+    return (
+        <Fragment>
+            {!isActive ? (
+                <section className="animated fadeIn delay-2s">
+                    {showPremiumBtn()}
+                    <ModalFullContent
+                        contentComp={PickedFeature}
+                        fullOpen={fullOpen}
+                        setFullOpen={handleFullClose}
+                    />
+                </section>
+            ) : (
+                showProActiveBadge()
+            )}
+        </Fragment>
     );
 }

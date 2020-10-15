@@ -113,7 +113,7 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
             <PremiumButton
                 size="compact"
                 btnType="pill"
-                proFeature={servicePage}
+                proPage={servicePage}
             />
         </div>
     );

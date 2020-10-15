@@ -109,7 +109,7 @@ function ProPay({
                     <br />
                     Renove esse plano a qualquer momento.
                     <br />
-                    Continue fidelizando!
+                    Continue fiddelizando!
                 </p>
             )}
             {(isWelcomeProPay || isProPayOnly) && (

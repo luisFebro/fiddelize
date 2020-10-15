@@ -16,7 +16,6 @@ const checkIfGotFreeCredits = ({ user, service }) => {
     const totalFreeUsers = user.clientAdminData.bizFreeCredits
         ? user.clientAdminData.bizFreeCredits[service]
         : 0;
-    console.log("totalFreeUsers", totalFreeUsers);
 
     if (planType === "gratis" && !totalFreeUsers) return false;
     return true;
@@ -29,7 +28,7 @@ exports.mwProCreditsCounter = (req, res, next) => {
             req.body.clientUserData &&
             req.body.clientUserData.bizId) ||
         req.query.userId;
-    console.log("bizId", bizId);
+
     const role = req.body && req.body.role;
 
     const isUseClient = role === "cliente";

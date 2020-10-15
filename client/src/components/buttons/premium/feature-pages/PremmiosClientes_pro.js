@@ -143,7 +143,6 @@ export default function ProFeature({ data }) {
         <section>
             <p className="my-5 text-subtitle text-purple">
                 Parabéns! Agora você conhece o serviço da Orgganize Clientes.
-                Continue conquistando mais clientes!
             </p>
             <section className="my-5 container-center">
                 <ButtonFab

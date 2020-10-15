@@ -147,7 +147,11 @@ export default function Filters({
                     <span className="mr-5 d-inline-block text-p text-subtitle font-weight-bold text-p text-left font-weight-bold">
                         Organize por:
                     </span>
-                    <PremiumButton right={20} proFeature="OrgganizeClients_1" />
+                    <PremiumButton
+                        right={20}
+                        service="Orgganize Clientes"
+                        proPage="OrgganizeClients_1"
+                    />
                 </div>
 
                 <br />

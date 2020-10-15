@@ -240,7 +240,8 @@ export default function QuickRegister({ formPayload }) {
                         <PremiumButton
                             top={-40}
                             right={-10}
-                            proFeature="EnvvioWhatsapp_2"
+                            service="Envvio Whatsapp"
+                            proPage="EnvvioWhatsapp_2"
                         />
                         <ButtonFab
                             size="medium"

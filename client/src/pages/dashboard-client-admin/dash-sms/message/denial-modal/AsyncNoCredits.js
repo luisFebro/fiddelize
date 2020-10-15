@@ -36,7 +36,7 @@ export default function AsyncNoCredits() {
 
     const modalData = {
         isFromSession: true, // it will allow period choice and handle individual order
-        currPlan,
+        currPlan: currPlan === "gratis" ? "bronze" : currPlan,
     };
 
     const showCTA = () => (
