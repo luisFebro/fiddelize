@@ -11,6 +11,7 @@ import { IS_PROD } from "../../config/clientUrl";
 import didRunOnce from "../../utils/storage/didRunOnce";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import usePro from "../../hooks/pro/usePro";
+import { useClientAdmin } from "../../hooks/useRoleData";
 
 const getPeriod = (ref) => {
     if (!ref) return;
@@ -27,6 +28,7 @@ export default function useManageProServices() {
         isExpired: false,
     });
     const { isToday, userId, isExpired } = data;
+    const { bizPlan } = useClientAdmin();
 
     const { data: nextExpiryDate } = useAPI({
         url: getNextExpiryDate(userId),
@@ -34,7 +36,7 @@ export default function useManageProServices() {
     });
 
     const { nextExpiryData: expiryData } = usePro({
-        trigger: nextExpiryDate && userId,
+        trigger: bizPlan === "gratis" || (nextExpiryDate && userId),
         nextExpiryDate,
         userId,
     });

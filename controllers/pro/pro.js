@@ -1,6 +1,7 @@
 const User = require("../../models/user/User");
 const getCurrPlan = require("./helpers/getCurrPlan");
 const getReferenceData = require("./helpers/getReferenceData");
+const { msg } = require("../_msgs/auth");
 // const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // America/Manaus
 // DEPRACATED - use isScheduledDate method to not include the current expiring date in the frontend's FNS date lib.
 // Use the nextExpiryDate to compare.
@@ -10,55 +11,104 @@ const getReferenceData = require("./helpers/getReferenceData");
 const isPaid = (transactionStatus) =>
     transactionStatus === "pago" || transactionStatus === "disponível";
 
-exports.mwDiscountProCredits = (req, res, next) => {
-    const {
-        userId = "5e8b0bfc8c616719b01abc9c",
-        service = "Novvos Clientes",
-    } = req;
+const checkIfGotFreeCredits = ({ user, service }) => {
+    const planType = user.clientAdminData.bizPlan;
+    const totalFreeUsers = user.clientAdminData.bizFreeCredits
+        ? user.clientAdminData.bizFreeCredits[service]
+        : 0;
+    console.log("totalFreeUsers", totalFreeUsers);
 
-    User.findById(userId).exec((err, user) => {
-        if (err || !user)
-            return res.status(404).json({ error: "user not found" });
+    if (planType === "gratis" && !totalFreeUsers) return false;
+    return true;
+};
 
-        const planList = user.clientAdminData.bizPlanList;
-        if (!planList.length) return res.json(false);
+exports.mwProCreditsCounter = (req, res, next) => {
+    const service = req.query.service || "Novvos Clientes";
+    const bizId =
+        (req.body &&
+            req.body.clientUserData &&
+            req.body.clientUserData.bizId) ||
+        req.query.userId;
+    console.log("bizId", bizId);
+    const role = req.body && req.body.role;
 
-        const numCredits = 1;
-        let newBalance;
-        const discountedList = planList.map((servObj) => {
-            if (servObj.service === service) {
-                const discountNow = servObj.creditEnd - numCredits;
-                servObj.creditEnd = discountNow;
-                newBalance = discountNow;
+    const isUseClient = role === "cliente";
+
+    if (!isUseClient) return next();
+
+    async function startUserClientDiscount() {
+        const user = await User.findById(bizId);
+
+        if (!user) return res.status(404).json({ error: "user not found" });
+
+        const gotFreeCredits = checkIfGotFreeCredits({ user, service });
+        if (!gotFreeCredits) {
+            const bizName = user.clientAdminData.bizName;
+            return res.status(401).json(msg("error.registersLimit", bizName));
+        }
+
+        const needFreeDiscount = gotFreeCredits === true;
+
+        let newBalance; // for console.log only.
+        if (needFreeDiscount) {
+            const thisNewBalance =
+                user.clientAdminData.bizFreeCredits[service] - 1;
+            newBalance = thisNewBalance;
+
+            user.clientAdminData.bizFreeCredits[service] =
+                thisNewBalance < 0 ? 0 : thisNewBalance;
+            user.clientAdminData.totalClientUsers += 1; // iin case of deletion, the substraction happens in the modalYesNo with method countFied
+            user.markModified("clientAdminData.bizFreeCredits");
+        } else {
+            const planList = user.clientAdminData.bizPlanList;
+            if (planList && !planList.length) return next();
+
+            const numCredits = 1;
+
+            const discountedList = planList.map((servObj) => {
+                if (servObj.service === service) {
+                    const discountNow = servObj.creditEnd - numCredits;
+                    servObj.creditEnd = discountNow;
+                    newBalance = discountNow;
+                    return servObj;
+                }
+
                 return servObj;
-            }
+            });
 
-            return servObj;
-        });
+            user.clientAdminData.bizPlanList = discountedList;
+            // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+            user.clientAdminData.totalClientUsers += 1;
+            user.markModified("clientAdminData.bizPlanList");
+        }
 
-        user.clientAdminData.bizPlanList = discountedList;
-        // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-        user.markModified("clientAdminData.bizPlanList");
+        await user.save();
 
-        user.save((err) => {
-            res.json(
-                `It was discounted 1 credit from service ${service}. New balance is ${newBalance} `
-            );
-            // next();
-        });
-    });
+        const succMsg = `It was discounted 1 ${
+            needFreeDiscount ? "FREE CREDIT" : "credit"
+        } from service ${service}. New balance is ${newBalance}`;
+        console.log(succMsg);
+        // res.json(succMsg); // for testing
+        next();
+    }
+
+    isUseClient && startUserClientDiscount();
 };
 
 // GET - goal is to change welcome message to direct pay after first transaction.
 exports.getProData = (req, res) => {
     const { userId, nextExpiryDate } = req.query;
     User.findById(userId)
-        .select("clientAdminData.orders clientAdminData.bizPlanList")
+        .select(
+            "clientAdminData.bizFreeCredits clientAdminData.orders clientAdminData.bizPlanList"
+        )
         .exec((err, data) => {
             if (err || !data)
                 return res.status(404).json({ error: "something went wrong" });
             const orders = data.clientAdminData.orders;
             const bizPlanList = data.clientAdminData.bizPlanList;
+            const bizFreeCredits = data.clientAdminData.bizFreeCredits;
+
             const isBizPlanValid = bizPlanList && bizPlanList.length;
             const isOrdersValid = orders && orders.length;
 
@@ -120,6 +170,7 @@ exports.getProData = (req, res) => {
                 totalScore,
                 plan,
                 nextExpiryServData: expiryData,
+                bizFreeCredits,
                 bizPlanList,
             });
         });

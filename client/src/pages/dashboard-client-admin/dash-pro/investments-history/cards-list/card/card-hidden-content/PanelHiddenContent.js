@@ -183,8 +183,9 @@ function PanelHiddenContent({ history, data }) {
             transactionStatus,
         } = data;
         const isRenewable =
-            (renewal && renewal.priorRef) !== reference &&
-            transactionStatus !== "pendente";
+            transactionStatus &&
+            transactionStatus !== "pendente" &&
+            (renewal && renewal.priorRef) !== reference;
         const referenceArray = reference && reference.split("-");
         const [planCode, qtt, period] = referenceArray;
 

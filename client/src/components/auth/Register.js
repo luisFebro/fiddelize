@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState, useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
-import { countField } from "../../redux/actions/userActions";
 // import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
@@ -208,27 +207,19 @@ function Register({
 
             !isStaff && lStorage("removeCol", { collection: "onceChecked" });
 
-            const objToSend = {
-                field: "clientAdminData.totalClientUsers",
-                type: "inc",
-            };
-            countField(bizSysId, objToSend).then((res) => {
-                if (res.status !== 200)
-                    return showSnackbar(dispatch, res.data.msg, "error");
-                if (isStaff) {
-                    const payload = { name, phone, email };
-                    callback(payload);
-                } else {
-                    setLoginOrRegister("login");
-                    showSnackbar(
-                        dispatch,
-                        `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
-                        "success",
-                        9000
-                    );
-                    // sendEmail(res.data.authUserId);
-                }
-            });
+            if (isStaff) {
+                const payload = { name, phone, email };
+                callback(payload);
+            } else {
+                setLoginOrRegister("login");
+                showSnackbar(
+                    dispatch,
+                    `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
+                    "success",
+                    9000
+                );
+                // sendEmail(res.data.authUserId);
+            }
         });
     };
 

@@ -71,9 +71,9 @@ export default function Totals({
                         <br />
                         <span className="mr-2 text-normal font-weight-bold">
                             •{" "}
-                            {`${loading ? "..." : allUsersLength} ${pluralizeBr(
-                                mainSubject
-                            )}`}
+                            {`${
+                                loading ? "..." : allUsersLength
+                            } ${mainSubject}${allUsersLength > 1 ? "s" : ""}`}
                         </span>
                         <br />
                         {showActiveScores()}

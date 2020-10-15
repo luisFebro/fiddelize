@@ -157,7 +157,9 @@ const clientAdminData = {
 
     // premium plans
     bizFreeCredits: {
-        NovvosClientes: { type: Number, default: 10 },
+        // for package-based services.
+        "Novvos Clientes": { type: Number, default: 10 },
+        "Kit da Eqquipe": { type: Number, default: 1 },
     },
     bizPlan: {
         type: String,
@@ -180,8 +182,8 @@ const clientAdminData = {
     selfThemeBackColor: String,
     // end self-service
 
-    totalClientUserScores: Number,
-    totalClientUsers: Number,
+    totalClientUserScores: { type: Number, default: 0 },
+    totalClientUsers: { type: Number, default: 0 },
 
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },

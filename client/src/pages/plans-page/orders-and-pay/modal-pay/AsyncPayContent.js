@@ -95,9 +95,6 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         renewalReference: renewalReference ? renewalReference : undefined,
         isSingleRenewal,
     };
-    console.log("renewalCurrDays", body.renewalCurrDays);
-    console.log("renewalDaysLeft", body.renewalDaysLeft);
-    console.log("isSingleRenewal", body.isSingleRenewal);
 
     const { data, loading } = useAPI({
         method: "post",

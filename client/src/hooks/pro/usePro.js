@@ -12,6 +12,7 @@ const setAllData = (thisData, setData, bizPlan) => {
         totalScore: thisData && thisData.totalScore,
         nextExpiryData: thisData && thisData.nextExpiryServData,
         bizPlanList: thisData && thisData.bizPlanList,
+        bizFreeCredits: thisData && thisData.bizFreeCredits,
     }));
 };
 
@@ -24,8 +25,16 @@ export default function usePro(options = {}) {
         totalScore: 0,
         nextExpiryData: "",
         bizPlanList: [],
+        bizFreeCredits: {},
     });
-    const { isPro, plan, nextExpiryData, totalScore, bizPlanList } = data;
+    const {
+        isPro,
+        plan,
+        nextExpiryData,
+        totalScore,
+        bizPlanList,
+        bizFreeCredits,
+    } = data;
 
     const { businessId } = useAppSystem();
     const { bizPlan } = useClientAdmin();
@@ -55,6 +64,7 @@ export default function usePro(options = {}) {
     if (service) {
         let credits = 0;
         let usageTimeEnd;
+
         bizPlanList &&
             bizPlanList.forEach((s) => {
                 if (service === s.service) {
@@ -64,6 +74,8 @@ export default function usePro(options = {}) {
             });
 
         const daysLeft = getDatesCountdown(usageTimeEnd);
+        const freeCredits = bizFreeCredits && bizFreeCredits[service];
+        credits += freeCredits ? freeCredits : 0;
 
         return {
             isPro,
