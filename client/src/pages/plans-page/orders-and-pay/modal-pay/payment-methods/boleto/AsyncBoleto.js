@@ -248,10 +248,7 @@ export default function AsyncBoleto({ modalData = {} }) {
                 estiver aprovado e seu <strong>plano atualizado</strong>.
             </p>
             <div className="container-center mt-5">
-                <RedirectLink
-                    toDashTab="Pro"
-                    pendingMsg="Indo para sessão Pro..."
-                >
+                <RedirectLink toDashTab="Pro">
                     <ButtonFab
                         size="large"
                         title="Ir para Histórico"

@@ -3,6 +3,7 @@ import extractStrData from "../../../../utils/string/extractStrData";
 import ButtonMulti from "../../../../components/buttons/material-ui/ButtonMulti";
 import setProRenewal from "../../../../utils/biz/setProRenewal";
 import { withRouter } from "react-router-dom";
+import RedirectLink from "../../../../components/RedirectLink";
 // import useCount from '../../../../hooks/useCount';
 import {
     textStyle,
@@ -89,6 +90,17 @@ function ProPay({
         />
     );
 
+    const GoToProSessionBtn = () => (
+        <RedirectLink toDashTab="Pro">
+            <ButtonMulti
+                title="Ir Sessão Pro"
+                color="var(--mainWhite)"
+                backgroundColor="var(--themeP)"
+                onClick={null}
+            />
+        </RedirectLink>
+    );
+
     return (
         <section>
             <ShowTitle text={handleTitle()} />
@@ -120,7 +132,9 @@ function ProPay({
             <ShowActionBtn
                 role={role}
                 titleCliAdmin="Ir para painel"
-                children={needOrderBtn ? <ChildrenBtn /> : undefined}
+                children={
+                    needOrderBtn ? <ChildrenBtn /> : <GoToProSessionBtn />
+                }
             />
         </section>
     );

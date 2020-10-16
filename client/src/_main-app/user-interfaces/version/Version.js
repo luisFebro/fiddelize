@@ -4,11 +4,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.6304.4";
+const latestVersion = "3.6310.4";
 // PRÓXIMO:
 //
 const updateDescription =
-    "sistema de planos - integração com serviços individuais pt5";
+    "sistema de planos - integração com serviços individuais pt6";
 const history = [
     "planos e pagamentos - sistema e design de notificação pro",
     "club pro - cards de transação e design",

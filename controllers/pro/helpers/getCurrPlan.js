@@ -1,17 +1,22 @@
 const getReferenceData = require("./getReferenceData");
 
-function analysePlanType(bizPlanList) {
-    let res = "";
+function analysePlanType(orders) {
+    let res = "bronze";
     let goldN = 0;
     let silverN = 0;
 
-    bizPlanList.forEach((serv) => {
-        if (serv.plan === "ouro") {
+    orders.forEach((serv) => {
+        const { planBr } = getReferenceData(serv.reference);
+        const isPaid =
+            serv.transactionStatus === "pago" ||
+            serv.transactionStatus === "disponível";
+
+        if (planBr === "ouro" && isPaid) {
             res = "ouro";
             ++goldN;
         }
 
-        if (serv.plan === "prata") {
+        if (planBr === "prata" && isPaid) {
             res = "prata";
             ++silverN;
         }
@@ -24,19 +29,10 @@ function analysePlanType(bizPlanList) {
     return res;
 }
 
-const getCurrPlan = (bizPlanList, options = {}) => {
-    const { mainRef } = options;
+const getCurrProPlan = (orders) => {
+    if (!orders) return "bronze";
 
-    if (!mainRef) return;
-
-    const { planBr: currPlan } = getReferenceData(mainRef);
-
-    if (!bizPlanList) return currPlan;
-    if (currPlan === "ouro") return currPlan;
-
-    const analysedRes = analysePlanType(bizPlanList);
-
-    return analysedRes;
+    return analysePlanType(orders);
 };
 
-module.exports = getCurrPlan;
+module.exports = getCurrProPlan;

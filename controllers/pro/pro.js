@@ -1,5 +1,5 @@
 const User = require("../../models/user/User");
-const getCurrPlan = require("./helpers/getCurrPlan");
+const getCurrProPlan = require("./helpers/getCurrPlan");
 const getReferenceData = require("./helpers/getReferenceData");
 const { msg } = require("../_msgs/auth");
 // const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // America/Manaus
@@ -151,10 +151,7 @@ exports.getProData = (req, res) => {
                     }
                 });
 
-            let mainRef = orders.length && orders[0].reference; //IMPORTANT: only to verify if the last added order is gold or in case of the first order to return the current plan. first order ref from list
-            const plan = !orders.length
-                ? "gratis"
-                : getCurrPlan(orders, { mainRef });
+            const plan = !isPro ? "gratis" : getCurrProPlan(orders);
 
             const expiryData = {
                 nextExPlan,

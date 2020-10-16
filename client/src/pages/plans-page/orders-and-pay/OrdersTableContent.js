@@ -60,7 +60,7 @@ export default function OrdersTableContent({
             créditos não usados <strong>são zerados automaticamente</strong> de
             forma permanente.
             <br />
-            <br /> - O cliente-admin é notificado <strong>5 dias</strong> antes
+            <br /> - O cliente-admin é notificado <strong>10 dias</strong> antes
             de expirar algum plano.
             <br />
             <br />- Você pode renovar seu plano mesmo durante sua ativação. Por

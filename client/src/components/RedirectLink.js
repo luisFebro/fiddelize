@@ -5,7 +5,7 @@ import { useClientAdmin } from "../hooks/useRoleData";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../redux/actions/globalActions";
 import { setVar } from "../hooks/storage/useVar";
-import { showSnackbar } from "../redux/actions/snackbarActions";
+// import { showSnackbar } from "../redux/actions/snackbarActions";
 
 export default function RedirectLink({
     children,
@@ -19,10 +19,10 @@ export default function RedirectLink({
 
     const handleClick = () => {
         if (toDashTab) {
-            if (pendingMsg) showSnackbar(dispatch, pendingMsg);
-            return setVar({ name_tabLabel: toDashTab }).then((res) => {
-                setRun(dispatch, "goDash");
-            });
+            setRun(dispatch, "goDash");
+            // it is now switchin tabs fast enough and msg became lazy
+            // if (pendingMsg) showSnackbar(dispatch, pendingMsg, "warning", 3000);
+            return setVar({ name_tabLabel: toDashTab });
         } else {
             setRun(dispatch, "goDash");
         }

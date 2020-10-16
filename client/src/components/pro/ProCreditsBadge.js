@@ -18,14 +18,15 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
         expiryDate: usageTimeEnd,
     };
 
+    const creditsCond = isPro ? credits : credits >= 0; // avoid displaying zero for pro plans when they got credits.
     return (
         <section className="d-table position-relative">
             <div className="text-pill main-font text-normal font-weight-bold">
-                {credits >= 0
+                {creditsCond
                     ? `${convertToReal(credits)} créditos`
                     : "... créditos"}
             </div>
-            {isPro && (
+            {isPro && daysLeft && (
                 <p className="text-small text-purple font-weight-bold">
                     Expira em
                     <span className="ml-1 d-inline-block text-normal font-weight-bold">
