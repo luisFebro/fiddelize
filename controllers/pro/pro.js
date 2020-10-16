@@ -1,5 +1,5 @@
 const User = require("../../models/user/User");
-const getCurrProPlan = require("./helpers/getCurrPlan");
+const getCurrPlan = require("./helpers/getCurrPlan");
 const getReferenceData = require("./helpers/getReferenceData");
 const { msg } = require("../_msgs/auth");
 // const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // America/Manaus
@@ -151,7 +151,7 @@ exports.getProData = (req, res) => {
                     }
                 });
 
-            const plan = !isPro ? "gratis" : getCurrProPlan(orders);
+            const plan = !isPro ? "gratis" : getCurrPlan(orders);
 
             const expiryData = {
                 nextExPlan,

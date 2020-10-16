@@ -57,7 +57,8 @@ exports.handleProPlan = ({
     allServices,
     thisDueDate,
 }) => {
-    const currPlan = getCurrPlan(currBizPlanList, { mainRef });
+    const currPlan = getCurrPlan(orders);
+
     data2.clientAdminData.bizPlan = currPlan;
     data2.clientAdminData.bizPlanList = setCurrPlan(currBizPlanList, orders, {
         allServices,

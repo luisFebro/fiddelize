@@ -115,7 +115,7 @@ const getPagNotify = (req, res) => {
                     totalRenewalDays
                 );
 
-                doc.planDueDate = thisDueDate; // I already modified future date on checkout for renewal.
+                doc.planDueDate = thisDueDate;
                 doc.paymentMethod = getPaymentMethod(paymentMethodCode);
                 doc.updatedAt = lastEventDate;
                 doc.transactionStatus = getTransactionStatusTypes(status);

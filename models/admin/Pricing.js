@@ -19,6 +19,7 @@ const data = {
     gold: plansData,
     silver: plansData,
     bronze: plansData,
+    isPackage: Boolean, // identify services which got a changeable pricing value and sold by package. e.g Novvos Clientes, Kit da Eqquipe
     // plansIncluded: { type: Array, default: ["gold", "silver", "bronze"] }, ssimplying using 0 in all excluded plan pricing when not included
 };
 

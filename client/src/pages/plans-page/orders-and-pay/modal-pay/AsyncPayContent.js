@@ -7,6 +7,7 @@ import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
 import getFirstName from "../../../../utils/string/getFirstName";
+import handleRenewalDays from "./helpers/handleRenewalDays";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
 const filter = getFilterDate();
@@ -22,14 +23,6 @@ const getPayMethod = (selected) => {
     if ("No Boleto") return "boleto";
     if ("No Cartão") return "creditCard";
     if ("No Débito") return "eft";
-};
-
-const handlePeriodDays = (reference) => {
-    const referenceArray = reference && reference.split("-");
-    const [, , per] = referenceArray;
-
-    if (per === "A") return 365;
-    if (per === "M") return 30;
 };
 
 export default function AsyncPayContent({ modalData, isProUser = false }) {
@@ -54,6 +47,30 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
     const [payMethods, setPayMethods] = useState({});
     const [senderHash, setSenderHash] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [renewalData, setRenewalData] = useState({
+        newRenewalDaysLeft: null,
+        renewalCurrDays: null,
+        renewalReady: false,
+    });
+    const { newRenewalDaysLeft, renewalCurrDays, renewalReady } = renewalData;
+    console.log("renewalData", renewalData);
+
+    useEffect(() => {
+        handleRenewalDays({
+            setRenewalData,
+            ordersStatement,
+            renewalDaysLeft,
+            renewalReference,
+            isSingleRenewal,
+            reference,
+        });
+    }, [
+        reference,
+        renewalReference,
+        renewalDaysLeft,
+        isSingleRenewal,
+        ordersStatement,
+    ]);
 
     const { businessId } = useAppSystem();
     const { name: adminName } = useProfile();
@@ -87,13 +104,10 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         firstDueDate,
         ordersStatement,
         filter,
-        renewalDaysLeft: renewalDaysLeft ? Number(renewalDaysLeft) : undefined,
-        renewalCurrDays:
-            renewalReference || isSingleRenewal
-                ? handlePeriodDays(reference)
-                : undefined,
-        renewalReference: renewalReference ? renewalReference : undefined,
+        renewalDaysLeft: newRenewalDaysLeft,
+        renewalCurrDays,
         isSingleRenewal,
+        renewalReference: renewalReference ? renewalReference : undefined,
     };
 
     const { data, loading } = useAPI({
@@ -102,7 +116,12 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         params,
         body,
         needAuth: true,
-        trigger: senderCPF && ordersStatement && senderHash && selectedCategory,
+        trigger:
+            renewalReady &&
+            senderCPF &&
+            ordersStatement &&
+            senderHash &&
+            selectedCategory,
         timeout: 40000,
     });
 

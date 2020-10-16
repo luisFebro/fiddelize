@@ -29,10 +29,10 @@ function analysePlanType(orders) {
     return res;
 }
 
-const getCurrProPlan = (orders) => {
+const getCurrPlan = (orders) => {
     if (!orders) return "bronze";
 
     return analysePlanType(orders);
 };
 
-module.exports = getCurrProPlan;
+module.exports = getCurrPlan;

@@ -1,5 +1,22 @@
 const getReferenceData = require("./getReferenceData");
 
+const handleCreditEnd = ({
+    currServ,
+    foundServicePriceDoc,
+    lastUserOrder,
+    isServiceSoldByPackage,
+    plan,
+    periodicity,
+}) => {
+    if (lastUserOrder && isServiceSoldByPackage) {
+        return lastUserOrder[currServ].amount;
+    }
+
+    return foundServicePriceDoc
+        ? foundServicePriceDoc[plan].credit[periodicity]
+        : 888;
+};
+
 const getNewService = ({
     isRenewal = false,
     lastRenewalHistory,
@@ -18,13 +35,12 @@ const getNewService = ({
 
     const infinityCredit = creditEnd === 888;
 
+    const gotLastCredits = lastCreditEnd && !infinityCredit;
+
     return {
         service: currServ,
         plan: currPlan,
-        creditEnd:
-            lastCreditEnd && !infinityCredit
-                ? lastCreditEnd + creditEnd
-                : creditEnd,
+        creditEnd: gotLastCredits ? lastCreditEnd + creditEnd : creditEnd,
         usageTimeEnd,
         periodicityBr,
         renewalHistory: isRenewal
@@ -64,7 +80,7 @@ const setVirginBizPlanList = ({
     allServices,
     lastOrderServices,
     servicesAlreadyPaid,
-    isCurrPlanPackage,
+    isCurrFullPremium,
     currPlan,
     usageTimeEnd,
     ref,
@@ -72,7 +88,7 @@ const setVirginBizPlanList = ({
 }) => {
     let newBizPlanList;
 
-    if (isCurrPlanPackage) {
+    if (isCurrFullPremium) {
         newBizPlanList = getAllPlanPackage({
             allServices,
             plan,
@@ -86,11 +102,11 @@ const setVirginBizPlanList = ({
         const serviceNamesToUpdate = lastOrderServices; // e.g ["Novvos Clientes", "Premmios Clientes"]
         newBizPlanList = serviceNamesToUpdate.map((nameServ) => {
             const currServ = nameServ;
-            const foundPricingServ = allServices.find(
+            const foundServicePriceDoc = allServices.find(
                 (s) => s.serviceName === currServ
             );
-            const creditEnd = foundPricingServ
-                ? foundPricingServ[plan].credit[periodicity]
+            const creditEnd = foundServicePriceDoc
+                ? foundServicePriceDoc[plan].credit[periodicity]
                 : 888;
 
             return getNewService({
@@ -117,7 +133,7 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
 
     const lastUserOrder = orders && orders[0].ordersStatement; //{ "Novvos Clientes": { amount: 1, price: 25 } } //orders && orders[0].ordersStatement; //{ "Novvos Clientes": { amount: 1, price: 25 } }//orders && orders[0].ordersStatement; //{ "Novvos Clientes": { amount: 1, price: 25 } } ///orders && orders[0].ordersStatement; ///{ "Envvio Whatsapp": { amount: 1, price: 25 } }///orders && orders[0].ordersStatement;
     const lastOrderServices = lastUserOrder && Object.keys(lastUserOrder);
-    const isCurrPlanPackage =
+    const isCurrFullPremium =
         lastOrderServices && lastOrderServices.includes("currPlan");
 
     if (currBizPlanList && !currBizPlanList.length)
@@ -126,7 +142,7 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
             periodicity,
             allServices,
             lastOrderServices,
-            isCurrPlanPackage,
+            isCurrFullPremium,
             currPlan,
             usageTimeEnd,
             ref,
@@ -135,7 +151,7 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
 
     // RENEWAL
     const isSingleToPackage =
-        isCurrPlanPackage && currBizPlanList.length < allServices.length; // handle case when user buy a single service, and then update to gold or silver.
+        isCurrFullPremium && currBizPlanList.length < allServices.length; // handle case when user buy a single service, and then update to gold or silver.
     if (isSingleToPackage)
         return getAllPlanPackage({
             allServices,
@@ -148,14 +164,16 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
         });
 
     let newBizPlanList;
-    if (isCurrPlanPackage) {
+    if (isCurrFullPremium) {
         newBizPlanList = currBizPlanList.map((serv) => {
             const currServ = serv.service;
-            const foundPricingServ = allServices.find(
+
+            const foundServicePriceDoc = allServices.find(
                 (s) => s.serviceName === currServ
             );
-            const creditEnd = foundPricingServ
-                ? foundPricingServ[plan].credit[periodicity]
+
+            const creditEnd = foundServicePriceDoc
+                ? foundServicePriceDoc[plan].credit[periodicity]
                 : 888;
 
             const lastRenewalHistory = serv ? serv.renewalHistory : [];
@@ -172,18 +190,26 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
             });
         });
     } else {
-        const serviceNamesToUpdate = lastOrderServices; // e.g ["Novvos Clientes", "Premmios Clientes"]
+        const serviceNamesToUpdate = lastOrderServices; // e.g ["Novvos Clientes", "Prêmmios Clientes"]
         newBizPlanList = serviceNamesToUpdate.map((nameServ) => {
             const currServ = nameServ;
             const currDataServ = currBizPlanList.find(
                 (serv) => serv.service === nameServ
             );
-            const foundPricingServ = allServices.find(
+            const foundServicePriceDoc = allServices.find(
                 (s) => s.serviceName === currServ
             );
-            const creditEnd = foundPricingServ
-                ? foundPricingServ[plan].credit[periodicity]
-                : 888;
+
+            const isServiceSoldByPackage =
+                foundServicePriceDoc && foundServicePriceDoc.isPackage;
+            const creditEnd = handleCreditEnd({
+                currServ,
+                foundServicePriceDoc,
+                isServiceSoldByPackage,
+                lastUserOrder,
+                plan,
+                periodicity,
+            });
 
             const lastRenewalHistory = currDataServ
                 ? currDataServ.renewalHistory
