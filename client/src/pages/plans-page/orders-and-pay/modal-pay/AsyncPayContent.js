@@ -53,7 +53,6 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         renewalReady: false,
     });
     const { newRenewalDaysLeft, renewalCurrDays, renewalReady } = renewalData;
-    console.log("renewalData", renewalData);
 
     useEffect(() => {
         handleRenewalDays({

@@ -23,7 +23,7 @@ const AsyncPayMethods = Load({
         ),
 });
 
-const sandboxMode = true; // IS_DEV ? true : false;
+const sandboxMode = IS_DEV ? true : false;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";

@@ -150,6 +150,8 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
         });
 
     // RENEWAL
+    // Warning for future update: This override previous services bought like a package (e.g Novvos CLientes).
+    // Soon fix it when necessary.
     const isSingleToPackage =
         isCurrFullPremium && currBizPlanList.length < allServices.length; // handle case when user buy a single service, and then update to gold or silver.
     if (isSingleToPackage)

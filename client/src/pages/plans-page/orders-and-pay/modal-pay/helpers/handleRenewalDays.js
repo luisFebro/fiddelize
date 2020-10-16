@@ -49,8 +49,6 @@ export default function handleRenewalDays({
             res: isUltimateRenewal,
             ultimateDaysLeft,
         } = checkUltimateRenewal({ ordersStatement, bizPlanList });
-        console.log("ultimateDaysLeft", ultimateDaysLeft);
-        console.log("isUltimateRenewal", isUltimateRenewal);
 
         const res = {
             newRenewalDaysLeft:

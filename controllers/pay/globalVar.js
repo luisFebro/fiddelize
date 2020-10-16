@@ -4,7 +4,7 @@ const { IS_PROD } = require("../../config");
 // In order to work, we have to set sandboxMode to TRUE and deploy both here and PayArea Compenent.
 // if sandboxMode is on, then production status transaction change will return with error 404 or 500
 exports.globalVar = {
-    sandboxMode: true, //
+    sandboxMode: false,
     get payUrl() {
         return this.sandboxMode
             ? "https://ws.sandbox.pagseguro.uol.com.br"
