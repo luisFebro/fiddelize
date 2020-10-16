@@ -5,7 +5,14 @@ import ProCreditsBtn from "./pro-credits-btn/ProCreditsBtn";
 // import { useRunComp } from '../../hooks/useRunComp';
 
 export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
-    let { isPro, credits, plan: currPlan, usageTimeEnd, daysLeft } = usePro({
+    let {
+        loading,
+        isPro,
+        credits,
+        plan: currPlan,
+        usageTimeEnd,
+        daysLeft,
+    } = usePro({
         service,
     });
 
@@ -18,7 +25,8 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
         expiryDate: usageTimeEnd,
     };
 
-    const creditsCond = isPro ? credits : credits >= 0; // avoid displaying zero for pro plans when they got credits.
+    const creditsCond = loading && !isPro ? credits : credits >= 0; // avoid displaying zero for pro plans when they got credits.
+
     return (
         <section className="d-table position-relative">
             <div className="text-pill main-font text-normal font-weight-bold">

@@ -78,6 +78,7 @@ export default function usePro(options = {}) {
         credits += freeCredits ? freeCredits : 0;
 
         return {
+            loading,
             isPro,
             isActive: Boolean(usageTimeEnd || freeCredits),
             credits,

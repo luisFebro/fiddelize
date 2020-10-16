@@ -97,7 +97,7 @@ export default function HiddenGoalsAndRewards() {
                     <PremiumButton
                         right={-60}
                         top={-40}
-                        service="Premmios Clientes"
+                        service="Prêmmios Clientes"
                         proPage="PremmiosClientes_pro"
                     />
                 </section>

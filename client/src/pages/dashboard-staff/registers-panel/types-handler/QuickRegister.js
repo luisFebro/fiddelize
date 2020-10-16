@@ -82,17 +82,6 @@ export default function QuickRegister({ formPayload }) {
     const AsyncNoCredits = <Async />;
 
     let { isPro } = usePro();
-    isPro = false;
-    // useEffect(() => {
-    //     if(formPayload) {
-    //         const { name: thisName, phone, email } = formPayload;
-    //         setData({
-    //             ...data,
-    //             meanPayload: meanType === "number" ? phone : email,
-    //             name: thisName,
-    //         })
-    //     }
-    // }, [formPayload, meanType])
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -329,3 +318,15 @@ export default function QuickRegister({ formPayload }) {
         </section>
     );
 }
+
+//ARCHIVES
+// useEffect(() => {
+//     if(formPayload) {
+//         const { name: thisName, phone, email } = formPayload;
+//         setData({
+//             ...data,
+//             meanPayload: meanType === "number" ? phone : email,
+//             name: thisName,
+//         })
+//     }
+// }, [formPayload, meanType])
