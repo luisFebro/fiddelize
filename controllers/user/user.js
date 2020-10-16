@@ -627,7 +627,7 @@ exports.uploadImages = (req, res) => {
         use_filename: false, // use file name as public_id
         image_metadata: true,
         quality_analysis: true,
-        quality: 90,
+        quality: 100,
         tags: "logo",
         backup: true,
         // folder: "trade-marks/",

@@ -21,7 +21,7 @@ export default function PlanAndServicesArea() {
     let { loading, plan: currPlan, totalScore } = usePro();
     currPlan = !loading && currPlan && currPlan.cap();
 
-    const isFree = currPlan === "gratis";
+    const isFree = currPlan === "Gratis";
 
     const showClubCTA = () => {
         const getCTABtn = (to, title, noIcon = false) => (
@@ -69,10 +69,15 @@ export default function PlanAndServicesArea() {
         );
     };
 
+    const handleVersion = () => {
+        if (loading) return "...";
+        return isFree ? "Atual" : "Pro";
+    };
+
     return (
         <section className="my-5">
             <div className="text-subtitle font-weight-bold text-purple">
-                Versão {isFree ? "Atual" : "Pro"}:
+                Versão {handleVersion()}:
                 <span className="d-block text-em-1-7">
                     {isFree ? "" : "Plano"} {currPlan ? currPlan : "..."}
                 </span>

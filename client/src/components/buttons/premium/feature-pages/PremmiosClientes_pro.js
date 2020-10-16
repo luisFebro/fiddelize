@@ -2,6 +2,7 @@ import React from "react";
 import { ShowTitle, ShowPicture, useElemShowOnScroll } from "./DefaultProComps";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 const checkIcon = {
     fontSize: "25px",
@@ -9,15 +10,16 @@ const checkIcon = {
     color: "var(--themeP)",
 };
 
+const S_NAME = "Prêmmios Clientes";
 export default function ProFeature({ data }) {
-    const { handleFullClose } = data;
+    const { handleFullClose, isFromDash } = data;
 
     const opts = {
         withObserver: true,
         loadImgs: true,
         imgWrapper: true,
     };
-    useElemShowOnScroll(".orgganize-clientes--picture", opts);
+    useElemShowOnScroll(".premmios-clientes--picture", opts);
 
     const showIllustration = () => (
         <ShowPicture
@@ -46,83 +48,50 @@ export default function ProFeature({ data }) {
                 Principais Benefícios
             </h2>
             <p className="text-normal text-purple">
-                <FontAwesomeIcon icon="check" style={checkIcon} />O serviço
-                Orgganize Clientes vai além de filtrar uma lista de dados. Ele
-                está conectado com a interação de seus clientes para te dá
-                ideias para suas campanhas.
-            </p>
-            <ShowPicture
-                imgContainerClass="orgganize-clientes--picture"
-                dataSrc="/img/pro-features/orgganize/admin-clients/pic-1.png"
-                reference=""
-                subtitle="opções de filtros"
-            />
-            <p className="text-normal text-purple">
                 <FontAwesomeIcon icon="check" style={checkIcon} />
-                Você já leva de graça os filtros essenciais e um pouco mais:
-                ordem alfabética, clientes recentes e pontos ativos (somente
-                quem já pontuou).
+                Na versão gratis, você pode adicionar até 3 desafios diferentes.{" "}
+                O serviço {S_NAME} te entrega{" "}
+                <strong>mais opções de prêmios e desafios</strong>.
                 <br />
                 <br />
-                As opções pro te oferece mais opções interessantes. Você tem
-                acesso ao resultado de métricas, assim filtrar e saber os
-                maiores fãs do seu negócio (compram mais), maiores valores por
-                compra, últimos clientes que compraram e aniversariantes.
-            </p>
-            <p className="text-normal text-purple">
-                <FontAwesomeIcon icon="check" style={checkIcon} />
-                Além de organizar e filtrar seus clientes por categoria, você
-                pode <strong>escolher o período</strong>.
+                Você pode escolher diferentes ícones para cada desafio assim
+                como a descrição do seu prêmio junto com sua meta em pontos, ou
+                o ponto-prêmio. Adicione quantos desafios personalizados
+                precisar com o {S_NAME}!
             </p>
             <ShowPicture
-                imgContainerClass="orgganize-clientes--picture"
-                dataSrc="/img/pro-features/orgganize/admin-clients/pic-2.png"
+                imgContainerClass="premmios-clientes--picture"
+                dataSrc="/img/pro-features/premmios-clientes/pic-1.png"
                 reference=""
-                subtitle="opções de períodos"
+                subtitle="modo progressivo - múltiplas opções prêmios"
             />
             <p className="text-normal text-purple">
-                <FontAwesomeIcon icon="check" style={checkIcon} />
-                Sabe quando você fala das suas <strong>
-                    preferências
-                </strong>{" "}
-                para alguém e depois ela esquece, ou pior, te entrega algo que
-                você não gosta? Você não tem isso com a Orgganize Clientes. Se
-                você prefere filtrar os últimos clientes e somente os de hoje, é
-                isso que você vai ver quando voltar sem ter que reorganizar tudo
-                de novo.
+                <FontAwesomeIcon icon="check" style={checkIcon} /> O serviço{" "}
+                {S_NAME} da Fiddelize gerencia de forma individual e
+                personalizada o app de cada um de seus clientes e mostra os seus
+                desafios de acordo o nível atual deles, seguindo a ordem da sua
+                lista de prêmios.
             </p>
             <ShowPicture
-                imgContainerClass="orgganize-clientes--picture"
-                dataSrc="/img/pro-features/orgganize/admin-clients/pic-3.png"
+                imgContainerClass="premmios-clientes--picture"
+                dataSrc="/img/pro-features/premmios-clientes/pic-2.png"
                 reference=""
-                subtitle="visão geral orgganize clientes"
+                subtitle="edição de um desafio"
+            />
+            <ShowPicture
+                imgContainerClass="premmios-clientes--picture"
+                dataSrc="/img/pro-features/premmios-clientes/pic-3.png"
+                reference=""
+                subtitle="editor de ícones de nível"
             />
             <p className="text-normal text-purple">
-                <FontAwesomeIcon icon="check" style={checkIcon} />
-                Onde está o botão de filtrar na imagem acima? A resposta é que
-                você não tem mesmo porque você não precisa. Os{" "}
-                <strong>filtros são automatizados</strong>. Você seleciona e já
-                aparece o resultado!
+                <FontAwesomeIcon icon="check" style={checkIcon} /> Além do mais,
+                a Fiddelize complementa o serviço com a assistente que te avisa
+                das novidades, inclusive quando seu cliente bate sua meta em
+                pontos. Não precisa se preocupar em procurar na lista de
+                clientes. Basta acompanhar suas notificações para ver os
+                resultados acontencendo em tempo real!
             </p>
-            <p className="text-normal text-purple">
-                <FontAwesomeIcon icon="check" style={checkIcon} />
-                Mas espera lá! Só vi a opção filtrar por clientes novos e ordem
-                alfabética de A-Z... e se eu quiser inverter a ordem? Sim,
-                pensamos nisso também. O <strong>botão de inversão</strong> é a
-                resposta.
-            </p>
-            <ShowPicture
-                imgContainerClass="orgganize-clientes--picture"
-                dataSrc="/img/pro-features/orgganize/admin-clients/pic-4.png"
-                reference=""
-                subtitle="ordem normal"
-            />
-            <ShowPicture
-                imgContainerClass="orgganize-clientes--picture"
-                dataSrc="/img/pro-features/orgganize/admin-clients/pic-5.png"
-                reference=""
-                subtitle="após clicado no botão, a ordem é inversa"
-            />
         </section>
     );
 
@@ -132,28 +101,53 @@ export default function ProFeature({ data }) {
                 Onde encontro o serviço no App?
             </h2>
             <p className="text-normal text-purple">
-                O Orgganize Clientes está em{" "}
-                <strong>Histórico de Clientes</strong> dentro da aba principal{" "}
-                <strong>clientes</strong> do seu painel de controle.
+                O serviço {S_NAME} está na sessão{" "}
+                <strong>App >> Desafios e Prêmios</strong> do seu painel de
+                controle.
             </p>
+            <ShowPicture
+                imgContainerClass="premmios-clientes--picture"
+                dataSrc="/img/pro-features/premmios-clientes/pic-4.png"
+                reference=""
+                subtitle="sessão app"
+            />
         </section>
     );
 
     const callToAction = () => (
         <section>
             <p className="my-5 text-subtitle text-purple">
-                Parabéns! Agora você conhece o serviço da Orgganize Clientes.
+                Conheça mais sobre {S_NAME} como os dois modos de desafios:
+                constante e progressivo, e sobre recurso de revelar prêmios e
+                metas indo na sessão app.
             </p>
             <section className="my-5 container-center">
-                <ButtonFab
-                    title="Voltar"
-                    iconMarginLeft=" "
-                    backgroundColor="var(--themeSDark--default)"
-                    onClick={handleFullClose}
-                    position="relative"
-                    variant="extended"
-                    size="large"
-                />
+                {isFromDash ? (
+                    <Link
+                        className="no-text-decoration"
+                        to="/planos?cliente-admin=1"
+                    >
+                        <ButtonFab
+                            title="Ver Planos"
+                            iconMarginLeft=" "
+                            backgroundColor="var(--themeSDark--default)"
+                            onClick={handleFullClose}
+                            position="relative"
+                            variant="extended"
+                            size="large"
+                        />
+                    </Link>
+                ) : (
+                    <ButtonFab
+                        title="Voltar"
+                        iconMarginLeft=" "
+                        backgroundColor="var(--themeSDark--default)"
+                        onClick={handleFullClose}
+                        position="relative"
+                        variant="extended"
+                        size="large"
+                    />
+                )}
             </section>
         </section>
     );
@@ -163,7 +157,7 @@ export default function ProFeature({ data }) {
             <ShowTitle title="Prêmmios Clientes" />
             {showIllustration()}
             {showMainBenefit()}
-            <section className="d-none mx-3">
+            <section className="mx-3">
                 {showMainFeatures()}
                 {showWhereFind()}
                 {callToAction()}

@@ -64,9 +64,8 @@ export default function ProFeature({ data }) {
                 ordem alfabética, clientes recentes e pontos ativos (somente
                 quem já pontuou).
                 <br />
-                <br />
-                As opções pro te oferece mais opções interessantes. Você tem
-                acesso ao resultado de métricas, assim filtrar e saber os
+                <br />A Orgganize Clientes te oferece mais opções interessantes.
+                Você tem acesso ao resultado de métricas para filtrar e saber os
                 maiores fãs do seu negócio (compram mais), maiores valores por
                 compra, últimos clientes que compraram e aniversariantes.
             </p>
@@ -122,7 +121,7 @@ export default function ProFeature({ data }) {
                 imgContainerClass="orgganize-clientes--picture"
                 dataSrc="/img/pro-features/orgganize/admin-clients/pic-5.png"
                 reference=""
-                subtitle="após clicado no botão, a ordem é inversa"
+                subtitle="após clicado no botão, a ordem é invertida"
             />
         </section>
     );
@@ -147,7 +146,10 @@ export default function ProFeature({ data }) {
             </p>
             <section className="my-5 container-center">
                 {isFromDash ? (
-                    <Link to="/planos?cliente-admin=1">
+                    <Link
+                        className="no-text-decoration"
+                        to="/planos?cliente-admin=1"
+                    >
                         <ButtonFab
                             title="Ver Planos"
                             iconMarginLeft=" "

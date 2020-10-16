@@ -9,6 +9,7 @@ import getFirstName from "../../../../../utils/string/getFirstName";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import { Link } from "react-router-dom";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
     readTransactionHistory,
@@ -206,20 +207,25 @@ export default function AsyncCardsList() {
             <section>
                 <Img
                     className="img-fluid margin-auto-90"
-                    src="/img/illustrations/empty-sms-history.png"
+                    src="/img/illustrations/empty-fiddelize-invest.svg"
                     offline={true}
-                    alt="club pro - boas vindas"
-                    title="Entre para o club e comece a fiddelizar!"
+                    alt="sem investimentos"
+                    title="Sem investimentos. Seu porquinho está vazio."
                 />
-                <div className=" mb-5 container-center">
-                    <ButtonFab
-                        size="large"
-                        title="ENTRAR"
-                        position="relative"
-                        onClick={null}
-                        backgroundColor={"var(--themeSDark--default)"}
-                        variant="extended"
-                    />
+                <div className="mt-3 mb-5 container-center">
+                    <Link
+                        to="/planos?cliente-admin=1"
+                        className="no-text-decoration"
+                    >
+                        <ButtonFab
+                            size="large"
+                            title="FAZER O PRIMEIRO"
+                            position="relative"
+                            onClick={null}
+                            backgroundColor={"var(--themeSDark--default)"}
+                            variant="extended"
+                        />
+                    </Link>
                 </div>
             </section>
         );
@@ -227,7 +233,7 @@ export default function AsyncCardsList() {
 
     return (
         <Fragment>
-            {needEmptyIllustra ? null : showAccordion()}
+            {needEmptyIllustra ? showEmptyData() : showAccordion()}
             {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
             <ShowOverMsg />

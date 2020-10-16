@@ -287,7 +287,7 @@ function Register({
                     onKeyPress={(e) => {
                         handleNextField(e, "field1", {
                             callback: () =>
-                                setData({ ...data, name: name.cap() }),
+                                setData({ ...data, name: name && name.cap() }),
                         });
                     }}
                     onBlur={(e) => {

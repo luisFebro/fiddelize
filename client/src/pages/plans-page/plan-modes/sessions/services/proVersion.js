@@ -96,8 +96,7 @@ const proVersion = (styles) => [
         Icon: <WhatsAppIcon style={styles.muStyle} />,
         cardDesc:
             "Agilize o processo de compra de seus clientes enviando o convite",
-        customIcon:
-            "/img/pro-features/whatsapp-invitation/fiddelize-whatsapp.svg",
+        customIcon: "/img/pro-features/envvio-whatsapp/envvio-whatsapp.svg",
         proPage: "EnvvioWhatsapp_2",
     },
     {
