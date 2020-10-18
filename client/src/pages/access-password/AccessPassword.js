@@ -5,6 +5,10 @@ import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import isThisApp from "../../utils/window/isThisApp";
 import { Link } from "react-router-dom";
+import Lock from "./interative-lock/Lock";
+import { useClientAdmin } from "../../hooks/useRoleData";
+import useBackColor from "../../hooks/useBackColor";
+import useScrollUp from "../../hooks/scroll/useScrollUp";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
@@ -50,8 +54,24 @@ const PasswordBlockField = ({ ind }) => {
 
 export default function AccessPassword() {
     const [display, setDisplay] = useState("");
+    const { selfThemeBackColor: backColor } = useClientAdmin();
+
+    const loading = false; // verify on backend!!!
+    const passOk = true; // verify on backend!!!
+    const completedFill = display && display.length === 6;
+
+    useBackColor(`var(--themeBackground--${backColor})`);
+    useScrollUp();
 
     const styles = getStyles();
+
+    const showInterativeLock = () => (
+        <Lock
+            backColor={`var(--themeBackground--${backColor})`}
+            needUnlock={completedFill && passOk}
+            isLockLoading={loading}
+        />
+    );
 
     const showCloseBtn = () => (
         <Link className="no-text-decoration" to={whichPath}>
@@ -61,18 +81,18 @@ export default function AccessPassword() {
 
     const showPasswordArea = () => (
         <Fragment>
-            <p className="mt-5 text-subtitle text-white text-center">
+            <p className="text-subtitle text-white text-center">
                 Digite sua senha:
             </p>
-            <p className="text-subtitle text-white text-center">{display}</p>
             <section
-                className="mt-4 container-center shake-it"
+                className="mt-1 container-center shake-it"
                 style={{ marginBottom: 200 }}
             >
                 {repeat(6).map((x, ind) => (
                     <PasswordBlockField key={ind} ind={ind} />
                 ))}
             </section>
+            <p className="text-subtitle text-white text-center">{display}</p>
         </Fragment>
     );
 
@@ -94,6 +114,7 @@ export default function AccessPassword() {
 
     return (
         <section>
+            {showInterativeLock()}
             {showCloseBtn()}
             {showPasswordArea()}
             <section style={{ marginBottom: 330 }}>

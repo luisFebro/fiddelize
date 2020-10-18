@@ -6,6 +6,7 @@ const CPF = require("../../utils/validation/validateCpf");
 const { msg } = require("../_msgs/auth");
 const { msgG } = require("../_msgs/globalMsgs");
 const { jsEncrypt } = require("../../utils/security/xCipher");
+const checkValidSequence = require("../../utils/biz-algorithms/password/checkValidSequence");
 
 const handleRoles = (currRoles, rolesQueryObj) => {
     const { cliAdmin, cliUser } = rolesQueryObj;
@@ -124,12 +125,15 @@ exports.mwValidateLogin = (req, res, next) => {
 };
 
 exports.mwValidatePassword = (req, res, next) => {
-    const { password } = req.body;
-    if (!password) return res.status(400).json(msg("error.noPassword"));
-    if (password.length < 6)
-        return res.status(400).json(msg("error.notEnoughCharacters"));
-    if (!validatePassword(password))
-        return res.status(400).json(msg("error.noDigitFound"));
+    const { pswd } = req.body;
+    if (!pswd)
+        return res
+            .status(400)
+            .json({ error: "Digite senha numérica de 6 dígitos" }); // not validated though since only requested if user fills every digit
+
+    const { result, msg } = checkValidSequence(pswd);
+    if (!result) return res.status(400).json({ error: msg });
+
     next();
 };
 
@@ -140,3 +144,12 @@ exports.mwValidateEmail = (req, res, next) => {
         return res.status(400).json(msg("error.invalidEmail"));
     next();
 };
+
+/* ARCHIVES
+ const { password } = req.body;
+    if (!password) return res.status(400).json(msg("error.noPassword"));
+    if (password.length < 6)
+        return res.status(400).json(msg("error.notEnoughCharacters"));
+    if (!validatePassword(password))
+        return res.status(400).json(msg("error.noDigitFound"));
+ */

@@ -266,6 +266,7 @@ const data = {
     clientAdminData: ClientAdminDataSchema,
     centralAdminData: CentralAdminDataSchema,
     filter: DefaultFilterSchema,
+    pswd: String,
     // staffBookingList: Array, // L
 };
 // End Profile

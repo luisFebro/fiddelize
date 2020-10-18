@@ -1,0 +1,63 @@
+// LESSON: & only works for the first level of nesting. Not works if you use inside a subparent
+
+.wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+
+    & .lock-top {
+        fill: none; // full container color
+        stroke: #fa113d;
+        stroke-width: 5;
+        stroke-linecap: round; // butt, round, square The stroke-linecap attribute is a presentation attribute defining the shape to be used at the end of the line or subpath.
+        stroke-miterlimit: 10; // ?
+        stroke-dasharray: 300; // ?
+        stroke-dashoffset: 0; //specify thelength of thepath- The stroke-dashoffset attribute is a presentation attribute defining an offset on the rendering of the associated dash array.
+        transition: all 300ms ease-out;
+    }
+    & .lock-top.loaded {
+        stroke-dashoffset: -30;
+        stroke: #02ac1e;
+    }
+    & .lock-top.loading {
+        stroke: grey;
+        // opacity: 0.3;
+    }
+
+    & .lock-outline {
+        opacity: 1;
+    }
+
+    .lock-body {
+        fill: #fa113d;
+        opacity: 1;
+        transition: all 300ms ease-out;
+    }
+    .lock-body.loading {
+        fill: grey !important;
+        opacity: 0.5;
+    }
+
+    .lock-spinner {
+        fill: none;
+        stroke: #000;
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        opacity: 0;
+        transition: opacity 200ms ease;
+    }
+
+    .lock-spinner.loading {
+        opacity: 1;
+    }
+
+    .lock-top.loaded ~ .lock-body {
+        fill: #02ac1e;
+    }
+}
+
+// .lock-spinner.loading{
+//     opacity: 1;
+// }

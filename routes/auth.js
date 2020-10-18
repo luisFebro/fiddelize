@@ -5,6 +5,8 @@ const {
     register,
     login,
     mwSession,
+    createPassword,
+    comparePassword,
     changePassword,
 } = require("../controllers/auth");
 
@@ -20,6 +22,9 @@ const { mwProCreditsCounter } = require("../controllers/pro/pro");
 router.get("/user", mwSession, loadAuthUser);
 router.post("/register", mwValidateRegister, mwProCreditsCounter, register);
 router.post("/login", mwValidateLogin, login);
-router.post("/change-password", mwValidatePassword, changePassword);
+// password
+router.post("/pswd/create", mwValidatePassword, createPassword);
+router.post("/pswd/check", comparePassword);
+// router.post("/change-password", mwValidatePassword, changePassword);
 
 module.exports = router;

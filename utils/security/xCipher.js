@@ -1,23 +1,25 @@
-var bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+var bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const KRYPTO_SECRET = process.env.KRYPTO_SECRET; // Must be 256 bits (32 characters)
 const IV_LENGTH = 16; // For AES, this is always 16
 
 // BCRYPT FOR DB PASSWORDS
-async function hashPassword(pass) {
+async function createBcryptPswd(pass) {
     try {
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(pass, salt);
 
         return hash;
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
 
-async function comparePassword(pass, hash) {
-    return bcrypt.compare(pass, hash);
+async function compareBcryptPswd(pass, options = {}) {
+    const { hash } = options;
+
+    return await bcrypt.compare(pass, hash);
 }
 
 // ex:
@@ -27,69 +29,87 @@ async function comparePassword(pass, hash) {
 // END BCRYPT FOR DB PASSWORDS
 
 // ENCRYPTION AND DECRYPTION
-function encrypt(text) { // criptografar
+function encrypt(text) {
+    // criptografar
     const promiseEncrypt = (resolve, reject) => {
         const run = () => {
             const iv = crypto.randomBytes(IV_LENGTH);
-            const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(KRYPTO_SECRET), iv);
+            const cipher = crypto.createCipheriv(
+                "aes-256-cbc",
+                Buffer.from(KRYPTO_SECRET),
+                iv
+            );
             let encrypted = cipher.update(text);
 
             encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-            return iv.toString('hex') + ':' + encrypted.toString('hex');
-        }
+            return iv.toString("hex") + ":" + encrypted.toString("hex");
+        };
 
         try {
-            resolve(run())
-        } catch(e) {
+            resolve(run());
+        } catch (e) {
             reject(e);
         }
-    }
+    };
 
     return new Promise(promiseEncrypt);
 }
 
-function encryptSync(text) { // criptografar
+function encryptSync(text) {
+    // criptografar
     const iv = crypto.randomBytes(IV_LENGTH);
-    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(KRYPTO_SECRET), iv);
+    const cipher = crypto.createCipheriv(
+        "aes-256-cbc",
+        Buffer.from(KRYPTO_SECRET),
+        iv
+    );
     let encrypted = cipher.update(text);
 
     encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-    return iv.toString('hex') + ':' + encrypted.toString('hex');
+    return iv.toString("hex") + ":" + encrypted.toString("hex");
 }
 
 function decrypt(hashTxt) {
-    if(!hashTxt) return;
+    if (!hashTxt) return;
     const promiseDecript = (resolve, reject) => {
         const run = () => {
-            const textParts = hashTxt.split(':');
-            const iv = Buffer.from(textParts.shift(), 'hex');
-            const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-            const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(KRYPTO_SECRET), iv);
+            const textParts = hashTxt.split(":");
+            const iv = Buffer.from(textParts.shift(), "hex");
+            const encryptedText = Buffer.from(textParts.join(":"), "hex");
+            const decipher = crypto.createDecipheriv(
+                "aes-256-cbc",
+                Buffer.from(KRYPTO_SECRET),
+                iv
+            );
             let decrypted = decipher.update(encryptedText);
 
             decrypted = Buffer.concat([decrypted, decipher.final()]);
 
             return decrypted.toString();
-        }
+        };
 
         try {
             resolve(run());
-        } catch(e) {
+        } catch (e) {
             reject(e);
         }
-    }
+    };
 
     return new Promise(promiseDecript);
 }
 
 function decryptSync(hashTxt) {
-    if(!hashTxt) return;
-    const textParts = hashTxt.split(':');
-    const iv = Buffer.from(textParts.shift(), 'hex');
-    const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(KRYPTO_SECRET), iv);
+    if (!hashTxt) return;
+    const textParts = hashTxt.split(":");
+    const iv = Buffer.from(textParts.shift(), "hex");
+    const encryptedText = Buffer.from(textParts.join(":"), "hex");
+    const decipher = crypto.createDecipheriv(
+        "aes-256-cbc",
+        Buffer.from(KRYPTO_SECRET),
+        iv
+    );
     let decrypted = decipher.update(encryptedText);
 
     decrypted = Buffer.concat([decrypted, decipher.final()]);
@@ -110,31 +130,36 @@ function decryptSync(hashTxt) {
 // })
 // .catch(e => console.log(e))
 
-
 // less secure for authentication which requires decryption.
-const handleCipherVault = salt => {
-    if(!salt) return;
-    const textToChars = text => text.split('').map(c => c.charCodeAt(0));
-    const byteHex = n => ("0" + Number(n).toString(16)).substr(-2);
-    const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
+const handleCipherVault = (salt) => {
+    if (!salt) return;
+    const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
+    const byteHex = (n) => ("0" + Number(n).toString(16)).substr(-2);
+    const applySaltToChar = (code) =>
+        textToChars(salt).reduce((a, b) => a ^ b, code);
 
-    return text => text.split('')
-        .map(textToChars)
-        .map(applySaltToChar)
-        .map(byteHex)
-        .join('');
-}
+    return (text) =>
+        text
+            .split("")
+            .map(textToChars)
+            .map(applySaltToChar)
+            .map(byteHex)
+            .join("");
+};
 
-const handleDecipherVault = salt => {
-    if(!salt) return;
-    const textToChars = text => text.split('').map(c => c.charCodeAt(0));
-    const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
-    return encoded => encoded.match(/.{1,2}/g)
-        .map(hex => parseInt(hex, 16))
-        .map(applySaltToChar)
-        .map(charCode => String.fromCharCode(charCode))
-        .join('');
-}
+const handleDecipherVault = (salt) => {
+    if (!salt) return;
+    const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
+    const applySaltToChar = (code) =>
+        textToChars(salt).reduce((a, b) => a ^ b, code);
+    return (encoded) =>
+        encoded
+            .match(/.{1,2}/g)
+            .map((hex) => parseInt(hex, 16))
+            .map(applySaltToChar)
+            .map((charCode) => String.fromCharCode(charCode))
+            .join("");
+};
 
 const jsEncrypt = handleCipherVault(KRYPTO_SECRET);
 const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
@@ -150,8 +175,8 @@ module.exports = {
     encryptSync,
     decrypt,
     decryptSync,
-    hashPassword,
-    comparePassword,
+    createBcryptPswd,
+    compareBcryptPswd,
     jsEncrypt,
     jsDecrypt,
 }; // both returns string
@@ -184,7 +209,6 @@ console.log("resDecipher", resDecipher);
 const res = compareThis({ str: '023.248.892-42', cipher: "1b191805191f1305131219061f19" });
 console.log("resCompare", res);
  */
-
 
 /* COMMENTS
 n1: add cipher (myCpf + 1) add + 1 at hte very end of decipher krypto_secret and faces will be displayed.

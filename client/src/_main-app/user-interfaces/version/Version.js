@@ -4,10 +4,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.66.4";
+const latestVersion = "3.6605.4";
 // PRÓXIMO:
 //
-const updateDescription = "sistema de acesso e senha - pt2";
+const updateDescription = "sistema de acesso e senha - pt3";
 const history = [
     "sistema de planos - integração com serviços individuais",
     "planos e pagamentos - sistema e design de notificação pro",
