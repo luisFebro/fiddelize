@@ -43,6 +43,8 @@ export default function SwitchBtn({
     data = "",
     pillStyle = false,
     pillBack,
+    customColor,
+    animationOn = true,
     // loading = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
@@ -78,9 +80,10 @@ export default function SwitchBtn({
             callback(getStatusWithId(false), switchData.current);
     };
 
-    const on =
-        "m-0 animated rubberBand text-normal text-purple font-weight-bold";
-    const off = "m-0 text-normal text-grey";
+    const on = `m-0 ${animationOn ? "animated rubberBand" : ""} text-normal ${
+        customColor ? customColor : "text-purple font-weight-bold"
+    }`;
+    const off = `m-0 text-normal ${customColor ? customColor : "text-grey"}`;
     const txtStyle1 = checked ? off : on;
     const txtStyle2 = !checked ? off : on;
 

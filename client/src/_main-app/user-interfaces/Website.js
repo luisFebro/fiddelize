@@ -30,6 +30,7 @@ import RedirectLink from "../../pages/RedirectLink";
 import ClientAppPreview from "../../pages/mobile-app/ClientAppPreview";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
+import AccessPassword from "../../pages/access-password/AccessPassword";
 const AsyncFixDatePage = Load({
     loader: () =>
         import(
@@ -103,6 +104,11 @@ function Website({ location }) {
                     path="/conserte-data"
                     exact
                     component={AsyncFixDatePage}
+                />
+                <Route
+                    path="/senha-de-acesso"
+                    exact
+                    component={AccessPassword}
                 />
                 <Route component={Default} />
             </Switch>

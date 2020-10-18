@@ -23,6 +23,7 @@ import PlansPage from "../../pages/plans-page/PlansPage";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
+import AccessPassword from "../../pages/access-password/AccessPassword";
 const AsyncFixDatePage = Load({
     loader: () =>
         import(
@@ -94,6 +95,11 @@ function Mobile({ location }) {
                     path="/conserte-data"
                     exact
                     component={AsyncFixDatePage}
+                />
+                <Route
+                    path="/senha-de-acesso"
+                    exact
+                    component={AccessPassword}
                 />
                 <Route component={Default} />
             </Switch>

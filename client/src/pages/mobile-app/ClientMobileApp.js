@@ -32,6 +32,9 @@ import useBackColor from "../../hooks/useBackColor";
 import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
+import AccessGateKeeper from "./password/AccessGateKeeper";
+import getFirstName from "../../utils/string/getFirstName";
+import { setVar, getVar, getMultiVar, store } from "../../hooks/storage/useVar";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -50,7 +53,29 @@ function ClientMobileApp({ location, history }) {
 
     const { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
-    const { _id, role, name } = useProfile();
+    let { _id, role = "cliente-admin", name = "Lipe Feitoza" } = useProfile();
+
+    // for logout access data.
+    const [store, setStore] = useState({
+        name: "...",
+        role: "...",
+    });
+
+    useEffect(() => {
+        setVar({ role }, store.user);
+        getVar("userId", store.user).then((data) => {
+            console.log("data", data);
+        });
+
+        // if(role && name) {
+        // } else {
+        //     getVar("userRole", store.user)
+        //     .then(Thisdata => {
+        //         console.log("Thisdata", Thisdata);
+        //     })
+        // }
+    }, [role, name]);
+
     const {
         bizCodeName,
         selfBizLogoImg,
@@ -59,6 +84,10 @@ function ClientMobileApp({ location, history }) {
         selfThemeBackColor,
     } = useClientAdmin();
     const { currScore } = useClientUser();
+
+    const isSessionOver = true;
+    const needRememberAccess = true;
+    const needLogoutAccess = isSessionOver && needRememberAccess;
 
     const logoBiz = useImg(url.logoBiz, {
         trigger: url.logoBiz,
@@ -183,7 +212,7 @@ function ClientMobileApp({ location, history }) {
         (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) ||
         gotEmptyData;
     const showAppType = () =>
-        conditionShowAppBubble && (
+        (conditionShowAppBubble || needLogoutAccess) && (
             <div className="container-center">
                 <div
                     className="position-relative"
@@ -258,7 +287,9 @@ function ClientMobileApp({ location, history }) {
 
     const showConnectedStatus = () => (
         <div
-            className="position-relative my-5 container-center-col text-white text-normal text-center"
+            className={`position-relative ${
+                isSessionOver ? "" : "my-5"
+            } container-center-col text-white text-normal text-center`}
             style={{ top: -68 }}
         >
             <span
@@ -266,40 +297,45 @@ function ClientMobileApp({ location, history }) {
                     selfThemeBackColor
                 )} font-weight-bold`}
             >
-                Conectado por
-                <br />
+                {!isSessionOver && "Conectado por"}
+                {!isSessionOver && <br />}
                 <strong className="text-title animated bounce">
-                    {name ? name : "..."}
+                    {name ? getFirstName(name, { addSurname: true }) : "..."}
                 </strong>
                 <br />
             </span>
-            <div className="container-center mt-4">
-                <Link
-                    className="mr-3 no-text-decoration"
-                    to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
-                    onClick={handleConnectedStatusClick}
-                >
-                    <RadiusBtn
-                        title="acessar"
-                        backgroundColor={
-                            "var(--themeSDark--" + selfThemeSColor + ")"
-                        }
-                    />
-                </Link>
-                <span>
-                    <RadiusBtn
-                        title="sair"
-                        backgroundColor="var(--mainRed)"
-                        onClick={handleLogout}
-                    />
-                </span>
-            </div>
+            {!isSessionOver ? (
+                <section className="container-center mt-4">
+                    <Link
+                        className="mr-3 no-text-decoration"
+                        to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                        onClick={handleConnectedStatusClick}
+                    >
+                        <RadiusBtn
+                            title="acessar"
+                            backgroundColor={
+                                "var(--themeSDark--" + selfThemeSColor + ")"
+                            }
+                        />
+                    </Link>
+                    <span>
+                        <RadiusBtn
+                            title="sair"
+                            backgroundColor="var(--mainRed)"
+                            onClick={handleLogout}
+                        />
+                    </span>
+                </section>
+            ) : (
+                <AccessGateKeeper />
+            )}
         </div>
     );
 
     const conditionRegister =
         loginOrRegister === "register" && showRegister(true);
-    const conditionLogin = loginOrRegister === "login" && showLogin();
+    const conditionLogin =
+        loginOrRegister === "login" && showLogin() && !needRememberAccess;
 
     let isCliAdminConnected =
         role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
@@ -323,6 +359,7 @@ function ClientMobileApp({ location, history }) {
 
             {!isAuthUser && (
                 <section>
+                    {needLogoutAccess && showConnectedStatus()}
                     {conditionRegister}
                     {conditionLogin}
                 </section>
@@ -342,7 +379,9 @@ function ClientMobileApp({ location, history }) {
                         />
                     )}
 
-                    {isCliAdminConnected && showNotificationBell()}
+                    {isCliAdminConnected &&
+                        !isSessionOver &&
+                        showNotificationBell()}
                     {isCliAdminConnected && showConnectedStatus()}
                     {!isAuthUser && isCliAdminConnected && showLogin()}
                 </section>

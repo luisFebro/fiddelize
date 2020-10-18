@@ -58,6 +58,15 @@ export const getVar = (key, options = {}) => {
     return variablesStore(storeName).getItem(key);
 };
 
+export const getMultiVar = (arrayKeys, options = {}) => {
+    const { storeName } = options;
+    const promises = arrayKeys.map((key) => {
+        return getVar(key, storeName);
+    });
+
+    return Promise.all(promises);
+};
+
 export const setVar = (obj, options = {}) => {
     const { storeName } = options;
 

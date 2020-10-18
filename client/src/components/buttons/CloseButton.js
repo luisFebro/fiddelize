@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import animateCSS from '../../utils/animateCSS';
+import animateCSS from "../../utils/animateCSS";
 
 CloseButton.propTypes = {
     onClick: PropTypes.func,
@@ -9,8 +9,8 @@ CloseButton.propTypes = {
     color: PropTypes.string,
     top: PropTypes.string,
     left: PropTypes.string,
-    delay: PropTypes.number
-}
+    delay: PropTypes.number,
+};
 export default function CloseButton({
     delay,
     onClick,
@@ -23,21 +23,25 @@ export default function CloseButton({
 }) {
     const styles = {
         closeBtn: {
-            position: position ||  'fixed',
-            top: top || '0px',
+            position: position || "fixed",
+            top: top || "0px",
             left: left,
             right: right,
-            cursor: 'pointer',
-            fontSize: size || '1.9em',
-            color: color || 'var(--mainWhite)',
+            fontSize: size || "1.9em",
+            color: color || "var(--mainWhite)",
+            cursor: "pointer",
             zIndex: 1500,
-            filter: 'drop-shadow(0.001em 0.1em 0.1em grey)',
-        }
-    }
+            filter: "drop-shadow(0.001em 0.1em 0.1em grey)",
+        },
+    };
 
-    const closeBtn = e => {
+    const closeBtn = (e) => {
         const elem = e.currentTarget;
-        elem.classList.remove("animated", "rotateIn", typeof delay === 'number' ? `delay-${delay}s` : "delay-2s")
+        elem.classList.remove(
+            "animated",
+            "rotateIn",
+            typeof delay === "number" ? `delay-${delay}s` : "delay-2s"
+        );
         animateCSS(elem, "rotateOut", "normal", () => onClick());
     };
 
@@ -45,8 +49,8 @@ export default function CloseButton({
         <FontAwesomeIcon
             icon="times-circle"
             style={styles.closeBtn}
-            className="animated rotateIn delay-2s"
-            onClick={e => closeBtn(e)}
+            className="animated rotateIn delay-1s"
+            onClick={(e) => closeBtn(e)}
         />
     );
 }
