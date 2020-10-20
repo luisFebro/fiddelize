@@ -1,16 +1,14 @@
-const User = require("../models/user");
+const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
-const { msgG } = require("./_msgs/globalMsgs");
-const { msg } = require("./_msgs/auth");
-const selectObjKeys = require("../utils/objects/selectObjKeys");
-const getFirstName = require("../utils/string/getFirstName");
+const { msgG } = require("../_msgs/globalMsgs");
+const { msg } = require("../_msgs/auth");
+const selectObjKeys = require("../../utils/objects/selectObjKeys");
+const getFirstName = require("../../utils/string/getFirstName");
 const {
     encryptSync,
     decryptSync,
     jsEncrypt,
-    createBcryptPswd,
-    compareBcryptPswd,
-} = require("../utils/security/xCipher");
+} = require("../../utils/security/xCipher");
 
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
@@ -224,76 +222,6 @@ exports.login = (req, res) => {
         }
     );
 };
-
-// ACCESS PASSWORD
-// POST
-exports.createPassword = (req, res) => {
-    const { pswd, userId } = req.body;
-
-    createBcryptPswd(pswd).then((hash) => {
-        User.findById(userId)
-            .then((userData) => {
-                if (userData.pswd)
-                    return res
-                        .status(400)
-                        .json({ error: "Erro ao criar senha." });
-
-                userData.pswd = hash;
-
-                userData.markModified("pswd");
-                userData.save(() => res.json({ msg: "senha criada" }));
-            })
-            .catch((error) => res.json({ error }));
-    });
-};
-
-// POST
-exports.comparePassword = (req, res) => {
-    const { pswd, userId } = req.body;
-    if (!pswd || !userId)
-        return res.status(400).json({ error: "Senha ou Id faltando..." });
-
-    User.findById(userId)
-        .select("pswd")
-        .then((userData) => {
-            const hash = userData.pswd;
-
-            compareBcryptPswd(pswd, { hash }).then((checkRes) => {
-                res.json(checkRes);
-            });
-        })
-        .catch((error) => res.json({ error }));
-};
-
-// exports.changePassword = (req, res) => {
-//     const { password, authToken } = req.body;
-//     const { id } = req.query;
-
-//     User.findOne({ _id: id }).then((user) => {
-//         if (!user.tempAuthUserToken)
-//             return res.status(400).json(msg("error.noAuthToken"));
-//         if (user.tempAuthUserToken.this !== authToken)
-//             return res.status(400).json(msg("error.expiredAuthToken"));
-
-//         user.tempAuthUserToken.this = undefined;
-//         bcrypt.genSalt(10, (err, salt) => {
-//             // n3
-//             bcrypt.hash(password, salt, (err, hash) => {
-//                 if (err)
-//                     return res.status(500).json(msgG("error.systemError", err));
-//                 user.password = hash;
-//                 user.save((err) => {
-//                     if (err)
-//                         return res
-//                             .status(500)
-//                             .json(msgG("error.systemError", err));
-//                     res.json(msg("ok.changedPassword", user.name));
-//                 });
-//             });
-//         });
-//     });
-// };
-// END ACCESS PASSWORD
 
 /* COMMENTS
 n1:

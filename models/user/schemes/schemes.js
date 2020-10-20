@@ -121,6 +121,16 @@ module.exports = {
     BizPlanListSchema,
 };
 
+/*
+
+const ttlData = {
+    requestId: String,
+    ttlId: { type: Schema.Types.ObjectId, ref: "TTL" },
+};
+const TTLSchema = new Schema(ttlData, { _id: false });
+
+ */
+
 // CLIENTS HISTORY
 // const pendingRegistersData = {
 //     clientName: { type: String, trim: true },

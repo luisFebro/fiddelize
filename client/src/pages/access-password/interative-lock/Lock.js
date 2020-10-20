@@ -2,6 +2,8 @@
 import React, { Fragment, useEffect } from "react";
 import "./_Lock.scss";
 
+const isSmall = window.Helper.isSmallScreen();
+
 export default function Lock({
     backColor,
     needUnlock = false,
@@ -12,8 +14,14 @@ export default function Lock({
     }, [needUnlock, isLockLoading]);
 
     return (
-        <section className="mt-2 container-center">
-            <div className="wrapper">
+        <section className={`${isSmall ? "mt-2" : "mt-1"} container-center`}>
+            <div
+                className="wrapper"
+                style={{
+                    height: isSmall ? "150px" : "100px",
+                    width: isSmall ? "150px" : "100px",
+                }}
+            >
                 <ShowSvgLock backColor={backColor} />
             </div>
         </section>

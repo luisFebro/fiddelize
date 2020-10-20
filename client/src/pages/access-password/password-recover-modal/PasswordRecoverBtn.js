@@ -29,7 +29,7 @@ export default function PasswordRecoverBtn(
     return (
         <section>
             <section
-                className="text-link text-normal font-weight-normal text-white text-center"
+                className="text-link text-small font-weight-normal text-white text-center"
                 onClick={handleFullOpen}
             >
                 Esqueci minha senha

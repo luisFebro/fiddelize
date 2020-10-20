@@ -3,6 +3,7 @@ import SwitchBtn from "../../../components/buttons/material-ui/SwitchBtn";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import ProtectionMsg from "../../access-password/ProtectionMsg";
 
 const awesomeStyle = {
     fontSize: "30px",
@@ -10,22 +11,8 @@ const awesomeStyle = {
     color: "white",
 };
 
-const getStyles = () => ({
-    rootProtectionMsg: {
-        border: "1px solid #fff",
-        borderRadius: "30px",
-        padding: "10px",
-    },
-    miniLock: {
-        fontSize: "20px",
-        color: "white",
-    },
-});
-
 export default function AccessGateKeeper() {
     const twoLastCpfDigits = "42";
-
-    const styles = getStyles();
 
     const showLoginName = () => (
         <section className="text-normal text-white">
@@ -81,32 +68,14 @@ export default function AccessGateKeeper() {
         </section>
     );
 
-    const showProtectionMsg = () => (
-        <section className="my-5" style={styles.rootProtectionMsg}>
-            <p className="font-weight-bold text-small text-center text-white">
-                <FontAwesomeIcon
-                    className="mr-3"
-                    icon="lock"
-                    style={styles.miniLock}
-                />
-                Nunca compartilhe sua senha.
-            </p>
-            <p className="text-small text-center text-white">
-                A Fiddelize não pedirá
-                <br />
-                sua senha por email ou
-                <br />
-                outros meios online.
-            </p>
-        </section>
-    );
-
     return (
         <section className="text-white text-title text-center">
             {showLoginName()}
             {showAccessSwitcher()}
             {showGateKeeperCTAs()}
-            {showProtectionMsg()}
+            <section className="my-5">
+                <ProtectionMsg />
+            </section>
         </section>
     );
 }

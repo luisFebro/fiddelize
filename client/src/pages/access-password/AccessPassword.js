@@ -9,9 +9,11 @@ import Lock from "./interative-lock/Lock";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
+import ProtectionMsg from "./ProtectionMsg";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
+const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
     passCircle: {
@@ -81,18 +83,21 @@ export default function AccessPassword() {
 
     const showPasswordArea = () => (
         <Fragment>
-            <p className="text-subtitle text-white text-center">
+            <p
+                className={`${
+                    isSmall ? "text-subtitle" : "text-normal m-0"
+                }  text-white text-center`}
+            >
                 Digite sua senha:
             </p>
             <section
                 className="mt-1 container-center shake-it"
-                style={{ marginBottom: 200 }}
+                style={{ marginBottom: 100 }}
             >
                 {repeat(6).map((x, ind) => (
                     <PasswordBlockField key={ind} ind={ind} />
                 ))}
             </section>
-            <p className="text-subtitle text-white text-center">{display}</p>
         </Fragment>
     );
 
@@ -117,6 +122,9 @@ export default function AccessPassword() {
             {showInterativeLock()}
             {showCloseBtn()}
             {showPasswordArea()}
+            <section className="mt-5 mb-2">
+                <ProtectionMsg />
+            </section>
             <section style={{ marginBottom: 330 }}>
                 <PasswordRecoverBtn />
             </section>
