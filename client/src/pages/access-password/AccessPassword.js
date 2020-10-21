@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import repeat from "../../utils/arrays/repeat";
 import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
@@ -10,6 +10,10 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import ProtectionMsg from "./ProtectionMsg";
+import useAPI, { checkPassword, getUniqueId } from "../../hooks/api/useAPI";
+import useGetVar from "../../hooks/storage/useVar";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import { useStoreDispatch } from "easy-peasy";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
@@ -56,11 +60,56 @@ const PasswordBlockField = ({ ind }) => {
 
 export default function AccessPassword() {
     const [display, setDisplay] = useState("");
+    const [uniqueIdTrigger, setUniqueIdTrigger] = useState(false);
     const { selfThemeBackColor: backColor } = useClientAdmin();
 
-    const loading = false; // verify on backend!!!
-    const passOk = true; // verify on backend!!!
+    const dispatch = useStoreDispatch();
+
+    const { data: userId } = useGetVar("userId", { storeName: "user" });
+
+    const body = {
+        userId,
+        pswd: display,
+    };
+    const { pswd } = body;
+
     const completedFill = display && display.length === 6;
+
+    const trigger = uniqueIdTrigger || (userId && pswd && completedFill);
+    const { data: passOk, loading, error } = useAPI({
+        method: "post",
+        url: checkPassword(),
+        body,
+        trigger,
+        loadingStart: false,
+    });
+
+    useEffect(() => {
+        if (completedFill && passOk !== true) {
+            const uniqueId = getUniqueId();
+            setUniqueIdTrigger(uniqueId);
+        }
+    }, [completedFill, passOk]);
+
+    useEffect(() => {
+        const wrongPassMsgCond = !loading && passOk === false;
+        if (wrongPassMsgCond) {
+            showSnackbar(dispatch, "Senha de acesso inválida.", "error", 2000);
+            setDisplay("");
+        }
+    }, [passOk, loading]);
+
+    useEffect(() => {
+        if (error) {
+            showSnackbar(
+                dispatch,
+                "Ocorreu um erro. Verifique sua conexão.",
+                "error",
+                4000
+            );
+            setDisplay("");
+        }
+    }, [error]);
 
     useBackColor(`var(--themeBackground--${backColor})`);
     useScrollUp();
@@ -70,8 +119,8 @@ export default function AccessPassword() {
     const showInterativeLock = () => (
         <Lock
             backColor={`var(--themeBackground--${backColor})`}
-            needUnlock={completedFill && passOk}
-            isLockLoading={loading}
+            needUnlock={passOk}
+            isLockLoading={completedFill && loading}
         />
     );
 
@@ -81,23 +130,51 @@ export default function AccessPassword() {
         </Link>
     );
 
+    const NUM_PASS_FIELD = 6;
     const showPasswordArea = () => (
         <Fragment>
-            <p
-                className={`${
-                    isSmall ? "text-subtitle" : "text-normal m-0"
-                }  text-white text-center`}
-            >
-                Digite sua senha:
-            </p>
-            <section
-                className="mt-1 container-center shake-it"
-                style={{ marginBottom: 100 }}
-            >
-                {repeat(6).map((x, ind) => (
-                    <PasswordBlockField key={ind} ind={ind} />
-                ))}
-            </section>
+            {!passOk && (
+                <p
+                    className={`${
+                        isSmall ? "text-subtitle" : "text-normal m-0"
+                    }  text-white text-center`}
+                >
+                    Digite sua senha:
+                </p>
+            )}
+            {loading && trigger ? (
+                <p className="text-subtitle text-white text-center">
+                    Analizando...
+                </p>
+            ) : (
+                <Fragment>
+                    {passOk ? (
+                        <p
+                            className="mt-3 text-subtitle font-weight-bold text-white text-center"
+                            style={{ marginBottom: 100 }}
+                        >
+                            Acesso concedido!{" "}
+                            <FontAwesomeIcon
+                                icon="check-circle"
+                                style={{
+                                    fontSize: 25,
+                                    color: "var(--mainWhite)",
+                                }}
+                                className="ml-2 animated rubberBand delay-1s"
+                            />
+                        </p>
+                    ) : (
+                        <section
+                            className="mt-1 container-center shake-it"
+                            style={{ marginBottom: 100 }}
+                        >
+                            {repeat(NUM_PASS_FIELD).map((x, ind) => (
+                                <PasswordBlockField key={ind} ind={ind} />
+                            ))}
+                        </section>
+                    )}
+                </Fragment>
+            )}
         </Fragment>
     );
 
@@ -106,7 +183,7 @@ export default function AccessPassword() {
         const currTypingField = document.querySelector(
             `.pass-block-${++counter}`
         );
-        if (currTypingField) currTypingField.classList.add("d-block");
+        if (currTypingField) currTypingField.classList.toggle("d-block");
     };
 
     const undoClick = () => {
@@ -114,7 +191,7 @@ export default function AccessPassword() {
         const currTypingField = document.querySelector(
             `.pass-block-${counter}`
         );
-        if (currTypingField) currTypingField.classList.remove("d-block");
+        if (currTypingField) currTypingField.classList.toggle("d-block");
     };
 
     return (

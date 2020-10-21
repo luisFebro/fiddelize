@@ -14,7 +14,7 @@
         stroke-miterlimit: 10; // ?
         stroke-dasharray: 300; // ?
         stroke-dashoffset: 0; //specify thelength of thepath- The stroke-dashoffset attribute is a presentation attribute defining an offset on the rendering of the associated dash array.
-        transition: all 300ms ease-out;
+        transition: all 600ms ease-out;
     }
     & .lock-top.loaded {
         stroke-dashoffset: -30;
@@ -32,7 +32,7 @@
     .lock-body {
         fill: #fa113d;
         opacity: 1;
-        transition: all 300ms ease-out;
+        transition: all 600ms ease-out;
     }
     .lock-body.loading {
         fill: grey !important;

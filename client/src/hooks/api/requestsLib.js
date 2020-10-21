@@ -56,3 +56,6 @@ export const getNextExpiryDate = (userId) =>
     `/api/pro/service/next-expiry-date?userId=${userId}`; // GET
 export const removeServices = (userId) =>
     `/api/pro/service/remove?userId=${userId}`; // DELETE
+
+// PASSWORD
+export const checkPassword = () => `/api/auth/pswd/check`;

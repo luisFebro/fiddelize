@@ -5,6 +5,24 @@ const {
     compareBcryptPswd,
 } = require("../../utils/security/xCipher");
 
+// HELPERS
+async function comparePswds(userId, options = {}) {
+    const { pswd } = options;
+
+    const userData = await User.findById(userId)
+        .select("pswd")
+        .catch((error) => res.json({ error }));
+
+    const hash = userData.pswd;
+
+    const checkRes = await compareBcryptPswd(pswd, { hash }).catch((error) =>
+        res.json({ error })
+    );
+
+    return checkRes;
+}
+// END HELPERS
+
 // POST
 exports.createPassword = (req, res) => {
     const { pswd, userId } = req.body;
@@ -32,19 +50,31 @@ exports.checkPassword = (req, res) => {
     if (!pswd || !userId)
         return res.status(400).json({ error: "Senha ou Id faltando..." });
 
-    User.findById(userId)
-        .select("pswd")
-        .then((userData) => {
-            const hash = userData.pswd;
-
-            compareBcryptPswd(pswd, { hash }).then((checkRes) => {
-                res.json(checkRes);
-            });
-        })
-        .catch((error) => res.json({ error }));
+    comparePswds(userId, { pswd }).then((checkRes) => {
+        res.json(checkRes);
+    });
 };
 
-exports.changePassword = (req, res) => {};
+exports.changePassword = async (req, res) => {
+    const { userId, priorPswd, newPswd } = req.body;
+
+    if (!userId || !newPswd || !priorPswd)
+        return res
+            .status(400)
+            .json({ error: "ID do usuário ou senhas faltando..." });
+
+    const checkRes = await comparePswds(userId, { pswd: priorPswd });
+
+    if (checkRes) {
+        const hash = await createBcryptPswd(newPswd);
+        await User.findByIdAndUpdate(userId, { pswd: hash });
+        res.json({ msg: "Senha alterada com sucesso!" });
+    } else {
+        return res
+            .status(400)
+            .json({ error: "A senha anterior não bate com a informada." });
+    }
+};
 
 // POST - Only for recover page when a 1 hour long time-out token will be verified
 exports.recoverPassword = async (req, res) => {
@@ -63,7 +93,7 @@ exports.recoverPassword = async (req, res) => {
 
     if (isValidYet) {
         const hash = await createBcryptPswd(pswd);
-        const userData = await User.findByIdAndUpdate(userId, { pswd: hash });
+        await User.findByIdAndUpdate(userId, { pswd: hash });
         res.json({ msg: "Senha alterada com sucesso!" });
     } else {
         res.status(401).json({ error: "Este link não é mais válido!" });

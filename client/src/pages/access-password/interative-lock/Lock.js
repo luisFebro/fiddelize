@@ -10,7 +10,8 @@ export default function Lock({
     isLockLoading = false,
 }) {
     useEffect(() => {
-        if (needUnlock) loadLock({ isLockLoading });
+        (isLockLoading || needUnlock) &&
+            loadLock({ isLockLoading, goUnlock: needUnlock });
     }, [needUnlock, isLockLoading]);
 
     return (
@@ -29,26 +30,33 @@ export default function Lock({
 }
 
 const unlock = () => {
-    setTimeout(function () {
-        const lockElems = document.querySelectorAll(".lock");
-        if (lockElems) {
-            lockElems.forEach((l) => {
-                l.classList.toggle("loading");
-            });
-            const lockTopElem = document.querySelector(".lock-top");
-            lockTopElem.classList.toggle("loaded");
-        }
-    }, 2000);
+    const lockElems = document.querySelectorAll(".lock");
+    if (lockElems) {
+        lockElems.forEach((l) => {
+            l.classList.toggle("loading");
+        });
+        const lockTopElem = document.querySelector(".lock-top");
+        lockTopElem.classList.add("loaded");
+    }
 };
 
-function loadLock({ isLockLoading }) {
+function loadLock({ isLockLoading, goUnlock }) {
     const lockElems = document.querySelectorAll(".lock");
     if (lockElems) {
         lockElems.forEach((l) => {
             l.classList.toggle("loading");
         });
 
-        !isLockLoading && unlock();
+        if (goUnlock) {
+            unlock();
+        } else {
+            // for avoid infinite looping, maximum loading time
+            setTimeout(() => {
+                lockElems.forEach((l) => {
+                    l.classList.toggle("loading");
+                });
+            }, 1500);
+        }
     }
 }
 
