@@ -59,3 +59,5 @@ export const removeServices = (userId) =>
 
 // PASSWORD
 export const checkPassword = () => `/api/auth/pswd/check`;
+export const getDecryptedToken = () => `/api/auth/pswd/decrypt-token`;
+export const getToken = () => `/api/auth/pswd/token`;

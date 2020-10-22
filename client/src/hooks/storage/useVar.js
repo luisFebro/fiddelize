@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import localforage from "localforage";
 
+// LESSON: if not working correctly, check if store has already been declared.
 const getObj = (name) => ({ storeName: name });
 export const store = {
     offline_lists: getObj("offline_lists"),
@@ -58,13 +59,14 @@ export const getVar = (key, options = {}) => {
     return variablesStore(storeName).getItem(key);
 };
 
-export const getMultiVar = (arrayKeys, options = {}) => {
+export const getMultiVar = async (arrayKeys, options = {}) => {
     const { storeName } = options;
+
     const promises = arrayKeys.map((key) => {
-        return getVar(key, storeName);
+        return variablesStore(storeName).getItem(key);
     });
 
-    return Promise.all(promises);
+    return await Promise.all(promises);
 };
 
 export const setVar = (obj, options = {}) => {
@@ -82,9 +84,28 @@ export const setVar = (obj, options = {}) => {
             console.log(`the was an error setting key ${key}. Details: ${err}`)
         );
 };
-// can accept an key with object like: const obj = { key: { a: "123", b: true }}
-// key
-// { a: '123', b: true }
+
+// objArray like [{ key1: value1 }, { key2: value2}]
+export const setMultiVar = async (objArray, options = {}) => {
+    const { storeName } = options;
+    if (objArray && !objArray.length) return;
+
+    const promises = objArray.map((obj) => {
+        const [key] = Object.keys(obj);
+        const [value] = Object.values(obj);
+
+        return variablesStore(storeName)
+            .setItem(key, value)
+            .then((res) => null)
+            .catch((err) =>
+                console.log(
+                    `the was an error setting key ${key}. Details: ${err}`
+                )
+            );
+    });
+
+    return await Promise.all(promises);
+};
 
 export const removeVar = (key, options = {}) => {
     const { storeName } = options;

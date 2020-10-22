@@ -1,4 +1,5 @@
-import { reducer } from 'easy-peasy';
+import { reducer } from "easy-peasy";
+import { setVar } from "../hooks/storage/useVar";
 // actions are used with the usestoredispatch hook inside the wanting functional component
 // copy and paste the type of actions below
 // You can use only one isntance of object like 'cases' for each object.
@@ -6,7 +7,7 @@ import { reducer } from 'easy-peasy';
 
 // REDUCERS
 const initialState = {
-    token: localStorage.getItem('token'), // n1 n3
+    token: localStorage.getItem("token"), // n1 n3
     tokenWhenLogin: false, // n2
     isUserAuthenticated: false,
     isUserOnline: "",
@@ -14,35 +15,39 @@ const initialState = {
 
 export const authReducer = {
     cases: reducer((state = initialState, action) => {
-        switch(action.type) {
-            case 'USER_ONLINE':
+        switch (action.type) {
+            case "USER_ONLINE":
                 return {
                     ...state,
                     isUserOnline: action.payload,
                 };
-            case 'AUTHENTICATE_USER_ONLY':
+            case "AUTHENTICATE_USER_ONLY":
                 return {
                     ...state,
                     isUserAuthenticated: true,
                 };
-            case 'LOGIN_EMAIL':
-            case 'REGISTER_EMAIL':
-                localStorage.setItem('token', action.payload);
+            case "LOGIN_EMAIL":
+            case "REGISTER_EMAIL":
+                const ignoreToken = action.payload.role === "cliente-admin"; // cli-admin handled in access password page.
+                !ignoreToken &&
+                    localStorage.setItem("token", action.payload.token);
+
                 return {
                     ...state,
                     isUserAuthenticated: true,
-                    tokenWhenLogin: action.payload,
+                    tokenWhenLogin: action.payload.token,
                 };
-            case 'LOGIN_GOOGLE':
-            case 'LOGIN_FACEBOOK':
-                localStorage.setItem('token', action.payload);
+            case "LOGIN_GOOGLE":
+            case "LOGIN_FACEBOOK":
+                localStorage.setItem("token", action.payload);
                 return {
                     ...state,
                     isUserAuthenticated: true,
                 };
-            case 'LOGIN_ERROR':
-            case 'LOGOUT_SUCCESS':
-                localStorage.removeItem('token');
+            case "LOGIN_ERROR":
+            case "LOGOUT_SUCCESS":
+                setVar({ success: false });
+                localStorage.removeItem("token");
                 return {
                     ...state,
                     isUserAuthenticated: false,
@@ -52,7 +57,7 @@ export const authReducer = {
             default:
                 return state;
         }
-    })
+    }),
 };
 
 /* COMMENTS

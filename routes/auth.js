@@ -6,6 +6,8 @@ const {
     login,
     mwSession,
     mwIsAuth,
+    getDecryptedToken,
+    getToken,
 } = require("../controllers/auth");
 
 const {
@@ -32,5 +34,7 @@ router.post("/pswd/create", mwValidatePassword, createPassword);
 router.post("/pswd/check", checkPassword);
 router.post("/pswd/recover", recoverPassword);
 router.post("/pswd/change", mwIsAuth, changePassword);
+router.post("/pswd/token", getToken);
+router.post("/pswd/decrypt-token", getDecryptedToken);
 
 module.exports = router;

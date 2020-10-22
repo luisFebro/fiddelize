@@ -151,7 +151,61 @@ exports.register = (req, res) => {
     });
 };
 
-const handleRolesData = (role, ...allKeys) => {
+exports.login = async (req, res) => {
+    // const { password, needKeepLoggedIn } = req.body;
+    const { _id, name, role, clientAdminData, clientUserData } = req.profile;
+    const { cpf } = req.body;
+    // encrypted token to be store in IndexDB before checking password validation.
+    let twoLastCpfDigits;
+
+    let token = await getJwtToken({ _id, role });
+
+    if (role === "cliente-admin") {
+        token = undefined; // this is fetched on getToken now..
+        twoLastCpfDigits = cpf && cpf.slice(-2);
+    }
+
+    let keysStore = {
+        role,
+        name,
+        bizId: (clientUserData && clientUserData.bizId) || "0",
+        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+        verificationPass: clientAdminData && clientAdminData.verificationPass,
+        selfBizLogoImg: clientAdminData && clientAdminData.selfBizLogoImg,
+        authUserId: _id,
+        msg: msg("ok.welcomeBack", getFirstName(name), "onlyMsg"),
+        needCliUserWelcomeNotif:
+            clientUserData && !clientUserData.notifications.length,
+        twoLastCpfDigits,
+    };
+
+    res.json(handleRolesData(role, { ...keysStore, token }));
+};
+
+exports.getToken = async (req, res) => {
+    const { _id } = req.body;
+
+    const token = await getJwtToken({ _id, role: "cliente-admin" });
+    const encrypted = encryptSync(token);
+
+    res.json(encrypted);
+};
+
+// After password validation success, decrypt token.
+exports.getDecryptedToken = (req, res) => {
+    const { token } = req.body;
+
+    const decrypted = decryptSync(token);
+    if (!decrypted)
+        return res
+            .status(401)
+            .json({ error: "Ocorreu um erro na validação..." });
+
+    res.json(decrypted);
+};
+
+// HELPERS
+function handleRolesData(role, ...allKeys) {
     let objToSend;
     const allKeysStore = Object.assign({}, ...allKeys);
     // console.log(Object.keys(allKeysStore))
@@ -167,6 +221,7 @@ const handleRolesData = (role, ...allKeys) => {
                 "authUserId",
                 "msg",
                 "selfBizLogoImg",
+                "twoLastCpfDigits",
             ];
             objToSend = selectObjKeys(allKeysStore, array1);
             break;
@@ -190,38 +245,20 @@ const handleRolesData = (role, ...allKeys) => {
     }
 
     return objToSend;
-};
-exports.login = (req, res) => {
-    // const { password, needKeepLoggedIn } = req.body;
-    const { _id, name, role, clientAdminData, clientUserData } = req.profile;
+}
 
-    let keysStore = {
-        role,
-        name,
-        bizId: (clientUserData && clientUserData.bizId) || "0",
-        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
-        verificationPass: clientAdminData && clientAdminData.verificationPass,
-        selfBizLogoImg: clientAdminData && clientAdminData.selfBizLogoImg,
-        authUserId: _id,
-        msg: msg("ok.welcomeBack", getFirstName(name), "onlyMsg"),
-        needCliUserWelcomeNotif:
-            clientUserData && !clientUserData.notifications.length,
-    };
-
+async function getJwtToken({ _id, role }) {
     let expiringTime;
     role !== "cliente" ? (expiringTime = "24h") : (expiringTime = "90d"); // default: 30m (enum: 30s, 30m, 1h, 7d)
 
-    jwt.sign(
-        { id: _id },
-        process.env.JWT_SECRET,
-        { expiresIn: expiringTime },
-        (err, token) => {
-            if (err)
-                return res.status(500).json(msgG("error.systemError", err));
-            res.json(handleRolesData(role, { ...keysStore, token }));
-        }
-    );
-};
+    let token = await jwt.sign({ id: _id }, process.env.JWT_SECRET, {
+        expiresIn: expiringTime,
+    });
+
+    return token;
+}
+
+// END HELPERS
 
 /* COMMENTS
 n1:

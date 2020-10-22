@@ -14,6 +14,12 @@ import useAPI, { checkPassword, getUniqueId } from "../../hooks/api/useAPI";
 import useGetVar from "../../hooks/storage/useVar";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
+import getAPI, {
+    getDecryptedToken,
+    getToken,
+} from "../../utils/promises/getAPI";
+import { getMultiVar, setVar, store } from "../../hooks/storage/useVar";
+import getFirstName from "../../utils/string/getFirstName";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
@@ -58,14 +64,29 @@ const PasswordBlockField = ({ ind }) => {
     );
 };
 
-export default function AccessPassword() {
+export default function AccessPassword({ history }) {
     const [display, setDisplay] = useState("");
     const [uniqueIdTrigger, setUniqueIdTrigger] = useState(false);
     const { selfThemeBackColor: backColor } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
-    const { data: userId } = useGetVar("userId", { storeName: "user" });
+    const { data: userId } = useGetVar("userId", store.user);
+
+    useEffect(() => {
+        if (userId) {
+            async function runToken() {
+                const body = { _id: userId };
+                const { data: encryptedToken } = await getAPI({
+                    method: "post",
+                    url: getToken(),
+                    body,
+                });
+                setVar({ token: encryptedToken }, store.user);
+            }
+            runToken();
+        }
+    }, [userId]);
 
     const body = {
         userId,
@@ -85,7 +106,43 @@ export default function AccessPassword() {
     });
 
     useEffect(() => {
-        if (completedFill && passOk !== true) {
+        const success = passOk === true;
+        if (completedFill && success) {
+            async function runSuccess() {
+                const [token, userName, bizCodeName] = await getMultiVar(
+                    ["token", "name", "bizCodeName"],
+                    store.user
+                );
+
+                const body = { token };
+                const { data } = await getAPI({
+                    method: "post",
+                    url: getDecryptedToken(),
+                    body,
+                });
+                await setVar({ success: true }, store.user);
+                localStorage.setItem("token", data);
+
+                // wait for the lock animation to end...
+                setTimeout(() => {
+                    const destiny = isApp
+                        ? `/mobile-app`
+                        : `${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
+                    history.push(destiny);
+                    showSnackbar(
+                        dispatch,
+                        `Olá de volta, ${
+                            userName && getFirstName(userName.cap())
+                        }!`,
+                        "success"
+                    );
+                }, 3000);
+            }
+
+            runSuccess();
+        }
+
+        if (completedFill && !success) {
             const uniqueId = getUniqueId();
             setUniqueIdTrigger(uniqueId);
         }

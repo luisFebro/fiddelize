@@ -34,7 +34,8 @@ import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
 import AccessGateKeeper from "./password/AccessGateKeeper";
 import getFirstName from "../../utils/string/getFirstName";
-import { setVar, getVar, getMultiVar, store } from "../../hooks/storage/useVar";
+import { getMultiVar, store } from "../../hooks/storage/useVar";
+import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -51,30 +52,40 @@ function ClientMobileApp({ location, history }) {
 
     useManageProServices();
 
-    const { isAuthUser } = useAuthUser();
+    let { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
-    let { _id, role = "cliente-admin", name = "Lipe Feitoza" } = useProfile();
+    let { _id, role, name } = useProfile();
 
     // for logout access data.
-    const [store, setStore] = useState({
+    const [dataStore, setDataStore] = useState({
         name: "...",
         role: "...",
+        rememberAccess: false,
+        loadingAccess: true,
+        success: false,
     });
+    const { rememberAccess, loadingAccess, success } = dataStore;
+    role = dataStore.role || role;
+    name = dataStore.name || name;
+    isAuthUser = isAuthUser || success;
+    console.log("success", success);
 
     useEffect(() => {
-        setVar({ role }, store.user);
-        getVar("userId", store.user).then((data) => {
-            console.log("data", data);
+        getMultiVar(
+            ["name", "role", "rememberAccess", "success"],
+            store.user
+        ).then((dataList) => {
+            const [thisName, thisRole, access, success] = dataList;
+            setDataStore((prev) => ({
+                ...prev,
+                rememberAccess: access,
+                name: thisName,
+                role: thisRole,
+                loadingAccess: false,
+                success,
+            }));
         });
-
-        // if(role && name) {
-        // } else {
-        //     getVar("userRole", store.user)
-        //     .then(Thisdata => {
-        //         console.log("Thisdata", Thisdata);
-        //     })
-        // }
-    }, [role, name]);
+    }, []);
 
     const {
         bizCodeName,
@@ -85,9 +96,9 @@ function ClientMobileApp({ location, history }) {
     } = useClientAdmin();
     const { currScore } = useClientUser();
 
-    const isSessionOver = true;
-    const needRememberAccess = true;
-    const needLogoutAccess = isSessionOver && needRememberAccess;
+    const isSessionOver = !localStorage.getItem("token");
+    console.log("isSessionOver", isSessionOver);
+    const needLogoutAccess = isSessionOver && rememberAccess;
 
     const logoBiz = useImg(url.logoBiz, {
         trigger: url.logoBiz,
@@ -166,19 +177,29 @@ function ClientMobileApp({ location, history }) {
         );
     };
 
+    const showAccessSwitcher = () => (
+        <AccessSwitcher rememberAccess={rememberAccess} />
+    );
+
     const showLogin = () => (
-        <CompLoader
-            width={200}
-            height={300}
-            comp={
-                <div
-                    className="container-center position-relative"
-                    style={{ top: roleWhichDownloaded ? -78 : 10 }}
-                >
-                    <AsyncLogin setLoginOrRegister={setLoginOrRegister} />
-                </div>
-            }
-        />
+        <Fragment>
+            <CompLoader
+                width={200}
+                height={300}
+                comp={
+                    <div
+                        className="container-center position-relative"
+                        style={{ top: role === "cliente-admin" ? -78 : 10 }}
+                    >
+                        <AsyncLogin
+                            setLoginOrRegister={setLoginOrRegister}
+                            rootClassname="mt-5 mb-3"
+                        />
+                    </div>
+                }
+            />
+            <div className="my-3">{showAccessSwitcher()}</div>
+        </Fragment>
     );
 
     const showRegister = (needLoginBtn, needSetFunc) => (
@@ -210,53 +231,53 @@ function ClientMobileApp({ location, history }) {
         typeof role === "object" && selfThemePColor === "default";
     const conditionShowAppBubble =
         (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) ||
-        gotEmptyData;
-    const showAppType = () =>
-        (conditionShowAppBubble || needLogoutAccess) && (
-            <div className="container-center">
+        gotEmptyData ||
+        role === "cliente-admin";
+
+    const showAppType = () => (
+        <div className="container-center">
+            <div
+                className="position-relative"
+                style={{ top: -55, marginTop: 90, marginBottom: 40 }}
+            >
                 <div
-                    className="position-relative"
-                    style={{ top: -55, marginTop: 90, marginBottom: 40 }}
+                    style={{ animationIterationCount: 1 }}
+                    className="animated rubberBand delay-1s"
                 >
-                    <div
-                        style={{ animationIterationCount: 1 }}
-                        className="animated rubberBand delay-1s"
-                    >
-                        <Img
-                            src={shapeSrc}
-                            width={460}
-                            needLoader={false}
-                            height={130}
-                            alt="tipo de app"
-                        />
-                    </div>
-                    <p
-                        style={{
-                            zIndex: 100,
-                            top: "25px",
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                        }}
-                        className="text-center text-white position-absolute text-shadow"
-                    >
-                        <span
-                            className="position-relative text-subtitle font-weight-bold"
-                            style={{ left: -25 }}
-                        >
-                            App
-                        </span>
-                        <br />
-                        <span className="text-title text-nowrap">
-                            do{" "}
-                            {roleWhichDownloaded === "cliente-admin" ||
-                            isUrlAdmin
-                                ? "Admin"
-                                : "Cliente"}
-                        </span>
-                    </p>
+                    <Img
+                        src={shapeSrc}
+                        width={460}
+                        needLoader={false}
+                        height={130}
+                        alt="tipo de app"
+                    />
                 </div>
+                <p
+                    style={{
+                        zIndex: 100,
+                        top: "25px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                    }}
+                    className="text-center text-white position-absolute text-shadow"
+                >
+                    <span
+                        className="position-relative text-subtitle font-weight-bold"
+                        style={{ left: -25 }}
+                    >
+                        App
+                    </span>
+                    <br />
+                    <span className="text-title text-nowrap">
+                        do{" "}
+                        {role === "cliente-admin" || isUrlAdmin
+                            ? "Admin"
+                            : "Cliente"}
+                    </span>
+                </p>
             </div>
-        );
+        </div>
+    );
 
     const showNotificationBell = () => (
         <div className="container-center">
@@ -300,7 +321,9 @@ function ClientMobileApp({ location, history }) {
                 {!isSessionOver && "Conectado por"}
                 {!isSessionOver && <br />}
                 <strong className="text-title animated bounce">
-                    {name ? getFirstName(name, { addSurname: true }) : "..."}
+                    {name
+                        ? getFirstName(name.cap(), { addSurname: true })
+                        : "..."}
                 </strong>
                 <br />
             </span>
@@ -332,10 +355,11 @@ function ClientMobileApp({ location, history }) {
         </div>
     );
 
+    const accessCheck = !loadingAccess && !rememberAccess;
     const conditionRegister =
         loginOrRegister === "register" && showRegister(true);
     const conditionLogin =
-        loginOrRegister === "login" && showLogin() && !needRememberAccess;
+        loginOrRegister === "login" && accessCheck && showLogin();
 
     let isCliAdminConnected =
         role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
@@ -355,7 +379,7 @@ function ClientMobileApp({ location, history }) {
         >
             <span className="text-right text-white for-version-test">{""}</span>
             {showLogo()}
-            {showAppType()}
+            {conditionShowAppBubble && showAppType()}
 
             {!isAuthUser && (
                 <section>

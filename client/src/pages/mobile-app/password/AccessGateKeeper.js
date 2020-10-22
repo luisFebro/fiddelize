@@ -1,9 +1,10 @@
-import React from "react";
-import SwitchBtn from "../../../components/buttons/material-ui/SwitchBtn";
+import React, { useState, useEffect } from "react";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import ProtectionMsg from "../../access-password/ProtectionMsg";
+import AccessSwitcher from "../../../components/auth/password/AccessSwitcher";
+import { getMultiVar, store } from "../../../hooks/storage/useVar";
 
 const awesomeStyle = {
     fontSize: "30px",
@@ -12,7 +13,18 @@ const awesomeStyle = {
 };
 
 export default function AccessGateKeeper() {
-    const twoLastCpfDigits = "42";
+    const [data, setData] = useState({
+        twoLastCpfDigits: "--",
+        rememberAccess: true,
+    });
+    const { twoLastCpfDigits, rememberAccess } = data;
+
+    useEffect(() => {
+        getMultiVar(["twoLastCpfDigits"], store.user).then((dataList) => {
+            const [cpfDigits] = dataList;
+            setData((prev) => ({ ...prev, twoLastCpfDigits: cpfDigits }));
+        });
+    }, []);
 
     const showLoginName = () => (
         <section className="text-normal text-white">
@@ -20,18 +32,8 @@ export default function AccessGateKeeper() {
         </section>
     );
 
-    // By default, the Lembrar acesso is activated. User should disable it manually.
-    //This should have a modal with the following warning when user switch to disabled:
-    // Desabilitando a opção Lembrar acesso, você vai precisar digitar CPF e senha em cada sessão. Continuar?
-    // Also: If first access or Lembrar acesso is disabled, then after CPF is checked, redirect user to password page, then his dashboard directly.
     const showAccessSwitcher = () => (
-        <SwitchBtn
-            titleLeft=" "
-            titleRight="Lembrar acesso"
-            defaultStatus="true"
-            customColor="var(--mainWhite)"
-            animationOn={false}
-        />
+        <AccessSwitcher rememberAccess={rememberAccess} top={0} />
     );
 
     const showGateKeeperCTAs = () => (
