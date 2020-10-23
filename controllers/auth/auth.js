@@ -188,10 +188,6 @@ exports.getDecryptedToken = (req, res) => {
     res.json(decrypted);
 };
 
-// HELPERS
-
-// END HELPERS
-
 /* COMMENTS
 n1:
 /*this middleware is created so that

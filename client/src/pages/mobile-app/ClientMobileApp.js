@@ -235,6 +235,11 @@ function ClientMobileApp({ location, history }) {
         gotEmptyData ||
         role === "cliente-admin";
 
+    const handleRoleName = () => {
+        if (loadingAccess) return "";
+        if (role === "cliente-admin" || isUrlAdmin) return "Admin";
+        return "Cliente";
+    };
     const showAppType = () => (
         <div className="container-center">
             <div
@@ -270,10 +275,7 @@ function ClientMobileApp({ location, history }) {
                     </span>
                     <br />
                     <span className="text-title text-nowrap">
-                        do{" "}
-                        {role === "cliente-admin" || isUrlAdmin
-                            ? "Admin"
-                            : "Cliente"}
+                        {!loadingAccess && "do"} {handleRoleName()}
                     </span>
                 </p>
             </div>
@@ -328,7 +330,7 @@ function ClientMobileApp({ location, history }) {
                 </strong>
                 <br />
             </span>
-            {!isSessionOver ? (
+            {!isSessionOver && (
                 <section className="container-center mt-4">
                     <RedirectLink
                         className="mr-3"
@@ -349,9 +351,8 @@ function ClientMobileApp({ location, history }) {
                         />
                     </span>
                 </section>
-            ) : (
-                <AsyncAccessGateKeeper />
             )}
+            {isSessionOver && !loadingAccess && <AsyncAccessGateKeeper />}
         </div>
     );
 
