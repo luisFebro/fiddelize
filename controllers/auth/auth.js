@@ -2,13 +2,14 @@ const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
 const { msgG } = require("../_msgs/globalMsgs");
 const { msg } = require("../_msgs/auth");
-const selectObjKeys = require("../../utils/objects/selectObjKeys");
 const getFirstName = require("../../utils/string/getFirstName");
 const {
     encryptSync,
     decryptSync,
     jsEncrypt,
 } = require("../../utils/security/xCipher");
+const getJwtToken = require("./helpers/getJwtToken");
+const getRoleData = require("./helpers/getRoleData");
 
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
@@ -152,34 +153,17 @@ exports.register = (req, res) => {
 };
 
 exports.login = async (req, res) => {
-    // const { password, needKeepLoggedIn } = req.body;
-    const { _id, name, role, clientAdminData, clientUserData } = req.profile;
+    const { _id, role } = req.profile;
     const { cpf } = req.body;
-    // encrypted token to be store in IndexDB before checking password validation.
-    let twoLastCpfDigits;
 
-    let token = await getJwtToken({ _id, role });
-
-    if (role === "cliente-admin") {
-        token = undefined; // this is fetched on getToken now..
-        twoLastCpfDigits = cpf && cpf.slice(-2);
+    let token = undefined;
+    if (role !== "cliente-admin") {
+        // for cli-admin, this is fetched on getToken now..
+        token = await getJwtToken({ _id, role });
     }
 
-    let keysStore = {
-        role,
-        name,
-        bizId: (clientUserData && clientUserData.bizId) || "0",
-        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
-        verificationPass: clientAdminData && clientAdminData.verificationPass,
-        selfBizLogoImg: clientAdminData && clientAdminData.selfBizLogoImg,
-        authUserId: _id,
-        msg: msg("ok.welcomeBack", getFirstName(name), "onlyMsg"),
-        needCliUserWelcomeNotif:
-            clientUserData && !clientUserData.notifications.length,
-        twoLastCpfDigits,
-    };
-
-    res.json(handleRolesData(role, { ...keysStore, token }));
+    const authData = getRoleData(role, { data: req.profile, token, cpf });
+    res.json(authData);
 };
 
 exports.getToken = async (req, res) => {
@@ -205,58 +189,6 @@ exports.getDecryptedToken = (req, res) => {
 };
 
 // HELPERS
-function handleRolesData(role, ...allKeys) {
-    let objToSend;
-    const allKeysStore = Object.assign({}, ...allKeys);
-    // console.log(Object.keys(allKeysStore))
-
-    switch (role) {
-        case "cliente-admin":
-            const array1 = [
-                "token",
-                "role",
-                "name",
-                "bizCodeName",
-                "verificationPass",
-                "authUserId",
-                "msg",
-                "selfBizLogoImg",
-                "twoLastCpfDigits",
-            ];
-            objToSend = selectObjKeys(allKeysStore, array1);
-            break;
-        case "cliente":
-            const array2 = [
-                "bizId",
-                "token",
-                "role",
-                "name",
-                "authUserId",
-                "msg",
-                "needCliUserWelcomeNotif",
-            ];
-            objToSend = selectObjKeys(allKeysStore, array2);
-            break;
-        default:
-            objToSend = allKeysStore;
-            console.log(
-                "All keys are included in handleRolesData function at auth"
-            );
-    }
-
-    return objToSend;
-}
-
-async function getJwtToken({ _id, role }) {
-    let expiringTime;
-    role !== "cliente" ? (expiringTime = "24h") : (expiringTime = "90d"); // default: 30m (enum: 30s, 30m, 1h, 7d)
-
-    let token = await jwt.sign({ id: _id }, process.env.JWT_SECRET, {
-        expiresIn: expiringTime,
-    });
-
-    return token;
-}
 
 // END HELPERS
 

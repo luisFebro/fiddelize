@@ -169,7 +169,7 @@ const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
 // console.log("resCipher", resCipher);
 // const resDecipher = jsDecrypt(resCipher);
 // END ENCRYPTION AND DECRYPTION
-
+// console.log(jsDecrypt("05010519040004190e02041a010e"))
 module.exports = {
     encrypt,
     encryptSync,

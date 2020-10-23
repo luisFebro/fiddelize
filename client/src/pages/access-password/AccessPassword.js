@@ -18,8 +18,8 @@ import getAPI, {
     getDecryptedToken,
     getToken,
 } from "../../utils/promises/getAPI";
-import { getMultiVar, setVar, store } from "../../hooks/storage/useVar";
-import getFirstName from "../../utils/string/getFirstName";
+import { getVar, setVar, store } from "../../hooks/storage/useVar";
+import authenticate from "../../components/auth/helpers/authenticate";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
@@ -109,33 +109,18 @@ export default function AccessPassword({ history }) {
         const success = passOk === true;
         if (completedFill && success) {
             async function runSuccess() {
-                const [token, userName, bizCodeName] = await getMultiVar(
-                    ["token", "name", "bizCodeName"],
-                    store.user
-                );
+                const token = await getVar("token", store.user);
 
                 const body = { token };
-                const { data } = await getAPI({
+                const { data: newToken } = await getAPI({
                     method: "post",
                     url: getDecryptedToken(),
                     body,
                 });
-                await setVar({ success: true }, store.user);
-                localStorage.setItem("token", data);
 
                 // wait for the lock animation to end...
                 setTimeout(() => {
-                    const destiny = isApp
-                        ? `/mobile-app`
-                        : `${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
-                    history.push(destiny);
-                    showSnackbar(
-                        dispatch,
-                        `Olá de volta, ${
-                            userName && getFirstName(userName.cap())
-                        }!`,
-                        "success"
-                    );
+                    authenticate(newToken, { dispatch, history });
                 }, 3000);
             }
 
@@ -210,7 +195,7 @@ export default function AccessPassword({ history }) {
                             className="mt-3 text-subtitle font-weight-bold text-white text-center"
                             style={{ marginBottom: 100 }}
                         >
-                            Acesso concedido!{" "}
+                            Certo!{" "}
                             <FontAwesomeIcon
                                 icon="check-circle"
                                 style={{

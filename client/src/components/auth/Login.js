@@ -80,6 +80,7 @@ function Login({
                 { userId: authUserId },
                 { bizCodeName },
                 { twoLastCpfDigits },
+                { rememberAccess: true },
             ];
             setMultiVar(storeElems, store.user);
 
@@ -122,16 +123,6 @@ function Login({
 
                 if (isThisApp()) {
                     history.push("/senha-de-acesso");
-                    // setTimeout(
-                    //     () =>
-                    //         showSnackbar(
-                    //             dispatch,
-                    //             msg,
-                    //             "success",
-                    //             3000
-                    //         ),
-                    //     1400
-                    // );
                 } else {
                     history.push("/senha-de-acesso");
                     // showSnackbar(

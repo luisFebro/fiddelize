@@ -11,12 +11,12 @@ async function comparePswds(userId, options = {}) {
 
     const userData = await User.findById(userId)
         .select("pswd")
-        .catch((error) => res.json({ error }));
+        .catch((error) => console.log(error));
 
     const hash = userData.pswd;
 
     const checkRes = await compareBcryptPswd(pswd, { hash }).catch((error) =>
-        res.json({ error })
+        console.log(error)
     );
 
     return checkRes;

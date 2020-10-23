@@ -4,7 +4,8 @@
     cursor: pointer;
 }
 
-.no-outline:focus, .no-outline:hover {
+.no-outline:focus,
+.no-outline:hover {
     outline: none;
 }
 // Index
@@ -50,13 +51,18 @@
     transform: translate(-50%, -50%);
 }
 
-.img-center { // does not require to specify image size
-    margin-left: 1rem!important;
-    margin-right: 1rem!important;
+.img-center {
+    // does not require to specify image size
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
 
     & img {
         max-width: 100%;
         height: auto;
     }
+}
+
+.no-border {
+    border: 0px solid transparent !important;
 }
 // end img

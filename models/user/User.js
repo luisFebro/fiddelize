@@ -267,6 +267,11 @@ const data = {
     centralAdminData: CentralAdminDataSchema,
     filter: DefaultFilterSchema,
     pswd: String,
+    pswdGoogle: {
+        email: String,
+        pswd: String,
+        profilePic: String,
+    }, // from oAuth2
     // staffBookingList: Array, // L
 };
 // End Profile

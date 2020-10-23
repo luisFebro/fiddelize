@@ -32,10 +32,17 @@ import useBackColor from "../../hooks/useBackColor";
 import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
-import AccessGateKeeper from "./password/AccessGateKeeper";
 import getFirstName from "../../utils/string/getFirstName";
 import { getMultiVar, store } from "../../hooks/storage/useVar";
-import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
+import { Load } from "../../components/code-splitting/LoadableComp";
+const AsyncAccessGateKeeper = Load({
+    loader: () =>
+        import(
+            "./password/AccessGateKeeper" /* webpackChunkName: "gate-keeper-comp-lazy" */
+        ),
+});
+
+// import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -68,7 +75,6 @@ function ClientMobileApp({ location, history }) {
     role = dataStore.role || role;
     name = dataStore.name || name;
     isAuthUser = isAuthUser || success;
-    console.log("success", success);
 
     useEffect(() => {
         getMultiVar(
@@ -97,7 +103,6 @@ function ClientMobileApp({ location, history }) {
     const { currScore } = useClientUser();
 
     const isSessionOver = !localStorage.getItem("token");
-    console.log("isSessionOver", isSessionOver);
     const needLogoutAccess = isSessionOver && rememberAccess;
 
     const logoBiz = useImg(url.logoBiz, {
@@ -177,10 +182,6 @@ function ClientMobileApp({ location, history }) {
         );
     };
 
-    const showAccessSwitcher = () => (
-        <AccessSwitcher rememberAccess={rememberAccess} />
-    );
-
     const showLogin = () => (
         <Fragment>
             <CompLoader
@@ -198,7 +199,6 @@ function ClientMobileApp({ location, history }) {
                     </div>
                 }
             />
-            <div className="my-3">{showAccessSwitcher()}</div>
         </Fragment>
     );
 
@@ -350,7 +350,7 @@ function ClientMobileApp({ location, history }) {
                     </span>
                 </section>
             ) : (
-                <AccessGateKeeper />
+                <AsyncAccessGateKeeper />
             )}
         </div>
     );
@@ -424,6 +424,8 @@ n1: LESSON: Do not use Fragment inside session since Fragment can hide inner ele
 */
 
 /* ARCHIVES
+<div className="my-3">{showAccessSwitcher()}</div>
+
 {isAuthUser && !name
 ? (
     <div style={{margin: '200px 0 0'}}>

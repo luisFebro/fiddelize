@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import ButtonMulti, { faStyle } from '../../components/buttons/material-ui/ButtonMulti';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import parse from 'html-react-parser';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import ButtonMulti, {
+    faStyle,
+} from "../../components/buttons/material-ui/ButtonMulti";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import parse from "html-react-parser";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 ModalConfYesNo.propTypes = {
@@ -22,11 +24,11 @@ export default function ModalConfYesNo({
     fullOpen,
     setFullOpen,
     contentComp,
-    modalData,
-    actionFunc }) {
+    actionFunc,
+}) {
     const [isYesBtnDisabled, setIsYesBtnDisabled] = useState(false);
 
-    const showActionBtns = dispatch => (
+    const showActionBtns = (dispatch) => (
         <section>
             <div className="mt-5 d-flex justify-content-center">
                 <ButtonMulti
@@ -37,9 +39,14 @@ export default function ModalConfYesNo({
                 <ButtonMulti
                     title="SIM"
                     disabled={isYesBtnDisabled ? true : false}
-                    onClick={() => { actionFunc(); setIsYesBtnDisabled(true); }}
-                    iconFontAwesome={<FontAwesomeIcon icon="times" style={faStyle} />}
-                    backgroundColor= "var(--mainRed)"
+                    onClick={() => {
+                        actionFunc();
+                        setIsYesBtnDisabled(true);
+                    }}
+                    iconFontAwesome={
+                        <FontAwesomeIcon icon="times" style={faStyle} />
+                    }
+                    backgroundColor="var(--mainRed)"
                 />
             </div>
         </section>
@@ -47,9 +54,7 @@ export default function ModalConfYesNo({
 
     const showTitle = () => (
         <DialogTitle id="form-dialog-title">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
+            <p className="text-subtitle text-purple text-center font-weight-bold">
                 {title && parse(title)}
             </p>
         </DialogTitle>
@@ -66,10 +71,10 @@ export default function ModalConfYesNo({
 
     return (
         <Dialog
-            PaperProps={{ style: {backgroundColor: 'var(--mainWhite)'}}}
+            PaperProps={{ style: { backgroundColor: "var(--mainWhite)" } }}
             style={{ zIndex: 1500 }}
             open={fullOpen}
-            maxWidth='sm'
+            maxWidth="sm"
             aria-labelledby="form-dialog-title"
             className="animated slideInLeft faster"
         >

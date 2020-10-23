@@ -74,37 +74,37 @@
 }
 /* THEMING */
 .theme-back--default {
-    background-color: #4a148c;
+    background-color: #4a148c !important;
 }
 .theme-back--pink {
-    background-color: var(--themeBackground--pink);
+    background-color: var(--themeBackground--pink) !important;
 }
 .theme-back--red {
-    background-color: var(--themeBackground--red);
+    background-color: var(--themeBackground--red) !important;
 }
 .theme-back--purple {
-    background-color: var(--themeBackground--purple);
+    background-color: var(--themeBackground--purple) !important;
 }
 .theme-back--orange {
-    background-color: var(--themeBackground--orange);
+    background-color: var(--themeBackground--orange) !important;
 }
 .theme-back--black {
-    background-color: var(--themeBackground--black);
+    background-color: var(--themeBackground--black) !important;
 }
 .theme-back--white {
-    background-color: var(--themeBackground--white);
+    background-color: var(--themeBackground--white) !important;
 }
 .theme-back--blue {
     background-color: var(--themeBackground--blue) !important;
 }
 .theme-back--green {
-    background-color: var(--themeBackground--green);
+    background-color: var(--themeBackground--green) !important;
 }
 .theme-back--brown {
-    background-color: var(--themeBackground--brown);
+    background-color: var(--themeBackground--brown) !important;
 }
 .theme-back--yellow {
-    background-color: var(--themeBackground--yellow);
+    background-color: var(--themeBackground--yellow) !important;
 }
 
 .txt-color--default {

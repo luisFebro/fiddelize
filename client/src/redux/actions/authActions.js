@@ -5,6 +5,7 @@ import { showSnackbar } from "./snackbarActions";
 import { getHeaderJson } from "../../utils/server/getHeaders";
 import { readCliAdmin } from "../../hooks/roles-storage-and-data-recovery/useRecoverSysData";
 import isThisApp from "../../utils/window/isThisApp";
+import { setVar, store } from "../../hooks/storage/useVar";
 // import lStorage from '../../utils/storage/lStorage';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
@@ -160,7 +161,7 @@ export const registerFacebook = (dispatch, body, resFacebook) => {
 };
 // Register Social Networks
 
-export const logout = (dispatch, opts = {}) => {
+export const logout = async (dispatch, opts = {}) => {
     const { needReload = false } = opts;
 
     setRun(dispatch, "logout");
@@ -171,6 +172,8 @@ export const logout = (dispatch, opts = {}) => {
     dispatch({ type: "LOGOUT_SUCCESS" });
     dispatch({ type: "USER_CLEARED" });
     dispatch({ type: "ALL_COMPONENTS_CLEARED" });
+
+    await setVar({ success: false }, store.user);
 };
 
 export const changePassword = async (dispatch, bodyPass, userId) => {

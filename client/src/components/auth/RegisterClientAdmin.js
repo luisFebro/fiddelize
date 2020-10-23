@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const getStyles = () => ({
     fieldForm: {
         backgroundColor: "var(--mainWhite)",
+        color: "var(--themeP)",
         zIndex: 2000,
         font: "normal 1em Poppins, sans-serif",
     },
@@ -159,21 +160,21 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         setFieldError(null);
     };
 
-    const sendEmail = (userId) => {
-        const dataEmail = {
-            name,
-            email,
-            bizName,
-            bizWebsite,
-            bizInstagram,
-        };
-        sendWelcomeConfirmEmail(dataEmail, userId).then((res) => {
-            if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
-            // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
-            clearData();
-        });
-    };
+    // const sendEmail = (userId) => {
+    //     const dataEmail = {
+    //         name,
+    //         email,
+    //         bizName,
+    //         bizWebsite,
+    //         bizInstagram,
+    //     };
+    //     sendWelcomeConfirmEmail(dataEmail, userId).then((res) => {
+    //         if (res.status !== 200)
+    //             return showSnackbar(dispatch, res.data.msg, "error");
+    //         clearData();
+    //         // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
+    //     });
+    // };
 
     const registerThisUser = (e) => {
         clientAdminData.bizWhatsapp = phone;
@@ -222,7 +223,8 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                 500
             );
 
-            sendEmail(userId);
+            // sendEmail(userId);
+            clearData();
         });
     };
 

@@ -11,7 +11,6 @@ export const handleNextField = (e, currField, options = {}) => {
         callback,
         clearFields = false,
     } = options;
-    console.log("passedFields", passedFields);
 
     if (clearFields) {
         passedFields = [];

@@ -1,5 +1,4 @@
 import { reducer } from "easy-peasy";
-import { setVar } from "../hooks/storage/useVar";
 // actions are used with the usestoredispatch hook inside the wanting functional component
 // copy and paste the type of actions below
 // You can use only one isntance of object like 'cases' for each object.
@@ -46,7 +45,6 @@ export const authReducer = {
                 };
             case "LOGIN_ERROR":
             case "LOGOUT_SUCCESS":
-                setVar({ success: false });
                 localStorage.removeItem("token");
                 return {
                     ...state,

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import ProtectionMsg from "../../access-password/ProtectionMsg";
 import AccessSwitcher from "../../../components/auth/password/AccessSwitcher";
 import { getMultiVar, store } from "../../../hooks/storage/useVar";
+import GoogleLogin from "../../../components/auth/GoogleLogin";
 
 const awesomeStyle = {
     fontSize: "30px",
@@ -20,10 +21,16 @@ export default function AccessGateKeeper() {
     const { twoLastCpfDigits, rememberAccess } = data;
 
     useEffect(() => {
-        getMultiVar(["twoLastCpfDigits"], store.user).then((dataList) => {
-            const [cpfDigits] = dataList;
-            setData((prev) => ({ ...prev, twoLastCpfDigits: cpfDigits }));
-        });
+        getMultiVar(["twoLastCpfDigits", "rememberAccess"], store.user).then(
+            (dataList) => {
+                const [cpfDigits, rememberAccess] = dataList;
+                setData((prev) => ({
+                    ...prev,
+                    twoLastCpfDigits: cpfDigits,
+                    rememberAccess,
+                }));
+            }
+        );
     }, []);
 
     const showLoginName = () => (
@@ -40,18 +47,8 @@ export default function AccessGateKeeper() {
         <section className="mt-3">
             <p className="text-subtitle text-white text-center">Acesso com:</p>
             <section className="container-center">
-                <div style={{ marginRight: "25px" }}>
-                    <ButtonFab
-                        title="GOOGLE"
-                        iconFontAwesome={
-                            <FontAwesomeIcon icon="lock" style={awesomeStyle} />
-                        }
-                        backgroundColor="var(--themeSDark--default)"
-                        onClick={null}
-                        position="relative"
-                        variant="extended"
-                        size="large"
-                    />
+                <div style={{ marginRight: "10px" }}>
+                    <GoogleLogin />
                 </div>
                 <Link className="no-text-decoration" to="/senha-de-acesso">
                     <ButtonFab

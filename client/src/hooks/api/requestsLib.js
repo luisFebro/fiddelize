@@ -57,7 +57,8 @@ export const getNextExpiryDate = (userId) =>
 export const removeServices = (userId) =>
     `/api/pro/service/remove?userId=${userId}`; // DELETE
 
-// PASSWORD
+// PASSWORD AND AUTH
 export const checkPassword = () => `/api/auth/pswd/check`;
 export const getDecryptedToken = () => `/api/auth/pswd/decrypt-token`;
 export const getToken = () => `/api/auth/pswd/token`;
+export const makeGoogleLogin = () => `/api/auth/google`; // POST

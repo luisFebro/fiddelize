@@ -15,6 +15,7 @@ export default function GoogleAuth() {
     }))
     // END REDUX
 
+    // very bad idea!!!
     const emailAllRegisteredUsers = userList.map(user => user.email);
 
     const handleSuccessGoogle = response => {

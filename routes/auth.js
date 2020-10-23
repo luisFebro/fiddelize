@@ -17,6 +17,8 @@ const {
     changePassword,
 } = require("../controllers/auth/password");
 
+const { makeGoogleLogin } = require("../controllers/auth/google");
+
 const {
     mwValidateRegister,
     mwValidateLogin,
@@ -36,5 +38,7 @@ router.post("/pswd/recover", recoverPassword);
 router.post("/pswd/change", mwIsAuth, changePassword);
 router.post("/pswd/token", getToken);
 router.post("/pswd/decrypt-token", getDecryptedToken);
+
+router.post("/google", makeGoogleLogin);
 
 module.exports = router;
