@@ -9,6 +9,7 @@ import { setVar } from "../hooks/storage/useVar";
 
 export default function RedirectLink({
     children,
+    className,
     onClick,
     toDashTab, // name of dashboard's session like App.
     pendingMsg,
@@ -29,14 +30,12 @@ export default function RedirectLink({
     };
 
     return (
-        <section>
-            <Link
-                className="no-text-decoration"
-                to={to || `/${bizCodeName}/cliente-admin/painel-de-controle`}
-                onClick={onClick ? onClick : () => handleClick()}
-            >
-                {children}
-            </Link>
-        </section>
+        <Link
+            className={`${className} no-text-decoration`}
+            to={to || `/${bizCodeName}/cliente-admin/painel-de-controle`}
+            onClick={onClick ? onClick : () => handleClick()}
+        >
+            {children}
+        </Link>
     );
 }

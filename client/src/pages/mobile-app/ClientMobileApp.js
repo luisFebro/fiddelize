@@ -35,6 +35,7 @@ import useManageProServices from "../../hooks/pro/useManageProServices";
 import getFirstName from "../../utils/string/getFirstName";
 import { getMultiVar, store } from "../../hooks/storage/useVar";
 import { Load } from "../../components/code-splitting/LoadableComp";
+import RedirectLink from "../../components/RedirectLink";
 const AsyncAccessGateKeeper = Load({
     loader: () =>
         import(
@@ -329,10 +330,9 @@ function ClientMobileApp({ location, history }) {
             </span>
             {!isSessionOver ? (
                 <section className="container-center mt-4">
-                    <Link
-                        className="mr-3 no-text-decoration"
+                    <RedirectLink
+                        className="mr-3"
                         to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
-                        onClick={handleConnectedStatusClick}
                     >
                         <RadiusBtn
                             title="acessar"
@@ -340,7 +340,7 @@ function ClientMobileApp({ location, history }) {
                                 "var(--themeSDark--" + selfThemeSColor + ")"
                             }
                         />
-                    </Link>
+                    </RedirectLink>
                     <span>
                         <RadiusBtn
                             title="sair"
