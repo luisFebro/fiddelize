@@ -102,7 +102,7 @@ function ClientMobileApp({ location, history }) {
     } = useClientAdmin();
     const { currScore } = useClientUser();
 
-    const isSessionOver = !localStorage.getItem("token");
+    const isSessionOver = !success || !localStorage.getItem("token");
     const needLogoutAccess = isSessionOver && rememberAccess;
 
     const logoBiz = useImg(url.logoBiz, {

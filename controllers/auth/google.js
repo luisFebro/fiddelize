@@ -6,37 +6,53 @@ const GOOGLE_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_ID);
 
 exports.makeGoogleLogin = async (req, res) => {
-    const { userId, tokenId: idToken } = req.body;
+    const {
+        userId,
+        tokenId: idToken,
+        n, // e.g n=1 new activation for creating google access from dashboard
+    } = req.body;
 
     const response = await client.verifyIdToken({
         idToken,
         audience: GOOGLE_ID,
     });
-    const { email_verified, jti, picture, name, email } = response.payload;
+
+    //name not being used in this project
+    const { email_verified, email, jti, picture } = response.payload;
 
     if (email_verified) {
-        const token = await getJwtToken({ _id: userId, role: "cliente-admin" });
-        return res.json(token);
-        // const gotObj = await User.find({ "pswdGoogle.email": email }).select("pswdGoogle -_id");
-        // const isAuth = gotObj;
+        if (n === 1) {
+            const googleObj = {
+                email,
+                pswd: jti,
+                pic: picture,
+            };
 
-        // if(isAuth) {
-        //     // send success token and user data
-        // }
+            await User.findByIdAndUpdate(userId, { pswdGoogle: googleObj });
+            return res.json({ msg: "google access ok" });
+        } else {
+            const cond = [{ _id: userId }, { "pswdGoogle.email": email }];
+            const resSearch = await User.findOne({ $and: cond }).select(
+                "pswdGoogle -_id"
+            );
 
-        const googleObj = {
-            pswd: jti,
-            pic: picture,
-        };
-        const yay = await User.findByIdAndUpdate(
-            userId,
-            { pswdGoogle: googleObj },
-            { new: true }
-        );
-        res.json(yay);
+            const isAuth = resSearch && resSearch.pswdGoogle.pswd;
+
+            if (isAuth) {
+                const token = await getJwtToken({
+                    _id: userId,
+                    role: "cliente-admin",
+                });
+                return res.json(token);
+            } else {
+                return res.status(400).json({
+                    error: "Email ou senha inválidos",
+                });
+            }
+        }
     } else {
         return res.status(400).json({
-            error: "Google login failed. Try again.",
+            error: "Falha ao acessar com o Google",
         });
     }
     res.json(response);

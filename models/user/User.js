@@ -270,7 +270,7 @@ const data = {
     pswdGoogle: {
         email: String,
         pswd: String,
-        profilePic: String,
+        pic: String,
     }, // from oAuth2
     // staffBookingList: Array, // L
 };

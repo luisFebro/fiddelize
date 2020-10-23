@@ -23,6 +23,7 @@ function GoogleLogin({ history }) {
     const { selfThemeBackColor: backColor } = useClientAdmin();
 
     const handleSuccess = async (response) => {
+        console.log("response", response);
         showSnackbar(dispatch, "Conectando... Um momento.");
 
         const userId = await getVar("userId", store.user);
