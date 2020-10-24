@@ -28,7 +28,7 @@ const {
     getHighestScores,
 } = require("../../controllers/user/clients-session/recordedClients");
 
-const { mwIsCliAdmin, mwIsAuth } = require("../../controllers/auth");
+const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
 // @route  api/user
 // RUD
 router.get("/:userId", read); // mwIsAuth JWT ERROR: jwt must be provided when log it
@@ -48,7 +48,7 @@ router.get("/list/purchase-history/prizes/:userId", readPrizes);
 // LISTS
 router.get("/list/all", mwIsAuth, getRecordedClientList);
 router.get("/list/highest-scores", getHighestScores);
-router.get("/:userId/backup/list", mwIsCliAdmin, readBackup); // mwIsAuth
+router.get("/:userId/backup/list", mwIsClientAdmin, readBackup); // mwIsAuth
 
 router.put("/count/field/:userId", countField);
 router.get("/redirect/url-link", redirectUrlLink);

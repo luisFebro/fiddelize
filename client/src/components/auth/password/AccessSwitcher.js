@@ -48,9 +48,7 @@ export default function AccessSwitcher({
                 defaultStatus={
                     typeof rememberAccess === "boolean" ? rememberAccess : true
                 }
-                customColor={`${selectTxtStyle(
-                    backColor
-                )} text-normal font-weight-bold`}
+                customColor={`${selectTxtStyle(backColor)} text-normal`}
                 animationOn={false}
                 needCustomColor={true}
                 callback={handleAccessSwitcher}

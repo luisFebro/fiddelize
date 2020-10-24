@@ -3,6 +3,10 @@ const getTTLResult = require("../ttl");
 const {
     createBcryptPswd,
     compareBcryptPswd,
+    decryptSync,
+    jsEncrypt,
+    createJWT,
+    checkJWT,
 } = require("../../utils/security/xCipher");
 
 // HELPERS
@@ -74,6 +78,36 @@ exports.changePassword = async (req, res) => {
             .status(400)
             .json({ error: "A senha anterior não bate com a informada." });
     }
+};
+
+exports.forgotPasswordRequest = async (req, res) => {
+    const { userId, cpf, email } = req.body;
+
+    const encryptedCPF = jsEncrypt(cpf);
+
+    const user = await User.findOne({ cpf: encryptedCPF }).select("email _id");
+    if (!user || (user && user._id.toString()) !== userId)
+        return res
+            .status(400)
+            .json({ error: "As informações não batem. Confira seus dados." });
+
+    const decryptedEmail = decryptSync(user.email);
+    if (decryptedEmail !== email)
+        return res
+            .status(400)
+            .json({ error: "As informações não batem. Confira seus dados." });
+
+    // const test = await createJWT(userId, { expiry: "10m" });
+    const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlOGIwYmZjOGM2MTY3MTliMDFhYmM5YyIsImlhdCI6MTYwMzU1MzIxMSwiZXhwIjoxNjAzNTUzODExfQ.e1vD35ZCHdi-sPaWqfwMCzVQhvfdjij5kkiXZQ-PwoY";
+    const test2 = await checkJWT(token).catch((e) => {
+        console.log(e);
+        res.status(400).json({ error: "Este link já expirou." });
+    });
+    res.json(test2);
+
+    // send email.
+    // User.findOne({ $and: query })
 };
 
 // POST - Only for recover page when a 1 hour long time-out token will be verified

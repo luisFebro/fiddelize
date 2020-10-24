@@ -13,8 +13,9 @@ const {
 const {
     createPassword,
     checkPassword,
-    recoverPassword,
     changePassword,
+    forgotPasswordRequest,
+    recoverPassword,
 } = require("../controllers/auth/password");
 
 // const { makeGoogleLogin } = require("../controllers/auth/google");
@@ -23,6 +24,8 @@ const {
     mwValidateRegister,
     mwValidateLogin,
     mwValidatePassword,
+    mwValidateCPF,
+    mwValidateEmail,
 } = require("../controllers/_mw-validation/auth");
 
 const { mwProCreditsCounter } = require("../controllers/pro/pro");
@@ -34,6 +37,12 @@ router.post("/login", mwValidateLogin, login);
 // password
 router.post("/pswd/create", mwValidatePassword, createPassword);
 router.post("/pswd/check", checkPassword);
+router.post(
+    "/pswd/forgot",
+    mwValidateCPF,
+    mwValidateEmail,
+    forgotPasswordRequest
+);
 router.post("/pswd/recover", recoverPassword);
 router.post("/pswd/change", mwIsAuth, changePassword);
 router.post("/pswd/token", getToken);

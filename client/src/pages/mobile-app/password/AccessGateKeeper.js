@@ -34,11 +34,7 @@ export default function AccessGateKeeper({ backColor, sColor }) {
     }, []);
 
     const showLoginName = () => (
-        <section
-            className={`text-normal font-weight-bold ${selectTxtStyle(
-                backColor
-            )}`}
-        >
+        <section className={`text-normal ${selectTxtStyle(backColor)}`}>
             CPF: ***.***.***-{twoLastCpfDigits}
         </section>
     );

@@ -83,22 +83,6 @@ exports.mwValidateRegister = (req, res, next) => {
         .catch((err) => msgG("error.systemError", err));
 };
 
-function runTestException(cpf, user, req, next) {
-    // For testing purpose, it will be allowed:]
-    // 111.111.111-11 for cli-admin free version testing
-    // 222.222.222-22 for cli-user free version testing
-    if (
-        cpf === "111.111.111-11" ||
-        cpf === "222.222.222-22" ||
-        cpf === "333.333.333-33"
-    ) {
-        req.profile = user;
-        next();
-        return true;
-    }
-    return false;
-}
-
 exports.mwValidateLogin = (req, res, next) => {
     const { cpf, roleWhichDownloaded } = req.body;
     const isCpfValid = new CPF().validate(cpf);
@@ -106,8 +90,8 @@ exports.mwValidateLogin = (req, res, next) => {
     User.findOne({ cpf: jsEncrypt(cpf) })
         .then((user) => {
             if (!cpf) return res.status(400).json(msg("error.noCpf"));
-            const detected = runTestException(cpf, user, req, next);
-            if (detected) return;
+            const detected = runTestException(cpf, { user, req });
+            if (detected) return next();
             if (!isCpfValid)
                 return res.status(400).json(msg("error.invalidCpf"));
             if (!user) return res.status(400).json(msg("error.notRegistedCpf"));
@@ -139,11 +123,46 @@ exports.mwValidatePassword = (req, res, next) => {
 
 exports.mwValidateEmail = (req, res, next) => {
     const { email } = req.body;
-    if (!email) return res.status(400).json(msg("error.noEmail"));
+    if (!email)
+        return res.status(400).json({ error: "Por favor, insira o seu CPF" });
     if (!validateEmail(email))
-        return res.status(400).json(msg("error.invalidEmail"));
+        return res
+            .status(400)
+            .json({ error: "Email informado é inválido. Tente novamente." });
     next();
 };
+
+exports.mwValidateCPF = (req, res, next) => {
+    const { cpf } = req.body;
+
+    const detected = runTestException(cpf);
+    if (detected) return next();
+    const isCpfValid = new CPF().validate(cpf);
+
+    if (!cpf) return res.status(400).json({ error: "Informe seu CPF." });
+    if (!isCpfValid)
+        return res.status(400).json({ error: "CPF informado é inválido." });
+
+    next();
+};
+
+// HELPERS
+function runTestException(cpf, options = {}) {
+    const { user, req } = options;
+    // For testing purpose, it will be allowed:]
+    // 111.111.111-11 for cli-admin free version testing
+    // 222.222.222-22 for cli-user free version testing
+    if (
+        cpf === "111.111.111-11" ||
+        cpf === "222.222.222-22"
+        // cpf === "333.333.333-33"
+    ) {
+        if (user && req) req.profile = user;
+        return true;
+    }
+    return false;
+}
+// END HELPERS
 
 /* ARCHIVES
  const { password } = req.body;

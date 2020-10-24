@@ -1,5 +1,4 @@
 const User = require("../../models/user");
-const jwt = require("jsonwebtoken");
 const { msgG } = require("../_msgs/globalMsgs");
 const { msg } = require("../_msgs/auth");
 const getFirstName = require("../../utils/string/getFirstName");
@@ -7,6 +6,7 @@ const {
     encryptSync,
     decryptSync,
     jsEncrypt,
+    checkJWT,
 } = require("../../utils/security/xCipher");
 const getJwtToken = require("./helpers/getJwtToken");
 const getRoleData = require("./helpers/getRoleData");
@@ -14,7 +14,7 @@ const getRoleData = require("./helpers/getRoleData");
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
 // bacause not found. To avoid this, try write userId if in a parameter as default.
-exports.mwIsAuth = (req, res, next) => {
+exports.mwIsAuth = async (req, res, next) => {
     //condition for testing without token
     if (
         req.query.isFebroBoss ||
@@ -22,45 +22,32 @@ exports.mwIsAuth = (req, res, next) => {
     ) {
         return next();
     }
+
     const profile = req.profile;
     const query = req.query;
     const body = req.body;
+
     const _id =
         (query && query.userId) ||
         (body && body.userId) ||
         (profile && profile._id) ||
         (query && query.bizId) ||
         (body && body.senderId); // add here all means to get id to compare against the JWT verification
-    let token = req.header("x-auth-token") || req.header("authorization"); // authrization for postman tests
-    if (token && token.includes("Bearer ")) {
-        token = token.slice(7);
-    }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        let isAuthUser = Boolean(
-            _id && decoded && decoded.id === _id.toString()
-        );
+    const token = getTreatedToken(req);
+    const decoded = await checkJWT(token).catch((err) =>
+        res.status(403).json({ error: "jwt expired" })
+    );
 
-        if (err) {
-            if (err && err.message.includes("expired"))
-                return res.status(403).json({ error: "jwt expired" });
-            console.log(`JWT ERROR: ${err.message}`);
-        }
-        if (err || !isAuthUser)
-            return res.status(403).json(msg("error.notAuthorized")); // n4 401 and 403 http code difference
-        next();
-    });
+    let isAuthUser = Boolean(_id && decoded && decoded.id === _id.toString());
+
+    if (!isAuthUser) return res.status(403).json(msg("error.notAuthorized")); // n4 401 and 403 http code difference
+
+    next();
 };
 
 exports.mwIsAdmin = (req, res, next) => {
     if (req.profile.role !== "admin") {
-        return res.status(403).json(msg("error.accessDenied")); // n4 401 and 403 http code difference
-    }
-    next();
-};
-
-exports.mwIsCliAdmin = (req, res, next) => {
-    if (req.profile.role !== "cliente-admin") {
         return res.status(403).json(msg("error.accessDenied")); // n4 401 and 403 http code difference
     }
     next();
@@ -73,42 +60,58 @@ exports.mwIsClientAdmin = (req, res, next) => {
     next();
 };
 
-exports.mwSession = (req, res, next) => {
+exports.mwSession = async (req, res, next) => {
     // n1
-    const token = req.header("x-auth-token"); // this does not work with authorization header // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkYjQzMDFlZDM5YTRlMTI1NDYyNzdhOCIsImlhdCI6MTU3NDIxMDUwNCwiZXhwIjoxNTc0ODE1MzA0fQ.HAUlZ6lCHxRuieN5nizug_ZMTEuAmJ2Ck22uCcBkmeY"
+    const token = getTreatedToken(req);
+    if (!token)
+        return res.json({ error: "New user accessed without JWT Token!" });
 
-    if (!token) return console.log("New user accessed without JWT Token!");
+    const decoded = await checkJWT(token).catch((err) => {
+        console.log(`${err}`); // do not return res.status since it will the a long serverResponse obj, by stringify the err, avoid the tracing error paths to show up...
+        res.status(401).json(msg("error.sessionEnded"));
+    });
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded) {
         req.authObj = decoded; // eg { id: '5db4301ed39a4e12546277a8', iat: 1574210504, exp: 1574815304 } // iat refers to JWT_SECRET. This data is generated from jwt.sign
         next();
-    } catch (err) {
-        console.log("This user has an Invalid or Expired JWT Token! " + err);
-        return res.status(401).json(msg("error.sessionEnded"));
     }
 };
 // END MIDDLEWARES
 
 // this will load the authorized user's data after and only if the token is valid in mwAuth
-exports.loadAuthUser = (req, res) => {
-    const userIdInsideJwt = req.authObj && req.authObj.id;
-    const select =
-        "-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications -clientUserData.purchaseHistory";
+exports.loadAuthUser = async (req, res) => {
+    const userJwtId = (req.authObj && req.authObj.id) || " ";
 
-    if (!userIdInsideJwt) {
-        console.log("Warning: user loaded without ID");
-    } else {
-        User.findById(userIdInsideJwt)
-            .select(select)
-            .exec((err, profile) => {
-                profile.email = decryptSync(profile.email);
-                profile.phone = decryptSync(profile.phone);
+    const user = await User.findById(userJwtId)
+        .select("role -_id")
+        .catch((err) => {
+            res.status(500).json({ error: err });
+        });
+    if (!user) return;
+    const role = user && user.role;
 
-                if (err)
-                    return res.status(500).json(msgG("error.systemError", err));
-                res.json({ profile });
-            });
+    const handleRole = (role) => {
+        const cliUser =
+            "-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications -clientUserData.purchaseHistory";
+        const cliAdmin =
+            "-pswd -clientAdminData.smsBalance -clientAdminData.bizFreeCredits -clientAdminData.bizPlanList -clientAdminData.smsHistory -clientAdminData.smsAutomation -clientAdminData.orders -clientAdminData.notifications -clientAdminData.tasks";
+
+        if (role === "cliente-admin") return cliAdmin;
+        if (role === "cliente") return cliUser;
+    };
+
+    const select = handleRole(role);
+
+    const profile = await User.findById(userJwtId)
+        .select(select)
+        .catch((err) => {
+            res.status(500).json({ error: err });
+        });
+    if (profile) {
+        profile.email = decryptSync(profile.email);
+        profile.phone = decryptSync(profile.phone);
+
+        res.json({ profile });
     }
 };
 
@@ -187,6 +190,17 @@ exports.getDecryptedToken = (req, res) => {
 
     res.json(decrypted);
 };
+
+// HELPERS
+function getTreatedToken(req) {
+    let token = req.header("x-auth-token") || req.header("authorization"); // authrization for postman tests
+    if (token && token.includes("Bearer ")) {
+        token = token.slice(7);
+    }
+
+    return token;
+}
+// END HELPERS
 
 /* COMMENTS
 n1:

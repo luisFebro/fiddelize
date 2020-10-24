@@ -1,10 +1,34 @@
-var bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 const KRYPTO_SECRET = process.env.KRYPTO_SECRET; // Must be 256 bits (32 characters)
 const IV_LENGTH = 16; // For AES, this is always 16
+const JWT_SECRET = process.env.JWT_SECRET;
 
-// BCRYPT FOR DB PASSWORDS
+// JWT AUTHORIZATION, SESSION, EXPIRY TOKENS
+async function createJWT(_id, options = {}) {
+    const { secret, expiry } = options;
+
+    const thisSecret = secret || JWT_SECRET;
+
+    return await jwt.sign({ id: _id }, thisSecret, {
+        expiresIn: expiry,
+    });
+}
+
+// handle error like: await checkJWT(token).catch(e => res.status(400).json({ error: "Este link já expirou." }))
+// if secret (signature) is invalid. This error is thrown: JsonWebTokenError: invalid signature
+// return this decoded obj = { "id": "5e8b0bfc8c616719b01abc9c", "iat": 1603553211, "exp": 1603553811 }
+async function checkJWT(token, options = {}) {
+    const { secret } = options;
+    const thisSecret = secret || JWT_SECRET;
+
+    return await jwt.verify(token, thisSecret);
+}
+// END JWT AUTHORIZATION, SESSION, EXPIRY TOKENS
+
+// HASHING ENCRYPTION - BCRYPT FOR DB PASSWORDS
 async function createBcryptPswd(pass) {
     try {
         const salt = await bcrypt.genSalt(10);
@@ -26,9 +50,10 @@ async function compareBcryptPswd(pass, options = {}) {
 // hashPassword("Hello").then(res => console.log(res))
 // const hash = "$2a$10$wmiNmOYZ9o2acsyoPa.EyODqM9q7iUehbw8AAID3vOrB5.Jo86z7."
 // comparePassword("Hello", hash).then(res => console.log(res));
-// END BCRYPT FOR DB PASSWORDS
 
-// ENCRYPTION AND DECRYPTION
+// HASHING ENCRYPTION - END BCRYPT FOR DB PASSWORDS
+
+// AES ENCRYPTION AND DECRYPTION
 function encrypt(text) {
     // criptografar
     const promiseEncrypt = (resolve, reject) => {
@@ -116,21 +141,9 @@ function decryptSync(hashTxt) {
 
     return decrypted.toString();
 }
+// AES ENCRYPTION AND DECRYPTION
 
-// console.log(decryptSync("2aa11588694c5cf87e84d9d72d092962:f4bc0cc535647851f6f449a55c95d648"))
-// console.log(encryptSync("(92) 99257-6121"))
-
-// TEST
-// encrypt("fjskda fsdajfsdlafjsdaklf sdalfjsdalfsda fsadlkfjsdal fsdalkfjsdalkfjdsalk fjdsaklfjsdalkfjdsal fjsadlfjlsdajflkdsjfklds afjkldsafjkldsfjkdsaflds")
-// .then(res => console.log(res))
-
-// decrypt("ef4b68527e5c7ba47bf9d46fbf22e6b9:4af17605662877a552b813e0242ae0f82131cfec2de8433f2780c07b5dbe7ec780048947e10337c3fd6f4232ef3477e92b779646903d9b1a5fa52c660e44a44ecd53c05f4f5a12575e55026b2dbf486bf24dea67bcc1e8f267b2b315c287a526fd8374a83687244e407cce66300b2df3875387df940778c67354dc6e37f73373aa16f3d1272ae89905ede7d1485763ef601015300ea5c1669db70ed68f612595")
-// .then(res => {
-//     console.log(res);
-// })
-// .catch(e => console.log(e))
-
-// less secure for authentication which requires decryption.
+// JS ENCRYPTION AND DECRYPTION - less secure for authentication which requires decryption.
 const handleCipherVault = (salt) => {
     if (!salt) return;
     const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
@@ -164,6 +177,8 @@ const handleDecipherVault = (salt) => {
 const jsEncrypt = handleCipherVault(KRYPTO_SECRET);
 const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
 
+// END JS ENCRYPTION AND DECRYPTION
+
 // TEST
 // const resCipher = jsEncrypt('023.248.892-42');
 // console.log("resCipher", resCipher);
@@ -179,6 +194,8 @@ module.exports = {
     compareBcryptPswd,
     jsEncrypt,
     jsDecrypt,
+    createJWT,
+    checkJWT,
 }; // both returns string
 
 // reference:

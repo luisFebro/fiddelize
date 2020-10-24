@@ -10,6 +10,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
+import getAPI, { forgotPasswordRequest } from "../../../utils/promises/getAPI";
+import useData from "../../../hooks/useData";
+import { useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
+
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -34,6 +39,9 @@ export default function AsyncPasswordRecoverContent() {
     const { cpf, email } = data;
 
     const styles = getStyles();
+    const dispatch = useStoreDispatch();
+
+    const [userId] = useData(["userId"]);
 
     const showTitle = () => (
         <p
@@ -123,7 +131,23 @@ export default function AsyncPasswordRecoverContent() {
         </form>
     );
 
-    const handlePassRecover = () => {};
+    const handlePassRecover = () => {
+        (async () => {
+            const body = {
+                userId,
+                cpf,
+                email,
+            };
+            const res = await getAPI({
+                method: "post",
+                body,
+                url: forgotPasswordRequest(),
+            }).catch(({ error }) => {
+                showSnackbar(dispatch, error, "error");
+            });
+            console.log(res);
+        })();
+    };
 
     const showCTA = () => (
         <div className="my-3 container-center">
