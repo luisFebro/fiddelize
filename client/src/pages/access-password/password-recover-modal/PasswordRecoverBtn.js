@@ -9,11 +9,7 @@ const Async = Load({
         ),
 });
 
-export default function PasswordRecoverBtn(
-    {
-        // modalData,
-    }
-) {
+export default function PasswordRecoverBtn({ textColor }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const AsyncPasswordRecoverContent = <Async />;
@@ -29,7 +25,7 @@ export default function PasswordRecoverBtn(
     return (
         <section>
             <section
-                className="text-link text-small font-weight-normal text-white text-center"
+                className={`text-link text-small font-weight-normal ${textColor} text-center`}
                 onClick={handleFullOpen}
             >
                 Esqueci minha senha

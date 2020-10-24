@@ -352,7 +352,12 @@ function ClientMobileApp({ location, history }) {
                     </span>
                 </section>
             )}
-            {isSessionOver && !loadingAccess && <AsyncAccessGateKeeper />}
+            {isSessionOver && !loadingAccess && (
+                <AsyncAccessGateKeeper
+                    backColor={selfThemeBackColor}
+                    sColor={selfThemeSColor}
+                />
+            )}
         </div>
     );
 

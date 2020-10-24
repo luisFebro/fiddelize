@@ -267,12 +267,6 @@ const data = {
     centralAdminData: CentralAdminDataSchema,
     filter: DefaultFilterSchema,
     pswd: String,
-    pswdGoogle: {
-        email: String,
-        pswd: String,
-        pic: String,
-    }, // from oAuth2
-    // staffBookingList: Array, // L
 };
 // End Profile
 
@@ -295,6 +289,13 @@ This is how I sorted by the largest length of items, and then sorted by name:
 */
 
 /* ARCHIVES
+// pswdGoogle: {
+    //     email: String,
+    //     pswd: String,
+    //     pic: String,
+    // }, // from oAuth2
+    // staffBookingList: Array, // L
+
 // TEMP AUTH USER ID
 const dataTempAuthUserToken = {
     this: {

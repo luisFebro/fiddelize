@@ -6,6 +6,8 @@ import { useStoreDispatch } from "easy-peasy";
 import { logout } from "../../../redux/actions/authActions";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
+// import { useClientAdmin } from '../../../hooks/useRoleData';
 
 const AsyncModalYesNo = Load({
     loader: () =>
@@ -18,6 +20,7 @@ const AsyncModalYesNo = Load({
 export default function AccessSwitcher({
     rememberAccess, // from indexDB user collection
     top = -70,
+    backColor,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -45,8 +48,11 @@ export default function AccessSwitcher({
                 defaultStatus={
                     typeof rememberAccess === "boolean" ? rememberAccess : true
                 }
-                customColor="text-white"
+                customColor={`${selectTxtStyle(
+                    backColor
+                )} text-normal font-weight-bold`}
                 animationOn={false}
+                needCustomColor={true}
                 callback={handleAccessSwitcher}
             />
             {fullOpen && (

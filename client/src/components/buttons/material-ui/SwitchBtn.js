@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import Switch from "@material-ui/core/Switch";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
 import uuidv1 from "uuid/v1";
 import parse from "html-react-parser";
+import { useClientAdmin } from "../../../hooks/useRoleData";
 // import { useStoreDispatch } from 'easy-peasy';
 // import { showSnackbar } from '../../../redux/actions/snackbarActions';
 
@@ -17,19 +18,23 @@ const getStyles = ({ pillStyle, pillBack }) => ({
         : undefined,
 });
 
-const PurpleSwitch = withStyles({
+const useStyles = makeStyles((theme) => ({
     switchBase: {
-        color: purple[300],
+        color: (props) => props.darkColor || purple[300],
         "&$checked": {
-            color: purple[500],
+            color: (props) => props.lightColor || purple[500],
         },
         "&$checked + $track": {
-            backgroundColor: purple[500],
+            backgroundColor: (props) => props.lightColor || purple[500],
         },
     },
-    checked: {},
-    track: {},
-})(Switch);
+    checked: {
+        color: (props) => props.lightColor || purple[500],
+    },
+    track: {
+        backgroundColor: (props) => props.darkColor || purple[300],
+    },
+}));
 
 const getStatusWithId = (bool) => `${bool}_${uuidv1()}`;
 
@@ -45,13 +50,22 @@ export default function SwitchBtn({
     pillBack,
     customColor,
     animationOn = true,
+    needCustomColor = false,
     // loading = false,
 }) {
     const [checked, setChecked] = useState(defaultStatus);
 
     const switchData = useRef(data);
 
+    const { selfThemeSColor: sColor } = useClientAdmin();
+
     const styles = getStyles({ pillStyle, pillBack });
+    const classes = useStyles({
+        darkColor: needCustomColor ? `var(--themeSDark--${sColor})` : undefined,
+        lightColor: needCustomColor
+            ? `var(--themeSLight--${sColor})`
+            : undefined,
+    });
 
     // const dispatch = useStoreDispatch();
 
@@ -97,10 +111,14 @@ export default function SwitchBtn({
             <p className={txtStyle1} onClick={setFalse}>
                 {titleLeft}
             </p>
-            <PurpleSwitch
+            <Switch
+                classes={{
+                    switchBase: classes.switchBase,
+                    checked: classes.checked,
+                    track: classes.track,
+                }}
                 checked={checked}
                 onChange={handleChange}
-                name="purpleSwitch"
                 disabled={disabled}
             />
             <p className={txtStyle2} onClick={setTrue}>
@@ -109,6 +127,24 @@ export default function SwitchBtn({
         </section>
     );
 }
+
+/* ARCHIVES
+
+const PurpleSwitch = withStyles({
+    switchBase: {
+        color: purple[300],
+        "&$checked": {
+            color: purple[500],
+        },
+        "&$checked + $track": {
+            backgroundColor: purple[500],
+        },
+    },
+    checked: {},
+    track: {},
+})(Switch);
+
+*/
 
 /*
 // const IOSSwitch = withStyles((theme) => ({

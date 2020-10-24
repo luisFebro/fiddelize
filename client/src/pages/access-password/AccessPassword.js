@@ -20,6 +20,7 @@ import getAPI, {
 } from "../../utils/promises/getAPI";
 import { getVar, setVar, store } from "../../hooks/storage/useVar";
 import authenticate from "../../components/auth/helpers/authenticate";
+import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
@@ -31,34 +32,42 @@ const getStyles = () => ({
         height: "40px",
         background: "transparent",
         borderRadius: "50%",
-        border: "solid var(--mainWhite) 4px",
         margin: "0 5px",
     },
     innerCircle: {
         width: "20px",
         height: "20px",
         borderRadius: "50%",
-        background: "#fff",
     },
     closeBtn: {
         position: "fixed",
         top: 15,
         right: 20,
         fontSize: "1.9em",
-        color: "var(--mainWhite)",
         cursor: "pointer",
         zIndex: 1500,
     },
 });
 
-const PasswordBlockField = ({ ind }) => {
+const PasswordBlockField = ({ ind, needDark }) => {
     const styles = getStyles();
 
     return (
-        <div className="container-center" style={styles.passCircle}>
+        <div
+            className="container-center"
+            style={{
+                ...styles.passCircle,
+                border: needDark
+                    ? "solid var(--mainDark) 4px"
+                    : "solid var(--mainWhite) 4px",
+            }}
+        >
             <div
                 className={`d-none pass-block-${++ind}`}
-                style={styles.innerCircle}
+                style={{
+                    ...styles.innerCircle,
+                    background: needDark ? "#000" : "#fff",
+                }}
             ></div>
         </div>
     );
@@ -67,7 +76,12 @@ const PasswordBlockField = ({ ind }) => {
 export default function AccessPassword({ history }) {
     const [display, setDisplay] = useState("");
     const [uniqueIdTrigger, setUniqueIdTrigger] = useState(false);
-    const { selfThemeBackColor: backColor } = useClientAdmin();
+    const {
+        selfThemeBackColor: backColor,
+        selfThemePColor: colorP,
+    } = useClientAdmin();
+
+    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
 
     const dispatch = useStoreDispatch();
 
@@ -168,7 +182,13 @@ export default function AccessPassword({ history }) {
 
     const showCloseBtn = () => (
         <Link className="no-text-decoration" to={whichPath}>
-            <FontAwesomeIcon icon="times" style={styles.closeBtn} />
+            <FontAwesomeIcon
+                icon="times"
+                style={{
+                    ...styles.closeBtn,
+                    color: needDark ? "var(--mainDark)" : "var(--mainWhite)",
+                }}
+            />
         </Link>
     );
 
@@ -179,20 +199,26 @@ export default function AccessPassword({ history }) {
                 <p
                     className={`${
                         isSmall ? "text-subtitle" : "text-normal m-0"
-                    }  text-white text-center`}
+                    }  ${needDark ? "text-black" : "text-white"} text-center`}
                 >
                     Digite sua senha:
                 </p>
             )}
             {loading && trigger ? (
-                <p className="text-subtitle text-white text-center">
+                <p
+                    className={`text-subtitle ${
+                        needDark ? "text-black" : "text-white"
+                    } text-center`}
+                >
                     Analizando...
                 </p>
             ) : (
                 <Fragment>
                     {passOk ? (
                         <p
-                            className="mt-3 text-subtitle font-weight-bold text-white text-center"
+                            className={`mt-3 text-subtitle font-weight-bold ${
+                                needDark ? "text-black" : "text-white"
+                            } text-center`}
                             style={{ marginBottom: 100 }}
                         >
                             Certo!{" "}
@@ -200,7 +226,9 @@ export default function AccessPassword({ history }) {
                                 icon="check-circle"
                                 style={{
                                     fontSize: 25,
-                                    color: "var(--mainWhite)",
+                                    color: needDark
+                                        ? "var(--mainDark)"
+                                        : "var(--mainWhite)",
                                 }}
                                 className="ml-2 animated rubberBand delay-1s"
                             />
@@ -211,7 +239,11 @@ export default function AccessPassword({ history }) {
                             style={{ marginBottom: 100 }}
                         >
                             {repeat(NUM_PASS_FIELD).map((x, ind) => (
-                                <PasswordBlockField key={ind} ind={ind} />
+                                <PasswordBlockField
+                                    key={ind}
+                                    ind={ind}
+                                    needDark={needDark}
+                                />
                             ))}
                         </section>
                     )}
@@ -242,16 +274,19 @@ export default function AccessPassword({ history }) {
             {showCloseBtn()}
             {showPasswordArea()}
             <section className="mt-5 mb-2">
-                <ProtectionMsg />
+                <ProtectionMsg backColor={backColor} />
             </section>
             <section style={{ marginBottom: 330 }}>
-                <PasswordRecoverBtn />
+                <PasswordRecoverBtn
+                    textColor={needDark ? "text-black" : "text-white"}
+                />
             </section>
             <NumericKeyboard
                 setDisplay={setDisplay}
                 display={display}
                 addCallback={showNextField}
                 eraseCallback={undoClick}
+                colorP={colorP}
             />
         </section>
     );
