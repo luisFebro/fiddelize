@@ -14,6 +14,12 @@ export default async function authenticate(newToken, options = {}) {
         store.user
     );
 
+    showSnackbar(
+        dispatch,
+        `Olá de volta, ${userName && getFirstName(userName.cap())}!`,
+        "success"
+    );
+
     await setVar({ success: true }, store.user);
 
     localStorage.setItem("token", newToken);
@@ -22,15 +28,10 @@ export default async function authenticate(newToken, options = {}) {
         ? `/mobile-app`
         : `${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
 
-    history.push(destiny);
+    setTimeout(() => (window.location.href = destiny), 2000); // data is being deleted from localstorage.
+    // history.push(destiny);
     // if(isApp) {
     //     window.location.href = destiny; // sometimes gatekeeper is not loaded.
     // } else {
     // }
-
-    showSnackbar(
-        dispatch,
-        `Olá de volta, ${userName && getFirstName(userName.cap())}!`,
-        "success"
-    );
 }

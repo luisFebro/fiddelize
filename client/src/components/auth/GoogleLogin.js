@@ -18,6 +18,8 @@ const awesomeStyle = {
 
 export default withRouter(GoogleLogin);
 
+// THIS PIECE OF SHIT DOES NOT WORK ON MOBILE APPS.
+// TRY EXPLORE THE DOCS IN DEPTH TO HAVE MY OWN COMP NEXT TIME.
 function GoogleLogin({ history }) {
     const [testFront, setTestFront] = useState("");
     const [testBack, setTestBack] = useState("");
@@ -25,7 +27,6 @@ function GoogleLogin({ history }) {
     const { selfThemeBackColor: backColor } = useClientAdmin();
 
     const handleSuccess = async (response) => {
-        setTestFront([response.tokenId, response.profileObj]);
         showSnackbar(dispatch, "Conectando... Um momento.");
 
         const userId = await getVar("userId", store.user);
@@ -71,7 +72,10 @@ function GoogleLogin({ history }) {
                 onFailure={handleError}
                 icon={false}
                 className={`theme-back--${backColor} no-border`}
-                isSignedIn={false} // If true will return GoogleUser object on load, if user has given your app permission
+                isSignedIn={false} // attribute will call onSuccess callback on load to keep the user signed in.
+                responseType="" // the code is useless for server validation though If responseType is 'code', callback will return the authorization code that can be used to retrieve a refresh token from the server.
+                // accessType="offline"
+                uxMode="popup" // popup does not appear on mobile.
                 cookiePolicy={"single_host_origin"}
                 // n1 other props
             >

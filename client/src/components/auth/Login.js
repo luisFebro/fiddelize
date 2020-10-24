@@ -73,6 +73,7 @@ function Login({
 
         let whichRoute;
         if (role === "cliente-admin") {
+            showSnackbar(dispatch, "Carregando...", "warning", 2000);
             // Pre login store data
             const storeElems = [
                 { role },
@@ -83,8 +84,6 @@ function Login({
                 { rememberAccess: true },
             ];
             setMultiVar(storeElems, store.user);
-
-            showSnackbar(dispatch, "Carregando...");
 
             await readUser(dispatch, authUserId); // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
 

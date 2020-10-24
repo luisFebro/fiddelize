@@ -5,6 +5,8 @@ const getJwtToken = require("./helpers/getJwtToken");
 const GOOGLE_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_ID);
 
+// THIS PIECE OF SHIT DOES NOT WORK ON MOBILE APPS.
+// TRY EXPLORE THE DOCS IN DEPTH TO HAVE MY OWN COMP NEXT TIME.
 exports.makeGoogleLogin = async (req, res) => {
     const {
         userId,

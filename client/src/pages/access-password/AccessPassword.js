@@ -121,7 +121,7 @@ export default function AccessPassword({ history }) {
                 // wait for the lock animation to end...
                 setTimeout(() => {
                     authenticate(newToken, { dispatch, history });
-                }, 3000);
+                }, 1000);
             }
 
             runSuccess();

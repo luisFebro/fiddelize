@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import ProtectionMsg from "../../access-password/ProtectionMsg";
 import AccessSwitcher from "../../../components/auth/password/AccessSwitcher";
 import { getMultiVar, store } from "../../../hooks/storage/useVar";
-import GoogleLogin from "../../../components/auth/GoogleLogin";
 
 const awesomeStyle = {
     fontSize: "30px",
@@ -47,9 +46,6 @@ export default function AccessGateKeeper() {
         <section className="mt-3">
             <p className="text-subtitle text-white text-center">Acesso com:</p>
             <section className="container-center">
-                <div style={{ marginRight: "10px" }}>
-                    <GoogleLogin />
-                </div>
                 <Link className="no-text-decoration" to="/senha-de-acesso">
                     <ButtonFab
                         title="SENHA"

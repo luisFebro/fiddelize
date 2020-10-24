@@ -199,7 +199,7 @@ const ShowLogoutBtn = ({ locationNow }) => {
                 backgroundColor: "var(--themeSDark)",
                 outline: "none",
             }}
-            onClick={() => logout(dispatch)}
+            onClick={() => logout(dispatch, { needReload: true })}
         >
             sair
         </button>
