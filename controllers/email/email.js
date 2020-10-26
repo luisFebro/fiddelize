@@ -1,71 +1,78 @@
-const User = require('../../models/user');
-const mailerSender = require('./mailerSender');
-const gridSender = require('./gridSender');
-const uuidv1 = require('uuid/v1');
-const { msgG } = require('../_msgs/globalMsgs');
-const { msg } = require('../_msgs/email');
-const {
-    showConfirmTemplate,
-    showNewPassLinkTemplate,
-} = require('../../templates/email');
-const { CLIENT_URL } = require('../../config');
+const User = require("../../models/user");
+const mailerSender = require("./mailerSender");
+const gridSender = require("./gridSender");
+const { CLIENT_URL } = require("../../config");
+const pickTemplate = require("../../templates/email/pickTemplate");
 
-// MIDDLEWARES
-exports.mwGetLinkChangePass = (req, res, next) => {
-    const { email } = req.body;
-    User.findOneAndUpdate(
-    { email },
-    { $set: {"tempAuthUserToken.this": `${uuidv1()}np`}},// np = new password
-    { new: true },
-    (err, user) => {
-        if(err) return res.status(400).json(msg('error.systemError', err.toString()))
-        if(!user) return res.status(400).json(msg('error.notRegistered'))
-        const authToken = user.tempAuthUserToken.this;
-        const userId = user._id;
-        const authLink = `${CLIENT_URL}/cliente/trocar-senha/${authToken}?id=${userId}`
-        req.email = {
-            authLink,
-            userName: user.name
+const handleEmailProvider = async ({ content }) => {
+    return await gridSender({ content }).catch(async (err) => {
+        console.error(
+            `ERROR: Email not sent! Details: ${err} End. || Trying with another provider...`
+        );
+
+        if (err.toString().includes("Maximum credits exceeded")) {
+            // not working: Username and Password not accepted
+            await mailerSender({ content }).catch((err) => {
+                console.log(
+                    `ERROR: email not sent with nodemailer. DETAILS: ${err}`
+                );
+            });
+
+            res.json({
+                msg: `Email successfully sent with nodeMailer`,
+            });
+            return undefined;
         }
+    });
+};
 
-        next();
-    })
-}
+exports.sendEmail = async (req, res) => {
+    const { type, payload } = req.body;
 
-exports.mwGetLinkConfirm = (req, res, next) => {
-    const { authId } = req.params;
-    User.findOne({ _id: authId })
-    .exec((err, user) => {
-        if(err) return res.status(400).json(msg('error.systemError', err.toString()))
-        const userId = user._id;
-        const authLink = `${CLIENT_URL}/cliente/confirmacao-conta/${userId}`
-        req.email = {
-            authLink,
-        }
+    if (!type || !payload)
+        return res
+            .status(400)
+            .json({
+                error: "Requires both email`s TYPE and PAYLOAD in the body",
+            });
+    // PAYLOADS
+    // recoverPassword = toEmail, token, name
 
-        next();
-    })
+    const content = pickTemplate(type, { payload });
 
-}
-// END MIDDLEWARES
+    const providerRes = await handleEmailProvider({ content }).catch((err) => {
+        res.json({ error: `ERROR: ${err}` });
+    });
 
-
-// SEND EMAIL
-const sendEmail = async (toEmail, mainTitle, content) => {
-    try {
-        await gridSender(toEmail, mainTitle, content)
-        console.log(msg('ok.sentGrid', 'onlyMsg'));
-    } catch(err) {
-        console.error(msg('error.notSent', err.toString(), 'onlyMsg'));
-        if(err.toString().includes("Maximum credits exceeded")) {
-            mailerSender(toEmail, mainTitle, content)
-            .then(res => console.log(msg('ok.sentMailer', 'onlyMsg')))
-            .catch(err => console.log("error.notSent", err.toString()))
-        }
+    if (providerRes) {
+        res.json({
+            msg: `${type} mail sent successfully`,
+        });
     }
-}
-// END SEND EMAIL
+};
 
+exports.sendEmailBack = async ({ type, payload }) => {
+    if (!type || !payload)
+        return console.log(
+            "Requires both email`s TYPE and PAYLOAD in the body"
+        );
+
+    const content = pickTemplate(type, { payload });
+
+    const providerRes = await handleEmailProvider({ content }).catch(
+        (err) => `ERROR: ${err}`
+    );
+
+    if (providerRes) {
+        return `${type} mail sent successfully`;
+    }
+};
+
+/* COMMENTS
+n1: // if any blocking condition is true, then "ok" will be the word to allow sending the email
+*/
+
+/*
 exports.sendWelcomeConfirmEmail = (req, res) => {
     const { email, bizName } = req.body;
     const mainTitle = `${bizName} - Plano de Fidelidade`;
@@ -83,73 +90,4 @@ exports.sendNewPasswordEmail = (req, res) => {
     .catch(err => res.json(msgG('error.systemError', err)))
 }
 
-
-
-/* COMMENTS
-n1: // if any blocking condition is true, then "ok" will be the word to allow sending the email
-*/
-
-// EXEMPLE
-// const User = require('../user.model')
-// The callback that is invoked when the user submits the form on the client.
-// exports.collectEmail = (req, res) => {
-//   const { email } = req.body
-
-//   User.findOne({ email })
-//     .then(user => {
-
-//       // We have a new user! Send them a confirmation email.
-//       if (!user) {
-//         User.create({ email })
-//           .then(newUser => sendEmail(newUser.email, templates.confirm(newUser._id)))
-//           .then(() => res.json({ msg: msgs.confirm }))
-//           .catch(err => console.log(err))
-//       }
-
-//       // We have already seen this email address. But the user has not
-//       // clicked on the confirmation link. Send another confirmation email.
-//       else if (user && !user.confirmed) {
-//         sendEmail(user.email, templates.confirm(user._id))
-//           .then(() => res.json({ msg: msgs.resend }))
-//       }
-
-//       // The user has already confirmed this email address
-//       else {
-//         res.json({ msg: msgs.alreadyConfirmed })
-//       }
-
-//     })
-//     .catch(err => console.log(err))
-// }
-
-// // The callback that is invoked when the user visits the confirmation
-// // url on the client and a fetch request is sent in componentDidMount.
-// exports.confirmEmail = (req, res) => {
-//   const { id } = req.params
-
-//   User.findById(id)
-//     .then(user => {
-
-//       // A user with that id does not exist in the DB. Perhaps some tricky
-//       // user tried to go to a different url than the one provided in the
-//       // confirmation email.
-//       if (!user) {
-//         res.json({ msg: msgs.couldNotFind })
-//       }
-
-//       // The user exists but has not been confirmed. We need to confirm this
-//       // user and let them know their email address has been confirmed.
-//       else if (user && !user.confirmed) {
-//         User.findByIdAndUpdate(id, { confirmed: true })
-//           .then(() => res.json({ msg: msgs.confirmed }))
-//           .catch(err => console.log(err))
-//       }
-
-//       // The user has already confirmed this email address.
-//       else  {
-//         res.json({ msg: msgs.alreadyConfirmed })
-//       }
-
-//     })
-//     .catch(err => console.log(err))
-// }
+ */

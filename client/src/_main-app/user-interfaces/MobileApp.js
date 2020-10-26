@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
-import { Load } from "../../components/code-splitting/LoadableComp";
 // LAYOUT
 import Navbar from "../../components/_layout/navbar";
 
@@ -23,14 +22,11 @@ import PlansPage from "../../pages/plans-page/PlansPage";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
-import AccessPassword from "../../pages/access-password/AccessPassword";
-const AsyncFixDatePage = Load({
-    loader: () =>
-        import(
-            "../../pages/AsyncFixDatePage" /* webpackChunkName: "fix-date-page-lazy" */
-        ),
-});
-
+import {
+    AccessPassword,
+    AsyncRecoverPassword,
+    AsyncFixDatePage,
+} from "./CommonImports";
 //END PAGES
 
 // This is the msg to be displayed for desktop users when popping up the
@@ -100,6 +96,11 @@ function Mobile({ location }) {
                     path="/senha-de-acesso"
                     exact
                     component={AccessPassword}
+                />
+                <Route
+                    path="/nova-senha/:token"
+                    exact
+                    component={AsyncRecoverPassword}
                 />
                 <Route component={Default} />
             </Switch>

@@ -109,7 +109,9 @@ exports.mwValidateLogin = (req, res, next) => {
 };
 
 exports.mwValidatePassword = (req, res, next) => {
-    const { pswd } = req.body;
+    const { pswd, checkToken } = req.body;
+    if (checkToken) return next();
+
     if (!pswd)
         return res
             .status(400)

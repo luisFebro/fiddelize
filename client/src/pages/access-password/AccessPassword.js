@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from "react";
-import repeat from "../../utils/arrays/repeat";
 import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,24 +20,13 @@ import getAPI, {
 import { getVar, setVar, store } from "../../hooks/storage/useVar";
 import authenticate from "../../components/auth/helpers/authenticate";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
+import PasswordCircleFields from "../../components/fields/PasswordCircleFields";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
-    passCircle: {
-        width: "40px",
-        height: "40px",
-        background: "transparent",
-        borderRadius: "50%",
-        margin: "0 5px",
-    },
-    innerCircle: {
-        width: "20px",
-        height: "20px",
-        borderRadius: "50%",
-    },
     closeBtn: {
         position: "fixed",
         top: 15,
@@ -48,30 +36,6 @@ const getStyles = () => ({
         zIndex: 1500,
     },
 });
-
-const PasswordBlockField = ({ ind, needDark }) => {
-    const styles = getStyles();
-
-    return (
-        <div
-            className="container-center"
-            style={{
-                ...styles.passCircle,
-                border: needDark
-                    ? "solid var(--mainDark) 4px"
-                    : "solid var(--mainWhite) 4px",
-            }}
-        >
-            <div
-                className={`d-none pass-block-${++ind}`}
-                style={{
-                    ...styles.innerCircle,
-                    background: needDark ? "#000" : "#fff",
-                }}
-            ></div>
-        </div>
-    );
-};
 
 export default function AccessPassword({ history }) {
     const [display, setDisplay] = useState("");
@@ -234,17 +198,8 @@ export default function AccessPassword({ history }) {
                             />
                         </p>
                     ) : (
-                        <section
-                            className="mt-1 container-center shake-it"
-                            style={{ marginBottom: 100 }}
-                        >
-                            {repeat(NUM_PASS_FIELD).map((x, ind) => (
-                                <PasswordBlockField
-                                    key={ind}
-                                    ind={ind}
-                                    needDark={needDark}
-                                />
-                            ))}
+                        <section className="mt-1" style={{ marginBottom: 100 }}>
+                            <PasswordCircleFields needDark={needDark} />
                         </section>
                     )}
                 </Fragment>

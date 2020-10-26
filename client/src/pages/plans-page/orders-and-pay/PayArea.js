@@ -12,9 +12,9 @@ import convertToReal from "../../../utils/numbers/convertToReal";
 import { addDays } from "../../../utils/dates/dateFns";
 import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 import { readUser } from "../../../redux/actions/userActions";
-import { IS_DEV } from "../../../config/clientUrl";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import setProRef from "../../../utils/biz/setProRef";
+// import { IS_DEV } from "../../../config/clientUrl";
 
 const AsyncPayMethods = Load({
     loader: () =>
@@ -23,7 +23,7 @@ const AsyncPayMethods = Load({
         ),
 });
 
-const sandboxMode = IS_DEV ? true : false;
+const sandboxMode = false; // IS_DEV ? true :
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";

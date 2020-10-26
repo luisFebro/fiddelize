@@ -57,7 +57,8 @@ function Navbar({ history, location }) {
         locationNow.includes("planos") ||
         locationNow.includes("pedidos") ||
         locationNow.includes("conserte-data") ||
-        locationNow.includes("senha-de-acesso");
+        locationNow.includes("senha-de-acesso") ||
+        locationNow.includes("nova-senha");
 
     const btnLogout = () => (
         <button

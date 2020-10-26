@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../../utils/form/kit";
@@ -35,8 +35,9 @@ export default function AsyncPasswordRecoverContent() {
     const [data, setData] = useState({
         cpf: "",
         email: "",
+        visibleForm: true,
     });
-    const { cpf, email } = data;
+    const { cpf, email, visibleForm } = data;
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -138,14 +139,23 @@ export default function AsyncPasswordRecoverContent() {
                 cpf,
                 email,
             };
-            const res = await getAPI({
+            const success = await getAPI({
                 method: "post",
                 body,
                 url: forgotPasswordRequest(),
             }).catch(({ error }) => {
                 showSnackbar(dispatch, error, "error");
             });
-            console.log(res);
+
+            if (success) {
+                !visibleForm &&
+                    showSnackbar(
+                        dispatch,
+                        "Email foi enviado novamente.",
+                        "success"
+                    );
+                setData((prev) => ({ ...prev, visibleForm: false }));
+            }
         })();
     };
 
@@ -165,14 +175,39 @@ export default function AsyncPasswordRecoverContent() {
         </div>
     );
 
-    return (
+    const showPendingContent = () => (
         <section>
-            {showTitle()}
             <p className="my-5 text-purple text-normal font-weight-bold mx-3">
                 Precisamos confirmar algumas informações. Beleza?
             </p>
             {showForm()}
             {showCTA()}
         </section>
+    );
+
+    const showSuccessfulContent = () => (
+        <section>
+            <p className="animated fadeInUp my-5 text-purple text-normal font-weight-bold mx-3">
+                <span className="d-block text-center text-subtitle font-weight-bold">
+                    PRONTO!
+                </span>
+                <br />
+                Foi enviado instruções para seu email.
+                <br />
+                <br />
+                Caso não tenha chegado, verifique na sua caixa de spam ou
+                <span className="text-link" onClick={() => handlePassRecover()}>
+                    {" "}
+                    envie novamente aqui
+                </span>
+            </p>
+        </section>
+    );
+
+    return (
+        <Fragment>
+            {showTitle()}
+            {visibleForm ? showPendingContent() : showSuccessfulContent()}
+        </Fragment>
     );
 }

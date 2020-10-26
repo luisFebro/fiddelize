@@ -43,7 +43,7 @@ router.post(
     mwValidateEmail,
     forgotPasswordRequest
 );
-router.post("/pswd/recover", recoverPassword);
+router.post("/pswd/recover", mwValidatePassword, recoverPassword);
 router.post("/pswd/change", mwIsAuth, changePassword);
 router.post("/pswd/token", getToken);
 router.post("/pswd/decrypt-token", getDecryptedToken);

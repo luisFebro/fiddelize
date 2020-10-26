@@ -267,6 +267,10 @@ const data = {
     centralAdminData: CentralAdminDataSchema,
     filter: DefaultFilterSchema,
     pswd: String,
+    expiryToken: {
+        current: String, // set this to null whenever the user has succeed his/her action
+        history: [],
+    }, // use for events that requires a speficic time to action before expiration.
 };
 // End Profile
 

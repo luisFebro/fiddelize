@@ -19,28 +19,28 @@
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    width="7.6393199in"
    height="3.4260077in"
-   inkscape:export-filename="C:\Users\ACESSO LIVRE\Desktop\official-logo-name.svg.png"
+   inkscape:export-filename="C:\Users\ACESSO LIVRE\Desktop\official-logo-name-email3.png"
    inkscape:export-xdpi="59.759998"
    inkscape:export-ydpi="59.759998"><metadata
    id="metadata103"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
    id="defs101" /><sodipodi:namedview
-   pagecolor="#ffffff"
+   pagecolor="#071a00"
    bordercolor="#666666"
    borderopacity="1"
    objecttolerance="10"
    gridtolerance="10"
    guidetolerance="10"
-   inkscape:pageopacity="0"
+   inkscape:pageopacity="0.72156863"
    inkscape:pageshadow="2"
    inkscape:window-width="1440"
    inkscape:window-height="858"
    id="namedview99"
    showgrid="false"
    inkscape:zoom="1.21"
-   inkscape:cx="349.63265"
-   inkscape:cy="93.649112"
+   inkscape:cx="376.91164"
+   inkscape:cy="131.1107"
    inkscape:window-x="-11"
    inkscape:window-y="-11"
    inkscape:window-maximized="1"
@@ -51,7 +51,10 @@
    fit-margin-bottom="0"
    inkscape:measure-start="393.388,87.6033"
    inkscape:measure-end="497.521,-4.13223"
-   units="in" />
+   units="in"
+   inkscape:pagecheckerboard="false"
+   inkscape:showpageshadow="false"
+   showborder="true" />
 
 
 <g
@@ -161,6 +164,7 @@
    id="tspan213"
    style="font-size:96px;fill:#00ffff" /></tspan></text>
 
+
 <text
    id="text217"
    y="184.34761"
@@ -176,6 +180,7 @@
      dx="18.91"
      dy="-7.3600001">iddelize</tspan></text>
 
+
 <flowRoot
    xml:space="preserve"
    id="flowRoot67"
@@ -187,7 +192,7 @@
        height="320.66116"
        x="15.702479"
        y="10.218799" /></flowRegion><flowPara
-     id="flowPara73"></flowPara></flowRoot></g><g
+     id="flowPara73" /></flowRoot></g><g
    id="g293"
    transform="matrix(0.71241016,0.24914011,-0.17716602,1.192596,137.30908,-255.7151)"
    style="fill:#00ffff"><g

@@ -8,7 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // JWT AUTHORIZATION, SESSION, EXPIRY TOKENS
 async function createJWT(_id, options = {}) {
-    const { secret, expiry } = options;
+    const { secret, expiry = "24h" } = options;
 
     const thisSecret = secret || JWT_SECRET;
 
