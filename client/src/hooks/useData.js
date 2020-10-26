@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getMultiVar, store as st } from "./storage/useVar";
+import repeat from "../utils/arrays/repeat";
 
 export default function useData(data) {
     const [store, setStore] = useState([]);
@@ -16,6 +17,11 @@ export default function useData(data) {
             })();
         }
     }, []);
+
+    // this will automatically set a ... for data loading
+    if (!store.length) {
+        return repeat(data.length, { placeholder: "..." });
+    }
 
     return store;
 }

@@ -4,7 +4,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.7002.4";
+const latestVersion = "3.7003.4";
 // PRÓXIMO:
 //
 const updateDescription = "sistema de acesso e senha - pt10";
