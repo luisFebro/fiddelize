@@ -35,13 +35,15 @@ exports.mwIsAuth = async (req, res, next) => {
         (body && body.senderId); // add here all means to get id to compare against the JWT verification
 
     const token = getTreatedToken(req);
-    const decoded = await checkJWT(token).catch((err) =>
-        res.status(403).json({ error: "jwt expired" })
-    );
+    const decoded = await checkJWT(token).catch((err) => {
+        res.status(401).json({ error: "Sua sessão expirou" }); // jwt expired
+    });
 
-    let isAuthUser = Boolean(_id && decoded && decoded.id === _id.toString());
-
-    if (!isAuthUser) return res.status(403).json(msg("error.notAuthorized")); // n4 401 and 403 http code difference
+    if (decoded) {
+        let isAuthUser = Boolean(_id && decoded.id === _id.toString());
+        if (!isAuthUser)
+            return res.status(403).json(msg("error.notAuthorized")); // n4 401 and 403 http code difference
+    }
 
     next();
 };

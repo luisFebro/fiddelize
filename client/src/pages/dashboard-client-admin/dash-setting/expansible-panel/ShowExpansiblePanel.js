@@ -1,26 +1,25 @@
-import React from 'react';
-import ConfigExpansiblePanel from './ConfigExpansiblePanel';
-import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
-import parse from 'html-react-parser';
+import React from "react";
+import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
+import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
+import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreState } from 'easy-peasy';
-import HiddenScoreRegulation from '../card-hidden-content/score-regulation/HiddenScoreRegulation';
-import HiddenVerifPass from '../card-hidden-content/HiddenVerifPass';
-import HiddenProfile from '../card-hidden-content/HiddenProfile';
-import HiddenBizDataAndBackup from '../card-hidden-content/biz-data-and-backup/HiddenBizDataAndBackup';
+import { useStoreState } from "easy-peasy";
+import HiddenScoreRegulation from "../card-hidden-content/score-regulation/HiddenScoreRegulation";
+import HiddenVerifPass from "../card-hidden-content/HiddenVerifPass";
+import HiddenProfile from "../card-hidden-content/HiddenProfile";
+import HiddenBizDataAndBackup from "../card-hidden-content/biz-data-and-backup/HiddenBizDataAndBackup";
 
 const faStyle = {
-    fontSize: '40px',
-    filter:  'drop-shadow(.5px .5px 1.5px black)',
-    color: 'white',
-}
+    fontSize: "40px",
+    filter: "drop-shadow(.5px .5px 1.5px black)",
+    color: "white",
+};
 
 export default function ShowExpansiblePanel() {
-    const { userData, clientAdmin } = useStoreState(state => ({
+    const { userData, clientAdmin } = useStoreState((state) => ({
         userData: state.userReducer.cases.currentUser,
-        clientAdmin: state.userReducer.cases.clientAdmin
+        clientAdmin: state.userReducer.cases.clientAdmin,
     }));
-
 
     const configList = [
         {
@@ -31,13 +30,13 @@ export default function ShowExpansiblePanel() {
         },
         {
             id: 1,
-            name: "Senha<br />de Verificação",
+            name: "Senhas",
             leftIcon: <FontAwesomeIcon icon="lock" />,
             hiddenContent: <HiddenVerifPass userData={userData} />,
         },
         {
             id: 2,
-            name: "Seu<br />Perfil",
+            name: "Seu Perfil",
             leftIcon: <FontAwesomeIcon icon="user" />,
             hiddenContent: <HiddenProfile userData={userData} />,
         },
@@ -47,37 +46,35 @@ export default function ShowExpansiblePanel() {
             leftIcon: <FontAwesomeIcon icon="database" />,
             hiddenContent: <HiddenBizDataAndBackup userData={userData} />,
         },
-    ]
+    ];
 
-    const handleMainHeading = config => (
+    const handleMainHeading = (config) => (
         <section className="card-main-heading--root">
             <div className="icon" style={faStyle}>
                 {config.leftIcon}
             </div>
-            <p
-                className="text text-nowrap text-subtitle font-weight-bold text-shadow">
+            <p className="text text-nowrap text-subtitle font-weight-bold text-shadow">
                 {parse(config.name)}
             </p>
         </section>
     );
 
-    const actions = configList.map(config => {
+    const actions = configList.map((config) => {
+        return {
+            _id: config.id,
+            mainHeading: handleMainHeading(config),
+            secondaryHeading: null,
+            configData: config,
+            hiddenContent: config.hiddenContent,
+        };
+    });
 
-        return({
-           _id: config.id,
-           mainHeading: handleMainHeading(config),
-           secondaryHeading: null,
-           configData: config,
-           hiddenContent: config.hiddenContent,
-        });
-    })
-
-    return(
+    return (
         <ConfigExpansiblePanel
             actions={actions}
             backgroundColor="var(--themePLight)"
             color="white"
             needToggleButton={false}
         />
-    )
+    );
 }

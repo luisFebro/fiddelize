@@ -156,7 +156,6 @@ export default function AccessPassword({ history }) {
         </Link>
     );
 
-    const NUM_PASS_FIELD = 6;
     const showPasswordArea = () => (
         <Fragment>
             {!passOk && (

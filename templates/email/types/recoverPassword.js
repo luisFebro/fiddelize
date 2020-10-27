@@ -24,7 +24,7 @@ exports.recoverPassword = (payload) => {
             <br />
             <h3><a href=${authLink}>${authLink}</a></h3>
             <br />
-            <h4>Por segurança, este link expira em 1 hora.</h4>
+            <h4>Por segurança, este link expira em 1 hora ou quando usado.</h4>
             <footer>
                 <h5>Você está recebendo este email após solicitar recuperação de acesso pelo site ou app da ${APP_NAME}.</h5>
                 <h5 class="font-weight: italic;">

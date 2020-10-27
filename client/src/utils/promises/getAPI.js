@@ -43,6 +43,7 @@ export default function getAPI({
             const response = await axios(config);
 
             clearTimeout(stopRequest);
+
             resolve(response);
         } catch (error) {
             if (axios.isCancel(error)) return;

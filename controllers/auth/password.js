@@ -20,6 +20,7 @@ async function comparePswds(userId, options = {}) {
     const hash = userData.pswd;
 
     const checkRes = await compareBcryptPswd(pswd, { hash }).catch((error) =>
+        // This does not return a catch. it returns either false or true.
         console.log(error)
     );
 
@@ -60,23 +61,35 @@ exports.checkPassword = (req, res) => {
 };
 
 exports.changePassword = async (req, res) => {
-    const { userId, priorPswd, newPswd } = req.body;
+    const { userId, newPswd, newPswd2 } = req.body;
 
-    if (!userId || !newPswd || !priorPswd)
+    // adapt from recoverPassword's variables
+    const priorPswd = newPswd;
+    const realNewPswd = newPswd2;
+
+    if (!userId)
         return res
             .status(400)
             .json({ error: "ID do usuário ou senhas faltando..." });
 
-    const checkRes = await comparePswds(userId, { pswd: priorPswd });
+    const checkRes = await comparePswds(userId, { pswd: priorPswd }).catch(
+        (err) => {
+            console.log(err);
+        }
+    );
 
     if (checkRes) {
-        const hash = await createBcryptPswd(newPswd);
+        if (priorPswd && !realNewPswd) return res.json({ msg: "ok pswd1" }); // the first pswd is ok. Passed validation.
+
+        const SUCCESSFUL_MSG = "pass changed";
+
+        const hash = await createBcryptPswd(realNewPswd);
         await User.findByIdAndUpdate(userId, { pswd: hash });
-        res.json({ msg: "Senha alterada com sucesso!" });
+        res.json({ msg: SUCCESSFUL_MSG });
     } else {
         return res
             .status(400)
-            .json({ error: "A senha anterior não bate com a informada." });
+            .json({ error: "A senha atual não bate com a informada." });
     }
 };
 
@@ -117,7 +130,7 @@ exports.forgotPasswordRequest = async (req, res) => {
         token,
     };
 
-    return res.json(token);
+    // return res.json(token);
 
     const finalRes = await sendEmailBack({ type: "recoverPassword", payload });
     if (finalRes) {
@@ -150,10 +163,13 @@ exports.recoverPassword = async (req, res) => {
     }
 
     // confirmation of password for a second time
-    if (newPswd !== newPswd2) {
-        return res.json({
-            error: "As senhas informadas não batem. Tente novamente.",
-        });
+    if (newPswd && !newPswd2) return res.json({ msg: "ok pswd1" }); // the first pswd is ok. Passed validation.
+    if (newPswd2) {
+        if (newPswd !== newPswd2) {
+            return res.status(400).json({
+                error: "As senhas informadas não batem. Tente novamente.",
+            });
+        }
     }
 
     if (!token || !newPswd)
@@ -165,6 +181,7 @@ exports.recoverPassword = async (req, res) => {
         res.status(401).json({ error: "Este link já expirou." });
     });
 
+    const SUCCESSFUL_MSG = "pass changed";
     if (validPayload) {
         const hash = await createBcryptPswd(newPswd);
         const userId = validPayload.id;
@@ -173,6 +190,6 @@ exports.recoverPassword = async (req, res) => {
             pswd: hash,
             "expiryToken.current": null,
         });
-        res.json({ msg: "Senha alterada com sucesso!" });
+        res.json({ msg: SUCCESSFUL_MSG });
     }
 };

@@ -30,7 +30,7 @@ function CircleField({ needDark = false, ind }) {
             }}
         >
             <div
-                className={`d-none pass-block-${++ind}`}
+                className={`d-none pass-circle pass-block-${++ind}`}
                 style={{
                     ...styles.innerCircle,
                     background: needDark ? "#000" : "#fff",

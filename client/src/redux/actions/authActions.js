@@ -54,12 +54,7 @@ export const loadUser = () => (dispatch, getState) => {
                 window.location.href = "/temporariamente-indisponivel-503";
             }
             if (gotObj && err.response.status === 401 && gotMsg) {
-                showSnackbar(
-                    dispatch,
-                    "Sua sessão terminou. Faça seu acesso novamente.",
-                    "warning",
-                    10000
-                ); // err.response.data.msg
+                // showSnackbar susa sessão
                 logout(dispatch);
             }
         });
@@ -133,34 +128,6 @@ export const registerEmail = async (dispatch, objToSend) => {
     }
 };
 
-// Register Social Networks - note: login is done conditionally in the their auth component
-export const registerGoogle = (dispatch, body, resGoogle) => {
-    axios
-        .post("/api/auth/register", body, getHeaderJson)
-        .then((res) => {
-            dispatch({ type: "LOGIN_GOOGLE", payload: res.data.token });
-            dispatch({ type: "USER_GOOGLE_DATA", payload: resGoogle });
-            readUser(dispatch, res.data.authUserId); // This will get the complementary data from user registered by social network
-        })
-        .catch((err) => {
-            return err.response;
-        });
-};
-
-export const registerFacebook = (dispatch, body, resFacebook) => {
-    axios
-        .post("/api/auth/register", body, getHeaderJson)
-        .then((res) => {
-            dispatch({ type: "LOGIN_FACEBOOK", payload: res.data.token });
-            dispatch({ type: "USER_FACEBOOK_DATA", payload: resFacebook });
-            readUser(dispatch, res.data.authUserId); // This will get the complementary data from user registered by social network
-        })
-        .catch((err) => {
-            return err.response;
-        });
-};
-// Register Social Networks
-
 export const logout = async (dispatch, opts = {}) => {
     const { needReload = false } = opts;
 
@@ -212,6 +179,15 @@ export const tokenConfig = (getState) => {
 
     return config;
 };
+
+/* ARCHIVES
+showSnackbar(
+    dispatch,
+    "Sua sessão terminou. Faça seu acesso novamente.",
+    "warning",
+    10000
+); // err.response.data.msg
+ */
 
 /* COMMENTS
 n1: eg when user authenticated

@@ -109,15 +109,16 @@ exports.mwValidateLogin = (req, res, next) => {
 };
 
 exports.mwValidatePassword = (req, res, next) => {
-    const { pswd, checkToken } = req.body;
+    const { pswd, newPswd, newPswd2, checkToken } = req.body;
     if (checkToken) return next();
 
-    if (!pswd)
+    if (!pswd && !newPswd)
         return res
             .status(400)
             .json({ error: "Digite senha numérica de 6 dígitos" }); // not validated though since only requested if user fills every digit
 
-    const { result, msg } = checkValidSequence(pswd);
+    const thisPswd = newPswd2 || newPswd || pswd;
+    const { result, msg } = checkValidSequence(thisPswd);
     if (!result) return res.status(400).json({ error: msg });
 
     next();

@@ -14,6 +14,7 @@ export default function RedirectLink({
     toDashTab, // name of dashboard's session like App.
     pendingMsg,
     to,
+    goDash = true,
 }) {
     const dispatch = useStoreDispatch();
     const { bizCodeName } = useClientAdmin();
@@ -25,7 +26,7 @@ export default function RedirectLink({
             // if (pendingMsg) showSnackbar(dispatch, pendingMsg, "warning", 3000);
             return setVar({ name_tabLabel: toDashTab });
         } else {
-            setRun(dispatch, "goDash");
+            goDash && setRun(dispatch, "goDash");
         }
     };
 

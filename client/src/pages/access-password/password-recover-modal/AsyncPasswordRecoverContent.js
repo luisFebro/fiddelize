@@ -80,11 +80,11 @@ export default function AsyncPasswordRecoverContent() {
                         });
                     }}
                     onBlur={(e) => {
-                        handleNextField(e, "field1", {
-                            callback: () => {
-                                setData({ ...data, cpf: cpfMaskBr(cpf) });
-                            },
-                        });
+                        setData({ ...data, cpf: cpfMaskBr(cpf) });
+                        // handleNextField(e, "field1", {
+                        //     callback: () => {
+                        //     },
+                        // });
                     }}
                     value={cpf}
                     type="tel"

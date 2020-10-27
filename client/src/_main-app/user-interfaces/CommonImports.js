@@ -10,7 +10,7 @@ export { AccessPassword };
 export const AsyncRecoverPassword = Load({
     loader: () =>
         import(
-            "../../pages/access-password/RecoverPassword" /* webpackChunkName: "pass-recover-page-lazy" */
+            "../../pages/access-password/NewPassword" /* webpackChunkName: "pass-recover-page-lazy" */
         ),
 });
 

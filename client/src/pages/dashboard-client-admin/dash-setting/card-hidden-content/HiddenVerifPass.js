@@ -1,5 +1,7 @@
-import React from 'react';
-import ShowPasswordForm from '../../ShowPasswordForm';
+import React from "react";
+import ShowPasswordForm from "../../ShowPasswordForm";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import { Link } from "react-router-dom";
 // import DateWithIcon from '../../../../components/date-time/DateWithIcon';
 
 // TEST
@@ -9,8 +11,24 @@ import ShowPasswordForm from '../../ShowPasswordForm';
 // END
 
 export default function HiddenVerifPass({ userData }) {
+    const showChangePassBtn = () => (
+        <section className="my-5 container-center">
+            <Link to="/nova-senha/mudar" className="no-text-decoration">
+                <ButtonFab
+                    size="large"
+                    title="Mudar senha de acesso"
+                    onClick={null}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant="extended"
+                    position="relative"
+                />
+            </Link>
+        </section>
+    );
+
     return (
         <div className="hidden-content--root text-normal">
+            {showChangePassBtn()}
             <ShowPasswordForm isFromCliAdminDash={true} />
         </div>
     );
