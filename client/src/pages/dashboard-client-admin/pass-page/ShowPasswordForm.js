@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useStoreDispatch } from "easy-peasy";
-import { CLIENT_URL } from "../../config/clientUrl";
-import ToggleVisibilityPassword from "../../components/forms/fields/ToggleVisibilityPassword";
-import handleChange from "../../utils/form/use-state/handleChange";
+import { CLIENT_URL } from "../../../config/clientUrl";
+import ToggleVisibilityPassword from "../../../components/forms/fields/ToggleVisibilityPassword";
+import handleChange from "../../../utils/form/use-state/handleChange";
 import ButtonMulti, {
     faStyle,
-} from "../../components/buttons/material-ui/ButtonMulti";
+} from "../../../components/buttons/material-ui/ButtonMulti";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
-import { updateUser } from "../../redux/actions/userActions";
-import { readVerificationPass } from "../../redux/actions/adminActions";
-import setValObjWithStr from "../../utils/objects/setValObjWithStr";
-import { regulationText } from "./regulationText";
-import { useAppSystem } from "../../hooks/useRoleData";
-import useAnimateElem from "../../hooks/scroll/useAnimateElem";
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import { updateUser } from "../../../redux/actions/userActions";
+import { readVerificationPass } from "../../../redux/actions/adminActions";
+import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
+import { regulationText } from "../regulationText";
+import { useAppSystem } from "../../../hooks/useRoleData";
+import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ShowPasswordForm({
     isFromCliAdminDash = false,
     dataFromPassPage = {},
+    btnAction,
 }) {
     const [error, setError] = useState("");
     const [data, setData] = useState({
@@ -109,8 +110,7 @@ export default function ShowPasswordForm({
             if (isFromCliAdminDash) {
                 showSnackbar(dispatch, "Senha foi alterada!", "success");
             } else {
-                showSnackbar(dispatch, "Preparando seu painel...");
-                setTimeout(() => history.push(`/mobile-app`), 1500); //before = ${bizCodeName}/cliente-admin/painel-de-controle changed for new users see notificaiton in the main app page
+                btnAction(true);
             }
         });
     };
@@ -118,11 +118,7 @@ export default function ShowPasswordForm({
     const showButtonAction = () => (
         <div className="container-center" style={{ marginTop: "20px" }}>
             <ButtonMulti
-                title={
-                    isFromCliAdminDash
-                        ? "Alterar senha"
-                        : "Salvar e acessar<br />seu painel de controle"
-                }
+                title={isFromCliAdminDash ? "Alterar senha" : "Continuar"}
                 needParse={true}
                 onClick={() => {
                     sendDataBackend();

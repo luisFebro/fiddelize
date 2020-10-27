@@ -64,4 +64,5 @@ export const getToken = () => `/api/auth/pswd/token`;
 export const forgotPasswordRequest = () => `/api/auth/pswd/forgot`;
 export const recoverPassword = () => `/api/auth/pswd/recover`;
 export const changePassword = () => `/api/auth/pswd/change`;
+export const createPassword = () => `/api/auth/pswd/create`;
 // export const makeGoogleLogin = () => `/api/auth/google`; // POST

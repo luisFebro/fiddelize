@@ -29,24 +29,38 @@ async function comparePswds(userId, options = {}) {
 // END HELPERS
 
 // POST
-exports.createPassword = (req, res) => {
-    const { pswd, userId } = req.body;
+exports.createPassword = async (req, res) => {
+    const { newPswd, newPswd2, userId } = req.body;
 
-    createBcryptPswd(pswd).then((hash) => {
-        User.findById(userId)
-            .then((userData) => {
-                if (userData.pswd)
-                    return res
-                        .status(400)
-                        .json({ error: "Erro ao criar senha." });
+    if (newPswd && !newPswd2) return res.json({ msg: "ok pswd1" });
 
-                userData.pswd = hash;
+    if (newPswd2) {
+        if (newPswd !== newPswd2) {
+            return res.status(400).json({
+                error: "As senhas informadas não batem. Tente novamente.",
+            });
+        }
+    }
 
-                userData.markModified("pswd");
-                userData.save(() => res.json({ msg: "senha criada" }));
-            })
-            .catch((error) => res.json({ error }));
+    const hash = await createBcryptPswd(newPswd);
+
+    const userData = await User.findById(userId).catch((error) => {
+        res.json({ error: "Id não encontrado" });
     });
+
+    if (userData) {
+        if (userData.pswd)
+            return res
+                .status(400)
+                .json({ error: "Já foi criado uma senha para esta conta" });
+
+        userData.pswd = hash;
+        userData.markModified("pswd");
+
+        await userData.save();
+        const SUCCESSFUL_MSG = "pass created";
+        res.json({ msg: SUCCESSFUL_MSG });
+    }
 };
 
 // POST

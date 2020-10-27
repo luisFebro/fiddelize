@@ -1,35 +1,71 @@
-import React, { useState, Fragment } from 'react';
-import AsyncLogin from '../../components/auth/AsyncLogin';
-import AsyncLoyaltyScoreHandler from '../client/loyalty-client-scores';
-import { useStoreState } from 'easy-peasy';
-import CompLoader from '../../components/CompLoader';
+import React, { useState, Fragment } from "react";
+import AsyncLogin from "../../components/auth/AsyncLogin";
+import AsyncLoyaltyScoreHandler from "../client/loyalty-client-scores";
+import { useStoreState } from "easy-peasy";
+import CompLoader from "../../components/CompLoader";
+import useData from "../../hooks/useData";
+import { Load } from "../../components/code-splitting/LoadableComp";
+
+export const AsyncAccessGateKeeper = Load({
+    loader: () =>
+        import(
+            "../mobile-app/password/AccessGateKeeper" /* webpackChunkName: "remember-access-cómp-lazy" */
+        ),
+});
 
 export default function LoginPage() {
-    const { currentComp } = useStoreState(state => ({
+    const { currentComp } = useStoreState((state) => ({
         currentComp: state.componentReducer.cases.currentComp,
-    }))
+    }));
+
+    const [rememberAccess, name] = useData(["rememberAccess", "name"]);
 
     return (
-        <>
-            <div className="container-center mt-5">
-                <div>
-                    {currentComp === "login"
-                    ? (
-                        <div style={{margin: '70px 0'}}>
-                            <CompLoader
-                                comp={<AsyncLogin />}
-                                width={330}
-                                marginY={100}
-                                timeout={3500}
+        <Fragment>
+            {rememberAccess === "..." ? (
+                <section
+                    className="text-center text-title text-white"
+                    style={{ margin: "100px 0" }}
+                >
+                    Carregando...
+                </section>
+            ) : (
+                <section
+                    className="container-center"
+                    style={{ margin: `30px 0` }}
+                >
+                    {rememberAccess === true && (
+                        <section className="container-center-col">
+                            <p className="my-3 font-weight-bold text-subtitle text-center text-white">
+                                {name && name.cap()}
+                            </p>
+                            <AsyncAccessGateKeeper
+                                backColor="default"
+                                sColor="default"
+                                accessClassname="mt-5"
                             />
-                        </div>
-                    ) : (
-                        <div style={{margin: '70px 0'}}>
-                            <AsyncLoyaltyScoreHandler />
-                        </div>
+                        </section>
                     )}
-                </div>
-            </div>
-        </>
+                    <div>
+                        {currentComp === "login" && rememberAccess !== true && (
+                            <div>
+                                <CompLoader
+                                    comp={<AsyncLogin rootClassname="mb-5" />}
+                                    width={330}
+                                    marginY={100}
+                                    timeout={3500}
+                                />
+                            </div>
+                        )}
+
+                        {currentComp !== "login" && rememberAccess !== true && (
+                            <div style={{ margin: "70px 0" }}>
+                                <AsyncLoyaltyScoreHandler />
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
+        </Fragment>
     );
 }

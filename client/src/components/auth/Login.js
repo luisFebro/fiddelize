@@ -22,6 +22,8 @@ import { deleteImage } from "../../utils/storage/lForage";
 import useCount from "../../hooks/useCount";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import { setMultiVar, store } from "../../hooks/storage/useVar";
+import getFirstName from "../../utils/string/getFirstName";
+
 const isApp = isThisApp();
 
 function Login({
@@ -77,7 +79,7 @@ function Login({
             // Pre login store data
             const storeElems = [
                 { role },
-                { name },
+                { name: getFirstName(name, { addSurname: true }) },
                 { userId: authUserId },
                 { bizCodeName },
                 { twoLastCpfDigits },

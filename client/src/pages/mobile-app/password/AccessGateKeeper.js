@@ -13,7 +13,11 @@ const awesomeStyle = {
     color: "white",
 };
 
-export default function AccessGateKeeper({ backColor, sColor }) {
+export default function AccessGateKeeper({
+    backColor,
+    sColor,
+    accessClassname,
+}) {
     const [data, setData] = useState({
         twoLastCpfDigits: "--",
         rememberAccess: true,
@@ -48,7 +52,7 @@ export default function AccessGateKeeper({ backColor, sColor }) {
     );
 
     const showGateKeeperCTAs = () => (
-        <section className="mt-3">
+        <section className={accessClassname ? accessClassname : "mt-3"}>
             <p
                 className={`text-subtitle text-center ${selectTxtStyle(
                     backColor

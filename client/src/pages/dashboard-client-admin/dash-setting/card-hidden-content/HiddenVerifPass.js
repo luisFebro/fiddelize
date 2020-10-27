@@ -1,5 +1,5 @@
 import React from "react";
-import ShowPasswordForm from "../../ShowPasswordForm";
+import ShowPasswordForm from "../../pass-page/ShowPasswordForm";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { Link } from "react-router-dom";
 // import DateWithIcon from '../../../../components/date-time/DateWithIcon';

@@ -13,7 +13,6 @@ import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClie
 import LoginPage from "../../pages/auth/LoginPage"; // is it necessarybecauseit is only usedthe login compo inmobile app
 import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
-import AsyncPasswordPage from "../../pages/dashboard-client-admin/AsyncPasswordPage";
 import ClientMobileApp from "../../pages/mobile-app/ClientMobileApp";
 import AsyncLoyaltyScoreHandler from "../../pages/client/loyalty-client-scores/AsyncLoyaltyScoreHandler";
 import RegulationPage from "../../pages/RegulationPage";
@@ -24,8 +23,9 @@ import UnavailableService from "../../pages/UnavailableService";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
 import {
     AccessPassword,
-    AsyncRecoverPassword,
+    AsyncNewPassword,
     AsyncFixDatePage,
+    AsyncPasswordPage,
 } from "./CommonImports";
 //END PAGES
 
@@ -100,7 +100,7 @@ function Mobile({ location }) {
                 <Route
                     path="/nova-senha/:token"
                     exact
-                    component={AsyncRecoverPassword}
+                    component={AsyncNewPassword}
                 />
                 <Route component={Default} />
             </Switch>

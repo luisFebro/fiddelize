@@ -20,7 +20,6 @@ import AsyncLoyaltyScoreHandler from "../../pages/client/loyalty-client-scores";
 import RegulationPage from "../../pages/RegulationPage";
 import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
 import AsyncIntroPage from "../../pages/new-app";
-import AsyncPasswordPage from "../../pages/dashboard-client-admin/AsyncPasswordPage";
 import AsyncAppSharer from "../../pages/app-sharer/AsyncAppSharer";
 import AsyncSelfServicePage from "../../pages/new-app/self-service/AsyncSelfServicePage";
 import PlansPage from "../../pages/plans-page/PlansPage";
@@ -31,8 +30,9 @@ import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import {
     AccessPassword,
-    AsyncRecoverPassword,
+    AsyncNewPassword,
     AsyncFixDatePage,
+    AsyncPasswordPage,
 } from "./CommonImports";
 //END PAGES
 
@@ -109,7 +109,7 @@ function Website({ location }) {
                 <Route
                     path="/nova-senha/:token"
                     exact
-                    component={AsyncRecoverPassword}
+                    component={AsyncNewPassword}
                 />
                 <Route component={Default} />
             </Switch>

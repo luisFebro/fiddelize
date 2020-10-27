@@ -168,7 +168,7 @@ export default function NewPassword({ match, history }) {
         const fields = document.querySelectorAll(`.pass-circle`);
         if (fields) {
             fields.forEach((f) => {
-                f.classList.toggle("d-block");
+                f.classList.remove("d-block");
             });
         }
 

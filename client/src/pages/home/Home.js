@@ -1,16 +1,19 @@
-import React, { Fragment, useState } from 'react';
-import VAsyncRegisterClientAdmin from '../../components/auth/VAsyncRegisterClientAdmin';
-import ScrollArrow from '../../keyframes/built/scroll-arrow/ScrollArrow';
-import AppShowCase from './AppShowCase';
-import { CLIENT_URL } from '../../config/clientUrl';
-import CompLoader from '../../components/CompLoader';
-import AsyncVersion from '../../_main-app/user-interfaces/version/AsyncVersion';
-import useDelay from '../../hooks/useDelay';
+import React, { Fragment, useState } from "react";
+import VAsyncRegisterClientAdmin from "../../components/auth/VAsyncRegisterClientAdmin";
+import ScrollArrow from "../../keyframes/built/scroll-arrow/ScrollArrow";
+import AppShowCase from "./AppShowCase";
+import { CLIENT_URL } from "../../config/clientUrl";
+import CompLoader from "../../components/CompLoader";
+import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
+import useDelay from "../../hooks/useDelay";
+import useBackColor from "../../hooks/useBackColor";
 // import { Link } from 'react-router-dom';
 
 export default function Home() {
     const [viewPhone, setViewPhone] = useState(false);
     const versionReady = useDelay(3000);
+
+    useBackColor(`var(--themeBackground--default)`);
 
     const isSmall = React.useCallback(window.Helper.isSmallScreen(), []);
 
@@ -18,31 +21,42 @@ export default function Home() {
         <section className="mt-5 d-flex flex-column flex-md-row justify-content-center align-items-center">
             <div className="align-self-center m-1">
                 <picture>
-                    <source srcSet="/img/official-logo-white.webp" type="image/webp" />
-                    <source srcSet="/img/official-logo-white.png" type="image/png" />
+                    <source
+                        srcSet="/img/official-logo-white.webp"
+                        type="image/webp"
+                    />
+                    <source
+                        srcSet="/img/official-logo-white.png"
+                        type="image/png"
+                    />
                     <img
                         className="svg-elevation"
                         src={`${CLIENT_URL}/img/official-logo-white.webp`}
                         alt="logo"
                         width={150}
-                        height='auto'
+                        height="auto"
                     />
                 </picture>
             </div>
             <h1
                 className="mx-2 mx-md-5 text-center align-item-center text-md-left text-title text-white"
-                style={{ maxWidth: '700px'}}
+                style={{ maxWidth: "700px" }}
             >
                 Pontos de Fidelidade Digital para seus Clientes
             </h1>
         </section>
     );
 
-    return(
+    return (
         <Fragment>
             <section className="full-height">
                 {showSlogon()}
-                <div style={{margin: isSmall ? '10px 0 100px 0' : '50px 0 100px 0'}} className="d-flex justify-content-center">
+                <div
+                    style={{
+                        margin: isSmall ? "10px 0 100px 0" : "50px 0 100px 0",
+                    }}
+                    className="d-flex justify-content-center"
+                >
                     <ScrollArrow color="white" />
                 </div>
             </section>
@@ -57,8 +71,7 @@ export default function Home() {
             {versionReady && <AsyncVersion position="absolute" />}
         </Fragment>
     );
-};
-
+}
 
 /* ARCHIVES
 
