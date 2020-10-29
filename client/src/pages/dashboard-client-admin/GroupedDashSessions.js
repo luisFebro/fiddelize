@@ -5,6 +5,7 @@ import isSmallScreen from "../../utils/isSmallScreen";
 import TabSessions from "../../components/tabs/TabSessions";
 // Icons from Tabs
 import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
+import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import BuildIcon from "@material-ui/icons/Build";
 import ChatIcon from "@material-ui/icons/Chat";
 import PhonelinkSetupIcon from "@material-ui/icons/PhonelinkSetup";
@@ -12,6 +13,12 @@ import DashClients from "./dash-clients";
 import LoadableVisible from "../../components/code-splitting/LoadableVisible";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const AsyncTeam = LoadableVisible({
+    loader: () =>
+        import(
+            "./dash-team" /* webpackChunkName: "cli-admin-app-team-session-lazy" */
+        ),
+});
 const AsyncAppDesign = LoadableVisible({
     loader: () =>
         import(
@@ -46,6 +53,11 @@ const data = [
         tabLabel: "Clientes",
         tabIcon: <PermContactCalendarIcon style={muStyle} />,
         tabContentPanel: <DashClients />,
+    },
+    {
+        tabLabel: "Equipe",
+        tabIcon: <PeopleAltIcon style={muStyle} />,
+        tabContentPanel: <AsyncTeam />,
     },
     {
         tabLabel: "App",
