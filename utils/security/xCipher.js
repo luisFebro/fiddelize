@@ -7,12 +7,13 @@ const IV_LENGTH = 16; // For AES, this is always 16
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // JWT AUTHORIZATION, SESSION, EXPIRY TOKENS
-async function createJWT(_id, options = {}) {
+// There is also jwt.decode...
+async function createJWT(data, options = {}) {
     const { secret, expiry = "24h" } = options;
 
     const thisSecret = secret || JWT_SECRET;
-
-    return await jwt.sign({ id: _id }, thisSecret, {
+    const payload = typeof data === "string" ? { id: data } : payload; // payload is used when external data's obj is required like account's preLogin.
+    return await jwt.sign(payload, thisSecret, {
         expiresIn: expiry,
     });
 }

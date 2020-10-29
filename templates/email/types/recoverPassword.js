@@ -1,6 +1,11 @@
 const { CLIENT_URL } = require("../../../config");
 const APP_NAME = process.env.APP_NAME;
 const getFirstName = require("../../../utils/string/getFirstName");
+/*
+Other email implementation's suggestions:
+- preLogin or preSignup (to avoid fake accounts...)
+- successful registration
+ */
 
 exports.recoverPassword = (payload) => {
     if (!payload) return false;

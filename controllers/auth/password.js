@@ -26,6 +26,34 @@ async function comparePswds(userId, options = {}) {
 
     return checkRes;
 }
+
+const checkExpiryAttempts = (attemptN) => {
+    if (attemptN === 2) return "30s";
+    if (attemptN === 4) return "1m";
+    if (attemptN === 6) return "2m";
+    if (attemptN === 8) return "4m";
+    if (attemptN === 10) return "8m";
+    if (attemptN === 12) return "16m";
+    if (attemptN >= 14) return "32m";
+
+    return false;
+};
+
+const checkForExpiryToken = async (currToken) => {
+    if (currToken) {
+        const noBlocked = await checkJWT(currToken).catch((e) => {
+            console.log(`${e}`);
+        });
+
+        if (noBlocked) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    return false;
+};
 // END HELPERS
 
 // POST
@@ -45,7 +73,7 @@ exports.createPassword = async (req, res) => {
     const hash = await createBcryptPswd(newPswd);
 
     const userData = await User.findById(userId).catch((error) => {
-        res.json({ error: "Id não encontrado" });
+        res.status(400).json({ error: "Id não encontrado" });
     });
 
     if (userData) {
@@ -64,14 +92,102 @@ exports.createPassword = async (req, res) => {
 };
 
 // POST
-exports.checkPassword = (req, res) => {
-    const { pswd, userId } = req.body;
+exports.checkPassword = async (req, res) => {
+    const { pswd, userId, checkIfLocked = false } = req.body;
+
+    if (checkIfLocked) {
+        const data = await User.findById(userId)
+            .select("expiryToken.current expiryToken.loginAttempts")
+            .catch((err) => {
+                res.status(500).json({ error: err });
+            });
+
+        if (data) {
+            const loginAttempts = data && data.expiryToken.loginAttempts;
+            const currToken = data && data.expiryToken.current;
+
+            if (!loginAttempts) return res.json(false);
+
+            const currExpiryTime = checkExpiryAttempts(loginAttempts + 1);
+            const verif = await checkForExpiryToken(currToken);
+            return res.json({
+                blocked: verif,
+                lockMin: currExpiryTime,
+            });
+        }
+    }
+
     if (!pswd || !userId)
         return res.status(400).json({ error: "Senha ou Id faltando..." });
 
-    comparePswds(userId, { pswd }).then((checkRes) => {
-        res.json(checkRes);
-    });
+    const checkRes = await comparePswds(userId, { pswd });
+
+    if (!checkRes) {
+        const data = await User.findById(userId)
+            .select("expiryToken.current expiryToken.loginAttempts")
+            .catch((err) => {
+                res.status(500).json({ error: err });
+            });
+
+        const loginAttempts = data && data.expiryToken.loginAttempts + 1;
+        const currToken = data && data.expiryToken.current;
+        const currExpiryTime = checkExpiryAttempts(loginAttempts);
+
+        let timeoutHash = null;
+        let isBlocked = false;
+
+        if (currExpiryTime) {
+            timeoutHash = await createJWT(userId, { expiry: currExpiryTime });
+            let update = {
+                "expiryToken.current": timeoutHash,
+                "expiryToken.loginAttempts": loginAttempts, // This considers user will not be redirect to a blocked page and not be able to try again during this time.
+            };
+
+            // register attempt failure once in the history
+            if (loginAttempts === 2) {
+                update = {
+                    ...update,
+                    $push: { "expiryToken.history": "loginAttempts" },
+                };
+            }
+
+            await User.findByIdAndUpdate(userId, update).catch((err) => {
+                console.log(err);
+            });
+        }
+
+        isBlocked = await checkForExpiryToken(currToken);
+
+        if (currExpiryTime) {
+            isBlocked = true;
+        }
+
+        if (!isBlocked) {
+            await User.findByIdAndUpdate(userId, {
+                "expiryToken.loginAttempts": loginAttempts,
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
+
+        if (currExpiryTime && isBlocked) {
+            const onlyMin =
+                currExpiryTime === "30s"
+                    ? 0.5
+                    : Number(currExpiryTime.replace(/m/gi, ""));
+            return res.status(401).json({ blocked: true, minutes: onlyMin });
+        }
+        return res.status(401).json(false);
+    } else {
+        await User.findByIdAndUpdate(userId, {
+            "expiryToken.current": null,
+            "expiryToken.loginAttempts": 0,
+        }).catch((err) => {
+            console.log(err);
+        });
+
+        res.json(true);
+    }
 };
 
 exports.changePassword = async (req, res) => {
@@ -158,13 +274,13 @@ exports.recoverPassword = async (req, res) => {
 
     // Check if token is still valid to redirect the page in case of expired token
     if (token && checkToken) {
-        const tokenRes = await checkJWT(token).catch((e) => {
+        const tokenOk = await checkJWT(token).catch((e) => {
             res.json(false);
         });
 
-        if (tokenRes) {
+        if (tokenOk) {
             // check if user already applied the change. If so, invalidate access.
-            const isTokenAvailable = await User.findById(tokenRes.id).select(
+            const isTokenAvailable = await User.findById(tokenOk.id).select(
                 "expiryToken.current -_id"
             );
 
@@ -203,6 +319,7 @@ exports.recoverPassword = async (req, res) => {
         await User.findByIdAndUpdate(userId, {
             pswd: hash,
             "expiryToken.current": null,
+            "expiryToken.loginAttempts": 0,
         });
         res.json({ msg: SUCCESSFUL_MSG });
     }

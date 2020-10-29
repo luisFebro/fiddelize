@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
@@ -9,7 +9,10 @@ const Async = Load({
         ),
 });
 
-export default function PasswordRecoverBtn({ textColor }) {
+export default function PasswordRecoverBtn({
+    textColor,
+    fromBlockedComp = false,
+}) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const AsyncPasswordRecoverContent = <Async />;
@@ -23,18 +26,27 @@ export default function PasswordRecoverBtn({ textColor }) {
     };
 
     return (
-        <section>
-            <section
-                className={`text-link text-small font-weight-normal ${textColor} text-center`}
-                onClick={handleFullOpen}
-            >
-                Esqueci minha senha
-            </section>
+        <Fragment>
+            {fromBlockedComp ? (
+                <span
+                    className={`text-link ${textColor}`}
+                    onClick={handleFullOpen}
+                >
+                    recupere a senha
+                </span>
+            ) : (
+                <section
+                    className={`text-link text-small font-weight-normal ${textColor} text-center`}
+                    onClick={handleFullOpen}
+                >
+                    Esqueci minha senha
+                </section>
+            )}
             <ModalFullContent
                 contentComp={AsyncPasswordRecoverContent}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />
-        </section>
+        </Fragment>
     );
 }

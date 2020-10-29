@@ -164,7 +164,7 @@ exports.login = async (req, res) => {
     let token = undefined;
     if (role !== "cliente-admin") {
         // for cli-admin, this is fetched on getToken now..
-        token = await getJwtToken({ _id, role });
+        token = await getJwtToken({ _id: _id && _id.toString(), role });
     }
 
     const authData = getRoleData(role, { data: req.profile, token, cpf });
@@ -174,7 +174,10 @@ exports.login = async (req, res) => {
 exports.getToken = async (req, res) => {
     const { _id } = req.body;
 
-    const token = await getJwtToken({ _id, role: "cliente-admin" });
+    const token = await getJwtToken({
+        _id: _id && _id.toString(),
+        role: "cliente-admin",
+    });
     const encrypted = encryptSync(token);
 
     res.json(encrypted);

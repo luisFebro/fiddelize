@@ -9,11 +9,11 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import ProtectionMsg from "./ProtectionMsg";
-import useAPI, { checkPassword, getUniqueId } from "../../hooks/api/useAPI";
-import useGetVar from "../../hooks/storage/useVar";
+import useData from "../../hooks/useData";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
 import getAPI, {
+    checkPassword,
     getDecryptedToken,
     getToken,
 } from "../../utils/promises/getAPI";
@@ -21,6 +21,12 @@ import { getVar, setVar, store } from "../../hooks/storage/useVar";
 import authenticate from "../../components/auth/helpers/authenticate";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import PasswordCircleFields from "../../components/fields/PasswordCircleFields";
+import { Load } from "../../components/code-splitting/LoadableComp";
+
+export const AsyncBlocked = Load({
+    loader: () =>
+        import("./AsyncBlocked" /* webpackChunkName: "block-comp-lazy" */),
+});
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";
@@ -39,20 +45,37 @@ const getStyles = () => ({
 
 export default function AccessPassword({ history }) {
     const [display, setDisplay] = useState("");
-    const [uniqueIdTrigger, setUniqueIdTrigger] = useState(false);
+    const [data, setData] = useState({
+        isBlocked: false,
+        lockMin: 0,
+        passOk: false,
+        loading: false,
+    });
+    const { isBlocked, lockMin, passOk, loading } = data;
+
     const {
         selfThemeBackColor: backColor,
         selfThemePColor: colorP,
     } = useClientAdmin();
 
-    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
-
+    const styles = getStyles();
     const dispatch = useStoreDispatch();
 
-    const { data: userId } = useGetVar("userId", store.user);
+    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
+    useBackColor(`var(--themeBackground--${backColor})`);
+    useScrollUp();
+
+    const [userId] = useData(["userId"], { dots: false });
 
     useEffect(() => {
         if (userId) {
+            async function checkIfLocked() {
+                return await getAPI({
+                    method: "post",
+                    url: checkPassword(),
+                    body: { userId, checkIfLocked: true },
+                });
+            }
             async function runToken() {
                 const body = { _id: userId };
                 const { data: encryptedToken } = await getAPI({
@@ -62,31 +85,100 @@ export default function AccessPassword({ history }) {
                 });
                 setVar({ token: encryptedToken }, store.user);
             }
-            runToken();
+            Promise.all([checkIfLocked(), runToken()]).then((res) => {
+                const [lockedRes] = res;
+                if (lockedRes) {
+                    const { blocked, lockMin } = lockedRes.data;
+                    if (blocked) {
+                        setData((prev) => ({
+                            ...prev,
+                            isBlocked: true,
+                            lockMin,
+                        }));
+                    }
+                }
+            });
         }
     }, [userId]);
 
-    const body = {
-        userId,
-        pswd: display,
+    // PASS FIELD'S HANDLERS
+    const showNextField = () => {
+        let counter = display.length;
+        const currTypingField = document.querySelector(
+            `.pass-block-${++counter}`
+        );
+        if (currTypingField) currTypingField.classList.toggle("d-block");
     };
-    const { pswd } = body;
+
+    const undoClick = () => {
+        let counter = display.length;
+        const currTypingField = document.querySelector(
+            `.pass-block-${counter}`
+        );
+        if (currTypingField) currTypingField.classList.toggle("d-block");
+    };
+    // END PASS FIELD'S HANDLERS
+
+    const runCheckPassword = async () => {
+        const body = {
+            userId,
+            pswd: display,
+        };
+
+        setData((prev) => ({ ...prev, loading: true }));
+        const data = await getAPI({
+            method: "post",
+            url: checkPassword(),
+            body,
+        }).catch((error) => {
+            const wrongPassMsgCond = error === false;
+            if (wrongPassMsgCond) {
+                showSnackbar(
+                    dispatch,
+                    "Senha de acesso inválida.",
+                    "error",
+                    2000
+                );
+                setData((prev) => ({ ...prev, loading: false }));
+                setDisplay("");
+                return;
+            }
+
+            const isThisBlocked = error && error.blocked;
+
+            if (isThisBlocked) {
+                setData((prev) => ({
+                    ...prev,
+                    isBlocked: true,
+                    lockMin: error.minutes,
+                    loading: false,
+                }));
+            } else {
+                showSnackbar(
+                    dispatch,
+                    "Ocorreu um erro. Verifique sua conexão.",
+                    "error",
+                    4000
+                );
+                setData((prev) => ({ ...prev, loading: false }));
+            }
+            setDisplay("");
+        });
+
+        if (data) {
+            setData((prev) => ({ ...prev, loading: false, passOk: true }));
+        }
+    };
 
     const completedFill = display && display.length === 6;
-
-    const trigger = uniqueIdTrigger || (userId && pswd && completedFill);
-    const { data: passOk, loading, error } = useAPI({
-        method: "post",
-        url: checkPassword(),
-        body,
-        trigger,
-        loadingStart: false,
-    });
-
     useEffect(() => {
         const success = passOk === true;
+        if (userId && completedFill) {
+            runCheckPassword();
+        }
+
         if (completedFill && success) {
-            async function runSuccess() {
+            (async () => {
                 const token = await getVar("token", store.user);
 
                 const body = { token };
@@ -100,41 +192,9 @@ export default function AccessPassword({ history }) {
                 setTimeout(() => {
                     authenticate(newToken, { dispatch, history });
                 }, 1000);
-            }
-
-            runSuccess();
+            })();
         }
-
-        if (completedFill && !success) {
-            const uniqueId = getUniqueId();
-            setUniqueIdTrigger(uniqueId);
-        }
-    }, [completedFill, passOk]);
-
-    useEffect(() => {
-        const wrongPassMsgCond = !loading && passOk === false;
-        if (wrongPassMsgCond) {
-            showSnackbar(dispatch, "Senha de acesso inválida.", "error", 2000);
-            setDisplay("");
-        }
-    }, [passOk, loading]);
-
-    useEffect(() => {
-        if (error) {
-            showSnackbar(
-                dispatch,
-                "Ocorreu um erro. Verifique sua conexão.",
-                "error",
-                4000
-            );
-            setDisplay("");
-        }
-    }, [error]);
-
-    useBackColor(`var(--themeBackground--${backColor})`);
-    useScrollUp();
-
-    const styles = getStyles();
+    }, [userId, completedFill, passOk]);
 
     const showInterativeLock = () => (
         <Lock
@@ -167,9 +227,9 @@ export default function AccessPassword({ history }) {
                     Digite sua senha:
                 </p>
             )}
-            {loading && trigger ? (
+            {loading ? (
                 <p
-                    className={`text-subtitle ${
+                    className={`my-3 text-subtitle ${
                         needDark ? "text-black" : "text-white"
                     } text-center`}
                 >
@@ -206,42 +266,37 @@ export default function AccessPassword({ history }) {
         </Fragment>
     );
 
-    const showNextField = () => {
-        let counter = display.length;
-        const currTypingField = document.querySelector(
-            `.pass-block-${++counter}`
-        );
-        if (currTypingField) currTypingField.classList.toggle("d-block");
-    };
-
-    const undoClick = () => {
-        let counter = display.length;
-        const currTypingField = document.querySelector(
-            `.pass-block-${counter}`
-        );
-        if (currTypingField) currTypingField.classList.toggle("d-block");
-    };
-
     return (
         <section>
             {showInterativeLock()}
             {showCloseBtn()}
-            {showPasswordArea()}
-            <section className="mt-5 mb-2">
-                <ProtectionMsg backColor={backColor} />
-            </section>
-            <section style={{ marginBottom: 330 }}>
-                <PasswordRecoverBtn
+            {isBlocked && (
+                <AsyncBlocked
                     textColor={needDark ? "text-black" : "text-white"}
+                    setLock={setData}
+                    lockMin={lockMin}
                 />
-            </section>
-            <NumericKeyboard
-                setDisplay={setDisplay}
-                display={display}
-                addCallback={showNextField}
-                eraseCallback={undoClick}
-                colorP={colorP}
-            />
+            )}
+            {!isBlocked && (
+                <Fragment>
+                    {showPasswordArea()}
+                    <section className="mt-5 mb-2">
+                        <ProtectionMsg backColor={backColor} />
+                    </section>
+                    <section style={{ marginBottom: 330 }}>
+                        <PasswordRecoverBtn
+                            textColor={needDark ? "text-black" : "text-white"}
+                        />
+                    </section>
+                    <NumericKeyboard
+                        setDisplay={setDisplay}
+                        display={display}
+                        addCallback={showNextField}
+                        eraseCallback={undoClick}
+                        colorP={colorP}
+                    />
+                </Fragment>
+            )}
         </section>
     );
 }

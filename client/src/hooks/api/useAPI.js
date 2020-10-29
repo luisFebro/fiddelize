@@ -164,7 +164,7 @@ export default function useAPI({
                 if (e.response) {
                     const thisStatus = e.response.status;
                     handleError(thisStatus);
-                    if (thisStatus !== 200) setError(true);
+                    if (thisStatus !== 200) setError(e.response.data);
                     console.log(
                         `${JSON.stringify(
                             e.response.data

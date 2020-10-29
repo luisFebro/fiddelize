@@ -269,6 +269,7 @@ const data = {
     pswd: String,
     expiryToken: {
         current: String, // set this to null whenever the user has succeed his/her action
+        loginAttempts: { type: Number, default: 0 }, // block access every 2 wrong password sequence and set a progressive timer to be able type again.
         history: [],
     }, // use for events that requires a speficic time to action before expiration.
 };

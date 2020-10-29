@@ -3,7 +3,7 @@ import { getMultiVar, store as st } from "./storage/useVar";
 import repeat from "../utils/arrays/repeat";
 
 export default function useData(data, options = {}) {
-    const { trigger = true, placeholder = true } = options;
+    const { trigger = true, dots = true } = options;
 
     const [store, setStore] = useState([]);
 
@@ -23,7 +23,7 @@ export default function useData(data, options = {}) {
     }, [trigger]);
 
     // this will automatically set a ... for data loading
-    if (placeholder && trigger && !store.length) {
+    if (dots && trigger && !store.length) {
         return repeat(data.length, { placeholder: "..." });
     }
 
