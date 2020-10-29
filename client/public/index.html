@@ -1,113 +1,533 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <title>Fiddelize</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
-    <!-- target-densitydpi=device-dpi: https://stackoverflow.com/questions/7773865/how-to-disable-web-page-zooming-scaling-on-android -->
-    <meta name="HandheldFriendly" content="true" />
-    <meta http-equiv="Content-Language" content="pt-br">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> -->
-    <!-- <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" /> -->
-    <!-- <meta
+    <head>
+        <title>Fiddelize</title>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1.0,shrink-to-fit=no"
+        />
+        <!-- target-densitydpi=device-dpi: https://stackoverflow.com/questions/7773865/how-to-disable-web-page-zooming-scaling-on-android -->
+        <meta name="HandheldFriendly" content="true" />
+        <meta http-equiv="Content-Language" content="pt-br" />
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> -->
+        <!-- <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" /> -->
+        <!-- <meta
        name="viewport"
        content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"
     /> -->
-    <!-- <meta name="viewport" content= "width=device-width, user-scalable=no"> -->
-    <!-- META SEO -->
-    <link rel="canonical" href="https://fiddelize.com.br"/>
-    <meta name="generator" content="www.fiddelize.com.br" />
-    <meta name="author" content="Luis Febro" />
-    <meta name="description" content="Plataforma de pontos de fidelidade e valorização do consumo de clientes" />
-    <meta name="Keywords" content="sistema, fidelidade, pontos, brasil, negócio, clientes, online" />
-    <!-- END META SEO -->
-    <!-- TOOLBAR COLOR - requires valid HTTPS certification to work -->
-    <meta name="theme-color" content="#232528" />
-    <meta name="msapplication-TileColor" content="#232528">
-    <meta name="msapplication-navbutton-color" content="#232528">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#232528">
-    <!-- END TOOLBAR COLOR -->
+        <!-- <meta name="viewport" content= "width=device-width, user-scalable=no"> -->
+        <!-- META SEO -->
+        <link rel="canonical" href="https://fiddelize.com.br" />
+        <meta name="generator" content="www.fiddelize.com.br" />
+        <meta name="author" content="Luis Febro" />
+        <meta
+            name="description"
+            content="Plataforma de pontos de fidelidade e valorização do consumo de clientes"
+        />
+        <meta
+            name="keywords"
+            content="sistema, fidelidade, pontos, brasil, negócio, clientes, online"
+        />
+        <!-- END META SEO -->
+        <!-- TOOLBAR COLOR - requires valid HTTPS certification to work -->
+        <meta name="theme-color" content="#232528" />
+        <meta name="msapplication-TileColor" content="#232528" />
+        <meta name="msapplication-navbutton-color" content="#232528" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="#232528" />
+        <!-- END TOOLBAR COLOR -->
 
-    <!-- GOOGLE WEBMASTERS -->
-    <!-- search console -->
-    <meta name="google-site-verification" content="nAosncHFtMApONJPqtLZWwDLLuNJesQukVcbAKazoUw" />
-    <!-- END GOOGLE WEBMASTERS -->
+        <!-- GOOGLE WEBMASTERS -->
+        <!-- search console -->
+        <meta
+            name="google-site-verification"
+            content="DUk_0ci9Aj2qwCZeYITRl5yE6srT8OOfr_MiqEFep7k"
+        />
+        <!-- END GOOGLE WEBMASTERS -->
 
-    <!-- HOMESCREEN MANIFEST -->
-    <link rel="manifest" href="/manifest.json" />
-    <!-- END HOMESCREEN MANIFEST -->
+        <!-- HOMESCREEN MANIFEST -->
+        <link rel="manifest" href="/manifest.json" />
+        <!-- END HOMESCREEN MANIFEST -->
 
-    <!-- CRITICAL CSS -->
-    <style>
-       body{position:relative;background:#4a148c;color:#232528!important;margin:0;overflow-x:hidden;overscroll-behavior-y:none}
-       .nav{display:flex;flex-wrap:wrap;padding-left:0;margin-bottom:0;list-style:none}.nav-link{display:block;padding:.5rem 1rem}.nav-link:focus,.nav-link:hover{text-decoration:none}.nav-link.disabled{color:#6c757d;pointer-events:none;cursor:default}.navbar{position:relative;padding:.5rem 1rem}.navbar,.navbar .container{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between}.navbar-nav{display:flex;flex-direction:column;padding-left:0;margin-bottom:0;list-style:none}.navbar-nav .nav-link{padding-right:0;padding-left:0}@media (max-width:575.98px){.navbar-expand-sm>.container{padding-right:0;padding-left:0}}@media (min-width:576px){.navbar-expand-sm{flex-flow:row nowrap;justify-content:flex-start}.navbar-expand-sm .navbar-nav{flex-direction:row}.navbar-expand-sm .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-sm>.container{flex-wrap:nowrap}}.d-none{display:none!important}.d-inline-block{display:inline-block!important}.d-block{display:block!important}.d-flex{display:flex!important}.flex-row{flex-direction:row!important}.flex-column{flex-direction:column!important}.flex-column-reverse{flex-direction:column-reverse!important}.flex-wrap{flex-wrap:wrap!important}.justify-content-start{justify-content:flex-start!important}.justify-content-end{justify-content:flex-end!important}.justify-content-center{justify-content:center!important}.justify-content-between{justify-content:space-between!important}.justify-content-around{justify-content:space-around!important}.align-items-start{align-items:flex-start!important}.align-items-center{align-items:center!important}.align-content-start{align-content:flex-start!important}.align-self-start{align-self:flex-start!important}.align-self-center{align-self:center!important}@media (min-width:768px){.flex-md-row{flex-direction:row!important}.flex-md-column{flex-direction:column!important}.justify-content-md-center{justify-content:center!important}.align-items-md-center{align-items:center!important}}.position-relative{position:relative!important}.position-absolute{position:absolute!important}.position-fixed{position:fixed!important}.fixed-bottom{position:fixed;right:0;bottom:0;left:0;z-index:1030}.shadow{box-shadow:0 .5rem 1rem rgba(0,0,0,.15)!important}.m-0{margin:0!important}.my-0{margin-top:0!important;margin-bottom:0!important}.m-1{margin:.25rem!important}.mt-1,.my-1{margin-top:.25rem!important}.mb-1,.my-1{margin-bottom:.25rem!important}.ml-1{margin-left:.25rem!important}.mt-2,.my-2{margin-top:.5rem!important}.mr-2,.mx-2{margin-right:.5rem!important}.mb-2,.my-2{margin-bottom:.5rem!important}.ml-2,.mx-2{margin-left:.5rem!important}.m-3{margin:1rem!important}.mt-3,.my-3{margin-top:1rem!important}.mr-3,.mx-3{margin-right:1rem!important}.mb-3,.my-3{margin-bottom:1rem!important}.ml-3,.mx-3{margin-left:1rem!important}.mt-4,.my-4{margin-top:1.5rem!important}.mr-4,.mx-4{margin-right:1.5rem!important}.mb-4,.my-4{margin-bottom:1.5rem!important}.mx-4{margin-left:1.5rem!important}.m-5{margin:3rem!important}.mt-5,.my-5{margin-top:3rem!important}.mx-5{margin-right:3rem!important}.mb-5,.my-5{margin-bottom:3rem!important}.ml-5,.mx-5{margin-left:3rem!important}.py-0{padding-top:0!important}.pb-0,.py-0{padding-bottom:0!important}.p-1{padding:.25rem!important}.pt-1{padding-top:.25rem!important}.pr-1,.px-1{padding-right:.25rem!important}.pb-1{padding-bottom:.25rem!important}.pl-1,.px-1{padding-left:.25rem!important}.p-2{padding:.5rem!important}.py-2{padding-top:.5rem!important}.px-2{padding-right:.5rem!important}.pb-2,.py-2{padding-bottom:.5rem!important}.pl-2,.px-2{padding-left:.5rem!important}.p-3{padding:1rem!important}.pt-3,.py-3{padding-top:1rem!important}.px-3{padding-right:1rem!important}.pb-3,.py-3{padding-bottom:1rem!important}.pl-3,.px-3{padding-left:1rem!important}.p-4{padding:1.5rem!important}.pt-4,.py-4{padding-top:1.5rem!important}.py-4{padding-bottom:1.5rem!important}.p-5{padding:3rem!important}.pt-5,.py-5{padding-top:3rem!important}.px-5{padding-right:3rem!important}.pb-5,.py-5{padding-bottom:3rem!important}.pl-5,.px-5{padding-left:3rem!important}.mx-auto{margin-right:auto!important}.ml-auto,.mx-auto{margin-left:auto!important}@media (min-width:576px){.px-sm-3{padding-right:1rem!important;padding-left:1rem!important}.ml-sm-auto{margin-left:auto!important}}@media (min-width:768px){.ml-md-0{margin-left:0!important}.mt-md-5{margin-top:3rem!important}.mr-md-5,.mx-md-5{margin-right:3rem!important}.mb-md-5{margin-bottom:3rem!important}.mx-md-5{margin-left:3rem!important}}
-    </style>
-    <!-- END CRITICAL CSS -->
+        <!-- CRITICAL CSS -->
+        <style>
+            body {
+                position: relative;
+                background: #4a148c;
+                color: #232528 !important;
+                margin: 0;
+                overflow-x: hidden;
+                overscroll-behavior-y: none;
+            }
+            .nav {
+                display: flex;
+                flex-wrap: wrap;
+                padding-left: 0;
+                margin-bottom: 0;
+                list-style: none;
+            }
+            .nav-link {
+                display: block;
+                padding: 0.5rem 1rem;
+            }
+            .nav-link:focus,
+            .nav-link:hover {
+                text-decoration: none;
+            }
+            .nav-link.disabled {
+                color: #6c757d;
+                pointer-events: none;
+                cursor: default;
+            }
+            .navbar {
+                position: relative;
+                padding: 0.5rem 1rem;
+            }
+            .navbar,
+            .navbar .container {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .navbar-nav {
+                display: flex;
+                flex-direction: column;
+                padding-left: 0;
+                margin-bottom: 0;
+                list-style: none;
+            }
+            .navbar-nav .nav-link {
+                padding-right: 0;
+                padding-left: 0;
+            }
+            @media (max-width: 575.98px) {
+                .navbar-expand-sm > .container {
+                    padding-right: 0;
+                    padding-left: 0;
+                }
+            }
+            @media (min-width: 576px) {
+                .navbar-expand-sm {
+                    flex-flow: row nowrap;
+                    justify-content: flex-start;
+                }
+                .navbar-expand-sm .navbar-nav {
+                    flex-direction: row;
+                }
+                .navbar-expand-sm .navbar-nav .nav-link {
+                    padding-right: 0.5rem;
+                    padding-left: 0.5rem;
+                }
+                .navbar-expand-sm > .container {
+                    flex-wrap: nowrap;
+                }
+            }
+            .d-none {
+                display: none !important;
+            }
+            .d-inline-block {
+                display: inline-block !important;
+            }
+            .d-block {
+                display: block !important;
+            }
+            .d-flex {
+                display: flex !important;
+            }
+            .flex-row {
+                flex-direction: row !important;
+            }
+            .flex-column {
+                flex-direction: column !important;
+            }
+            .flex-column-reverse {
+                flex-direction: column-reverse !important;
+            }
+            .flex-wrap {
+                flex-wrap: wrap !important;
+            }
+            .justify-content-start {
+                justify-content: flex-start !important;
+            }
+            .justify-content-end {
+                justify-content: flex-end !important;
+            }
+            .justify-content-center {
+                justify-content: center !important;
+            }
+            .justify-content-between {
+                justify-content: space-between !important;
+            }
+            .justify-content-around {
+                justify-content: space-around !important;
+            }
+            .align-items-start {
+                align-items: flex-start !important;
+            }
+            .align-items-center {
+                align-items: center !important;
+            }
+            .align-content-start {
+                align-content: flex-start !important;
+            }
+            .align-self-start {
+                align-self: flex-start !important;
+            }
+            .align-self-center {
+                align-self: center !important;
+            }
+            @media (min-width: 768px) {
+                .flex-md-row {
+                    flex-direction: row !important;
+                }
+                .flex-md-column {
+                    flex-direction: column !important;
+                }
+                .justify-content-md-center {
+                    justify-content: center !important;
+                }
+                .align-items-md-center {
+                    align-items: center !important;
+                }
+            }
+            .position-relative {
+                position: relative !important;
+            }
+            .position-absolute {
+                position: absolute !important;
+            }
+            .position-fixed {
+                position: fixed !important;
+            }
+            .fixed-bottom {
+                position: fixed;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 1030;
+            }
+            .shadow {
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+            }
+            .m-0 {
+                margin: 0 !important;
+            }
+            .my-0 {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+            .m-1 {
+                margin: 0.25rem !important;
+            }
+            .mt-1,
+            .my-1 {
+                margin-top: 0.25rem !important;
+            }
+            .mb-1,
+            .my-1 {
+                margin-bottom: 0.25rem !important;
+            }
+            .ml-1 {
+                margin-left: 0.25rem !important;
+            }
+            .mt-2,
+            .my-2 {
+                margin-top: 0.5rem !important;
+            }
+            .mr-2,
+            .mx-2 {
+                margin-right: 0.5rem !important;
+            }
+            .mb-2,
+            .my-2 {
+                margin-bottom: 0.5rem !important;
+            }
+            .ml-2,
+            .mx-2 {
+                margin-left: 0.5rem !important;
+            }
+            .m-3 {
+                margin: 1rem !important;
+            }
+            .mt-3,
+            .my-3 {
+                margin-top: 1rem !important;
+            }
+            .mr-3,
+            .mx-3 {
+                margin-right: 1rem !important;
+            }
+            .mb-3,
+            .my-3 {
+                margin-bottom: 1rem !important;
+            }
+            .ml-3,
+            .mx-3 {
+                margin-left: 1rem !important;
+            }
+            .mt-4,
+            .my-4 {
+                margin-top: 1.5rem !important;
+            }
+            .mr-4,
+            .mx-4 {
+                margin-right: 1.5rem !important;
+            }
+            .mb-4,
+            .my-4 {
+                margin-bottom: 1.5rem !important;
+            }
+            .mx-4 {
+                margin-left: 1.5rem !important;
+            }
+            .m-5 {
+                margin: 3rem !important;
+            }
+            .mt-5,
+            .my-5 {
+                margin-top: 3rem !important;
+            }
+            .mx-5 {
+                margin-right: 3rem !important;
+            }
+            .mb-5,
+            .my-5 {
+                margin-bottom: 3rem !important;
+            }
+            .ml-5,
+            .mx-5 {
+                margin-left: 3rem !important;
+            }
+            .py-0 {
+                padding-top: 0 !important;
+            }
+            .pb-0,
+            .py-0 {
+                padding-bottom: 0 !important;
+            }
+            .p-1 {
+                padding: 0.25rem !important;
+            }
+            .pt-1 {
+                padding-top: 0.25rem !important;
+            }
+            .pr-1,
+            .px-1 {
+                padding-right: 0.25rem !important;
+            }
+            .pb-1 {
+                padding-bottom: 0.25rem !important;
+            }
+            .pl-1,
+            .px-1 {
+                padding-left: 0.25rem !important;
+            }
+            .p-2 {
+                padding: 0.5rem !important;
+            }
+            .py-2 {
+                padding-top: 0.5rem !important;
+            }
+            .px-2 {
+                padding-right: 0.5rem !important;
+            }
+            .pb-2,
+            .py-2 {
+                padding-bottom: 0.5rem !important;
+            }
+            .pl-2,
+            .px-2 {
+                padding-left: 0.5rem !important;
+            }
+            .p-3 {
+                padding: 1rem !important;
+            }
+            .pt-3,
+            .py-3 {
+                padding-top: 1rem !important;
+            }
+            .px-3 {
+                padding-right: 1rem !important;
+            }
+            .pb-3,
+            .py-3 {
+                padding-bottom: 1rem !important;
+            }
+            .pl-3,
+            .px-3 {
+                padding-left: 1rem !important;
+            }
+            .p-4 {
+                padding: 1.5rem !important;
+            }
+            .pt-4,
+            .py-4 {
+                padding-top: 1.5rem !important;
+            }
+            .py-4 {
+                padding-bottom: 1.5rem !important;
+            }
+            .p-5 {
+                padding: 3rem !important;
+            }
+            .pt-5,
+            .py-5 {
+                padding-top: 3rem !important;
+            }
+            .px-5 {
+                padding-right: 3rem !important;
+            }
+            .pb-5,
+            .py-5 {
+                padding-bottom: 3rem !important;
+            }
+            .pl-5,
+            .px-5 {
+                padding-left: 3rem !important;
+            }
+            .mx-auto {
+                margin-right: auto !important;
+            }
+            .ml-auto,
+            .mx-auto {
+                margin-left: auto !important;
+            }
+            @media (min-width: 576px) {
+                .px-sm-3 {
+                    padding-right: 1rem !important;
+                    padding-left: 1rem !important;
+                }
+                .ml-sm-auto {
+                    margin-left: auto !important;
+                }
+            }
+            @media (min-width: 768px) {
+                .ml-md-0 {
+                    margin-left: 0 !important;
+                }
+                .mt-md-5 {
+                    margin-top: 3rem !important;
+                }
+                .mr-md-5,
+                .mx-md-5 {
+                    margin-right: 3rem !important;
+                }
+                .mb-md-5 {
+                    margin-bottom: 3rem !important;
+                }
+                .mx-md-5 {
+                    margin-left: 3rem !important;
+                }
+            }
+        </style>
+        <!-- END CRITICAL CSS -->
 
-    <!-- ASYNC DEFERED STYLES -->
-    <link
-        rel="stylesheet"
-        href="/styles/animate.selected.min.css"
-        media="print"
-        onload="this.media='all'; this.onload=null;"
-    >
-    <!-- reference: https://github.com/filamentgroup/loadCSS/ -->
-    <!--END ASYNC DEFERED STYLES -->
+        <!-- ASYNC DEFERED STYLES -->
+        <link
+            rel="stylesheet"
+            href="/styles/animate.selected.min.css"
+            media="print"
+            onload="this.media='all'; this.onload=null;"
+        />
+        <!-- reference: https://github.com/filamentgroup/loadCSS/ -->
+        <!--END ASYNC DEFERED STYLES -->
 
+        <!-- FACEBOOK OPEN GRAPHS - TESTING -->
+        <meta property="og:site_name" content="Fiddelize" />
+        <meta property="og:title" content="Fiddelize" />
+        <meta
+            property="og:image:secure_url"
+            itemprop="image"
+            content="https://fiddelize.com.br/img/official-logo.svg"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+            property="og:description"
+            content="Acumule pontos de fidelidade e ganhe prêmios pelo app. Baixe hoje o seu pelo link."
+        />
+        <meta property="og:updated_time" content="1440432930" />
+        <!-- END FACEBOOK OPEN GRAPHS - TESTING -->
 
-    <!-- FACEBOOK OPEN GRAPHS - TESTING -->
-    <meta property="og:site_name" content="Fiddelize">
-    <meta property="og:title" content="Fiddelize">
-    <meta property="og:image:secure_url" itemprop="image" content="https://fiddelize.com.br/img/official-logo.svg">
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="Acumule pontos de fidelidade e ganhe prêmios pelo app. Baixe hoje o seu pelo link." />
-    <meta property="og:updated_time" content="1440432930" />
-    <!-- END FACEBOOK OPEN GRAPHS - TESTING -->
+        <!-- PRELOADED MULTIMEDIAS -->
+        <link
+            rel="preload"
+            as="image"
+            href="%PUBLIC_URL%/img/official-logo-name.webp"
+        />
+        <link
+            rel="preload"
+            as="image"
+            href="%PUBLIC_URL%/img/official-logo-white.webp"
+        />
+        <!-- self-service page -->
+        <link
+            rel="preload"
+            as="image"
+            href="%PUBLIC_URL%/img/shapes/blob-app-preview.svg"
+        />
+        <!-- end self-service page -->
+        <!-- sounds depracated over usePlayAudio-->
+        <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/tock.mp3" />
+        <!-- end sounds -->
+        <!-- PRELOADED MULTIMEDIAS -->
 
-    <!-- PRELOADED MULTIMEDIAS -->
-    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-name.webp">
-    <link rel="preload" as="image" href="%PUBLIC_URL%/img/official-logo-white.webp">
-    <!-- self-service page -->
-    <link rel="preload" as="image" href="%PUBLIC_URL%/img/shapes/blob-app-preview.svg">
-    <!-- end self-service page -->
-    <!-- sounds depracated over usePlayAudio-->
-    <link rel="prefetch" as="media" href="%PUBLIC_URL%/sounds/tock.mp3">
-    <!-- end sounds -->
-    <!-- PRELOADED MULTIMEDIAS -->
+        <!-- BEGIN - FAVICON -->
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/icons/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/icons/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/icons/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/icons/site.webmanifest" />
+        <link
+            rel="mask-icon"
+            href="/icons/safari-pinned-tab.svg"
+            color="#5bbad5"
+        />
+        <link rel="shortcut icon" href="/icons/favicon.ico" />
+        <meta name="msapplication-TileColor" content="#00aba9" />
+        <meta name="msapplication-config" content="/icons/browserconfig.xml" />
+        <meta name="theme-color" content="#ffffff" />
+        <!-- END - FAVICON -->
 
-    <!-- BEGIN - FAVICON -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-    <link rel="manifest" href="/icons/site.webmanifest">
-    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5">
-    <link rel="shortcut icon" href="/icons/favicon.ico">
-    <meta name="msapplication-TileColor" content="#00aba9">
-    <meta name="msapplication-config" content="/icons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-    <!-- END - FAVICON -->
+        <!-- GOOGLE FONTS -->
+        <link
+            rel="prefetch"
+            href="https://fonts.googleapis.com/css?family=Poppins&display=swap"
+            as="style"
+            onload="this.onload=null;this.rel='stylesheet'"
+        />
+        <noscript
+            ><link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css?family=Poppins&display=swap"
+        /></noscript>
+        <!-- END GOOGLE FONTS -->
+    </head>
+    <body>
+        <noscript> You need to enable JavaScript to run this app. </noscript>
+        <div id="root"></div>
 
-    <!-- GOOGLE FONTS -->
-    <link rel="prefetch" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" /></noscript>
-    <!-- END GOOGLE FONTS -->
-
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-
-    <script>
-        // this disable mini-bar from browser. the custom banner is set in download page....
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-        })
-    </script>
-  </body>
+        <script>
+            // this disable mini-bar from browser. the custom banner is set in download page....
+            window.addEventListener("beforeinstallprompt", (e) => {
+                e.preventDefault();
+            });
+        </script>
+    </body>
 </html>
-
 
 <!-- /* COMMENTS
 <link rel="prefetch" as="image" href="%PUBLIC_URL%/img/icons/picture-upload.svg">
