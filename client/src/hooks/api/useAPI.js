@@ -120,7 +120,7 @@ export default function useAPI({
         setLoading(false);
         getSnack(txtFailure, { type: "error" });
 
-        const gotExpiredToken = status === 403;
+        const gotExpiredToken = status === 401;
 
         if (gotExpiredToken) {
             window.location.href = isApp

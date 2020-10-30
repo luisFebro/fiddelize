@@ -2,7 +2,6 @@ import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import truncateWords from "../utils/string/truncateWords";
-import { HashLink } from "react-router-hash-link";
 import { ButtonContainerPressedEffectDark as Dark } from "../components/buttons/Ω-archives/Default";
 import parse from "html-react-parser";
 import Spinner from "./loadingIndicators/Spinner";
@@ -66,9 +65,7 @@ export default function Illustration({
         return (
             btnName === "dark" && (
                 <div className="container-center">
-                    <HashLink smooth to={to || "/#inicio"}>
-                        <Dark className="mt-5">{txt}</Dark>
-                    </HashLink>
+                    <Dark className="mt-5">{txt}</Dark>
                 </div>
             )
         );
@@ -152,3 +149,15 @@ const DivWrapper = styled.div`
         text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;
     }
 `;
+
+/* ARCHIVES
+return (
+    btnName === "dark" && (
+        <div className="container-center">
+            <HashLink smooth to={to || "/#inicio"}>
+                <Dark className="mt-5">{txt}</Dark>
+            </HashLink>
+        </div>
+    )
+);
+ */

@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "../../../../components/Title";
-import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 import { useAppSystem } from "../../../../hooks/useRoleData";
+import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 
 const AsyncInvestCardsList = LoadableVisible({
     loading: true,

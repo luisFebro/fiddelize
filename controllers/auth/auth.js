@@ -43,9 +43,9 @@ exports.mwIsAuth = async (req, res, next) => {
         let isAuthUser = Boolean(_id && decoded.id === _id.toString());
         if (!isAuthUser)
             return res.status(403).json(msg("error.notAuthorized")); // n4 401 and 403 http code difference
-    }
 
-    next();
+        next();
+    }
 };
 
 exports.mwIsAdmin = (req, res, next) => {

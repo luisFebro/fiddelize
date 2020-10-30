@@ -1,7 +1,18 @@
-import React from "react";
+import React, { Fragment } from "react";
+import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
+
+const AsyncTeamTasksList = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./cards-list/AsyncTeamTasksList.js" /* webpackChunkName: "staff-tasks-pro-cards-list-session-lazy" */
+        ),
+});
 
 export default function AsyncTasks() {
     return (
-        <section className="text-hero text-purple">I am the AsyncTasks</section>
+        <Fragment>
+            <AsyncTeamTasksList />
+        </Fragment>
     );
 }

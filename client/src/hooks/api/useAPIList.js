@@ -151,7 +151,7 @@ export default function useAPIList({
         setError(true);
         setLoading(false);
 
-        const gotExpiredToken = status === 403;
+        const gotExpiredToken = status === 401;
         if (gotExpiredToken) {
             window.location.href = isApp
                 ? "/mobile-app"

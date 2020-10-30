@@ -58,6 +58,7 @@ const data = [
         tabLabel: "Equipe",
         tabIcon: <PeopleAltIcon style={muStyle} />,
         tabContentPanel: <AsyncTeam />,
+        boxPadding: 1,
     },
     {
         tabLabel: "App",

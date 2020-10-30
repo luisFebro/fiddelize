@@ -227,7 +227,7 @@ export default function AccessPassword({ history }) {
                     Digite sua senha:
                 </p>
             )}
-            {loading ? (
+            {loading && !passOk ? (
                 <p
                     className={`my-3 text-subtitle ${
                         needDark ? "text-black" : "text-white"

@@ -55,7 +55,7 @@ export default function getAPI({
                 );
 
                 const { status } = error.response;
-                const gotExpiredToken = status === 403;
+                const gotExpiredToken = status === 401;
                 if (gotExpiredToken && dispatch)
                     logout(dispatch, { needSnackbar: true });
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { default as GL } from "react-google-login";
+// import { default as GL } from "react-google-login";
 import getAPI, { makeGoogleLogin } from "../../utils/promises/getAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "../buttons/material-ui/ButtonFab";

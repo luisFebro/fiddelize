@@ -1,6 +1,5 @@
 import React, { useEffect, Fragment } from "react";
 import { BrowserRouter } from "react-router-dom";
-// import ScrollToTop from 'react-router-scroll-top';
 import isThisApp from "../utils/window/isThisApp";
 import isWebpSupported from "../utils/media/isWebpSupported";
 import deferJsOnload from "../utils/performance/deferJsOnload";
@@ -17,12 +16,12 @@ import "./styles/bootstrap.selected.css";
 import "./libraries/fontAwesomeLib";
 //END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
-
-// UIs
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 //END UIs
 import useCustomerBirthdayToday from "../hooks/notification/useCustomerBirthdayToday";
+// import ScrollToTop from 'react-router-scroll-top';
+
 export default function App() {
     useRecoveryAndDataOffline();
     useOffline();
