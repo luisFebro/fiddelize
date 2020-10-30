@@ -7,7 +7,7 @@ import OptionsHandler from "./OptionsHandler";
 export default function AsyncTeam() {
     return (
         <Fragment>
-            <div>
+            <div className="async-title">
                 <DashSectionTitle title={<Title />} />
             </div>
             <OptionsHandler />

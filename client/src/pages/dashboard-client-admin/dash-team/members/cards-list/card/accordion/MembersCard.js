@@ -8,9 +8,7 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
-import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -55,37 +53,6 @@ const getStyles = ({ color, backgroundColor }) => ({
     },
 });
 
-const handleTransactionStatus = ({ panel, daysLeft }) => {
-    let { transactionStatus, payDueDate, renewal, reference } = panel.data;
-
-    const isDuePay =
-        !isScheduledDate(payDueDate, { isDashed: true }) &&
-        transactionStatus !== "pago"; // for boleto
-    const isPaid =
-        transactionStatus === "pago" || transactionStatus === "disponível";
-    const isPriorCardRenewal = renewal && renewal.priorRef === reference;
-    const isCurrCardRenewal = renewal && renewal.currRef === reference;
-
-    if (!transactionStatus) return "PENDENTE";
-    if (isPaid && !isPriorCardRenewal) return "PAGO";
-    if (isDuePay || (daysLeft === 0 && transactionStatus !== "pendente"))
-        return "EXPIRADO";
-
-    if (renewal && (isPaid || transactionStatus === "pendente")) {
-        if (isPriorCardRenewal && renewal.isPaid) {
-            return "RENOVADO";
-        } else {
-            return "PENDENTE/RENOVAÇÃO";
-        }
-
-        if (isPaid && renewal.isPaid && isCurrCardRenewal) {
-            return "PAGO/RENOVADO";
-        }
-    }
-
-    return transactionStatus && transactionStatus.toUpperCase();
-};
-
 export default function MembersCard({
     detectedCard,
     checkDetectedElem,
@@ -98,46 +65,7 @@ export default function MembersCard({
         backgroundColor: "var(--themePLight)",
     });
 
-    // const dispatch = useStoreDispatch();
-
-    const displayStatusBadge = (panel, daysLeft) => {
-        const transactionStatus = handleTransactionStatus({ panel, daysLeft });
-
-        const handleBack = () => {
-            if (transactionStatus === "PENDENTE") return "grey";
-            if (
-                transactionStatus === "PAGO" ||
-                transactionStatus === "PAGO/RENOVADO"
-            )
-                return "var(--incomeGreen)";
-            if (transactionStatus === "RENOVADO") return "var(--niceUiYellow)";
-            if (
-                transactionStatus === "CANCELADO" ||
-                transactionStatus === "EXPIRADO"
-            )
-                return "var(--expenseRed)";
-            return "var(--mainDark)";
-        };
-
-        return (
-            <div className="enabledLink">
-                <ButtonFab
-                    position="absolute"
-                    top={-20}
-                    right={0}
-                    disabled={true}
-                    title={transactionStatus}
-                    variant="extended"
-                    fontWeight="bolder"
-                    fontSize=".6em"
-                    color="var(--mainWhite)"
-                    backgroundColor={handleBack()}
-                />
-            </div>
-        );
-    };
-
-    const showPanel = (panel, daysLeft) => {
+    const showPanel = (panel) => {
         return (
             <section>
                 <AccordionSummary
@@ -167,7 +95,6 @@ export default function MembersCard({
                         </Fragment>
                     )}
                 </AccordionSummary>
-                {displayStatusBadge(panel, daysLeft)}
             </section>
         );
     };
@@ -176,21 +103,18 @@ export default function MembersCard({
         <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
     );
 
-    const showAccordion = ({ panel, daysLeft }) => (
+    const showAccordion = ({ panel }) => (
         <Accordion
             TransitionProps={{ unmountOnExit: true }}
             className="disabledLink"
             style={styles.accordion}
         >
-            {showPanel(panel, daysLeft)}
+            {showPanel(panel)}
             {showHiddenPanel(panel)}
         </Accordion>
     );
 
     const ActionsMap = actions.map((panel, ind) => {
-        const { planDueDate, renewal } = panel.data;
-        const daysLeft = !planDueDate ? null : getDatesCountdown(planDueDate);
-
         const props = {
             key: ind,
             className: "position-relative mx-3 mb-5",
@@ -198,10 +122,10 @@ export default function MembersCard({
 
         return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? (
             <div {...props} ref={detectedCard}>
-                {showAccordion({ panel, daysLeft })}
+                {showAccordion({ panel })}
             </div>
         ) : (
-            <div {...props}>{showAccordion({ panel, daysLeft })}</div>
+            <div {...props}>{showAccordion({ panel })}</div>
         );
     });
 

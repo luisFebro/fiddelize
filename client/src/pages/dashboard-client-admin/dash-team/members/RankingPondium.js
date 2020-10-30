@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
-import truncateWords from "../../../utils/string/truncateWords";
+import truncateWords from "../../../../utils/string/truncateWords";
 import styled from "styled-components";
-import convertToReal from "../../../utils/numbers/convertToReal";
+import convertToReal from "../../../../utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAppSystem } from "../../../hooks/useRoleData";
-import Img from "../../../components/Img";
-import useAPI, { readHighestScores } from "../../../hooks/api/useAPI";
+import { useAppSystem } from "../../../../hooks/useRoleData";
+import Img from "../../../../components/Img";
+import useAPI, { readHighestScores } from "../../../../hooks/api/useAPI";
 
 export default function RankingPondium() {
     const { businessId } = useAppSystem();
@@ -54,7 +54,7 @@ export default function RankingPondium() {
                                     className="position-relative text-subtitle font-weight-bold text-shadow-white"
                                 >
                                     {clientScore}
-                                    {Boolean(ind === 0) && " Pontos"}
+                                    {Boolean(ind === 0) && " cadastros"}
                                 </span>
                                 <br />
                                 <span className="text-normal font-weight-bold text-shadow-white">

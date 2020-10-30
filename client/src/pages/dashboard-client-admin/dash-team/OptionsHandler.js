@@ -36,9 +36,9 @@ export default function OptionHandler() {
                     size="large"
                 />
             </div>
-            <div className="mt-5">
+            <div className="ml-3 mt-5">
                 <span className="text-purple text-subtitle font-weight-bold">
-                    {isTask ? "Tarefas Recentes:" : "Membros:"}
+                    {isTask ? "Tarefas Recentes:" : ""}
                 </span>
             </div>
 
