@@ -10,8 +10,8 @@ const getStyles = () => ({
         margin: "0 5px",
     },
     innerCircle: {
-        width: "20px",
-        height: "20px",
+        padding: "12px",
+        border: "none",
         borderRadius: "50%",
     },
 });

@@ -33,9 +33,16 @@ import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
 import getFirstName from "../../utils/string/getFirstName";
-import { getMultiVar, store } from "../../hooks/storage/useVar";
+import {
+    getVar,
+    removeVar,
+    getMultiVar,
+    store,
+} from "../../hooks/storage/useVar";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import RedirectLink from "../../components/RedirectLink";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+
 const AsyncAccessGateKeeper = Load({
     loader: () =>
         import(
@@ -49,6 +56,19 @@ const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
+
+const showWelcomeMsg = (dispatch, userName) => {
+    getVar("welcomeMsg").then((res) => {
+        if (res) {
+            showSnackbar(
+                dispatch,
+                `Olá de volta, ${userName && getFirstName(userName.cap())}!`,
+                "success"
+            );
+            removeVar("welcomeMsg");
+        }
+    });
+};
 
 function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
@@ -64,6 +84,11 @@ function ClientMobileApp({ location, history }) {
     const { roleWhichDownloaded, businessId } = useAppSystem();
     let { _id, role, name } = useProfile();
 
+    const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        showWelcomeMsg(dispatch, "Febro");
+    }, []);
     // for logout access data.
     const [dataStore, setDataStore] = useState({
         name: "...",
@@ -128,7 +153,6 @@ function ClientMobileApp({ location, history }) {
     const totalNotifications = useCountNotif(_id, { role });
     useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
-    const dispatch = useStoreDispatch();
 
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");

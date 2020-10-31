@@ -41,7 +41,7 @@ export default function TeamApp() {
                 position="absolute"
                 top={-20}
                 right={25}
-                notifBorderColor={"var(--themeBackground--" + backColor + ")"}
+                notifBorderColor={"var(--themePDark--" + backColor + ")"}
                 notifBackColor={
                     backColor === "red"
                         ? "var(--themePLight--black)"
@@ -52,7 +52,7 @@ export default function TeamApp() {
         );
 
         return (
-            <section className="animated slideInRight delay-4s">
+            <section className="animated slideInRight delay-3s">
                 <div className="team-app__notif">{displayBack()}</div>
                 {displayBell()}
             </section>
@@ -110,7 +110,7 @@ export default function TeamApp() {
                 />
                 <div className="ml-3">
                     <ButtonFab
-                        title="CLIENTES"
+                        title="CLIENTE"
                         backgroundColor="var(--themeSDark--default)"
                         onClick={null}
                         iconMu={PlusIcon}

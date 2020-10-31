@@ -16,6 +16,7 @@ export default function getAPI({
     timeout = 10000,
     trigger = true,
     dispatch,
+    isSearch = false,
 }) {
     if (!url) return console.log("A URL is required!");
 
@@ -46,7 +47,11 @@ export default function getAPI({
 
             resolve(response);
         } catch (error) {
-            if (axios.isCancel(error)) return;
+            if (axios.isCancel(error)) {
+                // if it is search and cancel is need as a defendor against multiple request, then isSearch is true.
+                isSearch && reject({ error: "canceled" });
+                return;
+            }
             if (error.response) {
                 console.log(
                     `${JSON.stringify(error.response.data)}. STATUS: ${
