@@ -25,7 +25,7 @@ export default function RankingPondium() {
                 const clientScore = convertToReal(itemsList && itemsList.score);
                 const clientName = truncateWords(
                     itemsList && itemsList.name.cap(),
-                    10
+                    13
                 );
 
                 return (
@@ -51,13 +51,13 @@ export default function RankingPondium() {
                             >
                                 <span
                                     style={{ top: "14px" }}
-                                    className="position-relative text-subtitle font-weight-bold text-shadow-white"
+                                    className="text-nowrap position-relative text-subtitle font-weight-bold text-shadow-white"
                                 >
-                                    {clientScore}
-                                    {Boolean(ind === 0) && " cadastros"}
+                                    {clientScore}{" "}
+                                    {Boolean(ind === 0) && "Cadastros"}
                                 </span>
                                 <br />
-                                <span className="text-normal font-weight-bold text-shadow-white">
+                                <span className="d-inline-block mt-2 text-normal font-weight-bold text-shadow-white">
                                     {clientName}
                                 </span>
                             </p>

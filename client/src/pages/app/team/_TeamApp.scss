@@ -1,0 +1,11 @@
+.team-app__notif {
+    position: absolute;
+    top: -80px;
+    right: -50px;
+
+    & .back {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+}

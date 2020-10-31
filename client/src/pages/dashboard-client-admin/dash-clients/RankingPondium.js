@@ -25,7 +25,7 @@ export default function RankingPondium() {
                 const clientScore = convertToReal(itemsList && itemsList.score);
                 const clientName = truncateWords(
                     itemsList && itemsList.name.cap(),
-                    10
+                    13
                 );
 
                 return (
@@ -57,7 +57,7 @@ export default function RankingPondium() {
                                     {Boolean(ind === 0) && " Pontos"}
                                 </span>
                                 <br />
-                                <span className="text-normal font-weight-bold text-shadow-white">
+                                <span className="d-inline-block mt-2 text-normal font-weight-bold text-shadow-white">
                                     {clientName}
                                 </span>
                             </p>

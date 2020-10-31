@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 import Title from "../../../../components/Title";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 
 const AsyncRankingPondium = LoadableVisible({
     loading: true,

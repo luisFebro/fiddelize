@@ -26,6 +26,7 @@ import {
     AsyncNewPassword,
     AsyncFixDatePage,
     AsyncPasswordPage,
+    AsyncTeamApp,
 } from "./CommonImports";
 //END PAGES
 
@@ -102,6 +103,7 @@ function Mobile({ location }) {
                     exact
                     component={AsyncNewPassword}
                 />
+                <Route path="/app/equipe" exact component={AsyncTeamApp} />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

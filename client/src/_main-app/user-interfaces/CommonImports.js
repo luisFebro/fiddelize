@@ -28,3 +28,10 @@ export const AsyncFixDatePage = Load({
             "../../pages/AsyncFixDatePage" /* webpackChunkName: "fix-date-page-lazy" */
         ),
 });
+
+export const AsyncTeamApp = Load({
+    loader: () =>
+        import(
+            "../../pages/app/team/TeamApp" /* webpackChunkName: "team-app-lazy" */
+        ),
+});
