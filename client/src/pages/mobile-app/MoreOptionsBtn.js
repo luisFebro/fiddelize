@@ -1,28 +1,37 @@
-import React, { useState, Fragment, useEffect } from 'react';
-import { logout } from '../../redux/actions/authActions';
-import { Link, withRouter } from 'react-router-dom';
-import { showComponent } from '../../redux/actions/componentActions';
-import SpeedDialButton from '../../components/buttons/SpeedDialButton';
-import { useStoreDispatch } from 'easy-peasy';
-import { useClientUser, useProfile } from '../../hooks/useRoleData';
-import { CLIENT_URL } from '../../config/clientUrl';
-import WhatsappBtn from '../../components/buttons/WhatsappBtn';
-import { readUser } from '../../redux/actions/userActions';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
+import React, { useState, Fragment, useEffect } from "react";
+import { logout } from "../../redux/actions/authActions";
+import { Link, withRouter } from "react-router-dom";
+import { showComponent } from "../../redux/actions/componentActions";
+import SpeedDialButton from "../../components/buttons/SpeedDialButton";
+import { useStoreDispatch } from "easy-peasy";
+import { useClientUser, useProfile } from "../../hooks/useRoleData";
+import { CLIENT_URL } from "../../config/clientUrl";
+import WhatsappBtn from "../../components/buttons/WhatsappBtn";
+import { readUser } from "../../redux/actions/userActions";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
 
 // SpeedDial and Icons
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import LocalMallIcon from '@material-ui/icons/LocalMall';
-import ChatIcon from '@material-ui/icons/Chat';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Tooltip from '../../components/tooltips/Tooltip';
-import lStorage, { tooltip1, yellowBtn2, needSetTrueLocalKey } from '../../utils/storage/lStorage';
-import ModalFullContent from '../../components/modals/ModalFullContent';
-import Fab from '@material-ui/core/Fab';
-import getFirstName from '../../utils/string/getFirstName';
-import { Load } from '../../components/code-splitting/LoadableComp'
+import LoyaltyIcon from "@material-ui/icons/Loyalty";
+import LocalMallIcon from "@material-ui/icons/LocalMall";
+import ChatIcon from "@material-ui/icons/Chat";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import Tooltip from "../../components/tooltips/Tooltip";
+import lStorage, {
+    tooltip1,
+    yellowBtn2,
+    needSetTrueLocalKey,
+} from "../../utils/storage/lStorage";
+import ModalFullContent from "../../components/modals/ModalFullContent";
+import Fab from "@material-ui/core/Fab";
+import getFirstName from "../../utils/string/getFirstName";
+import { Load } from "../../components/code-splitting/LoadableComp";
 
-const Async = Load({ loader: () => import('./history-purchase-btn/AsyncPurchaseHistory'  /* webpackChunkName: "cli-purchase-history-full-page-lazy" */ )});
+const Async = Load({
+    loader: () =>
+        import(
+            "./history-purchase-btn/AsyncPurchaseHistory" /* webpackChunkName: "cli-purchase-history-full-page-lazy" */
+        ),
+});
 
 const lastOption = tooltip1;
 const currOption = yellowBtn2;
@@ -32,19 +41,19 @@ const currChecked = lStorage("getItem", currOption);
 
 const getStyles = () => ({
     muStyle: {
-        transform: 'scale(1.1)',
-        filter:  'drop-shadow(.5px .5px 1.5px black)',
-        color: '#fff',
+        transform: "scale(1.1)",
+        filter: "drop-shadow(.5px .5px 1.5px black)",
+        color: "#fff",
     },
     fabRoot: {
-        bottom: '75px',
-        right: '85px',
+        bottom: "75px",
+        right: "85px",
     },
     fabTooltip: {
         backgroundColor: "var(--lightYellow)",
         color: "var(--mainDark)",
         filter: ``, // drop-shadow(0 0 8px #ffc)
-    }
+    },
 });
 
 function MoreOptionsBtn({
@@ -55,7 +64,8 @@ function MoreOptionsBtn({
     userName,
     needAppForCliAdmin,
     needAppForPreview,
-    colorS, }) {
+    colorS,
+}) {
     const [blockAccess, setBlockAccess] = useState(false);
     const [purchaseModal, setPurchaseModal] = useState(false);
     const [contactModal, setContactModal] = useState(false);
@@ -69,29 +79,31 @@ function MoreOptionsBtn({
         currScore,
         purchaseHistory,
         totalGeneralScore,
-        totalPurchasePrize
+        totalPurchasePrize,
     } = useClientUser();
-
 
     useEffect(() => {
         let cancel;
-        if(cancel) return;
-        readUser(dispatch, _id, {select: "clientUserData.totalPurchasePrize"})
-        .then(res => {
+        if (cancel) return;
+        readUser(dispatch, _id, {
+            select: "clientUserData.totalPurchasePrize",
+        }).then((res) => {
             //if user does not have the same quantity of prize in the db and thus not updateed
             //then, block access to loyalty score page to avoid registration of accumulative score from the last challenge.
-            if(res.status !== 200) return console.log("smt wrong with readUser from morebtn")
-            const totaldBPrizes = res.data.clientUserData && res.data.clientUserData.totalPurchasePrize;
-            if(totaldBPrizes !== totalPurchasePrize) setBlockAccess(true);
-        })
-        return () => cancel = true;
-    }, [_id, totalPurchasePrize])
+            if (res.status !== 200)
+                return console.log("smt wrong with readUser from morebtn");
+            const totaldBPrizes =
+                res.data.clientUserData &&
+                res.data.clientUserData.totalPurchasePrize;
+            if (totaldBPrizes !== totalPurchasePrize) setBlockAccess(true);
+        });
+        return () => (cancel = true);
+    }, [_id, totalPurchasePrize]);
 
     const showPurchaseHistory = () => {
-
         const handlePurchaseClose = () => {
             setPurchaseModal(false);
-        }
+        };
 
         const getModalData = () => ({
             cliUserName: userName,
@@ -102,31 +114,31 @@ function MoreOptionsBtn({
         });
 
         const modalData = getModalData();
-        const AsyncPurchaseHistory = <Async modalData={modalData} />
+        const AsyncPurchaseHistory = <Async modalData={modalData} />;
 
-        return(
+        return (
             <ModalFullContent
                 contentComp={AsyncPurchaseHistory}
                 fullOpen={purchaseModal}
                 setFullOpen={handlePurchaseClose}
             />
         );
-    }
+    };
 
     const speedDial = {
         actions: [
             //the order rendered is inverse from the bottom to top
             {
                 icon: <ExitToAppIcon style={styles.muStyle} />,
-                name: 'Desconectar ►',
+                name: "Sair ►",
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && logout(dispatch);
-                }
+                },
             },
             {
                 icon: <ChatIcon style={styles.muStyle} />,
-                name: 'Fale Conosco ►', // Insert wahtsapp button and redirect user to it.
+                name: "Fale Conosco ►", // Insert wahtsapp button and redirect user to it.
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && setContactModal(true);
@@ -135,41 +147,52 @@ function MoreOptionsBtn({
             },
             {
                 icon: <LocalMallIcon style={styles.muStyle} />,
-                name: 'Seu Histórico ►',
+                name: "Seu Histórico ►",
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && setPurchaseModal(true);
                     playBeep();
                 },
-            }
-        ]
-    }
+            },
+        ],
+    };
 
     const handleAddScoreClick = () => {
-        if(blockAccess) return showSnackbar(dispatch, `${getFirstName(userName.cap())}, parece que sua pontuação está desatualizada. Verifique sua notificação de confirmação para começar novo desafio.`, 9000)
+        if (blockAccess)
+            return showSnackbar(
+                dispatch,
+                `${getFirstName(
+                    userName.cap()
+                )}, parece que sua pontuação está desatualizada. Verifique sua notificação de confirmação para começar novo desafio.`,
+                9000
+            );
         showComponent(dispatch, "purchaseValue");
-        const path = needAppForCliAdmin ? "/cliente/pontos-fidelidade?client-admin=1" : "/cliente/pontos-fidelidade"
+        const path = needAppForCliAdmin
+            ? "/cliente/pontos-fidelidade?client-admin=1"
+            : "/cliente/pontos-fidelidade";
         history.push(path);
         playBeep();
         lStorage("setItem", currOption);
-    }
+    };
 
     const showContactComp = () => {
-        const Comp = <ContactComp />
-        return(
+        const Comp = <ContactComp />;
+        return (
             <ModalFullContent
                 contentComp={Comp}
                 fullOpen={contactModal}
                 setFullOpen={setContactModal}
             />
         );
-    }
+    };
 
-    return(
+    return (
         <div className="position-relative">
             <div
                 style={styles.fabRoot}
-                className={`position-fixed ${!showMoreBtn  ? 'd-none' : 'd-block'}`}
+                className={`position-fixed ${
+                    !showMoreBtn ? "d-none" : "d-block"
+                }`}
             >
                 <Tooltip
                     needArrow
@@ -196,12 +219,12 @@ function MoreOptionsBtn({
                 size="large"
                 FabProps={{
                     backgroundColor: "var(--themeSDark--" + colorS + ")",
-                    size: 'medium',
+                    size: "medium",
                     filter: `drop-shadow(.5px .5px 3px black)`, // still not working
                 }}
                 root={{
-                    bottom: '30px',
-                    right: '40px',
+                    bottom: "30px",
+                    right: "40px",
                 }}
                 hidden={!showMoreBtn}
             />
@@ -216,21 +239,24 @@ export default withRouter(MoreOptionsBtn);
 const ContactComp = () => {
     const showTitle = () => (
         <div className="my-4">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
+            <p className="text-subtitle text-purple text-center font-weight-bold">
                 &#187; Fale conosco
             </p>
         </div>
     );
 
-    return(
+    return (
         <Fragment>
             {showTitle()}
             <div className="mx-4">
-                <img className="img-fluid" height="auto" src={`${CLIENT_URL}/img/illustrations/online-chat.svg`} alt="chat online"/>
+                <img
+                    className="img-fluid"
+                    height="auto"
+                    src={`${CLIENT_URL}/img/illustrations/online-chat.svg`}
+                    alt="chat online"
+                />
             </div>
-            <div style={{height: '100%'}} className="container-center">
+            <div style={{ height: "100%" }} className="container-center">
                 <WhatsappBtn />
             </div>
         </Fragment>

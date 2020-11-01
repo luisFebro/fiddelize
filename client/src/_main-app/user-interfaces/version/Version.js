@@ -4,11 +4,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.7303.4";
+const latestVersion = "3.7305.4";
 // PRÓXIMO:
 //
 const updateDescription =
-    "app da equipe - serviço kit da equipe - equipe dash - pt5";
+    "app da equipe - serviço kit da equipe - equipe dash - pt6";
 const history = [
     "sistema de acesso e senha",
     "sistema de planos - integração com serviços individuais",

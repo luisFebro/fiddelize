@@ -3,6 +3,9 @@ import { useClientAdmin } from "../../../hooks/useRoleData";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { Load } from "../../../components/code-splitting/LoadableComp";
+import useData from "../../../hooks/useData";
+import getDayGreetingBr from "../../../utils/getDayGreetingBr";
+import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
 import "./_TeamApp.scss";
 
 export const AsyncBellNotifBtn = Load({
@@ -22,9 +25,12 @@ const muStyle = {
 const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 
 export default function TeamApp() {
+    const [firstName] = useData(["firstName"]);
+
     const {
         selfBizLogoImg: bizLogo,
         selfThemeBackColor: backColor,
+        selfThemeSColor: sColor,
     } = useClientAdmin();
 
     const showNotifBell = () => {
@@ -35,7 +41,7 @@ export default function TeamApp() {
             ></section>
         );
 
-        const totalNotifications = 3;
+        const totalNotifications = 0;
         const displayBell = () => (
             <AsyncBellNotifBtn
                 position="absolute"
@@ -93,7 +99,10 @@ export default function TeamApp() {
     const showCTAs = () => (
         <section className="animated fadeInUp delay-1s my-5 container-center">
             <div className="text-center">
-                <p className="m-0 text-left text-title text-white">Luis,</p>
+                <h2 className="m-0 text-left text-title text-white">
+                    {firstName},{" "}
+                    {getDayGreetingBr({ lowercase: true, lateHours: false })}!
+                </h2>
                 <h2 className="text-subtitle text-white font-weight-bold">
                     o que cadastrar?
                 </h2>
@@ -128,6 +137,9 @@ export default function TeamApp() {
             {showNotifBell()}
             {showMainAppTitle()}
             {showCTAs()}
+            <section className="animated zoomIn delay-3s">
+                <TeamSpeedDialBtn sColor={sColor} />
+            </section>
         </Fragment>
     );
 }
