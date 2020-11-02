@@ -70,15 +70,6 @@ export default function RankingPondium() {
 
     return (
         <DivPodium className="animated fadeIn my-3 container-center flex-column">
-            {!gotData && !loading && (
-                <p className="text-normal mb-5" style={{ color: "grey" }}>
-                    Aqui você acompanha as
-                    <br />
-                    <strong>3 maiores pontuações gerais</strong>
-                    <br />
-                    de todos seus clientes com atualizações em tempo real.
-                </p>
-            )}
             <div className="position-relative" style={{ marginTop: "30px" }}>
                 <Img
                     className="shadow-elevation-black"

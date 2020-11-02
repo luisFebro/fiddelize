@@ -34,14 +34,21 @@ export default function OptionHandler() {
 
     return (
         <section className="mt-4">
+            <div className="d-flex justify-content-end mr-1">
+                <ButtonFab
+                    title={isTask ? "VER MEMBROS" : "VER TAREFAS"}
+                    backgroundColor="var(--themeSDark--default)"
+                    onClick={() => toggleOption(isTask ? "members" : "tasks")}
+                    position="relative"
+                    variant="extended"
+                    size="large"
+                />
+            </div>
             {option === "members" && (
-                <div
-                    className="animated fadeIn position-relative"
-                    style={{ left: 5, top: -45 }}
-                >
+                <div className="mt-5 animated fadeIn delay-1s d-flex justify-content-end">
                     <Link className="no-text-decoration" to="/app/equipe">
                         <ButtonFab
-                            title="App Equipe"
+                            title="App"
                             backgroundColor="var(--themeSDark--default)"
                             onClick={null}
                             position="relative"
@@ -57,16 +64,6 @@ export default function OptionHandler() {
                     </Link>
                 </div>
             )}
-            <div className="d-flex justify-content-end mr-1">
-                <ButtonFab
-                    title={isTask ? "VER MEMBROS" : "VER TAREFAS"}
-                    backgroundColor="var(--themeSDark--default)"
-                    onClick={() => toggleOption(isTask ? "members" : "tasks")}
-                    position="relative"
-                    variant="extended"
-                    size="large"
-                />
-            </div>
             <div className="ml-3 mt-5">
                 <span className="text-purple text-subtitle font-weight-bold">
                     {isTask ? "Tarefas Recentes:" : ""}

@@ -1,23 +1,23 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import LocalMallIcon from '@material-ui/icons/LocalMall';
-import { muStyle } from '../../../../../components/buttons/material-ui/ButtonFab';
-import { faStyle } from '../../../../../components/buttons/material-ui/ButtonMulti';
-import { default as YesNoModalBtn } from './modal/modal-conf-yes-no/ModalBtn';
+import LocalMallIcon from "@material-ui/icons/LocalMall";
+import { muStyle } from "../../../../../components/buttons/material-ui/ButtonFab";
+import { faStyle } from "../../../../../components/buttons/material-ui/ButtonMulti";
+import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
 // import { default as DiscountModalBtn } from "./modal/modal-text-field/ModalBtn";
-import { useStoreState } from 'easy-peasy';
-import ClientProfile from './modal-content-pages/ClientProfile';
-import defineCurrChallenge from '../../../../../utils/biz/defineCurrChallenge';
-import getFirstName from '../../../../../utils/string/getFirstName';
-import PurchaseHistoryBtn from '../../../../mobile-app/history-purchase-btn/PurchaseHistoryBtn';
+import { useStoreState } from "easy-peasy";
+import ClientProfile from "./modal-content-pages/ClientProfile";
+import defineCurrChallenge from "../../../../../utils/biz/defineCurrChallenge";
+import getFirstName from "../../../../../utils/string/getFirstName";
+import PurchaseHistoryBtn from "../../../../mobile-app/history-purchase-btn/PurchaseHistoryBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 
 const Div = styled.div`
     .title-blob-action {
-        font-size: .5em;
+        font-size: 0.5em;
     }
     .star-blob-medium {
         font-size: 3em;
@@ -25,14 +25,12 @@ const Div = styled.div`
 `;
 
 export default function ActionBtns({ data, needBadgeForTestMode }) {
-    const { clientAdminData } = useStoreState(state => ({
-        clientAdminData: state.userReducer.cases.clientAdmin
-    }))
+    const { clientAdminData } = useStoreState((state) => ({
+        clientAdminData: state.userReducer.cases.clientAdmin,
+    }));
 
     return (
-        <Div
-            cssProps={{compName: null}}
-        >
+        <Div cssProps={{ compName: null }}>
             {showBlobActionBtns(data, clientAdminData)}
             {showDeleteBtn(data, needBadgeForTestMode)}
         </Div>
@@ -54,28 +52,31 @@ const ShowHistoryBtn = ({ data, isFromDashboard = true }) => {
 
     const modalData = getModalData();
 
-    return(
-        <PurchaseHistoryBtn
-            from="clientsHistory"
-            modalData={modalData}
-        />
-    );
-}
+    return <PurchaseHistoryBtn from="clientsHistory" modalData={modalData} />;
+};
 
-const showProfileBtn = data => (
+const showProfileBtn = (data) => (
     <div>
         <FullModalBtn
             button={{
                 iconFontAwesome: <FontAwesomeIcon icon="user" />,
-                backgroundColor: 'var(--themeSDark)',
+                backgroundColor: "var(--themeSDark)",
                 title: "Ver Perfil",
-                variant: 'extended',
-                position: 'relative',
+                variant: "extended",
+                position: "relative",
                 size: "medium",
             }}
             modalData={{
                 title: "&#187; Perfil do Cliente",
-                subTitle: <p><span className="font-weight-bold text-normal">• NOME:</span><br/>{data.name && data.name.cap()},</p>,
+                subTitle: (
+                    <p>
+                        <span className="font-weight-bold text-normal">
+                            • NOME:
+                        </span>
+                        <br />
+                        {data.name && data.name.cap()},
+                    </p>
+                ),
                 componentContent: <ClientProfile data={data} />,
             }}
         />
@@ -84,19 +85,28 @@ const showProfileBtn = data => (
 
 const showBlobActionBtns = (data, clientAdminData) => (
     <main className="text-white container-center flex-column blob-action-btns--root">
-        <p className="mb-5 position-relative text-center text-title text-shadow" style={{top: '40px'}}>
+        <p
+            className="mb-5 position-relative text-center text-title text-shadow"
+            style={{ top: "40px" }}
+        >
             <FontAwesomeIcon icon="star" className="title-blob-action" /> Ações
         </p>
         <section className={`container-center ${isSmall && "flex-column"}`}>
             <div className="blob-action-btn--root history-btn position-relative">
                 <p className="star position-absolute star-align">
-                    <FontAwesomeIcon icon="star" className="star-blob-medium animated rotateIn fast delay-5s" />
+                    <FontAwesomeIcon
+                        icon="star"
+                        className="star-blob-medium animated rotateIn fast delay-5s"
+                    />
                 </p>
                 <ShowHistoryBtn data={data} />
             </div>
             <div className="position-relative blob-action-btn--root">
                 <p className="star position-absolute star-align">
-                    <FontAwesomeIcon icon="star" className="star-blob-medium animated rotateIn fast delay-5s" />
+                    <FontAwesomeIcon
+                        icon="star"
+                        className="star-blob-medium animated rotateIn fast delay-5s"
+                    />
                 </p>
                 {showProfileBtn(data)}
             </div>
@@ -104,28 +114,28 @@ const showBlobActionBtns = (data, clientAdminData) => (
     </main>
 );
 
-const showDeleteBtn = (data, needBadgeForTestMode) => (
-    !needBadgeForTestMode &&
-    <div className="animated zoomIn mt-5">
-        <YesNoModalBtn
-            button={{
-                iconFontAwesome: <FontAwesomeIcon icon="trash-alt" />,
-                backgroundColor: 'var(--expenseRed)',
-                title: "excluir",
-                variant: 'extended',
-                position: 'relative',
-                size: "small",
-            }}
-            modalData={{
-                title: `Confirmação<br />de Exclusão de Cliente`,
-                subTitle: `Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
-                itemData: data,
-            }}
-            setRun={null}
-            run={null}
-        />
-    </div>
-);
+const showDeleteBtn = (data, needBadgeForTestMode) =>
+    !needBadgeForTestMode && (
+        <div className="animated zoomIn mt-5">
+            <YesNoModalBtn
+                button={{
+                    iconFontAwesome: <FontAwesomeIcon icon="trash-alt" />,
+                    backgroundColor: "var(--expenseRed)",
+                    title: "excluir",
+                    variant: "extended",
+                    position: "relative",
+                    size: "small",
+                }}
+                modalData={{
+                    title: `Confirmação<br />de Exclusão de Cliente`,
+                    subTitle: `Lembrando que o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
+                    itemData: data,
+                }}
+                setRun={null}
+                run={null}
+            />
+        </div>
+    );
 
 /*
 const showDiscountBtn = (data, clientAdminData) => {

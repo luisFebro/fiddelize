@@ -1,7 +1,11 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreState } from "easy-peasy";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import extractStrData from "../../../../../../../utils/string/extractStrData";
+import RemoveMemberBtn from "./cta/RemoveMemberBtn";
+import SeeProfileBtn from "./cta/SeeProfileBtn";
+import getFirstName from "../../../../../../../utils/string/getFirstName";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -18,6 +22,8 @@ function PanelHiddenContent({ history, data }) {
 
     const styles = getStyles();
 
+    const { newClientTotal, newScoreTotal } = extractStrData(data.content);
+
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
             <section className="my-4">
@@ -26,27 +32,32 @@ function PanelHiddenContent({ history, data }) {
                 </h2>
             </section>
             <p className="mb-4 text-normal font-weight-bold text-shadow">
-                • Nome do Cliente:
-                <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
-                    {data.clientName}
+                • Totais Gerais:
+                <span className="d-block main-font text-em-1-2 font-weight-bold">
+                    <FontAwesomeIcon
+                        icon="check"
+                        className="mr-2 shadow-elevation-black"
+                    />
+                    {newClientTotal} Cadastros.
+                </span>
+                <span className="d-block main-font text-em-1-0 font-weight-bold">
+                    <FontAwesomeIcon
+                        icon="check"
+                        className="mr-2 shadow-elevation-black"
+                    />
+                    {newScoreTotal} Pontos de clientes.
                 </span>
             </p>
-            {data.memberTask === "newClient" && (
-                <p className="mb-4 text-normal font-weight-bold text-shadow">
-                    • Cadastro com:
-                    <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
-                        {data.clientScore} Pontos.
-                    </span>
-                </p>
-            )}
             <div className="container-center mt-5">
-                <ButtonFab
-                    position="relative"
-                    size="large"
-                    title="Ver Cliente"
-                    onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
-                    variant="extended"
+                <SeeProfileBtn />
+            </div>
+            <div className="mt-5">
+                <RemoveMemberBtn
+                    modalData={{
+                        name: getFirstName(data.memberName, {
+                            addSurname: true,
+                        }),
+                    }}
                 />
             </div>
         </section>

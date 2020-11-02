@@ -33,7 +33,7 @@ const handleSecHeading = (data, styles) => {
                 style={styles.dateBadge}
             >
                 <span className="text-small text-shadow font-weight-bold">
-                    Feito: {calendar(data.createdAt)}.
+                    Cadastro: {calendar(data.createdAt)}.
                 </span>
             </p>
         </section>
@@ -68,21 +68,15 @@ export default function AsyncCardsList() {
     // do not forget to include admin in this list in the register in DB
     const list = [
         {
-            clientName: "Augusta Silva",
-            clientScore: 150,
-            memberTask: "newScore",
             memberName: "Luis Febro Feitoza Lima",
             memberJob: "admin",
-            content: "",
+            content: "newClientTotal:30;newScoreTotal:12;",
             createdAt: new Date(),
         },
         {
-            clientName: "Augusta Silva",
-            clientScore: 250, // Cadastrou e pontuou: R$ 250.
-            memberTask: "newClient",
             memberName: "Adriana Oliveira da Silva",
             memberJob: "vendas",
-            content: "",
+            content: "newClientTotal:5;newScoreTotal:3;",
             createdAt: new Date(),
         },
     ];
@@ -95,14 +89,14 @@ export default function AsyncCardsList() {
     });
 
     // scoreAdded or registeredClient - task's desc will be handled in the backend .
-    const displayTask = (taskDesc = "100 Pontos Adicionados") => {
+    const displayMember = (memberName) => {
         return (
             <section className="d-flex">
                 <span
                     className={`position-relative  d-inline-block text-subtitle font-weight-bold text-shadow`}
                     style={{ lineHeight: "25px", top: 5 }}
                 >
-                    {taskDesc}
+                    {getFirstName(memberName, { addSurname: true })}
                 </span>
             </section>
         );
@@ -112,18 +106,15 @@ export default function AsyncCardsList() {
         const actions = list.map((data) => {
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayTask(data.taskDesc)}
+                    {displayMember(data.memberName)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}
                     >
                         <span className="main-font text-em-1 font-weight-bold">
-                            Pelo membro:
-                            <br />
-                            <span className="d-inline-block mt-1 font-weight-bold main-font text-em-1-2">
-                                {getFirstName(data.member, {
-                                    addSurname: true,
-                                })}
+                            Atuação:{" "}
+                            <span className="font-weight-bold main-font text-em-1-2">
+                                {data.memberJob}
                             </span>
                         </span>
                     </p>
