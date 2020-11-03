@@ -68,7 +68,7 @@ export default function AsyncCardsList() {
     // do not forget to include admin in this list in the register in DB
     const list = [
         {
-            memberName: "Luis Febro Feitoza Lima",
+            memberName: "Luis Febro Feitoza Lima", // it will be name
             memberJob: "admin",
             content: "newClientTotal:30;newScoreTotal:12;",
             createdAt: new Date(),

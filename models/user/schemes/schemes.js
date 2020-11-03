@@ -1,5 +1,57 @@
+// COMMON SCHEMES BETWEEN ROLES
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
+// NOTIFICATIONS
+const enumTypes = [
+    "welcome", // cliAdmin/cliUser
+    "challenge", // cliAdmin
+    "system", // cliAdmin/cliUser
+    "chatRequest", // future implementations...
+    "birthday", // cliAdmin/cliUser
+    "pro",
+    // "newClientsToday", // cliAdmin (deactivated)
+];
+
+const enumSubtypes = [
+    // CHALLENGES
+    "clientWonChall", // cliAdmin
+    "confirmedChall", // cliUser - sent after cli-admin confirm discounts scores
+    // BIRTHDAYS
+    "weeklyReport",
+    "greeting",
+    // SYSTEM
+    "newFeature",
+    "lowBalanceWarning", // e.g sms usage is about to end..
+    "promotion",
+    // PRO
+    "welcomeProPay", // backend
+    "proPay", // backend
+    "proNearExpiryDate", // frontend
+    "proExpiredDate", // frontend
+];
+
+const notificationsData = {
+    // recipient.id and senderId should be equal for all notifications from Fiddelize.
+    // recipient: { id: String (REQUIRED), role: (REQUIRED){ type: String, enum: ["cliAdmin", "cliUser"]}, name: String }, // this object format is just to fetch data, then a fucntion will organize data in the shape of this schema
+    cardType: { required: true, type: String, enum: [...enumTypes] }, // *
+    subtype: { type: String, enum: [...enumSubtypes] }, // *
+    content: { type: String }, // msgs for chat or infos about variable in such data format: key1:value1;key2:value2;
+    senderId: String, // for authorization verification and for chat request
+    senderName: {
+        default: "fiddelize",
+        type: String,
+        trim: true,
+        lowercase: true,
+    }, // only for chat request
+    isCardNew: { type: Boolean, default: true }, // When user visualize notif page, a new badge will be show and then it will be update as false
+    clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
+    isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead
+    createdAt: { type: Date, default: Date.now },
+};
+
+const NotificationsSchema = new Schema(notificationsData, { _id: true });
+// END NOTIFICATIONS
 
 const DefaultFilterSchema = {
     day: Number,
@@ -7,45 +59,6 @@ const DefaultFilterSchema = {
     month: String, // e.g m:9.y:2020 => month.year
     year: Number,
 };
-
-// SMS
-const contactListData = {
-    id: String,
-    name: String,
-    phone: String, //"(92) 99281-7363",
-    carrier: String, // operadora: oi, claro, tim, vivo, nextel
-    // This will handled in frontend status: { type: String,  enum: ["recebido", "enviando", "agendado", "falhou"]}
-};
-const ContactListSchema = new Schema(contactListData, { _id: false });
-
-const smsHistoryData = {
-    cardType: { type: String, default: "out", enum: ["out", "in"] },
-    sentMsgDesc: String, // description of the msg sent in this batch
-    totalSMS: Number, // length of contact list
-    firstContacts: Array, // the first 3 names from easy identification.
-    contactStatements: [ContactListSchema],
-    scheduledDate: Date,
-    isScheduled: Boolean,
-    isCanceled: Boolean,
-    isAutomatic: Boolean,
-    createdAt: { type: Date, default: Date.now },
-    filter: DefaultFilterSchema,
-};
-const SmsHistorySchema = new Schema(smsHistoryData, { _id: true });
-
-const smsAutomationData = {
-    serviceId: Number,
-    service: {
-        type: String,
-        enum: ["missingPurchase", "confirmedChall", "finishedChall"],
-    },
-    active: Boolean,
-    usage: { type: Number, default: 0 },
-    msg: String,
-    afterDay: Number,
-};
-const SmsAutomationSchema = new Schema(smsAutomationData, { _id: false });
-// END SMS
 
 // ORDERS
 const transStatusObj = {
@@ -91,34 +104,17 @@ const ordersData = {
 const OrdersSchema = new Schema(ordersData, { _id: true });
 // END ORDERS
 
-// BIZ PLAN
-const bizPlanListData = {
-    plan: { type: String, enum: ["ouro", "prata", "bronze"] },
-    service: {
-        type: String,
-        enum: [
-            "Novvos Clientes",
-            "Envvio Whatsapp",
-            "Orgganize Clientes",
-            "Prêmmios Clientes",
-        ],
-    },
-    // creditStart: Number, // For simplification reason, all creditable services will have decrescenting count discount directly from the bizPlanList' s creditEnd
-    creditEnd: Number, // max limit
-    usageTimeEnd: Date,
-    renewalHistory: Array, // e.g { ref: 123, date: dateFormat }
-    periodicityBr: { type: String, enum: ["mensal", "anual"] }, // monthly or yearly
+// where_what_description
+const onceCheckedData = {
+    cliAdminDash_feature_proSearch: Boolean, // avoid declare default false to not declare unessary fields to DB.
 };
-const BizPlanListSchema = new Schema(bizPlanListData, { _id: true });
-// END BIZ PLAN
+const OnceCheckedSchema = new Schema(onceCheckedData, { _id: false });
 
 module.exports = {
-    SmsHistorySchema,
-    SmsAutomationSchema,
-    // PendingRegistersSchema,
+    NotificationsSchema,
+    OnceCheckedSchema,
     DefaultFilterSchema,
     OrdersSchema,
-    BizPlanListSchema,
 };
 
 /*
