@@ -29,6 +29,8 @@ const {
 } = require("../../controllers/user/clients-session/recordedClients");
 
 const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
+const { setNewAccount } = require("../../controllers/user/account/account");
+
 // @route  api/user
 // RUD
 router.get("/:userId", read); // mwIsAuth JWT ERROR: jwt must be provided when log it
@@ -57,6 +59,8 @@ router.get("/check/user-challenges", gotUsersInThisChallenge);
 // IMAGES
 router.post("/image/upload", uploadImages);
 router.put("/image/update", updateImages);
+
+router.put("/account/set", setNewAccount);
 
 // FIELDS
 // Array Fields handled: none

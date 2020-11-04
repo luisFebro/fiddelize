@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "all-clients";
+const { roleTypes } = require("./schemes/roles/main");
 // const generatePlanCodes = require("../../utils/string/generateAlphaNumeric");
 const { DefaultFilterSchema } = require("./schemes");
 const {
@@ -15,7 +16,7 @@ const data = {
     role: {
         type: String,
         default: "cliente-admin",
-        enum: ["admin", "cliente-admin", "cliente"],
+        enum: [...roleTypes],
     },
     name: {
         type: String,
