@@ -84,6 +84,7 @@ function Login({
                 { bizCodeName },
                 { twoLastCpfDigits },
                 { rememberAccess: true },
+                { verifPass: verificationPass },
             ];
             setMultiVar(storeElems, store.user);
 

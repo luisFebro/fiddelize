@@ -33,6 +33,10 @@ export default function TypesHandler({ isNewMember = false }) {
     const [open, setOpen] = useState("quick"); // complete or quick
     const [formPayload, setFormPayload] = useState(null);
 
+    const whichAudience = () => {
+        return isNewMember ? "membro" : "cliente";
+    };
+
     const styles = getStyles();
 
     const handleOpen = (nameComp) => {
@@ -45,7 +49,6 @@ export default function TypesHandler({ isNewMember = false }) {
     };
 
     const handleTitle = () => {
-        if (!open) return "Adicionar pontos para cliente?";
         if (open === "complete") return "Cadastre agora";
         if (open === "quick") return "Envio de Convite";
     };
@@ -53,10 +56,12 @@ export default function TypesHandler({ isNewMember = false }) {
     const showTitle = () => {
         const thisIcon = open === "quick" ? "paper-plane" : "file-alt";
 
-        const quickTxt =
-            "Envie o convite com o link do seu app junto com o formulário de cadastro e deixe os clientes se cadastrarem direto do conforto de seus dispositivos.";
-        const completeTxt =
-            "É opcional, somente se o cliente precisar que faça todo cadastro na hora para ele. Após cadastro, envie para o cliente o link do app para acesso.";
+        const quickTxt = `Envie o convite com o link do seu app junto com o formulário de cadastro e deixe os ${whichAudience()}s se cadastrarem direto do conforto de seus dispositivos.`;
+        const completeTxt = `É opcional, somente se ${
+            isNewMember
+                ? "já tiver os dados para cadastrar agora os membros da sua equipe."
+                : "o cliente precisar que faça todo cadastro na hora para ele."
+        } Após cadastro, envie para o ${whichAudience()} o link do app para acesso.`;
         const thisInfo = open === "quick" ? quickTxt : completeTxt;
 
         return (

@@ -14,6 +14,8 @@ import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
 import { regulationText } from "../regulationText";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
+import { setVar, store } from "../../../hooks/storage/useVar";
+
 const isSmall = window.Helper.isSmallScreen();
 
 export default function ShowPasswordForm({
@@ -107,11 +109,17 @@ export default function ShowPasswordForm({
         updateUser(dispatch, dataToSend, businessId).then((res) => {
             if (res.status !== 200)
                 return showSnackbar(dispatch, res.data.msg, "error");
-            if (isFromCliAdminDash) {
-                showSnackbar(dispatch, "Senha foi alterada!", "success");
-            } else {
-                btnAction(true);
-            }
+
+            setVar(
+                { verifPass: clientAdminData.verificationPass },
+                store.user
+            ).then((res) => {
+                if (isFromCliAdminDash) {
+                    showSnackbar(dispatch, "Senha foi alterada!", "success");
+                } else {
+                    btnAction(true);
+                }
+            });
         });
     };
 

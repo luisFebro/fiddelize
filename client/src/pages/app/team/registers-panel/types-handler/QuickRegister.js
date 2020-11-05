@@ -25,6 +25,7 @@ import EmailIcon from "@material-ui/icons/Email";
 import { handleFocus } from "../../../../../utils/form/handleFocus";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import usePro from "../../../../../hooks/pro/usePro";
+import useData from "../../../../../hooks/useData";
 
 const Async = Load({
     loader: () =>
@@ -88,6 +89,10 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const styles = getStyles();
     const dispatch = useStoreDispatch();
 
+    const [verifPass] = useData(["verifPass"], {
+        trigger: isNewMember ? true : false,
+    });
+
     const { businessId } = useAppSystem();
     const { bizName, bizCodeName } = useClientAdmin();
     const { name: userName } = useProfile();
@@ -126,9 +131,9 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     useEffect(() => {
         const handleTxt = () => {
             if (isNewMember) {
-                return `${name.toUpperCase()}, segue o app de fidelidade para membros da ${
+                return `Segue o app de fidelidade para membros da ${
                     bizName && bizName.toUpperCase()
-                }. Acesse o link: ${downloadLink}`;
+                }. Acesse: ${downloadLink} | Senha: ${verifPass}`;
             } else {
                 return `${name.toUpperCase()}, segue convite para o programa de fidelidade da ${
                     bizName && bizName.toUpperCase()
@@ -316,6 +321,19 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                         </p>
                     )}
                 </main>
+                {isNewMember && name && (
+                    <p className="font-weight-bold mx-3 my-3 text-small text-purple">
+                        <strong className="font-weight-bold text-normal text-purple">
+                            Notas:
+                        </strong>
+                        <br />
+                        - Sua senha de verificação compras é a mesma para os
+                        membros acessar o app.
+                        <br />
+                        <br />- Você pode trocar a qualquer momento em ajustes >
+                        senhas > senha de verificação
+                    </p>
+                )}
             </section>
         );
 
