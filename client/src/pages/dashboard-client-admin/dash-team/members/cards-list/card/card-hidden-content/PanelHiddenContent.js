@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreState } from "easy-peasy";
-import extractStrData from "../../../../../../../utils/string/extractStrData";
 import RemoveMemberBtn from "./cta/RemoveMemberBtn";
 import SeeProfileBtn from "./cta/SeeProfileBtn";
 import getFirstName from "../../../../../../../utils/string/getFirstName";
@@ -22,7 +21,7 @@ function PanelHiddenContent({ history, data }) {
 
     const styles = getStyles();
 
-    const { newClientTotal, newScoreTotal } = extractStrData(data.content);
+    const { newClientTotal, newScoreTotal } = data;
 
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">

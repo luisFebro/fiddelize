@@ -1,20 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import CloseButton from '../buttons/CloseButton';
-import RadiusBtn from '../buttons/RadiusBtn';
-import Dialog from '@material-ui/core/Dialog';
-import { useRunComp } from '../../hooks/useRunComp';
-import ButtonMulti from '../../components/buttons/material-ui/ButtonMulti';
+import React from "react";
+import PropTypes from "prop-types";
+import CloseButton from "../buttons/CloseButton";
+import RadiusBtn from "../buttons/RadiusBtn";
+import Dialog from "@material-ui/core/Dialog";
+import { useRunComp } from "../../hooks/useRunComp";
+import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
 
 ModalFullContent.propTypes = {
     contentComp: PropTypes.node,
     setFullOpen: PropTypes.func,
     style: PropTypes.object,
-}
+};
 
-const getStyles = ({ needIndex }) => ({ // assign as false when you need to open other modals above this component like calendar dialog
+const getStyles = ({ needIndex }) => ({
+    // assign as false when you need to open other modals above this component like calendar dialog
     root: {
-        zIndex: needIndex ? 3000 : 15, overflowX: 'hidden',
+        zIndex: needIndex ? 3000 : 15,
+        overflowX: "hidden",
     },
 });
 
@@ -27,23 +29,30 @@ export default function ModalFullContent({
     exitBtn,
     showBackBtn = false,
     needIndex = true,
+    backgroundColor,
 }) {
     const { runName } = useRunComp();
 
     const styles = getStyles({ needIndex });
 
     const handleOpen = () => {
-        if(runName === "closeModalFullContent") return false;
+        if (runName === "closeModalFullContent") return false;
         return fullOpen;
-    }
+    };
 
     const handleModalClose = () => {
-        setFullOpen(prevStatus => !prevStatus);
-    }
+        setFullOpen((prevStatus) => !prevStatus);
+    };
 
     return (
         <Dialog
-            PaperProps={{ style: {backgroundColor: 'var(--mainWhite)', maxWidth: '500px', overflowX: 'hidden'}}}
+            PaperProps={{
+                style: {
+                    backgroundColor: backgroundColor || "var(--mainWhite)",
+                    maxWidth: "500px",
+                    overflowX: "hidden",
+                },
+            }}
             maxWidth="md"
             fullWidth
             style={styles.root}
@@ -54,8 +63,7 @@ export default function ModalFullContent({
             onScroll={null}
         >
             {contentComp}
-            {exitBtn === "text"
-            ? (
+            {exitBtn === "text" ? (
                 <RadiusBtn
                     position="fixed"
                     onClick={setFullOpen}

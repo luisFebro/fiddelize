@@ -1,35 +1,35 @@
 import React, { useState, useEffect } from "react";
-import AsyncShowNewContactForm from "../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import generateAppDownloadLink from "../../../../utils/biz/generateAppDownloadLink";
+import AsyncShowNewContactForm from "../../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import generateAppDownloadLink from "../../../../../utils/biz/generateAppDownloadLink";
 import {
     useProfile,
     useClientAdmin,
     useAppSystem,
-} from "../../../../hooks/useRoleData";
-import validatePhone from "../../../../utils/validation/validatePhone";
-import validateEmail from "../../../../utils/validation/validateEmail";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+} from "../../../../../hooks/useRoleData";
+import validatePhone from "../../../../../utils/validation/validatePhone";
+import validateEmail from "../../../../../utils/validation/validateEmail";
+import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
-import convertPhoneStrToInt from "../../../../utils/numbers/convertPhoneStrToInt";
-import useCheckBalance from "../../../../hooks/sms/useCheckBalance";
-import ModalFullContent from "../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../components/code-splitting/LoadableComp";
-import sendSMS from "../../../../hooks/sms/sendSMS";
-import { getUniqueId } from "../../../../hooks/api/useAPI";
+import convertPhoneStrToInt from "../../../../../utils/numbers/convertPhoneStrToInt";
+import useCheckBalance from "../../../../../hooks/sms/useCheckBalance";
+import ModalFullContent from "../../../../../components/modals/ModalFullContent";
+import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import sendSMS from "../../../../../hooks/sms/sendSMS";
+import { getUniqueId } from "../../../../../hooks/api/useAPI";
 import SuccessOp from "./SuccessOp";
-import useCount from "../../../../hooks/useCount";
+import useCount from "../../../../../hooks/useCount";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import EmailIcon from "@material-ui/icons/Email";
-import { handleFocus } from "../../../../utils/form/handleFocus";
-import PremiumButton from "../../../../components/buttons/premium/PremiumButton";
-import usePro from "../../../../hooks/pro/usePro";
+import { handleFocus } from "../../../../../utils/form/handleFocus";
+import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
+import usePro from "../../../../../hooks/pro/usePro";
 
 const Async = Load({
     loader: () =>
         import(
-            "../../../dashboard-client-admin/dash-sms/message/denial-modal/AsyncNoCredits" /* webpackChunkName: "denial-page-lazy", webpackMode: "lazy", webpackIgnore: false */
+            "../../../../dashboard-client-admin/dash-sms/message/denial-modal/AsyncNoCredits" /* webpackChunkName: "denial-page-lazy", webpackMode: "lazy", webpackIgnore: false */
         ),
 });
 
@@ -60,14 +60,16 @@ const getSmsObj = ({ businessId, dispatch, name, meanPayload }) => ({
     contactList: [{ name: name, phone: meanPayload }],
 });
 
-export default function QuickRegister({ formPayload }) {
+export default function QuickRegister({ formPayload, isNewMember }) {
     useCount("QuickRegister");
     const [data, setData] = useState({
         meanPayload: "",
-        meanType: "",
+        meanType: "", // number or email
         name: "",
-    }); // number or email
-    const { meanPayload, meanType, name } = data; // meanType = number, email
+        job: "", // for team members only
+    });
+
+    const { meanPayload, meanType, name, job } = data; // meanType = number, email
     const [msg, setMsg] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
     const [clearForm, setClearForm] = useState(false);
@@ -92,6 +94,11 @@ export default function QuickRegister({ formPayload }) {
 
     const smsBalance = useCheckBalance();
 
+    const whichAudience = () => {
+        if (isNewMember) return "membro";
+        return "cliente";
+    };
+
     const handleSuccessOp = (title, ctaFunc, status, newOne) => {
         setSuccessOpData({
             successOp: status,
@@ -105,20 +112,39 @@ export default function QuickRegister({ formPayload }) {
         setFullOpen(false);
     };
 
-    const downloadLink = generateAppDownloadLink({ bizCodeName, name });
+    const appType = isNewMember ? "member" : undefined;
+    const payload = {
+        jobRole: job,
+        appType,
+    };
+    const downloadLink = generateAppDownloadLink({
+        bizCodeName,
+        name,
+        payload,
+    });
 
     useEffect(() => {
+        const handleTxt = () => {
+            if (isNewMember) {
+                return `${name.toUpperCase()}, segue o app de fidelidade para membros da ${
+                    bizName && bizName.toUpperCase()
+                }. Acesse o link: ${downloadLink}`;
+            } else {
+                return `${name.toUpperCase()}, segue convite para o programa de fidelidade da ${
+                    bizName && bizName.toUpperCase()
+                }. Acesse seu link exclusivo: ${downloadLink}`;
+            }
+        };
+
         if (name) {
-            const text = `${name.toUpperCase()}, segue convite para o programa de fidelidade da ${
-                bizName && bizName.toUpperCase()
-            }. Acesse seu link exclusivo: ${downloadLink}`;
+            const text = handleTxt();
             setMsg(text);
         }
     }, [name]);
 
     const handleMeanData = (data) => {
-        const { meanPayload, meanType, name } = data;
-        setData({ meanPayload, meanType, name });
+        const { meanPayload, meanType, name, job } = data;
+        setData({ meanPayload, meanType, name, job });
         setSuccessOpData({ ...successOpData, newOne: false });
     };
 
@@ -136,11 +162,15 @@ export default function QuickRegister({ formPayload }) {
         if (!name)
             return showSnackbar(
                 dispatch,
-                "Insira primeiro nome do cliente",
+                `Insira primeiro nome do ${whichAudience()}`,
                 "error"
             );
         if (!number)
-            return showSnackbar(dispatch, "Insira contato do cliente", "error");
+            return showSnackbar(
+                dispatch,
+                `Insira contato do ${whichAudience()}`,
+                "error"
+            );
         if (!validatePhone(number))
             return showSnackbar(
                 dispatch,
@@ -186,7 +216,7 @@ export default function QuickRegister({ formPayload }) {
         if (!name)
             return showSnackbar(
                 dispatch,
-                "Insira primeiro nome do cliente",
+                `Insira primeiro nome do ${whichAudience()}`,
                 "error"
             );
         if (!validateEmail(email))
@@ -281,8 +311,8 @@ export default function QuickRegister({ formPayload }) {
                         </p>
                     ) : (
                         <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
-                            {userName.cap()}, no aguardo do nome do cliente e um
-                            meio de envio...
+                            {userName.cap()}, no aguardo do nome do{" "}
+                            {whichAudience()} e um modo de envio...
                         </p>
                     )}
                 </main>
@@ -299,6 +329,7 @@ export default function QuickRegister({ formPayload }) {
             <div className="my-5">
                 <AsyncShowNewContactForm
                     isQuickRegister={true}
+                    isNewMember={isNewMember}
                     entryAnimation="animated fadeInUp"
                     clearForm={clearForm}
                     handleMeanData={handleMeanData}

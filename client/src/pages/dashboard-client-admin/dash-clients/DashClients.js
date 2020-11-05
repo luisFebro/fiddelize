@@ -49,7 +49,7 @@ export default function DashClients() {
             />
             <AsyncRankingPondium />
             <Title
-                title="&#187; Histórico de Cadastro"
+                title="&#187; Histórico de Clientes"
                 color="var(--themeP)"
                 margin=""
             />

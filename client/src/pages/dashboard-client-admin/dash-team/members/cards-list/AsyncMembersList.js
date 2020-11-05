@@ -12,6 +12,8 @@ import useAPIList, {
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../hooks/api/useElemDetection";
+import useElemShowOnScroll from "../../../../../hooks/scroll/useElemShowOnScroll";
+import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -47,6 +49,22 @@ export default function AsyncCardsList() {
 
     const styles = getStyles();
 
+    const showCTA = useElemShowOnScroll("#showNewCTA");
+    const showFixedCTA = () =>
+        showCTA && (
+            <section
+                className="animated fadeInUp"
+                style={{ position: "fixed", bottom: "10px", right: "10px" }}
+            >
+                <RegisterPanelBtn
+                    title="Novo Membro"
+                    isNewMember={true}
+                    needTeamApp={false}
+                    size="medium"
+                />
+            </section>
+        );
+
     const params = { userId: businessId, skip };
 
     const {
@@ -68,15 +86,17 @@ export default function AsyncCardsList() {
     // do not forget to include admin in this list in the register in DB
     const list = [
         {
-            memberName: "Luis Febro Feitoza Lima", // it will be name
+            name: "Luis Febro Feitoza Lima", // it will be name
             memberJob: "admin",
-            content: "newClientTotal:30;newScoreTotal:12;",
+            newClientTotal: 30,
+            newScoreTotal: 12,
             createdAt: new Date(),
         },
         {
-            memberName: "Adriana Oliveira da Silva",
+            name: "Adriana Oliveira da Silva",
             memberJob: "vendas",
-            content: "newClientTotal:5;newScoreTotal:3;",
+            newClientTotal: 5,
+            newScoreTotal: 3,
             createdAt: new Date(),
         },
     ];
@@ -106,7 +126,7 @@ export default function AsyncCardsList() {
         const actions = list.map((data) => {
             const mainHeading = (
                 <section className="d-flex flex-column align-self-start">
-                    {displayMember(data.memberName)}
+                    {displayMember(data.name)}
                     <p
                         className="m-0 mt-4 text-normal text-shadow font-weight-bold"
                         style={{ lineHeight: "25px" }}
@@ -135,14 +155,16 @@ export default function AsyncCardsList() {
         });
 
         return (
-            <MembersCard
-                detectedCard={detectedCard}
-                checkDetectedElem={checkDetectedElem}
-                actions={actions}
-                backgroundColor="var(--themePLight)"
-                color="white"
-                needToggleButton={true}
-            />
+            <section id="showNewCTA">
+                <MembersCard
+                    detectedCard={detectedCard}
+                    checkDetectedElem={checkDetectedElem}
+                    actions={actions}
+                    backgroundColor="var(--themePLight)"
+                    color="white"
+                    needToggleButton={true}
+                />
+            </section>
         );
     };
 
@@ -156,6 +178,7 @@ export default function AsyncCardsList() {
             {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
             <ShowOverMsg />
+            {showFixedCTA()}
         </Fragment>
     );
 }

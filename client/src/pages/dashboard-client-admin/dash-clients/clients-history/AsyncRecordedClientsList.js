@@ -471,7 +471,12 @@ export default function AsyncRecordedClientsList() {
                 className="animated fadeInUp"
                 style={{ position: "fixed", bottom: "10px", right: "10px" }}
             >
-                <RegisterPanelBtn title="Novo Cadastro" size="medium" />
+                <RegisterPanelBtn
+                    title="Novo Cadastro"
+                    size="medium"
+                    isCliAdmin={true}
+                    needTeamApp={true}
+                />
             </section>
         );
 

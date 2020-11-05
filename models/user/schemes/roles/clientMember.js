@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 const { NotificationsSchema } = require("../schemes.js");
 
 const clientMemberData = {
-    memberJob: String, // Vendas, Atendimento, Caixa, Divulgação
+    memberJob: String, // vendas, atendimento, caixa, gerência
     newClientTotal: { type: Number, default: 0 },
     newScoreTotal: { type: Number, default: 0 },
+    // content: String,
     notifications: [NotificationsSchema],
 };
 

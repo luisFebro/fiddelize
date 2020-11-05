@@ -10,10 +10,10 @@ import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../redux/actions/globalActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function ReturnBtn({ location, icon = "home", onClick }) {
+function ReturnBtn({ location, icon = "home", onClick, toAdminDash }) {
     const { bizCodeName } = useClientAdmin();
 
-    const isCliAdmin = location.search === "?cliente-admin=1";
+    const isCliAdmin = toAdminDash || location.search === "?cliente-admin=1";
 
     const dispatch = useStoreDispatch();
     const isFunc = typeof onClick === "function";

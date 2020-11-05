@@ -1,41 +1,89 @@
-import React, { useState } from 'react';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import ModalFullContent from '../../../../../components/modals/ModalFullContent';
-import { Load } from '../../../../../components/code-splitting/LoadableComp';
+import React, { useState } from "react";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "../../../../../components/modals/ModalFullContent";
+import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
-const Async = Load({ loading: true, loader: () => import('../../../../dashboard-staff/registers-panel/RegistersPanel' /* webpackChunkName: "news-panel-lazy" */)});
+const AsyncNewRegister = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "../../../../app/team/registers-panel/RegistersPanel" /* webpackChunkName: "new-member-or-customer-register-page-lazy" */
+        ),
+});
+
+const AsyncTeamApp = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "../../../../app/team/TeamApp" /* webpackChunkName: "team-app-lazy" */
+        ),
+});
+
+const muStyle = {
+    transform: "scale(1.5)",
+    color: "#fff",
+    filter: "drop-shadow(.1px .1px .9px grey)",
+};
+
+const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 
 export default function RegisterPanelBtn({
     title = "CADASTRE O PRIMEIRO",
     size = "large",
+    needPlusIcon = false, // for team app's btn
+    needTeamApp = false,
+    isNewMember = false,
+    isCliAdmin = false,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
         setFullOpen(true);
-    }
+    };
 
     const handleFullClose = () => {
         setFullOpen(false);
-    }
+    };
 
-    const AsyncRegisterPanel = <Async />
+    const AsyncComp = needTeamApp ? (
+        <AsyncTeamApp isCliAdmin={isCliAdmin} />
+    ) : (
+        <AsyncNewRegister isNewMember={isNewMember} />
+    );
 
     return (
         <section>
-            <ButtonFab
-                size={size}
-                title={title}
-                position="relative"
-                onClick={handleFullOpen}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
-            />
+            {needPlusIcon ? (
+                <ButtonFab
+                    size={size}
+                    title={title}
+                    backgroundColor="var(--themeSDark--default)"
+                    onClick={handleFullOpen}
+                    iconMu={PlusIcon}
+                    position="relative"
+                    variant="extended"
+                />
+            ) : (
+                <ButtonFab
+                    size={size}
+                    title={title}
+                    position="relative"
+                    onClick={handleFullOpen}
+                    backgroundColor="var(--themeSDark--default)"
+                    variant="extended"
+                />
+            )}
             <ModalFullContent
-                contentComp={AsyncRegisterPanel}
+                contentComp={AsyncComp}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
                 needIndex={false}
+                backgroundColor={
+                    needTeamApp
+                        ? "var(--themeBackground--purple)"
+                        : "var(--mainWhite)"
+                }
             />
         </section>
     );

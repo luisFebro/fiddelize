@@ -83,6 +83,7 @@ export default function AsyncShowNewContactForm({
     clearForm,
     entryAnimation,
     loadData,
+    isNewMember,
 }) {
     const [data, setData] = useState({
         name: "",
@@ -91,14 +92,16 @@ export default function AsyncShowNewContactForm({
     const { name, phone } = data;
     const [dataMean, setDataMean] = useState({
         selectedMean: "number",
+        job: "vendas", // only for team members
         email: null,
     });
-    const { selectedMean, email } = dataMean;
+    const { selectedMean, email, job } = dataMean;
     const [error, setError] = useState(null);
     const [readyMean, setReadyMean] = useState(false);
 
     useEffect(() => {
-        const needTransfer = loadData && selectedMean !== "selecione um meio:";
+        // transfer: set data to the parent component
+        const needTransfer = loadData && selectedMean !== "selecione um modo:";
 
         if (loadData && !needTransfer) {
             const {
@@ -115,6 +118,7 @@ export default function AsyncShowNewContactForm({
                 meanType: selectedMean,
                 meanPayload: selectedMean === "number" ? phone : email,
                 name,
+                job,
             });
         }
     }, [loadData, selectedMean]);
@@ -152,9 +156,10 @@ export default function AsyncShowNewContactForm({
                 meanType: selectedMean,
                 meanPayload: mean,
                 name,
+                job,
             });
         }
-    }, [isQuickRegister, readyMean, selectedMean, email, phone, name]);
+    }, [isQuickRegister, readyMean, selectedMean, email, phone, name, job]);
     const needPhoneField = !isQuickRegister || selectedMean === "number";
     const needEmailField = selectedMean === "email";
 
@@ -230,6 +235,7 @@ export default function AsyncShowNewContactForm({
                     InputProps={getAdornmentIcon(<AccountCircle />, styles)}
                 />
             </div>
+
             {isQuickRegister && (
                 <section className="my-4">
                     Modo de Envio
@@ -241,7 +247,9 @@ export default function AsyncShowNewContactForm({
                             handleChange(setDataMean)(e);
                             handleEvents(e, {
                                 onlyFocus: true,
-                                field: "selectedOpt",
+                                field: isNewMember
+                                    ? "selectedJob"
+                                    : "selectedOpt",
                             });
                             setReadyMean(false);
                         }}
@@ -259,11 +267,51 @@ export default function AsyncShowNewContactForm({
                                     fontFamily: "Poppins, sans-serif",
                                 }}
                             >
-                                selecione um meio:
+                                selecione um modo:
                             </span>
                         </MenuItem>
                         <MenuItem value={"number"}>Número de Contato</MenuItem>
                         <MenuItem value={"email"}>Email</MenuItem>
+                    </Select>
+                </section>
+            )}
+
+            {isQuickRegister && isNewMember && (
+                <section className="my-4">
+                    Área de Atuação
+                    <Select
+                        margin="dense"
+                        labelId="selectedMean"
+                        id="selectedJob"
+                        onChange={(e) => {
+                            handleChange(setDataMean)(e);
+                            handleEvents(e, {
+                                onlyFocus: true,
+                                field: "selectedOpt",
+                            });
+                            setReadyMean(false);
+                        }}
+                        name="job"
+                        fullWidth
+                        value={job}
+                        variant="outlined"
+                        style={{ backgroundColor: "var(--mainWhite)" }}
+                    >
+                        <MenuItem value={job}>
+                            <span
+                                className="text-p text-normal"
+                                style={{
+                                    fontSize: isSmall ? "1.1em" : "",
+                                    fontFamily: "Poppins, sans-serif",
+                                }}
+                            >
+                                selecione atuação:
+                            </span>
+                        </MenuItem>
+                        <MenuItem value={"vendas"}>Vendas</MenuItem>
+                        <MenuItem value={"atendimento"}>Atendimento</MenuItem>
+                        <MenuItem value={"caixa"}>Caixa</MenuItem>
+                        <MenuItem value={"gerência"}>Gerência</MenuItem>
                     </Select>
                 </section>
             )}

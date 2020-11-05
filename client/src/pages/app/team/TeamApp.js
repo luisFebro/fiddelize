@@ -1,20 +1,13 @@
 import React, { Fragment } from "react";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import useData from "../../../hooks/useData";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
+import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 import "./_TeamApp.scss";
-
-export const AsyncBellNotifBtn = Load({
-    loading: false,
-    loader: () =>
-        import(
-            "../../../components/notification/BellNotifBtn" /* webpackChunkName: "bell-notif-team-lazy" */
-        ),
-});
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 const muStyle = {
     transform: "scale(1.5)",
@@ -24,7 +17,15 @@ const muStyle = {
 
 const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 
-export default function TeamApp() {
+export const AsyncBellNotifBtn = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "../../../components/notification/BellNotifBtn" /* webpackChunkName: "bell-notif-team-lazy" */
+        ),
+});
+
+export default function TeamApp({ isCliAdmin = true }) {
     const [firstName] = useData(["firstName"]);
 
     const {
@@ -97,13 +98,13 @@ export default function TeamApp() {
     );
 
     const showCTAs = () => (
-        <section className="animated fadeInUp delay-1s my-5 container-center">
-            <div className="text-center">
-                <h2 className="m-0 text-left text-title text-white">
+        <section className="animated fadeInUp delay-1s my-5 container-center-col">
+            <div>
+                <h2 className="m-0 text-center text-title text-white">
                     {firstName},{" "}
                     {getDayGreetingBr({ lowercase: true, lateHours: false })}!
                 </h2>
-                <h2 className="text-subtitle text-white font-weight-bold">
+                <h2 className="text-center animated fadeIn delay-2s text-subtitle text-white font-weight-bold">
                     o que cadastrar?
                 </h2>
             </div>
@@ -118,15 +119,7 @@ export default function TeamApp() {
                     size="large"
                 />
                 <div className="ml-3">
-                    <ButtonFab
-                        title="CLIENTE"
-                        backgroundColor="var(--themeSDark--default)"
-                        onClick={null}
-                        iconMu={PlusIcon}
-                        position="relative"
-                        variant="extended"
-                        size="large"
-                    />
+                    <RegisterPanelBtn title="CLIENTE" needPlusIcon={true} />
                 </div>
             </section>
         </section>
@@ -134,12 +127,14 @@ export default function TeamApp() {
 
     return (
         <Fragment>
-            {showNotifBell()}
+            {!isCliAdmin && showNotifBell()}
             {showMainAppTitle()}
             {showCTAs()}
-            <section className="animated zoomIn delay-3s">
-                <TeamSpeedDialBtn sColor={sColor} />
-            </section>
+            {!isCliAdmin && (
+                <section className="animated zoomIn delay-3s">
+                    <TeamSpeedDialBtn sColor={sColor} />
+                </section>
+            )}
         </Fragment>
     );
 }

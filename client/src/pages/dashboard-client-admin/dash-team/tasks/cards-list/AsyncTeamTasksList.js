@@ -14,6 +14,8 @@ import useAPIList, {
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../hooks/api/useElemDetection";
+import useElemShowOnScroll from "../../../../../hooks/scroll/useElemShowOnScroll";
+import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -48,6 +50,23 @@ export default function AsyncCardsList() {
     const { businessId } = useAppSystem();
 
     const styles = getStyles();
+
+    const showCTA = useElemShowOnScroll("#showNewCTA");
+
+    const showFixedCTA = () =>
+        showCTA && (
+            <section
+                className="animated fadeInUp"
+                style={{ position: "fixed", bottom: "10px", right: "10px" }}
+            >
+                <RegisterPanelBtn
+                    title="Novo Membro"
+                    isNewMember={true}
+                    needTeamApp={false}
+                    size="medium"
+                />
+            </section>
+        );
 
     const params = { userId: businessId, skip };
 
@@ -153,14 +172,16 @@ export default function AsyncCardsList() {
         });
 
         return (
-            <TeamTasksCard
-                detectedCard={detectedCard}
-                checkDetectedElem={checkDetectedElem}
-                actions={actions}
-                backgroundColor="var(--themePLight)"
-                color="white"
-                needToggleButton={true}
-            />
+            <section id="showNewCTA">
+                <TeamTasksCard
+                    detectedCard={detectedCard}
+                    checkDetectedElem={checkDetectedElem}
+                    actions={actions}
+                    backgroundColor="var(--themePLight)"
+                    color="white"
+                    needToggleButton={true}
+                />
+            </section>
         );
     };
 
@@ -201,6 +222,7 @@ export default function AsyncCardsList() {
             {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
             <ShowOverMsg />
+            {showFixedCTA()}
         </Fragment>
     );
 }
