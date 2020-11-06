@@ -46,9 +46,12 @@ export default function OptionHandler() {
             </div>
             {option === "members" && (
                 <div className="mt-5 animated fadeIn delay-1s d-flex justify-content-end">
-                    <Link className="no-text-decoration" to="/app/equipe">
+                    <Link
+                        className="no-text-decoration"
+                        to="/app/equipe?modo-prev=1"
+                    >
                         <ButtonFab
-                            title="App"
+                            title="App Equipe"
                             backgroundColor="var(--themeSDark--default)"
                             onClick={null}
                             position="relative"

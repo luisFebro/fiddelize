@@ -213,9 +213,7 @@ export default function AsyncShowNewContactForm({
                         handleEvents(e, {
                             setData,
                             newValue: name.cap(),
-                            field: isQuickRegister
-                                ? "fieldMean"
-                                : "selectedOpt",
+                            field: "selectedOpt", // i am omitting this because if user jump to the last field, it will focus back on the second field.
                         })
                     }
                     onBlur={(e) =>
@@ -223,9 +221,7 @@ export default function AsyncShowNewContactForm({
                             setData,
                             newValue: name.cap(),
                             eventName: "blur",
-                            field: isQuickRegister
-                                ? "fieldMean"
-                                : "selectedOpt",
+                            field: "selectedOpt", // this is the essential fields which can be either phone or email in this form.
                         })
                     }
                     autoComplete="off"

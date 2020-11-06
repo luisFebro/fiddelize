@@ -5,17 +5,12 @@ import { Load } from "../../../components/code-splitting/LoadableComp";
 import useData from "../../../hooks/useData";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
-import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 import "./_TeamApp.scss";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-
-const muStyle = {
-    transform: "scale(1.5)",
-    color: "#fff",
-    filter: "drop-shadow(.1px .1px .9px grey)",
-};
-
-const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
+import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
+import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
+import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
+import useBackColor from "../../../hooks/useBackColor";
+import ReturnButton from "../../../components/buttons/ReturnBtn";
 
 export const AsyncBellNotifBtn = Load({
     loading: false,
@@ -25,20 +20,30 @@ export const AsyncBellNotifBtn = Load({
         ),
 });
 
-export default function TeamApp({ isCliAdmin = true }) {
+export default function TeamApp({ location, isCliAdmin = true }) {
     const [firstName] = useData(["firstName"]);
+
+    const isPreviewMode = location.search.includes("modo-prev=1");
 
     const {
         selfBizLogoImg: bizLogo,
         selfThemeBackColor: backColor,
         selfThemeSColor: sColor,
+        selfThemePColor: pColor,
     } = useClientAdmin();
+
+    useBackColor(`var(--themeBackground--${backColor})`);
+    const txtColor = selectTxtStyle(backColor);
 
     const showNotifBell = () => {
         const displayBack = () => (
             <section
                 className="back"
-                style={{ background: "var(--themePDark--default)" }}
+                style={{
+                    background: `var(--themeP${
+                        backColor === "black" ? "Light" : "Dark"
+                    }--${pColor})`,
+                }}
             ></section>
         );
 
@@ -83,9 +88,11 @@ export default function TeamApp({ isCliAdmin = true }) {
                 />
             </div>
             <h1
-                className="d-table main-font text-em-1-8 text-center font-weight-bold text-white text-pill"
+                className={`d-table main-font text-em-1-8 text-center font-weight-bold ${txtColor} text-pill`}
                 style={{
-                    background: "var(--themePDark--default)",
+                    background: `var(--themeP${
+                        backColor === "black" ? "Light" : "Dark"
+                    }--${pColor})`,
                     padding: "8px 20px",
                     lineHeight: "35px",
                 }}
@@ -100,37 +107,47 @@ export default function TeamApp({ isCliAdmin = true }) {
     const showCTAs = () => (
         <section className="animated fadeInUp delay-1s my-5 container-center-col">
             <div>
-                <h2 className="m-0 text-center text-title text-white">
+                <h2 className={`m-0 text-center text-title ${txtColor}`}>
                     {firstName},{" "}
                     {getDayGreetingBr({ lowercase: true, lateHours: false })}!
                 </h2>
-                <h2 className="text-center animated fadeIn delay-2s text-subtitle text-white font-weight-bold">
+                <h2
+                    className={`text-center animated fadeIn delay-2s text-subtitle ${txtColor} font-weight-bold`}
+                >
                     o que cadastrar?
                 </h2>
             </div>
             <section className="animated fadeIn delay-2s mt-4 container-center">
-                <ButtonFab
-                    title="PONTOS"
-                    backgroundColor="var(--themeSDark--default)"
-                    onClick={null}
-                    iconMu={PlusIcon}
-                    position="relative"
-                    variant="extended"
-                    size="large"
-                />
+                <AddNewScoreBtn backColor={backColor} sColor={sColor} />
                 <div className="ml-3">
-                    <RegisterPanelBtn title="CLIENTE" needPlusIcon={true} />
+                    <RegisterPanelBtn
+                        title="CLIENTE"
+                        needPlusIcon={true}
+                        backColor={backColor}
+                        sColor={sColor}
+                    />
                 </div>
             </section>
         </section>
     );
 
+    const showBackAdminBtn = () => (
+        <section className="position-absolute" style={{ left: 10, top: 10 }}>
+            <ReturnButton
+                toAdminDash={true}
+                icon="arrow-left"
+                btnColor={sColor}
+            />
+        </section>
+    );
+
     return (
         <Fragment>
-            {!isCliAdmin && showNotifBell()}
+            {isPreviewMode && showBackAdminBtn()}
+            {(isPreviewMode || !isCliAdmin) && showNotifBell()}
             {showMainAppTitle()}
             {showCTAs()}
-            {!isCliAdmin && (
+            {(isPreviewMode || !isCliAdmin) && (
                 <section className="animated zoomIn delay-3s">
                     <TeamSpeedDialBtn sColor={sColor} />
                 </section>

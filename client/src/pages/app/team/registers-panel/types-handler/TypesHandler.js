@@ -118,7 +118,6 @@ export default function TypesHandler({ isNewMember = false }) {
         <section>
             {showTitle()}
             {showSwitchBtnLeft()}
-            {/*showCTAs()*/}
 
             {open === "complete" && (
                 <CompleteRegister

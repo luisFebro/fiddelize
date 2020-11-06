@@ -257,7 +257,7 @@ function ClientMobileApp({ location, history }) {
     const conditionShowAppBubble =
         (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) ||
         gotEmptyData ||
-        role === "cliente-admin";
+        (role === "cliente-admin" && !needAppForCliAdmin);
 
     const handleRoleName = () => {
         if (loadingAccess) return "";

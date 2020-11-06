@@ -20,6 +20,7 @@ import useElemShowOnScroll from "../../hooks/scroll/useElemShowOnScroll";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 import useBackColor from "../../hooks/useBackColor";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
+import ClientMemberText from "./app-type-texts/ClientMemberText";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -61,6 +62,7 @@ export default function DownloadApp({ match, location }) {
     const backColor = getQueryByName("bc", location.search);
     const pColor = getQueryByName("pc", location.search);
 
+    const isTeamMember = getQueryByName("mj", location.search); // mj = memberJob
     const isClientAdmin = location.search.includes("admin=1");
     const isFromAdminPanel = location.search.includes("painel=1");
     const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
@@ -260,7 +262,7 @@ export default function DownloadApp({ match, location }) {
                 </div>
             </section>
             <p
-                className={`pl-3 text-center text-hero`}
+                className={`px-2 text-center text-hero`}
                 style={{ lineHeight: 1 }}
             >
                 {userName ? (
@@ -272,7 +274,7 @@ export default function DownloadApp({ match, location }) {
                     <span>Caro cliente,</span>
                 )}
             </p>
-            <div className="ml-2">
+            <div className="mx-2">
                 {isClientUser && (
                     <Fragment>
                         <p>Você foi convidado(a) para baixar o app da </p>
@@ -281,16 +283,23 @@ export default function DownloadApp({ match, location }) {
                         </p>
                         <p>
                             para te oferecer uma{" "}
-                            <strong>experiência de compra</strong> ainda melhor
-                            <br />e <strong>valorizar sua fidelidade.</strong>
+                            <strong>
+                                nova experiência em compras e valorizar sua
+                                fidelidade.
+                            </strong>
+                            <br />
+                            <br />
+                            Você está prestes a entrar no jogo de compras com
+                            desafios e prêmios reais.
                         </p>
 
                         {showAppShowCase()}
 
                         <p className="download-app--txt" style={styles.margin}>
                             Você vai acompanhar seus pontos de fidelidade,
-                            histórico de compras, conversar com a gente, ter
-                            acesso offline e mais.
+                            progresso de desafios, ter histórico compras
+                            automático, ter acesso offline, avaliar sua
+                            experiência e mais.
                         </p>
                         <p
                             className="download-app--txt text-hero"
@@ -298,11 +307,19 @@ export default function DownloadApp({ match, location }) {
                         >
                             E o melhor...
                             <br />
-                            você ainda ganha prêmios a cada meta atingida!
+                            <span
+                                className="mt-3 d-block text-title"
+                                style={{ lineHeight: "45px" }}
+                            >
+                                ganhe prêmios a cada desafio concluído!
+                            </span>
                         </p>
                         <p className="download-app--txt" style={styles.margin}>
-                            Baixe o seu app logo a baixo,
-                            <br />é leve e baixa rápido.
+                            Baixe o seu app logo a baixo.
+                            <br />
+                            <br />É leve.
+                            <br />É rápido.
+                            <br />É grátis!
                         </p>
                         {showMainScrollArray()}
                     </Fragment>
@@ -360,6 +377,22 @@ export default function DownloadApp({ match, location }) {
     };
 
     const isLinkInvalid = !bizName || !bizId || !isValidRoleType;
+
+    const handleAppTypeText = () => {
+        const props = {
+            bizLogo,
+            bizName,
+            txtPColor,
+            styles,
+            userName,
+            ScrollArrow,
+            showMainScrollArray,
+        };
+        if (isTeamMember) return <ClientMemberText {...props} />;
+
+        return isClientAdmin ? showClientAdminText() : showClientUserText();
+    };
+
     return (
         <section className="target--content-download">
             {showSpinner()}
@@ -367,9 +400,7 @@ export default function DownloadApp({ match, location }) {
                 errorMsg()
             ) : (
                 <section className={`${txtBackColor}`}>
-                    {isClientAdmin
-                        ? showClientAdminText()
-                        : showClientUserText()}
+                    {handleAppTypeText()}
                     <PwaInstaller
                         title={
                             isClientAdmin

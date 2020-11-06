@@ -10,7 +10,13 @@ import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../redux/actions/globalActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function ReturnBtn({ location, icon = "home", onClick, toAdminDash }) {
+function ReturnBtn({
+    location,
+    icon = "home",
+    onClick,
+    toAdminDash,
+    btnColor,
+}) {
     const { bizCodeName } = useClientAdmin();
 
     const isCliAdmin = toAdminDash || location.search === "?cliente-admin=1";
@@ -46,7 +52,9 @@ function ReturnBtn({ location, icon = "home", onClick, toAdminDash }) {
                 >
                     <ButtonFab
                         color="var(--mainWhite)"
-                        backgroundColor="var(--themeSDark)"
+                        backgroundColor={`var(--themeSDark--${
+                            btnColor || "default"
+                        })`}
                         iconFontAwesome={
                             <FontAwesomeIcon
                                 icon={icon}

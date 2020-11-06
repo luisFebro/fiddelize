@@ -35,6 +35,8 @@ export default function RegisterPanelBtn({
     needTeamApp = false,
     isNewMember = false,
     isCliAdmin = false,
+    backColor = "purple",
+    sColor = "default",
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -58,19 +60,19 @@ export default function RegisterPanelBtn({
                 <ButtonFab
                     size={size}
                     title={title}
-                    backgroundColor="var(--themeSDark--default)"
+                    backgroundColor={`var(--themeSDark--${sColor})`}
                     onClick={handleFullOpen}
                     iconMu={PlusIcon}
                     position="relative"
                     variant="extended"
                 />
             ) : (
-                <ButtonFab
+                <ButtonFab // used in the dashboard only
                     size={size}
                     title={title}
                     position="relative"
                     onClick={handleFullOpen}
-                    backgroundColor="var(--themeSDark--default)"
+                    backgroundColor={`var(--themeSDark--default)`}
                     variant="extended"
                 />
             )}
@@ -81,7 +83,7 @@ export default function RegisterPanelBtn({
                 needIndex={false}
                 backgroundColor={
                     needTeamApp
-                        ? "var(--themeBackground--purple)"
+                        ? `var(--themeBackground--${backColor})`
                         : "var(--mainWhite)"
                 }
             />

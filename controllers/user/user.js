@@ -21,7 +21,6 @@ const {
     defaultSecret,
 } = require("./helpers/prizes-gallery");
 const cloudinary = require("cloudinary").v2;
-const { CLIENT_URL } = require("../../config");
 const {
     getDataChunk,
     getChunksTotal,
@@ -33,6 +32,7 @@ const {
     encryptSync,
     jsDecrypt,
 } = require("../../utils/security/xCipher");
+const { getMemberJob, getFinalUrl } = require("./helpers/redirectUrlLink");
 
 // fetching enum values exemple:
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
@@ -558,10 +558,8 @@ exports.countField = (req, res) => {
     });
 };
 
-exports.redirectUrlLink = (req, res) => {
+exports.redirectUrlLink = async (req, res) => {
     const mainHash = req.query.code;
-    const typeLink = req.query.type || "cli";
-
     if (!mainHash) return res.status(400).json({ msg: "Link Inválido" });
 
     let code = mainHash;
@@ -573,38 +571,31 @@ exports.redirectUrlLink = (req, res) => {
         code = mainHash.slice(slashInd + 1);
     }
 
-    User.find({
+    let memberJob;
+    const needTeam = code && code.includes(".equipe");
+    if (needTeam) {
+        const [thisBizCode] = code.split(".");
+        const [, jobCode] = code.split("-");
+        code = thisBizCode;
+        memberJob = getMemberJob(jobCode);
+    }
+
+    const user = await User.findOne({
         "clientAdminData.bizCodeName": { $regex: `${code}`, $options: "i" },
     })
         .select(
-            "_id role clientAdminData.bizName clientAdminData.selfBizLogoImg clientAdminData.selfThemeBackColor"
+            "_id role clientAdminData.bizName clientAdminData.selfBizLogoImg clientAdminData.selfThemeBackColor clientAdminData.selfThemePColor"
         )
-        .exec((err, userArray) => {
-            if (err)
-                return res.status(500).json(msgG("error.systemError", err));
-            if (!userArray.length)
-                return res.status(400).json({ msg: "Link Inválido" });
-            if (userArray[0].role !== "cliente-admin")
-                return res.status(400).json({ msg: "Link Inválido" });
-
-            const user = userArray[0];
-            const cliUser = user.clientAdminData;
-
-            const firstName = name;
-            const bizId = user._id;
-            const bizName = cliUser.bizName; //"You%20Vipp%20Shop"; //addSpace(bizName.cap())
-            const logo = cliUser.selfBizLogoImg;
-            const bc = cliUser.selfThemeBackColor;
-            const pc = cliUser.selfThemePColor;
-
-            let finalUrl;
-            name
-                ? (finalUrl = `${CLIENT_URL}/baixe-app/${firstName}?negocio=${bizName}&id=${bizId}&cliente=1&logo=${logo}&bc=${bc}&pc=${pc}`)
-                : (finalUrl = `${CLIENT_URL}/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1&logo=${logo}&bc=${bc}&pc=${pc}`);
-
-            res.json(finalUrl);
-            // res.redirect(301, "https://youtube.com");
+        .catch((err) => {
+            res.json({ error: `${err}` });
         });
+
+    if (!user || user.role !== "cliente-admin")
+        return res.status(400).json({ msg: "Link Inválido" });
+
+    const finalUrl = getFinalUrl({ user, name, memberJob });
+
+    res.json(finalUrl);
 };
 
 // IMAGES UPLOAD

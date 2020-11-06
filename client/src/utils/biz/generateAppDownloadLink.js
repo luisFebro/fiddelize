@@ -23,9 +23,9 @@ export default function generateAppDownloadLink({
             if (job === "gerência") return "gr";
         };
         const jobRoleCode = handleJobRole();
-        return `${CLIENT_URL}/app/equipe_${getFirstName(
+        return `${CLIENT_URL}/app/${getFirstName(
             name.toLowerCase()
-        )}_${onlyBizCode}.${jobRoleCode}`;
+        )}_${onlyBizCode}.equipe-${jobRoleCode}`;
     }
 
     if (role === "cliente") {
