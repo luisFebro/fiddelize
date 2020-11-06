@@ -35,7 +35,7 @@ export default function ClientMemberText({
                 </div>
                 <div className="text-center text-hero">
                     <span
-                        className="d-inline-block text-title"
+                        className="d-block text-title"
                         style={{ lineHeight: "50px" }}
                     >
                         Novo app da equipe
@@ -59,7 +59,8 @@ export default function ClientMemberText({
             >
                 <span>
                     Oi,
-                    <br /> {truncate(userName.cap(), isSmall ? 22 : 30)}
+                    <br />{" "}
+                    {truncate(userName && userName.cap(), isSmall ? 22 : 30)}
                 </span>
             </p>
             <div className="mx-2">

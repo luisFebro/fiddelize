@@ -46,7 +46,8 @@ exports.mwValidateRegister = (req, res, next) => {
     // const queryCliAdmin = { $and: [cpf, {role: "cliente-admin"}] }
     // const queryCliUser = { $and: [cpf, bizId]}
     // let query = handleRoles(role, {cliAdmin: queryCliAdmin, cliUser: queryCliUser});
-    User.findOne({ cpf: jsEncrypt(cpf) })
+    User(role)
+        .findOne({ cpf: jsEncrypt(cpf) })
         .then((user) => {
             // profile validation
             // This CPF will be modified because this will be cheched according to roles..
@@ -84,10 +85,11 @@ exports.mwValidateRegister = (req, res, next) => {
 };
 
 exports.mwValidateLogin = (req, res, next) => {
-    const { cpf, roleWhichDownloaded } = req.body;
+    const { cpf, roleWhichDownloaded: role } = req.body;
     const isCpfValid = new CPF().validate(cpf);
 
-    User.findOne({ cpf: jsEncrypt(cpf) })
+    User(role)
+        .findOne({ cpf: jsEncrypt(cpf) })
         .then((user) => {
             if (!cpf) return res.status(400).json(msg("error.noCpf"));
             const detected = runTestException(cpf, { user, req });
@@ -97,7 +99,7 @@ exports.mwValidateLogin = (req, res, next) => {
             if (!user) return res.status(400).json(msg("error.notRegistedCpf"));
             // this following condition is essencial for the moment to avoid conflicts between account login switch.
             const appType = user.role === "cliente-admin" ? "ADMIN" : "CLIENTE";
-            if (roleWhichDownloaded && roleWhichDownloaded !== user.role)
+            if (role && role !== user.role)
                 return res
                     .status(400)
                     .json(msg("error.differentRoles", appType));

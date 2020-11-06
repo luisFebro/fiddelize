@@ -125,32 +125,41 @@ exports.register = (req, res) => {
         cpf,
         birthday,
         phone,
-        maritalStatus,
+        gender,
         clientAdminData,
+        clientMemberData,
         clientUserData,
+        bizTeamData,
         filter,
     } = req.body;
 
-    if (maritalStatus === "selecione estado civil") {
-        maritalStatus = "cliente não informou";
-    }
-
-    const newUser = new User({
+    const ThisUser = User(role);
+    const newUser = new ThisUser({
         role,
         name,
         email: encryptSync(cpf),
         cpf: jsEncrypt(cpf),
         phone: encryptSync(phone),
         birthday,
-        maritalStatus,
+        gender,
         clientAdminData,
         clientUserData,
+        clientMemberData,
+        bizTeamData,
         filter,
     });
 
+    const handleMsg = () => {
+        if (role === "cliente")
+            return `${getFirstName(
+                name
+            )}, cadastro realizado com sucesso. Você já pode entrar no seu app!`;
+        return `${getFirstName(name)}, cadastro realizado com sucesso.`;
+    };
+
     newUser.save().then((user) => {
         res.json({
-            msg: msg("ok.successRegister", getFirstName(name), "onlyMsg"),
+            msg: handleMsg(),
             authUserId: user._id,
             roleRegistered: role,
         });

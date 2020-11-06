@@ -243,7 +243,7 @@ export default function DownloadApp({ match, location }) {
                 </div>
                 <div className="text-center text-hero">
                     <span
-                        className="d-inline-block text-title"
+                        className="d-block text-title"
                         style={{ lineHeight: "50px" }}
                     >
                         Convite Especial

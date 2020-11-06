@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const bizTeamData = {
-    subRole: {
+    job: {
         type: String,
-        default: "rep-vendas",
-        enum: ["dev", "rep-vendas", "afiliado"],
+        default: "associado",
+        enum: ["dev", "rep-comercial", "associado"],
     },
     payments: {
         grossIncome: Number,

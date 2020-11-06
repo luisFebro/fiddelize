@@ -47,7 +47,7 @@ export default function TeamApp({ location, isCliAdmin = true }) {
             ></section>
         );
 
-        const totalNotifications = 0;
+        const totalNotifications = 3;
         const displayBell = () => (
             <AsyncBellNotifBtn
                 position="absolute"

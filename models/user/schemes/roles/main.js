@@ -7,9 +7,7 @@ const roleTypes = [
     "cliente", // cliente-usuario
     "cliente-admin",
     "cliente-membro",
-    "dev",
-    "rep-vendas",
-    "afiliado",
+    "equipe",
 ];
 
 module.exports = {

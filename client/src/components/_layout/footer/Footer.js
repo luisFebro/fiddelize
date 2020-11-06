@@ -3,7 +3,8 @@ import { withRouter } from "react-router-dom";
 
 const Footer = ({ location }) => {
     const locationNow = location.pathname;
-    const isBlackList = locationNow.includes("baixe-app");
+    const isBlackList =
+        locationNow.includes("baixe-app") || locationNow.includes("/t/app");
 
     return (
         !isBlackList && (

@@ -112,7 +112,7 @@ function Website({ location }) {
                     exact
                     component={AsyncNewPassword}
                 />
-                <Route path="/app/equipe" exact component={AsyncTeamApp} />
+                <Route path="/t/app/equipe" exact component={AsyncTeamApp} />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

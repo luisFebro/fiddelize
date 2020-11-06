@@ -316,7 +316,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                         </p>
                     ) : (
                         <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
-                            {userName.cap()}, no aguardo do nome do{" "}
+                            {userName && userName.cap()}, no aguardo do nome do{" "}
                             {whichAudience()} e um modo de envio...
                         </p>
                     )}
