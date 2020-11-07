@@ -86,6 +86,7 @@ const bizPlanListData = {
         type: String,
         enum: [
             "Novvos Clientes",
+            "Novvos Membros",
             "Envvio Whatsapp",
             "Orgganize Clientes",
             "Prêmmios Clientes",
@@ -111,7 +112,7 @@ const clientAdminData = {
     bizFreeCredits: {
         // for package-based services.
         "Novvos Clientes": { type: Number, default: 10 },
-        "Kit da Eqquipe": { type: Number, default: 1 },
+        "Novvos Membros": { type: Number, default: 1 },
     },
     bizPlan: {
         type: String,
@@ -136,6 +137,7 @@ const clientAdminData = {
 
     totalClientUserScores: { type: Number, default: 0 },
     totalClientUsers: { type: Number, default: 0 },
+    totalClientMembers: { type: Number, default: 0 },
 
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },

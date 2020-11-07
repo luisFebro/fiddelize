@@ -7,11 +7,19 @@ const sslRedirect = require("heroku-ssl-redirect");
 const helmet = require("helmet");
 const compression = require("compression");
 const { IS_PROD } = require("./config");
+const { getAccount } = require("./controllers/user/account/account");
+
 require("dotenv").config(); // n4
 require("./utils/globalHelpers");
 
 //Init Express
 const app = express();
+
+app.all("*", addAccount);
+function addAccount(req, res, next) {
+    req.getAccount = getAccount;
+    next();
+}
 
 // protect app with secure headers
 app.use(helmet());

@@ -141,7 +141,7 @@ const offplanVersion = () => [
         proPage: "CoppiaSeguranca",
     },
     {
-        title: "Kit da Eqquipe",
+        title: "Novvos Membros",
         img: "/img/pro-features/eqquipe-kit/eqquipe.svg",
         desc:
             "Um app de fidelidade intuitivo pensado na eficácia do trabalho dos seus colaboradores.",

@@ -12,37 +12,65 @@ isAnother = true,
 needUpdateOnly = true;
 send all default variables to update (role, bizId, bizImg)
  */
-exports.setNewAccount = async (req, res) => {
+
+exports.getAccount = async (userId, options = {}) => {
+    const { cpf, accounts = false } = options;
+
+    const query = cpf ? { checkId: cpf } : { defaultUserId: userId };
+
+    const select = accounts ? "accounts -_id" : "defaultRole -_id";
+
+    const data = await Account.findOne(query).select(select);
+
+    if (!data && accounts) return { accounts: [] };
+
+    const res = accounts
+        ? { accounts: data.accounts }
+        : { role: data.defaultRole };
+
+    return res;
+};
+
+exports.setNewAccount = async (options = {}) => {
     const {
-        checkId, // cpf
+        cpf,
+        userId,
         role,
-        bizId,
         bizImg,
+        bizName,
+        bizId,
         isAnother = false,
-        needUpdateOnly = false, // only for initial account or when user changes the default account
-    } = req.body;
+        needUpdateOnly = false,
+    } = options;
+
+    const checkId = cpf;
 
     if (!checkId) return res.status(400).json({ error: "Missing checkId!" });
 
-    const defaults = {
-        defaultRole: role,
-        defaultBizId: bizId,
-        defaultBizImg: bizImg,
+    const pushIt = {
+        userId,
+        bizId,
+        role,
+        bizImg,
+        bizName,
     };
-
-    if (!bizImg) delete defaults.defaultBizImg;
-    if (!role) delete defaults.defaultRole;
-    if (!bizId) delete defaults.defaultBizId;
 
     const payload = {
         checkId,
     };
-
-    const pushIt = {
-        role,
-        bizId,
-        bizImg,
+    const defaults = {
+        defaultUserId: userId,
+        defaultRole: role,
+        defaultBizId: bizId,
+        defaultBizName: bizName,
+        defaultBizImg: bizImg,
     };
+
+    if (!userId) delete defaults.defaultUserId;
+    if (!bizImg) delete defaults.defaultBizImg;
+    if (!bizName) delete defaults.defaultBizName;
+    if (!role) delete defaults.defaultRole;
+    if (!bizId) delete defaults.defaultBizId;
 
     const setObj = isAnother ? payload : { ...payload, ...defaults };
 
@@ -50,18 +78,10 @@ exports.setNewAccount = async (req, res) => {
         ? { $set: setObj }
         : { $set: setObj, $push: { accounts: pushIt } };
 
-    const data = await Account.findOneAndUpdate({ checkId }, dataSet, {
+    return await Account.findOneAndUpdate({ checkId }, dataSet, {
         new: true,
         upsert: true,
     }).catch((err) => {
         res.status(500).json({ error: err });
     });
-
-    if (data) {
-        res.json({
-            msg: `${
-                !role ? "account" : `new ${role} account`
-            } created or updated`,
-        });
-    }
 };

@@ -6,9 +6,9 @@ const {
     login,
     mwSession,
     mwIsAuth,
-    getDecryptedToken,
-    getToken,
 } = require("../controllers/auth");
+
+const { getDecryptedToken, getToken } = require("../controllers/auth/token");
 
 const {
     createPassword,
@@ -17,8 +17,6 @@ const {
     forgotPasswordRequest,
     recoverPassword,
 } = require("../controllers/auth/password");
-
-// const { makeGoogleLogin } = require("../controllers/auth/google");
 
 const {
     mwValidateRegister,
@@ -45,9 +43,9 @@ router.post(
 );
 router.post("/pswd/recover", mwValidatePassword, recoverPassword);
 router.post("/pswd/change", mwIsAuth, changePassword);
+// TOKEN
 router.post("/pswd/token", getToken);
 router.post("/pswd/decrypt-token", getDecryptedToken);
-
-// router.post("/google", makeGoogleLogin);
+// END TOKEN
 
 module.exports = router;

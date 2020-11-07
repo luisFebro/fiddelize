@@ -10,6 +10,8 @@ const {
 } = require("../../utils/security/xCipher");
 const getJwtToken = require("./helpers/getJwtToken");
 const getRoleData = require("./helpers/getRoleData");
+const { getTreatedToken } = require("./token");
+const { setNewAccount } = require("../user/account/account");
 
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
@@ -65,6 +67,7 @@ exports.mwIsClientAdmin = (req, res, next) => {
 exports.mwSession = async (req, res, next) => {
     // n1
     const token = getTreatedToken(req);
+
     if (!token)
         return res.json({ error: "New user accessed without JWT Token!" });
 
@@ -82,21 +85,13 @@ exports.mwSession = async (req, res, next) => {
 
 // this will load the authorized user's data after and only if the token is valid in mwAuth
 exports.loadAuthUser = async (req, res) => {
-    const userJwtId = (req.authObj && req.authObj.id) || " ";
-
-    const user = await User.findById(userJwtId)
-        .select("role -_id")
-        .catch((err) => {
-            res.status(500).json({ error: err });
-        });
-    if (!user) return;
-    const role = user && user.role;
+    const { role, id: userJwtId } = req.authObj;
 
     const handleRole = (role) => {
         const cliUser =
-            "-cpf -clientAdminData.verificationPass -clientAdminData.bizPlanCode -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications -clientUserData.purchaseHistory";
+            "-cpf -clientUserData.notifications -clientUserData.purchaseHistory";
         const cliAdmin =
-            "-pswd -clientAdminData.smsBalance -clientAdminData.bizFreeCredits -clientAdminData.bizPlanList -clientAdminData.smsHistory -clientAdminData.smsAutomation -clientAdminData.orders -clientAdminData.notifications -clientAdminData.tasks";
+            "-expiryToken -pswd -clientAdminData.smsBalance -clientAdminData.bizFreeCredits -clientAdminData.bizPlanList -clientAdminData.smsHistory -clientAdminData.smsAutomation -clientAdminData.orders -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications";
 
         if (role === "cliente-admin") return cliAdmin;
         if (role === "cliente") return cliUser;
@@ -104,11 +99,10 @@ exports.loadAuthUser = async (req, res) => {
 
     const select = handleRole(role);
 
-    const profile = await User.findById(userJwtId)
-        .select(select)
-        .catch((err) => {
-            res.status(500).json({ error: err });
-        });
+    const profile = await User(role).findById(userJwtId).select(select);
+
+    if (!profile)
+        return res.status(404).json({ error: "Usuário não encontrado!" });
     if (profile) {
         profile.email = decryptSync(profile.email);
         profile.phone = decryptSync(profile.phone);
@@ -117,7 +111,7 @@ exports.loadAuthUser = async (req, res) => {
     }
 };
 
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
     let {
         role,
         name,
@@ -131,6 +125,8 @@ exports.register = (req, res) => {
         clientUserData,
         bizTeamData,
         filter,
+        bizImg,
+        bizName,
     } = req.body;
 
     const ThisUser = User(role);
@@ -150,19 +146,37 @@ exports.register = (req, res) => {
     });
 
     const handleMsg = () => {
-        if (role === "cliente")
-            return `${getFirstName(
-                name
-            )}, cadastro realizado com sucesso. Você já pode entrar no seu app!`;
-        return `${getFirstName(name)}, cadastro realizado com sucesso.`;
+        const handleAppName = () => {
+            if (role === "cliente") return "do cliente";
+            if (role === "cliente-membro") return "de membros";
+            if (role === "cliente-admin") return "do Admin";
+            return "da Equipe Fiddelize";
+        };
+
+        return `${getFirstName(
+            name
+        )}, cadastro realizado com sucesso no App ${handleAppName()}.`;
     };
 
-    newUser.save().then((user) => {
-        res.json({
-            msg: handleMsg(),
-            authUserId: user._id,
-            roleRegistered: role,
-        });
+    const user = await newUser.save();
+    const { _id } = user;
+
+    await setNewAccount({
+        userId: _id,
+        cpf,
+        role,
+        bizImg,
+        bizName: bizName || (clientAdminData && clientAdminData.bizName),
+        bizId:
+            (clientUserData && clientUserData.bizId) ||
+            (clientMemberData && clientMemberData.bizId) ||
+            _id,
+    });
+
+    res.json({
+        msg: handleMsg(),
+        authUserId: user._id,
+        roleRegistered: role,
     });
 };
 
@@ -171,50 +185,15 @@ exports.login = async (req, res) => {
     const { cpf } = req.body;
 
     let token = undefined;
-    if (role !== "cliente-admin") {
-        // for cli-admin, this is fetched on getToken now..
+    if (role === "cliente") {
+        // only clients now have access to app only with CPF.
+        // Other roles require a password. Only after a correct one, then a token is generated (with getToken routes)
         token = await getJwtToken({ _id: _id && _id.toString(), role });
     }
 
     const authData = getRoleData(role, { data: req.profile, token, cpf });
     res.json(authData);
 };
-
-exports.getToken = async (req, res) => {
-    const { _id } = req.body;
-
-    const token = await getJwtToken({
-        _id: _id && _id.toString(),
-        role: "cliente-admin",
-    });
-    const encrypted = encryptSync(token);
-
-    res.json(encrypted);
-};
-
-// After password validation success, decrypt token.
-exports.getDecryptedToken = (req, res) => {
-    const { token } = req.body;
-
-    const decrypted = decryptSync(token);
-    if (!decrypted)
-        return res
-            .status(401)
-            .json({ error: "Ocorreu um erro na validação..." });
-
-    res.json(decrypted);
-};
-
-// HELPERS
-function getTreatedToken(req) {
-    let token = req.header("x-auth-token") || req.header("authorization"); // authrization for postman tests
-    if (token && token.includes("Bearer ")) {
-        token = token.slice(7);
-    }
-
-    return token;
-}
-// END HELPERS
 
 /* COMMENTS
 n1:

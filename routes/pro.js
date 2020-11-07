@@ -3,7 +3,6 @@ const router = express.Router();
 
 const {
     getProData,
-    mwProCreditsCounter,
     removeProServices,
     getNextExpiryDate,
 } = require("../controllers/pro/pro.js");
@@ -19,7 +18,7 @@ router.get("/pro-member-data", getProData);
 router.delete("/service/remove", removeProServices);
 router.get("/service/next-expiry-date", getNextExpiryDate);
 // test
-router.post("/counter", mwProCreditsCounter);
+// router.post("/counter", mwProCreditsCounter);
 
 // router.param("userId", mwUserId);
 

@@ -2,13 +2,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "user_cli-admins";
 
-const { ClientAdminSchema } = require("../schemes/roles/main");
+const {
+    ClientAdminSchema,
+    ClientUserSchema,
+} = require("../schemes/data-by-role/main");
 const { DefaultFilterSchema } = require("../schemes");
 const { profileSchema } = require("../schemes/profileSchema");
 
 const data = {
     ...profileSchema,
     clientAdminData: ClientAdminSchema,
+    clientUserData: ClientUserSchema, // used for testing mode
     filter: DefaultFilterSchema,
     pswd: String,
     expiryToken: {

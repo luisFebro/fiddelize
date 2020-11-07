@@ -1,4 +1,4 @@
-const { roleTypes } = require("./roles/main");
+const { roleTypes } = require("./data-by-role/main");
 
 exports.profileSchema = {
     role: {
@@ -31,6 +31,6 @@ exports.profileSchema = {
     gender: {
         type: String,
         default: "Não selecionado",
-        enum: ["masculino", "feminino", "outros", "não selecionado"],
+        enum: ["Masculino", "Feminino", "Outros", "Não selecionado"],
     },
 };

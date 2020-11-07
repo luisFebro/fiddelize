@@ -8,76 +8,92 @@ const { msg } = require("../_msgs/auth");
 // const isBefore = require('date-fns/isBefore');
 // is the first date before the second date ? isBefore returns true if both dates are today, replacing isToday method.
 
+// HELPERS
 const isPaid = (transactionStatus) =>
     transactionStatus === "pago" || transactionStatus === "disponível";
 
 const checkIfGotFreeCredits = ({ user, service }) => {
-    const planType = user.clientAdminData.bizPlan;
-    const totalFreeUsers = user.clientAdminData.bizFreeCredits
-        ? user.clientAdminData.bizFreeCredits[service]
-        : 0;
+    const { bizPlan, bizFreeCredits } = user.clientAdminData;
 
-    if (planType === "gratis" && !totalFreeUsers) return false;
+    const totalFreeUsers = bizFreeCredits ? bizFreeCredits[service] : 0;
+
+    if (bizPlan === "gratis" && !totalFreeUsers) return false;
     return true;
 };
 
+const getDiscountedList = ({ bizPlanList, service }) => {
+    const numCredits = 1;
+    let balance;
+    const list = bizPlanList.map((servObj) => {
+        if (servObj.service === service) {
+            const discountNow = servObj.creditEnd - numCredits;
+            servObj.creditEnd = discountNow;
+            balance = discountNow;
+            return servObj;
+        }
+
+        return servObj;
+    });
+
+    return { list, balance };
+};
+// END HELPERS
+
 exports.mwProCreditsCounter = (req, res, next) => {
-    const service = req.query.service || "Novvos Clientes";
+    const { role, clientUserData, clientMemberData } = req.body;
+    const isCliUser = role === "cliente";
+    const service = isCliUser ? "Novvos Clientes" : "Novvos Membros";
+
+    const isUserDiscountable = isCliUser || role === "cliente-membro";
+    if (!isUserDiscountable) return next();
+
     const bizId =
-        (req.body &&
-            req.body.clientUserData &&
-            req.body.clientUserData.bizId) ||
-        req.query.userId;
+        (clientUserData && clientUserData.bizId) ||
+        (clientMemberData && clientMemberData.bizId);
 
-    const role = req.body && req.body.role;
-
-    const isUseClient = role === "cliente";
-
-    if (!isUseClient) return next();
-
-    async function startUserClientDiscount() {
-        const user = await User.findById(bizId);
+    async function startDiscountCredit() {
+        const user = await User("cliente-admin").findById(bizId);
 
         if (!user) return res.status(404).json({ error: "user not found" });
 
         const gotFreeCredits = checkIfGotFreeCredits({ user, service });
+
         if (!gotFreeCredits) {
-            const bizName = user.clientAdminData.bizName;
+            const { bizName } = user.clientAdminData;
             return res.status(401).json(msg("error.registersLimit", bizName));
         }
 
-        const needFreeDiscount = gotFreeCredits === true;
-
         let newBalance; // for console.log only.
+        const needFreeDiscount = gotFreeCredits === true;
+        const {
+            bizFreeCredits,
+            totalClientUsers,
+            bizPlanList,
+        } = user.clientAdminData;
+
+        const targetTotal = isCliUser
+            ? "totalClientUsers"
+            : "totalClientMembers";
         if (needFreeDiscount) {
-            const thisNewBalance =
-                user.clientAdminData.bizFreeCredits[service] - 1;
+            const thisNewBalance = bizFreeCredits[service] - 1;
             newBalance = thisNewBalance;
 
-            user.clientAdminData.bizFreeCredits[service] =
-                thisNewBalance < 0 ? 0 : thisNewBalance;
-            user.clientAdminData.totalClientUsers += 1; // iin case of deletion, the substraction happens in the modalYesNo with method countFied
+            bizFreeCredits[service] = thisNewBalance < 0 ? 0 : thisNewBalance;
+            user.clientAdminData[targetTotal] += 1; // iin case of deletion, the substraction happens in the modalYesNo with method countFied
             user.markModified("clientAdminData.bizFreeCredits");
         } else {
-            const planList = user.clientAdminData.bizPlanList;
-            if (planList && !planList.length) return next();
+            if (bizPlanList && !bizPlanList.length) return next();
 
-            const numCredits = 1;
-
-            const discountedList = planList.map((servObj) => {
-                if (servObj.service === service) {
-                    const discountNow = servObj.creditEnd - numCredits;
-                    servObj.creditEnd = discountNow;
-                    newBalance = discountNow;
-                    return servObj;
-                }
-
-                return servObj;
+            // discount and get discountedList
+            const { list: discountedList, balance } = getDiscountedList({
+                bizPlanList,
+                service,
             });
+            newBalance = lance;
 
             user.clientAdminData.bizPlanList = discountedList;
             // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-            user.clientAdminData.totalClientUsers += 1;
+            user.clientAdminData[targetTotal] += 1;
             user.markModified("clientAdminData.bizPlanList");
         }
 
@@ -91,7 +107,7 @@ exports.mwProCreditsCounter = (req, res, next) => {
         next();
     }
 
-    isUseClient && startUserClientDiscount();
+    startDiscountCredit();
 };
 
 // GET - goal is to change welcome message to direct pay after first transaction.
@@ -175,7 +191,8 @@ exports.getProData = (req, res) => {
 exports.getNextExpiryDate = (req, res) => {
     const { userId } = req.query;
 
-    User.findById(userId)
+    User("cliente-admin")
+        .findById(userId)
         .select("clientAdminData.bizPlanList")
         .exec((err, user) => {
             if (err || !user)
@@ -202,41 +219,43 @@ exports.removeProServices = (req, res) => {
             .status(400)
             .json({ error: "missing nextExpiryDate string!" });
 
-    User.findById(userId).exec((err, user) => {
-        if (user.role !== "cliente-admin")
-            res.status(401).json({
-                error: "Você não tem permissão para acessar esta API",
+    User("cliente-admin")
+        .findById(userId)
+        .exec((err, user) => {
+            if (user.role !== "cliente-admin")
+                res.status(401).json({
+                    error: "Você não tem permissão para acessar esta API",
+                });
+            if (err || !user)
+                return res.status(404).json({ error: "user not found" });
+
+            const planList = user.clientAdminData.bizPlanList;
+            if (!planList.length) return res.json(false);
+
+            const removedList = [];
+            let totalRemovedServices = 0;
+            planList.forEach((servObj) => {
+                const isExpired =
+                    JSON.stringify(nextExpiryDate) ===
+                    JSON.stringify(servObj.usageTimeEnd); // LESSON: dates from mongoDB is an object. need JSON.stringify to compare correctly. Even the string date requires it otherwise it will fail
+                if (isExpired) {
+                    ++totalRemovedServices;
+                    return;
+                }
+
+                removedList.push(servObj);
             });
-        if (err || !user)
-            return res.status(404).json({ error: "user not found" });
 
-        const planList = user.clientAdminData.bizPlanList;
-        if (!planList.length) return res.json(false);
+            user.clientAdminData.bizPlanList = removedList;
+            // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+            user.markModified("clientAdminData.bizPlanList");
 
-        const removedList = [];
-        let totalRemovedServices = 0;
-        planList.forEach((servObj) => {
-            const isExpired =
-                JSON.stringify(nextExpiryDate) ===
-                JSON.stringify(servObj.usageTimeEnd); // LESSON: dates from mongoDB is an object. need JSON.stringify to compare correctly. Even the string date requires it otherwise it will fail
-            if (isExpired) {
-                ++totalRemovedServices;
-                return;
-            }
-
-            removedList.push(servObj);
+            user.save((err) => {
+                res.json(
+                    `It was removed ${totalRemovedServices} services. Now have ${
+                        planList ? planList.length - totalRemovedServices : 0
+                    }`
+                );
+            });
         });
-
-        user.clientAdminData.bizPlanList = removedList;
-        // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-        user.markModified("clientAdminData.bizPlanList");
-
-        user.save((err) => {
-            res.json(
-                `It was removed ${totalRemovedServices} services. Now have ${
-                    planList ? planList.length - totalRemovedServices : 0
-                }`
-            );
-        });
-    });
 };

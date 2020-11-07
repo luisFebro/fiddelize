@@ -2,6 +2,17 @@ const { msg } = require("../../_msgs/auth");
 const getFirstName = require("../../../utils/string/getFirstName");
 
 // ROLES
+const handleBizTeamData = ({ data, cpf }) => {
+    const { _id, name, role, clientAdminData } = data;
+
+    return {
+        name,
+        role,
+        authUserId: _id,
+        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+    };
+};
+
 const handleCliAdminData = ({ data, cpf }) => {
     const { _id, name, role, clientAdminData } = data;
 
@@ -13,6 +24,17 @@ const handleCliAdminData = ({ data, cpf }) => {
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
         verificationPass: clientAdminData && clientAdminData.verificationPass,
         twoLastCpfDigits: cpf && cpf.slice(-2),
+    };
+};
+
+const handleCliMemberData = ({ data, cpf }) => {
+    const { _id, name, role, clientAdminData } = data;
+
+    return {
+        name,
+        role,
+        authUserId: _id,
+        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
     };
 };
 
@@ -36,15 +58,16 @@ function getRoleData(role, options = {}) {
     const { data, token, cpf } = options;
 
     switch (role) {
+        case "equipe":
+            return handleBizTeamData({ data, cpf });
         case "cliente-admin":
             return handleCliAdminData({ data, cpf });
+        case "cliente-membro":
+            return handleCliMemberData({ data, cpf });
         case "cliente":
             return handleCliUserData({ data, token });
         default:
-            console.log(
-                "All keys are included in handleRolesData function at auth"
-            );
-            return allKeysStore;
+            return console.log(`The role ${role} was not found!`);
     }
 }
 

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "user_biz-team";
 
-const { BizTeamSchema } = require("../schemes/roles/main");
+const { BizTeamSchema } = require("../schemes/data-by-role/main");
 const { DefaultFilterSchema } = require("../schemes");
 const { profileSchema } = require("../schemes/profileSchema");
 

@@ -38,6 +38,7 @@ import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import ReactGA from "react-ga";
+import { useClientAdmin } from "../../hooks/useRoleData";
 
 const filter = getFilterDate();
 
@@ -87,7 +88,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         phone: "",
         birthday: "",
         cpf: "",
-        maritalStatus: "selecione estado civil",
+        gender: "selecione gênero",
         filter,
     });
     let {
@@ -95,7 +96,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         name,
         clientAdminData,
         email,
-        maritalStatus,
+        gender,
         birthday,
         cpf,
         phone,
@@ -112,11 +113,17 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const errorName = fieldError && fieldError.name;
     const errorBizName = fieldError && fieldError.name;
     const errorEmail = fieldError && fieldError.email;
-    const errorMaritalStatus = fieldError && fieldError.maritalStatus;
+    const errorGender = fieldError && fieldError.gender;
     const errorBirthday = fieldError && fieldError.birthday;
     const errorCpf = fieldError && fieldError.cpf;
     const errorPhone = fieldError && fieldError.phone;
     // end detecting field errors
+
+    const { selfBizLogoImg } = useClientAdmin();
+
+    useEffect(() => {
+        setData({ ...data, bizImg: selfBizLogoImg });
+    }, [selfBizLogoImg]);
 
     const dispatch = useStoreDispatch();
 
@@ -155,7 +162,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             phone: "",
             birthday: "",
             cpf: "",
-            maritalStatus: "selecione estado civil",
+            gender: "selecione gênero",
         });
         setFieldError(null);
     };
@@ -511,16 +518,16 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     <Select
                         id="value7"
                         margin="dense"
-                        labelId="maritalStatus"
+                        labelId="gender"
                         onChange={handleChange(setData, data)}
-                        name="maritalStatus"
+                        name="gender"
                         fullWidth
-                        value={maritalStatus}
+                        value={gender}
                         variant="outlined"
-                        error={errorMaritalStatus ? true : false}
+                        error={errorGender ? true : false}
                         style={{ backgroundColor: "var(--mainWhite)" }}
                     >
-                        <MenuItem value={maritalStatus}>
+                        <MenuItem value={gender}>
                             <span
                                 className="text-p text-normal"
                                 style={{
@@ -528,15 +535,12 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                                     fontFamily: "Poppins, sans-serif",
                                 }}
                             >
-                                selecione estado civil:
+                                selecione gênero:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"Solteiro(a)"}>Solteiro(a)</MenuItem>
-                        <MenuItem value={"Casado(a)"}>Casado(a)</MenuItem>
-                        <MenuItem value={"Divorciado(a)"}>
-                            Divorciado(a)
-                        </MenuItem>
-                        <MenuItem value={"Viúvo(a)"}>Viúvo(a)</MenuItem>
+                        <MenuItem value={"Feminino"}>Feminino</MenuItem>
+                        <MenuItem value={"Masculino"}>Masculino</MenuItem>
+                        <MenuItem value={"Outros"}>Outros</MenuItem>
                     </Select>
                 </div>
             </section>

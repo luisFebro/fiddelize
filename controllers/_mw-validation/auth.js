@@ -7,20 +7,25 @@ const { msg } = require("../_msgs/auth");
 const { msgG } = require("../_msgs/globalMsgs");
 const { jsEncrypt } = require("../../utils/security/xCipher");
 const checkValidSequence = require("../../utils/biz-algorithms/password/checkValidSequence");
+const checkAccountLimit = require("./helpers/checkAccountLimit");
 
-const handleRoles = (currRoles, rolesQueryObj) => {
-    const { cliAdmin, cliUser } = rolesQueryObj;
-    switch (currRoles) {
-        case "cliente":
-            return cliUser;
-        case "cliente-admin":
-            return cliAdmin;
-        default:
-            console.log("somehtign wrong in handleRoles");
-    }
-};
+// const handleRoles = (currRoles, rolesQueryObj) => {
+//     const { cliAdmin, cliUser } = rolesQueryObj;
+//     switch (currRoles) {
+//         case "cliente":
+//             return cliUser;
+//         case "cliente-admin":
+//             return cliAdmin;
+//         default:
+//             console.log("somehtign wrong in handleRoles");
+//     }
+// };
+// const getBizId = (body) => {
+//     const { clientUserData, clientMemberData } = body;
+//     return clientUserData && clientUserData.bizId || clientMemberData && clientMemberData.bizId;
+// }
 
-exports.mwValidateRegister = (req, res, next) => {
+exports.mwValidateRegister = async (req, res, next) => {
     const {
         role,
         name,
@@ -28,60 +33,53 @@ exports.mwValidateRegister = (req, res, next) => {
         cpf,
         birthday,
         phone,
-        clientUserData,
         clientAdminData,
     } = req.body;
+
+    const { accounts } = await req.getAccount(null, { cpf, accounts: true });
+
+    const error = checkAccountLimit(accounts);
+    if (error) return res.status(401).json({ error });
+
     const isCpfValid = new CPF().validate(cpf);
 
     // valid assertions:
-    // Considering CPF as ID, these are true:
-    // IMPORTANT: This requires another condition to identify if there is more than one account registered.account
-    // THEN create a panel when the user login which he/she will choose which account to enter.
-    // * achiever can register one cli-admin account and register one account in other fiddelize's accounts as a cli-user.
-    // * cli-admin still not allowed to create multiple businesses's account (Only if compare the business name too)
-    // e.g after finding a doc from queryCliadmin, verify if the bizName is the same:
-    // if(user && user.cpf === cpf) { clientAdminData.bizName ===  currBizName  // user.bizPlan === "free"} // THIS WILL RETURN BAD REQUEST
-    // * cli-admin can not have a cli-user account;
     // * a cli-user can have a cli-admin;
     // const queryCliAdmin = { $and: [cpf, {role: "cliente-admin"}] }
     // const queryCliUser = { $and: [cpf, bizId]}
     // let query = handleRoles(role, {cliAdmin: queryCliAdmin, cliUser: queryCliUser});
-    User(role)
+    const user = await User(role)
         .findOne({ cpf: jsEncrypt(cpf) })
-        .then((user) => {
-            // profile validation
-            // This CPF will be modified because this will be cheched according to roles..
-            if (user && user.cpf === jsEncrypt(cpf))
-                return res.status(400).json(msg("error.cpfAlreadyRegistered"));
-            if (!name && !email && !cpf && !phone)
-                return res.status(400).json(msg("error.anyFieldFilled"));
-            if (!name) return res.status(400).json(msg("error.noName"));
-            if (!isValidName(name))
-                return res.status(400).json(msg("error.invalidLengthName"));
-            if (role === "cliente-admin") {
-                if (!clientAdminData.bizName)
-                    return res
-                        .status(400)
-                        .json({ msg: "Informe o nome de sua empresa/projeto" });
-            }
-            if (!cpf) return res.status(400).json(msg("error.noCpf"));
-            if (!email) return res.status(400).json(msg("error.noEmail"));
-            if (!phone) return res.status(400).json(msg("error.noPhone"));
-            if (!birthday) return res.status(400).json(msg("error.noBirthday"));
-            if (!validateEmail(email))
-                return res.status(400).json(msg("error.invalidEmail"));
-            if (!isCpfValid)
-                return res.status(400).json(msg("error.invalidCpf"));
-            if (!validatePhone(phone))
-                return res.status(400).json(msg("error.invalidPhone"));
-            // end profile validation
-            //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
-            // Request to restrict 10 registers only for free accounts.
+        .catch((err) => {
+            msgG("error.systemError", err);
+        });
 
-            // if(user && user.name === name.toLowerCase()) return res.status(400).json(msg('error.userAlreadyRegistered')); // disable this until implementation of finding by bizId with { $and: [{ name }, { bizId }] }
-            next();
-        })
-        .catch((err) => msgG("error.systemError", err));
+    // profile validation
+    if (user && user.cpf === jsEncrypt(cpf))
+        return res.status(400).json(msg("error.cpfAlreadyRegistered"));
+    if (!name && !email && !cpf && !phone)
+        return res.status(400).json(msg("error.anyFieldFilled"));
+    if (!name) return res.status(400).json(msg("error.noName"));
+    if (!isValidName(name))
+        return res.status(400).json(msg("error.invalidLengthName"));
+    if (role === "cliente-admin") {
+        if (!clientAdminData.bizName)
+            return res
+                .status(400)
+                .json({ msg: "Informe o nome de sua empresa/projeto" });
+    }
+    if (!cpf) return res.status(400).json(msg("error.noCpf"));
+    if (!email) return res.status(400).json(msg("error.noEmail"));
+    if (!phone) return res.status(400).json(msg("error.noPhone"));
+    if (!birthday) return res.status(400).json(msg("error.noBirthday"));
+    if (!validateEmail(email))
+        return res.status(400).json(msg("error.invalidEmail"));
+    if (!isCpfValid) return res.status(400).json(msg("error.invalidCpf"));
+    if (!validatePhone(phone))
+        return res.status(400).json(msg("error.invalidPhone"));
+    // end profile validation
+    //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
+    next();
 };
 
 exports.mwValidateLogin = (req, res, next) => {

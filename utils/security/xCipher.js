@@ -12,7 +12,7 @@ async function createJWT(data, options = {}) {
     const { secret, expiry = "24h" } = options;
 
     const thisSecret = secret || JWT_SECRET;
-    const payload = typeof data === "string" ? { id: data } : payload; // payload is used when external data's obj is required like account's preLogin.
+    const payload = typeof data === "string" ? { id: data } : data; // payload is used when external data's obj is required like account's preLogin.
     return await jwt.sign(payload, thisSecret, {
         expiresIn: expiry,
     });

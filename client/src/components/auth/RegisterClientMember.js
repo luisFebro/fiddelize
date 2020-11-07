@@ -76,14 +76,14 @@ function Register({
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
     const [data, setData] = useState({
-        role: "cliente",
+        role: "cliente-membro",
         name: "",
         email: "",
         phone: "",
         birthday: "",
         cpf: "",
         gender: "selecione gênero",
-        clientUserData: { bizId: bizSysId, filterBirthday: "" },
+        clientMemberData: { bizId: bizSysId, filterBirthday: "" },
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
@@ -114,7 +114,6 @@ function Register({
             bizName,
         });
     }, [selfBizLogoImg, bizName]);
-
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
     // }));

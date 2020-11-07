@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const collectionName = "user_cli-members";
 
-const { ClientMemberSchema } = require("../schemes/roles/main");
+const { ClientMemberSchema } = require("../schemes/data-by-role/main");
 const { DefaultFilterSchema } = require("../schemes");
 const { profileSchema } = require("../schemes/profileSchema");
 

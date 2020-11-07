@@ -33,7 +33,7 @@ export default function OffplanBtn({
     const styles = getStyles();
 
     const disabledTeamFeature =
-        modalData && modalData.title === "Kit da Eqquipe";
+        modalData && modalData.title === "Novvos Membros";
     const handleFullOpen = () => {
         if (disabledTeamFeature) return;
         setFullOpen(true);
