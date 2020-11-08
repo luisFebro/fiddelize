@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const { NotificationsSchema } = require("../schemes.js");
+const { NotificationsSchema, OnceCheckedSchema } = require("../schemes.js");
 
 const historyData = {
     challengeN: Number,
@@ -19,6 +19,7 @@ const historyData = {
     isPrizeExpired: Boolean,
     isPrizeReceived: Boolean,
     isPrizeConfirmed: Boolean, // archive: default: function() { return this.cardType === "prize" ? false : undefined }},
+    onceChecked: OnceCheckedSchema,
 };
 const HistorySchema = new Schema(historyData, { _id: true });
 

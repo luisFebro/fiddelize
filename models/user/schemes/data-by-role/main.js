@@ -10,10 +10,18 @@ const roleTypes = [
     "equipe",
 ];
 
+const getRoleDataName = (role) => {
+    if (role === "cliente") return "clientUserData";
+    if (role === "cliente-admin") return "clientAdminData";
+    if (role === "cliente-membro") return "clientMemberData";
+    if (role === "equipe") return "bizTeamData";
+};
+
 module.exports = {
     BizTeamSchema,
     ClientAdminSchema,
     ClientMemberSchema,
     ClientUserSchema,
     roleTypes,
+    getRoleDataName,
 };

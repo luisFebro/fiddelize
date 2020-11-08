@@ -7,23 +7,10 @@ const { msg } = require("../_msgs/auth");
 const { msgG } = require("../_msgs/globalMsgs");
 const { jsEncrypt } = require("../../utils/security/xCipher");
 const checkValidSequence = require("../../utils/biz-algorithms/password/checkValidSequence");
-const checkAccountLimit = require("./helpers/checkAccountLimit");
-
-// const handleRoles = (currRoles, rolesQueryObj) => {
-//     const { cliAdmin, cliUser } = rolesQueryObj;
-//     switch (currRoles) {
-//         case "cliente":
-//             return cliUser;
-//         case "cliente-admin":
-//             return cliAdmin;
-//         default:
-//             console.log("somehtign wrong in handleRoles");
-//     }
-// };
-// const getBizId = (body) => {
-//     const { clientUserData, clientMemberData } = body;
-//     return clientUserData && clientUserData.bizId || clientMemberData && clientMemberData.bizId;
-// }
+const {
+    checkAccountLimit,
+    checkIfAlreadyHasUser,
+} = require("./helpers/validateRegister");
 
 exports.mwValidateRegister = async (req, res, next) => {
     const {
@@ -38,25 +25,22 @@ exports.mwValidateRegister = async (req, res, next) => {
 
     const { accounts } = await req.getAccount(null, { cpf, accounts: true });
 
-    const error = checkAccountLimit(accounts);
+    const error = checkAccountLimit(accounts, { currRole: role });
     if (error) return res.status(401).json({ error });
 
-    const isCpfValid = new CPF().validate(cpf);
-
-    // valid assertions:
-    // * a cli-user can have a cli-admin;
-    // const queryCliAdmin = { $and: [cpf, {role: "cliente-admin"}] }
-    // const queryCliUser = { $and: [cpf, bizId]}
-    // let query = handleRoles(role, {cliAdmin: queryCliAdmin, cliUser: queryCliUser});
-    const user = await User(role)
-        .findOne({ cpf: jsEncrypt(cpf) })
-        .catch((err) => {
-            msgG("error.systemError", err);
-        });
+    if (role === "cliente" || role === "cliente-admin") {
+        const userExists = await checkIfAlreadyHasUser(req.body);
+        if (userExists) {
+            const targetRole = role === "cliente" ? "cliente" : "admin";
+            return res
+                .status(401)
+                .json({
+                    error: `Não foi possível cadastrar com este CPF no app do ${targetRole}`,
+                });
+        }
+    }
 
     // profile validation
-    if (user && user.cpf === jsEncrypt(cpf))
-        return res.status(400).json(msg("error.cpfAlreadyRegistered"));
     if (!name && !email && !cpf && !phone)
         return res.status(400).json(msg("error.anyFieldFilled"));
     if (!name) return res.status(400).json(msg("error.noName"));
@@ -74,11 +58,15 @@ exports.mwValidateRegister = async (req, res, next) => {
     if (!birthday) return res.status(400).json(msg("error.noBirthday"));
     if (!validateEmail(email))
         return res.status(400).json(msg("error.invalidEmail"));
+
+    const isCpfValid = new CPF().validate(cpf);
     if (!isCpfValid) return res.status(400).json(msg("error.invalidCpf"));
+
     if (!validatePhone(phone))
         return res.status(400).json(msg("error.invalidPhone"));
     // end profile validation
     //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
+    req.accounts = accounts; // for decide wheter only update the accounts list if got already at least one account.
     next();
 };
 

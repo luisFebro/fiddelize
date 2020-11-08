@@ -111,9 +111,12 @@ exports.mwProCreditsCounter = (req, res, next) => {
 };
 
 // GET - goal is to change welcome message to direct pay after first transaction.
-exports.getProData = (req, res) => {
+exports.getProData = async (req, res) => {
     const { userId, nextExpiryDate } = req.query;
-    User.findById(userId)
+    const { role } = await req.getAccount(userId);
+
+    User(role)
+        .findById(userId)
         .select(
             "clientAdminData.bizFreeCredits clientAdminData.orders clientAdminData.bizPlanList"
         )

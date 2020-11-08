@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const { NotificationsSchema } = require("../schemes.js");
+const { NotificationsSchema, OnceCheckedSchema } = require("../schemes.js");
 
 const clientMemberData = {
     bizId: { type: String, required: true },
@@ -9,6 +9,7 @@ const clientMemberData = {
     newScoreTotal: { type: Number, default: 0 },
     // content: String,
     notifications: [NotificationsSchema],
+    onceChecked: OnceCheckedSchema,
 };
 
 const ClientMemberSchema = new Schema(clientMemberData, { _id: false });

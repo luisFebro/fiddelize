@@ -148,7 +148,7 @@ const clientAdminData = {
     verificationPass: String,
     regulation: RegulationSchema,
 
-    onceChecked: OnceCheckedSchema, // NOT IMPLEMENTED YET
+    onceChecked: OnceCheckedSchema,
     notifications: [NotificationsSchema],
     tasks: [TasksListSchema],
 

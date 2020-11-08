@@ -4,13 +4,13 @@ const Account = require("../../../models/user/Account");
 1. To add a new account:
 needUpdateOnly = false,
 
-2. To add a second or another account:
+2. To add another account:
 needUpdateOnly = false,
 isAnother = true,
 
 3. To update default:
 needUpdateOnly = true;
-send all default variables to update (role, bizId, bizImg)
+send all default variables to update (role, bizId, bizImg, bizName)
  */
 
 exports.getAccount = async (userId, options = {}) => {
@@ -40,7 +40,7 @@ exports.setNewAccount = async (options = {}) => {
         bizName,
         bizId,
         isAnother = false,
-        needUpdateOnly = false,
+        needUpdateOnly = false, // only true for updating the default account!!
     } = options;
 
     const checkId = cpf;

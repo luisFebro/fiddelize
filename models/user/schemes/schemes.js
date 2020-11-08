@@ -104,9 +104,10 @@ const ordersData = {
 const OrdersSchema = new Schema(ordersData, { _id: true });
 // END ORDERS
 
-// where_what_description
+// where_what_description --- desc is optional
 const onceCheckedData = {
     cliAdminDash_feature_proSearch: Boolean, // avoid declare default false to not declare unessary fields to DB.
+    backend_accountPanel: Boolean,
 };
 const OnceCheckedSchema = new Schema(onceCheckedData, { _id: false });
 

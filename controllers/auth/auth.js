@@ -12,7 +12,9 @@ const getJwtToken = require("./helpers/getJwtToken");
 const getRoleData = require("./helpers/getRoleData");
 const { getTreatedToken } = require("./token");
 const { setNewAccount } = require("../user/account/account");
-
+const {
+    getRoleDataName,
+} = require("../../models/user/schemes/data-by-role/main");
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
 // bacause not found. To avoid this, try write userId if in a parameter as default.
@@ -161,6 +163,14 @@ exports.register = async (req, res) => {
     const user = await newUser.save();
     const { _id } = user;
 
+    const isAnotherAccount = req.accounts.length;
+
+    if (isAnotherAccount) {
+        await User(role).findByIdAndUpdate(_id, {
+            [`${getRoleDataName(role)}.onceChecked.backend_accountPanel`]: true,
+        });
+    }
+
     await setNewAccount({
         userId: _id,
         cpf,
@@ -184,6 +194,17 @@ exports.login = async (req, res) => {
     const { _id, role } = req.profile;
     const { cpf } = req.body;
 
+    const roleData = req.profile[getRoleDataName(role)];
+    const needPanel = roleData.onceChecked.backend_accountPanel;
+    // const { accounts } = await req.getAccount(null, { cpf, accounts: true })
+    if (needPanel) {
+        await User(role).findByIdAndUpdate(_id, {
+            [`${getRoleDataName(
+                role
+            )}.onceChecked.backend_accountPanel`]: false,
+        });
+    }
+
     let token = undefined;
     if (role === "cliente") {
         // only clients now have access to app only with CPF.
@@ -191,8 +212,16 @@ exports.login = async (req, res) => {
         token = await getJwtToken({ _id: _id && _id.toString(), role });
     }
 
-    const authData = getRoleData(role, { data: req.profile, token, cpf });
-    res.json(authData);
+    const authData = getRoleData(role, {
+        data: req.profile,
+        token,
+        cpf,
+    });
+
+    res.json({
+        ...authData,
+        needAccountPanel: needPanel ? true : false,
+    });
 };
 
 /* COMMENTS

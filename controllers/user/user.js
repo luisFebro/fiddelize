@@ -38,11 +38,14 @@ const { getMemberJob, getFinalUrl } = require("./helpers/redirectUrlLink");
 // console.log(User.schema.path("role").enumValues); [ 'admin', 'colaborador', 'cliente' ]
 
 // MIDDLEWARES - mw
-exports.mwUserId = (req, res, next, id) => {
+exports.mwUserId = async (req, res, next, id) => {
     let { select } = req.query;
     if (!select) select = "";
 
-    User.findById(id)
+    const { role } = await getAccount(id);
+
+    User(role)
+        .findById(id)
         .select(select)
         .exec((err, user) => {
             if (err || !user)
