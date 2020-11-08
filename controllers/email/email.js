@@ -1,4 +1,3 @@
-const User = require("../../models/user");
 const mailerSender = require("./mailerSender");
 const gridSender = require("./gridSender");
 const { CLIENT_URL } = require("../../config");
@@ -30,11 +29,9 @@ exports.sendEmail = async (req, res) => {
     const { type, payload } = req.body;
 
     if (!type || !payload)
-        return res
-            .status(400)
-            .json({
-                error: "Requires both email`s TYPE and PAYLOAD in the body",
-            });
+        return res.status(400).json({
+            error: "Requires both email`s TYPE and PAYLOAD in the body",
+        });
     // PAYLOADS
     // recoverPassword = toEmail, token, name
 

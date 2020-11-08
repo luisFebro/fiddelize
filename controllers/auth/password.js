@@ -13,7 +13,10 @@ const { sendEmailBack } = require("../../controllers/email");
 async function comparePswds(userId, options = {}) {
     const { pswd } = options;
 
-    const userData = await User.findById(userId)
+    const { role } = req.getAccount(userId);
+
+    const userData = await User(role)
+        .findById(userId)
         .select("pswd")
         .catch((error) => console.log(error));
 
@@ -60,6 +63,8 @@ const checkForExpiryToken = async (currToken) => {
 exports.createPassword = async (req, res) => {
     const { newPswd, newPswd2, userId } = req.body;
 
+    const { role } = req.getAccount(userId);
+
     if (newPswd && !newPswd2) return res.json({ msg: "ok pswd1" });
 
     if (newPswd2) {
@@ -72,9 +77,11 @@ exports.createPassword = async (req, res) => {
 
     const hash = await createBcryptPswd(newPswd);
 
-    const userData = await User.findById(userId).catch((error) => {
-        res.status(400).json({ error: "Id não encontrado" });
-    });
+    const userData = await User(role)
+        .findById(userId)
+        .catch((error) => {
+            res.status(400).json({ error: "Id não encontrado" });
+        });
 
     if (userData) {
         if (userData.pswd)
@@ -95,8 +102,11 @@ exports.createPassword = async (req, res) => {
 exports.checkPassword = async (req, res) => {
     const { pswd, userId, checkIfLocked = false } = req.body;
 
+    const { role } = req.getAccount(userId);
+
     if (checkIfLocked) {
-        const data = await User.findById(userId)
+        const data = await User(role)
+            .findById(userId)
             .select("expiryToken.current expiryToken.loginAttempts")
             .catch((err) => {
                 res.status(500).json({ error: err });
@@ -123,7 +133,8 @@ exports.checkPassword = async (req, res) => {
     const checkRes = await comparePswds(userId, { pswd });
 
     if (!checkRes) {
-        const data = await User.findById(userId)
+        const data = await User(role)
+            .findById(userId)
             .select("expiryToken.current expiryToken.loginAttempts")
             .catch((err) => {
                 res.status(500).json({ error: err });
@@ -151,9 +162,11 @@ exports.checkPassword = async (req, res) => {
                 };
             }
 
-            await User.findByIdAndUpdate(userId, update).catch((err) => {
-                console.log(err);
-            });
+            await User(role)
+                .findByIdAndUpdate(userId, update)
+                .catch((err) => {
+                    console.log(err);
+                });
         }
 
         isBlocked = await checkForExpiryToken(currToken);
@@ -163,11 +176,13 @@ exports.checkPassword = async (req, res) => {
         }
 
         if (!isBlocked) {
-            await User.findByIdAndUpdate(userId, {
-                "expiryToken.loginAttempts": loginAttempts,
-            }).catch((err) => {
-                console.log(err);
-            });
+            await User(role)
+                .findByIdAndUpdate(userId, {
+                    "expiryToken.loginAttempts": loginAttempts,
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
 
         if (currExpiryTime && isBlocked) {
@@ -179,12 +194,14 @@ exports.checkPassword = async (req, res) => {
         }
         return res.status(401).json(false);
     } else {
-        await User.findByIdAndUpdate(userId, {
-            "expiryToken.current": null,
-            "expiryToken.loginAttempts": 0,
-        }).catch((err) => {
-            console.log(err);
-        });
+        await User(role)
+            .findByIdAndUpdate(userId, {
+                "expiryToken.current": null,
+                "expiryToken.loginAttempts": 0,
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
         res.json(true);
     }
@@ -193,6 +210,7 @@ exports.checkPassword = async (req, res) => {
 exports.changePassword = async (req, res) => {
     const { userId, newPswd, newPswd2 } = req.body;
 
+    const { role } = req.getAccount(userId);
     // adapt from recoverPassword's variables
     const priorPswd = newPswd;
     const realNewPswd = newPswd2;
@@ -214,7 +232,7 @@ exports.changePassword = async (req, res) => {
         const SUCCESSFUL_MSG = "pass changed";
 
         const hash = await createBcryptPswd(realNewPswd);
-        await User.findByIdAndUpdate(userId, { pswd: hash });
+        await User(role).findByIdAndUpdate(userId, { pswd: hash });
         res.json({ msg: SUCCESSFUL_MSG });
     } else {
         return res
@@ -226,11 +244,13 @@ exports.changePassword = async (req, res) => {
 exports.forgotPasswordRequest = async (req, res) => {
     const { userId, cpf, email } = req.body;
 
+    const { role } = req.getAccount(userId);
+
     const encryptedCPF = jsEncrypt(cpf);
 
-    const user = await User.findOne({ cpf: encryptedCPF }).select(
-        "name email _id"
-    );
+    const user = await User(role)
+        .findOne({ cpf: encryptedCPF })
+        .select("name email _id");
     if (!user || (user && user._id.toString()) !== userId)
         return res
             .status(400)
@@ -250,9 +270,11 @@ exports.forgotPasswordRequest = async (req, res) => {
         "expiryToken.current": token,
         $push: { "expiryToken.history": "recoverPassword" },
     };
-    await User.findByIdAndUpdate(userId, update).catch((err) => {
-        res.status(500).json({ error: err });
-    });
+    await User(role)
+        .findByIdAndUpdate(userId, update)
+        .catch((err) => {
+            res.status(500).json({ error: err });
+        });
 
     const payload = {
         name,
@@ -272,17 +294,21 @@ exports.forgotPasswordRequest = async (req, res) => {
 exports.recoverPassword = async (req, res) => {
     const { newPswd, newPswd2, token, checkToken = false } = req.body;
 
+    let thisRole;
     // Check if token is still valid to redirect the page in case of expired token
     if (token && checkToken) {
         const tokenOk = await checkJWT(token).catch((e) => {
             res.json(false);
         });
 
+        const { role } = req.getAccount(tokenOk.id);
+        thisRole = role;
+
         if (tokenOk) {
             // check if user already applied the change. If so, invalidate access.
-            const isTokenAvailable = await User.findById(tokenOk.id).select(
-                "expiryToken.current -_id"
-            );
+            const isTokenAvailable = await User(thisRole)
+                .findById(tokenOk.id)
+                .select("expiryToken.current -_id");
 
             const currToken =
                 isTokenAvailable && isTokenAvailable.expiryToken.current;
@@ -316,7 +342,7 @@ exports.recoverPassword = async (req, res) => {
         const hash = await createBcryptPswd(newPswd);
         const userId = validPayload.id;
 
-        await User.findByIdAndUpdate(userId, {
+        await User(thisRole).findByIdAndUpdate(userId, {
             pswd: hash,
             "expiryToken.current": null,
             "expiryToken.loginAttempts": 0,

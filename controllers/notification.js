@@ -70,7 +70,7 @@ const pickObjByRole = (role, options = {}) => {
 // END UTILS
 
 // Method: Get
-exports.countPendingNotif = (req, res) => {
+exports.countPendingNotif = async (req, res) => {
     let { userId, role, forceCliUser } = req.query;
     forceCliUser = forceCliUser === "true";
 
@@ -81,7 +81,8 @@ exports.countPendingNotif = (req, res) => {
 
     if (forceCliUser) rolePath = "clientUserData";
 
-    User.find({ _id: userId, role })
+    User(role)
+        .find({ _id: userId, role })
         .select(`${rolePath}.notifications -_id`)
         .exec((err, data) => {
             if (err)
@@ -116,6 +117,7 @@ exports.readNotifications = (req, res) => {
 // Method: Put
 exports.sendNotification = (req, res) => {
     const dataToSend = req.body;
+
     const {
         recipient: { role, id: recipientId },
     } = dataToSend; // n1 - destructuring
@@ -123,16 +125,17 @@ exports.sendNotification = (req, res) => {
     if (!recipientId)
         return res.status(400).json({ msg: "Missing recipient's ID" });
     if (!role)
-        return res
-            .status(400)
-            .json({
-                msg:
-                    "You have to specify the target role which the notification should be sent: cliAdmin, cliUser",
-            });
+        return res.status(400).json({
+            msg:
+                "You have to specify the target role which the notification should be sent: cliAdmin, cliUser",
+        });
 
     const obj = pickObjByRole(role, { data: dataToSend, needUnshift: true });
-    User.findOneAndUpdate({ _id: recipientId }, { $push: obj }, { new: false })
-        .select("clientAdminData.notifications clientUserData.notifications")
+    User(role)
+        .findOneAndUpdate({ _id: recipientId }, { $push: obj }, { new: false })
+        .select(
+            "clientAdminData.notifications clientUserData.notifications clientMembersData.notifications"
+        )
         .exec((err, user) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err)); // NEED CREATE
@@ -149,20 +152,16 @@ exports.sendBackendNotification = ({ notifData }) => {
     if (!recipientId)
         return res.status(400).json({ msg: "Missing recipient's ID" });
     if (!role)
-        return res
-            .status(400)
-            .json({
-                msg:
-                    "You have to specify the target role which the notification should be sent: cliAdmin, cliUser",
-            });
+        return res.status(400).json({
+            msg:
+                "You have to specify the target role which the notification should be sent: cliAdmin, cliUser",
+        });
 
     const obj = pickObjByRole(role, { data: notifData, needUnshift: true });
 
-    return User.findOneAndUpdate(
-        { _id: recipientId },
-        { $push: obj },
-        { new: false }
-    ).select("clientAdminData.notifications clientUserData.notifications");
+    return User(role)
+        .findOneAndUpdate({ _id: recipientId }, { $push: obj }, { new: false })
+        .select("clientAdminData.notifications clientUserData.notifications");
 };
 
 // method: PUT
@@ -179,7 +178,8 @@ exports.markOneClicked = (req, res) => {
     const resAction = findIdAndAssign(notifications, cardId, "clicked", true);
     const objToSet = pickObjByRole(role, { data: resAction });
 
-    User.findByIdAndUpdate(_id, objToSet, { new: false })
+    User(role)
+        .findByIdAndUpdate(_id, objToSet, { new: false })
         .select("clientAdminData.notifications clientUserData.notifications")
         .exec((err, user) => {
             if (err)
@@ -204,7 +204,8 @@ exports.markAllAsClicked = (req, res) => {
     const resAction = assignValueToObj(notifications, "clicked", true);
     const objToSet = pickObjByRole(role, { data: resAction });
 
-    User.findByIdAndUpdate(_id, objToSet, { new: false })
+    User(role)
+        .findByIdAndUpdate(_id, objToSet, { new: false })
         .select("clientAdminData.notifications clientUserData.notifications")
         .exec((err, user) => {
             if (err)
@@ -225,7 +226,8 @@ exports.markAllAsSeen = (req, res) => {
     const resAction = assignValueToObj(notifications, "isCardNew", false);
     const objToSet = pickObjByRole(role, { data: resAction });
 
-    User.findByIdAndUpdate(_id, objToSet, { new: false })
+    User(role)
+        .findByIdAndUpdate(_id, objToSet, { new: false })
         .select("clientAdminData.notifications clientUserData.notifications")
         .exec((err, user) => {
             if (err)

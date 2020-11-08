@@ -29,7 +29,7 @@ exports.getCurrBalance = (req, res) => {
 };
 
 // GET
-exports.readContacts = (req, res) => {
+exports.readContacts = async (req, res) => {
     let {
         userId,
         limit = 5,
@@ -38,6 +38,8 @@ exports.readContacts = (req, res) => {
         autocomplete = false, // retuns as string.
         autocompleteLimit = 4,
     } = req.query;
+
+    const { role } = await req.getAccount(userId);
 
     if (!search && !autocomplete) limit = "";
 
@@ -52,7 +54,8 @@ exports.readContacts = (req, res) => {
     }
 
     // .limit(limit)
-    User.find(findThis)
+    User(role)
+        .find(findThis)
         .select("phone name")
         .sort({ name: 1 })
         .exec((err, data) => {
@@ -170,10 +173,13 @@ exports.mwSendSMS = (req, res, next) => {
 };
 
 // for scheduled sms.
-exports.cancelSMS = (req, res) => {
+exports.cancelSMS = async (req, res) => {
     const { userId, cardId } = req.query;
 
-    User.findById(userId)
+    const { role } = await req.getAccount(userId);
+
+    User(role)
+        .findById(userId)
         .select("clientAdminData.smsHistory")
         .exec((err, doc) => {
             if (err)
@@ -232,10 +238,13 @@ exports.cancelSMS = (req, res) => {
     // https://api.smsdev.com.br/get?key=XXXXXXXXXXXXXX&action=cancelar&id=XXXXXXXX
 };
 
-exports.getGeneralTotals = (req, res) => {
+exports.getGeneralTotals = async (req, res) => {
     const { userId } = req.query;
 
-    User.findById(userId)
+    const { role } = await req.getAccount(userId);
+
+    User(role)
+        .findById(userId)
         .select("clientAdminData.smsHistory -_id")
         .exec((err, doc) => {
             if (err)
@@ -258,10 +267,13 @@ exports.getGeneralTotals = (req, res) => {
 // SMS CREDITS
 
 // METHOD: GET
-exports.readCredits = (req, res) => {
+exports.readCredits = async (req, res) => {
     const { userId } = req.query;
 
-    User.findById(userId)
+    const { role } = await req.getAccount(userId);
+
+    User(role)
+        .findById(userId)
         .select("clientAdminData.smsBalance -_id")
         .exec((err, doc) => {
             if (err)
@@ -279,11 +291,12 @@ exports.mwDiscountCredits = (req, res, next) => {
         "clientAdminData.smsBalance": Number(`-${numCredits}`),
     };
 
-    User.findOneAndUpdate(
-        { _id: userId },
-        { $inc: discountThis },
-        { new: true }
-    )
+    User("cliente-admin")
+        .findOneAndUpdate(
+            { _id: userId },
+            { $inc: discountThis },
+            { new: true }
+        )
         .select("clientAdminData.smsBalance -_id")
         .exec((err, data) => {
             const balance = data.clientAdminData.smsBalance;
@@ -333,13 +346,15 @@ exports.addSMSHistory = (req, res) => {
         "clientAdminData.smsHistory": { $each: [historyData], $position: 0 },
     };
 
-    User.findOneAndUpdate({ _id: userId }, { $push: objToPush }, { new: false })
+    User("cliente-admin")
+        .findOneAndUpdate({ _id: userId }, { $push: objToPush }, { new: false })
         .select("clientAdminData.smsHistory")
         .exec((err) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err));
             if (isAutomatic) {
-                User.findById(userId)
+                User("cliente-admin")
+                    .findById(userId)
                     .select("clientAdminData.smsAutomation")
                     .exec((err, doc) => {
                         if (err)
@@ -380,7 +395,8 @@ exports.addSMSHistory = (req, res) => {
 exports.readSMSMainHistory = (req, res) => {
     const { userId, skip, limit = 10 } = req.query;
 
-    User.findById(userId)
+    User("cliente-admin")
+        .findById(userId)
         .select("clientAdminData.smsHistory")
         .exec((err, doc) => {
             if (err)
@@ -410,7 +426,8 @@ exports.readSMSMainHistory = (req, res) => {
 exports.readSMSHistoryStatement = (req, res) => {
     const { userId, cardId } = req.query;
 
-    User.findById(userId)
+    User("cliente-admin")
+        .findById(userId)
         .select("clientAdminData.smsHistory")
         .exec((err, doc) => {
             if (err)
@@ -470,7 +487,8 @@ exports.readSMSHistoryStatement = (req, res) => {
 exports.readAutoService = (req, res) => {
     const { userId } = req.query;
 
-    User.findById(userId)
+    User("cliente-admin")
+        .findById(userId)
         .select("clientAdminData.smsAutomation -_id")
         .exec((err, doc) => {
             if (err)
@@ -498,43 +516,57 @@ exports.activateAutoService = (req, res) => {
     if (!service)
         return res.status(400).json({ error: "Missing service name" });
 
-    User.findById(userId).exec((err, doc) => {
-        if (err) return res.status(500).json(msgG("error.systemError", err));
+    User("cliente-admin")
+        .findById(userId)
+        .exec((err, doc) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        let smsAutomation = doc.clientAdminData.smsAutomation;
+            let smsAutomation = doc.clientAdminData.smsAutomation;
 
-        const getKeys = (mode) => {
-            if (mode === "active") return { key: "active", value: active };
-            if (mode === "msg") return { key: "msg", value: msg };
-        };
+            const getKeys = (mode) => {
+                if (mode === "active") return { key: "active", value: active };
+                if (mode === "msg") return { key: "msg", value: msg };
+            };
 
-        const { key, value } = getKeys(targetKey);
+            const { key, value } = getKeys(targetKey);
 
-        const foundService =
-            smsAutomation &&
-            smsAutomation.find((service) => service.serviceId === serviceId);
+            const foundService =
+                smsAutomation &&
+                smsAutomation.find(
+                    (service) => service.serviceId === serviceId
+                );
 
-        if (foundService) {
-            const newData = findKeyAndAssign({
-                objArray: smsAutomation,
-                compareProp: "serviceId",
-                compareValue: serviceId,
-                targetProp: key,
-                targetValue: value,
-            });
+            if (foundService) {
+                const newData = findKeyAndAssign({
+                    objArray: smsAutomation,
+                    compareProp: "serviceId",
+                    compareValue: serviceId,
+                    targetProp: key,
+                    targetValue: value,
+                });
 
-            smsAutomation = newData;
-        } else {
-            const newService = { serviceId, service, msg, afterDay, active };
-            doc.clientAdminData.smsAutomation = [...smsAutomation, newService];
-        }
+                smsAutomation = newData;
+            } else {
+                const newService = {
+                    serviceId,
+                    service,
+                    msg,
+                    afterDay,
+                    active,
+                };
+                doc.clientAdminData.smsAutomation = [
+                    ...smsAutomation,
+                    newService,
+                ];
+            }
 
-        doc.markModified("clientAdminData.smsAutomation");
+            doc.markModified("clientAdminData.smsAutomation");
 
-        doc.save((err) =>
-            res.json({ msg: `Automatic Service status changed` })
-        );
-    });
+            doc.save((err) =>
+                res.json({ msg: `Automatic Service status changed` })
+            );
+        });
 
     // if(smsAutomation && smsAutomation.length) {
     //     const newData = findKeyAndAssign({

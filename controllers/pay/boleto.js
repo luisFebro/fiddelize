@@ -126,42 +126,50 @@ function createBoleto(req, res) {
                 renewal,
             };
 
-            User.findById(userId).exec((err, doc) => {
-                if (err)
-                    return res.status(500).json(msgG("error.systemError", err));
-                const orders = doc.clientAdminData.orders;
+            User("clinte-admin")
+                .findById(userId)
+                .exec((err, doc) => {
+                    if (err)
+                        return res
+                            .status(500)
+                            .json(msgG("error.systemError", err));
+                    const orders = doc.clientAdminData.orders;
 
-                if (isRenewal) {
-                    const modifiedOrders =
-                        orders &&
-                        orders.map((serv) => {
-                            if (
-                                serv.reference === (renewal && renewal.priorRef)
-                            ) {
-                                serv.renewal = { ...renewal, isOldCard: true };
+                    if (isRenewal) {
+                        const modifiedOrders =
+                            orders &&
+                            orders.map((serv) => {
+                                if (
+                                    serv.reference ===
+                                    (renewal && renewal.priorRef)
+                                ) {
+                                    serv.renewal = {
+                                        ...renewal,
+                                        isOldCard: true,
+                                    };
+                                    return serv;
+                                }
+
                                 return serv;
-                            }
+                            });
 
-                            return serv;
+                        doc.clientAdminData.orders = [
+                            dataCliAdmin,
+                            ...modifiedOrders,
+                        ];
+                    } else {
+                        doc.clientAdminData.orders = [dataCliAdmin, ...orders];
+                    }
+                    // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+                    doc.markModified("clientAdminData.orders");
+                    doc.save((err) => {
+                        res.json({
+                            barcode: boletoData.barcode,
+                            dueDate: boletoData.dueDate,
+                            paymentLink: boletoData.paymentLink,
                         });
-
-                    doc.clientAdminData.orders = [
-                        dataCliAdmin,
-                        ...modifiedOrders,
-                    ];
-                } else {
-                    doc.clientAdminData.orders = [dataCliAdmin, ...orders];
-                }
-                // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-                doc.markModified("clientAdminData.orders");
-                doc.save((err) => {
-                    res.json({
-                        barcode: boletoData.barcode,
-                        dueDate: boletoData.dueDate,
-                        paymentLink: boletoData.paymentLink,
                     });
                 });
-            });
         })
         .catch((e) => console.log(e));
 }

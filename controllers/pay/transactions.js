@@ -134,7 +134,9 @@ const getPagNotify = (req, res) => {
                         .status(500)
                         .json({ error: "something went wrong with Pricing" });
 
-                const data2 = await User.findOne({ _id: clientAdminId });
+                const data2 = await User("cliente-admin").findOne({
+                    _id: clientAdminId,
+                });
                 let orders = data2.clientAdminData.orders;
                 let currBizPlanList = data2.clientAdminData.bizPlanList;
 
@@ -208,7 +210,8 @@ const getPagNotify = (req, res) => {
 const readHistory = (req, res) => {
     const { userId, skip, limit = 10 } = req.query;
 
-    User.findById(userId)
+    User("cliente-admin")
+        .findById(userId)
         .select("clientAdminData.orders")
         .exec((err, user) => {
             if (err || !user)
@@ -341,7 +344,7 @@ module.exports = {
     //                         .exec((err, allServices) => {
     //                             if (err) return res.status(400).json({ error: "something went wrong"});
 
-    //                             User.findOne({ _id: clientAdminId }).exec(
+    //                             User("cliente-admin").findOne({ _id: clientAdminId }).exec(
     //                                 (err, data2) => {
     //                                     let orders = data2.clientAdminData.orders;
     //                                     let currBizPlanList =

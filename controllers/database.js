@@ -10,7 +10,9 @@ const Finance = require("../models/finance");
 //     })
 // }
 
-exports.readAllDbFromModels = (req, res) => {
+exports.readAllDbFromModels = async (req, res) => {
+    // const { role } = req.getAccount()
+
     const modelQuery = req.query.modelName;
     const models = {
         user: User,

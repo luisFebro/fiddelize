@@ -185,71 +185,84 @@ exports.getRecordedClientList = (req, res) => {
         mainQuery = Object.assign({}, mainQuery, searchQuery);
     }
 
-    User.aggregate([
-        {
-            $facet: {
-                sideTotalSize: [{ $match: sideQuery }, countQuery],
-                list: [{ $match: mainQuery }, sortQuery, skipQuery, limitQuery],
-                totalSize: [{ $match: mainQuery }, countQuery],
-                totalCliUserScores: [
-                    { $match: mainQuery },
-                    totalUserGeneralScoresQuery,
-                ],
-                totalActiveScores: [
-                    { $match: mainQuery },
-                    totalActiveScoresQuery,
-                ],
+    User("cliente-admin")
+        .aggregate([
+            {
+                $facet: {
+                    sideTotalSize: [{ $match: sideQuery }, countQuery],
+                    list: [
+                        { $match: mainQuery },
+                        sortQuery,
+                        skipQuery,
+                        limitQuery,
+                    ],
+                    totalSize: [{ $match: mainQuery }, countQuery],
+                    totalCliUserScores: [
+                        { $match: mainQuery },
+                        totalUserGeneralScoresQuery,
+                    ],
+                    totalActiveScores: [
+                        { $match: mainQuery },
+                        totalActiveScoresQuery,
+                    ],
+                },
             },
-        },
-    ]).then((docs) => {
-        let {
-            sideTotalSize,
-            list,
-            totalSize,
-            totalCliUserScores,
-            totalActiveScores,
-        } = docs[0];
+        ])
+        .then((docs) => {
+            let {
+                sideTotalSize,
+                list,
+                totalSize,
+                totalCliUserScores,
+                totalActiveScores,
+            } = docs[0];
 
-        const emptyType = handleEmptyType({ search, sideTotalSize });
+            const emptyType = handleEmptyType({ search, sideTotalSize });
 
-        // remove sensitive cli-admin data
-        // note: check if notification will be include to be excluded too
-        const isCliAdmin = list.length && list[0].role === "cliente-admin"; // always the first object if available
-        if (isCliAdmin) {
-            delete list[0].clientAdminData;
-        }
+            // remove sensitive cli-admin data
+            // note: check if notification will be include to be excluded too
+            const isCliAdmin = list.length && list[0].role === "cliente-admin"; // always the first object if available
+            if (isCliAdmin) {
+                delete list[0].clientAdminData;
+            }
 
-        const treatedList = list.map((profile) => {
-            return {
-                ...profile,
-                cpf: jsDecrypt(profile.cpf),
-                email: decryptSync(profile.email),
-                phone: decryptSync(profile.phone),
-            };
+            const treatedList = list.map((profile) => {
+                return {
+                    ...profile,
+                    cpf: jsDecrypt(profile.cpf),
+                    email: decryptSync(profile.email),
+                    phone: decryptSync(profile.phone),
+                };
+            });
+
+            totalCliUserScores =
+                totalCliUserScores[0] === undefined
+                    ? 0
+                    : totalCliUserScores[0].value;
+            totalActiveScores =
+                totalActiveScores[0] === undefined
+                    ? 0
+                    : totalActiveScores[0].value;
+
+            const listTotal =
+                totalSize[0] === undefined ? 0 : totalSize[0].value;
+
+            res.json({
+                list: treatedList,
+                chunksTotal: getChunksTotal(listTotal, limit),
+                listTotal,
+                content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};emptyType:${emptyType};`,
+            });
         });
-
-        totalCliUserScores =
-            totalCliUserScores[0] === undefined
-                ? 0
-                : totalCliUserScores[0].value;
-        totalActiveScores =
-            totalActiveScores[0] === undefined ? 0 : totalActiveScores[0].value;
-
-        const listTotal = totalSize[0] === undefined ? 0 : totalSize[0].value;
-
-        res.json({
-            list: treatedList,
-            chunksTotal: getChunksTotal(listTotal, limit),
-            listTotal,
-            content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};emptyType:${emptyType};`,
-        });
-    });
 };
 
 exports.getHighestScores = (req, res) => {
     const bizId = req.query.bizId;
 
-    User.find({ "clientUserData.bizId": bizId })
+    // ATENTION: need to insert the name or code of biz since now the user can have multi accounts;
+
+    User("cliente")
+        .find({ "clientUserData.bizId": bizId })
         .select("name clientUserData.totalGeneralScore -_id")
         .sort({ "clientUserData.totalGeneralScore": -1 })
         .limit(3)

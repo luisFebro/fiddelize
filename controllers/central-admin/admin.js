@@ -62,7 +62,8 @@ exports.updateBusinessInfo = (req, res) => {
 // CLIENT-ADMIN
 exports.readVerificationPass = (req, res) => {
     const { userId } = req.params;
-    User.findById(userId)
+    User("cliente-admin")
+        .findById(userId)
         .select("clientAdminData.verificationPass -_id")
         .exec((err, data) => {
             const pass = data.clientAdminData.verificationPass;
@@ -75,20 +76,23 @@ exports.readVerificationPass = (req, res) => {
 exports.checkVerificationPass = (req, res) => {
     const { pass, bizId } = req.body;
 
-    User.findById(bizId).exec((err, clientAdmin) => {
-        if (err) return res.status(400).json(msgG("error.systemError", err));
-        if (!clientAdmin)
-            return res
-                .status(401)
-                .json({ msg: "Algo deu errado na verificação." });
+    User("cliente-admin")
+        .findById(bizId)
+        .exec((err, clientAdmin) => {
+            if (err)
+                return res.status(400).json(msgG("error.systemError", err));
+            if (!clientAdmin)
+                return res
+                    .status(401)
+                    .json({ msg: "Algo deu errado na verificação." });
 
-        const { clientAdminData } = clientAdmin;
-        if (clientAdminData.verificationPass !== pass)
-            return res
-                .status(401)
-                .json({ msg: "A senha de verificação está errada." });
-        res.json({ msg: "Ok!" });
-    });
+            const { clientAdminData } = clientAdmin;
+            if (clientAdminData.verificationPass !== pass)
+                return res
+                    .status(401)
+                    .json({ msg: "A senha de verificação está errada." });
+            res.json({ msg: "Ok!" });
+        });
 };
 
 // DEPRACATED - this will count by users registered and active instead of download page.

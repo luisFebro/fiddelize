@@ -1,8 +1,6 @@
 const User = require("../../models/user");
 const BackupUser = require("../../models/backup/BackupUser");
-const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 const { msgG } = require("../_msgs/globalMsgs");
 const { msg } = require("../_msgs/user");
 const validateEmail = require("../../utils/validation/validateEmail");
@@ -42,7 +40,7 @@ exports.mwUserId = async (req, res, next, id) => {
     let { select } = req.query;
     if (!select) select = "";
 
-    const { role } = await getAccount(id);
+    const { role } = await req.getAccount(id);
 
     User(role)
         .findById(id)
@@ -119,7 +117,7 @@ exports.read = (req, res) => {
     );
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     // n2
     const noResponse = Boolean(req.query.noResponse);
     const selectedString = req.query.selectedKeys
@@ -136,11 +134,13 @@ exports.update = (req, res) => {
         req.body.cpf = jsEncrypt(req.body.cpf);
     }
 
-    User.findOneAndUpdate(
-        { _id: req.profile._id },
-        { $set: req.body },
-        { new: true }
-    ) // real time updated! this send the most recently updated response/doc from database to app
+    const { role } = await req.getAccount(id);
+    User(role)
+        .findOneAndUpdate(
+            { _id: req.profile._id },
+            { $set: req.body },
+            { new: true }
+        ) // real time updated! this send the most recently updated response/doc from database to app
         .select(selectedString)
         .exec((err, user) => {
             if (err)
@@ -159,79 +159,93 @@ exports.remove = (req, res) => {
     });
 };
 
-exports.confirmUserAccount = (req, res) => {
+exports.confirmUserAccount = async (req, res) => {
     const { authUserId } = req.params;
-    User.findById(authUserId).exec((err, user) => {
-        if (!user)
-            return res.status(404).json(msg("error.notFoundConfirmation"));
-        if (err) return res.status(500).json(msgG("error.systemError", err));
+    const { role } = await req.getAccount(id);
 
-        const { isUserConfirmed, name } = user;
+    User(role)
+        .findById(authUserId)
+        .exec((err, user) => {
+            if (!user)
+                return res.status(404).json(msg("error.notFoundConfirmation"));
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
 
-        if (user && !isUserConfirmed) {
-            User.findByIdAndUpdate(authUserId, { isUserConfirmed: true }).exec(
-                (err) => {
-                    if (err)
-                        return res
-                            .status(500)
-                            .json(msgG("error.systemError", err));
-                    res.json(msg("ok.userConfirmed", name));
-                }
-            );
-        } else {
-            res.status(400).json(msg("error.userAlreadyConfirmed"));
-        }
-    });
+            const { isUserConfirmed, name } = user;
+
+            if (user && !isUserConfirmed) {
+                User(role)
+                    .findByIdAndUpdate(authUserId, { isUserConfirmed: true })
+                    .exec((err) => {
+                        if (err)
+                            return res
+                                .status(500)
+                                .json(msgG("error.systemError", err));
+                        res.json(msg("ok.userConfirmed", name));
+                    });
+            } else {
+                res.status(400).json(msg("error.userAlreadyConfirmed"));
+            }
+        });
 };
 
-exports.addElementArray = (req, res) => {
+exports.addElementArray = async (req, res) => {
     const objToChange = req.body; // n2
     const _id = req.params.id;
-    User.findByIdAndUpdate(_id, { $push: objToChange }, { new: true }).exec(
-        (err, user) => {
+
+    const { role } = await req.getAccount(id);
+
+    User(role)
+        .findByIdAndUpdate(_id, { $push: objToChange }, { new: true })
+        .exec((err, user) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err)); // NEED CREATE
             res.json({
                 user,
                 msg: msgG("ok.added", "onlyMsg"),
             });
-        }
-    );
+        });
 };
 
-exports.removeElementArray = (req, res) => {
+exports.removeElementArray = async (req, res) => {
     const objToChange = req.body;
     const _id = req.params.id;
-    User.findByIdAndUpdate(_id, { $pull: objToChange }, { new: true }).exec(
-        (err, user) => {
+
+    const { role } = await req.getAccount(id);
+    User(role)
+        .findByIdAndUpdate(_id, { $pull: objToChange }, { new: true })
+        .exec((err, user) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err)); // NEED CREATE
             res.json({
                 user,
                 msg: msgG("ok.removed", "onlyMsg"),
             });
-        }
-    );
+        });
 };
 
-exports.removeField = (req, res) => {
+exports.removeField = async (req, res) => {
     // n1
     let targetField = req.body.fieldToBeDeleted;
-    User.findById(req.params.id).exec((err, selectedUser) => {
-        if (!selectedUser)
-            return res.status(404).json({ msg: "data or user not found" });
-        if (selectedUser[targetField] === "[]")
-            return res
-                .status(400)
-                .json(msgG("error.notRemovedField", targetField));
-        // if(!selectedUser[targetField]) return res.status(404).json({ msg: "this field does not exist or already deleted" });
 
-        selectedUser.set(targetField, undefined, { strict: true });
-        selectedUser.save((err) => {
-            if (err) return res.json({ error: "shit" });
-            res.json(msgG("ok.removedField", targetField));
+    const { role } = await req.getAccount(id);
+    User(role)
+        .findById(req.params.id)
+        .exec((err, selectedUser) => {
+            if (!selectedUser)
+                return res.status(404).json({ msg: "data or user not found" });
+            if (selectedUser[targetField] === "[]")
+                return res
+                    .status(400)
+                    .json(msgG("error.notRemovedField", targetField));
+            // if(!selectedUser[targetField]) return res.status(404).json({ msg: "this field does not exist or already deleted" });
+
+            selectedUser.set(targetField, undefined, { strict: true });
+            selectedUser.save((err) => {
+                if (err) return res.json({ error: "shit" });
+                res.json(msgG("ok.removedField", targetField));
+            });
         });
-    });
 };
 
 exports.readBackup = (req, res) => {
@@ -243,9 +257,11 @@ exports.readBackup = (req, res) => {
 };
 
 // USER PURCHASE HISTORY
-exports.addPurchaseHistory = (req, res) => {
+exports.addPurchaseHistory = async (req, res) => {
     const { _id, clientUserData } = req.profile;
     if (!clientUserData) return res.json({ error: "requres user data array" });
+
+    const { role } = await req.getAccount(id);
 
     const totalNonPrizeCards = clientUserData.purchaseHistory.filter(
         (card) => card.cardType === "record"
@@ -267,30 +283,35 @@ exports.addPurchaseHistory = (req, res) => {
     if (lastCard) {
         const lastCardNumber = totalNonPrizeCards;
 
-        User.findOneAndUpdate(
-            { _id },
-            // remove the last object to update with a new order
-            {
-                $pull: {
-                    "clientUserData.purchaseHistory": {
-                        desc: `Última Compra ${lastCardNumber}`,
+        User(role)
+            .findOneAndUpdate(
+                { _id },
+                // remove the last object to update with a new order
+                {
+                    $pull: {
+                        "clientUserData.purchaseHistory": {
+                            desc: `Última Compra ${lastCardNumber}`,
+                        },
                     },
                 },
-            },
-            { new: false }
-        ).exec((err) => {
-            if (err)
-                return res.status(500).json(msgG("error.systemError", err));
-            findOneAndUpdate(User, { res, _id, currCard, lastCard });
-        });
+                { new: false }
+            )
+            .exec((err) => {
+                if (err)
+                    return res.status(500).json(msgG("error.systemError", err));
+                findOneAndUpdate(User(role), { res, _id, currCard, lastCard });
+            });
     } else {
         // Add without deleting the last card
-        findOneAndUpdate(User, { res, _id, currCard, lastCard });
+        findOneAndUpdate(User(role), { res, _id, currCard, lastCard });
     }
 };
 
-exports.readHistoryList = (req, res) => {
+exports.readHistoryList = async (req, res) => {
     const { _id, clientUserData } = req.profile;
+
+    const { role } = req.getAccount(_id);
+
     let {
         noResponse = false,
         skip,
@@ -354,15 +375,17 @@ exports.readHistoryList = (req, res) => {
         "prize, remainder".includes(newHistoryData[0].cardType);
 
     if (conditionToSave) {
-        User.findOneAndUpdate(
-            { _id },
-            { $set: { "clientUserData.purchaseHistory": newHistoryData } },
-            { new: false }
-        ).exec((err, user) => {
-            if (err)
-                return res.status(500).json(msgG("error.systemError", err));
-            res.json(finalRes);
-        });
+        User(role)
+            .findOneAndUpdate(
+                { _id },
+                { $set: { "clientUserData.purchaseHistory": newHistoryData } },
+                { new: false }
+            )
+            .exec((err, user) => {
+                if (err)
+                    return res.status(500).json(msgG("error.systemError", err));
+                res.json(finalRes);
+            });
     } else {
         res.json(finalRes);
     }
@@ -446,7 +469,8 @@ exports.readPrizes = (req, res) => {
 
     if (!cliAdminId)
         return res.status(404).json({ error: "cliAdminId query missing" });
-    User.findById(cliAdminId)
+    User(role)
+        .findById(cliAdminId)
         .select("clientAdminData.rewardList clientAdminData.arePrizesVisible")
         .exec((err, data) => {
             if (err) return res.status(400).json(msg("error.notFound"));
@@ -493,7 +517,7 @@ exports.readPrizes = (req, res) => {
 };
 
 exports.changePrizeStatus = (req, res) => {
-    const { _id, clientUserData } = req.profile;
+    const { _id, role, clientUserData } = req.profile;
     let { statusType, newValue = undefined, prizeId } = req.query;
 
     if (!"confirmed, received".includes(statusType))
@@ -517,7 +541,8 @@ exports.changePrizeStatus = (req, res) => {
 
     if (status === "FAIL") return res.status(404).json({ error });
 
-    User.findById(_id) // LESSON - do not use select with SAVE.
+    User(role)
+        .findById(_id) // LESSON - do not use select with SAVE.
         .exec((err, doc) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err));
@@ -538,7 +563,7 @@ exports.changePrizeStatus = (req, res) => {
 // END USER PURCHASE HISTORY
 
 exports.countField = (req, res) => {
-    const { _id } = req.profile;
+    const { _id, role } = req.profile;
     const { field, type } = req.body;
 
     if (!field)
@@ -551,14 +576,13 @@ exports.countField = (req, res) => {
         countingField = { [field]: -1 };
     }
 
-    User.findOneAndUpdate(
-        { _id },
-        { $inc: countingField },
-        { new: false }
-    ).exec((err) => {
-        if (err) return res.status(500).json(msgG("error.systemError", err));
-        res.json(`the field ${field.cap()} was updated`);
-    });
+    User(role)
+        .findOneAndUpdate({ _id }, { $inc: countingField }, { new: false })
+        .exec((err) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
+            res.json(`the field ${field.cap()} was updated`);
+        });
 };
 
 exports.redirectUrlLink = async (req, res) => {
@@ -583,9 +607,10 @@ exports.redirectUrlLink = async (req, res) => {
         memberJob = getMemberJob(jobCode);
     }
 
-    const user = await User.findOne({
-        "clientAdminData.bizCodeName": { $regex: `${code}`, $options: "i" },
-    })
+    const user = await User("cliente-admin")
+        .findOne({
+            "clientAdminData.bizCodeName": { $regex: `${code}`, $options: "i" },
+        })
         .select(
             "_id role clientAdminData.bizName clientAdminData.selfBizLogoImg clientAdminData.selfThemeBackColor clientAdminData.selfThemePColor"
         )
@@ -609,12 +634,14 @@ cloudinary.config({
 });
 
 // request: post
-exports.uploadImages = (req, res) => {
+exports.uploadImages = async (req, res) => {
     // n6 - multiple images promise.
     const fileRoot = req.files;
     const imagePath = fileRoot.file.path; // n7 e.g data
     const _id = req.query.id;
     const fileName = req.query.fileName;
+
+    const { role } = req.getAccount(_id);
 
     const options = {
         public_id: fileName,
@@ -631,13 +658,17 @@ exports.uploadImages = (req, res) => {
         .upload(imagePath, options)
         .then((fileResult) => {
             const generatedUrl = addTransformToImgUrl(fileResult.secure_url);
-            User.findByIdAndUpdate(_id, {
-                $set: { "clientAdminData.selfBizLogoImg": generatedUrl },
-            }).exec((err) => {
-                if (err)
-                    return res.status(500).json(msgG("error.systemError", err));
-                res.json(generatedUrl);
-            });
+            User(role)
+                .findByIdAndUpdate(_id, {
+                    $set: { "clientAdminData.selfBizLogoImg": generatedUrl },
+                })
+                .exec((err) => {
+                    if (err)
+                        return res
+                            .status(500)
+                            .json(msgG("error.systemError", err));
+                    res.json(generatedUrl);
+                });
         })
         .catch((err) => res.status(500).json(msgG("error.systemError", err)));
 };
@@ -646,13 +677,18 @@ exports.updateImages = (req, res) => {
     const _id = req.query.id;
     const { lastUrl, paramArray, customParam } = req.body;
 
+    const { role } = req.getAccount(_id);
+
     const updatedUrl = addTransformToImgUrl(lastUrl, paramArray);
-    User.findByIdAndUpdate(_id, {
-        $set: { "clientAdminData.selfBizLogoImg": updatedUrl },
-    }).exec((err) => {
-        if (err) return res.status(500).json(msgG("error.systemError", err));
-        res.json(updatedUrl);
-    });
+    User(role)
+        .findByIdAndUpdate(_id, {
+            $set: { "clientAdminData.selfBizLogoImg": updatedUrl },
+        })
+        .exec((err) => {
+            if (err)
+                return res.status(500).json(msgG("error.systemError", err));
+            res.json(updatedUrl);
+        });
 };
 // END IMAGES UPLOAD
 
@@ -662,11 +698,11 @@ exports.gotUsersInThisChallenge = (req, res) => {
     const bizId = req.query.id;
     const challengeInd = Number(req.query.challengeInd);
 
-    User.find({
-        role: "cliente",
-        "clientUserData.bizId": bizId,
-        "clientUserData.totalPurchasePrize": challengeInd,
-    })
+    User("cliente")
+        .find({
+            "clientUserData.bizId": bizId,
+            "clientUserData.totalPurchasePrize": challengeInd,
+        })
         .select("clientUserData.totalPurchasePrize")
         .exec((err, data) => {
             if (err)
