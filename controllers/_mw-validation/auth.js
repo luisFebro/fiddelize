@@ -6,7 +6,7 @@ const CPF = require("../../utils/validation/validateCpf");
 const { msg } = require("../_msgs/auth");
 const { msgG } = require("../_msgs/globalMsgs");
 const { jsEncrypt } = require("../../utils/security/xCipher");
-const checkValidSequence = require("../../utils/biz-algorithms/password/checkValidSequence");
+const checkValidSequence = require("./algorithms/checkValidSequence");
 const {
     checkAccountLimit,
     checkIfAlreadyHasUser,
@@ -32,11 +32,9 @@ exports.mwValidateRegister = async (req, res, next) => {
         const userExists = await checkIfAlreadyHasUser(req.body);
         if (userExists) {
             const targetRole = role === "cliente" ? "cliente" : "admin";
-            return res
-                .status(401)
-                .json({
-                    error: `Não foi possível cadastrar com este CPF no app do ${targetRole}`,
-                });
+            return res.status(401).json({
+                error: `Não foi possível cadastrar com este CPF no app do ${targetRole}`,
+            });
         }
     }
 

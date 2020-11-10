@@ -12,6 +12,14 @@ const AsyncRegister = Load({
         ),
 });
 
+const AsyncRegisterMember = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "../../../../../components/auth/RegisterClientMember" /* webpackChunkName: "cli-member-register-comp-lazy" */
+        ),
+});
+
 export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
     const [hidePanel, setHidePanel] = useState(false);
     const payload = useRef({});
@@ -31,10 +39,17 @@ export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
     const showNewCliRegister = () =>
         !hidePanel && (
             <section className="my-5">
-                <AsyncRegister
-                    isStaff={true}
-                    callback={handleSuccessfulRegister}
-                />
+                {isNewMember ? (
+                    <AsyncRegisterMember
+                        isStaff={true} // isStaff define if is from the dashboard or not
+                        callback={handleSuccessfulRegister}
+                    />
+                ) : (
+                    <AsyncRegister
+                        isStaff={true}
+                        callback={handleSuccessfulRegister}
+                    />
+                )}
             </section>
         );
 
@@ -45,7 +60,11 @@ export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
     };
 
     const showSuccessOp = () => (
-        <SuccessOp trigger={hidePanel} ctaFunc={handleNewInvitation} />
+        <SuccessOp
+            trigger={hidePanel}
+            ctaFunc={handleNewInvitation}
+            isNewMember={isNewMember}
+        />
     );
 
     return (

@@ -24,6 +24,7 @@ export default function SuccessOp({
     title = "Cliente Cadastrado!",
     trigger = false,
     ctaFunc,
+    isNewMember,
 }) {
     const [mainTitle, setMainTitle] = useState("");
     const readyForwarding = useDelay(6000);
@@ -32,7 +33,9 @@ export default function SuccessOp({
 
     useEffect(() => {
         if (title === "Cliente Cadastrado!")
-            return setMainTitle("Cliente Cadastrado!");
+            return setMainTitle(
+                `${isNewMember ? "Membro" : "Cliente"} Cadastrado!`
+            );
 
         if (!readyForwarding || !title) {
             setMainTitle("Processando...");

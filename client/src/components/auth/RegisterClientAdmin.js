@@ -213,7 +213,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             ReactGA.event({
                 // n1
                 label: "Form",
-                category: "UserCliAdmin",
+                category: "cliAdmin",
                 action: "Created an account",
                 transport: "beacon",
             });

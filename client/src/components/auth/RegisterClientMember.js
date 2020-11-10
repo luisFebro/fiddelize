@@ -75,6 +75,15 @@ function Register({
 }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
+
+    const {
+        selfThemePColor,
+        selfThemeSColor,
+        selfThemeBackColor,
+        selfBizLogoImg,
+        bizName,
+    } = useClientAdmin();
+
     const [data, setData] = useState({
         role: "cliente-membro",
         name: "",
@@ -85,8 +94,8 @@ function Register({
         gender: "selecione gênero",
         clientMemberData: { bizId: bizSysId, filterBirthday: "" },
         filter,
-        bizImg: "", // for account panel...
-        bizName: "", // for account panel...
+        bizImg: selfBizLogoImg, // for account panel...
+        bizName: bizName, // for account panel...
     });
 
     const styles = getStyles();
@@ -99,13 +108,8 @@ function Register({
 
     let { role, name, email, gender, birthday, cpf, phone } = data;
 
-    const {
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-        selfBizLogoImg,
-        bizName,
-    } = useClientAdmin();
+    console.log("bizName", bizName);
+    console.log("selfBizLogoImg", selfBizLogoImg);
 
     useEffect(() => {
         setData({
@@ -214,7 +218,7 @@ function Register({
             // setRun(dispatch, "ProCreditsBadge") // update total credits after registration...
 
             ReactGA.event({
-                category: "UserCliUser",
+                category: "cliMemberUser",
                 action: "Created an account",
                 label: "form",
                 nonInteraction: true,
@@ -269,7 +273,7 @@ function Register({
         <div className="position-relative">
             <Title
                 title={isStaff ? "Cadastro" : "Cadastre-se!"}
-                subTitle={isStaff ? "Novo Cliente" : "É rápido e fácil."}
+                subTitle={isStaff ? "Novo Membro" : ""}
                 color="var(--mainWhite)"
                 needShadow={true}
                 backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
@@ -287,7 +291,7 @@ function Register({
             }}
         >
             <div id="field1" className="mt-3">
-                {isStaff ? "Qual nome do cliente?" : "Qual é o seu nome?"}
+                {isStaff ? "Qual nome do membro?" : "Qual é o seu nome?"}
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
@@ -327,7 +331,7 @@ function Register({
                 id="field2"
                 className={`d-none animated slideInLeft fast mt-3`}
             >
-                {isStaff ? "Ok, informe CPF do cliente" : "Ok, informe seu CPF"}
+                {isStaff ? "Ok, informe CPF do membro" : "Ok, informe seu CPF"}
                 <TextField
                     required
                     margin="dense"
@@ -372,7 +376,7 @@ function Register({
             </div>
             <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
                 {isStaff ? (
-                    "Quando é aniversário do cliente?"
+                    "Quando é aniversário?"
                 ) : name ? (
                     <span>{name.cap()}, quando é o seu aniversário?</span>
                 ) : (

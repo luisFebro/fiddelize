@@ -215,7 +215,7 @@ function Register({
             // setRun(dispatch, "ProCreditsBadge") // update total credits after registration...
 
             ReactGA.event({
-                category: "UserCliUser",
+                category: "cliUser",
                 action: "Created an account",
                 label: "form",
                 nonInteraction: true,

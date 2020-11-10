@@ -11,9 +11,7 @@ const { sendEmailBack } = require("../../controllers/email");
 
 // HELPERS
 async function comparePswds(userId, options = {}) {
-    const { pswd } = options;
-
-    const { role } = req.getAccount(userId);
+    const { pswd, role } = options;
 
     const userData = await User(role)
         .findById(userId)
@@ -63,7 +61,7 @@ const checkForExpiryToken = async (currToken) => {
 exports.createPassword = async (req, res) => {
     const { newPswd, newPswd2, userId } = req.body;
 
-    const { role } = req.getAccount(userId);
+    const { role } = await req.getAccount(userId);
 
     if (newPswd && !newPswd2) return res.json({ msg: "ok pswd1" });
 
@@ -102,7 +100,7 @@ exports.createPassword = async (req, res) => {
 exports.checkPassword = async (req, res) => {
     const { pswd, userId, checkIfLocked = false } = req.body;
 
-    const { role } = req.getAccount(userId);
+    const { role } = await req.getAccount(userId);
 
     if (checkIfLocked) {
         const data = await User(role)
@@ -130,7 +128,7 @@ exports.checkPassword = async (req, res) => {
     if (!pswd || !userId)
         return res.status(400).json({ error: "Senha ou Id faltando..." });
 
-    const checkRes = await comparePswds(userId, { pswd });
+    const checkRes = await comparePswds(userId, { pswd, role });
 
     if (!checkRes) {
         const data = await User(role)
@@ -210,7 +208,7 @@ exports.checkPassword = async (req, res) => {
 exports.changePassword = async (req, res) => {
     const { userId, newPswd, newPswd2 } = req.body;
 
-    const { role } = req.getAccount(userId);
+    const { role } = await req.getAccount(userId);
     // adapt from recoverPassword's variables
     const priorPswd = newPswd;
     const realNewPswd = newPswd2;
@@ -244,7 +242,7 @@ exports.changePassword = async (req, res) => {
 exports.forgotPasswordRequest = async (req, res) => {
     const { userId, cpf, email } = req.body;
 
-    const { role } = req.getAccount(userId);
+    const { role } = await req.getAccount(userId);
 
     const encryptedCPF = jsEncrypt(cpf);
 
@@ -301,7 +299,7 @@ exports.recoverPassword = async (req, res) => {
             res.json(false);
         });
 
-        const { role } = req.getAccount(tokenOk.id);
+        const { role } = await req.getAccount(tokenOk.id);
         thisRole = role;
 
         if (tokenOk) {

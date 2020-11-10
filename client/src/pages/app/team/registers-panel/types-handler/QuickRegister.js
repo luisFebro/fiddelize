@@ -339,7 +339,12 @@ export default function QuickRegister({ formPayload, isNewMember }) {
 
     const showSuccessOp = () =>
         successOp && (
-            <SuccessOp trigger={successOp} title={title} ctaFunc={ctaFunc} />
+            <SuccessOp
+                trigger={successOp}
+                title={title}
+                ctaFunc={ctaFunc}
+                isNewMember={isNewMember}
+            />
         );
 
     return (

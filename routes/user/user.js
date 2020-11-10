@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const {
     read,
     update,
@@ -9,19 +10,24 @@ const {
     removeElementArray,
     removeField,
     readBackup,
-    createBooking,
     mwUserId,
     mwBackup,
+    countField,
+    redirectUrlLink,
+    gotUsersInThisChallenge,
+} = require("../../controllers/user");
+
+const {
+    uploadImages,
+    updateImages,
+} = require("../../controllers/media/adminLogo");
+
+const {
+    readPrizes,
     addPurchaseHistory,
     readHistoryList,
     changePrizeStatus,
-    countField,
-    uploadImages,
-    updateImages,
-    redirectUrlLink,
-    gotUsersInThisChallenge,
-    readPrizes,
-} = require("../../controllers/user");
+} = require("../../controllers/user/purchase-history/purchaseHistory");
 
 const {
     getRecordedClientList,
@@ -54,7 +60,7 @@ router.put("/count/field/:userId", countField);
 router.get("/redirect/url-link", redirectUrlLink);
 router.get("/check/user-challenges", gotUsersInThisChallenge);
 
-// IMAGES
+// MEDIA
 router.post("/image/upload", uploadImages);
 router.put("/image/update", updateImages);
 
