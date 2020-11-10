@@ -7,7 +7,7 @@ import getFirstName from "../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
-    readTransactionHistory,
+    readTeamMemberList,
 } from "../../../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
@@ -65,10 +65,10 @@ export default function AsyncCardsList() {
             </section>
         );
 
-    const params = { userId: businessId, skip };
+    const params = { bizId: businessId, skip };
 
     const {
-        // list,
+        list,
         loading,
         ShowLoadingSkeleton,
         error,
@@ -77,29 +77,11 @@ export default function AsyncCardsList() {
         isOffline,
         ShowOverMsg,
     } = useAPIList({
-        url: readTransactionHistory(),
+        url: readTeamMemberList(businessId),
         skip,
         params,
-        listName: "teamTasksList",
+        listName: "teamMemberList",
     });
-
-    // do not forget to include admin in this list in the register in DB
-    const list = [
-        {
-            name: "Luis Febro Feitoza Lima", // it will be name
-            memberJob: "admin",
-            newClientTotal: 30,
-            newScoreTotal: 12,
-            createdAt: new Date(),
-        },
-        {
-            name: "Adriana Oliveira da Silva",
-            memberJob: "vendas",
-            newClientTotal: 5,
-            newScoreTotal: 3,
-            createdAt: new Date(),
-        },
-    ];
 
     const detectedCard = useElemDetection({
         loading,
@@ -116,7 +98,9 @@ export default function AsyncCardsList() {
                     className={`position-relative  d-inline-block text-subtitle font-weight-bold text-shadow`}
                     style={{ lineHeight: "25px", top: 5 }}
                 >
-                    {getFirstName(memberName, { addSurname: true })}
+                    {getFirstName(memberName && memberName.cap(), {
+                        addSurname: true,
+                    })}
                 </span>
             </section>
         );
@@ -134,7 +118,7 @@ export default function AsyncCardsList() {
                         <span className="main-font text-em-1 font-weight-bold">
                             Atuação:{" "}
                             <span className="font-weight-bold main-font text-em-1-2">
-                                {data.memberJob}
+                                {data.job}
                             </span>
                         </span>
                     </p>

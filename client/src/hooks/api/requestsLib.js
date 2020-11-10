@@ -66,3 +66,6 @@ export const recoverPassword = () => `/api/auth/pswd/recover`;
 export const changePassword = () => `/api/auth/pswd/change`;
 export const createPassword = () => `/api/auth/pswd/create`;
 // export const makeGoogleLogin = () => `/api/auth/google`; // POST
+
+// TEAM
+export const readTeamMemberList = () => `/api/user/team/list`;

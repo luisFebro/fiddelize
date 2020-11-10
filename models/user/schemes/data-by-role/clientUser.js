@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 const { NotificationsSchema, OnceCheckedSchema } = require("../schemes.js");
 
 const historyData = {
@@ -44,6 +45,7 @@ const clientUserData = {
     filterBirthday: Number, // 23 de Agosto de 1994 => 823 (month code + day code)
     filterLastPurchase: Date,
     filterHighestPurchase: Number,
+    registeredBy: { type: ObjectId, ref: "CliMember" }, // not applicable for admin, need to fetch from admin doc
 };
 
 const ClientUserSchema = new Schema(clientUserData, { _id: false });

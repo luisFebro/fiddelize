@@ -34,6 +34,8 @@ const {
     getHighestScores,
 } = require("../../controllers/user/clients-session/recordedClients");
 
+const { readTeamMemberList } = require("../../controllers/user/team/team");
+
 const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
 // @route  api/user
 // RUD
@@ -69,6 +71,9 @@ router.put("/image/update", updateImages);
 router.put("/field/array/push/:id", addElementArray);
 router.put("/field/array/pull/:id", removeElementArray);
 router.put("/field/remove/:id", removeField);
+
+// TEAM
+router.get("/team/list", readTeamMemberList);
 
 router.param("userId", mwUserId); // n1
 

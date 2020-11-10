@@ -5,6 +5,7 @@ const collectionName = "user_cli-admins";
 const {
     ClientAdminSchema,
     ClientUserSchema,
+    ClientMemberSchema,
 } = require("../schemes/data-by-role/main");
 const { DefaultFilterSchema } = require("../schemes");
 const { profileSchema } = require("../schemes/profileSchema");
@@ -13,6 +14,7 @@ const data = {
     ...profileSchema,
     clientAdminData: ClientAdminSchema,
     clientUserData: ClientUserSchema, // used for testing mode
+    clientMemberData: ClientMemberSchema,
     filter: DefaultFilterSchema,
     pswd: String,
     expiryToken: {

@@ -94,7 +94,7 @@ export default function AsyncCardsList() {
             clientScore: 150,
             memberTask: "newScore",
             memberName: "Luis Febro Feitoza Lima",
-            memberJob: "admin",
+            job: "admin",
             content: "",
             createdAt: new Date(),
         },
@@ -103,7 +103,7 @@ export default function AsyncCardsList() {
             clientScore: 250, // Cadastrou e pontuou: R$ 250.
             memberTask: "newClient",
             memberName: "Adriana Oliveira da Silva",
-            memberJob: "vendas",
+            job: "vendas",
             content: "",
             createdAt: new Date(),
         },
