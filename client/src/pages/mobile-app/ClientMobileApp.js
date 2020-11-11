@@ -87,7 +87,7 @@ function ClientMobileApp({ location, history }) {
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        showWelcomeMsg(dispatch, "Febro");
+        showWelcomeMsg(dispatch, getFirstName(name));
     }, []);
     // for logout access data.
     const [dataStore, setDataStore] = useState({

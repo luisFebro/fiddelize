@@ -11,6 +11,7 @@ import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
 import ReturnButton from "../../../components/buttons/ReturnBtn";
+import { useAuthUser } from "../../../hooks/useAuthUser";
 
 export const AsyncBellNotifBtn = Load({
     loading: false,
@@ -20,8 +21,11 @@ export const AsyncBellNotifBtn = Load({
         ),
 });
 
-export default function TeamApp({ location, isCliAdmin = true }) {
+export default function TeamApp({ history, location, isCliAdmin = true }) {
     const [firstName] = useData(["firstName"]);
+
+    // redirect if not auth
+    useAuthUser({ history });
 
     const isPreviewMode = location.search.includes("modo-prev=1");
 

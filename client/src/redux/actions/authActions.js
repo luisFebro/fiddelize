@@ -12,12 +12,15 @@ import { setVar, store } from "../../hooks/storage/useVar";
 
 // Check token & load user
 let alreadyPass = false;
-export const loadUser = () => (dispatch, getState) => {
+export const loadUser = () => (dispatch, getState) => (history) => {
     console.log("==USER LOADING==");
     axios
         .get("/api/auth/user", tokenConfig(getState))
         .then((res) => {
             dispatch({ type: "USER_ONLINE", payload: true });
+
+            const gotError = res.data && res.data.error;
+            if (gotError) logout(dispatch, { history });
 
             const role = res.data.profile.role;
             const userId = res.data.profile._id;
@@ -37,6 +40,7 @@ export const loadUser = () => (dispatch, getState) => {
                 gotObj &&
                 err.response.data.msg &&
                 err.response.data.msg.length !== 0;
+
             if (gotObj && err.response.status === 500 && gotMsg) {
                 dispatch({ type: "USER_ONLINE", payload: false });
             }
@@ -54,8 +58,7 @@ export const loadUser = () => (dispatch, getState) => {
                 window.location.href = "/temporariamente-indisponivel-503";
             }
             if (gotObj && err.response.status === 401 && gotMsg) {
-                // showSnackbar susa sessão
-                logout(dispatch);
+                logout(dispatch, { history });
             }
         });
 };
@@ -129,9 +132,13 @@ export const registerEmail = async (dispatch, objToSend) => {
 };
 
 export const logout = async (dispatch, opts = {}) => {
-    const { needReload = false } = opts;
+    const { needReload = false, history } = opts;
 
     setRun(dispatch, "logout");
+
+    if (history) {
+        isThisApp() ? history.push("/mobile-app") : history.push("/");
+    }
 
     if (needReload) {
         window.location.href = isThisApp() ? "/mobile-app" : "/";

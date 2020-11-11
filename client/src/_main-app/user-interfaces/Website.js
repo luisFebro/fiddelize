@@ -1,5 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
+import { useStoreDispatch } from "easy-peasy";
+import { loadUser } from "../../redux/actions/authActions";
 //LAYOUT
 import Navbar from "../../components/_layout/navbar";
 import Footer from "../../components/_layout/footer/Footer";
@@ -37,9 +39,16 @@ import {
 } from "./CommonImports";
 //END PAGES
 
-function Website({ location }) {
+function Website({ location, history }) {
     const locationNow = location.pathname;
     const dontNeedLayout = !locationNow.includes("/mobile-app/preview");
+
+    const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        // loadReCaptcha();
+        dispatch(loadUser(dispatch))(history);
+    }, [dispatch]);
 
     return (
         <Fragment>

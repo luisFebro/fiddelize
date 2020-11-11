@@ -6,8 +6,6 @@ import deferJsOnload from "../utils/performance/deferJsOnload";
 import useOffline from "../hooks/useOffline";
 import { useRecoveryAndDataOffline } from "../hooks/roles-storage-and-data-recovery";
 import ReactGA from "react-ga"; // google analytics
-import { useStoreDispatch } from "easy-peasy";
-import { loadUser } from "../redux/actions/authActions";
 import { IS_PROD } from "../config/clientUrl";
 import "../utils/globalHelpers";
 //STYLING
@@ -26,7 +24,6 @@ export default function App() {
     useRecoveryAndDataOffline();
     useOffline();
     useCustomerBirthdayToday();
-    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         isWebpSupported(
@@ -52,11 +49,6 @@ export default function App() {
             }
         );
     }, []);
-
-    useEffect(() => {
-        // loadReCaptcha();
-        dispatch(loadUser(dispatch));
-    }, [dispatch]);
 
     return (
         <BrowserRouter>

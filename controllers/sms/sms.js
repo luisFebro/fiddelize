@@ -29,6 +29,7 @@ exports.getCurrBalance = (req, res) => {
 };
 
 // GET
+// Only customers - cli-users
 exports.readContacts = async (req, res) => {
     let {
         userId,
@@ -38,8 +39,6 @@ exports.readContacts = async (req, res) => {
         autocomplete = false, // retuns as string.
         autocompleteLimit = 4,
     } = req.query;
-
-    const { role } = await req.getAccount(userId);
 
     if (!search && !autocomplete) limit = "";
 
@@ -54,7 +53,7 @@ exports.readContacts = async (req, res) => {
     }
 
     // .limit(limit)
-    User(role)
+    User("cliente")
         .find(findThis)
         .select("phone name")
         .sort({ name: 1 })

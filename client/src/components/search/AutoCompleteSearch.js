@@ -52,6 +52,8 @@ function highlightSearchResult(string, search) {
 function handlePickedValuesHistory(pickedValue, options = {}) {
     const { offlineKey, maxHistory } = options;
 
+    if (!offlineKey) return;
+
     getVar(offlineKey).then((data) => {
         if (data) {
             const dataArray = [pickedValue, ...data].filter(Boolean);
@@ -90,6 +92,9 @@ export default function AutoCompleteSearch({
     autoHighlight = true,
     offlineKey = "",
     maxHistory = 4,
+    autoFocus,
+    ignoreEmptyHist = true,
+    disable,
 }) {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
@@ -97,6 +102,8 @@ export default function AutoCompleteSearch({
     const [searchChange, setSearchChange] = useState("");
     const [loading, setLoading] = useState(false);
     const [needHistory, setNeedHistory] = useState(true);
+
+    const didUserStartTyping = Boolean(searchChange.length);
 
     const token = useToken();
     let { name } = useProfile();
@@ -117,6 +124,7 @@ export default function AutoCompleteSearch({
         setSearchChange(currValue);
     };
 
+    // Select the first suggested item from the list
     const onKeyPress = (e) => {
         if (isKeyPressed(e, "Enter")) {
             if (options) {
@@ -132,7 +140,7 @@ export default function AutoCompleteSearch({
                 setNeedHistory(true);
                 setOptions(data);
             } else {
-                setOptions([" "]);
+                !ignoreEmptyHist && setOptions([" "]);
             }
         });
     };
@@ -173,7 +181,7 @@ export default function AutoCompleteSearch({
                     if (response.data.length === 0) {
                         getValuesHistory();
                     } else {
-                        setOptions(response.data);
+                        didUserStartTyping && setOptions(response.data);
                     }
                 }
 
@@ -222,7 +230,7 @@ export default function AutoCompleteSearch({
             onClose={() => {
                 setOpen(false);
             }}
-            onInputChange={(event, value) => onSelectedValue(value)}
+            onChange={(event, value) => onSelectedValue(value)}
             getOptionSelected={(option, value) =>
                 option.toLowerCase() === value.toLowerCase()
             }
@@ -232,7 +240,11 @@ export default function AutoCompleteSearch({
             loadingText="Carregando..."
             clearText="Limpar"
             closeText="Fechar"
-            noOptionsText={`${noOptionsText}, ${name}`}
+            noOptionsText={
+                didUserStartTyping
+                    ? `${noOptionsText}, ${name}`
+                    : `${name}, no aguardo da sua busca!`
+            }
             autoHighlight={autoHighlight}
             includeInputInList
             freeSolo={freeSolo}
@@ -266,6 +278,7 @@ export default function AutoCompleteSearch({
                     style={styles.asyncAutoSearch}
                     placeholder={placeholder}
                     fullWidth
+                    autoFocus={autoFocus}
                     onChange={onSearchChange}
                     onKeyPress={(e) => onKeyPress(e)}
                     variant="outlined"

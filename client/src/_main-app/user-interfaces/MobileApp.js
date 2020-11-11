@@ -1,5 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
+import { useStoreDispatch } from "easy-peasy";
+import { loadUser } from "../../redux/actions/authActions";
 // LAYOUT
 import Navbar from "../../components/_layout/navbar";
 
@@ -42,8 +44,15 @@ const InstallMsg = () => (
     </div>
 );
 
-function Mobile({ location }) {
+function Mobile({ location, history }) {
     const locationNow = location.pathname;
+
+    const dispatch = useStoreDispatch();
+
+    useEffect(() => {
+        // loadReCaptcha();
+        dispatch(loadUser(dispatch))(history);
+    }, [dispatch]);
 
     return (
         <Fragment>
