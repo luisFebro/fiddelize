@@ -1,37 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import cpfMaskBr, {
-    removeCpfMaskBr,
-} from "../../utils/validation/masks/cpfMaskBr";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
-import animateCSS from "../../utils/animateCSS";
 
 const isSmall = window.Helper.isSmallScreen();
 
-NumericKeyboard.propTypes = {
+ScoreKeyboard.propTypes = {
     setDisplay: PropTypes.func,
     display: PropTypes.string,
 };
 
-export default function NumericKeyboard({
+export default function ScoreKeyboard({
+    keyboardType,
     setDisplay,
     display,
-    colorP = "purple",
-    addCallback,
-    eraseCallback,
+    handleReturn,
+    handleConfirm,
+    colorP,
 }) {
     usePlayAudio("/sounds/confirmation-keypad.wav", ".keypadBeepConfirm");
 
-    const refAnima = React.useRef(null);
     const getValue = (value) => {
         if (display.length >= 6) return setDisplay(display);
-
         setDisplay((display += value));
-        if (typeof addCallback === "function") {
-            addCallback();
-        }
     };
 
     const eraseLastChar = () => {
@@ -79,6 +71,21 @@ export default function NumericKeyboard({
                     </div>
                     <div
                         onClick={() => {
+                            eraseLastChar();
+                            playBeep();
+                        }}
+                        style={{ fontSize: "1.8em" }}
+                        className="d-flex align-items-center flex-row justify-content-center erase-last side-btn"
+                    >
+                        <FontAwesomeIcon
+                            icon="arrow-left"
+                            style={{ fontSize: ".9em" }}
+                            className="mr-2 icon-shadow"
+                        />
+                        <span style={{ fontSize: ".7em" }}>Corrigir</span>
+                    </div>
+                    <div
+                        onClick={() => {
                             getValue("4");
                             playBeep();
                         }}
@@ -103,6 +110,21 @@ export default function NumericKeyboard({
                         className="item6"
                     >
                         6
+                    </div>
+                    <div
+                        onClick={() => {
+                            handleReturn();
+                            playBeep();
+                        }}
+                        style={{ fontSize: "1.8em" }}
+                        className="d-flex align-items-center justify-content-center return side-btn"
+                    >
+                        <FontAwesomeIcon
+                            icon="reply"
+                            style={{ fontSize: ".9em" }}
+                            className="mr-2 icon-shadow"
+                        />
+                        <span style={{ fontSize: ".7em" }}>Voltar</span>
                     </div>
                     <div
                         onClick={() => {
@@ -132,6 +154,18 @@ export default function NumericKeyboard({
                         9
                     </div>
                     <div
+                        onClick={handleConfirm}
+                        className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn"
+                    >
+                        <FontAwesomeIcon
+                            icon="check"
+                            style={{ fontSize: "1.9em" }}
+                            className="icon-shadow d-flex align-self-center"
+                        />
+                        <span style={{ fontSize: ".9em" }}>Confirmar</span>
+                    </div>
+                    <div className="empty"></div>
+                    <div
                         onClick={() => {
                             getValue("0");
                             playBeep();
@@ -140,26 +174,7 @@ export default function NumericKeyboard({
                     >
                         0
                     </div>
-                    <div
-                        onClick={() => {
-                            eraseLastChar();
-                            playBeep();
-
-                            if (display.length <= 0) return setDisplay("");
-                            if (typeof eraseCallback === "function") {
-                                eraseCallback();
-                            }
-                        }}
-                        style={{ fontSize: "1.8em" }}
-                        className="d-flex align-items-center flex-row justify-content-center erase-last side-btn"
-                    >
-                        <FontAwesomeIcon
-                            icon="arrow-left"
-                            style={{ fontSize: ".9em" }}
-                            className="mr-2 icon-shadow"
-                        />
-                        <span style={{ fontSize: ".7em" }}>Corrigir</span>
-                    </div>
+                    <div className="empty"></div>
                 </section>
                 <audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
             </GridContainer>
@@ -174,9 +189,10 @@ const GridContainer = styled.div`
         width: 100%;
         max-width: 400px;
     }
+
     & > section {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 40%;
         grid-gap: 5px;
         background-color: var(--mainDark);
         padding: 10px;
@@ -211,11 +227,17 @@ const GridContainer = styled.div`
         font-size: 1.4em;
     }
 
-    .erase-last {
+    & .erase-last {
         background: #fbc531;
     }
 
-    & > section div:nth-child(11) {
-        grid-column: 2 / 4;
+    & .return {
+        background: var(--lightBlue);
+    }
+
+    & .confirm {
+        background: #4cd137;
+        grid-column: 4;
+        grid-row: 3 / span 2;
     }
 `;

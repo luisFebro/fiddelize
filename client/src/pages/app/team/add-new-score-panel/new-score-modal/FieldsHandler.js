@@ -12,7 +12,9 @@ export default function FieldsHandler() {
     return (
         <Fragment>
             {field === "name" && <SearchCustomer setCurr={setCurr} />}
-            {field === "score" && <ScoreCustomer customerName={customerName} />}
+            {field === "score" && (
+                <ScoreCustomer setCurr={setCurr} customerName={customerName} />
+            )}
         </Fragment>
     );
 }
