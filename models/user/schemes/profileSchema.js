@@ -31,6 +31,6 @@ exports.profileSchema = {
     gender: {
         type: String,
         default: "Não selecionado",
-        enum: ["Masculino", "Feminino", "Outros", "Não selecionado"],
+        enum: ["Ele", "Ela"],
     },
 };

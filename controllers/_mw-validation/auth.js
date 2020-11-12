@@ -68,9 +68,11 @@ exports.mwValidateRegister = async (req, res, next) => {
     next();
 };
 
-exports.mwValidateLogin = (req, res, next) => {
-    const { cpf, roleWhichDownloaded: role } = req.body;
+exports.mwValidateLogin = async (req, res, next) => {
+    const { cpf, roleWhichDownloaded } = req.body;
     const isCpfValid = new CPF().validate(cpf);
+
+    const { role } = await req.getAccount(null, { cpf });
 
     User(role)
         .findOne({ cpf: jsEncrypt(cpf) })
@@ -83,7 +85,7 @@ exports.mwValidateLogin = (req, res, next) => {
             if (!user) return res.status(400).json(msg("error.notRegistedCpf"));
             // this following condition is essencial for the moment to avoid conflicts between account login switch.
             const appType = user.role === "cliente-admin" ? "ADMIN" : "CLIENTE";
-            if (role && role !== user.role)
+            if (roleWhichDownloaded && roleWhichDownloaded !== user.role)
                 return res
                     .status(400)
                     .json(msg("error.differentRoles", appType));

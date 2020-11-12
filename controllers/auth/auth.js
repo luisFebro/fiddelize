@@ -195,7 +195,8 @@ exports.login = async (req, res) => {
     const { cpf } = req.body;
 
     const roleData = req.profile[getRoleDataName(role)];
-    const needPanel = roleData.onceChecked.backend_accountPanel;
+    const needPanel =
+        roleData.onceChecked && roleData.onceChecked.backend_accountPanel;
     // const { accounts } = await req.getAccount(null, { cpf, accounts: true })
     if (needPanel) {
         await User(role).findByIdAndUpdate(_id, {

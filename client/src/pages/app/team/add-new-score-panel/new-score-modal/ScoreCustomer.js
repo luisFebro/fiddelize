@@ -1,8 +1,7 @@
 import React, { useState, Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
 import getFirstName from "../../../../../utils/string/getFirstName";
-import ScoreKeyboard from "../../../../../components/keyboards/ScoreKeyboard";
-import moneyMaskBr from "../../../../../utils/validation/masks/moneyMaskBr";
+import MoneyKeyboard from "../../../../../components/keyboards/MoneyKeyboard";
 import { convertBrToDollar } from "../../../../../utils/numbers/convertDotComma";
 
 const getStyles = () => ({
@@ -36,7 +35,8 @@ export default function ScoreCustomer({
     };
 
     const handleConfirm = () => {
-        alert("alerted!");
+        // open confir
+        // Confira o resumo
     };
 
     return (
@@ -49,7 +49,7 @@ export default function ScoreCustomer({
                         addSurname: true,
                     })}
                 </span>
-                Quantos pontos fez?
+                Quanto foi a compra?
             </h1>
             <section className="animated slideInRight container-center">
                 <TextField
@@ -59,13 +59,13 @@ export default function ScoreCustomer({
                     }}
                     inputProps={{ style: styles.input }}
                     name="score"
-                    value={moneyMaskBr(score)}
+                    value={score}
                     variant="outlined"
                     error={false}
                     autoComplete="off"
                 />
             </section>
-            <ScoreKeyboard
+            <MoneyKeyboard
                 setDisplay={setScore}
                 display={score}
                 colorP={colorP}

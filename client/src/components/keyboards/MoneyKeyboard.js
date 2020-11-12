@@ -3,15 +3,18 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
+import moneyMaskBr from "../../utils/validation/masks/moneyMaskBr";
+import { useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
 
 const isSmall = window.Helper.isSmallScreen();
 
-ScoreKeyboard.propTypes = {
+MoneyKeyboard.propTypes = {
     setDisplay: PropTypes.func,
     display: PropTypes.string,
 };
 
-export default function ScoreKeyboard({
+export default function MoneyKeyboard({
     keyboardType,
     setDisplay,
     display,
@@ -21,9 +24,13 @@ export default function ScoreKeyboard({
 }) {
     usePlayAudio("/sounds/confirmation-keypad.wav", ".keypadBeepConfirm");
 
+    const dispatch = useStoreDispatch();
+
     const getValue = (value) => {
         if (display.length >= 6) return setDisplay(display);
-        setDisplay((display += value));
+
+        const updatedValue = moneyMaskBr((display += value));
+        setDisplay(updatedValue);
     };
 
     const eraseLastChar = () => {
@@ -154,7 +161,16 @@ export default function ScoreKeyboard({
                         9
                     </div>
                     <div
-                        onClick={handleConfirm}
+                        onClick={() => {
+                            if (!display)
+                                return showSnackbar(
+                                    dispatch,
+                                    "Insira o valor gasto pelo cliente em R$",
+                                    "error",
+                                    3000
+                                );
+                            handleConfirm();
+                        }}
                         className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn"
                     >
                         <FontAwesomeIcon
