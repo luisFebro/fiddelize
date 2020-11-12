@@ -23,10 +23,16 @@ export default function SearchCustomer({ setCurr }) {
     return (
         <section>
             <h1
-                className="animated fadeInUp delay-1s mb-4 text-center text-white text-subtitle font-weight-bold"
-                style={{ marginTop: "4rem" }}
+                className="animated fadeInUp delay-1s text-center text-white text-subtitle font-weight-bold"
+                style={{
+                    marginTop: "1rem",
+                    marginBottom: "4rem",
+                    lineHeight: "30px",
+                }}
             >
-                Qual é o nome do cliente?
+                Qual é o nome
+                <br />
+                do cliente?
             </h1>
             <AutoCompleteSearch
                 autocompleteUrl={autocompleteUrl}

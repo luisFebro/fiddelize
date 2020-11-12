@@ -14,6 +14,18 @@ MoneyKeyboard.propTypes = {
     display: PropTypes.string,
 };
 
+const isInvalidValue = (money) => {
+    if (!money) return false;
+
+    const lastChar = money[money.length - 1];
+    console.log("lastChar", lastChar);
+
+    if (lastChar === "." || lastChar === ",")
+        return "Valor não pode terminar com vírgula ou ponto.";
+
+    return false;
+};
+
 export default function MoneyKeyboard({
     keyboardType,
     setDisplay,
@@ -169,6 +181,16 @@ export default function MoneyKeyboard({
                                     "error",
                                     3000
                                 );
+
+                            const errorInvalidMsg = isInvalidValue(display);
+                            if (errorInvalidMsg)
+                                return showSnackbar(
+                                    dispatch,
+                                    errorInvalidMsg,
+                                    "error",
+                                    3000
+                                );
+
                             handleConfirm();
                         }}
                         className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn"

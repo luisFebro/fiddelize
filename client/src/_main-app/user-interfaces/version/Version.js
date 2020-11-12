@@ -4,11 +4,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.7605.4";
+const latestVersion = "3.7607.5";
 // PRÓXIMO:
 // sistema multi-conta (painel de cadastros)
 const updateDescription =
-    "app da equipe - serviço novvos membros - equipe dash pt19";
+    "app da equipe - serviço novvos membros - equipe dash pt20";
 const history = [
     "sistema de acesso e senha",
     "sistema de planos - integração com serviços individuais",
