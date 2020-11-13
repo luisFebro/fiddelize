@@ -84,7 +84,7 @@ export default function SnackbarRedux() {
             onClose={() =>
                 setTimeout(
                     () => closeSnackbar(dispatch),
-                    snackbarTiming || 4000
+                    snackbarTiming || 2000
                 )
             }
             ContentProps={{

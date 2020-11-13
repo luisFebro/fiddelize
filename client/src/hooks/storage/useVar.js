@@ -8,6 +8,7 @@ export const store = {
     request_api_data: getObj("request_api_data"),
     once_checked: getObj("once_checked"),
     user: getObj("user"), // for profiles, offline profile data. useful to access the last user logged in data related.
+    audios: getObj("audios"),
 };
 
 const variablesStore = (storeName = "global_variables") =>

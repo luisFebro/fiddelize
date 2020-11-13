@@ -32,16 +32,11 @@ import useBackColor from "../../hooks/useBackColor";
 import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
-import getFirstName from "../../utils/string/getFirstName";
-import {
-    getVar,
-    removeVar,
-    getMultiVar,
-    store,
-} from "../../hooks/storage/useVar";
+import { getVar, removeVar, store } from "../../hooks/storage/useVar";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import RedirectLink from "../../components/RedirectLink";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
+import useData from "../../hooks/useData";
 
 const AsyncAccessGateKeeper = Load({
     loader: () =>
@@ -62,8 +57,9 @@ const showWelcomeMsg = (dispatch, userName) => {
         if (res) {
             showSnackbar(
                 dispatch,
-                `Olá de volta, ${userName && getFirstName(userName.cap())}!`,
-                "success"
+                `Olá de volta, ${userName}!`,
+                "success",
+                2000
             );
             removeVar("welcomeMsg");
         }
@@ -82,42 +78,25 @@ function ClientMobileApp({ location, history }) {
 
     let { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
-    let { _id, role, name } = useProfile();
+    let { _id } = useProfile();
+
+    const [rememberAccess, success, role, name, fullName] = useData([
+        "rememberAccess",
+        "success",
+        "role",
+        "firstName",
+        "name",
+    ]);
+    const loadingAccess = Boolean(rememberAccess === "...");
+    isAuthUser = isAuthUser || (success !== "..." && success);
 
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        showWelcomeMsg(dispatch, getFirstName(name));
-    }, []);
-    // for logout access data.
-    const [dataStore, setDataStore] = useState({
-        name: "...",
-        role: "...",
-        rememberAccess: false,
-        loadingAccess: true,
-        success: false,
-    });
-    const { rememberAccess, loadingAccess, success } = dataStore;
-    role = dataStore.role || role;
-    name = dataStore.name || name;
-    isAuthUser = isAuthUser || success;
-
-    useEffect(() => {
-        getMultiVar(
-            ["name", "role", "rememberAccess", "success"],
-            store.user
-        ).then((dataList) => {
-            const [thisName, thisRole, access, success] = dataList;
-            setDataStore((prev) => ({
-                ...prev,
-                rememberAccess: access,
-                name: thisName,
-                role: thisRole,
-                loadingAccess: false,
-                success,
-            }));
-        });
-    }, []);
+        if (name !== "...") {
+            showWelcomeMsg(dispatch, name);
+        }
+    }, [name]);
 
     const {
         bizCodeName,
@@ -263,7 +242,7 @@ function ClientMobileApp({ location, history }) {
         (role === "cliente-admin" && !needAppForCliAdmin);
 
     const handleRoleName = () => {
-        if (loadingAccess) return "";
+        if (loadingAccess) return "...";
         if (role === "cliente-admin" || isUrlAdmin) return "Admin";
         return "Cliente";
     };
@@ -351,9 +330,7 @@ function ClientMobileApp({ location, history }) {
                 {!isSessionOver && "Conectado por"}
                 {!isSessionOver && <br />}
                 <strong className="text-title animated bounce">
-                    {name
-                        ? getFirstName(name.cap(), { addSurname: true })
-                        : "..."}
+                    {fullName}
                 </strong>
                 <br />
             </span>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
 import { useProfile } from "../../../../../hooks/useRoleData";
 
-export default function SearchCustomer({ setCurr }) {
+export default function SearchCustomer({ setCurr, textColor }) {
     const [data, setData] = useState({
         selectedValue: "",
     });
@@ -23,7 +23,7 @@ export default function SearchCustomer({ setCurr }) {
     return (
         <section>
             <h1
-                className="animated fadeInUp delay-1s text-center text-white text-subtitle font-weight-bold"
+                className={`animated fadeInUp delay-1s text-center ${textColor} text-subtitle font-weight-bold`}
                 style={{
                     marginTop: "1rem",
                     marginBottom: "4rem",
@@ -41,7 +41,7 @@ export default function SearchCustomer({ setCurr }) {
                 autoFocus={true}
                 openOnFocus={false}
                 selectOnFocus={false}
-                noOptionsText="Nenhum cliente encontrado"
+                noOptionsText="Cliente não cadastrado"
                 maxHistory={7}
             />
         </section>

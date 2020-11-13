@@ -78,7 +78,11 @@ function Login({
             // Pre login store data
             const storeElems = [
                 { role },
-                { name: getFirstName(name, { addSurname: true }) },
+                {
+                    name: getFirstName(name && name.cap(), {
+                        addSurname: true,
+                    }),
+                },
                 { firstName: getFirstName(name && name.cap()) },
                 { userId: authUserId },
                 { bizCodeName },

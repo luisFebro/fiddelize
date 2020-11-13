@@ -1,17 +1,18 @@
+import { setVar, store } from "../../hooks/storage/useVar";
 // preload, cache multimedia.
-export default function convertBlobToData(blob, mediaElem, options = {}) {
-    const { storeAudioTo } = options;
+export default function convertBlobToData(blob, options = {}) {
+    const { prerender, audio, mediaName } = options;
 
-    if(!blob || !mediaElem) throw new Error("Missing arguments...")
+    if (!blob || !mediaName) throw new Error("Missing arguments...");
 
     const reader = new FileReader();
     reader.readAsDataURL(blob);
-    reader.onloadend = function() {
+    reader.onloadend = function () {
         const str64Data = reader.result;
-        if(storeAudioTo) {
-            localStorage.setItem(storeAudioTo, str64Data)
+        if (prerender) {
+            setVar({ [mediaName]: str64Data }, store.audios);
         } else {
-            mediaElem.src = str64Data;
+            audio.src = str64Data;
         }
-    }
+    };
 }
