@@ -37,6 +37,7 @@ import { Load } from "../../components/code-splitting/LoadableComp";
 import RedirectLink from "../../components/RedirectLink";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import useData from "../../hooks/useData";
+import useScrollUp from "../../hooks/scroll/useScrollUp";
 
 const AsyncAccessGateKeeper = Load({
     loader: () =>
@@ -74,6 +75,7 @@ function ClientMobileApp({ location, history }) {
         logoFid: "",
     });
 
+    useScrollUp();
     useManageProServices();
 
     let { isAuthUser } = useAuthUser();

@@ -5,7 +5,7 @@ import SuccessMsg from "./SuccessMsg";
 import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
 import { useClientAdmin } from "../../../../../hooks/useRoleData";
 
-export default function FieldsHandler() {
+export default function FieldsHandler({ closeModal }) {
     const [curr, setCurr] = useState({
         field: "name", // name
         customerName: "",
@@ -34,7 +34,11 @@ export default function FieldsHandler() {
                 />
             )}
             {field === "success" && (
-                <SuccessMsg needDark={needDark} textColor={textColor} />
+                <SuccessMsg
+                    needDark={needDark}
+                    textColor={textColor}
+                    closeModal={closeModal}
+                />
             )}
         </Fragment>
     );

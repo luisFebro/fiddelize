@@ -35,3 +35,11 @@ export const AsyncTeamApp = Load({
             "../../pages/app/team/TeamApp" /* webpackChunkName: "team-app-lazy" */
         ),
 });
+
+// CLIENT APP
+export const AsyncVirtualCard = Load({
+    loader: () =>
+        import(
+            "../../pages/client/virtual-card/VirtualCard" /* webpackChunkName: "virtual-card-page-lazy" */
+        ),
+});

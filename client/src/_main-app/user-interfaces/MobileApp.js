@@ -29,6 +29,7 @@ import {
     AsyncFixDatePage,
     AsyncPasswordPage,
     AsyncTeamApp,
+    AsyncVirtualCard,
 } from "./CommonImports";
 //END PAGES
 
@@ -113,6 +114,11 @@ function Mobile({ location, history }) {
                     component={AsyncNewPassword}
                 />
                 <Route path="/t/app/equipe" exact component={AsyncTeamApp} />
+                <Route
+                    path="/cartao-virtual"
+                    exact
+                    component={AsyncVirtualCard}
+                />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

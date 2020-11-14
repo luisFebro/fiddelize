@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from "../../../../../hooks/useRoleData";
 import usePlayAudio from "../../../../../hooks/media/usePlayAudio";
@@ -7,12 +7,25 @@ import useData from "../../../../../hooks/useData";
 export default function SuccessMsg({
     needDark = false,
     textColor = "text-white",
+    closeModal,
 }) {
+    const [closeMsg, setCloseMsg] = useState(false);
+
     const [succMsg] = useData(["cli-member_msg-score-text"], {
         storeName: "audios",
     });
 
-    usePlayAudio(null, "cli-member_msg-score-audio", { autoplay: true });
+    const handleFinishedAudio = () => {
+        setCloseMsg(true);
+        setTimeout(() => {
+            closeModal();
+        }, 2000);
+    };
+
+    usePlayAudio(null, "cli-member_msg-score-audio", {
+        autoplay: true,
+        onendedCallback: handleFinishedAudio,
+    });
 
     const { selfBizLogoImg: bizLogo } = useClientAdmin();
 
@@ -49,6 +62,13 @@ export default function SuccessMsg({
                         className="ml-2 animated rubberBand delay-3s"
                     />
                 </h1>
+                {closeMsg && (
+                    <p
+                        className={`${textColor} mt-5 text-subtitle font-weight-bold text-center`}
+                    >
+                        Finalizando...
+                    </p>
+                )}
             </div>
         </section>
     );

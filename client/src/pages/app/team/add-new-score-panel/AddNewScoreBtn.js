@@ -36,7 +36,7 @@ export default function AddNewScoreBtn({
         setFullOpen(false);
     };
 
-    const AsyncComp = <AsyncNewScoreModal />;
+    const AsyncComp = <AsyncNewScoreModal closeModal={handleFullClose} />;
 
     return (
         <section>

@@ -23,7 +23,14 @@ export const prerenderAudio = async (url, mediaName) => {
 // trigger (bool) condition to play audio
 // if prerender and autoplay, mediaElem will be a name instead of an element
 export default function usePlayAudio(url, mediaElem, options = {}) {
-    let { prerender, delay, trigger, multi, autoplay = false } = options;
+    let {
+        prerender,
+        delay,
+        trigger,
+        multi,
+        autoplay = false,
+        onendedCallback,
+    } = options;
 
     if (!delay) delay = 0;
     if (typeof trigger !== "boolean") trigger = true;
@@ -85,6 +92,12 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
                     setTimeout(() => audio.play(), delay);
                 })();
             }
+        }
+
+        if (typeof onendedCallback === "function") {
+            audio.addEventListener("ended", function () {
+                onendedCallback();
+            });
         }
     }, [multi, trigger, autoplay]);
 }
