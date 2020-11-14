@@ -54,7 +54,12 @@ exports.mwProCreditsCounter = (req, res, next) => {
     async function startDiscountCredit() {
         const user = await User("cliente-admin").findById(bizId);
 
-        if (!user) return res.status(404).json({ error: "user not found" });
+        if (!user)
+            return res
+                .status(404)
+                .json({
+                    error: "No momento, esta empresa não está disponível.",
+                });
 
         const gotFreeCredits = checkIfGotFreeCredits({ user, service });
 

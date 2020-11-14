@@ -81,9 +81,30 @@ exports.checkIfAlreadyHasUser = async (body) => {
         .findOne(query)
         .select(select)
         .catch((err) => {
-            msgG("error.systemError", err);
+            console.log(err);
         });
 
-    if (user) return true;
-    return false;
+    // Check if name is already registered to avoid duplicate names when searching users to add scores.
+    if (role === "cliente") {
+        const { name, clientUserData } = body;
+        const qName = { name };
+        const qBiz = { "clientUserData.bizId": clientUserData.bizId };
+
+        const queryName = { $and: [qName, qBiz] };
+
+        const userForName = await User(role)
+            .findOne(queryName)
+            .select("name -_id");
+
+        if (userForName) {
+            return {
+                statusVal: true,
+                duplicateNameMsg:
+                    "Este nome e sobrenome já registrado nesta empresa. Tente outro sobrenome.",
+            };
+        }
+    }
+
+    if (user) return { statusVal: true };
+    return { statusVal: false };
 };

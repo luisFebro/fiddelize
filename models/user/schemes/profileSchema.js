@@ -30,7 +30,6 @@ exports.profileSchema = {
     },
     gender: {
         type: String,
-        default: "Não selecionado",
-        enum: ["Ele", "Ela"],
+        // enum: ["Ele", "Ela"], // This error occurs although Masculino is not declared anywhre...  ValidationError: CliAdmin validation failed: gender: `Masculino` is not a valid enum value for path `gender`
     },
 };

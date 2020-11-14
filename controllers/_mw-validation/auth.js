@@ -20,6 +20,7 @@ exports.mwValidateRegister = async (req, res, next) => {
         cpf,
         birthday,
         phone,
+        gender,
         clientAdminData,
     } = req.body;
 
@@ -29,11 +30,16 @@ exports.mwValidateRegister = async (req, res, next) => {
     if (error) return res.status(401).json({ error });
 
     if (role === "cliente" || role === "cliente-admin") {
-        const userExists = await checkIfAlreadyHasUser(req.body);
+        const {
+            statusVal: userExists,
+            duplicateNameMsg,
+        } = await checkIfAlreadyHasUser(req.body);
+        if (duplicateNameMsg)
+            return res.status(401).json({ error: duplicateNameMsg });
         if (userExists) {
             const targetRole = role === "cliente" ? "cliente" : "admin";
             return res.status(401).json({
-                error: `Não foi possível cadastrar com este CPF no app do ${targetRole}`,
+                error: `Não foi possível cadastrar com este CPF no app do ${targetRole} nesta empresa`,
             });
         }
     }
@@ -62,6 +68,10 @@ exports.mwValidateRegister = async (req, res, next) => {
 
     if (!validatePhone(phone))
         return res.status(400).json(msg("error.invalidPhone"));
+    if (!gender)
+        return res
+            .status(400)
+            .json({ error: "Selecione uma forma de tratamento" });
     // end profile validation
     //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
     req.accounts = accounts; // for decide wheter only update the accounts list if got already at least one account.
@@ -93,7 +103,9 @@ exports.mwValidateLogin = async (req, res, next) => {
             req.profile = user;
             next();
         })
-        .catch((err) => msgG("error.systemError", err));
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 exports.mwValidatePassword = (req, res, next) => {

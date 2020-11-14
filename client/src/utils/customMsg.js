@@ -1,5 +1,4 @@
-import { getRandomArray } from './getRandomArray';
-
+import getRandomArray from "./arrays/getRandomArray";
 
 const data = {};
 
@@ -27,13 +26,11 @@ const customMsg = (mainSubject, name = "NeedCustomWord", type = "added") => {
         `Este item foi ${mainSubject}, ${name}`,
         `${name}, este item foi ${mainSubject}`,
     ];
-    const pickedMsg = getRandomArray(data[type])[0];
-    const needThrowErr = pickedMsg.includes('NeedCustomWord');
-    if(needThrowErr) throw new Error('It is required a customized string');
+    const pickedMsg = getRandomArray(data[type]);
+    const needThrowErr = pickedMsg.includes("NeedCustomWord");
+    if (needThrowErr) throw new Error("It is required a customized string");
 
     return pickedMsg;
-}
+};
 
 export default customMsg;
-
-

@@ -2,14 +2,17 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from "../../../../../hooks/useRoleData";
 import usePlayAudio from "../../../../../hooks/media/usePlayAudio";
+import useData from "../../../../../hooks/useData";
 
 export default function SuccessMsg({
     needDark = false,
     textColor = "text-white",
 }) {
-    const audio =
-        "/sounds/tts/cli-member-app/success-score-addition/certo-tempo-real-cliente.mp3";
-    usePlayAudio(audio, "cli-member_msg-score", { autoplay: true });
+    const [succMsg] = useData(["cli-member_msg-score-text"], {
+        storeName: "audios",
+    });
+
+    usePlayAudio(null, "cli-member_msg-score-audio", { autoplay: true });
 
     const { selfBizLogoImg: bizLogo } = useClientAdmin();
 
@@ -34,8 +37,7 @@ export default function SuccessMsg({
                     className={`text-subtitle ${textColor} mx-3 text-center`}
                     style={{ marginTop: 150 }}
                 >
-                    Certo! Pontos de fidelidade adicionados em tempo real para o
-                    cliente.{" "}
+                    {succMsg ? succMsg : "..."}{" "}
                     <FontAwesomeIcon
                         icon="check-circle"
                         style={{

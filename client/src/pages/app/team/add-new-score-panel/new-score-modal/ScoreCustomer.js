@@ -5,7 +5,11 @@ import MoneyKeyboard from "../../../../../components/keyboards/MoneyKeyboard";
 import { convertBrToDollar } from "../../../../../utils/numbers/convertDotComma";
 import ModalConfirmation from "../../../../../components/modals/ModalConfirmation";
 import useData from "../../../../../hooks/useData";
+import { setVar, store } from "../../../../../hooks/storage/useVar";
 import { prerenderAudio } from "../../../../../hooks/media/usePlayAudio";
+import getRandomArray from "../../../../../utils/arrays/getRandomArray";
+import { useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -21,6 +25,56 @@ const getStyles = () => ({
     },
 });
 
+// text-to-speech
+const defaultPath = "/sounds/tts/cli-member-app/success-score-addition";
+const ttsStore = [
+    {
+        audio: `${defaultPath}/certo-tempo-real-cliente.mp3`,
+        text:
+            "Certo! Pontos de fidelidade adicionados em tempo real para o cliente",
+    },
+    {
+        audio: `${defaultPath}/finalizado-pontos-disponivel-app-cliente.mp3`,
+        text:
+            "Finalizado! Pontos já disponíveis no aplicativo do cliente. Obrigada!",
+    },
+    {
+        audio: `${defaultPath}/mais-pontos-adicionados-para-cliente-ate-logo.mp3`,
+        text: "Mais pontos adicionados para o cliente. Até logo!",
+    },
+    {
+        audio: `${defaultPath}/pontos-adicionados-e-ja-disponiveis-app-cliente.mp3`,
+        text: "Pontos adicionados e já disponíveis no aplicativo do cliente.",
+    },
+    {
+        audio: `${defaultPath}/pontos-creditados-para-o-cliente-obrigada-por-voltar.mp3`,
+        text: "Pontos creditados para o cliente. Obrigada por voltar!",
+    },
+    {
+        audio: `${defaultPath}/pontos-de-fidelidade-adicionado-app-cliente-com-sucesso.mp3`,
+        text:
+            "Pontos de fidelidade adicionados no aplicativo do cliente com sucesso!",
+    },
+    {
+        audio: `${defaultPath}/pontos-enviados-com-sucesso-obrigada-por-adicionar.mp3`,
+        text: "Pontos enviados com sucesso. Obrigada por adicionar!",
+    },
+    {
+        audio: `${defaultPath}/rapido-hein-conta-do-cliente.mp3`,
+        text:
+            "Rápido, hein?! Os pontos já foram enviados para a conta do cliente. Até logo!",
+    },
+    {
+        audio: `${defaultPath}/tava-esperando-aqui-ate-proxima.mp3`,
+        text:
+            "Tava esperando aqui... Já enviei os pontos para o cliente. Até a próxima!",
+    },
+    {
+        audio: `${defaultPath}/tudo-certo-pontos-enviados-para-o-cliente.mp3`,
+        text: "Tudo certo! Pontos enviados com sucesso para o cliente.",
+    },
+];
+
 export default function ScoreCustomer({
     customerName,
     colorP = "purple",
@@ -29,6 +83,8 @@ export default function ScoreCustomer({
 }) {
     const [score, setScore] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
+
+    const dispatch = useStoreDispatch();
 
     const [memberName] = useData(["name"]);
 
@@ -46,15 +102,21 @@ export default function ScoreCustomer({
     };
 
     const handleConfirm = () => {
-        const audio =
-            "/sounds/tts/cli-member-app/success-score-addition/certo-tempo-real-cliente.mp3";
-        prerenderAudio(audio, "cli-member_msg-score");
-        setFullOpen(true);
+        (async () => {
+            const selectedTTS = getRandomArray(ttsStore);
+            const { audio, text } = selectedTTS;
+
+            await setVar({ "cli-member_msg-score-text": text }, store.audios);
+
+            prerenderAudio(audio, "cli-member_msg-score-audio");
+            setFullOpen(true);
+        })();
     };
 
     const handleSendScores = () => {
         // send notification to cli-user about score
         // set score to a temporary variable in user doc on DB
+        showSnackbar(dispatch, "Adicionando...", "warning", 3000);
         setCurr((prev) => ({
             ...prev,
             field: "success",

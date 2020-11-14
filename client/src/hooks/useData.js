@@ -3,7 +3,7 @@ import { getMultiVar, store as st } from "./storage/useVar";
 import repeat from "../utils/arrays/repeat";
 
 export default function useData(data, options = {}) {
-    const { trigger = true, dots = true } = options;
+    const { trigger = true, dots = true, storeName = "user" } = options;
 
     const [store, setStore] = useState([]);
 
@@ -12,7 +12,7 @@ export default function useData(data, options = {}) {
     useEffect(() => {
         if (data && trigger) {
             (async () => {
-                const dataArray = await getMultiVar(data, st.user).catch(
+                const dataArray = await getMultiVar(data, st[storeName]).catch(
                     (err) => {
                         console.log("ERROR: " + err);
                     }
@@ -20,7 +20,7 @@ export default function useData(data, options = {}) {
                 if (dataArray) setStore(dataArray);
             })();
         }
-    }, [trigger]);
+    }, [trigger, storeName]);
 
     // this will automatically set a ... for data loading
     if (dots && trigger && !store.length) {

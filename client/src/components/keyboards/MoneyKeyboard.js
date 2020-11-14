@@ -18,7 +18,6 @@ const isInvalidValue = (money) => {
     if (!money) return false;
 
     const lastChar = money[money.length - 1];
-    console.log("lastChar", lastChar);
 
     if (lastChar === "." || lastChar === ",")
         return "Valor não pode terminar com vírgula ou ponto.";
