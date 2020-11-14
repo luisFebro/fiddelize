@@ -19,9 +19,9 @@ const Footer = ({ location }) => {
                         <strong style={{ fontSize: "24px" }}>Fiddelize</strong>
                         <span className="font-weight-bold text-small">
                             <br />
-                            Plataforma de Pontos de Fidelidade Digital
+                            O próximo nível em pontos de fidelidade.
                             <br />
-                            Roraima - {new Date().getFullYear()}
+                            Manaus - {new Date().getFullYear()}
                         </span>
                     </div>
                 </div>

@@ -88,7 +88,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         phone: "",
         birthday: "",
         cpf: "",
-        gender: "selecione gênero",
+        gender: "selecione forma tratamento",
         filter,
     });
     let {
@@ -162,7 +162,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             phone: "",
             birthday: "",
             cpf: "",
-            gender: "selecione gênero",
+            gender: "selecione forma tratamento",
         });
         setFieldError(null);
     };
@@ -535,12 +535,11 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                                     fontFamily: "Poppins, sans-serif",
                                 }}
                             >
-                                selecione gênero:
+                                selecione forma tratamento:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"Feminino"}>Feminino</MenuItem>
-                        <MenuItem value={"Masculino"}>Masculino</MenuItem>
-                        <MenuItem value={"Outros"}>Outros</MenuItem>
+                        <MenuItem value={"Ela"}>Ela</MenuItem>
+                        <MenuItem value={"Ele"}>Ele</MenuItem>
                     </Select>
                 </div>
             </section>

@@ -113,10 +113,11 @@ export default function ScoreCustomer({
         })();
     };
 
-    const handleSendScores = () => {
+    const handleSuccessScore = () => {
+        showSnackbar(dispatch, "Adicionando...", "warning", 3000);
         // send notification to cli-user about score
         // set score to a temporary variable in user doc on DB
-        showSnackbar(dispatch, "Adicionando...", "warning", 3000);
+        // set member transaction history
         setCurr((prev) => ({
             ...prev,
             field: "success",
@@ -125,7 +126,7 @@ export default function ScoreCustomer({
 
     const CustomerBrief = () => (
         <section className="mx-3">
-            <h2 className="mb-4 text-purple text-normal font-weight-bold">
+            <h2 className="mb-3 text-purple text-normal font-weight-bold">
                 Nome do Cliente:
                 <br />
                 <span className="text-subtitle">
@@ -134,8 +135,8 @@ export default function ScoreCustomer({
                     </ul>
                 </span>
             </h2>
-            <h2 className="mb-4 text-purple text-normal font-weight-bold">
-                Cliente recebe no app:
+            <h2 className="mb-3 text-purple text-normal font-weight-bold">
+                Cliente recebe:
                 <br />
                 <span className="text-subtitle">
                     <ul>
@@ -190,7 +191,7 @@ export default function ScoreCustomer({
             />
             <ModalConfirmation
                 title="Confira o Resumo"
-                actionFunc={handleSendScores}
+                actionFunc={handleSuccessScore}
                 contentComp={<CustomerBrief />}
                 confirmBtnTitle="Tudo Certo!"
                 fullOpen={fullOpen}

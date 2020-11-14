@@ -91,7 +91,7 @@ function Register({
         phone: "",
         birthday: "",
         cpf: "",
-        gender: "selecione gênero",
+        gender: "selecione forma tratamento",
         clientMemberData: { bizId: bizSysId, filterBirthday: "" },
         filter,
         bizImg: selfBizLogoImg, // for account panel...
@@ -158,7 +158,7 @@ function Register({
             phone: "",
             birthday: "",
             cpf: "",
-            gender: "selecione gênero",
+            gender: "selecione forma tratamento",
         });
         setFieldError(null);
         handleNextField(null, null, { clearFields: true });
@@ -515,12 +515,11 @@ function Register({
                                     fontFamily: "Poppins, sans-serif",
                                 }}
                             >
-                                selecione gênero:
+                                selecione forma tratamento:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"Feminino"}>Feminino</MenuItem>
-                        <MenuItem value={"Masculino"}>Masculino</MenuItem>
-                        <MenuItem value={"Outros"}>Outros</MenuItem>
+                        <MenuItem value={"Ela"}>Ela</MenuItem>
+                        <MenuItem value={"Ele"}>Ele</MenuItem>
                     </Select>
                 </div>
             </section>
