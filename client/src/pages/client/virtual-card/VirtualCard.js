@@ -2,6 +2,7 @@ import React from "react";
 import FlipCreditCard from "../../../components/cards/flip-credit-card/FlipCreditCard";
 import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCard";
 
+// Use the 3D card with the flip animation from flipCreditCard.
 /*
 <FlipCreditCard />
  */

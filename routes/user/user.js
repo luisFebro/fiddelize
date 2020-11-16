@@ -34,7 +34,10 @@ const {
     getHighestScores,
 } = require("../../controllers/user/clients-session/recordedClients");
 
-const { readTeamMemberList } = require("../../controllers/user/team/team");
+const {
+    readTeamMemberList,
+    setTempScoreAndMemberData,
+} = require("../../controllers/user/team/team");
 
 const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
 // @route  api/user
@@ -74,6 +77,11 @@ router.put("/field/remove/:id", removeField);
 
 // TEAM
 router.get("/team/list", readTeamMemberList);
+router.post(
+    "/team/temp-user-score-member",
+    mwIsAuth,
+    setTempScoreAndMemberData
+);
 
 router.param("userId", mwUserId); // n1
 

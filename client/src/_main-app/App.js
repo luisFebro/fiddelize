@@ -10,6 +10,8 @@ import { IS_PROD } from "../config/clientUrl";
 import "../utils/globalHelpers";
 //STYLING
 import "./scss/App.scss";
+// I inlined all critical bootstrap classes on critical css... OMG!!
+// Selected is just the other ones...
 import "./styles/bootstrap.selected.css";
 import "./libraries/fontAwesomeLib";
 //END STYLING

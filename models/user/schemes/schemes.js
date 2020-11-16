@@ -9,7 +9,8 @@ const enumTypes = [
     "system", // cliAdmin/cliUser
     "chatRequest", // future implementations...
     "birthday", // cliAdmin/cliUser
-    "pro",
+    "pro", // cliAdmin
+    "score", // cliUser
     // "newClientsToday", // cliAdmin (deactivated)
 ];
 
@@ -29,6 +30,8 @@ const enumSubtypes = [
     "proPay", // backend
     "proNearExpiryDate", // frontend
     "proExpiredDate", // frontend
+    // SCORE
+    "scorePlus", // backend
 ];
 
 const notificationsData = {

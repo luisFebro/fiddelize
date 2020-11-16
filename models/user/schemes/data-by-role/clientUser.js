@@ -24,6 +24,12 @@ const historyData = {
 };
 const HistorySchema = new Schema(historyData, { _id: true });
 
+const tempScoreData = {
+    tempScore: Number,
+    createdAt: { type: Date, default: new Date() },
+};
+const TempScoreSchema = new Schema(tempScoreData, { _id: false });
+
 const clientUserData = {
     bizId: { type: String, default: "0" },
     cashCurrScore: {
@@ -46,6 +52,7 @@ const clientUserData = {
     filterLastPurchase: Date,
     filterHighestPurchase: Number,
     registeredBy: { type: ObjectId, ref: "CliMember" }, // not applicable for admin, need to fetch from admin doc
+    tempScoreList: [TempScoreSchema], // store scores from members app. The elements will delete after usage...
 };
 
 const ClientUserSchema = new Schema(clientUserData, { _id: false });
