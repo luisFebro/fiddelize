@@ -2,10 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 
-const getStyles = () => ({
+const getStyles = (needDark) => ({
     rootProtectionMsg: {
         borderRadius: "30px",
         padding: "15px",
+        border: needDark ? "1px solid #000" : "1px solid #fff",
     },
     miniLock: {
         fontSize: "20px",
@@ -13,18 +14,13 @@ const getStyles = () => ({
 });
 
 export default function ProtectionMsg({ backColor }) {
-    const styles = getStyles();
-
     const needDark = selectTxtStyle(backColor, { needDarkBool: true });
+
+    const styles = getStyles(needDark);
 
     return (
         <section className="d-flex justify-content-center">
-            <div
-                style={{
-                    ...styles.rootProtectionMsg,
-                    border: needDark ? "1px solid #000" : "1px solid #fff",
-                }}
-            >
+            <div style={styles.rootProtectionMsg}>
                 <p
                     className={`font-weight-bold text-small text-center ${selectTxtStyle(
                         backColor

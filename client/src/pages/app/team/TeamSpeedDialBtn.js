@@ -21,7 +21,7 @@ const getStyles = () => ({
     },
 });
 
-export default function TeamDialSpeedBtn({ sColor }) {
+export default function TeamDialSpeedBtn({ sColor, disableClick }) {
     const styles = getStyles();
 
     const speedDialActions = [
@@ -31,7 +31,7 @@ export default function TeamDialSpeedBtn({ sColor }) {
             name: "Sair ►",
             backColor: "var(--themeSDark--" + sColor + ")",
             onClick: () => {
-                // logout(dispatch);
+                // !disableClick && logout(dispatch);
             },
         },
         {
@@ -39,6 +39,7 @@ export default function TeamDialSpeedBtn({ sColor }) {
             name: "Tarefas Recentes ►",
             backColor: "var(--themeSDark--" + sColor + ")",
             onClick: () => {
+                // !disableClick && openMemberTasks();
                 // playBeep();
             },
         },

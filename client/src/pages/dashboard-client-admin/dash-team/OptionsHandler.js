@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const faStyle = {
@@ -44,29 +43,6 @@ export default function OptionHandler() {
                     size="large"
                 />
             </div>
-            {option === "members" && (
-                <div className="mt-5 animated fadeIn delay-1s d-flex justify-content-end">
-                    <Link
-                        className="no-text-decoration"
-                        to="/t/app/equipe?modo-prev=1"
-                    >
-                        <ButtonFab
-                            title="App Equipe"
-                            backgroundColor="var(--themeSDark--default)"
-                            onClick={null}
-                            position="relative"
-                            variant="extended"
-                            size="medium"
-                            iconFontAwesome={
-                                <FontAwesomeIcon
-                                    icon="mobile-alt"
-                                    style={faStyle}
-                                />
-                            }
-                        />
-                    </Link>
-                </div>
-            )}
             <div className="ml-3 mt-5">
                 <span className="text-purple text-subtitle font-weight-bold">
                     {isTask ? "Tarefas Recentes:" : ""}

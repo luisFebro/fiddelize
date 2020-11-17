@@ -38,7 +38,7 @@ export default function MoneyKeyboard({
     const dispatch = useStoreDispatch();
 
     const getValue = (value) => {
-        if (display.length >= 6) return setDisplay(display);
+        if (display.length >= 10) return setDisplay(display);
 
         const updatedValue = moneyMaskBr((display += value));
         setDisplay(updatedValue);

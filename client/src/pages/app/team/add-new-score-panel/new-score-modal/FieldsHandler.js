@@ -1,16 +1,49 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import SearchCustomer from "./SearchCustomer";
 import ScoreCustomer from "./ScoreCustomer";
 import SuccessMsg from "./SuccessMsg";
 import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
-import { useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
+import getAPI, {
+    setTempScoreAndMemberDataData,
+} from "../../../../../utils/promises/getAPI";
+
+const setCustomerId = async (clientName, bizId) => {
+    const body = {
+        needClientIdOnly: true,
+        userId: bizId, // for auth token only
+        bizId,
+        clientName,
+    };
+
+    return await getAPI({
+        method: "post",
+        url: setTempScoreAndMemberDataData(),
+        body,
+    });
+};
 
 export default function FieldsHandler({ closeModal }) {
     const [curr, setCurr] = useState({
         field: "name", // name
         customerName: "",
+        customerId: "",
     });
-    const { field, customerName } = curr;
+    const { field, customerName, customerId } = curr;
+
+    const { businessId: bizId } = useAppSystem();
+
+    useEffect(() => {
+        if (customerName && bizId) {
+            (async () => {
+                const { data: thisCustomerId } = await setCustomerId(
+                    customerName,
+                    bizId
+                );
+                setCurr((prev) => ({ ...prev, customerId: thisCustomerId }));
+            })();
+        }
+    }, [customerName, bizId]);
 
     const {
         selfThemeBackColor: backColor,
@@ -23,7 +56,11 @@ export default function FieldsHandler({ closeModal }) {
     return (
         <Fragment>
             {field === "name" && (
-                <SearchCustomer setCurr={setCurr} textColor={textColor} />
+                <SearchCustomer
+                    setCurr={setCurr}
+                    textColor={textColor}
+                    bizId={bizId}
+                />
             )}
             {field === "score" && (
                 <ScoreCustomer
@@ -31,6 +68,8 @@ export default function FieldsHandler({ closeModal }) {
                     customerName={customerName}
                     textColor={textColor}
                     colorP={colorP}
+                    bizId={bizId}
+                    clientId={customerId}
                 />
             )}
             {field === "success" && (

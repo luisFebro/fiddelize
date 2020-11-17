@@ -92,7 +92,11 @@ function Register({
         birthday: "",
         cpf: "",
         gender: "selecione forma tratamento",
-        clientMemberData: { bizId: bizSysId, filterBirthday: "" },
+        clientMemberData: {
+            bizId: bizSysId,
+            filterBirthday: "",
+            job: "vendas",
+        },
         filter,
         bizImg: selfBizLogoImg, // for account panel...
         bizName: bizName, // for account panel...

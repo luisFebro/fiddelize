@@ -10,8 +10,8 @@ import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-
 import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
-import ReturnButton from "../../../components/buttons/ReturnBtn";
 import { useAuthUser } from "../../../hooks/useAuthUser";
+import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 
 export const AsyncBellNotifBtn = Load({
     loading: false,
@@ -19,6 +19,14 @@ export const AsyncBellNotifBtn = Load({
         import(
             "../../../components/notification/BellNotifBtn" /* webpackChunkName: "bell-notif-team-lazy" */
         ),
+});
+
+const getStyles = (needDark) => ({
+    rootProtectionMsg: {
+        borderRadius: "30px",
+        padding: "7px",
+        border: needDark ? "1px solid #000" : "1px solid #fff",
+    },
 });
 
 export default function TeamApp({ history, location, isCliAdmin = true }) {
@@ -39,6 +47,9 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
     useBackColor(`var(--themeBackground--${backColor})`);
     const txtColor = selectTxtStyle(backColor);
 
+    const needDark = selectTxtStyle(backColor, { needDarkBool: true });
+    const styles = getStyles(needDark);
+
     const showNotifBell = () => {
         const displayBack = () => (
             <section
@@ -51,13 +62,17 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
             ></section>
         );
 
-        const totalNotifications = 3;
+        const allMemberNotif = 3; // member notif.
+        const totalNotifications = isPreviewMode ? 0 : allMemberNotif;
         const displayBell = () => (
             <AsyncBellNotifBtn
+                needClick={isPreviewMode ? false : true}
                 position="absolute"
                 top={-20}
                 right={25}
-                notifBorderColor={"var(--themePDark--" + backColor + ")"}
+                notifBorderColor={`var(--themeP${
+                    backColor === "black" ? "Light" : "Dark"
+                }--${pColor})`}
                 notifBackColor={
                     backColor === "red"
                         ? "var(--themePLight--black)"
@@ -122,13 +137,18 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
                 </h2>
             </div>
             <section className="animated fadeIn delay-2s mt-4 container-center">
-                <AddNewScoreBtn backColor={backColor} sColor={sColor} />
+                <AddNewScoreBtn
+                    backColor={backColor}
+                    sColor={sColor}
+                    needClick={isPreviewMode ? false : true}
+                />
                 <div className="ml-3">
                     <RegisterPanelBtn
                         title="CLIENTE"
                         needPlusIcon={true}
                         backColor={backColor}
                         sColor={sColor}
+                        needClick={isPreviewMode ? false : true}
                     />
                 </div>
             </section>
@@ -136,12 +156,30 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
     );
 
     const showBackAdminBtn = () => (
-        <section className="position-absolute" style={{ left: 10, top: 10 }}>
-            <ReturnButton
-                toAdminDash={true}
-                icon="arrow-left"
-                btnColor={sColor}
-            />
+        <BtnBackTestMode
+            isActive={isPreviewMode ? true : false}
+            mode="Membro"
+            btnBackColor={backColor}
+        />
+    );
+
+    const showAdminTestMsg = () => (
+        <section style={{ left: 10, bottom: "0px", position: "fixed" }}>
+            <div className="d-flex justify-content-center">
+                <div style={styles.rootProtectionMsg}>
+                    <p
+                        className={`m-0 text-small text-center ${selectTxtStyle(
+                            backColor
+                        )}`}
+                    >
+                        Admin, funcionalidades
+                        <br />
+                        desativas no modo teste.
+                        <br />
+                        Somente para <strong>fins visuais</strong>.
+                    </p>
+                </div>
+            </div>
         </section>
     );
 
@@ -153,9 +191,13 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
             {showCTAs()}
             {(isPreviewMode || !isCliAdmin) && (
                 <section className="animated zoomIn delay-3s">
-                    <TeamSpeedDialBtn sColor={sColor} />
+                    <TeamSpeedDialBtn
+                        sColor={sColor}
+                        disableClick={isPreviewMode ? false : true}
+                    />
                 </section>
             )}
+            {isPreviewMode && showAdminTestMsg()}
         </Fragment>
     );
 }

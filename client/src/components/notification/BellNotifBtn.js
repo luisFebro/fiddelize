@@ -12,6 +12,7 @@ export default function BellNotifBtn({
     notifBackColor,
     badgeValue,
     forceCliUser,
+    needClick = true,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -26,7 +27,7 @@ export default function BellNotifBtn({
     return (
         <section>
             <BadaloBell
-                onClick={handleFullOpen}
+                onClick={needClick ? handleFullOpen : null}
                 position={position}
                 top={top}
                 left={left}

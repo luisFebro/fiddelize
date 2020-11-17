@@ -69,3 +69,5 @@ export const createPassword = () => `/api/auth/pswd/create`;
 
 // TEAM
 export const readTeamMemberList = () => `/api/user/team/list`;
+export const setTempScoreAndMemberDataData = () =>
+    `/api/user/team/temp-user-score-member`;

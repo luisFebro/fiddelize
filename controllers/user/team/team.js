@@ -15,7 +15,24 @@ const getPushFifo = (field, elem) => {
 
 // POST
 exports.setTempScoreAndMemberData = async (req, res) => {
-    const { clientId, clientName, memberId, tempScore } = req.body;
+    const {
+        needClientIdOnly,
+        bizId,
+        clientId,
+        clientName,
+        memberId,
+        tempScore,
+    } = req.body;
+
+    if (needClientIdOnly) {
+        const nameQuery = { name: clientName };
+        const bizQuery = { "clientUserData.bizId": bizId };
+        const query = { $and: [nameQuery, bizQuery] };
+
+        const { _id } = await User("cliente").findOne(query).select("_id");
+
+        return res.json(_id);
+    }
 
     const sendTempUserScore = async () => {
         const pushList = getPushFifo("clientUserData.tempScoreList", {
@@ -52,13 +69,18 @@ exports.setTempScoreAndMemberData = async (req, res) => {
         res.status(500).json(err);
     });
 
+    const isFromAdmin = Boolean(bizId === memberId);
+    const targetCli = isFromAdmin ? "cliente-admin" : "cliente-membro";
     if (userPromises) {
         // set member data and transaction history
-        const memberData = await User("cliente-membro")
+        const memberData = await User(targetCli)
             .findById(memberId)
             .select("clientMemberData.newScoreTotal -_id");
 
-        const priorAddedScores = memberData.clientMemberData.newScoreTotal || 0;
+        const priorAddedScores =
+            memberData && memberData.clientMemberData
+                ? memberData.clientMemberData.newScoreTotal
+                : 0;
 
         const countClientTotal = { "clientMemberData.newClientTotal": 1 };
 
@@ -70,7 +92,7 @@ exports.setTempScoreAndMemberData = async (req, res) => {
 
         const pushList = getPushFifo("clientMemberData.taskList", taskData);
 
-        await User("cliente-membro").findByIdAndUpdate(memberId, {
+        await User(targetCli).findByIdAndUpdate(memberId, {
             $inc: countClientTotal,
             "clientMemberData.newScoreTotal": priorAddedScores + tempScore,
             ...pushList,

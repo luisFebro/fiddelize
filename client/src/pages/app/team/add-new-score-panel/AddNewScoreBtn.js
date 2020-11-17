@@ -25,6 +25,7 @@ export default function AddNewScoreBtn({
     size = "large",
     backColor,
     sColor,
+    needClick = true,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -44,7 +45,7 @@ export default function AddNewScoreBtn({
                 size={size}
                 title={title}
                 backgroundColor={`var(--themeSDark--${sColor})`}
-                onClick={handleFullOpen}
+                onClick={needClick ? handleFullOpen : null}
                 iconMu={PlusIcon}
                 position="relative"
                 variant="extended"

@@ -10,6 +10,9 @@ import { prerenderAudio } from "../../../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../../../utils/arrays/getRandomArray";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import getAPI, {
+    setTempScoreAndMemberDataData,
+} from "../../../../../utils/promises/getAPI";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -75,18 +78,43 @@ const ttsStore = [
     },
 ];
 
+const setUltimateData = async ({
+    clientId,
+    clientName,
+    memberId,
+    tempScore,
+    bizId,
+}) => {
+    const body = {
+        userId: bizId, // for auth only
+        bizId, // to check if isAdmin,
+        clientId,
+        clientName,
+        memberId,
+        tempScore,
+    };
+
+    return await getAPI({
+        method: "post",
+        url: setTempScoreAndMemberDataData(),
+        body,
+    });
+};
+
 export default function ScoreCustomer({
     customerName,
     colorP = "purple",
     setCurr,
     textColor,
+    bizId,
+    clientId,
 }) {
     const [score, setScore] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
 
     const dispatch = useStoreDispatch();
 
-    const [memberName] = useData(["name"]);
+    const [memberName, memberId] = useData(["name", "userId"]);
 
     const cliUserName = getFirstName(customerName && customerName.cap(), {
         addSurname: true,
@@ -114,14 +142,31 @@ export default function ScoreCustomer({
     };
 
     const handleSuccessScore = () => {
-        showSnackbar(dispatch, "Adicionando...", "warning", 3000);
-        // send notification to cli-user about score
-        // set score to a temporary variable in user doc on DB
-        // set member transaction history
-        setCurr((prev) => ({
-            ...prev,
-            field: "success",
-        }));
+        if (!clientId) {
+            return showSnackbar(
+                dispatch,
+                "Houve um problema ao buscar Id do cliente. Por favor, reinicie.",
+                "error",
+                3000
+            );
+        }
+
+        showSnackbar(dispatch, "Adicionando...", "warning", 2000);
+        (async () => {
+            const ultimateData = {
+                clientId,
+                clientName: customerName,
+                tempScore: convertBrToDollar(score),
+                memberId,
+                bizId,
+            };
+            await setUltimateData(ultimateData);
+
+            setCurr((prev) => ({
+                ...prev,
+                field: "success",
+            }));
+        })();
     };
 
     const CustomerBrief = () => (
