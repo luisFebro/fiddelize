@@ -114,7 +114,7 @@ exports.update = async (req, res) => {
         req.body.cpf = jsEncrypt(req.body.cpf);
     }
 
-    const { role } = await req.getAccount(id);
+    const { role } = await req.getAccount(req.params.userId);
     User(role)
         .findOneAndUpdate(
             { _id: req.profile._id },
@@ -141,7 +141,7 @@ exports.remove = (req, res) => {
 
 exports.confirmUserAccount = async (req, res) => {
     const { authUserId } = req.params;
-    const { role } = await req.getAccount(id);
+    const { role } = await req.getAccount(authUserId);
 
     User(role)
         .findById(authUserId)
@@ -171,12 +171,12 @@ exports.confirmUserAccount = async (req, res) => {
 
 exports.addElementArray = async (req, res) => {
     const objToChange = req.body; // n2
-    const _id = req.params.id;
+    const id = req.params.id;
 
     const { role } = await req.getAccount(id);
 
     User(role)
-        .findByIdAndUpdate(_id, { $push: objToChange }, { new: true })
+        .findByIdAndUpdate(id, { $push: objToChange }, { new: true })
         .exec((err, user) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err)); // NEED CREATE
@@ -189,11 +189,11 @@ exports.addElementArray = async (req, res) => {
 
 exports.removeElementArray = async (req, res) => {
     const objToChange = req.body;
-    const _id = req.params.id;
+    const id = req.params.id;
 
     const { role } = await req.getAccount(id);
     User(role)
-        .findByIdAndUpdate(_id, { $pull: objToChange }, { new: true })
+        .findByIdAndUpdate(id, { $pull: objToChange }, { new: true })
         .exec((err, user) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err)); // NEED CREATE
@@ -207,10 +207,11 @@ exports.removeElementArray = async (req, res) => {
 exports.removeField = async (req, res) => {
     // n1
     let targetField = req.body.fieldToBeDeleted;
+    const id = req.params.id;
 
     const { role } = await req.getAccount(id);
     User(role)
-        .findById(req.params.id)
+        .findById(id)
         .exec((err, selectedUser) => {
             if (!selectedUser)
                 return res.status(404).json({ msg: "data or user not found" });

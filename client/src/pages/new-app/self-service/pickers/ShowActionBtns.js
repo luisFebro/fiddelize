@@ -1,27 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { useAppSystem } from '../../../../hooks/useRoleData';
-import { useStoreDispatch } from 'easy-peasy';
-import { Link } from 'react-router-dom';
-import ButtonMulti, {faStyle} from '../../../../components/buttons/material-ui/ButtonMulti';
+import React, { useState, useEffect } from "react";
+import { useAppSystem } from "../../../../hooks/useRoleData";
+import { useStoreDispatch } from "easy-peasy";
+import { Link } from "react-router-dom";
+import ButtonMulti, {
+    faStyle,
+} from "../../../../components/buttons/material-ui/ButtonMulti";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateUser } from '../../../../redux/actions/userActions';
-import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import { readClientAdmin } from '../../../../redux/actions/userActions';
-import isThisApp from '../../../../utils/window/isThisApp';
-import PropTypes from 'prop-types';
+import { updateUser } from "../../../../redux/actions/userActions";
+import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import { readClientAdmin } from "../../../../redux/actions/userActions";
+import isThisApp from "../../../../utils/window/isThisApp";
+import PropTypes from "prop-types";
+import TestModeBtn from "../../../dashboard-client-admin/modal-test-mode/TestModeBtn";
 
 ShowActionBtns.propTypes = {
     objToSend: PropTypes.object,
     needUpdateBtn: PropTypes.string,
     titleBeforeOk: PropTypes.string,
     titleAfterOk: PropTypes.string,
-}
+};
 
 export default function ShowActionBtns({
     objToSend,
     titleBeforeOk = "Salvando Item",
     titleAfterOk = "Item Salvo",
-    needUpdateBtn }) {
+    needUpdateBtn,
+}) {
     const [showUpdateBtn, setShowUpdateBtn] = useState(false);
     const [showAppBtn, setShowAppBtn] = useState(false);
 
@@ -30,56 +34,68 @@ export default function ShowActionBtns({
     const { businessId } = useAppSystem();
 
     useEffect(() => {
-        if(showUpdateBtn === false) {
-            if(needUpdateBtn) {
+        if (showUpdateBtn === false) {
+            if (needUpdateBtn) {
                 setShowUpdateBtn(true);
             }
         }
-    }, [showUpdateBtn, needUpdateBtn])
+    }, [showUpdateBtn, needUpdateBtn]);
 
     const handleUpdateIcon = () => {
         showSnackbar(dispatch, titleBeforeOk);
-        updateUser(dispatch, objToSend, businessId)
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão", 'error')
-            readClientAdmin(dispatch, businessId)
-            .then(res => {
-                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+        updateUser(dispatch, objToSend, businessId).then((res) => {
+            if (res.status !== 200)
+                return showSnackbar(
+                    dispatch,
+                    "Algo deu errado. Verifique sua conexão",
+                    "error"
+                );
+            readClientAdmin(dispatch, businessId).then((res) => {
+                if (res.status !== 200)
+                    return showSnackbar(dispatch, res.data.msg, "error");
                 showSnackbar(dispatch, titleAfterOk, "success");
                 setShowAppBtn(true);
-            })
-        })
-    }
+            });
+        });
+    };
 
     const conditionToShowResultBtn = !objToSend ? needUpdateBtn : showAppBtn;
-    const showResultBtn = () => (
-        conditionToShowResultBtn && isThisApp() &&
-        <div className="animated zoomIn">
-            <Link to={`/mobile-app?client-admin=1`}>
-                <ButtonMulti
-                    onClick={null}
-                    title="resultado"
-                    color="var(--mainWhite)"
-                    backgroundColor="var(--themeSDark)"
-                    iconFontAwesome={<FontAwesomeIcon icon="mobile-alt" style={faStyle} />}
-                />
-            </Link>
-        </div>
-    );
+    const showResultBtn = () =>
+        conditionToShowResultBtn &&
+        isThisApp() && (
+            <div className="animated zoomIn">
+                <TestModeBtn />
+            </div>
+        );
 
     return (
-        showUpdateBtn &&
-        <section className="d-flex justify-content-center animated zoomIn my-3">
-            {objToSend && (
-                <ButtonMulti
-                    onClick={handleUpdateIcon}
-                    title="atualizar"
-                    color="var(--mainWhite)"
-                    backgroundColor="var(--themeSDark)"
-                    iconFontAwesome={<FontAwesomeIcon icon="sync-alt" style={faStyle} />}
-                />
-            )}
-            {showResultBtn()}
-        </section>
+        showUpdateBtn && (
+            <section className="d-flex justify-content-center animated zoomIn my-3">
+                {objToSend && (
+                    <ButtonMulti
+                        onClick={handleUpdateIcon}
+                        title="atualizar"
+                        color="var(--mainWhite)"
+                        backgroundColor="var(--themeSDark)"
+                        iconFontAwesome={
+                            <FontAwesomeIcon icon="sync-alt" style={faStyle} />
+                        }
+                    />
+                )}
+                {showResultBtn()}
+            </section>
+        )
     );
 }
+
+/* ARCHIVE
+<Link to={`/mobile-app?client-admin=1`}>
+    <ButtonMulti
+        onClick={null}
+        title="resultado"
+        color="var(--mainWhite)"
+        backgroundColor="var(--themeSDark)"
+        iconFontAwesome={<FontAwesomeIcon icon="mobile-alt" style={faStyle} />}
+    />
+</Link>
+ */

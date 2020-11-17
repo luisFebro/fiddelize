@@ -142,7 +142,7 @@ const offplanVersion = () => [
     },
     {
         title: "Novvos Membros",
-        img: "/img/pro-features/eqquipe-kit/eqquipe.svg",
+        img: "/img/pro-features/novvos/novvos-membros.svg",
         desc:
             "Um app de fidelidade intuitivo pensado na eficácia do trabalho dos seus colaboradores.",
         bronze: {

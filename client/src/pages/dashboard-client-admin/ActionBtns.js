@@ -16,6 +16,7 @@ import { useStoreDispatch } from "easy-peasy";
 import isThisApp from "../../utils/window/isThisApp";
 import useGetVar from "../../hooks/storage/useVar";
 import NotificationBadge from "../../components/NotificationBadge";
+import TestModeBtn from "./modal-test-mode/TestModeBtn";
 
 // IMPORTANT: This was moved from navbar since it was not running the buttons at the start.
 export default function ActionBtns({ location }) {
@@ -51,22 +52,9 @@ const ClientAdminBtns = ({ businessId, bizCodeName, bizName, role, name }) => {
             className="position-absolute container-center"
         >
             {isThisApp() && (
-                <Link to={`/mobile-app?client-admin=1`}>
-                    <div style={{ marginRight: "15px" }}>
-                        <ButtonFab
-                            backgroundColor="var(--themeSDark)"
-                            position="relative"
-                            size="medium"
-                            iconFontAwesome={
-                                <FontAwesomeIcon
-                                    icon="mobile-alt"
-                                    style={faStyle}
-                                />
-                            }
-                            onClick={null}
-                        />
-                    </div>
-                </Link>
+                <div style={{ marginRight: "15px" }}>
+                    <TestModeBtn isMainBtn={true} />
+                </div>
             )}
             <Link
                 to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}&adminName=${name}`}
