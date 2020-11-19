@@ -185,7 +185,7 @@ exports.getRecordedClientList = (req, res) => {
         mainQuery = Object.assign({}, mainQuery, searchQuery);
     }
 
-    User("cliente-admin")
+    User(role)
         .aggregate([
             {
                 $facet: {

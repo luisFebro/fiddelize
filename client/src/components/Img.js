@@ -120,11 +120,11 @@ export default function Img({
             <section style={{ display: status ? "none" : "block" }}>
                 <img
                     id={id}
+                    style={style}
                     data-src={dataSrc}
                     className={className}
                     src={thisSrc || src}
                     alt={alt || id}
-                    style={style}
                     width={width}
                     height={height || "auto"}
                     onLoad={() => !timeout && setStatus(false)}

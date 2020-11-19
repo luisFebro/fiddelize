@@ -36,6 +36,7 @@ const {
 
 const {
     readTeamMemberList,
+    readTeamTasksList,
     setTempScoreAndMemberData,
 } = require("../../controllers/user/team/team");
 
@@ -77,6 +78,7 @@ router.put("/field/remove/:id", removeField);
 
 // TEAM
 router.get("/team/list", readTeamMemberList);
+router.get("/team/tasks/list", readTeamTasksList);
 router.post(
     "/team/temp-user-score-member",
     mwIsAuth,

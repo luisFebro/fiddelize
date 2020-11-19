@@ -33,7 +33,7 @@ function PanelHiddenContent({ history, data }) {
             </p>
             {data.memberTask === "newClient" && (
                 <p className="mb-4 text-normal font-weight-bold text-shadow">
-                    • Cadastro com:
+                    • Cadastrou com:
                     <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
                         {data.clientScore} Pontos.
                     </span>

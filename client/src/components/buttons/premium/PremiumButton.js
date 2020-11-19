@@ -109,7 +109,7 @@ export default function PremiumButton({
 
     const showProActiveBadge = () => (
         <section
-            style={{ zIndex: 1000, top, left, right }}
+            style={{ zIndex: 5, top, left, right }}
             className="position-absolute"
         >
             <section

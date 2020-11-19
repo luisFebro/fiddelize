@@ -12,7 +12,7 @@ const handleData = (type) => {
         btnTitle = "ADICIONE MAIS";
         src = "/img/illustrations/empty-filter.svg";
         alt = "resultado vazio filtro clientes";
-        title = "Nenhum cliente fidelizado neste período";
+        title = "Nenhum cliente adicionado neste período";
     }
     if (type === "search") {
         btnTitle = "NOVA BUSCA";

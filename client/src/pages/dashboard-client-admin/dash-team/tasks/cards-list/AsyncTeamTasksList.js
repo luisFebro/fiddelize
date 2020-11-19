@@ -100,7 +100,7 @@ export default function AsyncCardsList() {
         },
         {
             clientName: "Augusta Silva",
-            clientScore: 250, // Cadastrou e pontuou: R$ 250.
+            clientScore: 250, // Cadastrou com pontos: 250
             memberTask: "newClient",
             memberName: "Adriana Oliveira da Silva",
             job: "vendas",

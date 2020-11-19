@@ -23,9 +23,6 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
-// import { setRun } from '../../hooks/useRunComp';
-// Material UI
-// import { makeStyles } from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
@@ -39,6 +36,7 @@ import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
+import useData from "../../hooks/useData";
 
 const filter = getFilterDate();
 // bizSysId for validation only since when the user is runningthe app
@@ -87,6 +85,9 @@ function Register({
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
+        tempScore: "", // for member tasks newClient Record
+        memberRole: "", // for member tasks newClient Record
+        memberId: "", // for member tasks newClient Record
     });
 
     const styles = getStyles();
@@ -107,13 +108,24 @@ function Register({
         bizName,
     } = useClientAdmin();
 
+    const [memberId, memberRole] = useData(["userId", "role"]);
+
     useEffect(() => {
-        setData({
-            ...data,
-            bizImg: selfBizLogoImg,
-            bizName,
-        });
-    }, [selfBizLogoImg, bizName]);
+        const isReady = selfBizLogoImg && bizName && memberRole && memberId;
+
+        if (isReady) {
+            setTimeout(() => {
+                // this timeout is used because the data is not set otherwise. The reason is unknown.
+                setData((prev) => ({
+                    ...prev,
+                    bizImg: selfBizLogoImg,
+                    bizName,
+                    memberRole,
+                    memberId,
+                }));
+            }, 4000);
+        }
+    }, [selfBizLogoImg, bizName, memberRole, memberId]);
 
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,

@@ -35,7 +35,7 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
     // redirect if not auth
     useAuthUser({ history });
 
-    const isPreviewMode = location.search.includes("modo-prev=1");
+    const isPreviewMode = location && location.search.includes("modo-prev=1");
 
     const {
         selfBizLogoImg: bizLogo,
@@ -138,16 +138,16 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
             </div>
             <section className="animated fadeIn delay-2s mt-4 container-center">
                 <AddNewScoreBtn
-                    backColor={backColor}
-                    sColor={sColor}
+                    backColor={isCliAdmin ? "default" : backColor}
+                    sColor={isCliAdmin ? "default" : sColor}
                     needClick={isPreviewMode ? false : true}
                 />
                 <div className="ml-3">
                     <RegisterPanelBtn
                         title="CLIENTE"
                         needPlusIcon={true}
-                        backColor={backColor}
-                        sColor={sColor}
+                        backColor={isCliAdmin ? "default" : backColor}
+                        sColor={isCliAdmin ? "default" : sColor}
                         needClick={isPreviewMode ? false : true}
                     />
                 </div>
@@ -193,7 +193,7 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
                 <section className="animated zoomIn delay-3s">
                     <TeamSpeedDialBtn
                         sColor={sColor}
-                        disableClick={isPreviewMode ? false : true}
+                        disableClick={isPreviewMode ? true : false}
                     />
                 </section>
             )}

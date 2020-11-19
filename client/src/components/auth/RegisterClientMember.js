@@ -98,8 +98,8 @@ function Register({
             job: "vendas",
         },
         filter,
-        bizImg: selfBizLogoImg, // for account panel...
-        bizName: bizName, // for account panel...
+        bizImg: "", // for account panel...
+        bizName: "", // for account panel...
     });
 
     const styles = getStyles();
@@ -112,15 +112,19 @@ function Register({
 
     let { role, name, email, gender, birthday, cpf, phone } = data;
 
-    console.log("bizName", bizName);
-    console.log("selfBizLogoImg", selfBizLogoImg);
-
     useEffect(() => {
-        setData({
-            ...data,
-            bizImg: selfBizLogoImg,
-            bizName,
-        });
+        const isReady = selfBizLogoImg && bizName;
+
+        if (isReady) {
+            setTimeout(() => {
+                // this timeout is used because the data is not set otherwise. The reason is unknown.
+                setData((prev) => ({
+                    ...prev,
+                    bizImg: selfBizLogoImg,
+                    bizName,
+                }));
+            }, 4000);
+        }
     }, [selfBizLogoImg, bizName]);
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,

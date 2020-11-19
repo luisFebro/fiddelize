@@ -16,9 +16,9 @@ export default function AsyncTestModeContent() {
 
     const showClientCard = () => (
         <Link className="no-text-decoration" to="/mobile-app?client-admin=1">
-            <section className="shadow-elevation" style={styles.rootCard}>
+            <section className="shadow-babadoo" style={styles.rootCard}>
                 <Img
-                    className="m-5"
+                    className="mx-5 mt-5 mb-3"
                     src="/img/pro-features/novvos/novvos-clientes.svg"
                     offline={true}
                     width="120px"
@@ -26,7 +26,9 @@ export default function AsyncTestModeContent() {
                     alt="serviço novvos clientes"
                 />
                 <div className="pb-3 text-nowrap text-center text-normal text-white font-weight-bold">
-                    App Cliente
+                    App
+                    <br />
+                    Cliente
                 </div>
             </section>
         </Link>
@@ -34,9 +36,9 @@ export default function AsyncTestModeContent() {
 
     const showTeamCard = () => (
         <Link className="no-text-decoration" to="/t/app/equipe?modo-prev=1">
-            <section className="shadow-elevation" style={styles.rootCard}>
+            <section className="shadow-babadoo" style={styles.rootCard}>
                 <Img
-                    className="m-5"
+                    className="mx-5 mt-5 mb-3"
                     src="/img/pro-features/novvos/novvos-membros.svg"
                     offline={true}
                     width="120px"
@@ -44,7 +46,9 @@ export default function AsyncTestModeContent() {
                     alt="serviço novvos membros"
                 />
                 <div className="pb-3 text-nowrap text-center text-normal text-white font-weight-bold">
-                    App Equipe
+                    App
+                    <br />
+                    Equipe
                 </div>
             </section>
         </Link>

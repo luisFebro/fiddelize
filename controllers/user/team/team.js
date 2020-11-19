@@ -5,6 +5,7 @@ const {
     getChunksTotal,
 } = require("../../../utils/array/getDataChunk");
 const { sendBackendNotification } = require("../../notification");
+const { getMemberTaskList } = require("./helpers");
 
 const getPushFifo = (field, elem) => {
     const fifo = { $each: [elem], $position: 0 }; // first in, first out.
@@ -82,24 +83,97 @@ exports.setTempScoreAndMemberData = async (req, res) => {
                 ? memberData.clientMemberData.newScoreTotal
                 : 0;
 
-        const countClientTotal = { "clientMemberData.newClientTotal": 1 };
-
         const taskData = {
             memberTask: "newScore",
-            clientName,
+            clientName: clientName && clientName.toLowerCase(),
             clientScore: tempScore,
         };
 
         const pushList = getPushFifo("clientMemberData.taskList", taskData);
 
         await User(targetCli).findByIdAndUpdate(memberId, {
-            $inc: countClientTotal,
             "clientMemberData.newScoreTotal": priorAddedScores + tempScore,
             ...pushList,
         });
 
         res.json({ msg: "all temp score and member data set" });
     }
+};
+
+// exclusive for new clients registration,
+// since newScores addition is embedded on setTempScoreAndMemberData above
+// This is that to avoid a new DB search.
+exports.addMemberTaskHistory = async ({
+    clientName,
+    tempScore, // tempScore is here because cliUsers can be registed with an entry amount of fidelity scores.
+    memberRole,
+    memberId,
+}) => {
+    const taskData = {
+        memberTask: "newClient",
+        clientName: clientName && clientName.toLowerCase(),
+        clientScore: tempScore || 0,
+    };
+
+    const pushList = getPushFifo("clientMemberData.taskList", taskData);
+
+    const targetCli =
+        memberRole === "cliente-admin" ? "cliente-admin" : "cliente-membro";
+
+    const countClientTotal = { "clientMemberData.newClientTotal": 1 };
+
+    await User(targetCli).findByIdAndUpdate(memberId, {
+        $inc: countClientTotal,
+        ...pushList,
+    });
+};
+
+/* GOAL RETURN THIS:
+clientName: "Augusta Silva",
+clientScore: 250, // Cadastrou com pontos: 250 (OK)
+memberTask: "newClient", (OK)
+memberName: "Adriana Oliveira da Silva", (OK)
+job: "vendas", (OK)
+content: "", (OK NOT NEED FOR NOW)
+createdAt: new Date(),
+ */
+exports.readTeamTasksList = async (req, res) => {
+    const { bizId, skip, limit = 10 } = req.query;
+
+    const adminDoc = await User("cliente-admin")
+        .findById(bizId)
+        .select("-_id name clientMemberData.taskList");
+
+    const adminMemberData = {
+        memberName: adminDoc.name,
+        job: "admin",
+    };
+
+    const adminTaskList = getMemberTaskList({
+        commonData: adminMemberData,
+        memberData: adminDoc.clientMemberData,
+    });
+
+    const memberDoc = await User("cliente-membro")
+        .find({ "clientMemberData.bizId": bizId })
+        .select("-_id name clientMemberData.job clientMemberData.taskList");
+
+    const membersTaskList = getMemberTaskList({
+        isMember: true,
+        memberData: memberDoc,
+    });
+
+    const data = [...adminTaskList, ...membersTaskList];
+
+    const dataSize = data.length;
+    const dataRes = {
+        list: getDataChunk(data, { skip, limit }),
+        chunksTotal: getChunksTotal(dataSize, limit),
+        listTotal: dataSize,
+        content: undefined,
+    };
+
+    res.json(dataRes);
 };
 
 exports.readTeamMemberList = async (req, res) => {

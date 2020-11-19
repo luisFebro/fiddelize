@@ -90,6 +90,11 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         cpf: "",
         gender: "selecione forma tratamento",
         filter,
+        // PENDING: These variables is not used in the curr version
+        // Since the register is still in the first page in the website.
+        // This will be active when change the form to be after app creation...
+        bizImg: "", // for account panel...
+        bizName: "", // for account panel...
     });
     let {
         role,

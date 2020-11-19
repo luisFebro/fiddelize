@@ -10,7 +10,7 @@ const taskListData = {
     // only for admin data format
     // memberName: String,
     // job: String
-    // content: String
+    // content: String (optional standby)
 };
 const TaskListSchema = new Schema(taskListData, { _id: false });
 
