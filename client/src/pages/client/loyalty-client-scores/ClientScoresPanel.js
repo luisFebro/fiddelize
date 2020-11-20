@@ -291,7 +291,9 @@ function ClientScoresPanel({
 
     const handleHomeBtnClick = () => {
         if (isThisApp()) {
-            readUser(dispatch, _id).then((res) => {
+            readUser(dispatch, _id, {
+                role: needAppForCliAdmin ? "cliente-admin" : "cliente",
+            }).then((res) => {
                 if (res.status !== 200) return console.log("Error on readUser");
                 const path = needAppForCliAdmin
                     ? "/mobile-app?client-admin=1"

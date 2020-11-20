@@ -35,6 +35,7 @@ export default function RegisterPanelBtn({
     needTeamApp = false,
     isNewMember = false,
     isCliAdmin = false,
+    needRecordTasks = false,
     backColor = "purple",
     sColor = "default",
     needClick = true,
@@ -57,7 +58,17 @@ export default function RegisterPanelBtn({
 
     return (
         <section>
-            {needPlusIcon ? (
+            {needRecordTasks && (
+                <ButtonFab
+                    size="large"
+                    title="CADASTRAR TAREFA"
+                    position="relative"
+                    onClick={handleFullOpen}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant="extended"
+                />
+            )}
+            {needPlusIcon && (
                 <ButtonFab
                     size={size}
                     title={title}
@@ -67,7 +78,9 @@ export default function RegisterPanelBtn({
                     position="relative"
                     variant="extended"
                 />
-            ) : (
+            )}
+
+            {!needPlusIcon && !needRecordTasks && (
                 <ButtonFab // used in the dashboard only
                     size={size}
                     title={title}

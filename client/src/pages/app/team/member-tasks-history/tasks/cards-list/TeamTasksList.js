@@ -1,23 +1,21 @@
 import React, { Fragment, useState } from "react";
 import TeamTasksCard from "./card/accordion/TeamTasksCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
-import { calendar } from "../../../../../utils/dates/dateFns";
-import { useAppSystem } from "../../../../../hooks/useRoleData";
-import getFirstName from "../../../../../utils/string/getFirstName";
-import Illustration from "../../../../../components/Illustration";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import { calendar } from "../../../../../../utils/dates/dateFns";
+import { useAppSystem } from "../../../../../../hooks/useRoleData";
+import getFirstName from "../../../../../../utils/string/getFirstName";
+import Illustration from "../../../../../../components/Illustration";
 import TeamTasksFilter from "./TeamTasksFilter";
-// import extractStrData from '../../../../../utils/string/extractStrData';
-// import { isScheduledDate } from '../../../../../utils/dates/dateFns';
+import useData from "../../../../../../hooks/useData";
+// import extractStrData from '../../../../../../utils/string/extractStrData';
+// import { isScheduledDate } from '../../../../../../utils/dates/dateFns';
 import useAPIList, {
-    readTeamTaskList,
+    readOneMemberTasksList,
     getTrigger,
-} from "../../../../../hooks/api/useAPIList";
+} from "../../../../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
-} from "../../../../../hooks/api/useElemDetection";
-import useElemShowOnScroll from "../../../../../hooks/scroll/useElemShowOnScroll";
-import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
+} from "../../../../../../hooks/api/useElemDetection";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -47,7 +45,7 @@ const handleSecHeading = (data, styles) => {
 };
 // END HELPERS
 
-export default function AsyncCardsList() {
+export default function TeamTasksList() {
     const [skip, setSkip] = useState(0);
     const [data, setData] = useState({
         filterBy: "today",
@@ -56,6 +54,7 @@ export default function AsyncCardsList() {
     const { filterBy, isFiltering } = data;
 
     const { businessId } = useAppSystem();
+    const [memberId] = useData(["userId"]);
 
     const styles = getStyles();
 
@@ -67,24 +66,13 @@ export default function AsyncCardsList() {
         }, 4000);
     };
 
-    const showCTA = useElemShowOnScroll("#showNewCTA");
-
-    const showFixedCTA = () =>
-        showCTA && (
-            <section
-                className="animated fadeInUp"
-                style={{ position: "fixed", bottom: "10px", right: "10px" }}
-            >
-                <RegisterPanelBtn
-                    title="Novo Membro"
-                    isNewMember={true}
-                    needTeamApp={false}
-                    size="medium"
-                />
-            </section>
-        );
-
-    const params = { userId: businessId, bizId: businessId, skip, filterBy };
+    const params = {
+        userId: businessId, // for token check
+        memberId,
+        bizId: businessId,
+        skip,
+        filterBy,
+    };
 
     const trigger = getTrigger(null, null, { cond2: `filter_${filterBy}` });
     const {
@@ -100,10 +88,10 @@ export default function AsyncCardsList() {
         gotData,
         listTotal,
     } = useAPIList({
-        url: readTeamTaskList(),
+        url: readOneMemberTasksList(),
         skip,
         params,
-        listName: "teamTasksList",
+        listName: "memberTasksHistory",
         trigger,
         isFiltering,
     });
@@ -125,13 +113,6 @@ export default function AsyncCardsList() {
                         }`,
                     }}
                 />
-                <div className="mt-3 mb-5 container-center">
-                    <RegisterPanelBtn
-                        needRecordTasks={true}
-                        isCliAdmin={true}
-                        needTeamApp={true}
-                    />
-                </div>
             </section>
         );
 
@@ -172,12 +153,15 @@ export default function AsyncCardsList() {
                         style={{ lineHeight: "25px" }}
                     >
                         <span className="main-font text-em-1 font-weight-bold">
-                            Pelo membro:
+                            Nome do Cliente:
                             <br />
                             <span className="d-inline-block mt-1 font-weight-bold main-font text-em-1-2">
-                                {getFirstName(data.memberName, {
-                                    addSurname: true,
-                                })}
+                                {getFirstName(
+                                    data.clientName && data.clientName.cap(),
+                                    {
+                                        addSurname: true,
+                                    }
+                                )}
                             </span>
                         </span>
                     </p>
@@ -224,7 +208,6 @@ export default function AsyncCardsList() {
             {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
             <ShowOverMsg />
-            {showFixedCTA()}
         </Fragment>
     );
 }

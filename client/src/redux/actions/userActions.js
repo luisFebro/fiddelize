@@ -7,12 +7,12 @@ import { setLoadingProgress } from "./globalActions";
 
 // MAIN DATA LOADING
 export const readUser = async (dispatch, _userId, options = {}) => {
-    const { select } = options;
+    const { select, role } = options;
     let selectQuery = "";
     if (select) selectQuery = `?select=${select}`;
 
     const res = await axios.get(
-        `/api/user/${_userId}${selectQuery}`,
+        `/api/user/${_userId}${selectQuery}&thisRole=${role}`,
         getHeaderJson
     );
     console.log("===CURRENT USER LOADED===");
@@ -23,7 +23,7 @@ export const readUser = async (dispatch, _userId, options = {}) => {
 
 export const readClientAdmin = async (dispatch, _userId) => {
     const res = await axios.get(
-        `/api/user/${_userId}?clientAdminRequest=true`,
+        `/api/user/${_userId}?clientAdminRequest=true&thisRole=cliente-admin`,
         getHeaderJson
     );
     dispatch({

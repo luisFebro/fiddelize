@@ -87,6 +87,7 @@ function MoreOptionsBtn({
         if (cancel) return;
         readUser(dispatch, _id, {
             select: "clientUserData.totalPurchasePrize",
+            role: "cliente",
         }).then((res) => {
             //if user does not have the same quantity of prize in the db and thus not updateed
             //then, block access to loyalty score page to avoid registration of accumulative score from the last challenge.

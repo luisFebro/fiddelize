@@ -12,6 +12,7 @@ import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
+// import ReturnBtn from '../../../components/buttons/ReturnBtn';
 
 export const AsyncBellNotifBtn = Load({
     loading: false,
@@ -29,13 +30,20 @@ const getStyles = (needDark) => ({
     },
 });
 
-export default function TeamApp({ history, location, isCliAdmin = true }) {
+export default function TeamApp({
+    history,
+    location,
+    isCliAdmin = true,
+    toTab = "Cliente",
+}) {
     const [firstName] = useData(["firstName"]);
 
     // redirect if not auth
     useAuthUser({ history });
 
     const isPreviewMode = location && location.search.includes("modo-prev=1");
+
+    const needAdminDefaultTheme = isCliAdmin && !isPreviewMode;
 
     const {
         selfBizLogoImg: bizLogo,
@@ -45,7 +53,9 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
     } = useClientAdmin();
 
     useBackColor(
-        `var(--themeBackground--${isCliAdmin ? "default" : backColor})`
+        `var(--themeBackground--${
+            needAdminDefaultTheme ? "default" : backColor
+        })`
     );
     const txtColor = selectTxtStyle(backColor);
 
@@ -140,29 +150,23 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
             </div>
             <section className="animated fadeIn delay-2s mt-4 container-center">
                 <AddNewScoreBtn
-                    backColor={isCliAdmin ? "default" : backColor}
-                    sColor={isCliAdmin ? "default" : sColor}
+                    backColor={needAdminDefaultTheme ? "default" : backColor}
+                    sColor={needAdminDefaultTheme ? "default" : sColor}
                     needClick={isPreviewMode ? false : true}
                 />
                 <div className="ml-3">
                     <RegisterPanelBtn
                         title="CLIENTE"
                         needPlusIcon={true}
-                        backColor={isCliAdmin ? "default" : backColor}
-                        sColor={isCliAdmin ? "default" : sColor}
+                        backColor={
+                            needAdminDefaultTheme ? "default" : backColor
+                        }
+                        sColor={needAdminDefaultTheme ? "default" : sColor}
                         needClick={isPreviewMode ? false : true}
                     />
                 </div>
             </section>
         </section>
-    );
-
-    const showBackAdminBtn = () => (
-        <BtnBackTestMode
-            isActive={isPreviewMode ? true : false}
-            mode="Membro"
-            btnBackColor={backColor}
-        />
     );
 
     const showAdminTestMsg = () => (
@@ -185,9 +189,17 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
         </section>
     );
 
+    const showBackTestAdminBtn = () => (
+        <BtnBackTestMode
+            isActive={isPreviewMode ? true : false}
+            mode="Membro"
+            btnBackColor={backColor}
+        />
+    );
+
     return (
         <Fragment>
-            {isPreviewMode && showBackAdminBtn()}
+            {isPreviewMode && showBackTestAdminBtn()}
             {(isPreviewMode || !isCliAdmin) && showNotifBell()}
             {showMainAppTitle()}
             {showCTAs()}
@@ -203,3 +215,16 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
         </Fragment>
     );
 }
+
+/*
+const showAdminBackBtn = () => (
+    <section
+        className="position-absolute"
+        style={{ top: 15, left: 15 }}
+    >
+        <ReturnBtn
+            toTab={toTab}
+        />
+    </section>
+);
+ */

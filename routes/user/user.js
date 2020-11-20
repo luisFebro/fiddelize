@@ -37,7 +37,9 @@ const {
 const {
     readTeamMemberList,
     readTeamTasksList,
+    readOneMemberTasksList,
     setTempScoreAndMemberData,
+    getMembersPodium,
 } = require("../../controllers/user/team/team");
 
 const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
@@ -79,6 +81,8 @@ router.put("/field/remove/:id", removeField);
 // TEAM
 router.get("/team/list", readTeamMemberList);
 router.get("/team/tasks/list", mwIsAuth, readTeamTasksList);
+router.get("/team/member-history/list", mwIsAuth, readOneMemberTasksList);
+router.get("/team/members/podium", getMembersPodium);
 router.post(
     "/team/temp-user-score-member",
     mwIsAuth,

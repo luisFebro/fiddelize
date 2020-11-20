@@ -1,29 +1,29 @@
 import React, { Fragment } from "react";
 import truncateWords from "../../../../utils/string/truncateWords";
 import styled from "styled-components";
-import convertToReal from "../../../../utils/numbers/convertToReal";
+// import convertToReal from "../../../../utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSystem } from "../../../../hooks/useRoleData";
 import Img from "../../../../components/Img";
-import useAPI, { readHighestScores } from "../../../../hooks/api/useAPI";
+import useAPI, { getMembersPodium } from "../../../../hooks/api/useAPI";
 
 export default function RankingPondium() {
     const { businessId } = useAppSystem();
 
-    const { data: highestScores, gotData, loading } = useAPI({
-        url: readHighestScores(businessId),
+    const { data: highestData, gotData, loading } = useAPI({
+        url: getMembersPodium(businessId),
         needAuth: false,
-        dataName: "rankingPodium",
+        dataName: "membersPodium",
     });
 
     const showScores = () => (
         <Fragment>
             {[0, 1, 2].map((ind) => {
                 const css = ["first-place", "second-place", "third-place"];
-                const itemsList = gotData && highestScores[ind];
+                const itemsList = gotData && highestData[ind];
 
-                const clientScore = convertToReal(itemsList && itemsList.score);
-                const clientName = truncateWords(
+                const registerTotal = itemsList && itemsList.value;
+                const memberName = truncateWords(
                     itemsList && itemsList.name.cap(),
                     13
                 );
@@ -53,12 +53,12 @@ export default function RankingPondium() {
                                     style={{ top: "14px" }}
                                     className="text-nowrap position-relative text-subtitle font-weight-bold text-shadow-white"
                                 >
-                                    {clientScore}{" "}
+                                    {registerTotal}{" "}
                                     {Boolean(ind === 0) && "Cadastros"}
                                 </span>
                                 <br />
                                 <span className="d-inline-block mt-2 text-normal font-weight-bold text-shadow-white">
-                                    {clientName}
+                                    {memberName}
                                 </span>
                             </p>
                         )}

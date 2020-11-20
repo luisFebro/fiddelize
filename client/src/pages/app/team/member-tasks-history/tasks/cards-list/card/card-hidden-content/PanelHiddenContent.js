@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreState } from "easy-peasy";
-import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import getFirstName from "../../../../../../../utils/string/getFirstName";
+import getFirstName from "../../../../../../../../utils/string/getFirstName";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -26,14 +25,6 @@ function PanelHiddenContent({ history, data }) {
                     Mais Detalhes
                 </h2>
             </section>
-            <p className="mb-4 text-normal font-weight-bold text-shadow">
-                • Nome do Cliente:
-                <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
-                    {getFirstName(data.clientName && data.clientName.cap(), {
-                        addSurname: true,
-                    })}
-                </span>
-            </p>
             {data.memberTask === "newClient" && (
                 <p className="mb-4 text-normal font-weight-bold text-shadow">
                     • Cadastrou com:
@@ -44,16 +35,12 @@ function PanelHiddenContent({ history, data }) {
                     </span>
                 </p>
             )}
-            <div className="d-none container-center mt-5">
-                <ButtonFab
-                    position="relative"
-                    size="large"
-                    title="Ver Cliente"
-                    onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
-                    variant="extended"
-                />
-            </div>
+            <p className="mb-4 text-normal font-weight-bold text-shadow">
+                • Pelo membro:
+                <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
+                    {getFirstName(data.memberName, { addSurname: true })}
+                </span>
+            </p>
         </section>
     );
 }

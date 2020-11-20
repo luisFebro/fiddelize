@@ -9,13 +9,16 @@ import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../redux/actions/globalActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RedirectLink from "../../components/RedirectLink";
 
 function ReturnBtn({
     location,
     icon = "home",
+    returnIcon = "arrow-left",
     onClick,
     toAdminDash,
     btnColor,
+    toTab,
 }) {
     const { bizCodeName } = useClientAdmin();
 
@@ -23,6 +26,25 @@ function ReturnBtn({
 
     const dispatch = useStoreDispatch();
     const isFunc = typeof onClick === "function";
+
+    if (toTab) {
+        return (
+            <RedirectLink toDashTab={toTab || "Cliente"}>
+                <ButtonFab
+                    color="var(--mainWhite)"
+                    backgroundColor={`var(--themeSDark--${
+                        btnColor || "default"
+                    })`}
+                    iconFontAwesome={
+                        <FontAwesomeIcon
+                            icon={returnIcon}
+                            style={{ ...faStyle, fontSize: "20px" }}
+                        />
+                    }
+                />
+            </RedirectLink>
+        );
+    }
 
     return (
         <div className="position-absolute" style={{ top: 15, left: 15 }}>

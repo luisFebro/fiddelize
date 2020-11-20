@@ -24,7 +24,7 @@ export default function ModalBtn({ modalData = {} }) {
     };
 
     const { data: payload, loading } = useAPI({
-        url: readUser(_id),
+        url: readUser(_id, "cliente-membro"),
         params,
     });
 

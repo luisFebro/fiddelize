@@ -76,7 +76,10 @@ export default function PayArea({
     };
 
     useEffect(() => {
-        readUser(dispatch, _id, { select: "cpf -_id" }).then((res) => {
+        readUser(dispatch, _id, {
+            select: "cpf -_id",
+            role: "cliente-admin",
+        }).then((res) => {
             let thisCPF = res.data.cpf;
             if (thisCPF === "111.111.111-11") thisCPF = "431.711.242-62"; // for testing only
 

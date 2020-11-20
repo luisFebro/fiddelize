@@ -143,11 +143,9 @@ exports.readTeamTasksList = async (req, res) => {
 
     const validFilter = ["today", "all"];
     if (!validFilter.includes(filterBy))
-        return res
-            .status(400)
-            .json({
-                error: "invalid filterBy value. Valid values: " + validFilter,
-            });
+        return res.status(400).json({
+            error: "invalid filterBy value. Valid values: " + validFilter,
+        });
 
     const adminDoc = await User("cliente-admin")
         .findById(bizId)
@@ -177,6 +175,32 @@ exports.readTeamTasksList = async (req, res) => {
     const allData = [...adminTaskList, ...membersTaskList];
 
     const data = sortDates(allData, { target: "createdAt", sortBy: "latest" });
+
+    const dataSize = data.length;
+    const dataRes = {
+        list: getDataChunk(data, { skip, limit }),
+        chunksTotal: getChunksTotal(dataSize, limit),
+        listTotal: dataSize,
+        content: undefined,
+    };
+
+    res.json(dataRes);
+};
+
+exports.readOneMemberTasksList = async (req, res) => {
+    const { memberId, bizId, skip, limit = 10, filterBy = "today" } = req.query;
+
+    const memberDoc = await User("cliente-membro")
+        .find({ _id: memberId, "clientMemberData.bizId": bizId })
+        .select("-_id name clientMemberData.job clientMemberData.taskList");
+
+    const membersTaskList = getMemberTaskList({
+        isMember: true,
+        memberData: memberDoc,
+        filterBy,
+    });
+
+    const data = membersTaskList;
 
     const dataSize = data.length;
     const dataRes = {
@@ -239,6 +263,35 @@ exports.readTeamMemberList = async (req, res) => {
     };
 
     res.json(dataRes);
+};
+
+exports.getMembersPodium = async (req, res) => {
+    const {
+        bizId,
+        filterBy = "register", // or score
+    } = req.query;
+
+    let filterQuery;
+    if (filterBy === "register") filterQuery = "newClientTotal";
+    if (filterBy === "score") filterQuery = "newScoreTotal";
+
+    const data = await User("cliente-membro")
+        .find({ "clientMemberData.bizId": bizId })
+        .select(`name clientMemberData.${filterQuery} -_id`)
+        .sort({ [`clientMemberData.${filterQuery}`]: -1 })
+        .limit(3);
+
+    if (data.length) {
+        const rankingList = data.map((member) => {
+            const { name, clientMemberData } = member;
+            const value = clientMemberData[filterQuery];
+            return { name, value };
+        });
+
+        return res.json(rankingList);
+    }
+
+    res.json([]);
 };
 
 /* COMMENTS

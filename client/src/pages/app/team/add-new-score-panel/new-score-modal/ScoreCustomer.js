@@ -11,7 +11,7 @@ import getRandomArray from "../../../../../utils/arrays/getRandomArray";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import getAPI, {
-    setTempScoreAndMemberDataData,
+    setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
 
 const getStyles = () => ({
@@ -96,7 +96,7 @@ const setUltimateData = async ({
 
     return await getAPI({
         method: "post",
-        url: setTempScoreAndMemberDataData(),
+        url: setTempScoreAndMemberData(),
         body,
     });
 };

@@ -5,7 +5,7 @@ import SuccessMsg from "./SuccessMsg";
 import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
 import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
-    setTempScoreAndMemberDataData,
+    setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
 
 const setCustomerId = async (clientName, bizId) => {
@@ -18,7 +18,7 @@ const setCustomerId = async (clientName, bizId) => {
 
     return await getAPI({
         method: "post",
-        url: setTempScoreAndMemberDataData(),
+        url: setTempScoreAndMemberData(),
         body,
     });
 };

@@ -1,6 +1,7 @@
 // URLs ONLY
 // user
-export const readUser = (userId) => `/api/user/${userId}`;
+export const readUser = (userId, role) =>
+    `/api/user/${userId}?noResponse=true&thisRole=${role}`;
 export const updateUser = (userId) => `/api/user/${userId}?noResponse=true`;
 export const removeUser = (userId) => `/api/user/${userId}`;
 
@@ -20,7 +21,7 @@ export const changePrizeStatus = (cliUserId, statusType) =>
 
 // Automatic Tasks
 export const readTasks = (userId, doneStatus) =>
-    `/api/task/read/${userId}?doneStatus=${doneStatus}`; // GET
+    `/api/task/read/${userId}?doneStatus=${doneStatus}&thisRole=cliente-admin`; // GET
 export const addTask = (userId) => `/api/task/add?userId=${userId}`; // PUT
 export const toggleDoneUrl = () => `/api/task/toggle`; // PUT
 export const removeTaskAndExpireCliPrize = () => `/api/task/remove-and-expire`;
@@ -71,5 +72,9 @@ export const createPassword = () => `/api/auth/pswd/create`;
 // TEAM
 export const readTeamMemberList = () => `/api/user/team/list`;
 export const readTeamTaskList = () => `/api/user/team/tasks/list`;
-export const setTempScoreAndMemberDataData = () =>
+export const readOneMemberTasksList = () =>
+    `/api/user/team/member-history/list`;
+export const setTempScoreAndMemberData = () =>
     `/api/user/team/temp-user-score-member`;
+export const getMembersPodium = (bizId) =>
+    `/api/user/team/members/podium?bizId=${bizId}`;

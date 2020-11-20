@@ -92,7 +92,7 @@ function Login({
             ];
             setMultiVar(storeElems, store.user);
 
-            await readUser(dispatch, authUserId); // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
+            await readUser(dispatch, authUserId, { role }); // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
 
             // Important: ONLY IMPLEMENT THIS IF THERE ARE USERS WITHOUT THIS PASS MISSING... otherwise, do not use this cond if all users already have one.
             if (!verificationPass) {
@@ -261,7 +261,7 @@ export default withRouter(Login);
 
 // HELPERS
 function handleCliUserPath({ authUserId, dispatch, history }) {
-    readUser(dispatch, authUserId) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
+    readUser(dispatch, authUserId, { role: "cliente" }) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
         .then((res) => {
             if (isThisApp()) {
                 if (res.status !== 200)
