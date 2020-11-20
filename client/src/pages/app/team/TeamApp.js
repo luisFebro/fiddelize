@@ -44,7 +44,9 @@ export default function TeamApp({ history, location, isCliAdmin = true }) {
         selfThemePColor: pColor,
     } = useClientAdmin();
 
-    useBackColor(`var(--themeBackground--${backColor})`);
+    useBackColor(
+        `var(--themeBackground--${isCliAdmin ? "default" : backColor})`
+    );
     const txtColor = selectTxtStyle(backColor);
 
     const needDark = selectTxtStyle(backColor, { needDarkBool: true });

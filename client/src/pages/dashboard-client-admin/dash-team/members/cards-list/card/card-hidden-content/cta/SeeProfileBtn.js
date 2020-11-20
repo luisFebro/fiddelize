@@ -4,6 +4,7 @@ import ModalConfYesNo from "../../../../../../../../components/modals/ModalYesNo
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalFullContent from "../../../../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../../../../components/code-splitting/LoadableComp";
+import useAPI, { readUser } from "../../../../../../../../hooks/api/useAPI";
 
 const Async = Load({
     loader: () =>
@@ -15,15 +16,25 @@ const Async = Load({
 export default function ModalBtn({ modalData = {} }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const { name = "Luis Febro" } = modalData;
+    const { name, _id } = modalData;
+
+    const params = {
+        thisRole: "cliente-membro",
+        select: "-_id name cpf createdAt phone email birthday",
+    };
+
+    const { data: payload, loading } = useAPI({
+        url: readUser(_id),
+        params,
+    });
 
     const data = {
-        name: "Luis Febro",
-        cpf: "023.248.892-42",
-        createdAt: new Date(),
-        phone: "(92) 99281-7363",
-        email: "mr.febro@gmail.com",
-        birthday: "23 de agosto de 1994",
+        name: loading ? "..." : payload.name,
+        cpf: loading ? "..." : payload.cpf,
+        createdAt: loading ? "..." : payload.createdAt,
+        phone: loading ? "..." : payload.phone,
+        email: loading ? "..." : payload.email,
+        birthday: loading ? "..." : payload.birthday,
     };
     const AsyncMemberProfile = (
         <Async
@@ -35,7 +46,7 @@ export default function ModalBtn({ modalData = {} }) {
                         • NOME:
                     </span>
                     <br />
-                    {name && name.cap()},
+                    {name},
                 </p>
             }
         />

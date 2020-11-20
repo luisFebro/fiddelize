@@ -1,0 +1,59 @@
+import React from "react";
+import AnimaIconsSelect from "../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
+import FilterStatus from "../../../../../components/selects/anima-icons-select/FilterStatus";
+import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
+// custom icons
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import EventIcon from "@material-ui/icons/Event";
+
+const periodOptions = (isPro) => [
+    {
+        titleBr: "Tudo",
+        title: "all",
+        reverseBr: null,
+        reverse: null,
+        showEmptyOption: null,
+        isPro: false,
+        Icon: <EventIcon />,
+    },
+    {
+        titleBr: "Hoje",
+        title: "today",
+        reverseBr: null,
+        reverse: null,
+        showEmptyOption: null,
+        isPro: false,
+        Icon: <EventIcon />,
+    },
+];
+
+export default function TeamTasksFilter({
+    listTotal,
+    loading,
+    handlePeriodFilter,
+    emptyType = "filter",
+    gotData,
+}) {
+    const defaultPeriodIcon = <DateRangeIcon />;
+
+    const showCategories = () =>
+        (listTotal !== 0 || emptyType === "filter") && (
+            <section className="mt-5 position-relative text-p text-left pl-2">
+                <AnimaIconsSelect
+                    callback={handlePeriodFilter}
+                    defaultSelected="Hoje"
+                    optionsArray={periodOptions}
+                    defaultSideIcon={defaultPeriodIcon}
+                    offlineKey="selectedPeriodFilter_memberTasks"
+                    width={200}
+                    needReverseBtn={false}
+                    zIndex={4}
+                />
+                <section className="my-3">
+                    <FilterStatus loading={loading} gotData={gotData} />
+                </section>
+            </section>
+        );
+
+    return <section>{showCategories()}</section>;
+}

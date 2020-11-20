@@ -1,5 +1,6 @@
 // URLs ONLY
 // user
+export const readUser = (userId) => `/api/user/${userId}`;
 export const updateUser = (userId) => `/api/user/${userId}?noResponse=true`;
 export const removeUser = (userId) => `/api/user/${userId}`;
 
@@ -69,5 +70,6 @@ export const createPassword = () => `/api/auth/pswd/create`;
 
 // TEAM
 export const readTeamMemberList = () => `/api/user/team/list`;
+export const readTeamTaskList = () => `/api/user/team/tasks/list`;
 export const setTempScoreAndMemberDataData = () =>
     `/api/user/team/temp-user-score-member`;

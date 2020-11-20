@@ -17,10 +17,13 @@ const { getMemberJob, getFinalUrl } = require("./helpers/redirectUrlLink");
 
 // MIDDLEWARES - mw
 exports.mwUserId = async (req, res, next, id) => {
-    let { select } = req.query;
+    let { select, thisRole } = req.query; // thisRole when a specific app is targeted.
     if (!select) select = "";
 
-    const { role } = await req.getAccount(id);
+    let role = thisRole;
+    if (!thisRole) {
+        role = await req.getAccount(id);
+    }
 
     User(role)
         .findById(id)
@@ -239,7 +242,7 @@ exports.readBackup = (req, res) => {
 
 exports.countField = (req, res) => {
     const { _id, role } = req.profile;
-    const { field, type } = req.body;
+    const { field, type, thisRole } = req.body; // thisRole is more reliable since it is specified which app's role.
 
     if (!field)
         return res.status(400).json({
@@ -251,7 +254,7 @@ exports.countField = (req, res) => {
         countingField = { [field]: -1 };
     }
 
-    User(role)
+    User(thisRole || role)
         .findOneAndUpdate({ _id }, { $inc: countingField }, { new: false })
         .exec((err) => {
             if (err)

@@ -78,7 +78,7 @@ router.put("/field/remove/:id", removeField);
 
 // TEAM
 router.get("/team/list", readTeamMemberList);
-router.get("/team/tasks/list", readTeamTasksList);
+router.get("/team/tasks/list", mwIsAuth, readTeamTasksList);
 router.post(
     "/team/temp-user-score-member",
     mwIsAuth,

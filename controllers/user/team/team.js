@@ -6,6 +6,7 @@ const {
 } = require("../../../utils/array/getDataChunk");
 const { sendBackendNotification } = require("../../notification");
 const { getMemberTaskList } = require("./helpers");
+const sortDates = require("../../../utils/dates/sortDates");
 
 const getPushFifo = (field, elem) => {
     const fifo = { $each: [elem], $position: 0 }; // first in, first out.
@@ -138,20 +139,29 @@ content: "", (OK NOT NEED FOR NOW)
 createdAt: new Date(),
  */
 exports.readTeamTasksList = async (req, res) => {
-    const { bizId, skip, limit = 10 } = req.query;
+    const { bizId, skip, limit = 10, filterBy = "today" } = req.query;
+
+    const validFilter = ["today", "all"];
+    if (!validFilter.includes(filterBy))
+        return res
+            .status(400)
+            .json({
+                error: "invalid filterBy value. Valid values: " + validFilter,
+            });
 
     const adminDoc = await User("cliente-admin")
         .findById(bizId)
         .select("-_id name clientMemberData.taskList");
 
     const adminMemberData = {
-        memberName: adminDoc.name,
+        memberName: adminDoc.name.cap(),
         job: "admin",
     };
 
     const adminTaskList = getMemberTaskList({
         commonData: adminMemberData,
         memberData: adminDoc.clientMemberData,
+        filterBy,
     });
 
     const memberDoc = await User("cliente-membro")
@@ -161,9 +171,12 @@ exports.readTeamTasksList = async (req, res) => {
     const membersTaskList = getMemberTaskList({
         isMember: true,
         memberData: memberDoc,
+        filterBy,
     });
 
-    const data = [...adminTaskList, ...membersTaskList];
+    const allData = [...adminTaskList, ...membersTaskList];
+
+    const data = sortDates(allData, { target: "createdAt", sortBy: "latest" });
 
     const dataSize = data.length;
     const dataRes = {
@@ -201,11 +214,12 @@ exports.readTeamMemberList = async (req, res) => {
     const memberDocs = await User("cliente-membro")
         .find({ "clientMemberData.bizId": bizId })
         .select(
-            "-_id name createdAt clientMemberData.newClientTotal clientMemberData.newScoreTotal"
+            "_id name createdAt clientMemberData.newClientTotal clientMemberData.newScoreTotal"
         );
 
     const membersList = memberDocs.map((m) => {
         return {
+            _id: m._id, // to be able to check member's profile...
             name: m.name,
             job: m.clientMemberData.job || "vendas",
             createdAt: m.createdAt,

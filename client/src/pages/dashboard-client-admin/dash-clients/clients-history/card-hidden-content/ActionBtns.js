@@ -128,7 +128,7 @@ const showDeleteBtn = (data, needBadgeForTestMode) =>
                 }}
                 modalData={{
                     title: `Confirmação<br />de Exclusão de Cliente`,
-                    subTitle: `Lembrando que o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
+                    subTitle: `Nota: o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${data.name.cap()}</strong> ?`,
                     itemData: data,
                 }}
                 setRun={null}

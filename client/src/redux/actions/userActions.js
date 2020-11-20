@@ -206,7 +206,7 @@ export const addAutomaticTask = async (userId, options = {}) => {
 export const countField = async (_id, objToSend) => {
     try {
         return await axios.put(
-            `/api/user/count/field/${_id}`,
+            `/api/user/count/field/${_id}?thisRole=${objToSend.thisRole}`,
             objToSend,
             getHeaderJson
         );

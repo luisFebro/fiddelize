@@ -8,13 +8,14 @@ import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
     readTeamMemberList,
+    getTrigger,
 } from "../../../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../hooks/api/useElemDetection";
 import useElemShowOnScroll from "../../../../../hooks/scroll/useElemShowOnScroll";
 import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
-
+import { useRunComp } from "../../../../../hooks/useRunComp";
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -67,6 +68,9 @@ export default function AsyncCardsList() {
 
     const params = { bizId: businessId, skip };
 
+    const { runName } = useRunComp();
+    const trigger = getTrigger(runName, "teamMemberList");
+
     const {
         list,
         loading,
@@ -81,6 +85,7 @@ export default function AsyncCardsList() {
         skip,
         params,
         listName: "teamMemberList",
+        trigger,
     });
 
     const detectedCard = useElemDetection({
@@ -129,7 +134,7 @@ export default function AsyncCardsList() {
             const sideHeading = handleSecHeading(data, styles);
 
             return {
-                _id: data._id,
+                _id: data.createdAt,
                 mainHeading,
                 secondaryHeading: sideHeading,
                 // data here is immutable only. If you need handle a mutable data, set it to teh card's actions iteration.

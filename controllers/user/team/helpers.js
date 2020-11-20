@@ -1,26 +1,46 @@
-exports.getMemberTaskList = ({ isMember, commonData, memberData }) => {
+const { isToday, parseISO } = require("date-fns");
+
+exports.getMemberTaskList = ({
+    isMember,
+    commonData,
+    memberData,
+    filterBy,
+}) => {
     if (isMember) {
         if (memberData && !memberData.length) return [];
 
         const finalMemberList = [];
 
         memberData.forEach((mData) => {
-            const taskList = mData && mData.clientMemberData.taskList;
+            const clientMemberData = mData && mData.clientMemberData;
+            const taskList = clientMemberData && clientMemberData.taskList;
 
             const commonData = {
-                memberName: mData.name,
-                job: mData.job,
+                memberName: mData.name.cap(),
+                job: clientMemberData && clientMemberData.job,
             };
 
             if (taskList) {
                 const finalList = taskList.map((t) => {
-                    finalMemberList.push({
-                        ...commonData,
-                        createdAt: t.createdAt,
-                        memberTask: t.memberTask,
-                        clientName: t.clientName,
-                        clientScore: t.clientScore,
-                    });
+                    if (filterBy === "today") {
+                        if (isToday(t.createdAt)) {
+                            finalMemberList.push({
+                                ...commonData,
+                                createdAt: new Date(t.createdAt),
+                                memberTask: t.memberTask,
+                                clientName: t.clientName,
+                                clientScore: t.clientScore,
+                            });
+                        }
+                    } else {
+                        finalMemberList.push({
+                            ...commonData,
+                            createdAt: new Date(t.createdAt),
+                            memberTask: t.memberTask,
+                            clientName: t.clientName,
+                            clientScore: t.clientScore,
+                        });
+                    }
                 });
             }
         });
@@ -31,14 +51,28 @@ exports.getMemberTaskList = ({ isMember, commonData, memberData }) => {
     const taskList = memberData ? memberData.taskList : [];
     if (taskList && !taskList.length) return [];
 
-    const finalList = taskList.map((t) => {
-        return {
-            ...commonData,
-            createdAt: t.createdAt,
-            memberTask: t.memberTask,
-            clientName: t.clientName,
-            clientScore: t.clientScore,
-        };
+    const finalList = [];
+
+    taskList.forEach((t) => {
+        if (filterBy === "today") {
+            if (isToday(t.createdAt)) {
+                finalList.push({
+                    ...commonData,
+                    createdAt: new Date(t.createdAt),
+                    memberTask: t.memberTask,
+                    clientName: t.clientName,
+                    clientScore: t.clientScore,
+                });
+            }
+        } else {
+            finalList.push({
+                ...commonData,
+                createdAt: new Date(t.createdAt),
+                memberTask: t.memberTask,
+                clientName: t.clientName,
+                clientScore: t.clientScore,
+            });
+        }
     });
 
     return finalList;

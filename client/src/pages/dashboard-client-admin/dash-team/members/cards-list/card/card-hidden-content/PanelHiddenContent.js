@@ -23,6 +23,15 @@ function PanelHiddenContent({ history, data }) {
 
     const { newClientTotal, newScoreTotal } = data;
 
+    const name = getFirstName(data.name && data.name.cap(), {
+        addSurname: true,
+    });
+
+    const modalData = {
+        name,
+        _id: data._id,
+    };
+
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
             <section className="my-4">
@@ -47,18 +56,16 @@ function PanelHiddenContent({ history, data }) {
                     {newScoreTotal} Pontos de clientes.
                 </span>
             </p>
-            <div className="container-center mt-5">
-                <SeeProfileBtn />
-            </div>
-            <div className="mt-5">
-                <RemoveMemberBtn
-                    modalData={{
-                        name: getFirstName(data.memberName, {
-                            addSurname: true,
-                        }),
-                    }}
-                />
-            </div>
+            {data.job !== "admin" && (
+                <Fragment>
+                    <div className="container-center mt-5">
+                        <SeeProfileBtn modalData={modalData} />
+                    </div>
+                    <div className="mt-5">
+                        <RemoveMemberBtn modalData={modalData} />
+                    </div>
+                </Fragment>
+            )}
         </section>
     );
 }

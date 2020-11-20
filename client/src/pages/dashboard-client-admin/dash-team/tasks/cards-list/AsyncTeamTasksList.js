@@ -6,10 +6,12 @@ import { useAppSystem } from "../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import Illustration from "../../../../../components/Illustration";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import TeamTasksFilter from "./TeamTasksFilter";
 // import extractStrData from '../../../../../utils/string/extractStrData';
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
-    readTransactionHistory,
+    readTeamTaskList,
+    getTrigger,
 } from "../../../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
@@ -47,9 +49,23 @@ const handleSecHeading = (data, styles) => {
 
 export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
+    const [data, setData] = useState({
+        filterBy: "today",
+        isFiltering: false,
+    });
+    const { filterBy, isFiltering } = data;
+
     const { businessId } = useAppSystem();
 
     const styles = getStyles();
+
+    const handlePeriodFilter = (dataFilter) => {
+        setSkip(0);
+        setData({ filterBy: dataFilter.selected, isFiltering: true });
+        setTimeout(() => {
+            setData((prev) => ({ ...prev, isFiltering: false }));
+        }, 4000);
+    };
 
     const showCTA = useElemShowOnScroll("#showNewCTA");
 
@@ -68,46 +84,59 @@ export default function AsyncCardsList() {
             </section>
         );
 
-    const params = { userId: businessId, skip };
+    const params = { userId: businessId, bizId: businessId, skip, filterBy };
 
+    const trigger = getTrigger(null, null, { cond2: `filter_${filterBy}` });
     const {
-        // list,
+        list,
         loading,
         ShowLoadingSkeleton,
         error,
         ShowError,
-        // needEmptyIllustra,
+        needEmptyIllustra,
         hasMore,
         isOffline,
         ShowOverMsg,
+        gotData,
+        listTotal,
     } = useAPIList({
-        url: readTransactionHistory(),
+        url: readTeamTaskList(),
         skip,
         params,
         listName: "teamTasksList",
+        trigger,
+        isFiltering,
     });
 
-    const needEmptyIllustra = false;
-    const list = [
-        {
-            clientName: "Augusta Silva",
-            clientScore: 150,
-            memberTask: "newScore",
-            memberName: "Luis Febro Feitoza Lima",
-            job: "admin",
-            content: "",
-            createdAt: new Date(),
-        },
-        {
-            clientName: "Augusta Silva",
-            clientScore: 250, // Cadastrou com pontos: 250
-            memberTask: "newClient",
-            memberName: "Adriana Oliveira da Silva",
-            job: "vendas",
-            content: "",
-            createdAt: new Date(),
-        },
-    ];
+    const showNoTasksImg = () =>
+        needEmptyIllustra &&
+        !isOffline && (
+            <section className="container-center mb-5">
+                <Illustration
+                    img={
+                        "/img/illustrations/empty-data.svg" || "/img/error.png"
+                    }
+                    txtClassName="text-purple"
+                    alt="Ilustração"
+                    txtImgConfig={{
+                        topPos: "50%",
+                        txt: `Nenhuma tarefa ${
+                            filterBy === "today" ? "para hoje" : "até agora"
+                        }`,
+                    }}
+                />
+                <div className="mt-3 mb-5 container-center">
+                    <ButtonFab
+                        size="large"
+                        title="CADASTRAR MEMBRO"
+                        position="relative"
+                        onClick={null}
+                        backgroundColor={"var(--themeSDark--default)"}
+                        variant="extended"
+                    />
+                </div>
+            </section>
+        );
 
     const detectedCard = useElemDetection({
         loading,
@@ -162,7 +191,7 @@ export default function AsyncCardsList() {
             const sideHeading = handleSecHeading(data, styles);
 
             return {
-                _id: data._id,
+                _id: data.createdAt,
                 mainHeading,
                 secondaryHeading: sideHeading,
                 // data here is immutable only. If you need handle a mutable data, set it to teh card's actions iteration.
@@ -185,40 +214,16 @@ export default function AsyncCardsList() {
         );
     };
 
-    const showEmptyData = () => {
-        return (
-            <section>
-                <div className="container-center my-5">
-                    <Illustration
-                        img={
-                            "/img/illustrations/empty-data.svg" ||
-                            "/img/error.png"
-                        }
-                        txtClassName="text-purple"
-                        alt="Sem tarefas"
-                        txtImgConfig={{
-                            topPos: "50%",
-                            txt: "Nenhuma tarefa da equipe",
-                        }}
-                    />
-                </div>
-                <div className="mt-3 mb-5 container-center">
-                    <ButtonFab
-                        size="large"
-                        title="CADASTRAR MEMBRO"
-                        position="relative"
-                        onClick={null}
-                        backgroundColor={"var(--themeSDark--default)"}
-                        variant="extended"
-                    />
-                </div>
-            </section>
-        );
-    };
-
     return (
         <Fragment>
-            {needEmptyIllustra ? showEmptyData() : showAccordion()}
+            <TeamTasksFilter
+                gotData={gotData}
+                listTotal={listTotal}
+                handlePeriodFilter={handlePeriodFilter}
+                loading={loading}
+            />
+            {gotData && showAccordion()}
+            {showNoTasksImg()}
             {loading && <ShowLoadingSkeleton size="large" />}
             {error && <ShowError />}
             <ShowOverMsg />

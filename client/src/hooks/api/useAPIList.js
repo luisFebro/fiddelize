@@ -54,6 +54,17 @@ export default function useAPIList({
     needAuth = true,
     isFiltering = false,
 }) {
+    // Warning: if using filter, isFiltering is required like:
+    /*
+        const handlePeriodFilter = (dataFilter) => {
+            setSkip(0);
+            setData({ filterBy: dataFilter.selected, isFiltering: true });
+            setTimeout(() => {
+                setData(prev => ({ ...prev, isFiltering: false }));
+            }, 4000);
+        }
+     */
+
     const [data, setData] = useState({
         list: [],
         listTotal: 0,
@@ -170,7 +181,6 @@ export default function useAPIList({
         }
 
         const updateOnly = skip === 0 || updateFirstChunkOnly;
-        console.log("updateOnly", updateOnly);
         if (updateOnly) skip = 0;
 
         const stopRequest = setTimeout(() => {
@@ -371,6 +381,7 @@ export default function useAPIList({
         isOffList,
         content,
         emptyType,
+        gotData: Boolean(gotListItems),
     };
 }
 

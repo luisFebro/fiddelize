@@ -28,18 +28,20 @@ function PanelHiddenContent({ history, data }) {
             <p className="mb-4 text-normal font-weight-bold text-shadow">
                 • Nome do Cliente:
                 <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
-                    {data.clientName}
+                    {data.clientName && data.clientName.cap()}
                 </span>
             </p>
             {data.memberTask === "newClient" && (
                 <p className="mb-4 text-normal font-weight-bold text-shadow">
                     • Cadastrou com:
-                    <span className="d-inline-block main-font text-em-1-2 font-weight-bold">
-                        {data.clientScore} Pontos.
+                    <span className="d-block main-font text-em-1-2 font-weight-bold">
+                        {data.clientScore
+                            ? `${data.clientScore} Pontos.`
+                            : "Nenhum Ponto."}
                     </span>
                 </p>
             )}
-            <div className="container-center mt-5">
+            <div className="d-none container-center mt-5">
                 <ButtonFab
                     position="relative"
                     size="large"

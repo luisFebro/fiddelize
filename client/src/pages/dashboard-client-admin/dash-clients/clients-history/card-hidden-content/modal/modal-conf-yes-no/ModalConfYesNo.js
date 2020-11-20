@@ -57,13 +57,14 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
             getAPI({
                 method: "delete",
                 url: removeUser(itemData._id),
-                params: { userId: businessId },
+                params: { userId: businessId, thisRole: "cliente" },
             }).then((res) => {
                 if (res.status !== 200)
                     return showSnackbar(dispatch, res.data.msg, "error");
                 countField(businessId, {
                     field: "clientAdminData.totalClientUsers",
                     type: "dec",
+                    thisRole: "cliente-admin",
                 }).then((res) => {
                     if (res.status !== 200)
                         return showSnackbar(dispatch, res.data.msg, "error");
