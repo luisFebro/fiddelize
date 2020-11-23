@@ -38,6 +38,7 @@ import RedirectLink from "../../components/RedirectLink";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import useData from "../../hooks/useData";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
+import AppTypeBubble from "./start-comps/AppTypeBubble";
 
 const AsyncAccessGateKeeper = Load({
     loader: () =>
@@ -80,6 +81,7 @@ function ClientMobileApp({ location, history }) {
 
     let { isAuthUser } = useAuthUser();
     const { roleWhichDownloaded, businessId } = useAppSystem();
+    console.log("roleWhichDownloaded", roleWhichDownloaded);
     let { _id } = useProfile();
 
     const [rememberAccess, success, role, name, fullName] = useData([
@@ -123,10 +125,6 @@ function ClientMobileApp({ location, history }) {
         key: "app_fiddelize_logo",
     });
 
-    const shapeSrc = useImg(
-        `/img/shapes/blob-app-start--${selfThemePColor}.svg`,
-        { coll: "shapes", key: `app_start_shape_${selfThemePColor}` }
-    );
     const logoSrc = logoBiz ? logoBiz : logoFid;
 
     const { runName } = useRunComp();
@@ -235,61 +233,6 @@ function ClientMobileApp({ location, history }) {
         </Fragment>
     );
 
-    const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
-    const gotEmptyData =
-        typeof role === "object" && selfThemePColor === "default";
-    const conditionShowAppBubble =
-        (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) ||
-        gotEmptyData ||
-        (role === "cliente-admin" && !needAppForCliAdmin);
-
-    const handleRoleName = () => {
-        if (loadingAccess) return "...";
-        if (role === "cliente-admin" || isUrlAdmin) return "Admin";
-        return "Cliente";
-    };
-    const showAppType = () => (
-        <div className="container-center">
-            <div
-                className="position-relative"
-                style={{ top: -55, marginTop: 90, marginBottom: 40 }}
-            >
-                <div
-                    style={{ animationIterationCount: 1 }}
-                    className="animated rubberBand delay-1s"
-                >
-                    <Img
-                        src={shapeSrc}
-                        width={460}
-                        needLoader={false}
-                        height={130}
-                        alt="tipo de app"
-                    />
-                </div>
-                <p
-                    style={{
-                        zIndex: 100,
-                        top: "25px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                    }}
-                    className="text-center text-white position-absolute text-shadow"
-                >
-                    <span
-                        className="position-relative text-subtitle font-weight-bold"
-                        style={{ left: -25 }}
-                    >
-                        App
-                    </span>
-                    <br />
-                    <span className="text-title text-nowrap">
-                        {!loadingAccess && "do"} {handleRoleName()}
-                    </span>
-                </p>
-            </div>
-        </div>
-    );
-
     const showNotificationBell = () => (
         <div className="container-center">
             <AsyncBellNotifBtn
@@ -391,7 +334,14 @@ function ClientMobileApp({ location, history }) {
         >
             <span className="text-right text-white for-version-test">{""}</span>
             {showLogo()}
-            {conditionShowAppBubble && showAppType()}
+            <AppTypeBubble
+                role={role}
+                loadingAccess={loadingAccess}
+                roleWhichDownloaded={roleWhichDownloaded}
+                isUrlAdmin={isUrlAdmin}
+                needAppForCliAdmin={needAppForCliAdmin}
+                selfThemePColor={selfThemePColor}
+            />
 
             {!isAuthUser && (
                 <section>

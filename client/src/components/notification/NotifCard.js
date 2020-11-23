@@ -80,7 +80,7 @@ function NotifCard({
         <div className="title text-white text-normal m-0">{title}</div>
     );
 
-    const cardBrief = brief.replace(/§/gi, "");
+    const cardBrief = brief && brief.replace(/§/gi, "");
     const showCardDesc = (cardType) => {
         return (
             <section className="desc text-left text-white font-weight-bold">

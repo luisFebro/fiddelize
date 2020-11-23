@@ -166,6 +166,20 @@ function Login({
         }
 
         if (role === "cliente") {
+            const storeElems = [
+                { role },
+                {
+                    name: getFirstName(name && name.cap(), {
+                        addSurname: true,
+                    }),
+                },
+                { firstName: getFirstName(name && name.cap()) },
+                { userId: authUserId },
+                { bizCodeName },
+                { rememberAccess: true },
+            ];
+            setMultiVar(storeElems, store.user);
+
             if (needCliUserWelcomeNotif) {
                 showSnackbar(dispatch, "Preparando App...", "warning", 3000);
 

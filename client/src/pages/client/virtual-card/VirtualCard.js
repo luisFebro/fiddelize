@@ -9,15 +9,10 @@ import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCar
 
 export default function VirtualCard() {
     const showCard = () => (
-        <div className="mt-5">
+        <div className="mt-5 animated fadeInUp delay-1s">
             <ThreeDFlipCard />
         </div>
     );
 
-    return (
-        <section className="text-hero text-white font-weight-bold">
-            I am the Virtual Card Page
-            {showCard()}
-        </section>
-    );
+    return <section>{showCard()}</section>;
 }

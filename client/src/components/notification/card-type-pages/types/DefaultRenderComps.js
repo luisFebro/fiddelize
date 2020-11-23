@@ -51,7 +51,7 @@ export const ShowIllustration = ({
                         height="auto"
                         width={!isSquared ? 140 : 90}
                         src={bizLogo || "/img/error.png"}
-                        alt="primeiro dia"
+                        alt="logo empresa"
                     />
                 </div>
             )}

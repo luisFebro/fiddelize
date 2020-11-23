@@ -30,7 +30,7 @@ export default function getCardTypeData(cardType, options = {}) {
         case "welcome":
             title = `Boas vindas, ${getFirstName(userName)}`;
             brief = handledWelcomeBrief;
-            circularImg = "/img/icons/calendar-welcome.svg";
+            circularImg = "/img/icons/notif/calendar-welcome.svg";
             break;
         case "challenge":
             const {
@@ -54,13 +54,13 @@ export default function getCardTypeData(cardType, options = {}) {
                 const { birthdayDate } = extractStrData(content);
                 title = `Feliz Aniversário!`;
                 brief = handledBirthdayGreeting(birthdayDate);
-                circularImg = "/img/icons/birthday-cake.svg";
+                circularImg = "/img/icons/notif/birthday-cake.svg";
             }
             if (subtype === "weeklyReport") {
                 title = `Aniversários da semana`;
                 brief =
                     "Lista de clientes aniversariantes da semana 21/07 por ordem de pontos acumulados";
-                circularImg = "/img/icons/birthday-customers.svg";
+                circularImg = "/img/icons/notif/birthday-customers.svg";
             }
             break;
         case "pro":
@@ -104,6 +104,17 @@ export default function getCardTypeData(cardType, options = {}) {
                     totalServ > 1 ? "s" : ""
                 } acabou de expirar. Lembrando que todos os seus clientes ainda continuam utilizando os apps normalmente. Somente os serviços do plano atual são interrompidos.`;
                 circularImg = "/img/icons/notif/crown-expired.svg";
+            }
+            break;
+        case "score":
+            const { tempScore } = extractStrData(content);
+
+            if (subtype === "scorePlus") {
+                title = "Nova Pontuação";
+                brief = `Opa! ${getFirstName(
+                    userName
+                )}, você recebeu §${tempScore} pontos§ no seu cartão de fidelidade virtual da ${bizName}.`;
+                circularImg = "/img/icons/notif/fidelity-card.svg";
             }
             break;
         case "system":

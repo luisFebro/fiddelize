@@ -22,7 +22,8 @@ exports.mwUserId = async (req, res, next, id) => {
 
     let role = thisRole;
     if (!thisRole) {
-        role = await req.getAccount(id);
+        const { role: accountRole } = await req.getAccount(req.params.userId);
+        role = accountRole;
     }
 
     User(role)

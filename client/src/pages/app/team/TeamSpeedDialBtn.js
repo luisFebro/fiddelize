@@ -53,8 +53,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick }) {
             name: "Tarefas Recentes ►",
             backColor: "var(--themeSDark--" + sColor + ")",
             onClick: () => {
-                // !disableClick &&
-                openMemberTasks(true);
+                !disableClick && openMemberTasks(true);
                 // playBeep();
             },
         },

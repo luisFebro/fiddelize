@@ -9,7 +9,13 @@ import Challenge from "./types/Challenge";
 const AsyncProPay = Load({
     loader: () =>
         import(
-            "./types/ProPay" /* webpackChunkName: "picked-notif-page-lazy" */
+            "./types/ProPay" /* webpackChunkName: "pay-picked-notif-page-lazy" */
+        ),
+});
+const AsyncScore = Load({
+    loader: () =>
+        import(
+            "./types/Score" /* webpackChunkName: "score-picked-notif-page-lazy" */
         ),
 });
 // END CARD TYPES
@@ -65,6 +71,14 @@ export default function pickCardType(cardType, options = {}) {
                 {...defaultProps}
                 subtype={subtype}
                 content={content ? content : undefined}
+            />
+        ),
+        score: (
+            <AsyncScore
+                {...defaultProps}
+                bizLogo={bizLogo}
+                subtype={subtype}
+                content={content}
             />
         ),
     };
