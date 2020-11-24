@@ -3,7 +3,6 @@ import React, { useRef, useEffect, useState, Fragment } from "react";
 import AsyncLogin from "../../components/auth/AsyncLogin";
 import { Link, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
 import { CLIENT_URL } from "../../config/clientUrl";
 import lStorage, { needAppRegisterOp } from "../../utils/storage/lStorage";
 import AsyncRegisterCliUser from "../../components/auth/AsyncRegisterCliUser";
@@ -12,14 +11,12 @@ import {
     useClientAdmin,
     useClientUser,
 } from "../../hooks/useRoleData";
-import { logout } from "../../redux/actions/authActions";
 import { updateUser, countField } from "../../redux/actions/userActions";
 import { setRun } from "../../hooks/useRunComp";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { useAppSystem } from "../../hooks/useRoleData";
 import { useRunComp } from "../../hooks/useRunComp";
 import ClientUserAppContent from "./content/ClientUserAppContent";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import isThisApp from "../../utils/window/isThisApp";
 import AsyncBellNotifBtn from "../../components/notification/AsyncBellNotifBtn";
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
@@ -33,20 +30,11 @@ import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
 import { getVar, removeVar, store } from "../../hooks/storage/useVar";
-import { Load } from "../../components/code-splitting/LoadableComp";
-import RedirectLink from "../../components/RedirectLink";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import useData from "../../hooks/useData";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
-
-const AsyncAccessGateKeeper = Load({
-    loader: () =>
-        import(
-            "./password/AccessGateKeeper" /* webpackChunkName: "gate-keeper-comp-lazy" */
-        ),
-});
-
+import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 // import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
@@ -256,60 +244,6 @@ function ClientMobileApp({ location, history }) {
         setRun(dispatch, "goDash");
     };
 
-    const handleLogout = () => {
-        logout(dispatch);
-    };
-
-    const showConnectedStatus = () => (
-        <div
-            className={`position-relative ${
-                isSessionOver ? "" : "my-5"
-            } container-center-col text-white text-normal text-center`}
-            style={{ top: -68 }}
-        >
-            <span
-                className={`${selectTxtStyle(
-                    selfThemeBackColor
-                )} font-weight-bold`}
-            >
-                {!isSessionOver && "Conectado por"}
-                {!isSessionOver && <br />}
-                <strong className="text-title animated bounce">
-                    {fullName}
-                </strong>
-                <br />
-            </span>
-            {!isSessionOver && (
-                <section className="container-center mt-4">
-                    <RedirectLink
-                        className="mr-3"
-                        to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
-                    >
-                        <RadiusBtn
-                            title="acessar"
-                            backgroundColor={
-                                "var(--themeSDark--" + selfThemeSColor + ")"
-                            }
-                        />
-                    </RedirectLink>
-                    <span>
-                        <RadiusBtn
-                            title="sair"
-                            backgroundColor="var(--mainRed)"
-                            onClick={handleLogout}
-                        />
-                    </span>
-                </section>
-            )}
-            {isSessionOver && !loadingAccess && (
-                <AsyncAccessGateKeeper
-                    backColor={selfThemeBackColor}
-                    sColor={selfThemeSColor}
-                />
-            )}
-        </div>
-    );
-
     const accessCheck = !loadingAccess && !rememberAccess;
     const conditionRegister =
         loginOrRegister === "register" && showRegister(true);
@@ -345,7 +279,16 @@ function ClientMobileApp({ location, history }) {
 
             {!isAuthUser && (
                 <section>
-                    {needLogoutAccess && showConnectedStatus()}
+                    {needLogoutAccess && (
+                        <GatewayAndCTAs
+                            isSessionOver={isSessionOver}
+                            selfThemeBackColor={selfThemeBackColor}
+                            selfThemeSColor={selfThemeSColor}
+                            fullName={fullName}
+                            bizCodeName={bizCodeName}
+                            loadingAccess={loadingAccess}
+                        />
+                    )}
                     {conditionRegister}
                     {conditionLogin}
                 </section>
@@ -368,7 +311,16 @@ function ClientMobileApp({ location, history }) {
                     {isCliAdminConnected &&
                         !isSessionOver &&
                         showNotificationBell()}
-                    {isCliAdminConnected && showConnectedStatus()}
+                    {isCliAdminConnected && (
+                        <GatewayAndCTAs
+                            isSessionOver={isSessionOver}
+                            selfThemeBackColor={selfThemeBackColor}
+                            selfThemeSColor={selfThemeSColor}
+                            fullName={fullName}
+                            bizCodeName={bizCodeName}
+                            loadingAccess={loadingAccess}
+                        />
+                    )}
                     {!isAuthUser && isCliAdminConnected && showLogin()}
                 </section>
             )}
