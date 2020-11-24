@@ -1,38 +1,6 @@
-@import url("https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i");
-
-// *{
-//   box-sizing:border-box;
-//   font-family: 'Space Mono', monospace;
-// }
-
-body,
-html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-}
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    display: -webkit-flex;
-    -webkit-align-items: center;
-    -webkit-justify-content: center;
-    background-image: linear-gradient(
-        to right top,
-        #a2beeb,
-        #8ecfee,
-        #8edde5,
-        #a4e7d5,
-        #c7eec7
-    );
-    flex-direction: column;
-    -webkit-flex-direction: column;
-}
-.title {
-    margin-bottom: 30px;
-    color: #162969;
+@font-face {
+    font-family: kredit-front;
+    src: url("/fonts/kredit_front.ttf");
 }
 
 .card {
@@ -44,6 +12,7 @@ body {
 }
 
 .card__part {
+    font: bold 1.7rem kredit-front;
     box-shadow: 1px 1px #aaa3a3;
     top: 0;
     position: absolute;
@@ -52,15 +21,14 @@ body {
     display: inline-block;
     width: 320px;
     height: 190px;
-    background-image: url("https://image.ibb.co/bVnMrc/g3095.png"),
-        linear-gradient(
-            to right bottom,
-            #fd696b,
-            #fa616e,
-            #f65871,
-            #f15075,
-            #ec4879
-        ); /*linear-gradient(to right bottom, #fd8369, #fc7870, #f96e78, #f56581, #ee5d8a)*/
+    background-image: linear-gradient(
+        to right bottom,
+        #fd696b,
+        #fa616e,
+        #f65871,
+        #f15075,
+        #ec4879
+    ); /*linear-gradient(to right bottom, #fd8369, #fc7870, #f96e78, #f56581, #ee5d8a)*/
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -77,33 +45,12 @@ body {
     -moz-backface-visibility: hidden;
 }
 
-.card__front {
-    padding: 18px;
-    -webkit-transform: rotateY(0);
-    -moz-transform: rotateY(0);
-}
-
-.card__back {
-    padding: 18px 0;
-    -webkit-transform: rotateY(-180deg);
-    -moz-transform: rotateY(-180deg);
-}
-
 .card__black-line {
     margin-top: 5px;
     height: 38px;
     background-color: #303030;
 }
 
-.card__logo {
-    height: 16px;
-}
-
-.card__front-logo {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-}
 .card__square {
     border-radius: 5px;
     height: 30px;
@@ -181,24 +128,30 @@ body {
     );
 }
 
-.card__back-logo {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-}
-
 .card__back-square {
     position: absolute;
     bottom: 15px;
     left: 15px;
 }
 
-.card:hover .card__front {
+.card__front {
+    padding: 18px;
+    -webkit-transform: rotateY(0);
+    -moz-transform: rotateY(0);
+}
+
+.card__back {
+    padding: 18px 0;
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+}
+
+.card.flipped .card__front {
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
 }
 
-.card:hover .card__back {
+.card.flipped .card__back {
     -webkit-transform: rotateY(0deg);
     -moz-transform: rotateY(0deg);
 }

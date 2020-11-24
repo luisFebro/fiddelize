@@ -1,4 +1,6 @@
 // reference: https://codepen.io/veronicadev/pen/VXqZgR
+// The credit card should follow the interactive field inspired on netlify>
+// https://app.netlify.com/teams/luisfebro/billing/general
 import React from "react";
 import "./_FlipCreditCard.scss";
 
@@ -7,11 +9,7 @@ export default function FlipCreditCard() {
         <div className="card__front card__part">
             <img
                 className="card__front-square card__square"
-                src="https://image.ibb.co/cZeFjx/little_square.png"
-            />
-            <img
-                className="card__front-logo card__logo"
-                src="https://www.fireeye.com/partners/strategic-technology-partners/visa-fireeye-cyber-watch-program/_jcr_content/content-par/grid_20_80_full/grid-20-left/image.img.png/1505254557388.png"
+                src="/img/icons/credit-card/chip.png"
             />
             <p className="card_numer">**** **** **** 6258</p>
             <div className="card__space-75">
@@ -34,18 +32,20 @@ export default function FlipCreditCard() {
                 </div>
                 <img
                     className="card__back-square card__square"
-                    src="https://image.ibb.co/cZeFjx/little_square.png"
-                />
-                <img
-                    className="card__back-logo card__logo"
-                    src="https://www.fireeye.com/partners/strategic-technology-partners/visa-fireeye-cyber-watch-program/_jcr_content/content-par/grid_20_80_full/grid-20-left/image.img.png/1505254557388.png"
+                    src="/img/icons/credit-card/chip.png"
                 />
             </div>
         </div>
     );
 
+    const flipCard = () => {
+        const cardElem = document.querySelector(".card");
+        console.log("cardElem", cardElem);
+        cardElem.classList.toggle("flipped");
+    };
+
     return (
-        <section className="card">
+        <section className="card" onClick={flipCard}>
             {showFront()}
             {showBack()}
         </section>

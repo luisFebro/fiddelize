@@ -44,7 +44,12 @@ function handleMouseMove(event) {
 
 export default function ThreeDFlipCard({ name, score }) {
     useBackColor("linear-gradient(125deg, #fbd7e5, #bdf4fa)");
-    const { selfBizLogoImg: bizLogo } = useClientAdmin();
+    const {
+        selfBizLogoImg: bizLogo,
+        selfThemePColor: colorP,
+    } = useClientAdmin();
+
+    const cardColor = `linear-gradient(145deg, var(--themePLight--${colorP}), var(--themePDark--${colorP}))`;
 
     useEffect(() => {
         document.addEventListener("mousemove", handleMouseMove);
@@ -59,9 +64,24 @@ export default function ThreeDFlipCard({ name, score }) {
 
     const setCardThickness = () => (
         <Fragment>
-            <div className="thickness"></div>
-            <div className="thickness"></div>
-            <div className="thickness"></div>
+            <div
+                className="thickness"
+                style={{
+                    background: cardColor,
+                }}
+            ></div>
+            <div
+                className="thickness"
+                style={{
+                    background: cardColor,
+                }}
+            ></div>
+            <div
+                className="thickness"
+                style={{
+                    background: cardColor,
+                }}
+            ></div>
         </Fragment>
     );
 
@@ -103,7 +123,12 @@ export default function ThreeDFlipCard({ name, score }) {
 
     return (
         <section className="body active">
-            <div className="floating">
+            <div
+                className="floating"
+                style={{
+                    background: cardColor,
+                }}
+            >
                 {setCardThickness()}
                 {setBody()}
             </div>

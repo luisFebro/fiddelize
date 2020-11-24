@@ -9,7 +9,7 @@ import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 
 export default function VirtualCard() {
     const showCard = () => (
-        <section className="container-center-col px-2">
+        <section className="container-center-col px-2 full-height">
             <main className="animated fadeInUp">
                 <ThreeDFlipCard name="Luis Febro" score={150} />
             </main>
