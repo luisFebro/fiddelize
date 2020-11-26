@@ -35,6 +35,11 @@ const {
 } = require("../../controllers/user/clients-session/recordedClients");
 
 const {
+    readTempScoreList,
+    setLastScoreAsDone,
+} = require("../../controllers/user/clients-session/tempScore");
+
+const {
     readTeamMemberList,
     readTeamTasksList,
     readOneMemberTasksList,
@@ -88,6 +93,10 @@ router.post(
     mwIsAuth,
     setTempScoreAndMemberData
 );
+
+// CLIENT USER TEMP SCORE
+router.get("/cli-user/temp-score/list", mwIsAuth, readTempScoreList);
+router.post("/cli-user/temp-score/set-last-done", mwIsAuth, setLastScoreAsDone);
 
 router.param("userId", mwUserId); // n1
 

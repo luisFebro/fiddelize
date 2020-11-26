@@ -11,8 +11,15 @@ export const readUser = async (dispatch, _userId, options = {}) => {
     let selectQuery = "";
     if (select) selectQuery = `?select=${select}`;
 
+    let roleQuery = "";
+    if (!select && role) {
+        roleQuery = `?thisRole=${role}`;
+    } else {
+        roleQuery = `&thisRole=${role}`;
+    }
+
     const res = await axios.get(
-        `/api/user/${_userId}${selectQuery}&thisRole=${role}`,
+        `/api/user/${_userId}${selectQuery}${roleQuery}`,
         getHeaderJson
     );
     console.log("===CURRENT USER LOADED===");
@@ -206,7 +213,9 @@ export const addAutomaticTask = async (userId, options = {}) => {
 export const countField = async (_id, objToSend) => {
     try {
         return await axios.put(
-            `/api/user/count/field/${_id}?thisRole=${objToSend.thisRole}`,
+            `/api/user/count/field/${_id}?thisRole=${
+                objToSend.thisRole || "cliente"
+            }`,
             objToSend,
             getHeaderJson
         );

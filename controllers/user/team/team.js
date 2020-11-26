@@ -39,6 +39,7 @@ exports.setTempScoreAndMemberData = async (req, res) => {
     const sendTempUserScore = async () => {
         const pushList = getPushFifo("clientUserData.tempScoreList", {
             tempScore,
+            used: false,
         });
         // set score to a temporary variable in user doc on DB (OK)
         return await User("cliente")

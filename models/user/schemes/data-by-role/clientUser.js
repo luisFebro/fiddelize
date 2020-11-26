@@ -26,6 +26,7 @@ const HistorySchema = new Schema(historyData, { _id: true });
 
 const tempScoreData = {
     tempScore: Number,
+    used: { type: Boolean, default: false },
     createdAt: { type: Date, default: new Date() },
 };
 const TempScoreSchema = new Schema(tempScoreData, { _id: false });

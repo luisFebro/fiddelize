@@ -15,7 +15,6 @@ import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import ChatIcon from "@material-ui/icons/Chat";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Tooltip from "../../components/tooltips/Tooltip";
 import lStorage, {
     tooltip1,
     yellowBtn2,
@@ -195,22 +194,14 @@ function MoreOptionsBtn({
                     !showMoreBtn ? "d-none" : "d-block"
                 }`}
             >
-                <Tooltip
-                    needArrow
-                    needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
-                    text={`♦ Sugestão: ${userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra.`}
-                    backgroundColor={"var(--themeSDark--" + colorS + ")"}
-                    element={
-                        <Fab
-                            style={styles.fabTooltip}
-                            className="float-it-5"
-                            size="medium"
-                            onClick={handleAddScoreClick}
-                        >
-                            <LoyaltyIcon />
-                        </Fab>
-                    }
-                />
+                <Fab
+                    style={styles.fabTooltip}
+                    className="floatdsa-it-5"
+                    size="medium"
+                    onClick={handleAddScoreClick}
+                >
+                    <LoyaltyIcon />
+                </Fab>
             </div>
             <SpeedDialButton
                 actions={speedDial.actions}
@@ -265,6 +256,16 @@ const ContactComp = () => {
 };
 
 /*ARCHIVES
+<Tooltip
+    needArrow
+    needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
+    text={`♦ Sugestão: ${userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra.`}
+    backgroundColor={"var(--themeSDark--" + colorS + ")"}
+    element={
+
+    }
+/>
+
 // const { run, runName } = useStoreState(state => ({
 //     run: state.globalReducer.cases.run,
 //     runName: state.globalReducer.cases.runName,

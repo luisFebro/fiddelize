@@ -12,6 +12,7 @@ import didRunOnce from "../../utils/storage/didRunOnce";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import usePro from "../../hooks/pro/usePro";
 import { useClientAdmin } from "../../hooks/useRoleData";
+import useData from "../../hooks/useData";
 
 const getPeriod = (ref) => {
     if (!ref) return;
@@ -30,9 +31,11 @@ export default function useManageProServices() {
     const { isToday, userId, isExpired } = data;
     const { bizPlan } = useClientAdmin();
 
+    const [role] = useData(["role"]);
+
     const { data: nextExpiryDate } = useAPI({
         url: getNextExpiryDate(userId),
-        trigger: isToday && userId,
+        trigger: isToday && userId && role === "cliente-admin",
     });
 
     const { nextExpiryData: expiryData } = usePro({

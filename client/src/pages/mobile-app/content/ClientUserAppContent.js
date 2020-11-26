@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import { useAuthUser } from "../../../hooks/useAuthUser";
-import getFirstName from "../../../utils/string/getFirstName";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import "../ellipse.scss";
 import AsyncBellNotifBtn from "../../../components/notification/AsyncBellNotifBtn";
@@ -24,6 +23,7 @@ import { readPurchaseHistory } from "../../../redux/actions/userActions";
 import useSendSMS from "../../../hooks/sms/useSendSMS";
 import useDidDateExpire from "../../../hooks/dates/date-expires/useDidDateExpire";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode.js";
+import useData from "../../../hooks/useData";
 
 // APP COMPONENTS
 import RatingIcons from "../RatingIcons";
@@ -47,7 +47,7 @@ const getAutoSMSObj = ({
     userBeatChallenge,
     lastPrizeId,
     businessId,
-    name,
+    firstName,
     currChall,
     bizWhatsapp,
 }) => ({
@@ -59,12 +59,12 @@ const getAutoSMSObj = ({
     smsId: needMissingMsg ? now.getMonth() : lastPrizeId,
     customMsg: needMissingMsg
         ? ""
-        : `CONCLUSÃO DE DESAFIO - ${getFirstName(name, {
+        : `CONCLUSÃO DE DESAFIO - ${firstName}, {
               addSurname: true,
           })} acabou de concluir desafio N.º ${currChall}.`,
     contactList: [
         {
-            name: needMissingMsg ? getFirstName(name) : "Você",
+            name: needMissingMsg ? firstName : "Você",
             phone: bizWhatsapp,
         },
     ],
@@ -94,10 +94,17 @@ export default function ClientUserAppContent({
     if (!colorS) {
         colorS = "default";
     }
-    let { role, name, _id, phone } = useProfile();
-    const fullName = name;
-    const totalNotifications = useCountNotif(_id, { role, forceCliUser: true });
-    name ? (name = getFirstName(name)) : (name = "cliente");
+    let { role, phone } = useProfile();
+    const [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
+    const userIdLoading = Boolean(_id === "...");
+    console.log("userIdLoading", userIdLoading);
+
+    const totalNotifications = useCountNotif(_id, {
+        role,
+        forceCliUser: true,
+        trigger: !userIdLoading,
+    });
+
     let {
         currScore,
         lastScore,
@@ -141,6 +148,8 @@ export default function ClientUserAppContent({
             setVar({ [key]: totalChallengesWon });
         }
 
+        if (userIdLoading) return;
+
         getVar(key).then((gotValue) => {
             const options = {
                 trigger: gotValue,
@@ -160,7 +169,13 @@ export default function ClientUserAppContent({
                 removeVar(key);
             }
         });
-    }, [userBeatChallenge, totalChallengesWon, pickedObjForPending]);
+    }, [
+        userIdLoading,
+        _id,
+        userBeatChallenge,
+        totalChallengesWon,
+        pickedObjForPending,
+    ]);
 
     useEffect(() => {
         if (!currScore) {
@@ -179,6 +194,7 @@ export default function ClientUserAppContent({
     const { data: lastPrizeId } = useAPI({
         url: readPrizes(_id),
         params: { lastPrizeId: true },
+        trigger: !userIdLoading,
     });
     const challNotifOptions = React.useCallback(
         () => ({
@@ -193,11 +209,14 @@ export default function ClientUserAppContent({
     );
     useSendNotif(businessId, "challenge", challNotifOptions());
 
-    const needMissingMsg = useDidDateExpire({ userId: _id });
+    const needMissingMsg = useDidDateExpire({
+        userId: _id,
+        trigger: !userIdLoading,
+    });
     const autoSMSMissingPurchase = getAutoSMSObj({
         needMissingMsg,
         businessId,
-        name,
+        firstName,
         bizWhatsapp,
     });
     useSendSMS(autoSMSMissingPurchase);
@@ -206,7 +225,7 @@ export default function ClientUserAppContent({
         userBeatChallenge,
         lastPrizeId,
         businessId,
-        name,
+        firstName,
         currChall,
         bizWhatsapp,
     });
@@ -280,14 +299,14 @@ export default function ClientUserAppContent({
             >
                 {greeting},
                 <br />
-                <span className="text-title">{`${name}!`}</span>
+                <span className="text-title">{`${firstName}!`}</span>
             </div>
         </section>
     );
 
     const showAllScores = () => (
         <AllScores
-            userName={name}
+            userName={firstName}
             userId={_id}
             currScoreRef={currScoreRef}
             currScore={currScore}
@@ -315,7 +334,7 @@ export default function ClientUserAppContent({
                                 userId={_id}
                                 arePrizesVisible={arePrizesVisible}
                                 rewardDeadline={rewardDeadline}
-                                userName={name}
+                                userName={firstName}
                                 classNamePerc={`${
                                     needAppForPreview && "enabledLink"
                                 }`}
@@ -434,7 +453,7 @@ export default function ClientUserAppContent({
             <AsyncMoreOptionsBtn
                 playBeep={playBeep}
                 showMoreBtn={showMoreBtn}
-                userName={name}
+                userName={firstName}
                 needAppForCliAdmin={needAppForCliAdmin}
                 needAppForPreview={needAppForPreview}
                 colorS={colorS}

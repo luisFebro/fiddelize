@@ -172,6 +172,7 @@ exports.readPrizes = (req, res) => {
         purchaseHistory,
         totalPurchasePrize = 0,
         currScore,
+        bizId,
     } = clientUserData;
 
     if (updatedValues) {
@@ -230,10 +231,8 @@ exports.readPrizes = (req, res) => {
     if (lastPrizeId && cliUserPrizes.length)
         return res.json(cliUserPrizes[0]._id);
 
-    if (!cliAdminId)
-        return res.status(404).json({ error: "cliAdminId query missing" });
-    User(role)
-        .findById(cliAdminId)
+    User("cliente-admin")
+        .findById(cliAdminId || bizId)
         .select("clientAdminData.rewardList clientAdminData.arePrizesVisible")
         .exec((err, data) => {
             if (err) return res.status(400).json(msg("error.notFound"));

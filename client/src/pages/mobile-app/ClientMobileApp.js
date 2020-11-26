@@ -58,7 +58,6 @@ const showWelcomeMsg = (dispatch, userName) => {
 
 function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
-
     const [url, setUrl] = useState({
         logoBiz: "",
         logoFid: "",
@@ -66,29 +65,51 @@ function ClientMobileApp({ location, history }) {
 
     useScrollUp();
     useManageProServices();
+    const dispatch = useStoreDispatch();
 
-    let { isAuthUser } = useAuthUser();
-    const { roleWhichDownloaded, businessId } = useAppSystem();
-    console.log("roleWhichDownloaded", roleWhichDownloaded);
-    let { _id } = useProfile();
-
-    const [rememberAccess, success, role, name, fullName] = useData([
+    const [userId, rememberAccess, success, role, name, fullName] = useData([
+        "userId",
         "rememberAccess",
         "success",
         "role",
         "firstName",
         "name",
     ]);
-    const loadingAccess = Boolean(rememberAccess === "...");
+    const loadingData = Boolean(rememberAccess === "...");
+
+    let { isAuthUser } = useAuthUser();
     isAuthUser = isAuthUser || (success !== "..." && success);
 
-    const dispatch = useStoreDispatch();
+    const { roleWhichDownloaded, businessId } = useAppSystem();
+
+    // MAIN VARIABLES
+    // # query
+    const searchQuery = location.search;
+    const needAppForCliAdmin = searchQuery.includes("client-admin=1");
+    const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
+    // # roles
+    const isStaff = role === "cliente-membro" || role === "cliente-admin";
+    let isCliUser = role === "cliente" || roleWhichDownloaded === "cliente";
+
+    let isCliAdmin =
+        role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
+
+    // # auth
+    const isSessionOver = !success || !localStorage.getItem("token");
+    const needStaffLogout = isStaff && isSessionOver && rememberAccess;
+
+    if (needAppForCliAdmin) {
+        isCliAdmin = false;
+        isCliUser = true;
+    }
+    const accessCheck = !isStaff || (!loadingData && !rememberAccess);
+    // END MAIN VARIABLES
 
     useEffect(() => {
-        if (name !== "...") {
+        if (!loadingData) {
             showWelcomeMsg(dispatch, name);
         }
-    }, [name]);
+    }, [loadingData, name]);
 
     const {
         bizCodeName,
@@ -98,9 +119,6 @@ function ClientMobileApp({ location, history }) {
         selfThemeBackColor,
     } = useClientAdmin();
     const { currScore } = useClientUser();
-
-    const isSessionOver = !success || !localStorage.getItem("token");
-    const needLogoutAccess = isSessionOver && rememberAccess;
 
     const logoBiz = useImg(url.logoBiz, {
         trigger: url.logoBiz,
@@ -117,22 +135,18 @@ function ClientMobileApp({ location, history }) {
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
-    const totalNotifications = useCountNotif(_id, {
+    const totalNotifications = useCountNotif(userId, {
         role,
-        trigger: role !== "...",
+        trigger: !loadingData,
     });
     useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
 
-    const searchQuery = location.search;
-    const needAppForCliAdmin = searchQuery.includes("client-admin=1");
-    const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
-
     useEffect(() => {
-        if (role === "cliente") {
-            countField(_id, { field: "clientUserData.totalVisits" });
+        if (isCliUser && !loadingData) {
+            countField(userId, { field: "clientUserData.totalVisits" });
         }
-    }, [_id, role]);
+    }, [userId, loadingData, isCliUser]);
 
     useEffect(() => {
         if (runName === "logout") {
@@ -244,22 +258,10 @@ function ClientMobileApp({ location, history }) {
         setRun(dispatch, "goDash");
     };
 
-    const accessCheck = !loadingAccess && !rememberAccess;
     const conditionRegister =
         loginOrRegister === "register" && showRegister(true);
     const conditionLogin =
         loginOrRegister === "login" && accessCheck && showLogin();
-
-    let isCliAdminConnected =
-        role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
-
-    const isCliUserConnected =
-        needAppForCliAdmin ||
-        role === "cliente" ||
-        roleWhichDownloaded === "cliente";
-    if (needAppForCliAdmin) {
-        isCliAdminConnected = false;
-    }
 
     return (
         <div
@@ -270,23 +272,24 @@ function ClientMobileApp({ location, history }) {
             {showLogo()}
             <AppTypeBubble
                 role={role}
-                loadingAccess={loadingAccess}
+                loadingAccess={loadingData}
                 roleWhichDownloaded={roleWhichDownloaded}
                 isUrlAdmin={isUrlAdmin}
                 needAppForCliAdmin={needAppForCliAdmin}
                 selfThemePColor={selfThemePColor}
+                isAuthUser={isAuthUser}
             />
 
             {!isAuthUser && (
                 <section>
-                    {needLogoutAccess && (
+                    {needStaffLogout && (
                         <GatewayAndCTAs
                             isSessionOver={isSessionOver}
                             selfThemeBackColor={selfThemeBackColor}
                             selfThemeSColor={selfThemeSColor}
                             fullName={fullName}
                             bizCodeName={bizCodeName}
-                            loadingAccess={loadingAccess}
+                            loadingAccess={loadingData}
                         />
                     )}
                     {conditionRegister}
@@ -296,7 +299,7 @@ function ClientMobileApp({ location, history }) {
 
             {isAuthUser && (
                 <section>
-                    {isCliUserConnected && (
+                    {isCliUser && (
                         <ClientUserAppContent
                             businessId={businessId}
                             useProfile={useProfile}
@@ -308,20 +311,18 @@ function ClientMobileApp({ location, history }) {
                         />
                     )}
 
-                    {isCliAdminConnected &&
-                        !isSessionOver &&
-                        showNotificationBell()}
-                    {isCliAdminConnected && (
+                    {isCliAdmin && !isSessionOver && showNotificationBell()}
+                    {isCliAdmin && !isCliUser && (
                         <GatewayAndCTAs
                             isSessionOver={isSessionOver}
                             selfThemeBackColor={selfThemeBackColor}
                             selfThemeSColor={selfThemeSColor}
                             fullName={fullName}
                             bizCodeName={bizCodeName}
-                            loadingAccess={loadingAccess}
+                            loadingAccess={loadingData}
                         />
                     )}
-                    {!isAuthUser && isCliAdminConnected && showLogin()}
+                    {!isAuthUser && isCliAdmin && showLogin()}
                 </section>
             )}
             {!isAuthUser && versionReady && <AsyncVersion />}

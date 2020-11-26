@@ -52,6 +52,17 @@
         transform: translateZ(50px);
     }
 
+    & .creation-date {
+        position: absolute;
+        font-family: kredit-front;
+        bottom: 1px;
+        color: #fff;
+        font-weight: bold;
+        bottom: 5px;
+        left: 25px;
+        font-size: 0.9rem;
+    }
+
     @media screen and (min-width: 490px) {
         & .holder {
             bottom: 25px;

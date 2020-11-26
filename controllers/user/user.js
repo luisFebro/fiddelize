@@ -20,6 +20,8 @@ exports.mwUserId = async (req, res, next, id) => {
     let { select, thisRole } = req.query; // thisRole when a specific app is targeted.
     if (!select) select = "";
 
+    // console.log("originalUrl", req.originalUrl);
+
     let role = thisRole;
     if (!thisRole) {
         const { role: accountRole } = await req.getAccount(req.params.userId);

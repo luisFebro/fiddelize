@@ -3,6 +3,7 @@ import React, { Fragment, useEffect } from "react";
 import "./_ThreeDFlipCard.scss";
 import useBackColor from "../../../hooks/useBackColor";
 import { useClientAdmin } from "../../../hooks/useRoleData";
+import { formatSlashDMY } from "../../../utils/dates/dateFns";
 
 function getTransformValue(v1, v2, value) {
     return (((v1 / v2) * value - value / 2) * 1).toFixed(1);
@@ -42,7 +43,7 @@ function handleMouseMove(event) {
     }px 6px rgba(0, 0, 0, .8)`;
 }
 
-export default function ThreeDFlipCard({ name, score }) {
+export default function ThreeDFlipCard({ name, score, createdAt }) {
     useBackColor("linear-gradient(125deg, #fbd7e5, #bdf4fa)");
     const {
         selfBizLogoImg: bizLogo,
@@ -118,6 +119,7 @@ export default function ThreeDFlipCard({ name, score }) {
             <div className="holder text-3d-shadow">
                 {name && name.toUpperCase()}
             </div>
+            <div className="creation-date">Em: {formatSlashDMY(createdAt)}</div>
         </main>
     );
 

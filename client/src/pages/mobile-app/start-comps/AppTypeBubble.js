@@ -6,15 +6,18 @@ const handleAppType = ({
     selfThemePColor,
     needAppForCliAdmin,
     roleWhichDownloaded,
+    isAuthUser,
 }) => {
+    const isClientUser = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
+
+    if (!isAuthUser && isClientUser) return "cliente";
     if (roleWhichDownloaded === "cliente") return false;
 
-    const isClientUserLogged = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
     const gotEmptyData =
         typeof role === "object" && selfThemePColor === "default";
 
     return (
-        (roleWhichDownloaded && !isClientUserLogged && !needAppForCliAdmin) ||
+        (roleWhichDownloaded && !isClientUser && !needAppForCliAdmin) ||
         gotEmptyData ||
         (role === "cliente-admin" && !needAppForCliAdmin)
     );
@@ -27,6 +30,7 @@ export default function AppTypeBubble({
     needAppForCliAdmin,
     selfThemePColor,
     roleWhichDownloaded,
+    isAuthUser,
 }) {
     const shapeSrc = useImg(
         `/img/shapes/blob-app-start--${selfThemePColor}.svg`,
@@ -44,6 +48,7 @@ export default function AppTypeBubble({
         selfThemePColor,
         needAppForCliAdmin,
         roleWhichDownloaded,
+        isAuthUser,
     });
 
     return (
@@ -51,7 +56,11 @@ export default function AppTypeBubble({
             <section className="container-center">
                 <div
                     className="position-relative"
-                    style={{ top: -55, marginTop: 90, marginBottom: 40 }}
+                    style={{
+                        top: -55,
+                        marginTop: 90,
+                        marginBottom: role === "cliente" ? -40 : 40,
+                    }}
                 >
                     <div
                         style={{ animationIterationCount: 1 }}

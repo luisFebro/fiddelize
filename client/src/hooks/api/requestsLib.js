@@ -78,3 +78,9 @@ export const setTempScoreAndMemberData = () =>
     `/api/user/team/temp-user-score-member`;
 export const getMembersPodium = (bizId) =>
     `/api/user/team/members/podium?bizId=${bizId}`;
+
+// TEMP SCORE
+export const readTempScoreList = (userId) =>
+    `/api/user/cli-user/temp-score/list?userId=${userId}`;
+export const setLastScoreAsDone = (userId) =>
+    `/api/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
