@@ -10,8 +10,8 @@ const {
     defaultSemisecret,
     defaultSecret,
 } = require("./helpers/prizes-gallery");
-const { generateHistoryData } = require("./algorithms/generateHistoryData");
-const { generatePrizeCard } = require("./algorithms/generatePrizeCard");
+const generateHistoryData = require("./algorithms/generateHistoryData");
+const generatePrizeCard = require("./algorithms/generatePrizeCard");
 const filterAndCount = require("../../../utils/array/filterAndCount");
 const {
     getDataChunk,
@@ -24,7 +24,7 @@ exports.addPurchaseHistory = async (req, res) => {
     const { _id, clientUserData } = req.profile;
     if (!clientUserData) return res.json({ error: "requres user data array" });
 
-    const { role } = await req.getAccount(id);
+    const role = req.role;
 
     const totalNonPrizeCards = clientUserData.purchaseHistory.filter(
         (card) => card.cardType === "record"

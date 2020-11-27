@@ -38,6 +38,7 @@ exports.mwUserId = async (req, res, next, id) => {
                 user.cpf = jsDecrypt(user.cpf);
             }
             req.profile = user;
+            req.role = role;
             next();
         });
 };

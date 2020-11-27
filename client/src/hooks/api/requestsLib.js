@@ -11,13 +11,15 @@ export const readUserList = (cliAdminId) =>
 export const readHighestScores = (cliAdminId) =>
     `/api/user/list/highest-scores?bizId=${cliAdminId}`;
 
-// Purchase's History
+// PURCHASE'S HISTORY
 export const readPurchaseCardsList = (userId) =>
     `/api/user/list/purchase-history/${userId}`;
 export const readPrizes = (userId) =>
     `/api/user/list/purchase-history/prizes/${userId}`;
 export const changePrizeStatus = (cliUserId, statusType) =>
     `/api/user/purchase-history/update-status/${cliUserId}?statusType=${statusType}`; // PUT - +params: newValue, taskId
+export const addPurchaseHistory = (userId, role) =>
+    `/api/user/purchase-history/${userId}?thisRole=${role}`; // PUT
 
 // Automatic Tasks
 export const readTasks = (userId, doneStatus) =>

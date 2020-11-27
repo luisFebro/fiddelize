@@ -86,18 +86,7 @@ export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
 // END RUD
 
 // PURCHASE HISTORY
-export const addPurchaseHistory = async (dispatch, _idUser, bodyToSend) => {
-    // n1
-    try {
-        return await axios.put(
-            `/api/user/purchase-history/${_idUser}`,
-            bodyToSend,
-            getHeaderJson
-        );
-    } catch (err) {
-        return err.response;
-    }
-};
+// addPurchaseHistory is on requestLib
 
 export const readPurchaseHistory = async (
     _idUser,
@@ -114,6 +103,7 @@ export const readPurchaseHistory = async (
         prizeDesc,
         trophyIcon,
         trigger = true,
+        thisRole,
     } = options;
 
     if (!trigger) return;
@@ -134,7 +124,7 @@ export const readPurchaseHistory = async (
 
     try {
         return await axios.get(
-            `/api/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`,
+            `/api/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}&thisRole=${thisRole}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`,
             getHeaderJson
         );
     } catch (err) {

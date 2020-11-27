@@ -3,7 +3,6 @@ import { useStoreState, useStoreDispatch } from "easy-peasy";
 import {
     readUser,
     readPurchaseHistory,
-    addPurchaseHistory,
 } from "../../../redux/actions/userActions";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import Title from "../../../components/Title";
@@ -15,7 +14,6 @@ import isInteger from "../../../utils/numbers/isInteger";
 import getMonthNowBr from "../../../utils/dates/getMonthNowBr";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import isThisApp from "../../../utils/window/isThisApp";
-import { showComponent } from "../../../redux/actions/componentActions";
 import { logout } from "../../../redux/actions/authActions";
 import { Link, withRouter } from "react-router-dom";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
@@ -32,11 +30,11 @@ import usePlayAudio from "../../../hooks/media/usePlayAudio";
 import useCount from "../../../hooks/useCount";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
 import getAPI, {
-    readTempScoreList,
     setLastScoreAsDone,
     updateUser,
+    addPurchaseHistory,
 } from "../../../utils/promises/getAPI";
-import useGetVar from "../../../hooks/storage/useVar";
+import useGetVar, { getVar, setVar } from "../../../hooks/storage/useVar";
 import useBackColor from "../../../hooks/useBackColor";
 import { getScoreData, getStyles } from "./helpers";
 
@@ -45,8 +43,7 @@ const isSmall = window.Helper.isSmallScreen();
 function AsyncClientScoresPanel({ history, location }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const [finishedWork, setFinishedWork] = useState(false);
-
-    const isCliAdminApp = location.search.includes("client-admin=1");
+    const [hideCurrScore, setHideCurrScore] = useState(false); // with updating, the currScore double when click on finish button. Then ofuscate it with "...".
 
     const { data: paidValue } = useGetVar("paidValue");
 
@@ -112,7 +109,9 @@ function AsyncClientScoresPanel({ history, location }) {
     const currChallenge = totalPurchasePrize + 1;
     const userBeatChallenge = currScoreNow >= maxScore;
 
+    const isCliAdminApp = location.search.includes("client-admin=1");
     const path = isCliAdminApp ? "/mobile-app?client-admin=1" : "/mobile-app";
+    const whichRole = isCliAdminApp ? "cliente-admin" : "cliente";
     // END MAIN VARIABLES
 
     useEffect(() => {
@@ -150,18 +149,18 @@ function AsyncClientScoresPanel({ history, location }) {
 
             (async () => {
                 // avoid user to restart page and end up adding more scores
-                const { data: dataTempScore } = await getAPI({
-                    url: readTempScoreList(_id),
-                    needAuth: true,
-                    params: { onlyLastAvailable: true },
-                });
-                if (!dataTempScore) return history.push(path);
+                const alreadySetScore = await getVar("alreadySetTempScore");
+                if (alreadySetScore) {
+                    setVar({ alreadySetTempScore: false });
+                    return history.push(path);
+                }
+                await setVar({ alreadySetTempScore: true });
 
                 await getAPI({
                     method: "put",
                     url: updateUser(_id),
                     body: objToSend,
-                    params: { thisRole: "cliente" },
+                    params: { thisRole: whichRole },
                 }).catch((err) => {
                     console.log("ERROR: " + err);
                 });
@@ -180,7 +179,11 @@ function AsyncClientScoresPanel({ history, location }) {
                     value: cashCurrScore,
                 };
 
-                await addPurchaseHistory(dispatch, _id, historyObj);
+                await getAPI({
+                    method: "put",
+                    url: addPurchaseHistory(_id, whichRole),
+                    body: historyObj,
+                });
 
                 showSnackbar(
                     dispatch,
@@ -191,10 +194,11 @@ function AsyncClientScoresPanel({ history, location }) {
                 if (userBeatChallenge) {
                     const options = {
                         noResponse: true,
+                        thisRole: whichRole,
                         prizeDesc,
                         trophyIcon: selfMilestoneIcon,
                     };
-                    readPurchaseHistory(_id, maxScore, options);
+                    await readPurchaseHistory(_id, maxScore, options);
                     setFinishedWork(true);
                 } else {
                     setFinishedWork(true);
@@ -257,7 +261,9 @@ function AsyncClientScoresPanel({ history, location }) {
                 <div className="animated bounce slow repeat-2">
                     <p className="text-center">&#187; Pontuação Atual:</p>
                     <p className="text-center text-hero">
-                        {convertDotToComma(currScoreNow)}
+                        {hideCurrScore
+                            ? "..."
+                            : convertDotToComma(currScoreNow)}
                     </p>
                 </div>
                 <section
@@ -271,17 +277,17 @@ function AsyncClientScoresPanel({ history, location }) {
         </div>
     );
 
-    const handleHomeBtnClick = () => {
+    const handleHomeBtnClick = async () => {
+        setHideCurrScore(true);
         if (isThisApp()) {
-            readUser(dispatch, _id, {
-                role: isCliAdminApp ? "cliente-admin" : "cliente",
-            }).then((res) => {
-                if (res.status !== 200) return console.log("Error on readUser");
-                showComponent(dispatch, "purchaseValue");
-                history.push(path);
+            await readUser(dispatch, _id, {
+                role: whichRole,
             });
+
+            await setVar({ alreadySetTempScore: false });
+
+            history.push(path);
         } else {
-            showComponent(dispatch, "login");
             window.location.href = `/acesso/verificacao`;
             logout(dispatch);
         }
