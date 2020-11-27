@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useStoreState, useStoreDispatch } from "easy-peasy";
 import {
     readUser,
-    updateUser,
     readPurchaseHistory,
     addPurchaseHistory,
 } from "../../../redux/actions/userActions";
@@ -32,7 +31,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../hooks/media/usePlayAudio";
 import useCount from "../../../hooks/useCount";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
-import getAPI, { setLastScoreAsDone } from "../../../utils/promises/getAPI";
+import getAPI, {
+    readTempScoreList,
+    setLastScoreAsDone,
+    updateUser,
+} from "../../../utils/promises/getAPI";
 import useGetVar from "../../../hooks/storage/useVar";
 import useBackColor from "../../../hooks/useBackColor";
 import { getScoreData, getStyles } from "./helpers";
@@ -108,16 +111,18 @@ function AsyncClientScoresPanel({ history, location }) {
     const firstName = getFirstName(name) || "Olá";
     const currChallenge = totalPurchasePrize + 1;
     const userBeatChallenge = currScoreNow >= maxScore;
+
+    const path = isCliAdminApp ? "/mobile-app?client-admin=1" : "/mobile-app";
     // END MAIN VARIABLES
 
     useEffect(() => {
-        const test = false;
-        if (test && !finishedWork) {
+        if (!finishedWork && cashCurrScore) {
             animateNumber(
                 animatedNumber.current,
                 0,
-                (cashCurrScore = true),
-                getAnimationDuration(Number(cashCurrScore))
+                cashCurrScore,
+                getAnimationDuration(Number(cashCurrScore)),
+                setShowTotalPoints
             );
 
             const newHighestScore =
@@ -143,37 +148,60 @@ function AsyncClientScoresPanel({ history, location }) {
                 };
             }
 
-            updateUser(dispatch, objToSend, _id).then((res) => {
-                if (res.status !== 200)
-                    return showSnackbar(dispatch, res.data.msg, "error");
+            (async () => {
+                // avoid user to restart page and end up adding more scores
+                const { data: dataTempScore } = await getAPI({
+                    url: readTempScoreList(_id),
+                    needAuth: true,
+                    params: { onlyLastAvailable: true },
+                });
+                if (!dataTempScore) return history.push(path);
+
+                await getAPI({
+                    method: "put",
+                    url: updateUser(_id),
+                    body: objToSend,
+                    params: { thisRole: "cliente" },
+                }).catch((err) => {
+                    console.log("ERROR: " + err);
+                });
+
+                if (role === "cliente") {
+                    await getAPI({
+                        method: "post",
+                        url: setLastScoreAsDone(_id),
+                        needAuth: true,
+                    });
+                }
+
                 const historyObj = {
                     rewardScore: maxScore,
                     icon: selfMilestoneIcon,
                     value: cashCurrScore,
                 };
-                addPurchaseHistory(dispatch, _id, historyObj).then((res) => {
-                    if (res.status !== 200)
-                        return showSnackbar(dispatch, res.data.msg, "error");
-                    showSnackbar(
-                        dispatch,
-                        `Pontuação Registrada, ${getFirstName(name)}!`,
-                        "success"
-                    );
-                    if (userBeatChallenge) {
-                        const options = {
-                            noResponse: true,
-                            prizeDesc,
-                            trophyIcon: selfMilestoneIcon,
-                        };
-                        readPurchaseHistory(_id, maxScore, options);
-                        setFinishedWork(true);
-                    } else {
-                        setFinishedWork(true);
-                    }
-                });
-            });
+
+                await addPurchaseHistory(dispatch, _id, historyObj);
+
+                showSnackbar(
+                    dispatch,
+                    `Pontuação Registrada, ${getFirstName(name)}!`,
+                    "success"
+                );
+
+                if (userBeatChallenge) {
+                    const options = {
+                        noResponse: true,
+                        prizeDesc,
+                        trophyIcon: selfMilestoneIcon,
+                    };
+                    readPurchaseHistory(_id, maxScore, options);
+                    setFinishedWork(true);
+                } else {
+                    setFinishedWork(true);
+                }
+            })();
         }
-    }, [finishedWork]);
+    }, [finishedWork, cashCurrScore]);
 
     const showHeader = () => (
         <div className="position-relative">
@@ -227,7 +255,7 @@ function AsyncClientScoresPanel({ history, location }) {
                 }}
             >
                 <div className="animated bounce slow repeat-2">
-                    <p className="ml-2 text-left">&#187; Pontuação Atual:</p>
+                    <p className="text-center">&#187; Pontuação Atual:</p>
                     <p className="text-center text-hero">
                         {convertDotToComma(currScoreNow)}
                     </p>
@@ -249,9 +277,6 @@ function AsyncClientScoresPanel({ history, location }) {
                 role: isCliAdminApp ? "cliente-admin" : "cliente",
             }).then((res) => {
                 if (res.status !== 200) return console.log("Error on readUser");
-                const path = isCliAdminApp
-                    ? "/mobile-app?client-admin=1"
-                    : "/mobile-app";
                 showComponent(dispatch, "purchaseValue");
                 history.push(path);
             });

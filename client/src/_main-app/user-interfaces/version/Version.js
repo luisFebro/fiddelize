@@ -4,7 +4,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.8015.5";
+const latestVersion = "3.8016.5";
 // PRÓXIMO:
 // sistema multi-conta (painel de cadastros)
 //  - serviço novvos membros - equipe dash -
