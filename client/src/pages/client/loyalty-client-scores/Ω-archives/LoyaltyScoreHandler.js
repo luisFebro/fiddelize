@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { useStoreState, useStoreDispatch } from 'easy-peasy';
 import PurchaseValue from './PurchaseValue';
 import StaffConfirmation from './StaffConfirmation';
-import ClientScoresPanel from './ClientScoresPanel';
+import AsyncClientScoresPanel from './AsyncClientScoresPanel';
 import HomeButton from '../../../components/buttons/HomeButton';
 import { useClientAdmin } from '../../../hooks/useRoleData';
 
@@ -52,7 +52,7 @@ export default function LoyaltyScoreHandler() {
                 valuePaid={valuePaid}
                 setVerification={setVerification}
             />
-            <ClientScoresPanel
+            <AsyncClientScoresPanel
                 success={clientScoresPanel}
                 valuePaid={valuePaid}
                 verification={verification}

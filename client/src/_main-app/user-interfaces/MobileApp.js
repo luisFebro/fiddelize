@@ -16,7 +16,6 @@ import LoginPage from "../../pages/auth/LoginPage"; // is it necessarybecauseit 
 import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import ClientMobileApp from "../../pages/mobile-app/ClientMobileApp";
-import AsyncLoyaltyScoreHandler from "../../pages/client/loyalty-client-scores/AsyncLoyaltyScoreHandler";
 import RegulationPage from "../../pages/RegulationPage";
 import AsyncAppSharer from "../../pages/app-sharer/AsyncAppSharer";
 import PlansPage from "../../pages/plans-page/PlansPage";
@@ -30,6 +29,7 @@ import {
     AsyncPasswordPage,
     AsyncTeamApp,
     AsyncVirtualCard,
+    AsyncScorePanel,
 } from "./CommonImports";
 //END PAGES
 
@@ -67,7 +67,7 @@ function Mobile({ location, history }) {
                 <Route
                     path="/cliente/pontos-fidelidade"
                     exact
-                    component={AsyncLoyaltyScoreHandler}
+                    component={AsyncScorePanel}
                 />
                 <Route path="/regulamento/" exact component={RegulationPage} />
                 <Route

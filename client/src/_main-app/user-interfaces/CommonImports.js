@@ -43,3 +43,11 @@ export const AsyncVirtualCard = Load({
             "../../pages/client/virtual-card/VirtualCard" /* webpackChunkName: "virtual-card-page-lazy" */
         ),
 });
+
+// FIDELITY SCORES
+export const AsyncScorePanel = Load({
+    loader: () =>
+        import(
+            "../../pages/client/loyalty-client-scores" /* webpackChunkName: "client-score-panel-page-lazy" */
+        ),
+});

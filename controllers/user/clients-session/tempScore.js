@@ -1,13 +1,22 @@
 const User = require("../../../models/user");
 
 exports.readTempScoreList = async (req, res) => {
-    const { userId } = req.query;
+    const { userId, onlyLastAvailable = false } = req.query;
 
     const data = await User("cliente")
         .findById(userId)
         .select("clientUserData.tempScoreList");
 
     const tempList = data.clientUserData.tempScoreList;
+
+    if (onlyLastAvailable) {
+        const lastOne = tempList.find((s) => {
+            return s.used === false;
+        });
+
+        if (lastOne) return res.json(lastOne);
+        return res.json(false);
+    }
 
     if (!tempList) return res.json([]);
     res.json(tempList);

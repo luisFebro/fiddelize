@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import { useStoreState, useStoreDispatch } from "easy-peasy";
 import {
     readUser,
@@ -12,11 +11,7 @@ import Title from "../../../components/Title";
 import animateNumber, {
     getAnimationDuration,
 } from "../../../utils/numbers/animateNumber";
-import {
-    convertDotToComma,
-    convertCommaToDot,
-} from "../../../utils/numbers/convertDotComma";
-import getIntOrFloat from "../../../utils/numbers/getIntOrFloat";
+import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
 import isInteger from "../../../utils/numbers/isInteger";
 import getMonthNowBr from "../../../utils/dates/getMonthNowBr";
 import { CLIENT_URL } from "../../../config/clientUrl";
@@ -37,72 +32,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../hooks/media/usePlayAudio";
 import useCount from "../../../hooks/useCount";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
+import getAPI, { setLastScoreAsDone } from "../../../utils/promises/getAPI";
+import useGetVar from "../../../hooks/storage/useVar";
+import useBackColor from "../../../hooks/useBackColor";
+import { getScoreData, getStyles } from "./helpers";
 
-ClientScoresPanel.propTypes = {
-    success: PropTypes.bool,
-    verification: PropTypes.bool,
-    valuePaid: PropTypes.string,
-};
+const isSmall = window.Helper.isSmallScreen();
 
-const getStyles = ({ colorP, colorS, colorBack, dynamicTxtColor }) => ({
-    finishButton: {
-        border: "none",
-        fontWeight: "bold",
-        fontSize: "1.5em",
-        padding: "25px 35px",
-        borderRadius: "20px",
-        backgroundColor: "var(--themeSDark--" + colorS + ")",
-        color: "var(--mainWhite)",
-        outline: "none",
-        filter: `drop-shadow(.001em .15em .2em ${
-            colorBack === "black" ? "var(--mainWhite)" : "var(--mainDark)"
-        })`,
-    },
-    crownIcon: {
-        position: "absolute",
-        filter: "drop-shadow(.001em .001em .75em var(--mainDark))",
-        top: "-45px",
-        left: "218px",
-        fontSize: "2em",
-        transform: "rotate(20deg)",
-        color: dynamicTxtColor,
-    },
-    challN: {
-        backgroundColor: "var(--themePDark--" + colorP + ")",
-        borderRadius: "50%",
-        padding: "8px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        bottom: "-30px",
-    },
-});
-
-function ClientScoresPanel({
-    history,
-    location,
-    success,
-    valuePaid,
-    verification,
-    colorP,
-    colorS,
-    colorBack,
-}) {
+function AsyncClientScoresPanel({ history, location }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
-    const needAppForCliAdmin = location.search.includes("client-admin=1");
     const [finishedWork, setFinishedWork] = useState(false);
-    const animatedNumber = useRef(null);
 
-    const dynamicTxtColor = selectTxtStyle(colorBack, { needDarkBool: true })
-        ? "var(--mainDark)"
-        : "var(--mainWhite)";
-    const styles = getStyles({
-        colorP,
-        colorS,
-        colorBack,
-        dynamicTxtColor,
-    });
+    const isCliAdminApp = location.search.includes("client-admin=1");
 
-    useCount("ClientScoresPanel"); // RT = 46
+    const { data: paidValue } = useGetVar("paidValue");
+
+    // ROLES
+    const { businessId } = useAppSystem();
     const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
     let {
         currScore: currentScore,
@@ -112,39 +58,66 @@ function ClientScoresPanel({
         totalPurchasePrize = 0,
     } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
-    const { bizName, rewardList, bizCodeName } = useClientAdmin();
 
-    let { maxScore, selfMilestoneIcon } = useClientAdmin();
+    let {
+        maxScore,
+        selfMilestoneIcon,
+        bizName,
+        rewardList,
+        bizCodeName,
+        selfThemeBackColor: colorBack,
+        selfThemePColor: colorP,
+        selfThemeSColor: colorS,
+    } = useClientAdmin();
+    // END ROLES
+
+    // STYLES
+    const dynamicTxtColor = selectTxtStyle(colorBack, { needDarkBool: true })
+        ? "var(--mainDark)"
+        : "var(--mainWhite)";
+
+    const styles = getStyles({
+        colorP,
+        colorS,
+        colorBack,
+        dynamicTxtColor,
+    });
+    // END STYLES
+
+    // USE HOOKS
+    const dispatch = useStoreDispatch();
+    const animatedNumber = useRef(null);
+    usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", {
+        prerender: true,
+    });
+    useBackColor(`var(--themeBackground--${colorBack})`);
+    // useCount("ClientScoresPanel"); // RT = 46
+    // END USE HOOKS
+
+    // MAIN VARIABLES
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
     selfMilestoneIcon = pickedObj.selfMilestoneIcon;
     const prizeDesc = pickedObj.mainReward;
 
-    const { businessId } = useAppSystem();
-    const dispatch = useStoreDispatch();
-    usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", {
-        prerender: true,
+    const { currScoreBefore, cashCurrScore, currScoreNow } = getScoreData({
+        currentScore,
+        paidValue,
     });
 
-    let currScoreBefore = currentScore ? currentScore : 0;
-    currScoreBefore = getIntOrFloat(currScoreBefore);
-
-    let cashCurrScore = convertCommaToDot(valuePaid);
-    cashCurrScore = getIntOrFloat(cashCurrScore);
-
-    let currScoreNow = parseFloat(currScoreBefore) + parseFloat(cashCurrScore);
-    currScoreNow = getIntOrFloat(currScoreNow);
-
+    const firstName = getFirstName(name) || "Olá";
+    const currChallenge = totalPurchasePrize + 1;
     const userBeatChallenge = currScoreNow >= maxScore;
+    // END MAIN VARIABLES
 
     useEffect(() => {
-        if (success && verification && !finishedWork) {
+        const test = false;
+        if (test && !finishedWork) {
             animateNumber(
                 animatedNumber.current,
                 0,
-                cashCurrScore,
-                getAnimationDuration(Number(cashCurrScore)),
-                setShowTotalPoints
+                (cashCurrScore = true),
+                getAnimationDuration(Number(cashCurrScore))
             );
 
             const newHighestScore =
@@ -200,14 +173,15 @@ function ClientScoresPanel({
                 });
             });
         }
-    }, [success, verification, finishedWork]);
+    }, [finishedWork]);
 
-    // RENDER
-    const firstName = getFirstName(name) || "Olá";
-    const currChallenge = totalPurchasePrize + 1;
     const showHeader = () => (
         <div className="position-relative">
-            <p className="m-0 margin-left-25 font-site text-em-2-3 text-shadow">
+            <p
+                className={`${selectTxtStyle(
+                    colorBack
+                )} m-0 margin-left-25 font-site text-em-2-3 text-shadow`}
+            >
                 {firstName},
             </p>
             <Title
@@ -233,7 +207,7 @@ function ClientScoresPanel({
             style={{ backgroundColor: "var(--themePLight--" + colorP + ")" }}
         >
             <section>
-                <p className="ml-2 text-left text-center text-nowrap">
+                <p className="text-center text-nowrap">
                     &#187; Pontuação Anterior:
                 </p>
                 <p className="text-center text-hero">
@@ -241,7 +215,7 @@ function ClientScoresPanel({
                 </p>
             </section>
             <section>
-                <p className="ml-2 text-left">&#187; Você Ganhou:</p>
+                <p className="text-center">&#187; Você Ganhou:</p>
                 <p className="text-center text-hero" ref={animatedNumber}>
                     ...
                 </p>
@@ -269,33 +243,13 @@ function ClientScoresPanel({
         </div>
     );
 
-    const showSharingBtn = () => (
-        <Link
-            to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}
-        >
-            <ButtonFab
-                position="relative"
-                top={-10}
-                left={70}
-                title={`compartilhar app`}
-                iconFontAwesome="fas fa-heart"
-                iconFontSize="16px"
-                variant="extended"
-                fontWeight="bolder"
-                fontSize=".9em"
-                color="var(--mainWhite)"
-                backgroundColor="var(--themeSDark)"
-            />
-        </Link>
-    );
-
     const handleHomeBtnClick = () => {
         if (isThisApp()) {
             readUser(dispatch, _id, {
-                role: needAppForCliAdmin ? "cliente-admin" : "cliente",
+                role: isCliAdminApp ? "cliente-admin" : "cliente",
             }).then((res) => {
                 if (res.status !== 200) return console.log("Error on readUser");
-                const path = needAppForCliAdmin
+                const path = isCliAdminApp
                     ? "/mobile-app?client-admin=1"
                     : "/mobile-app";
                 showComponent(dispatch, "purchaseValue");
@@ -313,70 +267,62 @@ function ClientScoresPanel({
         const backColorOnHover = "var(--themeSLight--" + colorS + ")";
         const backgroundColor = "var(--themeSDark--" + colorS + ")";
         return (
-            <button
-                disabled={finishedWork ? false : true}
-                className="win-challenge--audio text-shadow my-5 pressed-to-left"
-                style={styles.finishButton}
-                onClick={handleHomeBtnClick}
-                onMouseOver={(e) =>
-                    (e.target.style.backgroundColor = backColorOnHover)
-                }
-                onMouseOut={(e) =>
-                    (e.target.style.backgroundColor = backgroundColor)
-                }
-            >
-                {title}
-            </button>
+            <section className="container-center">
+                <button
+                    disabled={finishedWork ? false : true}
+                    className="win-challenge--audio text-shadow my-5 pressed-to-left"
+                    style={styles.finishButton}
+                    onClick={handleHomeBtnClick}
+                    onMouseOver={(e) =>
+                        (e.target.style.backgroundColor = backColorOnHover)
+                    }
+                    onMouseOut={(e) =>
+                        (e.target.style.backgroundColor = backgroundColor)
+                    }
+                >
+                    {title}
+                </button>
+            </section>
         );
     };
 
     return (
-        success && (
+        <section className="container-center-col mt-5 animated slideInLeft fast">
             <div
                 style={{
-                    maxWidth: 330,
-                    visibility: success ? "visible" : "hidden",
+                    maxWidth: !isSmall && 630,
                 }}
-                className=" container-center mt-5 animated slideInLeft fast"
             >
                 {showHeader()}
                 {showScores()}
                 {showHomeBtn()}
             </div>
-        )
+        </section>
     );
 }
 
-export default withRouter(ClientScoresPanel);
-/*ARCHIVES
-birthday
-// if(birthday.includes(getMonthNowBr())) {
-//     setGotBirthday(true);
-// }
-// This will be moved to client-admin soon.
-// const showBirthdayMsg = () => (
-//     <div className="container-center text-center flex-column">
-//         O cliente faz aniversário este mês
-//         <img
-//             src={`${CLIENT_URL}/img/icons/birthday-cake.svg`}
-//             width="128px"
-//             height="120px"
-//             alt="aniversariante"
-//         />
-//         <p className="text-default">em: {birthday}</p>
-//     </div>
-// );
+export default withRouter(AsyncClientScoresPanel);
 
-<Link to={`/${clientAdmin.bizCodeName}/compartilhar-app?negocio=${clientAdmin.bizName}&id=${businessId}&role=${role}`}>
-    <ButtonMulti
-        title="compartilhar app"
-        onClick={null}
-        color="var(--mainWhite)"
-        backgroundColor="var(--themeSDark)"
-        backColorOnHover="var(--themeSDark)"
-        iconFontAwesome="fas fa-share-alt"
-    />
-</Link>
+/*ARCHIVES
+const showSharingBtn = () => (
+    <Link
+        to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}
+    >
+        <ButtonFab
+            position="relative"
+            top={-10}
+            left={70}
+            title={`compartilhar app`}
+            iconFontAwesome="fas fa-heart"
+            iconFontSize="16px"
+            variant="extended"
+            fontWeight="bolder"
+            fontSize=".9em"
+            color="var(--mainWhite)"
+            backgroundColor="var(--themeSDark)"
+        />
+    </Link>
+);
 */
 
 /* COMMENTS

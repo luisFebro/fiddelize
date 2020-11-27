@@ -1,7 +1,6 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { logout } from "../../redux/actions/authActions";
 import { Link, withRouter } from "react-router-dom";
-import { showComponent } from "../../redux/actions/componentActions";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
 import { useStoreDispatch } from "easy-peasy";
 import { useClientUser, useProfile } from "../../hooks/useRoleData";
@@ -166,10 +165,9 @@ function MoreOptionsBtn({
                 )}, parece que sua pontuação está desatualizada. Verifique sua notificação de confirmação para começar novo desafio.`,
                 9000
             );
-        showComponent(dispatch, "purchaseValue");
         const path = needAppForCliAdmin
-            ? "/cliente/pontos-fidelidade?client-admin=1"
-            : "/cliente/pontos-fidelidade";
+            ? "/cartao-virtual?client-admin=1"
+            : "/cartao-virtual";
         history.push(path);
         playBeep();
         lStorage("setItem", currOption);

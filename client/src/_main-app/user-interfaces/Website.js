@@ -18,7 +18,6 @@ import Home from "../../pages/home/Home";
 import LoginPage from "../../pages/auth/LoginPage";
 import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
-import AsyncLoyaltyScoreHandler from "../../pages/client/loyalty-client-scores";
 import RegulationPage from "../../pages/RegulationPage";
 import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
 import AsyncIntroPage from "../../pages/new-app";
@@ -37,6 +36,7 @@ import {
     AsyncPasswordPage,
     AsyncTeamApp,
     AsyncVirtualCard,
+    AsyncScorePanel,
 } from "./CommonImports";
 //END PAGES
 
@@ -61,7 +61,7 @@ function Website({ location, history }) {
                 <Route
                     path="/cliente/pontos-fidelidade"
                     exact
-                    component={AsyncLoyaltyScoreHandler}
+                    component={AsyncScorePanel}
                 />
                 <Route path="/regulamento" exact component={RegulationPage} />
                 <Route

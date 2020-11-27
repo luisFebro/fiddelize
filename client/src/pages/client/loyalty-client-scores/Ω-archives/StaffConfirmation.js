@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StaffConf from './loyaltyScores/StaffConf';
+import StaffConf from './comps/StaffConf';
 import HomeButton from '../../../components/buttons/HomeButton';
 
 StaffConfirmation.propTypes = {

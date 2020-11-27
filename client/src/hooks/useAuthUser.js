@@ -9,7 +9,7 @@ const gotToken = localStorage.getItem("token");
 // The current state will be null.
 // The tokenWhenLogin completes the gotToken to verify the validity of access.
 export const useAuthUser = (options = {}) => {
-    const { history } = options;
+    const { history, role } = options;
 
     const { tokenWhenLogin, runName } = useStoreState((state) => ({
         tokenWhenLogin: state.authReducer.cases.tokenWhenLogin,

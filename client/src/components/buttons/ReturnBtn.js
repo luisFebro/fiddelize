@@ -17,7 +17,7 @@ function ReturnBtn({
     returnIcon = "arrow-left",
     onClick,
     toAdminDash,
-    btnColor,
+    btnColor = "default",
     toTab,
 }) {
     const { bizCodeName } = useClientAdmin();
@@ -52,7 +52,7 @@ function ReturnBtn({
                 <ButtonFab
                     onClick={onClick}
                     color="var(--mainWhite)"
-                    backgroundColor="var(--themeSDark)"
+                    backgroundColor={`var(--themeSDark--${btnColor})`}
                     iconFontAwesome={
                         <FontAwesomeIcon
                             icon={icon}

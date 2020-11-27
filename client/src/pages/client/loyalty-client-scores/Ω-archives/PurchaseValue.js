@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import InsertValue from './loyaltyScores/InsertValue';
+import InsertValue from './comps/InsertValue';
 import HomeButton from '../../../components/buttons/HomeButton';
 import showVanillaToast from '../../../components/vanilla-js/toastify/showVanillaToast';
 import { updateUser } from '../../../redux/actions/userActions';

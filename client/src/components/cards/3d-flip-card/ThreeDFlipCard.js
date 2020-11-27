@@ -1,7 +1,6 @@
 // reference: https://codepen.io/kivanfan/pen/BGxXKR
 import React, { Fragment, useEffect } from "react";
 import "./_ThreeDFlipCard.scss";
-import useBackColor from "../../../hooks/useBackColor";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import { formatSlashDMY } from "../../../utils/dates/dateFns";
 
@@ -29,6 +28,8 @@ function handleMouseMove(event) {
     const svgShadow = document.querySelector(".svg-shadow");
     const textShadow = document.querySelector(".text-3d-shadow");
 
+    if (!floating || !svgShadow || !textShadow) return;
+
     floating.style.transform = `rotateX(${
         card_y / 1
     }deg) rotateY(${card_x}deg)`;
@@ -44,7 +45,6 @@ function handleMouseMove(event) {
 }
 
 export default function ThreeDFlipCard({ name, score, createdAt }) {
-    useBackColor("linear-gradient(125deg, #fbd7e5, #bdf4fa)");
     const {
         selfBizLogoImg: bizLogo,
         selfThemePColor: colorP,
@@ -58,7 +58,9 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
         (() => {
             setTimeout(() => {
                 const body = document.querySelector(".body");
-                body.classList.remove("active");
+                if (body) {
+                    body.classList.remove("active");
+                }
             }, 2200);
         })();
     }, []);
