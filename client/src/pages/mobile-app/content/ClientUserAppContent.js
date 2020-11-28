@@ -97,7 +97,6 @@ export default function ClientUserAppContent({
     let { role, phone } = useProfile();
     const [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
     const userIdLoading = Boolean(_id === "...");
-    console.log("userIdLoading", userIdLoading);
 
     const totalNotifications = useCountNotif(_id, {
         role,

@@ -114,6 +114,15 @@
     height: 100vh;
 }
 
+.full-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column wrap;
+    height: 20em; // fallback in case of ch is not supported
+    height: 100vh;
+}
+
 .d-table {
     display: table !important;
 }

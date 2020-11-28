@@ -10,7 +10,8 @@ export default function getRandomArray(array, options = {}) {
         return 0.5 - Math.random();
     });
 
-    const randomNum = Math.floor(Math.random() * 10); // 0 to 9 index. select one of the first 10 results from the random array.
+    const ind = array.length;
+    const randomNum = Math.floor(Math.random() * ind); // 0 to 9 index. select one of the first 10 results from the random array.
 
     if (selectOne) return sortedArray[randomNum];
 

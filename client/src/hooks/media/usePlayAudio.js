@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
-import convertBlobToData from "../../utils/media/convertBlobToData";
+import convertBlobToData, {
+    convertBlobToDataAsync,
+} from "../../utils/media/convertBlobToData";
 import { getVar, store } from "../../hooks/storage/useVar";
 
 // For prerender audio when we need to use the mediaElem name twice, one to prerender the audio and to actually play it.
@@ -7,15 +9,14 @@ import { getVar, store } from "../../hooks/storage/useVar";
 //     "cli-member"
 // };
 // to use programmatically.
-export const prerenderAudio = async (url, mediaName) => {
-    return fetch(url)
-        .then((response) => response.blob())
-        .then((blob) =>
-            setTimeout(() =>
-                convertBlobToData(blob, { prerender: true, mediaName })
-            )
-        )
-        .catch((err) => console.log(err));
+export const prerenderAudio = async (url, mediaName, options = {}) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    return await convertBlobToDataAsync(blob, {
+        prerender: true,
+        mediaName,
+    }).catch((err) => console.log(err));
 };
 
 // cache and play audio easily and surely after loading a page.
@@ -35,6 +36,7 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
     if (!delay) delay = 0;
     if (typeof trigger !== "boolean") trigger = true;
 
+    console.log("trigger", trigger);
     const getSingleElem = (audio) => {
         const mediaBtn = document.querySelector(mediaElem);
         console.log(`audio set on ${mediaElem}`);

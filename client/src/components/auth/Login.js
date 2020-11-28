@@ -66,6 +66,7 @@ function Login({
             needCliUserWelcomeNotif,
             twoLastCpfDigits,
             token,
+            gender,
             // selfBizLogoImg,
         } = res.data;
 
@@ -89,6 +90,7 @@ function Login({
                 { twoLastCpfDigits },
                 { rememberAccess: true },
                 { verifPass: verificationPass },
+                { gender },
             ];
             setMultiVar(storeElems, store.user);
 
@@ -168,6 +170,7 @@ function Login({
         if (role === "cliente") {
             const storeElems = [
                 { role },
+                { gender },
                 {
                     name: getFirstName(name && name.cap(), {
                         addSurname: true,

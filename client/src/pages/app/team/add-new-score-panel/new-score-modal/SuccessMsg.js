@@ -11,7 +11,7 @@ export default function SuccessMsg({
 }) {
     const [closeMsg, setCloseMsg] = useState(false);
 
-    const [succMsg] = useData(["cli-member_msg-score-text"], {
+    const [succMsg] = useData(["text_cli-member_msg-score"], {
         storeName: "audios",
     });
 
@@ -22,7 +22,7 @@ export default function SuccessMsg({
         }, 2000);
     };
 
-    usePlayAudio(null, "cli-member_msg-score-audio", {
+    usePlayAudio(null, "audio_cli-member_msg-score", {
         autoplay: true,
         onendedCallback: handleFinishedAudio,
     });

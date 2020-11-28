@@ -134,9 +134,9 @@ export default function ScoreCustomer({
             const selectedTTS = getRandomArray(ttsStore);
             const { audio, text } = selectedTTS;
 
-            await setVar({ "cli-member_msg-score-text": text }, store.audios);
+            await setVar({ "text_cli-member_msg-score": text }, store.audios);
 
-            prerenderAudio(audio, "cli-member_msg-score-audio");
+            prerenderAudio(audio, "audio_cli-member_msg-score");
             setFullOpen(true);
         })();
     };

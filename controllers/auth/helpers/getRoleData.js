@@ -3,23 +3,25 @@ const getFirstName = require("../../../utils/string/getFirstName");
 
 // ROLES
 const handleBizTeamData = ({ data, cpf }) => {
-    const { _id, name, role, clientAdminData } = data;
+    const { _id, name, role, gender, clientAdminData } = data;
 
     return {
         name,
         role,
         authUserId: _id,
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+        gender,
     };
 };
 
 const handleCliAdminData = ({ data, cpf }) => {
-    const { _id, name, role, clientAdminData } = data;
+    const { _id, name, role, gender, clientAdminData } = data;
 
     // token only sent after password validation.
     return {
         name,
         role,
+        gender,
         authUserId: _id,
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
         verificationPass: clientAdminData && clientAdminData.verificationPass,
@@ -28,23 +30,25 @@ const handleCliAdminData = ({ data, cpf }) => {
 };
 
 const handleCliMemberData = ({ data, cpf }) => {
-    const { _id, name, role, clientAdminData } = data;
+    const { _id, name, role, gender, clientAdminData } = data;
 
     return {
         name,
         role,
+        gender,
         authUserId: _id,
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
     };
 };
 
 const handleCliUserData = ({ data, token }) => {
-    const { _id, name, role, clientUserData } = data;
+    const { _id, name, role, gender, clientUserData } = data;
 
     return {
         name,
         role,
         token,
+        gender,
         authUserId: _id,
         bizId: (clientUserData && clientUserData.bizId) || "0",
         msg: msg("ok.welcomeBack", getFirstName(name), "onlyMsg"),
