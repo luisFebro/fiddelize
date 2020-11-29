@@ -41,6 +41,9 @@ export default function AddScoreCTAs({ clientName, handleScoreToLink }) {
             </h2>
             <div className="container-center">
                 <AddNewScoreBtn
+                    registerBtnTitle={
+                        score ? "Mudar Pontos" : "Adicionar Pontos"
+                    }
                     backColor={isCliAdmin ? "default" : backColor}
                     sColor={isCliAdmin ? "default" : sColor}
                     clientScoreOnly={true}

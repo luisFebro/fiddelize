@@ -23,13 +23,10 @@ export default function RegistersPanel({ isNewMember = false }) {
 
     const showHeader = () => (
         <Fragment>
-            <div
-                className="animated slideInLeft delay-1s"
-                style={styles.clipPathBack}
-            ></div>
+            <div style={styles.clipPathBack}></div>
             <div className="position-relative container-center-col my-3">
                 <img src={selfBizLogoImg} alt="logo" />
-                <p className="mt-3 text-shadow animated fadeInUp delay-3s text-title text-white text-center">
+                <p className="mt-3 text-shadow animated fadeInUp text-title text-white text-center">
                     {isNewMember ? "Novo Membro Equipe" : "Novo Cliente"}
                 </p>
             </div>

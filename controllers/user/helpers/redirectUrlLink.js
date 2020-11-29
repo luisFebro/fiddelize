@@ -7,7 +7,7 @@ exports.getMemberJob = (code) => {
     if (code === "gr") return "gerência";
 };
 
-exports.getFinalUrl = ({ user, name, memberJob }) => {
+exports.getFinalUrl = ({ user, name, memberJob, userScore }) => {
     const cliAdmin = user.clientAdminData;
     const bizId = user._id;
     const firstName = name;
@@ -16,12 +16,18 @@ exports.getFinalUrl = ({ user, name, memberJob }) => {
     const logo = cliAdmin.selfBizLogoImg;
     const bc = cliAdmin.selfThemeBackColor;
     const pc = cliAdmin.selfThemePColor;
+    //fiddelize=1 for biz team
+    const defaultQueryParams = `negocio=${bizName}&id=${bizId}&logo=${logo}&bc=${bc}&pc=${pc}`;
 
     if (memberJob) {
-        return `${CLIENT_URL}/baixe-app/${firstName}?negocio=${bizName}&id=${bizId}&cliente=1&logo=${logo}&mj=${memberJob}&bc=${bc}&pc=${pc}`;
+        return `${CLIENT_URL}/baixe-app/${firstName}?cliente-membro=1&mj=${memberJob}&${defaultQueryParams}`;
+    }
+
+    if (userScore) {
+        return `${CLIENT_URL}/baixe-app/${firstName}?cliente=1&sc=${userScore}&${defaultQueryParams}`;
     }
 
     return firstName
-        ? `${CLIENT_URL}/baixe-app/${firstName}?negocio=${bizName}&id=${bizId}&cliente=1&logo=${logo}&bc=${bc}&pc=${pc}`
-        : `${CLIENT_URL}/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1&logo=${logo}&bc=${bc}&pc=${pc}`;
+        ? `${CLIENT_URL}/baixe-app/${firstName}?cliente=1&${defaultQueryParams}`
+        : `${CLIENT_URL}/baixe-app?cliente=1&${defaultQueryParams}`;
 };

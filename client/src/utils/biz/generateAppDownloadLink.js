@@ -33,7 +33,7 @@ export default function generateAppDownloadLink({
         name
             ? (link = `${CLIENT_URL}/app/${getFirstName(
                   name.toLowerCase()
-              )}_${onlyBizCode}`)
+              )}_${onlyBizCode}${linkScore ? `:${linkScore}` : ""}`)
             : (link = `${CLIENT_URL}/app/${onlyBizCode}`);
     }
 

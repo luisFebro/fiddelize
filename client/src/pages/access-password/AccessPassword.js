@@ -189,8 +189,8 @@ export default function AccessPassword({ history }) {
                 });
 
                 // wait for the lock animation to end...
-                setTimeout(() => {
-                    authenticate(newToken, { dispatch, history });
+                setTimeout(async () => {
+                    await authenticate(newToken, { dispatch, history });
                 }, 1000);
             })();
         }

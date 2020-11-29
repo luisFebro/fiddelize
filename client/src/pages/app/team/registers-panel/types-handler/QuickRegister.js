@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AsyncShowNewContactForm from "../../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import generateAppDownloadLink from "../../../../../utils/biz/generateAppDownloadLink";
 import {
     useProfile,
     useClientAdmin,
@@ -27,6 +26,7 @@ import PremiumButton from "../../../../../components/buttons/premium/PremiumButt
 import usePro from "../../../../../hooks/pro/usePro";
 import useData from "../../../../../hooks/useData";
 import getAPI, { encryptLinkScore } from "../../../../../utils/promises/getAPI";
+import useInvitationMsg from "./hooks/useInvitationMsg";
 
 const Async = Load({
     loader: () =>
@@ -73,7 +73,6 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     });
 
     const { linkScore, meanPayload, meanType, name, job } = data; // meanType = number, email
-    const [msg, setMsg] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
     const [clearForm, setClearForm] = useState(false);
     const [successOpData, setSuccessOpData] = useState({
@@ -140,31 +139,16 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         jobRole: job,
         appType,
     };
-    const downloadLink = generateAppDownloadLink({
-        bizCodeName,
+
+    const msg = useInvitationMsg({
         name,
-        payload,
         linkScore,
+        isNewMember,
+        bizName,
+        verifPass,
+        payload,
+        bizCodeName,
     });
-
-    useEffect(() => {
-        const handleTxt = () => {
-            if (isNewMember) {
-                return `Segue o app de fidelidade para membros da ${
-                    bizName && bizName.toUpperCase()
-                }. Acesse: ${downloadLink} | Senha: ${verifPass}`;
-            } else {
-                return `${name.toUpperCase()}, segue convite para o programa de fidelidade da ${
-                    bizName && bizName.toUpperCase()
-                }. Acesse seu link exclusivo: ${downloadLink}`;
-            }
-        };
-
-        if (name) {
-            const text = handleTxt();
-            setMsg(text);
-        }
-    }, [name]);
 
     // Actions
     const handleMeanData = (data) => {

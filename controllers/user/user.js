@@ -289,6 +289,14 @@ exports.redirectUrlLink = async (req, res) => {
         memberJob = getMemberJob(jobCode);
     }
 
+    let userScore;
+    const gotScore = code && code.includes(":");
+    if (gotScore) {
+        const [thisBizCode, thisUserScore] = code.split(":");
+        code = thisBizCode;
+        userScore = thisUserScore;
+    }
+
     const user = await User("cliente-admin")
         .findOne({
             "clientAdminData.bizCodeName": { $regex: `${code}`, $options: "i" },
@@ -303,7 +311,7 @@ exports.redirectUrlLink = async (req, res) => {
     if (!user || user.role !== "cliente-admin")
         return res.status(400).json({ msg: "Link Inválido" });
 
-    const finalUrl = getFinalUrl({ user, name, memberJob });
+    const finalUrl = getFinalUrl({ user, name, memberJob, userScore });
 
     res.json(finalUrl);
 };

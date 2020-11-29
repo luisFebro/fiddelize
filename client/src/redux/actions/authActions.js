@@ -9,6 +9,7 @@ import { setVar, store } from "../../hooks/storage/useVar";
 // import lStorage from '../../utils/storage/lStorage';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
+const isApp = isThisApp();
 
 // Check token & load user
 let alreadyPass = false;
@@ -19,7 +20,9 @@ export const loadUser = () => (dispatch, getState) => (history) => {
         .then((res) => {
             dispatch({ type: "USER_ONLINE", payload: true });
 
-            const gotError = res.data && res.data.error;
+            // this is redirect to home even redirect links page...
+            // that's why there is "isApp" to check if is not website
+            const gotError = isApp && res.data && res.data.error;
             if (gotError) logout(dispatch, { history });
 
             const role = res.data.profile.role;
@@ -137,11 +140,11 @@ export const logout = async (dispatch, opts = {}) => {
     setRun(dispatch, "logout");
 
     if (history) {
-        isThisApp() ? history.push("/mobile-app") : history.push("/");
+        isApp ? history.push("/mobile-app") : history.push("/");
     }
 
     if (needReload) {
-        window.location.href = isThisApp() ? "/mobile-app" : "/";
+        window.location.href = isApp ? "/mobile-app" : "/";
     }
     dispatch({ type: "LOGOUT_SUCCESS" });
     dispatch({ type: "USER_CLEARED" });

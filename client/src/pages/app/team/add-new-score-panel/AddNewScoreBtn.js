@@ -29,6 +29,7 @@ export default function AddNewScoreBtn({
     clientScoreOnly, // for quick register
     clientName, // for quick register
     handleCustomerScore, // for quick register
+    registerBtnTitle = "Adicionar Pontos",
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -53,7 +54,7 @@ export default function AddNewScoreBtn({
         <section>
             {clientScoreOnly ? (
                 <ButtonFab
-                    title="Adicionar Pontos"
+                    title={registerBtnTitle}
                     backgroundColor={`var(--themeSDark--${sColor})`}
                     onClick={handleFullOpen}
                     position="relative"

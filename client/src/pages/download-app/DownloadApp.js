@@ -4,7 +4,6 @@ import parse from "html-react-parser";
 import PwaInstaller from "../../components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "../../config/clientUrl";
 import checkIfElemIsVisible from "../../utils/window/checkIfElemIsVisible";
-import getQueryByName from "../../utils/string/getQueryByName";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import { readClientAdmin } from "../../redux/actions/userActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
@@ -21,6 +20,8 @@ import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 import useBackColor from "../../hooks/useBackColor";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import ClientMemberText from "./app-type-texts/ClientMemberText";
+import getQueries from "./helpers/getQueries";
+import { setMultiVar } from "../../hooks/storage/useVar";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -33,9 +34,9 @@ const iconStyle = {
 
 const appSystem = lStorage("getItems", { collection: "appSystem" });
 
-const getStyles = ({ isClientAdmin, pColor }) => ({
+const getStyles = ({ isCliAdmin, pColor }) => ({
     icon: {
-        fontSize: isClientAdmin ? "6rem" : "3rem",
+        fontSize: isCliAdmin ? "6rem" : "3rem",
         fontWeight: "bold",
     },
     margin: {
@@ -55,20 +56,36 @@ const getStyles = ({ isClientAdmin, pColor }) => ({
 // custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1
 
 export default function DownloadApp({ match, location }) {
-    const bizName = getQueryByName("negocio", location.search);
-    const bizId = getQueryByName("id", location.search);
+    const [
+        bizName,
+        bizId,
+        bizLogo,
+        backColor,
+        pColor,
+        userScore,
+        memberJob,
+        // roles
+        isBizTeam,
+        isCliAdmin,
+        isCliMember,
+        isCliUser,
+        isFromAdminPanel,
+        isValidRoleType,
+    ] = getQueries({
+        location,
+    });
 
-    const bizLogo = getQueryByName("logo", location.search);
-    const backColor = getQueryByName("bc", location.search);
-    const pColor = getQueryByName("pc", location.search);
+    // delete these variables after user successfully registered
+    useEffect(() => {
+        if (isCliMember || isBizTeam) {
+            setMultiVar([{ needRegister: true }]);
+        }
+        if (isCliUser) {
+            setMultiVar([{ needRegister: true }, { tempScore: userScore }]);
+        }
+    }, [isCliUser, isCliMember, isBizTeam, userScore]);
 
-    const isTeamMember = getQueryByName("mj", location.search); // mj = memberJob
-    const isClientAdmin = location.search.includes("admin=1");
-    const isFromAdminPanel = location.search.includes("painel=1");
-    const isClientUser = location.search.includes("cliente=1"); // need to be implmenet in the sharer page.
-    const isValidRoleType = isClientAdmin || isClientUser;
-
-    const styles = getStyles({ isClientAdmin, pColor });
+    const styles = getStyles({ isCliAdmin, pColor });
 
     useAnimateElem(".download-app--txt", {
         animaIn: "fadeInUp",
@@ -87,10 +104,10 @@ export default function DownloadApp({ match, location }) {
 
     const isAdminLoggedIn =
         appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
-    if (isClientAdmin) {
+    if (isCliAdmin) {
         lStorage("setItems", setSystemOp("cliente-admin", bizId));
     }
-    if (isClientUser && !isAdminLoggedIn) {
+    if (isCliUser && !isAdminLoggedIn) {
         lStorage("setItems", setSystemOp("cliente", bizId));
         lStorage("setItem", { ...needAppRegisterOp, value: true });
     } // L
@@ -275,7 +292,7 @@ export default function DownloadApp({ match, location }) {
                 )}
             </p>
             <div className="mx-2">
-                {isClientUser && (
+                {isCliUser && (
                     <Fragment>
                         <p>Você foi convidado(a) para baixar o app da </p>
                         <p className="text-hero text-center">
@@ -388,9 +405,9 @@ export default function DownloadApp({ match, location }) {
             ScrollArrow,
             showMainScrollArray,
         };
-        if (isTeamMember) return <ClientMemberText {...props} />;
+        if (isCliMember) return <ClientMemberText {...props} />;
 
-        return isClientAdmin ? showClientAdminText() : showClientUserText();
+        return isCliAdmin ? showClientAdminText() : showClientUserText();
     };
 
     return (
@@ -403,7 +420,7 @@ export default function DownloadApp({ match, location }) {
                     {handleAppTypeText()}
                     <PwaInstaller
                         title={
-                            isClientAdmin
+                            isCliAdmin
                                 ? `<strong>${
                                       userName && userName.cap()
                                   },<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`
@@ -429,4 +446,4 @@ If you see an error in JSON position, also check local storage for missing comma
 /*
 <p>{!isInstalled ? parse("<br /><br />Foi instalado.<br/>Visite sua galeria<br />de Apps") : ""}</p>
 FOR TESTING VERSIONS: <span className="text-right">{"t5"}</span>
- */
+*/
