@@ -37,6 +37,7 @@ const {
 const {
     readTempScoreList,
     setLastScoreAsDone,
+    encryptLinkScore,
 } = require("../../controllers/user/clients-session/tempScore");
 
 const {
@@ -97,6 +98,7 @@ router.post(
 // CLIENT USER TEMP SCORE
 router.get("/cli-user/temp-score/list", mwIsAuth, readTempScoreList);
 router.post("/cli-user/temp-score/set-last-done", mwIsAuth, setLastScoreAsDone);
+router.post("/cli-user/temp-score/encrypt", mwIsAuth, encryptLinkScore);
 
 router.param("userId", mwUserId); // n1
 

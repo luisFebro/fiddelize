@@ -26,6 +26,7 @@ import { handleFocus } from "../../../../../utils/form/handleFocus";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import usePro from "../../../../../hooks/pro/usePro";
 import useData from "../../../../../hooks/useData";
+import getAPI, { encryptLinkScore } from "../../../../../utils/promises/getAPI";
 
 const Async = Load({
     loader: () =>
@@ -68,9 +69,10 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         meanType: "", // number or email
         name: "",
         job: "", // for team members only
+        linkScore: "",
     });
 
-    const { meanPayload, meanType, name, job } = data; // meanType = number, email
+    const { linkScore, meanPayload, meanType, name, job } = data; // meanType = number, email
     const [msg, setMsg] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
     const [clearForm, setClearForm] = useState(false);
@@ -104,6 +106,22 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         return "cliente";
     };
 
+    const handleScoreToLink = (dbScore) => {
+        (async () => {
+            const { data: scoreToken } = await getAPI({
+                method: "post",
+                url: encryptLinkScore(),
+                needAuth: true,
+                body: { score: dbScore, userId: businessId },
+            });
+
+            setData((prev) => ({
+                ...prev,
+                linkScore: scoreToken,
+            }));
+        })();
+    };
+
     const handleSuccessOp = (title, ctaFunc, status, newOne) => {
         setSuccessOpData({
             successOp: status,
@@ -126,6 +144,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         bizCodeName,
         name,
         payload,
+        linkScore,
     });
 
     useEffect(() => {
@@ -147,6 +166,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         }
     }, [name]);
 
+    // Actions
     const handleMeanData = (data) => {
         const { meanPayload, meanType, name, job } = data;
         setData({ meanPayload, meanType, name, job });
@@ -161,7 +181,6 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         setClearForm(uniqueId);
     };
 
-    // Actions
     const handleNumberCTA = (type = "sms") => {
         const number = meanPayload;
         if (!name)
@@ -357,6 +376,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                     clearForm={clearForm}
                     handleMeanData={handleMeanData}
                     loadData={formPayload}
+                    handleScoreToLink={handleScoreToLink}
                 />
             </div>
             {meanType && meanType === "number" && showNumberCTAs()}

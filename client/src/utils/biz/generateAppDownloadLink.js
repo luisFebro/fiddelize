@@ -6,6 +6,7 @@ export default function generateAppDownloadLink({
     name = "",
     bizCodeName,
     payload,
+    linkScore,
 }) {
     let link;
 

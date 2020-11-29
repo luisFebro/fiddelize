@@ -26,6 +26,9 @@ export default function AddNewScoreBtn({
     backColor,
     sColor,
     needClick = true,
+    clientScoreOnly, // for quick register
+    clientName, // for quick register
+    handleCustomerScore, // for quick register
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -37,19 +40,37 @@ export default function AddNewScoreBtn({
         setFullOpen(false);
     };
 
-    const AsyncComp = <AsyncNewScoreModal closeModal={handleFullClose} />;
+    const AsyncComp = (
+        <AsyncNewScoreModal
+            closeModal={handleFullClose}
+            clientScoreOnly={clientScoreOnly}
+            clientName={clientName}
+            handleCustomerScore={handleCustomerScore}
+        />
+    );
 
     return (
         <section>
-            <ButtonFab
-                size={size}
-                title={title}
-                backgroundColor={`var(--themeSDark--${sColor})`}
-                onClick={needClick ? handleFullOpen : null}
-                iconMu={PlusIcon}
-                position="relative"
-                variant="extended"
-            />
+            {clientScoreOnly ? (
+                <ButtonFab
+                    title="Adicionar Pontos"
+                    backgroundColor={`var(--themeSDark--${sColor})`}
+                    onClick={handleFullOpen}
+                    position="relative"
+                    variant="extended"
+                    size="large"
+                />
+            ) : (
+                <ButtonFab
+                    size={size}
+                    title={title}
+                    backgroundColor={`var(--themeSDark--${sColor})`}
+                    onClick={needClick ? handleFullOpen : null}
+                    iconMu={PlusIcon}
+                    position="relative"
+                    variant="extended"
+                />
+            )}
             <ModalFullContent
                 contentComp={AsyncComp}
                 fullOpen={fullOpen}

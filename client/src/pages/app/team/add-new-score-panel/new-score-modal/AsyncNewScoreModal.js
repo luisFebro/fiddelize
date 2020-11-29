@@ -1,6 +1,18 @@
 import React from "react";
 import FieldsHandler from "./FieldsHandler";
 
-export default function AsyncNewScoreModal({ closeModal }) {
-    return <FieldsHandler closeModal={closeModal} />;
+export default function AsyncNewScoreModal({
+    closeModal,
+    clientScoreOnly = false, // quickRegister form
+    clientName = false, // quickRegister form
+    handleCustomerScore,
+}) {
+    return (
+        <FieldsHandler
+            closeModal={closeModal}
+            clientScoreOnly={clientScoreOnly}
+            clientName={clientName}
+            handleCustomerScore={handleCustomerScore}
+        />
+    );
 }

@@ -108,6 +108,9 @@ export default function ScoreCustomer({
     textColor,
     bizId,
     clientId,
+    clientScoreOnly,
+    handleCustomerScore,
+    closeModal,
 }) {
     const [score, setScore] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
@@ -142,6 +145,13 @@ export default function ScoreCustomer({
     };
 
     const handleSuccessScore = () => {
+        if (clientScoreOnly) {
+            handleCustomerScore(score);
+            setFullOpen(false);
+            closeModal();
+            return;
+        }
+
         if (!clientId) {
             return showSnackbar(
                 dispatch,
@@ -189,15 +199,17 @@ export default function ScoreCustomer({
                     </ul>
                 </span>
             </h2>
-            <h2 className="text-purple text-normal font-weight-bold">
-                Feito por:
-                <br />
-                <span className="text-subtitle">
-                    <ul>
-                        <li>{memberName}.</li>
-                    </ul>
-                </span>
-            </h2>
+            {!clientScoreOnly && (
+                <h2 className="text-purple text-normal font-weight-bold">
+                    Feito por:
+                    <br />
+                    <span className="text-subtitle">
+                        <ul>
+                            <li>{memberName}.</li>
+                        </ul>
+                    </span>
+                </h2>
+            )}
         </section>
     );
 

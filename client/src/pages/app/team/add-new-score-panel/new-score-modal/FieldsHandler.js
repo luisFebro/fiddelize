@@ -23,7 +23,12 @@ const setCustomerId = async (clientName, bizId) => {
     });
 };
 
-export default function FieldsHandler({ closeModal }) {
+export default function FieldsHandler({
+    closeModal,
+    clientScoreOnly = false,
+    clientName,
+    handleCustomerScore,
+}) {
     const [curr, setCurr] = useState({
         field: "name", // name
         customerName: "",
@@ -52,6 +57,22 @@ export default function FieldsHandler({ closeModal }) {
 
     const textColor = selectTxtStyle(backColor);
     const needDark = selectTxtStyle(backColor, { needDarkBool: true }); // for icons
+
+    if (clientScoreOnly) {
+        return (
+            <ScoreCustomer
+                clientScoreOnly={true}
+                closeModal={closeModal}
+                handleCustomerScore={handleCustomerScore}
+                setCurr={setCurr}
+                customerName={customerName || clientName}
+                textColor={textColor}
+                colorP={colorP}
+                bizId={bizId}
+                clientId={customerId}
+            />
+        );
+    }
 
     return (
         <Fragment>

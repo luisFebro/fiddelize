@@ -86,3 +86,4 @@ export const readTempScoreList = (userId) =>
     `/api/user/cli-user/temp-score/list?userId=${userId}`;
 export const setLastScoreAsDone = (userId) =>
     `/api/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
+export const encryptLinkScore = () => `/api/user/cli-user/temp-score/encrypt`; // POST

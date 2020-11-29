@@ -17,6 +17,7 @@ import validatePhone from "../../../../../../utils/validation/validatePhone";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import debounce from "../../../../../../utils/performance/debounce";
+import AddScoreCTAs from "./from-add-score/AddScoreCTAs";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -84,6 +85,7 @@ export default function AsyncShowNewContactForm({
     entryAnimation,
     loadData,
     isNewMember,
+    handleScoreToLink,
 }) {
     const [data, setData] = useState({
         name: "",
@@ -91,7 +93,7 @@ export default function AsyncShowNewContactForm({
     });
     const { name, phone } = data;
     const [dataMean, setDataMean] = useState({
-        selectedMean: "number",
+        selectedMean: "selecione um modo:",
         job: "vendas", // only for team members
         email: null,
     });
@@ -213,7 +215,7 @@ export default function AsyncShowNewContactForm({
                         handleEvents(e, {
                             setData,
                             newValue: name.cap(),
-                            field: "selectedOpt", // i am omitting this because if user jump to the last field, it will focus back on the second field.
+                            field: "fieldMean",
                         })
                     }
                     onBlur={(e) =>
@@ -221,7 +223,7 @@ export default function AsyncShowNewContactForm({
                             setData,
                             newValue: name.cap(),
                             eventName: "blur",
-                            field: "selectedOpt", // this is the essential fields which can be either phone or email in this form.
+                            field: "fieldMean",
                         })
                     }
                     autoComplete="off"
@@ -315,15 +317,13 @@ export default function AsyncShowNewContactForm({
             {needPhoneField && (
                 <div
                     className={`${
-                        isQuickRegister
-                            ? "animated fadeInUp fast mt-3 mb-5"
-                            : "mt-3"
+                        isQuickRegister ? "animated fadeInUp fast my-3" : "mt-3"
                     }`}
                 >
                     Contato
                     <TextField
                         required
-                        id="selectedOpt"
+                        id="selectedOpt" // this is the essential fields which can be either phone or email in this form.
                         margin="dense"
                         name="phone"
                         value={phone}
@@ -357,7 +357,7 @@ export default function AsyncShowNewContactForm({
             )}
 
             {needEmailField && (
-                <div className="animated fadeInUp fast mt-3 mb-5">
+                <div className="animated fadeInUp fast my-3">
                     Email
                     <TextField
                         required
@@ -381,6 +381,12 @@ export default function AsyncShowNewContactForm({
                         }}
                     />
                 </div>
+            )}
+            {isQuickRegister && (needPhoneField || needEmailField) && (
+                <AddScoreCTAs
+                    clientName={name}
+                    handleScoreToLink={handleScoreToLink}
+                />
             )}
         </form>
     );
