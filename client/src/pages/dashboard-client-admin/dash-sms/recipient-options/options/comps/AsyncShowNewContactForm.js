@@ -382,12 +382,14 @@ export default function AsyncShowNewContactForm({
                     />
                 </div>
             )}
-            {isQuickRegister && (needPhoneField || needEmailField) && (
-                <AddScoreCTAs
-                    clientName={name}
-                    handleScoreToLink={handleScoreToLink}
-                />
-            )}
+            {isQuickRegister &&
+                !isNewMember &&
+                (needPhoneField || needEmailField) && (
+                    <AddScoreCTAs
+                        clientName={name}
+                        handleScoreToLink={handleScoreToLink}
+                    />
+                )}
         </form>
     );
 

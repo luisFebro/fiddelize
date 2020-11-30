@@ -39,6 +39,7 @@ import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
+import { setStorageRegisterDone } from "./helpers";
 
 const filter = getFilterDate();
 // bizSysId for validation only since when the user is runningthe app
@@ -223,6 +224,7 @@ function Register({
                 return;
             }
 
+            setStorageRegisterDone();
             // setRun(dispatch, "ProCreditsBadge") // update total credits after registration...
 
             ReactGA.event({
@@ -268,7 +270,10 @@ function Register({
                     <RadiusBtn
                         size="small"
                         title="Faça login"
-                        onClick={() => setLoginOrRegister("login")}
+                        onClick={() => {
+                            setStorageRegisterDone();
+                            setLoginOrRegister("login");
+                        }}
                         backgroundColor={
                             "var(--themeSDark--" + selfThemeSColor + ")"
                         }

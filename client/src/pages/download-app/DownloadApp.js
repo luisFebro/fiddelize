@@ -7,10 +7,7 @@ import checkIfElemIsVisible from "../../utils/window/checkIfElemIsVisible";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import { readClientAdmin } from "../../redux/actions/userActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
-import lStorage, {
-    setSystemOp,
-    needAppRegisterOp,
-} from "../../utils/storage/lStorage";
+import lStorage from "../../utils/storage/lStorage";
 import { useStoreDispatch } from "easy-peasy";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
@@ -21,7 +18,8 @@ import useBackColor from "../../hooks/useBackColor";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import ClientMemberText from "./app-type-texts/ClientMemberText";
 import getQueries from "./helpers/getQueries";
-import { setMultiVar } from "../../hooks/storage/useVar";
+import { handleRoleStorage } from "./helpers";
+import { setVar } from "../../hooks/storage/useVar";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -31,8 +29,6 @@ const iconStyle = {
     color: "var(--mainWhite)",
     filter: "drop-shadow(.5px .5px 1.5px black)",
 };
-
-const appSystem = lStorage("getItems", { collection: "appSystem" });
 
 const getStyles = ({ isCliAdmin, pColor }) => ({
     icon: {
@@ -56,6 +52,16 @@ const getStyles = ({ isCliAdmin, pColor }) => ({
 // custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1
 
 export default function DownloadApp({ match, location }) {
+    const [isPageReady, setPageReady] = useState(false);
+    let [userName, setUserName] = useState(match.params.userName);
+    const [run, setRun] = useState(false);
+    const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
+    const [downloadAvailable, setDownloadAvailable] = useState(false);
+    const [analysis, setAnalysis] = useState(true);
+
+    userName = userName && userName.replace(/\+/g, " ").cap();
+
+    // MAIN VARIABLES
     const [
         bizName,
         bizId,
@@ -70,56 +76,55 @@ export default function DownloadApp({ match, location }) {
         isCliMember,
         isCliUser,
         isFromAdminPanel,
+        // others
         isValidRoleType,
+        isLinkInvalid,
+        whichRole,
     ] = getQueries({
         location,
     });
+    // END MAIN VARIABLES
 
-    // delete these variables after user successfully registered
-    useEffect(() => {
-        if (isCliMember || isBizTeam) {
-            setMultiVar([{ needRegister: true }]);
-        }
-        if (isCliUser) {
-            setMultiVar([{ needRegister: true }, { tempScore: userScore }]);
-        }
-    }, [isCliUser, isCliMember, isBizTeam, userScore]);
-
+    // STYLES
     const styles = getStyles({ isCliAdmin, pColor });
+    const txtPColor = selectTxtStyle(pColor);
+    const txtBackColor = selectTxtStyle(backColor);
+    // END STYLES
+
+    // HOOKS
+    useEffect(() => {
+        checkIfElemIsVisible(".target-download", (res) => setRun(res));
+        if (run) {
+            setTimeout(() => setAnalysis(false), 5000);
+        }
+    }, [run]);
+
+    useEffect(() => {
+        setTimeout(() => setPageReady(true), 2000);
+    }, []);
+
+    useEffect(() => {
+        if (isCliUser && userScore) {
+            setVar({ tempScore: userScore });
+        }
+    }, [isCliUser, userScore]);
 
     useAnimateElem(".download-app--txt", {
         animaIn: "fadeInUp",
         speed: "normal",
     });
+
     useBackColor(
         `var(--themeBackground--${
             backColor === "undefined" ? "default" : backColor
         })`
     );
-
-    const [isPageReady, setPageReady] = useState(false);
-    useEffect(() => {
-        setTimeout(() => setPageReady(true), 2000);
-    }, []);
-
-    const isAdminLoggedIn =
-        appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
-    if (isCliAdmin) {
-        lStorage("setItems", setSystemOp("cliente-admin", bizId));
-    }
-    if (isCliUser && !isAdminLoggedIn) {
-        lStorage("setItems", setSystemOp("cliente", bizId));
-        lStorage("setItem", { ...needAppRegisterOp, value: true });
-    } // L
-
-    let [userName, setUserName] = useState(match.params.userName);
-    userName = userName && userName.replace(/\+/g, " ").cap();
-    const [run, setRun] = useState(false);
-    const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
-    const [downloadAvailable, setDownloadAvailable] = useState(false);
-    const [analysis, setAnalysis] = useState(true);
-
     const dispatch = useStoreDispatch();
+    // END HOOKS
+
+    // STORAGE
+    handleRoleStorage({ whichRole, bizId });
+    // admin app config
     const {
         selfBizLogoImg,
         selfMilestoneIcon,
@@ -127,6 +132,18 @@ export default function DownloadApp({ match, location }) {
         selfThemeSColor,
         selfThemeBackColor,
     } = useClientAdmin();
+
+    useEffect(() => {
+        readClientAdmin(dispatch, bizId).then((res) => {
+            if (res.status !== 200)
+                return showSnackbar(
+                    dispatch,
+                    "Ocorreu um problema. Verifique sua conexão",
+                    "error"
+                );
+            setNeedSelfServiceData(true);
+        });
+    }, [bizId]);
 
     if (needSelfServiceData) {
         const clientAdminData = {
@@ -142,25 +159,8 @@ export default function DownloadApp({ match, location }) {
         };
         lStorage("setItems", clientAdminColl);
     }
-
-    useEffect(() => {
-        readClientAdmin(dispatch, bizId).then((res) => {
-            if (res.status !== 200)
-                return showSnackbar(
-                    dispatch,
-                    "Ocorreu um problema. Verifique sua conexão",
-                    "error"
-                );
-            setNeedSelfServiceData(true);
-        });
-    }, [bizId]);
-
-    useEffect(() => {
-        checkIfElemIsVisible(".target-download", (res) => setRun(res));
-        if (run) {
-            setTimeout(() => setAnalysis(false), 5000);
-        }
-    }, [run]);
+    // end admin app config
+    // END STORAGE
 
     const showSpinner = () =>
         !isPageReady && <Spinner marginY={600} size="large" logo="white" />;
@@ -233,9 +233,6 @@ export default function DownloadApp({ match, location }) {
             />
         </div>
     );
-
-    const txtPColor = selectTxtStyle(pColor);
-    const txtBackColor = selectTxtStyle(backColor);
 
     const showClientUserText = () => (
         <section
@@ -393,8 +390,6 @@ export default function DownloadApp({ match, location }) {
         );
     };
 
-    const isLinkInvalid = !bizName || !bizId || !isValidRoleType;
-
     const handleAppTypeText = () => {
         const props = {
             bizLogo,
@@ -439,10 +434,6 @@ export default function DownloadApp({ match, location }) {
     );
 }
 
-/* COMMENTS
-n1: LESSON: lStorage does not work with useEffect. just declare in the function body normally...
-If you see an error in JSON position, also check local storage for missing comma while editing...
-*/
 /*
 <p>{!isInstalled ? parse("<br /><br />Foi instalado.<br/>Visite sua galeria<br />de Apps") : ""}</p>
 FOR TESTING VERSIONS: <span className="text-right">{"t5"}</span>

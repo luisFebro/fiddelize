@@ -157,7 +157,7 @@ function ClientMobileApp({ location, history }) {
     useEffect(() => {
         if (needAppRegister) {
             setLoginOrRegister("register");
-            lStorage("setItem", { ...needAppRegisterOp, value: false });
+            // this is set to false just after registration with setStorageRegisterDone.
         }
     }, [needAppRegister]);
 
