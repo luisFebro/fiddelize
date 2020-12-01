@@ -7,6 +7,7 @@ export default function generateAppDownloadLink({
     bizCodeName,
     payload,
     linkScore,
+    linkId,
 }) {
     let link;
 
@@ -33,7 +34,7 @@ export default function generateAppDownloadLink({
         name
             ? (link = `${CLIENT_URL}/app/${getFirstName(
                   name.toLowerCase()
-              )}_${onlyBizCode}${linkScore ? `:${linkScore}` : ""}`)
+              )}_${onlyBizCode}${linkId}${linkScore ? `:${linkScore}` : ""}`)
             : (link = `${CLIENT_URL}/app/${onlyBizCode}`);
     }
 

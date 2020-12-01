@@ -4,13 +4,33 @@ import lStorage, {
 } from "../../../utils/storage/lStorage";
 import { setMultiVar, store } from "../../../hooks/storage/useVar";
 
-export const handleRoleStorage = ({ whichRole, bizId, registeredBy }) => {
+export const handleRoleStorage = ({
+    userScore,
+    whichRole,
+    bizId,
+    memberId,
+    memberJob,
+}) => {
     // n1
-    setMultiVar([{ role: whichRole }, { registeredBy }], store.user);
+    const isCliUser = whichRole === "cliente";
+    let userPayload;
+
+    if (isCliUser) {
+        userPayload = [
+            { lastRegisterBizId: bizId },
+            { memberId },
+            { memberRole: whichRole },
+            { memberJob: memberJob ? memberJob : "admin" },
+            { role: whichRole },
+            { userScore },
+        ];
+    } else {
+        userPayload = [{ lastRegisterBizId: bizId }, { role: whichRole }];
+    }
+
+    setMultiVar(userPayload, store.user);
     lStorage("setItems", setSystemOp(whichRole, bizId));
     lStorage("setItem", { ...needAppRegisterOp, value: true });
-
-    console.log("role storate set");
 };
 
 /* COMMENTS

@@ -19,7 +19,6 @@ import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import ClientMemberText from "./app-type-texts/ClientMemberText";
 import getQueries from "./helpers/getQueries";
 import { handleRoleStorage } from "./helpers";
-import { setVar } from "../../hooks/storage/useVar";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -70,6 +69,7 @@ export default function DownloadApp({ match, location }) {
         pColor,
         userScore,
         memberJob,
+        linkId,
         // roles
         isBizTeam,
         isCliAdmin,
@@ -103,12 +103,6 @@ export default function DownloadApp({ match, location }) {
         setTimeout(() => setPageReady(true), 2000);
     }, []);
 
-    useEffect(() => {
-        if (isCliUser && userScore) {
-            setVar({ tempScore: userScore });
-        }
-    }, [isCliUser, userScore]);
-
     useAnimateElem(".download-app--txt", {
         animaIn: "fadeInUp",
         speed: "normal",
@@ -123,7 +117,13 @@ export default function DownloadApp({ match, location }) {
     // END HOOKS
 
     // STORAGE
-    handleRoleStorage({ whichRole, bizId });
+    handleRoleStorage({
+        userScore,
+        whichRole,
+        bizId,
+        memberId: linkId,
+        memberJob,
+    });
     // admin app config
     const {
         selfBizLogoImg,

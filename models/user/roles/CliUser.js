@@ -11,6 +11,10 @@ const data = {
     ...profileSchema,
     clientUserData: ClientUserSchema,
     filter: DefaultFilterSchema,
+    register: {
+        id: String,
+        job: String, // like sales, admin
+    },
 };
 // END PROFILE
 

@@ -272,7 +272,9 @@ exports.redirectUrlLink = async (req, res) => {
     if (!mainHash) return res.status(400).json({ msg: "Link Inválido" });
 
     let code = mainHash;
+
     let name;
+    let linkId;
     const needSplit = mainHash.includes("_");
     if (needSplit) {
         const slashInd = mainHash.indexOf("_");
@@ -297,12 +299,19 @@ exports.redirectUrlLink = async (req, res) => {
         userScore = thisUserScore;
     }
 
+    const needStaffLinkId = code && code.length > 7;
+    if (needStaffLinkId) {
+        const fixedCode = code;
+        code = code.slice(0, -1); // remove the last char cuz the eighth number is link id for members
+        linkId = Number(fixedCode.slice(-1)); // the last char.
+    }
+
     const user = await User("cliente-admin")
         .findOne({
             "clientAdminData.bizCodeName": { $regex: `${code}`, $options: "i" },
         })
         .select(
-            "_id role clientAdminData.bizName clientAdminData.selfBizLogoImg clientAdminData.selfThemeBackColor clientAdminData.selfThemePColor"
+            "_id role clientAdminData.bizName clientAdminData.selfBizLogoImg clientAdminData.selfThemeBackColor clientAdminData.selfThemePColor clientAdminData.memberIdList"
         )
         .catch((err) => {
             res.json({ error: `${err}` });
@@ -311,7 +320,7 @@ exports.redirectUrlLink = async (req, res) => {
     if (!user || user.role !== "cliente-admin")
         return res.status(400).json({ msg: "Link Inválido" });
 
-    const finalUrl = getFinalUrl({ user, name, memberJob, userScore });
+    const finalUrl = getFinalUrl({ user, name, memberJob, userScore, linkId });
 
     res.json(finalUrl);
 };

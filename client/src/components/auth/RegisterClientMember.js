@@ -40,13 +40,8 @@ import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import { setStorageRegisterDone } from "./helpers";
-
+import useData from "../../hooks/useData";
 const filter = getFilterDate();
-// bizSysId for validation only since when the user is runningthe app
-// for the first time, businessId returns "0"...
-const collection = { collection: "appSystem" };
-const appSystem = lStorage("getItems", collection);
-const bizSysId = appSystem && appSystem.businessId;
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -83,6 +78,7 @@ function Register({
         selfThemeBackColor,
         selfBizLogoImg,
         bizName,
+        bizCodeName,
     } = useClientAdmin();
 
     const [data, setData] = useState({
@@ -94,7 +90,7 @@ function Register({
         cpf: "",
         gender: "selecione forma tratamento",
         clientMemberData: {
-            bizId: bizSysId,
+            bizId: "",
             filterBirthday: "",
             job: "vendas",
         },
@@ -113,9 +109,11 @@ function Register({
 
     let { role, name, email, gender, birthday, cpf, phone } = data;
 
-    useEffect(() => {
-        const isReady = selfBizLogoImg && bizName;
+    const [lastRegisterBizId] = useData(["lastRegisterBizId"]);
 
+    const isReady = selfBizLogoImg && bizName && lastRegisterBizId;
+
+    useEffect(() => {
         if (isReady) {
             setTimeout(() => {
                 // this timeout is used because the data is not set otherwise. The reason is unknown.
@@ -123,10 +121,14 @@ function Register({
                     ...prev,
                     bizImg: selfBizLogoImg,
                     bizName,
+                    clientMemberData: {
+                        ...data.clientMemberData,
+                        bizId: lastRegisterBizId,
+                    },
                 }));
             }, 4000);
         }
-    }, [selfBizLogoImg, bizName]);
+    }, [isReady, selfBizLogoImg, bizName]);
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
     // }));
@@ -192,13 +194,6 @@ function Register({
 
     const registerThisUser = (e) => {
         setActionBtnDisabled(true);
-        if (!bizSysId || bizSysId === "0")
-            return showSnackbar(
-                dispatch,
-                "Nenhuma chave de acesso encontrada. Faça login se for admin ou desinstale e baixe o app novamente.",
-                "warning",
-                7000
-            );
 
         const newUser = {
             ...data,

@@ -67,6 +67,7 @@ function Login({
             twoLastCpfDigits,
             token,
             gender,
+            linkId,
             // selfBizLogoImg,
         } = res.data;
 
@@ -91,6 +92,7 @@ function Login({
                 { rememberAccess: true },
                 { verifPass: verificationPass },
                 { gender },
+                { linkId: 0 },
             ];
             setMultiVar(storeElems, store.user);
 
@@ -165,6 +167,23 @@ function Login({
                     // );
                 }
             }
+        }
+
+        if (role === "cliente-membro") {
+            const storeElems = [
+                { role },
+                { gender },
+                {
+                    name: getFirstName(name && name.cap(), {
+                        addSurname: true,
+                    }),
+                },
+                { firstName: getFirstName(name && name.cap()) },
+                { userId: authUserId },
+                { rememberAccess: true },
+                { linkId },
+            ];
+            setMultiVar(storeElems, store.user);
         }
 
         if (role === "cliente") {

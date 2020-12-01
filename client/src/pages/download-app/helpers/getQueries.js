@@ -9,7 +9,7 @@ const getWhichRole = (queries) => {
 };
 
 export default function getQueries({ location }) {
-    const mainData = ["negocio", "id", "logo", "bc", "pc", "sc", "mj"];
+    const mainData = ["negocio", "id", "logo", "bc", "pc", "sc", "mj", "li"];
 
     const mainQueries = mainData.map((q) => getQueryByName(q, location.search));
     const [bizName, bizId] = mainQueries;

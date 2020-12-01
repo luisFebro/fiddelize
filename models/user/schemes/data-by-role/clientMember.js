@@ -27,6 +27,7 @@ const clientMemberData = {
     notifications: [NotificationsSchema],
     onceChecked: OnceCheckedSchema,
     taskList: [TaskListSchema],
+    linkId: Number, // to identify the member when registering client-users
 };
 
 const ClientMemberSchema = new Schema(clientMemberData, { _id: false });

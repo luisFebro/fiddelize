@@ -30,14 +30,14 @@ const handleCliAdminData = ({ data, cpf }) => {
 };
 
 const handleCliMemberData = ({ data, cpf }) => {
-    const { _id, name, role, gender, clientAdminData } = data;
+    const { _id, name, role, gender, clientMemberData } = data;
 
     return {
         name,
         role,
         gender,
         authUserId: _id,
-        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+        linkId: clientMemberData && clientMemberData.linkId,
     };
 };
 

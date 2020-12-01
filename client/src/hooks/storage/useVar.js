@@ -118,6 +118,25 @@ export const removeVar = (key, options = {}) => {
         );
 };
 
+// e.g ["elem1", "elem2"]
+export const removeMultiVar = async (strArray, options = {}) => {
+    const { storeName } = options;
+    if (strArray && !strArray.length) return;
+
+    const promises = strArray.map((strElem) => {
+        return variablesStore(storeName)
+            .removeItem(strElem)
+            .then((res) => null)
+            .catch((err) =>
+                console.log(
+                    `the was an error removing key ${strElem}. Details: ${err}`
+                )
+            );
+    });
+
+    return await Promise.all(promises);
+};
+
 function getStrVersion(str) {
     if (!str) return;
     const underscoreInd = str.indexOf("_");

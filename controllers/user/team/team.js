@@ -63,9 +63,8 @@ exports.setTempScoreAndMemberData = async (req, res) => {
         });
     };
 
-    // n1. Promise.all fail-fast behavior - even if the last promise is the rejected, all other won't revolse
-    // Promise.race The Promise.race() method returns a promise that fulfills or rejects as soon as one of the promises in an iterable fulfills or rejects, with the value or reason from that promise.
-    const userPromises = await Promise.race([
+    // n1. Promise.all fail-fast behavior - even if the last promise is the rejected, all other won't revolve. But there is no cancellation, then it means the execution on DB, for instance, will still be doen...
+    const userPromises = await Promise.all([
         sendTempUserScore(),
         sendUserNotif(),
     ]).catch((err) => {

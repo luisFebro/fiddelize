@@ -99,7 +99,6 @@ const bizPlanListData = {
     periodicityBr: { type: String, enum: ["mensal", "anual"] }, // monthly or yearly
 };
 const BizPlanListSchema = new Schema(bizPlanListData, { _id: true });
-
 // END SCHEMES
 
 const clientAdminData = {
@@ -138,6 +137,8 @@ const clientAdminData = {
     totalClientUserScores: { type: Number, default: 0 },
     totalClientUsers: { type: Number, default: 0 },
     totalClientMembers: { type: Number, default: 0 },
+
+    memberIdList: Array, // e.g numerical sequence id ["123abc", "321def"]
 
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },

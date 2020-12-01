@@ -20,7 +20,6 @@ exports.getMemberTaskList = ({
                 job: clientMemberData && clientMemberData.job,
             };
 
-            console.log("commonData", commonData);
             if (taskList) {
                 taskList.forEach((t) => {
                     if (filterBy === "today") {
@@ -46,7 +45,6 @@ exports.getMemberTaskList = ({
             }
         });
 
-        console.log("finalMemberList", finalMemberList);
         return finalMemberList;
     }
 

@@ -1,7 +1,7 @@
 // URLs ONLY
 // user
-export const readUser = (userId, role) =>
-    `/api/user/${userId}?noResponse=true&thisRole=${role}`;
+export const readUser = (userId, role, noResponse = true) =>
+    `/api/user/${userId}?noResponse=${noResponse}&thisRole=${role}`;
 export const updateUser = (userId) => `/api/user/${userId}?noResponse=true`;
 export const removeUser = (userId) => `/api/user/${userId}`;
 

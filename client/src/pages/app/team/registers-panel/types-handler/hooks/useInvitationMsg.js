@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import generateAppDownloadLink from "../../../../../../utils/biz/generateAppDownloadLink";
 import getFirstName from "../../../../../../utils/string/getFirstName";
+import useData from "../../../../../../hooks/useData";
 
 export default function useInvitationMsg({
     name,
@@ -12,13 +13,17 @@ export default function useInvitationMsg({
     bizCodeName,
 }) {
     const [msg, setMsg] = useState("");
+    const [linkId] = useData(["linkId"]);
 
     useEffect(() => {
+        if (linkId === "...") return;
+
         const downloadLink = generateAppDownloadLink({
             bizCodeName,
             name,
             payload,
             linkScore,
+            linkId,
         });
 
         const handleTxt = () => {
@@ -39,7 +44,7 @@ export default function useInvitationMsg({
             const text = handleTxt();
             setMsg(text);
         }
-    }, [name, linkScore]);
+    }, [name, linkScore, linkId]);
 
     return msg;
 }

@@ -16,6 +16,7 @@ const {
     getRoleDataName,
 } = require("../../models/user/schemes/data-by-role/main");
 const { addMemberTaskHistory } = require("../user/team/team");
+const { createLinkId } = require("./helpers/handleLinkId");
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
 // bacause not found. To avoid this, try write userId if in a parameter as default.
@@ -132,8 +133,9 @@ exports.register = async (req, res) => {
         bizName,
         tempScore,
         memberRole,
-        memberId,
+        register: thisRegister,
     } = req.body;
+    console.log("thisRegister", thisRegister);
 
     const ThisUser = User(role);
     const newUser = new ThisUser({
@@ -149,6 +151,7 @@ exports.register = async (req, res) => {
         clientMemberData,
         bizTeamData,
         filter,
+        register: thisRegister, // only userClient
     });
 
     const handleMsg = () => {
@@ -187,14 +190,20 @@ exports.register = async (req, res) => {
             _id,
     });
 
-    const isUserCli = role === "cliente";
-    if (isUserCli) {
+    const isCliUser = role === "cliente";
+    const isCliMember = role === "cliente-membro";
+    if (isCliUser) {
         await addMemberTaskHistory({
             clientName: name,
             tempScore,
             memberRole,
-            memberId,
+            memberId: thisRegister.id,
         });
+    }
+
+    if (isCliMember) {
+        const adminId = clientMemberData.bizId;
+        await createLinkId(_id, { adminId });
     }
 
     res.json({
