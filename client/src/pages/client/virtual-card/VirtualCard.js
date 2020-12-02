@@ -33,9 +33,12 @@ const getTtsStore = ({ isShe, isSmall }) => ({
                 : "Aqui está seus novos pontos do seu cartão virtual de fidelidade. Experimente passar o mouse sobre o cartão para interagir",
         },
         {
-            audio: `${defaultPath}/new-card/seu-novo-cartao-virtual-esta-aqui.mp3`,
-            text:
-                "Seu novo cartão virtual de fidelidade está aqui e pronto para ser usado.",
+            audio: `${defaultPath}/new-card/${
+                isShe ? "s" : ""
+            }he-olha-ai-seu-novo-cartao-d-amig73r.mp3`,
+            text: `Olha ai seu novo cartão de fidelidade. E você já pode usar, amig${
+                isShe ? "a" : "o"
+            }`,
         },
     ],
     noCard: [
