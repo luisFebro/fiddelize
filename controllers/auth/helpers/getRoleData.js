@@ -38,6 +38,7 @@ const handleCliMemberData = ({ data, cpf }) => {
         gender,
         authUserId: _id,
         linkId: clientMemberData && clientMemberData.linkId,
+        memberJob: clientMemberData && clientMemberData.job,
     };
 };
 

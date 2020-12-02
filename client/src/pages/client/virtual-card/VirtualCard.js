@@ -117,7 +117,7 @@ function VirtualCard({ history }) {
     const { data: cardsData, error } = useAPI({
         url: readTempScoreList(userId),
         needAuth: true,
-        params: { onlyLastAvailable: true },
+        params: { onlyLastAvailable: true, isAdmin: isCliAdmin },
         trigger: userId !== "...",
     });
 

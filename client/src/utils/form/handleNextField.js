@@ -38,7 +38,6 @@ export const handleNextField = (e, currField, options = {}) => {
         const nextValueField = `value${Number(fieldNum) + 1}`;
 
         const elemToDisplay = document.getElementById(nextField);
-        console.log("elemToDisplay", elemToDisplay);
 
         elemToDisplay.classList.add("d-block");
         handleFocus(nextValueField, { delay: 500 });
@@ -53,14 +52,12 @@ export const handleNextField = (e, currField, options = {}) => {
     if (event === "onKeyPress") {
         if (isKeyPressed(e, "Enter")) {
             const needRun = addFieldToQueue();
-            console.log("needRun", needRun);
             if (needRun) runNextField();
 
             runCallback();
         }
     } else {
         const needRun = addFieldToQueue(true);
-        console.log("needRun addFieldToQueue(true)", needRun);
         if (needRun) runNextField();
 
         runCallback();

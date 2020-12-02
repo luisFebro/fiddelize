@@ -75,6 +75,7 @@ function ClientMobileApp({ location, history }) {
         "firstName",
         "name",
     ]);
+
     const loadingData = Boolean(rememberAccess === "...");
 
     let { isAuthUser } = useAuthUser();
@@ -264,10 +265,7 @@ function ClientMobileApp({ location, history }) {
         loginOrRegister === "login" && accessCheck && showLogin();
 
     return (
-        <div
-            style={{ overflowX: "hidden" }}
-            className={`theme-back--${selfThemeBackColor}`}
-        >
+        <div style={{ overflowX: "hidden" }}>
             <span className="text-right text-white for-version-test">{""}</span>
             {showLogo()}
             <AppTypeBubble

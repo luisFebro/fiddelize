@@ -63,7 +63,7 @@ const getSmsObj = ({ businessId, dispatch, name, meanPayload }) => ({
 });
 
 export default function QuickRegister({ formPayload, isNewMember }) {
-    useCount("QuickRegister");
+    // useCount("QuickRegister");
     const [data, setData] = useState({
         meanPayload: "",
         meanType: "", // number or email

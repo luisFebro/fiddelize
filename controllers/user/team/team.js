@@ -26,6 +26,7 @@ exports.setTempScoreAndMemberData = async (req, res) => {
         tempScore,
     } = req.body;
 
+    // search for already registered customers and get their _id
     if (needClientIdOnly) {
         const nameQuery = { name: clientName };
         const bizQuery = { "clientUserData.bizId": bizId };
@@ -101,7 +102,48 @@ exports.setTempScoreAndMemberData = async (req, res) => {
     }
 };
 
-// exclusive for new clients registration,
+exports.setCliUserScore = async ({
+    tempScore,
+    clientId,
+    bizId,
+    clientName,
+    memberId,
+}) => {
+    const sendTempUserScore = async () => {
+        const pushList = getPushFifo("clientUserData.tempScoreList", {
+            tempScore,
+            used: false,
+        });
+        // set score to a temporary variable in user doc on DB (OK)
+        return await User("cliente")
+            .findByIdAndUpdate(clientId, pushList)
+            .catch((err) => {
+                error: "Um erro ocorreu ao atualizar cliente.";
+            });
+    };
+
+    const notifData = {
+        cardType: "score",
+        subtype: "scorePlus",
+        recipient: { role: "cliente", id: clientId },
+        content: `tempScore:${tempScore};isRegisterFirstScore:yes`,
+    };
+
+    // send notification to cli-user about score (OK)
+    const sendUserNotif = async () => {
+        return await sendBackendNotification({ notifData }).catch((err) => {
+            error: "Um erro ocorreu ao atualizar cliente.";
+        });
+    };
+
+    return await Promise.all([sendTempUserScore(), sendUserNotif()]).catch(
+        (err) => {
+            res.status(500).json(err);
+        }
+    );
+};
+
+// exclusive for new clients REGISTER,
 // since newScores addition is embedded on setTempScoreAndMemberData above
 // This is that to avoid a new DB search.
 exports.addMemberTaskHistory = async ({

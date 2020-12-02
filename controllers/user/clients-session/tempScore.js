@@ -2,14 +2,39 @@ const User = require("../../../models/user");
 const generateAlphaNumeric = require("../../../utils/string/generateAlphaNumeric");
 const { jsEncrypt, jsDecrypt } = require("../../../utils/security/xCipher");
 
-exports.readTempScoreList = async (req, res) => {
-    const { userId, onlyLastAvailable = false } = req.query;
+// temp score is all scores which were added wirelessly by staff either by new and regular clients.
+// the link score is how all scores are safely encrypted and sent through a link.
 
-    const data = await User("cliente")
+// POST
+// token example: d%40.50
+// first 2 characters will be randomly generated
+// and followed by the user's score.
+exports.encryptLinkScore = async (req, res) => {
+    const { score } = req.body;
+
+    const salt = generateAlphaNumeric(2, "aA#!@");
+    const token = jsEncrypt(`${salt}${score}`);
+
+    res.json(token);
+};
+
+// GET - for security reasons, this method will be passed and handled to the server
+// it will be used in the backend register auth
+exports.decryptLinkScore = (encryptedScore) => {
+    const tokenRevealed = jsDecrypt(encryptedScore);
+
+    return Number(tokenRevealed.slice(2));
+};
+
+exports.readTempScoreList = async (req, res) => {
+    const { userId, onlyLastAvailable = false, isAdmin = false } = req.query;
+
+    const data = await User(isAdmin ? "cliente-admin" : "cliente")
         .findById(userId)
         .select("clientUserData.tempScoreList");
 
-    const tempList = data.clientUserData.tempScoreList;
+    const tempList = data && data.clientUserData.tempScoreList;
+    if (!tempList) return res.json([]);
 
     if (onlyLastAvailable) {
         const lastOne = tempList.find((s) => {
@@ -20,7 +45,6 @@ exports.readTempScoreList = async (req, res) => {
         return res.json(false);
     }
 
-    if (!tempList) return res.json([]);
     res.json(tempList);
 };
 
@@ -55,25 +79,4 @@ exports.setLastScoreAsDone = async (req, res) => {
     await data.save();
 
     res.json({ msg: "the last score was set" });
-};
-
-// POST
-// token example: d%40.50
-// first 2 characters will be randomly generated
-// and followed by the user's score.
-exports.encryptLinkScore = async (req, res) => {
-    const { score } = req.body;
-
-    const salt = generateAlphaNumeric(2, "aA#!@");
-    const token = jsEncrypt(`${salt}${score}`);
-
-    res.json(token);
-};
-
-// GET - for security reasons, this method will be passed and handled to the server
-// it will be used in the backend register auth
-exports.decryptLinkScore = (encryptedScore) => {
-    const tokenRevealed = jsDecrypt(encryptedScore);
-
-    return Number(tokenRevealed.slice(2));
 };

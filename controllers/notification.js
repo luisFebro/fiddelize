@@ -144,7 +144,7 @@ exports.sendNotification = (req, res) => {
 };
 
 exports.sendBackendNotification = ({ notifData }) => {
-    // required props: cardType, subtype, recipient: { role, id, }}
+    // required props: cardType, (subtype if any), recipient: { role, id, }}
     const {
         recipient: { role, id: recipientId },
     } = notifData;

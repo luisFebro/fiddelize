@@ -15,8 +15,10 @@ const { setNewAccount } = require("../user/account/account");
 const {
     getRoleDataName,
 } = require("../../models/user/schemes/data-by-role/main");
-const { addMemberTaskHistory } = require("../user/team/team");
+const { addMemberTaskHistory, setCliUserScore } = require("../user/team/team");
 const { createLinkId } = require("./helpers/handleLinkId");
+const { decryptLinkScore } = require("../user/clients-session/tempScore");
+const { sendBackendNotification } = require("../notification");
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
 // bacause not found. To avoid this, try write userId if in a parameter as default.
@@ -135,7 +137,6 @@ exports.register = async (req, res) => {
         memberRole,
         register: thisRegister,
     } = req.body;
-    console.log("thisRegister", thisRegister);
 
     const ThisUser = User(role);
     const newUser = new ThisUser({
@@ -193,12 +194,28 @@ exports.register = async (req, res) => {
     const isCliUser = role === "cliente";
     const isCliMember = role === "cliente-membro";
     if (isCliUser) {
+        const registerUserScore = decryptLinkScore(tempScore);
         await addMemberTaskHistory({
             clientName: name,
-            tempScore,
+            tempScore: registerUserScore,
             memberRole,
             memberId: thisRegister.id,
         });
+
+        const notifData = {
+            cardType: "welcome",
+            recipient: { role: "cliente", id: _id },
+        };
+
+        await sendBackendNotification({ notifData });
+
+        if (tempScore) {
+            await setCliUserScore({
+                tempScore: registerUserScore,
+                clientId: _id,
+            });
+            // Remove link from pending list in cli-admin
+        }
     }
 
     if (isCliMember) {

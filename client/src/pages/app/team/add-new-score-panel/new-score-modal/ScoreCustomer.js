@@ -87,7 +87,7 @@ const setUltimateData = async ({
 }) => {
     const body = {
         userId: bizId, // for auth only
-        bizId, // to check if isAdmin,
+        bizId,
         clientId,
         clientName,
         memberId,

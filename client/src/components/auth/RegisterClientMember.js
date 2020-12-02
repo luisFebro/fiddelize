@@ -111,7 +111,7 @@ function Register({
 
     const [lastRegisterBizId] = useData(["lastRegisterBizId"]);
 
-    const isReady = selfBizLogoImg && bizName && lastRegisterBizId;
+    const isReady = selfBizLogoImg && bizName && lastRegisterBizId !== "...";
 
     useEffect(() => {
         if (isReady) {
@@ -198,6 +198,14 @@ function Register({
         const newUser = {
             ...data,
         };
+
+        if (!lastRegisterBizId) {
+            showSnackbar(
+                dispatch,
+                "O ID do app não foi encontrado. Tente reinstalar o app na página de convite.",
+                "error"
+            );
+        }
 
         showSnackbar(
             dispatch,

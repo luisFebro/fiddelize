@@ -31,6 +31,7 @@ export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
     };
 
     const handleSuccessfulRegister = (payL) => {
+        // payL: { name, phone, email }
         togglePanel();
         payload.current = payL;
         setRun(dispatch, isNewMember ? "" : "RecordedClientsList");

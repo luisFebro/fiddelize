@@ -4,11 +4,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.8150.5";
+const latestVersion = "3.82.5";
 // PRÓXIMO:
 // sistema multi-conta (painel de cadastros)
 //  - serviço novvos membros - equipe dash -
-const updateDescription = "biz logic and new score panel pt2";
+const updateDescription = "biz logic and new score panel pt3";
 const history = [
     "cartão virtual 3D de fidelidade",
     "app da equipe",

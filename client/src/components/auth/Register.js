@@ -105,12 +105,14 @@ function Register({
     } = useClientAdmin();
 
     const [
+        staffId,
         memberId,
         memberRole,
         memberJob,
         userScore,
         lastRegisterBizId,
     ] = useData([
+        "userId",
         "memberId",
         "memberRole",
         "memberJob",
@@ -118,7 +120,7 @@ function Register({
         "lastRegisterBizId",
     ]);
 
-    const isReady = selfBizLogoImg && bizName && memberId;
+    const isReady = selfBizLogoImg && bizName && memberId !== "...";
     useEffect(() => {
         if (isReady) {
             setTimeout(() => {
@@ -128,11 +130,11 @@ function Register({
                     bizImg: selfBizLogoImg,
                     bizName,
                     register: {
-                        id: memberId,
-                        job: memberJob,
+                        id: memberId || staffId,
+                        job: memberJob || "admin",
                     },
                     tempScore: userScore,
-                    memberRole,
+                    memberRole: memberRole || role, // if not found memberRole, it means it is a complete register before sending link invitation.
                     clientUserData: {
                         ...data.clientUserData,
                         bizId: lastRegisterBizId,
@@ -219,6 +221,14 @@ function Register({
         let newUser = {
             ...data,
         };
+
+        if (!lastRegisterBizId) {
+            showSnackbar(
+                dispatch,
+                "O ID do app não foi encontrado. Tente reinstalar o app na página de convite.",
+                "error"
+            );
+        }
 
         showSnackbar(
             dispatch,

@@ -101,6 +101,8 @@ export default function AsyncShowNewContactForm({
     const [error, setError] = useState(null);
     const [readyMean, setReadyMean] = useState(false);
 
+    const isAfterCompleteRegister = Boolean(loadData && loadData.name);
+
     useEffect(() => {
         // transfer: set data to the parent component
         const needTransfer = loadData && selectedMean !== "selecione um modo:";
@@ -384,12 +386,20 @@ export default function AsyncShowNewContactForm({
             )}
             {isQuickRegister &&
                 !isNewMember &&
-                (needPhoneField || needEmailField) && (
+                (needPhoneField || needEmailField) &&
+                !isAfterCompleteRegister && (
                     <AddScoreCTAs
                         clientName={name}
                         handleScoreToLink={handleScoreToLink}
                     />
                 )}
+            {isAfterCompleteRegister && (
+                <p className="my-3 mx-3 text-small text-purple">
+                    <strong>Nota:</strong> O{" "}
+                    <strong>cadastro com pontos</strong> está disponível apenas
+                    para envio de convite sem cadastro na hora.
+                </p>
+            )}
         </form>
     );
 

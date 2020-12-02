@@ -44,6 +44,7 @@ export default function TypesHandler({ isNewMember = false }) {
     };
 
     const handleNewSendingEnv = (payload) => {
+        // payload: { name, phone, email }
         setOpen("quick");
         setFormPayload(payload);
     };

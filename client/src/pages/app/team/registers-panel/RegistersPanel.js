@@ -19,7 +19,7 @@ export default function RegistersPanel({ isNewMember = false }) {
 
     const styles = getStyles();
 
-    const readyTypesHandler = useDelay(3500);
+    const readyTypesHandler = useDelay(1500);
 
     const showHeader = () => (
         <Fragment>

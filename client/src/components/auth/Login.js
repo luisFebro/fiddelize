@@ -25,6 +25,17 @@ import getFirstName from "../../utils/string/getFirstName";
 
 const isApp = isThisApp();
 
+const sendWelcomeNotif = async ({ userId, role = "ambos-clientes" }) => {
+    // "ambos-clientes" add an welcome obj to cli-user as weel for test mode.
+    const notifOptions = {
+        role,
+        noToken: true, // allow notification without being loggedin
+    };
+    return await sendNotification(userId, "welcome", notifOptions);
+    // if (notifRes.status !== 200)
+    // return showSnackbar(dispatch, notifRes.data.msg, "error");
+};
+
 function Login({
     history,
     setLoginOrRegister,
@@ -68,6 +79,7 @@ function Login({
             token,
             gender,
             linkId,
+            memberJob,
             // selfBizLogoImg,
         } = res.data;
 
@@ -100,19 +112,10 @@ function Login({
 
             // Important: ONLY IMPLEMENT THIS IF THERE ARE USERS WITHOUT THIS PASS MISSING... otherwise, do not use this cond if all users already have one.
             if (!verificationPass) {
-                // "ambos-clientes" add an welcome obj to cli-user as weel for test mode.
-                const notifOptions = {
+                await sendWelcomeNotif({
+                    userId: authUserId,
                     role: "ambos-clientes",
-                    noToken: true,
-                };
-                const notifRes = await sendNotification(
-                    authUserId,
-                    "welcome",
-                    notifOptions
-                );
-                if (notifRes.status !== 200)
-                    return showSnackbar(dispatch, notifRes.data.msg, "error");
-
+                });
                 // showSnackbar(dispatch, notifRes.data.msg, "success");
                 showSnackbar(dispatch, "Verificando...", "warning", 3000);
                 setTimeout(
@@ -182,11 +185,13 @@ function Login({
                 { userId: authUserId },
                 { rememberAccess: true },
                 { linkId },
+                { memberJob },
             ];
             setMultiVar(storeElems, store.user);
         }
 
         if (role === "cliente") {
+            // the welcome msg is sent in the backend for client-user
             const storeElems = [
                 { role },
                 { gender },
