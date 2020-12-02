@@ -67,14 +67,29 @@ function ClientMobileApp({ location, history }) {
     useManageProServices();
     const dispatch = useStoreDispatch();
 
-    const [userId, rememberAccess, success, role, name, fullName] = useData([
+    const [
+        userId,
+        rememberAccess,
+        success,
+        role,
+        name,
+        fullName,
+        memberId,
+    ] = useData([
         "userId",
         "rememberAccess",
         "success",
         "role",
         "firstName",
         "name",
+        "memberId",
     ]);
+
+    useEffect(() => {
+        if (memberId !== "..." && memberId) {
+            setLoginOrRegister("register");
+        }
+    }, [memberId]);
 
     const loadingData = Boolean(rememberAccess === "...");
 

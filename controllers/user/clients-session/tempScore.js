@@ -27,14 +27,15 @@ exports.decryptLinkScore = (encryptedScore) => {
 };
 
 exports.readTempScoreList = async (req, res) => {
-    const { userId, onlyLastAvailable = false, isAdmin = false } = req.query;
+    let { userId, onlyLastAvailable = false, isAdmin = false } = req.query;
+    onlyLastAvailable = onlyLastAvailable === "true";
+    isAdmin = isAdmin === "true";
 
     const data = await User(isAdmin ? "cliente-admin" : "cliente")
         .findById(userId)
         .select("clientUserData.tempScoreList");
 
     const tempList = data && data.clientUserData.tempScoreList;
-    if (!tempList) return res.json([]);
 
     if (onlyLastAvailable) {
         const lastOne = tempList.find((s) => {
@@ -45,6 +46,7 @@ exports.readTempScoreList = async (req, res) => {
         return res.json(false);
     }
 
+    if (!tempList) return res.json([]);
     res.json(tempList);
 };
 
