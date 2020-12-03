@@ -146,7 +146,10 @@ export default function ScoreCustomer({
 
     const handleSuccessScore = () => {
         if (clientScoreOnly) {
-            handleCustomerScore(score);
+            const firstCliName = getFirstName(
+                customerName && customerName.toLowerCase()
+            );
+            handleCustomerScore(score, firstCliName);
             setFullOpen(false);
             closeModal();
             return;

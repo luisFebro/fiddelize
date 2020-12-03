@@ -28,10 +28,10 @@ export default function AddScoreCTAs({ clientName, handleScoreToLink }) {
         </p>
     );
 
-    const handleCustomerScore = (thisScore) => {
+    const handleCustomerScore = (thisScore, thisCliName) => {
         setData({ ...data, score: thisScore });
         const dbScore = convertBrToDollar(thisScore);
-        handleScoreToLink(dbScore);
+        handleScoreToLink(dbScore, thisCliName);
     };
 
     return (

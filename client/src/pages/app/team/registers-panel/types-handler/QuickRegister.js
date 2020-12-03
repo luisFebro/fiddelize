@@ -94,6 +94,8 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         trigger: isNewMember ? true : false,
     });
 
+    const [linkId] = useData(["linkId"]);
+
     const { businessId } = useAppSystem();
     const { bizName, bizCodeName } = useClientAdmin();
     const { name: userName } = useProfile();
@@ -105,13 +107,23 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         return "cliente";
     };
 
-    const handleScoreToLink = (dbScore) => {
+    const handleScoreToLink = (dbScore, cliFirstName) => {
+        if (linkId === "..." || !bizCodeName) return;
+        const indLastSlash = bizCodeName.lastIndexOf("-");
+        let bizCode = bizCodeName.slice(indLastSlash + 1);
+        bizCode = `${bizCode}${linkId}`;
+
         (async () => {
             const { data: scoreToken } = await getAPI({
                 method: "post",
                 url: encryptLinkScore(),
                 needAuth: true,
-                body: { score: dbScore, userId: businessId },
+                body: {
+                    score: dbScore,
+                    cliFirstName,
+                    bizCode,
+                    userId: businessId,
+                },
             });
 
             setData((prev) => ({
@@ -148,6 +160,8 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         verifPass,
         payload,
         bizCodeName,
+        linkId,
+        trigger: linkId !== "...",
     });
 
     // Actions

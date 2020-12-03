@@ -3,7 +3,7 @@ import { removeMultiVar, store } from "../../../hooks/storage/useVar";
 
 export const setStorageRegisterDone = () => {
     removeMultiVar(
-        ["memberId", "memberRole", "memberJob", "userScore"],
+        ["memberId", "memberRole", "memberJob", "userScore", "linkCode"],
         store.user
     ).then((res) => {
         lStorage("setItem", { ...needAppRegisterOp, value: false });

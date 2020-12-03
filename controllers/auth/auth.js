@@ -17,7 +17,10 @@ const {
 } = require("../../models/user/schemes/data-by-role/main");
 const { addMemberTaskHistory, setCliUserScore } = require("../user/team/team");
 const { createLinkId } = require("./helpers/handleLinkId");
-const { decryptLinkScore } = require("../user/clients-session/tempScore");
+const {
+    decryptLinkScore,
+    removeAllowedLinkBack,
+} = require("../user/clients-session/tempScore");
 const { sendBackendNotification } = require("../notification");
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
@@ -135,6 +138,7 @@ exports.register = async (req, res) => {
         bizName,
         tempScore,
         memberRole,
+        linkCode,
         register: thisRegister,
     } = req.body;
 
@@ -210,11 +214,16 @@ exports.register = async (req, res) => {
         await sendBackendNotification({ notifData });
 
         if (tempScore) {
-            await setCliUserScore({
-                tempScore: registerUserScore,
-                clientId: _id,
-            });
-            // Remove link from pending list in cli-admin
+            const runCliUser = async () =>
+                await setCliUserScore({
+                    tempScore: registerUserScore,
+                    clientId: _id,
+                });
+
+            const removeAllowedLink = async () =>
+                await removeAllowedLinkBack(linkCode, clientUserData.bizId);
+
+            await Promise.all([runCliUser(), removeAllowedLink()]);
         }
     }
 

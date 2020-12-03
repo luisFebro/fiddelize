@@ -6,16 +6,18 @@ const { jsEncrypt, jsDecrypt } = require("../../../utils/security/xCipher");
 // the link score is how all scores are safely encrypted and sent through a link.
 
 // POST
-// token example: d%40.50
-// first 2 characters will be randomly generated
-// and followed by the user's score.
+// token example: d%40.50 - first 2 characters will be randomly generated and followed by the user's score.
 exports.encryptLinkScore = async (req, res) => {
-    const { score } = req.body;
-
+    const { score, cliFirstName, bizCode, userId: bizId } = req.body;
     const salt = generateAlphaNumeric(2, "aA#!@");
-    const token = jsEncrypt(`${salt}${score}`);
+    const scoreToken = jsEncrypt(`${salt}${score}`);
 
-    res.json(token);
+    //e.g app/alan_yvs493z0:5d700207
+    const invitationLinkCode = `${cliFirstName}_${bizCode}:${scoreToken}`;
+
+    await addInvitaLink(invitationLinkCode, bizId);
+
+    res.json(scoreToken);
 };
 
 // GET - for security reasons, this method will be passed and handled to the server
@@ -82,3 +84,39 @@ exports.setLastScoreAsDone = async (req, res) => {
 
     res.json({ msg: "the last score was set" });
 };
+
+// INVITATION LINK VALIDATION
+async function addInvitaLink(linkCode, bizId) {
+    const pushObj = {
+        "clientAdminData.allowedTempLinks": linkCode,
+    };
+    return await User("cliente-admin").findByIdAndUpdate(bizId, {
+        $push: pushObj,
+    });
+}
+
+exports.removeAllowedLinkBack = async (linkCode, bizId) => {
+    const pullObj = {
+        "clientAdminData.allowedTempLinks": linkCode,
+    };
+    return await User("cliente-admin").findByIdAndUpdate(bizId, {
+        $pull: pullObj,
+    });
+};
+
+// GET
+exports.isLinkAllowed = async (req, res) => {
+    const { linkCode, bizId } = req.query;
+
+    const bizData = await User("cliente-admin")
+        .findById(bizId)
+        .select("-_id clientAdminData.allowedTempLinks");
+
+    const allowedList = bizData.clientAdminData.allowedTempLinks;
+
+    if (!allowedList || !allowedList.length) return res.json(false);
+
+    const decision = allowedList.includes(linkCode);
+    return res.json(decision);
+};
+// END INVITATION LINK VALIDATION

@@ -84,6 +84,7 @@ function Register({
         register: {},
         tempScore: "", // for member tasks newClient Record
         memberRole: "", // for member tasks newClient Record
+        linkCode: "",
     });
 
     const styles = getStyles();
@@ -111,6 +112,7 @@ function Register({
         memberJob,
         userScore,
         lastRegisterBizId,
+        linkCode,
     ] = useData([
         "userId",
         "memberId",
@@ -118,6 +120,7 @@ function Register({
         "memberJob",
         "userScore",
         "lastRegisterBizId",
+        "linkCode",
     ]);
 
     const isReady = selfBizLogoImg && bizName && memberId !== "...";
@@ -139,6 +142,7 @@ function Register({
                         ...data.clientUserData,
                         bizId: lastRegisterBizId,
                     },
+                    linkCode,
                 }));
             }, 4000);
         }

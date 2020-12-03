@@ -31,6 +31,10 @@ export const handleRoleStorage = ({
     setMultiVar(userPayload, store.user);
     lStorage("setItems", setSystemOp(whichRole, bizId));
     lStorage("setItem", { ...needAppRegisterOp, value: true });
+
+    // for garantee that the current app is logged out.
+    // Otherwise, the app will be displayed with wrong and mingled app's pages.
+    localStorage.removeItem("token");
 };
 
 /* COMMENTS

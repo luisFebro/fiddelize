@@ -4,12 +4,13 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.8206.5";
+const latestVersion = "3.83.5";
 // PRÓXIMO:
 // sistema multi-conta (painel de cadastros)
 //  - serviço novvos membros - equipe dash -
-const updateDescription = "biz logic and new score panel pt3";
+const updateDescription = "biz logic and new score panel pt4";
 const history = [
+    "segurança dos link de convite com pontos para baixar app",
     "cartão virtual 3D de fidelidade",
     "app da equipe",
     "sistema de acesso e senha",

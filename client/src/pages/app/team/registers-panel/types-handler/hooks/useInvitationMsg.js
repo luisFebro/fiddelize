@@ -11,12 +11,13 @@ export default function useInvitationMsg({
     verifPass,
     payload,
     bizCodeName,
+    linkId,
+    trigger,
 }) {
     const [msg, setMsg] = useState("");
-    const [linkId] = useData(["linkId"]);
 
     useEffect(() => {
-        if (linkId === "...") return;
+        if (linkId === "..." || !trigger) return;
 
         const downloadLink = generateAppDownloadLink({
             bizCodeName,

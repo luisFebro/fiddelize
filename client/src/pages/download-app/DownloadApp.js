@@ -19,6 +19,7 @@ import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import ClientMemberText from "./app-type-texts/ClientMemberText";
 import getQueries from "./helpers/getQueries";
 import { handleRoleStorage } from "./helpers";
+import useAllowedLink from "./hooks/useAllowedLink";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -92,6 +93,7 @@ export default function DownloadApp({ match, location }) {
     // END STYLES
 
     // HOOKS
+    const isAllowedLink = useAllowedLink({ bizId, isCliUser, userScore });
     useEffect(() => {
         checkIfElemIsVisible(".target-download", (res) => setRun(res));
         if (run) {
@@ -345,7 +347,7 @@ export default function DownloadApp({ match, location }) {
     const errorMsg = () => (
         <div className="text-white text-center">
             <p className={`pl-3 mt-5 text-center text-hero`}>
-                Oops! Parece que esse link não é válido.
+                Oops! Parece que esse link não é válido ou já usado.
             </p>
             <p
                 className={`${
@@ -408,7 +410,7 @@ export default function DownloadApp({ match, location }) {
     return (
         <section className="target--content-download">
             {showSpinner()}
-            {isLinkInvalid ? (
+            {isLinkInvalid || !isAllowedLink ? (
                 errorMsg()
             ) : (
                 <section className={`${txtBackColor}`}>
