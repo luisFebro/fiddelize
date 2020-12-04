@@ -8,7 +8,11 @@ const {
     mwIsAuth,
 } = require("../controllers/auth");
 
-const { getDecryptedToken, getToken } = require("../controllers/auth/token");
+const {
+    getDecryptedToken,
+    getToken,
+    getAuthTk,
+} = require("../controllers/auth/token");
 
 const {
     createPassword,
@@ -46,6 +50,7 @@ router.post("/pswd/change", mwIsAuth, changePassword);
 // TOKEN
 router.post("/pswd/token", getToken);
 router.post("/pswd/decrypt-token", getDecryptedToken);
+router.post("/pswd/auth-tk", getAuthTk);
 // END TOKEN
 
 module.exports = router;

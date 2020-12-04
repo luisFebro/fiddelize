@@ -2,7 +2,11 @@ import lStorage, {
     setSystemOp,
     needAppRegisterOp,
 } from "../../../utils/storage/lStorage";
-import { setMultiVar, store } from "../../../hooks/storage/useVar";
+import {
+    setMultiVar,
+    removeMultiVar,
+    store,
+} from "../../../hooks/storage/useVar";
 
 export const handleRoleStorage = ({
     userScore,
@@ -29,6 +33,8 @@ export const handleRoleStorage = ({
     }
 
     setMultiVar(userPayload, store.user);
+    removeMultiVar(["rememberAccess", "success", "verifPass"], store.user);
+
     lStorage("setItems", setSystemOp(whichRole, bizId));
     lStorage("setItem", { ...needAppRegisterOp, value: true });
 

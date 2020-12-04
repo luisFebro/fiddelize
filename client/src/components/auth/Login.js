@@ -42,7 +42,7 @@ function Login({
     dontNeedRegister,
     rootClassname,
 }) {
-    useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
+    // useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
     const dispatch = useStoreDispatch();
     let { roleWhichDownloaded } = useAppSystem();
     // disable restriction of user during early estages of tests.
@@ -106,11 +106,10 @@ function Login({
                 { gender },
                 { linkId: 0 },
             ];
-            setMultiVar(storeElems, store.user);
 
+            await setMultiVar(storeElems, store.user);
             await readUser(dispatch, authUserId, { role }); // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
 
-            // Important: ONLY IMPLEMENT THIS IF THERE ARE USERS WITHOUT THIS PASS MISSING... otherwise, do not use this cond if all users already have one.
             if (!verificationPass) {
                 await sendWelcomeNotif({
                     userId: authUserId,
@@ -132,47 +131,13 @@ function Login({
                 whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
                 setTimeout(() => history.push(whichRoute), 5000);
             } else {
-                whichRoute = `/${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
-
-                if (isThisApp()) {
-                    history.push("/senha-de-acesso");
-                } else {
-                    history.push("/senha-de-acesso");
-                    // showSnackbar(
-                    //     dispatch,
-                    //     "Analisando Credenciais...",
-                    //     "warning",
-                    //     3000
-                    // );
-                    // setTimeout(
-                    //     () =>
-                    //         showSnackbar(
-                    //             dispatch,
-                    //             "Redirecionando...",
-                    //             "warning",
-                    //             4000
-                    //         ),
-                    //     2900
-                    // );
-                    // setTimeout(
-                    //     () => history.push(whichRoute),
-                    //     5000
-                    // );
-                    // setTimeout(
-                    //     () =>
-                    //         showSnackbar(
-                    //             dispatch,
-                    //             msg,
-                    //             "success",
-                    //             3000
-                    //         ),
-                    //     7000
-                    // );
-                }
+                history.push("/senha-de-acesso");
             }
         }
 
         if (role === "cliente-membro") {
+            showSnackbar(dispatch, "Carregando...", "warning", 2000);
+
             const storeElems = [
                 { role },
                 { gender },
@@ -188,6 +153,11 @@ function Login({
                 { memberJob },
             ];
             setMultiVar(storeElems, store.user);
+
+            await setMultiVar(storeElems, store.user);
+            await readUser(dispatch, authUserId, { role });
+
+            history.push("/senha-equipe");
         }
 
         if (role === "cliente") {
@@ -319,6 +289,37 @@ function handleCliUserPath({ authUserId, dispatch, history }) {
 // END HELPERS
 
 /*ARCHIVES
+
+showSnackbar(
+    dispatch,
+    "Analisando Credenciais...",
+    "warning",
+    3000
+);
+setTimeout(
+    () =>
+        showSnackbar(
+            dispatch,
+            "Redirecionando...",
+            "warning",
+            4000
+        ),
+    2900
+);
+setTimeout(
+    () => history.push(whichRoute),
+    5000
+);
+setTimeout(
+    () =>
+        showSnackbar(
+            dispatch,
+            msg,
+            "success",
+            3000
+        ),
+    7000
+);
 
 if (role === "admin") {
     showSnackbar(

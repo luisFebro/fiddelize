@@ -34,6 +34,7 @@ import {
     AsyncNewPassword,
     AsyncFixDatePage,
     AsyncPasswordPage,
+    AsyncTeamPassword,
     AsyncTeamApp,
     AsyncVirtualCard,
     AsyncScorePanel,
@@ -116,6 +117,11 @@ function Website({ location, history }) {
                     path="/senha-de-acesso"
                     exact
                     component={AccessPassword}
+                />
+                <Route
+                    path="/senha-equipe"
+                    exact
+                    component={AsyncTeamPassword}
                 />
                 <Route
                     path="/nova-senha/:token"

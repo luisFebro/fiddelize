@@ -23,6 +23,9 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
+// import { setRun } from '../../hooks/useRunComp';
+// Material UI
+// import { makeStyles } from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
@@ -36,9 +39,8 @@ import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
-import useData from "../../hooks/useData";
 import { setStorageRegisterDone } from "./helpers";
-
+import useData from "../../hooks/useData";
 const filter = getFilterDate();
 
 const isSmall = window.Helper.isSmallScreen();
@@ -69,22 +71,32 @@ function Register({
 }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
+
+    const {
+        selfThemePColor,
+        selfThemeSColor,
+        selfThemeBackColor,
+        selfBizLogoImg,
+        bizName,
+        bizCodeName,
+    } = useClientAdmin();
+
     const [data, setData] = useState({
-        role: "cliente",
+        role: "cliente-membro",
         name: "",
         email: "",
         phone: "",
         birthday: "",
         cpf: "",
         gender: "selecione forma tratamento",
-        clientUserData: { bizId: "", filterBirthday: "" },
+        clientMemberData: {
+            bizId: "",
+            filterBirthday: "",
+            job: "vendas",
+        },
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
-        register: {},
-        tempScore: "", // for member tasks newClient Record
-        memberRole: "", // for member tasks newClient Record
-        linkCode: "",
     });
 
     const styles = getStyles();
@@ -97,33 +109,10 @@ function Register({
 
     let { role, name, email, gender, birthday, cpf, phone } = data;
 
-    const {
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-        selfBizLogoImg,
-        bizName,
-    } = useClientAdmin();
+    const [lastRegisterBizId] = useData(["lastRegisterBizId"]);
 
-    const [
-        staffId,
-        memberId,
-        memberRole,
-        memberJob,
-        userScore,
-        lastRegisterBizId,
-        linkCode,
-    ] = useData([
-        "userId",
-        "memberId",
-        "memberRole",
-        "memberJob",
-        "userScore",
-        "lastRegisterBizId",
-        "linkCode",
-    ]);
+    const isReady = selfBizLogoImg && bizName && lastRegisterBizId !== "...";
 
-    const isReady = selfBizLogoImg && bizName && memberId !== "...";
     useEffect(() => {
         if (isReady) {
             setTimeout(() => {
@@ -132,30 +121,14 @@ function Register({
                     ...prev,
                     bizImg: selfBizLogoImg,
                     bizName,
-                    register: {
-                        id: memberId || staffId,
-                        job: memberJob || "admin",
-                    },
-                    tempScore: userScore,
-                    memberRole: memberRole || role, // if not found memberRole, it means it is a complete register before sending link invitation.
-                    clientUserData: {
-                        ...data.clientUserData,
+                    clientMemberData: {
+                        ...data.clientMemberData,
                         bizId: lastRegisterBizId,
                     },
-                    linkCode,
                 }));
             }, 4000);
         }
-    }, [
-        isReady,
-        selfBizLogoImg,
-        bizName,
-        memberRole,
-        memberId,
-        memberJob,
-        userScore,
-    ]);
-
+    }, [isReady, selfBizLogoImg, bizName]);
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
     // }));
@@ -222,7 +195,7 @@ function Register({
     const registerThisUser = (e) => {
         setActionBtnDisabled(true);
 
-        let newUser = {
+        const newUser = {
             ...data,
         };
 
@@ -258,7 +231,7 @@ function Register({
             // setRun(dispatch, "ProCreditsBadge") // update total credits after registration...
 
             ReactGA.event({
-                category: "cliUser",
+                category: "cliMemberUser",
                 action: "Created an account",
                 label: "form",
                 nonInteraction: true,
@@ -315,8 +288,8 @@ function Register({
     const showTitle = () => (
         <div className="position-relative">
             <Title
-                title={isStaff ? "Cadastro" : "Cadastre-se!"}
-                subTitle={isStaff ? "Novo Cliente" : "É rápido e fácil."}
+                title={isStaff ? "Cadastro" : "Faça seu cadastro"}
+                subTitle={isStaff ? "Novo Membro" : ""}
                 color="var(--mainWhite)"
                 needShadow={true}
                 backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
@@ -334,7 +307,7 @@ function Register({
             }}
         >
             <div id="field1" className="mt-3">
-                {isStaff ? "Qual nome do cliente?" : "Qual é o seu nome?"}
+                {isStaff ? "Qual nome do membro?" : "Qual é o seu nome?"}
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
@@ -374,7 +347,7 @@ function Register({
                 id="field2"
                 className={`d-none animated slideInLeft fast mt-3`}
             >
-                {isStaff ? "Ok, informe CPF do cliente" : "Ok, informe seu CPF"}
+                {isStaff ? "Ok, informe CPF do membro" : "Ok, informe seu CPF"}
                 <TextField
                     required
                     margin="dense"
@@ -419,7 +392,7 @@ function Register({
             </div>
             <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
                 {isStaff ? (
-                    "Quando é aniversário do cliente?"
+                    "Quando é aniversário?"
                 ) : name ? (
                     <span>{name.cap()}, quando é o seu aniversário?</span>
                 ) : (

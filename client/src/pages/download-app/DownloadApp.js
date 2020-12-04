@@ -119,13 +119,14 @@ export default function DownloadApp({ match, location }) {
     // END HOOKS
 
     // STORAGE
-    handleRoleStorage({
-        userScore,
-        whichRole,
-        bizId,
-        memberId: linkId,
-        memberJob,
-    });
+    isAllowedLink &&
+        handleRoleStorage({
+            userScore,
+            whichRole,
+            bizId,
+            memberId: linkId,
+            memberJob,
+        });
     // admin app config
     const {
         selfBizLogoImg,

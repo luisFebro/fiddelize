@@ -4,8 +4,23 @@ import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
 const isApp = isThisApp();
 
+const handleDestiny = ({ role, bizCodeName }) => {
+    if (role === "cliente-membro") return "/t/app/equipe";
+    return isApp
+        ? `/mobile-app`
+        : `${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
+};
+
+const handleRedirect = ({ role, destiny, history }) => {
+    if (role === "cliente-membro") {
+        history.push(destiny);
+    } else {
+        setTimeout(() => (window.location.href = destiny), 1000); // data is being deleted from localstorage.
+    }
+};
+
 export default async function authenticate(newToken, options = {}) {
-    const { dispatch, history } = options;
+    const { dispatch, history, role } = options;
     // these variables are set and avaiable after CPF login.
 
     await setVar({ success: true }, store.user);
@@ -19,14 +34,9 @@ export default async function authenticate(newToken, options = {}) {
 
     await setVar({ welcomeMsg: true });
 
-    const destiny = isApp
-        ? `/mobile-app`
-        : `${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
+    const destiny = handleDestiny({ role, bizCodeName });
 
-    setTimeout(() => (window.location.href = destiny), 1000); // data is being deleted from localstorage.
-    // history.push(destiny);
-    // if(isApp) {
-    //     window.location.href = destiny; // sometimes gatekeeper is not loaded.
-    // } else {
-    // }
+    handleRedirect({ role, destiny, history });
+
+    return "ok";
 }

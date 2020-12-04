@@ -40,3 +40,15 @@ exports.getDecryptedToken = (req, res) => {
 
     res.json(decrypted);
 };
+
+// POST
+exports.getAuthTk = async (req, res) => {
+    const { _id, role } = req.body;
+
+    const token = await getJwtToken({
+        _id: _id && _id.toString(),
+        role: role || "cliente-admin",
+    });
+
+    res.json(token);
+};

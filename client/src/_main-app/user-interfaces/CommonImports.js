@@ -13,6 +13,13 @@ export const AsyncNewPassword = Load({
         ),
 });
 
+export const AsyncTeamPassword = Load({
+    loader: () =>
+        import(
+            "../../pages/access-password/team-password/TeamPassword" /* webpackChunkName: "team-password-page-lazy" */
+        ),
+});
+
 // creation
 export const AsyncPasswordPage = Load({
     loader: () =>

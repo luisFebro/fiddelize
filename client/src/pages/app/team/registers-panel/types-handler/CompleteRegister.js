@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react";
-import { Load } from "../../../../../components/code-splitting/LoadableComp";
 import { setRun } from "../../../../../hooks/useRunComp";
 import { useStoreDispatch } from "easy-peasy";
 import SuccessOp from "./SuccessOp";
+import { Load } from "../../../../../components/code-splitting/LoadableComp";
 
 const AsyncRegister = Load({
     loading: true,
     loader: () =>
         import(
-            "../../../../../components/auth/Register" /* webpackChunkName: "cli-user-register-comp-lazy" */
+            "../../../../../components/auth/AsyncRegisterCliUser" /* webpackChunkName: "cli-user-register-comp-lazy" */
         ),
 });
 
@@ -16,7 +16,7 @@ const AsyncRegisterMember = Load({
     loading: true,
     loader: () =>
         import(
-            "../../../../../components/auth/RegisterClientMember" /* webpackChunkName: "cli-member-register-comp-lazy" */
+            "../../../../../components/auth/AsyncRegisterCliMember" /* webpackChunkName: "cli-member-register-comp-lazy" */
         ),
 });
 

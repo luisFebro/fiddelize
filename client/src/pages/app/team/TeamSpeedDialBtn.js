@@ -45,7 +45,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick }) {
             name: "Sair ►",
             backColor: "var(--themeSDark--" + sColor + ")",
             onClick: () => {
-                !disableClick && logout(dispatch);
+                !disableClick && logout(dispatch, { needReload: true });
             },
         },
         {

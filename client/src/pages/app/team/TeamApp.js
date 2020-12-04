@@ -33,13 +33,13 @@ const getStyles = (needDark) => ({
 export default function TeamApp({
     history,
     location,
-    isCliAdmin = true,
+    isCliAdmin,
     toTab = "Cliente",
 }) {
     const [firstName] = useData(["firstName"]);
 
     // redirect if not auth
-    useAuthUser({ history });
+    // useAuthUser({ history });
 
     const isPreviewMode = location && location.search.includes("modo-prev=1");
 

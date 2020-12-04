@@ -5,7 +5,6 @@ import { Link, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { CLIENT_URL } from "../../config/clientUrl";
 import lStorage, { needAppRegisterOp } from "../../utils/storage/lStorage";
-import AsyncRegisterCliUser from "../../components/auth/AsyncRegisterCliUser";
 import {
     useProfile,
     useClientAdmin,
@@ -35,6 +34,23 @@ import useData from "../../hooks/useData";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
+import { Load } from "../../components/code-splitting/LoadableComp";
+
+const AsyncRegisterCliUser = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "../../components/auth/AsyncRegisterCliUser" /* webpackChunkName: "cli-user-register-comp-lazy" */
+        ),
+});
+
+const AsyncRegisterCliMember = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "../../components/auth/AsyncRegisterCliMember" /* webpackChunkName: "cli-member-register-comp-lazy" */
+        ),
+});
 // import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
@@ -233,18 +249,28 @@ function ClientMobileApp({ location, history }) {
                 className="mx-2 mt-3 text-normal font-weight-bold text-center text-white"
                 style={{ marginBottom: 100 }}
             >
-                Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de
-                compras feito para você!
+                {role === "cliente" &&
+                    "Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de compras feito para você!"}
+                {role === "cliente-membro" &&
+                    "Adicione pontos e clientes para o clube de fidelidade em segundos."}
             </p>
             <CompLoader
                 width={200}
                 height={300}
                 comp={
                     <div className="position-relative" style={{ top: -120 }}>
-                        <AsyncRegisterCliUser
-                            setLoginOrRegister={setLoginOrRegister || true}
-                            needLoginBtn={needLoginBtn}
-                        />
+                        {role === "cliente" && (
+                            <AsyncRegisterCliUser
+                                setLoginOrRegister={setLoginOrRegister || true}
+                                needLoginBtn={needLoginBtn}
+                            />
+                        )}
+                        {role === "cliente-membro" && (
+                            <AsyncRegisterCliMember
+                                setLoginOrRegister={setLoginOrRegister || true}
+                                needLoginBtn={needLoginBtn}
+                            />
+                        )}
                     </div>
                 }
             />

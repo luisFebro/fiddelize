@@ -1,11 +1,11 @@
 import React, { useState, Fragment } from 'react';
 import Title from '../../../../components/Title';
-import { useStoreDispatch } from 'easy-peasy';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MoneyIcon from '@material-ui/icons/Money';
 import Card from '@material-ui/core/Card';
 import { showComponent } from '../../../../redux/actions/componentActions';
+import { useStoreDispatch } from 'easy-peasy';
 import { showSnackbar } from '../../../../redux/actions/snackbarActions';
 import ButtonMulti, { faStyle } from '../../../../components/buttons/material-ui/ButtonMulti';
 import handleChange from '../../../../utils/form/use-state/handleChange';
