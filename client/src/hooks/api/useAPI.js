@@ -11,10 +11,7 @@ import { ShowLoadingComp } from "./Comps";
 import { chooseHeader } from "../../utils/server/getHeaders";
 import { useToken } from "../../hooks/useRoleData";
 import { useOfflineData } from "../../hooks/storage/useOfflineListData";
-import { logout } from "../../redux/actions/authActions";
-import isThisApp from "../../utils/window/isThisApp";
-
-const isApp = isThisApp();
+import { disconnect } from "../../hooks/useAuthUser";
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
@@ -120,14 +117,13 @@ export default function useAPI({
         setLoading(false);
         getSnack(txtFailure, { type: "error" });
 
-        const gotExpiredToken = status === 401;
+        const gotExpiredToken = status === 401 || status === 403;
 
         if (gotExpiredToken) {
-            window.location.href = isApp
-                ? "/mobile-app"
-                : "/acesso/verificacao";
-            showSnackbar(dispatch, "Sua sessão terminou.", "warning");
-            logout(dispatch, { needSnackbar: false });
+            (async () => {
+                await disconnect();
+                showSnackbar(dispatch, "Sua sessão terminou.", "warning");
+            })();
         }
     }
 

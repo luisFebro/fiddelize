@@ -108,7 +108,7 @@ export const setMultiVar = async (objArray, options = {}) => {
     return await Promise.all(promises);
 };
 
-export const removeVar = (key, options = {}) => {
+export const removeVar = async (key, options = {}) => {
     const { storeName } = options;
     return variablesStore(storeName)
         .removeItem(key)

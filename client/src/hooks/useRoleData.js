@@ -5,6 +5,7 @@ import lStorage, {
     userProfileColl,
 } from "../utils/storage/lStorage";
 import getFirstName from "../utils/string/getFirstName";
+import useData from "../hooks/useData";
 
 export { getFirstName };
 
@@ -59,9 +60,11 @@ export const useProfile = () => {
         (state) => state.userReducer.cases.currentUser
     );
 
+    const [firstName] = useData(["firstName"]);
+
     const _id = currentUser && currentUser._id;
     const role = currentUser && currentUser.role;
-    const name = currentUser && currentUser.name && currentUser.name.cap();
+    const name = firstName; // currentUser && currentUser.name && currentUser.name.cap() || returning an array like ["Nome"]
     const phone = currentUser && currentUser.phone;
     const email = currentUser && currentUser.email;
     const birthday = currentUser && currentUser.birthday;

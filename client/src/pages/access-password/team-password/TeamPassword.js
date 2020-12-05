@@ -9,6 +9,11 @@ import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import getAPI, { getAuthTk } from "../../../utils/promises/getAPI";
 import authenticate from "../../../components/auth/helpers/authenticate";
+import useBackColor from "../../../hooks/useBackColor";
+import { useClientAdmin } from "../../../hooks/useRoleData";
+import RadiusBtn from "../../../components/buttons/RadiusBtn";
+import { setVar, store } from "../../../hooks/storage/useVar";
+import { disconnect } from "../../../hooks/useAuthUser";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -27,14 +32,18 @@ export default function TeamPassword({ history }) {
     });
     const { pass } = data;
 
-    const [bizId, role, userId, firstName] = useData([
+    const [bizId, role, userId, firstName, success] = useData([
         "lastRegisterBizId",
         "role",
         "userId",
         "firstName",
+        "success",
     ]);
     const { businessId } = useAppSystem();
     const dispatch = useStoreDispatch();
+
+    const { selfThemeBackColor: backColor } = useClientAdmin();
+    useBackColor(`var(--themeBackground--${backColor})`);
 
     const styles = getStyles();
 
@@ -75,10 +84,38 @@ export default function TeamPassword({ history }) {
         }
     };
 
+    const handleLogout = () => {
+        (async () => {
+            await setVar({ disconnectCliMember: true }, store.user);
+            await disconnect();
+        })();
+    };
+
+    const showLogoutBtn = () => (
+        <RadiusBtn
+            position="absolute"
+            backgroundColor="var(--mainRed)"
+            title="sair conta"
+            top={0}
+            right={20}
+            size="extra-small"
+            fontSize="15px"
+            onClick={handleLogout}
+        />
+    );
+
     return (
         <section>
-            <h1 className="my-3 mx-3 text-subtitle text-white text-center">
-                Insira senha de verificação
+            {showLogoutBtn()}
+            <h1
+                className="mx-3 text-subtitle text-white text-center"
+                style={{
+                    marginTop: "2rem",
+                    marginBottom: "3rem",
+                    lineHeight: "30px",
+                }}
+            >
+                {firstName}, insira senha de verificação
             </h1>
             <div>
                 <ToggleVisibilityPassword

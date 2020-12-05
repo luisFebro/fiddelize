@@ -10,7 +10,7 @@ import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-
 import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
-import { useAuthUser } from "../../../hooks/useAuthUser";
+import useAuth from "../../../hooks/useAuthUser";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 // import ReturnBtn from '../../../components/buttons/ReturnBtn';
 
@@ -39,7 +39,7 @@ export default function TeamApp({
     const [firstName] = useData(["firstName"]);
 
     // redirect if not auth
-    // useAuthUser({ history });
+    useAuth({ history });
 
     const isPreviewMode = location && location.search.includes("modo-prev=1");
 
@@ -74,7 +74,7 @@ export default function TeamApp({
             ></section>
         );
 
-        const allMemberNotif = 3; // member notif.
+        const allMemberNotif = 0; // member notif.
         const totalNotifications = isPreviewMode ? 0 : allMemberNotif;
         const displayBell = () => (
             <AsyncBellNotifBtn
@@ -208,6 +208,7 @@ export default function TeamApp({
                     <TeamSpeedDialBtn
                         sColor={sColor}
                         disableClick={isPreviewMode ? true : false}
+                        history={history}
                     />
                 </section>
             )}

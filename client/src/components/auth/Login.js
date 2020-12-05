@@ -20,7 +20,7 @@ import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import { deleteImage } from "../../utils/storage/lForage";
 import useCount from "../../hooks/useCount";
 import { sendNotification } from "../../redux/actions/notificationActions";
-import { setMultiVar, store } from "../../hooks/storage/useVar";
+import { setMultiVar, removeVar, store } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
 
 const isApp = isThisApp();
@@ -137,6 +137,7 @@ function Login({
 
         if (role === "cliente-membro") {
             showSnackbar(dispatch, "Carregando...", "warning", 2000);
+            await removeVar("disconnectCliMember", store.user);
 
             const storeElems = [
                 { role },

@@ -23,7 +23,7 @@ export const loadUser = () => (dispatch, getState) => (history) => {
             // this is redirect to home even redirect links page...
             // that's why there is "isApp" to check if is not website
             const gotError = isApp && res.data && res.data.error;
-            // if (gotError) logout(dispatch, { history });
+            if (gotError) logout(dispatch, { history });
 
             const role = res.data.profile.role;
             const userId = res.data.profile._id;

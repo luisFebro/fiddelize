@@ -1,6 +1,7 @@
 import { chooseHeader } from "../../utils/server/getHeaders";
 import { logout } from "../../redux/actions/authActions";
 import axios from "axios";
+import { disconnect } from "../../hooks/useAuthUser";
 
 export * from "../../hooks/api/requestsLib";
 
@@ -61,8 +62,11 @@ export default function getAPI({
 
                 const { status } = error.response;
                 const gotExpiredToken = status === 401;
-                if (gotExpiredToken && dispatch)
-                    logout(dispatch, { needSnackbar: true });
+                if (gotExpiredToken) {
+                    (async () => {
+                        await disconnect();
+                    })();
+                }
 
                 reject(error.response.data);
             }

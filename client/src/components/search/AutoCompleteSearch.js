@@ -14,6 +14,7 @@ import isKeyPressed from "../../utils/event/isKeyPressed";
 import { useToken, useProfile } from "../../hooks/useRoleData";
 import { chooseHeader } from "../../utils/server/getHeaders";
 import getFirstName from "../../utils/string/getFirstName";
+import { disconnect } from "../../hooks/useAuthUser";
 // 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
 AutoCompleteSearch.propTypes = {
@@ -188,6 +189,11 @@ export default function AutoCompleteSearch({
                 setLoading(false);
             } catch (e) {
                 if (axios.isCancel(e)) return;
+                if (e.response.status === 403 || e.response.status === 401) {
+                    (async () => {
+                        await disconnect();
+                    })();
+                }
                 if (e.response) {
                     console.log(
                         `${JSON.stringify(e.response.data)}. STATUS: ${

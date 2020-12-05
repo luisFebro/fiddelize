@@ -91,6 +91,7 @@ function ClientMobileApp({ location, history }) {
         name,
         fullName,
         memberId,
+        disconnectCliMember,
     ] = useData([
         "userId",
         "rememberAccess",
@@ -99,6 +100,7 @@ function ClientMobileApp({ location, history }) {
         "firstName",
         "name",
         "memberId",
+        "disconnectCliMember",
     ]);
 
     useEffect(() => {
@@ -121,6 +123,8 @@ function ClientMobileApp({ location, history }) {
     const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
     // # roles
     const isStaff = role === "cliente-membro" || role === "cliente-admin";
+    const isCliMember =
+        role === "cliente-membro" || roleWhichDownloaded === "cliente-membro";
     let isCliUser = role === "cliente" || roleWhichDownloaded === "cliente";
 
     let isCliAdmin =
@@ -138,10 +142,10 @@ function ClientMobileApp({ location, history }) {
     // END MAIN VARIABLES
 
     useEffect(() => {
-        if (!loadingData) {
+        if (!loadingData && isCliAdmin) {
             showWelcomeMsg(dispatch, name);
         }
-    }, [loadingData, name]);
+    }, [loadingData, name, isCliAdmin]);
 
     const {
         bizCodeName,
@@ -205,6 +209,15 @@ function ClientMobileApp({ location, history }) {
     useEffect(() => {
         handleLogoSrc();
     }, [needClientLogo]);
+
+    if (isCliMember) {
+        // this var is removed when making login
+        if (!disconnectCliMember) {
+            isSessionOver
+                ? history.push("/senha-equipe")
+                : history.push("/t/app/equipe");
+        }
+    }
 
     const showLogo = () => {
         const isSquared =
@@ -304,6 +317,14 @@ function ClientMobileApp({ location, history }) {
         loginOrRegister === "register" && showRegister(true);
     const conditionLogin =
         loginOrRegister === "login" && accessCheck && showLogin();
+
+    if (loadingData) {
+        return (
+            <p className="text-subtitle font-weight-bold full-page text-center text-white">
+                Carregando...
+            </p>
+        );
+    }
 
     return (
         <div style={{ overflowX: "hidden" }}>

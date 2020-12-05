@@ -32,7 +32,7 @@ const getStyles = () => ({
     },
 });
 
-export default function TeamDialSpeedBtn({ sColor, disableClick }) {
+export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
     const [memberTasks, openMemberTasks] = useState(false);
     const styles = getStyles();
 
@@ -45,7 +45,12 @@ export default function TeamDialSpeedBtn({ sColor, disableClick }) {
             name: "Sair ►",
             backColor: "var(--themeSDark--" + sColor + ")",
             onClick: () => {
-                !disableClick && logout(dispatch, { needReload: true });
+                if (!disableClick) {
+                    (async () => {
+                        await logout(dispatch);
+                        history.push("/senha-equipe");
+                    })();
+                }
             },
         },
         {

@@ -2,7 +2,8 @@ import React, { Fragment, useState } from "react";
 import { useClientAdmin } from "../../../../hooks/useRoleData";
 import useDelay from "../../../../hooks/useDelay";
 import TypesHandler from "./types-handler/TypesHandler";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import useAuth from "../../../../hooks/useAuthUser";
 
 const getStyles = () => ({
     clipPathBack: {
@@ -14,8 +15,12 @@ const getStyles = () => ({
     },
 });
 
-export default function RegistersPanel({ isNewMember = false }) {
+export default withRouter(RegistersPanel);
+
+function RegistersPanel({ history, isNewMember = false }) {
     const { selfBizLogoImg, bizCodeName } = useClientAdmin();
+
+    useAuth({ history });
 
     const styles = getStyles();
 

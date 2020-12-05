@@ -51,7 +51,7 @@ export default function RadiusBtn({
     };
 
     if (size === "small") {
-        className = "my-1";
+        className = "";
         fontSize = "15px";
     }
 

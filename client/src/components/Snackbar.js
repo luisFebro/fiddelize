@@ -79,7 +79,7 @@ export default function SnackbarRedux() {
             transitionDuration={{ enter: 300, exit: 300 }}
             style={{ zIndex: 30000 }}
             open={isSnackbarOpen}
-            autoHideDuration={snackbarTiming} // This stopped to work with error type, it forced me to put an setTimeout below...
+            autoHideDuration={snackbarTiming || 2000} // This stopped to work with error type, it forced me to put an setTimeout below...
             resumeHideDuration={500} // n3
             onClose={() =>
                 setTimeout(

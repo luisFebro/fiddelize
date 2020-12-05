@@ -7,6 +7,8 @@ import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
     setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
+import useAuth from "../../../../../hooks/useAuthUser";
+import { withRouter } from "react-router-dom";
 
 const setCustomerId = async (clientName, bizId) => {
     const body = {
@@ -23,7 +25,10 @@ const setCustomerId = async (clientName, bizId) => {
     });
 };
 
-export default function FieldsHandler({
+export default withRouter(FieldsHandler);
+
+function FieldsHandler({
+    history,
     closeModal,
     clientScoreOnly = false,
     clientName,
@@ -37,6 +42,7 @@ export default function FieldsHandler({
     const { field, customerName, customerId } = curr;
 
     const { businessId: bizId } = useAppSystem();
+    useAuth({ history });
 
     useEffect(() => {
         if (customerName && bizId) {
