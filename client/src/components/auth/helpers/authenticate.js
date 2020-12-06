@@ -1,6 +1,6 @@
 import { getMultiVar, setVar, store } from "../../../hooks/storage/useVar";
 import isThisApp from "../../../utils/window/isThisApp";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+// import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
 const isApp = isThisApp();
 
@@ -20,7 +20,7 @@ const handleRedirect = ({ role, destiny, history }) => {
 };
 
 export default async function authenticate(newToken, options = {}) {
-    const { dispatch, history, role } = options;
+    const { history, role } = options;
     // these variables are set and avaiable after CPF login.
 
     await setVar({ success: true }, store.user);

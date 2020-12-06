@@ -29,10 +29,9 @@ export default function GatewayAndCTAs({
 
     return (
         <section
-            className={`position-relative ${
+            className={`${
                 isSessionOver ? "" : "my-5"
             } container-center-col text-white text-normal text-center`}
-            style={{ top: -68 }}
         >
             <span
                 className={`${selectTxtStyle(

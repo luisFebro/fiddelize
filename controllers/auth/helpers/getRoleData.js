@@ -10,6 +10,7 @@ const handleBizTeamData = ({ data, cpf }) => {
         role,
         authUserId: _id,
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
+        bizId: _id,
         gender,
     };
 };
@@ -39,6 +40,7 @@ const handleCliMemberData = ({ data, cpf }) => {
         authUserId: _id,
         linkId: clientMemberData && clientMemberData.linkId,
         memberJob: clientMemberData && clientMemberData.job,
+        bizId: clientMemberData && clientMemberData.bizId,
     };
 };
 

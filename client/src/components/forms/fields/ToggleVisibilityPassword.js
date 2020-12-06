@@ -42,6 +42,7 @@ export default function ToggleVisibilityPassword({
     generatePassObj,
     autoFocus = false,
     autoComplete,
+    maxWidth,
 }) {
     const [data, setData] = useState({
         showPassword: false,
@@ -106,7 +107,10 @@ export default function ToggleVisibilityPassword({
         );
 
     return (
-        <FormControl fullWidth>
+        <FormControl
+            fullWidth
+            style={{ maxWidth: maxWidth ? maxWidth : undefined }}
+        >
             <InputLabel
                 htmlFor="adornment-password"
                 style={{ color: error ? "red" : "black" }}

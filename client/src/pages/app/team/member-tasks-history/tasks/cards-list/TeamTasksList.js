@@ -67,7 +67,7 @@ export default function TeamTasksList() {
     };
 
     const params = {
-        userId: businessId, // for token check
+        userId: memberId, // for token check
         memberId,
         bizId: businessId,
         skip,

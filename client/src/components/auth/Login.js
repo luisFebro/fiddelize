@@ -73,6 +73,7 @@ function Login({
             name,
             authUserId,
             bizCodeName,
+            bizId,
             verificationPass,
             needCliUserWelcomeNotif,
             twoLastCpfDigits,
@@ -91,6 +92,7 @@ function Login({
             showSnackbar(dispatch, "Carregando...", "warning", 2000);
             // Pre login store data
             const storeElems = [
+                { bizId },
                 { role },
                 {
                     name: getFirstName(name && name.cap(), {
@@ -140,6 +142,7 @@ function Login({
             await removeVar("disconnectCliMember", store.user);
 
             const storeElems = [
+                { bizId },
                 { role },
                 { gender },
                 {
@@ -164,6 +167,7 @@ function Login({
         if (role === "cliente") {
             // the welcome msg is sent in the backend for client-user
             const storeElems = [
+                { bizId },
                 { role },
                 { gender },
                 {

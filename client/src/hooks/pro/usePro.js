@@ -47,7 +47,7 @@ export default function usePro(options = {}) {
         url: getProData(businessId || userId), // userId used if user not logged in.
         dataName: "proData",
         params,
-        trigger,
+        trigger: trigger && businessId !== "...",
     });
 
     // if some error happens, then fetch from most recent offline data storage

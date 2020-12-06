@@ -90,11 +90,7 @@ router.get("/team/list", readTeamMemberList);
 router.get("/team/tasks/list", mwIsAuth, readTeamTasksList);
 router.get("/team/member-history/list", mwIsAuth, readOneMemberTasksList);
 router.get("/team/members/podium", getMembersPodium);
-router.post(
-    "/team/temp-user-score-member",
-    mwIsAuth,
-    setTempScoreAndMemberData
-);
+router.post("/team/temp-user-score-member", setTempScoreAndMemberData); // mwIsAuth, not recognizing client-member
 
 // CLIENT USER TEMP SCORE
 router.get("/cli-user/temp-score/list", mwIsAuth, readTempScoreList);

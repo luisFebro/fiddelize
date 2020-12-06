@@ -61,7 +61,7 @@ const getStyles = () => ({
     },
 });
 
-function Register({
+function ASyncRegisterCliUser({
     isStaff = false,
     callback,
     setLoginOrRegister,
@@ -603,7 +603,7 @@ function Register({
     );
 }
 
-export default React.memo(Register);
+export default React.memo(ASyncRegisterCliUser);
 
 /* ARCHIVES
 <div style={{whiteSpace: 'wrap'}}>

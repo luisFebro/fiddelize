@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import useAPI, { readCredits } from '../api/useAPI';
-import { useAppSystem } from '../useRoleData';
+import React, { useState } from "react";
+import useAPI, { readCredits } from "../api/useAPI";
+import { useAppSystem } from "../useRoleData";
 
 export default function useCheckBalance() {
     const { businessId } = useAppSystem();
@@ -8,7 +8,8 @@ export default function useCheckBalance() {
     const { data: smsBalance } = useAPI({
         url: readCredits(businessId),
         needOnlyOnce: true,
-    })
+        trigger: businessId !== "...",
+    });
 
     return smsBalance;
 }

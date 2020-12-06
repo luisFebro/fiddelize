@@ -11,7 +11,6 @@ import {
     useClientUser,
 } from "../../hooks/useRoleData";
 import { updateUser, countField } from "../../redux/actions/userActions";
-import { setRun } from "../../hooks/useRunComp";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { useAppSystem } from "../../hooks/useRoleData";
 import { useRunComp } from "../../hooks/useRunComp";
@@ -244,11 +243,11 @@ function ClientMobileApp({ location, history }) {
                 comp={
                     <div
                         className="container-center position-relative"
-                        style={{ top: role === "cliente-admin" ? -78 : 10 }}
+                        style={{ top: 10 }}
                     >
                         <AsyncLogin
                             setLoginOrRegister={setLoginOrRegister}
-                            rootClassname="mt-5 mb-3"
+                            rootClassname=""
                         />
                     </div>
                 }
@@ -294,7 +293,7 @@ function ClientMobileApp({ location, history }) {
         <div className="container-center">
             <AsyncBellNotifBtn
                 position="relative"
-                top={-60}
+                top={15}
                 left={0}
                 notifBorderColor={
                     "var(--themeBackground--" + selfThemeBackColor + ")"
@@ -308,10 +307,6 @@ function ClientMobileApp({ location, history }) {
             />
         </div>
     );
-
-    const handleConnectedStatusClick = () => {
-        setRun(dispatch, "goDash");
-    };
 
     const conditionRegister =
         loginOrRegister === "register" && showRegister(true);

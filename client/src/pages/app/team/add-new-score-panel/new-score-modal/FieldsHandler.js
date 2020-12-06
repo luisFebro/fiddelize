@@ -9,11 +9,12 @@ import getAPI, {
 } from "../../../../../utils/promises/getAPI";
 import useAuth from "../../../../../hooks/useAuthUser";
 import { withRouter } from "react-router-dom";
+import useData from "../../../../../hooks/useData";
 
-const setCustomerId = async (clientName, bizId) => {
+const setCustomerId = async (clientName, bizId, memberId) => {
     const body = {
         needClientIdOnly: true,
-        userId: bizId, // for auth token only
+        userId: memberId, // for auth token only
         bizId,
         clientName,
     };
@@ -42,19 +43,24 @@ function FieldsHandler({
     const { field, customerName, customerId } = curr;
 
     const { businessId: bizId } = useAppSystem();
-    useAuth({ history });
+    const [memberId] = useData(["userId"]);
+
+    // useAuth({ history });
 
     useEffect(() => {
+        if (memberId === "...") return;
+
         if (customerName && bizId) {
             (async () => {
                 const { data: thisCustomerId } = await setCustomerId(
                     customerName,
-                    bizId
+                    bizId,
+                    memberId
                 );
                 setCurr((prev) => ({ ...prev, customerId: thisCustomerId }));
             })();
         }
-    }, [customerName, bizId]);
+    }, [customerName, bizId, memberId]);
 
     const {
         selfThemeBackColor: backColor,

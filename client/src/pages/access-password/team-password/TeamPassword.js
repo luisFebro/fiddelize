@@ -80,7 +80,12 @@ export default function TeamPassword({ history }) {
             });
 
             await authenticate(token, { history, role });
-            showSnackbar(dispatch, `Olá de volta, ${firstName}!`, "success");
+            role === "cliente-membro" &&
+                showSnackbar(
+                    dispatch,
+                    `Olá de volta, ${firstName}!`,
+                    "success"
+                );
         }
     };
 
@@ -117,8 +122,9 @@ export default function TeamPassword({ history }) {
             >
                 {firstName}, insira senha de verificação
             </h1>
-            <div>
+            <div className="container-center">
                 <ToggleVisibilityPassword
+                    maxWidth={400}
                     style={styles.fieldFormValue}
                     onChange={handleChange(setData, data)}
                     label=" "

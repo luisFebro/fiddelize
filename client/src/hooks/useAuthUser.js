@@ -36,6 +36,7 @@ export default function useAuth(options = {}) {
         if (success === "...") return;
 
         const isAuthUser = success;
+        console.log("isAuthUser", isAuthUser);
 
         if (!isAuthUser && history) {
             (async () => {

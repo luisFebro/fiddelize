@@ -2,17 +2,20 @@ const User = require("../../../models/user");
 
 // link id is used to identify which staff registered customers through the invitation link
 
-const createLinkId = async (memberId, options = {}) => {
+exports.createLinkId = async (memberId, options = {}) => {
     const { adminId } = options;
 
-    let memberIdList = [];
-
     const obj = { "clientAdminData.memberIdList": memberId };
-    await User("cliente-admin").findByIdAndUpdate(adminId, { $push: obj });
 
-    const adminData = await User("cliente-admin")
-        .findById(adminId)
-        .select("clientAdminData.memberIdList");
+    const setMemberIdList = async () =>
+        await User("cliente-admin").findByIdAndUpdate(adminId, { $push: obj });
+    const getAdminData = async () =>
+        await User("cliente-admin")
+            .findById(adminId)
+            .select("clientAdminData.memberIdList");
+
+    const [adminData] = await Promise.all([getAdminData(), setMemberIdList()]);
+
     const idList = adminData.clientAdminData.memberIdList;
     let idRes;
     if (idList && idList.length) {

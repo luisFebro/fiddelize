@@ -146,7 +146,7 @@ exports.register = async (req, res) => {
     const newUser = new ThisUser({
         role,
         name,
-        email: encryptSync(cpf),
+        email: encryptSync(email),
         cpf: jsEncrypt(cpf),
         phone: encryptSync(phone),
         birthday,
@@ -198,7 +198,7 @@ exports.register = async (req, res) => {
     const isCliUser = role === "cliente";
     const isCliMember = role === "cliente-membro";
     if (isCliUser) {
-        const registerUserScore = decryptLinkScore(tempScore);
+        const registerUserScore = tempScore ? decryptLinkScore(tempScore) : 0;
         await addMemberTaskHistory({
             clientName: name,
             tempScore: registerUserScore,

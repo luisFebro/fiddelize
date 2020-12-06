@@ -86,7 +86,7 @@ const setUltimateData = async ({
     bizId,
 }) => {
     const body = {
-        userId: bizId, // for auth only
+        userId: memberId, // for auth only
         bizId,
         clientId,
         clientName,
@@ -145,6 +145,8 @@ export default function ScoreCustomer({
     };
 
     const handleSuccessScore = () => {
+        if (memberId === "...") return;
+
         if (clientScoreOnly) {
             const firstCliName = getFirstName(
                 customerName && customerName.toLowerCase()

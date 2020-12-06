@@ -32,16 +32,18 @@ export default function SearchCustomer({ setCurr, textColor, bizId }) {
                 <br />
                 do cliente?
             </h1>
-            <AutoCompleteSearch
-                autocompleteUrl={autocompleteUrl}
-                setData={setData}
-                placeholder=""
-                autoFocus={true}
-                openOnFocus={false}
-                selectOnFocus={false}
-                noOptionsText="Cliente não cadastrado"
-                maxHistory={7}
-            />
+            {bizId !== "..." && (
+                <AutoCompleteSearch
+                    autocompleteUrl={autocompleteUrl}
+                    setData={setData}
+                    placeholder=""
+                    autoFocus={true}
+                    openOnFocus={false}
+                    selectOnFocus={false}
+                    noOptionsText="Cliente não cadastrado"
+                    maxHistory={7}
+                />
+            )}
         </section>
     );
 }
