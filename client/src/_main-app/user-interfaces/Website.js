@@ -30,7 +30,7 @@ import ClientAppPreview from "../../pages/mobile-app/ClientAppPreview";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import {
-    AccessPassword,
+    AsyncAccessPassword,
     AsyncNewPassword,
     AsyncFixDatePage,
     AsyncPasswordPage,
@@ -116,7 +116,7 @@ function Website({ location, history }) {
                 <Route
                     path="/senha-de-acesso"
                     exact
-                    component={AccessPassword}
+                    component={AsyncAccessPassword}
                 />
                 <Route
                     path="/senha-equipe"

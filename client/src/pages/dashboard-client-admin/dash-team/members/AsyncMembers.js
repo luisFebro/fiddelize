@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 import Title from "../../../../components/Title";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import ProCreditsBadge from "../../../../components/pro/ProCreditsBadge";
 
 const AsyncRankingPondium = LoadableVisible({
     loading: true,
@@ -32,6 +33,9 @@ export default function AsyncMembers() {
             <p className="ml-3 text-purple font-weight-bold text-subtitle">
                 Membros:
             </p>
+            <div className="container-center mt-5">
+                <ProCreditsBadge service="Novvos Membros" />
+            </div>
             <AsyncMembersList />
         </Fragment>
     );

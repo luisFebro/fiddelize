@@ -23,7 +23,7 @@ import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
 import {
-    AccessPassword,
+    AsyncAccessPassword,
     AsyncNewPassword,
     AsyncFixDatePage,
     AsyncPasswordPage,
@@ -107,7 +107,7 @@ function Mobile({ location, history }) {
                 <Route
                     path="/senha-de-acesso"
                     exact
-                    component={AccessPassword}
+                    component={AsyncAccessPassword}
                 />
                 <Route
                     path="/senha-equipe"

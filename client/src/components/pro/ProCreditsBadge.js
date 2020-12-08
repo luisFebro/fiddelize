@@ -25,7 +25,7 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
         expiryDate: usageTimeEnd,
     };
 
-    const creditsCond = loading && !isPro ? credits : credits >= 0; // avoid displaying zero for pro plans when they got credits.
+    const creditsCond = Boolean(loading && !isPro ? credits : credits >= 0); // avoid displaying zero for pro plans when they got credits.
 
     return (
         <section className="d-table position-relative">
@@ -34,7 +34,7 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
                     ? `${convertToReal(credits)} créditos`
                     : "... créditos"}
             </div>
-            {isPro && daysLeft && (
+            {Boolean(isPro && daysLeft) && (
                 <p className="text-small text-purple font-weight-bold">
                     Expira em
                     <span className="ml-1 d-inline-block text-normal font-weight-bold">
@@ -43,7 +43,7 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
                 </p>
             )}
             <div className="position-absolute" style={{ right: -40, top: -10 }}>
-                <ProCreditsBtn modalData={modalData} />
+                <ProCreditsBtn modalData={modalData} service={service} />
             </div>
         </section>
     );

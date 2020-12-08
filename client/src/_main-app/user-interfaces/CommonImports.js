@@ -1,10 +1,14 @@
 import React from "react";
 import { Load } from "../../components/code-splitting/LoadableComp";
-import AccessPassword from "../../pages/access-password/AccessPassword";
 // All component pages which are using both in website and mobile app goes here in next updates...
 
 // PASSWORDS
-export { AccessPassword };
+export const AsyncAccessPassword = Load({
+    loader: () =>
+        import(
+            "../../pages/access-password/AccessPassword" /* webpackChunkName: "cli-admin-access-password-page-lazy" */
+        ),
+});
 // recover and change
 export const AsyncNewPassword = Load({
     loader: () =>
