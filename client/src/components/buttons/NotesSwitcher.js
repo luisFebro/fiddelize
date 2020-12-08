@@ -13,7 +13,7 @@ export default function NotesSwitcher({
 
     return (
         <section
-            className={`${rootClassName} text-center text-normal animated rubberBand my-3`}
+            className={`${rootClassName} text-center text-normal animated fadeIn my-3`}
         >
             <div style={{ width: 200 }}>
                 <p

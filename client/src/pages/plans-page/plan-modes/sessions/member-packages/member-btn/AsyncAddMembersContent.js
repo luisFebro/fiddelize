@@ -81,11 +81,22 @@ function AsyncAddMembersContent({
                 - Os créditos são <strong>liberados automaticamente</strong>{" "}
                 após a aprovação do pagamento.
             </p>
-            {/*Blocking not implemented yet*/}
-            <p className="d-none text-small text-left text-purple mt-3">
-                - Quando expira seu tempo de uso, os apps dos membros são
-                temporariamente desativados até a renovação do serviço. Você é
-                notificado <strong>10 dias</strong> antes do prazo expirar.
+            <p className="text-small text-left text-purple mt-3">
+                - Os apps dos membros são
+                <strong> temporariamente desativados</strong> após a expiração
+                do plano.
+            </p>
+            <p className="text-small text-left text-purple mt-3">
+                - Com a exceção do seu <strong>primeiro app de membro</strong>{" "}
+                da sua conta, que é grátis e sem tempo de expiração.
+            </p>
+            <p className="text-small text-left text-purple mt-3">
+                - Renove o tempo de uso do serviço facilmente indo no seu painel
+                na aba PRO.
+            </p>
+            <p className="text-small text-left text-purple mt-3">
+                - Você é notificado <strong>10 dias</strong> antes do prazo
+                expirar.
             </p>
         </section>
     );

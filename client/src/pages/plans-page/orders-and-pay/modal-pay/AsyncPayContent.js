@@ -3,11 +3,11 @@ import "./_PayContent.scss";
 import PayCategories from "./payment-methods/PayCategories";
 // import { Load } from "../../../../components/code-splitting/LoadableComp";
 import useAPI, { finishCheckout } from "../../../../hooks/api/useAPI";
-import { useProfile, useAppSystem } from "../../../../hooks/useRoleData";
+import { useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
 import getFilterDate from "../../../../utils/dates/getFilterDate";
-import getFirstName from "../../../../utils/string/getFirstName";
 import handleRenewalDays from "./helpers/handleRenewalDays";
+import useData from "../../../../hooks/useData";
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
 const filter = getFilterDate();
@@ -36,7 +36,7 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
         senderCPF,
         senderAreaCode,
         senderPhone,
-        senderEmail,
+        senderEmail, // LESSON: sender email can not be admin's email (mr.fe...)
         PagSeguro,
         firstDueDate,
         ordersStatement,
@@ -72,8 +72,7 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
     ]);
 
     const { businessId } = useAppSystem();
-    const { name: adminName } = useProfile();
-    const firstAdminName = getFirstName(adminName);
+    const [adminName, firstAdminName] = useData(["name", "firstName"]);
 
     const handleSelected = (selection) => {
         setSelectedCategory(selection);
@@ -120,7 +119,8 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
             senderCPF &&
             ordersStatement &&
             senderHash &&
-            selectedCategory,
+            selectedCategory &&
+            adminName !== "...",
         timeout: 40000,
     });
 

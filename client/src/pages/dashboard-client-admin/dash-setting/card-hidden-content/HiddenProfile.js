@@ -30,36 +30,32 @@ export default function HiddenProfile({ userData }) {
         birthday: "",
         email: "",
         phone: "",
-        maritalStatus: "",
+        gender: "",
     });
+
+    const { name, cpf, birthday, email, phone, gender, bizWhatsapp } = data;
+
     const [error, setError] = useState("");
 
     useEffect(() => {
-        readUser(dispatch, userData._id, { role: "cliente" }).then((res) => {
-            if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
-            setData({
+        (async () => {
+            const res = await readUser(dispatch, userData._id, {
+                role: "cliente-admin",
+            });
+
+            setData((prev) => ({
+                ...prev,
                 name: res.data.name && res.data.name.cap(),
                 cpf: res.data.cpf,
                 birthday: res.data.birthday,
                 email: res.data.email,
                 phone: res.data.phone,
-                maritalStatus: res.data.maritalStatus,
-            });
-        });
+                gender: res.data.gender,
+            }));
+        })();
     }, []);
 
     const dispatch = useStoreDispatch();
-
-    const {
-        name,
-        cpf,
-        birthday,
-        email,
-        phone,
-        maritalStatus,
-        bizWhatsapp,
-    } = data;
 
     const styles = {
         form: {
@@ -218,15 +214,15 @@ export default function HiddenProfile({ userData }) {
                         fullWidth
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
-                    <p className="text-shadow">Estado Civil</p>
+                <div className={`d-none mt-4 margin-auto-95 text-normal`}>
+                    <p className="text-shadow">Forma de Tratamento</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         onChange={handleChange(setData, data)}
                         autoComplete="off"
-                        name="maritalStatus"
-                        value={maritalStatus}
+                        name="gender"
+                        value={gender}
                         fullWidth
                     />
                 </div>

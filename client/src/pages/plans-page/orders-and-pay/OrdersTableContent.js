@@ -39,17 +39,13 @@ export default function OrdersTableContent({
 
     const notes = (
         <Fragment>
-            - O tempo de uso dos <strong>serviços em pré-venda</strong> só
-            começam a contar quando for lançado. Você será notificado. E
-            receberá um novo card com devido tempo de uso.
-            <br />
-            <br />
             - Os pacotes de SMS não tem validade, não expiram.
             <br />
-            <br />- Você dá acesso sem restrição aos seus clientes e equipe que{" "}
+            <br />- Você dá acesso sem restrição aos seus clientes que{" "}
             <strong>já foram cadastrados</strong>. Eles continuam usando o app
             mesmo quando o prazo de seu plano terminar. Você precisa renovar seu
             plano para novos clintes.
+            <br />
             <br />
             <br />- Os créditos disponíveis em cada serviço{" "}
             <strong>são acumulativos apenas durante o tempo de uso</strong>.
@@ -63,11 +59,10 @@ export default function OrdersTableContent({
             <br /> - O cliente-admin é notificado <strong>10 dias</strong> antes
             de expirar algum plano.
             <br />
-            <br />- Você pode renovar seu plano mesmo durante sua ativação. Por
-            exemplo, se renovar um plano mensal por mais 1 mês, logo você terá
-            60 dias de tempo de uso acumulados. O sistema da Fiddelize analisa
-            se você já tem o serviço a ser renovado e atualiza o plano
-            considerando o tempo de uso anterior restante somado com o atual.
+            <br />- Você pode renovar seu plano mesmo durante sua ativação. O
+            sistema da Fiddelize analisa se você já tem o serviço a ser renovado
+            e atualiza o plano considerando o tempo de uso anterior restante
+            somado com o atual.
             <br />
             <br />- Você consegue renovar um plano mensal para anual ou
             vice-versa quantas vezes precisar.

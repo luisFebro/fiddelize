@@ -148,10 +148,8 @@ export default function Simulator({
                 className="d-inline-block ml-2 text-title text-purple"
                 style={styles.totalUnits}
             >
-                <span
-                    className={`text-em-${unitSizeInc} font-site text-nowrap`}
-                >
-                    {totalReal} {subject}
+                <span className={`text-em-1-2 font-site text-nowrap`}>
+                    + {totalReal} {subject}
                     {packages === 1 ? "" : "s"}
                 </span>
                 <br />
@@ -167,7 +165,8 @@ export default function Simulator({
                     {unitReal}
                     {isYearly && (
                         <span className="d-inline-block text-small">
-                            apenas <strong>{yearToMonthUnit}</strong>cada ao mês
+                            apenas <strong>{yearToMonthUnit}</strong>{" "}
+                            {packages !== 1 && "(cada)"} ao mês
                         </span>
                     )}
                 </div>

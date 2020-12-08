@@ -126,7 +126,7 @@ function createBoleto(req, res) {
                 renewal,
             };
 
-            User("clinte-admin")
+            User("cliente-admin")
                 .findById(userId)
                 .exec((err, doc) => {
                     if (err)
