@@ -19,7 +19,6 @@ export default function ModalBtn({ modalData = {} }) {
     const { name, _id } = modalData;
 
     const params = {
-        thisRole: "cliente-membro",
         select: "-_id name cpf createdAt phone email birthday",
     };
 

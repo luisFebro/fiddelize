@@ -41,7 +41,6 @@ export default function ClientProfile({ data, title, subtitle }) {
             Contato: phone,
             Email: email,
             Aniversário: birthday,
-            "Estado Civil": maritalStatus,
         };
 
         const infoKeys = Object.keys(infos);

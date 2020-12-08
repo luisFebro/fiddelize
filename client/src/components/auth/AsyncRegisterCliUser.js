@@ -109,6 +109,7 @@ function ASyncRegisterCliUser({
         staffId,
         memberId,
         memberRole,
+        memberRoleAlt,
         memberJob,
         userScore,
         lastRegisterBizId,
@@ -117,6 +118,7 @@ function ASyncRegisterCliUser({
         "userId",
         "memberId",
         "memberRole",
+        "role",
         "memberJob",
         "userScore",
         "lastRegisterBizId",
@@ -137,7 +139,7 @@ function ASyncRegisterCliUser({
                         job: memberJob || "admin",
                     },
                     tempScore: userScore,
-                    memberRole: memberRole || role, // if not found memberRole, it means it is a complete register before sending link invitation.
+                    memberRole: memberRole || memberRoleAlt, // if not found memberRole, it means it is a complete register before sending link invitation.
                     clientUserData: {
                         ...data.clientUserData,
                         bizId: lastRegisterBizId,

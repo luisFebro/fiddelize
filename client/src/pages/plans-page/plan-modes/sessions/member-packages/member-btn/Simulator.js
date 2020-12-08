@@ -64,14 +64,14 @@ export default function Simulator({
     animaDisabled,
 }) {
     const [packages, setPackages] = useState(1);
-    const [discountDiff, setDiscountDiff] = useState(null);
-    const [increasedPerc, setIncreasedPerc] = useState(null);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
         usageDays: 30,
         formattedExpiryDate: "",
     });
+    // const [increasedPerc, setIncreasedPerc] = useState(null);
+    // const [discountDiff, setDiscountDiff] = useState(null);
     const { newQuantity, expiryDate, usageDays, formattedExpiryDate } = data;
 
     const isYearly = period === "yearly";
@@ -124,8 +124,12 @@ export default function Simulator({
         moneySign: true,
         needFraction: true,
     });
+    const yearToMonthUnit = convertToReal(unit / 12, {
+        moneySign: true,
+        needFraction: true,
+    });
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
-    const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
+    // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
     const firstPhasePriceReal = convertToReal(firstPhasePrice, {
         moneySign: true,
     });
@@ -137,17 +141,6 @@ export default function Simulator({
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
     }, [packages]);
-
-    useEffect(() => {
-        if (unit !== 0.14) {
-            const diff = firstPhasePrice - totalFinalMoney;
-            const incPerc = getIncreasedPerc(totalFinalMoney, firstPhasePrice);
-            setDiscountDiff(diff);
-            setIncreasedPerc(incPerc);
-        } else {
-            setDiscountDiff(null);
-        }
-    }, [unit, firstPhasePrice]);
 
     const showMultiPrice = () => (
         <section className="mt-3 text-center">
@@ -162,14 +155,22 @@ export default function Simulator({
                     {packages === 1 ? "" : "s"}
                 </span>
                 <br />
-                <span className="text-title"> X </span>
-                <span
-                    className={`text-em-${unitSizeDec} font-site ${
+                <div
+                    className={`text-em-${
+                        isYearly ? "1-3" : unitSizeDec
+                    } font-site ${
                         unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
                     }`}
+                    style={{ lineHeight: "20px" }}
                 >
+                    <span className="text-title"> X </span>
                     {unitReal}
-                </span>
+                    {isYearly && (
+                        <span className="d-inline-block text-small">
+                            apenas <strong>{yearToMonthUnit}</strong>cada ao mês
+                        </span>
+                    )}
+                </div>
             </span>
         </section>
     );
@@ -180,27 +181,6 @@ export default function Simulator({
             {totalFinalMoneyReal}
         </section>
     );
-
-    const showDiffDiscount = () =>
-        Boolean(discountDiff) && (
-            <section
-                className={`my-5 ${animaDisabled ? "" : "zoomIn animated"}`}
-            >
-                <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
-                    Automatizador de Desconto
-                </h2>
-                <p className="text-normal text-purple text-left">
-                    Você economiza{" "}
-                    <span className="text-subtitle font-weight-bold">
-                        {discountDiffReal} ({Math.ceil(increasedPerc)}%)
-                    </span>{" "}
-                    <span className="d-none">
-                        comparado com o preço total de {firstPhasePriceReal} -
-                        R$ 1,00 por {subject};
-                    </span>
-                </p>
-            </section>
-        );
 
     const handlePlanName = () => {
         if (currPlan === "ouro") return currPlan.cap();
@@ -283,6 +263,38 @@ export default function Simulator({
 }
 
 /* ARCHIVES
+    useEffect(() => {
+        if (unit !== 0.14) {
+            const diff = firstPhasePrice - totalFinalMoney;
+            const incPerc = getIncreasedPerc(totalFinalMoney, firstPhasePrice);
+            setDiscountDiff(diff);
+            setIncreasedPerc(incPerc);
+        } else {
+            setDiscountDiff(null);
+        }
+    }, [unit, firstPhasePrice]);
+
+const showDiffDiscount = () =>
+        Boolean(discountDiff) && (
+            <section
+                className={`my-5 ${animaDisabled ? "" : "zoomIn animated"}`}
+            >
+                <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
+                    Automatizador de Desconto
+                </h2>
+                <p className="text-normal text-purple text-left">
+                    Você economiza{" "}
+                    <span className="text-subtitle font-weight-bold">
+                        {discountDiffReal} ({Math.ceil(increasedPerc)}%)
+                    </span>{" "}
+                    <span className="d-none">
+                        comparado com o preço total de {firstPhasePriceReal} -
+                        R$ 1,00 por {subject};
+                    </span>
+                </p>
+            </section>
+        );
+
 const packageMarks = [
         value: 1,
         label: "",

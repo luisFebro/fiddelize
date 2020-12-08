@@ -142,6 +142,14 @@ exports.register = async (req, res) => {
         register: thisRegister,
     } = req.body;
 
+    // get member Name
+    const memberId = thisRegister.id;
+    const memberData = await User(memberRole)
+        .findById(memberId)
+        .select("-_id name");
+
+    thisRegister = { ...thisRegister, member: memberData.name };
+
     const ThisUser = User(role);
     const newUser = new ThisUser({
         role,
@@ -203,7 +211,7 @@ exports.register = async (req, res) => {
             clientName: name,
             tempScore: registerUserScore,
             memberRole,
-            memberId: thisRegister.id,
+            memberId,
         });
 
         const notifData = {

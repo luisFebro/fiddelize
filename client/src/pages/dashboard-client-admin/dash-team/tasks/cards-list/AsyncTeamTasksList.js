@@ -76,9 +76,9 @@ export default function AsyncCardsList() {
                 style={{ position: "fixed", bottom: "10px", right: "10px" }}
             >
                 <RegisterPanelBtn
-                    title="Novo Membro"
-                    isNewMember={true}
-                    needTeamApp={false}
+                    title="Nova Tarefa"
+                    isCliAdmin={true}
+                    needTeamApp={true}
                     size="medium"
                 />
             </section>

@@ -12,6 +12,7 @@ const data = {
     clientUserData: ClientUserSchema,
     filter: DefaultFilterSchema,
     register: {
+        member: String,
         id: String,
         job: String, // like sales, admin
     },

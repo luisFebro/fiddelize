@@ -81,22 +81,11 @@ function AsyncAddMembersContent({
                 - Os créditos são <strong>liberados automaticamente</strong>{" "}
                 após a aprovação do pagamento.
             </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Caso ainda possua créditos válidos anteriores, o sistema da
-                Fiddelize <strong>acumula esses créditos com os atuais</strong>.
-                O <strong>tempo de validade</strong> é acumulado da mesma forma
-                também.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Quando expira seu tempo de uso, os seus{" "}
-                <strong>créditos não usados são zerados</strong>. Você é
+            {/*Blocking not implemented yet*/}
+            <p className="d-none text-small text-left text-purple mt-3">
+                - Quando expira seu tempo de uso, os apps dos membros são
+                temporariamente desativados até a renovação do serviço. Você é
                 notificado <strong>10 dias</strong> antes do prazo expirar.
-                Renovando o serviço, você extende o tempo de uso dos créditos.
-            </p>
-            <p className="text-small text-left text-purple mt-3">
-                - Uma vez cadastrado, seus clientes usam o{" "}
-                <strong>app sem limites</strong>, mesmo quando seu plano
-                expirar. Você só vai precisar investir em novos clientes.
             </p>
         </section>
     );
