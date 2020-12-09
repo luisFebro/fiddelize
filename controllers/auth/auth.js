@@ -142,13 +142,26 @@ exports.register = async (req, res) => {
         register: thisRegister,
     } = req.body;
 
-    // get member Name
-    const memberId = thisRegister.id;
-    const memberData = await User(memberRole)
-        .findById(memberId)
-        .select("-_id name");
+    const isCliUser = role === "cliente";
+    const isCliMember = role === "cliente-membro";
+    // const isCliAdmin = role === "cliente-admin";
 
-    thisRegister = { ...thisRegister, member: memberData.name };
+    if (isCliUser) {
+        // get member Name
+        const memberId = thisRegister && thisRegister.id;
+        const memberData = await User(memberRole)
+            .findById(memberId)
+            .select("-_id name");
+
+        thisRegister = { ...thisRegister, member: memberData.name };
+    }
+
+    if (isCliMember) {
+        const { isFreeMemberApp } = req;
+        if (isFreeMemberApp) {
+            clientMemberData = { ...clientMemberData, isFreeMemberApp: true };
+        }
+    }
 
     const ThisUser = User(role);
     const newUser = new ThisUser({
@@ -203,8 +216,6 @@ exports.register = async (req, res) => {
             _id,
     });
 
-    const isCliUser = role === "cliente";
-    const isCliMember = role === "cliente-membro";
     if (isCliUser) {
         const registerUserScore = tempScore ? decryptLinkScore(tempScore) : 0;
         await addMemberTaskHistory({

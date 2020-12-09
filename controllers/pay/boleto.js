@@ -4,6 +4,7 @@ const axios = require("axios");
 const { globalVar } = require("./globalVar");
 
 const { email: authEmail } = globalVar;
+const FAKE_EMAIL_TEST = "fiddelize.boleto@gmail.com";
 /*
 IMPORTANTE:
 Sua aplicação deve estar apta para suportar tempo de resposta de até 1 minuto, pois a dependendo da quantidade de boletos a serem gerados, sua aplicação pode retornar time out enquanto ainda os boletos estiverem sendo gerados no PagSeguro.
@@ -33,21 +34,21 @@ a Federação Brasileira de Bancos (Febraban) realizou um processo de aprimorame
 Isso ajuda na a possibilidade de pagar um boleto vencido em qualquer banco ou instituição financeira, diminuição das fraudes e das inconsistências de valores.
  */
 
-function createBoleto(req, res) {
+// LESSON: this request can take up to 40s in dev mode.
+async function createBoleto(req, res) {
     let {
-        userId,
-        paymentCategory,
-        reference = "123",
-        amount = "150.00",
+        userId = "5e8b0bfc8c616719b01abc9c",
+        paymentCategory = "boleto",
+        reference = "OU-Q1-A-XXCY94N",
+        amount = "299.00",
         numberOfPayments = 1,
-        instructions,
+        instructions = "Plano ouro  com 1 servico no valor total de: R$ 300.00",
         description,
-        cpf = "02324889242",
+        cpf = "43171124262",
         cnpj,
-        name = "Ana Maria",
+        name = "Febro Feitoza",
         phoneAreaCode = "92",
-        phoneNumber = "992817363",
-        email = "luis.felipe.bruno@gmail.com",
+        phoneNumber = "992576121",
         postalCode = "01046010",
         street = "Av. Ipiranga",
         number = "100",
@@ -55,10 +56,10 @@ function createBoleto(req, res) {
         city = "Sao Paulo",
         state = "SP",
         complement,
-        firstDueDate = "2020-10-08",
-        ordersStatement,
-        isRenewal,
-        renewal,
+        firstDueDate = "2020-12-12",
+        ordersStatement = "{ 'Novvos Membros': { totalPackage: 10, amount: 0, price: 300 } }",
+        isRenewal = false,
+        renewal = undefined,
     } = req.payload;
 
     const params = {
@@ -79,7 +80,9 @@ function createBoleto(req, res) {
     const customerData = {
         name, // Nome completo ou Razão Social do comprador do produto /serviço referente ao boleto gerado.
         phone: { areaCode: phoneAreaCode, number: phoneNumber },
-        email,
+        // IMPORTANT LESSON: do not use test@analimatest@gmail.com since this is a production shit, use else email. In this case, email is hardcoded and not real cuz i am already sending in the checkout.
+        // This was the cause of hours of debugging... One advantage is that now we do not have duplicated emails.
+        email: FAKE_EMAIL_TEST,
         document: { type: cpf ? "CPF" : "CNPJ", value: cpf || cnpj },
         address: addressData, //Dados de endereço do comprador, Os dados de endereço são opcionais, porém a partir do momento que o elemento address é informado, todos os sub-parâmetros dele são obrigatórios.
     };
@@ -110,68 +113,63 @@ function createBoleto(req, res) {
         },
     };
 
-    axios(config)
-        .then((response) => {
-            const { boletos } = response.data;
-            const [boletoData] = boletos;
+    const response = await axios(config).catch((e) => {
+        res.status(500).json(e);
+    });
+    if (!response) return;
 
-            let dataCliAdmin = {
-                reference,
-                investAmount: (Number(amount) + 1).toFixed(2).toString(), // I discounted R$1, then replacing again to displace the correct price to cliAdmin
-                barcode: boletoData.barcode,
-                paymentCategory,
-                paymentLink: boletoData.paymentLink,
-                payDueDate: boletoData.dueDate,
-                ordersStatement,
-                renewal,
-            };
+    const { boletos } = response.data;
+    const [boletoData] = boletos;
 
-            User("cliente-admin")
-                .findById(userId)
-                .exec((err, doc) => {
-                    if (err)
-                        return res
-                            .status(500)
-                            .json(msgG("error.systemError", err));
-                    const orders = doc.clientAdminData.orders;
+    let dataCliAdmin = {
+        reference,
+        investAmount: (Number(amount) + 1).toFixed(2).toString(), // I discounted R$1, then replacing again to displace the correct price to cliAdmin
+        barcode: boletoData.barcode,
+        paymentCategory,
+        paymentLink: boletoData.paymentLink,
+        payDueDate: boletoData.dueDate,
+        ordersStatement,
+        renewal,
+    };
 
-                    if (isRenewal) {
-                        const modifiedOrders =
-                            orders &&
-                            orders.map((serv) => {
-                                if (
-                                    serv.reference ===
-                                    (renewal && renewal.priorRef)
-                                ) {
-                                    serv.renewal = {
-                                        ...renewal,
-                                        isOldCard: true,
-                                    };
-                                    return serv;
-                                }
+    const doc = await User("cliente-admin")
+        .findById(userId)
+        .catch((e) => {
+            res.status(500).json(e);
+        });
+    if (!doc) return;
 
-                                return serv;
-                            });
+    const orders = doc.clientAdminData.orders;
 
-                        doc.clientAdminData.orders = [
-                            dataCliAdmin,
-                            ...modifiedOrders,
-                        ];
-                    } else {
-                        doc.clientAdminData.orders = [dataCliAdmin, ...orders];
-                    }
-                    // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-                    doc.markModified("clientAdminData.orders");
-                    doc.save((err) => {
-                        res.json({
-                            barcode: boletoData.barcode,
-                            dueDate: boletoData.dueDate,
-                            paymentLink: boletoData.paymentLink,
-                        });
-                    });
-                });
-        })
-        .catch((e) => console.log(e));
+    if (isRenewal) {
+        const modifiedOrders =
+            orders &&
+            orders.map((serv) => {
+                if (serv.reference === (renewal && renewal.priorRef)) {
+                    serv.renewal = {
+                        ...renewal,
+                        isOldCard: true,
+                    };
+                    return serv;
+                }
+
+                return serv;
+            });
+
+        doc.clientAdminData.orders = [dataCliAdmin, ...modifiedOrders];
+    } else {
+        doc.clientAdminData.orders = [dataCliAdmin, ...orders];
+    }
+
+    // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+    doc.markModified("clientAdminData.orders");
+    await doc.save();
+
+    res.json({
+        barcode: boletoData.barcode,
+        paymentLink: boletoData.paymentLink,
+        dueDate: boletoData.dueDate,
+    });
 }
 
 module.exports = {

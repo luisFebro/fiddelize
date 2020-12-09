@@ -1,13 +1,12 @@
 // TRANSPARENT CHECKOUT - full control of PAGSEGURO's API to run payment in my own app/website
 // start and finish checkout flow - página de pagamento
-const xml2js = require("xml2js");
 const qs = require("querystring");
 const Order = require("../../models/order/Order");
 const { getPayCategoryType } = require("./helpers/getTypes");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
-const parser = new xml2js.Parser({ attrkey: "ATTR" });
-const { payUrl, sandboxMode, email, token } = globalVar;
+const { payUrl, email, token } = globalVar;
+const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 
 function handleAmounts(num1, num2, options = {}) {
     const { op = "+" } = options;
@@ -25,7 +24,7 @@ function handleAmounts(num1, num2, options = {}) {
 
 // POST - generate a authorization session token
 // This will be the choice for my own checkout customization
-function startCheckout(req, res) {
+async function startCheckout(req, res) {
     const params = {
         email,
         token,
@@ -41,23 +40,17 @@ function startCheckout(req, res) {
         },
     };
 
-    axios(config)
-        .then((response) => {
-            const xml = response.data;
-            parser.parseString(xml, function (error, result) {
-                if (error === null) {
-                    const [checkoutCode] = result.session.id;
-                    res.json(checkoutCode);
-                } else {
-                    console.log(error);
-                }
-            });
-        })
-        .catch((e) => res.json(e.response.data));
+    const response = await axios(config);
+
+    const xml = response.data;
+    const result = await convertXmlToJson(xml);
+
+    const [checkoutCode] = result.session.id;
+    res.json(checkoutCode);
 }
 
 // POST
-const finishCheckout = (req, res, next) => {
+async function finishCheckout(req, res, next) {
     const { userId } = req.query;
 
     let {
@@ -146,82 +139,75 @@ const finishCheckout = (req, res, next) => {
         },
     };
 
-    axios(config)
-        .then((response) => {
-            const xml = response.data;
-            parser.parseString(xml, function (error, result) {
-                if (error === null) {
-                    const data = result.transaction;
-                    const [reference] = data.reference;
-                    const [feeAmount] = data.feeAmount;
-                    const [netAmount] = data.netAmount;
-                    const [grossAmount] = data.grossAmount;
-                    const [extraAmount] = data.extraAmount;
+    const response = await axios(config);
 
-                    const payload = {
-                        userId,
-                        paymentCategory: getPayCategoryType(paymentMethod),
-                        reference,
-                        amount: grossAmount,
-                        instructions: itemDescription1,
-                        cpf: senderCPF,
-                        name: senderName,
-                        phoneAreaCode: senderAreaCode,
-                        phoneNumber: senderPhone,
-                        email: senderEmail,
-                        ordersStatement,
-                        firstDueDate,
-                        isRenewal: renewalReference ? true : false,
-                    };
+    const xml = response.data;
 
-                    const newOrder = new Order({
-                        reference,
-                        agentName: "Fiddelize",
-                        agentId: "5db4301ed39a4e12546277a8",
-                        clientAdmin: {
-                            name: senderName,
-                            id: userId,
-                        },
-                        paymentCategory: getPayCategoryType(paymentMethod),
-                        amount: {
-                            fee: handleAmounts(feeAmount, extraAmount, {
-                                op: "+",
-                            }),
-                            net: netAmount,
-                            gross: handleAmounts(grossAmount, extraAmount, {
-                                op: "+",
-                            }),
-                            extra: extraAmount,
-                        },
-                        filter,
-                        isCurrRenewal: renewalReference ? true : undefined,
-                        totalRenewalDays:
-                            renewalReference || isSingleRenewal
-                                ? Number(renewalCurrDays) +
-                                  Number(renewalDaysLeft)
-                                : undefined,
-                        isSingleRenewal: isSingleRenewal ? true : undefined,
-                    });
+    const result = await convertXmlToJson(xml);
 
-                    newOrder.save().then((err) => {
-                        const renewal = {
-                            priorRef: renewalReference,
-                            currRef: reference,
-                            priorDaysLeft: renewalDaysLeft,
-                        };
-                        payload.renewal = renewalReference
-                            ? renewal
-                            : undefined;
-                        req.payload = payload;
-                        next();
-                    });
-                } else {
-                    console.log(error);
-                }
-            });
-        })
-        .catch((e) => console.log(e)); // LESSON: never use e to be log in a JSON response. it will displayed like error: {} The error log only appears only in CLI.
-};
+    const data = result.transaction;
+    const [referenceXml] = data.reference;
+    const [feeAmount] = data.feeAmount;
+    const [netAmount] = data.netAmount;
+    const [grossAmount] = data.grossAmount;
+    const [extraAmountXml] = data.extraAmount;
+
+    const payload = {
+        userId,
+        paymentCategory: getPayCategoryType(paymentMethod),
+        reference: referenceXml,
+        amount: grossAmount,
+        instructions: itemDescription1,
+        cpf: senderCPF,
+        name: senderName,
+        phoneAreaCode: senderAreaCode,
+        phoneNumber: senderPhone,
+        ordersStatement,
+        firstDueDate,
+        isRenewal: renewalReference ? true : false,
+    };
+
+    const newOrder = new Order({
+        reference: referenceXml,
+        agentName: "Fiddelize",
+        agentId: "5db4301ed39a4e12546277a8",
+        clientAdmin: {
+            name: senderName,
+            id: userId,
+        },
+        paymentCategory: getPayCategoryType(paymentMethod),
+        amount: {
+            fee: handleAmounts(feeAmount, extraAmountXml, {
+                op: "+",
+            }),
+            net: netAmount,
+            gross: handleAmounts(grossAmount, extraAmountXml, {
+                op: "+",
+            }),
+            extra: extraAmountXml,
+        },
+        filter,
+        isCurrRenewal: renewalReference ? true : undefined,
+        totalRenewalDays:
+            renewalReference || isSingleRenewal
+                ? Number(renewalCurrDays) + Number(renewalDaysLeft)
+                : undefined,
+        isSingleRenewal: isSingleRenewal ? true : undefined,
+    });
+
+    await newOrder.save();
+
+    const renewal = {
+        priorRef: renewalReference,
+        currRef: referenceXml,
+        priorDaysLeft: renewalDaysLeft,
+    };
+    payload.renewal = renewalReference ? renewal : undefined;
+
+    req.payload = payload;
+    next();
+}
+// .catch((e) => console.log(e)); // LESSON: never use e to be log in a JSON response. it will displayed like error: {} The error log only appears only in CLI.
 
 module.exports = {
     startCheckout,
@@ -530,7 +516,7 @@ function createDefaultCode(req, res) {
     axios(config)
         .then((response) => {
             const xml = response.data;
-            parser.parseString(xml, function (error, result) {
+            const result = await convertXmlToJson(xml);
                 if (error === null) {
                     const [checkoutCode] = result.checkout.code;
                     res.json(checkoutCode);

@@ -13,12 +13,31 @@ const isPaid = (transactionStatus) =>
     transactionStatus === "pago" || transactionStatus === "disponível";
 
 const checkIfGotFreeCredits = ({ user, service }) => {
-    const { bizPlan, bizFreeCredits } = user.clientAdminData;
+    const { bizPlan, bizFreeCredits, bizPlanList } = user.clientAdminData;
 
     const totalFreeUsers = bizFreeCredits ? bizFreeCredits[service] : 0;
-
     if (bizPlan === "gratis" && !totalFreeUsers) return false;
+
     return true;
+};
+
+// to avoid pro to add unthorized credits since the freeCredit method just verify if the user has a free account.
+const checkIfServiceGotCredit = ({ user, service }) => {
+    const { bizPlanList } = user.clientAdminData;
+
+    if (!bizPlanList) return false;
+
+    const needCheckPro = bizPlanList && bizPlanList.length;
+    if (needCheckPro) {
+        let foundService = false;
+        bizPlanList.map((s) => {
+            if (s.service === service) foundService = true;
+        });
+
+        return foundService;
+    }
+
+    return false;
 };
 
 const getDiscountedList = ({ bizPlanList, service }) => {
@@ -55,17 +74,25 @@ exports.mwProCreditsCounter = (req, res, next) => {
         const user = await User("cliente-admin").findById(bizId);
 
         if (!user)
-            return res
-                .status(404)
-                .json({
-                    error: "No momento, esta empresa não está disponível.",
-                });
+            return res.status(404).json({
+                error: "No momento, esta empresa não está disponível.",
+            });
 
         const gotFreeCredits = checkIfGotFreeCredits({ user, service });
+        const gotServiceCredits = checkIfServiceGotCredit({ user, service });
 
+        const { bizName, bizPlan } = user.clientAdminData;
         if (!gotFreeCredits) {
-            const { bizName } = user.clientAdminData;
             return res.status(401).json(msg("error.registersLimit", bizName));
+        }
+
+        if (bizPlan !== "gratis" && !gotServiceCredits) {
+            return res
+                .status(401)
+                .json({
+                    error:
+                        "Limite máximo de cadastro alcançado. Adicione mais créditos.",
+                });
         }
 
         let newBalance; // for console.log only.
@@ -74,6 +101,7 @@ exports.mwProCreditsCounter = (req, res, next) => {
             bizFreeCredits,
             totalClientUsers,
             bizPlanList,
+            totalClientMembers,
         } = user.clientAdminData;
 
         const targetTotal = isCliUser
@@ -108,7 +136,11 @@ exports.mwProCreditsCounter = (req, res, next) => {
             needFreeDiscount ? "FREE CREDIT" : "credit"
         } from service ${service}. New balance is ${newBalance}`;
         console.log(succMsg);
-        // res.json(succMsg); // for testing
+
+        // handle first member app as free only
+        const isFreeApp = totalClientMembers === 0 || !totalClientMembers;
+        req.isFreeMemberApp = isFreeApp;
+
         next();
     }
 
@@ -118,9 +150,8 @@ exports.mwProCreditsCounter = (req, res, next) => {
 // GET - goal is to change welcome message to direct pay after first transaction.
 exports.getProData = async (req, res) => {
     const { userId, nextExpiryDate } = req.query;
-    const { role } = await req.getAccount(userId);
 
-    User(role)
+    User("cliente-admin")
         .findById(userId)
         .select(
             "clientAdminData.bizFreeCredits clientAdminData.orders clientAdminData.bizPlanList"

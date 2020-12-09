@@ -3,8 +3,7 @@ const Order = require("../../models/order/Order");
 const Pricing = require("../../models/admin/Pricing");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
-const xml2js = require("xml2js");
-const parser = new xml2js.Parser({ attrkey: "ATTR" });
+const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 const {
     getTransactionStatusTypes,
     getPaymentMethod,
@@ -24,7 +23,7 @@ const {
 } = require("./helpers/transactionHandlers");
 const { sendBackendNotification } = require("../notification");
 
-const { payUrl, sandboxMode, email, token } = globalVar;
+const { payUrl, email, token } = globalVar;
 
 // real time notification to Fiddelize's system every time a transation's status change like pending to paid.
 /*
@@ -58,7 +57,7 @@ const handlePlanDueDate = (
 };
 
 // Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
-const getPagNotify = (req, res) => {
+const getPagNotify = async (req, res) => {
     const notificationCode = req.body.notificationCode;
 
     // Consulting notification transaction - requiring auth data related to received notification's code.
@@ -77,134 +76,124 @@ const getPagNotify = (req, res) => {
         },
     };
 
-    async function runNotifTransactions() {
-        const response = await axios(config);
-        const xml = response.data;
+    const response = await axios(config);
+    const xml = response.data;
 
-        parser.parseString(xml, async function (error, result) {
-            if (error === null) {
-                const data = result.transaction;
+    const result = await convertXmlToJson(xml);
 
-                const [status] = data.status;
-                const [reference] = data.reference;
-                const [lastEventDate] = data.lastEventDate;
-                const [paymentMethod] = data.paymentMethod;
-                const [paymentMethodCode] = paymentMethod.code;
+    const data = result.transaction;
 
-                const mainRef = reference;
+    const [status] = data.status;
+    const [reference] = data.reference;
+    const [lastEventDate] = data.lastEventDate;
+    const [paymentMethod] = data.paymentMethod;
+    const [paymentMethodCode] = paymentMethod.code;
 
-                const currStatus = getTransactionStatusTypes(status);
-                const isPaid = getPaidStatus(currStatus);
+    const mainRef = reference;
 
-                let thisDueDate;
+    const currStatus = getTransactionStatusTypes(status);
+    const isPaid = getPaidStatus(currStatus);
 
-                const doc = await Order.findOne({ reference });
-                if (!doc)
-                    return res.status(404).json({ error: "order not found!" });
+    let thisDueDate;
 
-                const isCurrRenewal = doc && doc.isCurrRenewal;
-                const isSingleRenewal = doc && doc.isSingleRenewal;
-                const totalRenewalDays = doc && doc.totalRenewalDays;
+    const doc = await Order.findOne({ reference }).catch((e) => {
+        res.status(404).json({ error: "order not found!" });
+    });
+    if (!doc) return;
 
-                thisDueDate = handlePlanDueDate(
-                    currStatus,
-                    doc,
-                    reference,
-                    isCurrRenewal,
-                    isSingleRenewal,
-                    totalRenewalDays
-                );
+    const { isCurrRenewal, isSingleRenewal, totalRenewalDays } = doc;
 
-                doc.planDueDate = thisDueDate;
-                doc.paymentMethod = getPaymentMethod(paymentMethodCode);
-                doc.updatedAt = lastEventDate;
-                doc.transactionStatus = getTransactionStatusTypes(status);
-                const payRelease = doc.paymentReleaseDate;
-                doc.paymentReleaseDate = payRelease
-                    ? payRelease
-                    : paymentReleaseDate;
+    thisDueDate = handlePlanDueDate(
+        currStatus,
+        doc,
+        reference,
+        isCurrRenewal,
+        isSingleRenewal,
+        totalRenewalDays
+    );
 
-                const clientAdminId = doc.clientAdmin.id;
+    doc.planDueDate = thisDueDate;
+    doc.paymentMethod = getPaymentMethod(paymentMethodCode);
+    doc.updatedAt = lastEventDate;
+    doc.transactionStatus = getTransactionStatusTypes(status);
 
-                // doc.markModified("clientAdminData");
-                await doc.save();
-                const allServices = await Pricing.find({});
-                if (!allServices)
-                    return res
-                        .status(500)
-                        .json({ error: "something went wrong with Pricing" });
+    const payRelease = doc.paymentReleaseDate;
+    doc.paymentReleaseDate = payRelease ? payRelease : paymentReleaseDate;
 
-                const data2 = await User("cliente-admin").findOne({
-                    _id: clientAdminId,
-                });
-                let orders = data2.clientAdminData.orders;
-                let currBizPlanList = data2.clientAdminData.bizPlanList;
+    const clientAdminId = doc.clientAdmin.id;
 
-                const modifiedOrders = orders.map((targetOr) => {
-                    return handleModifiedOrders({
-                        targetOr,
-                        isCurrRenewal,
-                        mainRef,
-                        isPaid,
-                        thisDueDate,
-                        getPaymentMethod,
-                        paymentMethodCode,
-                        currStatus,
-                        lastEventDate,
-                    });
-                });
+    // doc.markModified("clientAdminData");
+    await doc.save();
+    const allServices = await Pricing.find({});
+    if (!allServices) return console.log("something went wrong with Pricing");
 
-                if (isPaid) {
-                    const isSMS = orders.find(
-                        (o) =>
-                            o.reference === reference &&
-                            o.ordersStatement &&
-                            o.ordersStatement.sms
-                    );
+    const data2 = await User("cliente-admin").findOne({
+        _id: clientAdminId,
+    });
 
-                    if (isSMS) {
-                        // This is an exception because SMS was built firstly and has a different reasoning to add credits
-                        data2.clientAdminData.smsBalance = handleProSMSCredits({
-                            data2,
-                            isSMS,
-                        });
-                    }
+    let orders = data2.clientAdminData.orders;
+    let currBizPlanList = data2.clientAdminData.bizPlanList;
 
-                    handleProPlan({
-                        data2,
-                        getCurrPlan,
-                        currBizPlanList,
-                        mainRef,
-                        setCurrPlan,
-                        orders,
-                        allServices,
-                        thisDueDate,
-                        mainRef,
-                    });
-
-                    const gotPaidServices =
-                        currBizPlanList && currBizPlanList.length;
-                    const notifData = {
-                        cardType: "pro",
-                        subtype: gotPaidServices ? "proPay" : "welcomeProPay",
-                        recipient: { role: "cliente-admin", id: clientAdminId },
-                        content: `approvalDate:${new Date()};`,
-                    };
-
-                    await sendBackendNotification({ notifData });
-                }
-
-                data2.clientAdminData.orders = modifiedOrders;
-
-                await data2.save();
-                res.json({
-                    msg: "both agent and cliAdmin updated on db",
-                });
-            }
+    const modifiedOrders = orders.map((targetOr) => {
+        return handleModifiedOrders({
+            targetOr,
+            isCurrRenewal,
+            mainRef,
+            isPaid,
+            thisDueDate,
+            getPaymentMethod,
+            paymentMethodCode,
+            currStatus,
+            lastEventDate,
         });
+    });
+
+    if (isPaid) {
+        const isSMS = orders.find(
+            (o) =>
+                o.reference === reference &&
+                o.ordersStatement &&
+                o.ordersStatement.sms
+        );
+
+        if (isSMS) {
+            // This is an exception because SMS was built firstly and has a different reasoning to add credits
+            data2.clientAdminData.smsBalance = handleProSMSCredits({
+                data2,
+                isSMS,
+            });
+        }
+
+        handleProPlan({
+            data2,
+            getCurrPlan,
+            currBizPlanList,
+            mainRef,
+            setCurrPlan,
+            orders,
+            allServices,
+            thisDueDate,
+            mainRef,
+        });
+
+        const gotPaidServices = currBizPlanList && currBizPlanList.length;
+        const notifData = {
+            cardType: "pro",
+            subtype: gotPaidServices ? "proPay" : "welcomeProPay",
+            recipient: { role: "cliente-admin", id: clientAdminId },
+            content: `approvalDate:${new Date()};`,
+        };
+
+        await sendBackendNotification({ notifData });
     }
 
-    runNotifTransactions();
+    data2.clientAdminData.orders = modifiedOrders;
+
+    await data2.save();
+
+    res.json({
+        msg: "both agent and cliAdmin updated on db",
+    });
 };
 
 const readHistory = (req, res) => {
@@ -292,7 +281,7 @@ module.exports = {
 // axios(config)
     //     .then((response) => {
     //         const xml = response.data;
-    //         parser.parseString(xml, function (error, result) {
+    //         convertXmlToJson
     //             if (error === null) {
     //                 const data = result.transaction;
 
@@ -462,7 +451,7 @@ const readTransaction = (req, res) => {
     axios(config)
         .then((response) => {
             const xml = response.data;
-            parser.parseString(xml, function (error, result) {
+            convertXmlToJson
                 if (error === null) {
                     const data = result.transaction;
 

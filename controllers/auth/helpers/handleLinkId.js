@@ -1,6 +1,7 @@
 const User = require("../../../models/user");
 
 // link id is used to identify which staff registered customers through the invitation link
+// 0 is always the admin id. Then from 1 above, it corresponds to each member.
 
 exports.createLinkId = async (memberId, options = {}) => {
     const { adminId } = options;

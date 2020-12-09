@@ -28,6 +28,7 @@ const clientMemberData = {
     onceChecked: OnceCheckedSchema,
     taskList: [TaskListSchema],
     linkId: Number, // to identify the member when registering client-users
+    isFreeMemberApp: Boolean, // allow only the first app to have free access and no expiry date in case of pro plan is expired.
 };
 
 const ClientMemberSchema = new Schema(clientMemberData, { _id: false });

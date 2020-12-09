@@ -121,7 +121,7 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
             senderHash &&
             selectedCategory &&
             adminName !== "...",
-        timeout: 40000,
+        timeout: 60000,
     });
 
     const showTitle = () => (
