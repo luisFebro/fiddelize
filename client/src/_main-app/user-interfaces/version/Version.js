@@ -4,7 +4,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.8397.5";
+const latestVersion = "3.8398.5";
 // PRÓXIMO:
 // sistema multi-conta (painel de cadastros)
 const updateDescription = "serviço novvos membros pt4";

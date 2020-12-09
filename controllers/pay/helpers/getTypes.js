@@ -4,6 +4,7 @@ exports.getPayCategoryType = (type) => {
     if (type === "eft") return "débito";
 };
 
+// LESSON: while testing, do not forget to switch to paid status!
 exports.getTransactionStatusTypes = (codeNum) => {
     if (codeNum === "1") return "pendente";
     if (codeNum === "2") return "em análise";

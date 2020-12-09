@@ -26,6 +26,11 @@ const handleServiceName = ({
             totalPackage === 1 ? "pacote" : "pacotes"
         } com ${convertToReal(packageQtt)} clientes`;
 
+    if (serv === "Novvos Membros")
+        return `Novvos Membros - serviço com ${totalPackage} ${
+            totalPackage === 1 ? "membro" : "membros"
+        }`;
+
     return serv;
 };
 

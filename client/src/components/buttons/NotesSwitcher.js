@@ -12,9 +12,7 @@ export default function NotesSwitcher({
     const [openNote, setOpenNote] = useState(false);
 
     return (
-        <section
-            className={`${rootClassName} text-center text-normal animated fadeIn my-3`}
-        >
+        <section className={`${rootClassName} text-center text-normal my-3`}>
             <div style={{ width: 200 }}>
                 <p
                     className={`${color} ${shadowTitle} text-left text-subtitle font-weight-bold m-0`}
@@ -31,7 +29,7 @@ export default function NotesSwitcher({
             </div>
             {openNote && (
                 <p
-                    className={`${color} text-small text-left mt-3 animated rubberBand`}
+                    className={`${color} text-small text-left mt-3 animated fadeIn`}
                 >
                     {notes}
                 </p>

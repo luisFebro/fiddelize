@@ -14,8 +14,6 @@ const {
     getChunksTotal,
 } = require("../../utils/array/getDataChunk");
 const addDays = require("date-fns/addDays");
-const getCurrPlan = require("../pro/helpers/getCurrPlan");
-const setCurrPlan = require("../pro/helpers/setCurrPlan");
 const {
     handleProPlan,
     handleModifiedOrders,
@@ -57,7 +55,7 @@ const handlePlanDueDate = (
 };
 
 // Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
-const getPagNotify = async (req, res) => {
+async function getPagNotify(req, res) {
     const notificationCode = req.body.notificationCode;
 
     // Consulting notification transaction - requiring auth data related to received notification's code.
@@ -127,12 +125,12 @@ const getPagNotify = async (req, res) => {
     const allServices = await Pricing.find({});
     if (!allServices) return console.log("something went wrong with Pricing");
 
-    const data2 = await User("cliente-admin").findOne({
+    const adminData = await User("cliente-admin").findOne({
         _id: clientAdminId,
     });
 
-    let orders = data2.clientAdminData.orders;
-    let currBizPlanList = data2.clientAdminData.bizPlanList;
+    let orders = adminData.clientAdminData.orders;
+    let currBizPlanList = adminData.clientAdminData.bizPlanList;
 
     const modifiedOrders = orders.map((targetOr) => {
         return handleModifiedOrders({
@@ -158,18 +156,16 @@ const getPagNotify = async (req, res) => {
 
         if (isSMS) {
             // This is an exception because SMS was built firstly and has a different reasoning to add credits
-            data2.clientAdminData.smsBalance = handleProSMSCredits({
-                data2,
+            adminData.clientAdminData.smsBalance = handleProSMSCredits({
+                adminData,
                 isSMS,
             });
         }
 
         handleProPlan({
-            data2,
-            getCurrPlan,
+            adminData,
             currBizPlanList,
             mainRef,
-            setCurrPlan,
             orders,
             allServices,
             thisDueDate,
@@ -187,14 +183,14 @@ const getPagNotify = async (req, res) => {
         await sendBackendNotification({ notifData });
     }
 
-    data2.clientAdminData.orders = modifiedOrders;
+    adminData.clientAdminData.orders = modifiedOrders;
 
-    await data2.save();
+    await adminData.save();
 
     res.json({
         msg: "both agent and cliAdmin updated on db",
     });
-};
+}
 
 const readHistory = (req, res) => {
     const { userId, skip, limit = 10 } = req.query;

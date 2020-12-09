@@ -1,5 +1,8 @@
-exports.handleProSMSCredits = ({ data2, isSMS }) => {
-    const priorCredits = data2.clientAdminData.smsBalance;
+const setCurrPlan = require("../../pro/helpers/setCurrPlan");
+const getCurrPlan = require("../../pro/helpers/getCurrPlan");
+
+exports.handleProSMSCredits = ({ adminData, isSMS }) => {
+    const priorCredits = adminData.clientAdminData.smsBalance;
     const newCredits =
         isSMS.ordersStatement &&
         isSMS.ordersStatement.sms &&
@@ -48,22 +51,26 @@ exports.handleModifiedOrders = ({
 };
 
 exports.handleProPlan = ({
-    data2,
-    getCurrPlan,
+    adminData,
     currBizPlanList,
     mainRef,
-    setCurrPlan,
     orders,
     allServices,
     thisDueDate,
 }) => {
     const currPlan = getCurrPlan(orders);
 
-    data2.clientAdminData.bizPlan = currPlan;
-    data2.clientAdminData.bizPlanList = setCurrPlan(currBizPlanList, orders, {
-        allServices,
-        currPlan,
-        usageTimeEnd: thisDueDate,
-        ref: mainRef,
-    });
+    adminData.clientAdminData.bizPlan = currPlan;
+    adminData.clientAdminData.bizPlanList = setCurrPlan(
+        currBizPlanList,
+        orders,
+        {
+            allServices,
+            currPlan,
+            usageTimeEnd: thisDueDate,
+            ref: mainRef,
+        }
+    );
+
+    return adminData;
 };

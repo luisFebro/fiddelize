@@ -61,6 +61,7 @@ const getDiscountedList = ({ bizPlanList, service }) => {
 exports.mwProCreditsCounter = (req, res, next) => {
     const { role, clientUserData, clientMemberData } = req.body;
     const isCliUser = role === "cliente";
+    const isCliMember = role === "cliente-membro";
     const service = isCliUser ? "Novvos Clientes" : "Novvos Membros";
 
     const isUserDiscountable = isCliUser || role === "cliente-membro";
@@ -81,18 +82,16 @@ exports.mwProCreditsCounter = (req, res, next) => {
         const gotFreeCredits = checkIfGotFreeCredits({ user, service });
         const gotServiceCredits = checkIfServiceGotCredit({ user, service });
 
+        if (isCliMember && !gotServiceCredits) {
+            return res.status(401).json({
+                error:
+                    "Limite máximo de cadastro alcançado. Adicione mais créditos para novos membros.",
+            });
+        }
+
         const { bizName, bizPlan } = user.clientAdminData;
         if (!gotFreeCredits) {
             return res.status(401).json(msg("error.registersLimit", bizName));
-        }
-
-        if (bizPlan !== "gratis" && !gotServiceCredits) {
-            return res
-                .status(401)
-                .json({
-                    error:
-                        "Limite máximo de cadastro alcançado. Adicione mais créditos.",
-                });
         }
 
         let newBalance; // for console.log only.

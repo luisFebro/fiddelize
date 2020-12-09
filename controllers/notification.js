@@ -143,7 +143,7 @@ exports.sendNotification = (req, res) => {
         });
 };
 
-exports.sendBackendNotification = ({ notifData }) => {
+exports.sendBackendNotification = async ({ notifData }) => {
     // required props: cardType, (subtype if any), recipient: { role, id, }}
     const {
         recipient: { role, id: recipientId },
@@ -159,7 +159,7 @@ exports.sendBackendNotification = ({ notifData }) => {
 
     const obj = pickObjByRole(role, { data: notifData, needUnshift: true });
 
-    return User(role)
+    return await User(role)
         .findOneAndUpdate({ _id: recipientId }, { $push: obj }, { new: false })
         .select("clientAdminData.notifications clientUserData.notifications");
 };
