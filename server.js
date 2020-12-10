@@ -53,6 +53,24 @@ app.use(formData.parse()); // for images and multimedia in forms.
 app.use(cors()); //n2
 app.use(sslRedirect()); // n5
 
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*"); // to enable calls from every domain
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+    ); // allowed actiosn
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization"
+    );
+
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200); // to deal with chrome sending an extra options request
+    }
+
+    next(); // call next middlewer in line
+});
+
 // routes
 app.use("/api/email", require("./routes/email"));
 app.use("/api/user", require("./routes/user"));
