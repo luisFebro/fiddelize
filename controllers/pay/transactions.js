@@ -57,7 +57,7 @@ const handlePlanDueDate = (
 
 // Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
 // FUCKIN LESSON: Axios serializes JavaScript objects to JSON. To serialize in application/x-www-form-urlencoded format you will need to use one of the techniques described in the Axios documentation.https://github.com/axios/axios#using-applicationx-www-form-urlencoded-format
-function getPagNotify(req, res) {
+async function getPagNotify(req, res) {
     const { notificationCode } = req.body;
 
     const params = {
@@ -65,7 +65,7 @@ function getPagNotify(req, res) {
         token,
     };
 
-    // IMPORTANT LESSON: Request failed with status code 404 will appear on PROD if you are testing with SAND TEST MODE
+    // IMPORTANT LESSON: Do not mix sandMode with production!!! if using sandMode and request for production will return Request failed with status code 404 will appear on PROD if you are testing with SAND TEST MODE
     // You should force sandbox on globalVar to production in order to work for testing!!
     const config = {
         method: "get",
@@ -76,131 +76,126 @@ function getPagNotify(req, res) {
         },
     };
 
-    async function runNotification() {
-        const response = await axios(config).catch((e) => {
-            res.json(e);
-        });
-        if (!response) return;
-        const xml = response.data;
+    const response = await axios(config).catch((e) => {
+        res.json(e);
+    });
+    if (!response) return;
+    const xml = response.data;
 
-        const result = await convertXmlToJson(xml);
+    const result = await convertXmlToJson(xml);
 
-        return res.json(result);
-        const data = result.transaction;
+    return res.json(result);
+    const data = result.transaction;
 
-        const [status] = data.status;
-        const [reference] = data.reference;
-        const [lastEventDate] = data.lastEventDate;
-        const [paymentMethod] = data.paymentMethod;
-        const [paymentMethodCode] = paymentMethod.code;
+    const [status] = data.status;
+    const [reference] = data.reference;
+    const [lastEventDate] = data.lastEventDate;
+    const [paymentMethod] = data.paymentMethod;
+    const [paymentMethodCode] = paymentMethod.code;
 
-        const mainRef = reference;
+    const mainRef = reference;
 
-        const currStatus = getTransactionStatusTypes(status);
-        const isPaid = getPaidStatus(currStatus);
+    const currStatus = getTransactionStatusTypes(status);
+    const isPaid = getPaidStatus(currStatus);
 
-        let thisDueDate;
+    let thisDueDate;
 
-        const doc = await Order.findOne({ reference }).catch((e) => {
-            res.status(404).json({ error: "order not found!" });
-        });
-        if (!doc) return;
+    const doc = await Order.findOne({ reference }).catch((e) => {
+        res.status(404).json({ error: "order not found!" });
+    });
+    if (!doc) return;
 
-        const { isCurrRenewal, isSingleRenewal, totalRenewalDays } = doc;
+    const { isCurrRenewal, isSingleRenewal, totalRenewalDays } = doc;
 
-        thisDueDate = handlePlanDueDate(
-            currStatus,
-            doc,
-            reference,
+    thisDueDate = handlePlanDueDate(
+        currStatus,
+        doc,
+        reference,
+        isCurrRenewal,
+        isSingleRenewal,
+        totalRenewalDays
+    );
+
+    doc.planDueDate = thisDueDate;
+    doc.paymentMethod = getPaymentMethod(paymentMethodCode);
+    doc.updatedAt = lastEventDate;
+    doc.transactionStatus = getTransactionStatusTypes(status);
+
+    const payRelease = doc.paymentReleaseDate;
+    doc.paymentReleaseDate = payRelease ? payRelease : paymentReleaseDate;
+
+    const clientAdminId = doc.clientAdmin.id;
+
+    // doc.markModified("clientAdminData");
+    await doc.save();
+    const allServices = await Pricing.find({});
+    if (!allServices) return console.log("something went wrong with Pricing");
+
+    const adminData = await User("cliente-admin").findOne({
+        _id: clientAdminId,
+    });
+
+    let orders = adminData.clientAdminData.orders;
+    let currBizPlanList = adminData.clientAdminData.bizPlanList;
+
+    const modifiedOrders = orders.map((targetOr) => {
+        return handleModifiedOrders({
+            targetOr,
             isCurrRenewal,
-            isSingleRenewal,
-            totalRenewalDays
+            mainRef,
+            isPaid,
+            thisDueDate,
+            getPaymentMethod,
+            paymentMethodCode,
+            currStatus,
+            lastEventDate,
+        });
+    });
+
+    if (isPaid) {
+        const isSMS = orders.find(
+            (o) =>
+                o.reference === reference &&
+                o.ordersStatement &&
+                o.ordersStatement.sms
         );
 
-        doc.planDueDate = thisDueDate;
-        doc.paymentMethod = getPaymentMethod(paymentMethodCode);
-        doc.updatedAt = lastEventDate;
-        doc.transactionStatus = getTransactionStatusTypes(status);
-
-        const payRelease = doc.paymentReleaseDate;
-        doc.paymentReleaseDate = payRelease ? payRelease : paymentReleaseDate;
-
-        const clientAdminId = doc.clientAdmin.id;
-
-        // doc.markModified("clientAdminData");
-        await doc.save();
-        const allServices = await Pricing.find({});
-        if (!allServices)
-            return console.log("something went wrong with Pricing");
-
-        const adminData = await User("cliente-admin").findOne({
-            _id: clientAdminId,
-        });
-
-        let orders = adminData.clientAdminData.orders;
-        let currBizPlanList = adminData.clientAdminData.bizPlanList;
-
-        const modifiedOrders = orders.map((targetOr) => {
-            return handleModifiedOrders({
-                targetOr,
-                isCurrRenewal,
-                mainRef,
-                isPaid,
-                thisDueDate,
-                getPaymentMethod,
-                paymentMethodCode,
-                currStatus,
-                lastEventDate,
-            });
-        });
-
-        if (isPaid) {
-            const isSMS = orders.find(
-                (o) =>
-                    o.reference === reference &&
-                    o.ordersStatement &&
-                    o.ordersStatement.sms
-            );
-
-            if (isSMS) {
-                // This is an exception because SMS was built firstly and has a different reasoning to add credits
-                adminData.clientAdminData.smsBalance = handleProSMSCredits({
-                    adminData,
-                    isSMS,
-                });
-            }
-
-            handleProPlan({
+        if (isSMS) {
+            // This is an exception because SMS was built firstly and has a different reasoning to add credits
+            adminData.clientAdminData.smsBalance = handleProSMSCredits({
                 adminData,
-                currBizPlanList,
-                mainRef,
-                orders,
-                allServices,
-                thisDueDate,
-                mainRef,
+                isSMS,
             });
-
-            const gotPaidServices = currBizPlanList && currBizPlanList.length;
-            const notifData = {
-                cardType: "pro",
-                subtype: gotPaidServices ? "proPay" : "welcomeProPay",
-                recipient: { role: "cliente-admin", id: clientAdminId },
-                content: `approvalDate:${new Date()};`,
-            };
-
-            await sendBackendNotification({ notifData });
         }
 
-        adminData.clientAdminData.orders = modifiedOrders;
-
-        await adminData.save();
-
-        res.json({
-            msg: "both agent and cliAdmin updated on db",
+        handleProPlan({
+            adminData,
+            currBizPlanList,
+            mainRef,
+            orders,
+            allServices,
+            thisDueDate,
+            mainRef,
         });
+
+        const gotPaidServices = currBizPlanList && currBizPlanList.length;
+        const notifData = {
+            cardType: "pro",
+            subtype: gotPaidServices ? "proPay" : "welcomeProPay",
+            recipient: { role: "cliente-admin", id: clientAdminId },
+            content: `approvalDate:${new Date()};`,
+        };
+
+        await sendBackendNotification({ notifData });
     }
 
-    runNotification();
+    adminData.clientAdminData.orders = modifiedOrders;
+
+    await adminData.save();
+
+    res.json({
+        msg: "both agent and cliAdmin updated on db",
+    });
 }
 
 const readHistory = (req, res) => {
