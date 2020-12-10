@@ -14,7 +14,7 @@ exports.handleProSMSCredits = ({ adminData, isSMS }) => {
 exports.handleModifiedOrders = ({
     targetOr,
     isCurrRenewal,
-    mainRef,
+    reference,
     isPaid,
     thisDueDate,
     getPaymentMethod,
@@ -24,12 +24,12 @@ exports.handleModifiedOrders = ({
 }) => {
     const priorRef = targetOr.renewal && targetOr.renewal.priorRef;
     const condition = isCurrRenewal
-        ? targetOr.reference === mainRef || targetOr.reference === priorRef
-        : targetOr.reference === mainRef;
+        ? targetOr.reference === reference || targetOr.reference === priorRef
+        : targetOr.reference === reference;
     if (condition) {
         if (isPaid) {
             const { renewal } = targetOr;
-            if (mainRef === (renewal && renewal.currRef)) {
+            if (reference === (renewal && renewal.currRef)) {
                 targetOr.renewal.isPaid = true;
             }
         }
@@ -53,9 +53,9 @@ exports.handleModifiedOrders = ({
 exports.handleProPlan = ({
     adminData,
     currBizPlanList,
-    mainRef,
+    reference,
     orders,
-    allServices,
+    allPricing,
     thisDueDate,
 }) => {
     const currPlan = getCurrPlan(orders);
@@ -65,10 +65,10 @@ exports.handleProPlan = ({
         currBizPlanList,
         orders,
         {
-            allServices,
+            allPricing,
             currPlan,
             usageTimeEnd: thisDueDate,
-            ref: mainRef,
+            reference,
         }
     );
 

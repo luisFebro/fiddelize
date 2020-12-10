@@ -92,8 +92,6 @@ async function getPagNotify(req, res) {
     const [paymentMethod] = data.paymentMethod;
     const [paymentMethodCode] = paymentMethod.code;
 
-    const mainRef = reference;
-
     const currStatus = getTransactionStatusTypes(status);
     const isPaid = getPaidStatus(currStatus);
 
@@ -127,8 +125,8 @@ async function getPagNotify(req, res) {
 
     // doc.markModified("clientAdminData");
     await doc.save();
-    const allServices = await Pricing.find({});
-    if (!allServices) return console.log("something went wrong with Pricing");
+    const allPricing = await Pricing.find({});
+    if (!allPricing) return console.log("something went wrong with Pricing");
 
     const adminData = await User("cliente-admin").findOne({
         _id: clientAdminId,
@@ -141,7 +139,7 @@ async function getPagNotify(req, res) {
         return handleModifiedOrders({
             targetOr,
             isCurrRenewal,
-            mainRef,
+            reference,
             isPaid,
             thisDueDate,
             getPaymentMethod,
@@ -170,11 +168,10 @@ async function getPagNotify(req, res) {
         handleProPlan({
             adminData,
             currBizPlanList,
-            mainRef,
-            orders,
-            allServices,
+            reference,
+            orders: modifiedOrders,
+            allPricing,
             thisDueDate,
-            mainRef,
         });
 
         const gotPaidServices = currBizPlanList && currBizPlanList.length;
@@ -331,7 +328,7 @@ module.exports = {
     //                     const clientAdminId = doc.clientAdmin.id;
     //                     doc.save((err) => {
     //                         Pricing.find({})
-    //                         .exec((err, allServices) => {
+    //                         .exec((err, allPricing) => {
     //                             if (err) return res.status(400).json({ error: "something went wrong"});
 
     //                             User("cliente-admin").findOne({ _id: clientAdminId }).exec(
@@ -402,7 +399,7 @@ module.exports = {
     //                                         data2.clientAdminData.bizPlanList = setCurrPlan(
     //                                             currBizPlanList,
     //                                             orders,
-    //                                             { allServices, currPlan, usageTimeEnd: thisDueDate, ref: mainRef }
+    //                                             { allPricing, currPlan, usageTimeEnd: thisDueDate, ref: mainRef }
     //                                         );
     //                                         // send successful pay notification to user
     //                                     }
