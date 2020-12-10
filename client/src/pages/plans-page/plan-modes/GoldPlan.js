@@ -8,6 +8,7 @@ import getServices from "./sessions/services/getServices";
 
 // sessions
 import ServicesCard from "./sessions/services/ServicesCard";
+import AddClientsToCart from "./sessions/AddClientsToCart";
 import AddSMS from "./sessions/AddSMS";
 import OffplanServices from "./sessions/services/offplan/OffplanServices";
 
@@ -34,6 +35,8 @@ const defaultOrders = {
 
 export default function GoldPlan({ setCurrPlan }) {
     const [nextPage, setNextPage] = useState(false);
+    const [currService, setCurrService] = useState(null);
+
     const [data, setData] = useState({
         totalInvest: 0,
         totalServices: 0,
@@ -62,6 +65,8 @@ export default function GoldPlan({ setCurrPlan }) {
     const styles = getStyles();
 
     const handleNewOrder = (serviceName, options = {}) => {
+        setCurrService(serviceName);
+
         const {
             order,
             orderGroup,
@@ -93,6 +98,11 @@ export default function GoldPlan({ setCurrPlan }) {
         const ordersObj = handleOrderShape();
 
         setData({ ...data, orders: ordersObj });
+    };
+
+    const modalClientsData = {
+        handleNewOrder,
+        period,
     };
 
     const handlePeriod = (newPeriod) => {
@@ -144,7 +154,16 @@ export default function GoldPlan({ setCurrPlan }) {
                         Invista menos por cada serviço."
                     />
                     <PeriodSelection handlePeriod={handlePeriod} />
+
                     <ServicesCard plan="gold" period={period} />
+
+                    <AddClientsToCart
+                        modalData={modalClientsData}
+                        clientOrder={orders[currService]}
+                        currService={currService}
+                        disableCliUser={true}
+                    />
+
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}

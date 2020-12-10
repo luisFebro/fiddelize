@@ -9,7 +9,7 @@ export default function AddClientsToCart({
     clientOrder = { amount: 0, price: 0 },
     modalData,
     currService,
-    disableCliUser = true,
+    disableCliUser = false,
 }) {
     const [data, setData] = useState({
         addedCustomers: 0,
@@ -105,11 +105,19 @@ export default function AddClientsToCart({
 
     return (
         <section
-            style={{ margin: "0 0 100px", top: -60 }}
+            style={{ margin: "0 0 100px", top: disableCliUser ? -150 : -60 }}
             className="position-relative"
         >
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
-                Aumente seu alcance de cadastros
+                {disableCliUser
+                    ? "Invista na equipe"
+                    : "Aumente seu alcance de cadastros e número de apps"}
+                {disableCliUser && (
+                    <span className="d-block text-normal text-purple text-center">
+                        Membros da sua equipe te ajudam a cadastrar pontos e
+                        clientes em segundos.
+                    </span>
+                )}
             </p>
             <section className="d-flex justify-content-around">
                 {!disableCliUser && showNovvosClientes()}
