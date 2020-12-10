@@ -6,6 +6,7 @@ import useBackColor from "../../../hooks/useBackColor";
 import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
 // sessions
 import ServicesCard from "./sessions/services/ServicesCard";
+import AddClientsToCart from "./sessions/AddClientsToCart";
 import AddSMS from "./sessions/AddSMS";
 import OffplanServices from "./sessions/services/offplan/OffplanServices";
 import getServices from "./sessions/services/getServices";
@@ -32,6 +33,7 @@ const defaultOrders = {
 };
 
 export default function SilverPlan({ setCurrPlan }) {
+    const [currService, setCurrService] = useState(null);
     const [nextPage, setNextPage] = useState(false);
     const [data, setData] = useState({
         totalInvest: 0,
@@ -61,6 +63,8 @@ export default function SilverPlan({ setCurrPlan }) {
     const styles = getStyles();
 
     const handleNewOrder = (serviceName, options = {}) => {
+        setCurrService(serviceName);
+
         const {
             order,
             orderGroup,
@@ -92,6 +96,11 @@ export default function SilverPlan({ setCurrPlan }) {
         const ordersObj = handleOrderShape();
 
         setData({ ...data, orders: ordersObj });
+    };
+
+    const modalClientsData = {
+        handleNewOrder,
+        period,
     };
 
     const handlePeriod = (newPeriod) => {
@@ -144,11 +153,21 @@ export default function SilverPlan({ setCurrPlan }) {
                         com desconto."
                     />
                     <PeriodSelection handlePeriod={handlePeriod} />
+
                     <ServicesCard plan="silver" period={period} />
+
+                    <AddClientsToCart
+                        modalData={modalClientsData}
+                        clientOrder={orders[currService]}
+                        currService={currService}
+                        disableCliUser={true}
+                    />
+
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}
                     />
+
                     <OffplanServices
                         handleNewOrder={handleNewOrder}
                         plan="silver"
