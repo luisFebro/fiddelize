@@ -7,7 +7,7 @@ import { Load } from "../../../../../../components/code-splitting/LoadableComp";
 const Async = Load({
     loader: () =>
         import(
-            "./AsyncAddCustomersContent" /* webpackChunkName: "add-customers-full-page-lazy" */
+            "./AsyncAddMembersContent" /* webpackChunkName: "add-members-full-page-lazy" */
         ),
 });
 

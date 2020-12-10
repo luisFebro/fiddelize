@@ -140,31 +140,6 @@ const offplanVersion = () => [
         },
         proPage: "CoppiaSeguranca",
     },
-    {
-        title: "Novvos Membros",
-        img: "/img/pro-features/novvos/novvos-membros.svg",
-        desc:
-            "Um app de fidelidade intuitivo pensado na eficácia do trabalho dos seus colaboradores.",
-        bronze: {
-            price: {
-                yearly: 80,
-                monthly: 40,
-            },
-        },
-        silver: {
-            price: {
-                yearly: 70,
-                monthly: 35,
-            },
-        },
-        gold: {
-            price: {
-                yearly: 60,
-                monthly: 30,
-            },
-        },
-        proPage: "",
-    },
 ];
 
 const styles = {

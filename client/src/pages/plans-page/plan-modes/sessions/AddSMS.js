@@ -26,6 +26,13 @@ export default function AddSMS({
             className="position-relative"
         >
             <div className="container-center-col">
+                <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
+                    Envie SMS
+                    <span className="d-block text-normal text-purple text-center">
+                        Invista em SMS e use quando precisar sem prazo para
+                        expirar
+                    </span>
+                </p>
                 <div className="position-relative text-title text-purple text-center">
                     SMS:
                     <span

@@ -33,7 +33,7 @@ export default function ServicesGallery({ handleNewOrder, period }) {
         >
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 Vitrine de Serviços
-                <span className="d-block font-weight bold text-normal text-purple text-center">
+                <span className="d-block text-normal text-purple text-center">
                     Descubra serviços selecionados para o seu negócio.
                 </span>
             </p>

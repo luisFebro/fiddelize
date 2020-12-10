@@ -8,7 +8,7 @@ import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
 
 // Sessions
-import AddCustomerPackages from "./sessions/customer-packages/AddCustomerPackages";
+import AddClientsToCart from "./sessions/AddClientsToCart";
 import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
 import AddSMS from "./sessions/AddSMS";
 import OffplanServices from "./sessions/services/offplan/OffplanServices";
@@ -32,6 +32,7 @@ const getStyles = () => ({
 
 export default function BronzePlan({ setCurrPlan }) {
     const [nextPage, setNextPage] = useState(false);
+    const [currService, setCurrService] = useState(null);
     const [data, setData] = useState({
         totalInvest: 0,
         totalServices: 0,
@@ -62,6 +63,8 @@ export default function BronzePlan({ setCurrPlan }) {
     const styles = getStyles();
 
     const handleNewOrder = (serviceName, options = {}) => {
+        setCurrService(serviceName);
+
         const {
             order,
             orderGroup,
@@ -112,7 +115,7 @@ export default function BronzePlan({ setCurrPlan }) {
         </section>
     );
 
-    const modalCustomersData = {
+    const modalClientsData = {
         handleNewOrder,
         period,
     };
@@ -140,9 +143,10 @@ export default function BronzePlan({ setCurrPlan }) {
                     />
                     <PeriodSelection handlePeriod={handlePeriod} />
 
-                    <AddCustomerPackages
-                        modalData={modalCustomersData}
-                        customersOrder={orders["Novvos Clientes"]}
+                    <AddClientsToCart
+                        modalData={modalClientsData}
+                        clientOrder={orders[currService]}
+                        currService={currService}
                     />
                     <ServicesGallery
                         handleNewOrder={handleNewOrder}
