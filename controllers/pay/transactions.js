@@ -4,21 +4,21 @@ const Pricing = require("../../models/admin/Pricing");
 const axios = require("axios");
 const { globalVar } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
-const {
-    getTransactionStatusTypes,
-    getPaymentMethod,
-} = require("./helpers/getTypes");
+const addDays = require("date-fns/addDays");
 const { getNewPlanDays } = require("./helpers/getNewPlanDays");
 const {
     getDataChunk,
     getChunksTotal,
 } = require("../../utils/array/getDataChunk");
-const addDays = require("date-fns/addDays");
 const {
     handleProPlan,
     handleModifiedOrders,
     handleProSMSCredits,
 } = require("./helpers/transactionHandlers");
+const {
+    getTransactionStatusTypes,
+    getPaymentMethod,
+} = require("./helpers/getTypes");
 const { sendBackendNotification } = require("../notification");
 
 const { payUrl, email, token } = globalVar;
@@ -72,11 +72,14 @@ function getPagNotify(req, res) {
             "Content-Type": "application/x-www-form-urlencoded",
         },
     };
-    return res.json(config);
 
     async function runNotification() {
-        const response = await axios(config);
+        const response = await axios(config).catch((e) => {
+            res.json(e);
+        });
+        if (!response) return;
         const xml = response.data;
+        return res.json(xml);
 
         const result = await convertXmlToJson(xml);
 
