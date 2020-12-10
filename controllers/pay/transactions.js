@@ -78,6 +78,7 @@ async function getPagNotify(req, res) {
 
     const result = await convertXmlToJson(xml);
 
+    return res.json(result);
     const data = result.transaction;
 
     const [status] = data.status;
@@ -93,7 +94,6 @@ async function getPagNotify(req, res) {
 
     let thisDueDate;
 
-    return res.json(data);
     const doc = await Order.findOne({ reference }).catch((e) => {
         res.status(404).json({ error: "order not found!" });
     });
