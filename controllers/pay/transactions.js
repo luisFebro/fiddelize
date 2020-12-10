@@ -58,6 +58,8 @@ const handlePlanDueDate = (
 async function getPagNotify(req, res) {
     const notificationCode = req.body.notificationCode;
 
+    return res.json("I am fucking working");
+
     // Consulting notification transaction - requiring auth data related to received notification's code.
     const params = {
         email,
