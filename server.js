@@ -40,8 +40,8 @@ mongoose
 // END DATABASE
 
 // MIDDLEWARES
-// app.use(helmet()); // protect app with secure headers
-// app.use(helmet.hidePoweredBy());
+app.use(helmet()); // protect app with secure headers
+app.use(helmet.hidePoweredBy());
 app.use(compression()); // compress all responses
 app.use(express.json()); //n1
 app.use(express.urlencoded({ extended: true }));

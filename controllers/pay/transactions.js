@@ -2,6 +2,7 @@ const User = require("../../models/user/User");
 const Order = require("../../models/order/Order");
 const Pricing = require("../../models/admin/Pricing");
 const axios = require("axios");
+const qs = require("querystring");
 const { globalVar } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 const addDays = require("date-fns/addDays");
@@ -64,14 +65,14 @@ function getPagNotify(req, res) {
         token,
     };
 
+    // IMPORTANT LESSON: Request failed with status code 404 will appear on PROD if you are testing with SAND TEST MODE
+    // You should force sandbox on globalVar to production in order to work for testing!!
     const config = {
         method: "get",
         url: `${payUrl}/v3/transactions/notifications/${notificationCode}`,
         params,
         headers: {
-            charset: "ISO-8859-1",
-            "Content-Type": "application/json",
-            Accept: "*/*",
+            "Content-Type": "application/x-www-form-urlencoded",
         },
     };
 
@@ -81,10 +82,10 @@ function getPagNotify(req, res) {
         });
         if (!response) return;
         const xml = response.data;
-        return res.json(xml);
 
         const result = await convertXmlToJson(xml);
 
+        return res.json(result);
         const data = result.transaction;
 
         const [status] = data.status;
