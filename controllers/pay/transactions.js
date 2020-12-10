@@ -84,7 +84,6 @@ async function getPagNotify(req, res) {
 
     const result = await convertXmlToJson(xml);
 
-    return res.json(result);
     const data = result.transaction;
 
     const [status] = data.status;
