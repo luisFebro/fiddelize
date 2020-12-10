@@ -3,6 +3,7 @@ const { IS_DEV } = require("./config/clientUrl");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 // REVERSE PROXY
+// This is not working any longer on PRODUCTION, only DEV...
 module.exports = function (app) {
     app.use(
         "/api/pay/pag-notify",

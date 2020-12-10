@@ -56,7 +56,7 @@ const handlePlanDueDate = (
 
 // Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
 function getPagNotify(req, res) {
-    const notificationCode = req.body.notificationCode;
+    const { notificationCode } = req.body;
 
     const params = {
         email,
@@ -72,11 +72,11 @@ function getPagNotify(req, res) {
             "Content-Type": "application/x-www-form-urlencoded",
         },
     };
+    return res.json(config);
 
-    const runNotification = async () => {
+    async function runNotification() {
         const response = await axios(config);
         const xml = response.data;
-        return res.json(xml);
 
         const result = await convertXmlToJson(xml);
 
@@ -192,7 +192,7 @@ function getPagNotify(req, res) {
         res.json({
             msg: "both agent and cliAdmin updated on db",
         });
-    };
+    }
 
     runNotification();
 }
