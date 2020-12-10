@@ -21,13 +21,6 @@ function addAccount(req, res, next) {
     next();
 }
 
-// protect app with secure headers
-app.use(helmet());
-app.use(helmet.hidePoweredBy());
-
-// compress all responses
-app.use(compression());
-
 const isProduction = IS_PROD;
 console.log("env", isProduction ? "production" : "development");
 
@@ -47,6 +40,9 @@ mongoose
 // END DATABASE
 
 // MIDDLEWARES
+// app.use(helmet()); // protect app with secure headers
+// app.use(helmet.hidePoweredBy());
+app.use(compression()); // compress all responses
 app.use(express.json()); //n1
 app.use(express.urlencoded({ extended: true }));
 app.use(formData.parse()); // for images and multimedia in forms.

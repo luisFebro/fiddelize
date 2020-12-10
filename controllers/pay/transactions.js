@@ -68,10 +68,11 @@ function getPagNotify(req, res) {
         method: "get",
         url: `${payUrl}/v3/transactions/notifications/${notificationCode}`,
         params,
-        // headers: {
-        //     charset: "ISO-8859-1",
-        //     "Content-Type": "application/x-www-form-urlencoded",
-        // },
+        headers: {
+            charset: "ISO-8859-1",
+            "Content-Type": "application/json",
+            Accept: "*/*",
+        },
     };
 
     async function runNotification() {
