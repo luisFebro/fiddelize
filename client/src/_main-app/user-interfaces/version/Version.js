@@ -4,10 +4,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.84.5";
+const latestVersion = "3.8450.5";
 // PRÓXIMO:
 // sistema multi-conta (painel de cadastros)
-const updateDescription = "serviço novvos membros pt6";
+const updateDescription = "serviço novvos membros pt7";
 const history = [
     "app membro - sistema de acesso",
     "segurança dos link de convite com pontos para baixar app",

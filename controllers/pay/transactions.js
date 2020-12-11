@@ -23,7 +23,6 @@ const {
 const { sendBackendNotification } = require("../notification");
 
 const { payUrl, email, token } = globalVar;
-
 // real time notification to Fiddelize's system every time a transation's status change like pending to paid.
 /*
 Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas

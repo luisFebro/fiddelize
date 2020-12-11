@@ -22,6 +22,7 @@ const {
     removeAllowedLinkBack,
 } = require("../user/clients-session/tempScore");
 const { sendBackendNotification } = require("../notification");
+const checkExpiryService = require("./helpers/checkExpiryService");
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
 // bacause not found. To avoid this, try write userId if in a parameter as default.
@@ -263,6 +264,7 @@ exports.login = async (req, res) => {
     const { cpf } = req.body;
 
     const roleData = req.profile[getRoleDataName(role)];
+
     const needPanel =
         roleData.onceChecked && roleData.onceChecked.backend_accountPanel;
     // const { accounts } = await req.getAccount(null, { cpf, accounts: true })
@@ -279,6 +281,20 @@ exports.login = async (req, res) => {
         // only clients now have access to app only with CPF.
         // Other roles require a password. Only after a correct one, then a token is generated (with getToken routes)
         token = await getJwtToken({ _id: _id && _id.toString(), role });
+    }
+
+    if (role === "cliente-membro") {
+        const { bizId } = roleData;
+        const isServExpired = await checkExpiryService({
+            bizId,
+            isFreeApp: roleData && roleData.isFreeMemberApp,
+        });
+        if (isServExpired)
+            return res
+                .status(401)
+                .json({
+                    error: `Os apps de membros estão desativados temporarimente. Contate admin.`,
+                });
     }
 
     const authData = getRoleData(role, {

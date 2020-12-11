@@ -13,10 +13,10 @@ const isPaid = (transactionStatus) =>
     transactionStatus === "pago" || transactionStatus === "disponível";
 
 const checkIfGotFreeCredits = ({ user, service }) => {
-    const { bizPlan, bizFreeCredits, bizPlanList } = user.clientAdminData;
+    const { bizFreeCredits, bizPlanList } = user.clientAdminData;
 
     const totalFreeUsers = bizFreeCredits ? bizFreeCredits[service] : 0;
-    if (bizPlan === "gratis" && !totalFreeUsers) return false;
+    if (!totalFreeUsers) return false;
 
     return true;
 };
@@ -29,24 +29,25 @@ const checkIfServiceGotCredit = ({ user, service }) => {
 
     const needCheckPro = bizPlanList && bizPlanList.length;
     if (needCheckPro) {
-        let foundService = false;
+        let foundServicewithCredits = false;
         bizPlanList.map((s) => {
-            if (s.service === service) foundService = true;
+            if (s.service === service && s.creditEnd !== 0)
+                foundServicewithCredits = true;
         });
 
-        return foundService;
+        return foundServicewithCredits;
     }
 
     return false;
 };
 
-const getDiscountedList = ({ bizPlanList, service }) => {
+const getDiscountedList = ({ bizPlanList, serviceName }) => {
     const numCredits = 1;
     let balance;
     const list = bizPlanList.map((servObj) => {
-        if (servObj.service === service) {
+        if (servObj.service === serviceName) {
             const discountNow = servObj.creditEnd - numCredits;
-            servObj.creditEnd = discountNow;
+            servObj.creditEnd = discountNow < 0 ? 0 : discountNow;
             balance = discountNow;
             return servObj;
         }
@@ -82,7 +83,8 @@ exports.mwProCreditsCounter = (req, res, next) => {
         const gotFreeCredits = checkIfGotFreeCredits({ user, service });
         const gotServiceCredits = checkIfServiceGotCredit({ user, service });
 
-        if (isCliMember && !gotServiceCredits) {
+        const allCreditsGone = !gotServiceCredits && !gotFreeCredits;
+        if (isCliMember && allCreditsGone) {
             return res.status(401).json({
                 error:
                     "Limite máximo de cadastro alcançado. Adicione mais créditos para novos membros.",
@@ -90,7 +92,7 @@ exports.mwProCreditsCounter = (req, res, next) => {
         }
 
         const { bizName, bizPlan } = user.clientAdminData;
-        if (!gotFreeCredits) {
+        if (bizPlan === "gratis" && isCliUser && !gotFreeCredits) {
             return res.status(401).json(msg("error.registersLimit", bizName));
         }
 
@@ -119,9 +121,9 @@ exports.mwProCreditsCounter = (req, res, next) => {
             // discount and get discountedList
             const { list: discountedList, balance } = getDiscountedList({
                 bizPlanList,
-                service,
+                serviceName: service,
             });
-            newBalance = lance;
+            newBalance = balance;
 
             user.clientAdminData.bizPlanList = discountedList;
             // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose

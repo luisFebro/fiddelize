@@ -63,7 +63,12 @@ function Login({
         const res = await loginEmail(dispatch, userData);
 
         if (res.status !== 200) {
-            showSnackbar(dispatch, res.data.msg, "error");
+            showSnackbar(
+                dispatch,
+                res.data.msg || res.data.error,
+                "error",
+                6000
+            );
             return null;
         }
 

@@ -29,7 +29,7 @@ export default function ProCreditsBadge({ service = "Novvos Clientes" }) {
 
     return (
         <section className="d-table position-relative">
-            <div className="text-pill main-font text-normal font-weight-bold">
+            <div className="text-pill text-center main-font text-normal font-weight-bold">
                 {creditsCond
                     ? `${convertToReal(credits)} crédito${
                           credits === 1 ? "" : "s"
