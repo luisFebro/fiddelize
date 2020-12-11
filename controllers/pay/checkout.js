@@ -125,7 +125,7 @@ async function finishCheckout(req, res, next) {
         currency: "BRL",
         paymentMode: "default",
         notificationURL: "https://fiddelize.herokuapp.com/api/pay/pag-notify",
-        receiverEmail: "mr.febro@gmail.com",
+        receiverEmail: "mr.febro2020@gmail.com", // fake email to avoid duplicate with boleto on production`s pagseguro
     };
 
     const config = {
