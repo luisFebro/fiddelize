@@ -7,7 +7,7 @@ import useData from "../../../hooks/useData";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
-import getAPI, { getAuthTk } from "../../../utils/promises/getAPI";
+import getAPI, { getAuthTk, updateUser } from "../../../utils/promises/getAPI";
 import authenticate from "../../../components/auth/helpers/authenticate";
 import useBackColor from "../../../hooks/useBackColor";
 import { useClientAdmin } from "../../../hooks/useRoleData";
@@ -91,8 +91,17 @@ export default function TeamPassword({ history }) {
 
     const handleLogout = () => {
         (async () => {
-            await setVar({ disconnectCliMember: true }, store.user);
-            await disconnect();
+            await Promise.all([
+                await getAPI({
+                    // await is displayed here cuz getAPI is a function. As a demand, all these elements should be a Promise instead. All the others are promises, they do not need it.
+                    method: "put",
+                    url: updateUser(userId),
+                    body: { "clientMemberData.isLoggedIn": false },
+                    params: { thisRole: "cliente-membro" },
+                }),
+                setVar({ disconnectCliMember: true }, store.user),
+                disconnect(),
+            ]);
         })();
     };
 

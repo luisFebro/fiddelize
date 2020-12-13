@@ -290,11 +290,20 @@ exports.login = async (req, res) => {
             isFreeApp: roleData && roleData.isFreeMemberApp,
         });
         if (isServExpired)
-            return res
-                .status(401)
-                .json({
-                    error: `Os apps de membros estão desativados temporarimente. Contate admin.`,
-                });
+            return res.status(401).json({
+                error: `Os apps de membros estão desativados temporarimente. Contate admin.`,
+            });
+
+        const isMemberLoggedIn = Boolean(roleData && roleData.isLoggedIn); // to avoid access with multiple devices with the same account.
+        if (isMemberLoggedIn) {
+            return res.status(401).json({
+                error: `Esta conta do app do membro já está conectada em outro dispositivo.`,
+            });
+        } else {
+            await User("cliente-membro").findByIdAndUpdate(_id, {
+                "clientMemberData.isLoggedIn": true,
+            });
+        }
     }
 
     const authData = getRoleData(role, {
