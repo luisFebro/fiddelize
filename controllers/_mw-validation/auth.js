@@ -68,7 +68,7 @@ exports.mwValidateRegister = async (req, res, next) => {
 
     if (!validatePhone(phone))
         return res.status(400).json(msg("error.invalidPhone"));
-    if (!gender)
+    if (gender === "selecione forma tratamento")
         return res
             .status(400)
             .json({ error: "Selecione uma forma de tratamento" });
