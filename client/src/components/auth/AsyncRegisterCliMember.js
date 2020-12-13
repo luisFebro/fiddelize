@@ -109,7 +109,11 @@ function Register({
 
     let { role, name, email, gender, birthday, cpf, phone } = data;
 
-    const [lastRegisterBizId, bizId] = useData(["lastRegisterBizId", "bizId"]);
+    const [lastRegisterBizId, bizId, userId] = useData([
+        "lastRegisterBizId",
+        "bizId",
+        "userId",
+    ]);
 
     const isReady = selfBizLogoImg && bizName && lastRegisterBizId !== "...";
 
@@ -123,7 +127,7 @@ function Register({
                     bizName,
                     clientMemberData: {
                         ...data.clientMemberData,
-                        bizId: lastRegisterBizId || bizId, // bizId is just a fallback in case user got the app but not from download page which is not the case for upcoming app downloads...
+                        bizId: lastRegisterBizId || bizId || userId, // bizId is just a fallback in case user got the app but not from download page which is not the case for upcoming app downloads...
                     },
                 }));
             }, 4000);
