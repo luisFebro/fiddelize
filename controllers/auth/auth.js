@@ -297,7 +297,7 @@ exports.login = async (req, res) => {
         const isMemberLoggedIn = Boolean(roleData && roleData.isLoggedIn); // to avoid access with multiple devices with the same account.
         if (isMemberLoggedIn) {
             return res.status(401).json({
-                error: `Esta conta do app do membro já está conectada em outro dispositivo.`,
+                error: `Só pode ter um dispositivo conectado por conta no app do membro. Desconecte-se do atual.`,
             });
         } else {
             await User("cliente-membro").findByIdAndUpdate(_id, {
