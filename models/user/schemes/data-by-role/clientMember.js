@@ -29,7 +29,7 @@ const clientMemberData = {
     taskList: [TaskListSchema],
     linkId: Number, // to identify the member when registering client-users
     isFreeMemberApp: Boolean, // allow only the first app to have free access and no expiry date in case of pro plan is expired.
-    isLoggedIn: Boolean,
+    // isLoggedIn: Boolean, // disabled due to persistent storage issue after device spending a while without being logged in.
 };
 
 const ClientMemberSchema = new Schema(clientMemberData, { _id: false });

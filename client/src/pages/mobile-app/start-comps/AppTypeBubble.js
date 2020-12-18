@@ -42,7 +42,8 @@ export default function AppTypeBubble({
         if (loadingAccess) return "...";
         if (role === "cliente-membro") return "Membro";
         if (role === "cliente-admin" || isUrlAdmin) return "Admin";
-        return "Cliente";
+        if (role === "cliente") return "Cliente";
+        return "...";
     };
 
     const showAppType = handleAppType({

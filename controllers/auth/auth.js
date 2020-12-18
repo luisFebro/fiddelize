@@ -294,16 +294,18 @@ exports.login = async (req, res) => {
                 error: `Os apps de membros estão desativados temporarimente. Contate admin.`,
             });
 
-        const isMemberLoggedIn = Boolean(roleData && roleData.isLoggedIn); // to avoid access with multiple devices with the same account.
-        if (isMemberLoggedIn) {
-            return res.status(401).json({
-                error: `Só pode ter um dispositivo conectado por conta no app do membro. Desconecte-se do atual.`,
-            });
-        } else {
-            await User("cliente-membro").findByIdAndUpdate(_id, {
-                "clientMemberData.isLoggedIn": true,
-            });
-        }
+        // Disabled temporatily due to issue with persistent storage.
+        // The data need to be reliable enough, otherwise the cli-member account will be locked forever unless with manual DB handling.
+        // const isMemberLoggedIn = Boolean(roleData && roleData.isLoggedIn); // to avoid access with multiple devices with the same account.
+        // if (isMemberLoggedIn) {
+        //     return res.status(401).json({
+        //         error: `Só pode ter um dispositivo conectado por conta no app do membro. Desconecte-se do atual.`,
+        //     });
+        // } else {
+        //     await User("cliente-membro").findByIdAndUpdate(_id, {
+        //         "clientMemberData.isLoggedIn": true,
+        //     });
+        // }
     }
 
     const authData = getRoleData(role, {

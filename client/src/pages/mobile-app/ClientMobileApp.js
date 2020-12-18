@@ -34,6 +34,7 @@ import useScrollUp from "../../hooks/scroll/useScrollUp";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import { Load } from "../../components/code-splitting/LoadableComp";
+import usePersistentStorage from "../../hooks/storage/usePersistentStorage";
 
 const AsyncRegisterCliUser = Load({
     loading: true,
@@ -72,21 +73,13 @@ const showWelcomeMsg = (dispatch, userName) => {
 };
 
 function ClientMobileApp({ location, history }) {
-    useEffect(() => {
-        (async () => {
-            if (navigator.storage && navigator.storage.persist) {
-                const isPersisted = await navigator.storage.persist();
-                console.log(`Persisted storage granted: ${isPersisted}`);
-            }
-        })();
-    }, []);
-
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     const [url, setUrl] = useState({
         logoBiz: "",
         logoFid: "",
     });
 
+    usePersistentStorage();
     useScrollUp();
     useManageProServices();
     const dispatch = useStoreDispatch();
@@ -222,6 +215,7 @@ function ClientMobileApp({ location, history }) {
         // this var is removed when making login
         // userId to check if data still persists or user device
         // otherwise the user will be not able to access...
+        // Always check if the data is still available on indexedDB, if not show login comp for users.
         if (!disconnectCliMember && userId) {
             isSessionOver
                 ? history.push("/senha-equipe")
