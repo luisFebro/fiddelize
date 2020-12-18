@@ -1,6 +1,6 @@
 /**
  * [sortDates]
- * @param  {Array} datesArray [an array with objects]
+ * @param  {Array} dates [an array with objects]
  * @param  {String} sortBy
  * @param  {String} target [the element which is the date to be sorted like createdAt]
  * @return {Array} Array with sorted dates

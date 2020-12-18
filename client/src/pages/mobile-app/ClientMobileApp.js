@@ -72,6 +72,15 @@ const showWelcomeMsg = (dispatch, userName) => {
 };
 
 function ClientMobileApp({ location, history }) {
+    useEffect(() => {
+        (async () => {
+            if (navigator.storage && navigator.storage.persist) {
+                const isPersisted = await navigator.storage.persist();
+                console.log(`Persisted storage granted: ${isPersisted}`);
+            }
+        })();
+    }, []);
+
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     const [url, setUrl] = useState({
         logoBiz: "",
@@ -211,7 +220,9 @@ function ClientMobileApp({ location, history }) {
 
     if (isCliMember) {
         // this var is removed when making login
-        if (!disconnectCliMember) {
+        // userId to check if data still persists or user device
+        // otherwise the user will be not able to access...
+        if (!disconnectCliMember && userId) {
             isSessionOver
                 ? history.push("/senha-equipe")
                 : history.push("/t/app/equipe");
