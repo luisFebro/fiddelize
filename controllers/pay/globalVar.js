@@ -12,7 +12,7 @@ const handleMode = () => {
     return IS_PROD ? false : true;
 };
 
-exports.globalVar = {
+module.exports = {
     sandboxMode: handleMode(),
     get payUrl() {
         return this.sandboxMode

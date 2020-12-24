@@ -1,7 +1,3 @@
-const checkout = require("./checkout");
-const transactions = require("./transactions");
-const boleto = require("./boleto");
-
 const {
     getCompoundInterest,
     getSuggestPrice,
@@ -170,12 +166,6 @@ const getPagseguroPay = (paidValue, options = {}) => {
     };
 };
 // const simulation = getPagseguroPay(100, { totalInstallments: 18 });
-
-module.exports = {
-    checkout,
-    transactions,
-    boleto,
-};
 
 // exports.generateBoleto = (req, res) => {
 //     //https://ws.pagseguro.uol.com.br/recurring-payment/boletos?email=__seu_email__

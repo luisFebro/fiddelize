@@ -3,7 +3,7 @@ const Order = require("../../models/order/Order");
 const Pricing = require("../../models/admin/Pricing");
 const axios = require("axios");
 const qs = require("querystring");
-const { globalVar } = require("./globalVar");
+const { payUrl, email, token } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 const addDays = require("date-fns/addDays");
 const { getNewPlanDays } = require("./helpers/getNewPlanDays");
@@ -21,8 +21,6 @@ const {
     getPaymentMethod,
 } = require("./helpers/getTypes");
 const { sendBackendNotification } = require("../notification");
-
-const { payUrl, email, token } = globalVar;
 // real time notification to Fiddelize's system every time a transation's status change like pending to paid.
 /*
 Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas
@@ -193,86 +191,7 @@ async function getPagNotify(req, res) {
     });
 }
 
-const readHistory = (req, res) => {
-    const { userId, skip, limit = 10 } = req.query;
-
-    User("cliente-admin")
-        .findById(userId)
-        .select("clientAdminData.orders")
-        .exec((err, user) => {
-            if (err || !user)
-                return res.status(400).json({ error: "Orders not found" });
-
-            const data = user.clientAdminData.orders;
-
-            const dataSize = data.length;
-            const dataRes = {
-                list: getDataChunk(data, { skip, limit }),
-                chunksTotal: getChunksTotal(dataSize, limit),
-                listTotal: dataSize,
-                content: undefined,
-            };
-
-            res.json(dataRes);
-        });
-};
-
-// Estornar transação.
-const refundTransaction = (req, res) => {
-    const { transactionCode } = req.body;
-
-    const params = {
-        email,
-        token,
-    };
-
-    const body = {
-        transactionCode, // Transação deverá estar com os status Paga, Disponível ou Em disputa.  Formato: Uma sequência de 36 caracteres, com os hífens, ou 32 caracteres, sem os hífens.
-        refundValue, // STRING Utilizado no estorno de uma transação, corresponde ao valor a ser devolvido. Se não for informado, o PagSeguro assume que o valor a ser estornado é o valor total da transação
-    };
-
-    const config = {
-        method: "post",
-        url: `${payUrl}/v2/transactions/refunds`,
-        data: body,
-        params,
-        headers: {
-            "Accept-Charset": "ISO-8859-1",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
-};
-
-const cancelTransaction = (req, res) => {
-    const { transactionCode } = req.body;
-
-    const params = {
-        email,
-        token,
-    };
-
-    const body = {
-        transactionCode, // Transação deverá estar com os status Aguardando pagamento ou Em análise
-    };
-
-    const config = {
-        method: "post",
-        url: `${payUrl}/v2/transactions/cancels`,
-        data: body,
-        params,
-        headers: {
-            "Accept-Charset": "ISO-8859-1",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
-};
-
-module.exports = {
-    getPagNotify,
-    readHistory,
-    refundTransaction,
-    cancelTransaction,
-};
+module.exports = getPagNotify;
 
 /* ARCHIVES
 // axios(config)

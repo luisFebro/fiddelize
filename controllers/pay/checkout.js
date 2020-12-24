@@ -4,9 +4,10 @@ const qs = require("querystring");
 const Order = require("../../models/order/Order");
 const { getPayCategoryType } = require("./helpers/getTypes");
 const axios = require("axios");
-const { globalVar } = require("./globalVar");
-const { payUrl, email, token } = globalVar;
+const { payUrl, email, token } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
+// PAY METHODS
+const createBoleto = require("./pay-methods/boleto");
 
 function handleAmounts(num1, num2, options = {}) {
     const { op = "+" } = options;
@@ -50,7 +51,7 @@ async function startCheckout(req, res) {
 }
 
 // POST
-async function finishCheckout(req, res, next) {
+async function finishCheckout(req, res) {
     const { userId } = req.query;
 
     let {
@@ -125,7 +126,7 @@ async function finishCheckout(req, res, next) {
         currency: "BRL",
         paymentMode: "default",
         notificationURL: "https://fiddelize.herokuapp.com/api/pay/pag-notify",
-        receiverEmail: "mr.febro2020@gmail.com", // fake email to avoid duplicate with boleto on production`s pagseguro
+        receiverEmail: "mr.febro@gmail.com", // LESSON: this fake email (mr.febro2020@gmail.com) to avoid duplicate with boleto on production`s pagseguro does not work> ERROR: invalid receiver: mr.febro2020@gmail.com, verify receiver's account status and if it is a seller's account.
     };
 
     const config = {
@@ -139,7 +140,11 @@ async function finishCheckout(req, res, next) {
         },
     };
 
-    const response = await axios(config);
+    // LESSON: use e.response.data to identify errors. Otherwise, A generic error with only a status will be shown
+    const response = await axios(config).catch((e) => {
+        res.json(e.response.data);
+    });
+    if (!response) return;
 
     const xml = response.data;
 
@@ -204,10 +209,15 @@ async function finishCheckout(req, res, next) {
     };
     payload.renewal = renewalReference ? renewal : undefined;
 
-    req.payload = payload;
-    next();
+    if (paymentMethod === "boleto") {
+        const boletoData = await createBoleto(payload);
+        return res.json(boletoData);
+    }
+
+    res.json({
+        msg: `successful checkout with ${paymentMethod.toUpperCase()} pay method`,
+    });
 }
-// .catch((e) => console.log(e)); // LESSON: never use e to be log in a JSON response. it will displayed like error: {} The error log only appears only in CLI.
 
 module.exports = {
     startCheckout,

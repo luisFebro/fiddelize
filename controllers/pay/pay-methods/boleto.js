@@ -1,9 +1,8 @@
-const User = require("../../models/user/User");
+const User = require("../../../models/user/User");
 // const Order = require("../../models/order/Order");
 const axios = require("axios");
-const { globalVar } = require("./globalVar");
+const { email: authEmail } = require("../globalVar");
 
-const { email: authEmail } = globalVar;
 const FAKE_EMAIL_TEST = "fiddelize.boleto@gmail.com";
 /*
 IMPORTANTE:
@@ -35,7 +34,7 @@ Isso ajuda na a possibilidade de pagar um boleto vencido em qualquer banco ou in
  */
 
 // LESSON: this request can take up to 40s in dev mode.
-async function createBoleto(req, res) {
+async function createBoleto(payload) {
     let {
         userId = "5e8b0bfc8c616719b01abc9c",
         paymentCategory = "boleto",
@@ -60,7 +59,7 @@ async function createBoleto(req, res) {
         ordersStatement = "{ 'Novvos Membros': { totalPackage: 10, amount: 0, price: 300 } }",
         isRenewal = false,
         renewal = undefined,
-    } = req.payload;
+    } = payload;
 
     const params = {
         email: authEmail,
@@ -165,16 +164,14 @@ async function createBoleto(req, res) {
     doc.markModified("clientAdminData.orders");
     await doc.save();
 
-    res.json({
+    return {
         barcode: boletoData.barcode,
         paymentLink: boletoData.paymentLink,
         dueDate: boletoData.dueDate,
-    });
+    };
 }
 
-module.exports = {
-    createBoleto,
-};
+module.exports = createBoleto;
 
 /* COMMENTS
 n1:
