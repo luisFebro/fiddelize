@@ -271,21 +271,3 @@ export default function AsyncBoleto({ modalData = {} }) {
         </Fragment>
     );
 }
-
-/* ARCHIVES
-// NOT BEING USED WITH BOLETO
-
-PagSeguro.getPaymentMethods({
-    amount: undefined, // returns all methods if not defined.
-    success: function (response) {
-        // n2
-        setPayMethods(response.paymentMethods);
-    },
-    error: function (response) {
-        console.log("Callback para chamadas que falharam", response);
-    },
-    complete: function (response) {
-        // console.log("Callback para todas chamadas", response);
-    },
-});
- */

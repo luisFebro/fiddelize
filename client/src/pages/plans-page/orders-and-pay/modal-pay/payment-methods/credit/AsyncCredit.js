@@ -8,6 +8,10 @@ import TextField from "@material-ui/core/TextField";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
+import usePayMethods from "../helpers/usePayMethods";
+import handleChange from "../../../../../../utils/form/use-state/handleChange";
+import { getBrand } from "./helpers/creditcardMethods";
+import FlipCreditCard from "../../../../../../components/cards/flip-credit-card/FlipCreditCard";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
@@ -18,7 +22,7 @@ const getStyles = () => ({
         width: "95%",
         maxWidth: isSmall ? "" : 450,
     },
-    fieldFormValue: {
+    fieldForm: {
         backgroundColor: "#fff",
         color: "var(--themeP)",
         fontSize: "20px",
@@ -29,6 +33,12 @@ const getStyles = () => ({
 
 export default function AsyncCredit({ modalData }) {
     const [copy, setCopy] = useState(false);
+    const [data, setData] = useState({
+        cardNumber: "",
+        cardName: "",
+        cvvSize: "",
+    });
+    const { cardNumber, cardName, cvvSize } = data;
 
     const {
         responseData,
@@ -46,26 +56,29 @@ export default function AsyncCredit({ modalData }) {
     const styles = getStyles();
     const dispatch = useStoreDispatch();
 
-    // useEffect(() => {
-    //     PagSeguro.setSessionId(authToken);
-    //     PagSeguro.getPaymentMethods({
-    //         amount: undefined, // returns all methods if not defined.
-    //         success: function (response) {
-    //             // n2
-    //             setPayMethods(response.paymentMethods);
-    //         },
-    //         error: function (response) {
-    //             console.log("Callback para chamadas que falharam", response);
-    //         },
-    //         complete: function (response) {
-    //             // console.log("Callback para todas chamadas", response);
-    //         },
+    const options = {
+        PagSeguro,
+        handleSelected,
+        getSenderHash,
+        authToken,
+    };
+    const cardsAvailable = usePayMethods("CREDIT_CARD", itemAmount, options);
+    useEffect(() => {
+        const go = async () => {
+            const cardData = await getBrand(cardNumber, { PagSeguro });
+            if (cardData) {
+                const { name, cvvSize } = cardData;
+                setData((prev) => ({
+                    ...prev,
+                    cardName: name,
+                    cvvSize,
+                }));
+            }
+        };
 
-    //     });
-
-    //     handleSelected("No Crédito");
-    //     setTimeout(() => getSenderHash(), 5000);
-    // }, [])
+        const needRun = !cardNumber || (cardNumber && cardNumber.length >= 6);
+        needRun && go();
+    }, [cardNumber]);
 
     const showTitle = () => (
         <div className="mt-2">
@@ -88,15 +101,6 @@ export default function AsyncCredit({ modalData }) {
         </section>
     );
 
-    const showMaintenanceMsg = () => (
-        <section className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left">
-            <span className="text-em-1-5">Cartão de Crédito</span>
-            <br />
-            {getFirstName(adminName)}, ainda estamos trabalhando nesta opção de
-            pagamento. Logo ficará disponível!
-        </section>
-    );
-
     const showMsgProcessing = () => (
         <section
             id="PayContent--boleto-msg"
@@ -110,11 +114,67 @@ export default function AsyncCredit({ modalData }) {
         <section className="container-center">I am the CREDITCARD</section>
     );
 
-    return (
+    const showAvailableCards = () => (
+        <section className="my-5">
+            {!cardsAvailable ? (
+                <p className="text-normal text-purple">Carregando cartões...</p>
+            ) : (
+                <p className="text-normal text-purple font-weight-bold">
+                    Cartões disponíveis:
+                </p>
+            )}
+            <section className="container-center">
+                {cardsAvailable &&
+                    cardsAvailable.map((card) => (
+                        <section key={card.name}>
+                            <img
+                                width={68}
+                                height={30}
+                                src={card.image}
+                                alt={card.name}
+                            />
+                        </section>
+                    ))}
+            </section>
+        </section>
+    );
+
+    const showCard = () => <FlipCreditCard />;
+
+    const showCardNumber = () => (
         <Fragment>
-            {showTitle()}
-            {showMaintenanceMsg()}
-            <ShowPayWatermarks needAnima={false} />
+            <p className="text-p text-normal m-0">Insira N.º cartão:</p>
+            <TextField
+                required
+                margin="dense"
+                onChange={handleChange(setData, data)}
+                error={false}
+                name="cardNumber"
+                value={cardNumber}
+                variant="outlined"
+                autoOk={false}
+                onKeyPress={null}
+                onBlur={null}
+                type="tel"
+                autoComplete="off"
+                fullWidth
+                InputProps={{
+                    style: styles.fieldForm,
+                    id: "value2",
+                }}
+            />
+            <p className="text-center text-normal">{cardName}</p>
+            <p className="text-center text-normal">{cvvSize}</p>
         </Fragment>
+    );
+
+    return (
+        <section className="mx-3">
+            {showTitle()}
+            {showCard()}
+            {showCardNumber()}
+            {showAvailableCards()}
+            <ShowPayWatermarks needAnima={false} />
+        </section>
     );
 }

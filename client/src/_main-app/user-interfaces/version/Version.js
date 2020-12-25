@@ -4,10 +4,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.8510.6";
+const latestVersion = "3.8530.6";
 // PRÓXIMO:
+// split de pagamento backend pt2
 // sistema multi-conta (painel de cadastros)
-const updateDescription = "split de pagamento backend pt1";
+const updateDescription = "credit card pay frontend pt1";
 const history = [
     "serviço novvos membros",
     "app membro - sistema de acesso",
