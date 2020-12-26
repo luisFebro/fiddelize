@@ -36,9 +36,9 @@ const handleBtnShadow = (shadowColor, custom) => {
 
 // NEED CHANGE ICON TO FONT AWESOME TOBE MORE FLEXIBLE
 export default function ButtonFab({
-    variant,
-    position,
-    size,
+    variant = "round",
+    position = "absolute",
+    size = "small",
     top,
     right,
     bottom,
@@ -81,7 +81,7 @@ export default function ButtonFab({
         fab: {
             fontWeight: fontWeight,
             fontSize: fontSize,
-            position: position || "absolute",
+            position,
             top,
             left,
             bottom,
@@ -151,14 +151,14 @@ export default function ButtonFab({
     return (
         <Fab
             id={id}
-            variant={variant || "round"}
+            variant={variant}
             onClick={() =>
                 handleOnClick() === false
                     ? isClickFunc && onClick()
                     : handleOnClick()
             }
             onMouseOver={onMouseOver}
-            size={size || "small"}
+            size={size}
             aria-label={title}
             style={styles.fab}
             disabled={disabled}
@@ -175,8 +175,8 @@ export default function ButtonFab({
                     style={{ textTransform: textTransform || "capitalize" }}
                 >
                     {title}
-                    {showIcon(iconFontAwesome)}
-                    {showMuIcon(iconMu)}
+                    {iconFontAwesome && showIcon(iconFontAwesome)}
+                    {iconMu && showMuIcon(iconMu)}
                 </span>
             )}
         </Fab>

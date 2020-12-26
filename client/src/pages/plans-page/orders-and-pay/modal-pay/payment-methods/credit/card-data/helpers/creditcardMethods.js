@@ -1,19 +1,3 @@
-export function getBrand(PagSeguro) {
-    // n1
-    PagSeguro.getBrand({
-        cardBin: 411111,
-        success: function (response) {
-            //bandeira encontrada
-        },
-        error: function (response) {
-            //tratamento do erro
-        },
-        complete: function (response) {
-            //tratamento comum para todas chamadas
-        },
-    });
-}
-
 export function getInstallments(PagSeguro) {
     PagSeguro.getInstallments({
         amount: 118.8,
@@ -33,7 +17,7 @@ export function getInstallments(PagSeguro) {
 
 export function createCardToken(PagSeguro) {
     // n4
-    PagSeguroDirectPayment.createCardToken({
+    PagSeguro.createCardToken({
         cardNumber: "4111111111111111", // Número do cartão de crédito
         brand: "visa", // Bandeira do cartão
         cvv: "013", // CVV do cartão
@@ -52,17 +36,6 @@ export function createCardToken(PagSeguro) {
 }
 
 /* COMMENTS
-n1:
-O método getBrand é utilizado para verificar qual a bandeira do cartão que está sendo digitada. Esse método recebe por parâmetro o BIN (seis primeiros dígitos do cartão) e retorna dados como qual a bandeira, o tamanho do CVV, se possui data de expiração e qual algoritmo de validação.
-{
-        "brand":{
-        "name":"visa",
-        "bin":411111,
-        "cvvSize":3,
-        "expirable":true,
-        "validationAlgorithm":"LUHN"
-    }
-}
 
 n2:
 Esse parâmetro deverá receber valor maior ou igual a 2.

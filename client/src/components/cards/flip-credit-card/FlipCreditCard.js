@@ -4,22 +4,33 @@
 import React from "react";
 import "./_FlipCreditCard.scss";
 
-export default function FlipCreditCard() {
+export default function FlipCreditCard({ cardNumber, cardFullName, cardVal }) {
+    const finalCardNumber = cardNumber ? cardNumber : "**** **** **** ****";
+    const finalCardFullName = cardFullName ? cardFullName : "Nome no cartão";
+    const finalCardVal = cardVal
+        ? cardVal && cardVal.replace(/\s/g, "")
+        : "••/••";
+
     const showFront = () => (
+        // disabled
         <div className="card__front card__part">
             <img
-                className="card__front-square card__square"
-                src="/img/icons/credit-card/chip.png"
+                className="card-brand"
+                width={65}
+                height={40}
+                src="/img/icons/credit-card/brands/visa.png"
+                alt="marca cartão"
             />
-            <p className="card_numer">**** **** **** 6258</p>
-            <div className="card__space-75">
-                <span className="card__label">Card holder</span>
-                <p className="card__info">John Doe</p>
-            </div>
-            <div className="card__space-25">
-                <span className="card__label">Expires</span>
-                <p className="card__info">10/25</p>
-            </div>
+            <img
+                className="card__square front"
+                src="/img/icons/credit-card/chip.png"
+                alt="chip cartão"
+            />
+            <p className="card_numer">{finalCardNumber}</p>
+            <p className="card-holder text-default m-0">{finalCardFullName}</p>
+            <p className="card-val-date text-default m-0">
+                VAL <span className="val">{finalCardVal}</span>
+            </p>
         </div>
     );
 
@@ -28,12 +39,21 @@ export default function FlipCreditCard() {
             <div className="card__black-line"></div>
             <div className="card__back-content">
                 <div className="card__secret">
-                    <p className="card__secret--last">420</p>
+                    <p className="card__secret--last">•••</p>
                 </div>
-                <img
-                    className="card__back-square card__square"
-                    src="/img/icons/credit-card/chip.png"
-                />
+                <section className="card__back-square">
+                    <div className="d-flex mx-3 justify-content-around align-items-center">
+                        <img
+                            className="card__square mr-3"
+                            src="/img/icons/credit-card/chip.png"
+                        />
+                        <p className="text-card m-0">
+                            Este cartão é pessoal e intrasferível.
+                            <br />
+                            Cartão via Fiddelize.
+                        </p>
+                    </div>
+                </section>
             </div>
         </div>
     );

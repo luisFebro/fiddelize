@@ -4,31 +4,32 @@
 }
 
 .card {
-    width: 320px;
-    height: 190px;
+    margin: auto;
+    width: 330px;
+    height: 195px;
     -webkit-perspective: 600px;
     -moz-perspective: 600px;
     perspective: 600px;
 }
 
+@media screen and (min-width: 370px) {
+    .card {
+        width: 350px;
+        height: 200px;
+    }
+}
+
 .card__part {
     font: bold 1.7rem kredit-front;
     box-shadow: 1px 1px #aaa3a3;
-    top: 0;
+    display: inline-block; // Lesson: this along with absolute, top, left prevents the back card to be piled below other than in the same size and leve.
     position: absolute;
-    z-index: 1000;
+    top: 0;
     left: 0;
-    display: inline-block;
-    width: 320px;
-    height: 190px;
-    background-image: linear-gradient(
-        to right bottom,
-        #fd696b,
-        #fa616e,
-        #f65871,
-        #f15075,
-        #ec4879
-    ); /*linear-gradient(to right bottom, #fd8369, #fc7870, #f96e78, #f56581, #ee5d8a)*/
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, #8e2de2, #4a00e0);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -45,10 +46,20 @@
     -moz-backface-visibility: hidden;
 }
 
+.card__part.disabled {
+    background: rgba(0, 0, 0, 0.2);
+}
+
 .card__black-line {
     margin-top: 5px;
     height: 38px;
     background-color: #303030;
+}
+
+.card-brand {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }
 
 .card__square {
@@ -56,43 +67,52 @@
     height: 30px;
 }
 
+.card__square.front {
+    border-radius: 5px;
+    height: 30px;
+    margin-top: 45px;
+}
+
 .card_numer {
     display: block;
     width: 100%;
     word-spacing: 4px;
-    font-size: 20px;
+    font-size: 23px;
     letter-spacing: 2px;
     color: #fff;
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    text-align: left;
+    margin: 10px 0px;
 }
 
-.card__space-75 {
-    width: 75%;
-    float: left;
-}
-
-.card__space-25 {
-    width: 25%;
-    float: left;
-}
-
-.card__label {
-    font-size: 10px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
-    letter-spacing: 1px;
-}
-
-.card__info {
-    margin-bottom: 0;
-    margin-top: 5px;
-    font-size: 16px;
+.text-default {
+    font-weight: bold;
     line-height: 18px;
     color: #fff;
     letter-spacing: 1px;
     text-transform: uppercase;
+}
+
+.card-holder {
+    font-size: 20px;
+}
+
+.card-val-date {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 15px;
+}
+
+.card-val-date .val {
+    font-family: Arial;
+}
+
+.disabled .card_numer {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.disabled .card__info {
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .card__back-content {
@@ -130,8 +150,12 @@
 
 .card__back-square {
     position: absolute;
-    bottom: 15px;
-    left: 15px;
+    bottom: 25px;
+}
+
+.card__back-square .text-card {
+    color: #fff;
+    font-size: 11px;
 }
 
 .card__front {
@@ -155,3 +179,20 @@
     -webkit-transform: rotateY(0deg);
     -moz-transform: rotateY(0deg);
 }
+
+// .card__space-75 {
+//     width: 75%;
+//     float: left;
+// }
+
+// .card__space-25 {
+//     width: 25%;
+//     float: left;
+// }
+
+// .card__label {
+//     font-size: 10px;
+//     text-transform: uppercase;
+//     color: rgba(255, 255, 255, 0.8);
+//     letter-spacing: 1px;
+// }
