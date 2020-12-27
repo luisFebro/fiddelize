@@ -62,7 +62,14 @@ export default function CardValAndCvv({
                     name="cardCvv"
                     value={cardCvv}
                     variant="outlined"
-                    onKeyPress={null}
+                    onKeyPress={() => {
+                        isSmall && setWatermark(true);
+                        if (is4Css) return;
+                        setData((prev) => ({
+                            ...prev,
+                            flipCard: getUniqueId(),
+                        }));
+                    }}
                     onFocus={() => {
                         isSmall && setWatermark(false);
                         if (is4Css) return;

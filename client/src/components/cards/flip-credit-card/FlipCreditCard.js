@@ -155,7 +155,7 @@ export default function FlipCreditCard({
     );
 
     return (
-        <section className="card mb-5" onClick={runFlipCard}>
+        <section className="card mb-1" onClick={runFlipCard}>
             {showFront()}
             {showBack()}
         </section>
