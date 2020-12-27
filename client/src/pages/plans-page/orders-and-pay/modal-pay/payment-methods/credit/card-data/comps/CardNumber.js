@@ -2,6 +2,9 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
 import { handleEnterPress } from "../../../../../../../../utils/event/isKeyPressed";
+import { getUniqueId } from "../../../../../../../../hooks/api/trigger";
+
+const isSmall = window.Helper.isSmallScreen();
 
 export default function CardNumber({
     styles,
@@ -10,6 +13,7 @@ export default function CardNumber({
     setCurrComp,
     data,
     cardNumber,
+    setWatermark,
 }) {
     return (
         <section className="position-relative">
@@ -33,7 +37,12 @@ export default function CardNumber({
                 onKeyPress={(e) =>
                     handleEnterPress(e, () => setCurrComp("fullName"))
                 }
-                onBlur={null}
+                onFocus={() => {
+                    isSmall && setWatermark(false);
+                }}
+                onBlur={() => {
+                    isSmall && setWatermark(getUniqueId());
+                }}
                 type="tel"
                 autoComplete="off"
                 fullWidth

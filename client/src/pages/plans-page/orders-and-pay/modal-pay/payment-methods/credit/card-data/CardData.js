@@ -20,7 +20,7 @@ const getStyles = () => ({
     },
 });
 
-export default function CardData({ PagSeguro }) {
+export default function CardData({ PagSeguro, setWatermark }) {
     const [currComp, setCurrComp] = useState("cardNumber");
     const [data, setData] = useState({
         cardBrand: "",
@@ -41,7 +41,6 @@ export default function CardData({ PagSeguro }) {
         flipCard,
     } = data;
 
-    console.log("data", data);
     const maskCardNumber = cardNumberMask(cardNumber);
     const maskCardVal = cardExpiresMask(cardVal);
     cardNumber = cardNumber && cardNumber.replace(" ", "");
@@ -73,6 +72,7 @@ export default function CardData({ PagSeguro }) {
                         handleChange={handleChange}
                         setData={setData}
                         setCurrComp={setCurrComp}
+                        setWatermark={setWatermark}
                         data={data}
                     />
                 )}
@@ -83,6 +83,7 @@ export default function CardData({ PagSeguro }) {
                         handleChange={handleChange}
                         setData={setData}
                         setCurrComp={setCurrComp}
+                        setWatermark={setWatermark}
                         data={data}
                     />
                 )}
@@ -96,6 +97,7 @@ export default function CardData({ PagSeguro }) {
                         setData={setData}
                         setCurrComp={setCurrComp}
                         data={data}
+                        setWatermark={setWatermark}
                         handleCardConclusion={handleCardConclusion}
                     />
                 )}

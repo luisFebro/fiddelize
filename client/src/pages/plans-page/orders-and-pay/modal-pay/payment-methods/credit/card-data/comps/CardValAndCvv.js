@@ -3,6 +3,8 @@ import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
 import { getUniqueId } from "../../../../../../../../hooks/api/trigger";
 
+const isSmall = window.Helper.isSmallScreen();
+
 export default function CardValAndCvv({
     // n1 cvv
     styles,
@@ -14,6 +16,7 @@ export default function CardValAndCvv({
     cardCvv,
     cvvSize,
     handleCardConclusion,
+    setWatermark,
 }) {
     const is4Css = cvvSize === 4;
 
@@ -31,7 +34,12 @@ export default function CardValAndCvv({
                     name="cardVal"
                     value={cardVal}
                     variant="outlined"
-                    onBlur={null}
+                    onFocus={() => {
+                        isSmall && setWatermark(false);
+                    }}
+                    onBlur={() => {
+                        isSmall && setWatermark(getUniqueId());
+                    }}
                     type="tel"
                     autoComplete="off"
                     inputProps={{
@@ -56,6 +64,7 @@ export default function CardValAndCvv({
                     variant="outlined"
                     onKeyPress={null}
                     onFocus={() => {
+                        isSmall && setWatermark(false);
                         if (is4Css) return;
                         setData((prev) => ({
                             ...prev,
@@ -63,6 +72,7 @@ export default function CardValAndCvv({
                         }));
                     }}
                     onBlur={() => {
+                        isSmall && setWatermark(getUniqueId());
                         if (is4Css) return;
                         setData((prev) => ({
                             ...prev,

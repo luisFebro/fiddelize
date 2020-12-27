@@ -58,7 +58,7 @@ export default function OrdersTable({
     const vanishMsgReady = useDelay(6000);
 
     return (
-        <section className="animated fadeInUp normal">
+        <section>
             <p className="mt-3 mx-3 text-subtitle font-weight-bold text-purple">
                 Plano {plan} {period === "yearly" ? "anual" : "mensal"}
             </p>

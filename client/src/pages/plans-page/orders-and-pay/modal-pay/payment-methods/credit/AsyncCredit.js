@@ -4,10 +4,7 @@ import usePayMethods from "../helpers/usePayMethods";
 import CardData from "./card-data/CardData";
 
 export default function AsyncCredit({ modalData }) {
-    const [data, setData] = useState({
-        cardNumber: "",
-    });
-    const { cardNumber, cardName, cvvSize } = data;
+    const [watermark, setWatermark] = useState(true);
 
     const {
         responseData,
@@ -36,15 +33,6 @@ export default function AsyncCredit({ modalData }) {
                 Fiddelize Invista
             </p>
         </div>
-    );
-
-    const showMsgProcessing = () => (
-        <section
-            id="PayContent--boleto-msg"
-            className="container-center-col mx-3 full-height my-4 text-subtitle font-weight-bold text-purple text-left"
-        >
-            Some loading Msg
-        </section>
     );
 
     const showAvailableCards = () => (
@@ -83,9 +71,9 @@ export default function AsyncCredit({ modalData }) {
     return (
         <section className="mx-3">
             {showTitle()}
-            <CardData PagSeguro={PagSeguro} />
+            <CardData PagSeguro={PagSeguro} setWatermark={setWatermark} />
             {showAvailableCards()}
-            <ShowPayWatermarks needAnima={false} />
+            {watermark && <ShowPayWatermarks needAnima={false} />}
         </section>
     );
 }
