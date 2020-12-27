@@ -96,7 +96,7 @@ export default function CardValAndCvv({
             <NavBtns
                 returnCallback={() => setCurrComp("fullName")}
                 continueCallback={handleCardConclusion}
-                continueTitle="concluir"
+                continueTitle="ver resumo"
             />
         </section>
     );

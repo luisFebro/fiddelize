@@ -32,6 +32,7 @@ export default function FlipCreditCard({
     const secondChar = numberLength && Number(cardNumber.charAt(1));
     const firstTwoChar = numberLength && Number(cardNumber.slice(0, 2));
     const firstThreeChar = numberLength && Number(cardNumber.slice(0, 3));
+    const isUnknown = !brand && numberLength >= 6;
 
     const isVisa = numberLength >= 2 && firstChar === 4;
     const isMasterCard =
@@ -71,6 +72,7 @@ export default function FlipCreditCard({
         if (isDiners) return brandedCardImgs.diners;
         if (isElo) return brandedCardImgs.elo;
         if (isAura) return brandedCardImgs.aura;
+        return brandedCardImgs.unknown;
     };
 
     const runFlipCard = () => {
@@ -87,7 +89,7 @@ export default function FlipCreditCard({
         <section
             className={`card__front card__part ${!isCardValid && "disabled"}`}
         >
-            {!isCardValid ? (
+            {!isCardValid && !isUnknown ? (
                 <div className="card-brand"></div>
             ) : (
                 <img
@@ -153,7 +155,7 @@ export default function FlipCreditCard({
     );
 
     return (
-        <section className="card mb-3" onClick={runFlipCard}>
+        <section className="card mb-5" onClick={runFlipCard}>
             {showFront()}
             {showBack()}
         </section>

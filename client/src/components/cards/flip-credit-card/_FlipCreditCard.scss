@@ -6,7 +6,7 @@
 .card {
     margin: auto;
     width: 330px;
-    height: 200px;
+    height: 190px;
     -webkit-perspective: 600px;
     -moz-perspective: 600px;
     perspective: 600px;
@@ -15,7 +15,7 @@
 @media screen and (min-width: 370px) {
     .card {
         width: 350px;
-        //height: 200px;
+        height: 200px;
     }
 }
 
