@@ -10,7 +10,7 @@ function getAvailableCards(collection) {
         const isAvailable = status === "AVAILABLE";
         if (isAvailable) {
             availableCards.push({
-                name,
+                name: name && name.toLowerCase(),
                 code,
                 image: `https://stc.pagseguro.uol.com.br/${images.MEDIUM.path}`,
             });

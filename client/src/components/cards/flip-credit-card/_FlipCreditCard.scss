@@ -62,6 +62,13 @@
     right: 15px;
 }
 
+.disabled .card-brand {
+    width: 65px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
 .card__square {
     border-radius: 5px;
     height: 30px;
@@ -107,12 +114,10 @@
     font-family: Arial;
 }
 
+.disabled .card__info,
+.disabled .text-default,
 .disabled .card_numer {
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.disabled .card__info {
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.3);
 }
 
 .card__back-content {

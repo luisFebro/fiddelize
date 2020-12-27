@@ -60,7 +60,8 @@ export default function AsyncCredit({ modalData }) {
                 </p>
             ) : (
                 <p className="text-normal text-purple font-weight-bold">
-                    Cartões disponíveis:
+                    {cardsAvailable ? cardsAvailable.length : 0} cartões
+                    disponíveis:
                 </p>
             )}
             <section className="container-center">

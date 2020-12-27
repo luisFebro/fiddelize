@@ -5,7 +5,7 @@ export default async function getBrand(cardNumber, { PagSeguro }) {
         PagSeguro.getBrand({
             // PagSeguro is typeof Object, getBrand is a regular function, not a promise.
             cardBin: cardNumber, // n1
-            success: function (response) {
+            success: async function (response) {
                 //bandeira encontrada
                 resolve(response.brand);
             },
@@ -19,7 +19,7 @@ export default async function getBrand(cardNumber, { PagSeguro }) {
         });
     };
 
-    return new Promise(run);
+    return await new Promise(run);
 }
 
 /* Notes
@@ -33,19 +33,19 @@ https://www.experian.com/blogs/ask-experian/how-many-numbers-are-on-a-credit-car
 
 | Bandeira   | Comeca com                                  | Máximo de número | Máximo de número cvc |
 | ---------- | ------------------------------------------- | ---------------- | -------------------- |
-| Visa       | 4  (requires at least 2 digits to display brand)| 13,16        | 3                    |
-| Mastercard | 5  (requires at least 2 digits to display brand)| 16           | 3                    |
-| Diners     | 301,305,36,38                               | 14,16            | 3                    |
-| Elo (only national) | 636368,438935,504175,451416,509048,509067,  |                  | 3(?)
+| Visa       | OK 4  (requires at least 2 digits to display brand)| 13,16        | 3                    |
+| Mastercard | OK 5  (requires at least 2 digits to display brand)| 16           | 3                    |
+| Diners     | OK 301,305,36,38                               | 14,16            | 3                    |
+| Elo (national) | OK 636368,438935,504175,451416,509048,509067,  |                  | 3(?)
 |            | 509049,509069,509050,509074,509068,509040,
 |            | 509045,509051,509046,509066,509047,509042,
 |            | 509052,509043,509064,509040                 |                  |
 |            | 36297, 5067,4576,4011                       | 16               | 3
-| Amex (American Express) | 34,37                          | 15               | 4                    |
+| Amex (American Express) | OK 34,37                          | 15               | 4                    |
 | Discover   | 6011,622,64,65                              | 16               | 4                    |
-| Aura (only national)       | 50                          | 16               | 3                    |
-| jcb (only national)        | 35                          | 16               | 3                    |
-| Hipercard (only national) | 38,60
+| Aura (national)       | 50                          | 16               | 3                    |
+| jcb (national)        | NO 35                          | 16               | 3                    |
+| Hipercard (national) | 38,60
 
 Caso vá fazer alguma compra por site ou telefone estrangeiro, saiba que o código pode ter três nomes diferentes: CVD (Card Verification Data), CVN (Card Verification Number) ou CVV (Card Verification Value).
 O código é usado como uma validação adicional para as transações em que o cartão não se encontra presente. É um número que não deve ser registrado ou guardado por vendedores, lojas online e sistemas de pagamento virtual.

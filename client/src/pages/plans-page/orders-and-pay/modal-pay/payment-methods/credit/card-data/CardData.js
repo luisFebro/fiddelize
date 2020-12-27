@@ -54,9 +54,11 @@ export default function CardData({ PagSeguro }) {
     return (
         <Fragment>
             <FlipCreditCard
+                brand={cardBrand}
                 cardNumber={maskCardNumber}
                 cardFullName={cardFullName}
                 cardVal={maskCardVal}
+                cardCvv={cardCvv}
             />
             <section className="mt-4">
                 {currComp === "cardNumber" && (

@@ -15,13 +15,14 @@ const handleRedirect = ({ role, destiny, history }) => {
     if (role === "cliente-membro") {
         history.push(destiny);
     } else {
-        setTimeout(() => (window.location.href = destiny), 1000); // data is being deleted from localstorage.
+        setTimeout(() => (window.location.href = destiny), 1500); // data is being deleted from localstorage.
     }
 };
 
 export default async function authenticate(newToken, options = {}) {
     const { history, role } = options;
     // these variables are set and avaiable after CPF login.
+    localStorage.setItem("token", newToken);
 
     await setVar({ success: true }, store.user);
 
@@ -29,8 +30,6 @@ export default async function authenticate(newToken, options = {}) {
         ["name", "bizCodeName"],
         store.user
     );
-
-    localStorage.setItem("token", newToken);
 
     await setVar({ welcomeMsg: true });
 

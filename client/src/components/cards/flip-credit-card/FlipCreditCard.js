@@ -3,24 +3,80 @@
 // https://app.netlify.com/teams/luisfebro/billing/general
 import React from "react";
 import "./_FlipCreditCard.scss";
+import { brandedCardImgs } from "./brandedCardImgs";
+import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 
-export default function FlipCreditCard({ cardNumber, cardFullName, cardVal }) {
+export default function FlipCreditCard({
+    brand,
+    cardNumber,
+    cardFullName,
+    cardVal,
+    cardCvv,
+}) {
     const finalCardNumber = cardNumber ? cardNumber : "**** **** **** ****";
     const finalCardFullName = cardFullName ? cardFullName : "Nome no cartão";
     const finalCardVal = cardVal
         ? cardVal && cardVal.replace(/\s/g, "")
         : "••/••";
+    const finalCardCvv = cardCvv ? cardCvv : "•••";
+
+    const numberLength = cardNumber && cardNumber.length;
+
+    const firstChar = numberLength && Number(cardNumber.charAt(0));
+    const secondChar = numberLength && Number(cardNumber.charAt(1));
+    const firstTwoChar = numberLength && Number(cardNumber.slice(0, 2));
+    const firstThreeChar = numberLength && Number(cardNumber.slice(0, 3));
+
+    const isVisa = numberLength >= 2 && firstChar === 4;
+    const isMasterCard =
+        numberLength >= 2 && secondChar <= 5 && secondChar >= 1;
+    const isAmex =
+        numberLength >= 2 && (firstTwoChar === 34 || firstTwoChar === 37);
+    const dinersList = ["301", "305", "36", "38"];
+    const isDiners =
+        numberLength >= 2 &&
+        gotArrayThisItem(
+            dinersList,
+            firstThreeChar && firstThreeChar.toString()
+        );
+    const eloList = ["509", "36", "63"];
+    const isElo =
+        numberLength >= 2 &&
+        gotArrayThisItem(eloList, firstThreeChar && firstThreeChar.toString());
+    const isAura = numberLength >= 2 && firstTwoChar === 50;
+
+    const isCardValid =
+        brand ||
+        isVisa ||
+        isMasterCard ||
+        isAmex ||
+        isDiners ||
+        isElo ||
+        isAura;
+
+    const handleBrandCardSrc = () => {
+        if (isVisa) return brandedCardImgs.visa;
+        if (isMasterCard) return brandedCardImgs.mastercard;
+        if (isAmex) return brandedCardImgs.amex;
+        if (isDiners) return brandedCardImgs.diners;
+        if (isElo) return brandedCardImgs.elo;
+        if (isAura) return brandedCardImgs.aura;
+        return brandedCardImgs[brand];
+    };
 
     const showFront = () => (
-        // disabled
-        <div className="card__front card__part">
-            <img
-                className="card-brand"
-                width={65}
-                height={40}
-                src="/img/icons/credit-card/brands/visa.png"
-                alt="marca cartão"
-            />
+        <div className={`card__front card__part ${!isCardValid && "disabled"}`}>
+            {!isCardValid ? (
+                <div className="card-brand"></div>
+            ) : (
+                <img
+                    className="card-brand"
+                    width={65}
+                    height={40}
+                    src={handleBrandCardSrc()}
+                    alt="marca cartão"
+                />
+            )}
             <img
                 className="card__square front"
                 src="/img/icons/credit-card/chip.png"
@@ -39,7 +95,7 @@ export default function FlipCreditCard({ cardNumber, cardFullName, cardVal }) {
             <div className="card__black-line"></div>
             <div className="card__back-content">
                 <div className="card__secret">
-                    <p className="card__secret--last">•••</p>
+                    <p className="card__secret--last">{finalCardCvv}</p>
                 </div>
                 <section className="card__back-square">
                     <div className="d-flex mx-3 justify-content-around align-items-center">
@@ -60,7 +116,6 @@ export default function FlipCreditCard({ cardNumber, cardFullName, cardVal }) {
 
     const flipCard = () => {
         const cardElem = document.querySelector(".card");
-        console.log("cardElem", cardElem);
         cardElem.classList.toggle("flipped");
     };
 
