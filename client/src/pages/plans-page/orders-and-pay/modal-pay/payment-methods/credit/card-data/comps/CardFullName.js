@@ -1,6 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
+import { handleEnterPress } from "../../../../../../../../utils/event/isKeyPressed";
 
 export default function CardFullName({
     styles,
@@ -29,7 +30,9 @@ export default function CardFullName({
                 name="cardFullName"
                 value={cardFullName}
                 variant="outlined"
-                onKeyPress={null}
+                onKeyPress={(e) =>
+                    handleEnterPress(e, () => setCurrComp("valAndCvv"))
+                }
                 onBlur={null}
                 type="tel"
                 autoComplete="off"

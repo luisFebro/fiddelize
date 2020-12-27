@@ -29,19 +29,22 @@ export default function CardData({ PagSeguro }) {
         cardVal: "",
         cardCvv: "",
         cvvSize: "",
+        flipCard: false,
     });
-    const {
+    let {
         cardNumber,
         cardFullName,
         cardBrand,
         cardVal,
         cardCvv,
         cvvSize,
+        flipCard,
     } = data;
-    console.log("cvvSize", cvvSize);
-    console.log("cardBrand", cardBrand);
+
+    console.log("data", data);
     const maskCardNumber = cardNumberMask(cardNumber);
     const maskCardVal = cardExpiresMask(cardVal);
+    cardNumber = cardNumber && cardNumber.replace(" ", "");
 
     useBrand(cardNumber, { setData, PagSeguro });
 
@@ -59,6 +62,8 @@ export default function CardData({ PagSeguro }) {
                 cardFullName={cardFullName}
                 cardVal={maskCardVal}
                 cardCvv={cardCvv}
+                cvvSize={cvvSize}
+                flipCard={flipCard}
             />
             <section className="mt-4">
                 {currComp === "cardNumber" && (
@@ -86,6 +91,7 @@ export default function CardData({ PagSeguro }) {
                         styles={styles}
                         cardVal={maskCardVal}
                         cardCvv={cardCvv}
+                        cvvSize={cvvSize}
                         handleChange={handleChange}
                         setData={setData}
                         setCurrComp={setCurrComp}
@@ -94,8 +100,6 @@ export default function CardData({ PagSeguro }) {
                     />
                 )}
             </section>
-            <p className="text-center text-normal">{cardBrand}</p>
-            <p className="text-center text-normal">{cvvSize}</p>
         </Fragment>
     );
 }

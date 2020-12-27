@@ -1,4 +1,5 @@
 export const brandedCardImgs = {
+    unknown: "/img/icons/credit-card/brands/unknown.png",
     // international branded cards
     visa: "/img/icons/credit-card/brands/visa.png",
     mastercard: "/img/icons/credit-card/brands/mastercard.png",

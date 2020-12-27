@@ -1,6 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
+import { getUniqueId } from "../../../../../../../../hooks/api/trigger";
 
 export default function CardValAndCvv({
     // n1 cvv
@@ -11,8 +12,11 @@ export default function CardValAndCvv({
     data,
     cardVal,
     cardCvv,
+    cvvSize,
     handleCardConclusion,
 }) {
+    const is4Css = cvvSize === 4;
+
     const showFields = () => (
         <section className="d-flex mx-3 align-items-center justify-content-around">
             <div>
@@ -27,13 +31,53 @@ export default function CardValAndCvv({
                     name="cardVal"
                     value={cardVal}
                     variant="outlined"
-                    onKeyPress={null}
                     onBlur={null}
                     type="tel"
                     autoComplete="off"
                     inputProps={{
                         maxLength: 7,
-                        style: { ...styles.fieldForm, fontSize: "18px" },
+                        style: {
+                            ...styles.fieldForm,
+                            fontSize: "20px",
+                            width: "90px",
+                        },
+                    }}
+                />
+            </div>
+            <div>
+                <p className="text-p font-weight-bold text-normal m-0">CVV:</p>
+                <TextField
+                    required
+                    margin="dense"
+                    onChange={handleChange(setData, data)}
+                    error={false}
+                    name="cardCvv"
+                    value={cardCvv}
+                    variant="outlined"
+                    onKeyPress={null}
+                    onFocus={() => {
+                        if (is4Css) return;
+                        setData((prev) => ({
+                            ...prev,
+                            flipCard: getUniqueId(),
+                        }));
+                    }}
+                    onBlur={() => {
+                        if (is4Css) return;
+                        setData((prev) => ({
+                            ...prev,
+                            flipCard: getUniqueId(),
+                        }));
+                    }}
+                    type="tel"
+                    autoComplete="off"
+                    inputProps={{
+                        maxLength: cvvSize || 3,
+                        style: {
+                            ...styles.fieldForm,
+                            fontSize: "20px",
+                            width: "90px",
+                        },
                     }}
                 />
             </div>
@@ -59,28 +103,7 @@ export default function CardValAndCvv({
 }
 
 /*
-<div>
-    <p className="text-p font-weight-bold text-normal m-0">
-        CVV:
-    </p>
-    <TextField
-        required
-        margin="dense"
-        onChange={handleChange(setData, data)}
-        error={false}
-        name="cardCvv"
-        value={cardCvv}
-        variant="outlined"
-        onKeyPress={null}
-        onBlur={null}
-        type="tel"
-        autoComplete="off"
-        inputProps={{
-            maxLength: 3,
-            style: { ...styles.fieldForm, fontSize: "18px" },
-        }}
-    />
-</div>
+
  */
 
 /*

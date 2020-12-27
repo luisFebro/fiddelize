@@ -9,7 +9,7 @@ export default function NavBtns({
     return (
         <section className="d-flex justify-content-around align-items-center mt-2 mx-3">
             {returnCallback && (
-                <div className="animated fadeInUp">
+                <div>
                     <ButtonFab
                         title="voltar"
                         position="relative"

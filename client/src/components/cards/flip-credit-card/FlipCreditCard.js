@@ -1,7 +1,7 @@
 // reference: https://codepen.io/veronicadev/pen/VXqZgR
 // The credit card should follow the interactive field inspired on netlify>
 // https://app.netlify.com/teams/luisfebro/billing/general
-import React from "react";
+import React, { useEffect } from "react";
 import "./_FlipCreditCard.scss";
 import { brandedCardImgs } from "./brandedCardImgs";
 import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
@@ -12,16 +12,22 @@ export default function FlipCreditCard({
     cardFullName,
     cardVal,
     cardCvv,
+    flipCard = false,
+    cvvSize,
 }) {
-    const finalCardNumber = cardNumber ? cardNumber : "**** **** **** ****";
+    const finalCardNumber = cardNumber ? cardNumber : "•••• •••• •••• ••••";
     const finalCardFullName = cardFullName ? cardFullName : "Nome no cartão";
     const finalCardVal = cardVal
         ? cardVal && cardVal.replace(/\s/g, "")
         : "••/••";
     const finalCardCvv = cardCvv ? cardCvv : "•••";
+    const handleFourCvv = () => {
+        if (!cardCvv) return "••••";
+        return cardCvv;
+    };
+    const finalFourCvv = cvvSize === 4 ? handleFourCvv() : false;
 
     const numberLength = cardNumber && cardNumber.length;
-
     const firstChar = numberLength && Number(cardNumber.charAt(0));
     const secondChar = numberLength && Number(cardNumber.charAt(1));
     const firstTwoChar = numberLength && Number(cardNumber.slice(0, 2));
@@ -29,7 +35,10 @@ export default function FlipCreditCard({
 
     const isVisa = numberLength >= 2 && firstChar === 4;
     const isMasterCard =
-        numberLength >= 2 && secondChar <= 5 && secondChar >= 1;
+        numberLength >= 2 &&
+        firstChar === 5 &&
+        secondChar <= 5 &&
+        secondChar >= 1;
     const isAmex =
         numberLength >= 2 && (firstTwoChar === 34 || firstTwoChar === 37);
     const dinersList = ["301", "305", "36", "38"];
@@ -55,17 +64,29 @@ export default function FlipCreditCard({
         isAura;
 
     const handleBrandCardSrc = () => {
+        if (brand && numberLength >= 6) return brandedCardImgs[brand];
         if (isVisa) return brandedCardImgs.visa;
         if (isMasterCard) return brandedCardImgs.mastercard;
         if (isAmex) return brandedCardImgs.amex;
         if (isDiners) return brandedCardImgs.diners;
         if (isElo) return brandedCardImgs.elo;
         if (isAura) return brandedCardImgs.aura;
-        return brandedCardImgs[brand];
     };
 
+    const runFlipCard = () => {
+        const cardElem = document.querySelector(".card");
+        cardElem.classList.toggle("flipped");
+    };
+
+    useEffect(() => {
+        // use an id to flip to change this useEffect. If used true, it will run only once...
+        if (flipCard) runFlipCard();
+    }, [flipCard]);
+
     const showFront = () => (
-        <div className={`card__front card__part ${!isCardValid && "disabled"}`}>
+        <section
+            className={`card__front card__part ${!isCardValid && "disabled"}`}
+        >
             {!isCardValid ? (
                 <div className="card-brand"></div>
             ) : (
@@ -73,8 +94,13 @@ export default function FlipCreditCard({
                     className="card-brand"
                     width={65}
                     height={40}
-                    src={handleBrandCardSrc()}
-                    alt="marca cartão"
+                    src={handleBrandCardSrc() || brandedCardImgs.unknown}
+                    alt=""
+                    onError={(e) => {
+                        // this works but requiers src returns an invalid src, not undefined.
+                        //e.target.onerror = null;
+                        //e.target.src = brandedCardImgs.unknown;
+                    }}
                 />
             )}
             <img
@@ -82,16 +108,28 @@ export default function FlipCreditCard({
                 src="/img/icons/credit-card/chip.png"
                 alt="chip cartão"
             />
-            <p className="card_numer">{finalCardNumber}</p>
+            <p
+                className="card_numer"
+                style={{
+                    font: cardNumber
+                        ? "bold 1.7rem kredit-front"
+                        : "bold 1.7rem arial",
+                }}
+            >
+                {finalCardNumber}
+            </p>
             <p className="card-holder text-default m-0">{finalCardFullName}</p>
             <p className="card-val-date text-default m-0">
                 VAL <span className="val">{finalCardVal}</span>
             </p>
-        </div>
+            {finalFourCvv && <div className="four-cvv">{finalFourCvv}</div>}
+        </section>
     );
 
     const showBack = () => (
-        <div className="card__back card__part">
+        <section
+            className={`card__back card__part ${!isCardValid && "disabled"}`}
+        >
             <div className="card__black-line"></div>
             <div className="card__back-content">
                 <div className="card__secret">
@@ -111,16 +149,11 @@ export default function FlipCreditCard({
                     </div>
                 </section>
             </div>
-        </div>
+        </section>
     );
 
-    const flipCard = () => {
-        const cardElem = document.querySelector(".card");
-        cardElem.classList.toggle("flipped");
-    };
-
     return (
-        <section className="card" onClick={flipCard}>
+        <section className="card mb-3" onClick={runFlipCard}>
             {showFront()}
             {showBack()}
         </section>
