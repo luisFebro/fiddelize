@@ -34,7 +34,7 @@ export default function CardFullName({
                     handleEnterPress(e, () => setCurrComp("valAndCvv"))
                 }
                 onBlur={null}
-                type="tel"
+                type="text"
                 autoComplete="off"
                 fullWidth
                 inputProps={{
