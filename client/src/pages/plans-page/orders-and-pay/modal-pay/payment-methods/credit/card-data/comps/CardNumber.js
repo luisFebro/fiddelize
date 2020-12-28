@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
 import { handleEnterPress } from "../../../../../../../../utils/event/isKeyPressed";
 import { getUniqueId } from "../../../../../../../../hooks/api/trigger";
+import ShowAvailableCards from "./ShowAvailableCards";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -15,6 +16,7 @@ export default function CardNumber({
     cardNumber,
     setWatermark,
     maxCardNumberLength,
+    modalData,
 }) {
     const getSpaceNum = () => {
         if (maxCardNumberLength === 16) return 3;
@@ -58,6 +60,7 @@ export default function CardNumber({
                 }}
             />
             <NavBtns continueCallback={() => setCurrComp("fullName")} />
+            <ShowAvailableCards modalData={modalData} />
         </section>
     );
 }

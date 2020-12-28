@@ -20,11 +20,7 @@ function getAvailableCards(collection) {
     return availableCards;
 }
 
-export default function usePayMethods(
-    target,
-    value,
-    { PagSeguro, handleSelected, getSenderHash, authToken }
-) {
+export default function usePayMethods(target, value, { PagSeguro, authToken }) {
     const [payMethod, setPayMethod] = useState(null);
 
     const targets = ["CREDIT_CARD", "ONLINE_DEBT"];

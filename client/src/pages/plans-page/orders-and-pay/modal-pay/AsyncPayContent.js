@@ -25,7 +25,7 @@ const getPayMethod = (selected) => {
     if ("No Débito") return "eft";
 };
 
-export default function AsyncPayContent({ modalData, isProUser = false }) {
+export default function AsyncPayContent({ modalData }) {
     const {
         handleCancel,
         sandboxMode,
@@ -134,16 +134,9 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
 
     const showSubtitle = () => (
         <div className="mx-2 my-5">
-            {isProUser ? (
-                <p className="text-subtitle main-font text-purple text-center font-weight-bold">
-                    {firstAdminName}, selecione a sua forma de investir
-                    favorita.
-                </p>
-            ) : (
-                <p className="text-subtitle main-font text-purple text-center font-weight-bold">
-                    Selecione a sua forma de investir favorita.
-                </p>
-            )}
+            <p className="text-subtitle main-font text-purple text-center font-weight-bold">
+                {firstAdminName}, selecione a sua forma de investir favorita.
+            </p>
         </div>
     );
 
@@ -161,7 +154,6 @@ export default function AsyncPayContent({ modalData, isProUser = false }) {
 
     const methodsModalData = {
         handleCancel,
-        isProUser,
         processing: loading,
         responseData: data,
         authToken,

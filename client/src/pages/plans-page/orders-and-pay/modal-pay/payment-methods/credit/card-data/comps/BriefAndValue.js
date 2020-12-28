@@ -6,6 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
 import { treatBoolStatus } from "../../../../../../../../hooks/api/trigger";
+import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 
 export default function BriefAndValue({
     brand,
@@ -14,12 +15,36 @@ export default function BriefAndValue({
     PagSeguro,
     setMainData,
     payMethod,
+    installmentTotalAmount,
+    setCurrComp,
 }) {
     const [data, setData] = useState({
         installmentOpts: null,
-        selected: "selecione parcelas:",
+        selectedInsta: "selecione parcela:",
     });
-    const { installmentOpts, selected } = data;
+    const { installmentOpts, selectedInsta } = data;
+
+    useEffect(() => {
+        if (selectedInsta !== "selecione parcela:") {
+            // e.g 12 x R$ 120,00
+            const firstSpaceInd = selectedInsta.indexOf(" ");
+            const installmentQuantity = Number(
+                selectedInsta.slice(0, firstSpaceInd)
+            );
+            const installmentDesc = selectedInsta;
+
+            const indInsta = installmentQuantity - 2; // e.g it is started by 2 instalments, then the first is 0 in the array.
+            const installmentTotalAmount =
+                installmentOpts[indInsta].totalAmount;
+
+            setMainData((prev) => ({
+                ...prev,
+                installmentQuantity,
+                installmentDesc,
+                installmentTotalAmount,
+            }));
+        }
+    }, [selectedInsta]);
 
     useEffect(() => {
         if (brand && amount && PagSeguro) {
@@ -54,16 +79,17 @@ export default function BriefAndValue({
     };
 
     const displayInstallmentSelect = () => (
-        <section className="container-center">
+        <section className="my-3 container-center">
             <Select
                 margin="dense"
                 onChange={handleChange(setData, data)}
-                name="selected"
-                value={selected}
+                name="selectedInsta"
+                value={selectedInsta}
                 variant="outlined"
                 error={false}
+                style={{ backgroundColor: "#fff" }}
             >
-                <MenuItem value={selected}>
+                <MenuItem value={selectedInsta}>
                     <span
                         className="text-p text-normal"
                         style={{
@@ -71,14 +97,16 @@ export default function BriefAndValue({
                             fontFamily: "Poppins, sans-serif",
                         }}
                     >
-                        selecione parcelas:
+                        selecione parcela:
                     </span>
                 </MenuItem>
                 {installmentOpts &&
                     installmentOpts.map((inst, ind) => {
-                        const instValue = `${inst.quantity} x ${
-                            inst.installmentAmount
-                        } ${inst.interestFree ? "(sem juros)" : ""}`;
+                        const instValue = `${
+                            inst.quantity
+                        } x ${convertToReal(inst.installmentAmount, {
+                            moneySign: true,
+                        })} ${inst.interestFree ? "(sem juros)" : ""}`;
                         return (
                             <MenuItem key={ind} value={instValue}>
                                 {instValue}
@@ -101,15 +129,36 @@ export default function BriefAndValue({
                 defaultStatus={true}
             />
             {payMethod === "installment" && displayInstallmentSelect()}
-            Valor total:{" "}
+            Valor total {installmentTotalAmount && "parcelado"}:{" "}
             <span className="text-pill">
-                {amount && convertToReal(amount, { moneySign: true })}
+                {convertToReal(installmentTotalAmount || amount, {
+                    moneySign: true,
+                })}
             </span>
         </section>
     );
 
+    const showEditCardBtn = () => (
+        <ButtonFab
+            title="editar cartão"
+            size="small"
+            position="absolute"
+            left={20}
+            top={-60}
+            variant="extended"
+            backgroundColor={`var(--themeSDark--default)`}
+            onClick={() => setCurrComp("cardNumber")}
+        />
+    );
+
     return (
-        <section>
+        <section
+            className="position-relative"
+            style={{
+                marginBottom: "150px",
+            }}
+        >
+            {showEditCardBtn()}
             <p className="text-subtitle text-p font-weight-bold text-center">
                 Resumo
             </p>
@@ -123,7 +172,6 @@ export default function BriefAndValue({
                 </div>
             </div>
             {showPayMethods()}
-            {JSON.stringify(installmentOpts)}
         </section>
     );
 }

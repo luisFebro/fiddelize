@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
-import useAPI, { startCheckout, getProData } from "../../../hooks/api/useAPI";
-import PayBtn from "./modal-pay/PayBtn";
+import useAPI, { startCheckout } from "../../../hooks/api/useAPI";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
 import convertToReal from "../../../utils/numbers/convertToReal";
@@ -46,7 +45,6 @@ export default function PayArea({
         senderAreaCode: "",
         senderPhone: "",
         firstDueDate: "",
-        isUserPro: false,
     });
     let {
         SKU,
@@ -55,17 +53,10 @@ export default function PayArea({
         senderAreaCode,
         senderPhone,
         firstDueDate,
-        // isUserPro,
     } = data;
 
     const { bizCodeName } = useClientAdmin();
     const { _id, phone, name: userName, email: senderEmail } = useProfile();
-    const { data: dataPro, loading: proLoading } = useAPI({
-        url: getProData(_id),
-        dataName: "proData",
-    });
-
-    const isUserPro = !proLoading && dataPro && dataPro.isPro;
 
     const dispatch = useStoreDispatch();
 
@@ -166,40 +157,9 @@ export default function PayArea({
         isSingleRenewal,
     };
 
-    const showDirectPayAreaToPros = () =>
-        !loading && <AsyncPayMethods modalData={modalData} isProUser={true} />;
-
-    const showUnpaidUsersMsg = () => (
-        <Fragment>
-            <p
-                className="mb-5 text-center text-purple text-subtitle font-weight-bold"
-                style={{ lineHeight: "35px" }}
-            >
-                Pronto para fazer
-                <br />
-                parte do <span className="text-pill">clube pro</span>
-                <br />
-                da Fiddelize?
-            </p>
-        </Fragment>
-    );
-
     const showCTAs = () =>
         !loading && (
             <section className="container-center-col">
-                {authToken && !isUserPro && (
-                    <PayBtn
-                        size="large"
-                        title="VAMOS LÁ!"
-                        position="relative"
-                        modalData={modalData}
-                        callback={() => {
-                            handleCancel();
-                        }}
-                        backgroundColor={"var(--themeSDark)"}
-                        variant="extended"
-                    />
-                )}
                 <Link
                     to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}
@@ -210,7 +170,7 @@ export default function PayArea({
                         variant="link"
                         color="var(--themeP)"
                         underline={true}
-                        margin={isUserPro ? "0 16px 50px" : undefined}
+                        margin="0 16px 50px"
                         zIndex={-1}
                     />
                 </Link>
@@ -219,11 +179,13 @@ export default function PayArea({
 
     return (
         <section className="my-5">
-            {isUserPro && !proLoading && showDirectPayAreaToPros()}
-            {!isUserPro && !proLoading && showUnpaidUsersMsg()}
+            {!loading && <AsyncPayMethods modalData={modalData} />}
             {showCTAs()}
-            {loading && !proLoading && (
-                <p className="font-weight-bold text-subtitle text-purple text-center">
+            {loading && (
+                <p
+                    className="font-weight-bold text-subtitle text-purple text-center"
+                    style={{ margin: "100px 0" }}
+                >
                     Preparando tudo...
                 </p>
             )}
@@ -232,8 +194,19 @@ export default function PayArea({
     );
 }
 
-/*
-<p className="text-break text-normal mx-2">
-    {JSON.stringify(authToken)}
-</p>
+/* ARCHIVES
+const showUnpaidUsersMsg = () => (
+<Fragment>
+    <p
+        className="mb-5 text-center text-purple text-subtitle font-weight-bold"
+        style={{ lineHeight: "35px" }}
+    >
+        Pronto para fazer
+        <br />
+        parte do <span className="text-pill">clube pro</span>
+        <br />
+        da Fiddelize?
+    </p>
+</Fragment>
+);
  */

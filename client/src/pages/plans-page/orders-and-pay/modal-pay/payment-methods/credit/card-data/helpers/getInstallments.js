@@ -8,7 +8,10 @@ export default function getInstallments({ amount, brand, PagSeguro }) {
             maxInstallmentNoInterest: MAX_INSTALLMENT_NO_INTEREST, // n2
             success: function (response) {
                 // Retorna as opções de parcelamento disponíveis
-                resolve(response.installments[brand]);
+                const installmentOpts = response.installments[brand];
+                const onlyInstallments =
+                    installmentOpts && installmentOpts.slice(1); // the first option is in cash and already have it.
+                resolve(onlyInstallments);
             },
             error: function (response) {
                 reject(response);

@@ -2,6 +2,7 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
 import { getUniqueId } from "../../../../../../../../hooks/api/trigger";
+import ShowAvailableCards from "./ShowAvailableCards";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -16,6 +17,7 @@ export default function CardValAndCvv({
     cardCvv,
     cvvSize,
     setWatermark,
+    modalData,
 }) {
     const is4Css = cvvSize === 4;
 
@@ -103,6 +105,7 @@ export default function CardValAndCvv({
                 continueCallback={() => setCurrComp("briefAndValue")}
                 continueTitle="ver resumo"
             />
+            <ShowAvailableCards modalData={modalData} />
         </section>
     );
 }

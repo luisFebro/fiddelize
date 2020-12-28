@@ -65,6 +65,7 @@ export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {
                 contentComp={AsyncPayMethod}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
+                needIndex={false}
             />
         </section>
     );

@@ -26,6 +26,7 @@ export default function CardData({
     setWatermark,
     amount,
     description,
+    modalData,
 }) {
     const [currComp, setCurrComp] = useState("cardNumber");
     const [data, setData] = useState({
@@ -38,7 +39,9 @@ export default function CardData({
         cvvSize: "",
         flipCard: false,
         payMethod: "cash", // or installment
-        installmentCount: null,
+        installmentQuantity: null,
+        installmentDesc: "",
+        installmentTotalAmount: null,
     });
     let {
         cardNumber,
@@ -50,6 +53,7 @@ export default function CardData({
         cvvSize,
         flipCard,
         payMethod,
+        installmentTotalAmount,
     } = data;
 
     const maskCardNumber = cardNumberMask(cardNumber);
@@ -86,6 +90,7 @@ export default function CardData({
                         setWatermark={setWatermark}
                         data={data}
                         maxCardNumberLength={maxCardNumberLength}
+                        modalData={modalData}
                     />
                 )}
                 {currComp === "fullName" && (
@@ -97,6 +102,7 @@ export default function CardData({
                         setCurrComp={setCurrComp}
                         setWatermark={setWatermark}
                         data={data}
+                        modalData={modalData}
                     />
                 )}
                 {currComp === "valAndCvv" && (
@@ -110,6 +116,7 @@ export default function CardData({
                         setCurrComp={setCurrComp}
                         data={data}
                         setWatermark={setWatermark}
+                        modalData={modalData}
                     />
                 )}
                 {currComp === "briefAndValue" && (
@@ -120,6 +127,8 @@ export default function CardData({
                         description={description}
                         setMainData={setData}
                         payMethod={payMethod}
+                        installmentTotalAmount={installmentTotalAmount}
+                        setCurrComp={setCurrComp}
                     />
                 )}
             </section>
