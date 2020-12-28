@@ -7,6 +7,9 @@ import Select from "@material-ui/core/Select";
 import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
 import { treatBoolStatus } from "../../../../../../../../hooks/api/trigger";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
+import createCardToken from "../helpers/createCardToken";
+import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
+import { useStoreDispatch } from "easy-peasy";
 
 export default function BriefAndValue({
     brand,
@@ -17,12 +20,15 @@ export default function BriefAndValue({
     payMethod,
     installmentTotalAmount,
     setCurrComp,
+    mainData,
 }) {
     const [data, setData] = useState({
         installmentOpts: null,
         selectedInsta: "selecione parcela:",
     });
     const { installmentOpts, selectedInsta } = data;
+
+    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         if (selectedInsta !== "selecione parcela:") {
@@ -102,11 +108,12 @@ export default function BriefAndValue({
                 </MenuItem>
                 {installmentOpts &&
                     installmentOpts.map((inst, ind) => {
-                        const instValue = `${
-                            inst.quantity
-                        } x ${convertToReal(inst.installmentAmount, {
-                            moneySign: true,
-                        })} ${inst.interestFree ? "(sem juros)" : ""}`;
+                        const instValue = `${inst.quantity} x ${convertToReal(
+                            inst.installmentAmount,
+                            {
+                                moneySign: true,
+                            }
+                        )} ${inst.interestFree ? "(sem juros)" : ""}`;
                         return (
                             <MenuItem key={ind} value={instValue}>
                                 {instValue}
@@ -151,6 +158,35 @@ export default function BriefAndValue({
         />
     );
 
+    const handleInvestConclusion = async () => {
+        const cardToken = await createCardToken({
+            cardData: mainData,
+            PagSeguro,
+        }).catch((e) => {
+            showSnackbar(
+                dispatch,
+                "Dados inválidos. Edite o cartão, revise e corrija erros encontrados.",
+                "error"
+            );
+            console.log(e);
+        });
+        if (!cardToken) return;
+        console.log("cardToken", cardToken);
+    };
+
+    const showFinalInvestBtn = () => (
+        <section className="my-5 container-center">
+            <ButtonFab
+                title="Investir"
+                size="large"
+                position="relative"
+                variant="extended"
+                backgroundColor={`var(--themeSDark--default)`}
+                onClick={handleInvestConclusion}
+            />
+        </section>
+    );
+
     return (
         <section
             className="position-relative"
@@ -172,6 +208,7 @@ export default function BriefAndValue({
                 </div>
             </div>
             {showPayMethods()}
+            {showFinalInvestBtn()}
         </section>
     );
 }

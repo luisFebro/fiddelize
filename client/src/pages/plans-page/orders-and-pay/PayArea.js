@@ -22,7 +22,7 @@ const AsyncPayMethods = Load({
         ),
 });
 
-const sandboxMode = IS_DEV ? true : false;
+const sandboxMode = false;//IS_DEV ? true : false;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";
@@ -179,7 +179,7 @@ export default function PayArea({
 
     return (
         <section className="my-5">
-            {!loading && <AsyncPayMethods modalData={modalData} />}
+            {!loading && !error && <AsyncPayMethods modalData={modalData} />}
             {showCTAs()}
             {loading && (
                 <p

@@ -20,7 +20,7 @@ export default function ShowAvailableCards({ modalData }) {
         >
             {!cardsAvailable ? (
                 <p className="text-normal text-purple font-weight-bold">
-                    Vericando disponíveis...
+                    Verificando disponíveis...
                 </p>
             ) : (
                 <p className="text-normal text-purple font-weight-bold">

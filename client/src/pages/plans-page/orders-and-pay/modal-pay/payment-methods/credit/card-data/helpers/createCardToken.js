@@ -1,17 +1,30 @@
-export function createCardToken({ cardData, PagSeguro }) {
-    // n4
+const getValidationData = (date) => {
+    const [month, year] = date.split(" / ");
 
+    return {
+        month,
+        year: `20${year}`,
+    };
+};
+
+export default function createCardToken({ cardData, PagSeguro }) {
     const run = (resolve, reject) => {
-        const { cardNumber, cardBrand, cardCvv, cardVal } = cardData;
+        // n1
+        let { cardNumber, cardBrand, cardCvv, cardVal } = cardData;
+        cardNumber = cardNumber && cardNumber.replace(/\s/g, "");
+
+        const { month, year } = getValidationData(cardVal);
+
         PagSeguro.createCardToken({
             cardNumber: cardNumber, // Número do cartão de crédito
             brand: cardBrand, // Bandeira do cartão
             cvv: cardCvv, // CVV do cartão
-            expirationMonth: cardVal, // Mês da expiração do cartão
-            expirationYear: `2026`, // Ano da expiração do cartão, é necessário os 4 dígitos.
+            expirationMonth: month, // Mês da expiração do cartão
+            expirationYear: year, // Ano da expiração do cartão, é necessário os 4 dígitos.
             success: function (response) {
+                console.log("response", response);
                 // Retorna o cartão tokenizado.
-                resolve(response);
+                resolve(response.card.token);
             },
             error: function (response) {
                 reject(response);
@@ -27,6 +40,7 @@ export function createCardToken({ cardData, PagSeguro }) {
 
 /* COMMENTS
 
-n4:
-O método createCardToken utiliza os dados do cartão de crédito para gerar um token que será enviado no Passo 3, pois por motivos de segurança os dados do cartão não são enviados diretamente na chamada.
+n1:
+O método createCardToken utiliza os dados do cartão de crédito para gerar um token que será enviado no Passo 3,
+pois por motivos de segurança os DADOS DO CARTÃO NÃO SÃO ENVIADOS DIRETAMENTE NA CHAMADA.
 */

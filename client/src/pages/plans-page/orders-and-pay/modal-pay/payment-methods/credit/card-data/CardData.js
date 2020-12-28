@@ -58,15 +58,11 @@ export default function CardData({
 
     const maskCardNumber = cardNumberMask(cardNumber);
     const maskCardVal = cardExpiresMask(cardVal);
-    cardNumber = cardNumber && cardNumber.replace(" ", "");
+    cardNumber = cardNumber && cardNumber.replace(/\s/g, "");
 
     useBrand(cardNumber, { setData, PagSeguro });
 
     const styles = getStyles();
-
-    // const handleCardConclusion = () => {
-    //     alert("hello");
-    // };
 
     return (
         <Fragment>
@@ -129,6 +125,7 @@ export default function CardData({
                         payMethod={payMethod}
                         installmentTotalAmount={installmentTotalAmount}
                         setCurrComp={setCurrComp}
+                        mainData={data}
                     />
                 )}
             </section>
