@@ -7,6 +7,7 @@ import useBrand from "./hooks/useBrand";
 import CardNumber from "./comps/CardNumber";
 import CardFullName from "./comps/CardFullName";
 import CardValAndCvv from "./comps/CardValAndCvv";
+import BriefAndValue from "./comps/BriefAndValue";
 
 const getStyles = () => ({
     fieldForm: {
@@ -20,25 +21,35 @@ const getStyles = () => ({
     },
 });
 
-export default function CardData({ PagSeguro, setWatermark }) {
+export default function CardData({
+    PagSeguro,
+    setWatermark,
+    amount,
+    description,
+}) {
     const [currComp, setCurrComp] = useState("cardNumber");
     const [data, setData] = useState({
         cardBrand: "",
         cardNumber: "",
+        maxCardNumberLength: "",
         cardFullName: "",
         cardVal: "",
         cardCvv: "",
         cvvSize: "",
         flipCard: false,
+        payMethod: "cash", // or installment
+        installmentCount: null,
     });
     let {
         cardNumber,
+        maxCardNumberLength,
         cardFullName,
         cardBrand,
         cardVal,
         cardCvv,
         cvvSize,
         flipCard,
+        payMethod,
     } = data;
 
     const maskCardNumber = cardNumberMask(cardNumber);
@@ -49,9 +60,9 @@ export default function CardData({ PagSeguro, setWatermark }) {
 
     const styles = getStyles();
 
-    const handleCardConclusion = () => {
-        alert("hello");
-    };
+    // const handleCardConclusion = () => {
+    //     alert("hello");
+    // };
 
     return (
         <Fragment>
@@ -74,6 +85,7 @@ export default function CardData({ PagSeguro, setWatermark }) {
                         setCurrComp={setCurrComp}
                         setWatermark={setWatermark}
                         data={data}
+                        maxCardNumberLength={maxCardNumberLength}
                     />
                 )}
                 {currComp === "fullName" && (
@@ -98,7 +110,16 @@ export default function CardData({ PagSeguro, setWatermark }) {
                         setCurrComp={setCurrComp}
                         data={data}
                         setWatermark={setWatermark}
-                        handleCardConclusion={handleCardConclusion}
+                    />
+                )}
+                {currComp === "briefAndValue" && (
+                    <BriefAndValue
+                        PagSeguro={PagSeguro}
+                        amount={amount}
+                        brand={cardBrand}
+                        description={description}
+                        setMainData={setData}
+                        payMethod={payMethod}
                     />
                 )}
             </section>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-async function getBrand(cardNumber, { PagSeguro }) {
+function getBrand(cardNumber, { PagSeguro }) {
     // n1
     const run = (resolve, reject) => {
         PagSeguro.getBrand({
@@ -10,7 +10,7 @@ async function getBrand(cardNumber, { PagSeguro }) {
                 //bandeira encontrada
                 resolve(response.brand);
             },
-            error: async function (response) {
+            error: function (response) {
                 //tratamento do erro
                 reject(response);
             },
@@ -20,7 +20,7 @@ async function getBrand(cardNumber, { PagSeguro }) {
         });
     };
 
-    return await new Promise(run);
+    return new Promise(run);
 }
 
 export default function useBrand(cardNumber, { setData, PagSeguro }) {
@@ -31,6 +31,7 @@ export default function useBrand(cardNumber, { setData, PagSeguro }) {
             ...prev,
             cardBrand: "",
             cvvSize: "",
+            maxCardNumberLength: "",
         }));
     };
 
@@ -53,14 +54,19 @@ export default function useBrand(cardNumber, { setData, PagSeguro }) {
                     console.log(e);
                 }
             );
-            console.log("cardData", cardData);
             if (!cardData) return;
 
-            const { name, cvvSize } = cardData;
+            const {
+                name,
+                cvvSize,
+                config: { acceptedLengths },
+            } = cardData;
+            const maxCardNumberLength = Math.max(...acceptedLengths);
             setData((prev) => ({
                 ...prev,
                 cardBrand: name,
                 cvvSize,
+                maxCardNumberLength,
             }));
         };
 
@@ -99,12 +105,12 @@ O código é usado como uma validação adicional para as transações em que o 
                                     |
 O método getBrand é utilizado para verificar qual a bandeira do cartão que está sendo digitada. Esse método recebe por parâmetro o BIN (seis primeiros dígitos do cartão) e retorna dados como qual a bandeira, o tamanho do CVV, se possui data de expiração e qual algoritmo de validação.
 {
-        "brand":{
-        "name":"visa",
-        "bin":411111,
-        "cvvSize":3,
-        "expirable":true,
-        "validationAlgorithm":"LUHN"
-    }
+       bin: 411111
+       config: {acceptedLengths: Array(13, 16, 19), hasDueDate: true, hasCvv: true, hasPassword: false, securityFieldLength: 3}
+       cvvSize: 3
+       expirable: false
+       international: false
+       name: "visa"
+       validationAlgorithm: "LUHN"
 }
  */

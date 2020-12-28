@@ -14,7 +14,13 @@ export default function CardNumber({
     data,
     cardNumber,
     setWatermark,
+    maxCardNumberLength,
 }) {
+    const getSpaceNum = () => {
+        if (maxCardNumberLength === 16) return 3;
+        if (maxCardNumberLength === 19) return 4;
+    };
+
     return (
         <section className="position-relative">
             <p
@@ -47,7 +53,7 @@ export default function CardNumber({
                 autoComplete="off"
                 fullWidth
                 inputProps={{
-                    maxLength: 19,
+                    maxLength: maxCardNumberLength + getSpaceNum() || 23, // 19 characters and up to 4 spaces
                     style: styles.fieldForm,
                 }}
             />

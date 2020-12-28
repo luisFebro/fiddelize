@@ -15,7 +15,6 @@ export default function CardValAndCvv({
     cardVal,
     cardCvv,
     cvvSize,
-    handleCardConclusion,
     setWatermark,
 }) {
     const is4Css = cvvSize === 4;
@@ -36,9 +35,6 @@ export default function CardValAndCvv({
                     variant="outlined"
                     onFocus={() => {
                         isSmall && setWatermark(false);
-                    }}
-                    onBlur={() => {
-                        isSmall && setWatermark(getUniqueId());
                     }}
                     type="tel"
                     autoComplete="off"
@@ -104,7 +100,7 @@ export default function CardValAndCvv({
             {showFields()}
             <NavBtns
                 returnCallback={() => setCurrComp("fullName")}
-                continueCallback={handleCardConclusion}
+                continueCallback={() => setCurrComp("briefAndValue")}
                 continueTitle="ver resumo"
             />
         </section>

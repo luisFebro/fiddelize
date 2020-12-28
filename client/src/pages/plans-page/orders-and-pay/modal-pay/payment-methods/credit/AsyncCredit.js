@@ -71,7 +71,12 @@ export default function AsyncCredit({ modalData }) {
     return (
         <section className="mx-3">
             {showTitle()}
-            <CardData PagSeguro={PagSeguro} setWatermark={setWatermark} />
+            <CardData
+                PagSeguro={PagSeguro}
+                setWatermark={setWatermark}
+                amount={itemAmount}
+                description={itemDescription}
+            />
             {showAvailableCards()}
             {watermark && <ShowPayWatermarks needAnima={false} />}
         </section>
