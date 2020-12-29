@@ -7,11 +7,14 @@ const getValidationData = (date) => {
     };
 };
 
-export default function createCardToken({ cardData, PagSeguro }) {
+export default function createCardToken({ cardData }) {
+    const PagSeguro = window.PagSeguroDirectPayment;
+
     const run = (resolve, reject) => {
         // n1
         let { cardNumber, cardBrand, cardCvv, cardVal } = cardData;
         cardNumber = cardNumber && cardNumber.replace(/\s/g, "");
+        console.log("cardBrand", cardBrand);
 
         const { month, year } = getValidationData(cardVal);
 
@@ -22,7 +25,6 @@ export default function createCardToken({ cardData, PagSeguro }) {
             expirationMonth: month, // Mês da expiração do cartão
             expirationYear: year, // Ano da expiração do cartão, é necessário os 4 dígitos.
             success: function (response) {
-                console.log("response", response);
                 // Retorna o cartão tokenizado.
                 resolve(response.card.token);
             },

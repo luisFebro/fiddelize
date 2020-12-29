@@ -1,5 +1,6 @@
 const MAX_INSTALLMENT_NO_INTEREST = 2;
 
+export { MAX_INSTALLMENT_NO_INTEREST };
 export default function getInstallments({ amount, brand, PagSeguro }) {
     const run = (resolve, reject) => {
         PagSeguro.getInstallments({

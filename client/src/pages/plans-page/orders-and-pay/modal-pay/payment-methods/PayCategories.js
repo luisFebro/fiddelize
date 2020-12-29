@@ -108,20 +108,4 @@ if (typeof Node === 'function' && Node.prototype) {
     return originalInsertBefore.apply(this, arguments);
   }
 }
-
-// const ready = useDelay(8000);
-// console.log("ready", ready);
-// useEffect(() => {
-//     if(ready) {
-//         const payBtns = document.querySelectorAll(".pay-methods-btns button");
-//         console.log("payBtns", payBtns);
-//         if(payBtns){
-//             payBtns.forEach(pBtn => {
-//                 pBtn.innerHTML = '<span class="text-normal font-weight-bold text-shadow text-center" style="text-transform: none">Esta aqui</span>';
-//                 pBtn.disabled = false;
-//                 pBtn.addEventListener("click", () => handleSelected("MOTHERFUCKER WORKS"))
-//             })
-//         }
-//     }
-// }, [ready])
  */

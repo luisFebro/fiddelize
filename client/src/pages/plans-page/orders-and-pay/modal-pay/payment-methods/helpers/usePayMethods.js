@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 //Esse método recebe opcionalmente o valor da transação e retorna um JSON contendo os meios de pagamento disponíveis, compatíveis com o valor informado. Caso não seja informado o valor, será retornado todos os meios de pagamento.
+// Observe que os meios de pagamento Balance e Deposit são retornados, porém atualmente não podem ser implementados.
 // Com essas informações você poderá apresentar as opções para pagamento ao comprador.
 
 function getAvailableCards(collection) {
@@ -20,7 +21,7 @@ function getAvailableCards(collection) {
     return availableCards;
 }
 
-export default function usePayMethods(target, value, { PagSeguro, authToken }) {
+export default function usePayMethods(target, value, { PagSeguro }) {
     const [payMethod, setPayMethod] = useState(null);
 
     const targets = ["CREDIT_CARD", "ONLINE_DEBT"];
@@ -28,8 +29,6 @@ export default function usePayMethods(target, value, { PagSeguro, authToken }) {
     if (!targets.includes(target)) throw new Error("target not valid");
 
     useEffect(() => {
-        PagSeguro.setSessionId(authToken);
-
         if (payMethod) return;
         PagSeguro.getPaymentMethods({
             amount: value, // returns all methods if not defined.
@@ -45,10 +44,6 @@ export default function usePayMethods(target, value, { PagSeguro, authToken }) {
                 // console.log("Callback para todas chamadas", response);
             },
         });
-
-        // This should be at the end of the process when all card data is ok and ready to be sent
-        // handleSelected("No Crédito");
-        // setTimeout(() => getSenderHash(), 2500);
     }, []);
 
     return payMethod;

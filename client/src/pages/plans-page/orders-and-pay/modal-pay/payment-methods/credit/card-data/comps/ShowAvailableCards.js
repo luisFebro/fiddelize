@@ -2,11 +2,10 @@ import React from "react";
 import usePayMethods from "../../../helpers/usePayMethods";
 
 export default function ShowAvailableCards({ modalData }) {
-    const { PagSeguro, authToken, itemAmount } = modalData;
+    const { PagSeguro, itemAmount } = modalData;
 
     const options = {
         PagSeguro,
-        authToken,
     };
 
     const cardsAvailable = usePayMethods("CREDIT_CARD", itemAmount, options);

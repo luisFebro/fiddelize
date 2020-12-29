@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import NavBtns from "./NavBtns";
 import { getUniqueId } from "../../../../../../../../hooks/api/trigger";
 import ShowAvailableCards from "./ShowAvailableCards";
+import { handleEnterPress } from "../../../../../../../../utils/event/isKeyPressed";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -19,7 +20,7 @@ export default function CardValAndCvv({
     setWatermark,
     modalData,
 }) {
-    const is4Css = cvvSize === 4;
+    const is4CvvDigit = cvvSize === 4;
 
     const showFields = () => (
         <section className="d-flex mx-3 align-items-center justify-content-around">
@@ -62,7 +63,7 @@ export default function CardValAndCvv({
                     variant="outlined"
                     onFocus={() => {
                         isSmall && setWatermark(false);
-                        if (is4Css) return;
+                        if (is4CvvDigit) return;
                         setData((prev) => ({
                             ...prev,
                             flipCard: getUniqueId(),
@@ -70,11 +71,27 @@ export default function CardValAndCvv({
                     }}
                     onBlur={() => {
                         isSmall && setWatermark(getUniqueId());
-                        if (is4Css) return;
+                        if (is4CvvDigit) return;
                         setData((prev) => ({
                             ...prev,
                             flipCard: getUniqueId(),
                         }));
+                    }}
+                    onKeyPress={(e) => {
+                        const run = async () => {
+                            isSmall && setWatermark(getUniqueId());
+                            if (!is4CvvDigit) {
+                                await setData((prev) => ({
+                                    ...prev,
+                                    flipCard: getUniqueId(),
+                                }));
+                            }
+                            setTimeout(
+                                () => setCurrComp("briefAndValue"),
+                                1500
+                            );
+                        };
+                        handleEnterPress(e, run);
                     }}
                     type="tel"
                     autoComplete="off"

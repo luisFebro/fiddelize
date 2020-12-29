@@ -56,62 +56,43 @@ async function finishCheckout(req, res) {
 
     let {
         reference = "123",
-        paymentMethod = "boleto",
-        itemId1 = "123",
-        itemDescription1 = "Cool Service",
-        itemQuantity1 = 1,
-        itemAmount1 = "0.00",
-        extraAmount = "-1.00",
-        senderCPF,
-        senderHash,
-        senderAreaCode = "92",
-        senderPhone = "992817363",
-        senderName = "captain great",
-        senderEmail = "captainGreat@sandbox.pagseguro.com.br",
-        firstDueDate = "2020-10-08",
-        shippingAddressStreet,
-        shippingAddressDistrict,
-        shippingAddressState,
-        shippingAddressNumber,
-        shippingAddressCity,
-        shippingAddressPostalCode,
-        shippingAddressCountry,
-        shippingAddressComplement,
-        shippingType,
-        shippingCost,
-        ordersStatement,
-        filter,
-        renewalReference,
-        renewalDaysLeft,
-        renewalCurrDays,
-        isSingleRenewal,
-    } = req.body;
-    if (paymentMethod !== "boleto") extraAmount = "0.00";
-
-    const params = {
-        email,
-        token,
-    };
-
-    const body = {
-        reference,
-        paymentMethod, // *
+        paymentMethod = "boleto", // *
         // sender (buyer) object
-        senderHash, // (fingerprint) gerado pelo JavaScript do PagSeguro. Formato: Obtido a partir de uma chamada javascript PagseguroDirectPayment.onSenderHashReady().
-        senderName, // * No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
-        senderEmail, // * um e-mail válido (p.e., usuario@site.com.br), com no máximo 60 caracteres
-        senderAreaCode, // * Um número de 2 dígitos correspondente a um DDD válido.
-        senderPhone, // * STRING Um número de 7 a 9 dígitos
+        senderHash, // * (fingerprint) gerado pelo JavaScript do PagSeguro. Formato: Obtido a partir de uma chamada javascript PagseguroDirectPayment.onSenderHashReady().
+        senderName = "captain great", // * No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
+        senderEmail = "captainGreat@sandbox.pagseguro.com.br", // * um e-mail válido (p.e., usuario@site.com.br), com no máximo 60 caracteres
+        senderAreaCode = "92", // * Um número de 2 dígitos correspondente a um DDD válido.
+        senderPhone = "992817363", // * STRING Um número de 7 a 9 dígitos
         senderCPF, // * STRING in order to display leading and trailing zeros!!!
-        senderCNPJ: undefined, // * if no CPF
+        senderCNPJ = undefined, // * if no CPF
         // items
-        itemId1, // * SKU Livre, com limite de 100 caracteres.
-        itemDescription1, // * up until 100 characters
-        itemQuantity1, // *
-        itemAmount1, // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
-        extraAmount, // StRING!!! Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
+        itemId1 = "123", // * SKU Livre, com limite de 100 caracteres. Você pode escolher códigos que tenham significado para seu sistema e informá-los nestes parâmetros. O PagSeguro não realiza qualquer validação sobre esses identificadores, mas eles não podem se repetir em um mesmo pagamento.
+        itemDescription1 = "Cool Service", // * up until 100 characters, Descrevem os itens sendo pagos. A descrição é o texto que o PagSeguro mostra associado a cada item quando o comprador está finalizando o pagamento, portanto é importante que ela seja clara e explicativa.
+        itemQuantity1 = 1, // *
+        itemAmount1 = "0.00", // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
+        extraAmount = "-1.00", // StRING!!!Esse valor pode representar uma taxa extra a ser cobrada no pagamento ou um desconto a ser concedido, caso o valor seja negativo. Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
+        // boleto
+        firstDueDate = "2020-10-08",
+        // credit card
+        installmentQuantity, // * Quantidade de parcelas escolhidas pelo cliente. Formato: Um inteiro entre 1 e 18.
+        installmentValue, // * Se uma parcela, valor inteiro da compra. Valor das parcelas obtidas no serviço de opções de parcelamento. Formato: Numérico com 2 casas decimais e separado por ponto.
+        noInterestInstallmentQuantity, // * Quantidade de parcelas sem juros oferecidas ao cliente. O valor deve ser o mesmo indicado no método getInstallments, no parâmetro maxInstallmentNoInterest.
+        creditCardToken, // * token with credit number, expiring date mm/yy, cvv {creditCard_token_obtido_no_passo_2.6}
+        creditCardHolderName, // * Nome impresso no cartão de crédito. Formato: min = 1, max = 50 caracteres.
+        creditCardHolderCPF, // * 22111944785 Um número de 11 dígitos para CPF ou 14 dígitos para CNPJ (senderCNPJ)
+        creditCardHolderBirthDate, // * Data de nascimento do dono do cartão de crédito. Formato: dd/MM/yyyy
+        creditCardHolderAreaCode, // * Especifica o código de área (DDD) do comprador que está realizando o pagamento. Formato: Um número de 2 dígitos correspondente a um DDD válido.
+        creditCardHolderPhone, // * 56273440
+        billingAddressStreet = "Av. Brig. Faria Lima", // Nome da rua do endereço de envio. Informa o nome da rua do endereço de envio do produto. Livre, com limite de 80 caracteres.
+        billingAddressDistrict = "Jardim Paulistano", // Bairro do endereço de envio. Informa o bairro do endereço de envio do produto.Formato: Livre, com limite de 60 caracteres.
+        billingAddressCity = "Sao Paulo", // Cidade do endereço de envio. Informa a cidade do endereço de envio do produto. Formato: Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
+        billingAddressState = "SP", // Estado do endereço de envio. Informa o estado do endereço de envio do produto. Formato: Duas letras, representando a sigla do estado brasileiro correspondente.
+        billingAddressCountry = "BRA", // País do endereço de envio. Informa o país do endereço de envio do produto. Formato: No momento, apenas o valor BRA é permitido.
+        billingAddressPostalCode = "01452002", // CEP do endereço de envio. Informa o CEP do endereço de envio do produto. Formato: Um número de 8 dígitos
+        billingAddressNumber = "1384", // Número do endereço de envio. Informa o número do endereço de envio do produto.
+        billingAddressComplement = "5o andar", // nforma o complemento (bloco, apartamento, etc.) do endereço de envio do produto. Formato: Livre, com limite de 40 caracteres.
         // address
-        shippingAddressRequired: false, // * if no address is sent, then ((Av. Brigadeiro Faria Lima, 1.384 - CEP: 01452002 Sao Paulo-São Paulo)) will be displayed at the bottom of the boleto's doc.
+        shippingAddressRequired = false, // * if no address is sent, then ((Av. Brigadeiro Faria Lima, 1.384 - CEP: 01452002 Sao Paulo-São Paulo)) will be displayed at the bottom of the boleto's doc.
         shippingAddressStreet, // Livre, com limite de 80 caracteres.
         shippingAddressNumber, //Livre, com limite de 20 caracteres.
         shippingAddressComplement, // Livre, com limite de 40 caracteres.
@@ -120,14 +101,61 @@ async function finishCheckout(req, res) {
         shippingAddressCity, // Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
         shippingAddressCountry, // No momento, apenas o valor BRA é permitido.
         shippingAddressPostalCode, // STRING Um número de 8 dígitos
-        shippingType, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado.
-        shippingCost, // STRING!!! Informa o valor total de frete do pedido. // Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00.
+        shippingType, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado. Informa o tipo de frete a ser usado para o envio do produto. Esta informação é usada pelo PagSeguro para calcular, junto aos Correios, o valor do frete a partir do peso dos itens.
+        shippingCost, // STRING!!! Informa o valor total de frete do pedido. Caso este valor seja especificado, o PagSeguro irá assumi-lo como valor do frete e não fará nenhum cálculo referente aos pesos e valores de entrega dos itens. // Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00.
+        // fiddelize system
+        ordersStatement,
+        filter,
+        renewalReference,
+        renewalDaysLeft,
+        renewalCurrDays,
+        isSingleRenewal,
+    } = req.body;
+    if (paymentMethod !== "boleto") extraAmount = "0.00";
+    const paymentMethods = ["creditCard", "eft", "boleto"];
+    if (!paymentMethods.includes(paymentMethod))
+        return res
+            .status(400)
+            .json({
+                error: `Invalid payment method. Availables: ${paymentMethods}`,
+            });
+    const isCreditCard = paymentMethod === "creditCard";
+
+    const params = {
+        email,
+        token,
+    };
+
+    const body = {
+        ...req.body,
         // defaults
         currency: "BRL",
         paymentMode: "default",
         notificationURL: "https://fiddelize.herokuapp.com/api/pay/pag-notify",
-        receiverEmail: "mr.febro@gmail.com", // LESSON: this fake email (mr.febro2020@gmail.com) to avoid duplicate with boleto on production`s pagseguro does not work> ERROR: invalid receiver: mr.febro2020@gmail.com, verify receiver's account status and if it is a seller's account.
+        receiverEmail: "mr.febro@gmail.com", // Um e-mail válido, com limite de 60 caracteres. O e-mail informado deve estar vinculado à conta PagSeguro que está realizando a chamada à API. LESSON: this fake email (mr.febro2020@gmail.com) to avoid duplicate with boleto on production`s pagseguro does not work> ERROR: invalid receiver: mr.febro2020@gmail.com, verify receiver's account status and if it is a seller's account.
+        shippingAddressRequired,
+        itemId1,
+        itemDescription1,
+        itemQuantity1,
+        itemAmount1,
+        extraAmount,
+        billingAddressStreet: isCreditCard ? billingAddressStreet : undefined,
+        billingAddressNumber: isCreditCard ? billingAddressNumber : undefined,
+        billingAddressComplement: isCreditCard
+            ? billingAddressComplement
+            : undefined,
+        billingAddressDistrict: isCreditCard
+            ? billingAddressDistrict
+            : undefined,
+        billingAddressPostalCode: isCreditCard
+            ? billingAddressPostalCode
+            : undefined,
+        billingAddressCity: isCreditCard ? billingAddressCity : undefined,
+        billingAddressState: isCreditCard ? billingAddressState : undefined,
+        billingAddressCountry: isCreditCard ? billingAddressCountry : undefined,
     };
+
+    console.log("body", body);
 
     const config = {
         method: "post",
@@ -253,192 +281,6 @@ function handleData({ Order, payload, res, createNewOrder, renewal, next }) {
 }
 
 */
-
-/*
-Handling responses - BOLETO:
-<transaction>
-    <date>2011-02-05T15:46:12.000-02:00</date>
-    <lastEventDate>2011-02-15T17:39:14.000-03:00</lastEventDate>
-    <code>9E884542-81B3-4419-9A75-BCC6FB495EF1</code>
-    <reference>REF1234</reference>
-    <type>1</type>
-    <status>3</status>
-    <paymentMethod>
-        <type>1</type>
-        <code>101</code>
-    </paymentMethod>
-<paymentLink>
-https://pagseguro.uol.com.br/checkout/imprimeBoleto.jhtml?code=314601B208B24A5CA53260000F7BB0D
-</paymentLink>
-    <grossAmount>49900.00</grossAmount>
-    <discountAmount>0.00</discountAmount>
-    <feeAmount>0.00</feeAmount>
-    <netAmount>49900.50</netAmount>
-    <extraAmount>0.00</extraAmount>
-    <installmentCount>1</installmentCount>
-    <itemCount>2</itemCount>
-    <items>
-        <item>
-            <id>0001</id>
-            <description>Notebook Prata</description>
-            <quantity>1</quantity>
-            <amount>24300.00</amount>
-        </item>
-        <item>
-            <id>0002</id>
-            <description>Notebook Rosa</description>
-            <quantity>1</quantity>
-            <amount>25600.00</amount>
-        </item>
-    </items>
-    <sender>
-        <name>José Comprador</name>
-        <email>comprador@uol.com.br</email>
-        <phone>
-            <areaCode>11</areaCode>
-            <number>56273440</number>
-        </phone>
-    </sender>
-    <shipping>
-        <address>
-            <street>Av. Brig. Faria Lima</street>
-            <number>1384</number>
-            <complement>5o andar</complement>
-            <district>Jardim Paulistano</district>
-            <postalCode>01452002</postalCode>
-            <city>Sao Paulo</city>
-            <state>SP</state>
-            <country>BRA</country>
-        </address>
-        <type>1</type>
-        <cost>21.50</cost>
-    </shipping>
-</transaction>
-paymentLink . Esse parâmetro pode ser um link de acesso para a imagem do boleto ou para a página de pagamento do banco selecionado. Lembrando que a página do banco não deve ser aberta em um IFrame.
-
-Exemplo de checkout com DÉBITO ONLINE:
-paymentMode=default
-&paymentMethod=eft
-&bankName=itau
-&receiverEmail=suporte@lojamodelo.com.br
-&currency=BRL
-&extraAmount=1.00
-&itemId1=0001
-&itemDescription1=Notebook Prata
-&itemAmount1=24300.00
-&itemQuantity1=1
-&notificationURL=https://sualoja.com.br/notifica.html
-&reference=REF1234
-&senderName=Jose Comprador
-&senderCPF=22111944785
-&senderAreaCode=11
-&senderPhone=56273440
-&senderEmail=comprador@uol.com.br
-&senderHash={hash_obtido_no_passo_2.3}
-&shippingAddressRequired=true
-&shippingAddressStreet=Av. Brig. Faria Lima
-&shippingAddressNumber=1384
-&shippingAddressComplement=5o andar
-&shippingAddressDistrict=Jardim Paulistano
-&shippingAddressPostalCode=01452002
-&shippingAddressCity=Sao Paulo
-&shippingAddressState=SP
-&shippingAddressCountry=BRA
-&shippingType=1
-&shippingCost=1.00
-
-Exemplo de checkout com CARTÃO DE CRÉDITO:
-paymentMode=default
-&paymentMethod=creditCard
-&receiverEmail=suporte@lojamodelo.com.br
-&currency=BRL
-&extraAmount=1.00
-&itemId1=0001
-&itemDescription1=Notebook Prata
-&itemAmount1=24300.00
-&itemQuantity1=1
-&notificationURL=https://sualoja.com.br/notifica.html
-&reference=REF1234
-&senderName=Jose Comprador
-&senderCPF=22111944785
-&senderAreaCode=11
-&senderPhone=56273440
-&senderEmail=comprador@uol.com.br
-&senderHash={hash_obtido_no_passo_2.3}
-&shippingAddressRequired=true
-&shippingAddressStreet=Av. Brig. Faria Lima
-&shippingAddressNumber=1384
-&shippingAddressComplement=5o andar
-&shippingAddressDistrict=Jardim Paulistano
-&shippingAddressPostalCode=01452002
-&shippingAddressCity=Sao Paulo
-&shippingAddressState=SP
-&shippingAddressCountry=BRA
-&shippingType=1
-&shippingCost=1.00
-&creditCardToken={creditCard_token_obtido_no_passo_2.6}
-&installmentQuantity={quantidade_de_parcelas_escolhida}
-&installmentValue={installmentAmount_obtido_no_retorno_do_passo_2.5}
-&noInterestInstallmentQuantity={valor_maxInstallmentNoInterest_incluido_no_passo_2.5}
-&creditCardHolderName=Jose Comprador
-&creditCardHolderCPF=22111944785
-&creditCardHolderBirthDate=27/10/1987
-&creditCardHolderAreaCode=11
-&creditCardHolderPhone=56273440
-&billingAddressStreet=Av. Brig. Faria Lima
-&billingAddressNumber=1384
-&billingAddressComplement=5o andar
-&billingAddressDistrict=Jardim Paulistano
-&billingAddressPostalCode=01452002
-&billingAddressCity=Sao Paulo
-&billingAddressState=SP
-&billingAddressCountry=BRA
-*/
-
-/*
-Exemplo de checkout padrão:
-const params = {
-email,
-token,
-// items
-itemId1, // * SKU Livre, com limite de 100 caracteres.
-itemDescription1, // * up until 100 characters
-itemQuantity1, // *
-itemAmount1, // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
-currency: "BRL",
-itemWeight: undefined, // Um número inteiro correspondendo ao peso em gramas do item. A soma dos pesos de todos os produtos não pode ultrapassar 30000 gramas (30 kg).
-itemShippingCost1: undefined, // String Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00
-//address obj
-addressRequired: false,
-shippingAddressStreet: "Rua da Indústria, n* 13 B", // Livre, com limite de 80 caracteres.
-shippingAddressNumber: "13 B", //Livre, com limite de 20 caracteres.
-shippingAddressComplement: "perto do mercadinho", // Livre, com limite de 40 caracteres.
-shippingAddressDistrict: "Compensa 1", // Bairro - Livre, com limite de 60 caracteres - Este campo é opcional e você pode enviá-lo caso já tenha capturado os dados do comprador em seu sistema e queira evitar que ele preencha esses dados novamente no PagSeguro.
-shippingAddressState: "AM", // Duas letras, representando a sigla do estado brasileiro correspondente
-shippingAddressCity: "Manaus", // Livre. Deve ser um nome válido de cidade do Brasil, com no mínimo 2 e no máximo 60 caracteres.
-shippingAddressCountry: "BRA", // No momento, apenas o valor BRA é permitido.
-shippingAddressPostalCode: "69030070", // STRING Um número de 8 dígitos
-shippingType: 2, // 1 - Encomenda normal (PAC), 2 - SEDEX, 3 - Tipo de frete não especificado.
-shippingCost: undefined, // STRING!!! Informa o valor total de frete do pedido. // Decimal, com duas casas decimais separadas por ponto (p.e., 1234.56), maior que 0.00 e menor ou igual a 9999999.00.
-// sender (buyer) object
-senderName: "Luis Febro", //No mínimo (nome e sobrenome) duas sequências de caracteres, com o limite total de 50 caracteres.
-senderEmail: "mr.febro@gmail.com", // um e-mail válido (p.e., usuario@site.com.br), com no máximo 60 caracteres
-senderAreaCode: 92, // Um número de 2 dígitos correspondente a um DDD válido.
-senderPhone: "992817363", // STRING Um número de 7 a 9 dígitos
-senderCPF: "02324889242", // STRING in order to display leading and trailing zeros!!!
-senderCNPJ: undefined,
-reference, // SKU Define um código para fazer referência ao pagamento. Este código fica associado à transação criada pelo pagamento e é útil para vincular as transações do PagSeguro às vendas registradas no seu sistema. Livre, com o limite de 200 caracteres
-redirectURL: "https://fiddelize.com.br", //Uma URL válida, com limite de 255 caractere Determina a URL para a qual o comprador será redirecionado após o final do fluxo de pagamento. Este parâmetro permite que seja informado um endereço de específico para cada pagamento realizado.
-// receiver (salesperson) object
-receiverEmail: "mr.febro@gmail.com", // O e-mail informado deve estar vinculado à conta PagSeguro que está realizando a chamada à API.
-enableRecover: false, //Parâmetro utilizado para desabilitar a funcionalidade recuperação de carrinho.
-timeout: 180, // O tempo mínimo da duração do checkout é de 20 minutos e máximo de 100000 minutos.
-// security
-maxUses: 3, // Um número inteiro maior que 0 e menor ou igual a 999. , Determina o número máximo de vezes que o código de pagamento criado pela chamada à API de Pagamentos poderá ser usado. Este parâmetro pode ser usado como um controle de segurança.
-maxAge: 86400, // 86400 = um dia. Um número inteiro maior ou igual a 30 e menor ou igual a 999999999. Prazo de validade do código de pagamento. Determina o prazo (em segundos) durante o qual o código de pagamento criado pela chamada à API de Pagamentos poderá ser usado.
-extraAmount: "-2.00", // StRING!!! Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
-};
- */
 
 /* ARCHIVES
 // POST - Create a transation - Obter autorização - Código Checkout

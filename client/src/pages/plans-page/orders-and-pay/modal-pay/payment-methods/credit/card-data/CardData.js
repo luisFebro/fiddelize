@@ -42,6 +42,7 @@ export default function CardData({
         installmentQuantity: null,
         installmentDesc: "",
         installmentTotalAmount: null,
+        amountPerInstallment: null,
     });
     let {
         cardNumber,
@@ -60,7 +61,7 @@ export default function CardData({
     const maskCardVal = cardExpiresMask(cardVal);
     cardNumber = cardNumber && cardNumber.replace(/\s/g, "");
 
-    useBrand(cardNumber, { setData, PagSeguro });
+    useBrand(cardNumber, { setData, cardNumber });
 
     const styles = getStyles();
 
@@ -126,6 +127,7 @@ export default function CardData({
                         installmentTotalAmount={installmentTotalAmount}
                         setCurrComp={setCurrComp}
                         mainData={data}
+                        modalData={modalData}
                     />
                 )}
             </section>

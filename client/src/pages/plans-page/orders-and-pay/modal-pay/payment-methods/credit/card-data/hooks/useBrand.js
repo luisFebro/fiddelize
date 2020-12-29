@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 function getBrand(cardNumber, { PagSeguro }) {
+    console.log("cardNumber", cardNumber);
     // n1
     const run = (resolve, reject) => {
         PagSeguro.getBrand({
@@ -23,7 +24,9 @@ function getBrand(cardNumber, { PagSeguro }) {
     return new Promise(run);
 }
 
-export default function useBrand(cardNumber, { setData, PagSeguro }) {
+export default function useBrand(cardNumber, { setData }) {
+    const PagSeguro = window.PagSeguroDirectPayment;
+
     const [firstSixChar, setFirstSixChar] = useState("");
 
     const cleanData = () => {
@@ -50,10 +53,11 @@ export default function useBrand(cardNumber, { setData, PagSeguro }) {
             // LESSON: do not forget to console the error when creating an pure promise. If not working, probably it is some error not being catched.
             const cardData = await getBrand(firstSixChar, { PagSeguro }).catch(
                 (e) => {
-                    cleanData();
+                    // cleanData();
                     console.log(e);
                 }
             );
+            console.log("cardData", cardData);
             if (!cardData) return;
 
             const {

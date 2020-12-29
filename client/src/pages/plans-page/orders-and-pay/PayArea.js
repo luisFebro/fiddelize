@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
-import useAPI, { startCheckout } from "../../../hooks/api/useAPI";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
 import convertToReal from "../../../utils/numbers/convertToReal";
@@ -13,7 +12,10 @@ import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 import { readUser } from "../../../redux/actions/userActions";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import setProRef from "../../../utils/biz/setProRef";
-import { IS_DEV } from "../../../config/clientUrl";
+import useStartPagseguro, {
+    sandboxMode,
+} from "./helpers/pagseguro/useStartPagseguro";
+import useStartCheckout from "./helpers/pagseguro/useStartCheckout";
 
 const AsyncPayMethods = Load({
     loader: () =>
@@ -21,11 +23,6 @@ const AsyncPayMethods = Load({
             "./modal-pay/AsyncPayContent" /* webpackChunkName: "direct-pay-comp-lazy" */
         ),
 });
-
-const sandboxMode = false;//IS_DEV ? true : false;
-const payUrl = sandboxMode
-    ? "https://stc.sandbox.pagseguro.uol.com.br"
-    : "https://stc.pagseguro.uol.com.br";
 
 export default function PayArea({
     handleCancel,
@@ -57,6 +54,12 @@ export default function PayArea({
 
     const { bizCodeName } = useClientAdmin();
     const { _id, phone, name: userName, email: senderEmail } = useProfile();
+
+    const startedPagseguro = useStartPagseguro();
+    const { loading, error, ShowError } = useStartCheckout({
+        userId: _id,
+        trigger: SKU && servicesTotal && servicesAmount,
+    });
 
     const dispatch = useStoreDispatch();
 
@@ -106,15 +109,6 @@ export default function PayArea({
     servicesAmount =
         servicesAmount && Number(servicesAmount).toFixed(2).toString();
 
-    const { data: authToken, loading, error, ShowError } = useAPI({
-        method: "post",
-        url: startCheckout(),
-        params: { userId: _id },
-        trigger: SKU && servicesTotal && servicesAmount,
-        needAuth: true,
-        timeout: 30000,
-    });
-
     useEffect(() => {
         setProRef({
             setData,
@@ -123,25 +117,9 @@ export default function PayArea({
         });
     }, [plan, period]);
 
-    useEffect(() => {
-        const script = document.createElement("script");
-
-        script.type = "text/javascript";
-        script.src = `${payUrl}/pagseguro/api/v2/checkout/pagseguro.directpayment.js`;
-        script.async = true;
-        script.crossorigin = "anonymous";
-
-        document.body.appendChild(script);
-
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
-
     const modalData = {
         handleCancel,
         sandboxMode,
-        authToken,
         reference: SKU,
         itemDescription: servDesc,
         itemAmount: servicesAmount,
@@ -158,7 +136,8 @@ export default function PayArea({
     };
 
     const showCTAs = () =>
-        !loading && (
+        !loading &&
+        startedPagseguro && (
             <section className="container-center-col">
                 <Link
                     to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
@@ -179,7 +158,9 @@ export default function PayArea({
 
     return (
         <section className="my-5">
-            {!loading && !error && <AsyncPayMethods modalData={modalData} />}
+            {!loading && startedPagseguro && !error && (
+                <AsyncPayMethods modalData={modalData} />
+            )}
             {showCTAs()}
             {loading && (
                 <p

@@ -11,6 +11,7 @@ import getSlashDayMonthYear from "../../../../../../utils/dates/getSlashDayMonth
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RedirectLink from "../../../../../../components/RedirectLink";
+import getSenderHash from "../../../helpers/pagseguro/getSenderHash";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
@@ -57,10 +58,7 @@ export default function AsyncBoleto({ modalData = {} }) {
     const {
         responseData,
         processing,
-        handleSelected,
-        setPayMethods,
-        authToken,
-        getSenderHash,
+        handleDataMethod,
         itemDescription,
         itemAmount,
         adminName,
@@ -79,13 +77,17 @@ export default function AsyncBoleto({ modalData = {} }) {
     }, [responseData]);
 
     useEffect(() => {
-        if (modalData) {
-            PagSeguro.setSessionId(authToken);
+        (async () => {
+            const senderHash = await getSenderHash().catch((e) => {
+                console.log(e);
+            });
 
-            handleSelected("No Boleto");
-            setTimeout(() => getSenderHash(), 2500);
-        }
-    }, [modalData]);
+            handleDataMethod({
+                selectedMethod: "boleto",
+                senderHash,
+            });
+        })();
+    }, []);
 
     const showTitle = () => (
         <div className="mt-2">

@@ -10,6 +10,72 @@ import ButtonFab from "../../../../../../../../components/buttons/material-ui/Bu
 import createCardToken from "../helpers/createCardToken";
 import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
+import getSenderHash from "../../../../../helpers/pagseguro/getSenderHash";
+
+const getFinalTokens = async ({ cardData, dispatch }) => {
+    return await Promise.all([
+        getSenderHash().catch((e) => {
+            showSnackbar(
+                dispatch,
+                "Erro ao processar transação. Tente reiniciar.",
+                "error"
+            );
+        }),
+        createCardToken({ cardData }).catch((e) => {
+            if (e.errors["10000"]) {
+                return showSnackbar(
+                    dispatch,
+                    "Marca do cartão Inválido. Edite seu cartão",
+                    "error"
+                );
+            }
+            if (e.errors["10001"]) {
+                return showSnackbar(
+                    dispatch,
+                    "Número do cartão de crédito ou comprimento inválido. Edite seu cartão",
+                    "error"
+                );
+            }
+            if (e.errors["10002"]) {
+                return showSnackbar(
+                    dispatch,
+                    "Formato da data de expiração do cartão é inválido. Edite seu cartão.",
+                    "error"
+                );
+            }
+            if (e.errors["10003"]) {
+                //invalid security field.
+                return showSnackbar(
+                    dispatch,
+                    "Código de segurança é inválido. Edite seu cartão.",
+                    "error"
+                );
+            }
+            if (e.errors["10004"]) {
+                //invalid security field.
+                return showSnackbar(
+                    dispatch,
+                    "Código CVV/CVC é obrigatório. Edite seu cartão.",
+                    "error"
+                );
+            }
+            if (e.errors["10006"]) {
+                return showSnackbar(
+                    dispatch,
+                    "Campo de segurança com largura inválida. Edite seu cartão.",
+                    "error"
+                );
+            }
+
+            showSnackbar(
+                dispatch,
+                "Dados inválidos. Edite o cartão, revise e corrija erros encontrados.",
+                "error"
+            );
+            console.log(e);
+        }),
+    ]);
+};
 
 export default function BriefAndValue({
     brand,
@@ -21,6 +87,7 @@ export default function BriefAndValue({
     installmentTotalAmount,
     setCurrComp,
     mainData,
+    modalData,
 }) {
     const [data, setData] = useState({
         installmentOpts: null,
@@ -42,12 +109,15 @@ export default function BriefAndValue({
             const indInsta = installmentQuantity - 2; // e.g it is started by 2 instalments, then the first is 0 in the array.
             const installmentTotalAmount =
                 installmentOpts[indInsta].totalAmount;
+            const amountPerInstallment =
+                installmentOpts[indInsta].installmentAmount;
 
             setMainData((prev) => ({
                 ...prev,
                 installmentQuantity,
                 installmentDesc,
                 installmentTotalAmount,
+                amountPerInstallment,
             }));
         }
     }, [selectedInsta]);
@@ -159,19 +229,25 @@ export default function BriefAndValue({
     );
 
     const handleInvestConclusion = async () => {
-        const cardToken = await createCardToken({
+        showSnackbar(dispatch, "Processando. Um momento...");
+        const [cardToken, senderHash] = await getFinalTokens({
             cardData: mainData,
-            PagSeguro,
-        }).catch((e) => {
-            showSnackbar(
-                dispatch,
-                "Dados inválidos. Edite o cartão, revise e corrija erros encontrados.",
-                "error"
-            );
-            console.log(e);
+            dispatch,
         });
-        if (!cardToken) return;
-        console.log("cardToken", cardToken);
+        if (!cardToken || !senderHash) return;
+
+        const { handleDataMethod, itemAmount } = modalData;
+
+        handleDataMethod({
+            selectedMethod: "creditCard",
+            senderHash,
+            creditCardToken: cardToken,
+            installmentQuantity: mainData.installmentQuantity || "1",
+            installmentValue: mainData.amountPerInstallment
+                ? Number(mainData.amountPerInstallment).toFixed(2).toString()
+                : itemAmount,
+            creditCardHolderName: mainData.cardFullName,
+        });
     };
 
     const showFinalInvestBtn = () => (
@@ -195,20 +271,22 @@ export default function BriefAndValue({
             }}
         >
             {showEditCardBtn()}
-            <p className="text-subtitle text-p font-weight-bold text-center">
-                Resumo
-            </p>
-            <div className="mx-3 my-3">
-                <p className="m-0 text-purple text-subtitle text-left">
-                    Referente a:{" "}
+            <section className="animated fadeInUp">
+                <p className="text-subtitle text-p font-weight-bold text-center">
+                    Resumo
                 </p>
-                <div className="text-purple font-weight-bold text-normal text-left">
-                    {description &&
-                        description.replace(" no valor total de:", ".")}
+                <div className="mx-3 my-3">
+                    <p className="m-0 text-purple text-subtitle text-left">
+                        Referente a:{" "}
+                    </p>
+                    <div className="text-purple font-weight-bold text-normal text-left">
+                        {description &&
+                            description.replace(" no valor total de:", ".")}
+                    </div>
                 </div>
-            </div>
-            {showPayMethods()}
-            {showFinalInvestBtn()}
+                {showPayMethods()}
+                {showFinalInvestBtn()}
+            </section>
         </section>
     );
 }

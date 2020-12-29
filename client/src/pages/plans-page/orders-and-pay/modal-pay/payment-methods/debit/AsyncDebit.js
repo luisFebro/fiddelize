@@ -33,10 +33,7 @@ export default function AsyncCredit({ modalData }) {
     const {
         responseData,
         processing,
-        handleSelected,
-        setPayMethods,
-        authToken,
-        getSenderHash,
+        handleDataMethod,
         itemDescription,
         itemAmount,
         adminName,
@@ -47,24 +44,10 @@ export default function AsyncCredit({ modalData }) {
     const dispatch = useStoreDispatch();
 
     // useEffect(() => {
-    //     PagSeguro.setSessionId(authToken);
-    //     PagSeguro.getPaymentMethods({
-    //         amount: undefined, // returns all methods if not defined.
-    //         success: function (response) {
-    //             // n2
-    //             setPayMethods(response.paymentMethods);
-    //         },
-    //         error: function (response) {
-    //             console.log("Callback para chamadas que falharam", response);
-    //         },
-    //         complete: function (response) {
-    //             // console.log("Callback para todas chamadas", response);
-    //         },
-
+    //     handleDataMethod({
+    //      paymentMethod: "No Débito",
+    //      senderHash: ffds,
     //     });
-
-    //     handleSelected("No Débito");
-    //     setTimeout(() => getSenderHash(), 5000);
     // }, [])
 
     const showTitle = () => (
