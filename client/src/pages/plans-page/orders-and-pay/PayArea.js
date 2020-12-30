@@ -16,6 +16,7 @@ import useStartPagseguro, {
     sandboxMode,
 } from "./helpers/pagseguro/useStartPagseguro";
 import useStartCheckout from "./helpers/pagseguro/useStartCheckout";
+import convertTextDateToSlashDate from "../../../utils/dates/convertTextDateToSlashDate";
 
 const AsyncPayMethods = Load({
     loader: () =>
@@ -35,13 +36,15 @@ export default function PayArea({
     renewalReference,
     isSingleRenewal,
 }) {
+    const [alreadyReadUser, setAlreadyReadUser] = useState(false); // avoid multiple request calls
     const [data, setData] = useState({
         SKU: "",
         servDesc: "",
         senderCPF: "",
         senderAreaCode: "",
         senderPhone: "",
-        firstDueDate: "",
+        senderBirthday: "", // for credit card
+        firstDueDate: "", // for boleto
     });
     let {
         SKU,
@@ -49,6 +52,7 @@ export default function PayArea({
         senderCPF,
         senderAreaCode,
         senderPhone,
+        senderBirthday,
         firstDueDate,
     } = data;
 
@@ -70,10 +74,13 @@ export default function PayArea({
     };
 
     useEffect(() => {
+        if (alreadyReadUser) return;
         readUser(dispatch, _id, {
-            select: "cpf -_id",
+            select: "cpf birthday -_id",
             role: "cliente-admin",
         }).then((res) => {
+            setAlreadyReadUser(true);
+            const thisBirthDay = res.data.birthday;
             let thisCPF = res.data.cpf;
             if (thisCPF === "111.111.111-11") thisCPF = "431.711.242-62"; // for testing only
 
@@ -95,6 +102,8 @@ export default function PayArea({
                 addDays(new Date(), 3)
             );
 
+            const thisSenderBirthday = convertTextDateToSlashDate(thisBirthDay);
+
             setData((thisData) => ({
                 ...thisData,
                 servDesc: desc,
@@ -102,9 +111,10 @@ export default function PayArea({
                 senderAreaCode: thisSenderAreaCode,
                 senderPhone: thisSenderPhone,
                 firstDueDate: thisFirstDueDate,
+                senderBirthday: thisSenderBirthday,
             }));
         });
-    }, [plan, servicesTotal, phone, servicesAmount]);
+    }, [plan, servicesTotal, phone, servicesAmount, alreadyReadUser]);
 
     servicesAmount =
         servicesAmount && Number(servicesAmount).toFixed(2).toString();
@@ -124,6 +134,7 @@ export default function PayArea({
         itemDescription: servDesc,
         itemAmount: servicesAmount,
         senderCPF,
+        senderBirthday,
         senderAreaCode,
         senderPhone,
         senderEmail,

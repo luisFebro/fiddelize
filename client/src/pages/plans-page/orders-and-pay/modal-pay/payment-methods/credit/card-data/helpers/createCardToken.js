@@ -7,6 +7,7 @@ const getValidationData = (date) => {
     };
 };
 
+export { getValidationData };
 export default function createCardToken({ cardData }) {
     const PagSeguro = window.PagSeguroDirectPayment;
 

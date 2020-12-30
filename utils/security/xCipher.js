@@ -144,7 +144,9 @@ function decryptSync(hashTxt) {
 }
 // AES ENCRYPTION AND DECRYPTION
 
-// JS ENCRYPTION AND DECRYPTION - less secure for authentication which requires decryption.
+// JS ENCRYPTION AND DECRYPTION
+// less secure for authentication which requires decryption.
+// but can be useful to obscurate data in http requests, better than in plain text, right?
 const handleCipherVault = (salt) => {
     if (!salt) return;
     const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));

@@ -110,6 +110,7 @@ async function finishCheckout(req, res) {
         renewalDaysLeft,
         renewalCurrDays,
         isSingleRenewal,
+        cc,
     } = req.body;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
     const paymentMethods = ["creditCard", "eft", "boleto"];
@@ -153,8 +154,6 @@ async function finishCheckout(req, res) {
         billingAddressCountry: isCreditCard ? billingAddressCountry : undefined,
     };
 
-    console.log("body", body);
-
     const config = {
         method: "post",
         url: `${payUrl}/v2/transactions`,
@@ -168,10 +167,8 @@ async function finishCheckout(req, res) {
 
     // LESSON: use e.response.data to identify errors. Otherwise, A generic error with only a status will be shown
     const response = await axios(config).catch((e) => {
-        console.log("e", e);
         res.json(e.response.data);
     });
-    console.log("response", response);
     if (!response) return;
 
     const xml = response.data;
@@ -184,21 +181,6 @@ async function finishCheckout(req, res) {
     const [netAmount] = data.netAmount;
     const [grossAmount] = data.grossAmount;
     const [extraAmountXml] = data.extraAmount;
-
-    const payload = {
-        userId,
-        paymentCategory: getPayCategoryType(paymentMethod),
-        reference: referenceXml,
-        amount: grossAmount,
-        instructions: itemDescription1,
-        cpf: senderCPF,
-        name: senderName,
-        phoneAreaCode: senderAreaCode,
-        phoneNumber: senderPhone,
-        ordersStatement,
-        firstDueDate,
-        isRenewal: renewalReference ? true : false,
-    };
 
     const newOrder = new Order({
         reference: referenceXml,
@@ -230,16 +212,37 @@ async function finishCheckout(req, res) {
 
     await newOrder.save();
 
+    // PAYLOAD FOR FIDDELIZE SYSTEM
+    const payload = {
+        userId,
+        paymentCategory: getPayCategoryType(paymentMethod),
+        reference: referenceXml,
+        amount: grossAmount,
+        instructions: itemDescription1,
+        cpf: senderCPF,
+        name: senderName,
+        phoneAreaCode: senderAreaCode,
+        phoneNumber: senderPhone,
+        ordersStatement,
+        firstDueDate,
+        isRenewal: renewalReference ? true : false,
+    };
+
     const renewal = {
         priorRef: renewalReference,
         currRef: referenceXml,
         priorDaysLeft: renewalDaysLeft,
     };
     payload.renewal = renewalReference ? renewal : undefined;
+    // END PAYLOAD FOR FIDDELIZE SYSTEM
 
     if (paymentMethod === "boleto") {
         const boletoData = await createBoleto(payload);
         return res.json(boletoData);
+    }
+
+    if (paymentMethod === "creditCard") {
+        // await handleCreditCard({ payload, cc });
     }
 
     res.json({

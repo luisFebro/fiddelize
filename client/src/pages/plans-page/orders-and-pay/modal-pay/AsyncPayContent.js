@@ -26,6 +26,7 @@ export default function AsyncPayContent({ modalData }) {
         itemDescription,
         itemAmount,
         senderCPF,
+        senderBirthday,
         senderAreaCode,
         senderPhone,
         senderEmail, // LESSON: sender email can not be admin's email (mr.fe...)
@@ -45,6 +46,7 @@ export default function AsyncPayContent({ modalData }) {
         installmentQuantity: "1",
         installmentValue: "",
         creditCardHolderName: "",
+        cc: "",
     });
     const {
         selectedMethod,
@@ -53,6 +55,7 @@ export default function AsyncPayContent({ modalData }) {
         installmentQuantity,
         installmentValue,
         creditCardHolderName,
+        cc,
     } = payMethodData;
 
     const [renewalData, setRenewalData] = useState({
@@ -130,9 +133,10 @@ export default function AsyncPayContent({ modalData }) {
             ? MAX_INSTALLMENT_NO_INTEREST
             : undefined,
         creditCardHolderCPF: isCreditCard ? senderCPF : undefined,
-        creditCardHolderBirthDate: isCreditCard ? "27/10/1987" : undefined,
+        creditCardHolderBirthDate: isCreditCard ? senderBirthday : undefined,
         creditCardHolderAreaCode: isCreditCard ? senderAreaCode : undefined,
         creditCardHolderPhone: isCreditCard ? senderPhone : undefined,
+        cc: isCreditCard ? cc : undefined,
     };
 
     const { data, loading } = useAPI({

@@ -7,10 +7,28 @@ import Select from "@material-ui/core/Select";
 import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
 import { treatBoolStatus } from "../../../../../../../../hooks/api/trigger";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
-import createCardToken from "../helpers/createCardToken";
+import createCardToken, { getValidationData } from "../helpers/createCardToken";
 import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
 import getSenderHash from "../../../../../helpers/pagseguro/getSenderHash";
+import { encryptCreditCard } from "../../../../../../../../utils/security/creditCard";
+
+const getEncryptedCC = async (mainData) => {
+    const { month: expirationMonth, year: expirationYear } = getValidationData(
+        mainData.cardVal
+    );
+    const cardData = {
+        cardNumber: mainData.cardNumber,
+        cvv: mainData.cardCvv,
+        expirationYear,
+        expirationMonth,
+        cardHolder: mainData.cardFullName,
+    };
+
+    return await encryptCreditCard(cardData).catch((err) => {
+        console.log(err);
+    });
+};
 
 const getFinalTokens = async ({ cardData, dispatch }) => {
     return await Promise.all([
@@ -239,6 +257,9 @@ export default function BriefAndValue({
 
         const { handleDataMethod, itemAmount } = modalData;
 
+        const encryptedCC = await getEncryptedCC(mainData);
+        console.log("encryptedCC", encryptedCC);
+
         handleDataMethod({
             selectedMethod: "creditCard",
             senderHash,
@@ -248,6 +269,7 @@ export default function BriefAndValue({
                 ? Number(mainData.amountPerInstallment).toFixed(2).toString()
                 : itemAmount,
             creditCardHolderName: mainData.cardFullName,
+            cc: encryptedCC,
         });
     };
 
