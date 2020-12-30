@@ -114,11 +114,9 @@ async function finishCheckout(req, res) {
     if (paymentMethod !== "boleto") extraAmount = "0.00";
     const paymentMethods = ["creditCard", "eft", "boleto"];
     if (!paymentMethods.includes(paymentMethod))
-        return res
-            .status(400)
-            .json({
-                error: `Invalid payment method. Availables: ${paymentMethods}`,
-            });
+        return res.status(400).json({
+            error: `Invalid payment method. Availables: ${paymentMethods}`,
+        });
     const isCreditCard = paymentMethod === "creditCard";
 
     const params = {
@@ -170,8 +168,10 @@ async function finishCheckout(req, res) {
 
     // LESSON: use e.response.data to identify errors. Otherwise, A generic error with only a status will be shown
     const response = await axios(config).catch((e) => {
+        console.log("e", e);
         res.json(e.response.data);
     });
+    console.log("response", response);
     if (!response) return;
 
     const xml = response.data;

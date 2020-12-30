@@ -110,10 +110,9 @@ export default function AsyncPayContent({ modalData }) {
         paymentMethod: selectedMethod,
         itemId: reference,
         itemAmount1: itemAmount,
-        itemDescription1: `${itemDescription.replace(
-            /ç/gi,
-            "c"
-        )}R$ ${itemAmount}`,
+        itemDescription1: `${itemDescription
+            .replace(/ç/gi, "c")
+            .replace("null", "pro")}R$ ${itemAmount}`,
         ordersStatement,
         filter,
         renewalDaysLeft: newRenewalDaysLeft,

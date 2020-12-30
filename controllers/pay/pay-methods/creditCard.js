@@ -222,4 +222,58 @@ paymentMode=default
 &billingAddressCity=Sao Paulo
 &billingAddressState=SP
 &billingAddressCountry=BRA
+
+
+Response Example:
+
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+    <transaction>
+        <date>2020-12-29T22:29:46.000-03:00</date>
+        <code>B6162128-A267-4686-8952-55B26B32DC7D</code>
+        <reference>PR-Q4-A-CQ5NM1S</reference>
+        <type>1</type>
+        <status>1</status>
+        <lastEventDate>2020-12-29T22:29:46.000-03:00</lastEventDate>
+        <paymentMethod>
+            <type>1</type>
+            <code>101</code>
+        </paymentMethod>
+        <grossAmount>338.00</grossAmount>
+        <discountAmount>0.00</discountAmount>
+        <feeAmount>17.27</feeAmount>
+        <netAmount>320.73</netAmount>
+        <extraAmount>0.00</extraAmount>
+        <installmentCount>1</installmentCount>
+        <itemCount>1</itemCount>
+        <items><item>
+        <id>123</id>
+        <description>Plano null  com 4 servicos no valor total de: R$ 338.00</description>
+        <quantity>1</quantity>
+        <amount>338.00</amount>
+        </item></items>
+        <sender>
+            <name>Febro Feitoza</name>
+            <email>teste@sandbox.pagseguro.com.br</email>
+            <phone>
+                <areaCode>92</areaCode>
+                <number>992576121</number>
+            </phone>
+            <documents><document>
+                <type>CPF</type>
+                <value>43171124262</value>
+            </document></documents>
+            </sender>
+            <gatewaySystem>
+                <type>cielo</type>
+                <rawCode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <rawMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <normalizedCode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <normalizedMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <authorizationCode>0</authorizationCode>
+                <nsu>0</nsu>
+                <tid>0</tid>
+                <establishmentCode>1056784170</establishmentCode>
+                <acquirerName>CIELO</acquirerName>
+            </gatewaySystem>
+        </transaction>'
  */

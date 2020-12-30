@@ -57,7 +57,7 @@ export default function useBrand(cardNumber, { setData }) {
                     console.log(e);
                 }
             );
-            console.log("cardData", cardData);
+
             if (!cardData) return;
 
             const {

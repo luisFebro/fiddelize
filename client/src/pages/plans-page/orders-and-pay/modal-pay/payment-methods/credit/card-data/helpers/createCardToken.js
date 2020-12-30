@@ -14,7 +14,6 @@ export default function createCardToken({ cardData }) {
         // n1
         let { cardNumber, cardBrand, cardCvv, cardVal } = cardData;
         cardNumber = cardNumber && cardNumber.replace(/\s/g, "");
-        console.log("cardBrand", cardBrand);
 
         const { month, year } = getValidationData(cardVal);
 
@@ -23,7 +22,7 @@ export default function createCardToken({ cardData }) {
             brand: cardBrand, // Bandeira do cartão
             cvv: cardCvv, // CVV do cartão
             expirationMonth: month, // Mês da expiração do cartão
-            expirationYear: year, // Ano da expiração do cartão, é necessário os 4 dígitos.
+            expirationYear: year.toString(), // Ano da expiração do cartão, é necessário os 4 dígitos.
             success: function (response) {
                 // Retorna o cartão tokenizado.
                 resolve(response.card.token);

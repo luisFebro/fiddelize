@@ -228,13 +228,14 @@ export default function BriefAndValue({
         />
     );
 
+    // LESSON: fucking important lesson: watch out for the order of result in the list, they can be misput and sometimes the result be hard to track like finding why the credit token id is returning invalid...
     const handleInvestConclusion = async () => {
         showSnackbar(dispatch, "Processando. Um momento...");
-        const [cardToken, senderHash] = await getFinalTokens({
+        const [senderHash, cardToken] = await getFinalTokens({
             cardData: mainData,
             dispatch,
         });
-        if (!cardToken || !senderHash) return;
+        if (!senderHash || !cardToken) return;
 
         const { handleDataMethod, itemAmount } = modalData;
 
@@ -281,7 +282,9 @@ export default function BriefAndValue({
                     </p>
                     <div className="text-purple font-weight-bold text-normal text-left">
                         {description &&
-                            description.replace(" no valor total de:", ".")}
+                            description
+                                .replace(" no valor total de:", ".")
+                                .replace("null", "pro")}
                     </div>
                 </div>
                 {showPayMethods()}
