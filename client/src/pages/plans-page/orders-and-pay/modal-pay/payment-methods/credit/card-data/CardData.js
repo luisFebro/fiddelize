@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import FlipCreditCard from "../../../../../../../components/cards/flip-credit-card/FlipCreditCard";
 import handleChange from "../../../../../../../utils/form/use-state/handleChange";
 import cardNumberMask from "../../../../../../../utils/validation/masks/cardNumberMask";
@@ -28,6 +28,8 @@ export default function CardData({
     amount,
     description,
     modalData,
+    oneClickInvest,
+    loadingInvest,
 }) {
     const [currComp, setCurrComp] = useState("cardNumber");
     const [data, setData] = useState({
@@ -41,10 +43,12 @@ export default function CardData({
         flipCard: false,
         payMethod: "cash", // or installment
         installmentQuantity: null,
-        installmentDesc: "à venda",
+        installmentDesc: "à vista",
         installmentTotalAmount: null,
         amountPerInstallment: null,
         oneClickInvest: false,
+        isOneClickRemoved: false, // when user click on "excluir" btn
+        hideCard: false, // for successful transacion only
     });
     let {
         cardNumber,
@@ -57,7 +61,34 @@ export default function CardData({
         flipCard,
         payMethod,
         installmentTotalAmount,
+        isOneClickRemoved,
+        hideCard,
     } = data;
+
+    const isOneClickInvest = !isOneClickRemoved && Boolean(oneClickInvest);
+    useEffect(() => {
+        if (isOneClickInvest) {
+            const {
+                cardHolder,
+                cvv,
+                cardNumber,
+                expirationYear,
+                expirationMonth,
+            } = oneClickInvest;
+            const expYear = expirationYear && expirationYear.slice(-2);
+            const thisCardVal = `${expirationMonth} / ${expYear}`;
+
+            setCurrComp("briefAndValue");
+            setData({
+                ...data,
+                cardNumber,
+                cardFullName: cardHolder,
+                cardVal: thisCardVal,
+                cardCvv: cvv,
+                oneClickInvest: true,
+            });
+        }
+    }, [isOneClickInvest]);
 
     const maskCardNumber = cardNumberMask(cardNumber);
     const maskCardVal = cardExpiresMask(cardVal);
@@ -67,17 +98,35 @@ export default function CardData({
 
     const styles = getStyles();
 
+    if (loadingInvest) {
+        return (
+            <p className="my-5 text-center text-p text-subtitle font-weight-bold">
+                Carregando cartão...
+            </p>
+        );
+    }
+
     return (
         <Fragment>
-            <FlipCreditCard
-                brand={cardBrand}
-                cardNumber={maskCardNumber}
-                cardFullName={cardFullName}
-                cardVal={maskCardVal}
-                cardCvv={cardCvv}
-                cvvSize={cvvSize}
-                flipCard={flipCard}
-            />
+            {!hideCard && (
+                <Fragment>
+                    {isOneClickInvest && (
+                        <p className="text-center text-p font-weight-bold text-normal">
+                            Cartão salvo
+                        </p>
+                    )}
+                    <FlipCreditCard
+                        brand={cardBrand}
+                        cardNumber={maskCardNumber}
+                        cardFullName={cardFullName}
+                        cardVal={maskCardVal}
+                        cardCvv={cardCvv}
+                        cvvSize={cvvSize}
+                        flipCard={flipCard}
+                        isOneClick={isOneClickInvest}
+                    />
+                </Fragment>
+            )}
             <section className="mt-4">
                 {currComp === "cardNumber" && (
                     <CardNumber
@@ -129,9 +178,12 @@ export default function CardData({
                         setCurrComp={setCurrComp}
                         mainData={data}
                         modalData={modalData}
+                        isOneClick={isOneClickInvest}
                     />
                 )}
-                {currComp === "successfulCCPay" && <SuccessfulCcPay />}
+                {currComp === "successfulCCPay" && (
+                    <SuccessfulCcPay setMainData={setData} />
+                )}
             </section>
         </Fragment>
     );

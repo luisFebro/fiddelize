@@ -15,6 +15,9 @@ import goFinishCheckout from "../../../../../helpers/pagseguro/goFinishCheckout"
 import getInstallments, {
     MAX_INSTALLMENT_NO_INTEREST,
 } from "../helpers/getInstallments";
+import getAPI, {
+    removeOneClickInvest,
+} from "../../../../../../../../utils/promises/getAPI";
 
 const getEncryptedCC = async (mainData) => {
     const { month: expirationMonth, year: expirationYear } = getValidationData(
@@ -108,12 +111,14 @@ export default function BriefAndValue({
     setCurrComp,
     mainData,
     modalData,
+    isOneClick,
 }) {
     const [data, setData] = useState({
         installmentOpts: null,
         selectedInsta: "selecione parcela:",
+        loadingInvest: false,
     });
-    const { installmentOpts, selectedInsta } = data;
+    const { installmentOpts, selectedInsta, loadingInvest } = data;
 
     const dispatch = useStoreDispatch();
 
@@ -262,20 +267,51 @@ export default function BriefAndValue({
         />
     );
 
+    const handleDeleteCard = () => {
+        (async () => {
+            await getAPI({
+                method: "put",
+                url: removeOneClickInvest(modalData.userId),
+            });
+            await setMainData((prev) => ({
+                ...prev,
+                isOneClickRemoved: true,
+                cardNumber: "",
+                cardFullName: "",
+                cardVal: "",
+                cardCvv: "",
+            }));
+            setCurrComp("cardNumber");
+            showSnackbar(dispatch, "Cartão removido com sucesso.", "success");
+        })();
+    };
+    const showDeleteCardBtn = () => (
+        <ButtonFab
+            title="excluir"
+            size="small"
+            position="absolute"
+            left={20}
+            top={-60}
+            variant="extended"
+            backgroundColor={`var(--expenseRed)`}
+            onClick={handleDeleteCard}
+        />
+    );
+
     // LESSON: fucking important lesson: watch out for the order of result in the list, they can be misput and sometimes the result be hard to track like finding why the credit token id is returning invalid...
     const handleInvestConclusion = async () => {
-        showSnackbar(dispatch, "Processando. Um momento...", 7000);
+        setData({ ...data, loadingInvest: true });
         const [senderHash, cardToken] = await getFinalTokens({
             cardData: mainData,
             dispatch,
         });
         if (!senderHash || !cardToken) return;
 
-        const { itemAmount } = modalData;
+        const { itemAmount, handleCancel } = modalData;
 
         const encryptedCC = await getEncryptedCC(mainData);
 
-        const { data } = await goFinishCheckout({
+        const { data: dataCheckout } = await goFinishCheckout({
             selectedMethod: "creditCard",
             senderHash,
             modalData,
@@ -289,17 +325,22 @@ export default function BriefAndValue({
             creditCardHolderName: mainData.cardFullName,
             cc: encryptedCC,
             oneClickInvest: mainData.oneClickInvest,
+            brand,
         }).catch((e) => {
+            setData({ ...data, loadingInvest: false });
             console.log(e);
         });
 
+        if (!dataCheckout) return;
+        await setData({ ...data, loadingInvest: false });
         setCurrComp("successfulCCPay");
+        handleCancel(); // remove current orders
     };
 
     const showFinalInvestBtn = () => (
         <section className="my-5 container-center">
             <ButtonFab
-                title="Investir"
+                title={`${loadingInvest ? "Carregando..." : "Investir"}`}
                 size="large"
                 position="relative"
                 variant="extended"
@@ -309,23 +350,24 @@ export default function BriefAndValue({
         </section>
     );
 
-    const showOneClickInvest = () => (
-        <section className="my-5 container-center">
-            <p className="m-0 text-purple text-subtitle text-left">
-                Investir com 1-clique:
-            </p>
-            <p className="ml-2 my-3 text-purple text-small font-weight-bold text-left">
-                Seu cartão é criptografado e armazenado com segurança para
-                agilizar ainda mais futuros investimentos na Fiddelize.
-            </p>
-            <SwitchBtn
-                titleLeft="desativado"
-                titleRight="ativado"
-                callback={handleSwitchOneClickInvest}
-                defaultStatus={false}
-            />
-        </section>
-    );
+    const showOneClickInvest = () =>
+        !isOneClick && (
+            <section className="my-5 container-center">
+                <p className="m-0 text-purple text-subtitle text-left">
+                    Investir com 1-clique:
+                </p>
+                <p className="ml-2 my-3 text-purple text-small font-weight-bold text-left">
+                    Seu cartão é criptografado e armazenado com segurança para
+                    agilizar seu investimento na próxima vez.
+                </p>
+                <SwitchBtn
+                    titleLeft="desativado"
+                    titleRight="ativado"
+                    callback={handleSwitchOneClickInvest}
+                    defaultStatus={isOneClick || false}
+                />
+            </section>
+        );
 
     return (
         <section
@@ -334,7 +376,7 @@ export default function BriefAndValue({
                 marginBottom: "150px",
             }}
         >
-            {showEditCardBtn()}
+            {isOneClick ? showDeleteCardBtn() : showEditCardBtn()}
             <section className="animated fadeInUp">
                 <p className="text-subtitle text-p font-weight-bold text-center">
                     Resumo

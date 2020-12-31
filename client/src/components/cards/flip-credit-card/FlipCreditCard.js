@@ -6,6 +6,16 @@ import "./_FlipCreditCard.scss";
 import { brandedCardImgs } from "./brandedCardImgs";
 import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 
+const handleFinalCardNumber = (cardNumber, options = {}) => {
+    const { isOneClick } = options;
+    if (isOneClick) {
+        const lastFourDigits = cardNumber && cardNumber.slice(-4);
+        return `•••• •••• •••• ${lastFourDigits || "••••"}`;
+    }
+
+    return cardNumber ? cardNumber : "•••• •••• •••• ••••";
+};
+
 export default function FlipCreditCard({
     brand,
     cardNumber,
@@ -14,13 +24,14 @@ export default function FlipCreditCard({
     cardCvv,
     flipCard = false,
     cvvSize,
+    isOneClick = false,
 }) {
-    const finalCardNumber = cardNumber ? cardNumber : "•••• •••• •••• ••••";
+    const finalCardNumber = handleFinalCardNumber(cardNumber, { isOneClick });
     const finalCardFullName = cardFullName ? cardFullName : "Nome no cartão";
     const finalCardVal = cardVal
         ? cardVal && cardVal.replace(/\s/g, "")
         : "••/••";
-    const finalCardCvv = cardCvv ? cardCvv : "•••";
+    const finalCardCvv = cardCvv && !isOneClick ? cardCvv : "•••";
     const handleFourCvv = () => {
         if (!cardCvv) return "••••";
         return cardCvv;

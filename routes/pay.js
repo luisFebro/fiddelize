@@ -17,6 +17,11 @@ const {
     transfer,
 } = require("../controllers/pay/transfer/transfer");
 
+const {
+    checkOneClickInvest,
+    removeOneClickInvest,
+} = require("../controllers/pay/pay-methods/creditCard");
+
 const { mwIsAuth } = require("../controllers/auth");
 const { mwUserId } = require("../controllers/user");
 
@@ -33,6 +38,9 @@ router.get("/split/credit-card-flag", getCreditCardFlag);
 router.get("/transfer/balance", getBalance);
 router.post("/transfer/request", requestAuthorization);
 router.post("/transfer/finish", transfer);
+// payment methods
+router.get("/cc/check/one-click-invest", checkOneClickInvest);
+router.put("/cc/remove/one-click-invest", removeOneClickInvest);
 
 // router.param("userId", mwUserId);
 module.exports = router;

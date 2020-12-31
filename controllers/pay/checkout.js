@@ -8,7 +8,7 @@ const { payUrl, email, token } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 // PAY METHODS
 const createBoleto = require("./pay-methods/boleto");
-const handleCreditCard = require("./pay-methods/creditCard");
+const { handleCreditCard } = require("./pay-methods/creditCard");
 
 function handleAmounts(num1, num2, options = {}) {
     const { op = "+" } = options;
@@ -114,6 +114,7 @@ async function finishCheckout(req, res) {
         cc,
         oneClickInvest,
         installmentDesc,
+        brand,
     } = req.body;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
     const paymentMethods = ["creditCard", "eft", "boleto"];
@@ -255,6 +256,7 @@ async function finishCheckout(req, res) {
             oneClickInvest,
             gatewaySystem,
             installmentDesc,
+            brand,
         });
     }
 

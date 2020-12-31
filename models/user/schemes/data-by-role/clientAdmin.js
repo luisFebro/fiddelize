@@ -162,7 +162,12 @@ const clientAdminData = {
         encrypted: String, // all cc data
         oneClickInvest: Boolean, // activate 1-click invest
         gatewaySystem: String, // e.g cielo
-        installmentDesc: String, // e.g à vista
+        brand: String,
+        installmentDesc: {
+            // e.g à vista
+            type: String,
+            trim: true,
+        },
     },
 };
 const ClientAdminSchema = new Schema(clientAdminData, { _id: false });

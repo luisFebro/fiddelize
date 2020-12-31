@@ -71,6 +71,7 @@ export default async function goFinishCheckout(props) {
         oneClickInvest: isCreditCard ? props.oneClickInvest : undefined,
         creditCardHolderBirthDate: isCreditCard ? senderBirthday : undefined,
         creditCardHolderCPF: isCreditCard ? senderCPF : undefined,
+        brand: props.brand,
     };
 
     return await getAPI({

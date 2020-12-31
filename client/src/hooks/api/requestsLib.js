@@ -52,6 +52,10 @@ export const activateAutoService = () => `/api/sms/automatic/activate`; // POST
 export const startCheckout = () => `/api/pay/transparent-checkout/start`; // POST
 export const finishCheckout = () => `/api/pay/transparent-checkout/finish`; // POST
 export const readTransactionHistory = () => `/api/pay/transactions/history`; // GET
+export const checkOneClickInvest = (userId) =>
+    `/api/pay/cc/check/one-click-invest?userId=${userId}`; // GET
+export const removeOneClickInvest = (userId) =>
+    `/api/pay/cc/remove/one-click-invest?userId=${userId}`; // PUT
 
 // PRO
 export const getProData = (userId) =>

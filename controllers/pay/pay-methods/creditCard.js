@@ -4,13 +4,14 @@ const {
     getSuggestPrice,
 } = require("../../../utils/number/getCompoundInterest");
 
-async function handleCreditCard({
+exports.handleCreditCard = async ({
     payload,
     cc,
     oneClickInvest,
     gatewaySystem,
     installmentDesc,
-}) {
+    brand,
+}) => {
     const { userId } = payload;
 
     const obj = {
@@ -18,6 +19,7 @@ async function handleCreditCard({
         oneClickInvest,
         gatewaySystem,
         installmentDesc,
+        brand,
     };
 
     return await User("cliente-admin")
@@ -25,9 +27,36 @@ async function handleCreditCard({
             "clientAdminData.lastCC": obj,
         })
         .catch((e) => console.log(e));
-}
+};
 
-module.exports = handleCreditCard;
+exports.checkOneClickInvest = async (req, res) => {
+    const { userId } = req.query;
+
+    const data = await User("cliente-admin")
+        .findById(userId)
+        .select("clientAdminData.lastCC");
+
+    const lastCC =
+        data.clientAdminData.lastCC &&
+        data.clientAdminData.lastCC.oneClickInvest;
+
+    if (lastCC) {
+        return res.json(data.clientAdminData.lastCC.encrypted);
+    } else {
+        return res.json(false);
+    }
+};
+
+exports.removeOneClickInvest = async (req, res) => {
+    const { userId } = req.query;
+
+    const data = await User("cliente-admin").findByIdAndUpdate(userId, {
+        "clientAdminData.lastCC.oneClickInvest": false,
+    });
+
+    res.json({ msg: "removed one click invest from user account" });
+};
+
 /* NOTAS
 1.
 Comprador Teste:
