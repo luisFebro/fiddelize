@@ -140,7 +140,6 @@ export default function PayArea({
         senderEmail,
         firstDueDate,
         ordersStatement,
-        PagSeguro: window.PagSeguroDirectPayment,
         renewalDaysLeft,
         renewalReference,
         isSingleRenewal,

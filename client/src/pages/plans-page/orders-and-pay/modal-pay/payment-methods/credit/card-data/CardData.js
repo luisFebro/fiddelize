@@ -4,10 +4,12 @@ import handleChange from "../../../../../../../utils/form/use-state/handleChange
 import cardNumberMask from "../../../../../../../utils/validation/masks/cardNumberMask";
 import cardExpiresMask from "../../../../../../../utils/validation/masks/cardExpiresMask";
 import useBrand from "./hooks/useBrand";
+// comps
 import CardNumber from "./comps/CardNumber";
 import CardFullName from "./comps/CardFullName";
 import CardValAndCvv from "./comps/CardValAndCvv";
 import BriefAndValue from "./comps/BriefAndValue";
+import SuccessfulCcPay from "./comps/SuccessFulCcPay";
 
 const getStyles = () => ({
     fieldForm: {
@@ -22,7 +24,6 @@ const getStyles = () => ({
 });
 
 export default function CardData({
-    PagSeguro,
     setWatermark,
     amount,
     description,
@@ -40,9 +41,10 @@ export default function CardData({
         flipCard: false,
         payMethod: "cash", // or installment
         installmentQuantity: null,
-        installmentDesc: "",
+        installmentDesc: "à venda",
         installmentTotalAmount: null,
         amountPerInstallment: null,
+        oneClickInvest: false,
     });
     let {
         cardNumber,
@@ -118,7 +120,6 @@ export default function CardData({
                 )}
                 {currComp === "briefAndValue" && (
                     <BriefAndValue
-                        PagSeguro={PagSeguro}
                         amount={amount}
                         brand={cardBrand}
                         description={description}
@@ -130,6 +131,7 @@ export default function CardData({
                         modalData={modalData}
                     />
                 )}
+                {currComp === "successfulCCPay" && <SuccessfulCcPay />}
             </section>
         </Fragment>
     );

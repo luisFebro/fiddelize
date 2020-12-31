@@ -3,3 +3,5 @@
 2) useStartCheckout to get sessionId in the backend and set it to start using the Pagseguro API properly. It is required to identify the user session for security.
 
 3) Finally the senderHash should be generated to be sent to finish the checkout on backend for all the payment methods.
+
+4) Then send everything together with goFinishCheckout

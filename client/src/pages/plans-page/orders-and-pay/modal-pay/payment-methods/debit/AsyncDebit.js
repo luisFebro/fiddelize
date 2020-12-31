@@ -6,7 +6,6 @@ import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
 import TextField from "@material-ui/core/TextField";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
-import getFirstName from "../../../../../../utils/string/getFirstName";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
@@ -30,15 +29,7 @@ const getStyles = () => ({
 export default function AsyncCredit({ modalData }) {
     const [copy, setCopy] = useState(false);
 
-    const {
-        responseData,
-        processing,
-        handleDataMethod,
-        itemDescription,
-        itemAmount,
-        adminName,
-        PagSeguro,
-    } = modalData;
+    const { itemDescription, itemAmount, userFirstName } = modalData;
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -75,8 +66,8 @@ export default function AsyncCredit({ modalData }) {
         <section className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left">
             <span className="text-em-1-5">Débito Online</span>
             <br />
-            {getFirstName(adminName)}, ainda estamos trabalhando nesta opção de
-            pagamento. Logo ficará disponível!
+            {userFirstName}, ainda estamos trabalhando nesta opção de pagamento.
+            Logo ficará disponível!
         </section>
     );
 

@@ -8,6 +8,7 @@ const { payUrl, email, token } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 // PAY METHODS
 const createBoleto = require("./pay-methods/boleto");
+const handleCreditCard = require("./pay-methods/creditCard");
 
 function handleAmounts(num1, num2, options = {}) {
     const { op = "+" } = options;
@@ -111,6 +112,8 @@ async function finishCheckout(req, res) {
         renewalCurrDays,
         isSingleRenewal,
         cc,
+        oneClickInvest,
+        installmentDesc,
     } = req.body;
     if (paymentMethod !== "boleto") extraAmount = "0.00";
     const paymentMethods = ["creditCard", "eft", "boleto"];
@@ -167,13 +170,14 @@ async function finishCheckout(req, res) {
 
     // LESSON: use e.response.data to identify errors. Otherwise, A generic error with only a status will be shown
     const response = await axios(config).catch((e) => {
-        res.json(e.response.data);
+        res.status(400).json(e.response.data);
     });
     if (!response) return;
 
     const xml = response.data;
 
     const result = await convertXmlToJson(xml);
+    console.log("result", result);
 
     const data = result.transaction;
     const [referenceXml] = data.reference;
@@ -242,7 +246,16 @@ async function finishCheckout(req, res) {
     }
 
     if (paymentMethod === "creditCard") {
-        // await handleCreditCard({ payload, cc });
+        console.log(data.gatewaySystem);
+        const [gatewaySystem] = data.gatewaySystem[0].type;
+
+        await handleCreditCard({
+            payload,
+            cc,
+            oneClickInvest,
+            gatewaySystem,
+            installmentDesc,
+        });
     }
 
     res.json({

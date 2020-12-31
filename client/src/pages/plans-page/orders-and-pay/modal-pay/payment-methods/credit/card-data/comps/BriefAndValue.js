@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import getInstallments from "../helpers/getInstallments";
 import SwitchBtn from "../../../../../../../../components/buttons/material-ui/SwitchBtn";
 import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -12,6 +11,10 @@ import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActi
 import { useStoreDispatch } from "easy-peasy";
 import getSenderHash from "../../../../../helpers/pagseguro/getSenderHash";
 import { encryptCreditCard } from "../../../../../../../../utils/security/creditCard";
+import goFinishCheckout from "../../../../../helpers/pagseguro/goFinishCheckout";
+import getInstallments, {
+    MAX_INSTALLMENT_NO_INTEREST,
+} from "../helpers/getInstallments";
 
 const getEncryptedCC = async (mainData) => {
     const { month: expirationMonth, year: expirationYear } = getValidationData(
@@ -99,7 +102,6 @@ export default function BriefAndValue({
     brand,
     amount,
     description,
-    PagSeguro,
     setMainData,
     payMethod,
     installmentTotalAmount,
@@ -122,7 +124,7 @@ export default function BriefAndValue({
             const installmentQuantity = Number(
                 selectedInsta.slice(0, firstSpaceInd)
             );
-            const installmentDesc = selectedInsta;
+            const installmentDesc = `parcelado em ${selectedInsta}`;
 
             const indInsta = installmentQuantity - 2; // e.g it is started by 2 instalments, then the first is 0 in the array.
             const installmentTotalAmount =
@@ -141,12 +143,11 @@ export default function BriefAndValue({
     }, [selectedInsta]);
 
     useEffect(() => {
-        if (brand && amount && PagSeguro) {
+        if (brand && amount) {
             (async () => {
                 const installments = await getInstallments({
                     brand,
                     amount,
-                    PagSeguro,
                 }).catch((e) => {
                     console.log(e);
                 });
@@ -155,7 +156,7 @@ export default function BriefAndValue({
                 setData((prev) => ({ ...prev, installmentOpts: installments }));
             })();
         }
-    }, [brand, amount, PagSeguro]);
+    }, [brand, amount]);
 
     const handleSwitch = (res) => {
         const boolSwitch = treatBoolStatus(res);
@@ -168,6 +169,21 @@ export default function BriefAndValue({
             setMainData((prev) => ({
                 ...prev,
                 payMethod: "cash",
+            }));
+        }
+    };
+
+    const handleSwitchOneClickInvest = (res) => {
+        const boolSwitch = treatBoolStatus(res);
+        if (boolSwitch) {
+            setMainData((prev) => ({
+                ...prev,
+                oneClickInvest: true,
+            }));
+        } else {
+            setMainData((prev) => ({
+                ...prev,
+                oneClickInvest: false,
             }));
         }
     };
@@ -248,29 +264,36 @@ export default function BriefAndValue({
 
     // LESSON: fucking important lesson: watch out for the order of result in the list, they can be misput and sometimes the result be hard to track like finding why the credit token id is returning invalid...
     const handleInvestConclusion = async () => {
-        showSnackbar(dispatch, "Processando. Um momento...");
+        showSnackbar(dispatch, "Processando. Um momento...", 7000);
         const [senderHash, cardToken] = await getFinalTokens({
             cardData: mainData,
             dispatch,
         });
         if (!senderHash || !cardToken) return;
 
-        const { handleDataMethod, itemAmount } = modalData;
+        const { itemAmount } = modalData;
 
         const encryptedCC = await getEncryptedCC(mainData);
-        console.log("encryptedCC", encryptedCC);
 
-        handleDataMethod({
+        const { data } = await goFinishCheckout({
             selectedMethod: "creditCard",
             senderHash,
+            modalData,
             creditCardToken: cardToken,
+            noInterestInstallmentQuantity: MAX_INSTALLMENT_NO_INTEREST,
             installmentQuantity: mainData.installmentQuantity || "1",
             installmentValue: mainData.amountPerInstallment
                 ? Number(mainData.amountPerInstallment).toFixed(2).toString()
                 : itemAmount,
+            installmentDesc: mainData.installmentDesc,
             creditCardHolderName: mainData.cardFullName,
             cc: encryptedCC,
+            oneClickInvest: mainData.oneClickInvest,
+        }).catch((e) => {
+            console.log(e);
         });
+
+        setCurrComp("successfulCCPay");
     };
 
     const showFinalInvestBtn = () => (
@@ -282,6 +305,24 @@ export default function BriefAndValue({
                 variant="extended"
                 backgroundColor={`var(--themeSDark--default)`}
                 onClick={handleInvestConclusion}
+            />
+        </section>
+    );
+
+    const showOneClickInvest = () => (
+        <section className="my-5 container-center">
+            <p className="m-0 text-purple text-subtitle text-left">
+                Investir com 1-clique:
+            </p>
+            <p className="ml-2 my-3 text-purple text-small font-weight-bold text-left">
+                Seu cartão é criptografado e armazenado com segurança para
+                agilizar ainda mais futuros investimentos na Fiddelize.
+            </p>
+            <SwitchBtn
+                titleLeft="desativado"
+                titleRight="ativado"
+                callback={handleSwitchOneClickInvest}
+                defaultStatus={false}
             />
         </section>
     );
@@ -310,6 +351,7 @@ export default function BriefAndValue({
                     </div>
                 </div>
                 {showPayMethods()}
+                {showOneClickInvest()}
                 {showFinalInvestBtn()}
             </section>
         </section>

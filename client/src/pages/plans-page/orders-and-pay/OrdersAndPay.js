@@ -86,7 +86,7 @@ export default function OrdersAndPay({
 
     const showTitle = () => (
         <div className="my-3">
-            <p className="text-subtitle text-purple text-center font-weight-bold">
+            <p className="main-font text-em-1-9 text-purple text-center font-weight-bold">
                 Seu Pedido
             </p>
         </div>

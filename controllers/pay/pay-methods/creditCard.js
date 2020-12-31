@@ -1,7 +1,33 @@
+const User = require("../../../models/user/User");
 const {
     getCompoundInterest,
     getSuggestPrice,
-} = require("../../utils/number/getCompoundInterest");
+} = require("../../../utils/number/getCompoundInterest");
+
+async function handleCreditCard({
+    payload,
+    cc,
+    oneClickInvest,
+    gatewaySystem,
+    installmentDesc,
+}) {
+    const { userId } = payload;
+
+    const obj = {
+        encrypted: cc,
+        oneClickInvest,
+        gatewaySystem,
+        installmentDesc,
+    };
+
+    return await User("cliente-admin")
+        .findByIdAndUpdate(userId, {
+            "clientAdminData.lastCC": obj,
+        })
+        .catch((e) => console.log(e));
+}
+
+module.exports = handleCreditCard;
 /* NOTAS
 1.
 Comprador Teste:
@@ -270,7 +296,7 @@ Response Example:
                 <normalizedCode xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
                 <normalizedMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
                 <authorizationCode>0</authorizationCode>
-                <nsu>0</nsu>
+                <nsu>0</nsu> // NSU: Número sequencial único é o número de identificação de uma operação de venda realizada com cartões. É atribuído a cada documento fiscal emitido. TID: Transaction ID é um número de identificação (ou de autorização) da transação de e-commerce na operadora.
                 <tid>0</tid>
                 <establishmentCode>1056784170</establishmentCode>
                 <acquirerName>CIELO</acquirerName>

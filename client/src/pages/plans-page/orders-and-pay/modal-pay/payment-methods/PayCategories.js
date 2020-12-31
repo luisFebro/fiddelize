@@ -10,7 +10,7 @@ const thisData = [
         img: "/img/icons/pay/categories/boleto-selection.svg",
     },
     {
-        title: "No Crédito",
+        title: "No Cartão",
         img: "/img/icons/pay/categories/credit-card-selection.svg",
     },
     {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 function getBrand(cardNumber, { PagSeguro }) {
-    console.log("cardNumber", cardNumber);
     // n1
     const run = (resolve, reject) => {
         PagSeguro.getBrand({

@@ -6,12 +6,12 @@ import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
 import TextField from "@material-ui/core/TextField";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
-import getFirstName from "../../../../../../utils/string/getFirstName";
 import getSlashDayMonthYear from "../../../../../../utils/dates/getSlashDayMonthYear";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RedirectLink from "../../../../../../components/RedirectLink";
 import getSenderHash from "../../../helpers/pagseguro/getSenderHash";
+import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
@@ -52,29 +52,15 @@ export default function AsyncBoleto({ modalData = {} }) {
         paymentLink: "",
         barcode: "",
         dueDate: "",
+        loading: false,
+        error: false,
     });
-    const { paymentLink, barcode, dueDate } = data;
+    const { paymentLink, barcode, dueDate, loading, error } = data;
 
-    const {
-        responseData,
-        processing,
-        handleDataMethod,
-        itemDescription,
-        itemAmount,
-        adminName,
-        PagSeguro,
-    } = modalData;
+    const { itemDescription, itemAmount, userFirstName } = modalData;
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
-
-    useEffect(() => {
-        if (responseData)
-            setData({
-                ...responseData,
-                dueDate: getSlashDayMonthYear(responseData.dueDate),
-            });
-    }, [responseData]);
 
     useEffect(() => {
         (async () => {
@@ -82,10 +68,33 @@ export default function AsyncBoleto({ modalData = {} }) {
                 console.log(e);
             });
 
-            handleDataMethod({
+            setData((prev) => ({
+                ...prev,
+                loading: true,
+                error: false,
+            }));
+
+            const { data: responseData } = await goFinishCheckout({
                 selectedMethod: "boleto",
                 senderHash,
+                modalData,
+            }).catch((e) => {
+                console.log(e);
+                setData((prev) => ({
+                    ...prev,
+                    loading: false,
+                    error: true,
+                }));
             });
+
+            if (!responseData) return;
+
+            setData((prev) => ({
+                ...prev,
+                ...responseData,
+                dueDate: getSlashDayMonthYear(responseData.dueDate),
+                loading: false,
+            }));
         })();
     }, []);
 
@@ -212,7 +221,7 @@ export default function AsyncBoleto({ modalData = {} }) {
             className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left"
         >
             <span className="text-em-1-5">Boleto Automático</span>
-            <br />É pra já, {adminName && getFirstName(adminName)}!
+            <br />É pra já, {userFirstName}!
             <br />
             Seu Boleto está sendo feito agora! Um momento, carregando...
         </section>
@@ -267,8 +276,18 @@ export default function AsyncBoleto({ modalData = {} }) {
     return (
         <Fragment>
             {showTitle()}
-            {processing ? showMsgProcessing() : showBoleto()}
-            {!processing && showNotesAndCTA()}
+            {loading && showMsgProcessing()}
+            {paymentLink && !loading && !error && (
+                <Fragment>
+                    {showBoleto()}
+                    {showNotesAndCTA()}
+                </Fragment>
+            )}
+            {error && (
+                <p className="text-red mx-3 my-5 text-subtitle">
+                    Erro ao gerar boleto. Tente gerar novamente.
+                </p>
+            )}
             <ShowPayWatermarks needAnima={false} />
         </Fragment>
     );

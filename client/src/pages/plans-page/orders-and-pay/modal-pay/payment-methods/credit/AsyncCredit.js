@@ -5,7 +5,7 @@ import CardData from "./card-data/CardData";
 export default function AsyncCredit({ modalData }) {
     const [watermark, setWatermark] = useState(true);
 
-    const { itemDescription, itemAmount, PagSeguro } = modalData;
+    const { itemDescription, itemAmount } = modalData;
 
     const showTitle = () => (
         <div className="mt-2">
@@ -19,7 +19,6 @@ export default function AsyncCredit({ modalData }) {
         <section className="mx-3">
             {showTitle()}
             <CardData
-                PagSeguro={PagSeguro}
                 setWatermark={setWatermark}
                 modalData={modalData}
                 amount={itemAmount}

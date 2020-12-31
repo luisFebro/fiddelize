@@ -31,8 +31,7 @@ const AsyncCredit = Load({
 const pickPayMethod = (payMethod, modalData) => {
     if (payMethod === "No Boleto") return <AsyncBoleto modalData={modalData} />;
     if (payMethod === "No Débito") return <AsyncDebit modalData={modalData} />;
-    if (payMethod === "No Crédito")
-        return <AsyncCredit modalData={modalData} />;
+    if (payMethod === "No Cartão") return <AsyncCredit modalData={modalData} />;
 };
 
 export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {

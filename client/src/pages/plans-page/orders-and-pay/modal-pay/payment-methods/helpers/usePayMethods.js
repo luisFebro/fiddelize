@@ -21,13 +21,14 @@ function getAvailableCards(collection) {
     return availableCards;
 }
 
-export default function usePayMethods(target, value, { PagSeguro }) {
+export default function usePayMethods(target, value) {
     const [payMethod, setPayMethod] = useState(null);
 
     const targets = ["CREDIT_CARD", "ONLINE_DEBT"];
 
     if (!targets.includes(target)) throw new Error("target not valid");
 
+    const PagSeguro = window.PagSeguroDirectPayment;
     useEffect(() => {
         if (payMethod) return;
         PagSeguro.getPaymentMethods({
