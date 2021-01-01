@@ -34,6 +34,7 @@ export default async function goFinishCheckout(props) {
 
     const isBoleto = selectedMethod === "boleto";
     const isCreditCard = selectedMethod === "creditCard";
+    const isBankDebit = selectedMethod === "eft";
 
     const body = {
         paymentMethod: selectedMethod,
@@ -58,6 +59,8 @@ export default async function goFinishCheckout(props) {
         isSingleRenewal,
         renewalDaysLeft,
         renewalReference,
+        // bank debit
+        bankName: isBankDebit ? props.bankName : undefined,
         // boleto
         firstDueDate: isBoleto ? firstDueDate : undefined,
         // credit card

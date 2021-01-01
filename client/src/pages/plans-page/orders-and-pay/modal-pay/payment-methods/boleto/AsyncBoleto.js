@@ -57,7 +57,12 @@ export default function AsyncBoleto({ modalData = {} }) {
     });
     const { paymentLink, barcode, dueDate, loading, error } = data;
 
-    const { itemDescription, itemAmount, userFirstName } = modalData;
+    const {
+        itemDescription,
+        itemAmount,
+        userFirstName,
+        handleCancel,
+    } = modalData;
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -95,6 +100,8 @@ export default function AsyncBoleto({ modalData = {} }) {
                 dueDate: getSlashDayMonthYear(responseData.dueDate),
                 loading: false,
             }));
+
+            handleCancel(); // remove current orders
         })();
     }, []);
 

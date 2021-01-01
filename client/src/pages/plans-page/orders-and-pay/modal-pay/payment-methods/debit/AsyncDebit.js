@@ -1,94 +1,57 @@
-import React, { useState, useEffect, Fragment } from "react";
-import Card from "@material-ui/core/Card";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import copyTextToClipboard from "../../../../../../utils/document/copyTextToClipboard";
-import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
-import TextField from "@material-ui/core/TextField";
-import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import React, { useState } from "react";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
-// import animateCSS from '../../../../utils/animateCSS';
-// import scrollIntoView from '../../../../utils/document/scrollIntoView';
+// comps
+import BankList from "./bank-list/BankList"; // const isSmall = window.Helper.isSmallScreen();
+import LinkBankDebit from "./LinkBankDebit";
 
-const isSmall = window.Helper.isSmallScreen();
-const getStyles = () => ({
-    card: {
-        margin: "auto",
-        width: "95%",
-        maxWidth: isSmall ? "" : 450,
-    },
-    fieldFormValue: {
-        backgroundColor: "#fff",
-        color: "var(--themeP)",
-        fontSize: "20px",
-        fontWeight: "bold",
-        fontFamily: "var(--mainFont)",
-    },
-});
+/* IMPORTANT NOTES
+only works in the production mode. sandbox gives error.
+currently, there is 4 banks available.
+example of encripted link sent by pagseguro: https://pagseguro.uol.com.br/checkout/payment/eft/print.jhtml?c=be4c1c7dad60ab66d22180a3c9f0bb8d9246df62d15bfc4013f57c2f24d065fe6fcfefd5fd885a60
+ITAU - https://shopline.itau.com.br/shopline/shopline.aspx
+mobile friendly - no
 
-export default function AsyncCredit({ modalData }) {
-    const [copy, setCopy] = useState(false);
+BANRISUL - https://ww7.banrisul.com.br/brb/link/brbwe4hw.aspx?Largura=800&Sistema=BANRICOMPRAS&Servico=brbw69hw_Banricompras.aspx&Dados=COD_REDE:410138000|COD_ESTAB:148|DT_MOVIMENTO:2020%2D12%2D31|NSU_ORIGEM:43971|URL_NOK:https%3A%2F%2Fnotifica2%2Euol%2Ecom%2Ebr%2Fbpag2%2Fservlet%2FBjBanrisulControl%3Ffinaliza%3D0%26%2526VlrTotal%253D338%26idpedido%3D444836390%26identpedido%3D444836390|FORMA_PGTO:PGTA|STATUS:0|MSG_ERRO_CLIENTE:%20|MSG_ERRO_TECNICO:%20
+mobile friendly - yes
 
-    const { itemDescription, itemAmount, userFirstName } = modalData;
+BANCO_BRASIL - https://mpag.bb.com.br/site/mpag/
+mobile friendly - no
 
-    const styles = getStyles();
-    const dispatch = useStoreDispatch();
+BRADESCO - no working internal server error
+mobile friendly -
+ */
 
-    // useEffect(() => {
-    //     handleDataMethod({
-    //      paymentMethod: "No Débito",
-    //      senderHash: ffds,
-    //     });
-    // }, [])
+export default function AsyncDebit({ modalData }) {
+    const [data, setData] = useState({
+        currComp: "bankList",
+        selectedBank: null,
+    });
+    const { selectedBank, currComp } = data;
 
     const showTitle = () => (
         <div className="mt-2">
             <p className="text-em-1-9 main-font text-purple text-center font-weight-bold">
                 Fiddelize Invista
             </p>
+            <p className="main-font my-3 text-center text-em-1-5 font-weight-bold">
+                Débito Bancário
+            </p>
         </div>
     );
 
-    const showCTA = () => (
-        <section className="my-4 d-flex justify-content-around">
-            <ButtonFab
-                size="medium"
-                title="Ver Doc."
-                onClick={null}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant="extended"
-                position="relative"
-            />
-        </section>
-    );
-
-    const showMaintenanceMsg = () => (
-        <section className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left">
-            <span className="text-em-1-5">Débito Online</span>
-            <br />
-            {userFirstName}, ainda estamos trabalhando nesta opção de pagamento.
-            Logo ficará disponível!
-        </section>
-    );
-
-    const showMsgProcessing = () => (
-        <section
-            id="PayContent--boleto-msg"
-            className="container-center-col mx-3 my-5 text-subtitle font-weight-bold text-purple text-left"
-        >
-            Some loading Msg
-        </section>
-    );
-
-    const showCreditCard = () => (
-        <section className="container-center">I am the CREDITCARD</section>
-    );
-
     return (
-        <Fragment>
+        <section className="mx-3 text-purple text-left">
             {showTitle()}
-            {showMaintenanceMsg()}
+            {currComp === "bankList" && (
+                <BankList modalData={modalData} setMainData={setData} />
+            )}
+            {currComp === "linkBankDebit" && (
+                <LinkBankDebit
+                    selectedBank={selectedBank}
+                    modalData={modalData}
+                />
+            )}
             <ShowPayWatermarks needAnima={false} />
-        </Fragment>
+        </section>
     );
 }

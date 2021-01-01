@@ -70,6 +70,8 @@ export default function getAPI({
 
                 reject(error.response.data);
             }
+
+            reject(error);
         }
     };
 

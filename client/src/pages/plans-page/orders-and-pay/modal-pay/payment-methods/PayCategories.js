@@ -6,16 +6,16 @@ import PayMethodsBtn from "./PayMethodsBtn";
 
 const thisData = [
     {
-        title: "No Boleto",
+        title: "Boleto Automático",
         img: "/img/icons/pay/categories/boleto-selection.svg",
     },
     {
-        title: "No Cartão",
+        title: "Cartão de Crédito",
         img: "/img/icons/pay/categories/credit-card-selection.svg",
     },
     {
-        title: "No Débito",
-        img: "/img/icons/pay/categories/online-debt-selection.png",
+        title: "Débito Bancário",
+        img: "/img/icons/pay/categories/bank-debit-selection.png",
     },
 ];
 

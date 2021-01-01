@@ -8,6 +8,7 @@ const { payUrl, email, token } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 // PAY METHODS
 const createBoleto = require("./pay-methods/boleto");
+const handleBankDebit = require("./pay-methods/bankDebit");
 const { handleCreditCard } = require("./pay-methods/creditCard");
 
 function handleAmounts(num1, num2, options = {}) {
@@ -258,11 +259,17 @@ async function finishCheckout(req, res) {
             installmentDesc,
             brand,
         });
+
+        return res.json({
+            msg: `successful checkout with CREDIT CARD`,
+        });
     }
 
-    res.json({
-        msg: `successful checkout with ${paymentMethod.toUpperCase()} pay method`,
-    });
+    if (paymentMethod === "eft") {
+        const [paymentLink] = data.paymentLink;
+        // await handleBankDebit
+        return res.json(paymentLink);
+    }
 }
 
 module.exports = {

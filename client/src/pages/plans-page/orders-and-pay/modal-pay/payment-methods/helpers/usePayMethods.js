@@ -3,28 +3,29 @@ import { useState, useEffect } from "react";
 // Observe que os meios de pagamento Balance e Deposit são retornados, porém atualmente não podem ser implementados.
 // Com essas informações você poderá apresentar as opções para pagamento ao comprador.
 
-function getAvailableCards(collection) {
-    const availableCards = [];
+function getAvailableAssets(collection) {
+    const availableAssets = [];
 
-    for (const card in collection) {
-        const { status, name, images, code } = collection[card];
+    for (const asset in collection) {
+        const { status, name, images, displayName, code } = collection[asset];
         const isAvailable = status === "AVAILABLE";
         if (isAvailable) {
-            availableCards.push({
+            availableAssets.push({
                 name: name && name.toLowerCase(),
+                displayName,
                 code,
                 image: `https://stc.pagseguro.uol.com.br/${images.MEDIUM.path}`,
             });
         }
     }
 
-    return availableCards;
+    return availableAssets;
 }
 
 export default function usePayMethods(target, value) {
     const [payMethod, setPayMethod] = useState(null);
 
-    const targets = ["CREDIT_CARD", "ONLINE_DEBT"];
+    const targets = ["CREDIT_CARD", "ONLINE_DEBIT"];
 
     if (!targets.includes(target)) throw new Error("target not valid");
 
@@ -35,8 +36,8 @@ export default function usePayMethods(target, value) {
             amount: value, // returns all methods if not defined.
             success: function (response) {
                 const allOptions = response.paymentMethods[target].options;
-                const cardsAvailable = getAvailableCards(allOptions);
-                setPayMethod(cardsAvailable);
+                const assetAvailable = getAvailableAssets(allOptions);
+                setPayMethod(assetAvailable);
             },
             error: function (response) {
                 console.log("Callback para chamadas que falharam", response);

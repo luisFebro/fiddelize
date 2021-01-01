@@ -81,22 +81,3 @@ export default function AsyncPayContent({ modalData }) {
         </section>
     );
 }
-
-/* ARCHIVES
-// FOR TESTING
-<p className="text-break text-normal mx-2 my-5">
-    {JSON.stringify(params)}
-</p>
-
-const handleView = (targetCategory) => {
-        let elem = "";
-        if(targetCategory === "No Boleto") elem = "#PayContent--boleto-msg";
-        // if("No Cartão") return "creditCard";
-        // if("No Débito") return "eft";
-
-        var element = document.querySelector(elem)
-        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
-        // scrollIntoView(elem, { mainContainer: "#mainContainer-PayContent" });
-    }
-
- */

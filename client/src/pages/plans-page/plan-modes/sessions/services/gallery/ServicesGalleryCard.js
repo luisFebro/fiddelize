@@ -170,7 +170,6 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
                     ...styles.card,
                     background: selected ? "var(--themePLight)" : "#fff",
                 }}
-                elevation={false}
             >
                 {showTitle()}
                 {showServiceIcon()}

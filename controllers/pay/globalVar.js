@@ -13,7 +13,7 @@ const handleMode = () => {
 };
 
 module.exports = {
-    sandboxMode: handleMode(),
+    sandboxMode: false, //handleMode(),
     get payUrl() {
         return this.sandboxMode
             ? "https://ws.sandbox.pagseguro.uol.com.br"
