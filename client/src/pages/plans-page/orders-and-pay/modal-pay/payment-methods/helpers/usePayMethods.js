@@ -24,6 +24,7 @@ function getAvailableAssets(collection) {
 
 export default function usePayMethods(target, value) {
     const [payMethod, setPayMethod] = useState(null);
+    const [error, setError] = useState(false);
 
     const targets = ["CREDIT_CARD", "ONLINE_DEBIT"];
 
@@ -41,6 +42,7 @@ export default function usePayMethods(target, value) {
             },
             error: function (response) {
                 console.log("Callback para chamadas que falharam", response);
+                setError(true);
             },
             complete: function (response) {
                 // console.log("Callback para todas chamadas", response);
@@ -48,5 +50,5 @@ export default function usePayMethods(target, value) {
         });
     }, []);
 
-    return payMethod;
+    return { payMethod, error };
 }

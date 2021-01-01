@@ -34,8 +34,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                 console.log(e);
             });
 
-            console.log("response", response);
-            if (!response) {
+            if (response === "Internal Server Error") {
                 return setData((prev) => ({
                     ...prev,
                     loading: false,
@@ -76,7 +75,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
             )}
             {paymentLink && (
                 <Fragment>
-                    <p className="my-5 text-purple text-subtitle font-weight-bold mx-3">
+                    <p className="mt-3 text-purple text-subtitle font-weight-bold mx-3">
                         Está pronto! Acesse o link do banco abaixo.
                     </p>
                     <div className="container-center">

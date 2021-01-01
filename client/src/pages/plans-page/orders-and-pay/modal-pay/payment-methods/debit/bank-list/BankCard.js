@@ -26,10 +26,10 @@ export default function BankCard({ data, setMainData }) {
 
     return (
         <section
-            className="position-relative shadow-babadoo mb-5 col-6 col-md-4 col-lg-3 mx-auto"
+            className="position-relative shadow-babadoo mb-5 col-6 col-md-4 col-lg-3"
             style={{
                 backgroundColor: "#fff",
-                maxWidth: "150px",
+                maxWidth: "140px",
             }}
         >
             <div className="mt-2 container-center">

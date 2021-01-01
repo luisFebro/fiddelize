@@ -5,7 +5,18 @@ import BankCard from "./BankCard";
 export default function BankList({ modalData, setMainData }) {
     const { itemAmount } = modalData;
 
-    const banksAvailable = usePayMethods("ONLINE_DEBIT", itemAmount);
+    const { payMethod: banksAvailable, error } = usePayMethods(
+        "ONLINE_DEBIT",
+        itemAmount
+    );
+
+    if (error) {
+        return (
+            <p className="text-subtitle text-red font-weight-bold mx-3 my-5">
+                Um erro aconteceu ao iniciar a sessão. Tente abrir novamente.
+            </p>
+        );
+    }
 
     return (
         <section

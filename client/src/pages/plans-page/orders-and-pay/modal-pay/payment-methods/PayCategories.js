@@ -24,7 +24,7 @@ const CardList = ({ modalData }) => {
         <Fragment>
             {thisData.map((card) => {
                 const ShowIcon = () => (
-                    <section style={{ minHeight: "80px" }}>
+                    <section style={{ maxHeight: "80px" }}>
                         <img
                             className="img-fluid"
                             width={100}
@@ -39,11 +39,11 @@ const CardList = ({ modalData }) => {
                         key={card.title}
                         className="carousel-cell no-outline"
                     >
-                        <p className="mt-3 text-grey text-subtitle text-center font-weight-bold">
+                        <p className="mt-1 text-grey text-normal text-center font-weight-bold">
                             {card.title}
                         </p>
                         <ShowIcon />
-                        <section className="my-3 container-center">
+                        <section className="mt-5 container-center">
                             <PayMethodsBtn
                                 method={card.title}
                                 modalData={modalData}
