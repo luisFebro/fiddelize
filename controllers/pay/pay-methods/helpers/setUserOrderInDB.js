@@ -2,17 +2,16 @@ const User = require("../../../../models/user/User");
 
 async function setUserOrderInDB(data = {}) {
     const { isRenewal, userId } = data;
-    if (!isRenewal || !userId)
-        return Promise.reject({ error: "missing mandatory params." });
+    if (!userId) return Promise.reject({ error: "missing mandatory params." });
 
     let dataCliAdmin = {
         reference: data.reference,
         investAmount: (Number(data.amount) + 1).toFixed(2).toString(), // I discounted R$1, then replacing again to displace the correct price to cliAdmin
         ordersStatement: data.ordersStatement, // e.g "{ 'Novvos Membros': { totalPackage: 10, amount: 0, price: 300 } }"
-        paymentCategory: data.paymentCategory,
+        paymentMethod: data.paymentMethod,
         renewal: data.renewal, // default: undefined
         // boleto
-        paymentLink: data.paymentLink, // boleto and eft
+        paymentLink: data.paymentLink, // boleto or eft
         payDueDate: data.dueDate,
         barcode: data.barcode,
     };
@@ -50,3 +49,5 @@ async function setUserOrderInDB(data = {}) {
 
     return { msg: "orders set successfully!" };
 }
+
+module.exports = setUserOrderInDB;

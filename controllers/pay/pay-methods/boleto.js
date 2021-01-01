@@ -112,7 +112,7 @@ async function createBoleto(payload) {
     });
     if (!responseBoleto) return;
 
-    const { boletos } = response.data;
+    const { boletos } = responseBoleto.data;
     const [boletoData] = boletos;
 
     const orderData = {
@@ -122,9 +122,7 @@ async function createBoleto(payload) {
         barcode: boletoData.barcode,
     };
 
-    const responseOrder = await setUserOrderInDB(orderData).catch((err) => {
-        res.status(500).json({ error: err });
-    });
+    const responseOrder = await setUserOrderInDB(orderData).catch((err) => err);
     if (!responseOrder) return;
 
     return {

@@ -152,14 +152,15 @@ function PanelHiddenContent({ history, data }) {
     );
 
     const showPayDetails = (data) => {
-        const payCategory = data.paymentCategory;
+        const payMethod = data.paymentMethod;
+        const isBoleto = payMethod === "boleto";
 
         return (
             <section className="mt-4 mb-5">
                 <h2 className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
                     Detalhes Transação
                 </h2>
-                {payCategory === "boleto" && showBoletoDetails(data)}
+                {isBoleto && showBoletoDetails(data)}
             </section>
         );
     };

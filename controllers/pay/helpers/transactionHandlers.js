@@ -17,8 +17,6 @@ exports.handleModifiedOrders = ({
     reference,
     isPaid,
     thisDueDate,
-    getPaymentMethod,
-    paymentMethodCode,
     currStatus,
     lastEventDate,
 }) => {
@@ -40,7 +38,7 @@ exports.handleModifiedOrders = ({
             targetOr.planDueDate = thisDueDate;
         }
 
-        targetOr.paymentMethod = getPaymentMethod(paymentMethodCode);
+        targetOr.paymentDetails = "no details";
         targetOr.transactionStatus = currStatus;
         targetOr.updatedAt = lastEventDate;
 

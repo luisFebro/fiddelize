@@ -8,10 +8,6 @@ const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 const addDays = require("date-fns/addDays");
 const { getNewPlanDays } = require("./helpers/getNewPlanDays");
 const {
-    getDataChunk,
-    getChunksTotal,
-} = require("../../utils/array/getDataChunk");
-const {
     handleProPlan,
     handleModifiedOrders,
     handleProSMSCredits,
@@ -190,30 +186,6 @@ async function getPagNotify(req, res) {
         msg: "both agent and cliAdmin updated on db",
     });
 }
-
-const readHistory = (req, res) => {
-    const { userId, skip, limit = 10 } = req.query;
-
-    User("cliente-admin")
-        .findById(userId)
-        .select("clientAdminData.orders")
-        .exec((err, user) => {
-            if (err || !user)
-                return res.status(400).json({ error: "Orders not found" });
-
-            const data = user.clientAdminData.orders;
-
-            const dataSize = data.length;
-            const dataRes = {
-                list: getDataChunk(data, { skip, limit }),
-                chunksTotal: getChunksTotal(dataSize, limit),
-                listTotal: dataSize,
-                content: undefined,
-            };
-
-            res.json(dataRes);
-        });
-};
 
 // Estornar transação.
 const refundTransaction = (req, res) => {

@@ -39,7 +39,7 @@ const CardList = ({ modalData }) => {
                         key={card.title}
                         className="carousel-cell no-outline"
                     >
-                        <p className="mt-1 text-grey text-normal text-center font-weight-bold">
+                        <p className="mt-3 text-grey text-normal text-center font-weight-bold">
                             {card.title}
                         </p>
                         <ShowIcon />

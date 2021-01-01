@@ -188,6 +188,8 @@ async function finishCheckout(req, res) {
     const [grossAmount] = data.grossAmount;
     const [extraAmountXml] = data.extraAmount;
 
+    const currPayMethod = getPayCategoryType(paymentMethod);
+
     const newOrder = new Order({
         reference: referenceXml,
         agentName: "Fiddelize",
@@ -196,7 +198,7 @@ async function finishCheckout(req, res) {
             name: senderName,
             id: userId,
         },
-        paymentCategory: getPayCategoryType(paymentMethod),
+        paymentMethod: currPayMethod,
         amount: {
             fee: handleAmounts(feeAmount, extraAmountXml, {
                 op: "+",
@@ -221,7 +223,7 @@ async function finishCheckout(req, res) {
     // PAYLOAD FOR FIDDELIZE SYSTEM ALL PAYMENT METHODS
     const payload = {
         userId,
-        paymentCategory: getPayCategoryType(paymentMethod),
+        paymentMethod: currPayMethod,
         reference: referenceXml,
         amount: grossAmount,
         instructions: itemDescription1,
@@ -243,7 +245,10 @@ async function finishCheckout(req, res) {
     // END PAYLOAD FOR FIDDELIZE SYSTEM ALL PAYMENT METHODS
 
     if (paymentMethod === "boleto") {
-        const boletoData = await createBoleto(payload);
+        const boletoData = await createBoleto(payload).catch((e) => {
+            console.log(e);
+        });
+        if (!boletoData) return;
         return res.json(boletoData);
     }
 

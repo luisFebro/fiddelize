@@ -1,7 +1,7 @@
 exports.getPayCategoryType = (type) => {
     if (type === "boleto") return "boleto";
-    if (type === "creditCard") return "crédito";
-    if (type === "eft") return "débito";
+    if (type === "creditCard") return "cartão crédito";
+    if (type === "eft") return "débito bancário";
 };
 
 // LESSON: while testing, do not forget to switch to paid status!
@@ -60,6 +60,7 @@ exports.getTransactionStatusTypes = (codeNum) => {
 // 401 Saldo PagSeguro.
 // 501 Oi Paggo.
 // 701 Depósito em conta - Banco do Brasil
-exports.getPaymentMethod = (codeNum) => {
-    if (codeNum === "202") return "boleto santander";
-};
+// deprecated, now paymentDetails
+// exports.getPaymentMethod = (codeNum) => {
+//     if (codeNum === "202") return "boleto santander";
+// };

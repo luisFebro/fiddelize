@@ -26,8 +26,11 @@ const data = {
             "em retenção",
         ],
     },
-    paymentCategory: { type: String, enum: ["boleto", "crédito", "débito"] },
-    paymentMethod: String, // boleto santander, nomes das bandeiras aqui...
+    paymentMethod: {
+        type: String,
+        enum: ["boleto", "cartão crédito", "débito bancário"],
+    },
+    paymentDetails: String, // boleto santander, nomes das bandeiras aqui...
     paymentReleaseDate: Date, // 15 or 30 days after purchasing date.
     amount: {
         gross: String, // e.g 520.00

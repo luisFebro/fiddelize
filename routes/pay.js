@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
+const getPagNotify = require("../controllers/pay/pag-notification");
+const readTransactionHistory = require("../controllers/pay/transaction/transactionHistory");
+
 const {
     startCheckout,
     finishCheckout,
 } = require("../controllers/pay/checkout");
-const getPagNotify = require("../controllers/pay/pag-notification");
+
 const {
     startSplit,
     getPayMethods,
@@ -34,6 +37,9 @@ router.post("/pag-notify", getPagNotify);
 router.post("/split/start", startSplit);
 router.get("/split/pay-methods", getPayMethods);
 router.get("/split/credit-card-flag", getCreditCardFlag);
+// transactions
+router.get("/transactions/history", readTransactionHistory);
+// refund and cancel too
 // transfer
 router.get("/transfer/balance", getBalance);
 router.post("/transfer/request", requestAuthorization);

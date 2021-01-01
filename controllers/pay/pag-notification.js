@@ -16,10 +16,7 @@ const {
     handleModifiedOrders,
     handleProSMSCredits,
 } = require("./helpers/transactionHandlers");
-const {
-    getTransactionStatusTypes,
-    getPaymentMethod,
-} = require("./helpers/getTypes");
+const { getTransactionStatusTypes } = require("./helpers/getTypes");
 const { sendBackendNotification } = require("../notification");
 // real time notification to Fiddelize's system every time a transation's status change like pending to paid.
 /*
@@ -86,9 +83,10 @@ async function getPagNotify(req, res) {
     const [status] = data.status;
     const [reference] = data.reference;
     const [lastEventDate] = data.lastEventDate;
-    const [paymentMethod] = data.paymentMethod;
-    const [paymentMethodCode] = paymentMethod.code;
+    // check this value...
+    // const [paymentMethod] = data.paymentMethod;
 
+    // const currPayMethod = "boleto";
     const currStatus = getTransactionStatusTypes(status);
     const isPaid = getPaidStatus(currStatus);
 
@@ -111,7 +109,7 @@ async function getPagNotify(req, res) {
     );
 
     doc.planDueDate = thisDueDate;
-    doc.paymentMethod = getPaymentMethod(paymentMethodCode);
+    doc.paymentDetails = "no details";
     doc.updatedAt = lastEventDate;
     doc.transactionStatus = getTransactionStatusTypes(status);
 
@@ -139,8 +137,6 @@ async function getPagNotify(req, res) {
             reference,
             isPaid,
             thisDueDate,
-            getPaymentMethod,
-            paymentMethodCode,
             currStatus,
             lastEventDate,
         });
@@ -192,233 +188,3 @@ async function getPagNotify(req, res) {
 }
 
 module.exports = getPagNotify;
-
-/* ARCHIVES
-// axios(config)
-    //     .then((response) => {
-    //         const xml = response.data;
-    //         convertXmlToJson
-    //             if (error === null) {
-    //                 const data = result.transaction;
-
-    //                 const [status] = data.status;
-    //                 const [reference] = data.reference;
-    //                 const [lastEventDate] = data.lastEventDate;
-    //                 const [paymentMethod] = data.paymentMethod;
-    //                 const [paymentMethodCode] = paymentMethod.code;
-
-    //                 const mainRef = reference;
-
-    //                 const currStatus = getTransactionStatusTypes(status);
-    //                 const isPaid = getPaidStatus(currStatus);
-
-    //                 let thisDueDate;
-    //                 Order.findOne({ reference }).exec((err, doc) => {
-    //                     if (err || !doc)
-    //                         return res
-    //                             .status(404)
-    //                             .json({ error: "order not found!" });
-
-    //                     const isCurrRenewal = doc && doc.isCurrRenewal;
-    //                     const totalRenewalDays = doc && doc.totalRenewalDays;
-
-    //                     thisDueDate = handlePlanDueDate(
-    //                         currStatus,
-    //                         doc,
-    //                         reference,
-    //                         isCurrRenewal,
-    //                         totalRenewalDays
-    //                     );
-
-    //                     doc.planDueDate = thisDueDate; // I already modified future date on checkout for renewal.
-    //                     doc.paymentMethod = getPaymentMethod(paymentMethodCode);
-    //                     doc.updatedAt = lastEventDate;
-    //                     doc.transactionStatus = getTransactionStatusTypes(
-    //                         status
-    //                     );
-    //                     const payRelease = doc.paymentReleaseDate;
-    //                     doc.paymentReleaseDate = payRelease
-    //                         ? payRelease
-    //                         : paymentReleaseDate;
-
-    //                     // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-    //                     // doc.markModified("clientAdminData");
-    //                     const clientAdminId = doc.clientAdmin.id;
-    //                     doc.save((err) => {
-    //                         Pricing.find({})
-    //                         .exec((err, allPricing) => {
-    //                             if (err) return res.status(400).json({ error: "something went wrong"});
-
-    //                             User("cliente-admin").findOne({ _id: clientAdminId }).exec(
-    //                                 (err, data2) => {
-    //                                     let orders = data2.clientAdminData.orders;
-    //                                     let currBizPlanList =
-    //                                         data2.clientAdminData.bizPlanList;
-
-    //                                     const modifiedOrders = orders.map(
-    //                                         (targetOr) => {
-    //                                             const priorRef =
-    //                                                 targetOr.renewal &&
-    //                                                 targetOr.renewal.priorRef;
-    //                                             const condition = isCurrRenewal
-    //                                                 ? targetOr.reference ===
-    //                                                       mainRef ||
-    //                                                   targetOr.reference ===
-    //                                                       priorRef
-    //                                                 : targetOr.reference ===
-    //                                                   mainRef;
-    //                                             if (condition) {
-    //                                                 if (isPaid) {
-    //                                                     const {
-    //                                                         renewal,
-    //                                                     } = targetOr;
-    //                                                     if (
-    //                                                         mainRef ===
-    //                                                         (renewal &&
-    //                                                             renewal.currRef)
-    //                                                     ) {
-    //                                                         targetOr.renewal.isPaid = true;
-    //                                                     }
-    //                                                 }
-
-    //                                                 if (
-    //                                                     isPaid &&
-    //                                                     targetOr.reference ===
-    //                                                         priorRef
-    //                                                 ) {
-    //                                                     targetOr.planDueDate = undefined; // make the last card required to be renewal with no date to expire it.
-    //                                                 } else {
-    //                                                     targetOr.planDueDate = thisDueDate;
-    //                                                 }
-
-    //                                                 targetOr.paymentMethod = getPaymentMethod(
-    //                                                     paymentMethodCode
-    //                                                 );
-    //                                                 targetOr.transactionStatus = currStatus;
-    //                                                 // targetOr.renewalHistory.transitionStatus
-    //                                                 targetOr.updatedAt = lastEventDate;
-
-    //                                                 return targetOr;
-    //                                             }
-
-    //                                             return targetOr;
-    //                                         }
-    //                                     );
-
-    //                                     if (isPaid) {
-    //                                         const currPlan = getCurrPlan(
-    //                                             currBizPlanList,
-    //                                             { mainRef }
-    //                                         );
-    //                                         // change status to pro version
-    //                                         data2.clientAdminData.bizPlan = currPlan;
-
-    //                                         // insert services in the bizPlanList
-    //                                         data2.clientAdminData.bizPlanList = setCurrPlan(
-    //                                             currBizPlanList,
-    //                                             orders,
-    //                                             { allPricing, currPlan, usageTimeEnd: thisDueDate, ref: mainRef }
-    //                                         );
-    //                                         // send successful pay notification to user
-    //                                     }
-
-    //                                     data2.clientAdminData.orders = modifiedOrders;
-    //                                     // modifying an array requires we need to manual tell the mongoose the it is modified. All document is updated reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-    //                                     // data2.markModified("clientAdminData");
-    //                                     data2.save((err) => {
-    //                                         res.json({
-    //                                             msg:
-    //                                                 "both agent and cliAdmin updated on db",
-    //                                         });
-    //                                     });
-    //                                 }
-    //                             );
-    //                         });
-
-    //                     });
-    //                 });
-    //             } else {
-    //                 console.log(error);
-    //             }
-    //         });
-    //     })
-    //     .catch((e) => res.json(e.response.data));
-
-GET
-it is no longer needed because pagseguroro reads every transaction ans send notification about them in every transaction change
-const readTransaction = (req, res) => {
-    const { transactionCode } = req.query;
-
-    const params = {
-        email,
-        token,
-    };
-
-    const config = {
-        method: "get",
-        url: `${payUrl}/v2/transactions/${transactionCode}`,
-        params,
-        headers: {
-            "Accept-Charset": "ISO-8859-1",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
-
-    axios(config)
-        .then((response) => {
-            const xml = response.data;
-            convertXmlToJson
-                if (error === null) {
-                    const data = result.transaction;
-
-                    const [status] = data.status;
-                    const [lastEventDate] = data.lastEventDate;
-                    const [paymentMethod] = data.paymentMethod;
-                    const [paymentMethodCode] = paymentMethod.code;
-
-                    res.json({
-                        status,
-                        lastEventDate,
-                        paymentMethodCode,
-                    });
-                } else {
-                    console.log(error);
-                }
-            });
-        })
-        .catch((e) => res.json(e.response.data));
-};
-
-GET
-it is depracated because i already have history stored on db
-const readHistory = (req, res) => {
-    const {
-        reference,
-        initialDate,
-        finalDate,
-        page = 1,
-        maxPageResults = 10,
-    } = req.query;
-
-    const params = {
-        email,
-        token,
-        reference, // * Código de referência da transação. Código informado na criação da transação para fazer referência ao pagamento.
-        initialDate, // Obrigatório:** Se estiver utilizando o finalDate Especifica a data inicial do intervalo de pesquisa. Somente transações criadas a partir desta data serão retornadas. Esta data não pode ser anterior a 6 meses da data corrente. Formato:YYYY-MM-DDThh:mm:ss.sTZD
-        finalDate,
-        page, // O número de resultados retornado pela consulta por código de referência pode ser grande, portanto é possível fazer a paginação dos resultados. A primeira página retornada é 1 e assim por diante. Este parâmetro especifica qual é a página de resultados a ser retornada.
-        maxPageResults, //Número máximo de resultados por página. Para limitar o tamanho da resposta de cada chamada à consulta, é possível especificar um número máximo de resultados por página.
-    };
-
-    const config = {
-        method: "post",
-        url: `${payUrl}/v2/transactions`,
-        data: body,
-        params,
-        headers: {
-            "Accept-Charset": "ISO-8859-1",
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
-};
-*/

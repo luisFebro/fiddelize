@@ -94,8 +94,11 @@ const ordersData = {
     investAmount: String,
     ordersStatement: Object, // n1 e.g { amount: 4, price: 740 }
     transactionStatus: transStatusObj, // set in notification request
-    paymentCategory: { type: String, enum: ["boleto", "crédito", "débito"] },
-    paymentMethod: String, // ??? boleto santander, nomes das bandeiras aqui...
+    paymentMethod: {
+        type: String,
+        enum: ["boleto", "cartão crédito", "débito bancário"],
+    },
+    paymentDetails: String, // boleto santander, nomes das bandeiras aqui...
     planDueDate: Date, // expiration date for the plan
     renewal: RenewalSchema,
     createdAt: { type: Date, default: Date.now }, // timestamps do not work for subdocuments on mondodb...
