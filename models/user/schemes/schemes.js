@@ -93,16 +93,16 @@ const ordersData = {
     reference: String,
     investAmount: String,
     ordersStatement: Object, // n1 e.g { amount: 4, price: 740 }
-    barcode: String,
-    transactionStatus: transStatusObj,
-    paymentLink: String,
+    transactionStatus: transStatusObj, // set in notification request
     paymentCategory: { type: String, enum: ["boleto", "crédito", "débito"] },
-    paymentMethod: String, // boleto santander, nomes das bandeiras aqui...
-    payDueDate: String,
-    planDueDate: Date,
+    paymentMethod: String, // ??? boleto santander, nomes das bandeiras aqui...
+    planDueDate: Date, // expiration date for the plan
     renewal: RenewalSchema,
     createdAt: { type: Date, default: Date.now }, // timestamps do not work for subdocuments on mondodb...
     updatedAt: { type: Date, default: Date.now },
+    payDueDate: String, // only for boleto
+    paymentLink: String, // for eft and boleto only
+    barcode: String, // only for boleto
 };
 const OrdersSchema = new Schema(ordersData, { _id: true });
 // END ORDERS

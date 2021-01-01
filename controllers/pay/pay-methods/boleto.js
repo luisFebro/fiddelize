@@ -1,8 +1,7 @@
-const User = require("../../../models/user/User");
 // const Order = require("../../models/order/Order");
 const axios = require("axios");
 const { email: authEmail } = require("../globalVar");
-
+const setUserOrderInDB = require("./helpers/setUserOrderInDB");
 const FAKE_EMAIL_TEST = "fiddelize.boleto@gmail.com";
 /*
 IMPORTANTE:
@@ -34,15 +33,13 @@ Isso ajuda na a possibilidade de pagar um boleto vencido em qualquer banco ou in
  */
 
 // LESSON: this request can take up to 40s in dev mode.
+
 async function createBoleto(payload) {
-    let {
-        userId = "5e8b0bfc8c616719b01abc9c",
-        paymentCategory = "boleto",
+    const {
         reference = "OU-Q1-A-XXCY94N",
         amount = "299.00",
         numberOfPayments = 1,
         instructions = "Plano ouro  com 1 servico no valor total de: R$ 300.00",
-        description,
         cpf = "43171124262",
         cnpj,
         name = "Febro Feitoza",
@@ -56,9 +53,7 @@ async function createBoleto(payload) {
         state = "SP",
         complement,
         firstDueDate = "2020-12-12",
-        ordersStatement = "{ 'Novvos Membros': { totalPackage: 10, amount: 0, price: 300 } }",
         isRenewal = false,
-        renewal = undefined,
     } = payload;
 
     const params = {
@@ -79,7 +74,7 @@ async function createBoleto(payload) {
     const customerData = {
         name, // Nome completo ou Razão Social do comprador do produto /serviço referente ao boleto gerado.
         phone: { areaCode: phoneAreaCode, number: phoneNumber },
-        // IMPORTANT LESSON: do not use test@analimatest@gmail.com since this is a production shit, use else email. In this case, email is hardcoded and not real cuz i am already sending in the checkout.
+        // IMPORTANT LESSON: do not use test@gmail.com since this is a production shit, use else email. In this case, email is hardcoded and not real cuz i am already sending in the checkout.
         // This was the cause of hours of debugging... One advantage is that now we do not have duplicated emails.
         email: FAKE_EMAIL_TEST,
         document: { type: cpf ? "CPF" : "CNPJ", value: cpf || cnpj },
@@ -112,57 +107,25 @@ async function createBoleto(payload) {
         },
     };
 
-    const response = await axios(config).catch((e) => {
+    const responseBoleto = await axios(config).catch((e) => {
         res.status(500).json(e);
     });
-    if (!response) return;
+    if (!responseBoleto) return;
 
     const { boletos } = response.data;
     const [boletoData] = boletos;
 
-    let dataCliAdmin = {
-        reference,
-        investAmount: (Number(amount) + 1).toFixed(2).toString(), // I discounted R$1, then replacing again to displace the correct price to cliAdmin
-        barcode: boletoData.barcode,
-        paymentCategory,
+    const orderData = {
+        ...payload,
         paymentLink: boletoData.paymentLink,
         payDueDate: boletoData.dueDate,
-        ordersStatement,
-        renewal,
+        barcode: boletoData.barcode,
     };
 
-    const doc = await User("cliente-admin")
-        .findById(userId)
-        .catch((e) => {
-            res.status(500).json(e);
-        });
-    if (!doc) return;
-
-    const orders = doc.clientAdminData.orders;
-
-    if (isRenewal) {
-        const modifiedOrders =
-            orders &&
-            orders.map((serv) => {
-                if (serv.reference === (renewal && renewal.priorRef)) {
-                    serv.renewal = {
-                        ...renewal,
-                        isOldCard: true,
-                    };
-                    return serv;
-                }
-
-                return serv;
-            });
-
-        doc.clientAdminData.orders = [dataCliAdmin, ...modifiedOrders];
-    } else {
-        doc.clientAdminData.orders = [dataCliAdmin, ...orders];
-    }
-
-    // modifying an array requires we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-    doc.markModified("clientAdminData.orders");
-    await doc.save();
+    const responseOrder = await setUserOrderInDB(orderData).catch((err) => {
+        res.status(500).json({ error: err });
+    });
+    if (!responseOrder) return;
 
     return {
         barcode: boletoData.barcode,

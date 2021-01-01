@@ -179,7 +179,7 @@ async function finishCheckout(req, res) {
     const xml = response.data;
 
     const result = await convertXmlToJson(xml);
-    console.log("result", result);
+    // console.log("result", result);
 
     const data = result.transaction;
     const [referenceXml] = data.reference;
@@ -218,7 +218,7 @@ async function finishCheckout(req, res) {
 
     await newOrder.save();
 
-    // PAYLOAD FOR FIDDELIZE SYSTEM
+    // PAYLOAD FOR FIDDELIZE SYSTEM ALL PAYMENT METHODS
     const payload = {
         userId,
         paymentCategory: getPayCategoryType(paymentMethod),
@@ -240,7 +240,7 @@ async function finishCheckout(req, res) {
         priorDaysLeft: renewalDaysLeft,
     };
     payload.renewal = renewalReference ? renewal : undefined;
-    // END PAYLOAD FOR FIDDELIZE SYSTEM
+    // END PAYLOAD FOR FIDDELIZE SYSTEM ALL PAYMENT METHODS
 
     if (paymentMethod === "boleto") {
         const boletoData = await createBoleto(payload);
@@ -267,7 +267,7 @@ async function finishCheckout(req, res) {
 
     if (paymentMethod === "eft") {
         const [paymentLink] = data.paymentLink;
-        // await handleBankDebit
+        await handleBankDebit({ payload, paymentLink });
         return res.json(paymentLink);
     }
 }

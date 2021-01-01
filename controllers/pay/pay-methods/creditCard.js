@@ -1,4 +1,6 @@
 const User = require("../../../models/user/User");
+const setUserOrderInDB = require("./helpers/setUserOrderInDB");
+
 const {
     getCompoundInterest,
     getSuggestPrice,
@@ -21,6 +23,15 @@ exports.handleCreditCard = async ({
         installmentDesc,
         brand,
     };
+
+    const orderData = {
+        ...payload,
+    };
+
+    const responseOrder = await setUserOrderInDB(orderData).catch((err) => {
+        res.status(500).json({ error: err });
+    });
+    if (!responseOrder) return;
 
     return await User("cliente-admin")
         .findByIdAndUpdate(userId, {
