@@ -9,8 +9,8 @@ const handleCredits = ({
     periodicity,
 }) => {
     if (currServ === "Novvos Membros") {
-        const customCredit =
-            currPaidOrder.ordersStatement[currServ].totalPackage;
+        const newMembers = currPaidOrder.ordersStatement["Novvos Membros"];
+        const customCredit = newMembers ? newMembers.totalPackage : 0;
         return customCredit; // handling custom credits added by user like novvos membros which is not in the Pricing DB and thus avoiding adding 888
     }
     return servObj ? servObj[plan].credit[periodicity] : 888;
