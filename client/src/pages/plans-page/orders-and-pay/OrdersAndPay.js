@@ -50,8 +50,8 @@ export default function OrdersAndPay({
         "totalMoney_clientAdmin"
     );
     orders = !orders ? data : orders;
-    plan = !plan ? dataPlan : plan;
-    period = !period ? dataPeriod : period;
+    plan = !plan ? dataPlan || "bronze" : plan;
+    period = !period ? dataPeriod || "yearly" : period;
     orderTotal = !orderTotal ? dataMoney : orderTotal;
 
     useEffect(() => {

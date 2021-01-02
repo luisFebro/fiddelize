@@ -10,6 +10,8 @@ const getPlan = (plan) => {
     if (plan.toLowerCase() === "ouro") return "OU";
     if (plan.toLowerCase() === "prata") return "PR";
     if (plan.toLowerCase() === "bronze") return "BR";
+
+    return "BR";
 };
 
 const getPeriod = (per) => {

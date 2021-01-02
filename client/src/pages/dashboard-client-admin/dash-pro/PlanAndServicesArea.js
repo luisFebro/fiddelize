@@ -43,13 +43,13 @@ export default function PlanAndServicesArea() {
                 {isFree ? (
                     <Fragment>
                         <div className="my-5 text-purple text-subtitle font-weight-bold text-center">
-                            Vamos entrar para o club pro e começar a conquistar
-                            mais clientes?
+                            Comece a investir em serviços da Fiddelize e entre
+                            para o clube
                         </div>
                         <div className="container-center my-5">
                             {getCTABtn(
                                 "/planos?cliente-admin=1",
-                                "Quero entrar",
+                                "Adicionar serviço",
                                 true
                             )}
                         </div>

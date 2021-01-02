@@ -100,12 +100,6 @@ function PanelHiddenContent({ history, data }) {
 
     const showBoletoDetails = (data) => (
         <Fragment>
-            <p className="text-subtitle font-weight-bold text-shadow">
-                • Referência:
-                <span className="d-block text-normal font-weight-bold">
-                    {data.reference}
-                </span>
-            </p>
             {isDuePay ||
                 (data.transactionStatus !== "pago" && (
                     <Fragment>
@@ -151,16 +145,44 @@ function PanelHiddenContent({ history, data }) {
         </Fragment>
     );
 
+    const showBankDebitDetails = (data) => (
+        <section className="mt-4 mb-5 container-center">
+            <a
+                rel="noopener noreferrer"
+                className="no-text-decoration"
+                href={data.paymentLink}
+                target="_blank"
+            >
+                <ButtonFab
+                    position="relative"
+                    size="medium"
+                    title="Acessar Banco"
+                    onClick={null}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant="extended"
+                />
+            </a>
+        </section>
+    );
+
     const showPayDetails = (data) => {
         const payMethod = data.paymentMethod;
         const isBoleto = payMethod === "boleto";
+        const isBankDebit = payMethod === "débito bancário";
 
         return (
             <section className="mt-4 mb-5">
                 <h2 className="mb-2 text-subtitle font-weight-bold text-white text-shadow text-center">
                     Detalhes Transação
                 </h2>
-                {isBoleto && showBoletoDetails(data)}
+                <p className="text-subtitle font-weight-bold text-shadow">
+                    • Referência:
+                    <span className="d-block text-normal font-weight-bold">
+                        {data.reference}
+                    </span>
+                    {isBoleto && showBoletoDetails(data)}
+                    {isBankDebit && showBankDebitDetails(data)}
+                </p>
             </section>
         );
     };

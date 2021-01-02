@@ -51,6 +51,7 @@ const handlePlanDueDate = (
 
 // Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas. Se seu sistema ficou indisponível por um período maior que este e não recebeu nenhum dos envios da notificação, ainda assim é possível obter os dados de suas transações usando a Consulta de Transações.
 // FUCKIN LESSON: Axios serializes JavaScript objects to JSON. To serialize in application/x-www-form-urlencoded format you will need to use one of the techniques described in the Axios documentation.https://github.com/axios/axios#using-applicationx-www-form-urlencoded-format
+// FUCKIN LESSON 2: Changes in this code should be deployed since the payment operator will be running with the deployed version of the app.
 async function getPagNotify(req, res) {
     const { notificationCode } = req.body;
 
@@ -109,7 +110,6 @@ async function getPagNotify(req, res) {
     );
 
     doc.planDueDate = thisDueDate;
-    doc.paymentDetails = "no details";
     doc.updatedAt = lastEventDate;
     doc.transactionStatus = getTransactionStatusTypes(status);
 

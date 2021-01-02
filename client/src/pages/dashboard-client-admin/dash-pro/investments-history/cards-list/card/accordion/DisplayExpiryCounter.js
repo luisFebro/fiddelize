@@ -51,7 +51,10 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
         reference,
         payDueDate,
         renewal,
+        paymentMethod,
     } = panel.data;
+
+    const isBoleto = paymentMethod === "boleto";
 
     const isRenewable =
         (renewal && renewal.priorRef) !== reference &&
@@ -169,7 +172,10 @@ function DisplayExpiryCounter({ history, panel, daysLeft }) {
                 : !isUnlimitedService && (
                       <Fragment>
                           {showDisabled()}
-                          {isDuePay && isRenewable && showExpiredBoleto()}
+                          {isBoleto &&
+                              isDuePay &&
+                              isRenewable &&
+                              showExpiredBoleto()}
                           {daysLeft >= 0 &&
                               isPaid &&
                               !isOldCard &&

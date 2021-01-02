@@ -38,7 +38,6 @@ exports.handleModifiedOrders = ({
             targetOr.planDueDate = thisDueDate;
         }
 
-        targetOr.paymentDetails = "no details";
         targetOr.transactionStatus = currStatus;
         targetOr.updatedAt = lastEventDate;
 

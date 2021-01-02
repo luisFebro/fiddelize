@@ -57,11 +57,23 @@ const getStyles = ({ color, backgroundColor }) => ({
 });
 
 const handleTransactionStatus = ({ panel, daysLeft }) => {
-    let { transactionStatus, payDueDate, renewal, reference } = panel.data;
+    let {
+        paymentMethod,
+        transactionStatus,
+        payDueDate,
+        renewal,
+        reference,
+    } = panel.data;
+    const isBoleto = paymentMethod === "boleto";
 
-    const isDuePay =
-        !isScheduledDate(payDueDate, { isDashed: true }) &&
-        transactionStatus !== "pago"; // for boleto
+    if (isBoleto) {
+        const isDuePay =
+            !isScheduledDate(payDueDate, { isDashed: true }) &&
+            transactionStatus !== "pago"; // for boleto
+        if (isDuePay || (daysLeft === 0 && transactionStatus !== "pendente"))
+            return "EXPIRADO";
+    }
+
     const isPaid =
         transactionStatus === "pago" || transactionStatus === "disponível";
     const isPriorCardRenewal = renewal && renewal.priorRef === reference;
@@ -69,8 +81,6 @@ const handleTransactionStatus = ({ panel, daysLeft }) => {
 
     if (!transactionStatus) return "PENDENTE";
     if (isPaid && !isPriorCardRenewal) return "PAGO";
-    if (isDuePay || (daysLeft === 0 && transactionStatus !== "pendente"))
-        return "EXPIRADO";
 
     if (renewal && (isPaid || transactionStatus === "pendente")) {
         if (isPriorCardRenewal && renewal.isPaid) {

@@ -73,6 +73,8 @@ async function finishCheckout(req, res) {
         itemQuantity1 = 1, // *
         itemAmount1 = "0.00", // * STRING!! ex: 50.00 Decimal, com duas casas decimais separadas por ponto
         extraAmount = "-1.00", // StRING!!!Esse valor pode representar uma taxa extra a ser cobrada no pagamento ou um desconto a ser concedido, caso o valor seja negativo. Especifica um valor extra que deve ser adicionado ou subtraído ao valor total do pagamento. Otimo se precisar oferecer coupos de desconto para o cliente Decimal (positivo ou negativo), com duas casas decimais separadas por ponto (p.e., 1234.56 ou -1234.56), maior ou igual a -9999999.00 e menor ou igual a 9999999.00. Quando negativo, este valor não pode ser maior ou igual à soma dos valores dos produtos.
+        // bank debit
+        bankName,
         // boleto
         firstDueDate = "2020-10-08",
         // credit card
@@ -190,6 +192,21 @@ async function finishCheckout(req, res) {
 
     const currPayMethod = getPayCategoryType(paymentMethod);
 
+    const handlePaymentDetails = () => {
+        if (paymentMethod === "eft") {
+            return `bankName:${bankName};`;
+        }
+
+        if (paymentMethod === "creditCard") {
+            const [gatewaySystem] = data.gatewaySystem[0].type;
+            return `gatewaySystem:${gatewaySystem};`;
+        }
+
+        return "";
+    };
+
+    const paymentDetails = handlePaymentDetails();
+
     const newOrder = new Order({
         reference: referenceXml,
         agentName: "Fiddelize",
@@ -199,6 +216,7 @@ async function finishCheckout(req, res) {
             id: userId,
         },
         paymentMethod: currPayMethod,
+        paymentDetails,
         amount: {
             fee: handleAmounts(feeAmount, extraAmountXml, {
                 op: "+",
@@ -234,6 +252,7 @@ async function finishCheckout(req, res) {
         ordersStatement,
         firstDueDate,
         isRenewal: renewalReference ? true : false,
+        paymentDetails,
     };
 
     const renewal = {

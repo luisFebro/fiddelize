@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from "react";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
 import getSenderHash from "../../../helpers/pagseguro/getSenderHash";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
+import RedirectLink from "../../../../../../components/RedirectLink";
 
 export default function LinkBankDebit({ selectedBank, modalData }) {
     const [data, setData] = useState({
@@ -10,6 +11,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
         error: false,
     });
     const { paymentLink, loading, error } = data;
+    const { handleCancel } = modalData;
 
     useEffect(() => {
         if (!selectedBank) return;
@@ -48,6 +50,8 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                 loading: false,
                 error: false,
             }));
+
+            handleCancel(); // remove current orders
         })();
     }, [selectedBank]);
 
@@ -69,7 +73,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                 </p>
             )}
             {loading && (
-                <p className="my-5 text-purple text-subtitle font-weight-bold mx-3">
+                <p className="my-5 text-center text-purple text-subtitle font-weight-bold mx-3">
                     Gerando link...
                 </p>
             )}
@@ -78,7 +82,10 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                     <p className="mt-3 text-purple text-subtitle font-weight-bold mx-3">
                         Está pronto! Acesse o link do banco abaixo.
                     </p>
-                    <div className="container-center">
+                    <section
+                        className="container-center-col"
+                        style={{ marginBottom: "150px" }}
+                    >
                         <a
                             href={paymentLink}
                             className="no-text-decoration"
@@ -95,7 +102,21 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                                 onClick={null}
                             />
                         </a>
-                    </div>
+                        <div className="mt-3">
+                            <RedirectLink toDashTab="Pro">
+                                <ButtonFab
+                                    size="small"
+                                    title="Ir para Histórico"
+                                    onClick={null}
+                                    backgroundColor={
+                                        "var(--themeSDark--default)"
+                                    }
+                                    variant="extended"
+                                    position="relative"
+                                />
+                            </RedirectLink>
+                        </div>
+                    </section>
                 </Fragment>
             )}
         </section>

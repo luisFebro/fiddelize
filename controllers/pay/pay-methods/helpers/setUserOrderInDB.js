@@ -12,8 +12,9 @@ async function setUserOrderInDB(data = {}) {
         renewal: data.renewal, // default: undefined
         // boleto
         paymentLink: data.paymentLink, // boleto or eft
-        payDueDate: data.dueDate,
+        payDueDate: data.payDueDate,
         barcode: data.barcode,
+        paymentDetails: data.paymentDetails,
     };
 
     const doc = await User("cliente-admin")
