@@ -16,8 +16,12 @@ const {
     handleModifiedOrders,
     handleProSMSCredits,
 } = require("./helpers/transactionHandlers");
-const { getTransactionStatusTypes } = require("./helpers/getTypes");
+const {
+    getTransactionStatusTypes,
+    getPaymentMethodType,
+} = require("./helpers/getTypes");
 const { sendBackendNotification } = require("../notification");
+const handlePaymentDetails = require("./helpers/handlePaymentDetails");
 // real time notification to Fiddelize's system every time a transation's status change like pending to paid.
 /*
 Enquanto seu sistema não receber uma notificação, o PagSeguro irá envia-la novamente a cada 2 horas, até um máximo de 5 tentativas
@@ -84,10 +88,14 @@ async function getPagNotify(req, res) {
     const [status] = data.status;
     const [reference] = data.reference;
     const [lastEventDate] = data.lastEventDate;
-    // check this value...
-    // const [paymentMethod] = data.paymentMethod;
+    // Payment method
+    const [paymentMethodNum] = data.paymentMethod[0].type;
+    const currPayMethod = getPaymentMethodType(paymentMethodNum);
+    // const isCreditCard = paymentMethodNum === "1";
+    // const isBoleto = paymentMethodNum === "2";
+    // const isBankDebit = paymentMethodNum === "3";
+    // End Payment method
 
-    // const currPayMethod = "boleto";
     const currStatus = getTransactionStatusTypes(status);
     const isPaid = getPaidStatus(currStatus);
 
@@ -112,6 +120,12 @@ async function getPagNotify(req, res) {
     doc.planDueDate = thisDueDate;
     doc.updatedAt = lastEventDate;
     doc.transactionStatus = getTransactionStatusTypes(status);
+    doc.paymentDetails = handlePaymentDetails({
+        currPayMethod,
+        currDetails: doc.paymentDetails,
+        escrow: data.escrowEndDate,
+        creditorFees: data.creditorFees[0],
+    });
 
     const payRelease = doc.paymentReleaseDate;
     doc.paymentReleaseDate = payRelease ? payRelease : paymentReleaseDate;
@@ -128,6 +142,7 @@ async function getPagNotify(req, res) {
     });
 
     let orders = adminData.clientAdminData.orders;
+    console.log("orders", JSON.stringify(orders));
     let currBizPlanList = adminData.clientAdminData.bizPlanList;
 
     const modifiedOrders = orders.map((targetOr) => {
@@ -188,3 +203,437 @@ async function getPagNotify(req, res) {
 }
 
 module.exports = getPagNotify;
+
+/* RESPONSE EXAMPLES
+CREDIT CARD - Cartão de crédito (pagamento em 12x)
+{
+    "date": [
+        "2021-01-02T12:50:22.000-03:00"
+    ],
+    "code": [
+        "028496E3-EB96-4484-99CC-0785E0935CE7"
+    ],
+    "reference": [
+        "PR-Q4-A-6KH25KN"
+    ],
+    "type": [
+        "1"
+    ],
+    "status": [
+        "3"
+    ],
+    "lastEventDate": [
+        "2021-01-02T13:33:10.000-03:00"
+    ],
+    "paymentMethod": [
+        {
+            "type": [
+                "1"
+            ],
+            "code": [
+                "101"
+            ]
+        }
+    ],
+    "grossAmount": [
+        "338.00"
+    ],
+    "discountAmount": [
+        "0.00"
+    ],
+    "creditorFees": [
+        {
+            "installmentFeeAmount": [
+                "0.00"
+            ],
+            "intermediationRateAmount": [
+                "0.40"
+            ],
+            "intermediationFeeAmount": [
+                "16.87"
+            ]
+        }
+    ],
+    "netAmount": [
+        "320.73"
+    ],
+    "extraAmount": [
+        "0.00"
+    ],
+    "escrowEndDate": [ // ˈeskrō (Fim data de garantia) - a bond, deed, or other document kept in the custody of a third party and taking effect only when a specified condition has been fulfilled.
+        "2021-01-16T13:33:10.000-03:00"
+    ],
+    "installmentCount": [
+        "12"
+    ],
+    "itemCount": [
+        "1"
+    ],
+    "items": [
+        {
+            "item": [
+                {
+                    "id": [
+                        "123"
+                    ],
+                    "description": [
+                        "Plano bronze anual com  servico no valor total de: R$ 338.00"
+                    ],
+                    "quantity": [
+                        "1"
+                    ],
+                    "amount": [
+                        "338.00"
+                    ]
+                }
+            ]
+        }
+    ],
+    "sender": [
+        {
+            "name": [
+                "Febro Feitoza"
+            ],
+            "email": [
+                "teste@sandbox.pagseguro.com.br"
+            ],
+            "phone": [
+                {
+                    "areaCode": [
+                        "92"
+                    ],
+                    "number": [
+                        "992576121"
+                    ]
+                }
+            ],
+            "documents": [
+                {
+                    "document": [
+                        {
+                            "type": [
+                                "CPF"
+                            ],
+                            "value": [
+                                "43171124262"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "gatewaySystem": [
+        {
+            "type": [
+                "cielo"
+            ],
+            "rawCode": [
+                {
+                    "ATTR": {
+                        "xsi:nil": "true",
+                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+                    }
+                }
+            ],
+            "rawMessage": [
+                {
+                    "ATTR": {
+                        "xsi:nil": "true",
+                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+                    }
+                }
+            ],
+            "normalizedCode": [
+                {
+                    "ATTR": {
+                        "xsi:nil": "true",
+                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+                    }
+                }
+            ],
+            "normalizedMessage": [
+                {
+                    "ATTR": {
+                        "xsi:nil": "true",
+                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+                    }
+                }
+            ],
+            "authorizationCode": [
+                "0"
+            ],
+            "nsu": [
+                "0"
+            ],
+            "tid": [
+                "0"
+            ],
+            "establishmentCode": [
+                "1056784170"
+            ],
+            "acquirerName": [
+                "CIELO"
+            ]
+        }
+    ],
+    "primaryReceiver": [
+        {
+            "publicKey": [
+                "PUB47BC2049F30544A5A0F252FD0BF11672"
+            ]
+        }
+    ]
+}
+
+BANK DEBIT - Débito online (pagamento em 1x)
+{
+    "date": [
+        "2021-01-02T05:14:09.000-03:00"
+    ],
+    "code": [
+        "1FAFB7AB-1639-4283-AA09-FE99B12A8DCF"
+    ],
+    "reference": [
+        "-Q1--V8YJ4D0"
+    ],
+    "recoveryCode": [
+        "7df5a68dd88c50bb3edcb5077f726932813306a6f0a154ac"
+    ],
+    "type": [
+        "1"
+    ],
+    "status": [
+        "1"
+    ],
+    "lastEventDate": [
+        "2021-01-02T05:14:09.000-03:00"
+    ],
+    "paymentMethod": [
+        {
+            "type": [
+                "3"
+            ],
+            "code": [
+                "301"
+            ]
+        }
+    ],
+    "paymentLink": [
+        "https://sandbox.pagseguro.uol.com.br/checkout/payment/eft/print.jhtml?c=031e850192db26452d0762aafd80a92ae8e7b6e891600828fd659e137b7b4c20dfc62d6230b4987d"
+    ],
+    "grossAmount": [
+        "62.00"
+    ],
+    "discountAmount": [
+        "0.00"
+    ],
+    "creditorFees": [
+        {
+            "intermediationRateAmount": [
+                "0.40"
+            ],
+            "intermediationFeeAmount": [
+                "3.09"
+            ]
+        }
+    ],
+    "netAmount": [
+        "58.51"
+    ],
+    "extraAmount": [
+        "0.00"
+    ],
+    "installmentCount": [
+        "1"
+    ],
+    "itemCount": [
+        "1"
+    ],
+    "items": [
+        {
+            "item": [
+                {
+                    "id": [
+                        "123"
+                    ],
+                    "description": [
+                        "Plano pro  com  servico no valor total de: R$ 62.00"
+                    ],
+                    "quantity": [
+                        "1"
+                    ],
+                    "amount": [
+                        "62.00"
+                    ]
+                }
+            ]
+        }
+    ],
+    "sender": [
+        {
+            "name": [
+                "Febro Feitoza"
+            ],
+            "email": [
+                "teste@sandbox.pagseguro.com.br"
+            ],
+            "phone": [
+                {
+                    "areaCode": [
+                        "92"
+                    ],
+                    "number": [
+                        "992576121"
+                    ]
+                }
+            ],
+            "documents": [
+                {
+                    "document": [
+                        {
+                            "type": [
+                                "CPF"
+                            ],
+                            "value": [
+                                "43171124262"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "primaryReceiver": [
+        {
+            "publicKey": [
+                "PUB47BC2049F30544A5A0F252FD0BF11672"
+            ]
+        }
+    ]
+}
+
+BOLETO
+{
+    "date": [
+        "2021-01-02T19:06:04.000-03:00"
+    ],
+    "code": [
+        "2A319101-D9C5-4C09-95F5-BB7F17C6F172"
+    ],
+    "reference": [
+        "BR-Q1-A-KKB0H0Z"
+    ],
+    "type": [
+        "1"
+    ],
+    "status": [
+        "1"
+    ],
+    "lastEventDate": [
+        "2021-01-02T19:06:08.000-03:00"
+    ],
+    "paymentMethod": [
+        {
+            "type": [
+                "2"
+            ],
+            "code": [
+                "202"
+            ]
+        }
+    ],
+    "paymentLink": [
+        "https://sandbox.pagseguro.uol.com.br/checkout/payment/booklet/print.jhtml?c=348ff314947a8117712e8df1da6f78a055156a72528bdd790345e529768e1e9c5d8ede577944f937"
+    ],
+    "grossAmount": [
+        "299.00"
+    ],
+    "discountAmount": [
+        "0.00"
+    ],
+    "creditorFees": [
+        {
+            "intermediationRateAmount": [
+                "0.40"
+            ],
+            "intermediationFeeAmount": [
+                "14.92"
+            ]
+        }
+    ],
+    "netAmount": [
+        "283.68"
+    ],
+    "extraAmount": [
+        "-1.00"
+    ],
+    "installmentCount": [
+        "1"
+    ],
+    "itemCount": [
+        "1"
+    ],
+    "items": [
+        {
+            "item": [
+                {
+                    "id": [
+                        "123"
+                    ],
+                    "description": [
+                        "Plano bronze anual com  servico no valor total de: R$ 300.00"
+                    ],
+                    "quantity": [
+                        "1"
+                    ],
+                    "amount": [
+                        "300.00"
+                    ]
+                }
+            ]
+        }
+    ],
+    "sender": [
+        {
+            "name": [
+                "Febro Feitoza"
+            ],
+            "email": [
+                "teste.fiddelize@sandbox.pagseguro.com.br"
+            ],
+            "phone": [
+                {
+                    "areaCode": [
+                        "92"
+                    ],
+                    "number": [
+                        "992576121"
+                    ]
+                }
+            ],
+            "documents": [
+                {
+                    "document": [
+                        {
+                            "type": [
+                                "CPF"
+                            ],
+                            "value": [
+                                "31968323414"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "primaryReceiver": [
+        {
+            "publicKey": [
+                "PUB47BC2049F30544A5A0F252FD0BF11672"
+            ]
+        }
+    ]
+}
+ */

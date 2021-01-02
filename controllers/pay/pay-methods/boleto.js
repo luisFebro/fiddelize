@@ -34,7 +34,7 @@ Isso ajuda na a possibilidade de pagar um boleto vencido em qualquer banco ou in
 
 // LESSON: this request can take up to 40s in dev mode.
 
-async function createBoleto(payload) {
+async function createBoleto(payload, { senderEmail }) {
     const {
         reference = "OU-Q1-A-XXCY94N",
         amount = "299.00",
@@ -75,8 +75,8 @@ async function createBoleto(payload) {
         name, // Nome completo ou Razão Social do comprador do produto /serviço referente ao boleto gerado.
         phone: { areaCode: phoneAreaCode, number: phoneNumber },
         // IMPORTANT LESSON: do not use test@gmail.com since this is a production shit, use else email. In this case, email is hardcoded and not real cuz i am already sending in the checkout.
-        // This was the cause of hours of debugging... One advantage is that now we do not have duplicated emails.
-        email: FAKE_EMAIL_TEST,
+        // This was the cause of hours of debugging... FAKE_EMAIL works to avoid duplicate, but on the other hand, all customers email has this email which is not possible to distinguish in the email sent by Pagseguro.
+        email: senderEmail,
         document: { type: cpf ? "CPF" : "CNPJ", value: cpf || cnpj },
         address: addressData, //Dados de endereço do comprador, Os dados de endereço são opcionais, porém a partir do momento que o elemento address é informado, todos os sub-parâmetros dele são obrigatórios.
     };
@@ -107,8 +107,8 @@ async function createBoleto(payload) {
         },
     };
 
-    const responseBoleto = await axios(config).catch((e) => {
-        res.status(500).json(e);
+    const responseBoleto = await axios(config).catch((err) => {
+        console.log(err.response.data);
     });
     if (!responseBoleto) return;
 

@@ -71,7 +71,7 @@ export default function getAPI({
                 reject(error.response.data);
             }
 
-            reject(error);
+            reject(error.response.data);
         }
     };
 

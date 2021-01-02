@@ -117,8 +117,9 @@ export default function BriefAndValue({
         installmentOpts: null,
         selectedInsta: "selecione parcela:",
         loadingInvest: false,
+        errorInvest: false,
     });
-    const { installmentOpts, selectedInsta, loadingInvest } = data;
+    const { installmentOpts, selectedInsta, loadingInvest, errorInvest } = data;
 
     const dispatch = useStoreDispatch();
 
@@ -148,7 +149,7 @@ export default function BriefAndValue({
     }, [selectedInsta]);
 
     useEffect(() => {
-        if (brand && amount) {
+        if (amount) {
             (async () => {
                 const installments = await getInstallments({
                     brand,
@@ -300,7 +301,7 @@ export default function BriefAndValue({
 
     // LESSON: fucking important lesson: watch out for the order of result in the list, they can be misput and sometimes the result be hard to track like finding why the credit token id is returning invalid...
     const handleInvestConclusion = async () => {
-        setData({ ...data, loadingInvest: true });
+        setData({ ...data, loadingInvest: true, errorInvest: false });
         const [senderHash, cardToken] = await getFinalTokens({
             cardData: mainData,
             dispatch,
@@ -317,6 +318,7 @@ export default function BriefAndValue({
             modalData,
             creditCardToken: cardToken,
             noInterestInstallmentQuantity: MAX_INSTALLMENT_NO_INTEREST,
+            installmentTotalAmount, // for installment handling
             installmentQuantity: mainData.installmentQuantity || "1",
             installmentValue: mainData.amountPerInstallment
                 ? Number(mainData.amountPerInstallment).toFixed(2).toString()
@@ -326,12 +328,14 @@ export default function BriefAndValue({
             cc: encryptedCC,
             oneClickInvest: mainData.oneClickInvest,
             brand,
-        }).catch((e) => {
-            setData({ ...data, loadingInvest: false });
-            console.log(e);
+        }).catch((err) => {
+            console.log(err);
         });
 
-        if (!dataCheckout) return;
+        if (!dataCheckout) {
+            setData({ ...data, loadingInvest: false, errorInvest: true });
+            return;
+        }
         await setData({ ...data, loadingInvest: false });
         setCurrComp("successfulCCPay");
         handleCancel(); // remove current orders
@@ -369,6 +373,12 @@ export default function BriefAndValue({
             </section>
         );
 
+    const showError = () => (
+        <p className="text-red font-weight-bold text-subtitle mx-3 my-3">
+            Um erro ocorreu ao finalizar transação. Tente novamente.
+        </p>
+    );
+
     return (
         <section
             className="position-relative"
@@ -394,6 +404,7 @@ export default function BriefAndValue({
                 </div>
                 {showPayMethods()}
                 {showOneClickInvest()}
+                {errorInvest && showError()}
                 {showFinalInvestBtn()}
             </section>
         </section>

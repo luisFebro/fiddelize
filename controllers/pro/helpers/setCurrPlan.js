@@ -1,7 +1,13 @@
 const getReferenceData = require("./getReferenceData");
 
 // HANDLING CREDITS
-const handleCredits = ({ currServ, servObj, currPaidOrder }) => {
+const handleCredits = ({
+    currServ,
+    servObj,
+    currPaidOrder,
+    plan,
+    periodicity,
+}) => {
     if (currServ === "Novvos Membros") {
         const customCredit =
             currPaidOrder.ordersStatement[currServ].totalPackage;
@@ -27,6 +33,8 @@ const handleCreditEnd = ({
         currServ,
         servObj: foundServicePriceDoc,
         currPaidOrder,
+        plan,
+        periodicity,
     });
 };
 
@@ -80,6 +88,8 @@ const getAllPlanPackage = ({
             currServ,
             servObj: serv,
             currPaidOrder,
+            plan,
+            periodicity,
         });
 
         return getNewService({
@@ -131,6 +141,8 @@ const setVirginBizPlanList = ({
                 currServ,
                 servObj: foundServicePriceDoc,
                 currPaidOrder,
+                plan,
+                periodicity,
             });
 
             return getNewService({
@@ -208,6 +220,8 @@ function setCurrPlan(currBizPlanList, orders, options = {}) {
                 currServ,
                 servObj: foundServicePriceDoc,
                 currPaidOrder,
+                plan,
+                periodicity,
             });
 
             const lastRenewalHistory = serv ? serv.renewalHistory : [];

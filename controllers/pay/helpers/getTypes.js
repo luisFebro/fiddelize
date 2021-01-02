@@ -24,6 +24,11 @@ exports.getTransactionStatusTypes = (codeNum) => {
 // 4   Saldo PagSeguro: o comprador optou por pagar a transação utilizando o saldo de sua conta PagSeguro.
 // 5   Oi Paggo *: o comprador escolheu pagar sua transação através de seu celular Oi.
 // 7   Depósito em conta: o comprador optou por fazer um depósito na conta corrente do PagSeguro. Ele precisará ir até uma agência bancária, fazer o depósito, guardar o comprovante e retornar ao PagSeguro para informar os dados do pagamento. A transação será confirmada somente após a finalização deste processo, que pode levar de 2 a 13 dias úteis.
+exports.getPaymentMethodType = (codeNum) => {
+    if (codeNum === "1") return "cartão crédito";
+    if (codeNum === "2") return "boleto";
+    if (codeNum === "3") return "débito bancário";
+};
 
 // 6. Código identificador do meio de pagamento.
 // 101 Cartão de crédito Visa.

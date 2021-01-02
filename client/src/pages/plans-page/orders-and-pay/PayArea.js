@@ -82,7 +82,7 @@ export default function PayArea({
             setAlreadyReadUser(true);
             const thisBirthDay = res.data.birthday;
             let thisCPF = res.data.cpf;
-            if (thisCPF === "111.111.111-11") thisCPF = "431.711.242-62"; // for testing only
+            if (thisCPF === "111.111.111-11") thisCPF = "319.683.234-14"; // for testing only
 
             let desc = `Plano ${plan} ${handlePeriod()} com ${
                 servicesTotal ? servicesTotal : ""

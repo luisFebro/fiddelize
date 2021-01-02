@@ -11,6 +11,7 @@ import { setVar } from "../../../../../../../hooks/storage/useVar";
 import { withRouter } from "react-router-dom";
 import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
+import extractStrData from "../../../../../../../utils/string/extractStrData";
 
 const AsyncOrdersTableContent = Load({
     loader: () =>
@@ -165,10 +166,25 @@ function PanelHiddenContent({ history, data }) {
         </section>
     );
 
+    const showCreditCardDetails = (data) => {
+        const { paymentDetails } = data;
+        const { installmentDesc } = extractStrData(paymentDetails);
+
+        return (
+            <section className="mt-4">
+                <p class="text-normal font-weight-bold text-white text-shadow text-left">
+                    • Investimento {installmentDesc}
+                </p>
+            </section>
+        );
+    };
+
     const showPayDetails = (data) => {
         const payMethod = data.paymentMethod;
+
         const isBoleto = payMethod === "boleto";
         const isBankDebit = payMethod === "débito bancário";
+        const isCreditCard = payMethod === "cartão crédito";
 
         return (
             <section className="mt-4 mb-5">
@@ -182,6 +198,7 @@ function PanelHiddenContent({ history, data }) {
                     </span>
                     {isBoleto && showBoletoDetails(data)}
                     {isBankDebit && showBankDebitDetails(data)}
+                    {isCreditCard && showCreditCardDetails(data)}
                 </p>
             </section>
         );

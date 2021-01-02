@@ -81,6 +81,7 @@ async function finishCheckout(req, res) {
         installmentQuantity, // * Quantidade de parcelas escolhidas pelo cliente. Formato: Um inteiro entre 1 e 18.
         installmentValue, // * Se uma parcela, valor inteiro da compra. Valor das parcelas obtidas no serviço de opções de parcelamento. Formato: Numérico com 2 casas decimais e separado por ponto.
         noInterestInstallmentQuantity, // * Quantidade de parcelas sem juros oferecidas ao cliente. O valor deve ser o mesmo indicado no método getInstallments, no parâmetro maxInstallmentNoInterest.
+        installmentTotalAmount, // only for fiddelize system to set the actual total amount for transactions having installments
         creditCardToken, // * token with credit number, expiring date mm/yy, cvv {creditCard_token_obtido_no_passo_2.6}
         creditCardHolderName, // * Nome impresso no cartão de crédito. Formato: min = 1, max = 50 caracteres.
         creditCardHolderCPF, // * 22111944785 Um número de 11 dígitos para CPF ou 14 dígitos para CNPJ (senderCNPJ)
@@ -199,7 +200,7 @@ async function finishCheckout(req, res) {
 
         if (paymentMethod === "creditCard") {
             const [gatewaySystem] = data.gatewaySystem[0].type;
-            return `gatewaySystem:${gatewaySystem};`;
+            return `gatewaySystem:${gatewaySystem};installmentDesc:${installmentDesc};`;
         }
 
         return "";
@@ -243,7 +244,7 @@ async function finishCheckout(req, res) {
         userId,
         paymentMethod: currPayMethod,
         reference: referenceXml,
-        amount: grossAmount,
+        amount: installmentTotalAmount || grossAmount,
         instructions: itemDescription1,
         cpf: senderCPF,
         name: senderName,
@@ -264,15 +265,17 @@ async function finishCheckout(req, res) {
     // END PAYLOAD FOR FIDDELIZE SYSTEM ALL PAYMENT METHODS
 
     if (paymentMethod === "boleto") {
-        const boletoData = await createBoleto(payload).catch((e) => {
-            console.log(e);
-        });
+        const boletoData = await createBoleto(payload, { senderEmail }).catch(
+            (e) => {
+                res.status(400).json({ error: e });
+            }
+        );
         if (!boletoData) return;
         return res.json(boletoData);
     }
 
     if (paymentMethod === "creditCard") {
-        console.log(data.gatewaySystem);
+        // console.log(data.gatewaySystem);
         const [gatewaySystem] = data.gatewaySystem[0].type;
 
         await handleCreditCard({

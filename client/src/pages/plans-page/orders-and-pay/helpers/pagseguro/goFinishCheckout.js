@@ -43,7 +43,7 @@ export default async function goFinishCheckout(props) {
         itemId: reference,
         senderName: userName,
         senderEmail: sandboxMode
-            ? `teste@sandbox.pagseguro.com.br`
+            ? `teste.fiddelize@sandbox.pagseguro.com.br`
             : senderEmail,
         senderCPF,
         senderAreaCode,
@@ -69,6 +69,7 @@ export default async function goFinishCheckout(props) {
         installmentQuantity: props.installmentQuantity,
         installmentValue: props.installmentValue,
         installmentDesc: props.installmentDesc, // only for fiddelize system
+        installmentTotalAmount: props.installmentTotalAmount, // only for fiddelize since the total amount should the original value, otherwise PagSeguro will thrown an errow as an invalid value
         creditCardHolderName: props.creditCardHolderName,
         cc: props.cc,
         oneClickInvest: isCreditCard ? props.oneClickInvest : undefined,
@@ -84,14 +85,26 @@ export default async function goFinishCheckout(props) {
         body,
         trigger: true,
         timeout: 60000,
-    }).catch((err) => err);
+    }).catch((err) => {
+        console.log(err);
+        return err;
+    });
 }
 
-/*
+/* ARCHIVES
 trigger: renewalReady &&
          senderCPF &&
          ordersStatement &&
          senderHash &&
          selectedMethod &&
          userName !== "...",
+
+const handleItemAmount = () => {
+    return itemAmount;
+    const isInstallment = Number(props.installmentQuantity) > 1;
+    if(isCreditCard && isInstallment) {
+        return ;
+    }
+
+}
  */
