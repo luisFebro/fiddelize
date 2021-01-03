@@ -170,7 +170,7 @@ export default function AsyncCardsList() {
                             })}
                         </span>
                         <br />
-                        <span className="main-font text-em-1 font-weight-bold">
+                        <span className="main-font d-inline-block mt-3 text-em-1 font-weight-bold">
                             via {paymentMethod}.
                         </span>
                     </p>

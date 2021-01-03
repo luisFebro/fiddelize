@@ -76,7 +76,9 @@ async function getPagNotify(req, res) {
     };
 
     const response = await axios(config).catch((e) => {
-        res.json(e);
+        res.status(400).json(
+            `${e.response.data}. IMPORTANT: sandbox should be on production for testing...`
+        );
     });
     if (!response) return;
     const xml = response.data;
