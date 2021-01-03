@@ -5,7 +5,7 @@ const { IS_PROD } = require("../../config");
 // if sandboxMode is on, then production status transaction change will return with error 404 or 500
 
 // Disable it when testing is no longer made.
-const forceSandboxOnProduction = true; // if not activated, then requests will return (Request failed with status code 404) because is not from production.
+const forceSandboxOnProduction = false; // if not activated, then requests will return (Request failed with status code 404) because is not from production.
 
 const handleMode = () => {
     if (forceSandboxOnProduction) return true;
