@@ -89,10 +89,6 @@ function AsyncAddSMSContent({
 
     const showCTA = () => (
         <section className="my-5 container-center">
-            <p className="mx-3 mb-5 text-purple text-left text-subtitle font-weight-bold m-0">
-                {userName}, preparado(a) para ganhar novos superpoderes de
-                comunicação?
-            </p>
             <ButtonFab
                 size="large"
                 title="Adicionar"

@@ -8,7 +8,6 @@ import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
 import ServicesCard from "./sessions/services/ServicesCard";
 import AddClientsToCart from "./sessions/AddClientsToCart";
 import AddSMS from "./sessions/AddSMS";
-import OffplanServices from "./sessions/services/offplan/OffplanServices";
 import getServices from "./sessions/services/getServices";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
@@ -166,12 +165,6 @@ export default function SilverPlan({ setCurrPlan }) {
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}
-                    />
-
-                    <OffplanServices
-                        handleNewOrder={handleNewOrder}
-                        plan="silver"
-                        period={period}
                     />
 
                     <TotalInvest

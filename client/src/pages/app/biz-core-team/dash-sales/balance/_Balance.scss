@@ -1,0 +1,23 @@
+.biz-team-balance--root {
+    position: relative;
+    margin: 1rem 0.8rem;
+    padding: 15px;
+    border-radius: 25px;
+    background-color: var(--themeP);
+
+    & > * {
+        color: var(--lightGreen);
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .biz-team-balance--root {
+        margin: 1rem 8rem;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .biz-team-balance--root {
+        margin: 1rem 12rem;
+    }
+}

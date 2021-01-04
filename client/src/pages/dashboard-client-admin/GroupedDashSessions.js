@@ -1,6 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import isSmallScreen from "../../utils/isSmallScreen";
 // material-ui
 import TabSessions from "../../components/tabs/TabSessions";
 // Icons from Tabs

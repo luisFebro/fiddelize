@@ -6,9 +6,11 @@
     --mainBrown: #795548;
     --mainOrange: #ffb300;
     --expenseRed: #ff4757;
-    --lightGrey: #CAD3C8;
-    --mainGreen: #4cd137;
+    --lightGrey: #cad3c8;
+    --mainGreen: #4cd137; /* download progress */
     --incomeGreen: #2ecc71;
+    --lightGreen: #90ee90;
+    --strongGreen: #04ff00eb;
     --mainBlue: #2a2a72;
     --darkBlue: #2c3e50;
     --lightBlue: #009ffd;
@@ -56,6 +58,10 @@
 
 .text-green {
     color: var(--mainGreen);
+}
+
+.text-strong-green {
+    color: var(--strongGreen) !important;
 }
 
 .text-income-green {

@@ -199,8 +199,8 @@ async function finishCheckout(req, res) {
         }
 
         if (paymentMethod === "creditCard") {
-            const [gatewaySystem] = data.gatewaySystem[0].type;
-            return `gatewaySystem:${gatewaySystem};installmentDesc:${installmentDesc};`;
+            // const [gatewaySystem] = data.gatewaySystem[0].type;
+            return `installmentDesc:${installmentDesc};`;
         }
 
         return "";

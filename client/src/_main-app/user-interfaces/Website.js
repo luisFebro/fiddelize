@@ -36,6 +36,7 @@ import {
     AsyncPasswordPage,
     AsyncTeamPassword,
     AsyncTeamApp,
+    AsyncBizTeam,
     AsyncVirtualCard,
     AsyncScorePanel,
 } from "./CommonImports";
@@ -129,6 +130,11 @@ function Website({ location, history }) {
                     component={AsyncNewPassword}
                 />
                 <Route path="/t/app/equipe" exact component={AsyncTeamApp} />
+                <Route
+                    path="/t/app/equipe/nucleo-equipe"
+                    exact
+                    component={AsyncBizTeam}
+                />
                 <Route
                     path="/cartao-virtual"
                     exact

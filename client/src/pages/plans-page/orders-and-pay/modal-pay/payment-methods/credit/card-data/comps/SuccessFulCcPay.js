@@ -37,12 +37,21 @@ function SuccessFulCcPay({ history, setMainData }) {
                 width="200px"
                 alt="cartão aprovado"
             />
-            <p className="text-subtitle text-p mx-3 my-3 font-weight-bold">
+            <p className="text-subtitle text-p mx-3 font-weight-bold">
                 Cartão aprovado!
                 <br />
-                Os serviços investidos já estão disponíveis.
+                Os serviços investidos estarão disponíveis em instantes.
             </p>
-            <div className="container-center">
+            <p className="text-small text-p my-3 font-weight-bold">
+                - Caso os serviços não fiquem disponíveis em até 15 minutos,
+                saia da sua conta e entre novamente.
+            </p>
+            <div
+                className="container-center"
+                style={{
+                    marginBottom: "150px",
+                }}
+            >
                 <ButtonFab
                     title="Finalizar"
                     size="large"

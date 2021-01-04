@@ -18,7 +18,6 @@ BANCO_BRASIL - https://mpag.bb.com.br/site/mpag/
 mobile friendly - no
 
 BRADESCO - no working internal server error
-mobile friendly -
  */
 
 export default function AsyncDebit({ modalData }) {

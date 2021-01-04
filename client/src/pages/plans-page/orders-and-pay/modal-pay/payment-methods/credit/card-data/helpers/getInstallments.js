@@ -1,7 +1,7 @@
 const MAX_INSTALLMENT_NO_INTEREST = 2;
 
 export { MAX_INSTALLMENT_NO_INTEREST };
-export default function getInstallments({ amount, brand = "visa" }) {
+export default async function getInstallments({ amount, brand = "visa" }) {
     const PagSeguro = window.PagSeguroDirectPayment;
 
     const run = (resolve, reject) => {

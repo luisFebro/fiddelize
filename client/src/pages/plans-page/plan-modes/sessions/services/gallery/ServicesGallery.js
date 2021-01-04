@@ -4,11 +4,6 @@ import getServices from "../getServices";
 
 export default function ServicesGallery({ handleNewOrder, period }) {
     const list = getServices("pro", { plan: "bronze" }).map((service) => {
-        // const servPrice = getProPrice(service.devGrade, service.resGrade, {
-        //     plan: "bronze",
-        //     period,
-        // });
-
         const serviceData = {
             serviceName: service.name,
             servicePrice: service.price[period],

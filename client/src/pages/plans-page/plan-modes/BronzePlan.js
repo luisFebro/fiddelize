@@ -11,7 +11,6 @@ import { useStoreDispatch } from "easy-peasy";
 import AddClientsToCart from "./sessions/AddClientsToCart";
 import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
 import AddSMS from "./sessions/AddSMS";
-import OffplanServices from "./sessions/services/offplan/OffplanServices";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
 const AsyncOrdersAndPay = Load({
@@ -156,11 +155,6 @@ export default function BronzePlan({ setCurrPlan }) {
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}
                         top={-80}
-                    />
-                    <OffplanServices
-                        handleNewOrder={handleNewOrder}
-                        plan="bronze"
-                        period={period}
                     />
 
                     <TotalInvest

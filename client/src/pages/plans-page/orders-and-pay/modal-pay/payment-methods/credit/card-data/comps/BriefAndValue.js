@@ -149,19 +149,17 @@ export default function BriefAndValue({
     }, [selectedInsta]);
 
     useEffect(() => {
-        if (amount) {
-            (async () => {
-                const installments = await getInstallments({
-                    brand,
-                    amount,
-                }).catch((e) => {
-                    console.log(e);
-                });
-                if (!installments) return;
+        (async () => {
+            const installments = await getInstallments({
+                brand,
+                amount,
+            }).catch((e) => {
+                console.log(e);
+            });
+            if (!installments) return;
 
-                setData((prev) => ({ ...prev, installmentOpts: installments }));
-            })();
-        }
+            setData((prev) => ({ ...prev, installmentOpts: installments }));
+        })();
     }, [brand, amount]);
 
     const handleSwitch = (res) => {

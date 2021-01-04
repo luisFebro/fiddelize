@@ -10,7 +10,6 @@ import getServices from "./sessions/services/getServices";
 import ServicesCard from "./sessions/services/ServicesCard";
 import AddClientsToCart from "./sessions/AddClientsToCart";
 import AddSMS from "./sessions/AddSMS";
-import OffplanServices from "./sessions/services/offplan/OffplanServices";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
 const AsyncOrdersAndPay = Load({
@@ -167,11 +166,6 @@ export default function GoldPlan({ setCurrPlan }) {
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}
-                    />
-                    <OffplanServices
-                        handleNewOrder={handleNewOrder}
-                        plan="gold"
-                        period={period}
                     />
 
                     <TotalInvest

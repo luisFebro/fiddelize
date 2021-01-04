@@ -40,12 +40,21 @@ export const AsyncFixDatePage = Load({
         ),
 });
 
+// APPS
+export const AsyncBizTeam = Load({
+    loader: () =>
+        import(
+            "../../pages/app/biz-core-team/BizTeamApp" /* webpackChunkName: "biz-core-team-app-lazy" */
+        ),
+});
+
 export const AsyncTeamApp = Load({
     loader: () =>
         import(
             "../../pages/app/team/TeamApp" /* webpackChunkName: "team-app-lazy" */
         ),
 });
+// END APPS
 
 // CLIENT APP
 export const AsyncVirtualCard = Load({

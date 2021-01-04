@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box !important; // this prevent gallery to be initialized as one column only
+}
+*,
+:before,
+:after {
+    box-sizing: border-box !important;
+}
+
+.bank-card--root {
+    border-color: transparent;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+
+    & .img-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    // https://stackoverflow.com/questions/37287153/how-to-get-images-in-bootstraps-card-to-be-the-same-height-width
+    & .img-container > img {
+        flex-shrink: 0;
+        width: 100%;
+        height: 35vw;
+        object-fit: contain; // container - full image with limit height
+    }
+
+    @media screen and (min-width: 768px) {
+        & .img-container > img {
+            height: 20vw;
+            // object-fit: cover; // cover - image is slightly cut to fit
+        }
+    }
+
+    & .card-footer {
+        padding: 0.25rem !important;
+        color: var(--themeP);
+    }
+
+    & .card-footer > .desc {
+        height: 3em; // default 4em; for shorter desc like names just 2em
+        overflow: hidden;
+        font: normal 1.3rem var(--mainFont), sans-serif;
+        line-height: 25px;
+    }
+
+    & .card-footer > div {
+        margin: 1rem 0;
+    }
+}

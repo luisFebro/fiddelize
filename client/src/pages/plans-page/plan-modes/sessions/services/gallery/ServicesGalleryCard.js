@@ -5,6 +5,7 @@ import RemoveIcon from "@material-ui/icons/Remove";
 import PremiumButton from "../../../../../../components/buttons/premium/PremiumButton";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import "./_ServicesGalleryCard.scss";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -14,24 +15,12 @@ const muStyle = {
 };
 
 const getStyles = () => ({
-    card: {
-        maxWidth: 228,
-        overflow: "visible",
-    },
     titleContainer: {
         height: isSmall ? "60px" : "80px",
     },
     imgContainer: {
         position: "relative",
         overflow: "hidden",
-    },
-    descContainer: {
-        height: isSmall ? "7em" : "5em",
-        overflow: "hidden",
-    },
-    descTxt: {
-        font: "normal 1.3rem Poppins, sans-serif",
-        lineHeight: "25px",
     },
     addCardBtn: {
         bottom: -10,
@@ -70,38 +59,28 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
     };
 
     const showTitle = () => (
-        <section style={styles.titleContainer}>
-            <p
-                className={`${
-                    selected ? "text-white" : "text-purple"
-                } d-flex justify-content-center align-items-center mb-0 mx-2 pt-3 text-normal text-center font-weight-bold`}
-            >
-                {serviceName}
-            </p>
-        </section>
+        <p
+            style={styles.titleContainer}
+            className={`${
+                selected ? "text-white" : "text-purple"
+            } d-flex justify-content-center align-items-center mb-0 mx-2 pt-3 text-normal text-center font-weight-bold`}
+        >
+            {serviceName}
+        </p>
     );
 
     const showServiceIcon = () => (
-        <section
-            className="p-1 p-sm-3 my-3 mx-auto container-center"
-            style={styles.imgContainer}
-        >
-            <img
-                className="img-fluid"
-                width={100}
-                src={serviceIcon}
-                alt="serviço varejo"
-            />
+        <section className="p-1 p-sm-3 img-container">
+            <img src={serviceIcon} alt="serviço varejo" />
         </section>
     );
 
     const showDesc = () => (
-        <div style={styles.descContainer}>
+        <div className="card-footer">
             <p
                 className={`${
                     selected ? "text-white" : "text-purple"
-                } text-left mx-2 mt-2`}
-                style={styles.descTxt}
+                } desc m-0`}
             >
                 {truncateWords(serviceDesc, 40)}
             </p>
@@ -122,7 +101,7 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
         <div
             className={`${
                 selected ? "text-white text-shadow" : "text-purple"
-            } text-left p-3 font-weight-bold text-normal`}
+            } p-1 font-weight-bold text-normal`}
         >
             {servicePriceReal}
         </div>
@@ -164,8 +143,8 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
 
     return (
         <section className="mb-5 col-6 col-md-4 col-lg-3 mx-auto">
-            <div
-                className="shadow-babadoo position-relative"
+            <section
+                className="shadow-babadoo grid-card--root"
                 style={{
                     ...styles.card,
                     background: selected ? "var(--themePLight)" : "#fff",
@@ -177,7 +156,7 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
                 {showPremiumBtn()}
                 {showPrice()}
                 {showAddCartBtn()}
-            </div>
+            </section>
         </section>
     );
 }

@@ -1,3 +1,9 @@
+/*
+Since the result of using the box-sizing: border-box; is so much better, many developers want all elements on their pages to work this way.
+this breaks some components such as fields. box-sizing should be inherit isntead
+https://www.w3schools.com/css/css3_box-sizing.asp
+ */
+
 * {
     box-sizing: inherit;
 }

@@ -3,6 +3,8 @@ import getFilterDate from "../../../../../utils/dates/getFilterDate";
 
 const filter = getFilterDate();
 
+const testValue = undefined; // IMPORTANT: set this to undefined after testing
+
 export default async function goFinishCheckout(props) {
     // common data
     const { selectedMethod, senderHash, modalData } = props;
@@ -48,7 +50,7 @@ export default async function goFinishCheckout(props) {
         senderCPF,
         senderAreaCode,
         senderPhone,
-        itemAmount1: itemAmount,
+        itemAmount1: testValue || itemAmount,
         itemDescription1: `${itemDescription
             .replace(/ç/gi, "c")
             .replace("null", "pro")}R$ ${itemAmount}`,
@@ -67,14 +69,18 @@ export default async function goFinishCheckout(props) {
         noInterestInstallmentQuantity: props.noInterestInstallmentQuantity,
         creditCardToken: props.creditCardToken,
         installmentQuantity: props.installmentQuantity,
-        installmentValue: props.installmentValue,
+        installmentValue: testValue || props.installmentValue,
         installmentDesc: props.installmentDesc, // only for fiddelize system
         installmentTotalAmount: props.installmentTotalAmount, // only for fiddelize since the total amount should the original value, otherwise PagSeguro will thrown an errow as an invalid value
-        creditCardHolderName: props.creditCardHolderName,
+        creditCardHolderName:
+            props.creditCardHolderName &&
+            props.creditCardHolderName.toLowerCase(),
         cc: props.cc,
         oneClickInvest: isCreditCard ? props.oneClickInvest : undefined,
         creditCardHolderBirthDate: isCreditCard ? senderBirthday : undefined,
         creditCardHolderCPF: isCreditCard ? senderCPF : undefined,
+        creditCardHolderAreaCode: isCreditCard ? senderAreaCode : undefined,
+        creditCardHolderPhone: isCreditCard ? senderPhone : undefined,
         brand: props.brand,
     };
 

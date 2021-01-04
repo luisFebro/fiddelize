@@ -1,5 +1,6 @@
 import React from "react";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import "./_BankCard.scss";
 
 export default function BankCard({ data, setMainData }) {
     const { name, displayName } = data;
@@ -10,9 +11,7 @@ export default function BankCard({ data, setMainData }) {
             variant="extended"
             size="small"
             backgroundColor="var(--default)"
-            position="absolute"
-            bottom={-20}
-            left={0}
+            position="relative"
             backgroundColor={`var(--themeSDark--default)`}
             onClick={() => {
                 setMainData((prev) => ({
@@ -24,28 +23,31 @@ export default function BankCard({ data, setMainData }) {
         />
     );
 
+    const showFooter = () => (
+        <section className="card-footer">
+            <p className="desc font-weight-bold">{displayName}</p>
+            <div className="container-center">
+                {showCTA(name.toUpperCase())}
+            </div>
+        </section>
+    );
+
     return (
         <section
-            className="position-relative shadow-babadoo mb-5 col-6 col-md-4 col-lg-3"
-            style={{
-                backgroundColor: "#fff",
-                maxWidth: "140px",
-            }}
+            className="col-6 mx-auto mb-4" // not using  col-md-4  col-lg-3 since it is in a modal, only 2 columns of 6 / 6 from 12
         >
-            <div className="mt-2 container-center">
-                <img
-                    src={
-                        `/img/icons/bank-debits/${name}.jpg` || "/img/error.png"
-                    }
-                    className="img-fluid"
-                    width={110}
-                    alt={displayName}
-                />
-            </div>
-            <p className="text-center text-normal text-p font-weight-bold">
-                {displayName}
-            </p>
-            {showCTA(name.toUpperCase())}
+            <section className="shadow-babadoo bank-card--root">
+                <div className="img-container p-1 p-sm-3">
+                    <img
+                        src={
+                            `/img/icons/bank-debits/${name}.jpg` ||
+                            "/img/error.png"
+                        }
+                        alt={displayName}
+                    />
+                </div>
+                {showFooter()}
+            </section>
         </section>
     );
 }
