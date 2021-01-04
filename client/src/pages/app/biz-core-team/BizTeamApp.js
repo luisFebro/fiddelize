@@ -26,8 +26,10 @@ export default function BizTeamApp() {
     return (
         <Fragment>
             <BizTeamNavbar />
-            {showGreeting()}
-            <ShareLink />
+            <section className="animated fadeInUp">
+                {showGreeting()}
+                <ShareLink />
+            </section>
             <br />
             <GroupedDashSessions />
         </Fragment>

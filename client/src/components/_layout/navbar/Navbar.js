@@ -257,7 +257,6 @@ function Navbar({ history, location }) {
         return (
             <Link to={handleLogoClick()}>
                 <Img
-                    className="animated zoomIn slow"
                     style={{
                         position: "absolute",
                         top: isAuthUser ? 0 : "12px",
@@ -346,7 +345,9 @@ const DivWrapper = styled.div`
 `;
 const NavWrapper = styled.nav`
     & {
-        min-height: 60px;
+        margin: 0;
+        padding: 0;
+        min-height: 50px;
     }
     .store-container {
         position: relative;

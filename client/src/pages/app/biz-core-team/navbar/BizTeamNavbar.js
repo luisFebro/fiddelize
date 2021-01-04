@@ -1,23 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import "./_BizTeamNavbar.scss";
 import Img from "../../../../components/Img";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";
+import SendIcon from "@material-ui/icons/Send";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const muIcon = {
-    position: "absolute",
-    fontSize: "45px",
-    selfAlign: "flexEnd",
-    top: "5px",
-    right: "10px",
-};
-
 export default function BizTeamNavbar() {
+    const showMoreOptionsBtn = () => {
+        const optArray = [
+            {
+                icon: <SendIcon />,
+                text: "trocar conta",
+                callback: () => alert("trocar conta"),
+            },
+            {
+                icon: <SendIcon />,
+                text: "sair",
+                callback: () => alert("sair"),
+            },
+        ];
+        return (
+            <ButtonMenu
+                mainIcon="moreVert"
+                optionsArray={optArray}
+                whiteRipple
+            />
+        );
+    };
+
     return (
         <header className="biz-team-navbar--root">
             <Img
-                className="animated zoomIn slow"
                 style={{
                     position: "absolute",
                     top: "3px",
@@ -28,7 +42,7 @@ export default function BizTeamNavbar() {
                 src="/img/official-logo-name-biz-team.png"
                 alt="logo equipe"
             />
-            <MoreVertIcon style={muIcon} />
+            {showMoreOptionsBtn()}
         </header>
     );
 }

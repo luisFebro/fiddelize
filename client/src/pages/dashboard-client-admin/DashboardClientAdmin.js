@@ -7,12 +7,13 @@ import isThisApp from "../../utils/window/isThisApp";
 import "./mainLayout.scss";
 import getFirstName from "../../utils/string/getFirstName";
 import { useProfile } from "../../hooks/useRoleData";
-import ActionBtns, { PlanBadges } from "./ActionBtns";
+import MoreOptionsMenu from "./MoreOptionsMenu";
+import PlanBadges from "./PlanBadges";
 import { withRouter } from "react-router-dom";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 
-function DashboardClientAdmin({ location }) {
+function DashboardClientAdmin({ location, history }) {
     const { name } = useProfile();
     useBackColor("var(--themeBackground--default)");
     useScrollUp();
@@ -20,7 +21,7 @@ function DashboardClientAdmin({ location }) {
     const showGreeting = () => (
         <p
             className="position-relative text-normal text-center text-white"
-            style={{ margin: 15, top: 15 }}
+            style={{ margin: 25, top: 20 }}
         >
             <span className="font-weight-bold">
                 {getDayGreetingBr()}, {name ? `${getFirstName(name)}!` : " ..."}
@@ -34,7 +35,7 @@ function DashboardClientAdmin({ location }) {
             <PlanBadges />
             <br />
             <GroupedDashSessions />
-            <ActionBtns location={location} />
+            <MoreOptionsMenu location={location} history={history} />
         </Fragment>
     );
 }

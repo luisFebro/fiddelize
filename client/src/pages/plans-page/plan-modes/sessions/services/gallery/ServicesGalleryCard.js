@@ -27,8 +27,8 @@ const getStyles = () => ({
         right: -10,
     },
     addedBadge: {
-        bottom: -10,
-        right: 40,
+        bottom: -22,
+        right: 30,
     },
 });
 

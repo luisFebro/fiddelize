@@ -19,11 +19,11 @@ export default function AsyncTestModeContent() {
             <section className="shadow-babadoo" style={styles.rootCard}>
                 <Img
                     className="mx-5 mt-5 mb-3"
-                    src="/img/pro-features/novvos/novvos-clientes.svg"
+                    src="/img/icons/test-mode/clients-test.svg"
                     offline={true}
                     width="120px"
                     height="auto"
-                    alt="serviço novvos clientes"
+                    alt="teste app clientes"
                 />
                 <div className="pb-3 text-nowrap text-center text-normal text-white font-weight-bold">
                     App
@@ -39,11 +39,11 @@ export default function AsyncTestModeContent() {
             <section className="shadow-babadoo" style={styles.rootCard}>
                 <Img
                     className="mx-5 mt-5 mb-3"
-                    src="/img/pro-features/novvos/novvos-membros.svg"
+                    src="/img/icons/test-mode/members-test.svg"
                     offline={true}
                     width="120px"
                     height="auto"
-                    alt="serviço novvos membros"
+                    alt="teste app membros"
                 />
                 <div className="pb-3 text-nowrap text-center text-normal text-white font-weight-bold">
                     App
@@ -61,7 +61,7 @@ export default function AsyncTestModeContent() {
                 <br />
                 no modo teste?
             </h1>
-            <section className="mt-3 animated fadeInUp delay-1s container-center">
+            <section className="mt-3 animated fadeInUp container-center">
                 <div className="mr-3">{showClientCard()}</div>
                 {showTeamCard()}
             </section>

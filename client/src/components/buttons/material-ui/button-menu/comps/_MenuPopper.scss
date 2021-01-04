@@ -1,0 +1,10 @@
+.MuiListItemText-root .MuiTypography-body1 {
+    font-size: 1.2rem !important;
+    font-family: var(--mainFont) !important;
+    color: var(--themeP);
+}
+
+.MuiListItem-root .MuiListItemIcon-root {
+    color: var(--themeP);
+    min-width: 40px;
+}
