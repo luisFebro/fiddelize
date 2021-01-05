@@ -276,13 +276,13 @@ async function finishCheckout(req, res) {
 
     if (paymentMethod === "creditCard") {
         // console.log(data.gatewaySystem);
-        const [gatewaySystem] = data.gatewaySystem[0].type;
+        // const [gatewaySystem] = data.gatewaySystem[0].type;
 
         await handleCreditCard({
             payload,
             cc,
             oneClickInvest,
-            gatewaySystem,
+            gatewaySystem: " ",
             installmentDesc,
             brand,
         });

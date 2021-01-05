@@ -1,0 +1,4 @@
+// requires to fix text fields padding which suddendly shrinks while inherit is not set...
+* {
+    box-sizing: inherit;
+}

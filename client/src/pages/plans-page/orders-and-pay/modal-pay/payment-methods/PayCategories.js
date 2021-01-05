@@ -6,12 +6,16 @@ import PayMethodsBtn from "./PayMethodsBtn";
 
 const thisData = [
     {
-        title: "Boleto Automático",
-        img: "/img/icons/pay/categories/boleto-selection.svg",
-    },
-    {
         title: "Cartão de Crédito",
         img: "/img/icons/pay/categories/credit-card-selection.svg",
+    },
+    {
+        title: "Pix",
+        img: "/img/icons/pay/categories/pix-selection.png",
+    },
+    {
+        title: "Boleto Automático",
+        img: "/img/icons/pay/categories/boleto-selection.svg",
     },
     {
         title: "Débito Bancário",
@@ -24,10 +28,10 @@ const CardList = ({ modalData }) => {
         <Fragment>
             {thisData.map((card) => {
                 const ShowIcon = () => (
-                    <section style={{ maxHeight: "80px" }}>
+                    <section className="mb-2 container-center">
                         <img
-                            className="img-fluid"
-                            width={100}
+                            width="120px"
+                            height="120px"
                             src={card.img}
                             alt="categorias de pagamento"
                         />
@@ -39,11 +43,11 @@ const CardList = ({ modalData }) => {
                         key={card.title}
                         className="carousel-cell no-outline"
                     >
-                        <p className="mt-3 text-grey text-normal text-center font-weight-bold">
+                        <p className="m-0 mt-3 text-grey text-normal text-center font-weight-bold">
                             {card.title}
                         </p>
                         <ShowIcon />
-                        <section className="mt-5 container-center">
+                        <section className="container-center">
                             <PayMethodsBtn
                                 method={card.title}
                                 modalData={modalData}

@@ -28,13 +28,22 @@ const AsyncCredit = Load({
         ),
 });
 
+const AsyncPix = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "./pix/AsyncPix" /* webpackChunkName: "pix-pay-method-page-lazy" */
+        ),
+});
+
 const pickPayMethod = (payMethod, modalData) => {
+    if (payMethod === "Cartão de Crédito")
+        return <AsyncCredit modalData={modalData} />;
+    if (payMethod === "Pix") return <AsyncPix modalData={modalData} />;
     if (payMethod === "Boleto Automático")
         return <AsyncBoleto modalData={modalData} />;
     if (payMethod === "Débito Bancário")
         return <AsyncDebit modalData={modalData} />;
-    if (payMethod === "Cartão de Crédito")
-        return <AsyncCredit modalData={modalData} />;
 };
 
 export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {

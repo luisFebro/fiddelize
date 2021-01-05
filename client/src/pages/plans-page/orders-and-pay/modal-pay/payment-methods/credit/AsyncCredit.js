@@ -5,6 +5,7 @@ import useAPI, {
     checkOneClickInvest,
 } from "../../../../../../hooks/api/useAPI";
 import { decryptCreditCard } from "../../../../../../utils/security/creditCard";
+import "./_AsyncCredit.scss";
 
 export default function AsyncCredit({ modalData }) {
     const [watermark, setWatermark] = useState(true);

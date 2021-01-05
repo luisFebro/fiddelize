@@ -31,18 +31,26 @@ function SuccessFulCcPay({ history, setMainData }) {
         <section className="my-5">
             <Img
                 className="img-fluid"
-                src="/img/icons/credit-card/approved-transaction.svg"
+                src="/img/icons/credit-card/processing-transaction.svg"
                 offline={true}
                 height="auto"
                 width="200px"
-                alt="cartão aprovado"
+                alt="cartão em analise"
             />
             <p className="text-subtitle text-p mx-3 font-weight-bold">
-                Cartão aprovado!
+                Analisando cartão...
                 <br />
-                Os serviços investidos estarão disponíveis em instantes.
+                Os serviços investidos ficam disponíveis em instantes.
             </p>
             <p className="text-small text-p my-3 font-weight-bold">
+                - Você recebe uma notificação da Fiddelize logo que análise é
+                aprovada. Os serviços investidos são liberados automaticamente.
+            </p>
+            <p className="text-small text-p my-3 font-weight-bold">
+                - Caso seu cartão não seja aprovado, o valor é estornado
+                imediatamente. Acompanhe com seu banco o motivo da falha.
+            </p>
+            <p className="text-small text-p font-weight-bold">
                 - Caso os serviços não fiquem disponíveis em até 15 minutos,
                 saia da sua conta e entre novamente.
             </p>
