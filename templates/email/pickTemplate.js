@@ -4,10 +4,29 @@ const store = {
     recoverPassword,
 };
 
-function pickTemplate(name, options = {}) {
+async function pickTemplate(type = "text", options = {}) {
     const { payload } = options;
 
-    const found = store[name];
+    if (type === "text") {
+        const { toEmail, mainTitle, subject, msg } = payload;
+        if (!toEmail || !mainTitle || !subject || !msg)
+            return Promise.reject(
+                "PAYLOAD: missing toEmail, mainTitle, subject or msg"
+            );
+
+        return {
+            toEmail,
+            mainTitle: `${mainTitle}`,
+            subject: `${subject}`,
+            html: `
+                <p>
+                   ${msg}
+                </p>
+            `,
+        };
+    }
+
+    const found = store[type];
     if (!found) return false;
 
     return found(payload);

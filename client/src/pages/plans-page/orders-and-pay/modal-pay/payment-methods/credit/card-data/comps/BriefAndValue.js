@@ -355,7 +355,7 @@ export default function BriefAndValue({
     const showOneClickInvest = () =>
         !isOneClick && (
             <section className="my-5 container-center">
-                <p className="m-0 text-purple text-subtitle text-left">
+                <p className="m-0 text-nowrap text-purple text-subtitle text-left">
                     Investir com 1-clique:
                 </p>
                 <p className="ml-2 my-3 text-purple text-small font-weight-bold text-left">

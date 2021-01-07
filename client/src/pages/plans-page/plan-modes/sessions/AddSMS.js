@@ -13,7 +13,6 @@ const getStyles = () => ({
 export default function AddSMS({
     smsOrder = { amount: 0, price: 0 },
     handleNewOrder,
-    top = -150,
 }) {
     const addedSMS = convertToReal(smsOrder.amount);
     const smsPrice = convertToReal(smsOrder.price, { moneySign: true });
@@ -21,10 +20,7 @@ export default function AddSMS({
     const styles = getStyles();
 
     return (
-        <section
-            style={{ margin: "0 0 100px", top }}
-            className="position-relative"
-        >
+        <section className="position-relative">
             <div className="container-center-col">
                 <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                     Envie SMS

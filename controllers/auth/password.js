@@ -282,10 +282,15 @@ exports.forgotPasswordRequest = async (req, res) => {
 
     // return res.json(token);
 
-    const finalRes = await sendEmailBack({ type: "recoverPassword", payload });
-    if (finalRes) {
-        return res.json({ msg: "recovery email sent" });
-    }
+    const finalRes = await sendEmailBack({
+        type: "recoverPassword",
+        payload,
+    }).catch((err) => {
+        res.status(400).json({ error: err });
+    });
+    if (!finalRes) return;
+
+    res.json({ msg: "recovery email sent" });
 };
 
 // POST - Only for recover page when a 1 hour long time-out token will be verified

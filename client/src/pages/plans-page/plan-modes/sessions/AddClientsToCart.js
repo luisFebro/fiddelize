@@ -104,10 +104,7 @@ export default function AddClientsToCart({
     );
 
     return (
-        <section
-            style={{ margin: "0 0 100px", top: disableCliUser ? -150 : -60 }}
-            className="position-relative"
-        >
+        <section className="position-relative">
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 {disableCliUser
                     ? "Invista na equipe"

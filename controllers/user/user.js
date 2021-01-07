@@ -268,6 +268,7 @@ exports.countField = (req, res) => {
 };
 
 exports.redirectUrlLink = async (req, res) => {
+    // pedro_nucleo:fiddelize
     const mainHash = req.query.code;
     if (!mainHash) return res.status(400).json({ msg: "Link Inválido" });
 
@@ -282,8 +283,10 @@ exports.redirectUrlLink = async (req, res) => {
         code = mainHash.slice(slashInd + 1);
     }
 
+    const isBizTeam = code.includes("nucleo:");
+
     let memberJob;
-    const needTeam = code && code.includes(".equipe");
+    const needTeam = !isBizTeam && code && code.includes(".equipe");
     if (needTeam) {
         const [thisBizCode] = code.split(".");
         const [, jobCode] = code.split("-");
@@ -292,18 +295,26 @@ exports.redirectUrlLink = async (req, res) => {
     }
 
     let userScore;
-    const gotScore = code && code.includes(":");
+    const gotScore = !isBizTeam && code && code.includes(":");
     if (gotScore) {
         const [thisBizCode, thisUserScore] = code.split(":");
         code = thisBizCode;
         userScore = thisUserScore;
     }
 
-    const needStaffLinkId = code && code.length > 7;
+    const needStaffLinkId = !isBizTeam && code && code.length > 7;
     if (needStaffLinkId) {
         const fixedCode = code;
         code = code.slice(0, -1); // remove the last char cuz the eighth number is link id for members
         linkId = Number(fixedCode.slice(-1)); // the last char.
+    }
+
+    if (isBizTeam) {
+        const twoDotsInd = code.indexOf(":");
+        const primaryAgent = code.slice(twoDotsInd + 1);
+
+        const finalUrl = getFinalUrl({ isBizTeam: true, name, primaryAgent });
+        return res.json(finalUrl);
     }
 
     const user = await User("cliente-admin")

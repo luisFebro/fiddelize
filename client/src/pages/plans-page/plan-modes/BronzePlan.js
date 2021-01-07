@@ -1,11 +1,19 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { GoldBtn, SilverBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
 import useBackColor from "../../../hooks/useBackColor";
-import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
+import {
+    MinimizedUpperOptions,
+    ContinueBtn,
+    TotalInvest,
+    PeriodSelection,
+} from "./comps/MainComps";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
+import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
+import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
+import useScrollUp from "../../../hooks/scroll/useScrollUp";
 
 // Sessions
 import AddClientsToCart from "./sessions/AddClientsToCart";
@@ -39,9 +47,12 @@ export default function BronzePlan({ setCurrPlan }) {
         orders: {}, // e.g { "Novvos Clientes": { amount: 0, price: 0, expiryDate: dateFormat }
     });
     const { totalInvest, totalServices, period, orders } = data;
-    console.log("orders", orders);
     // console.table(data); // for objects without the necessary of using JSON.stringify(obj)
     const dispatch = useStoreDispatch();
+
+    const showMainUpperOpts = useDetectScrollSingle(".period-selection");
+    useScrollUp();
+    const isScrollingUpward = useDetectScrollUp();
 
     useEffect(() => {
         let total = 0;
@@ -104,7 +115,7 @@ export default function BronzePlan({ setCurrPlan }) {
     useBackColor("var(--mainWhite)");
 
     const showPlanSwitchBtns = () => (
-        <section style={styles.root}>
+        <section className="animated fadeInDown" style={styles.root}>
             <div className="d-flex justify-content-end">
                 <div className="position-relative" style={{ marginRight: 25 }}>
                     <GoldBtn setCurrPlan={setCurrPlan} />
@@ -129,34 +140,49 @@ export default function BronzePlan({ setCurrPlan }) {
     };
 
     return (
-        <Fragment>
+        <section style={{ marginBottom: 150 }}>
             {!nextPage ? (
                 <section>
                     <CircleBack />
                     <ReturnBtn />
-                    {showPlanSwitchBtns()}
+                    {!showMainUpperOpts ? (
+                        <MinimizedUpperOptions
+                            hidePlan="bronze"
+                            period={period}
+                            setCurrPlan={setCurrPlan}
+                            isScrollingUpward={isScrollingUpward}
+                        />
+                    ) : (
+                        showPlanSwitchBtns()
+                    )}
                     <MainTitle
                         customPlanTitle="Meu"
                         plan="Bronze"
                         planMsg="Faça seu próprio plano.<br />Escolha seu preço."
                     />
-                    <PeriodSelection handlePeriod={handlePeriod} />
+                    <section className="period-selection">
+                        <PeriodSelection handlePeriod={handlePeriod} />
+                    </section>
+                    <div style={{ height: 180 }}></div>
 
                     <AddClientsToCart
                         modalData={modalClientsData}
                         clientOrder={orders[currService]}
                         currService={currService}
                     />
+                    <div style={{ marginBottom: 100 }}></div>
+
                     <ServicesGallery
                         handleNewOrder={handleNewOrder}
                         period={period}
                     />
+                    <div style={{ marginBottom: 50 }}></div>
+
                     <AddSMS
                         smsOrder={orders.sms}
                         handleNewOrder={handleNewOrder}
                         top={-80}
                     />
-
                     <TotalInvest
                         totalInvest={totalInvest}
                         totalServices={totalServices}
@@ -172,6 +198,6 @@ export default function BronzePlan({ setCurrPlan }) {
                     orderTotal={totalInvest}
                 />
             )}
-        </Fragment>
+        </section>
     );
 }

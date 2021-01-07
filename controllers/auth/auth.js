@@ -23,6 +23,10 @@ const {
 } = require("../user/clients-session/tempScore");
 const { sendBackendNotification } = require("../notification");
 const checkExpiryService = require("./helpers/checkExpiryService");
+const getUniqueLinkId = require("./helpers/getUniqueLinkId");
+const {
+    getAgentRedirectAuthCode,
+} = require("../pay/agent-register/agentRegister");
 // MIDDLEWARES
 // WARNING: if some error, probably it is _id which is not being read
 // bacause not found. To avoid this, try write userId if in a parameter as default.
@@ -145,6 +149,7 @@ exports.register = async (req, res) => {
 
     const isCliUser = role === "cliente";
     const isCliMember = role === "cliente-membro";
+    const isBizTeam = role === "nucleo-equipe";
     // const isCliAdmin = role === "cliente-admin";
 
     if (isCliUser) {
@@ -162,6 +167,16 @@ exports.register = async (req, res) => {
         if (isFreeMemberApp) {
             clientMemberData = { ...clientMemberData, isFreeMemberApp: true };
         }
+    }
+
+    if (isBizTeam) {
+        const uniqueLinkId = await getUniqueLinkId(name);
+        const redirectAuthCode = await getAgentRedirectAuthCode({
+            uniqueLinkId,
+            agentName: name,
+            agentEmail: email,
+        });
+        bizTeamData = { ...bizTeamData, uniqueLinkId, redirectAuthCode };
     }
 
     const ThisUser = User(role);
@@ -210,7 +225,10 @@ exports.register = async (req, res) => {
         cpf,
         role,
         bizImg,
-        bizName: bizName || (clientAdminData && clientAdminData.bizName),
+        bizName:
+            bizName ||
+            (clientAdminData && clientAdminData.bizName) ||
+            "fiddelize",
         bizId:
             (clientUserData && clientUserData.bizId) ||
             (clientMemberData && clientMemberData.bizId) ||

@@ -13,7 +13,6 @@ const getStyles = () => ({
         margin: "auto",
         width: "95%",
         maxWidth: isSmall ? "" : 450,
-        top: -190,
     },
     freeTitle: {
         background: "var(--themeP)",
@@ -134,7 +133,7 @@ export default function ServicesCard({ period = "yearly", plan = "gold" }) {
 
     return (
         <Card
-            className="position-relative animated fadeInUp mt-0 mb-5 shadow-elevation"
+            className="position-relative animated fadeInUp shadow-elevation"
             style={styles.card}
             elevation={false}
         >

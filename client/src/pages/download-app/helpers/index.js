@@ -14,9 +14,13 @@ export const handleRoleStorage = ({
     bizId,
     memberId,
     memberJob,
+    primaryAgent,
 }) => {
     // n1
     const isCliUser = whichRole === "cliente";
+    const isCliMember = whichRole === "cliente-membro";
+    const isBizTeam = whichRole === "nucleo-equipe";
+
     let userPayload;
 
     if (isCliUser) {
@@ -28,14 +32,21 @@ export const handleRoleStorage = ({
             { role: whichRole },
             { userScore },
         ];
-    } else {
+    }
+
+    if (isCliMember) {
         userPayload = [{ lastRegisterBizId: bizId }, { role: whichRole }];
+    }
+
+    if (isBizTeam) {
+        userPayload = [{ primaryAgent }, { role: whichRole }];
     }
 
     setMultiVar(userPayload, store.user);
     removeMultiVar(["rememberAccess", "success", "verifPass"], store.user);
 
-    lStorage("setItems", setSystemOp(whichRole, bizId));
+    const needSysOp = whichRole && bizId;
+    needSysOp && lStorage("setItems", setSystemOp(whichRole, bizId));
     lStorage("setItem", { ...needAppRegisterOp, value: true });
 
     // for garantee that the current app is logged out.

@@ -21,7 +21,6 @@ import handleChange from "../../utils/form/use-state/handleChange";
 import lStorage from "../../utils/storage/lStorage";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
-import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
 // import { setRun } from '../../hooks/useRunComp';
 // Material UI
@@ -158,11 +157,6 @@ function Register({
             const { code: thisBirthCode } = getDateCode(thisBirthDate);
 
             setData({ ...data, birthday: thisBirthDate });
-            setValObjWithStr(
-                data,
-                "clientUserData.filterBirthday",
-                thisBirthCode
-            );
         }
     }, [selectedDate]);
 

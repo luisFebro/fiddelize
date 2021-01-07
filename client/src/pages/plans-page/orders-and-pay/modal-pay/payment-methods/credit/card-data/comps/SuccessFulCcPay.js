@@ -10,6 +10,8 @@ const isApp = isThisApp();
 export default withRouter(SuccessFulCcPay);
 
 function SuccessFulCcPay({ history, setMainData }) {
+    useScrollUp();
+
     useEffect(() => {
         setMainData((prev) => ({
             ...prev,
@@ -17,7 +19,6 @@ function SuccessFulCcPay({ history, setMainData }) {
         }));
     }, []);
 
-    useScrollUp();
     const { bizCodeName } = useClientAdmin();
 
     const handleFinish = () => {

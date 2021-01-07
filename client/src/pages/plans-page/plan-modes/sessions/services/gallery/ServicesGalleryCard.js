@@ -39,12 +39,17 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
         serviceDesc,
         servicePage,
         serviceIcon,
+        period,
     } = data;
+
+    const isYearly = period === "yearly";
 
     const [selected, setSelected] = useState(false);
     const styles = getStyles();
 
     const servicePriceReal = convertToReal(servicePrice, { moneySign: true });
+    const serviceMonthlyPrice =
+        isYearly && convertToReal(servicePrice / 12, { moneySign: true });
 
     const toggleSelection = (cardName) => {
         setSelected((prev) => !prev);
@@ -97,13 +102,23 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
         </div>
     );
 
+    /*
+    <div class="text-purple p-2 font-weight-bold text-normal position-relative">R$&nbsp;50</div>
+     */
+
     const showPrice = () => (
         <div
             className={`${
                 selected ? "text-white text-shadow" : "text-purple"
-            } p-1 font-weight-bold text-normal`}
+            } p-2 position-relative font-weight-bold text-normal`}
+            style={{ lineHeight: "20px" }}
         >
-            {servicePriceReal}
+            {isYearly ? serviceMonthlyPrice : servicePriceReal}
+            {isYearly && (
+                <span className="d-block text-small font-weight-bold">
+                    {servicePriceReal}/ano
+                </span>
+            )}
         </div>
     );
 

@@ -1,0 +1,13 @@
+<snippet>
+    <content><![CDATA[
+import PropTypes from 'prop-types';
+
+${TM_FILENAME/(.+)\..+|.*/$1/:FunctionName}.propTypes = {
+    ${1:prop1}: PropTypes.func,
+}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>importPropTypes</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

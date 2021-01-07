@@ -4,7 +4,7 @@ const qs = require("querystring");
 const Order = require("../../models/order/Order");
 const { getPayCategoryType } = require("./helpers/getTypes");
 const axios = require("axios");
-const { payUrl, email, token } = require("./globalVar");
+const { payUrl, email, token, pagNotifyUrl } = require("./globalVar");
 const convertXmlToJson = require("../../utils/promise/convertXmlToJson");
 // PAY METHODS
 const createBoleto = require("./pay-methods/boleto");
@@ -138,7 +138,7 @@ async function finishCheckout(req, res) {
         // defaults
         currency: "BRL",
         paymentMode: "default",
-        notificationURL: "https://fiddelize.herokuapp.com/api/pay/pag-notify",
+        notificationURL: pagNotifyUrl,
         receiverEmail: "mr.febro@gmail.com", // Um e-mail válido, com limite de 60 caracteres. O e-mail informado deve estar vinculado à conta PagSeguro que está realizando a chamada à API. LESSON: this fake email (mr.febro2020@gmail.com) to avoid duplicate with boleto on production`s pagseguro does not work> ERROR: invalid receiver: mr.febro2020@gmail.com, verify receiver's account status and if it is a seller's account.
         shippingAddressRequired,
         itemId1,

@@ -1,0 +1,15 @@
+<snippet>
+    <content><![CDATA[
+try {
+  ${1:codeBlockForTest};
+} catch(err) {
+    document.getElementById("${2:id}").innerHTML = err.message;
+  } finally {
+      document.getElementById("${3:id}").value = "";
+    }
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>tryFin</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

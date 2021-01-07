@@ -1,6 +1,5 @@
 const axios = require("axios");
-const { payUrl } = require("../globalVar");
-const { appKey, appId } = require("./getKeys");
+const { payUrl, appKey, appId } = require("../globalVar");
 const convertXmlToJson = require("../../../utils/promise/convertXmlToJson");
 // payment split to automate the sales process among stakeholders
 
@@ -150,7 +149,7 @@ exports.getCardToken = async (req, res) => {
         method: "post",
         url: `https://df.uol.com.br/v2/cards/`,
         params,
-        body,
+        data: body,
     };
 };
 

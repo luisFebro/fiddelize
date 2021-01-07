@@ -65,7 +65,7 @@ function getRoleData(role, options = {}) {
     const { data, token, cpf } = options;
 
     switch (role) {
-        case "equipe":
+        case "nucleo-equipe":
             return handleBizTeamData({ data, cpf });
         case "cliente-admin":
             return handleCliAdminData({ data, cpf });

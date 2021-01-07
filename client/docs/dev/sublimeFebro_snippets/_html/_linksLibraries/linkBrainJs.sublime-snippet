@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+<script src="https://unpkg.com/brain.js@1.0.0-rc.3/browser.js"></script>
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>linkBrainJs</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

@@ -6,8 +6,10 @@ const { IS_PROD } = require("../../config");
 
 // Disable it when testing is no longer made.
 const forceSandboxOnProduction = false; // if not activated, then requests will throw an error request because is not from production.
+const activateProduction = false;
 
 const handleMode = () => {
+    if (activateProduction) return false;
     if (forceSandboxOnProduction) return true;
     return IS_PROD ? false : true;
 };
@@ -25,4 +27,17 @@ module.exports = {
             ? process.env.TOKEN_PAGSEGURO
             : process.env.TOKEN_PAGSEGURO_PROD;
     },
+    get appId() {
+        return this.sandboxMode
+            ? process.env.SPLIT_APP_ID_PAGSEGURO_DEV
+            : process.env.SPLIT_APP_ID_PAGSEGURO_PROD;
+    },
+    get appKey() {
+        return this.sandboxMode
+            ? process.env.SPLIT_APP_KEY_PAGSEGURO_DEV
+            : process.env.SPLIT_APP_KEY_PAGSEGURO_PROD;
+    },
+    pagNotifyUrl: process.env.PAG_NOTIFY_URL,
+    agentRegisterNotifyUrl: process.env.AGENT_REGISTER_NOTIFY_URL,
+    splitNotifyUrl: process.env.SPLIT_NOTIFY_URL,
 };

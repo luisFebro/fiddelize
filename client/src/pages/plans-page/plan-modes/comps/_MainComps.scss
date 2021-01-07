@@ -1,0 +1,41 @@
+.minimized-upper.period {
+    top: 0;
+    left: 15px;
+    position: fixed;
+    z-index: 500;
+    background-color: var(--themeP);
+    padding: 2px 5px 5px;
+    border-radius: 0px 0px 15px 15px;
+}
+
+.minimized-upper.container-btns {
+    top: 0;
+    right: 15px;
+    position: fixed;
+    z-index: 500;
+    border-radius: 0px 0px 15px 15px;
+    text-align: center;
+    text-shadow: 1px 1px 3px black;
+
+    & div {
+        display: flex;
+        margin: 0 5px;
+    }
+
+    & div .button {
+        padding: 2px 10px 5px;
+        border-radius: 0px 0px 15px 15px;
+    }
+
+    & div .gold-btn {
+        background-color: var(--niceUiYellow);
+    }
+
+    & div .silver-btn {
+        background-color: rgb(194, 191, 191);
+    }
+
+    & div .bronze-btn {
+        background-color: #a17f73;
+    }
+}

@@ -10,6 +10,7 @@ export default function ServicesGallery({ handleNewOrder, period }) {
             serviceDesc: service.cardDesc,
             servicePage: service.proPage,
             serviceIcon: service.customIcon,
+            period,
         };
 
         return (
@@ -22,10 +23,7 @@ export default function ServicesGallery({ handleNewOrder, period }) {
     });
 
     return (
-        <section
-            className="position-relative my-5 text-purple"
-            style={{ top: -120 }}
-        >
+        <section className="my-5 text-purple">
             <p className="mx-3 text-subtitle font-weight-bold text-purple text-center">
                 Vitrine de Serviços
                 <span className="d-block text-normal text-purple text-center">

@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+let ${1:varName} = `${2:\${varHere\}} ${3:\${varHere\}}<br/>`;
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>varBTick</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

@@ -2,7 +2,7 @@ import getQueryByName from "../../../utils/string/getQueryByName";
 
 const getWhichRole = (queries) => {
     const [isBizTeam, isClientAdmin, isTeamMember, isClientUser] = queries;
-    if (isBizTeam) return "biz-team";
+    if (isBizTeam) return "nucleo-equipe";
     if (isClientAdmin) return "cliente-admin";
     if (isTeamMember) return "cliente-membro";
     if (isClientUser) return "cliente";
@@ -15,7 +15,7 @@ export default function getQueries({ location }) {
     const [bizName, bizId] = mainQueries;
 
     const roleData = [
-        "fiddelize=1",
+        "nucleo-equipe=1",
         "admin=1",
         "cliente-membro=1",
         "cliente=1",
@@ -31,11 +31,16 @@ export default function getQueries({ location }) {
 
     const whichRole = getWhichRole(roleQueries);
 
+    let primaryAgent; // for bizTeam only
+    if (whichRole === "nucleo-equipe") {
+        primaryAgent = getQueryByName("primary", location.search);
+    }
     return [
         ...mainQueries,
         ...roleQueries,
         isValidRoleType,
         isLinkInvalid,
         whichRole,
+        primaryAgent,
     ];
 }

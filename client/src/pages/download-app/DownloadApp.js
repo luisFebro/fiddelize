@@ -9,20 +9,44 @@ import { readClientAdmin } from "../../redux/actions/userActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import lStorage from "../../utils/storage/lStorage";
 import { useStoreDispatch } from "easy-peasy";
-import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import Spinner from "../../components/loadingIndicators/Spinner";
 import useElemShowOnScroll from "../../hooks/scroll/useElemShowOnScroll";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 import useBackColor from "../../hooks/useBackColor";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
-import ClientMemberText from "./app-type-texts/ClientMemberText";
 import getQueries from "./helpers/getQueries";
 import { handleRoleStorage } from "./helpers";
 import useAllowedLink from "./hooks/useAllowedLink";
+import { Load } from "../../components/code-splitting/LoadableComp";
+// CONTENTS
+export const AsyncBizTeamText = Load({
+    loader: () =>
+        import(
+            "./app-type-texts/BizTeamText" /* webpackChunkName: "main-content-download-page-lazy" */
+        ),
+});
+export const AsyncClientMemberText = Load({
+    loader: () =>
+        import(
+            "./app-type-texts/ClientMemberText" /* webpackChunkName: "main-content-download-page-lazy" */
+        ),
+});
+export const AsyncClientAdminText = Load({
+    loader: () =>
+        import(
+            "./app-type-texts/ClientAdminText" /* webpackChunkName: "main-content-download-page-lazy" */
+        ),
+});
+export const AsyncClientUserText = Load({
+    loader: () =>
+        import(
+            "./app-type-texts/ClientUserText" /* webpackChunkName: "main-content-download-page-lazy" */
+        ),
+});
+// END CONTENTS
 
 const isSmall = window.Helper.isSmallScreen();
-const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 const iconStyle = {
     fontSize: "140px",
@@ -81,6 +105,7 @@ export default function DownloadApp({ match, location }) {
         isValidRoleType,
         isLinkInvalid,
         whichRole,
+        primaryAgent,
     ] = getQueries({
         location,
     });
@@ -126,6 +151,7 @@ export default function DownloadApp({ match, location }) {
             bizId,
             memberId: linkId,
             memberJob,
+            primaryAgent,
         });
     // admin app config
     const {
@@ -181,168 +207,6 @@ export default function DownloadApp({ match, location }) {
                 <ScrollArrow margin={5} />
             </div>
         </div>
-    );
-
-    const showClientAdminText = () => (
-        <div className="text-center text-title mt-5">
-            {isFromAdminPanel ? (
-                <Fragment>
-                    <p className="text-hero container-center-col">
-                        <ImportantDevicesIcon style={iconStyle} />
-                        {userName && userName.cap()}, baixe seu app seja para
-                        celular, tablet ou desktop.
-                    </p>
-                    <div className="pt-1 pb-5">
-                        <ScrollArrow margin={50} />
-                    </div>
-                    <p className="download-app--txt" style={styles.margin}>
-                        Clique no banner que aparece a baixo,
-                        <br />e comece a baixar em instantes.
-                    </p>
-                </Fragment>
-            ) : (
-                <Fragment>
-                    <p className="text-hero">
-                        O App da {bizName && bizName.cap()} ficou pronto!
-                        <i style={styles.icon}>🎉</i>
-                    </p>
-                    <div className="pt-1 pb-5">
-                        <ScrollArrow margin={50} />
-                    </div>
-                    <p className="download-app--txt" style={styles.margin}>
-                        Baixe logo a baixo,
-                        <br />e já comece a usar.
-                    </p>
-                </Fragment>
-            )}
-            {showMainScrollArray()}
-        </div>
-    );
-
-    // Update this with Picture Comp and lazy loading effect: fadeInBottomLeft
-    const showAppShowCase = () => (
-        <div
-            style={{
-                maxWidth: 800,
-                position: "relative",
-                left: isSmall ? "-125px" : "-239px",
-            }}
-        >
-            <img
-                className="img-fluid shape-elevation"
-                src="/img/illustrations/app-demo-download-page.png"
-                height="auto"
-                alt="app do celular"
-            />
-        </div>
-    );
-
-    const showClientUserText = () => (
-        <section
-            className={`${
-                isSmall ? "ml-2 text-left" : "text-center"
-            } mt-4 text-title`}
-        >
-            <section className="full-height">
-                <div className="my-5 container-center">
-                    <img
-                        src={
-                            bizLogo === "undefined"
-                                ? `/img/official-logo-name.png`
-                                : bizLogo
-                        }
-                        className="img-fluid"
-                        width={bizLogo === "undefined" && 200}
-                        height={bizLogo === "undefined" && 200}
-                        title={`logo da ${bizName}`}
-                        alt={`logo empresa ${bizName}`}
-                    />
-                </div>
-                <div className="text-center text-hero">
-                    <span
-                        className="d-block text-title"
-                        style={{ lineHeight: "50px" }}
-                    >
-                        Convite Especial
-                        <br />
-                        para{" "}
-                    </span>
-                    <div
-                        className={`${txtPColor} d-inline-block mt-2 animated bounce repeat-2 delay-3s`}
-                        style={styles.hightlighedName}
-                    >
-                        {userName ? userName : "você!"}
-                    </div>
-                    <div className="pt-1 pb-5">
-                        <ScrollArrow margin={50} />
-                    </div>
-                </div>
-            </section>
-            <p
-                className={`px-2 text-center text-hero`}
-                style={{ lineHeight: 1 }}
-            >
-                {userName ? (
-                    <span>
-                        Oi,
-                        <br /> {truncate(userName.cap(), isSmall ? 22 : 30)}
-                    </span>
-                ) : (
-                    <span>Caro cliente,</span>
-                )}
-            </p>
-            <div className="mx-2">
-                {isCliUser && (
-                    <Fragment>
-                        <p>Você foi convidado(a) para baixar o app da </p>
-                        <p className="text-hero text-center">
-                            {bizName && bizName.cap()}
-                        </p>
-                        <p>
-                            para te oferecer uma{" "}
-                            <strong>
-                                nova experiência em compras e valorizar sua
-                                fidelidade.
-                            </strong>
-                            <br />
-                            <br />
-                            Você está prestes a entrar no jogo de compras com
-                            desafios e prêmios reais.
-                        </p>
-
-                        {showAppShowCase()}
-
-                        <p className="download-app--txt" style={styles.margin}>
-                            Você vai acompanhar seus pontos de fidelidade,
-                            progresso de desafios, ter histórico compras
-                            automático, ter acesso offline, avaliar sua
-                            experiência e mais.
-                        </p>
-                        <p
-                            className="download-app--txt text-hero"
-                            style={styles.margin}
-                        >
-                            E o melhor...
-                            <br />
-                            <span
-                                className="mt-3 d-block text-title"
-                                style={{ lineHeight: "45px" }}
-                            >
-                                ganhe prêmios a cada desafio concluído!
-                            </span>
-                        </p>
-                        <p className="download-app--txt" style={styles.margin}>
-                            Baixe o seu app logo a baixo.
-                            <br />
-                            <br />É leve.
-                            <br />É rápido.
-                            <br />É grátis!
-                        </p>
-                        {showMainScrollArray()}
-                    </Fragment>
-                )}
-            </div>
-        </section>
     );
 
     const errorMsg = () => (
@@ -403,15 +267,23 @@ export default function DownloadApp({ match, location }) {
             ScrollArrow,
             showMainScrollArray,
         };
-        if (isCliMember) return <ClientMemberText {...props} />;
-
-        return isCliAdmin ? showClientAdminText() : showClientUserText();
+        if (isCliAdmin)
+            return (
+                <AsyncClientAdminText
+                    {...props}
+                    isFromAdminPanel={isFromAdminPanel}
+                    iconStyle={iconStyle}
+                />
+            );
+        if (isCliMember) return <AsyncClientMemberText {...props} />;
+        if (isCliUser) return <AsyncClientUserText {...props} />;
+        if (isBizTeam) return <AsyncBizTeamText {...props} />;
     };
 
     return (
         <section className="target--content-download">
             {showSpinner()}
-            {isLinkInvalid || !isAllowedLink ? (
+            {(isLinkInvalid || !isAllowedLink) && !isBizTeam ? (
                 errorMsg()
             ) : (
                 <section className={`${txtBackColor}`}>

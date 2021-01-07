@@ -6,7 +6,7 @@ async function getJwtToken({ _id, role }) {
         if (role === "cliente-admin") return "1h"; // 1h
         if (role === "cliente-membro") return "8h"; // 8h
         if (role === "cliente") return "90d"; //90d
-        if (role === "equipe") return "1h"; //1h
+        if (role === "nucleo-equipe") return "1h"; //1h
     };
 
     const payload = { id: _id, role };

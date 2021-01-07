@@ -1,6 +1,6 @@
 // const Order = require("../../models/order/Order");
 const axios = require("axios");
-const { email: authEmail } = require("../globalVar");
+const { email: authEmail, pagNotifyUrl } = require("../globalVar");
 const setUserOrderInDB = require("./helpers/setUserOrderInDB");
 const FAKE_EMAIL_TEST = "fiddelize.boleto@gmail.com";
 /*
@@ -91,7 +91,7 @@ async function createBoleto(payload, { senderEmail }) {
         description: reference, // EMAIL - Description appears in the email ITENS DO PEDIDO. use SKU. This does not insert anything in the Boleto Descrição do produto objeto da cobrança.
         periodicity: "monthly", // Atualmente a chamada não aceita nenhum outro valor diferente.
         customer: customerData,
-        notificationURL: "https://fiddelize.herokuapp.com/api/pay/pag-notify", // URL para recebimento de notificação. Realiza validação de url válida.
+        notificationURL: pagNotifyUrl, // URL para recebimento de notificação. Realiza validação de url válida.
         firstDueDate, // Formato: aaaa-mm-dd Data de vencimento para qual será gerado o primeiro boleto - permitido 1 dia à partir da data presente até D+30. // Se o parâmetro numberOfPayments > 1, os próximos vencimentos seguirão com a mesma data informada no na data dd nos períodos subsequentes. // Para meses onde não existirem a data informada, será considerado sempre um dia anterior.
     };
     // END DATA BODY

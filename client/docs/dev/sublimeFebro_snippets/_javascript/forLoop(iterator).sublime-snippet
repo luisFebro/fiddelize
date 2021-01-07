@@ -1,0 +1,11 @@
+<snippet>
+  <content><![CDATA[
+for (let x = 0; x < ${1:targetVariable}.length; x++) {
+  
+}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>forLoop</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>

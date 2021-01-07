@@ -1,5 +1,6 @@
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SEND_GRID_KEY);
+const c = require("../../utils/promise/c");
 
 module.exports = async ({ content }) => {
     const { toEmail, mainTitle } = content;
@@ -16,5 +17,9 @@ module.exports = async ({ content }) => {
     };
 
     const emailContent = Object.assign({}, content, contacts);
-    return await sgMail.send(emailContent);
+
+    const [err, mailRes] = await c(sgMail.send(emailContent));
+    if (err)
+        return Promise.reject(`email not sent with SENDGRID. DETAILS: ${err}`);
+    return mailRes;
 };

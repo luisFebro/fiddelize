@@ -8,7 +8,7 @@ const store = {
     cliente: CliUser,
     "cliente-admin": CliAdmin,
     "cliente-membro": CliMember,
-    equipe: BizTeam,
+    "nucleo-equipe": BizTeam,
 };
 
 const User = (role) => {

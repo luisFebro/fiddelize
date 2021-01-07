@@ -2,31 +2,42 @@ const mailerSender = require("./mailerSender");
 const gridSender = require("./gridSender");
 const { CLIENT_URL } = require("../../config");
 const pickTemplate = require("../../templates/email/pickTemplate");
+const c = require("../../utils/promise/c");
 
-const handleEmailProvider = async ({ content }) => {
-    return await gridSender({ content }).catch(async (err) => {
-        console.error(
-            `ERROR: Email not sent! Details: ${err} End. || Trying with another provider...`
-        );
+const handleEmailProvider = async ({
+    content,
+    toEmail,
+    priority = "mailer",
+}) => {
+    const priorities = ["grid", "mailer"];
+    if (!priorities.includes(priority))
+        return Promise.reject(`priority should be: ${priorities}`);
 
-        if (err.toString().includes("Maximum credits exceeded")) {
-            // not working: Username and Password not accepted
-            await mailerSender({ content }).catch((err) => {
-                console.log(
-                    `ERROR: email not sent with nodemailer. DETAILS: ${err}`
-                );
-            });
-
-            res.json({
-                msg: `Email successfully sent with nodeMailer`,
-            });
-            return undefined;
+    if (priority === "grid") {
+        const [senderErr, answer] = await c(gridSender({ content }));
+        if (senderErr) {
+            const [mailerErr, mailerRes] = await c(mailerSender({ content }));
+            if (mailerErr)
+                return Promise.reject(`${mailerErr}. sendGrid also failed!`);
+            return { secondTry: true, provider: "nodeMailer", sentTo: toEmail };
         }
-    });
+        return { provider: "sendgrid", sentTo: toEmail };
+    }
+
+    if (priority === "mailer") {
+        const [mailerErr, mailerRes] = await c(mailerSender({ content }));
+        if (mailerErr) {
+            const [senderErr] = await c(gridSender({ content }));
+            if (senderErr)
+                return Promise.reject(`${senderErr}. nodeMailer also failed!`);
+            return { secondTry: true, provider: "nodeMailer", sentTo: toEmail };
+        }
+        return { provider: "nodeMailer", sentTo: toEmail };
+    }
 };
 
 exports.sendEmail = async (req, res) => {
-    const { type, payload } = req.body;
+    const { type, priority, payload } = req.body;
 
     if (!type || !payload)
         return res.status(400).json({
@@ -35,33 +46,41 @@ exports.sendEmail = async (req, res) => {
     // PAYLOADS
     // recoverPassword = toEmail, token, name
 
-    const content = pickTemplate(type, { payload });
+    const [templateErr, content] = await c(pickTemplate(type, { payload }));
+    if (templateErr) return res.status(400).json({ error: templateErr });
 
-    const providerRes = await handleEmailProvider({ content }).catch((err) => {
-        res.json({ error: `ERROR: ${err}` });
+    const [providerErr, providerRes] = await c(
+        handleEmailProvider({ content, priority, toEmail: payload.toEmail })
+    );
+    if (providerErr) return res.status(400).json({ error: providerErr });
+
+    const { provider, sentTo } = providerRes;
+
+    res.json({
+        msg: `Email sent successfully`,
+        type,
+        provider,
+        sentTo,
     });
-
-    if (providerRes) {
-        res.json({
-            msg: `${type} mail sent successfully`,
-        });
-    }
 };
 
-exports.sendEmailBack = async ({ type, payload }) => {
+exports.sendEmailBack = async ({ type, priority, payload }) => {
     if (!type || !payload)
-        return console.log(
+        return Promise.reject(
             "Requires both email`s TYPE and PAYLOAD in the body"
         );
 
-    const content = pickTemplate(type, { payload });
+    const [templateErr, content] = await c(pickTemplate(type, { payload }));
+    if (templateErr) return Promise.reject(templateErr);
 
-    const providerRes = await handleEmailProvider({ content }).catch(
-        (err) => `ERROR: ${err}`
+    const [providerErr, providerRes] = await c(
+        handleEmailProvider({ content, priority, toEmail: payload.toEmail })
     );
+    if (providerErr) return Promise.reject(providerErr);
 
+    const { provider, sentTo } = providerRes;
     if (providerRes) {
-        return `${type} mail sent successfully`;
+        return `mail sent to ${sentTo} successfully with ${providerRes}`;
     }
 };
 

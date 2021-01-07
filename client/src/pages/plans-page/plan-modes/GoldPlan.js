@@ -1,10 +1,17 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { SilverBtn, BronzeBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
-import { ContinueBtn, TotalInvest, PeriodSelection } from "./comps/MainComps";
+import {
+    MinimizedUpperOptions,
+    ContinueBtn,
+    TotalInvest,
+    PeriodSelection,
+} from "./comps/MainComps";
 import useBackColor from "../../../hooks/useBackColor";
 import getServices from "./sessions/services/getServices";
+import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
+import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
 
 // sessions
 import ServicesCard from "./sessions/services/ServicesCard";
@@ -43,6 +50,9 @@ export default function GoldPlan({ setCurrPlan }) {
         orders: defaultOrders,
     });
     const { totalServices, totalInvest, period, orders } = data;
+
+    const showMainUpperOpts = useDetectScrollSingle(".period-selection");
+    const isScrollingUpward = useDetectScrollUp();
 
     useEffect(() => {
         let total = 0;
@@ -131,7 +141,7 @@ export default function GoldPlan({ setCurrPlan }) {
     useBackColor("var(--mainWhite)");
 
     const showPlanSwitchBtns = () => (
-        <section style={styles.root}>
+        <section className="animated fadeInDown" style={styles.root}>
             <div className="d-flex justify-content-end">
                 <div className="position-relative" style={{ marginRight: 25 }}>
                     <SilverBtn setCurrPlan={setCurrPlan} />
@@ -142,19 +152,32 @@ export default function GoldPlan({ setCurrPlan }) {
     );
 
     return (
-        <Fragment>
+        <section style={{ marginBottom: 150 }}>
             {!nextPage ? (
                 <section>
                     <CircleBack />
                     <ReturnBtn />
-                    {showPlanSwitchBtns()}
+                    {!showMainUpperOpts ? (
+                        <MinimizedUpperOptions
+                            hidePlan="gold"
+                            period={period}
+                            setCurrPlan={setCurrPlan}
+                            isScrollingUpward={isScrollingUpward}
+                        />
+                    ) : (
+                        showPlanSwitchBtns()
+                    )}
                     <MainTitle
-                        planMsg="Desvende todo o potencial da Fiddelize.
+                        planMsg="Desvende todo o potencial da Fiddelize para seu negócio.
                         Invista menos por cada serviço."
                     />
-                    <PeriodSelection handlePeriod={handlePeriod} />
+                    <section className="period-selection">
+                        <PeriodSelection handlePeriod={handlePeriod} />
+                    </section>
+                    <div style={{ height: 50 }}></div>
 
                     <ServicesCard plan="gold" period={period} />
+                    <div style={{ marginBottom: 100 }}></div>
 
                     <AddClientsToCart
                         modalData={modalClientsData}
@@ -162,6 +185,7 @@ export default function GoldPlan({ setCurrPlan }) {
                         currService={currService}
                         disableCliUser={true}
                     />
+                    <div style={{ marginBottom: 100 }}></div>
 
                     <AddSMS
                         smsOrder={orders.sms}
@@ -183,6 +207,6 @@ export default function GoldPlan({ setCurrPlan }) {
                     orderTotal={totalInvest}
                 />
             )}
-        </Fragment>
+        </section>
     );
 }

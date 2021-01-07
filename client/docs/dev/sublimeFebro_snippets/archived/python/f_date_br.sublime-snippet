@@ -1,0 +1,24 @@
+<snippet>
+  <content><![CDATA[
+${1:#from datetime import datetime}
+def date_br(datehere):
+  days = 'Segunda Terça Quarta Quinta Sexta Sábado Domingo'.split()
+  days_numb = datehere.weekday() #here does not need -1 because function ALREADY STARTS WITH 0 (Segunda)
+
+  monthes = 'Janeiro Fevereiro Março Abril Maio Junho Julho Agosto Setembro Outubro Novembro Dezembro'.split()
+  monthes_numb = datehere.month - 1 #equalizes with index
+  #BUILDING
+  format_day = days[days_numb]
+  format_date = datehere.strftime(f'%d de {monthes[monthes_numb]} de %Y - %H:%M.')
+  #RESULT
+  if days_numb < 5:
+    result = f'{format_day}-Feira, {format_date}'
+  else:
+    result = f'{format_day}, {format_date}'
+  return result
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>f_date_br</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>

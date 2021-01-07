@@ -1,0 +1,36 @@
+<snippet>
+  <content><![CDATA[
+${1:from datetime import datetime}
+def date_en(insert):
+  monthes = '''January February March 
+  April May June 
+  July August September 
+  October November December'''.split()
+  numb_mon = insert.month - 1
+  select_mon = monthes[numb_mon]
+
+  days = '''Monday Tuesday 
+  Wednesday Thirsday
+  Friday Saturday
+  Sunday'''
+  num_day = insert.weekday()
+  select_days = days[num_day]
+
+  #conditions for typedate in en:
+  typedate_en = insert.day
+  typedate_en = 'th'
+  if typedate_en == 1:
+    typedate_en = 'st'
+  if typedate_en == 2:
+    typedate_en = 'nd'
+  if typedate_en == 3:
+    typedate_en = 'rd'
+
+  res = insert.strftime(f'{select_mon} %d{typedate_en}, %Y - %H:%M')
+  return res
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>f_date_en</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>

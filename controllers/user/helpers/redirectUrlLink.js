@@ -8,10 +8,22 @@ exports.getMemberJob = (code) => {
     if (code === "gr") return "gerência";
 };
 
-exports.getFinalUrl = ({ user, name, memberJob, userScore, linkId }) => {
+exports.getFinalUrl = ({
+    user,
+    name,
+    memberJob,
+    userScore,
+    linkId,
+    isBizTeam,
+    primaryAgent,
+}) => {
+    const firstName = name;
+    if (isBizTeam) {
+        return `${CLIENT_URL}/baixe-app/${firstName}?nucleo-equipe=1&primary=${primaryAgent}&bc=default&pc=default&sc=default`;
+    }
+
     const cliAdmin = user.clientAdminData;
     const bizId = user._id;
-    const firstName = name;
 
     const linkIdList = cliAdmin.memberIdList;
 

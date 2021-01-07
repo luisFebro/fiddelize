@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+const data = await ${1:PROMISE}.catch(err => { res.status(500).json({ error: err }) });
+if(!data) return;
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>awaitJson</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[
+@media only screen and (min-width: 768px) {
+    ${1:cssSelector}
+}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>mediaOnlyQuery</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

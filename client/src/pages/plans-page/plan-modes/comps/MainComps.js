@@ -7,6 +7,7 @@ import SwitchBtn from "../../../../components/buttons/material-ui/SwitchBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import animateCSS from "../../../../utils/animateCSS";
 import NotificationBadge from "../../../../components/NotificationBadge";
+import "./_MainComps.scss";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -33,7 +34,6 @@ const getStyles = () => ({
     },
     rootPeriod: {
         position: "relative",
-        height: 300,
         width: 260,
         left: 15,
         top: 20,
@@ -142,4 +142,47 @@ const PeriodSelection = ({ handlePeriod, containerCenter = false }) => {
     );
 };
 
-export { ContinueBtn, TotalInvest, PeriodSelection };
+const MinimizedUpperOptions = ({
+    isScrollingUpward,
+    hidePlan = "bronze",
+    period,
+    setCurrPlan,
+}) => (
+    <Fragment>
+        <div className="minimized-upper period animated fadeInDown text-small text-white font-weight-bold">
+            Plano {period === "yearly" ? "Anual" : "Mensal"}
+        </div>
+        {isScrollingUpward && (
+            <section className="minimized-upper container-btns animated fadeInDown delay-1s">
+                <div>
+                    <div
+                        className={`${
+                            hidePlan === "gold" ? "d-none" : "d-block"
+                        } button gold-btn text-small text-white font-weight-bold`}
+                        onClick={() => setCurrPlan("gold")}
+                    >
+                        ouro
+                    </div>
+                    <div
+                        className={`${
+                            hidePlan === "silver" ? "d-none" : "d-block"
+                        } button silver-btn text-small text-white font-weight-bold`}
+                        onClick={() => setCurrPlan("silver")}
+                    >
+                        prata
+                    </div>
+                    <div
+                        className={`${
+                            hidePlan === "bronze" ? "d-none" : "d-block"
+                        } button bronze-btn text-white font-weight-bold`}
+                        onClick={() => setCurrPlan("bronze")}
+                    >
+                        bronze
+                    </div>
+                </div>
+            </section>
+        )}
+    </Fragment>
+);
+
+export { ContinueBtn, TotalInvest, PeriodSelection, MinimizedUpperOptions };

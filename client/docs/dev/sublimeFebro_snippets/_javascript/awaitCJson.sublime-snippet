@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+const [err, data] = await c(${1:PROMISE});
+if(err) return res.status(400).json({ error: err });
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>awaitCJson</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

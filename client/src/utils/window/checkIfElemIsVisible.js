@@ -1,4 +1,5 @@
-import throttle from '../performance/throttle';
+// prefer using detectScrollSingleElem.js
+import throttle from "../performance/throttle";
 
 // needPartial if only a part of the element is displayed to trigger...
 // callback returns a value which need to be used as an argument like:
@@ -8,34 +9,50 @@ import throttle from '../performance/throttle';
 // const isFunction = func => typeof callback === 'function';
 // for now, only work using one function per component...
 export default function checkIfElemIsVisible(elem, callback, opts = {}) {
-    const { needPartial = true, throttleSpan = 300, leading = true, trailing = true, detectionOnce = false } = opts;
+    const {
+        needPartial = true,
+        throttleSpan = 300,
+        leading = true,
+        trailing = true,
+        detectionOnce = false,
+    } = opts;
 
     const handleScrollEvent = () => {
-        window.onscroll = throttle(function() { // LESSON
-            isElemVisible(elem, callback, needPartial);
-        }, throttleSpan, { leading, trailing });
-    }
+        window.onscroll = throttle(
+            function () {
+                // LESSON
+                isElemVisible(elem, callback, needPartial);
+            },
+            throttleSpan,
+            { leading, trailing }
+        );
+    };
 
     handleScrollEvent();
 
     function isElemVisible(elem, callback, needPartial) {
-        if(!elem) throw Error("You need to declare an element as the first parameter");
+        if (!elem)
+            throw Error(
+                "You need to declare an element as the first parameter"
+            );
 
         elem = document.querySelector(elem);
-        if(elem) {
+        if (elem) {
             const rect = elem.getBoundingClientRect();
             const elemTop = rect.top;
             const elemBottom = rect.bottom;
 
             let res;
-            const isTotallyVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
-            const isPartiallyVisible = elemTop < window.innerHeight && elemBottom >= 0;
+            const isTotallyVisible =
+                elemTop >= 0 && elemBottom <= window.innerHeight;
+            const isPartiallyVisible =
+                elemTop < window.innerHeight && elemBottom >= 0;
 
             res = needPartial ? isPartiallyVisible : isTotallyVisible;
 
-            callback(res)
+            callback(res);
 
-            if(detectionOnce && res) {
+            if (detectionOnce && res) {
                 window.onscroll = null;
             } else {
                 handleScrollEvent();

@@ -61,7 +61,7 @@ exports.setNewAccount = async (options = {}) => {
     const defaults = {
         defaultUserId: userId,
         defaultRole: role,
-        defaultBizId: bizId,
+        defaultBizId: role === "nucleo-equipe" ? "nucleo" : bizId,
         defaultBizName: bizName,
         defaultBizImg: bizImg,
     };

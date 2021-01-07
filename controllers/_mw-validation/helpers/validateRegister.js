@@ -24,7 +24,7 @@ exports.checkAccountLimit = (accounts, options = {}) => {
             case "cliente-membro":
                 ++appMember;
                 break;
-            case "equipe":
+            case "nucleo-equipe":
                 ++appFiddelize;
                 break;
         }

@@ -1,0 +1,14 @@
+<snippet>
+    <content><![CDATA[
+/*MOBILE FIRST RESPONSIVE MEDIA QUERIES*/
+/*media portrait tablets and large phones || for large devices, use min-width: 992px and up*/
+@media only screen and (min-width: 600px) {
+    ${1:cssSelector}
+}
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>queryMobileFirst</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

@@ -36,7 +36,6 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
     if (!delay) delay = 0;
     if (typeof trigger !== "boolean") trigger = true;
 
-    console.log("trigger", trigger);
     const getSingleElem = (audio) => {
         const mediaBtn = document.querySelector(mediaElem);
         console.log(`audio set on ${mediaElem}`);

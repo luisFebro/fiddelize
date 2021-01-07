@@ -7,6 +7,7 @@ import convertToReal from "../../../../../utils/numbers/convertToReal";
 const muStyle = {
     fontSize: "35px",
     color: "var(--lightGreen)",
+    cursor: "pointer",
 };
 
 export default function Balance() {

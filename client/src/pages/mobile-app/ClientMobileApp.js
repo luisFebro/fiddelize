@@ -52,6 +52,13 @@ const AsyncRegisterCliMember = Load({
         ),
 });
 // import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
+const AsyncRegisterBizTeam = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "../../components/auth/AsyncRegisterBizTeam" /* webpackChunkName: "biz-team-register-comp-lazy" */
+        ),
+});
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
@@ -104,6 +111,9 @@ function ClientMobileApp({ location, history }) {
         "disconnectCliMember",
     ]);
 
+    // memberId is cleaned after a successful registration.
+    // While this id is still living in th local DB is an strong indication there is a pending registration.
+    // This is good in case users accidently leave the app and keep showing the form instead of login in prior versions
     useEffect(() => {
         if (memberId !== "..." && memberId) {
             setLoginOrRegister("register");
@@ -124,12 +134,13 @@ function ClientMobileApp({ location, history }) {
     const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
     // # roles
     const isStaff = role === "cliente-membro" || role === "cliente-admin";
+    const isBizTeam =
+        role === "nucleo-equipe" || roleWhichDownloaded === "nucleo-equipe";
+    let isCliAdmin =
+        role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
     const isCliMember =
         role === "cliente-membro" || roleWhichDownloaded === "cliente-membro";
     let isCliUser = role === "cliente" || roleWhichDownloaded === "cliente";
-
-    let isCliAdmin =
-        role === "cliente-admin" || roleWhichDownloaded === "cliente-admin";
 
     // # auth
     const isSessionOver = !success || !localStorage.getItem("token");
@@ -168,7 +179,7 @@ function ClientMobileApp({ location, history }) {
         key: "app_fiddelize_logo",
     });
 
-    const logoSrc = logoBiz ? logoBiz : logoFid;
+    const logoSrc = logoBiz && !isBizTeam ? logoBiz : logoFid;
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
@@ -209,7 +220,7 @@ function ClientMobileApp({ location, history }) {
     };
     useEffect(() => {
         handleLogoSrc();
-    }, [needClientLogo]);
+    }, []);
 
     if (isCliMember) {
         // this var is removed when making login
@@ -229,13 +240,23 @@ function ClientMobileApp({ location, history }) {
 
         return (
             <div className="container-center">
-                <Img
-                    src={logoSrc}
-                    className="animated zoomIn slow"
-                    style={{ position: "relative", margin: "15px 0" }}
-                    width={isSquared ? 100 : 190}
-                    height={isSquared ? 100 : 85}
-                />
+                {isBizTeam ? (
+                    <img
+                        src="/img/official-logo-name.png"
+                        style={{ position: "relative", margin: "15px 0" }}
+                        width={190}
+                        height={85}
+                        alt="logo fiddelize"
+                    />
+                ) : (
+                    <Img
+                        src={logoSrc}
+                        className="animated zoomIn slow"
+                        style={{ position: "relative", margin: "15px 0" }}
+                        width={isSquared ? 100 : 190}
+                        height={isSquared ? 100 : 85}
+                    />
+                )}
             </div>
         );
     };
@@ -266,24 +287,32 @@ function ClientMobileApp({ location, history }) {
                 className="mx-2 mt-3 text-normal font-weight-bold text-center text-white"
                 style={{ marginBottom: 100 }}
             >
-                {role === "cliente" &&
+                {isCliUser &&
                     "Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de compras feito para você!"}
-                {role === "cliente-membro" &&
+                {isCliMember &&
                     "Adicione pontos e clientes para o clube de fidelidade em segundos."}
+                {isBizTeam &&
+                    "Faça parte do time da Fiddelize e comece a ganhar dinheiro."}
             </p>
             <CompLoader
                 width={200}
                 height={300}
                 comp={
                     <div className="position-relative" style={{ top: -120 }}>
-                        {role === "cliente" && (
+                        {isCliUser && (
                             <AsyncRegisterCliUser
                                 setLoginOrRegister={setLoginOrRegister || true}
                                 needLoginBtn={needLoginBtn}
                             />
                         )}
-                        {role === "cliente-membro" && (
+                        {isCliMember && (
                             <AsyncRegisterCliMember
+                                setLoginOrRegister={setLoginOrRegister || true}
+                                needLoginBtn={needLoginBtn}
+                            />
+                        )}
+                        {isBizTeam && (
+                            <AsyncRegisterBizTeam
                                 setLoginOrRegister={setLoginOrRegister || true}
                                 needLoginBtn={needLoginBtn}
                             />

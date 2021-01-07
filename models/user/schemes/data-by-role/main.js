@@ -7,14 +7,14 @@ const roleTypes = [
     "cliente", // cliente-usuario
     "cliente-admin",
     "cliente-membro",
-    "equipe",
+    "nucleo-equipe",
 ];
 
 const getRoleDataName = (role) => {
     if (role === "cliente") return "clientUserData";
     if (role === "cliente-admin") return "clientAdminData";
     if (role === "cliente-membro") return "clientMemberData";
-    if (role === "equipe") return "bizTeamData";
+    if (role === "nucleo-equipe") return "bizTeamData";
 };
 
 module.exports = {

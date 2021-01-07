@@ -24,15 +24,24 @@ const {
     checkOneClickInvest,
     removeOneClickInvest,
 } = require("../controllers/pay/pay-methods/creditCard");
+// const {
+//     getAgentRedirectAuthCode,
+// } = require("../controllers/pay/agent-register/agentRegister");
+const getAgentRegisterNotify = require("../controllers/pay/agent-register/agentRegisterNotify");
 
 const { mwIsAuth } = require("../controllers/auth");
-const { mwUserId } = require("../controllers/user");
+// const { mwUserId } = require("../controllers/user");
 
 // @ routes api/pay/...
 // transparent Checkout - full control
 router.post("/transparent-checkout/start", mwIsAuth, startCheckout);
 router.post("/transparent-checkout/finish", mwIsAuth, finishCheckout);
+// notifications
 router.post("/pag-notify", getPagNotify);
+router.post("/agent-register-notify", getAgentRegisterNotify);
+// agentRegister / applications model
+// this will be using directly in the register auth to make the process quickly sending just the link to redirect the user to frontend.
+// router.post("/agent/auth-request", getAgentRedirectAuthCode)
 // split
 router.post("/split/start", startSplit);
 router.get("/split/pay-methods", getPayMethods);
