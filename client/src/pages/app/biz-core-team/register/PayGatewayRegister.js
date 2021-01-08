@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import useData from "../../../../hooks/useData";
 import AccessPassCreation from "../../../dashboard-client-admin/pass-page/AccessPassCreation";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
@@ -7,11 +7,10 @@ import isThisApp from "../../../../utils/window/isThisApp";
 
 const isApp = isThisApp();
 // register agent in the payment gateway provider (Pagseguro)
-export default function PayGatewayRegister({ history }) {
-    const [firstName, redirectLink] = useData([
-        "firstName",
-        "redirectPayGatewayLink",
-    ]);
+export default function PayGatewayRegister({ history, location }) {
+    const isSuccess = location.search.includes(
+        "successFiddelizeAuthorization=true"
+    );
 
     useEffect(() => {
         (async () => {
@@ -19,7 +18,23 @@ export default function PayGatewayRegister({ history }) {
             if (isDone) history.push(isApp ? "/mobile-app" : "/acesso");
         })();
     }, []);
-    // setVar({ donePayGateway: true }) to the other component when agent successfully has registered
+
+    return (
+        <Fragment>
+            {isSuccess ? (
+                <GatewaySuccess history={history} />
+            ) : (
+                <AgentRedirect />
+            )}
+        </Fragment>
+    );
+}
+
+function AgentRedirect() {
+    const [firstName, redirectLink] = useData([
+        "firstName",
+        "redirectPayGatewayLink",
+    ]);
 
     const showTitle = () => (
         <div className="my-4">
@@ -63,6 +78,39 @@ export default function PayGatewayRegister({ history }) {
                         position="relative"
                     />
                 </a>
+            </div>
+        </section>
+    );
+}
+
+function GatewaySuccess({ history }) {
+    const handleClick = async () => {
+        await setVar({ donePayGateway: true });
+        history.push("/t/app/nucleo-equipe/acesso");
+    };
+
+    return (
+        <section className="full-page mx-3 text-white font-weight-bold">
+            <div className="container-center">
+                <img
+                    width={200}
+                    height="auto"
+                    src="/img/icons/pay/logo-pagseguro-uol.png"
+                    alt="pagseguro logo"
+                />
+            </div>
+            <h1 className="text-subtitle">
+                Conectado pelo Pagseguro com sucesso!
+            </h1>
+            <div className="my-5">
+                <ButtonFab
+                    size="medium"
+                    title="Acessar App"
+                    onClick={handleClick}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant="extended"
+                    position="relative"
+                />
             </div>
         </section>
     );

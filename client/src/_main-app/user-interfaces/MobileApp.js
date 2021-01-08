@@ -31,6 +31,7 @@ import {
     AsyncTeamApp,
     AsyncVirtualCard,
     AsyncScorePanel,
+    AsyncPix,
     // biz team comps
     AsyncBizTeam,
     AsyncAgentNewPassword,
@@ -150,6 +151,7 @@ function Mobile({ location, history }) {
                     exact
                     component={AsyncBizTeamPassword}
                 />
+                <Route path="/pix" exact component={AsyncPix} />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />

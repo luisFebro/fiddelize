@@ -63,7 +63,8 @@ function Navbar({ history, location }) {
         locationNow.includes("nova-senha") ||
         locationNow.includes("equipe") ||
         locationNow.includes("cartao-virtual") ||
-        locationNow.includes("senha-equipe");
+        locationNow.includes("senha-equipe") ||
+        locationNow.includes("pix");
 
     const btnLogout = () => (
         <button

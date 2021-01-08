@@ -63,6 +63,12 @@ export const AsyncScorePanel = Load({
         ),
 });
 
+// PAY METHODS
+export const AsyncPix = Load({
+    loader: () =>
+        import("../../pages/pix/Pix" /* webpackChunkName: "pix-page-lazy" */),
+});
+
 // BIZ TEAM APP
 export const AsyncBizTeam = Load({
     loader: () =>
