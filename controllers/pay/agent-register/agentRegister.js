@@ -20,20 +20,6 @@ Caso ele não tenha conta, os dados serão utilizados como sugestão para o cada
 Quantos mais dados corretos forem informados, maior a chance de conversão do vendedor não cadastrado nesse fluxo.
 É possível encaminhar os dados tanto de um cliente Vendedor (utilizando CPF) quanto para um cliente Empresarial (Utilizando o CNPJ).
 
-TRATANDO RESPOSTA
-https://pagseguro.uol.com.br/v2/authorization/request.jhtml?code={resquestCode}
-
-Ao realizar a chamada com sucesso à API de autorização e redirecionar o cliente ao PagSeguro, será exibido uma tela com base nas informações que você encaminhou na chamada.
-
-Se o cliente clique em "Autorizar , ele será redirecionado para a sua URL de retorno. Neste retorno o PagSeguro encaminha via GET o código de notificação da autorização para que você possa consultar o resultado desta autorização.
-
-O retorno será feito como no exemplo a seguir:
-GET http://www.seusite.com.br/retorno?notificationCode={notificationCode}
-
-É exatamente com esse notificationCode que, fazendo a consulta do mesmo obterá os dados do vendedor que autorizou aplicação, como por exemplo:
-
-Autorizações que foram solicitadas e autorizadas, e onde será retornada a PUBLICKEY por exemplo.
-
 FAQ
 Estou enviando o request para o fluxo de autorização, mas estou tomando erro "Forbidden", o que pode ser?
 Isso pode ocorrer por algumas razões:
@@ -90,7 +76,7 @@ exports.getAgentRedirectAuthCode = async (data) => {
                     <name>${agentName}</name>
                 </person>
             </account>
-            <redirectURL>${CLIENT_URL}/t/app/nucleo-equipe/registro</redirectURL>
+            <redirectURL>${CLIENT_URL}/t/app/nucleo-equipe/cadastro/pagseguro?successFiddelizeAuthorization=true</redirectURL>
             <notificationURL>${agentRegisterNotifyUrl}</notificationURL>
         </authorizationRequest>
     `;
@@ -115,6 +101,7 @@ exports.getAgentRedirectAuthCode = async (data) => {
 
     const [authCode] = result.authorizationRequest.code;
     return authCode;
+    // N3 https://pagseguro.uol.com.br/v2/authorization/request.jhtml?code={resquestCode}
 };
 
 /* temporary disabled until to apply the methods to treat each format
@@ -162,6 +149,22 @@ n2:
         ]
     }
 }
+
+n3:
+TRATANDO RESPOSTA
+https://pagseguro.uol.com.br/v2/authorization/request.jhtml?code={resquestCode}
+
+Direcionando para autorização
+Ao realizar a chamada com sucesso à API de autorização e redirecionar o cliente ao PagSeguro, será exibido uma tela com base nas informações que você encaminhou na chamada.
+
+Se o cliente clique em "Autorizar , ele será redirecionado para a sua URL de retorno. Neste retorno o PagSeguro encaminha via GET o código de notificação da autorização para que você possa consultar o resultado desta autorização.
+
+O retorno será feito como no exemplo a seguir:
+GET http://www.seusite.com.br/retorno?notificationCode={notificationCode}
+
+É exatamente com esse notificationCode que, fazendo a consulta do mesmo obterá os dados do vendedor que autorizou aplicação, como por exemplo:
+
+Autorizações que foram solicitadas e autorizadas, e onde será retornada a PUBLICKEY por exemplo.
 
 Qual tipo do seu negócio?
  Advogados e Serviços Legais

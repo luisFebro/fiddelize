@@ -3,15 +3,21 @@ const getFirstName = require("../../../utils/string/getFirstName");
 
 // ROLES
 const handleBizTeamData = ({ data, cpf }) => {
-    const { _id, name, role, gender, clientAdminData } = data;
+    const { _id, name, role, gender, pswd, bizTeamData } = data;
 
     return {
         name,
         role,
-        authUserId: _id,
-        bizCodeName: clientAdminData && clientAdminData.bizCodeName,
-        bizId: _id,
         gender,
+        pswd,
+        authUserId: _id,
+        primaryAgent: bizTeamData && bizTeamData.primaryAgent,
+        agentJob: bizTeamData && bizTeamData.job,
+        uniqueLinkId: bizTeamData && bizTeamData.uniqueLinkId,
+        publicKey: bizTeamData && bizTeamData.publicKey,
+        redirectPayGatewayLink: `https://pagseguro.uol.com.br/v2/authorization/request.jhtml?code=${
+            bizTeamData && bizTeamData.redirectAuthCode
+        }`,
     };
 };
 

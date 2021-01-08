@@ -6,10 +6,11 @@ import getFirstName from "../../../utils/string/getFirstName";
 import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import { setVar } from "../../../hooks/storage/useVar";
 
 export default withRouter(AccessPassCreation);
 
-function AccessPassCreation({ userName, userId, history }) {
+function AccessPassCreation({ isBizTeam, userName, userId, history }) {
     const [display, setDisplay] = useState("");
 
     const dispatch = useStoreDispatch();
@@ -73,6 +74,7 @@ function AccessPassCreation({ userName, userId, history }) {
                     newPswd,
                     newPswd2,
                     userId,
+                    role: isBizTeam ? "nucleo-equipe" : "cliente-admin",
                 };
 
                 newPswdCond &&
@@ -107,13 +109,22 @@ function AccessPassCreation({ userName, userId, history }) {
                             3000
                         );
                         setTimeout(() => {
-                            showSnackbar(
-                                dispatch,
-                                "Tudo pronto!",
-                                "warning",
-                                3000
-                            );
-                            history.push(`/mobile-app`);
+                            if (isBizTeam) {
+                                (async () => {
+                                    await setVar({ donePswd: true });
+                                    history.push(
+                                        `/t/app/nucleo-equipe/cadastro/pagseguro`
+                                    );
+                                })();
+                            } else {
+                                showSnackbar(
+                                    dispatch,
+                                    "Tudo pronto!",
+                                    "warning",
+                                    3000
+                                );
+                                history.push(`/mobile-app`);
+                            }
                         }, 2900);
                     }
                 }

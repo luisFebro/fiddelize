@@ -59,9 +59,7 @@ const checkForExpiryToken = async (currToken) => {
 
 // POST
 exports.createPassword = async (req, res) => {
-    const { newPswd, newPswd2, userId } = req.body;
-
-    const { role } = await req.getAccount(userId);
+    const { newPswd, newPswd2, userId, role = "cliente-admin" } = req.body;
 
     if (newPswd && !newPswd2) return res.json({ msg: "ok pswd1" });
 

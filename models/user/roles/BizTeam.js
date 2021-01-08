@@ -11,6 +11,7 @@ const data = {
     ...profileSchema,
     bizTeamData: BizTeamSchema,
     filter: DefaultFilterSchema,
+    pswd: String, // biz member password
 };
 // END PROFILE
 

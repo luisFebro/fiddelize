@@ -29,9 +29,13 @@ import {
     AsyncPasswordPage,
     AsyncTeamPassword,
     AsyncTeamApp,
-    AsyncBizTeam,
     AsyncVirtualCard,
     AsyncScorePanel,
+    // biz team comps
+    AsyncBizTeam,
+    AsyncAgentNewPassword,
+    AsyncPayGatewayRegister,
+    AsyncBizTeamPassword,
 } from "./CommonImports";
 //END PAGES
 
@@ -122,14 +126,29 @@ function Mobile({ location, history }) {
                 />
                 <Route path="/t/app/equipe" exact component={AsyncTeamApp} />
                 <Route
+                    path="/cartao-virtual"
+                    exact
+                    component={AsyncVirtualCard}
+                />
+                <Route
                     path="/t/app/nucleo-equipe"
                     exact
                     component={AsyncBizTeam}
                 />
                 <Route
-                    path="/cartao-virtual"
+                    path="/t/app/nucleo-equipe/cadastro/senha"
                     exact
-                    component={AsyncVirtualCard}
+                    component={AsyncAgentNewPassword}
+                />
+                <Route
+                    path="/t/app/nucleo-equipe/cadastro/pagseguro"
+                    exact
+                    component={AsyncPayGatewayRegister}
+                />
+                <Route
+                    path="/t/app/nucleo-equipe/acesso"
+                    exact
+                    component={AsyncBizTeamPassword}
                 />
                 <Route component={Default} />
             </Switch>

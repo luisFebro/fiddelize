@@ -41,6 +41,7 @@ function Login({
     setLoginOrRegister,
     dontNeedRegister,
     rootClassname,
+    isBizTeam,
 }) {
     // useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
     const dispatch = useStoreDispatch();
@@ -86,7 +87,13 @@ function Login({
             gender,
             linkId,
             memberJob,
-            // selfBizLogoImg,
+            // nucleo-equipe data
+            primaryAgent,
+            agentJob,
+            redirectPayGatewayLink,
+            uniqueLinkId,
+            pswd, // only verification to redirect to password page
+            publicKey, // only verification to redirect to password page
         } = res.data;
 
         // clean up whatever logo from prior login to set new one (especially another account)
@@ -207,6 +214,40 @@ function Login({
                 handleCliUserPath({ authUserId, dispatch, history });
             }
         }
+
+        if (role === "nucleo-equipe") {
+            showSnackbar(dispatch, "Carregando...", "warning", 2000);
+            // Pre login store data
+            const storeElems = [
+                { role },
+                { userId: authUserId },
+                { gender },
+                {
+                    name: getFirstName(name && name.cap(), {
+                        addSurname: true,
+                    }),
+                },
+                { firstName: getFirstName(name && name.cap()) },
+                { rememberAccess: true },
+                { primaryAgent },
+                { agentJob },
+                { redirectPayGatewayLink },
+                { uniqueLinkId },
+            ];
+
+            await setMultiVar(storeElems, store.user);
+
+            if (!pswd) {
+                //redirect user to password page
+                return history.push("/t/app/nucleo-equipe/cadastro/senha");
+            }
+            if (!publicKey) {
+                //redirect user to pagseguro agent registration
+                return history.push("/t/app/nucleo-equipe/cadastro/pagseguro");
+            }
+
+            history.push("/t/app/nucleo-equipe/acesso");
+        }
     };
 
     const showTitle = () => (
@@ -215,7 +256,9 @@ function Login({
             color="var(--mainWhite)"
             padding="py-2 px-2"
             needShadow={true}
-            backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
+            backgroundColor={`var(--themePDark--${
+                isBizTeam ? "default" : selfThemeSColor
+            })`}
         />
     );
 
@@ -226,7 +269,9 @@ function Login({
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
                 confirmFunction={signInThisUser}
-                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                backgroundColor={`var(--themeSDark--${
+                    isBizTeam ? "default" : selfThemeSColor
+                })`}
             />
         </div>
     );
@@ -242,7 +287,7 @@ function Login({
             <div className="animated zoomIn delay-2s p-2 mt-3">
                 <p
                     className={`${selectTxtStyle(
-                        selfThemeBackColor || "default"
+                        isBizTeam ? "default" : selfThemeBackColor || "default"
                     )} d-flex justify-content-center text-small`}
                 >
                     <span style={{ fontWeight: "bolder" }}>
@@ -256,7 +301,9 @@ function Login({
                             title="aqui"
                             onClick={handleLoginAndRegister}
                             backgroundColor={
-                                "var(--themeSDark--" + selfThemeSColor + ")"
+                                "var(--themeSDark--" + isBizTeam
+                                    ? "default"
+                                    : selfThemeSColor + ")"
                             }
                         />
                     </div>

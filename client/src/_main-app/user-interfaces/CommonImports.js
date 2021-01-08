@@ -40,21 +40,12 @@ export const AsyncFixDatePage = Load({
         ),
 });
 
-// APPS
-export const AsyncBizTeam = Load({
-    loader: () =>
-        import(
-            "../../pages/app/biz-core-team/BizTeamApp" /* webpackChunkName: "biz-core-team-app-lazy" */
-        ),
-});
-
 export const AsyncTeamApp = Load({
     loader: () =>
         import(
             "../../pages/app/team/TeamApp" /* webpackChunkName: "team-app-lazy" */
         ),
 });
-// END APPS
 
 // CLIENT APP
 export const AsyncVirtualCard = Load({
@@ -71,3 +62,34 @@ export const AsyncScorePanel = Load({
             "../../pages/client/loyalty-client-scores" /* webpackChunkName: "client-score-panel-page-lazy" */
         ),
 });
+
+// BIZ TEAM APP
+export const AsyncBizTeam = Load({
+    loader: () =>
+        import(
+            "../../pages/app/biz-core-team/BizTeamApp" /* webpackChunkName: "biz-core-team-app-lazy" */
+        ),
+});
+
+export const AsyncAgentNewPassword = Load({
+    loader: () =>
+        import(
+            "../../pages/app/biz-core-team/register/AgentNewPassword" /* webpackChunkName: "biz-core-team-new-password-lazy" */
+        ),
+});
+
+export const AsyncPayGatewayRegister = Load({
+    loader: () =>
+        import(
+            "../../pages/app/biz-core-team/register/PayGatewayRegister" /* webpackChunkName: "biz-core-team-pay-gateway-register-lazy" */
+        ),
+});
+
+export const AsyncBizTeamPassword = Load({
+    loader: () =>
+        import(
+            "../../pages/app/biz-core-team/access/BizTeamPassword" /* webpackChunkName: "biz-core-team-access-lazy" */
+        ),
+});
+
+// END BIZ TEAM APP

@@ -188,7 +188,9 @@ function ClientMobileApp({ location, history }) {
         trigger: !loadingData,
     });
     useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
-    useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
+    useBackColor(
+        `var(--themeBackground--${isBizTeam ? "default" : selfThemeBackColor})`
+    );
 
     useEffect(() => {
         if (isCliUser && !loadingData) {
@@ -273,6 +275,7 @@ function ClientMobileApp({ location, history }) {
                     >
                         <AsyncLogin
                             setLoginOrRegister={setLoginOrRegister}
+                            isBizTeam={isBizTeam}
                             rootClassname=""
                         />
                     </div>

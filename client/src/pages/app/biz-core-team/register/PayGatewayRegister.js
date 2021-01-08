@@ -1,0 +1,69 @@
+import React, { useEffect } from "react";
+import useData from "../../../../hooks/useData";
+import AccessPassCreation from "../../../dashboard-client-admin/pass-page/AccessPassCreation";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import { getVar, setVar } from "../../../../hooks/storage/useVar";
+import isThisApp from "../../../../utils/window/isThisApp";
+
+const isApp = isThisApp();
+// register agent in the payment gateway provider (Pagseguro)
+export default function PayGatewayRegister({ history }) {
+    const [firstName, redirectLink] = useData([
+        "firstName",
+        "redirectPayGatewayLink",
+    ]);
+
+    useEffect(() => {
+        (async () => {
+            const isDone = await getVar("donePayGateway");
+            if (isDone) history.push(isApp ? "/mobile-app" : "/acesso");
+        })();
+    }, []);
+    // setVar({ donePayGateway: true }) to the other component when agent successfully has registered
+
+    const showTitle = () => (
+        <div className="my-4">
+            <p className="text-center font-weight-bold  text-subtitle text-white">
+                Conecte-se com o Pagseguro
+            </p>
+        </div>
+    );
+
+    return (
+        <section className="mx-3 text-white">
+            {showTitle()}
+            <section>
+                <p className="text-normal">
+                    {firstName}, o seu dinheiro das suas vendas são depositados
+                    de <strong>forma automática</strong> na sua conta do
+                    Pagseguro.
+                </p>
+                <p className="text-normal">
+                    Você precisa <strong>autorizar a Fiddelize</strong> para
+                    fazer os depósitos na sua conta.
+                </p>
+                <p className="text-normal">
+                    Acesse logo abaixo o seu{" "}
+                    <strong>link de autorização</strong>.
+                </p>
+            </section>
+            <div className="my-5 container-center">
+                <a
+                    className="no-text-decoration"
+                    href={redirectLink}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    <ButtonFab
+                        size="medium"
+                        title="Ir para Pagseguro"
+                        onClick={null}
+                        backgroundColor={"var(--themeSDark--default)"}
+                        variant="extended"
+                        position="relative"
+                    />
+                </a>
+            </div>
+        </section>
+    );
+}
