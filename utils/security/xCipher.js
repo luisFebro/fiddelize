@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+require("dotenv").config(); // insert it here cuz env variables server is not reaching utils
 
 const KRYPTO_SECRET = process.env.KRYPTO_SECRET; // Must be 256 bits (32 characters)
 const IV_LENGTH = 16; // For AES, this is always 16
@@ -189,7 +190,11 @@ const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
 // END ENCRYPTION AND DECRYPTION
 console.log(jsDecrypt("02030719020e0f1903030f1a0204"));
 // console.log(encryptSync("mr.febro@gmail.com"));
-// console.log(decryptSync("b6796df19acd8d308b6b6ca9a7db83a6:5933bc3e35116a1597aef36878f89ea0"));
+//console.log(decryptSync("b6796df19acd8d308b6b6ca9a7db83a6:5933bc3e35116a1597aef36878f89ea0"));
+// (async () => {
+//     const res = await createBcryptPswd("121316")
+//     console.log("res", res);
+// })()
 module.exports = {
     encrypt,
     encryptSync,

@@ -11,7 +11,7 @@ const { getAccount } = require("./controllers/user/account/account");
 
 require("dotenv").config(); // n4
 require("./utils/globalHelpers");
-
+console.log(process.env.APP_NAME);
 //Init Express
 const app = express();
 

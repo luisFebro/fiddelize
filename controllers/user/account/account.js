@@ -1,4 +1,6 @@
 const Account = require("../../../models/user/Account");
+const User = require("../../../models/user");
+const { jsDecrypt } = require("../../../utils/security/xCipher");
 
 /* ACTIONS
 1. To add a new account:
@@ -84,4 +86,26 @@ exports.setNewAccount = async (options = {}) => {
     }).catch((err) => {
         res.status(500).json({ error: err });
     });
+};
+
+exports.findAllUserAccounts = async ({ cpf, userId, role }) => {
+    let thisCpf = cpf;
+
+    if (userId) {
+        const userResult = await User(role).findById(userId).select("cpf -_id");
+
+        if (!userResult) return Promise.reject({ error: "userId not found" });
+
+        thisCpf = jsDecrypt(userResult.cpf);
+    }
+
+    const dataAccount = await Account.findOne({ checkId: thisCpf }).select(
+        "accounts -_id"
+    );
+
+    if (!dataAccount)
+        return Promise.reject({ error: "no account found for this CPF" });
+
+    const allRoles = dataAccount.accounts.map((acc) => acc.role);
+    return allRoles;
 };

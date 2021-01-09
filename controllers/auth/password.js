@@ -8,6 +8,7 @@ const {
     checkJWT,
 } = require("../../utils/security/xCipher");
 const { sendEmailBack } = require("../../controllers/email");
+const { findAllUserAccounts } = require("../user/account/account");
 
 // HELPERS
 async function comparePswds(userId, options = {}) {
@@ -210,9 +211,6 @@ exports.checkPassword = async (req, res) => {
 exports.changePassword = async (req, res) => {
     const { userId, newPswd, newPswd2, role = "cliente-admin" } = req.body;
 
-    // Check if user has both a cli-admin or a biz-team account.
-    // If so, the password change will be both of them
-
     // adapt from recoverPassword's variables
     const priorPswd = newPswd;
     const realNewPswd = newPswd2;
@@ -222,11 +220,12 @@ exports.changePassword = async (req, res) => {
             .status(400)
             .json({ error: "ID do usuário ou senhas faltando..." });
 
-    const checkRes = await comparePswds(userId, { pswd: priorPswd }).catch(
-        (err) => {
-            console.log(err);
-        }
-    );
+    const checkRes = await comparePswds(userId, {
+        pswd: priorPswd,
+        role,
+    }).catch((err) => {
+        console.log(err);
+    });
 
     if (checkRes) {
         if (priorPswd && !realNewPswd) return res.json({ msg: "ok pswd1" }); // the first pswd is ok. Passed validation.
@@ -234,6 +233,28 @@ exports.changePassword = async (req, res) => {
         const SUCCESSFUL_MSG = "pass changed";
 
         const hash = await createBcryptPswd(realNewPswd);
+
+        // Check if user has both a cli-admin or a biz-team account.
+        // If so, the password change will be both of them
+        const dataAcc = await findAllUserAccounts({ userId, role }).catch(
+            (err) => {
+                res.status(400).json({ error: err });
+            }
+        );
+        if (!dataAcc) return;
+        const needDoubleStore =
+            dataAcc.includes("nucleo-equipe") &&
+            dataAcc.includes("cliente-admin");
+
+        if (needDoubleStore) {
+            await Promise.all([
+                User("nucleo-equipe").findByIdAndUpdate(userId, { pswd: hash }),
+                User("cliente-admin").findByIdAndUpdate(userId, { pswd: hash }),
+            ]);
+            return res.json({
+                msg: `${SUCCESSFUL_MSG} by double storage nucleo and cli-admin`,
+            });
+        }
         await User(role).findByIdAndUpdate(userId, { pswd: hash });
         res.json({ msg: SUCCESSFUL_MSG });
     } else {
@@ -349,6 +370,34 @@ exports.recoverPassword = async (req, res) => {
     if (validPayload) {
         const hash = await createBcryptPswd(newPswd);
         const userId = validPayload.id;
+
+        const dataAcc = await findAllUserAccounts({ userId, role }).catch(
+            (err) => {
+                res.status(400).json({ error: err });
+            }
+        );
+        if (!dataAcc) return;
+        const needDoubleStore =
+            dataAcc.includes("nucleo-equipe") &&
+            dataAcc.includes("cliente-admin");
+
+        if (needDoubleStore) {
+            await Promise.all([
+                User("nucleo-equipe").findByIdAndUpdate(userId, {
+                    pswd: hash,
+                    "expiryToken.current": null,
+                    "expiryToken.loginAttempts": 0,
+                }),
+                User("cliente-admin").findByIdAndUpdate(userId, {
+                    pswd: hash,
+                    "expiryToken.current": null,
+                    "expiryToken.loginAttempts": 0,
+                }),
+            ]);
+            return res.json({
+                msg: `${SUCCESSFUL_MSG} by double storage nucleo and cli-admin`,
+            });
+        }
 
         await User(role).findByIdAndUpdate(userId, {
             pswd: hash,
