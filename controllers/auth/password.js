@@ -96,9 +96,12 @@ exports.createPassword = async (req, res) => {
 
 // POST
 exports.checkPassword = async (req, res) => {
-    const { pswd, userId, checkIfLocked = false } = req.body;
-
-    const { role } = await req.getAccount(userId);
+    const {
+        pswd,
+        userId,
+        checkIfLocked = false,
+        role = "cliente-admin",
+    } = req.body;
 
     if (checkIfLocked) {
         const data = await User(role)
@@ -186,9 +189,10 @@ exports.checkPassword = async (req, res) => {
                 currExpiryTime === "30s"
                     ? 0.5
                     : Number(currExpiryTime.replace(/m/gi, ""));
-            return res.status(401).json({ blocked: true, minutes: onlyMin });
+            // setting to 400 instead of 401 since it is disconnecting user while is blocked on access page
+            return res.status(400).json({ blocked: true, minutes: onlyMin });
         }
-        return res.status(401).json(false);
+        return res.status(400).json(false);
     } else {
         await User(role)
             .findByIdAndUpdate(userId, {
@@ -204,9 +208,11 @@ exports.checkPassword = async (req, res) => {
 };
 
 exports.changePassword = async (req, res) => {
-    const { userId, newPswd, newPswd2 } = req.body;
+    const { userId, newPswd, newPswd2, role = "cliente-admin" } = req.body;
 
-    const { role } = await req.getAccount(userId);
+    // Check if user has both a cli-admin or a biz-team account.
+    // If so, the password change will be both of them
+
     // adapt from recoverPassword's variables
     const priorPswd = newPswd;
     const realNewPswd = newPswd2;
@@ -238,9 +244,7 @@ exports.changePassword = async (req, res) => {
 };
 
 exports.forgotPasswordRequest = async (req, res) => {
-    const { userId, cpf, email } = req.body;
-
-    const { role } = await req.getAccount(userId);
+    const { userId, cpf, email, role = "cliente-admin" } = req.body;
 
     const encryptedCPF = jsEncrypt(cpf);
 
@@ -276,6 +280,7 @@ exports.forgotPasswordRequest = async (req, res) => {
         name,
         toEmail: decryptedEmail,
         token,
+        role,
     };
 
     // return res.json(token);
@@ -293,21 +298,23 @@ exports.forgotPasswordRequest = async (req, res) => {
 
 // POST - Only for recover page when a 1 hour long time-out token will be verified
 exports.recoverPassword = async (req, res) => {
-    const { newPswd, newPswd2, token, checkToken = false } = req.body;
+    const {
+        newPswd,
+        newPswd2,
+        token,
+        checkToken = false,
+        role = "cliente-admin",
+    } = req.body;
 
-    let thisRole;
     // Check if token is still valid to redirect the page in case of expired token
     if (token && checkToken) {
         const tokenOk = await checkJWT(token).catch((e) => {
             res.json(false);
         });
 
-        const { role } = await req.getAccount(tokenOk.id);
-        thisRole = role;
-
         if (tokenOk) {
             // check if user already applied the change. If so, invalidate access.
-            const isTokenAvailable = await User(thisRole)
+            const isTokenAvailable = await User(role)
                 .findById(tokenOk.id)
                 .select("expiryToken.current -_id");
 
@@ -343,7 +350,7 @@ exports.recoverPassword = async (req, res) => {
         const hash = await createBcryptPswd(newPswd);
         const userId = validPayload.id;
 
-        await User(thisRole).findByIdAndUpdate(userId, {
+        await User(role).findByIdAndUpdate(userId, {
             pswd: hash,
             "expiryToken.current": null,
             "expiryToken.loginAttempts": 0,

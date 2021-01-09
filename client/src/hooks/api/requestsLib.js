@@ -93,3 +93,6 @@ export const setLastScoreAsDone = (userId) =>
     `/api/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
 export const encryptLinkScore = () => `/api/user/cli-user/temp-score/encrypt`; // POST
 export const isLinkAllowed = () => `/api/user/cli-user/temp-score/allowed-link`; // GET
+
+// EMAIL
+export const sendEmail = () => `/api/email/send`;

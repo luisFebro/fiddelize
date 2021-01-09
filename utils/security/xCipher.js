@@ -188,6 +188,8 @@ const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
 // const resDecipher = jsDecrypt(resCipher);
 // END ENCRYPTION AND DECRYPTION
 console.log(jsDecrypt("02030719020e0f1903030f1a0204"));
+// console.log(encryptSync("mr.febro@gmail.com"));
+// console.log(decryptSync("b6796df19acd8d308b6b6ca9a7db83a6:5933bc3e35116a1597aef36878f89ea0"));
 module.exports = {
     encrypt,
     encryptSync,
@@ -204,31 +206,6 @@ module.exports = {
 // reference:
 // https://vancelucas.com/blog/stronger-encryption-and-decryption-in-node-js/
 // more: https://www.sohamkamani.com/nodejs/rsa-encryption/
-
-/* ARCHIVES
-https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
-
-const KRYPTO_SECRET = process.env.KRYPTO_SECRET;
-const cipherThis = handleCipherVault(KRYPTO_SECRET);
-const decipherThis = handleDecipherVault(KRYPTO_SECRET);
-
-function compareThis(options = {}) {
-    const { str = "", cipher = "" } = options;
-    if(!str || !cipher) return console.log("Missing str or cipher params")
-    if(typeof str !== "string" || typeof cipher !== "string") return console.log("parameters should be obj with string as value")
-
-    const thisCipher = cipherThis(str);
-    return thisCipher === cipher;
-}
-
-const { cipherThis, decipherThis, compareThis } = require("./utils/security/xCipher");
-const resCipher = cipherThis('023.248.892-42');
-console.log("resCipher", resCipher);
-const resDecipher = decipherThis(resCipher);
-console.log("resDecipher", resDecipher);
-const res = compareThis({ str: '023.248.892-42', cipher: "1b191805191f1305131219061f19" });
-console.log("resCompare", res);
- */
 
 /* COMMENTS
 n1: add cipher (myCpf + 1) add + 1 at hte very end of decipher krypto_secret and faces will be displayed.

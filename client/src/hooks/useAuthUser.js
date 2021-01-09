@@ -36,12 +36,11 @@ export default function useAuth(options = {}) {
         if (success === "...") return;
 
         const isAuthUser = success;
-        console.log("isAuthUser", isAuthUser);
 
         if (!isAuthUser && history) {
             (async () => {
                 await disconnect({ needRedirect: false });
-                isApp ? history.push("/mobile-app") : history.push("/");
+                history.push(isApp ? "/mobile-app" : "/acesso");
             })();
         }
     }, [success]);

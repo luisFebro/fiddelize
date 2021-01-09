@@ -81,6 +81,7 @@ exports.mwIsClientAdmin = (req, res, next) => {
 exports.mwSession = async (req, res, next) => {
     // n1
     const token = getTreatedToken(req);
+    console.log("token", token);
 
     if (!token)
         return res.json({ error: "New user accessed without JWT Token!" });
@@ -101,22 +102,27 @@ exports.mwSession = async (req, res, next) => {
 exports.loadAuthUser = async (req, res) => {
     const { role, id: userJwtId } = req.authObj;
 
+    const isCliAdmin = role === "cliente-admin";
+    const isCliUser = role === "cliente";
+    const needLoadData = isCliAdmin || isCliUser;
+
     const handleRole = (role) => {
         const cliUser =
             "-cpf -clientUserData.notifications -clientUserData.purchaseHistory";
         const cliAdmin =
             "-expiryToken -pswd -clientAdminData.smsBalance -clientAdminData.bizFreeCredits -clientAdminData.bizPlanList -clientAdminData.smsHistory -clientAdminData.smsAutomation -clientAdminData.orders -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications";
 
-        if (role === "cliente-admin") return cliAdmin;
-        if (role === "cliente") return cliUser;
+        if (isCliAdmin) return cliAdmin;
+        if (isCliUser) return cliUser;
     };
 
     const select = handleRole(role);
 
-    const profile = await User(role).findById(userJwtId).select(select);
+    const profile = !needLoadData
+        ? false
+        : await User(role).findById(userJwtId).select(select);
 
-    if (!profile)
-        return res.status(404).json({ error: "Usuário não encontrado!" });
+    if (!profile) return res.json({});
     if (profile) {
         profile.email = decryptSync(profile.email);
         profile.phone = decryptSync(profile.phone);

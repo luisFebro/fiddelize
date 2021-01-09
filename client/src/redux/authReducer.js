@@ -27,7 +27,9 @@ export const authReducer = {
                 };
             case "LOGIN_EMAIL":
             case "REGISTER_EMAIL":
-                const ignoreToken = action.payload.role === "cliente-admin"; // cli-admin handled in access password page.
+                const role = action.payload.role;
+                const ignoreToken =
+                    role === "cliente-admin" || role === "nucleo-equipe"; // cli-admin handled in access password page.
                 !ignoreToken &&
                     localStorage.setItem("token", action.payload.token);
 

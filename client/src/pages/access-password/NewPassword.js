@@ -33,11 +33,13 @@ const getStyles = () => ({
 });
 
 // For recovering and changing user's password
-export default function NewPassword({ match, history }) {
+export default function NewPassword({ location, match, history }) {
     const [display, setDisplay] = useState("");
     const [okContent, setOkContent] = useState(false);
 
     const changeMode = match.params.token === "mudar" ? true : false;
+    const isBizTeam = location.search.includes("?nucleo-equipe=1");
+    const role = isBizTeam ? "nucleo-equipe" : "cliente-admin";
 
     const [data, setData] = useState({
         newPswd: null,
@@ -66,6 +68,7 @@ export default function NewPassword({ match, history }) {
             const body = {
                 checkToken: true,
                 token: match.params.token,
+                role,
             };
             const { data: isValidToken } = await getAPI({
                 method: "post",
@@ -198,6 +201,7 @@ export default function NewPassword({ match, history }) {
                     newPswd2,
                     token: !changeMode ? match.params.token : undefined,
                     userId: !changeMode ? undefined : userId,
+                    role,
                 };
 
                 newPswdCond &&
@@ -250,6 +254,9 @@ export default function NewPassword({ match, history }) {
         </Fragment>
     );
 
+    const finalDestiny = isBizTeam
+        ? "/t/app/nucleo-equipe/acesso"
+        : "/senha-de-acesso";
     const showSuccessContent = () => (
         <section className="animated fadeInUp">
             <p
@@ -274,7 +281,7 @@ export default function NewPassword({ match, history }) {
                 <RedirectLink
                     toDashTab={changeMode ? "Ajustes" : undefined}
                     goDash={changeMode ? true : false}
-                    to={!changeMode ? "/senha-de-acesso" : undefined}
+                    to={!changeMode ? finalDestiny : undefined}
                 >
                     <ButtonFab
                         title={changeMode ? "VOLTAR" : "ACESSAR"}

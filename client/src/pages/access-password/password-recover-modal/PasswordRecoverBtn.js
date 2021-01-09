@@ -12,10 +12,11 @@ const Async = Load({
 export default function PasswordRecoverBtn({
     textColor,
     fromBlockedComp = false,
+    role,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncPasswordRecoverContent = <Async />;
+    const AsyncPasswordRecoverContent = <Async role={role} />;
 
     const handleFullOpen = () => {
         setFullOpen(true);

@@ -31,7 +31,7 @@ const getStyles = () => ({
     },
 });
 
-export default function AsyncPasswordRecoverContent() {
+export default function AsyncPasswordRecoverContent({ role }) {
     const [data, setData] = useState({
         cpf: "",
         email: "",
@@ -138,6 +138,7 @@ export default function AsyncPasswordRecoverContent() {
                 userId,
                 cpf,
                 email,
+                role,
             };
             const success = await getAPI({
                 method: "post",

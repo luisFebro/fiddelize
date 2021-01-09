@@ -4,10 +4,13 @@ import AccessPassCreation from "../../../dashboard-client-admin/pass-page/Access
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { getVar, setVar } from "../../../../hooks/storage/useVar";
 import isThisApp from "../../../../utils/window/isThisApp";
+import useBackColor from "../../../../hooks/useBackColor";
 
 const isApp = isThisApp();
 // register agent in the payment gateway provider (Pagseguro)
 export default function PayGatewayRegister({ history, location }) {
+    useBackColor("var(--themeP)");
+
     const isSuccess = location.search.includes(
         "successFiddelizeAuthorization=true"
     );
@@ -15,7 +18,8 @@ export default function PayGatewayRegister({ history, location }) {
     useEffect(() => {
         (async () => {
             const isDone = await getVar("donePayGateway");
-            if (isDone) history.push(isApp ? "/mobile-app" : "/acesso");
+            if (isDone)
+                history.push(isApp ? "/t/app/nucleo-equipe/acesso" : "/acesso");
         })();
     }, []);
 

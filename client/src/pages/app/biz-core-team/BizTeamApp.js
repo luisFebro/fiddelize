@@ -5,9 +5,12 @@ import ShareLink from "./share-link/ShareLink";
 import BizTeamNavbar from "./navbar/BizTeamNavbar";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import useBackColor from "../../../hooks/useBackColor";
+import useAuth from "../../../hooks/useAuthUser";
 
-export default function BizTeamApp() {
+export default function BizTeamApp({ history }) {
     const userFirstName = "Febro";
+
+    useAuth({ history });
 
     useScrollUp();
     useBackColor("var(--themeBackground--default)");

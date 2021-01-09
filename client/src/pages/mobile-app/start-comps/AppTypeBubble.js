@@ -10,8 +10,10 @@ const handleAppType = ({
 }) => {
     const isClientUser = role === "cliente"; // isAuthUser && this isAuthUser hinters app type to appear when user is logged out.
     const isClientMember = role === "cliente-membro";
+    const isBizTeam = role === "nucleo-equipe";
 
-    if (!isAuthUser && (isClientMember || isClientUser)) return true;
+    if (!isAuthUser && (isClientMember || isClientUser || isBizTeam))
+        return true;
     if (roleWhichDownloaded === "cliente") return false;
 
     const gotEmptyData =
@@ -38,8 +40,11 @@ export default function AppTypeBubble({
         { coll: "shapes", key: `app_start_shape_${selfThemePColor}` }
     );
 
+    const isBizTeam = role === "nucleo-equipe";
+
     const handleRoleName = () => {
         if (loadingAccess) return "...";
+        if (isBizTeam) return "Fiddelize";
         if (role === "cliente-membro") return "Membro";
         if (role === "cliente-admin" || isUrlAdmin) return "Admin";
         if (role === "cliente") return "Cliente";
@@ -94,7 +99,8 @@ export default function AppTypeBubble({
                         </span>
                         <br />
                         <span className="text-title text-nowrap">
-                            {!loadingAccess && "do"} {handleRoleName()}
+                            {!loadingAccess && !isBizTeam && "do"}{" "}
+                            {handleRoleName()}
                         </span>
                     </p>
                 </div>

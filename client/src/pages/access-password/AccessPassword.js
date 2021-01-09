@@ -43,7 +43,7 @@ const getStyles = () => ({
     },
 });
 
-export default function AccessPassword({ history }) {
+export default function AccessPassword({ history, isBizTeam = false }) {
     const [display, setDisplay] = useState("");
     const [data, setData] = useState({
         isBlocked: false,
@@ -52,6 +52,8 @@ export default function AccessPassword({ history }) {
         loading: false,
     });
     const { isBlocked, lockMin, passOk, loading } = data;
+
+    const role = isBizTeam ? "nucleo-equipe" : "cliente-admin";
 
     const {
         selfThemeBackColor: backColor,
@@ -62,7 +64,9 @@ export default function AccessPassword({ history }) {
     const dispatch = useStoreDispatch();
 
     const needDark = selectTxtStyle(backColor, { needDarkBool: true });
-    useBackColor(`var(--themeBackground--${backColor})`);
+    useBackColor(
+        `var(--themeBackground--${isBizTeam ? "default" : backColor})`
+    );
     useScrollUp();
 
     const [userId] = useData(["userId"], { dots: false });
@@ -73,11 +77,15 @@ export default function AccessPassword({ history }) {
                 return await getAPI({
                     method: "post",
                     url: checkPassword(),
-                    body: { userId, checkIfLocked: true },
+                    body: {
+                        userId,
+                        checkIfLocked: true,
+                        role,
+                    },
                 });
             }
             async function runToken() {
-                const body = { _id: userId };
+                const body = { _id: userId, role };
                 const { data: encryptedToken } = await getAPI({
                     method: "post",
                     url: getToken(),
@@ -123,6 +131,7 @@ export default function AccessPassword({ history }) {
         const body = {
             userId,
             pswd: display,
+            role,
         };
 
         setData((prev) => ({ ...prev, loading: true }));
@@ -190,7 +199,7 @@ export default function AccessPassword({ history }) {
 
                 // wait for the lock animation to end...
                 setTimeout(async () => {
-                    await authenticate(newToken, { dispatch, history });
+                    await authenticate(newToken, { history, role });
                 }, 1000);
             })();
         }
@@ -198,7 +207,9 @@ export default function AccessPassword({ history }) {
 
     const showInterativeLock = () => (
         <Lock
-            backColor={`var(--themeBackground--${backColor})`}
+            backColor={`var(--themeBackground--${
+                isBizTeam ? "default" : backColor
+            })`}
             needUnlock={passOk}
             isLockLoading={completedFill && loading}
         />
@@ -286,6 +297,7 @@ export default function AccessPassword({ history }) {
                     <section style={{ marginBottom: 330 }}>
                         <PasswordRecoverBtn
                             textColor={needDark ? "text-black" : "text-white"}
+                            role={role}
                         />
                     </section>
                     <NumericKeyboard

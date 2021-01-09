@@ -100,6 +100,7 @@ function ClientMobileApp({ location, history }) {
         fullName,
         memberId,
         disconnectCliMember,
+        disconnectAgent,
     ] = useData([
         "userId",
         "rememberAccess",
@@ -109,6 +110,7 @@ function ClientMobileApp({ location, history }) {
         "name",
         "memberId",
         "disconnectCliMember",
+        "disconnectAgent",
     ]);
 
     // memberId is cleaned after a successful registration.
@@ -233,6 +235,14 @@ function ClientMobileApp({ location, history }) {
             isSessionOver
                 ? history.push("/senha-equipe")
                 : history.push("/t/app/equipe");
+        }
+    }
+
+    if (isBizTeam) {
+        if (!disconnectAgent && userId) {
+            isSessionOver
+                ? history.push("t/app/nucleo-equipe/acesso")
+                : history.push("t/app/nucleo-equipe");
         }
     }
 

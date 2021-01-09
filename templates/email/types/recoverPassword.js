@@ -10,10 +10,34 @@ Other email implementation's suggestions:
 exports.recoverPassword = (payload) => {
     if (!payload) return false;
 
-    let { toEmail, token, name } = payload;
+    let { toEmail, token, name, role } = payload;
     name = name && getFirstName(name.cap());
 
-    const authLink = `${CLIENT_URL}/nova-senha/${token}`;
+    const isBizTeam = role === "nucleo-equipe";
+    const urlBizTeam = isBizTeam ? "?nucleo-equipe=1" : "";
+    const authLink = `${CLIENT_URL}/nova-senha/${token}${urlBizTeam}`;
+
+    const pColor = "#4a148c";
+    const sColor = "#0ff";
+    const showBtn = ({ title, link, bgColor = "#000", txtColor = "#fff" }) => `
+        <center>
+            <table width="100%">
+              <tr>
+                  <td>
+                      <table border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                              <td style="border-radius: 15px;" bgcolor=${bgColor}>
+                                  <a href=${link} target="_blank" style="padding: 8px 12px; border: 1px solid #fff;font-family: Helvetica, Arial, sans-serif;font-size: 18px; color: ${txtColor};text-decoration: none;font-weight:bold;display: inline-block;">
+                                      ${title}
+                                  </a>
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+            </table>
+        </center>
+    `;
 
     return {
         toEmail,
@@ -25,9 +49,14 @@ exports.recoverPassword = (payload) => {
                      <img style="max-width: 400px;" src="https://imgur.com/YUdJbI2.png" width="100%" height="150px"/>
                 </header>
             </center>
-            <h3>Para trocar sua senha, clique aqui em <a href=${authLink}>TROCAR SENHA</a> ou pelo seguinte link:</h3>
+            <h3>Para trocar sua senha, clique no botão abaixo:</h3>
             <br />
-            <h3><a href=${authLink}>${authLink}</a></h3>
+            ${showBtn({
+                title: "trocar senha",
+                link: authLink,
+                bgColor: pColor,
+                txtColor: sColor,
+            })}
             <br />
             <h4>Por segurança, este link expira em 1 hora ou quando usado.</h4>
             <footer>
