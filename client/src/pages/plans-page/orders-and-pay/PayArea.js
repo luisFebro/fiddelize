@@ -56,7 +56,7 @@ export default function PayArea({
         firstDueDate,
     } = data;
 
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName, bizName } = useClientAdmin();
     const { _id, phone, name: userName, email: senderEmail } = useProfile();
 
     const startedPagseguro = useStartPagseguro();
@@ -143,6 +143,7 @@ export default function PayArea({
         renewalDaysLeft,
         renewalReference,
         isSingleRenewal,
+        bizName, //for email alert only
     };
 
     const showCTAs = () =>

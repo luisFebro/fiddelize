@@ -1,7 +1,9 @@
 const { recoverPassword } = require("./types/recoverPassword");
+const { payAlert } = require("./types/payAlert");
 
 const store = {
     recoverPassword,
+    payAlert,
 };
 
 async function pickTemplate(type = "text", options = {}) {
@@ -28,7 +30,6 @@ async function pickTemplate(type = "text", options = {}) {
 
     const found = store[type];
     if (!found) return false;
-
     return found(payload);
 }
 

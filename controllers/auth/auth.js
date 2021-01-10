@@ -81,7 +81,6 @@ exports.mwIsClientAdmin = (req, res, next) => {
 exports.mwSession = async (req, res, next) => {
     // n1
     const token = getTreatedToken(req);
-    console.log("token", token);
 
     if (!token)
         return res.json({ error: "New user accessed without JWT Token!" });
@@ -147,6 +146,7 @@ exports.register = async (req, res) => {
         filter,
         bizImg,
         bizName,
+        // below only cli-user vars
         tempScore,
         memberRole,
         linkCode,

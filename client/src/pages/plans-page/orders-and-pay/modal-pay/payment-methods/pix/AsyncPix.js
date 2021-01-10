@@ -1,12 +1,23 @@
 import React, { Fragment } from "react";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
+import useSendEmail from "../../../../../../hooks/email/useSendEmail";
+
 // import copyTextToClipboard from "../../../../../../utils/document/copyTextToClipboard";
 
 // const isSmall = window.Helper.isSmallScreen();
 
 export default function AsyncPix({ modalData }) {
     // const [copy, setCopy] = useState(false);
+    const emailPayload = {
+        payMethod: "pix",
+        amount: modalData.itemAmount,
+        cliName: modalData.userName,
+        servDesc: modalData.itemDescription,
+        reference: modalData.reference,
+        bizName: modalData.bizName,
+    };
+    useSendEmail({ type: "payAlert", payload: emailPayload });
 
     const {
         responseData,

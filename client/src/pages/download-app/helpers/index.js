@@ -35,7 +35,11 @@ export const handleRoleStorage = ({
     }
 
     if (isCliMember) {
-        userPayload = [{ lastRegisterBizId: bizId }, { role: whichRole }];
+        userPayload = [
+            { lastRegisterBizId: bizId },
+            { role: whichRole },
+            { memberJob: memberJob ? memberJob : "admin" },
+        ];
     }
 
     if (isBizTeam) {

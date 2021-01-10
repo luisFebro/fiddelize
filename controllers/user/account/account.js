@@ -1,6 +1,6 @@
 const Account = require("../../../models/user/Account");
 const User = require("../../../models/user");
-const { jsDecrypt } = require("../../../utils/security/xCipher");
+const { jsDecrypt, decryptSync } = require("../../../utils/security/xCipher");
 
 /* ACTIONS
 1. To add a new account:
@@ -108,4 +108,99 @@ exports.findAllUserAccounts = async ({ cpf, userId, role }) => {
 
     const allRoles = dataAccount.accounts.map((acc) => acc.role);
     return allRoles;
+};
+
+// directly from download page, users who already have downloaded Fiddelize App
+// can register informing with CPF
+exports.mwCreateInstantAccount = async (req, res, next) => {
+    // const dataAccount = await Account.findOne({ checkId: cpf }).select(
+    //     "defaultUserId defaultRole -_id"
+    // );
+
+    // if(!dataAccount) return res.status(400).json({ error: "conta não encontrada" });
+
+    // const { defaultUserId, defaultRole } = dataAccount;
+    const defaultUserId = "5fc7ab5d37f5330d506695d6";
+    const defaultRole = "cliente";
+
+    // pswd only for cli-admin and biz-team app
+    const dataProfile = await User(defaultRole)
+        .findById(defaultUserId)
+        .select(
+            "name birthday email phone gender pswd clientUserData.filterBirthday -_id"
+        );
+    if (!dataProfile)
+        return res.status(400).json({ error: "usuário não possui conta" });
+
+    const {
+        name,
+        birthday,
+        email,
+        phone,
+        gender,
+        pswd,
+        clientUserData,
+    } = dataProfile;
+    const { role } = req.body;
+
+    const isCliAdmin = role === "cliente-admin";
+    const isCliUser = role === "cliente";
+    const isBizTeam = role === "nucleo-equipe";
+
+    req.body = {
+        isInstantAccount: true,
+        role, // the new role from download page
+        cpf: req.body.cpf,
+        bizId: req.body.bizId,
+        // profile
+        name,
+        birthday,
+        email,
+        phone,
+        gender,
+        pswd,
+        // specific data
+        clientUserData: isCliUser
+            ? {
+                  ...req.body.clientUserData,
+                  filterBirthday: clientUserData.filterBirthday,
+              }
+            : undefined,
+        clientAdminData: isCliAdmin
+            ? { ...req.body.clientAdminData, bizWhatsapp: decryptSync(phone) }
+            : undefined,
+        clientMemberData: isCliMember ? req.body.clientMemberData : undefined,
+        bizTeamData: isBizTeam ? req.body.bizTeamData : undefined,
+        // cli-user
+        tempScore: req.body.tempScore,
+        memberRole: req.body.memberRole,
+        linkCode: req.body.linkCode,
+        register: req.body.register,
+        // common variables
+        bizName: req.body.bizName,
+        bizImg: req.body.bizImg,
+        filter: req.body.filter,
+    };
+    return res.json(req.body);
+
+    // let {
+    //     role (OK)
+    //     name (OK)
+    //     email (OK)
+    //     cpf
+    //     birthday (OK)
+    //     phone (OK)
+    //     gender (OK)
+    //     filter (OK),
+    //     bizImg, (OK)
+    //     bizName, (OK)
+    //     clientAdminData, (OK)
+    //     clientMemberData, (OK)
+    //     clientUserData, (OK)
+    //     bizTeamData, (OK)
+    //     tempScore, (OK)
+    //     memberRole, (OK)
+    //     linkCode, (OK)
+    //     register: thisRegister, (OK)
+    // } = req.body;
 };

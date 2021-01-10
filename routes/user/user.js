@@ -49,6 +49,12 @@ const {
     getMembersPodium,
 } = require("../../controllers/user/team/team");
 
+const {
+    mwCreateInstantAccount,
+} = require("../../controllers/user/account/account");
+
+const { register } = require("../../controllers/auth/auth");
+
 const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
 // @route  api/user
 // RUD
@@ -97,6 +103,9 @@ router.get("/cli-user/temp-score/list", mwIsAuth, readTempScoreList);
 router.post("/cli-user/temp-score/set-last-done", mwIsAuth, setLastScoreAsDone);
 router.post("/cli-user/temp-score/encrypt", mwIsAuth, encryptLinkScore);
 router.get("/cli-user/temp-score/allowed-link", isLinkAllowed);
+
+// ACCOUNT
+router.post("/instant-acc", mwCreateInstantAccount, register);
 
 router.param("userId", mwUserId); // n1
 

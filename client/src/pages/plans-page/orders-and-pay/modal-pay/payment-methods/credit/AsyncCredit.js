@@ -6,6 +6,7 @@ import useAPI, {
 } from "../../../../../../hooks/api/useAPI";
 import { decryptCreditCard } from "../../../../../../utils/security/creditCard";
 import "./_AsyncCredit.scss";
+import useSendEmail from "../../../../../../hooks/email/useSendEmail";
 
 export default function AsyncCredit({ modalData }) {
     const [watermark, setWatermark] = useState(true);
@@ -29,6 +30,16 @@ export default function AsyncCredit({ modalData }) {
     }, [dataInvest, loadingInvest]);
 
     const { itemDescription, itemAmount } = modalData;
+
+    const emailPayload = {
+        payMethod: "cartão de crédito",
+        amount: modalData.itemAmount,
+        cliName: modalData.userName,
+        servDesc: modalData.itemDescription,
+        reference: modalData.reference,
+        bizName: modalData.bizName,
+    };
+    useSendEmail({ type: "payAlert", payload: emailPayload });
 
     const showTitle = () => (
         <div className="mt-2">

@@ -16,7 +16,11 @@ export default function AgentNewPassword({ history }) {
         (async () => {
             const isDone = await getVar("donePswd");
             if (isDone)
-                history.push(isApp ? "/t/app/nucleo-equipe/acesso" : "/acesso");
+                history.push(
+                    isApp
+                        ? "/t/app/nucleo-equipe/acesso"
+                        : "/acesso/verificacao"
+                );
         })();
     }, []);
 

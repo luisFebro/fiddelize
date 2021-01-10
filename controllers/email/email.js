@@ -47,7 +47,7 @@ exports.sendEmail = async (req, res) => {
     // recoverPassword = toEmail, token, name
 
     const [templateErr, content] = await c(pickTemplate(type, { payload }));
-    if (templateErr) return res.status(400).json({ error: templateErr });
+    if (templateErr) return res.status(400).json({ error: `${templateErr}` }); // LESSON: use templates string. Otherwise it will produce error like this: {}
 
     const [providerErr, providerRes] = await c(
         handleEmailProvider({ content, priority, toEmail: payload.toEmail })

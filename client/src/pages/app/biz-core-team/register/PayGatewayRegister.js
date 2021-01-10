@@ -19,7 +19,11 @@ export default function PayGatewayRegister({ history, location }) {
         (async () => {
             const isDone = await getVar("donePayGateway");
             if (isDone)
-                history.push(isApp ? "/t/app/nucleo-equipe/acesso" : "/acesso");
+                history.push(
+                    isApp
+                        ? "/t/app/nucleo-equipe/acesso"
+                        : "/acesso/verificacao"
+                );
         })();
     }, []);
 

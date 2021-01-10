@@ -19,6 +19,13 @@ import getQueries from "./helpers/getQueries";
 import { handleRoleStorage } from "./helpers";
 import useAllowedLink from "./hooks/useAllowedLink";
 import { Load } from "../../components/code-splitting/LoadableComp";
+
+export const AsyncInstantAccount = Load({
+    loader: () =>
+        import(
+            "./instant-accout/InstantAccount" /* webpackChunkName: "instant-account-comp-lazy" */
+        ),
+});
 // CONTENTS
 export const AsyncBizTeamText = Load({
     loader: () =>
@@ -280,6 +287,21 @@ export default function DownloadApp({ match, location }) {
         if (isBizTeam) return <AsyncBizTeamText {...props} />;
     };
 
+    const instantAccountPayload = {
+        role: whichRole,
+        bizImg: isBizTeam ? "/img/official-logo-name.png" : bizLogo,
+        bizName: isBizTeam ? "fiddelize" : bizName,
+        // for specific user data
+        isCliAdmin,
+        isCliUser,
+        bizId,
+        primaryAgent,
+        // cli-user
+        memberJob,
+        memberId: linkId,
+        userScore,
+    };
+
     return (
         <section className="target--content-download">
             {showSpinner()}
@@ -288,6 +310,7 @@ export default function DownloadApp({ match, location }) {
             ) : (
                 <section className={`${txtBackColor}`}>
                     {handleAppTypeText()}
+                    <AsyncInstantAccount payload={instantAccountPayload} />
                     <PwaInstaller
                         title={
                             isCliAdmin

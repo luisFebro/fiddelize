@@ -13,9 +13,11 @@ import useAPIList, {
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../hooks/api/useElemDetection";
-import useElemShowOnScroll from "../../../../../hooks/scroll/useElemShowOnScroll";
 import RegisterPanelBtn from "../../../dash-clients/clients-history/register-panel-btn/RegisterPanelBtn";
 import { useRunComp } from "../../../../../hooks/useRunComp";
+// need to handle update when the component amount cuz it is not working sometimes. The element is not detected.
+// import useDetectScrollSingle from "../../../../../hooks/scroll/useDetectScrollSingle";
+
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -50,7 +52,7 @@ export default function AsyncCardsList() {
 
     const styles = getStyles();
 
-    const showCTA = useElemShowOnScroll("#showNewCTA");
+    const showCTA = true; //useDetectScrollSingle("#showNewCTA");
     const showFixedCTA = () =>
         showCTA && (
             <section

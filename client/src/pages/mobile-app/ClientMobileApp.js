@@ -122,6 +122,13 @@ function ClientMobileApp({ location, history }) {
         }
     }, [memberId]);
 
+    useEffect(() => {
+        if (needAppRegister) {
+            setLoginOrRegister("register");
+            // this is set to false just after registration with setStorageRegisterDone.
+        }
+    }, [needAppRegister]);
+
     const loadingData = Boolean(rememberAccess === "...");
 
     let { isAuthUser } = useAuthUser();
@@ -205,13 +212,6 @@ function ClientMobileApp({ location, history }) {
             history.push("/mobile-app");
         }
     }, [runName]);
-
-    useEffect(() => {
-        if (needAppRegister) {
-            setLoginOrRegister("register");
-            // this is set to false just after registration with setStorageRegisterDone.
-        }
-    }, [needAppRegister]);
 
     const needClientLogo =
         (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
@@ -358,7 +358,8 @@ function ClientMobileApp({ location, history }) {
     const conditionRegister =
         loginOrRegister === "register" && showRegister(true);
     const conditionLogin =
-        loginOrRegister === "login" && accessCheck && showLogin();
+        (loginOrRegister === "login" && accessCheck && showLogin()) ||
+        (loginOrRegister === "login" && !isAuthUser);
 
     if (loadingData) {
         return (

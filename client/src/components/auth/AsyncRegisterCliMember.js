@@ -90,7 +90,6 @@ function Register({
         gender: "selecione forma tratamento",
         clientMemberData: {
             bizId: "",
-            filterBirthday: "",
             job: "vendas",
         },
         filter,
@@ -108,10 +107,11 @@ function Register({
 
     let { role, name, email, gender, birthday, cpf, phone } = data;
 
-    const [lastRegisterBizId, bizId, userId] = useData([
+    const [lastRegisterBizId, bizId, userId, memberJob] = useData([
         "lastRegisterBizId",
         "bizId",
         "userId",
+        "memberJob",
     ]);
 
     const isReady = selfBizLogoImg && bizName && lastRegisterBizId !== "...";
@@ -127,11 +127,12 @@ function Register({
                     clientMemberData: {
                         ...data.clientMemberData,
                         bizId: lastRegisterBizId || bizId || userId, // bizId is just a fallback in case user got the app but not from download page which is not the case for upcoming app downloads...
+                        job: memberJob,
                     },
                 }));
             }, 4000);
         }
-    }, [isReady, selfBizLogoImg, bizName, lastRegisterBizId]);
+    }, [isReady, selfBizLogoImg, bizName, lastRegisterBizId, memberJob]);
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
     // }));

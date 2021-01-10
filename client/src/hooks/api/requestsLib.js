@@ -1,5 +1,5 @@
 // URLs ONLY
-// user
+// USER
 export const readUser = (userId, role, noResponse = true) =>
     `/api/user/${userId}?noResponse=${noResponse}&thisRole=${role}`;
 export const updateUser = (userId) => `/api/user/${userId}?noResponse=true`;
@@ -10,6 +10,10 @@ export const readUserList = (cliAdminId) =>
     `/api/user/list/all?bizId=${cliAdminId}`;
 export const readHighestScores = (cliAdminId) =>
     `/api/user/list/highest-scores?bizId=${cliAdminId}`;
+// account
+export const createInstantAccount = () => `/api/user/instant-acc`; // POST
+
+// END USER
 
 // PURCHASE'S HISTORY
 export const readPurchaseCardsList = (userId) =>

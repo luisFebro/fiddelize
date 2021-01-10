@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getUrlLink } from "../redux/actions/userActions";
 import { setVar, store } from "../hooks/storage/useVar";
 
+// linkCode example: alan_yvs493z0
 export default function RedirectLink({ match }) {
     const [error, setError] = useState("");
     const code = match.params.nameAndCode;

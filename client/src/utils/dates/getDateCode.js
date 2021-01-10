@@ -1,6 +1,6 @@
 // useful to know which date is largest than another without year as parameter like brithdays
 // for now, only works for string br dates: e.g 23 de Agosto de 1994
-//  format: month code + day code
+//  format: month code + day code (always the last 2 digits. The first characters can be either one or two characters for month. for instance, january 5th will be 105, and dezember 5th will be 1205)
 
 function getMonthesDetails() {
     return {
@@ -12,7 +12,7 @@ function getMonthesDetails() {
             maxDay: 28,
             codeNum: 2,
         },
-        "março": {
+        março: {
             maxDay: 31,
             codeNum: 3,
         },
@@ -52,24 +52,25 @@ function getMonthesDetails() {
             maxDay: 31,
             codeNum: 12,
         },
-    }
+    };
 }
 
 const monthesDetails = getMonthesDetails();
 
 export default function getDateCode(strDate) {
-    if(!strDate) return {
-        code: 0,
-        monthCode: 0,
-        maxDayMonth: 0,
-    }
+    if (!strDate)
+        return {
+            code: 0,
+            monthCode: 0,
+            maxDayMonth: 0,
+        };
 
     const indFirstSpacing = strDate.indexOf(" ");
     let day = strDate.slice(0, indFirstSpacing);
-    if(day === "1º") day = "01";
-    if(day.length === 1) day = `0${day}`;
+    if (day === "1º") day = "01";
+    if (day.length === 1) day = `0${day}`;
 
-    const indFirstMonthSpacing = strDate.lastIndexOf(" ", 8) // n1
+    const indFirstMonthSpacing = strDate.lastIndexOf(" ", 8); // n1
     const slicedMonthDate = strDate.slice(indFirstMonthSpacing).trim();
     const indLastMonthSpacing = slicedMonthDate.indexOf(" ");
     const month = slicedMonthDate.slice(0, indLastMonthSpacing).toLowerCase();
@@ -79,7 +80,7 @@ export default function getDateCode(strDate) {
         code: Number(monthCode + day),
         monthCode,
         maxDayMonth,
-    }
+    };
 }
 
 // console.log(getDateCode("5 de Agosto de 2017"));

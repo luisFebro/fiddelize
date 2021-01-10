@@ -88,7 +88,7 @@ function Register({
         cpf: "",
         gender: "selecione forma tratamento",
         bizTeamData: {
-            job: "afiliado",
+            job: "afiliado", // if rep-comercial, it should be manually set in DB for now.
             primaryAgent: "",
         },
         filter,

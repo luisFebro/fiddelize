@@ -3,6 +3,7 @@ import { ShowPayWatermarks } from "../../comps/GlobalComps";
 // comps
 import BankList from "./bank-list/BankList"; // const isSmall = window.Helper.isSmallScreen();
 import LinkBankDebit from "./LinkBankDebit";
+import useSendEmail from "../../../../../../hooks/email/useSendEmail";
 
 /* IMPORTANT NOTES
 only works in the production mode. sandbox gives error.
@@ -26,6 +27,16 @@ export default function AsyncDebit({ modalData }) {
         selectedBank: null,
     });
     const { selectedBank, currComp } = data;
+
+    const emailPayload = {
+        payMethod: "débito bancário",
+        amount: modalData.itemAmount,
+        cliName: modalData.userName,
+        servDesc: modalData.itemDescription,
+        reference: modalData.reference,
+        bizName: modalData.bizName,
+    };
+    useSendEmail({ type: "payAlert", payload: emailPayload });
 
     const showTitle = () => (
         <div className="mt-2">

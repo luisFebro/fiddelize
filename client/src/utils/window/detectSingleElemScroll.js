@@ -3,6 +3,9 @@ export default function detectSingleElemScroll(elemQuery, options = {}) {
     const { callback } = options;
 
     if (!elemQuery) return console.log("ERROR: Missing elem Query");
+    const finalElem = document.querySelector(elemQuery);
+    // const isElementType = finalElem && finalElem.nodeType;
+    // if(!isElementType) return;
 
     if (
         "IntersectionObserver" in window &&
@@ -13,7 +16,7 @@ export default function detectSingleElemScroll(elemQuery, options = {}) {
             const isIntersecting = entries[0].isIntersecting;
             callback(isIntersecting);
         });
-        observer.observe(document.querySelector(elemQuery));
+        observer.observe(finalElem);
     }
 }
 

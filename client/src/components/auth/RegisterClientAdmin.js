@@ -22,8 +22,6 @@ import handleChange from "../../utils/form/use-state/handleChange";
 import lStorage from "../../utils/storage/lStorage";
 import { handleNextField } from "../../utils/form/kit";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
-import { getUniqueCodeName } from "../../utils/string/generateAlphaNumeric";
-import addDashesToString from "../../utils/string/addDashesToString";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import getFilterDate from "../../utils/dates/getFilterDate";
 // Material Ui
@@ -39,6 +37,7 @@ import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import ReactGA from "react-ga";
 import { useClientAdmin } from "../../hooks/useRoleData";
+import generateBizCodeName from "../../pages/download-app/instant-accout/helpers/generateBizCodeName";
 
 const filter = getFilterDate();
 
@@ -90,9 +89,6 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         cpf: "",
         gender: "selecione forma tratamento",
         filter,
-        // PENDING: These variables is not used in the curr version
-        // Since the register is still in the first page in the website.
-        // This will be active when change the form to be after app creation...
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
     });
@@ -143,10 +139,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     useEffect(() => {
         const thisBizName = clientAdminData.bizName;
         if (thisBizName) {
-            const bizCode = getUniqueCodeName(thisBizName);
-            const finalDashedName = `${addDashesToString(
-                `${thisBizName}`
-            )}-${bizCode}`;
+            const finalDashedName = generateBizCodeName(thisBizName);
             setValObjWithStr(
                 data,
                 "clientAdminData.bizCodeName",
