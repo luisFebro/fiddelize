@@ -19,9 +19,8 @@ import { handleRoleStorage } from "./helpers";
 import useAllowedLink from "./hooks/useAllowedLink";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
-import isThisApp from "../../utils/window/isThisApp";
 
-const isApp = isThisApp();
+const isSmall = window.Helper.isSmallScreen();
 
 export const AsyncDetectedApp = Load({
     loader: () =>
@@ -55,8 +54,6 @@ export const AsyncClientUserText = Load({
         ),
 });
 // END CONTENTS
-
-const isSmall = window.Helper.isSmallScreen();
 
 const iconStyle = {
     fontSize: "140px",
@@ -350,7 +347,7 @@ export default function DownloadApp({ match, location }) {
                     <h2 className="text-subtitle">
                         Instruções caso não tenha encontrado o app
                     </h2>
-                    {isApp ? (
+                    {isSmall ? (
                         <Fragment>
                             <p>
                                 1) Verifique sua conexão. Mesmo que tenha
