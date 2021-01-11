@@ -18,7 +18,7 @@ export default function DetectedApp({
     txtPColor,
     pColor,
     instantAccountPayload,
-    setDownloadAvailable,
+    setData,
 }) {
     const [currComp, setCurrComp] = useState("detected");
     const [success, setSuccess] = useState(false);
@@ -77,7 +77,11 @@ export default function DetectedApp({
                                 <ButtonMulti
                                     title="continuar baixando app"
                                     onClick={() => {
-                                        setDownloadAvailable(true);
+                                        setData((prev) => ({
+                                            ...prev,
+                                            downloadAvailable: true,
+                                            showDesktopMsg: true,
+                                        }));
                                     }}
                                     variant="link"
                                     color={
@@ -123,7 +127,7 @@ export default function DetectedApp({
                     txtPColor={txtPColor}
                     pColor={pColor}
                     setSuccess={setSuccess}
-                    setDownloadAvailable={setDownloadAvailable}
+                    setMainData={setData}
                 />
             </section>
         );

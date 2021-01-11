@@ -84,25 +84,32 @@ const getStyles = ({ isCliAdmin, pColor }) => ({
 
 export default function DownloadApp({ match, location }) {
     const [isPageReady, setPageReady] = useState(false);
-    let [userName, setUserName] = useState(match.params.userName);
-    const [run, setRun] = useState(false);
-    const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
-    const [downloadAvailable, setDownloadAvailable] = useState(true);
-    const [analysis, setAnalysis] = useState(true);
-    const [test, setTest] = useState({
+    const [data, setData] = useState({
+        run: false,
+        downloadAvailable: false, // LESSON: false is default
+        analysis: true,
+        showDesktopMsg: false,
+        needSelfServiceData: false,
+        // for test only
         testMode: true,
-        appinstalled: "none",
         relatedInstalledApps: "none",
         beforeinstallprompt: "none",
     });
+
     const {
+        run,
+        downloadAvailable,
+        analysis,
+        showDesktopMsg,
+        needSelfServiceData,
         testMode,
         appinstalled,
         relatedInstalledApps,
         beforeinstallprompt,
-    } = test;
+    } = data;
 
-    userName = userName && userName.replace(/\+/g, " ").cap();
+    const matchName = match.params.userName;
+    const userName = matchName && matchName.replace(/\+/g, " ").cap();
 
     // MAIN VARIABLES
     const [
@@ -139,9 +146,14 @@ export default function DownloadApp({ match, location }) {
     // HOOKS
     const isAllowedLink = useAllowedLink({ bizId, isCliUser, userScore });
     useEffect(() => {
-        checkIfElemIsVisible(".target-download", (res) => setRun(true));
+        checkIfElemIsVisible(".target-download", (res) =>
+            setData((prev) => ({ ...prev, run: true }))
+        );
         if (run) {
-            setTimeout(() => setAnalysis(false), 5000);
+            setTimeout(
+                () => setData((prev) => ({ ...prev, analysis: false })),
+                5000
+            );
         }
     }, [run]);
 
@@ -189,7 +201,7 @@ export default function DownloadApp({ match, location }) {
                     "Ocorreu um problema. Verifique sua conexão",
                     "error"
                 );
-            setNeedSelfServiceData(true);
+            setData({ ...data, needSelfServiceData: true });
         });
     }, [bizId]);
 
@@ -273,7 +285,7 @@ export default function DownloadApp({ match, location }) {
                 txtPColor={txtPColor}
                 pColor={pColor}
                 instantAccountPayload={instantAccountPayload}
-                setDownloadAvailable={setDownloadAvailable}
+                setData={setData}
             />
         );
     };
@@ -329,19 +341,23 @@ export default function DownloadApp({ match, location }) {
                 </a>
             </div>
             <p className="text-center my-3">ou</p>
-            <p>
-                Se você estiver usando o Desktop e o app já está instalado,
-                basta encontrar o app na seu desktop ou abra o seu app com o
-                botão similar a este:
-            </p>
-            <div className="container-center">
-                <img
-                    src="/img/demos/pwa/button-to-open-pwa-desktop.png"
-                    width="189"
-                    height="auto"
-                    alt="botão abri app desktop"
-                />
-            </div>
+            {showDesktopMsg && (
+                <Fragment>
+                    <p>
+                        Se você estiver usando o Desktop e o app já está
+                        instalado, basta encontrar o app na seu desktop ou abra
+                        o seu app com o botão similar a este:
+                    </p>
+                    <div className="container-center">
+                        <img
+                            src="/img/demos/pwa/button-to-open-pwa-desktop.png"
+                            width="189"
+                            height="auto"
+                            alt="botão abri app desktop"
+                        />
+                    </div>
+                </Fragment>
+            )}
         </section>
     );
 
@@ -369,7 +385,7 @@ export default function DownloadApp({ match, location }) {
                         }
                         icon={`${CLIENT_URL}/img/official-logo-white.png`}
                         run={run}
-                        setDownloadAvailable={setDownloadAvailable}
+                        setData={setData}
                     />
                     {testMode && (
                         <p
@@ -384,8 +400,6 @@ export default function DownloadApp({ match, location }) {
                             analysis: {JSON.stringify(analysis)}
                             <br />
                             run: {JSON.stringify(run)}
-                            <br />
-                            appinstalled: {JSON.stringify(appinstalled)}
                             <br />
                             beforeinstallprompt:{" "}
                             {JSON.stringify(beforeinstallprompt)}

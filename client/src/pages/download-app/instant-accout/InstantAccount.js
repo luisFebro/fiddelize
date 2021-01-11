@@ -32,7 +32,7 @@ export default function InstantAccount({
     txtPColor,
     pColor,
     setSuccess,
-    setDownloadAvailable,
+    setMainData,
 }) {
     const {
         bizId,
@@ -143,7 +143,11 @@ export default function InstantAccount({
                             <ButtonMulti
                                 title="continuar baixando app"
                                 onClick={() => {
-                                    setDownloadAvailable(true);
+                                    setMainData((prev) => ({
+                                        ...prev,
+                                        downloadAvailable: true,
+                                        showDesktopMsg: true,
+                                    }));
                                 }}
                                 variant="link"
                                 color={

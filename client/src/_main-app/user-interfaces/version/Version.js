@@ -4,7 +4,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9230.6";
+const latestVersion = "3.9231.6";
 // PRÓXIMO:
 // split de pagamento backend pt2
 // sistema multi-conta (painel de cadastros)
