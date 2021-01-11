@@ -40,18 +40,6 @@ import {
 } from "./CommonImports";
 //END PAGES
 
-// This is the msg to be displayed for desktop users when popping up the
-// new screen right after the download.
-const InstallMsg = () => (
-    <div className="text-center mt-5">
-        <p className="text-white text-title">Seu App está sendo instalado!</p>
-        <p className="text-white text-subtitle mx-2">
-            Feche essa janela e abra o app direto da sua área de desktop assim
-            que aparecer a mensagem de confirmação.
-        </p>
-    </div>
-);
-
 function Mobile({ location, history }) {
     const locationNow = location.pathname;
 
@@ -87,7 +75,6 @@ function Mobile({ location, history }) {
                     exact
                     component={AsyncAppSharer}
                 />
-                <Route path="/baixe-app" exact component={InstallMsg} />
                 <Route
                     path="/baixe-app/:userName"
                     exact
@@ -162,6 +149,19 @@ function Mobile({ location, history }) {
 export default withRouter(Mobile);
 
 /* ARCHIVES
+// This is the msg to be displayed for desktop users when popping up the
+// new screen right after the download.
+const InstallMsg = () => (
+    <div className="text-center mt-5">
+        <p className="text-white text-title">Seu App está sendo instalado!</p>
+        <p className="text-white text-subtitle mx-2">
+            Feche essa janela e abra o app direto da sua área de desktop assim
+            que aparecer a mensagem de confirmação.
+        </p>
+    </div>
+);
+<Route path="/baixe-app" exact component={InstallMsg} />
+
 <PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
 
 import ChangePassword from '../../pages/client/ChangePassword';
