@@ -77,7 +77,7 @@ export default function PwaInstaller({ title, icon, run = true, setData }) {
     // TEST
     useEffect(() => {
         window.addEventListener("appinstalled", (evt) => {
-            setTest((prev) => ({
+            setData((prev) => ({
                 ...prev,
                 appinstalled: "app already installed" + JSON.stringify(evt),
             }));
