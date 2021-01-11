@@ -92,6 +92,7 @@ export default function DownloadApp({ match, location }) {
         needSelfServiceData: false,
         // for test only
         testMode: true,
+        appinstalled: "none",
         relatedInstalledApps: "none",
         beforeinstallprompt: "none",
     });
@@ -340,9 +341,9 @@ export default function DownloadApp({ match, location }) {
                     />
                 </a>
             </div>
-            <p className="text-center my-3">ou</p>
             {showDesktopMsg && (
                 <Fragment>
+                    <p className="text-center my-3">ou</p>
                     <p>
                         Se você estiver usando o Desktop e o app já está
                         instalado, basta encontrar o app na seu desktop ou abra
@@ -403,6 +404,7 @@ export default function DownloadApp({ match, location }) {
                             <br />
                             beforeinstallprompt:{" "}
                             {JSON.stringify(beforeinstallprompt)}
+                            appinstalled: {JSON.stringify(appinstalled)}
                             <br />
                             relatedInstalledApps:{" "}
                             {JSON.stringify(relatedInstalledApps)}

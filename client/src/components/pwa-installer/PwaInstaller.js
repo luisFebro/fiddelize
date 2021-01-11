@@ -74,6 +74,17 @@ export default function PwaInstaller({ title, icon, run = true, setData }) {
         })();
     }
 
+    // TEST
+    useEffect(() => {
+        window.addEventListener("appinstalled", (evt) => {
+            setTest((prev) => ({
+                ...prev,
+                appinstalled: "app already installed" + JSON.stringify(evt),
+            }));
+            setBannerVisible(false);
+        });
+    }, []);
+
     useEffect(() => {
         // This event requires the page to reload in order to set correctly...
         window.addEventListener("beforeinstallprompt", (e) => {
@@ -86,7 +97,7 @@ export default function PwaInstaller({ title, icon, run = true, setData }) {
 
             setData((prev) => ({
                 ...prev,
-                beforeinstallprompt: "e" + e,
+                beforeinstallprompt: "e:" + JSON.stringify(e),
             }));
         });
     }, []);
@@ -188,15 +199,5 @@ n1: If the user selects Install, the app is installed (available as standalone d
 */
 
 /* ARCHIVE
-useEffect(() => {
-    window.addEventListener("appinstalled", (evt) => {
-        console.log("evt", evt);
-        // Log install to analytics
-        setTest((prev) => ({
-            ...prev,
-            appinstalled: "app already installed" + evt,
-        }));
-        setBannerVisible(false);
-    });
-}, []);
+
 */
