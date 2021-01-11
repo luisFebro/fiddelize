@@ -35,11 +35,13 @@ const getStyles = () => ({
 });
 
 let deferredPrompt = null;
+const displayBannerOnDev = false;
 export default function PwaInstaller({
     title,
     icon,
     run = true,
     setDownloadAvailable,
+    setTest,
 }) {
     // A2HS = App to HomeScreen
     const [bannerVisible, setBannerVisible] = useState(false);
@@ -50,7 +52,7 @@ export default function PwaInstaller({
 
     const styles = getStyles();
 
-    const shouldRender = run && bannerVisible; //&& !isApp;
+    const shouldRender = displayBannerOnDev || (run && bannerVisible && !isApp);
 
     useEffect(() => {
         if (bannerVisible) {
@@ -63,18 +65,28 @@ export default function PwaInstaller({
     useEffect(() => {
         window.addEventListener("appinstalled", (evt) => {
             // Log install to analytics
-            alert("app already installed");
+            setTest((prev) => ({
+                ...prev,
+                appinstalled: "app already installed" + evt,
+            }));
             setBannerVisible(false);
         });
 
         //https://web.dev/get-installed-related-apps/
         //check if browser version supports the api
+        console.log(
+            "getInstalledRelatedApps",
+            window.navigator.getInstalledRelatedApps
+        );
         if ("getInstalledRelatedApps" in window.navigator) {
             (async () => {
                 const relatedApps = await navigator.getInstalledRelatedApps();
                 relatedApps.forEach((app) => {
                     //if your PWA exists in the array it is installed
-                    console.log(app);
+                    setTest((prev) => ({
+                        ...prev,
+                        relatedInstalledApps: app,
+                    }));
                 });
             })();
         }
@@ -89,6 +101,11 @@ export default function PwaInstaller({
             // Stash the event so it can be triggered later.
             deferredPrompt = e;
             setBannerVisible(true);
+
+            setTest((prev) => ({
+                ...prev,
+                beforeinstallprompt: e,
+            }));
         });
     }, []);
 

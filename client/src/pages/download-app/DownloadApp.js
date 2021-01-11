@@ -87,8 +87,20 @@ export default function DownloadApp({ match, location }) {
     let [userName, setUserName] = useState(match.params.userName);
     const [run, setRun] = useState(false);
     const [needSelfServiceData, setNeedSelfServiceData] = useState(false);
-    const [downloadAvailable, setDownloadAvailable] = useState(false);
+    const [downloadAvailable, setDownloadAvailable] = useState(true);
     const [analysis, setAnalysis] = useState(true);
+    const [test, setTest] = useState({
+        testMode: true,
+        appinstalled: "none",
+        relatedInstalledApps: "none",
+        beforeinstallprompt: "none",
+    });
+    const {
+        testMode,
+        appinstalled,
+        relatedInstalledApps,
+        beforeinstallprompt,
+    } = test;
 
     userName = userName && userName.replace(/\+/g, " ").cap();
 
@@ -127,7 +139,7 @@ export default function DownloadApp({ match, location }) {
     // HOOKS
     const isAllowedLink = useAllowedLink({ bizId, isCliUser, userScore });
     useEffect(() => {
-        checkIfElemIsVisible(".target-download", (res) => setRun(res));
+        checkIfElemIsVisible(".target-download", (res) => setRun(true));
         if (run) {
             setTimeout(() => setAnalysis(false), 5000);
         }
@@ -359,15 +371,29 @@ export default function DownloadApp({ match, location }) {
                         run={run}
                         setDownloadAvailable={setDownloadAvailable}
                     />
-                    <p className="my-5 text-normal mx-3 text-white">
-                        TESTE:
-                        <br />
-                        downloadAvailable: {JSON.stringify(downloadAvailable)}
-                        <br />
-                        analysis: {JSON.stringify(analysis)}
-                        <br />
-                        run: {JSON.stringify(run)}
-                    </p>
+                    {testMode && (
+                        <p
+                            className="mt-5 text-normal mx-3 text-white"
+                            style={{ marginBottom: 150 }}
+                        >
+                            TESTE:
+                            <br />
+                            downloadAvailable:{" "}
+                            {JSON.stringify(downloadAvailable)}
+                            <br />
+                            analysis: {JSON.stringify(analysis)}
+                            <br />
+                            run: {JSON.stringify(run)}
+                            <br />
+                            appinstalled: {JSON.stringify(appinstalled)}
+                            <br />
+                            beforeinstallprompt:{" "}
+                            {JSON.stringify(beforeinstallprompt)}
+                            <br />
+                            relatedInstalledApps:{" "}
+                            {JSON.stringify(relatedInstalledApps)}
+                        </p>
+                    )}
                 </Fragment>
             )}
         </section>
