@@ -113,15 +113,21 @@ exports.findAllUserAccounts = async ({ cpf, userId, role }) => {
 // directly from download page, users who already have downloaded Fiddelize App
 // can register informing with CPF
 exports.mwCreateInstantAccount = async (req, res, next) => {
-    // const dataAccount = await Account.findOne({ checkId: cpf }).select(
-    //     "defaultUserId defaultRole -_id"
-    // );
+    const { role, cpf } = req.body;
 
-    // if(!dataAccount) return res.status(400).json({ error: "conta não encontrada" });
+    const isCliAdmin = role === "cliente-admin";
+    const isCliMember = role === "cliente-membro";
+    const isCliUser = role === "cliente";
+    const isBizTeam = role === "nucleo-equipe";
 
-    // const { defaultUserId, defaultRole } = dataAccount;
-    const defaultUserId = "5fc7ab5d37f5330d506695d6";
-    const defaultRole = "cliente";
+    const dataAccount = await Account.findOne({ checkId: cpf }).select(
+        "defaultUserId defaultRole -_id"
+    );
+
+    if (!dataAccount)
+        return res.status(400).json({ error: "CPF informado foi rejeitado." });
+
+    const { defaultUserId, defaultRole } = dataAccount;
 
     // pswd only for cli-admin and biz-team app
     const dataProfile = await User(defaultRole)
@@ -141,11 +147,6 @@ exports.mwCreateInstantAccount = async (req, res, next) => {
         pswd,
         clientUserData,
     } = dataProfile;
-    const { role } = req.body;
-
-    const isCliAdmin = role === "cliente-admin";
-    const isCliUser = role === "cliente";
-    const isBizTeam = role === "nucleo-equipe";
 
     req.body = {
         isInstantAccount: true,
@@ -181,26 +182,6 @@ exports.mwCreateInstantAccount = async (req, res, next) => {
         bizImg: req.body.bizImg,
         filter: req.body.filter,
     };
-    return res.json(req.body);
 
-    // let {
-    //     role (OK)
-    //     name (OK)
-    //     email (OK)
-    //     cpf
-    //     birthday (OK)
-    //     phone (OK)
-    //     gender (OK)
-    //     filter (OK),
-    //     bizImg, (OK)
-    //     bizName, (OK)
-    //     clientAdminData, (OK)
-    //     clientMemberData, (OK)
-    //     clientUserData, (OK)
-    //     bizTeamData, (OK)
-    //     tempScore, (OK)
-    //     memberRole, (OK)
-    //     linkCode, (OK)
-    //     register: thisRegister, (OK)
-    // } = req.body;
+    next();
 };

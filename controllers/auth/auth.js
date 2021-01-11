@@ -151,6 +151,7 @@ exports.register = async (req, res) => {
         memberRole,
         linkCode,
         register: thisRegister,
+        isInstantAccount = false,
     } = req.body;
 
     const isCliUser = role === "cliente";
@@ -189,9 +190,9 @@ exports.register = async (req, res) => {
     const newUser = new ThisUser({
         role,
         name,
-        email: encryptSync(email),
         cpf: jsEncrypt(cpf),
-        phone: encryptSync(phone),
+        email: isInstantAccount ? email : encryptSync(email), // instant mode is already encrypted.
+        phone: isInstantAccount ? phone : encryptSync(phone),
         birthday,
         gender,
         clientAdminData,
@@ -218,7 +219,7 @@ exports.register = async (req, res) => {
     const user = await newUser.save();
     const { _id } = user;
 
-    const isAnotherAccount = req.accounts.length;
+    const isAnotherAccount = req.accountsNumber;
 
     if (isAnotherAccount) {
         await User(role).findByIdAndUpdate(_id, {

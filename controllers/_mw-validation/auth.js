@@ -12,6 +12,8 @@ const {
     checkIfAlreadyHasUser,
 } = require("./helpers/validateRegister");
 
+const CPF_TEST = "111.111.111-00";
+
 exports.mwValidateRegister = async (req, res, next) => {
     const {
         role,
@@ -22,6 +24,7 @@ exports.mwValidateRegister = async (req, res, next) => {
         phone,
         gender,
         clientAdminData,
+        isInstantAccount,
     } = req.body;
 
     const { accounts } = await req.getAccount(null, { cpf, accounts: true });
@@ -29,7 +32,7 @@ exports.mwValidateRegister = async (req, res, next) => {
     const error = checkAccountLimit(accounts, { currRole: role });
     if (error) return res.status(401).json({ error });
 
-    if (role === "cliente" || role === "cliente-admin") {
+    if (!isInstantAccount && (role === "cliente" || role === "cliente-admin")) {
         const {
             statusVal: userExists,
             duplicateNameMsg,
@@ -44,37 +47,48 @@ exports.mwValidateRegister = async (req, res, next) => {
         }
     }
 
-    // profile validation
-    if (!name && !email && !cpf && !phone)
-        return res.status(400).json(msg("error.anyFieldFilled"));
-    if (!name) return res.status(400).json(msg("error.noName"));
-    if (!isValidName(name))
-        return res.status(400).json(msg("error.invalidLengthName"));
-    if (role === "cliente-admin") {
-        if (!clientAdminData.bizName)
+    if (!isInstantAccount) {
+        // profile validation
+        if (!name && !email && !cpf && !phone)
+            return res.status(400).json(msg("error.anyFieldFilled"));
+        if (!name) return res.status(400).json(msg("error.noName"));
+        if (!isValidName(name))
+            return res.status(400).json(msg("error.invalidLengthName"));
+        if (role === "cliente-admin") {
+            if (!clientAdminData.bizName)
+                return res
+                    .status(400)
+                    .json({ msg: "Informe o nome de sua empresa/projeto" });
+        }
+        if (!cpf) return res.status(400).json(msg("error.noCpf"));
+        if (!email) return res.status(400).json(msg("error.noEmail"));
+        if (!phone) return res.status(400).json(msg("error.noPhone"));
+        if (!birthday) return res.status(400).json(msg("error.noBirthday"));
+        if (!validateEmail(email))
+            return res.status(400).json(msg("error.invalidEmail"));
+
+        const isCpfValid = new CPF().validate(cpf);
+        if (!isCpfValid) return res.status(400).json(msg("error.invalidCpf"));
+
+        if (!validatePhone(phone))
+            return res.status(400).json(msg("error.invalidPhone"));
+        if (gender === "selecione forma tratamento")
             return res
                 .status(400)
-                .json({ msg: "Informe o nome de sua empresa/projeto" });
+                .json({ error: "Selecione uma forma de tratamento" });
+        // end profile validation
+        //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
+    } else {
+        if (!cpf) return res.status(400).json(msg("error.noCpf"));
+        if (cpf !== CPF_TEST) {
+            const isCpfValid = new CPF().validate(cpf);
+            if (!isCpfValid)
+                return res.status(400).json(msg("error.invalidCpf"));
+        }
     }
-    if (!cpf) return res.status(400).json(msg("error.noCpf"));
-    if (!email) return res.status(400).json(msg("error.noEmail"));
-    if (!phone) return res.status(400).json(msg("error.noPhone"));
-    if (!birthday) return res.status(400).json(msg("error.noBirthday"));
-    if (!validateEmail(email))
-        return res.status(400).json(msg("error.invalidEmail"));
 
-    const isCpfValid = new CPF().validate(cpf);
-    if (!isCpfValid) return res.status(400).json(msg("error.invalidCpf"));
+    req.accountsNumber = accounts && accounts.length; // for decide whether only update the accounts list if got already at least one account.
 
-    if (!validatePhone(phone))
-        return res.status(400).json(msg("error.invalidPhone"));
-    if (gender === "selecione forma tratamento")
-        return res
-            .status(400)
-            .json({ error: "Selecione uma forma de tratamento" });
-    // end profile validation
-    //if(reCaptchaToken) return res.status(400).json(msg('error.noReCaptchaToken'));
-    req.accounts = accounts; // for decide wheter only update the accounts list if got already at least one account.
     next();
 };
 
@@ -90,6 +104,7 @@ exports.mwValidateLogin = async (req, res, next) => {
             if (!cpf) return res.status(400).json(msg("error.noCpf"));
             const detected = runTestException(cpf, { user, req });
             if (detected) return next();
+
             if (!isCpfValid)
                 return res.status(400).json(msg("error.invalidCpf"));
             if (!user) return res.status(400).json(msg("error.notRegistedCpf"));
@@ -153,13 +168,8 @@ exports.mwValidateCPF = (req, res, next) => {
 function runTestException(cpf, options = {}) {
     const { user, req } = options;
     // For testing purpose, it will be allowed:]
-    // 111.111.111-11 for cli-admin free version testing
-    // 222.222.222-22 for cli-user free version testing
-    if (
-        cpf === "111.111.111-11" ||
-        cpf === "222.222.222-22"
-        // cpf === "333.333.333-33"
-    ) {
+    // 111.111.111-00 is the official account for all apps version testing
+    if (cpf === CPF_TEST) {
         if (user && req) req.profile = user;
         return true;
     }

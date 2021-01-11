@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import cpfMaskBr, {
-    removeCpfMaskBr,
-} from "../../utils/validation/masks/cpfMaskBr";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
 import animateCSS from "../../utils/animateCSS";

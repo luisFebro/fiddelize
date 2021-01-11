@@ -9,7 +9,6 @@ import { readClientAdmin } from "../../redux/actions/userActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import lStorage from "../../utils/storage/lStorage";
 import { useStoreDispatch } from "easy-peasy";
-import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import Spinner from "../../components/loadingIndicators/Spinner";
 import useElemShowOnScroll from "../../hooks/scroll/useElemShowOnScroll";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
@@ -19,11 +18,12 @@ import getQueries from "./helpers/getQueries";
 import { handleRoleStorage } from "./helpers";
 import useAllowedLink from "./hooks/useAllowedLink";
 import { Load } from "../../components/code-splitting/LoadableComp";
+import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
 
-export const AsyncInstantAccount = Load({
+export const AsyncDetectedApp = Load({
     loader: () =>
         import(
-            "./instant-accout/InstantAccount" /* webpackChunkName: "instant-account-comp-lazy" */
+            "./detected-app/DetectedApp" /* webpackChunkName: "detected-app-comp-lazy" */
         ),
 });
 // CONTENTS
@@ -237,30 +237,32 @@ export default function DownloadApp({ match, location }) {
     );
 
     const showAlreadyDownloadedApp = () => {
-        const icon = () => (
-            <div className="container-center">
-                <PhoneIphoneIcon style={{ ...iconStyle }} />
-            </div>
-        );
+        const instantAccountPayload = {
+            role: whichRole,
+            bizImg: isBizTeam ? "/img/official-logo-name.png" : bizLogo,
+            bizName: isBizTeam ? "fiddelize" : bizName,
+            // for specific user data
+            isCliAdmin,
+            isCliUser,
+            bizId,
+            primaryAgent,
+            // cli-user
+            memberJob,
+            memberId: linkId,
+            userScore,
+        };
+
         return (
-            !downloadAvailable && (
-                <section className="my-5">
-                    {icon()}
-                    {run && !analysis && (
-                        <p className="animated rubberBand text-subtitle font-weight-bold text-center">
-                            Você já tem instalado o app de{" "}
-                            {bizName && bizName.cap()}
-                            <br />
-                            Verifique na sua tela inicial.
-                        </p>
-                    )}
-                    {run && analysis && (
-                        <p className="text-subtitle font-weight-bold text-white text-center">
-                            Analisando...
-                        </p>
-                    )}
-                </section>
-            )
+            <AsyncDetectedApp
+                downloadAvailable={downloadAvailable}
+                run={run}
+                analysis={analysis}
+                bizName={bizName}
+                txtPColor={txtPColor}
+                pColor={pColor}
+                instantAccountPayload={instantAccountPayload}
+                setDownloadAvailable={setDownloadAvailable}
+            />
         );
     };
 
@@ -287,30 +289,44 @@ export default function DownloadApp({ match, location }) {
         if (isBizTeam) return <AsyncBizTeamText {...props} />;
     };
 
-    const instantAccountPayload = {
-        role: whichRole,
-        bizImg: isBizTeam ? "/img/official-logo-name.png" : bizLogo,
-        bizName: isBizTeam ? "fiddelize" : bizName,
-        // for specific user data
-        isCliAdmin,
-        isCliUser,
-        bizId,
-        primaryAgent,
-        // cli-user
-        memberJob,
-        memberId: linkId,
-        userScore,
-    };
+    const showMissingBannerMsg = () => (
+        <section style={{ marginBottom: 150 }}>
+            <p>Se a placa para baixar o app não apareceu. Tente por aqui:</p>
+            <div className="container-center">
+                <a
+                    href={"/mobile-app?abrir=1&banner=1"}
+                    className="no-text-decoration"
+                >
+                    <ButtonFab
+                        title="Acessar App"
+                        color={
+                            txtPColor && txtPColor.includes("text-white")
+                                ? "#fff"
+                                : "#000"
+                        }
+                        backgroundColor={`var(--themeS--${
+                            pColor || "default"
+                        })`}
+                        onClick={null}
+                        position="relative"
+                        variant="extended"
+                        size="medium"
+                        needBtnShadow
+                        shadowColor="white"
+                    />
+                </a>
+            </div>
+        </section>
+    );
 
     return (
-        <section className="target--content-download">
+        <section className="target--content-download mx-3 text-normal">
             {showSpinner()}
             {(isLinkInvalid || !isAllowedLink) && !isBizTeam ? (
                 errorMsg()
             ) : (
                 <section className={`${txtBackColor}`}>
                     {handleAppTypeText()}
-                    <AsyncInstantAccount payload={instantAccountPayload} />
                     <PwaInstaller
                         title={
                             isCliAdmin
@@ -325,7 +341,8 @@ export default function DownloadApp({ match, location }) {
                         run={run}
                         setDownloadAvailable={setDownloadAvailable}
                     />
-                    {showAlreadyDownloadedApp()}
+                    {downloadAvailable && showMissingBannerMsg()}
+                    {!downloadAvailable && showAlreadyDownloadedApp()}
                 </section>
             )}
         </section>

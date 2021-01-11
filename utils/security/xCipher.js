@@ -184,7 +184,7 @@ const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
 // END JS ENCRYPTION AND DECRYPTION
 
 // TEST
-// const resCipher = jsEncrypt('023.248.892-42');
+// const resCipher = jsEncrypt('111.111.111-00');
 // console.log("resCipher", resCipher);
 // const resDecipher = jsDecrypt(resCipher);
 // END ENCRYPTION AND DECRYPTION

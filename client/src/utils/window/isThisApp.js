@@ -1,7 +1,7 @@
 import { IS_DEV } from "../../config/clientUrl";
 
 // change here only if it is the website to be developed in localhost
-const localHostWebsiteMode = false;
+const localHostWebsiteMode = true;
 const localHostAppMode = IS_DEV ? true : false;
 
 export default function isThisApp() {
@@ -13,16 +13,16 @@ export default function isThisApp() {
     const isAppFromSafariOrChrome = window.navigator.standalone;
     const isAppFromChrome = window.matchMedia("(display-mode: standalone)")
         .matches;
-    const isAndroidStockBrowser = checkIfStockBrowser(); // samsung
+    const isAndroidStockBrowserOrElse = checkIfStockBrowser(); // samsung
 
     const checkBrowsers =
         resIos ||
         isAppFromChrome ||
         isAppFromFirefox ||
         isAppFromSafariOrChrome ||
-        isAndroidStockBrowser;
+        isAndroidStockBrowserOrElse;
 
-    if (localHostWebsiteMode) return false;
+    if (localHostWebsiteMode && !isAndroidStockBrowserOrElse) return false;
     return localHostAppMode ? true : checkBrowsers;
 }
 
