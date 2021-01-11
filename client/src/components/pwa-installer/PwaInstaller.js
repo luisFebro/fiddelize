@@ -67,6 +67,7 @@ export default function PwaInstaller({
             setBannerVisible(false);
         });
 
+        //https://web.dev/get-installed-related-apps/
         //check if browser version supports the api
         if ("getInstalledRelatedApps" in window.navigator) {
             (async () => {

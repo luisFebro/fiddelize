@@ -290,9 +290,9 @@ export default function DownloadApp({ match, location }) {
     };
 
     const showMissingBannerMsg = () => (
-        <section style={{ marginBottom: 150 }}>
+        <section className="container-center" style={{ marginBottom: 150 }}>
             <p>Se a placa para baixar o app não apareceu. Tente por aqui:</p>
-            <div className="container-center">
+            <div>
                 <a
                     href={"/mobile-app?abrir=1&banner=1"}
                     className="no-text-decoration"
@@ -315,6 +315,20 @@ export default function DownloadApp({ match, location }) {
                         shadowColor="white"
                     />
                 </a>
+            </div>
+            <p className="text-center my-3">ou</p>
+            <p>
+                Se você estiver usando o Desktop e o app já está instalado,
+                basta encontrar o app na seu desktop ou abra o seu app com o
+                botão similar a este:
+            </p>
+            <div className="container-center-col">
+                <img
+                    src="/img/demos/pwa/button-to-open-pwa-desktop.png"
+                    width="189"
+                    height="auto"
+                    alt="botão abri app desktop"
+                />
             </div>
         </section>
     );

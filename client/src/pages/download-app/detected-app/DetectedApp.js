@@ -41,7 +41,7 @@ export default function DetectedApp({
                         </p>
                         <div className="container-center">
                             <img
-                                src="/img/fiddelize-mobile-app.png"
+                                src="/img/demos/pwa/fiddelize-mobile-app.png"
                                 width="300"
                                 height="auto"
                                 alt="app fiddelize no dispositivo"
