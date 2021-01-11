@@ -290,9 +290,9 @@ export default function DownloadApp({ match, location }) {
     };
 
     const showMissingBannerMsg = () => (
-        <section className="container-center" style={{ marginBottom: 150 }}>
+        <section className="container-center-col" style={{ marginBottom: 150 }}>
             <p>Se a placa para baixar o app não apareceu. Tente por aqui:</p>
-            <div>
+            <div className="my-3">
                 <a
                     href={"/mobile-app?abrir=1&banner=1"}
                     className="no-text-decoration"
@@ -322,7 +322,7 @@ export default function DownloadApp({ match, location }) {
                 basta encontrar o app na seu desktop ou abra o seu app com o
                 botão similar a este:
             </p>
-            <div className="container-center-col">
+            <div className="container-center">
                 <img
                     src="/img/demos/pwa/button-to-open-pwa-desktop.png"
                     width="189"
@@ -334,13 +334,17 @@ export default function DownloadApp({ match, location }) {
     );
 
     return (
-        <section className="target--content-download mx-3 text-normal">
+        <section className="target--content-download">
             {showSpinner()}
             {(isLinkInvalid || !isAllowedLink) && !isBizTeam ? (
                 errorMsg()
             ) : (
-                <section className={`${txtBackColor}`}>
-                    {handleAppTypeText()}
+                <Fragment>
+                    <section className={`mx-3 text-normal ${txtBackColor}`}>
+                        {handleAppTypeText()}
+                        {downloadAvailable && showMissingBannerMsg()}
+                        {!downloadAvailable && showAlreadyDownloadedApp()}
+                    </section>
                     <PwaInstaller
                         title={
                             isCliAdmin
@@ -355,9 +359,16 @@ export default function DownloadApp({ match, location }) {
                         run={run}
                         setDownloadAvailable={setDownloadAvailable}
                     />
-                    {downloadAvailable && showMissingBannerMsg()}
-                    {!downloadAvailable && showAlreadyDownloadedApp()}
-                </section>
+                    <p className="my-5 text-normal mx-3 text-white">
+                        TESTE:
+                        <br />
+                        downloadAvailable: {JSON.stringify(downloadAvailable)}
+                        <br />
+                        analysis: {JSON.stringify(analysis)}
+                        <br />
+                        run: {JSON.stringify(run)}
+                    </p>
+                </Fragment>
             )}
         </section>
     );
