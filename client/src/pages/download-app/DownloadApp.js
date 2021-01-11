@@ -19,6 +19,9 @@ import { handleRoleStorage } from "./helpers";
 import useAllowedLink from "./hooks/useAllowedLink";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
+import isThisApp from "../../utils/window/isThisApp";
+
+const isApp = isThisApp();
 
 export const AsyncDetectedApp = Load({
     loader: () =>
@@ -91,7 +94,7 @@ export default function DownloadApp({ match, location }) {
         showDesktopMsg: false,
         needSelfServiceData: false,
         // for test only
-        testMode: true,
+        testMode: false,
         appinstalled: "none",
         relatedInstalledApps: "none",
         beforeinstallprompt: "none",
@@ -344,19 +347,64 @@ export default function DownloadApp({ match, location }) {
             {showDesktopMsg && (
                 <Fragment>
                     <p className="text-center my-3">ou</p>
-                    <p>
-                        Se você estiver usando o Desktop e o app já está
-                        instalado, basta encontrar o app na seu desktop ou abra
-                        o seu app com o botão similar a este:
-                    </p>
-                    <div className="container-center">
-                        <img
-                            src="/img/demos/pwa/button-to-open-pwa-desktop.png"
-                            width="189"
-                            height="auto"
-                            alt="botão abri app desktop"
-                        />
-                    </div>
+                    <h2 className="text-subtitle">
+                        Instruções caso não tenha encontrado o app
+                    </h2>
+                    {isApp ? (
+                        <Fragment>
+                            <p>
+                                1) Verifique sua conexão. Mesmo que tenha
+                                aparecido uma mensagem de instalação
+                                bem-sucedida, às vezes, o download pode demorar
+                                alguns segundos.
+                            </p>
+                            <p>
+                                2) Por último, instale o app manualmente.
+                                <br />
+                                a) primeiro verifique que está no nosso site
+                                (https://fiddelize.com.br).
+                                <br />
+                                <br />
+                                b) clique no botão de mais no canto superior
+                                <div className="container-center">
+                                    <img
+                                        src="/img/demos/pwa/not-found-app-instru-1.jpg"
+                                        width="260px"
+                                        height="auto"
+                                        alt="botão abri app desktop"
+                                    />
+                                </div>
+                                <br />
+                                c) bastar clicar em{" "}
+                                <strong>instalar aplicativo</strong> e
+                                confirmar.
+                                <div className="container-center">
+                                    <img
+                                        src="/img/demos/pwa/not-found-app-instru-2.jpg"
+                                        width="310px"
+                                        height="auto"
+                                        alt="botão abri app desktop"
+                                    />
+                                </div>
+                            </p>
+                        </Fragment>
+                    ) : (
+                        <Fragment>
+                            <p>
+                                No Desktop, caso não tenha encontrado o app na
+                                tela inicial, você pode abrir o app com um botão
+                                similar a este:
+                            </p>
+                            <div className="container-center">
+                                <img
+                                    src="/img/demos/pwa/button-to-open-pwa-desktop.png"
+                                    width="189"
+                                    height="auto"
+                                    alt="botão abri app desktop"
+                                />
+                            </div>
+                        </Fragment>
+                    )}
                 </Fragment>
             )}
         </section>

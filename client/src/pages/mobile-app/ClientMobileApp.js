@@ -36,6 +36,14 @@ import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import usePersistentStorage from "../../hooks/storage/usePersistentStorage";
 
+const AsyncPWA = Load({
+    loading: true,
+    loader: () =>
+        import(
+            "../../components/pwa-installer/PwaInstaller" /* webpackChunkName: "pwa-comp-lazy" */
+        ),
+});
+
 const AsyncRegisterCliUser = Load({
     loading: true,
     loader: () =>
@@ -141,6 +149,7 @@ function ClientMobileApp({ location, history }) {
     const searchQuery = location.search;
     const needAppForCliAdmin = searchQuery.includes("client-admin=1");
     const isUrlAdmin = searchQuery.indexOf("abrir=1&admin=1") !== -1;
+    const needPWA = searchQuery.includes("banner=1"); // used for trying to show the download banner again if the first attempt has failed
     // # roles
     const isStaff = role === "cliente-membro" || role === "cliente-admin";
     const isBizTeam =
@@ -429,6 +438,13 @@ function ClientMobileApp({ location, history }) {
                 </section>
             )}
             {!isAuthUser && versionReady && <AsyncVersion />}
+            {needPWA && (
+                <AsyncPWA
+                    title="Baixe aqui nosso app"
+                    icon={`/img/official-logo-white.png`}
+                    alwaysOn={true}
+                />
+            )}
         </div>
     );
 }

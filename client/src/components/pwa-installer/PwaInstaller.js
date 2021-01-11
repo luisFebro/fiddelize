@@ -36,9 +36,15 @@ const getStyles = () => ({
 
 let deferredPrompt = null;
 const displayBannerOnDev = false;
-export default function PwaInstaller({ title, icon, run = true, setData }) {
+export default function PwaInstaller({
+    title,
+    icon,
+    run = true,
+    setData,
+    alwaysOn = false,
+}) {
     // A2HS = App to HomeScreen
-    const [bannerVisible, setBannerVisible] = useState(false);
+    const [bannerVisible, setBannerVisible] = useState(alwaysOn || false);
     useAnimateElem(".pwa-installer--text", {
         animaIn: "fadeInUp",
         speed: "slow",
@@ -46,44 +52,20 @@ export default function PwaInstaller({ title, icon, run = true, setData }) {
 
     const styles = getStyles();
 
-    const shouldRender = displayBannerOnDev || (run && bannerVisible && !isApp);
+    const shouldRender =
+        displayBannerOnDev || alwaysOn || (run && bannerVisible && !isApp);
 
     useEffect(() => {
         if (bannerVisible) {
-            setData((prev) => ({
-                ...prev,
-                downloadAvailable: true,
-            }));
+            setData &&
+                setData((prev) => ({
+                    ...prev,
+                    downloadAvailable: true,
+                }));
         }
     }, [bannerVisible]);
 
     const dispatch = useStoreDispatch();
-
-    //https://web.dev/get-installed-related-apps/
-    //check if browser version supports the api
-    if ("getInstalledRelatedApps" in window.navigator) {
-        (async () => {
-            const relatedApps = await navigator.getInstalledRelatedApps();
-            relatedApps.forEach((app) => {
-                //if your PWA exists in the array it is installed
-                setData((prev) => ({
-                    ...prev,
-                    relatedInstalledApps: "app" + app,
-                }));
-            });
-        })();
-    }
-
-    // TEST
-    useEffect(() => {
-        window.addEventListener("appinstalled", (evt) => {
-            setData((prev) => ({
-                ...prev,
-                appinstalled: "app already installed" + JSON.stringify(evt),
-            }));
-            setBannerVisible(false);
-        });
-    }, []);
 
     useEffect(() => {
         // This event requires the page to reload in order to set correctly...
@@ -198,6 +180,30 @@ export default function PwaInstaller({ title, icon, run = true, setData }) {
 n1: If the user selects Install, the app is installed (available as standalone desktop app), and the Install button no longer shows (the onbeforeinstallprompt event no longer fires if the app is already installed).
 */
 
-/* ARCHIVE
+/* ARCHIVE TESTS
+//https://web.dev/get-installed-related-apps/
+//check if browser version supports the api
+if ("getInstalledRelatedApps" in window.navigator) {
+    (async () => {
+        const relatedApps = await navigator.getInstalledRelatedApps();
+        relatedApps.forEach((app) => {
+            //if your PWA exists in the array it is installed
+            setData((prev) => ({
+                ...prev,
+                relatedInstalledApps: "app" + app,
+            }));
+        });
+    })();
+}
 
+// TEST
+useEffect(() => {
+    window.addEventListener("appinstalled", (evt) => {
+        setData((prev) => ({
+            ...prev,
+            appinstalled: "app already installed" + JSON.stringify(evt),
+        }));
+        setBannerVisible(false);
+    });
+}, []);
 */
