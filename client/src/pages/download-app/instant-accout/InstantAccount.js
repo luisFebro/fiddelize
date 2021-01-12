@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import createInstantAccount from "./helpers/createInstantAccount";
 import getFilterDate from "../../../utils/dates/getFilterDate";
 import generateBizCodeName from "./helpers/generateBizCodeName";
-import { getVar, store } from "../../../hooks/storage/useVar";
+import {
+    removeMultiVar,
+    setMultiVar,
+    getVar,
+    store,
+} from "../../../hooks/storage/useVar";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
@@ -10,6 +15,7 @@ import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
+import lStorage, { needAppRegisterOp } from "../../../utils/storage/lStorage";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -37,6 +43,7 @@ export default function InstantAccount({
     const {
         bizId,
         bizName,
+        bizImg,
         primaryAgent,
         memberJob,
         memberId,
@@ -56,7 +63,6 @@ export default function InstantAccount({
     let body = {
         cpf,
         ...payload,
-        filter,
         clientAdminData: {
             bizName,
             bizCodeName: isCliAdmin && generateBizCodeName(bizName),
@@ -65,6 +71,9 @@ export default function InstantAccount({
         bizTeamData: { job: "afiliado", primaryAgent },
         clientMemberData: { job: memberJob, bizId },
         clientUserData: { bizId, filterBirthday: "" },
+        filter,
+        bizName,
+        bizImg,
         // ONLY CLI-USER verify these data
         register: isCliUser && {
             id: memberId || bizId,
@@ -88,12 +97,27 @@ export default function InstantAccount({
                 body = { ...body, linkCode: thisLinkCode };
             }
 
-            const succ = await createInstantAccount({ body }).catch((e) => {
-                showSnackbar(dispatch, e.error, "error");
-                setData((prev) => ({ ...prev, errorOnce: true }));
-            });
+            // const succ = await createInstantAccount({ body }).catch((e) => {
+            //     showSnackbar(dispatch, e.error, "error");
+            //     setData((prev) => ({ ...prev, errorOnce: true }));
+            // });
 
-            if (!succ) return;
+            // if (!succ) return;
+
+            // prevent register page to be shown. Display login page instead with the new account
+            // remove variables at the login access
+            const storeElems = [
+                { isInstantAccount: true },
+                { instantBizImg: bizImg },
+                { instantBizName: bizName },
+            ];
+
+            await Promise.all([
+                removeMultiVar(["success", "memberId"], store.user),
+                setMultiVar(storeElems, store.user),
+            ]).then((res) => {
+                lStorage("setItem", { ...needAppRegisterOp, value: false });
+            });
 
             setSuccess(true);
         })();

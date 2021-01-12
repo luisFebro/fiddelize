@@ -3,6 +3,7 @@ import lStorage, {
     needAppRegisterOp,
 } from "../../../utils/storage/lStorage";
 import {
+    getVar,
     setMultiVar,
     removeMultiVar,
     store,
@@ -46,16 +47,24 @@ export const handleRoleStorage = ({
         userPayload = [{ primaryAgent }, { role: whichRole }];
     }
 
-    setMultiVar(userPayload, store.user);
-    removeMultiVar(["rememberAccess", "success", "verifPass"], store.user);
+    (async () => {
+        const isInstantAccount = await getVar("isInstantAccount", store.user);
+        !isInstantAccount &&
+            lStorage("setItem", { ...needAppRegisterOp, value: true });
 
-    const needSysOp = whichRole && bizId;
-    needSysOp && lStorage("setItems", setSystemOp(whichRole, bizId));
-    lStorage("setItem", { ...needAppRegisterOp, value: true });
+        await setMultiVar(userPayload, store.user);
+        await removeMultiVar(
+            ["rememberAccess", "success", "verifPass"],
+            store.user
+        );
 
-    // for garantee that the current app is logged out.
-    // Otherwise, the app will be displayed with wrong and mingled app's pages.
-    localStorage.removeItem("token");
+        const needSysOp = whichRole && bizId;
+        needSysOp && lStorage("setItems", setSystemOp(whichRole, bizId));
+
+        // for garantee that the current app is logged out.
+        // Otherwise, the app will be displayed with wrong and mingled app's pages.
+        localStorage.removeItem("token");
+    })();
 };
 
 /* COMMENTS

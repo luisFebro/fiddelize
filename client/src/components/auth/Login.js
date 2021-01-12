@@ -15,12 +15,18 @@ import showVanillaToast from "../../components/vanilla-js/toastify/showVanillaTo
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 import { CLIENT_URL } from "../../config/clientUrl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAppSystem, useClientAdmin } from "../../hooks/useRoleData";
+import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import { deleteImage } from "../../utils/storage/lForage";
 import useCount from "../../hooks/useCount";
 import { sendNotification } from "../../redux/actions/notificationActions";
-import { setMultiVar, removeVar, store } from "../../hooks/storage/useVar";
+import {
+    setMultiVar,
+    removeVar,
+    getVar,
+    removeMultiVar,
+    store,
+} from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
 
 const isApp = isThisApp();
@@ -45,9 +51,9 @@ function Login({
 }) {
     // useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
     const dispatch = useStoreDispatch();
-    let { roleWhichDownloaded } = useAppSystem();
+    // let { roleWhichDownloaded } = useAppSystem();
     // disable restriction of user during early estages of tests.
-    roleWhichDownloaded = "";
+    // roleWhichDownloaded = "";
 
     const {
         selfThemeSColor,
@@ -58,7 +64,7 @@ function Login({
     const signInThisUser = async (value) => {
         const userData = {
             cpf: value,
-            roleWhichDownloaded,
+            // roleWhichDownloaded,
         };
 
         const res = await loginEmail(dispatch, userData);
@@ -248,6 +254,20 @@ function Login({
 
             history.push("/t/app/nucleo-equipe/acesso");
         }
+
+        // remove instant account notification
+        (async () => {
+            const isInstantAccount = await getVar(
+                "isInstantAccount",
+                store.user
+            );
+            if (isInstantAccount) {
+                await removeMultiVar(
+                    ["isInstantAccount", "instantBizImg", "instantBizName"],
+                    store.user
+                );
+            }
+        })();
     };
 
     const showTitle = () => (

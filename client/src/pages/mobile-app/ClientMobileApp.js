@@ -35,6 +35,7 @@ import AppTypeBubble from "./start-comps/AppTypeBubble";
 import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import usePersistentStorage from "../../hooks/storage/usePersistentStorage";
+import Card from "@material-ui/core/Card";
 
 const AsyncPWA = Load({
     loading: true,
@@ -109,6 +110,9 @@ function ClientMobileApp({ location, history }) {
         memberId,
         disconnectCliMember,
         disconnectAgent,
+        isInstantAccount,
+        instantBizImg,
+        instantBizName,
     ] = useData([
         "userId",
         "rememberAccess",
@@ -119,6 +123,9 @@ function ClientMobileApp({ location, history }) {
         "memberId",
         "disconnectCliMember",
         "disconnectAgent",
+        "isInstantAccount",
+        "instantBizImg",
+        "instantBizName",
     ]);
 
     // memberId is cleaned after a successful registration.
@@ -381,16 +388,42 @@ function ClientMobileApp({ location, history }) {
     return (
         <div style={{ overflowX: "hidden" }}>
             <span className="text-right text-white for-version-test">{""}</span>
-            {showLogo()}
-            <AppTypeBubble
-                role={role}
-                loadingAccess={loadingData}
-                roleWhichDownloaded={roleWhichDownloaded}
-                isUrlAdmin={isUrlAdmin}
-                needAppForCliAdmin={needAppForCliAdmin}
-                selfThemePColor={selfThemePColor}
-                isAuthUser={isAuthUser}
-            />
+            {isInstantAccount ? (
+                <section className="container-center mx-3 text-normal">
+                    <Card
+                        className="animated fadeInDown delay-2s"
+                        style={{
+                            backgroundColor: "var(--mainWhite)",
+                            borderRadius: "0 0 50px 50px",
+                        }}
+                    >
+                        <div className="animated fadeInDown delay-3s container-center">
+                            <img
+                                className="shadow-babadoo"
+                                src={instantBizImg}
+                                alt={instantBizName}
+                            />
+                        </div>
+                        <p className="animated fadeInDown delay-4s mx-3 text-purple font-weight-bold text-center my-3">
+                            Novo App de {instantBizName} foi instalado na sua
+                            conta.
+                        </p>
+                    </Card>
+                </section>
+            ) : (
+                <Fragment>
+                    {showLogo()}
+                    <AppTypeBubble
+                        role={role}
+                        loadingAccess={loadingData}
+                        roleWhichDownloaded={roleWhichDownloaded}
+                        isUrlAdmin={isUrlAdmin}
+                        needAppForCliAdmin={needAppForCliAdmin}
+                        selfThemePColor={selfThemePColor}
+                        isAuthUser={isAuthUser}
+                    />
+                </Fragment>
+            )}
 
             {!isAuthUser && (
                 <section>

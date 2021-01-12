@@ -97,6 +97,7 @@ exports.mwValidateLogin = async (req, res, next) => {
     const isCpfValid = new CPF().validate(cpf);
 
     const { role } = await req.getAccount(null, { cpf });
+    console.log("role", role);
 
     User(role)
         .findOne({ cpf: jsEncrypt(cpf) })

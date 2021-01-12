@@ -22,7 +22,7 @@ export default function isThisApp() {
         isAppFromSafariOrChrome ||
         isAndroidStockBrowserOrElse;
 
-    if (localHostWebsiteMode && !isAndroidStockBrowserOrElse) return false;
+    if (localHostWebsiteMode) return false; // && !isAndroidStockBrowserOrElse
     return localHostAppMode ? true : checkBrowsers;
 }
 

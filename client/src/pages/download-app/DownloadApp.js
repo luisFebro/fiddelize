@@ -358,11 +358,8 @@ export default function DownloadApp({ match, location }) {
                             <p>
                                 2) Por último, instale o app manualmente.
                                 <br />
-                                a) primeiro verifique que está no nosso site
-                                (https://fiddelize.com.br).
-                                <br />
-                                <br />
-                                b) clique no botão de mais no canto superior
+                                a) clique no botão no canto superior para
+                                mostrar mais opções nesta mesma página.
                                 <div className="container-center">
                                     <img
                                         src="/img/demos/pwa/not-found-app-instru-1.jpg"
@@ -372,9 +369,9 @@ export default function DownloadApp({ match, location }) {
                                     />
                                 </div>
                                 <br />
-                                c) bastar clicar em{" "}
-                                <strong>instalar aplicativo</strong> e
-                                confirmar.
+                                b) Nas opções, procure e clique em{" "}
+                                <strong>instalar aplicativo</strong> e confirme
+                                para baixar.
                                 <div className="container-center">
                                     <img
                                         src="/img/demos/pwa/not-found-app-instru-2.jpg"
