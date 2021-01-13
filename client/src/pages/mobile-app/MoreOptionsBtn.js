@@ -8,8 +8,8 @@ import { CLIENT_URL } from "../../config/clientUrl";
 import WhatsappBtn from "../../components/buttons/WhatsappBtn";
 import { readUser } from "../../redux/actions/userActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
-
 // SpeedDial and Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -133,6 +133,19 @@ function MoreOptionsBtn({
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
                     !needAppForPreview && logout(dispatch);
+                },
+            },
+            {
+                icon: (
+                    <FontAwesomeIcon
+                        icon="sync-alt"
+                        style={{ ...styles.muStyle, transform: "scale(1.3)" }}
+                    />
+                ),
+                name: "Trocar App ►",
+                backColor: "var(--themeSDark--" + colorS + ")",
+                onClick: () => {
+                    !needAppForPreview && history.push("/painel-de-apps");
                 },
             },
             {

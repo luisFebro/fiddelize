@@ -99,3 +99,10 @@ export const AsyncBizTeamPassword = Load({
 });
 
 // END BIZ TEAM APP
+
+export const AsyncAppsPanel = Load({
+    loader: () =>
+        import(
+            "../../pages/apps-painel/AppsPanel" /* webpackChunkName: "apps-panel-page-lazy" */
+        ),
+});

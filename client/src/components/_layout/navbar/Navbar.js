@@ -64,7 +64,8 @@ function Navbar({ history, location }) {
         locationNow.includes("equipe") ||
         locationNow.includes("cartao-virtual") ||
         locationNow.includes("senha-equipe") ||
-        locationNow.includes("pix");
+        locationNow.includes("pix") ||
+        locationNow.includes("painel-de-apps");
 
     const btnLogout = () => (
         <button

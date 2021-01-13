@@ -75,14 +75,14 @@ export default function MoreOptionsMenu({ location, history }) {
             callback: () => handleFullOpen("testModal"),
         },
         {
+            icon: <FontAwesomeIcon icon="sync-alt" style={menuIconStyle} />,
+            text: "trocar app",
+            callback: () => history.push("/painel-de-apps"),
+        },
+        {
             icon: <FontAwesomeIcon icon="comment" style={menuIconStyle} />,
             text: "fale conosco",
             callback: () => handleFullOpen("contactModal"),
-        },
-        {
-            icon: <FontAwesomeIcon icon="sync-alt" style={menuIconStyle} />,
-            text: "trocar conta",
-            callback: () => alert("trocar conta"),
         },
         {
             icon: <ExitToAppIcon style={menuIconStyle} />,

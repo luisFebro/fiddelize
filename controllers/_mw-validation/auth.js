@@ -97,7 +97,7 @@ exports.mwValidateLogin = async (req, res, next) => {
     const isCpfValid = new CPF().validate(cpf);
 
     const { role } = await req.getAccount(null, { cpf });
-    console.log("role", role);
+    if (!role) return res.status(400).json({ error: "Acesso inválido." });
 
     User(role)
         .findOne({ cpf: jsEncrypt(cpf) })

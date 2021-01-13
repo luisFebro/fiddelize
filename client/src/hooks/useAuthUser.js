@@ -28,14 +28,16 @@ export const disconnect = async (options = {}) => {
 };
 
 export default function useAuth(options = {}) {
-    const { history } = options;
+    const { history, role } = options;
 
-    const [success] = useData(["success"]);
+    if (!role || !history) throw new Error("role and history is required!");
+
+    const [success, roleAllowed] = useData(["success", "role"]);
 
     useEffect(() => {
         if (success === "...") return;
 
-        const isAuthUser = success;
+        const isAuthUser = success && role.includes(roleAllowed);
 
         if (!isAuthUser && history) {
             (async () => {

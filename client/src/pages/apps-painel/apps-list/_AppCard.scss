@@ -1,0 +1,185 @@
+* {
+    box-sizing: border-box !important; // this prevent gallery to be initialized as one column only
+}
+*,
+:before,
+:after {
+    box-sizing: border-box !important;
+}
+
+.app-card--root {
+    border-color: transparent;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border-top: 35px solid var(--themeP);
+    border-bottom: 30px solid var(--themeP);
+    border-left: 5px solid var(--themeP);
+    border-right: 5px solid var(--themeP);
+    border-radius: 0.75rem;
+    box-shadow: inset 0 0 0.4em #000;
+
+    & .img-container {
+        position: relative;
+        overflow: hidden;
+        background-color: grey;
+    }
+
+    & .upper-audio-camera {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    & .upper-audio-camera div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    & .upper-audio-camera div > .audio {
+        width: 60px;
+        height: 4px;
+        border-radius: 15px;
+        background-color: white;
+    }
+
+    & .upper-audio-camera div > .cam {
+        margin-left: 5px;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: white;
+    }
+
+    & .two-btns-left {
+        position: absolute;
+        top: 35px;
+        left: -8px;
+    }
+
+    & .two-btns-left div {
+        display: flex;
+        justify-content: center;
+        flex-flow: column wrap;
+    }
+
+    & .two-btns-left div span {
+        width: 7px;
+        height: 20px;
+        border-radius: 15px;
+        background-color: var(--themeP);
+    }
+
+    & .two-btns-left div .down {
+        margin-top: 5px;
+    }
+
+    & .power-btn-right {
+        position: absolute;
+        top: 45px;
+        right: -8px;
+        width: 7px;
+        height: 20px;
+        border-radius: 15px;
+        background-color: var(--themeP);
+    }
+
+    // https://stackoverflow.com/questions/37287153/how-to-get-images-in-bootstraps-card-to-be-the-same-height-width
+    & .img-container > img {
+        flex-shrink: 0;
+        width: 100%;
+        height: 35vw;
+        object-fit: contain; // container - full image with limit height
+    }
+
+    @media screen and (min-width: 768px) {
+        & .img-container > img {
+            height: 20vw;
+            // object-fit: cover; // cover - image is slightly cut to fit
+        }
+    }
+
+    & .card-footer {
+        position: relative;
+        padding: 0.25rem !important;
+        color: var(--themeP);
+    }
+
+    & .card-footer > .desc {
+        height: 3em; // default 4em; for shorter desc like names just 2em
+        overflow: hidden;
+        font: normal 1rem var(--mainFont), sans-serif;
+        line-height: 20px;
+    }
+
+    & .card-footer > .desc .app-type-badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+    & .card-footer > .desc .default-access-badge {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 2px 10px;
+        color: var(--mainWhite);
+        font: bold 0.7rem var(--mainFont), sans-serif;
+        background: var(--themeP);
+        border-radius: 30px;
+        white-space: nowrap !important;
+    }
+
+    & .card-footer > .desc .default-access-badge svg {
+        font-size: 20px;
+    }
+
+    & .card-footer > .desc .access-check {
+        position: absolute;
+        font: bold 0.7rem var(--mainFont), sans-serif;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap !important;
+        border-radius: 30px;
+    }
+
+    @media screen and (min-width: 500px) {
+        & .card-footer > .desc .default-access-badge,
+        & .card-footer > .desc .access-check {
+            font: bold 0.9rem var(--mainFont), sans-serif;
+        }
+        & .card-footer > .desc .default-access-badge svg {
+            font-size: 20px;
+        }
+    }
+
+    & .card-footer > .desc .app-type-badge svg {
+        margin-right: 15px;
+        margin-left: 5px;
+        background-color: var(--themeP);
+        color: var(--mainWhite) !important;
+        padding: 5px;
+        font-size: 40px;
+        border-radius: 50%;
+    }
+
+    & .card-footer > div {
+        margin: 1rem 0;
+    }
+
+    & .cta {
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

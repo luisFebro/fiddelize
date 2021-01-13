@@ -7,6 +7,7 @@ import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import { useStoreDispatch } from "easy-peasy";
 import { logout } from "../../../redux/actions/authActions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AsyncMemberTasksHistory = Load({
     loader: () =>
@@ -51,6 +52,20 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
                         history.push("/senha-equipe");
                     })();
                 }
+            },
+        },
+        {
+            icon: (
+                <FontAwesomeIcon
+                    icon="sync-alt"
+                    style={{ ...styles.muStyle, transform: "scale(1.3)" }}
+                />
+            ),
+            name: "Trocar App ►",
+            backColor: "var(--themeSDark--" + sColor + ")",
+            onClick: () => {
+                !disableClick && history.push("/painel-de-apps");
+                // playBeep();
             },
         },
         {

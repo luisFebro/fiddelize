@@ -10,7 +10,7 @@ import useAuth from "../../../hooks/useAuthUser";
 export default function BizTeamApp({ history }) {
     const userFirstName = "Febro";
 
-    useAuth({ history });
+    useAuth({ history, role: "nucleo-equipe" });
 
     useScrollUp();
     useBackColor("var(--themeBackground--default)");

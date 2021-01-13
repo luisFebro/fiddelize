@@ -2,20 +2,28 @@ import React, { useState } from "react";
 import "./_BizTeamNavbar.scss";
 import Img from "../../../../components/Img";
 import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";
-import SendIcon from "@material-ui/icons/Send";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from "react-router-dom";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function BizTeamNavbar() {
+export default withRouter(BizTeamNavbar);
+
+export const menuIconStyle = {
+    fontSize: "30px",
+};
+
+function BizTeamNavbar({ history }) {
     const showMoreOptionsBtn = () => {
         const optArray = [
             {
-                icon: <SendIcon />,
-                text: "trocar conta",
-                callback: () => alert("trocar conta"),
+                icon: <FontAwesomeIcon icon="sync-alt" style={menuIconStyle} />,
+                text: "trocar app",
+                callback: () => history.push("/painel-de-apps"),
             },
             {
-                icon: <SendIcon />,
+                icon: <ExitToAppIcon style={menuIconStyle} />,
                 text: "sair",
                 callback: () => alert("sair"),
             },

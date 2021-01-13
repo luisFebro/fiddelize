@@ -24,7 +24,7 @@ exports.getAccount = async (userId, options = {}) => {
 
     const data = await Account.findOne(query).select(select);
 
-    if (!data && accounts) return { accounts: [] };
+    if ((!data && accounts) || !data) return { accounts: [] };
 
     const res = accounts
         ? { accounts: data.accounts }

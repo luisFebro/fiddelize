@@ -39,6 +39,7 @@ import {
     AsyncVirtualCard,
     AsyncScorePanel,
     AsyncPix,
+    AsyncAppsPanel,
     // biz team comps
     AsyncBizTeam,
     AsyncAgentNewPassword,
@@ -161,6 +162,11 @@ function Website({ location, history }) {
                     component={AsyncBizTeamPassword}
                 />
                 <Route path="/pix" exact component={AsyncPix} />
+                <Route
+                    path="/painel-de-apps"
+                    exact
+                    component={AsyncAppsPanel}
+                />
                 <Route component={Default} />
             </Switch>
             <SnackbarRedux />
