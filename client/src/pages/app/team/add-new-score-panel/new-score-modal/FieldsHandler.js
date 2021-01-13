@@ -45,7 +45,7 @@ function FieldsHandler({
     const { businessId: bizId } = useAppSystem();
     const [memberId] = useData(["userId"]);
 
-    // useAuth({ history });
+    // useAuth({ history, roles: "cliente-membro, cliente-admin" });
 
     useEffect(() => {
         if (memberId === "...") return;

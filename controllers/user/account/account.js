@@ -1,19 +1,12 @@
 const Account = require("../../../models/user/Account");
 const User = require("../../../models/user");
 const { jsDecrypt, decryptSync } = require("../../../utils/security/xCipher");
-
-/* ACTIONS
-1. To add a new account:
-needUpdateOnly = false,
-
-2. To add another account:
-needUpdateOnly = false,
-isAnother = true,
-
-3. To update default:
-needUpdateOnly = true;
-send all default variables to update (role, bizId, bizImg, bizName)
- */
+const { handleDefaultAccess, changeDefaultAccess } = require("./helpers.js");
+const {
+    getChunksTotal,
+    getDataChunk,
+} = require("../../../utils/array/getDataChunk");
+const getId = require("../../../utils/getId");
 
 exports.getAccount = async (userId, options = {}) => {
     const { cpf, accounts = false } = options;
@@ -33,6 +26,29 @@ exports.getAccount = async (userId, options = {}) => {
     return res;
 };
 
+exports.readAppList = async (req, res) => {
+    const { userId, role, skip, limit = 5 } = req.query;
+
+    const userData = await User(role)
+        .findById(userId)
+        .select("cpf -_id")
+        .catch((e) => {
+            res.json(e);
+        });
+    const cpf = userData && jsDecrypt(userData.cpf);
+    const { accounts } = await req.getAccount(null, { cpf, accounts: true });
+
+    const data = accounts;
+    const dataSize = data.length;
+    const dataChunk = getDataChunk(data, { skip, limit });
+
+    res.json({
+        list: dataChunk,
+        listTotal: dataSize,
+        chunksTotal: getChunksTotal(dataSize, limit),
+    });
+};
+
 exports.setNewAccount = async (options = {}) => {
     const {
         cpf,
@@ -41,21 +57,12 @@ exports.setNewAccount = async (options = {}) => {
         bizImg,
         bizName,
         bizId,
-        isAnother = false,
-        needUpdateOnly = false, // only true for updating the default account!!
+        // isAnother = false,
     } = options;
 
     const checkId = cpf;
 
     if (!checkId) return res.status(400).json({ error: "Missing checkId!" });
-
-    const pushIt = {
-        userId,
-        bizId,
-        role,
-        bizImg,
-        bizName,
-    };
 
     const payload = {
         checkId,
@@ -74,18 +81,63 @@ exports.setNewAccount = async (options = {}) => {
     if (!role) delete defaults.defaultRole;
     if (!bizId) delete defaults.defaultBizId;
 
-    const setObj = isAnother ? payload : { ...payload, ...defaults };
+    const dataAcc = await Account.findOne({ checkId: cpf }).select(
+        "accounts -_id"
+    );
 
-    const dataSet = needUpdateOnly
-        ? { $set: setObj }
-        : { $set: setObj, $push: { accounts: pushIt } };
+    const pullIt = {
+        userId,
+        bizId,
+        role,
+        bizImg,
+        bizName,
+    };
+
+    const appId = getId();
+
+    const newAcc = handleDefaultAccess({ appId, dataAcc, pullIt });
+
+    const setObj = { ...payload, ...defaults, accounts: newAcc };
+
+    const dataSet = { $set: setObj };
 
     return await Account.findOneAndUpdate({ checkId }, dataSet, {
         new: true,
         upsert: true,
     }).catch((err) => {
-        res.status(500).json({ error: err });
+        res.status(400).json({ error: err });
     });
+};
+
+exports.setDefaultAccess = async (req, res) => {
+    const {
+        userId, // userId and userRole is required because we have to looking for the user's CPF so that we can find the right accounts
+        userRole,
+        appId,
+    } = req.body;
+
+    const userData = await User(userRole)
+        .findById(userId)
+        .select("cpf -_id")
+        .catch((e) => {
+            res.json(e);
+        });
+    const cpf = userData && jsDecrypt(userData.cpf);
+
+    const { accounts } = await req.getAccount(null, { cpf, accounts: true });
+    const setObj = changeDefaultAccess({ accounts, appId });
+
+    const dataSet = { $set: setObj };
+
+    const done = await Account.findOneAndUpdate({ checkId: cpf }, dataSet, {
+        new: true,
+        upsert: true,
+    }).catch((err) => {
+        res.status(400).json({ error: err });
+    });
+    if (!done) return;
+
+    return res.json({ msg: "default account was updated." });
 };
 
 exports.findAllUserAccounts = async ({ cpf, userId, role }) => {
@@ -185,3 +237,12 @@ exports.mwCreateInstantAccount = async (req, res, next) => {
 
     next();
 };
+
+/* ARCHIVES
+const pullElem = (field, elem) => {
+    const targetElem = { $each: [elem], $position: 0 }; // first in, first out.
+    const fieldAndElem = { [field]: targetElem };
+
+    return { $push: fieldAndElem };
+};
+*/

@@ -20,7 +20,7 @@ export default withRouter(RegistersPanel);
 function RegistersPanel({ history, isNewMember = false }) {
     const { selfBizLogoImg, bizCodeName } = useClientAdmin();
 
-    useAuth({ history });
+    useAuth({ history, roles: "cliente-membro, cliente-admin" });
 
     const styles = getStyles();
 

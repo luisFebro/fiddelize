@@ -1,42 +1,58 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import AppCard from "./AppCard";
+import getAPI, { setDefaultAccess } from "../../../utils/promises/getAPI";
+import useAPIList, { readAppList } from "../../../hooks/api/useAPIList";
+import useElemDetection, {
+    checkDetectedElem,
+} from "../../../hooks/api/useElemDetection";
+import useData from "../../../hooks/useData";
+import getId from "../../../utils/getId";
 
+// LESSON: if you are using a list, insert an id if you gonna need the cards indivudially.
 export default function AppList() {
-    const itemAmount = 150.5;
+    const [skip, setSkip] = useState(0);
+    const [trigger, setTrigger] = useState(false);
 
-    const installedApps = [
-        {
-            bizId: "123s",
-            bizImg:
-                "https://res.cloudinary.com/fiddelize/image/upload/v1602846305/you-vipp-shop-yvczdd8.png",
-            bizName: "Cherry's Beauty",
-            role: "cliente-admin",
-            isDefaultAccess: true,
-        },
-        {
-            bizId: "1432s",
-            bizImg:
-                "https://res.cloudinary.com/fiddelize/image/upload/v1602079714/you-vipp-shop-yvsffp932.png",
-            bizName: "You Vipp Shop",
-            role: "cliente",
-            isDefaultAccess: false,
-        },
-        {
-            bizId: "123123141s",
-            bizImg: "/img/official-logo-name.png",
-            bizName: "Fiddelize",
-            role: "cliente-membro",
-            isDefaultAccess: false,
-        },
-        {
-            bizId: "1231231s",
-            bizImg: "/img/official-logo-name.png",
-            bizName: "Fiddelize",
-            role: "nucleo-equipe",
-            isDefaultAccess: false,
-        },
-    ];
-    const error = false;
+    const [userId, role] = useData(["userId", "role"]);
+
+    const params = {
+        skip,
+        userId,
+        role,
+    };
+
+    const {
+        list: installedApps,
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        hasMore,
+        readyShowElems,
+    } = useAPIList({
+        url: readAppList(),
+        params,
+        trigger: trigger || userId !== "...",
+    });
+
+    const handleSelectedDefaultAccess = (appId) => {
+        (async () => {
+            const body = {
+                userRole: role,
+                userId,
+                appId,
+            };
+
+            await getAPI({
+                method: "post",
+                url: setDefaultAccess(),
+                body,
+            });
+
+            const newTrigger = getId();
+            setTrigger(newTrigger);
+        })();
+    };
 
     const totalApps = installedApps && installedApps.length;
     const plural = totalApps === 1 ? "" : "s";
@@ -54,6 +70,10 @@ export default function AppList() {
             </p>
         );
     }
+
+    const payload = {
+        handleSelectedDefaultAccess,
+    };
 
     return (
         <section
@@ -79,7 +99,7 @@ export default function AppList() {
                     {installedApps &&
                         installedApps.map((app) => (
                             <Fragment key={app.bizId}>
-                                <AppCard data={app} />
+                                <AppCard data={app} payload={payload} />
                             </Fragment>
                         ))}
                 </div>

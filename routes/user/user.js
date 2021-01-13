@@ -51,6 +51,8 @@ const {
 
 const {
     mwCreateInstantAccount,
+    setDefaultAccess,
+    readAppList,
 } = require("../../controllers/user/account/account");
 
 const { register } = require("../../controllers/auth/auth");
@@ -112,6 +114,8 @@ router.post(
     mwValidateRegister,
     register
 );
+router.post("/acc/set-default-access", setDefaultAccess);
+router.get("/acc/app-list", readAppList);
 
 router.param("userId", mwUserId); // n1
 

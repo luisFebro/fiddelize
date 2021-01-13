@@ -68,7 +68,8 @@ exports.mwValidateRegister = async (req, res, next) => {
             return res.status(400).json(msg("error.invalidEmail"));
 
         const isCpfValid = new CPF().validate(cpf);
-        if (!isCpfValid) return res.status(400).json(msg("error.invalidCpf"));
+        if (!isCpfValid && cpf !== CPF_TEST)
+            return res.status(400).json(msg("error.invalidCpf"));
 
         if (!validatePhone(phone))
             return res.status(400).json(msg("error.invalidPhone"));

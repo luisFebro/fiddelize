@@ -1,39 +1,58 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import NotifCard from './NotifCard';
-import { markAllAsSeen } from '../../redux/actions/notificationActions';
-import useAPIList, { readNotifications } from '../../hooks/api/useAPIList';
-import useElemDetection, { checkDetectedElem } from '../../hooks/api/useElemDetection';
-import getFirstName from '../../utils/string/getFirstName';
+import React, { useEffect, useState, Fragment } from "react";
+import NotifCard from "./NotifCard";
+import { markAllAsSeen } from "../../redux/actions/notificationActions";
+import useAPIList, { readNotifications } from "../../hooks/api/useAPIList";
+import useElemDetection, {
+    checkDetectedElem,
+} from "../../hooks/api/useElemDetection";
+import getFirstName from "../../utils/string/getFirstName";
 
-export default function NotifList({ _id, userName, forceCliUser = false, }) {
+export default function NotifList({ _id, userName, forceCliUser = false }) {
     const [skip, setSkip] = useState(0);
     const [firstChunkLoaded, setFirstChunkLoaded] = useState(false);
 
     userName = getFirstName(userName);
 
     const params = { forceCliUser, skip };
-    const apiKeys = { url: readNotifications(_id), skip, params, listName: "notifList" }
+    const apiKeys = {
+        url: readNotifications(_id),
+        skip,
+        params,
+        listName: "notifList",
+    };
 
     const {
         list,
-        loading, ShowLoadingSkeleton,
-        error, ShowError,
-        hasMore, readyShowElems,
+        loading,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        hasMore,
+        readyShowElems,
     } = useAPIList(apiKeys);
 
-    const handleSkip = res => { setSkip(prevSkip => prevSkip + 1) };
-    const detectedCard = useElemDetection({ loading, hasMore, handleSkip });
+    // const handleSkip = res => { setSkip(prevSkip => prevSkip + 1) };
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
 
     useEffect(() => {
-        if(list.length && !firstChunkLoaded) {
+        if (list.length && !firstChunkLoaded) {
             markAllAsSeen(_id, { forceCliUser });
             setFirstChunkLoaded(true);
         }
-    }, [list, firstChunkLoaded])
+    }, [list, firstChunkLoaded]);
 
-    const showCard = (props) => (<NotifCard {...props} />);
+    const showCard = (props) => <NotifCard {...props} />;
     const renderedList = list.map((notif, ind) => {
-        const { _id, senderId, cardType, subtype, isCardNew, createdAt, clicked, content } = notif;
+        const {
+            _id,
+            senderId,
+            cardType,
+            subtype,
+            isCardNew,
+            createdAt,
+            clicked,
+            content,
+        } = notif;
         const props = {
             cardId: _id,
             cardType,
@@ -46,8 +65,7 @@ export default function NotifList({ _id, userName, forceCliUser = false, }) {
             content,
         };
 
-        return checkDetectedElem({ list, ind, indFromLast: 3 })
-        ? (
+        return checkDetectedElem({ list, ind, indFromLast: 3 }) ? (
             <section key={_id} className="mx-2" ref={detectedCard}>
                 {showCard(props)}
             </section>
@@ -55,17 +73,18 @@ export default function NotifList({ _id, userName, forceCliUser = false, }) {
             <section key={_id} className="mx-2">
                 {showCard(props)}
             </section>
-        )
-    })
+        );
+    });
 
-    const showOverMsg = () => (
-        !hasMore && readyShowElems &&
-        <p className="my-5 text-normal text-center font-weight-bold text-purple">
-            Isso é tudo, {userName}.
-        </p>
-    );
+    const showOverMsg = () =>
+        !hasMore &&
+        readyShowElems && (
+            <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                Isso é tudo, {userName}.
+            </p>
+        );
 
-    return(
+    return (
         <Fragment>
             {renderedList}
             {loading && <ShowLoadingSkeleton />}

@@ -5,6 +5,7 @@ const { roleTypes } = require("./schemes/data-by-role/main");
 
 // For account page to enable use to switch between different accounts;
 const accountSetData = {
+    appId: String,
     role: {
         type: String,
         enum: [...roleTypes],
@@ -13,6 +14,7 @@ const accountSetData = {
     bizId: String,
     bizName: String,
     bizImg: { type: String, default: "/img/official-logo-name.png" },
+    isDefaultAccess: Boolean,
 };
 const AccountSetSchema = new Schema(accountSetData, { _id: false });
 

@@ -112,6 +112,7 @@ export default function ButtonMulti({
             style={{
                 margin: margin ? margin : undefined,
                 zIndex: zIndex ? zIndex : undefined,
+                outline: 0,
             }}
         >
             <span

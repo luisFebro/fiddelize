@@ -10,10 +10,14 @@ export const readUserList = (cliAdminId) =>
     `/api/user/list/all?bizId=${cliAdminId}`;
 export const readHighestScores = (cliAdminId) =>
     `/api/user/list/highest-scores?bizId=${cliAdminId}`;
-// account
-export const createInstantAccount = () => `/api/user/instant-acc`; // POST
-
 // END USER
+
+// ACCOUNT
+export const createInstantAccount = () => `/api/user/instant-acc`; // POST
+export const readAppList = () => `/api/user/acc/app-list`; // GET
+export const setDefaultAccess = () => `/api/user/acc/set-default-access`; // POST
+
+// END ACCOUNT
 
 // PURCHASE'S HISTORY
 export const readPurchaseCardsList = (userId) =>

@@ -1,5 +1,6 @@
 import React from "react";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import "./_AppCard.scss";
 // icons
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
@@ -19,8 +20,9 @@ const handleAppType = (role) => {
     if (role === "cliente") return { type: "cliente", icon: <LocalMallIcon /> };
 };
 
-export default function BankCard({ data }) {
-    const { bizId, bizImg, bizName, role, isDefaultAccess } = data;
+export default function AppCard({ data, payload }) {
+    const { appId, bizImg, bizName, role, isDefaultAccess } = data;
+    const { handleSelectedDefaultAccess } = payload;
 
     const { type, icon } = handleAppType(role);
 
@@ -45,9 +47,11 @@ export default function BankCard({ data }) {
                     </p>
                 ) : (
                     <div className="access-check">
-                        <CheckBoxForm
-                            text="acesso padrão"
-                            setIsBoxChecked={null}
+                        <ButtonMulti
+                            title="acesso padrão"
+                            onClick={() => handleSelectedDefaultAccess(appId)}
+                            variant="link"
+                            textTransform="lowercase"
                         />
                     </div>
                 )}

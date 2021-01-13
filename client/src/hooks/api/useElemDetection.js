@@ -20,7 +20,6 @@ export default function useElemDetection({
             if (loading) return; // constantly calls the API ifwe do not return...
 
             const currObserver = new IntersectionObserver((entries, self) => {
-                console.log("entries", entries);
                 const entry = entries[0];
                 const detection = entry.isIntersecting && hasMore;
                 if (detection) {
