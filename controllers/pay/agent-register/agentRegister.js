@@ -58,8 +58,7 @@ exports.getAgentRedirectAuthCode = async (data) => {
     };
 
     // n1 params reference
-    const xmlBody = `
-        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    const xmlBody = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         <authorizationRequest>
             <reference>${uniqueLinkId}</reference>
             <permissions>
@@ -78,8 +77,7 @@ exports.getAgentRedirectAuthCode = async (data) => {
             </account>
             <redirectURL>${CLIENT_URL}/t/app/nucleo-equipe/cadastro/pagseguro?successFiddelizeAuthorization=true</redirectURL>
             <notificationURL>${agentRegisterNotifyUrl}</notificationURL>
-        </authorizationRequest>
-    `;
+        </authorizationRequest>`;
 
     const config = {
         method: "post",
@@ -92,7 +90,7 @@ exports.getAgentRedirectAuthCode = async (data) => {
     };
 
     const response = await axios(config).catch((e) => {
-        res.status(400).json(e.response.data);
+        Promise.reject(e.response.data);
     });
     if (!response) return;
 

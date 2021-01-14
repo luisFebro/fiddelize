@@ -109,7 +109,7 @@ exports.loadAuthUser = async (req, res) => {
         const cliUser =
             "-cpf -clientUserData.notifications -clientUserData.purchaseHistory";
         const cliAdmin =
-            "-expiryToken -pswd -clientAdminData.smsBalance -clientAdminData.bizFreeCredits -clientAdminData.bizPlanList -clientAdminData.smsHistory -clientAdminData.smsAutomation -clientAdminData.orders -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications";
+            "-cpf -expiryToken -pswd -clientAdminData.smsBalance -clientAdminData.bizFreeCredits -clientAdminData.bizPlanList -clientAdminData.smsHistory -clientAdminData.smsAutomation -clientAdminData.orders -clientAdminData.notifications -clientAdminData.tasks -clientUserData.notifications -clientAdminData.lastCC -clientAdminData.verificationPass";
 
         if (isCliAdmin) return cliAdmin;
         if (isCliUser) return cliUser;
@@ -146,6 +146,7 @@ exports.register = async (req, res) => {
         filter,
         bizImg,
         bizName,
+        pswd,
         // below only cli-user vars
         tempScore,
         memberRole,
@@ -182,7 +183,13 @@ exports.register = async (req, res) => {
             uniqueLinkId,
             agentName: name,
             agentEmail: email,
+        }).catch((err) => {
+            res.status(400).json({
+                error: "Ocorreu um erro ao gerar código de redirecionamento.",
+            });
         });
+        if (!redirectAuthCode) return;
+
         bizTeamData = { ...bizTeamData, uniqueLinkId, redirectAuthCode };
     }
 
@@ -201,6 +208,7 @@ exports.register = async (req, res) => {
         bizTeamData,
         filter,
         register: thisRegister, // only userClient
+        pswd, // only for cli-admin and biz-team. They should be the same for simplicity.
     });
 
     const handleMsg = () => {
@@ -244,6 +252,8 @@ exports.register = async (req, res) => {
 
     if (isCliUser) {
         const registerUserScore = tempScore ? decryptLinkScore(tempScore) : 0;
+        const memberId = thisRegister && thisRegister.id;
+
         await addMemberTaskHistory({
             clientName: name,
             tempScore: registerUserScore,
@@ -335,7 +345,7 @@ exports.login = async (req, res) => {
         // }
     }
 
-    const authData = getRoleData(role, {
+    const authData = await getRoleData(role, {
         data: req.profile,
         token,
         cpf,

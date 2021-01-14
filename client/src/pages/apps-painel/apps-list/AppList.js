@@ -8,8 +8,10 @@ import useElemDetection, {
 import useData from "../../../hooks/useData";
 import getId from "../../../utils/getId";
 import repeat from "../../../utils/arrays/repeat";
+import { useStoreDispatch } from "easy-peasy";
+
 // LESSON: if you are using a list, insert an id if you gonna need the cards indivudially.
-export default function AppList() {
+export default function AppList({ history }) {
     const [skip, setSkip] = useState(0);
     const [data, setData] = useState({
         trigger: false,
@@ -17,7 +19,14 @@ export default function AppList() {
     });
     const { trigger, loadingDefaultAccess } = data;
 
-    const [userId, role] = useData(["userId", "role"]);
+    const [userId, role, bizCodeName, appId] = useData([
+        "userId",
+        "role",
+        "bizCodeName",
+        "appId",
+    ]);
+
+    const dispatch = useStoreDispatch();
 
     const params = {
         userId,
@@ -39,6 +48,7 @@ export default function AppList() {
         params,
         skip,
         trigger: trigger || userId !== "...",
+        forceTrigger: true,
         listName: "appList",
     });
 
@@ -96,6 +106,11 @@ export default function AppList() {
 
     const payload = {
         handleSelectedDefaultAccess,
+        history,
+        role_loggedIn: role,
+        appId_loggedIn: appId,
+        dispatch,
+        bizCodeName,
     };
 
     return (
@@ -121,7 +136,7 @@ export default function AppList() {
                         }) ? (
                             <Fragment key={app.appId || ind}>
                                 <AppCard
-                                    ref={detectedCard} // ref not working yet
+                                    ref={detectedCard}
                                     data={app}
                                     payload={payload}
                                     loading={loading}

@@ -1,15 +1,15 @@
-import React, { Fragment } from "react";
+import React, { Fragment, forwardRef } from "react";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import "./_AppCard.scss";
+import Skeleton from "../../../components/multimedia/Skeleton";
+import { handleOpenApp } from "./helpers/appOpenAlgorithm";
 // icons
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
-import CheckBoxForm from "../../../components/CheckBoxForm";
-import Skeleton from "../../../components/multimedia/Skeleton";
 
 const handleAppType = (role) => {
     if (role === "cliente-admin")
@@ -21,28 +21,20 @@ const handleAppType = (role) => {
     if (role === "cliente") return { type: "cliente", icon: <LocalMallIcon /> };
 };
 
-export default function AppCard({
-    data,
-    payload,
-    loading,
-    loadingDefaultAccess,
-}) {
+export default forwardRef(AppCard);
+
+function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
     const { appId, bizImg, bizName, role, isDefaultAccess } = data;
-    const { handleSelectedDefaultAccess } = payload;
+    const {
+        appId_loggedIn,
+        history,
+        dispatch,
+        role_loggedIn,
+        bizCodeName,
+        handleSelectedDefaultAccess,
+    } = payload;
 
     const dataAppType = role && handleAppType(role);
-
-    const showCTA = () => (
-        <ButtonFab
-            title="abrir"
-            variant="extended"
-            size="small"
-            backgroundColor="var(--default)"
-            position="relative"
-            backgroundColor={`var(--themeSDark--default)`}
-            onClick={null}
-        />
-    );
 
     const showFooter = () => (
         <section className="card-footer">
@@ -83,6 +75,16 @@ export default function AppCard({
         </section>
     );
 
+    const payloadOpen = {
+        history,
+        appId,
+        appRole: role,
+        role_loggedIn,
+        appId_loggedIn,
+        dispatch,
+        bizCodeName,
+    };
+
     const showCard = () => (
         <section className="shadow-babadoo app-card--root">
             <section className="upper-audio-camera">
@@ -107,7 +109,17 @@ export default function AppCard({
                 />
             </div>
             {showFooter()}
-            <section className="cta">{showCTA()}</section>
+            <section className="cta">
+                <ButtonFab
+                    title="abrir"
+                    variant="extended"
+                    size="small"
+                    backgroundColor="var(--default)"
+                    position="relative"
+                    backgroundColor={`var(--themeSDark--default)`}
+                    onClick={() => handleOpenApp(payloadOpen)}
+                />
+            </section>
         </section>
     );
 
@@ -116,6 +128,7 @@ export default function AppCard({
     return (
         <section
             className="col-6 mx-auto mb-4 col-md-4 col-lg-3" // if you are in a modal, use only two cols, remove col-md-4 col-lg-3
+            ref={ref}
         >
             {loading ? showSkeleton() : showCard()}
         </section>

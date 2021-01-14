@@ -5,13 +5,17 @@ import useGetVar from "../../../hooks/storage/useVar";
 export default function useAllowedLink({ bizId, isCliUser, userScore }) {
     const { data: linkCode } = useGetVar("linkCode", { storeName: "user" });
 
+    const blackList =
+        linkCode &&
+        (linkCode.includes("nucleo") || linkCode.includes("equipe"));
+
     const { data: isAllowed, loading } = useAPI({
         url: isLinkAllowed(),
         params: {
             linkCode,
             bizId,
         },
-        trigger: linkCode,
+        trigger: linkCode && !blackList,
     });
 
     if (loading) return true;

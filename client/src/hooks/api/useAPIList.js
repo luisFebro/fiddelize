@@ -50,6 +50,7 @@ export default function useAPIList({
     skip = null,
     timeout = IS_DEV ? 30000 : 10000, // default: 10000
     trigger,
+    forceTrigger = false, // by default, in this API, trigger only serves as a reload rathan than preventing the list loading. To activate this later behavior, put it as true
     listName, // offline usage
     needAuth = true,
     isFiltering = false,
@@ -173,6 +174,10 @@ export default function useAPIList({
     }
 
     useEffect(() => {
+        if (forceTrigger) {
+            if (!trigger) return;
+        }
+
         let cancel;
 
         if (reachedChunksLimit && !isFiltering) {

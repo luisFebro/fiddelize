@@ -192,7 +192,7 @@ console.log(jsDecrypt("02030719020e0f1903030f1a0204"));
 // console.log(encryptSync("mr.febro@gmail.com"));
 //console.log(decryptSync("b6796df19acd8d308b6b6ca9a7db83a6:5933bc3e35116a1597aef36878f89ea0"));
 // (async () => {
-//     const res = await createBcryptPswd("121316")
+//     const res = await createBcryptPswd("940823")
 //     console.log("res", res);
 // })()
 module.exports = {

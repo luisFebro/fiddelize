@@ -2,7 +2,7 @@ import React from "react";
 import useBackColor from "../../hooks/useBackColor";
 import AppList from "./apps-list/AppList";
 
-export default function AppsPanel() {
+export default function AppsPanel({ history }) {
     useBackColor("var(--mainWhite)");
 
     return (
@@ -15,7 +15,7 @@ export default function AppsPanel() {
                     Uma conta. Acesse todos seus apps.
                 </h2>
             </header>
-            <AppList />
+            <AppList history={history} />
         </section>
     );
 }

@@ -21,6 +21,7 @@ exports.changeDefaultAccess = ({ accounts, appId }) => {
         if (acc.appId === appId) {
             acc.isDefaultAccess = true;
             defaults = {
+                defaultAppId: acc.appId,
                 defaultUserId: acc.userId,
                 defaultRole: acc.role,
                 defaultBizId: acc.bizId,

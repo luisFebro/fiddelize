@@ -67,8 +67,12 @@ exports.setNewAccount = async (options = {}) => {
     const payload = {
         checkId,
     };
+
+    const appId = getId();
+
     const defaults = {
         defaultUserId: userId,
+        defaultAppId: appId,
         defaultRole: role,
         defaultBizId: role === "nucleo-equipe" ? "nucleo" : bizId,
         defaultBizName: bizName,
@@ -92,8 +96,6 @@ exports.setNewAccount = async (options = {}) => {
         bizImg,
         bizName,
     };
-
-    const appId = getId();
 
     const newAcc = handleDefaultAccess({ appId, dataAcc, pullIt });
 
@@ -211,7 +213,7 @@ exports.mwCreateInstantAccount = async (req, res, next) => {
         email,
         phone,
         gender,
-        pswd,
+        pswd, // only for cli-admin and biz-team. They should have the same password
         // specific data
         clientUserData: isCliUser
             ? {

@@ -61,7 +61,7 @@ export default function DetectedApp({
                                         ? "#fff"
                                         : "#000"
                                 }
-                                backgroundColor={`var(--themeS--${
+                                backgroundColor={`var(--themeSDark--${
                                     pColor || "default"
                                 })`}
                                 onClick={() => {
@@ -150,7 +150,7 @@ export default function DetectedApp({
                                 ? "#fff"
                                 : "#000"
                         }
-                        backgroundColor={`var(--themeS--${
+                        backgroundColor={`var(--themeSDark--${
                             pColor || "default"
                         })`}
                         onClick={null}

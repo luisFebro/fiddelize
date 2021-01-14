@@ -29,6 +29,7 @@ export default function isThisApp() {
 // https://stackoverflow.com/questions/53378576/detect-web-app-running-as-homescreen-app-on-android-stock-browser
 function checkIfStockBrowser() {
     if (!(window.sessionStorage || false)) return false; // Session storage not supported
+    // LESSON: mobile-app?abrir=1 only works on production with localHostWebsiteMode and localHostAppMode as false.
     const condition =
         window.location.href.indexOf("?abrir=1") >= 0 ||
         window.location.href.indexOf("?abrir=sim") >= 0;

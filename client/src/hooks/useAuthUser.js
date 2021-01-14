@@ -30,7 +30,7 @@ export const disconnect = async (options = {}) => {
 export default function useAuth(options = {}) {
     const { history, roles } = options;
 
-    if (!roles || !history) throw new Error("roles and history is required!");
+    if (!roles) throw new Error("roles and history is required!");
 
     const [success, roleAllowed] = useData(["success", "role"]);
 

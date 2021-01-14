@@ -28,6 +28,7 @@ import {
     store,
 } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
+import { setStorageRegisterDone } from "./helpers/index";
 
 const isApp = isThisApp();
 
@@ -93,6 +94,8 @@ function Login({
             gender,
             linkId,
             memberJob,
+            needAccountPanel,
+            appId,
             // nucleo-equipe data
             primaryAgent,
             agentJob,
@@ -125,6 +128,7 @@ function Login({
                 { verifPass: verificationPass },
                 { gender },
                 { linkId: 0 },
+                { appId },
             ];
 
             await setMultiVar(storeElems, store.user);
@@ -173,11 +177,17 @@ function Login({
                 { rememberAccess: true },
                 { linkId },
                 { memberJob },
+                { appId },
             ];
             setMultiVar(storeElems, store.user);
 
             await setMultiVar(storeElems, store.user);
             await readUser(dispatch, authUserId, { role });
+
+            if (needAccountPanel) {
+                history.push("/painel-de-apps");
+                return;
+            }
 
             history.push("/senha-equipe");
         }
@@ -197,6 +207,7 @@ function Login({
                 { userId: authUserId },
                 { bizCodeName },
                 { rememberAccess: true },
+                { appId },
             ];
             setMultiVar(storeElems, store.user);
 
@@ -214,6 +225,11 @@ function Login({
 
                 if (cliNotifRes.status !== 200)
                     return console.log("smt wrong with sendNotification");
+
+                if (needAccountPanel) {
+                    history.push("/painel-de-apps");
+                    return;
+                }
 
                 handleCliUserPath({ authUserId, dispatch, history });
             } else {
@@ -239,6 +255,7 @@ function Login({
                 { agentJob },
                 { redirectPayGatewayLink },
                 { uniqueLinkId },
+                { appId },
             ];
 
             await setMultiVar(storeElems, store.user);
@@ -256,18 +273,15 @@ function Login({
         }
 
         // remove instant account notification
-        (async () => {
-            const isInstantAccount = await getVar(
-                "isInstantAccount",
+        const isInstantAccount = await getVar("isInstantAccount", store.user);
+
+        if (isInstantAccount) {
+            await removeMultiVar(
+                ["isInstantAccount", "instantBizImg", "instantBizName"],
                 store.user
             );
-            if (isInstantAccount) {
-                await removeMultiVar(
-                    ["isInstantAccount", "instantBizImg", "instantBizName"],
-                    store.user
-                );
-            }
-        })();
+            setStorageRegisterDone();
+        }
     };
 
     const showTitle = () => (

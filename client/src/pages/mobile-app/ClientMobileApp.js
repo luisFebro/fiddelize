@@ -132,13 +132,13 @@ function ClientMobileApp({ location, history }) {
     // While this id is still living in th local DB is an strong indication there is a pending registration.
     // This is good in case users accidently leave the app and keep showing the form instead of login in prior versions
     useEffect(() => {
-        if (memberId !== "..." && memberId) {
+        if (memberId !== "..." && memberId && !isInstantAccount) {
             setLoginOrRegister("register");
         }
     }, [memberId]);
 
     useEffect(() => {
-        if (needAppRegister) {
+        if (needAppRegister && !isInstantAccount) {
             setLoginOrRegister("register");
             // this is set to false just after registration with setStorageRegisterDone.
         }
@@ -385,10 +385,11 @@ function ClientMobileApp({ location, history }) {
         );
     }
 
+    const isFiddelizeLogo = instantBizImg === "/img/official-logo-name.png";
     return (
         <div style={{ overflowX: "hidden" }}>
             <span className="text-right text-white for-version-test">{""}</span>
-            {isInstantAccount ? (
+            {isInstantAccount && !isAuthUser ? (
                 <section className="container-center mx-3 text-normal">
                     <Card
                         className="animated fadeInDown delay-2s"
@@ -399,6 +400,13 @@ function ClientMobileApp({ location, history }) {
                     >
                         <div className="animated fadeInDown delay-3s container-center">
                             <img
+                                style={{
+                                    padding: "5px",
+                                    backgroundColor: isFiddelizeLogo
+                                        ? "var(--themeP)"
+                                        : undefined,
+                                    maxWidth: "170px",
+                                }}
                                 className="shadow-babadoo"
                                 src={instantBizImg}
                                 alt={instantBizName}

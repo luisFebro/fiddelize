@@ -97,12 +97,12 @@ export default function InstantAccount({
                 body = { ...body, linkCode: thisLinkCode };
             }
 
-            // const succ = await createInstantAccount({ body }).catch((e) => {
-            //     showSnackbar(dispatch, e.error, "error");
-            //     setData((prev) => ({ ...prev, errorOnce: true }));
-            // });
+            const succ = await createInstantAccount({ body }).catch((e) => {
+                showSnackbar(dispatch, e.error, "error");
+                setData((prev) => ({ ...prev, errorOnce: true }));
+            });
 
-            // if (!succ) return;
+            if (!succ) return;
 
             // prevent register page to be shown. Display login page instead with the new account
             // remove variables at the login access
@@ -152,7 +152,7 @@ export default function InstantAccount({
                                 ? "#fff"
                                 : "#000"
                         }
-                        backgroundColor={`var(--themeS--${
+                        backgroundColor={`var(--themeSDark--${
                             pColor || "default"
                         })`}
                         onClick={handleInstantAccount}

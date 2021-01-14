@@ -157,7 +157,7 @@ const clientAdminData = {
     smsHistory: [SmsHistorySchema],
     smsAutomation: [SmsAutomationSchema],
     orders: [OrdersSchema],
-    allowedTempLinks: Array, // temp link codes like "app/alan_yvs493z0:5d700207" to allow once once registration and only by invitation codes presented in this list.
+    allowedTempLinks: Array, // for client-user only: temp link codes like "app/alan_yvs493z0:5d700207" to allow once once registration and only by invitation codes presented in this list.
     lastCC: {
         encrypted: String, // all cc data
         oneClickInvest: Boolean, // activate 1-click invest

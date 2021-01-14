@@ -1,8 +1,9 @@
 const { msg } = require("../../_msgs/auth");
 const getFirstName = require("../../../utils/string/getFirstName");
+const Account = require("../../../models/user/Account");
 
 // ROLES
-const handleBizTeamData = ({ data, cpf }) => {
+const handleBizTeamData = ({ data, appId }) => {
     const { _id, name, role, gender, pswd, bizTeamData } = data;
 
     return {
@@ -18,10 +19,11 @@ const handleBizTeamData = ({ data, cpf }) => {
         redirectPayGatewayLink: `https://pagseguro.uol.com.br/v2/authorization/request.jhtml?code=${
             bizTeamData && bizTeamData.redirectAuthCode
         }`,
+        appId,
     };
 };
 
-const handleCliAdminData = ({ data, cpf }) => {
+const handleCliAdminData = ({ data, cpf, appId }) => {
     const { _id, name, role, gender, clientAdminData } = data;
 
     // token only sent after password validation.
@@ -33,10 +35,11 @@ const handleCliAdminData = ({ data, cpf }) => {
         bizCodeName: clientAdminData && clientAdminData.bizCodeName,
         verificationPass: clientAdminData && clientAdminData.verificationPass,
         twoLastCpfDigits: cpf && cpf.slice(-2),
+        appId,
     };
 };
 
-const handleCliMemberData = ({ data, cpf }) => {
+const handleCliMemberData = ({ data, appId }) => {
     const { _id, name, role, gender, clientMemberData } = data;
 
     return {
@@ -47,10 +50,11 @@ const handleCliMemberData = ({ data, cpf }) => {
         linkId: clientMemberData && clientMemberData.linkId,
         memberJob: clientMemberData && clientMemberData.job,
         bizId: clientMemberData && clientMemberData.bizId,
+        appId,
     };
 };
 
-const handleCliUserData = ({ data, token }) => {
+const handleCliUserData = ({ data, token, appId }) => {
     const { _id, name, role, gender, clientUserData } = data;
 
     return {
@@ -63,22 +67,29 @@ const handleCliUserData = ({ data, token }) => {
         msg: msg("ok.welcomeBack", getFirstName(name), "onlyMsg"),
         needCliUserWelcomeNotif:
             clientUserData && !clientUserData.notifications.length,
+        appId,
     };
 };
 // END ROLES
 
-function getRoleData(role, options = {}) {
+async function getRoleData(role, options = {}) {
     const { data, token, cpf } = options;
+
+    const appData = await Account.findOne({ checkId: cpf }).select(
+        "-_id defaultAppId"
+    );
+
+    const appId = appData.defaultAppId;
 
     switch (role) {
         case "nucleo-equipe":
-            return handleBizTeamData({ data, cpf });
+            return handleBizTeamData({ data, appId });
         case "cliente-admin":
-            return handleCliAdminData({ data, cpf });
+            return handleCliAdminData({ data, cpf, appId });
         case "cliente-membro":
-            return handleCliMemberData({ data, cpf });
+            return handleCliMemberData({ data, appId });
         case "cliente":
-            return handleCliUserData({ data, token });
+            return handleCliUserData({ data, token, appId });
         default:
             return console.log(`The role ${role} was not found!`);
     }

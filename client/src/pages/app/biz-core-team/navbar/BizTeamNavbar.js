@@ -5,6 +5,7 @@ import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/B
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { disconnect } from "../../../../hooks/useAuthUser";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -25,7 +26,11 @@ function BizTeamNavbar({ history }) {
             {
                 icon: <ExitToAppIcon style={menuIconStyle} />,
                 text: "sair",
-                callback: () => alert("sair"),
+                callback: () => {
+                    (async () => {
+                        await disconnect();
+                    })();
+                },
             },
         ];
         return (

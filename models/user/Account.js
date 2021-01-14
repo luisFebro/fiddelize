@@ -28,6 +28,7 @@ const data = {
         default: "cliente-admin",
     },
     defaultBizId: String,
+    defaultAppId: String,
     defaultBizImg: String, // img's url form cloudinary
     defaultBizName: String,
     accounts: [AccountSetSchema],
