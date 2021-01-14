@@ -7,35 +7,56 @@ import useElemDetection, {
 } from "../../../hooks/api/useElemDetection";
 import useData from "../../../hooks/useData";
 import getId from "../../../utils/getId";
-
+import repeat from "../../../utils/arrays/repeat";
 // LESSON: if you are using a list, insert an id if you gonna need the cards indivudially.
 export default function AppList() {
     const [skip, setSkip] = useState(0);
-    const [trigger, setTrigger] = useState(false);
+    const [data, setData] = useState({
+        trigger: false,
+        loadingDefaultAccess: false,
+    });
+    const { trigger, loadingDefaultAccess } = data;
 
     const [userId, role] = useData(["userId", "role"]);
 
     const params = {
-        skip,
         userId,
         role,
+        skip,
     };
 
     const {
-        list: installedApps,
+        list,
         loading,
-        ShowLoadingSkeleton,
         error,
         ShowError,
         hasMore,
         readyShowElems,
+        isOffline,
+        ShowOverMsg,
     } = useAPIList({
         url: readAppList(),
         params,
+        skip,
         trigger: trigger || userId !== "...",
+        listName: "appList",
+    });
+
+    const installedApps = loading ? repeat(5) : list;
+
+    const detectedCard = useElemDetection({
+        loading,
+        hasMore,
+        setSkip,
+        isOffline,
     });
 
     const handleSelectedDefaultAccess = (appId) => {
+        setData((prev) => ({
+            ...prev,
+            loadingDefaultAccess: appId,
+        }));
+
         (async () => {
             const body = {
                 userRole: role,
@@ -50,7 +71,11 @@ export default function AppList() {
             });
 
             const newTrigger = getId();
-            setTrigger(newTrigger);
+            setData((prev) => ({
+                ...prev,
+                trigger: newTrigger,
+                loadingDefaultAccess: false,
+            }));
         })();
     };
 
@@ -58,17 +83,15 @@ export default function AppList() {
     const plural = totalApps === 1 ? "" : "s";
     const showTotalApps = () => (
         <p className="text-p text-normal my-3 text-left">
-            <span className="font-weight-bold">Total:</span> {totalApps} app
-            {plural} instalado{plural}.
+            <span className="font-weight-bold">Total:</span>
+            {loading
+                ? " ..."
+                : ` ${totalApps} app${plural} instalado${plural}.`}
         </p>
     );
 
     if (error) {
-        return (
-            <p className="text-subtitle text-red font-weight-bold mx-3 my-5">
-                Um erro aconteceu ao iniciar a sessão. Tente abrir novamente.
-            </p>
-        );
+        return <ShowError />;
     }
 
     const payload = {
@@ -82,28 +105,47 @@ export default function AppList() {
                 marginBottom: "150px",
             }}
         >
-            {!installedApps ? (
-                <p className="text-normal text-purple font-weight-bold">
-                    Verificando disponíveis... here goes skeleton instead
+            <Fragment>
+                <p className="text-subtitle text-purple font-weight-bold">
+                    Selecione app.
                 </p>
-            ) : (
-                <Fragment>
-                    <p className="text-subtitle text-purple font-weight-bold">
-                        Selecione app.
-                    </p>
-                    {showTotalApps()}
-                </Fragment>
-            )}
+                {showTotalApps()}
+            </Fragment>
             <section className="container">
                 <div className="row">
-                    {installedApps &&
-                        installedApps.map((app) => (
-                            <Fragment key={app.bizId}>
-                                <AppCard data={app} payload={payload} />
+                    {installedApps.map((app, ind) => {
+                        return checkDetectedElem({
+                            list: installedApps,
+                            ind,
+                            indFromLast: 5,
+                        }) ? (
+                            <Fragment key={app.appId || ind}>
+                                <AppCard
+                                    ref={detectedCard} // ref not working yet
+                                    data={app}
+                                    payload={payload}
+                                    loading={loading}
+                                    loadingDefaultAccess={loadingDefaultAccess}
+                                    detectedCard={detectedCard}
+                                    checkDetectedElem={checkDetectedElem}
+                                />
                             </Fragment>
-                        ))}
+                        ) : (
+                            <Fragment key={app.appId || ind}>
+                                <AppCard
+                                    data={app}
+                                    payload={payload}
+                                    loading={loading}
+                                    loadingDefaultAccess={loadingDefaultAccess}
+                                    detectedCard={detectedCard}
+                                    checkDetectedElem={checkDetectedElem}
+                                />
+                            </Fragment>
+                        );
+                    })}
                 </div>
             </section>
+            <ShowOverMsg />
         </section>
     );
 }

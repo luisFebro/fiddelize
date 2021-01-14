@@ -1,3 +1,5 @@
+// depracated by autoCpfMaskBr.js
+
 export function removeCpfMaskBr(number) {
     const regEx = /(\.|-)/gi
     return number.toString().replace(regEx, "");

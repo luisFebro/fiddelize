@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../../utils/form/kit";
-import cpfMaskBr from "../../../utils/validation/masks/cpfMaskBr";
+import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
@@ -38,6 +38,7 @@ export default function AsyncPasswordRecoverContent({ role }) {
         visibleForm: true,
     });
     const { cpf, email, visibleForm } = data;
+    const cpfValue = autoCpfMaskBr(cpf);
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -75,18 +76,18 @@ export default function AsyncPasswordRecoverContent({ role }) {
                         // Not working
                         handleNextField(e, "field1", {
                             callback: () => {
-                                setData({ ...data, cpf: cpfMaskBr(cpf) });
+                                setData({ ...data, cpf: autoCpfMaskBr(cpf) });
                             },
                         });
                     }}
                     onBlur={(e) => {
-                        setData({ ...data, cpf: cpfMaskBr(cpf) });
+                        setData({ ...data, cpf: autoCpfMaskBr(cpf) });
                         // handleNextField(e, "field1", {
                         //     callback: () => {
                         //     },
                         // });
                     }}
-                    value={cpf}
+                    value={cpfValue}
                     type="tel"
                     autoComplete="off"
                     helperText="Digite apenas números."

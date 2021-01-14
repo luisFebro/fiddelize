@@ -4,7 +4,7 @@ import Title from "../Title";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
-import cpfMaskBr from "../../utils/validation/masks/cpfMaskBr";
+import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
@@ -105,6 +105,7 @@ function Register({
     const [selectedDate, handleDateChange] = useState(dateNow);
 
     let { role, name, email, gender, birthday, cpf, phone } = data;
+    const cpfValue = autoCpfMaskBr(cpf);
 
     const [primaryAgent] = useData(["primaryAgent"]);
 
@@ -349,7 +350,7 @@ function Register({
                     onKeyPress={(e) => {
                         handleNextField(e, "field2", {
                             callback: () => {
-                                setData({ ...data, cpf: cpfMaskBr(cpf) });
+                                setData({ ...data, cpf: autoCpfMaskBr(cpf) });
                                 setSwitchNumToText(true);
                             },
                         });
@@ -358,12 +359,12 @@ function Register({
                         handleNextField(e, "field2", {
                             event: "onBlur",
                             callback: () => {
-                                setData({ ...data, cpf: cpfMaskBr(cpf) });
+                                setData({ ...data, cpf: autoCpfMaskBr(cpf) });
                                 setSwitchNumToText(true);
                             },
                         });
                     }}
-                    value={cpf}
+                    value={cpfValue}
                     type={switchNumToText ? "text" : "tel"}
                     autoComplete="off"
                     helperText="Digite apenas números."

@@ -154,6 +154,11 @@
         //padding: 5px 10px;
     }
 
+    & .card-footer > .desc .access-check.loading {
+        top: 0px;
+        text-decoration: none;
+    }
+
     @media screen and (min-width: 500px) {
         & .card-footer > .desc .default-access-badge,
         & .card-footer > .desc .access-check {
