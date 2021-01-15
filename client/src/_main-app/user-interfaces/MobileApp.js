@@ -2,13 +2,13 @@ import React, { Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { loadUser } from "../../redux/actions/authActions";
+import useAuth from "../../hooks/useAuthUser";
 // LAYOUT
 import Navbar from "../../components/_layout/navbar";
 
 // COMPONENTS
 import SnackbarRedux from "../../components/Snackbar";
 import LinearProgress from "../../components/loadingIndicators/LinearProgress";
-import PrivateRouteAdm from "../../components/auth/routes/PrivateRouteAdm";
 import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
 // PAGES
@@ -57,6 +57,11 @@ function Mobile({ location, history }) {
     const locationNow = location.pathname;
 
     const dispatch = useStoreDispatch();
+
+    useAuth({
+        history,
+        roles: "nucleo-equipe, cliente-admin, cliente-membro, cliente",
+    });
 
     useEffect(() => {
         // loadReCaptcha();
@@ -168,8 +173,6 @@ function Mobile({ location, history }) {
 export default withRouter(Mobile);
 
 /* ARCHIVES
-<PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
-
 import ChangePassword from '../../pages/client/ChangePassword';
 import InsertNewPassword from '../../pages/client/InsertNewPassword';
 import ConfirmAccount from '../../pages/client/ConfirmAccount';

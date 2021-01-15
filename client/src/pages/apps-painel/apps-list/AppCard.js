@@ -3,7 +3,10 @@ import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import "./_AppCard.scss";
 import Skeleton from "../../../components/multimedia/Skeleton";
-import { handleOpenApp } from "./helpers/appOpenAlgorithm";
+import {
+    handleOpenApp,
+    dontRememberAccess,
+} from "./helpers/appAccessAlgorithm";
 // icons
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
@@ -58,9 +61,15 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
                         ) : (
                             <ButtonMulti
                                 title="acesso padrão"
-                                onClick={() =>
-                                    handleSelectedDefaultAccess(appId)
-                                }
+                                onClick={() => {
+                                    (async () => {
+                                        await dontRememberAccess({
+                                            role: "team-apps",
+                                            role_loggedIn,
+                                        });
+                                        handleSelectedDefaultAccess(appId);
+                                    })();
+                                }}
                                 variant="link"
                                 textTransform="lowercase"
                             />
@@ -85,6 +94,8 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
         bizCodeName,
     };
 
+    const finalBizLogo =
+        bizImg && bizImg.replace(/\/h_100,w_100|\/h_85,w_190/gi, "");
     const showCard = () => (
         <section className="shadow-babadoo app-card--root">
             <section className="upper-audio-camera">
@@ -103,7 +114,7 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
             <div className="two-btns-left"></div>
             <div className="img-container p-1 p-sm-3">
                 <img
-                    src={bizImg || "/img/error.png"}
+                    src={finalBizLogo || "/img/error.png"}
                     alt={bizName}
                     className="shadow-elevation-black"
                 />

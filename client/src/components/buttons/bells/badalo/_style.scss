@@ -2,57 +2,62 @@
 
 $color: #fff;
 
+// LESSON: do not declare global * (especially box-sizing) in localized component since it can impact the design from other components
 // before fixes the issue with badalo skirt's width
-*,
-:before,
-:after {
-    box-sizing: inherit;
-}
+// *,
+// :before,
+// :after {
+//     box-sizing: inherit;
+// }
 
 //Icon
 .bell {
-    filter: drop-shadow(.001em .1em .1em var(--mainDark));
-  .bell-top {
-    width: 40px;
-    height: 40px;
-    background: $color;
-    border-radius: 50% 50% 0 0;
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 
-    &:before { //catcher
-      content: '';
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: inherit;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 50%;
+    .bell-top {
+        width: 40px;
+        height: 40px;
+        background: $color;
+        border-radius: 50% 50% 0 0;
+
+        &:before {
+            //catcher
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: inherit;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+        }
+
+        &:after {
+            //bell skirt
+            width: 56px;
+            content: "";
+            border-bottom: 10px solid #fff;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            height: 0;
+            position: absolute;
+            left: -8px;
+            bottom: -11px;
+        }
     }
 
-    &:after { //bell skirt
-      width: 40px;
-      content: '';
-      border-bottom: 10px solid #fff;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      height: 0;
-      position: absolute;
-      left: -8px;
-      bottom: -11px;
+    .bell-bot {
+        //badalo
+        width: 16px;
+        height: 8px;
+        background: $color;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -21px;
+        border-radius: 0 0 16px 16px;
     }
-  }
-
-  .bell-bot { //badalo
-    width: 16px;
-    height: 8px;
-    background: $color;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -21px;
-    border-radius: 0 0 16px 16px;
-  }
 }
 
 // Animation
@@ -60,62 +65,66 @@ $color: #fff;
     animation: abanico 1000ms ease-in-out 1;
     transform-origin: top;
 }
-.bell-bot-anim { animation: badalo 1000ms ease-in-out 1; }
+.bell-bot-anim {
+    animation: badalo 1000ms ease-in-out 1;
+}
 
 .bell-top-anim-2 {
     animation: abanico 1000ms ease-in-out 2;
     transform-origin: top;
 }
-.bell-bot-anim-2 { animation: badalo 1000ms ease-in-out 2; }
+.bell-bot-anim-2 {
+    animation: badalo 1000ms ease-in-out 2;
+}
 
 @keyframes abanico {
-      0% {
+    0% {
         transform: rotate(0deg);
-      }
-      7.5% {
+    }
+    7.5% {
         transform: rotate(25deg);
-      }
-      30% {
+    }
+    30% {
         transform: rotate(-25deg);
-      }
-      45% {
+    }
+    45% {
         transform: rotate(15deg);
-      }
-      58% {
+    }
+    58% {
         transform: rotate(-10deg);
-      }
-      70% {
+    }
+    70% {
         transform: rotate(5deg);
-      }
-      87.5% {
+    }
+    87.5% {
         transform: rotate(-2deg);
-      }
-      100% {
+    }
+    100% {
         transform: rotate(0deg);
-      }
+    }
 }
 
 @keyframes badalo {
-      0% {
-      }
-      15% {
+    0% {
+    }
+    15% {
         transform: translateX(-25px) rotate(7deg);
-      }
-      32.5% {
+    }
+    32.5% {
         transform: translateX(10px) rotate(-7deg);
-      }
-      50% {
+    }
+    50% {
         transform: translateX(-15px) rotate(7deg);
-      }
-      65% {
+    }
+    65% {
         transform: translateX(5px) rotate(-7deg);
-      }
-      80% {
+    }
+    80% {
         transform: translateX(-15px) rotate(7deg);
-      }
-      90% {
+    }
+    90% {
         transform: translateX(0px) rotate(-7deg);
-      }
-      100% {
+    }
+    100% {
     }
 }

@@ -239,6 +239,7 @@ function Login({
 
         if (role === "nucleo-equipe") {
             showSnackbar(dispatch, "Carregando...", "warning", 2000);
+            await removeVar("disconnectAgent", store.user);
             // Pre login store data
             const storeElems = [
                 { role },

@@ -55,8 +55,9 @@ export default function InstantAccount({
     const [data, setData] = useState({
         cpf: "",
         errorOnce: false,
+        loadingCreation: false,
     });
-    const { cpf, errorOnce } = data;
+    const { cpf, errorOnce, loadingCreation } = data;
 
     const styles = getStyles();
 
@@ -97,10 +98,20 @@ export default function InstantAccount({
                 body = { ...body, linkCode: thisLinkCode };
             }
 
+            setData((prev) => ({
+                ...prev,
+                loadingCreation: true,
+            }));
+
             const succ = await createInstantAccount({ body }).catch((e) => {
                 showSnackbar(dispatch, e.error, "error");
                 setData((prev) => ({ ...prev, errorOnce: true }));
             });
+
+            setData((prev) => ({
+                ...prev,
+                loadingCreation: false,
+            }));
 
             if (!succ) return;
 
@@ -146,7 +157,8 @@ export default function InstantAccount({
             {cpf && cpf.length === 14 && (
                 <div className="animated fadeInUp mt-3 container-center">
                     <ButtonFab
-                        title="Criar conta"
+                        title={loadingCreation ? "criando..." : "Criar conta"}
+                        disabled={loadingCreation ? true : false}
                         color={
                             txtPColor && txtPColor.includes("text-white")
                                 ? "#fff"

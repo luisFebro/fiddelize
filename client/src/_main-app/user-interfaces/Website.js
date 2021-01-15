@@ -10,7 +10,6 @@ import Footer from "../../components/_layout/footer/Footer";
 // COMPONENTS
 import SnackbarRedux from "../../components/Snackbar";
 import LinearProgress from "../../components/loadingIndicators/LinearProgress";
-import PrivateRouteAdm from "../../components/auth/routes/PrivateRouteAdm";
 import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
 // PAGES
@@ -178,7 +177,6 @@ function Website({ location, history }) {
 export default withRouter(Website);
 
 /* ARCHIVES
-<PrivateRouteAdm path="/admin/painel-de-controle" exact component={Dashboard} />
 
 import ChangePassword from '../../pages/client/ChangePassword';
 import ConfirmAccount from '../../pages/client/ConfirmAccount';

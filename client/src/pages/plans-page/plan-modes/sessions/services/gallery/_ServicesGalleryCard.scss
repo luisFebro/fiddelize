@@ -1,10 +1,10 @@
-* {
-    box-sizing: border-box !important; // this prevent gallery to be initialized as one column only
-}
-*,
-:before,
-:after {
+.grid-card--root * {
+    // this prevent gallery to be initialized as one column only
     box-sizing: border-box !important;
+    &:before,
+    &:after {
+        box-sizing: border-box !important;
+    }
 }
 
 .grid-card--root {

@@ -5,8 +5,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import SpeedDialButton from "../../../components/buttons/SpeedDialButton";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
-import { useStoreDispatch } from "easy-peasy";
-import { logout } from "../../../redux/actions/authActions";
+import { disconnect } from "../../../hooks/useAuthUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AsyncMemberTasksHistory = Load({
@@ -37,8 +36,6 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
     const [memberTasks, openMemberTasks] = useState(false);
     const styles = getStyles();
 
-    const dispatch = useStoreDispatch();
-
     const speedDialActions = [
         //the order rendered is inverse from the bottom to top
         {
@@ -48,8 +45,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             onClick: () => {
                 if (!disableClick) {
                     (async () => {
-                        await logout(dispatch);
-                        history.push("/senha-equipe");
+                        await disconnect();
                     })();
                 }
             },

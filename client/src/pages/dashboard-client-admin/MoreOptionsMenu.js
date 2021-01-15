@@ -11,6 +11,7 @@ import isThisApp from "../../utils/window/isThisApp";
 import ButtonMenu from "../../components/buttons/material-ui/button-menu/ButtonMenu";
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
+import { setVar, store } from "../../hooks/storage/useVar";
 // ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -87,7 +88,12 @@ export default function MoreOptionsMenu({ location, history }) {
         {
             icon: <ExitToAppIcon style={menuIconStyle} />,
             text: "sair",
-            callback: () => logout(dispatch, { needReload: true }),
+            callback: () => {
+                (async () => {
+                    await setVar({ success: false }, store.user);
+                    logout(dispatch, { needReload: true });
+                })();
+            },
         },
     ];
 

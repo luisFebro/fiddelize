@@ -9,6 +9,7 @@ export default function BankList({ modalData, setMainData }) {
         "ONLINE_DEBIT",
         itemAmount
     );
+    console.log("error", error);
 
     if (error) {
         return (

@@ -2,14 +2,15 @@
 which means instead especify a class such home-to-right, create a more general class such as mv-right.
 */
 
-*, :after, :before{
-    -webkit-box-sizing:inherit;
-    box-sizing:inherit
+*,
+:after,
+:before {
+    -webkit-box-sizing: inherit;
+    box-sizing: inherit;
 }
-/** {
-    box-sizing: border-box;
-}*/
-html, body {
+
+html,
+body {
     overflow-x: hidden;
     /*max-width: 100%;*/
     /* Disables pull-to-refresh and overscroll glow effect for PWA.
@@ -35,12 +36,20 @@ body {
     /*overscroll-behavior-y: none;*/
 }
 
-article, aside, footer, header, nav, section, figcaption, figure, main {
+article,
+aside,
+footer,
+header,
+nav,
+section,
+figcaption,
+figure,
+main {
     display: block;
 }
 
 figure {
-    margin: 1em 40px
+    margin: 1em 40px;
 }
 
 hr {
@@ -53,7 +62,12 @@ hr.lazer {
     width: 100%;
     border: 0;
     height: 2px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 0.75),
+        rgba(0, 0, 0, 0)
+    );
 }
 
 hr.lazer-purple {
@@ -61,49 +75,57 @@ hr.lazer-purple {
     width: 100%;
     border: 0;
     height: 2px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(74, 20, 140, 0.75), rgba(0, 0, 0, 0));
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0),
+        rgba(74, 20, 140, 0.75),
+        rgba(0, 0, 0, 0)
+    );
 }
 
 pre {
-    font-family: monospace,monospace;
-    font-size: 1em
+    font-family: monospace, monospace;
+    font-size: 1em;
 }
 
 a {
     background-color: transparent;
-    -webkit-text-decoration-skip: objects
+    -webkit-text-decoration-skip: objects;
 }
 
 abbr[title] {
     border-bottom: none;
     text-decoration: underline;
     -webkit-text-decoration: underline dotted;
-    text-decoration: underline dotted
+    text-decoration: underline dotted;
 }
 
-code,kbd,samp {
-    font-family: monospace,monospace;
-    font-size: 1em
+code,
+kbd,
+samp {
+    font-family: monospace, monospace;
+    font-size: 1em;
 }
 
 dfn {
-    font-style: italic
+    font-style: italic;
 }
 
 mark {
     background-color: #ff0;
-    color: #000
+    color: #000;
 }
 
 small {
-    font-size: 80%
+    font-size: 80%;
 }
 
-sub,sup {
+sub,
+sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
-    vertical-align: baseline
+    vertical-align: baseline;
 }
 
 button {
@@ -114,18 +136,19 @@ button {
 
 /* MOBILE CAROUSEL PERSISTENT STYLE */
 .is-selected {
-  color: var(--mainWhite) !important;
-  background-color: var(--lightPurple) !important; /* var(--lightPurple) */
+    color: var(--mainWhite) !important;
+    background-color: var(--lightPurple) !important; /* var(--lightPurple) */
 }
 
-::-moz-selection { /* Code for Firefox */
-  color: #fff;
-  background: var(--themeP);
+::-moz-selection {
+    /* Code for Firefox */
+    color: #fff;
+    background: var(--themeP);
 }
 
 ::selection {
-  color: #fff;
-  background: var(--themeP);
+    color: #fff;
+    background: var(--themeP);
 }
 
 /* COMMENTS

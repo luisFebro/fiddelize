@@ -1,9 +1,15 @@
 import React from "react";
 import useBackColor from "../../hooks/useBackColor";
 import AppList from "./apps-list/AppList";
+import useAuth from "../../hooks/useAuthUser";
 
 export default function AppsPanel({ history }) {
     useBackColor("var(--mainWhite)");
+
+    useAuth({
+        history,
+        roles: "nucleo-equipe, cliente-admin, cliente-membro, cliente",
+    });
 
     return (
         <section className="text-p text-center mx-3">
