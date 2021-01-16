@@ -7,5 +7,6 @@ export default async function createInstantAccount({ body }) {
         method: "post",
         url: createInstant(),
         body,
+        timeout: 30000,
     });
 }

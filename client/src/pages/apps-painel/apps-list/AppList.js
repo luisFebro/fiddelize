@@ -9,6 +9,7 @@ import useData from "../../../hooks/useData";
 import getId from "../../../utils/getId";
 import repeat from "../../../utils/arrays/repeat";
 import { useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
 // LESSON: if you are using a list, insert an id if you gonna need the cards indivudially.
 export default function AppList({ history }) {
@@ -78,6 +79,8 @@ export default function AppList({ history }) {
                 method: "post",
                 url: setDefaultAccess(),
                 body,
+            }).catch((e) => {
+                showSnackbar(dispatch, e.error, "error");
             });
 
             const newTrigger = getId();
@@ -111,6 +114,7 @@ export default function AppList({ history }) {
         appId_loggedIn: appId,
         dispatch,
         bizCodeName,
+        userId,
     };
 
     return (

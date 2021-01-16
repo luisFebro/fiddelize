@@ -45,6 +45,8 @@ exports.getDecryptedToken = (req, res) => {
 exports.getAuthTk = async (req, res) => {
     const { _id, role } = req.body;
 
+    if (!_id || !role) return res.status(400).json({ error: "missing params" });
+
     const token = await getJwtToken({
         _id: _id && _id.toString(),
         role: role || "cliente-admin",

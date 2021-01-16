@@ -39,7 +39,7 @@ export default function TeamApp({
     const [firstName] = useData(["firstName"]);
 
     // redirect if not auth
-    useAuth({ history, roles: "cliente-membro, cliente-admin" });
+    useAuth({ history, roles: "nucleo-equipe, cliente-membro, cliente-admin" });
 
     const isPreviewMode = location && location.search.includes("modo-prev=1");
 

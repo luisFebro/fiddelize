@@ -210,7 +210,7 @@ exports.mwCreateInstantAccount = async (req, res, next) => {
         // profile
         name,
         birthday,
-        email,
+        email: email && decryptSync(email),
         phone,
         gender,
         pswd, // only for cli-admin and biz-team. They should have the same password

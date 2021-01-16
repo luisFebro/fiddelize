@@ -47,6 +47,7 @@ exports.getAgentRedirectAuthCode = async (data) => {
         // agentCPF,
         // agentBirthDate = "1994/08/23",
         // agentAreaCode = "92", // Um número de 2 dígitos correspondente a um DDD válido.
+        // IMPORTANT: if later, need to activate agentNumber, remember to use decryptSync before sending to register
         // agentNumber = "992817363", // Aceita apenas números de 8 a 9 dígitos.
         //phoneType = "MOBILE", // Os tipos de telefone permitidos são HOME, MOBILE e BUSINESS.
         //docType = "CPF", // Aceitará apenas números de CPF válidos e não restritos (no PagSeguro/UOL).
@@ -89,9 +90,7 @@ exports.getAgentRedirectAuthCode = async (data) => {
         },
     };
 
-    const response = await axios(config).catch((e) => {
-        Promise.reject(e.response.data);
-    });
+    const response = await axios(config).catch((e) => e.response.data);
     if (!response) return;
 
     const xml = response.data;

@@ -30,7 +30,7 @@ exports.mwValidateRegister = async (req, res, next) => {
     const { accounts } = await req.getAccount(null, { cpf, accounts: true });
 
     const error = checkAccountLimit(accounts, { currRole: role });
-    if (error) return res.status(401).json({ error });
+    if (error) return res.status(400).json({ error });
 
     if (!isInstantAccount && (role === "cliente" || role === "cliente-admin")) {
         const {
@@ -38,10 +38,10 @@ exports.mwValidateRegister = async (req, res, next) => {
             duplicateNameMsg,
         } = await checkIfAlreadyHasUser(req.body);
         if (duplicateNameMsg)
-            return res.status(401).json({ error: duplicateNameMsg });
+            return res.status(400).json({ error: duplicateNameMsg });
         if (userExists) {
             const targetRole = role === "cliente" ? "cliente" : "admin";
-            return res.status(401).json({
+            return res.status(400).json({
                 error: `Não foi possível cadastrar com este CPF no app do ${targetRole} nesta empresa`,
             });
         }
@@ -94,28 +94,34 @@ exports.mwValidateRegister = async (req, res, next) => {
 };
 
 exports.mwValidateLogin = async (req, res, next) => {
-    const { cpf, roleWhichDownloaded } = req.body;
+    const { cpf, appPanelUserId, appPanelRole } = req.body;
     const isCpfValid = new CPF().validate(cpf);
 
-    const { role } = await req.getAccount(null, { cpf });
-    if (!role) return res.status(400).json({ error: "Acesso inválido." });
+    let role = appPanelRole;
+    if (!appPanelUserId) {
+        const { role: thisRole } = await req.getAccount(null, { cpf });
+        if (!thisRole)
+            return res.status(400).json({ error: "Acesso inválido." });
+        role = thisRole;
+    }
+
+    const whichQuery = appPanelUserId
+        ? { _id: appPanelUserId }
+        : { cpf: jsEncrypt(cpf) };
 
     User(role)
-        .findOne({ cpf: jsEncrypt(cpf) })
+        .findOne(whichQuery)
         .then((user) => {
-            if (!cpf) return res.status(400).json(msg("error.noCpf"));
-            const detected = runTestException(cpf, { user, req });
-            if (detected) return next();
+            if (!appPanelUserId) {
+                if (!cpf) return res.status(400).json(msg("error.noCpf"));
+                const detected = runTestException(cpf, { user, req });
+                if (detected) return next();
 
-            if (!isCpfValid)
-                return res.status(400).json(msg("error.invalidCpf"));
-            if (!user) return res.status(400).json(msg("error.notRegistedCpf"));
-            // this following condition is essencial for the moment to avoid conflicts between account login switch.
-            const appType = user.role === "cliente-admin" ? "ADMIN" : "CLIENTE";
-            if (roleWhichDownloaded && roleWhichDownloaded !== user.role)
-                return res
-                    .status(400)
-                    .json(msg("error.differentRoles", appType));
+                if (!isCpfValid)
+                    return res.status(400).json(msg("error.invalidCpf"));
+                if (!user)
+                    return res.status(400).json(msg("error.notRegistedCpf"));
+            }
 
             req.profile = user;
             next();
@@ -186,4 +192,11 @@ function runTestException(cpf, options = {}) {
         return res.status(400).json(msg("error.notEnoughCharacters"));
     if (!validatePassword(password))
         return res.status(400).json(msg("error.noDigitFound"));
+
+// this following condition is essencial for the moment to avoid conflicts between account login switch.
+const appType = user.role === "cliente-admin" ? "ADMIN" : "CLIENTE";
+if (roleWhichDownloaded && roleWhichDownloaded !== user.role)
+    return res
+        .status(400)
+        .json(msg("error.differentRoles", appType));
  */

@@ -5,6 +5,26 @@ import {
     setMultiVar,
     store,
 } from "../../../../hooks/storage/useVar";
+import renewAccessToken from "../../../../components/auth/helpers/renewAccessToken";
+import lStorage from "../../../../utils/storage/lStorage";
+import { signInUserData } from "../../../../components/auth/Login";
+
+const handleCliAdmin = ({ bizId, dispatch, history, bizCodeName }) => {
+    const updatedValues = {
+        roleWhichDownloaded: "cliente-admin",
+        businessId: bizId,
+    };
+    lStorage("setItems", { collection: "appSystem", newObj: updatedValues });
+
+    setRun(dispatch, "goDash");
+    return history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);
+};
+
+const handleCliUser = ({ bizId, history }) => {
+    const updatedValues = { roleWhichDownloaded: "cliente", businessId: bizId };
+    lStorage("setItems", { collection: "appSystem", newObj: updatedValues });
+    return history.push(`/mobile-app`);
+};
 
 export const handleOpenApp = async ({
     history,
@@ -14,8 +34,28 @@ export const handleOpenApp = async ({
     appId_loggedIn,
     dispatch,
     bizCodeName,
+    clickedAppUserId,
+    userId,
+    bizId,
 }) => {
     if (role_loggedIn === "...") return;
+
+    const userData = {
+        dispatch,
+        history,
+        appPanelUserId: clickedAppUserId,
+        appPanelRole: appRole,
+    };
+
+    // IMPORTANT: userId is used as the current id to be authorized by system. the _id is clicked app id not the current.
+    await Promise.all([
+        signInUserData(null, userData),
+        renewAccessToken({
+            userId,
+            _id: clickedAppUserId,
+            role: appRole,
+        }).catch((e) => console.log(e)),
+    ]);
 
     const isBizTeam = role_loggedIn === "nucleo-equipe";
     const isCliAdmin = role_loggedIn === "cliente-admin";
@@ -45,10 +85,7 @@ export const handleOpenApp = async ({
         }
 
         if (isCliAdmin) {
-            setRun(dispatch, "goDash");
-            return history.push(
-                `/${bizCodeName}/cliente-admin/painel-de-controle`
-            );
+            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
         }
 
         if (isCliMemberApp) {
@@ -56,16 +93,13 @@ export const handleOpenApp = async ({
         }
 
         if (isCliUserApp) {
-            return history.push(`/mobile-app`);
+            return handleCliUser({ bizId, history });
         }
     }
 
     if (isBizTeam) {
         if (isCliAdminApp) {
-            setRun(dispatch, "goDash");
-            return history.push(
-                `/${bizCodeName}/cliente-admin/painel-de-controle`
-            );
+            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
         }
 
         if (isCliMemberApp) {
@@ -73,7 +107,7 @@ export const handleOpenApp = async ({
         }
 
         if (isCliUserApp) {
-            return history.push(`/mobile-app`);
+            return handleCliUser({ bizId, history });
         }
     }
 
@@ -87,7 +121,7 @@ export const handleOpenApp = async ({
         }
 
         if (isCliUserApp) {
-            return history.push(`/mobile-app`);
+            return handleCliUser({ bizId, history });
         }
     }
 
@@ -97,14 +131,11 @@ export const handleOpenApp = async ({
         }
 
         if (isCliAdminApp) {
-            setRun(dispatch, "goDash");
-            return history.push(
-                `/${bizCodeName}/cliente-admin/painel-de-controle`
-            );
+            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
         }
 
         if (isCliUserApp) {
-            return history.push(`/mobile-app`);
+            return handleCliUser({ bizId, history });
         }
     }
 
@@ -123,7 +154,7 @@ export const handleOpenApp = async ({
         }
     }
 
-    return alert("other");
+    return alert("error");
 };
 
 export async function dontRememberAccess({

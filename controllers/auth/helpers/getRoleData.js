@@ -15,7 +15,7 @@ const handleBizTeamData = ({ data, appId }) => {
         primaryAgent: bizTeamData && bizTeamData.primaryAgent,
         agentJob: bizTeamData && bizTeamData.job,
         uniqueLinkId: bizTeamData && bizTeamData.uniqueLinkId,
-        publicKey: bizTeamData && bizTeamData.publicKey,
+        publicKey: bizTeamData && bizTeamData.publicKey, // pagseguro's id for split
         redirectPayGatewayLink: `https://pagseguro.uol.com.br/v2/authorization/request.jhtml?code=${
             bizTeamData && bizTeamData.redirectAuthCode
         }`,

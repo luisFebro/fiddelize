@@ -7,6 +7,7 @@ import {
     handleOpenApp,
     dontRememberAccess,
 } from "./helpers/appAccessAlgorithm";
+import { useAppSystem } from "../../../hooks/useRoleData";
 // icons
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
@@ -27,7 +28,14 @@ const handleAppType = (role) => {
 export default forwardRef(AppCard);
 
 function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
-    const { appId, bizImg, bizName, role, isDefaultAccess } = data;
+    const {
+        userId: clickedAppUserId,
+        appId,
+        bizImg,
+        bizName,
+        role,
+        isDefaultAccess,
+    } = data;
     const {
         appId_loggedIn,
         history,
@@ -35,7 +43,10 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
         role_loggedIn,
         bizCodeName,
         handleSelectedDefaultAccess,
+        userId,
     } = payload;
+
+    const { businessId } = useAppSystem();
 
     const dataAppType = role && handleAppType(role);
 
@@ -92,6 +103,9 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
         appId_loggedIn,
         dispatch,
         bizCodeName,
+        bizId: businessId,
+        clickedAppUserId,
+        userId,
     };
 
     const finalBizLogo =
@@ -106,6 +120,7 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
             </section>
             <section className="two-btns-left">
                 <div>
+                    {" "}
                     <span className="up"></span>
                     <span className="down"></span>
                 </div>

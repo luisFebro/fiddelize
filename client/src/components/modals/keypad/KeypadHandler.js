@@ -29,6 +29,7 @@ export default function NumericKeypad({
     onClose,
     open,
     confirmFunction,
+    confirmPayload,
 }) {
     const { selfThemePColor } = useClientAdmin();
 
@@ -50,7 +51,7 @@ export default function NumericKeypad({
                 "error",
                 6000
             );
-        if (confirmFunction(display)) {
+        if (confirmFunction(display, confirmPayload)) {
             onClose();
         }
     };

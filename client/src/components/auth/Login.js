@@ -32,17 +32,6 @@ import { setStorageRegisterDone } from "./helpers/index";
 
 const isApp = isThisApp();
 
-const sendWelcomeNotif = async ({ userId, role = "ambos-clientes" }) => {
-    // "ambos-clientes" add an welcome obj to cli-user as weel for test mode.
-    const notifOptions = {
-        role,
-        noToken: true, // allow notification without being loggedin
-    };
-    return await sendNotification(userId, "welcome", notifOptions);
-    // if (notifRes.status !== 200)
-    // return showSnackbar(dispatch, notifRes.data.msg, "error");
-};
-
 function Login({
     history,
     setLoginOrRegister,
@@ -50,240 +39,13 @@ function Login({
     rootClassname,
     isBizTeam,
 }) {
-    // useCount("Login.js"); // Initial RT 2 // After logout cli-user = 26
-    const dispatch = useStoreDispatch();
-    // let { roleWhichDownloaded } = useAppSystem();
-    // disable restriction of user during early estages of tests.
-    // roleWhichDownloaded = "";
-
     const {
         selfThemeSColor,
         selfThemePColor,
         selfThemeBackColor,
     } = useClientAdmin();
 
-    const signInThisUser = async (value) => {
-        const userData = {
-            cpf: value,
-            // roleWhichDownloaded,
-        };
-
-        const res = await loginEmail(dispatch, userData);
-
-        if (res.status !== 200) {
-            showSnackbar(
-                dispatch,
-                res.data.msg || res.data.error,
-                "error",
-                6000
-            );
-            return null;
-        }
-
-        const {
-            msg,
-            role,
-            name,
-            authUserId,
-            bizCodeName,
-            bizId,
-            verificationPass,
-            needCliUserWelcomeNotif,
-            twoLastCpfDigits,
-            token,
-            gender,
-            linkId,
-            memberJob,
-            needAccountPanel,
-            appId,
-            // nucleo-equipe data
-            primaryAgent,
-            agentJob,
-            redirectPayGatewayLink,
-            uniqueLinkId,
-            pswd, // only verification to redirect to password page
-            publicKey, // only verification to redirect to password page
-        } = res.data;
-
-        // clean up whatever logo from prior login to set new one (especially another account)
-        deleteImage("logos", "app_biz_logo");
-
-        let whichRoute;
-        if (role === "cliente-admin") {
-            showSnackbar(dispatch, "Carregando...", "warning", 2000);
-            // Pre login store data
-            const storeElems = [
-                { bizId },
-                { role },
-                {
-                    name: getFirstName(name && name.cap(), {
-                        addSurname: true,
-                    }),
-                },
-                { firstName: getFirstName(name && name.cap()) },
-                { userId: authUserId },
-                { bizCodeName },
-                { twoLastCpfDigits },
-                { rememberAccess: true },
-                { verifPass: verificationPass },
-                { gender },
-                { linkId: 0 },
-                { appId },
-            ];
-
-            await setMultiVar(storeElems, store.user);
-            await readUser(dispatch, authUserId, { role }); // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
-
-            if (!verificationPass) {
-                await sendWelcomeNotif({
-                    userId: authUserId,
-                    role: "ambos-clientes",
-                });
-                // showSnackbar(dispatch, notifRes.data.msg, "success");
-                showSnackbar(dispatch, "Verificando...", "warning", 3000);
-                setTimeout(
-                    () =>
-                        showSnackbar(
-                            dispatch,
-                            "Redirecionando...",
-                            "warning",
-                            4000
-                        ),
-                    2900
-                );
-
-                whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
-                setTimeout(() => history.push(whichRoute), 5000);
-            } else {
-                history.push("/senha-de-acesso");
-            }
-        }
-
-        if (role === "cliente-membro") {
-            showSnackbar(dispatch, "Carregando...", "warning", 2000);
-            await removeVar("disconnectCliMember", store.user);
-
-            const storeElems = [
-                { bizId },
-                { role },
-                { gender },
-                {
-                    name: getFirstName(name && name.cap(), {
-                        addSurname: true,
-                    }),
-                },
-                { firstName: getFirstName(name && name.cap()) },
-                { userId: authUserId },
-                { rememberAccess: true },
-                { linkId },
-                { memberJob },
-                { appId },
-            ];
-            setMultiVar(storeElems, store.user);
-
-            await setMultiVar(storeElems, store.user);
-            await readUser(dispatch, authUserId, { role });
-
-            if (needAccountPanel) {
-                history.push("/painel-de-apps");
-                return;
-            }
-
-            history.push("/senha-equipe");
-        }
-
-        if (role === "cliente") {
-            // the welcome msg is sent in the backend for client-user
-            const storeElems = [
-                { bizId },
-                { role },
-                { gender },
-                {
-                    name: getFirstName(name && name.cap(), {
-                        addSurname: true,
-                    }),
-                },
-                { firstName: getFirstName(name && name.cap()) },
-                { userId: authUserId },
-                { bizCodeName },
-                { rememberAccess: true },
-                { appId },
-            ];
-            setMultiVar(storeElems, store.user);
-
-            if (needCliUserWelcomeNotif) {
-                showSnackbar(dispatch, "Preparando App...", "warning", 3000);
-
-                const cliNotifRes = await sendNotification(
-                    authUserId,
-                    "welcome",
-                    {
-                        role,
-                        nT: true,
-                    }
-                );
-
-                if (cliNotifRes.status !== 200)
-                    return console.log("smt wrong with sendNotification");
-
-                if (needAccountPanel) {
-                    history.push("/painel-de-apps");
-                    return;
-                }
-
-                handleCliUserPath({ authUserId, dispatch, history });
-            } else {
-                handleCliUserPath({ authUserId, dispatch, history });
-            }
-        }
-
-        if (role === "nucleo-equipe") {
-            showSnackbar(dispatch, "Carregando...", "warning", 2000);
-            await removeVar("disconnectAgent", store.user);
-            // Pre login store data
-            const storeElems = [
-                { role },
-                { userId: authUserId },
-                { gender },
-                {
-                    name: getFirstName(name && name.cap(), {
-                        addSurname: true,
-                    }),
-                },
-                { firstName: getFirstName(name && name.cap()) },
-                { rememberAccess: true },
-                { primaryAgent },
-                { agentJob },
-                { redirectPayGatewayLink },
-                { uniqueLinkId },
-                { appId },
-            ];
-
-            await setMultiVar(storeElems, store.user);
-
-            if (!pswd) {
-                //redirect user to password page
-                return history.push("/t/app/nucleo-equipe/cadastro/senha");
-            }
-            if (!publicKey) {
-                //redirect user to pagseguro agent registration
-                return history.push("/t/app/nucleo-equipe/cadastro/pagseguro");
-            }
-
-            history.push("/t/app/nucleo-equipe/acesso");
-        }
-
-        // remove instant account notification
-        const isInstantAccount = await getVar("isInstantAccount", store.user);
-
-        if (isInstantAccount) {
-            await removeMultiVar(
-                ["isInstantAccount", "instantBizImg", "instantBizName"],
-                store.user
-            );
-            setStorageRegisterDone();
-        }
-    };
+    const dispatch = useStoreDispatch();
 
     const showTitle = () => (
         <Title
@@ -303,7 +65,8 @@ function Login({
                 title="Informe CPF"
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
-                confirmFunction={signInThisUser}
+                confirmFunction={signInUserData}
+                confirmPayload={{ history, dispatch }}
                 backgroundColor={`var(--themeSDark--${
                     isBizTeam ? "default" : selfThemeSColor
                 })`}
@@ -362,7 +125,243 @@ function Login({
 
 export default withRouter(Login);
 
+export async function signInUserData(cpfValue, options = {}) {
+    const {
+        dispatch,
+        history,
+        appPanelUserId = undefined,
+        appPanelRole = undefined,
+    } = options;
+
+    const objToSend = {
+        cpf: cpfValue,
+        appPanelUserId,
+        appPanelRole,
+    };
+
+    const res = await loginEmail(dispatch, objToSend);
+
+    if (res.status !== 200) {
+        showSnackbar(dispatch, res.data.msg || res.data.error, "error", 6000);
+        return null;
+    }
+
+    const {
+        msg,
+        role,
+        name,
+        authUserId,
+        bizCodeName,
+        bizId,
+        verificationPass,
+        needCliUserWelcomeNotif,
+        twoLastCpfDigits,
+        token,
+        gender,
+        linkId,
+        memberJob,
+        needAccountPanel,
+        appId,
+        // nucleo-equipe data
+        primaryAgent,
+        agentJob,
+        redirectPayGatewayLink,
+        uniqueLinkId,
+        pswd, // only verification to redirect to password page
+        publicKey, // only verification to redirect to password page
+    } = res.data;
+
+    // clean up whatever logo from prior login to set new one (especially another account)
+    deleteImage("logos", "app_biz_logo");
+    await removeInstantAccountData();
+
+    let whichRoute;
+    if (role === "cliente-admin") {
+        showSnackbar(dispatch, "Carregando...", "warning", 2000);
+        // Pre login store data
+        const storeElems = [
+            { bizId },
+            { role },
+            {
+                name: getFirstName(name && name.cap(), {
+                    addSurname: true,
+                }),
+            },
+            { firstName: getFirstName(name && name.cap()) },
+            { userId: authUserId },
+            { bizCodeName },
+            { twoLastCpfDigits },
+            { rememberAccess: true },
+            { verifPass: verificationPass },
+            { gender },
+            { linkId: 0 },
+            { appId },
+        ];
+
+        await setMultiVar(storeElems, store.user);
+        await readUser(dispatch, authUserId, { role }); // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
+
+        if (!verificationPass) {
+            await sendWelcomeNotif({
+                userId: authUserId,
+                role: "ambos-clientes",
+            });
+            // showSnackbar(dispatch, notifRes.data.msg, "success");
+            showSnackbar(dispatch, "Verificando...", "warning", 3000);
+            setTimeout(
+                () =>
+                    showSnackbar(
+                        dispatch,
+                        "Redirecionando...",
+                        "warning",
+                        4000
+                    ),
+                2900
+            );
+
+            whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
+            !appPanelUserId && setTimeout(() => history.push(whichRoute), 5000);
+        } else {
+            !appPanelUserId && history.push("/senha-de-acesso");
+        }
+    }
+
+    if (role === "cliente-membro") {
+        showSnackbar(dispatch, "Carregando...", "warning", 2000);
+        await removeVar("disconnectCliMember", store.user);
+
+        const storeElems = [
+            { bizId },
+            { role },
+            { gender },
+            {
+                name: getFirstName(name && name.cap(), {
+                    addSurname: true,
+                }),
+            },
+            { firstName: getFirstName(name && name.cap()) },
+            { userId: authUserId },
+            { rememberAccess: true },
+            { linkId },
+            { memberJob },
+            { appId },
+        ];
+        setMultiVar(storeElems, store.user);
+
+        await setMultiVar(storeElems, store.user);
+        await readUser(dispatch, authUserId, { role });
+
+        if (needAccountPanel) {
+            !appPanelUserId && history.push("/painel-de-apps");
+            return;
+        }
+
+        !appPanelUserId && history.push("/senha-equipe");
+    }
+
+    if (role === "cliente") {
+        // the welcome msg is sent in the backend for client-user
+        const storeElems = [
+            { bizId },
+            { role },
+            { gender },
+            {
+                name: getFirstName(name && name.cap(), {
+                    addSurname: true,
+                }),
+            },
+            { firstName: getFirstName(name && name.cap()) },
+            { userId: authUserId },
+            { bizCodeName },
+            { rememberAccess: true },
+            { appId },
+        ];
+        setMultiVar(storeElems, store.user);
+
+        if (needCliUserWelcomeNotif) {
+            showSnackbar(dispatch, "Preparando App...", "warning", 3000);
+
+            const cliNotifRes = await sendNotification(authUserId, "welcome", {
+                role,
+                nT: true,
+            });
+
+            if (cliNotifRes.status !== 200)
+                return console.log("smt wrong with sendNotification");
+
+            if (needAccountPanel) {
+                history.push("/painel-de-apps");
+                return;
+            }
+
+            !appPanelUserId &&
+                handleCliUserPath({ authUserId, dispatch, history });
+        } else {
+            !appPanelUserId &&
+                handleCliUserPath({ authUserId, dispatch, history });
+        }
+    }
+
+    if (role === "nucleo-equipe") {
+        showSnackbar(dispatch, "Carregando...", "warning", 2000);
+        await removeVar("disconnectAgent", store.user);
+        // Pre login store data
+        const storeElems = [
+            { role },
+            { userId: authUserId },
+            { gender },
+            {
+                name: getFirstName(name && name.cap(), {
+                    addSurname: true,
+                }),
+            },
+            { firstName: getFirstName(name && name.cap()) },
+            { rememberAccess: true },
+            { primaryAgent },
+            { agentJob },
+            { redirectPayGatewayLink },
+            { uniqueLinkId },
+            { appId },
+        ];
+
+        await setMultiVar(storeElems, store.user);
+
+        if (!pswd) {
+            //redirect user to password page
+            return history.push("/t/app/nucleo-equipe/cadastro/senha");
+        }
+        if (!publicKey) {
+            //redirect user to pagseguro agent registration
+            return history.push("/t/app/nucleo-equipe/cadastro/pagseguro");
+        }
+
+        !appPanelUserId && history.push("/t/app/nucleo-equipe/acesso");
+    }
+}
+
 // HELPERS
+async function sendWelcomeNotif({ userId, role = "ambos-clientes" }) {
+    // "ambos-clientes" add an welcome obj to cli-user as weel for test mode.
+    const notifOptions = {
+        role,
+        noToken: true, // allow notification without being loggedin
+    };
+    return await sendNotification(userId, "welcome", notifOptions);
+    // if (notifRes.status !== 200)
+    // return showSnackbar(dispatch, notifRes.data.msg, "error");
+}
+
+async function removeInstantAccountData() {
+    const isInstantAccount = await getVar("isInstantAccount", store.user);
+    if (!isInstantAccount) return;
+
+    await removeMultiVar(
+        ["isInstantAccount", "instantBizImg", "instantBizName"],
+        store.user
+    );
+    setStorageRegisterDone();
+}
+
 function handleCliUserPath({ authUserId, dispatch, history }) {
     readUser(dispatch, authUserId, { role: "cliente" }) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
         .then((res) => {

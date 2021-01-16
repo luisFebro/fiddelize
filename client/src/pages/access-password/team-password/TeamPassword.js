@@ -69,7 +69,8 @@ export default function TeamPassword({ history }) {
         if (res.data.msg) {
             // authorize user first
             const body = {
-                _id: userId,
+                userId,
+                _id: userId, // this is actually the required _id, userId for Auth. This is separated due to logics at appPanel
                 role,
             };
 

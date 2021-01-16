@@ -5,6 +5,7 @@ const getFirstName = require("../../utils/string/getFirstName");
 const {
     encryptSync,
     decryptSync,
+    jsDecrypt,
     jsEncrypt,
     checkJWT,
 } = require("../../utils/security/xCipher");
@@ -198,8 +199,8 @@ exports.register = async (req, res) => {
         role,
         name,
         cpf: jsEncrypt(cpf),
-        email: isInstantAccount ? email : encryptSync(email), // instant mode is already encrypted.
-        phone: isInstantAccount ? phone : encryptSync(phone),
+        email: encryptSync(email),
+        phone: isInstantAccount ? phone : encryptSync(phone), // instant mode is already encrypted.
         birthday,
         gender,
         clientAdminData,
@@ -296,7 +297,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { _id, role } = req.profile;
-    const { cpf } = req.body;
+    let { cpf, appPanelUserId } = req.body;
 
     const roleData = req.profile[getRoleDataName(role)];
 
@@ -345,6 +346,7 @@ exports.login = async (req, res) => {
         // }
     }
 
+    cpf = appPanelUserId ? jsDecrypt(req.profile.cpf) : cpf;
     const authData = await getRoleData(role, {
         data: req.profile,
         token,
