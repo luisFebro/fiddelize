@@ -1,4 +1,9 @@
-import { getMultiVar, setVar, store } from "../../../hooks/storage/useVar";
+import {
+    getMultiVar,
+    setMultiVar,
+    setVar,
+    store,
+} from "../../../hooks/storage/useVar";
 import isThisApp from "../../../utils/window/isThisApp";
 // import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
@@ -28,7 +33,7 @@ export default async function authenticate(newToken, options = {}) {
     // these variables are set and avaiable after CPF login.
     localStorage.setItem("token", newToken);
 
-    await setVar({ success: true }, store.user);
+    await setMultiVar([{ success: true }, { token: newToken }], store.user);
 
     const [bizCodeName] = await getMultiVar(["bizCodeName"], store.user);
 

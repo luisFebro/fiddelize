@@ -2,7 +2,6 @@ import React, { Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { loadUser } from "../../redux/actions/authActions";
-import useAuth from "../../hooks/useAuthUser";
 // LAYOUT
 import Navbar from "../../components/_layout/navbar";
 
@@ -57,11 +56,6 @@ function Mobile({ location, history }) {
     const locationNow = location.pathname;
 
     const dispatch = useStoreDispatch();
-
-    useAuth({
-        history,
-        roles: "nucleo-equipe, cliente-admin, cliente-membro, cliente",
-    });
 
     useEffect(() => {
         // loadReCaptcha();

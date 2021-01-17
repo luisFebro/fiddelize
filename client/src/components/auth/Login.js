@@ -177,7 +177,8 @@ export async function signInUserData(cpfValue, options = {}) {
 
     let whichRoute;
     if (role === "cliente-admin") {
-        showSnackbar(dispatch, "Carregando...", "warning", 2000);
+        !appPanelUserId &&
+            showSnackbar(dispatch, "Carregando...", "warning", 2000);
         // Pre login store data
         const storeElems = [
             { bizId },
@@ -227,7 +228,8 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "cliente-membro") {
-        showSnackbar(dispatch, "Carregando...", "warning", 2000);
+        !appPanelUserId &&
+            showSnackbar(dispatch, "Carregando...", "warning", 2000);
         await removeVar("disconnectCliMember", store.user);
 
         const storeElems = [
@@ -246,10 +248,7 @@ export async function signInUserData(cpfValue, options = {}) {
             { memberJob },
             { appId },
         ];
-        setMultiVar(storeElems, store.user);
-
         await setMultiVar(storeElems, store.user);
-        await readUser(dispatch, authUserId, { role });
 
         if (needAccountPanel) {
             !appPanelUserId && history.push("/painel-de-apps");
@@ -275,8 +274,9 @@ export async function signInUserData(cpfValue, options = {}) {
             { bizCodeName },
             { rememberAccess: true },
             { appId },
+            { success: true }, // other apps are authenticated on password page.
         ];
-        setMultiVar(storeElems, store.user);
+        await setMultiVar(storeElems, store.user);
 
         if (needCliUserWelcomeNotif) {
             showSnackbar(dispatch, "Preparando App...", "warning", 3000);
@@ -303,7 +303,8 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "nucleo-equipe") {
-        showSnackbar(dispatch, "Carregando...", "warning", 2000);
+        !appPanelUserId &&
+            showSnackbar(dispatch, "Carregando...", "warning", 2000);
         await removeVar("disconnectAgent", store.user);
         // Pre login store data
         const storeElems = [

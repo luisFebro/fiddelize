@@ -14,6 +14,7 @@ import { useClientAdmin } from "../../../hooks/useRoleData";
 import RadiusBtn from "../../../components/buttons/RadiusBtn";
 import { setVar, store } from "../../../hooks/storage/useVar";
 import { disconnect } from "../../../hooks/useAuthUser";
+import getId from "../../../utils/getId";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -69,9 +70,9 @@ export default function TeamPassword({ history }) {
         if (res.data.msg) {
             // authorize user first
             const body = {
-                userId,
-                _id: userId, // this is actually the required _id, userId for Auth. This is separated due to logics at appPanel
+                _id: userId,
                 role,
+                nT: getId(),
             };
 
             const { data: token } = await getAPI({

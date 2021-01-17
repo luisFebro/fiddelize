@@ -1,4 +1,5 @@
 import { reducer } from "easy-peasy";
+import { setVar, store } from "../hooks/storage/useVar";
 // actions are used with the usestoredispatch hook inside the wanting functional component
 // copy and paste the type of actions below
 // You can use only one isntance of object like 'cases' for each object.
@@ -18,7 +19,7 @@ export const authReducer = {
             case "USER_ONLINE":
                 return {
                     ...state,
-                    isUserOnline: action.payload,
+                    isUserOnline: action && action.payload,
                 };
             case "AUTHENTICATE_USER_ONLY":
                 return {
@@ -28,10 +29,17 @@ export const authReducer = {
             case "LOGIN_EMAIL":
             case "REGISTER_EMAIL":
                 const role = action.payload.role;
-                const ignoreToken =
-                    role === "cliente-admin" || role === "nucleo-equipe"; // cli-admin handled in access password page.
-                !ignoreToken &&
-                    localStorage.setItem("token", action.payload.token);
+                const allowTokenWhen = role === "cliente"; // ther apps are handled in access password page.
+
+                if (allowTokenWhen) {
+                    (async () => {
+                        await setVar(
+                            { token: action.payload.token },
+                            store.user
+                        );
+                        localStorage.setItem("token", action.payload.token);
+                    })();
+                }
 
                 return {
                     ...state,
@@ -40,7 +48,7 @@ export const authReducer = {
                 };
             case "LOGIN_GOOGLE":
             case "LOGIN_FACEBOOK":
-                localStorage.setItem("token", action.payload);
+                // localStorage.setItem("token", action.payload);
                 return {
                     ...state,
                     isUserAuthenticated: true,

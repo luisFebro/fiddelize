@@ -1,12 +1,10 @@
 import React, { Fragment, useState } from "react";
 import AppCard from "./AppCard";
-import getAPI, { setDefaultAccess } from "../../../utils/promises/getAPI";
 import useAPIList, { readAppList } from "../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../hooks/api/useElemDetection";
 import useData from "../../../hooks/useData";
-import getId from "../../../utils/getId";
 import repeat from "../../../utils/arrays/repeat";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
@@ -14,11 +12,6 @@ import { showSnackbar } from "../../../redux/actions/snackbarActions";
 // LESSON: if you are using a list, insert an id if you gonna need the cards indivudially.
 export default function AppList({ history }) {
     const [skip, setSkip] = useState(0);
-    const [data, setData] = useState({
-        trigger: false,
-        loadingDefaultAccess: false,
-    });
-    const { trigger, loadingDefaultAccess } = data;
 
     const [userId, role, bizCodeName, appId] = useData([
         "userId",
@@ -48,7 +41,7 @@ export default function AppList({ history }) {
         url: readAppList(),
         params,
         skip,
-        trigger: trigger || userId !== "...",
+        trigger: userId !== "...",
         forceTrigger: true,
         listName: "appList",
     });
@@ -61,36 +54,6 @@ export default function AppList({ history }) {
         setSkip,
         isOffline,
     });
-
-    const handleSelectedDefaultAccess = (appId) => {
-        setData((prev) => ({
-            ...prev,
-            loadingDefaultAccess: appId,
-        }));
-
-        (async () => {
-            const body = {
-                userRole: role,
-                userId,
-                appId,
-            };
-
-            await getAPI({
-                method: "post",
-                url: setDefaultAccess(),
-                body,
-            }).catch((e) => {
-                showSnackbar(dispatch, e.error, "error");
-            });
-
-            const newTrigger = getId();
-            setData((prev) => ({
-                ...prev,
-                trigger: newTrigger,
-                loadingDefaultAccess: false,
-            }));
-        })();
-    };
 
     const totalApps = installedApps && installedApps.length;
     const plural = totalApps === 1 ? "" : "s";
@@ -108,7 +71,6 @@ export default function AppList({ history }) {
     }
 
     const payload = {
-        handleSelectedDefaultAccess,
         history,
         role_loggedIn: role,
         appId_loggedIn: appId,
@@ -144,7 +106,6 @@ export default function AppList({ history }) {
                                     data={app}
                                     payload={payload}
                                     loading={loading}
-                                    loadingDefaultAccess={loadingDefaultAccess}
                                     detectedCard={detectedCard}
                                     checkDetectedElem={checkDetectedElem}
                                 />
@@ -155,7 +116,6 @@ export default function AppList({ history }) {
                                     data={app}
                                     payload={payload}
                                     loading={loading}
-                                    loadingDefaultAccess={loadingDefaultAccess}
                                     detectedCard={detectedCard}
                                     checkDetectedElem={checkDetectedElem}
                                 />

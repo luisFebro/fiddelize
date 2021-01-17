@@ -2,12 +2,14 @@ import { setRun } from "../../../../redux/actions/globalActions";
 import {
     removeVar,
     setVar,
+    getVar,
     setMultiVar,
     store,
 } from "../../../../hooks/storage/useVar";
 import renewAccessToken from "../../../../components/auth/helpers/renewAccessToken";
 import lStorage from "../../../../utils/storage/lStorage";
 import { signInUserData } from "../../../../components/auth/Login";
+import getAPI, { setDefaultAccess } from "../../../../utils/promises/getAPI";
 
 const handleCliAdmin = ({ bizId, dispatch, history, bizCodeName }) => {
     const updatedValues = {
@@ -17,16 +19,26 @@ const handleCliAdmin = ({ bizId, dispatch, history, bizCodeName }) => {
     lStorage("setItems", { collection: "appSystem", newObj: updatedValues });
 
     setRun(dispatch, "goDash");
+
+    if (!bizCodeName) {
+        (async () => {
+            const thisBizCodeName = await getVar("bizCodeName", store.user);
+            return history.push(
+                `/${thisBizCodeName}/cliente-admin/painel-de-controle`
+            );
+        })();
+    }
     return history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);
 };
 
 const handleCliUser = ({ bizId, history }) => {
     const updatedValues = { roleWhichDownloaded: "cliente", businessId: bizId };
     lStorage("setItems", { collection: "appSystem", newObj: updatedValues });
-    return history.push(`/mobile-app`);
+    // need to reload so that some variables in the local storage can be loaded properly.
+    return (window.location.href = `/mobile-app`);
 };
 
-export const handleOpenApp = async ({
+export default async function handleOpenApp({
     history,
     appRole,
     role_loggedIn,
@@ -37,25 +49,8 @@ export const handleOpenApp = async ({
     clickedAppUserId,
     userId,
     bizId,
-}) => {
+}) {
     if (role_loggedIn === "...") return;
-
-    const userData = {
-        dispatch,
-        history,
-        appPanelUserId: clickedAppUserId,
-        appPanelRole: appRole,
-    };
-
-    // IMPORTANT: userId is used as the current id to be authorized by system. the _id is clicked app id not the current.
-    await Promise.all([
-        signInUserData(null, userData),
-        renewAccessToken({
-            userId,
-            _id: clickedAppUserId,
-            role: appRole,
-        }).catch((e) => console.log(e)),
-    ]);
 
     const isBizTeam = role_loggedIn === "nucleo-equipe";
     const isCliAdmin = role_loggedIn === "cliente-admin";
@@ -68,6 +63,35 @@ export const handleOpenApp = async ({
     const isCliUserApp = appRole === "cliente";
 
     const isCurrApp = appId_loggedIn === appId;
+
+    if (!isCurrApp) {
+        await getAPI({
+            method: "post",
+            url: setDefaultAccess(),
+            body: {
+                userRole: appRole,
+                appId: appId,
+                userId: clickedAppUserId,
+            },
+        }).catch((e) => {
+            console.log(e.error);
+        });
+
+        const userData = {
+            dispatch,
+            history,
+            appPanelUserId: clickedAppUserId,
+            appPanelRole: appRole,
+        };
+
+        await signInUserData(null, userData);
+        // IMPORTANT: userId is used as the current id to be authorized by system. the clickedAppUserId, of course, it is clicked app id.
+        await renewAccessToken({
+            userId,
+            clickedAppUserId,
+            role: appRole,
+        });
+    }
 
     if (!isFiddelizeApp) {
         await dontRememberAccess({ role: "nucleo-equipe" });
@@ -155,12 +179,9 @@ export const handleOpenApp = async ({
     }
 
     return alert("error");
-};
+}
 
-export async function dontRememberAccess({
-    role = "team-apps",
-    role_loggedIn,
-}) {
+async function dontRememberAccess({ role = "team-apps" }) {
     if (role === "cliente-admin") {
         return await removeVar("rememberAccess", store.user);
     }
@@ -174,15 +195,15 @@ export async function dontRememberAccess({
         return await setVar({ disconnectAgent: true }, store.user);
     }
 
-    if (role === "team-apps") {
-        if (role_loggedIn === "cliente-admin") {
-            // disable remember access page to show login for the new toggled app.
-            await setVar({ rememberAccess: false }, store.user);
-        }
+    // if (role === "team-apps") {
+    //     if (role_loggedIn === "cliente-admin") {
+    //         // disable remember access page to show login for the new toggled app.
+    //         await setVar({ rememberAccess: false }, store.user);
+    //     }
 
-        return await setMultiVar(
-            [{ disconnectCliMember: true }, { disconnectAgent: true }],
-            store.user
-        );
-    }
+    //     return await setMultiVar(
+    //         [{ disconnectCliMember: true }, { disconnectAgent: true }],
+    //         store.user
+    //     );
+    // }
 }

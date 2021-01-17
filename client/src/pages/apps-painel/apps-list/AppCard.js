@@ -1,12 +1,8 @@
-import React, { Fragment, forwardRef } from "react";
+import React, { Fragment, useState, forwardRef } from "react";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import "./_AppCard.scss";
 import Skeleton from "../../../components/multimedia/Skeleton";
-import {
-    handleOpenApp,
-    dontRememberAccess,
-} from "./helpers/appAccessAlgorithm";
+import handleOpenApp from "./helpers/appAccessAlgorithm";
 import { useAppSystem } from "../../../hooks/useRoleData";
 // icons
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
@@ -27,22 +23,24 @@ const handleAppType = (role) => {
 
 export default forwardRef(AppCard);
 
-function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
+function AppCard({ data, payload, loading }, ref) {
+    const [opening, setOpening] = useState(false);
+
     const {
         userId: clickedAppUserId,
         appId,
         bizImg,
         bizName,
         role,
-        isDefaultAccess,
+        isDefaultAccess: isCurrApp,
     } = data;
+
     const {
         appId_loggedIn,
         history,
         dispatch,
         role_loggedIn,
         bizCodeName,
-        handleSelectedDefaultAccess,
         userId,
     } = payload;
 
@@ -53,41 +51,12 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
     const showFooter = () => (
         <section className="card-footer">
             <div className="desc font-weight-bold">
-                {isDefaultAccess ? (
+                {isCurrApp && (
                     <p className="default-access-badge">
-                        acesso padrão <DoneOutlineIcon />
+                        APP ATUAL <DoneOutlineIcon />
                     </p>
-                ) : (
-                    <div
-                        className={
-                            loadingDefaultAccess === appId
-                                ? "access-check loading"
-                                : "access-check"
-                        }
-                    >
-                        {loadingDefaultAccess === appId ? (
-                            <p className="text-p text-small font-weight-bold">
-                                ativando padrão...
-                            </p>
-                        ) : (
-                            <ButtonMulti
-                                title="acesso padrão"
-                                onClick={() => {
-                                    (async () => {
-                                        await dontRememberAccess({
-                                            role: "team-apps",
-                                            role_loggedIn,
-                                        });
-                                        handleSelectedDefaultAccess(appId);
-                                    })();
-                                }}
-                                variant="link"
-                                textTransform="lowercase"
-                            />
-                        )}
-                    </div>
                 )}
-                <p className="app-type-badge">
+                <p className={`app-type-badge ${isCurrApp ? "curr-app" : ""}`}>
                     app {dataAppType.type}
                     {dataAppType.icon}
                 </p>
@@ -137,13 +106,19 @@ function AppCard({ data, payload, loading, loadingDefaultAccess }, ref) {
             {showFooter()}
             <section className="cta">
                 <ButtonFab
-                    title="abrir"
+                    title={`${opening ? "iniciando..." : "abrir"}`}
                     variant="extended"
                     size="small"
                     backgroundColor="var(--default)"
                     position="relative"
                     backgroundColor={`var(--themeSDark--default)`}
-                    onClick={() => handleOpenApp(payloadOpen)}
+                    onClick={() => {
+                        (async () => {
+                            setOpening(true);
+                            await handleOpenApp(payloadOpen);
+                            setOpening(false);
+                        })();
+                    }}
                 />
             </section>
         </section>

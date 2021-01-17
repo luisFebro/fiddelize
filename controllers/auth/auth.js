@@ -35,7 +35,8 @@ exports.mwIsAuth = async (req, res, next) => {
     //condition for testing without token
     if (
         req.query.isFebroBoss ||
-        (req.query.nT && req.body.recipient) // nT === token
+        (req.query.nT && req.body.recipient) || // nT === no token
+        (req.body.nT && req.body._id)
     ) {
         return next();
     }

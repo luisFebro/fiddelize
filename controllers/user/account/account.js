@@ -131,10 +131,10 @@ exports.setDefaultAccess = async (req, res) => {
 
     const dataSet = { $set: setObj };
 
-    const done = await Account.findOneAndUpdate({ checkId: cpf }, dataSet, {
-        new: true,
-        upsert: true,
-    }).catch((err) => {
+    const done = await Account.findOneAndUpdate(
+        { checkId: cpf },
+        dataSet
+    ).catch((err) => {
         res.status(400).json({ error: err });
     });
     if (!done) return;

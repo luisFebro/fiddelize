@@ -1,4 +1,4 @@
-import { chooseHeader } from "../../utils/server/getHeaders";
+import { chooseHeaderAsync } from "../../utils/server/getHeaders";
 import { logout } from "../../redux/actions/authActions";
 import axios from "axios";
 import { disconnect } from "../../hooks/useAuthUser";
@@ -32,12 +32,14 @@ export default function getAPI({
             });
         }, timeout);
 
+        const headers = await chooseHeaderAsync({ token, needAuth });
+
         const config = {
             url,
             method,
             data: body,
             params,
-            headers: chooseHeader({ token: token, needAuth }),
+            headers,
             cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
         };
 

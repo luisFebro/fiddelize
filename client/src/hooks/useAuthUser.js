@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useStoreState } from "easy-peasy";
 import isThisApp from "../utils/window/isThisApp";
 import useData from "../hooks/useData";
-import { getVar, setMultiVar, store } from "../hooks/storage/useVar";
+import { getVar, setMultiVar, removeVar, store } from "../hooks/storage/useVar";
 
 const isApp = isThisApp();
 const gotToken = localStorage.getItem("token");
@@ -13,12 +13,15 @@ export const disconnect = async (options = {}) => {
     const { needRedirect = true } = options;
 
     const role = await getVar("role", store.user);
-    const isMember = role === "cliente-membro";
+    const isCliAdmin = role === "cliente-admin";
 
-    await setMultiVar(
-        [{ success: false }, { rememberAccess: isMember ? false : true }],
-        store.user
-    );
+    await Promise.all([
+        setMultiVar(
+            [{ success: false }, { rememberAccess: isCliAdmin ? true : false }],
+            store.user
+        ),
+        removeVar("token"),
+    ]);
 
     localStorage.removeItem("token");
 

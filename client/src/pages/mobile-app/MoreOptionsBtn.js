@@ -1,5 +1,4 @@
 import React, { useState, Fragment, useEffect } from "react";
-import { logout } from "../../redux/actions/authActions";
 import { Link, withRouter } from "react-router-dom";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
 import { useStoreDispatch } from "easy-peasy";
@@ -23,6 +22,7 @@ import ModalFullContent from "../../components/modals/ModalFullContent";
 import Fab from "@material-ui/core/Fab";
 import getFirstName from "../../utils/string/getFirstName";
 import { Load } from "../../components/code-splitting/LoadableComp";
+import { disconnect } from "../../hooks/useAuthUser";
 
 const Async = Load({
     loader: () =>
@@ -132,7 +132,10 @@ function MoreOptionsBtn({
                 name: "Sair ►",
                 backColor: "var(--themeSDark--" + colorS + ")",
                 onClick: () => {
-                    !needAppForPreview && logout(dispatch);
+                    if (needAppForPreview) return;
+                    (async () => {
+                        await disconnect();
+                    })();
                 },
             },
             {

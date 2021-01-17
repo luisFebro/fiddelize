@@ -10,7 +10,8 @@ export default function useData(data, options = {}) {
     if (!Array.isArray(data)) throw new Error("Requires a array data format");
 
     useEffect(() => {
-        if (data && trigger) {
+        let unmounted;
+        if (data && trigger && !unmounted) {
             (async () => {
                 const dataArray = await getMultiVar(data, st[storeName]).catch(
                     (err) => {
@@ -20,6 +21,10 @@ export default function useData(data, options = {}) {
                 if (dataArray) setStore(dataArray);
             })();
         }
+
+        return () => {
+            unmounted = true;
+        };
     }, [trigger, storeName]);
 
     // this will automatically set a ... for data loading
