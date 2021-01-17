@@ -178,7 +178,7 @@ export async function signInUserData(cpfValue, options = {}) {
     let whichRoute;
     if (role === "cliente-admin") {
         !appPanelUserId &&
-            showSnackbar(dispatch, "Carregando...", "warning", 2000);
+            showSnackbar(dispatch, "Iniciando...", "warning", 2000);
         // Pre login store data
         const storeElems = [
             { bizId },
@@ -229,7 +229,7 @@ export async function signInUserData(cpfValue, options = {}) {
 
     if (role === "cliente-membro") {
         !appPanelUserId &&
-            showSnackbar(dispatch, "Carregando...", "warning", 2000);
+            showSnackbar(dispatch, "Iniciando...", "warning", 2000);
         await removeVar("disconnectCliMember", store.user);
 
         const storeElems = [
@@ -304,7 +304,7 @@ export async function signInUserData(cpfValue, options = {}) {
 
     if (role === "nucleo-equipe") {
         !appPanelUserId &&
-            showSnackbar(dispatch, "Carregando...", "warning", 2000);
+            showSnackbar(dispatch, "Iniciando...", "warning", 2000);
         await removeVar("disconnectAgent", store.user);
         // Pre login store data
         const storeElems = [
@@ -369,7 +369,7 @@ function handleCliUserPath({ authUserId, dispatch, history }) {
             if (isThisApp()) {
                 if (res.status !== 200)
                     return showSnackbar(dispatch, res.data.msg, "error");
-                showSnackbar(dispatch, "Carregando...", "warning", 3000);
+                showSnackbar(dispatch, "Iniciando...", "warning", 3000);
                 history.push("/mobile-app");
             } else {
                 showComponent(dispatch, "purchaseValue");

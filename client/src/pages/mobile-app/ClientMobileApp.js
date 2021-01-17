@@ -21,7 +21,6 @@ import AsyncBellNotifBtn from "../../components/notification/AsyncBellNotifBtn";
 // import ImageLogo from '../../components/ImageLogo';
 import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
 import useDelay from "../../hooks/useDelay";
-import useCount from "../../hooks/useCount";
 import CompLoader from "../../components/CompLoader";
 import useBackColor from "../../hooks/useBackColor";
 import useCountNotif from "../../hooks/notification/useCountNotif";
@@ -36,6 +35,7 @@ import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import usePersistentStorage from "../../hooks/storage/usePersistentStorage";
 import Card from "@material-ui/core/Card";
+// import useCount from "../../hooks/useCount";
 
 const AsyncPWA = Load({
     loading: true,
@@ -212,7 +212,7 @@ function ClientMobileApp({ location, history }) {
         role,
         trigger: !loadingData,
     });
-    useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
+    // useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(
         `var(--themeBackground--${isBizTeam ? "default" : selfThemeBackColor})`
     );

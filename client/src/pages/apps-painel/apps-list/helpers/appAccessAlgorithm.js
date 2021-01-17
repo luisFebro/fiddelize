@@ -3,7 +3,7 @@ import {
     removeVar,
     setVar,
     getVar,
-    setMultiVar,
+    removeMultiVar,
     store,
 } from "../../../../hooks/storage/useVar";
 import renewAccessToken from "../../../../components/auth/helpers/renewAccessToken";
@@ -163,17 +163,26 @@ export default async function handleOpenApp({
         }
     }
 
+    // if curr app is cli-user password required for all other apps since it is not required authenticated login
     if (isCliUser) {
-        // if curr app is cli-user password required for all other apps since it is not required one
+        const removeSession = async () => {
+            // NOTE: sometimes, token is not removed. This is not an issue just yet since this token is simply informative so far.
+            await removeMultiVar(["success", "token"], store.user);
+            localStorage.removeItem("token");
+        };
+
         if (isFiddelizeApp) {
+            await removeSession();
             return history.push(`/t/app/nucleo-equipe/acesso`);
         }
 
         if (isCliAdminApp) {
+            await removeSession();
             return history.push(`/senha-de-acesso`);
         }
 
         if (isCliMemberApp) {
+            await removeSession();
             return history.push(`/senha-equipe`);
         }
     }
@@ -194,16 +203,18 @@ async function dontRememberAccess({ role = "team-apps" }) {
     if (role === "nucleo-equipe") {
         return await setVar({ disconnectAgent: true }, store.user);
     }
-
-    // if (role === "team-apps") {
-    //     if (role_loggedIn === "cliente-admin") {
-    //         // disable remember access page to show login for the new toggled app.
-    //         await setVar({ rememberAccess: false }, store.user);
-    //     }
-
-    //     return await setMultiVar(
-    //         [{ disconnectCliMember: true }, { disconnectAgent: true }],
-    //         store.user
-    //     );
-    // }
 }
+
+/* ARCHIVES
+// if (role === "team-apps") {
+//     if (role_loggedIn === "cliente-admin") {
+//         // disable remember access page to show login for the new toggled app.
+//         await setVar({ rememberAccess: false }, store.user);
+//     }
+
+//     return await setMultiVar(
+//         [{ disconnectCliMember: true }, { disconnectAgent: true }],
+//         store.user
+//     );
+// }
+*/

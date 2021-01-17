@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currTxtColor } from "../../../utils/biz/selectTxtStyle";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useElemShowOnScroll from "../../../hooks/scroll/useElemShowOnScroll";
-import useCount from "../../../hooks/useCount";
 import CompLoader from "../../../components/CompLoader";
 import useAnimateConfetti from "../../../hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "../../../hooks/animation/useAnimateNumber";
@@ -24,6 +23,7 @@ import useSendSMS from "../../../hooks/sms/useSendSMS";
 import useDidDateExpire from "../../../hooks/dates/date-expires/useDidDateExpire";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode.js";
 import useData from "../../../hooks/useData";
+// import useCount from "../../../hooks/useCount";
 
 // APP COMPONENTS
 import RatingIcons from "../RatingIcons";
@@ -189,7 +189,7 @@ export default function ClientUserAppContent({
     }, [currScore]);
 
     const { isAuthUser } = useAuthUser();
-    useCount("ClientUserAppContent.js"); // RT = 3 before = /
+    // useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const { data: lastPrizeId } = useAPI({
         url: readPrizes(_id),
         params: { lastPrizeId: true },

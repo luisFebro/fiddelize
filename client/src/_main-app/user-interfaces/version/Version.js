@@ -4,13 +4,13 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9450.6";
+const latestVersion = "3.95.6";
 // PRÓXIMO:
+// app fiddelize pt 8
 // split de pagamento backend pt2
-// sistema multi-conta (painel de cadastros)
-const updateDescription =
-    "app fiddelize pt 8 || instant account - multi-account pt 12";
+const updateDescription = "site - marketing - design com diferenciais pt 0";
 const history = [
+    "conta instantânea, painel de apps, sistema multi-contas pt 13",
     "credit card pay frontend pt16",
     "serviço novvos membros",
     "app membro - sistema de acesso",
