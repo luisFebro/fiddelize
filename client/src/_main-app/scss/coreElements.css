@@ -88,6 +88,10 @@ pre {
     font-size: 1em;
 }
 
+strong {
+    letter-spacing: 1px;
+}
+
 a {
     background-color: transparent;
     -webkit-text-decoration-skip: objects;

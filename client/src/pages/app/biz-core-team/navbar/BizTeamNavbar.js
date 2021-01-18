@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./_BizTeamNavbar.scss";
 import Img from "../../../../components/Img";
 import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";

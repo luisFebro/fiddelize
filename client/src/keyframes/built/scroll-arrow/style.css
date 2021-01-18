@@ -1,4 +1,4 @@
-.container {
+.chevron--container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,7 +24,7 @@
 
 .chevron:before,
 .chevron:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     height: 100%;

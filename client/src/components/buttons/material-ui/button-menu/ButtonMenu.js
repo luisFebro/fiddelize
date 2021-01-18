@@ -20,6 +20,8 @@ export default function ButtonMenu({
         setOpen((prev) => !prev);
     };
 
+    const Icon = handleIcons(mainIcon, open);
+
     return (
         <section className="button-menu--root">
             <IconButton
@@ -32,7 +34,7 @@ export default function ButtonMenu({
                     whiteRipple ? "ripple-color-white" : ""
                 }`}
             >
-                {handleIcons(mainIcon)}
+                {Icon}
             </IconButton>
             <MenuPopper
                 open={open}

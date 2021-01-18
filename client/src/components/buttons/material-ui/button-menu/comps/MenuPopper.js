@@ -1,5 +1,4 @@
 import React from "react";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
@@ -8,12 +7,9 @@ import MenuList from "@material-ui/core/MenuList";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import "./_MenuPopper.scss";
+// import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 export default function MenuPopper({ open, optionsArray, setOpen, anchorRef }) {
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
-    };
-
     const handleClose = (event) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
@@ -21,6 +17,10 @@ export default function MenuPopper({ open, optionsArray, setOpen, anchorRef }) {
 
         setOpen(false);
     };
+
+    // const handleToggle = () => {
+    //     setOpen((prevOpen) => !prevOpen);
+    // };
 
     // return focus to the button when we transitioned from !open -> open
     // const prevOpen = React.useRef(open);
@@ -63,31 +63,31 @@ export default function MenuPopper({ open, optionsArray, setOpen, anchorRef }) {
                     }}
                 >
                     <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                            <MenuList
-                                autoFocusItem={open}
-                                id="menu-list-grow"
-                                onKeyDown={handleListKeyDown}
-                            >
-                                {optionsArray.map((option) => (
-                                    <MenuItem
-                                        key={option.text}
-                                        onClick={(e) => {
-                                            option.callback();
-                                            handleClose(e);
-                                        }}
-                                    >
-                                        <ListItemIcon>
-                                            {option.icon}
-                                        </ListItemIcon>
-                                        <ListItemText primary={option.text} />
-                                    </MenuItem>
-                                ))}
-                            </MenuList>
-                        </ClickAwayListener>
+                        <MenuList
+                            autoFocusItem={open}
+                            id="menu-list-grow"
+                            onKeyDown={handleListKeyDown}
+                        >
+                            {optionsArray.map((option) => (
+                                <MenuItem
+                                    key={option.text}
+                                    onClick={(e) => {
+                                        option.callback();
+                                        handleClose(e);
+                                    }}
+                                >
+                                    <ListItemIcon>{option.icon}</ListItemIcon>
+                                    <ListItemText primary={option.text} />
+                                </MenuItem>
+                            ))}
+                        </MenuList>
                     </Paper>
                 </Grow>
             )}
         </Popper>
     );
 }
+
+// ARCHIVES
+//<ClickAwayListener onClickAway={() => null}> {/*LESSON: disabled temporarily until finding a solution to toggle to close icon without triggering this...*/}
+//</ClickAwayListener>

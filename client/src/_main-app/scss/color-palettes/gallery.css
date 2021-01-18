@@ -22,6 +22,7 @@
     --lightPurple: #7c43bd;
     --mainCyan: #00b2cc;
     --mainCyanLight: #00e5ff;
+    --vocarizaCyan: #00ffff;
 }
 
 .text-red {
@@ -82,4 +83,8 @@
 
 .text-cyan-light {
     color: var(--mainCyanLight);
+}
+
+.text-voca-cyan {
+    color: var(--vocarizaCyan);
 }

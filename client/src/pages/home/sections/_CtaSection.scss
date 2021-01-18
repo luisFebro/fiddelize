@@ -1,0 +1,97 @@
+.cta-section--root {
+    color: var(--mainWhite);
+    margin: 100px 0;
+    background: var(--mainWhite) !important;
+
+    & .section-title {
+        text-align: center;
+    }
+
+    @media (min-width: 641px) {
+        .section-title {
+            text-align: left;
+        }
+    }
+
+    .container {
+        max-width: 1128px;
+    }
+    @media (min-width: 481px) {
+        .container,
+        .container-sm {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+    }
+
+    .container,
+    .container-sm {
+        width: 100%;
+        margin: 0 auto;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    @media (min-width: 641px) {
+        .cta .section-inner {
+            padding: 64px 32px;
+        }
+    }
+    .cta .section-inner {
+        padding: 48px 16px;
+    }
+    @media (min-width: 641px) {
+        .section-inner {
+            padding-top: 88px;
+            padding-bottom: 88px;
+        }
+    }
+
+    .section-inner {
+        position: relative;
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+    @media (min-width: 641px) {
+        .cta-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+    .cta-inner {
+        position: relative;
+        background: var(--themePDark);
+        overflow: hidden;
+    }
+
+    .cta-inner::before {
+        content: "";
+        position: absolute;
+        right: 98px;
+        top: -100px;
+        width: 160px;
+        height: 187px;
+        background-image: url("/img/illustrations/home/shapes/cta-illustra.svg");
+        background-repeat: no-repeat;
+    }
+
+    @media (min-width: 641px) {
+        .cta .section-title {
+            margin-bottom: 0;
+            padding-right: 24px;
+        }
+    }
+
+    .cta .section-title {
+        margin-bottom: 40px;
+    }
+
+    .cta-inner > * {
+        position: relative;
+    }
+
+    .mt-0 {
+        margin-top: 0;
+    }
+}

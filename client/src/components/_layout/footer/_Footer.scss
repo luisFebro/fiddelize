@@ -1,0 +1,84 @@
+footer {
+    position: relative;
+    font-family: var(--mainFont);
+    color: var(--mainWhite);
+    background-color: var(--themeP);
+    padding-top: 7rem;
+    padding-bottom: 0; // prior 0.5rem
+
+    & a {
+        color: var(--mainWhite);
+        text-decoration: underline;
+    }
+
+    & .footer-col {
+        margin-bottom: 2.25rem;
+    }
+
+    & .media {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: start;
+        align-items: flex-start;
+    }
+
+    & .media-body {
+        margin-left: 0.5rem;
+    }
+
+    & .fas {
+        color: #fff;
+        font-size: 1.2rem;
+        line-height: 1.5rem;
+        -webkit-font-smoothing: antialiased;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+    }
+
+    & .fa-square:before {
+        content: "■";
+    }
+
+    & .list-unstyled {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    // LESSON: the waves should be as thin as possible to fit the layout without overflowing it.
+    & .shape {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        -webkit-transform: translateY(-10%);
+        transform: translateY(-10%);
+    }
+
+    & .copyright-slogon {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    & .copyright-slogon div {
+        padding-bottom: 70px;
+    }
+
+    @media (min-width: 1200px) {
+        & .footer-col.first {
+            margin-right: 1.5rem;
+        }
+
+        & .footer-col.middle {
+            margin-right: 0.75rem;
+            margin-left: 0.75rem;
+        }
+
+        & .footer-col.last {
+            margin-left: 1.5rem;
+        }
+    }
+}

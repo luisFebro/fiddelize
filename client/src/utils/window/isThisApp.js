@@ -1,7 +1,7 @@
 import { IS_DEV } from "../../config/clientUrl";
 
 // change here only if it is the website to be developed in localhost
-const localHostWebsiteMode = false;
+const localHostWebsiteMode = true;
 const localHostAppMode = IS_DEV ? true : false;
 
 export default function isThisApp() {
