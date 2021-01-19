@@ -1,0 +1,32 @@
+.feature-section--root {
+    background-color: var(--mainWhite);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 45px;
+    padding-bottom: 0px;
+    position: relative;
+    background: var(--mainWhite);
+
+    & .shape {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        -webkit-transform: translateY(-20%);
+        transform: translateY(-20%);
+    }
+
+    & .tabs {
+        padding: 50px 0 100px;
+        background-color: var(--mainWhite);
+    }
+
+    & .tabs .section-title {
+        text-align: center;
+    }
+
+    & .tabs .section-title p {
+        margin-bottom: 3.125rem;
+    }
+}

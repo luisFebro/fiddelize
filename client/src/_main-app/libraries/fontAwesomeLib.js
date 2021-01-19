@@ -12,6 +12,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight";
 import { faChartPie } from "@fortawesome/free-solid-svg-icons/faChartPie";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck"; // Confirmation btn
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons/faCheckCircle"; // for success
+import { faCircle } from "@fortawesome/free-solid-svg-icons/faCircle";
 import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faCogs } from "@fortawesome/free-solid-svg-icons/faCogs"; // tech support, setting
 import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
@@ -64,7 +65,6 @@ import { faMagic } from "@fortawesome/free-solid-svg-icons/faMagic";
 import { faAppleAlt } from "@fortawesome/free-solid-svg-icons/faAppleAlt";
 import { faCar } from "@fortawesome/free-solid-svg-icons/faCar";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons/faCartPlus";
-import { faCircle } from "@fortawesome/free-solid-svg-icons/faCircle";
 import { faCocktail } from "@fortawesome/free-solid-svg-icons/faCocktail";
 import { faCut } from "@fortawesome/free-solid-svg-icons/faCut";
 import { faDragon } from "@fortawesome/free-solid-svg-icons/faDragon";
@@ -94,6 +94,7 @@ library.add(
     faChartPie,
     faCheck,
     faCheckCircle,
+    faCircle,
     faClock,
     faCogs,
     faComment,
@@ -145,7 +146,6 @@ library.add(
     faAppleAlt,
     faCar,
     faCartPlus,
-    faCircle,
     faCocktail,
     faCut,
     faDragon,

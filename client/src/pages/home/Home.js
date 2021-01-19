@@ -1,6 +1,5 @@
 import React from "react";
 import { CLIENT_URL } from "../../config/clientUrl";
-import useBackColor from "../../hooks/useBackColor";
 import ScrollArrow from "../../keyframes/built/scroll-arrow/ScrollArrow";
 import "./_Home.scss";
 import FeaturesSection from "./sections/features/FeaturesSection";
@@ -14,8 +13,6 @@ const isSmall = window.Helper.isSmallScreen();
 
 export default function Home() {
     // const [viewPhone, setViewPhone] = useState(false);
-    useBackColor(`var(--themeP)`);
-
     const showHero = () => (
         <section className="hero-section">
             <div className="container">

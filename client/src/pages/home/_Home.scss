@@ -2,6 +2,8 @@
 // I had to lower the media query to min-width: 892px (orginally 992px) to fit two columns in a 100% zoom
 
 .home-page--root {
+    background: var(--mainWhite);
+
     & * {
         margin: 0;
         padding: 0;
@@ -14,16 +16,23 @@
     }
 
     h2 {
-        font-size: 3rem;
+        font-size: 2.3rem;
         font-family: var(--mainFont);
         color: var(--themeP);
-        line-height: 36px;
+        line-height: 50px;
         font-weight: 550;
         letter-spacing: 0;
     }
 
+    h1,
+    h2,
+    h3,
+    h4 {
+        margin-bottom: 0.5rem;
+    }
+
     p {
-        // color: #222f3f;
+        color: #222f3f;
         font-size: 21px;
         font-weight: 400;
         letter-spacing: -0.4px;
@@ -46,6 +55,7 @@
 // HERO SECTION
 .home-page--root .hero-section {
     padding: 36px 0 50px;
+    background: var(--themeP);
 
     & .line-height-hero {
         line-height: 40px;
@@ -115,26 +125,6 @@
     }
 }
 // END HERO AREA
-
-// FEATURES SECTION
-.home-page--root .feature-section {
-    background-color: var(--mainWhite);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding-top: 45px;
-    padding-bottom: 600px; // original: 60px;
-    position: relative;
-
-    & .shape {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        -webkit-transform: translateY(-20%);
-        transform: translateY(-20%);
-    }
-}
 
 // OTHERS
 .col,

@@ -33,6 +33,13 @@ const Footer = ({ location }) => {
                     <li className="media">
                         <i className="fas fa-square"></i>
                         <div className="media-body">
+                            <a href="">Acessar conta</a>
+                        </div>
+                    </li>
+                    <br />
+                    <li className="media">
+                        <i className="fas fa-square"></i>
+                        <div className="media-body">
                             <a href="">Termos e Condições</a>
                         </div>
                     </li>
