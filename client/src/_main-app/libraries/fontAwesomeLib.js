@@ -85,6 +85,12 @@ import { faSun } from "@fortawesome/free-solid-svg-icons/faSun";
 import { faTshirt } from "@fortawesome/free-solid-svg-icons/faTshirt";
 import { faUserTie } from "@fortawesome/free-solid-svg-icons/faUserTie";
 // end app milestone icons
+// home marketing
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons/faBullhorn";
+import { faStore } from "@fortawesome/free-solid-svg-icons/faStore";
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons/faCreditCard";
+import { faPhoneSquareAlt } from "@fortawesome/free-solid-svg-icons/faPhoneSquareAlt";
+//
 
 library.add(
     faAngleDoubleRight,
@@ -139,6 +145,11 @@ library.add(
     faSms,
     faSortAmountDown,
     faSortAmountDownAlt,
+    // home marketing
+    faBullhorn,
+    faStore,
+    faCreditCard,
+    faPhoneSquareAlt,
     // services
     faFilter,
     faMagic,

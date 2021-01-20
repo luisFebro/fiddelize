@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import "./_TabsContent.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
@@ -8,12 +8,13 @@ export default function TabsContent({ tabsData, currTab }) {
         <section className="tab-content" id="templateTabsContent">
             {tabsData.map((tabData, ind) => {
                 return (
-                    <ShowTab
-                        key={ind + 1}
-                        id={ind + 1}
-                        tabData={tabData}
-                        currTab={currTab}
-                    />
+                    <Fragment key={ind + 1}>
+                        <ShowTab
+                            id={ind + 1}
+                            tabData={tabData}
+                            currTab={currTab}
+                        />
+                    </Fragment>
                 );
             })}
         </section>
@@ -70,7 +71,7 @@ function ShowTab({ tabData, id, currTab }) {
     const showIconCardsPanelRight = () => (
         <section className="col-lg-4">
             <ul className="list-unstyled li-space-lg">
-                <ul className="list-unstyled li-space-lg first">
+                <ul className="list-unstyled li-space-lg">
                     {tabData.dataPanel.right.map((dataP) => {
                         return showCardsPanel(dataP);
                     })}
@@ -97,23 +98,3 @@ function ShowTab({ tabData, id, currTab }) {
         </section>
     );
 }
-
-/*
-Convite Personalizado
-
-
-App leve e rápido
-Todos os apps usam o que há mais moderno na tecnologia web para trazer maior perfomance e menor tamanho.
-
-Jogo de compras
-Seus clientes acompanham seus pontos, metas por etapa, recebem troféis a cada meta atingida.
-
-Histórico de compra automático.
-Seus clientes sabem
-
-Cartão Virtual 3D
-Assim que for adicionado os pontos do cliente, seu cliente é notificado em tempo real e recebe um cartão virtual com a sua logo e cores.
-
-Contato com seu negócio
-Seus clientes podem entrar em contato direto do app.
-*/

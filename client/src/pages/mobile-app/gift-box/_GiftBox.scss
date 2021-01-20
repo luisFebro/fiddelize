@@ -16,6 +16,9 @@
 //           transform: translate(-50%, -50%);
 //   border-radius: 50%;
 // }
+
+// LESSON: use content-box for design which is screwed by border-box
+
 .gift-card--root {
     position: relative;
     overflow: visible;
@@ -53,10 +56,12 @@
             width: 25px;
         }
 
-        & .box-bowtie::before, .box-bowtie::after {
+        & .box-bowtie::before,
+        .box-bowtie::after {
             width: 13.3333333333px;
             height: 13.3333333333px;
             border: 8.6666666667px solid white;
+            box-sizing: content-box !important;
         }
     }
 }
@@ -79,16 +84,16 @@
     }
 
     &::after {
-       content: "";
-       position: absolute;
-       top: 0;
-       bottom: 0;
-       left: 50%;
-       -webkit-transform: translateX(-50%);
-               transform: translateX(-50%);
-       width: 35px; // change OK
-       background: linear-gradient(#ffffff,#ffefa0);
-       opacity: .9;
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        width: 35px; // change OK
+        background: linear-gradient(#ffffff, #ffefa0);
+        opacity: 0.9;
     }
 
     // BOX LID
@@ -97,7 +102,7 @@
         z-index: 1;
         left: 50%;
         -webkit-transform: translateX(-50%);
-                transform: translateX(-50%);
+        transform: translateX(-50%);
         bottom: 90%;
         background-color: #cc231e;
         height: 40px;
@@ -106,15 +111,15 @@
         box-shadow: 0 8px 4px -4px rgba(0, 0, 0, 0.3);
 
         &::after {
-           content: "";
-           position: absolute;
-           top: 0;
-           bottom: 0;
-           left: 50%;
-           -webkit-transform: translateX(-50%);
-                   transform: translateX(-50%);
-           width: 35px; // change OK
-           background: linear-gradient(#ffefa0,#fff)
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            width: 35px; // change OK
+            background: linear-gradient(#ffefa0, #fff);
         }
 
         & .box-bowtie {
@@ -122,7 +127,8 @@
             height: 100%;
         }
 
-        & .box-bowtie::before, .box-bowtie::after {
+        & .box-bowtie::before,
+        .box-bowtie::after {
             content: "";
             width: 17.3333333333px; // change OK
             height: 17.3333333333px; // change OK
@@ -131,6 +137,7 @@
             position: absolute;
             bottom: 99%;
             z-index: -1;
+            box-sizing: content-box !important;
         }
 
         & .box-bowtie::before {
@@ -182,151 +189,159 @@
 }
 
 @-webkit-keyframes box-lid {
-  0%,
-  42% {
-    -webkit-transform: translate3d(-50%, 0%, 0) rotate(0deg);
-            transform: translate3d(-50%, 0%, 0) rotate(0deg);
-  }
-  60% {
-    -webkit-transform: translate3d(-85%, -230%, 0) rotate(-25deg);
-            transform: translate3d(-85%, -230%, 0) rotate(-25deg);
-  }
-  90%, 100% {
-    -webkit-transform: translate3d(-119%, 170%, 0) rotate(-70deg);
-            transform: translate3d(-119%, 170%, 0) rotate(-70deg);
-  }
+    0%,
+    42% {
+        -webkit-transform: translate3d(-50%, 0%, 0) rotate(0deg);
+        transform: translate3d(-50%, 0%, 0) rotate(0deg);
+    }
+    60% {
+        -webkit-transform: translate3d(-85%, -230%, 0) rotate(-25deg);
+        transform: translate3d(-85%, -230%, 0) rotate(-25deg);
+    }
+    90%,
+    100% {
+        -webkit-transform: translate3d(-119%, 170%, 0) rotate(-70deg);
+        transform: translate3d(-119%, 170%, 0) rotate(-70deg);
+    }
 }
 
 @keyframes box-lid {
-  0%,
-  42% {
-    -webkit-transform: translate3d(-50%, 0%, 0) rotate(0deg);
-            transform: translate3d(-50%, 0%, 0) rotate(0deg);
-  }
-  60% {
-    -webkit-transform: translate3d(-85%, -230%, 0) rotate(-25deg);
-            transform: translate3d(-85%, -230%, 0) rotate(-25deg);
-  }
-  90%, 100% {
-    -webkit-transform: translate3d(-119%, 170%, 0) rotate(-70deg);
-            transform: translate3d(-119%, 170%, 0) rotate(-70deg);
-  }
+    0%,
+    42% {
+        -webkit-transform: translate3d(-50%, 0%, 0) rotate(0deg);
+        transform: translate3d(-50%, 0%, 0) rotate(0deg);
+    }
+    60% {
+        -webkit-transform: translate3d(-85%, -230%, 0) rotate(-25deg);
+        transform: translate3d(-85%, -230%, 0) rotate(-25deg);
+    }
+    90%,
+    100% {
+        -webkit-transform: translate3d(-119%, 170%, 0) rotate(-70deg);
+        transform: translate3d(-119%, 170%, 0) rotate(-70deg);
+    }
 }
 @-webkit-keyframes box-body {
-  0% {
-    -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
-            transform: translate3d(0%, 0%, 0) rotate(0deg);
-  }
-  25% {
-    -webkit-transform: translate3d(0%, 25%, 0) rotate(20deg);
-            transform: translate3d(0%, 25%, 0) rotate(20deg);
-  }
-  50% {
-    -webkit-transform: translate3d(0%, -15%, 0) rotate(0deg);
-            transform: translate3d(0%, -15%, 0) rotate(0deg);
-  }
-  70% {
-    -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
-            transform: translate3d(0%, 0%, 0) rotate(0deg);
-  }
+    0% {
+        -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
+        transform: translate3d(0%, 0%, 0) rotate(0deg);
+    }
+    25% {
+        -webkit-transform: translate3d(0%, 25%, 0) rotate(20deg);
+        transform: translate3d(0%, 25%, 0) rotate(20deg);
+    }
+    50% {
+        -webkit-transform: translate3d(0%, -15%, 0) rotate(0deg);
+        transform: translate3d(0%, -15%, 0) rotate(0deg);
+    }
+    70% {
+        -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
+        transform: translate3d(0%, 0%, 0) rotate(0deg);
+    }
 }
 @keyframes box-body {
-  0% {
-    -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
-            transform: translate3d(0%, 0%, 0) rotate(0deg);
-            z-index: 1000;
-  }
-  25% {
-    -webkit-transform: translate3d(0%, 25%, 0) rotate(20deg);
-            transform: translate3d(0%, 25%, 0) rotate(20deg);
-            z-index: 1000;
-  }
-  50% {
-    -webkit-transform: translate3d(0%, -15%, 0) rotate(0deg);
-            transform: translate3d(0%, -15%, 0) rotate(0deg);
-  }
-  70% {
-    -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
-            transform: translate3d(0%, 0%, 0) rotate(0deg);
-  }
+    0% {
+        -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
+        transform: translate3d(0%, 0%, 0) rotate(0deg);
+        z-index: 1000;
+    }
+    25% {
+        -webkit-transform: translate3d(0%, 25%, 0) rotate(20deg);
+        transform: translate3d(0%, 25%, 0) rotate(20deg);
+        z-index: 1000;
+    }
+    50% {
+        -webkit-transform: translate3d(0%, -15%, 0) rotate(0deg);
+        transform: translate3d(0%, -15%, 0) rotate(0deg);
+    }
+    70% {
+        -webkit-transform: translate3d(0%, 0%, 0) rotate(0deg);
+        transform: translate3d(0%, 0%, 0) rotate(0deg);
+    }
 }
 @-webkit-keyframes box-bowtie-right {
-  0%,
-  50%,
-  75% {
-    -webkit-transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
-            transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
-  }
-  90%,
-  100% {
-    -webkit-transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-            transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-    box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.3);
-  }
+    0%,
+    50%,
+    75% {
+        -webkit-transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
+        transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
+    }
+    90%,
+    100% {
+        -webkit-transform: translate(-50%, -15%) rotate(45deg)
+            skew(10deg, 10deg);
+        transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+        box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.3);
+    }
 }
 @keyframes box-bowtie-right {
-  0%,
-  50%,
-  75% {
-    -webkit-transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
-            transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
-  }
-  90%,
-  100% {
-    -webkit-transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-            transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-    box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.3);
-  }
+    0%,
+    50%,
+    75% {
+        -webkit-transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
+        transform: translateX(0%) rotate(90deg) skew(10deg, 10deg);
+    }
+    90%,
+    100% {
+        -webkit-transform: translate(-50%, -15%) rotate(45deg)
+            skew(10deg, 10deg);
+        transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+        box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.3);
+    }
 }
 @-webkit-keyframes box-bowtie-left {
-  0% {
-    -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-            transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-  }
-  50%,
-  75% {
-    -webkit-transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-            transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-  }
-  90%,
-  100% {
-    -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-            transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-  }
+    0% {
+        -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+        transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+    }
+    50%,
+    75% {
+        -webkit-transform: translate(-50%, -15%) rotate(45deg)
+            skew(10deg, 10deg);
+        transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+    }
+    90%,
+    100% {
+        -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+        transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+    }
 }
 @keyframes box-bowtie-left {
-  0% {
-    -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-            transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-  }
-  50%,
-  75% {
-    -webkit-transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-            transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
-  }
-  90%,
-  100% {
-    -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-            transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
-  }
+    0% {
+        -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+        transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+    }
+    50%,
+    75% {
+        -webkit-transform: translate(-50%, -15%) rotate(45deg)
+            skew(10deg, 10deg);
+        transform: translate(-50%, -15%) rotate(45deg) skew(10deg, 10deg);
+    }
+    90%,
+    100% {
+        -webkit-transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+        transform: translateX(-100%) rotate(0deg) skew(10deg, 10deg);
+    }
 }
 
 // RIBBON
 .ribbon {
-  position: absolute;
-  right: -5px; top: -5px;
-  z-index: 1;
-  overflow: hidden;
-  width: 75px; height: 75px;
-  text-align: right;
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 75px;
+    height: 75px;
+    text-align: right;
 }
 .ribbon span {
     font-size: 13px;
     font-weight: bold;
-    color: #FFF;
+    color: #fff;
     text-transform: uppercase;
     text-align: center;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     text-shadow: 1px 1px 3px black;
     line-height: 20px;
     transform: rotate(45deg);
@@ -335,23 +350,28 @@
     display: block;
     box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
     position: absolute;
-    top: 19px; right: -21px;
+    top: 19px;
+    right: -21px;
 }
 .ribbon span::before {
     content: "";
-    position: absolute; left: 0px; top: 100%;
+    position: absolute;
+    left: 0px;
+    top: 100%;
     z-index: -1;
-    border-left: 3px solid #8F0808;
+    border-left: 3px solid #8f0808;
     border-right: 3px solid transparent;
     border-bottom: 3px solid transparent;
-    border-top: 3px solid #8F0808;
+    border-top: 3px solid #8f0808;
 }
 .ribbon span::after {
     content: "";
-    position: absolute; right: 0px; top: 100%;
+    position: absolute;
+    right: 0px;
+    top: 100%;
     z-index: -1;
     border-left: 3px solid transparent;
-    border-right: 3px solid #8F0808;
+    border-right: 3px solid #8f0808;
     border-bottom: 3px solid transparent;
-    border-top: 3px solid #8F0808;
+    border-top: 3px solid #8f0808;
 }

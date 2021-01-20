@@ -188,7 +188,8 @@ const jsDecrypt = handleDecipherVault(KRYPTO_SECRET);
 // console.log("resCipher", resCipher);
 // const resDecipher = jsDecrypt(resCipher);
 // END ENCRYPTION AND DECRYPTION
-console.log(jsDecrypt("02030719020e0f1903030f1a0204"));
+// 02030719020e0f1903030f1a0204
+console.log(jsDecrypt("05050519050505190505051a0505"));
 // console.log(encryptSync("mr.febro@gmail.com"));
 //console.log(decryptSync("b6796df19acd8d308b6b6ca9a7db83a6:5933bc3e35116a1597aef36878f89ea0"));
 // (async () => {
