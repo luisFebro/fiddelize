@@ -41,7 +41,7 @@ const dataPanelCliUser = {
             icon: "bolt",
             title: "App leve e rápido",
             text:
-                "Todos os apps usam o que há mais moderno na tecnologia web para trazer maior perfomance e menor tamanho.",
+                "Todos os apps usam o que há mais moderno na tecnologia web para trazer maior perfomance e tamanho compacto.",
         },
     ],
 };
@@ -136,8 +136,8 @@ const tabsData = [
     {
         tabsName: "App Cliente",
         Icon: <PermContactCalendarIcon />,
-        mainImg: "/img/illustrations/home/feature-mobiles/cli-admin.png",
-        mainGif: "/img/illustrations/home/feature-mobiles/cli-admin.gif",
+        mainImg: "/img/illustrations/home/feature-mobiles/cli-user.png",
+        mainGif: "/img/illustrations/home/feature-mobiles/cli-user.gif",
         dataPanel: dataPanelCliUser,
     },
     {

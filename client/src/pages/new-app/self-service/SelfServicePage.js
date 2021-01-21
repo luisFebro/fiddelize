@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import AppPreview from './AppPreview';
-import AppPickersHandler from './pickers/AppPickersHandler';
-import getQueryByName from '../../../utils/string/getQueryByName';
-import getFirstName from '../../../utils/string/getFirstName';
-import useDelay from '../../../hooks/useDelay';
-import Spinner from '../../../components/loadingIndicators/Spinner';
+import React, { useState } from "react";
+import AppPreview from "./AppPreview";
+import AppPickersHandler from "./pickers/AppPickersHandler";
+import getQueryByName from "../../../utils/string/getQueryByName";
+import getFirstName from "../../../utils/string/getFirstName";
+import useDelay from "../../../hooks/useDelay";
+import Spinner from "../../../components/loadingIndicators/Spinner";
 // import useCount from '../../../hooks/useCount';
-import './style.scss';
-import lStorage from '../../../utils/storage/lStorage';
+import "./style.scss";
+import lStorage from "../../../utils/storage/lStorage";
 
-lStorage("removeItem", {collection: "clientAdmin", property: "selfMilestoneIcon"})
+lStorage("removeItem", {
+    collection: "clientAdmin",
+    property: "selfMilestoneIcon",
+});
 
 function SelfServicePage({ location, match }) {
     //useCount();// RT = 3
@@ -18,7 +21,7 @@ function SelfServicePage({ location, match }) {
         colorP: "default",
         colorS: "default",
         colorBack: "",
-    })
+    });
     const { colorP, colorS, colorBack } = theme;
 
     const isPageReady = useDelay(2000);
@@ -33,28 +36,26 @@ function SelfServicePage({ location, match }) {
     let rewardDesc = getQueryByName("premio-desc", location.search);
     let currScore = getQueryByName("ponto-atual", location.search);
     const isTest = location.search.includes("teste=1");
-    if(typeof rewardScore === "object") { rewardScore = 500 } // if it is null
-    if(typeof currScore === "object") { currScore = 100 }
+    if (typeof rewardScore === "object") {
+        rewardScore = 500;
+    } // if it is null
+    if (typeof currScore === "object") {
+        currScore = 100;
+    }
     clientName = getFirstName(clientName);
     // END API
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
-            <p className="text-title">Self-Service</p>
+            <p className="text-title">Novo App</p>
         </div>
     );
 
-    const showSpinner = () => (
-        !isPageReady &&
-        <Spinner
-            marginY={600}
-            size="large"
-            logo="white"
-        />
-    );
+    const showSpinner = () =>
+        !isPageReady && <Spinner marginY={600} size="large" logo="white" />;
 
     return (
-        <div style={{overflow: 'hidden'}}>
+        <div style={{ overflow: "hidden" }}>
             {showSpinner()}
             {showTitle()}
             <div className="main-self-service">

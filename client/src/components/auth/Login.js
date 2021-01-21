@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import Card from "@material-ui/core/Card";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
-import { showComponent } from "../../redux/actions/componentActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { loginEmail } from "../../redux/actions/authActions";
 import { readUser } from "../../redux/actions/userActions";
@@ -372,8 +371,7 @@ function handleCliUserPath({ authUserId, dispatch, history }) {
                 showSnackbar(dispatch, "Iniciando...", "warning", 3000);
                 history.push("/mobile-app");
             } else {
-                showComponent(dispatch, "purchaseValue");
-                history.push("/cliente/pontos-fidelidade");
+                window.location.href = "/mobile-app?abrir=1";
             }
         });
 }

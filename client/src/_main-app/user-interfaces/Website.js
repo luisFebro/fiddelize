@@ -19,9 +19,12 @@ import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import RegulationPage from "../../pages/RegulationPage";
 import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
-import AsyncIntroPage from "../../pages/new-app";
 import AsyncAppSharer from "../../pages/app-sharer/AsyncAppSharer";
-import AsyncSelfServicePage from "../../pages/new-app/self-service/AsyncSelfServicePage";
+import {
+    AsyncBizInfo,
+    AsyncRewardPlanner,
+    AsyncSelfService,
+} from "./comp-pages/AsyncNewAppPages";
 import PlansPage from "../../pages/plans-page/PlansPage";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
 import RedirectLink from "../../pages/RedirectLink";
@@ -78,14 +81,19 @@ function Website({ location, history }) {
                 />
                 <Route path="/baixe-app" exact component={AsyncDownloadApp} />
                 <Route
+                    path="/novo-app/info-negocio"
+                    exact
+                    component={AsyncBizInfo}
+                />
+                <Route
                     path="/:bizCodeName/novo-app"
                     exact
-                    component={AsyncIntroPage}
+                    component={AsyncRewardPlanner}
                 />
                 <Route
                     path="/:bizCodeName/novo-app/self-service/:bizId"
                     exact
-                    component={AsyncSelfServicePage}
+                    component={AsyncSelfService}
                 />
                 <Route
                     path="/:bizCodeName/nova-senha-verificacao"

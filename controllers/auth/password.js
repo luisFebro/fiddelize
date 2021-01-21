@@ -19,6 +19,8 @@ async function comparePswds(userId, options = {}) {
         .select("pswd")
         .catch((error) => console.log(error));
 
+    if (!userData) return false;
+
     const hash = userData.pswd;
 
     const checkRes = await compareBcryptPswd(pswd, { hash }).catch((error) =>
@@ -139,6 +141,10 @@ exports.checkPassword = async (req, res) => {
             .catch((err) => {
                 res.status(500).json({ error: err });
             });
+        if (!data)
+            return res
+                .status(400)
+                .json({ error: "Id do usuário não compatível" });
 
         const loginAttempts = data && data.expiryToken.loginAttempts + 1;
         const currToken = data && data.expiryToken.current;

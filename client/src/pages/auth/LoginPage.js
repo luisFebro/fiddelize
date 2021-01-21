@@ -5,6 +5,7 @@ import { useStoreState } from "easy-peasy";
 import CompLoader from "../../components/CompLoader";
 import useData from "../../hooks/useData";
 import { Load } from "../../components/code-splitting/LoadableComp";
+import useBackColor from "../../hooks/useBackColor";
 
 export const AsyncAccessGateKeeper = Load({
     loader: () =>
@@ -18,7 +19,14 @@ export default function LoginPage() {
         currentComp: state.componentReducer.cases.currentComp,
     }));
 
-    const [rememberAccess, name] = useData(["rememberAccess", "name"]);
+    useBackColor("var(--themeP)");
+
+    const [rememberAccess, name, role] = useData([
+        "rememberAccess",
+        "name",
+        "role",
+    ]);
+    const needGateKeeper = rememberAccess === true && role === "cliente-admin";
 
     return (
         <Fragment>
@@ -34,7 +42,7 @@ export default function LoginPage() {
                     className="container-center"
                     style={{ margin: `30px 0` }}
                 >
-                    {rememberAccess === true && (
+                    {needGateKeeper && (
                         <section className="container-center-col">
                             <p className="my-3 font-weight-bold text-subtitle text-center text-white">
                                 {name && name.cap()}
@@ -47,7 +55,7 @@ export default function LoginPage() {
                         </section>
                     )}
                     <div>
-                        {currentComp === "login" && rememberAccess !== true && (
+                        {currentComp === "login" && !needGateKeeper && (
                             <div>
                                 <CompLoader
                                     comp={<AsyncLogin rootClassname="mb-5" />}

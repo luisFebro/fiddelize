@@ -2,7 +2,7 @@ import { IS_DEV } from "../../config/clientUrl";
 
 // change here only if it is the website to be developed in localhost
 const localHostWebsiteMode = false;
-const localHostAppMode = IS_DEV ? true : false;
+const localHostAppMode = false ? true : false;
 
 export default function isThisApp() {
     const isInWebAppiOS = window.navigator.userAgent.toLowerCase();
@@ -36,6 +36,8 @@ function checkIfStockBrowser() {
 
     if (condition) {
         window.sessionStorage.setItem("isPWA", "1");
+    } else {
+        window.sessionStorage.removeItem("isPWA");
     }
 
     return window.sessionStorage.getItem("isPWA") === "1";

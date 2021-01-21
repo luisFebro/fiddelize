@@ -124,6 +124,7 @@ const clientAdminData = {
     // address
     bizCep: String, // NOT IMPLEMENTED YET - change to number when using this later (only in dash optional)
     bizAddress: { type: String, lowercase: true, trim: true }, // NOT IMPLEMENTED YET (only in dash optional)
+    bizField: String, // ramo de atividade comercial.
     // end address
 
     // self-service

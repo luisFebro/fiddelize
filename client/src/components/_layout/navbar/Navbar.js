@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
-import { logout } from "../../../redux/actions/authActions";
+import { useStoreDispatch } from "easy-peasy";
 import { Link } from "react-router-dom";
 import RadiusBtn from "../../../components/buttons/RadiusBtn";
 import styled from "styled-components";
@@ -19,13 +18,7 @@ const isApp = isThisApp();
 const isSmall = window.Helper.isSmallScreen();
 
 function Navbar({ history, location }) {
-    //RT = 2 (OK);
-    // useCount();
     const [isSearchOpen, setSearchOpen] = useState(false);
-    const { role, _idStaff } = useStoreState((state) => ({
-        role: state.userReducer.cases.currentUser.role,
-        _idStaff: state.userReducer.cases.currentUser._id,
-    }));
 
     const [url, setUrl] = useState({
         logoBiz: "",
@@ -45,7 +38,7 @@ function Navbar({ history, location }) {
     const logoSrc = logoBiz ? logoBiz : logoFid;
 
     const { isAuthUser } = useAuthUser();
-    const { bizCodeName, selfBizLogoImg, selfThemePColor } = useClientAdmin();
+    const { selfBizLogoImg, selfThemePColor } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
@@ -67,104 +60,33 @@ function Navbar({ history, location }) {
         locationNow.includes("pix") ||
         locationNow.includes("painel-de-apps");
 
-    const btnLogout = () => (
-        <button
-            className="font-weight-bold text-small text-shadow"
-            style={{
-                position: "absolute",
-                top: "65px",
-                right: "5px",
-                color: "white",
-                padding: "2px 5px",
-                borderRadius: "20px",
-                backgroundColor: "var(--themeSDark)",
-                outline: "none",
-            }}
-            onClick={() => logout(dispatch)}
-        >
-            sair
-        </button>
-    );
-
     const showAccessBtn = () => (
-        <Fragment>
-            {!gotToken || !role ? (
-                <Link
-                    to="/acesso/verificacao"
-                    className={
-                        [
-                            "/cliente/pontos-fidelidade",
-                            "/acesso/verificacao",
-                        ].includes(locationNow)
-                            ? "disabled-link"
-                            : "nav-link"
-                    }
+        <Link
+            to="/acesso/verificacao"
+            className={
+                ["/cliente/pontos-fidelidade", "/acesso/verificacao"].includes(
+                    locationNow
+                )
+                    ? "disabled-link"
+                    : "nav-link"
+            }
+        >
+            {locationNow === "/" ? (
+                <span
+                    className="text-subtitle text-s"
+                    style={{
+                        position: "relative",
+                        right: isSmall ? "-18px" : "",
+                    }}
                 >
-                    {locationNow === "/" ? (
-                        <span
-                            className="text-subtitle text-s"
-                            style={{
-                                position: "relative",
-                                right: isSmall ? "-18px" : "",
-                            }}
-                        >
-                            Acesso{" "}
-                            <FontAwesomeIcon
-                                icon="lock"
-                                style={{ fontSize: "1.9rem" }}
-                            />
-                        </span>
-                    ) : null}
-                </Link>
-            ) : (
-                <div>
-                    {role === "admin" && (
-                        <Fragment>
-                            <Link
-                                to="/admin/painel-de-controle"
-                                className="text-cyan-light"
-                            >
-                                Admin{" "}
-                                <FontAwesomeIcon
-                                    icon="lock"
-                                    style={{ fontSize: "1.9rem" }}
-                                />
-                            </Link>
-                            {btnLogout()}
-                        </Fragment>
-                    )}
-
-                    {role === "cliente-admin" && ( // logout and actionbtns moved to DashboardClientAdmin.js
-                        <Fragment>
-                            <Link
-                                to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
-                                style={{
-                                    display: !locationNow.includes(
-                                        "/cliente-admin/painel-de-controle"
-                                    )
-                                        ? "block"
-                                        : "none",
-                                }}
-                                className="text-cyan-light"
-                            >
-                                Cli-Admin{" "}
-                                <FontAwesomeIcon
-                                    icon="lock"
-                                    style={{ fontSize: "1.9rem" }}
-                                />
-                            </Link>
-                        </Fragment>
-                    )}
-
-                    {role === "cliente" && (
-                        <Fragment>
-                            <span className="text-cyan-light">Cliente</span>
-                            {btnLogout()}
-                        </Fragment>
-                    )}
-                </div>
-            )}
-        </Fragment>
+                    Acesso{" "}
+                    <FontAwesomeIcon
+                        icon="lock"
+                        style={{ fontSize: "1.9rem" }}
+                    />
+                </span>
+            ) : null}
+        </Link>
     );
 
     const showCallToActionBtn = () =>
@@ -183,8 +105,8 @@ function Navbar({ history, location }) {
                 <RadiusBtn
                     title={isSmall ? "Crie App" : "Crie seu App"}
                     position="fixed"
-                    top={20}
-                    right={20}
+                    top={10}
+                    right={10}
                     zIndex={1000}
                 />
             </Link>
@@ -261,7 +183,7 @@ function Navbar({ history, location }) {
                 <Img
                     style={{
                         position: "absolute",
-                        top: isAuthUser ? 0 : "12px",
+                        top: needClientLogo ? 0 : "8px",
                         left: isSmall ? "10px" : "20px",
                     }}
                     src={locationNow === "/" ? fiddelizeLogo : logoSrc}

@@ -6,8 +6,11 @@
 .access-link-mobile {
     display: block;
     position: absolute;
-    top: 68px;
-    right: -5px;
+    top: 56px;
+    right: 5px;
+    background-color: var(--themePDark);
+    padding: 0px 5px;
+    border-radius: 30px;
 }
 
 @media only screen and (min-width: 500px) {

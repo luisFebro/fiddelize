@@ -93,9 +93,10 @@ export default function AutoCompleteSearch({
     autoHighlight = true,
     offlineKey = "",
     maxHistory = 4,
-    autoFocus,
+    autoFocus = false,
     ignoreEmptyHist = true,
     disable,
+    searchIcon = undefined, // fa icon name
 }) {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
@@ -248,8 +249,12 @@ export default function AutoCompleteSearch({
             closeText="Fechar"
             noOptionsText={
                 didUserStartTyping
-                    ? `${noOptionsText}, ${name}`
-                    : `${name}, no aguardo da sua busca!`
+                    ? name
+                        ? `${noOptionsText}, ${name}`
+                        : `${noOptionsText}`
+                    : name
+                    ? `${name}, no aguardo da sua busca!`
+                    : "No aguardo da sua busca!"
             }
             autoHighlight={autoHighlight}
             includeInputInList
@@ -298,7 +303,17 @@ export default function AutoCompleteSearch({
                         },
                         startAdornment: (
                             <InputAdornment position="start">
-                                <SearchIcon style={styles.icon} />
+                                {searchIcon ? (
+                                    <FontAwesomeIcon
+                                        icon={searchIcon}
+                                        style={{
+                                            ...styles.icon,
+                                            transform: "scale(0.9)",
+                                        }}
+                                    />
+                                ) : (
+                                    <SearchIcon style={styles.icon} />
+                                )}
                             </InputAdornment>
                         ),
                         endAdornment: (

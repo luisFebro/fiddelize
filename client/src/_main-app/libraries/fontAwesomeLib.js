@@ -8,7 +8,7 @@ import { faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons/faAngleDou
 import { faBolt } from "@fortawesome/free-solid-svg-icons/faBolt"; // generate something
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons/faAngleRight";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight"; // continue
 import { faChartPie } from "@fortawesome/free-solid-svg-icons/faChartPie";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck"; // Confirmation btn
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons/faCheckCircle"; // for success
@@ -58,6 +58,7 @@ import { faArrowCircleUp } from "@fortawesome/free-solid-svg-icons/faArrowCircle
 import { faSms } from "@fortawesome/free-solid-svg-icons/faSms";
 import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons/faSortAmountDown";
 import { faSortAmountDownAlt } from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
+import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons/faMapMarkedAlt";
 // services
 import { faFilter } from "@fortawesome/free-solid-svg-icons/faFilter";
 import { faMagic } from "@fortawesome/free-solid-svg-icons/faMagic";
@@ -145,6 +146,7 @@ library.add(
     faSms,
     faSortAmountDown,
     faSortAmountDownAlt,
+    faMapMarkedAlt,
     // home marketing
     faBullhorn,
     faStore,

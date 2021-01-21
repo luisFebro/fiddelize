@@ -7,6 +7,8 @@ import "./_Footer.scss";
 const Footer = ({ location }) => {
     const versionReady = useDelay(3000);
     const locationNow = location.pathname;
+    const isHome = locationNow === "/";
+
     const isBlackList =
         locationNow.includes("baixe-app") || locationNow.includes("/t/app");
 
@@ -73,13 +75,15 @@ const Footer = ({ location }) => {
     return (
         !isBlackList && (
             <footer>
-                <div className="shape">
-                    <img
-                        src="/img/illustrations/home/shapes/landing-footer.svg"
-                        alt="shape 1"
-                    />
-                </div>
-                <div className="container">
+                {isHome && (
+                    <div className="shape">
+                        <img
+                            src="/img/illustrations/home/shapes/landing-footer.svg"
+                            alt="shape 1"
+                        />
+                    </div>
+                )}
+                <div className={`container ${!isHome ? "theme-p-dark" : ""}`}>
                     <div className="row">
                         {showAboutColumn()}
                         {showImportantLinks()}
@@ -89,8 +93,13 @@ const Footer = ({ location }) => {
                 <div className="copyright-slogon">
                     {" "}
                     <div className="position-relative target-download theme-p-dark text-s text-center pt-3">
-                        <strong style={{ fontSize: "24px" }}>Fiddelize</strong>
-                        <span className="font-weight-bold text-small">
+                        <strong
+                            className="d-block"
+                            style={{ fontSize: "24px" }}
+                        >
+                            Fiddelize
+                        </strong>
+                        <span className="d-inline-block mx-3 font-weight-bold text-small">
                             <br />
                             © O próximo nível em pontos de fidelidade. Todos os
                             direitos reservados.

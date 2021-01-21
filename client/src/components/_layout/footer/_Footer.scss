@@ -6,6 +6,10 @@ footer {
     padding-top: 7rem;
     padding-bottom: 0; // prior 0.5rem
 
+    & .container.theme-p-dark {
+        padding-top: 35px;
+    }
+
     & a {
         color: var(--mainWhite);
         text-decoration: underline;
@@ -64,7 +68,7 @@ footer {
     }
 
     & .copyright-slogon div {
-        padding-bottom: 70px;
+        padding-bottom: 85px;
     }
 
     @media (min-width: 1200px) {

@@ -55,6 +55,8 @@ const {
     readAppList,
 } = require("../../controllers/user/account/account");
 
+const { getBizFields } = require("../../controllers/user/biz/dataBizFields");
+
 const { register } = require("../../controllers/auth/auth");
 const { mwValidateRegister } = require("../../controllers/_mw-validation/auth");
 
@@ -116,6 +118,9 @@ router.post(
 );
 router.post("/acc/set-default-access", setDefaultAccess);
 router.get("/acc/app-list", readAppList);
+
+// PRE REGISTER DATA
+router.get("/pre-register/fields-list", getBizFields);
 
 router.param("userId", mwUserId); // n1
 
