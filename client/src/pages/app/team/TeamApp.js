@@ -12,6 +12,7 @@ import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "../../../hooks/useAuthUser";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
+import removeImgFormat from "../../../utils/biz/removeImgFormat";
 // import ReturnBtn from '../../../components/buttons/ReturnBtn';
 
 export const AsyncBellNotifBtn = Load({
@@ -51,6 +52,8 @@ export default function TeamApp({
         selfThemeSColor: sColor,
         selfThemePColor: pColor,
     } = useClientAdmin();
+
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
     useBackColor(
         `var(--themeBackground--${
@@ -107,13 +110,12 @@ export default function TeamApp({
             <div className="mb-3">
                 <img
                     src={
-                        bizLogo === "undefined"
+                        thisBizLogo === "undefined"
                             ? `/img/official-logo-name.png`
-                            : bizLogo
+                            : thisBizLogo
                     }
-                    className="img-fluid"
-                    width={bizLogo === "undefined" && 200}
-                    height={bizLogo === "undefined" && 200}
+                    width={width} // bizLogo === "undefined" && 200
+                    height={height}
                     title={`logo empresa`}
                     alt={`logo empresa`}
                 />

@@ -35,6 +35,7 @@ import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import usePersistentStorage from "../../hooks/storage/usePersistentStorage";
 import Card from "@material-ui/core/Card";
+import removeImgFormat from "../../utils/biz/removeImgFormat";
 // import useCount from "../../hooks/useCount";
 
 const AsyncPWA = Load({
@@ -233,14 +234,17 @@ function ClientMobileApp({ location, history }) {
         (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
     const handleLogoSrc = () => {
         if (needClientLogo) {
-            return setUrl({ ...url, logoBiz: selfBizLogoImg });
+            const { newImg: thisSelfBizLogoImg } = removeImgFormat(
+                selfBizLogoImg
+            );
+            return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
         } else {
             return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
         }
     };
     useEffect(() => {
         handleLogoSrc();
-    }, []);
+    }, [selfBizLogoImg]);
 
     if (isCliMember) {
         // this var is removed when making login

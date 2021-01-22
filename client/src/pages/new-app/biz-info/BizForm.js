@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../../utils/form/kit";
-import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
@@ -37,13 +36,14 @@ const getStyles = () => ({
     },
 });
 
-export default function BizForm() {
+export default function BizForm({ history }) {
     const [data, setData] = useState({
-        clientAdminData: { bizName: "", bizCodeName: "" },
+        bizName: "",
+        bizCodeName: "",
         field: "",
         selectedValue: "", // field in the autoselect
     });
-    const { clientAdminData, field, selectedValue } = data;
+    const { bizCodeName, field, bizName, selectedValue } = data;
 
     useEffect(() => {
         if (selectedValue) {
@@ -57,17 +57,15 @@ export default function BizForm() {
 
     //error options: bizName or field
     const [fieldError, setFieldError] = useState(null);
-    const autocompleteUrl = `/api/user/pre-register/fields-list?limit=20`;
+    const autocompleteUrl = `/api/user/pre-register/fields-list?limit=30`;
 
-    const generateThisBizCode = () => {
-        const thisBizName = clientAdminData.bizName;
-        if (thisBizName) {
-            const finalDashedName = generateBizCodeName(thisBizName);
-            setValObjWithStr(
-                data,
-                "clientAdminData.bizCodeName",
-                finalDashedName
-            );
+    const generateThisBizCode = (ultimateBizName) => {
+        if (ultimateBizName) {
+            const finalDashedName = generateBizCodeName(ultimateBizName);
+            setData({
+                ...data,
+                bizCodeName: finalDashedName,
+            });
         }
     };
 
@@ -81,28 +79,28 @@ export default function BizForm() {
                 Qual o nome do seu negócio?
                 <TextField
                     required
-                    onChange={handleChange(setData, data, true)}
+                    onChange={handleChange(setData, data)}
                     error={fieldError === "bizName" ? true : false}
                     variant="outlined"
                     margin="dense"
-                    name="clientAdminData.bizName"
-                    value={clientAdminData.bizName}
+                    name="bizName"
+                    value={bizName}
                     onKeyPress={(e) => {
                         handleNextField(e, "field1");
-                        setValObjWithStr(
-                            data,
-                            "clientAdminData.bizName",
-                            clientAdminData.bizName.cap()
-                        );
+                        setData({
+                            ...data,
+                            bizName: e.target.value && e.target.value.cap(),
+                        });
                     }}
                     onBlur={(e) => {
                         handleNextField(e, "field1", { event: "onBlur" });
-                        generateThisBizCode();
-                        setValObjWithStr(
-                            data,
-                            "clientAdminData.bizName",
-                            clientAdminData.bizName.cap()
-                        );
+                        const ultimateBizName =
+                            e.target.value && e.target.value.cap();
+                        setData({
+                            ...data,
+                            bizName: ultimateBizName,
+                        });
+                        generateThisBizCode(ultimateBizName);
                     }}
                     autoComplete="off"
                     type="text"
@@ -114,6 +112,7 @@ export default function BizForm() {
                             </InputAdornment>
                         ),
                         style: styles.fieldForm,
+                        id: "value1",
                     }}
                 />
             </div>
@@ -128,13 +127,14 @@ export default function BizForm() {
                     searchIcon="map-marked-alt"
                     noOptionsText="Nada encontrado"
                     maxHistory={7}
+                    inputId="value2"
                 />
             </div>
         </form>
     );
 
     const handleContinue = async () => {
-        if (!clientAdminData.bizName) {
+        if (!bizName) {
             setFieldError("bizName");
             return showSnackbar(
                 dispatch,
@@ -152,8 +152,14 @@ export default function BizForm() {
             );
         }
 
-        const data = [{ doneBizInfo: true }, { field }, { clientAdminData }];
+        const data = [
+            { doneBizInfo: true },
+            { field },
+            { clientAdminData: { bizName, bizCodeName } },
+        ];
         await setMultiVar(data, store.pre_register);
+
+        history.push(`/${bizCodeName}/novo-app/metas`);
     };
 
     const showButtonActions = () => (

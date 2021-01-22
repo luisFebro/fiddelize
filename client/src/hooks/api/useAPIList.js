@@ -28,7 +28,7 @@ const {
     data: list = [],
     loading, ShowLoading,
     error, ShowError,
-} = useAPI({ method: "put", url: readPrizes(userId), params: { cliAdminId: businessId } })
+} = useAPI({ method: "put", url: someMethod(userId), params: { cliAdminId: businessId } })
 <List />
 {loading && <ShowLoading />}
 {error && <ShowError />}

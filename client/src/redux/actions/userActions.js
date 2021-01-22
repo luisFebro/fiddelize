@@ -244,10 +244,10 @@ export const removeField = async (userId, fieldName) => {
 
 // IMAGE HANDLING
 export const uploadImages = async (formData, options) => {
-    const { _id, fileName } = options;
+    const { fileName } = options;
     try {
         return await axios.post(
-            `/api/user/image/upload?id=${_id}&fileName=${fileName}`,
+            `/api/user/image/upload?fileName=${fileName}`,
             formData,
             getHeaderJson
         );

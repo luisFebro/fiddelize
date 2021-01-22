@@ -1,5 +1,6 @@
 import React from "react";
 import { GoldBtn, SilverBtn, BronzeBtn } from "./ProBtns";
+import removeImgFormat from "../../utils/biz/removeImgFormat";
 
 const getStyles = () => ({
     hightlighedName: {
@@ -25,13 +26,16 @@ export default function StartPage({
     adminName,
 }) {
     const styles = getStyles();
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
     const showStartMsg = () => (
         <section>
             <div className="mb-2 container-center">
                 <img
-                    src={bizLogo ? bizLogo : ""}
+                    src={thisBizLogo ? thisBizLogo : ""}
                     className="img-fluid"
+                    width={width}
+                    height={height}
                     title={`logo da ${bizName}`}
                     alt={`logo empresa ${bizName}`}
                 />

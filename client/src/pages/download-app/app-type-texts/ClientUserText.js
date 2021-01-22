@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import removeImgFormat from "../../../utils/biz/removeImgFormat";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -12,6 +13,8 @@ export default function ClientUserText({
     ScrollArrow,
     showMainScrollArray,
 }) {
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
+
     // Update this with Picture Comp and lazy loading effect: fadeInBottomLeft
     const showAppShowCase = () => (
         <div
@@ -40,13 +43,12 @@ export default function ClientUserText({
                 <div className="my-5 container-center">
                     <img
                         src={
-                            bizLogo === "undefined"
+                            thisBizLogo === "undefined"
                                 ? `/img/official-logo-name.png`
-                                : bizLogo
+                                : thisBizLogo
                         }
-                        className="img-fluid"
-                        width={bizLogo === "undefined" && 200}
-                        height={bizLogo === "undefined" && 200}
+                        width={width} // bizLogo === "undefined" && 200
+                        height={height}
                         title={`logo da ${bizName}`}
                         alt={`logo empresa ${bizName}`}
                     />

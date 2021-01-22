@@ -2,6 +2,7 @@ const addTransformToImgUrl = require("./algorithms/addTransformToImgUrl");
 const cloudinary = require("cloudinary").v2;
 const { msgG } = require("../_msgs/globalMsgs");
 const { msg } = require("../_msgs/user");
+const User = require("../../models/user/User");
 
 // IMAGES UPLOAD
 cloudinary.config({
@@ -15,10 +16,7 @@ exports.uploadImages = async (req, res) => {
     // n6 - multiple images promise.
     const fileRoot = req.files;
     const imagePath = fileRoot.file.path; // n7 e.g data
-    const _id = req.query.id;
     const fileName = req.query.fileName;
-
-    const { role } = await req.getAccount(_id);
 
     const options = {
         public_id: fileName,
@@ -35,30 +33,27 @@ exports.uploadImages = async (req, res) => {
         .upload(imagePath, options)
         .then((fileResult) => {
             const generatedUrl = addTransformToImgUrl(fileResult.secure_url);
-            User(role)
-                .findByIdAndUpdate(_id, {
-                    $set: { "clientAdminData.selfBizLogoImg": generatedUrl },
-                })
-                .exec((err) => {
-                    if (err)
-                        return res
-                            .status(500)
-                            .json(msgG("error.systemError", err));
-                    res.json(generatedUrl);
-                });
+            res.json(generatedUrl);
         })
         .catch((err) => res.status(500).json(msgG("error.systemError", err)));
 };
 
 exports.updateImages = async (req, res) => {
-    const _id = req.query.id;
-    const { lastUrl, paramArray, customParam } = req.body;
-
-    const { role } = await req.getAccount(_id);
+    // LESSON: watch out for falsy condition when using query.using
+    // it is ALWAYS true because it is JSON parsed.
+    const { id } = req.query;
+    const { lastUrl, paramArray } = req.body; // , customParam
+    const role = "cliente-admin";
 
     const updatedUrl = addTransformToImgUrl(lastUrl, paramArray);
+
+    const gotId = id !== "undefined";
+    if (!gotId) {
+        return res.json(updatedUrl);
+    }
+
     User(role)
-        .findByIdAndUpdate(_id, {
+        .findByIdAndUpdate(id, {
             $set: { "clientAdminData.selfBizLogoImg": updatedUrl },
         })
         .exec((err) => {

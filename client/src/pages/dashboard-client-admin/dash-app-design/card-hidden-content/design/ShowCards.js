@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import OptionCard from './OptionCard';
-import { useClientAdmin } from '../../../../../hooks/useRoleData';
-import { useAuthUser } from '../../../../../hooks/useAuthUser';
+import React, { useEffect, useState } from "react";
+import OptionCard from "./OptionCard";
+import { useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useAuthUser } from "../../../../../hooks/useAuthUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import './style.scss';
-import { translateColorToPtBr } from '../../../../../global-data/uiColors';
-import useImg, { Img } from '../../../../../hooks/media/useImg';
+import "./style.scss";
+import { translateColorToPtBr } from "../../../../../global-data/uiColors";
+import useImg, { Img } from "../../../../../hooks/media/useImg";
+import removeImgFormat from "../../../../../utils/biz/removeImgFormat";
 
 export default function ShowCards({ setOpenComp }) {
     const {
@@ -22,35 +23,51 @@ export default function ShowCards({ setOpenComp }) {
         logoFid: "",
     });
 
-    const logoBiz = useImg(url.logoBiz, { trigger: url.logoBiz, coll: "logos", key: "app_biz_logo" })
-    const logoFid = useImg(url.logoFid, { trigger: url.logoFid, coll: "logos", key: "app_fiddelize_logo" })
+    const logoBiz = useImg(url.logoBiz, {
+        trigger: url.logoBiz,
+        coll: "logos",
+        key: "app_biz_logo",
+    });
+    const logoFid = useImg(url.logoFid, {
+        trigger: url.logoFid,
+        coll: "logos",
+        key: "app_fiddelize_logo",
+    });
     const logoSrc = logoBiz ? logoBiz : logoFid;
 
     const needClientLogo = selfBizLogoImg || isAuthUser;
 
     const handleLogoSrc = () => {
-        if(needClientLogo) {
-            return setUrl({ ...url, logoBiz: selfBizLogoImg });
+        if (needClientLogo) {
+            const { newImg: thisSelfBizLogoImg } = removeImgFormat(
+                selfBizLogoImg
+            );
+            return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
         } else {
             return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
         }
-    }
+    };
 
     useEffect(() => {
         handleLogoSrc();
-    }, [needClientLogo])
+    }, [needClientLogo]);
 
     const logoContent = () => {
-        const isSquared = selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const isSquared =
+            selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
 
-        return(
+        return (
             <div className="container-center">
                 {selfBizLogoImg ? (
                     <Img
                         src={logoSrc}
                         alt="logo negócio"
                         className={`animated zoomIn slow shadow-elevation`}
-                        style={{position: 'relative', margin: '15px 0', boxShadow: '0 30px 40px 8px rgba(0, 0, 0, 0.35)'}}
+                        style={{
+                            position: "relative",
+                            margin: "15px 0",
+                            boxShadow: "0 30px 40px 8px rgba(0, 0, 0, 0.35)",
+                        }}
                         width={isSquared ? 100 : 190}
                         height={isSquared ? 100 : 85}
                     />
@@ -61,25 +78,38 @@ export default function ShowCards({ setOpenComp }) {
                 )}
             </div>
         );
-    }
+    };
 
     const colorContent = React.useCallback(() => {
         const colorP = selfThemePColor;
         const colorS = selfThemeSColor;
-        const colorBack = selfThemeBackColor || 'default';
+        const colorBack = selfThemeBackColor || "default";
 
-        const translatedColorP = translateColorToPtBr(colorP === "default" ? "purple" : colorP);
-        const translatedColorS = translateColorToPtBr(colorS === "default" ? "defaultS" : colorS);
-        const translatedColorBack = translateColorToPtBr(colorBack === "default" ? "purple" : colorBack);
+        const translatedColorP = translateColorToPtBr(
+            colorP === "default" ? "purple" : colorP
+        );
+        const translatedColorS = translateColorToPtBr(
+            colorS === "default" ? "defaultS" : colorS
+        );
+        const translatedColorBack = translateColorToPtBr(
+            colorBack === "default" ? "purple" : colorBack
+        );
 
-        return(
+        return (
             <section className="color--root">
                 <div>
                     <div className="color-content">
                         <p className="color-text">• Cor Principal: </p>
                         <section className="color-desc">
-                            <div className="color-circle" style={{backgroundColor: `var(--themeP--${colorP}` }}></div>
-                            <span className="text-center color-title text-purple text-small">{translatedColorP}</span>
+                            <div
+                                className="color-circle"
+                                style={{
+                                    backgroundColor: `var(--themeP--${colorP}`,
+                                }}
+                            ></div>
+                            <span className="text-center color-title text-purple text-small">
+                                {translatedColorP}
+                            </span>
                         </section>
                     </div>
                 </div>
@@ -87,8 +117,15 @@ export default function ShowCards({ setOpenComp }) {
                     <div className="color-content">
                         <p className="color-text">• Cor Secundária: </p>
                         <section className="color-desc">
-                            <div className="color-circle" style={{backgroundColor: `var(--themeS--${colorS}` }}></div>
-                            <span className="text-center color-title text-purple text-small">{translatedColorS}</span>
+                            <div
+                                className="color-circle"
+                                style={{
+                                    backgroundColor: `var(--themeS--${colorS}`,
+                                }}
+                            ></div>
+                            <span className="text-center color-title text-purple text-small">
+                                {translatedColorS}
+                            </span>
                         </section>
                     </div>
                 </div>
@@ -96,8 +133,18 @@ export default function ShowCards({ setOpenComp }) {
                     <div className="color-content">
                         <p className="color-text">• Cor de Fundo: </p>
                         <section className="color-desc">
-                            <div className="color-circle shadow-elevation" style={{backgroundColor: colorBack === "white" ? 'var(--mainWhite)' : `var(--themeBackground--${colorBack}` }}></div>
-                            <span className="text-center color-title text-purple text-small">{translatedColorBack}</span>
+                            <div
+                                className="color-circle shadow-elevation"
+                                style={{
+                                    backgroundColor:
+                                        colorBack === "white"
+                                            ? "var(--mainWhite)"
+                                            : `var(--themeBackground--${colorBack}`,
+                                }}
+                            ></div>
+                            <span className="text-center color-title text-purple text-small">
+                                {translatedColorBack}
+                            </span>
                         </section>
                     </div>
                 </div>
@@ -107,13 +154,13 @@ export default function ShowCards({ setOpenComp }) {
 
     const iconContent = React.useCallback(() => {
         const icon = selfMilestoneIcon || "star";
-        return(
+        return (
             <section className="container-center icon--root">
-                <div className="icon--circle" style={{backgroundColor: 'var(--themeP)'}}></div>
-                <FontAwesomeIcon
-                    icon={icon}
-                    className="icon--selected-one"
-                />
+                <div
+                    className="icon--circle"
+                    style={{ backgroundColor: "var(--themeP)" }}
+                ></div>
+                <FontAwesomeIcon icon={icon} className="icon--selected-one" />
             </section>
         );
     }, []);

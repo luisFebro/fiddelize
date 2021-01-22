@@ -2,19 +2,44 @@ import React, { useState } from "react";
 import AppPreview from "./AppPreview";
 import AppPickersHandler from "./pickers/AppPickersHandler";
 import getQueryByName from "../../../utils/string/getQueryByName";
-import getFirstName from "../../../utils/string/getFirstName";
 import useDelay from "../../../hooks/useDelay";
 import Spinner from "../../../components/loadingIndicators/Spinner";
+import useData, { sto } from "../../../hooks/useData";
 // import useCount from '../../../hooks/useCount';
 import "./style.scss";
 import lStorage from "../../../utils/storage/lStorage";
+import { getVar, setMultiVar, store } from "../../../hooks/storage/useVar";
+import useScrollUp from "../../../hooks/scroll/useScrollUp";
 
 lStorage("removeItem", {
     collection: "clientAdmin",
     property: "selfMilestoneIcon",
 });
 
-function SelfServicePage({ location, match }) {
+const setLocalData = ({ type = "theming", colors, iconsData }) => {
+    (async () => {
+        const priorAdminData = await getVar(
+            "clientAdminData",
+            store.pre_register
+        );
+
+        let newObj = { ...priorAdminData, ...colors };
+
+        let stepObj = { doneSSTheming: true };
+        if (type !== "theming") {
+            newObj = { ...priorAdminData, ...iconsData };
+            stepObj = { doneSSRatingIcon: true };
+        }
+
+        const newAdminData = newObj;
+        await setMultiVar(
+            [{ clientAdminData: newAdminData }, stepObj],
+            store.pre_register
+        );
+    })();
+};
+
+function SelfServicePage({ location }) {
     //useCount();// RT = 3
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
     const [theme, setTheme] = useState({
@@ -26,28 +51,27 @@ function SelfServicePage({ location, match }) {
 
     const isPageReady = useDelay(2000);
 
-    const bizId = match.params.bizId;
-    const bizCodeName = match.params.bizCodeName; // for image naming
-    const getBizName = getQueryByName("negocio", location.search); // this is optional for when it is in testing mode.
-    const bizName = getBizName && getBizName.cap();
+    useScrollUp();
+
+    const [clientAdminData] = useData(["clientAdminData"], sto.re.pre_register);
+    const { bizName, bizCodeName } = clientAdminData;
     // API
-    let clientName = getQueryByName("nome-cliente", location.search).cap();
+    const clientName = getQueryByName("nome-cliente", location.search);
     let rewardScore = getQueryByName("ponto-premio", location.search);
     let rewardDesc = getQueryByName("premio-desc", location.search);
     let currScore = getQueryByName("ponto-atual", location.search);
-    const isTest = location.search.includes("teste=1");
     if (typeof rewardScore === "object") {
         rewardScore = 500;
     } // if it is null
     if (typeof currScore === "object") {
         currScore = 100;
     }
-    clientName = getFirstName(clientName);
     // END API
 
     const showTitle = () => (
         <div className="text-center text-white my-4">
             <p className="text-title">Novo App</p>
+            <p className="text-white text-normal mx-3 mb-5">Hora de criar!</p>
         </div>
     );
 
@@ -59,18 +83,17 @@ function SelfServicePage({ location, match }) {
             {showSpinner()}
             {showTitle()}
             <div className="main-self-service">
-                <section className="picker-area">
+                <section className="picker-area mx-3">
                     <p className="title text-subtitle text-center text-white">
-                        Personalize o App dos clientes
+                        App dos clientes da {!bizName ? "..." : bizName}
                     </p>
                     <AppPickersHandler
-                        bizId={bizId}
                         bizCodeName={bizCodeName}
                         bizName={bizName}
                         clientName={clientName}
-                        isTest={isTest}
                         setLogoUrlPreview={setLogoUrlPreview}
                         theme={theme}
+                        setLocalData={setLocalData}
                         setTheme={setTheme}
                         rewardScore={rewardScore}
                         rewardDesc={rewardDesc}

@@ -102,7 +102,11 @@ const BizPlanListSchema = new Schema(bizPlanListData, { _id: true });
 // END SCHEMES
 
 const clientAdminData = {
-    bizName: String, // required: true,comment out cuz every sign up will request and throw error
+    bizName: {
+        // required: true,comment out cuz every sign up will request and throw error
+        type: String,
+        trim: true,
+    },
     bizCodeName: String,
     bizCnpj: String, // NOT IMPLEMENTED YET
     bizWhatsapp: String,
@@ -143,7 +147,10 @@ const clientAdminData = {
 
     rewardScore: Number, // prior maxScore
     rewardDeadline: { type: Number, default: 30 },
-    mainReward: String,
+    mainReward: {
+        type: String,
+        trim: true,
+    },
     arePrizesVisible: Boolean,
     rewardList: [RewardListSchema],
 

@@ -1,7 +1,7 @@
 import React from "react";
 import BizForm from "./BizForm";
 
-export default function BizInfo() {
+export default function BizInfo({ history }) {
     const showTitle = () => (
         <div className="text-center text-white my-4">
             <h1 className="text-title">Novo App</h1>
@@ -15,7 +15,7 @@ export default function BizInfo() {
         <section>
             {showTitle()}
             <div style={{ marginBottom: 150 }}>
-                <BizForm />
+                <BizForm history={history} />
             </div>
         </section>
     );

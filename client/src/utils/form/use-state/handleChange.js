@@ -1,26 +1,27 @@
-import setValObjWithStr from '../../objects/setValObjWithStr';
+import setValObjWithStr from "../../objects/setValObjWithStr";
 // change state of a React Hook
 // the component need to have "name" explicitally assigned with the target key in the state.
-const handleChange = (setObj, obj, isNestedObj = false) => e => {
+const handleChange = (setObj, obj, isNestedObj = false) => (e) => {
     const { name, value } = e.target; // n1
 
-    if(isNestedObj) {
+    // this isNestedObj is preventing the first character to be deleted. it freezes the value.
+    if (isNestedObj) {
         setValObjWithStr(obj, name, value);
         const newObj = obj;
         setObj(Object.assign({}, obj, newObj));
     } else {
-        if(!obj) {
-            setObj(data => {
-                if(typeof data === "string") {
+        if (!obj) {
+            setObj((data) => {
+                if (typeof data === "string") {
                     return value;
                 }
-                return ({ ...data, [name]: value })
-            })
+                return { ...data, [name]: value };
+            });
         } else {
             setObj({ ...obj, [name]: value });
         }
     }
-}
+};
 
 export default handleChange;
 

@@ -1,8 +1,10 @@
 import React from "react";
 import "./_CtaSection.scss";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import { withRouter } from "react-router-dom";
 
-export default function CtaSection() {
+export default withRouter(CtaSection);
+function CtaSection({ history }) {
     return (
         <section className="cta-section--root">
             <div className="container">
@@ -15,7 +17,9 @@ export default function CtaSection() {
                             title="Fazer primeiro app"
                             size="large"
                             backgroundColor="var(--themeSDark)"
-                            onClick={null}
+                            onClick={() =>
+                                history.push("/novo-app/info-negocio")
+                            }
                         />
                     </div>
                 </div>

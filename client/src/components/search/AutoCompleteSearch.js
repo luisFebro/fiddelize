@@ -97,6 +97,7 @@ export default function AutoCompleteSearch({
     ignoreEmptyHist = true,
     disable,
     searchIcon = undefined, // fa icon name
+    inputId = undefined, // id for working with focus
 }) {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
@@ -295,6 +296,7 @@ export default function AutoCompleteSearch({
                     variant="outlined"
                     InputProps={{
                         ...params.InputProps,
+                        id: inputId,
                         type: "search",
                         style: {
                             fontSize: "1em",

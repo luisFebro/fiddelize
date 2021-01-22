@@ -9,11 +9,11 @@ import ButtonMulti, {
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
-import { updateUser } from "../../../redux/actions/userActions";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { withRouter } from "react-router-dom";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
+import { setMultiVar, getVar, store } from "../../../hooks/storage/useVar";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -33,132 +33,104 @@ const useStyles = makeStyles({
     },
 });
 
-function GoalForm({ history, bizId, bizName, bizCodeName, name }) {
+const styles = {
+    form: {
+        maxWidth: "350px",
+        background: "var(--themeSDark)",
+        borderRadius: "10px",
+        padding: "25px",
+    },
+    fieldFormValue: {
+        backgroundColor: "var(--mainWhite)",
+        color: "var(--themeP)",
+        fontSize: "2.1em",
+        padding: "0px 10px",
+        maxWidth: "190px",
+        zIndex: 2000,
+    },
+    formIcons: {
+        top: -20,
+        right: 35,
+        zIndex: 3000,
+        //animationIterationCount: 2,
+    },
+    giftBagIcon: {
+        right: -30,
+        top: -20,
+        zIndex: 3000,
+    },
+    helperFromField: {
+        color: "white",
+        fontFamily: "Poppins, sans-serif",
+        fontSize: isSmall ? ".8em" : ".6em",
+        textShadow: "1px 1px 3px black",
+    },
+};
+
+function GoalForm({ history, bizCodeName, bizName }) {
     const [error, setError] = useState("");
-    const [showThisField, setShowThisField] = useState(false);
     const [data, setData] = useState({
-        clientAdminData: { rewardScore: undefined, mainReward: "" },
+        rewardScore: undefined,
+        mainReward: "",
     });
+    const { rewardScore, mainReward } = data;
 
     useAnimateElem(".goal-form--comp", {
         animaIn: "bounceInUp",
         speed: "normal",
     });
 
-    const { clientAdminData } = data;
-
     const dispatch = useStoreDispatch();
 
     const classes = useStyles();
 
-    const styles = {
-        form: {
-            maxWidth: "350px",
-            background: "var(--themeSDark)",
-            borderRadius: "10px",
-            padding: "25px",
-        },
-        fieldFormValue: {
-            backgroundColor: "var(--mainWhite)",
-            color: "var(--themeP)",
-            fontSize: "2.1em",
-            padding: "0px 10px",
-            maxWidth: "190px",
-            zIndex: 2000,
-        },
-        formIcons: {
-            top: "-15%",
-            transform: "translateX(190%)",
-            zIndex: 3000,
-            //animationIterationCount: 2,
-        },
-        giftBagIcon: {
-            top: "-35%",
-            transform: "translateX(370%)",
-            zIndex: 3000,
-        },
-        helperFromField: {
-            color: "white",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: isSmall ? ".8em" : ".6em",
-        },
-    };
+    const saveData = async () => {
+        const score = rewardScore;
+        const prize = mainReward;
 
-    const handleNextFieldFunc = (type, e) =>
-        handleNextField(type, setShowThisField, {
-            nextField: "field2",
-            delay: 1500,
-        })(e);
-
-    const handleShowCurrField = (field) => {
-        const field2 =
-            (showThisField === "field2" &&
-                clientAdminData.rewardScore &&
-                clientAdminData.rewardScore.length >= 1) ||
-            showThisField === "field3" ||
-            showThisField === "field4" ||
-            showThisField === "otherFields";
-
-        switch (field) {
-            case "field2":
-                return field2;
-
-            default:
-                console.log("something went wrong with handleShowCurrField...");
-        }
-    };
-
-    const sendDataBackend = () => {
-        const score = clientAdminData.rewardScore;
-        const prize = clientAdminData.mainReward;
         if (!score) {
             setError("rewardScore");
-            showSnackbar(
+            return showSnackbar(
                 dispatch,
                 "Você precisa inserir o ponto de prêmio",
                 "error"
             );
-            return;
         }
         if (!prize) {
             setError("mainReward");
-            showSnackbar(
+            return showSnackbar(
                 dispatch,
                 "Você precisa inserir uma descrição do prêmio",
                 "error"
             );
-            return;
         }
-        const dataToSend = {
-            "clientAdminData.rewardScore": score,
-            "clientAdminData.mainReward": prize,
-        };
 
-        updateUser(dispatch, dataToSend, bizId).then((res) => {
-            if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
-            setTimeout(
-                () =>
-                    history.push(
-                        `/${bizCodeName}/novo-app/self-service/${bizId}?nome-cliente=${name}&negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}`
-                    ),
-                1500
-            );
-        });
+        const priorData = await getVar("clientAdminData", store.pre_register);
+        const newData = {
+            ...priorData,
+            rewardScore: Number(rewardScore),
+            mainReward,
+        };
+        await setMultiVar(
+            [{ clientAdminData: newData }, { doneRewardPlanner: true }],
+            store.pre_register
+        );
+
+        history.push(
+            `/${bizCodeName}/novo-app/self-service?nome-cliente=Ana&negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}`
+        );
     };
 
     const showButtonAction = () => (
         <div className="container-center" style={{ marginTop: "20px" }}>
             <ButtonMulti
-                title="Prosseguir"
-                onClick={() => {
-                    sendDataBackend();
-                }}
+                title="Continuar"
+                onClick={saveData}
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeP)"
                 backColorOnHover="var(--themeP)"
                 iconFontAwesome={
-                    <FontAwesomeIcon icon="paper-plane" style={faStyle} />
+                    <FontAwesomeIcon icon="arrow-right" style={faStyle} />
                 }
                 textTransform="uppercase"
             />
@@ -172,11 +144,13 @@ function GoalForm({ history, bizId, bizName, bizCodeName, name }) {
                 onBlur={() => setError("")}
                 style={styles.form}
             >
-                <p className="text-title text-nowrap text-center m-1 p-1">
+                <p className="text-title text-shadow text-nowrap text-center m-1 p-1">
                     Meta do App
                 </p>
                 <div className="position-relative margin-auto-90 text-normal font-weight-bold">
-                    <p>Qual é o ponto de prêmio?</p>
+                    <p className="text-shadow">
+                        Quanto é o seu ponto de prêmio?
+                    </p>
                     <div className="position-relative">
                         <TextField
                             placeholder="0"
@@ -192,18 +166,22 @@ function GoalForm({ history, bizId, bizName, bizCodeName, name }) {
                             }}
                             type="number"
                             helperText={
-                                "Lembre-se: é o ponto/valor que o cliente precisa alcançar em compras"
+                                "Lembre-se: é o ponto/R$ que o cliente precisa alcançar em compras"
                             }
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
                             }}
-                            name="clientAdminData.rewardScore"
-                            value={clientAdminData.rewardScore}
-                            onChange={handleChange(setData, data, true)}
-                            onBlur={(e) => handleNextFieldFunc("onBlur", e)}
+                            name="rewardScore"
+                            value={rewardScore}
+                            onChange={handleChange(setData, data)}
                             onKeyPress={(e) => {
-                                handleNextFieldFunc("onKeyPress", e);
+                                handleNextField(e, "field1");
                             }}
+                            onBlur={(e) =>
+                                handleNextField(e, "field1", {
+                                    event: "onBlur",
+                                })
+                            }
                             variant="outlined"
                             error={error === "rewardScore" ? true : false}
                             autoComplete="off"
@@ -213,7 +191,7 @@ function GoalForm({ history, bizId, bizName, bizCodeName, name }) {
                             className="position-absolute"
                         >
                             <img
-                                src={`${CLIENT_URL}/img/icons/coins.svg`}
+                                src={`${CLIENT_URL}/img/icons/new-app/reward-planner/points.svg`}
                                 className="svg-elevation"
                                 width={70}
                                 height="auto"
@@ -223,14 +201,14 @@ function GoalForm({ history, bizId, bizName, bizCodeName, name }) {
                     </div>
                 </div>
                 <div
-                    className={`animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold ${
-                        handleShowCurrField("field2") ? "d-block" : "d-none"
-                    }`}
+                    id="field2"
+                    className={`d-none animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}
                 >
-                    <p>Qual é a descrição do prêmio principal?</p>
+                    <p className="text-shadow">
+                        Qual é a descrição do prêmio simbólico?
+                    </p>
                     <div className="position-relative">
                         <TextField
-                            id="field2"
                             multiline
                             rows={2}
                             placeholder="digite aqui"
@@ -243,22 +221,24 @@ function GoalForm({ history, bizId, bizName, bizCodeName, name }) {
                                 classes: {
                                     input: classes.outlinedInput2,
                                 },
+                                id: "value2",
                             }}
-                            name="clientAdminData.mainReward"
-                            value={clientAdminData.mainReward}
+                            name="mainReward"
+                            value={mainReward}
                             helperText={
-                                "Lembre-se: um serviço, produto, benefício ou desconto. Você vai poder modificar depois no seu painel de controle 👍"
+                                "Lembre-se: um serviço, produto, benefício ou desconto."
                             }
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
                             }}
-                            onChange={handleChange(setData, data, true)}
+                            onChange={handleChange(setData, data)}
                             onBlur={() =>
-                                setValObjWithStr(
-                                    data,
-                                    "clientAdminData.mainReward",
-                                    clientAdminData.mainReward.cap()
-                                )
+                                setData({
+                                    ...data,
+                                    mainReward:
+                                        mainReward &&
+                                        mainReward.toLowerCase().trim(),
+                                })
                             }
                             variant="outlined"
                             error={error === "mainReward" ? true : false}
@@ -278,7 +258,13 @@ function GoalForm({ history, bizId, bizName, bizCodeName, name }) {
                         </div>
                     </div>
                 </div>
-                {showButtonAction()}
+                {mainReward && (
+                    <p className="animated fadeInUp delay-2s mt-3 text-shadow text-white text-small">
+                        Nota: Se precisar, você pode mudar esses dados depois no
+                        seu painel de controle na sessão de app. 👍
+                    </p>
+                )}
+                {rewardScore && showButtonAction()}
             </form>
         </div>
     );

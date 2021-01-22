@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from "../../../../../hooks/useRoleData";
 import usePlayAudio from "../../../../../hooks/media/usePlayAudio";
 import useData from "../../../../../hooks/useData";
+import removeImgFormat from "../../../../../utils/biz/removeImgFormat";
 
 export default function SuccessMsg({
     needDark = false,
@@ -28,20 +29,20 @@ export default function SuccessMsg({
     });
 
     const { selfBizLogoImg: bizLogo } = useClientAdmin();
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
     return (
         <section className="full-height">
             <div className="my-5 container-center">
                 <img
                     src={
-                        bizLogo === "undefined"
+                        thisBizLogo === "undefined"
                             ? `/img/official-logo-name.png`
-                            : bizLogo
+                            : thisBizLogo
                     }
-                    className="img-fluid"
-                    width={bizLogo === "undefined" && 200}
-                    height={bizLogo === "undefined" && 200}
-                    title={`logo logo empresa`}
+                    width={width} // prior: bizLogo === "undefined" && 200
+                    height={height}
+                    title={`logo empresa`}
                     alt={`logo empresa`}
                 />
             </div>

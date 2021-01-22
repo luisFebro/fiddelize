@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { getMultiVar, store as st } from "./storage/useVar";
 import repeat from "../utils/arrays/repeat";
 
+export const sto = {
+    re: st,
+};
+
 export default function useData(data, options = {}) {
     const { trigger = true, dots = true, storeName = "user" } = options;
 

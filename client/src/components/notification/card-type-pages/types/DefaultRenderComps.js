@@ -8,7 +8,7 @@ import Img from "../../../../components/Img";
 import applyTextStyle from "../../../../utils/string/applyTextStyle";
 import { readUser } from "../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
-
+import removeImgFormat from "../../../../utils/biz/removeImgFormat";
 export const textStyle = "text-purple text-left text-normal mx-3";
 
 export const ShowTitle = ({ text }) => (
@@ -24,7 +24,9 @@ export const ShowIllustration = ({
     mainImg,
     bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png",
 }) => {
-    const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
+    const { isSquared, width, height, newImg: thisBizLogo } = removeImgFormat(
+        bizLogo
+    );
 
     return (
         <div className="container-center position-relative my-5">
@@ -46,11 +48,11 @@ export const ShowIllustration = ({
                 >
                     <img
                         className={`animated delay-1s ${
-                            bizLogo ? "shadow-elevation" : ""
+                            thisBizLogo ? "shadow-elevation" : ""
                         }`}
                         height="auto"
                         width={!isSquared ? 140 : 90}
-                        src={bizLogo || "/img/error.png"}
+                        src={thisBizLogo || "/img/error.png"}
                         alt="logo empresa"
                     />
                 </div>

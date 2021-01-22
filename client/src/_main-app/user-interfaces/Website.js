@@ -86,12 +86,12 @@ function Website({ location, history }) {
                     component={AsyncBizInfo}
                 />
                 <Route
-                    path="/:bizCodeName/novo-app"
+                    path="/:bizCodeName/novo-app/metas"
                     exact
                     component={AsyncRewardPlanner}
                 />
                 <Route
-                    path="/:bizCodeName/novo-app/self-service/:bizId"
+                    path="/:bizCodeName/novo-app/self-service"
                     exact
                     component={AsyncSelfService}
                 />

@@ -1,15 +1,16 @@
-import React, { Fragment } from 'react';
-import { useClientAdmin } from '../../hooks/useRoleData';
-import ClientUserAppContent from './content/ClientUserAppContent';
-import { withRouter } from 'react-router-dom';
-import getQueryByName from '../../utils/string/getQueryByName';
-import useCount from '../../hooks/useCount';
-import Img  from '../../components/Img';
+import React, { Fragment } from "react";
+import { useClientAdmin } from "../../hooks/useRoleData";
+import ClientUserAppContent from "./content/ClientUserAppContent";
+import { withRouter } from "react-router-dom";
+import getQueryByName from "../../utils/string/getQueryByName";
+import Img from "../../components/Img";
+import removeImgFormat from "../../utils/biz/removeImgFormat";
+// import useCount from '../../hooks/useCount';
 
 const isSmall = window.Helper.isSmallScreen();
 
 function ClientAppPreview({ location }) {
-    useCount("ClientAppPreview.js"); // RT =1 (ok)
+    // useCount("ClientAppPreview.js"); // RT =1 (ok)
 
     const runName = getQueryByName("runName", location.search);
     const clientName = getQueryByName("clientName", location.search);
@@ -21,7 +22,7 @@ function ClientAppPreview({ location }) {
     let currScore = getQueryByName("currScore", location.search);
 
     const useProfile = () => ({
-        role: 'cliente',
+        role: "cliente",
         name: `${clientName} (T)`,
     });
 
@@ -30,13 +31,22 @@ function ClientAppPreview({ location }) {
         lastScore: 20,
     });
 
-    const logoSrc = logoUrlPreview ? logoUrlPreview : "/img/official-logo-name.png";
-    const isSquared = logoSrc && logoSrc.includes("h_100,w_100");
+    const { newImg: formattedImg, isSquared } = removeImgFormat(logoUrlPreview);
+    const logoSrc = logoUrlPreview
+        ? formattedImg
+        : "/img/official-logo-name.png";
+
     const showLogo = () => (
         <div className="container-center">
             <Img
-                className={`${logoUrlPreview ? "app_biz_logo" : null} animated zoomIn slow`}
-                style={{position: 'relative', margin: '15px 0', left: isSmall ? '5px' : '20px'}}
+                className={`${
+                    logoUrlPreview ? "app_biz_logo" : null
+                } animated zoomIn slow`}
+                style={{
+                    position: "relative",
+                    margin: "15px 0",
+                    left: isSmall ? "5px" : "20px",
+                }}
                 src={logoSrc}
                 alt="Logomarca Principal"
                 width={isSquared ? 100 : 190}
@@ -63,12 +73,16 @@ function ClientAppPreview({ location }) {
     );
 
     return (
-        <div style={{
-            backgroundColor: `var(--themeBackground--${colorBack || colorP})`,
-            overflowX: 'hidden',
-            overflowY: 'auto',
-            cursor: 'pointer',
-        }}>
+        <div
+            style={{
+                backgroundColor: `var(--themeBackground--${
+                    colorBack || colorP
+                })`,
+                overflowX: "hidden",
+                overflowY: "auto",
+                cursor: "pointer",
+            }}
+        >
             {mainContent()}
         </div>
     );

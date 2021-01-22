@@ -3,6 +3,7 @@ import React, { Fragment, useEffect } from "react";
 import "./_ThreeDFlipCard.scss";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import { formatSlashDMY } from "../../../utils/dates/dateFns";
+import removeImgFormat from "../../../utils/biz/removeImgFormat";
 
 function getTransformValue(v1, v2, value) {
     return (((v1 / v2) * value - value / 2) * 1).toFixed(1);
@@ -50,6 +51,7 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
         selfThemePColor: colorP,
     } = useClientAdmin();
 
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
     const cardColor = `linear-gradient(145deg, var(--themePLight--${colorP}), var(--themePDark--${colorP}))`;
 
     useEffect(() => {
@@ -100,7 +102,9 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
                 >
                     <img
                         className="animated fadeInUp delay-1s"
-                        src={bizLogo}
+                        src={thisBizLogo}
+                        width={width}
+                        height={height}
                         alt="logo negócio"
                     />
                     <div className="ml-5">

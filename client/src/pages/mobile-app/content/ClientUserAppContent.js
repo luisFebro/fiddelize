@@ -192,8 +192,8 @@ export default function ClientUserAppContent({
     // useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const { data: lastPrizeId } = useAPI({
         url: readPrizes(_id),
-        params: { lastPrizeId: true },
-        trigger: !userIdLoading,
+        params: { lastPrizeId: true, thisRole: "cliente" },
+        trigger: !needAppForPreview && !userIdLoading,
     });
     const challNotifOptions = React.useCallback(
         () => ({
@@ -210,7 +210,7 @@ export default function ClientUserAppContent({
 
     const needMissingMsg = useDidDateExpire({
         userId: _id,
-        trigger: !userIdLoading,
+        trigger: !needAppForPreview && !userIdLoading,
     });
     const autoSMSMissingPurchase = getAutoSMSObj({
         needMissingMsg,

@@ -11,7 +11,7 @@ export default function useDidDateExpire({
 
     const { data: lastPrizeDate, loading } = useAPI({
         url: readPrizes(userId),
-        params: { lastPrizeDate: true },
+        params: { lastPrizeDate: true, thisRole: "cliente" },
         trigger,
     });
 

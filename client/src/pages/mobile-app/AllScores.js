@@ -1,6 +1,6 @@
-import React from 'react';
-import { convertDotToComma } from '../../utils/numbers/convertDotComma';
-import PurchaseHistoryBtn from './history-purchase-btn/PurchaseHistoryBtn';
+import React from "react";
+import { convertDotToComma } from "../../utils/numbers/convertDotComma";
+import PurchaseHistoryBtn from "./history-purchase-btn/PurchaseHistoryBtn";
 
 const AllScores = ({
     currScoreRef,
@@ -16,7 +16,6 @@ const AllScores = ({
     totalPurchasePrize,
     userName,
 }) => {
-
     const getModalData = () => ({
         cliUserName: userName,
         cliUserId: userId,
@@ -27,14 +26,14 @@ const AllScores = ({
 
     lastScore = convertDotToComma(lastScore);
     const modalData = getModalData();
-    const selectedTxtStyle = selectTxtStyle(colorBack, {bold: true});
+    const selectedTxtStyle = selectTxtStyle(colorBack, { bold: true });
 
-    return(
+    return (
         <section className="text-subtitle my-3 text-white text-center">
             <span className={`text-title ${selectedTxtStyle}`}>
                 Fidelidômetro:
             </span>
-            <br/>
+            <br />
             <div className="d-flex justify-content-center">
                 <p
                     className={`text-title ${selectedTxtStyle}`}
@@ -42,18 +41,22 @@ const AllScores = ({
                 >
                     ...
                 </p>
-                <span className={`ml-2 ${selectedTxtStyle}`}>
-                    Pontos
-                </span>
+                <span className={`ml-2 ${selectedTxtStyle}`}>Pontos</span>
             </div>
             {/*LAST SCORE*/}
-            {currScore === 0 || !currScore || !showPercentage
-             ? null
-             : (
+            {currScore === 0 || !currScore || !showPercentage ? null : (
                 <section className="text-normal position-relative animated slideInLeft slow">
                     <section>
-                        <div className="all-scores--ellipse">
-                            <div className="body" style={{ left: needAppForPreview && '160px'}}></div>
+                        <div
+                            className="all-scores--ellipse"
+                            style={{
+                                left: needAppForPreview ? "160px" : "200px",
+                            }}
+                        >
+                            <div
+                                className="body"
+                                style={{ left: needAppForPreview && "160px" }}
+                            ></div>
                             <PurchaseHistoryBtn
                                 bottom={-15}
                                 right={-5}
@@ -65,22 +68,24 @@ const AllScores = ({
                     <div
                         style={{
                             zIndex: 10,
-                            lineHeight: '1.2em',
-                            color: 'var(--themeP)',
-                            position: 'absolute',
-                            top: '-18px',
-                            left: needAppForPreview ? '170px' : '200px'}}
+                            lineHeight: "1.2em",
+                            color: "var(--themeP)",
+                            position: "absolute",
+                            top: "-18px",
+                            left: needAppForPreview ? "160px" : "200px",
+                        }}
                         className="text-em-0-7 text-nowrap font-weight-bold"
                     >
-                        Sua<br />última pontuação:<br />
-                        <span className="text-em-1-3">
-                            {lastScore}
-                        </span>
+                        Sua
+                        <br />
+                        última pontuação:
+                        <br />
+                        <span className="text-em-1-3">{lastScore}</span>
                     </div>
                 </section>
             )}
         </section>
     );
-}
+};
 
 export default AllScores;

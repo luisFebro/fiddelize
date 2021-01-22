@@ -4,6 +4,7 @@ import useDelay from "../../../../hooks/useDelay";
 import TypesHandler from "./types-handler/TypesHandler";
 import { Link, withRouter } from "react-router-dom";
 import useAuth from "../../../../hooks/useAuthUser";
+import removeImgFormat from "../../../../utils/biz/removeImgFormat";
 
 const getStyles = () => ({
     clipPathBack: {
@@ -19,7 +20,9 @@ export default withRouter(RegistersPanel);
 
 function RegistersPanel({ history, isNewMember = false }) {
     const { selfBizLogoImg, bizCodeName } = useClientAdmin();
-
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(
+        selfBizLogoImg
+    );
     useAuth({ history, roles: "cliente-membro, cliente-admin" });
 
     const styles = getStyles();
@@ -30,7 +33,12 @@ function RegistersPanel({ history, isNewMember = false }) {
         <Fragment>
             <div style={styles.clipPathBack}></div>
             <div className="position-relative container-center-col my-3">
-                <img src={selfBizLogoImg} alt="logo" />
+                <img
+                    src={thisBizLogo}
+                    width={width}
+                    height={height}
+                    alt="logo"
+                />
                 <p className="mt-3 text-shadow animated fadeInUp text-title text-white text-center">
                     {isNewMember ? "Novo Membro Equipe" : "Novo Cliente"}
                 </p>

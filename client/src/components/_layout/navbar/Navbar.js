@@ -11,6 +11,7 @@ import { useClientAdmin } from "../../../hooks/useRoleData";
 import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import useImg, { Img } from "../../../hooks/media/useImg";
+import removeImgFormat from "../../../utils/biz/removeImgFormat";
 // import useCount from '../../../hooks/useCount';
 
 const gotToken = localStorage.getItem("token");
@@ -92,7 +93,7 @@ function Navbar({ history, location }) {
     const showCallToActionBtn = () =>
         locationNow === "/" && (
             <Link
-                to="/empresa-teste/novo-app/self-service/5ed0316700c6a10017f8c190?teste=1&nome-cliente=visitante&ponto-premio=500&ponto-atual=100"
+                to="/novo-app/info-negocio"
                 className={
                     [
                         "/cliente/pontos-fidelidade",
@@ -141,9 +142,12 @@ function Navbar({ history, location }) {
     const fiddelizeLogo = `/img/official-logo-name.png`;
     const handleLogoSrc = () => {
         if (needClientLogo) {
-            return setUrl({ ...url, logoBiz: selfBizLogoImg });
+            const { newImg: thisSelfBizLogoImg } = removeImgFormat(
+                selfBizLogoImg
+            );
+            return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
         } else {
-            return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
+            return setUrl({ ...url, logoFid: fiddelizeLogo });
         }
     };
 

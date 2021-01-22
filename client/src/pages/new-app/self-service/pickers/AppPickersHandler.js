@@ -1,75 +1,77 @@
-import React, { useState } from 'react';
-import ButtonMulti, {faStyle} from '../../../../components/buttons/material-ui/ButtonMulti';
+import React, { useState } from "react";
+import ButtonMulti, {
+    faStyle,
+} from "../../../../components/buttons/material-ui/ButtonMulti";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import '../style.scss';
-import { setRun } from '../../../../redux/actions/globalActions';
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import { updateUser } from '../../../../redux/actions/userActions';
-import { useRunComp } from '../../../../hooks/useRunComp';
-// import useCount from '../../../../hooks/useCount';
+import "../style.scss";
+import { useRunComp } from "../../../../hooks/useRunComp";
+import getId from "../../../../utils/getId";
 //pickers
-import PickLogo from './PickLogo';
-import AsyncPickRatingIcon from './AsyncPickRatingIcon';
-import AsyncPickTheming from './AsyncPickTheming';
-
+import PickLogo from "./PickLogo";
+import AsyncPickRatingIcon from "./AsyncPickRatingIcon";
+import AsyncPickTheming from "./AsyncPickTheming";
 // end pickers
+// import useCount from '../../../../hooks/useCount';
+const id = getId();
 
 export default function AppPickersHandler({
     bizId,
     bizCodeName,
     bizName,
     clientName,
-    isTest,
     setLogoUrlPreview,
     theme,
     setTheme,
+    setLocalData,
     rewardDesc,
-    rewardScore, }) {
+    rewardScore,
+}) {
     const { runName } = useRunComp();
-    const [step, setStep] = useState({ currNumber: 1, nextTask: '(cores)' });
+    const [step, setStep] = useState({ currNumber: 1, nextTask: "(cores)" });
     const [nextDisabled, setNextDisabled] = useState(true);
 
     // useCount(); // RT 3 (OK)
 
     const { currNumber, nextTask } = step;
-    const dispatch = useStoreDispatch();
 
-    const handleNextStep = currNumber => {
-        switch(currNumber) {
+    const handleNextStep = (currNumber) => {
+        switch (currNumber) {
             case 1:
-                setStep({ currNumber: 2, nextTask: '(ícones)' });
+                setStep({ currNumber: 2, nextTask: "(ícones)" });
                 setNextDisabled(true);
                 break;
             case 2:
-                const objToSend1 = {
-                    "clientAdminData.selfThemePColor": theme.colorP,
-                    "clientAdminData.selfThemeSColor": theme.colorS,
-                    "clientAdminData.selfThemeBackColor": theme.colorBack ? theme.colorBack : theme.colorP,
-                }
-                showSnackbar(dispatch, "Salvando preferências de cores e continuando...");
-                updateUser(dispatch, objToSend1, bizId)
-                .then(res => {
-                    if(res.status !== 200) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão", 'error')
-                    setStep({ currNumber: 3, nextTask: '' });
-                })
+                const colors = {
+                    selfThemePColor: theme.colorP,
+                    selfThemeSColor: theme.colorS,
+                    selfThemeBackColor: theme.colorBack
+                        ? theme.colorBack
+                        : theme.colorP,
+                };
+
+                setLocalData({
+                    type: "theming",
+                    colors,
+                });
+                setStep({ currNumber: 3, nextTask: "" });
                 break;
             case 3:
-                const objToSend2 = {
-                    "clientAdminData.selfMilestoneIcon": runName || "star",
-                    "clientAdminData.rewardList": [{ id: bizId, icon: runName, rewardScore: rewardScore, rewardDesc: rewardDesc || "Sem Descrição" }]
-                }
-                showSnackbar(dispatch, "Salvo. Finalizando a criação dos apps...");
-                updateUser(dispatch, objToSend2, bizId)
-                .then(res => {
-                    if(res.status !== 200) return showSnackbar(dispatch, "Algo deu errado. Verifique sua conexão", 'error')
-                    if(isTest) {
-                        showSnackbar(dispatch, `Modo Teste: ${clientName}, você concluíu o app do self-service. Redirecionando para o ínicio.`, "warning", 8000);
-                        setTimeout(() => window.location.href = "/", 7900);
-                    } else {
-                        window.location.href = `/baixe-app/${clientName}?negocio=${bizName}&id=${bizId}&admin=1`;
-                    }
-                })
+                const iconsData = {
+                    selfMilestoneIcon: runName || "star",
+                    rewardList: [
+                        {
+                            id,
+                            icon: runName,
+                            rewardScore: rewardScore,
+                            rewardDesc: rewardDesc || "Sem Descrição",
+                        },
+                    ],
+                };
+                setLocalData({
+                    type: "icon",
+                    iconsData,
+                });
+                // window.location.href = `/baixe-app/${clientName}?negocio=${bizName}&id=${bizId}&admin=1`;
                 break;
             default:
                 console.log("Something went wrong with handleNextStep");
@@ -88,8 +90,10 @@ export default function AppPickersHandler({
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"
-                iconFontAwesome={<FontAwesomeIcon icon="angle-right" style={faStyle}/>}
-                textTransform='uppercase'
+                iconFontAwesome={
+                    <FontAwesomeIcon icon="angle-right" style={faStyle} />
+                }
+                textTransform="uppercase"
             />
         </div>
     );
@@ -111,11 +115,11 @@ export default function AppPickersHandler({
                     setNextDisabled={setNextDisabled}
                     theme={theme}
                     setTheme={setTheme}
+                    setLocalData={setLocalData}
                 />
             )}
             {currNumber === 3 && (
                 <AsyncPickRatingIcon
-                    isTest={isTest}
                     step={currNumber}
                     setNextDisabled={setNextDisabled}
                 />
