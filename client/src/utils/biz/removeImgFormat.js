@@ -10,8 +10,8 @@ export default function removeImgFormat(imgUrl) {
     let height = 85;
 
     if (isSquared) {
-        width = 130;
-        height = 130;
+        width = 110;
+        height = 110;
     }
 
     return {
