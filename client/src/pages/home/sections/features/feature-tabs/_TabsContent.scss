@@ -203,6 +203,8 @@
 .tab-content {
     & .main-img-container {
         position: relative;
+        max-width: 313.33px;
+        margin: 0 auto;
     }
 
     & .main-img-container .play-button {
