@@ -3,7 +3,7 @@ import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import OfflineBoltIcon from "@material-ui/icons/OfflineBolt";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
-import InstantAccount from "../instant-accout/InstantAccount";
+import InstantApp from "../instant-app/InstantApp";
 
 const iconStyle = {
     fontSize: "140px",
@@ -50,11 +50,11 @@ export default function DetectedApp({
                         <p className="mt-3 animated fadeIn text-normal font-weight-bold text-left">
                             Você pode acessar e adicionar novos apps pelo seu
                             CPF sem precisar baixar a plataforma da Fiddelize de
-                            novo.
+                            novo cadastrando via App Instantâneo.
                         </p>
                         <div className="container-center-col mt-5">
                             <ButtonFab
-                                title="Nova conta instantânea"
+                                title="Novo App Instantâneo"
                                 color={
                                     txtPColor &&
                                     txtPColor.includes("text-white")
@@ -122,7 +122,7 @@ export default function DetectedApp({
                     Procure pelo seu CPF e adicione seu novo app de {bizName}{" "}
                     sem precisar preencher novo cadastro.
                 </p>
-                <InstantAccount
+                <InstantApp
                     payload={instantAccountPayload}
                     txtPColor={txtPColor}
                     pColor={pColor}

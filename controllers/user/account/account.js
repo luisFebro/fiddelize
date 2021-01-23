@@ -166,7 +166,7 @@ exports.findAllUserAccounts = async ({ cpf, userId, role }) => {
 
 // directly from download page, users who already have downloaded Fiddelize App
 // can register informing with CPF
-exports.mwCreateInstantAccount = async (req, res, next) => {
+exports.mwCreateInstantApp = async (req, res, next) => {
     const { role, cpf } = req.body;
 
     const isCliAdmin = role === "cliente-admin";

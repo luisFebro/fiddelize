@@ -43,7 +43,7 @@ export default function ClientUserText({
                 <div className="my-5 container-center">
                     <img
                         src={
-                            thisBizLogo === "undefined"
+                            thisBizLogo === undefined
                                 ? `/img/official-logo-name.png`
                                 : thisBizLogo
                         }

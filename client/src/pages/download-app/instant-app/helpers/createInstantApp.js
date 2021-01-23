@@ -1,8 +1,8 @@
 import getAPI, {
-    createInstantAccount as createInstant,
+    createInstantApp as createInstant,
 } from "../../../../utils/promises/getAPI";
 
-export default async function createInstantAccount({ body }) {
+export default async function createInstantApp({ body }) {
     return await getAPI({
         method: "post",
         url: createInstant(),

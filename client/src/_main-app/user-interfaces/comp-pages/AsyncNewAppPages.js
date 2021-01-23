@@ -21,3 +21,10 @@ export const AsyncRewardPlanner = Load({
             "../../../pages/new-app/reward-planner/RewardPlanner" /* webpackChunkName: "reward-planner-page-lazy" */
         ),
 });
+
+export const AsyncAdminRegister = Load({
+    loader: () =>
+        import(
+            "../../../pages/new-app/admin-register/AdminRegister" /* webpackChunkName: "admin-register-page-lazy" */
+        ),
+});

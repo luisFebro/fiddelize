@@ -4,7 +4,6 @@ import ScrollArrow from "../../keyframes/built/scroll-arrow/ScrollArrow";
 import "./_Home.scss";
 import FeaturesSection from "./sections/features/FeaturesSection";
 import CtaSection from "./sections/CtaSection.js";
-// import VAsyncRegisterClientAdmin from "../../components/auth/VAsyncRegisterClientAdmin";
 // import CompLoader from "../../components/CompLoader";
 // import AppShowCase from "./AppShowCase";
 // import { Link } from 'react-router-dom';
@@ -63,13 +62,6 @@ export default function Home() {
     </div>
 </section>
 <AppShowCase setData={setViewPhone} />
-<CompLoader
-    comp={<VAsyncRegisterClientAdmin />}
-    hide={viewPhone}
-    timeout={1000}
-    width={200}
-    marginY={30}
-/>
 
  const showSlogon = () => (
         <section className="mt-5 d-flex flex-column flex-md-row justify-content-center align-items-center">

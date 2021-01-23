@@ -90,7 +90,7 @@ export const setVar = (obj, options = {}) => {
 // objArray like [{ key1: value1 }, { key2: value2}]
 export const setMultiVar = async (objArray, options = {}) => {
     const { storeName } = options;
-    if (objArray && !objArray.length) return;
+    if (!objArray || (objArray && !objArray.length)) return;
 
     const promises = objArray.map((obj) => {
         const [key] = Object.keys(obj);
@@ -136,6 +136,13 @@ export const removeMultiVar = async (strArray, options = {}) => {
     });
 
     return await Promise.all(promises);
+};
+
+export const removeCollection = async (storeName) => {
+    return await localforage.dropInstance({
+        name: `fiddelize-${storeName}`,
+        // storeName: storeName, // if this is specified, only the store inside collection is removed.
+    });
 };
 
 function getStrVersion(str) {

@@ -117,7 +117,7 @@ function GoalForm({ history, bizCodeName, bizName }) {
         );
 
         history.push(
-            `/${bizCodeName}/novo-app/self-service?nome-cliente=Ana&negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}`
+            `/${bizCodeName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}&nome-cliente=Ana`
         );
     };
 

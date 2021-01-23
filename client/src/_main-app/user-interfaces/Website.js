@@ -24,6 +24,7 @@ import {
     AsyncBizInfo,
     AsyncRewardPlanner,
     AsyncSelfService,
+    AsyncAdminRegister,
 } from "./comp-pages/AsyncNewAppPages";
 import PlansPage from "../../pages/plans-page/PlansPage";
 import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
@@ -94,6 +95,11 @@ function Website({ location, history }) {
                     path="/:bizCodeName/novo-app/self-service"
                     exact
                     component={AsyncSelfService}
+                />
+                <Route
+                    path="/:bizCodeName/novo-app/cadastro-admin"
+                    exact
+                    component={AsyncAdminRegister}
                 />
                 <Route
                     path="/:bizCodeName/nova-senha-verificacao"

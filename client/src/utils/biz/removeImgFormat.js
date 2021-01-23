@@ -1,6 +1,6 @@
 // this remove format and improves img quality
 export default function removeImgFormat(imgUrl) {
-    if (!imgUrl) return {};
+    if (!imgUrl) return { width: 190, height: 85 }; // for adjusting to fiddelize default logo.
 
     const newImg = imgUrl && imgUrl.replace(/\/h_100,w_100|\/h_85,w_190/gi, "");
 

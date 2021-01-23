@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../style.scss";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import getId from "../../../../utils/getId";
+import { getMultiVar, store } from "../../../../hooks/storage/useVar";
 //pickers
 import PickLogo from "./PickLogo";
 import AsyncPickRatingIcon from "./AsyncPickRatingIcon";
@@ -25,16 +26,27 @@ export default function AppPickersHandler({
     setLocalData,
     rewardDesc,
     rewardScore,
+    history,
 }) {
     const { runName } = useRunComp();
     const [step, setStep] = useState({ currNumber: 1, nextTask: "(cores)" });
     const [nextDisabled, setNextDisabled] = useState(true);
 
     // useCount(); // RT 3 (OK)
+    useEffect(() => {
+        (async () => {
+            const [doneSSLogo, doneSSTheming] = await getMultiVar(
+                ["doneSSLogo", "doneSSTheming"],
+                store.pre_register
+            );
+            if (doneSSLogo) handleNextStep(1);
+            if (doneSSTheming) handleNextStep(2);
+        })();
+    }, []);
 
     const { currNumber, nextTask } = step;
 
-    const handleNextStep = (currNumber) => {
+    function handleNextStep(currNumber) {
         switch (currNumber) {
             case 1:
                 setStep({ currNumber: 2, nextTask: "(ícones)" });
@@ -54,6 +66,7 @@ export default function AppPickersHandler({
                     colors,
                 });
                 setStep({ currNumber: 3, nextTask: "" });
+                setNextDisabled(false);
                 break;
             case 3:
                 const iconsData = {
@@ -71,12 +84,12 @@ export default function AppPickersHandler({
                     type: "icon",
                     iconsData,
                 });
-                // window.location.href = `/baixe-app/${clientName}?negocio=${bizName}&id=${bizId}&admin=1`;
+                history.push(`/${bizCodeName}/novo-app/cadastro-admin`);
                 break;
             default:
                 console.log("Something went wrong with handleNextStep");
         }
-    };
+    }
 
     const showStepIndicatorAndBtnAction = () => (
         <div className="step-indicator-btn">

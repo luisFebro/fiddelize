@@ -7,7 +7,6 @@ import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { withRouter } from 'react-router-dom';
 // import ReCaptchaCheckbox from "../ReCaptcha";
@@ -37,7 +36,10 @@ import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import ReactGA from "react-ga";
 import { useClientAdmin } from "../../hooks/useRoleData";
-import generateBizCodeName from "../../pages/download-app/instant-accout/helpers/generateBizCodeName";
+import generateBizCodeName from "../../pages/download-app/instant-app/helpers/generateBizCodeName";
+import useData, { sto } from "../../hooks/useData";
+import { removeCollection } from "../../hooks/storage/useVar";
+import getFirstName from "../../utils/string/getFirstName";
 
 const filter = getFilterDate();
 
@@ -70,7 +72,7 @@ const getStyles = () => ({
     },
 });
 
-function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
+function RegisterClientAdmin({ logo }) {
     const [switchNumToText, setSwitchNumToText] = useState(false); //n1
 
     const dateNow = new Date();
@@ -82,7 +84,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const [data, setData] = useState({
         role: "cliente-admin",
         name: "",
-        clientAdminData: { bizName: "", bizCodeName: "", bizWhatsapp: "" },
+        clientAdminData: { bizWhatsapp: "" },
         email: "",
         phone: "",
         birthday: "",
@@ -105,16 +107,30 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
 
     const cpfValue = autoCpfMaskBr(cpf);
 
-    const { bizInfo } = useStoreState((state) => ({
-        bizInfo: state.adminReducer.cases.businessInfo,
-    }));
+    const [preRegisterCliAdminData] = useData(
+        ["clientAdminData"],
+        sto.re.pre_register
+    );
 
-    const { bizName, bizWebsite, bizInstagram } = bizInfo;
+    useEffect(() => {
+        const isReady = preRegisterCliAdminData !== "...";
+        if (isReady) {
+            setTimeout(() => {
+                // this timeout is used because the data is not set otherwise. The reason is unknown.
+                setData((prev) => ({
+                    ...prev,
+                    clientAdminData: {
+                        ...data.clientAdminData,
+                        ...preRegisterCliAdminData,
+                    },
+                }));
+            }, 4000);
+        }
+    }, [preRegisterCliAdminData]);
 
     // detecting field errors
     const [fieldError, setFieldError] = useState(null);
     const errorName = fieldError && fieldError.name;
-    const errorBizName = fieldError && fieldError.name;
     const errorEmail = fieldError && fieldError.email;
     const errorGender = fieldError && fieldError.gender;
     const errorBirthday = fieldError && fieldError.birthday;
@@ -167,6 +183,12 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
         setFieldError(null);
     };
 
+    // const { bizInfo } = useStoreState((state) => ({
+    //     bizInfo: state.adminReducer.cases.businessInfo,
+    // }));
+
+    // const { bizName, bizWebsite, bizInstagram } = bizInfo;
+
     // const sendEmail = (userId) => {
     //     const dataEmail = {
     //         name,
@@ -183,7 +205,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     //     });
     // };
 
-    const registerThisUser = (e) => {
+    const registerThisUser = async (e) => {
         clientAdminData.bizWhatsapp = phone;
         const newUser = {
             ...data,
@@ -195,71 +217,65 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
             "warning",
             7000
         );
-        registerEmail(dispatch, newUser).then((res) => {
-            if (res.status !== 200) {
-                showSnackbar(dispatch, res.data.msg, "error", 6000);
-                // detect field errors
-                const thisModalFields = Object.keys(data);
-                const foundObjError = detectErrorField(
-                    res.data.msg,
-                    thisModalFields
-                );
-                setFieldError(foundObjError);
-                return;
-            }
+        const res = await registerEmail(dispatch, newUser);
 
-            const userId = res.data.authUserId;
-
-            ReactGA.event({
-                // n1
-                label: "Form",
-                category: "cliAdmin",
-                action: "Created an account",
-                transport: "beacon",
-            });
-
-            const removalOptions = {
-                collection: "onceChecked",
-            };
-            lStorage("removeItems", removalOptions);
-
-            // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-            setTimeout(
-                () =>
-                    (window.location.href = `/${clientAdminData.bizCodeName}/novo-app?id=${res.data.authUserId}&bizName=${clientAdminData.bizName}&name=${name}`),
-                500
+        if (res.status !== 200) {
+            showSnackbar(
+                dispatch,
+                res.data.error || res.data.msg,
+                "error",
+                6000
             );
+            // detect field errors
+            const thisModalFields = Object.keys(data);
+            const foundObjError = detectErrorField(
+                res.data.msg,
+                thisModalFields
+            );
+            setFieldError(foundObjError);
+            return;
+        }
 
-            // sendEmail(userId);
-            clearData();
+        await removeCollection("pre_register");
+
+        const userId = res.data.authUserId;
+
+        ReactGA.event({
+            // n1
+            label: "Form",
+            category: "cliAdmin",
+            action: "Created an account",
+            transport: "beacon",
         });
-    };
 
-    const showLoginForm = (needLoginBtn) =>
-        needLoginBtn && (
-            <div
-                className="text-white position-absolute text-small font-weight-bold p-2"
-                style={{ top: isSmall ? "105px" : "130px", left: "50px" }}
-            >
-                <p style={{ whiteSpace: "nowrap" }}>
-                    Já é cadastrado?{" "}
-                    <RadiusBtn
-                        title="Faça login"
-                        onClick={() => setLoginOrRegister("login")}
-                    />
-                </p>
-            </div>
+        const removalOptions = {
+            collection: "onceChecked",
+        };
+        lStorage("removeItems", removalOptions);
+
+        // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
+        setTimeout(
+            () =>
+                (window.location.href = `/baixe-app/${getFirstName(
+                    name
+                )}?negocio=${
+                    clientAdminData.bizName
+                }&admin=1&logo=${logo}&bc=default&pc=default&sc=default`),
+            500
         );
+
+        // sendEmail(userId);
+        clearData();
+    };
 
     const showTitle = () => (
         <div className="position-relative">
             <Title
-                title="Comece Aqui!"
-                subTitle="Cadastre-se."
+                title="Uma conta"
+                subTitle="Acesse todos seus apps"
                 color="var(--mainWhite)"
                 backgroundColor="var(--themePDark)"
             />
-            {showLoginForm(needLoginBtn)}
         </div>
     );
 
@@ -307,52 +323,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     }}
                 />
             </div>
-            <div
-                id="field2"
-                className={`d-none animated slideInLeft fast mt-3`}
-            >
-                Qual é o nome do
-                <br />
-                seu projeto/empresa?
-                <TextField
-                    required
-                    onChange={handleChange(setData, data, true)}
-                    error={errorBizName ? true : false}
-                    variant="outlined"
-                    margin="dense"
-                    name="clientAdminData.bizName"
-                    value={clientAdminData.bizName}
-                    onKeyPress={(e) => {
-                        handleNextField(e, "field2");
-                        setValObjWithStr(
-                            data,
-                            "clientAdminData.bizName",
-                            clientAdminData.bizName.cap()
-                        );
-                    }}
-                    onBlur={(e) => {
-                        handleNextField(e, "field2", { event: "onBlur" });
-                        setValObjWithStr(
-                            data,
-                            "clientAdminData.bizName",
-                            clientAdminData.bizName.cap()
-                        );
-                    }}
-                    autoComplete="off"
-                    type="text"
-                    fullWidth
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <AccountCircle />
-                            </InputAdornment>
-                        ),
-                        style: styles.fieldForm,
-                        id: "value2",
-                    }}
-                />
-            </div>
-            <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field2" className={`d-none animated fadeInUp fast mt-3`}>
                 Ok, informe seu CPF
                 <TextField
                     required
@@ -363,7 +334,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     variant="outlined"
                     autoOk={false}
                     onKeyPress={(e) => {
-                        handleNextField(e, "field3", {
+                        handleNextField(e, "field2", {
                             callback: () => {
                                 setData({ ...data, cpf: autoCpfMaskBr(cpf) });
                                 setSwitchNumToText(true);
@@ -371,7 +342,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         });
                     }}
                     onBlur={(e) => {
-                        handleNextField(e, "field3", {
+                        handleNextField(e, "field2", {
                             event: "onBlur",
                             callback: () => {
                                 setData({ ...data, cpf: autoCpfMaskBr(cpf) });
@@ -382,8 +353,6 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                     value={cpfValue}
                     type={switchNumToText ? "text" : "tel"}
                     autoComplete="off"
-                    helperText="Digite apenas números."
-                    FormHelperTextProps={{ style: styles.helperFromField }}
                     fullWidth
                     InputProps={{
                         startAdornment: (
@@ -392,11 +361,11 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                             </InputAdornment>
                         ),
                         style: styles.fieldForm,
-                        id: "value3",
+                        id: "value2",
                     }}
                 />
             </div>
-            <div id="field4" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
                 {name ? (
                     <span>{name.cap()}, quando é o seu aniversário?</span>
                 ) : (
@@ -422,7 +391,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         value={selectedDate}
                         onChange={(e) => {
                             handleDateChange(e);
-                            handleNextField(e, "field4", {
+                            handleNextField(e, "field3", {
                                 event: "onChange",
                                 ignoreValue: true,
                             });
@@ -434,12 +403,12 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                                 </InputAdornment>
                             ),
                             style: styles.fieldForm,
-                            id: "value4",
+                            id: "value3",
                         }}
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section id="field5" className={`d-none animated slideInUp fast`}>
+            <section id="field4" className={`d-none animated slideInUp fast`}>
                 <p className="text-left my-2">Para finalizar seu cadastro...</p>
                 <div className="mt-3">
                     Email
@@ -449,7 +418,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         onChange={handleChange(setData, data)}
                         onKeyPress={(e) => handleNextField(e, "field5")}
                         onBlur={(e) =>
-                            handleNextField(e, "field5", { event: "onBlur" })
+                            handleNextField(e, "field4", { event: "onBlur" })
                         }
                         error={errorEmail ? true : false}
                         name="email"
@@ -465,11 +434,11 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                                 </InputAdornment>
                             ),
                             style: styles.fieldForm,
-                            id: "value5",
+                            id: "value4",
                         }}
                     />
                 </div>
-                <div id="field6" className="mt-3">
+                <div id="field5" className="mt-3">
                     Contato/Whatsapp
                     <TextField
                         required
@@ -477,7 +446,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                         onChange={handleChange(setData)}
                         error={errorPhone ? true : false}
                         onKeyPress={(e) => {
-                            handleNextField(e, "field6", {
+                            handleNextField(e, "field5", {
                                 callback: () =>
                                     setData({
                                         ...data,
@@ -486,7 +455,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                             });
                         }}
                         onBlur={(e) => {
-                            handleNextField(e, "field6", {
+                            handleNextField(e, "field5", {
                                 event: "onBlur",
                                 callback: () =>
                                     setData({
@@ -510,13 +479,13 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
                                 </InputAdornment>
                             ),
                             style: styles.fieldForm,
-                            id: "value6",
+                            id: "value5",
                         }}
                     />
                 </div>
-                <div id="field7" className="my-3">
+                <div id="field6" className="my-3">
                     <Select
-                        id="value7"
+                        id="value6"
                         margin="dense"
                         labelId="gender"
                         onChange={handleChange(setData, data)}
@@ -550,9 +519,7 @@ function RegisterClientAdmin({ setLoginOrRegister, needLoginBtn }) {
     const showButtonActions = () => (
         <div className="container-center">
             <ButtonMulti
-                onClick={() => {
-                    registerThisUser();
-                }}
+                onClick={registerThisUser}
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"

@@ -27,13 +27,23 @@ export default function getQueries({ location }) {
     const [isBizTeam, isClientAdmin, isTeamMember, isClientUser] = roleQueries;
     const isValidRoleType =
         isBizTeam || isClientAdmin || isTeamMember || isClientUser;
-    const isLinkInvalid = !bizName || !bizId || !isValidRoleType;
 
     const whichRole = getWhichRole(roleQueries);
 
-    let primaryAgent; // for bizTeam only
+    const isLinkInvalid =
+        whichRole !== "cliente-admin" &&
+        (!bizName || !bizId || !isValidRoleType);
+
+    let primaryAgent;
     if (whichRole === "nucleo-equipe") {
         primaryAgent = getQueryByName("primary", location.search);
+    }
+
+    let needSelfServBackBtn;
+    if (whichRole === "cliente-admin") {
+        needSelfServBackBtn = Boolean(
+            getQueryByName("isFromSelfServ", location.search)
+        );
     }
     return [
         ...mainQueries,
@@ -42,5 +52,6 @@ export default function getQueries({ location }) {
         isLinkInvalid,
         whichRole,
         primaryAgent,
+        needSelfServBackBtn,
     ];
 }

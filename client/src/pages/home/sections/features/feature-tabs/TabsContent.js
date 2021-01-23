@@ -1,7 +1,8 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import "./_TabsContent.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
+import Spinner from "../../../../../components/loadingIndicators/Spinner";
 
 export default function TabsContent({ tabsData, currTab }) {
     return (
@@ -23,7 +24,17 @@ export default function TabsContent({ tabsData, currTab }) {
 
 function ShowTab({ tabData, id, currTab }) {
     const [play, setPlay] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const dNone = clsx({ "d-none": play });
+
+    useEffect(() => {
+        if (play) {
+            setLoading(true);
+            setTimeout(() => {
+                setLoading(false);
+            }, 2000);
+        }
+    }, [play]);
 
     const playGif = () => {
         setPlay(true);
@@ -56,16 +67,21 @@ function ShowTab({ tabData, id, currTab }) {
     );
 
     const showImagePanel = () => (
-        <div className="main-img-container col-lg-4">
+        <section className="main-img-container col-lg-4">
             <img
-                className="main-img img-fluid"
+                className={`main-img img-fluid ${isLoading ? "loading" : ""}`}
                 src={play ? tabData.mainGif : tabData.mainImg}
                 alt="aplicativo admin"
             />
             <span className={"play-button" + dNone} onClick={playGif}>
                 <span></span>
             </span>
-        </div>
+            <div className={`loader ${isLoading ? "loading" : ""}`}>
+                <div>
+                    <Spinner size="large" />
+                </div>
+            </div>
+        </section>
     );
 
     const showIconCardsPanelRight = () => (

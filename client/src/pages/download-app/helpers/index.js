@@ -18,11 +18,16 @@ export const handleRoleStorage = ({
     primaryAgent,
 }) => {
     // n1
-    const isCliUser = whichRole === "cliente";
-    const isCliMember = whichRole === "cliente-membro";
     const isBizTeam = whichRole === "nucleo-equipe";
+    const isCliAdmin = whichRole === "cliente-admin";
+    const isCliMember = whichRole === "cliente-membro";
+    const isCliUser = whichRole === "cliente";
 
     let userPayload;
+
+    if (isCliAdmin) {
+        userPayload = [{ lastRegisterBizId: bizId }];
+    }
 
     if (isCliUser) {
         userPayload = [

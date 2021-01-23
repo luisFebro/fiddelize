@@ -411,8 +411,6 @@ function ASyncRegisterCliUser({
                     value={cpfValue}
                     type={switchNumToText ? "text" : "tel"}
                     autoComplete="off"
-                    helperText="Digite apenas números."
-                    FormHelperTextProps={{ style: styles.helperFromField }}
                     fullWidth
                     InputProps={{
                         startAdornment: (

@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
+import removeImgFormat from "../../../utils/biz/removeImgFormat";
 
 export default function ClientAdminText({
     isFromAdminPanel,
@@ -8,8 +9,27 @@ export default function ClientAdminText({
     ScrollArrow,
     styles,
     bizName,
+    bizLogo,
     showMainScrollArray,
 }) {
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
+
+    const showLogo = () => (
+        <div className="my-5 container-center">
+            <img
+                src={
+                    thisBizLogo === undefined
+                        ? `/img/official-logo-name.png`
+                        : thisBizLogo
+                }
+                width={width}
+                height={height}
+                title={`logo da ${bizName}`}
+                alt={`logo empresa ${bizName}`}
+            />
+        </div>
+    );
+
     return (
         <section className="text-center text-title mt-5">
             {isFromAdminPanel ? (
@@ -29,9 +49,15 @@ export default function ClientAdminText({
                 </Fragment>
             ) : (
                 <Fragment>
-                    <p className="text-hero">
+                    {showLogo()}
+                    <p className="text-title">
                         O App da {bizName && bizName.cap()} ficou pronto!
-                        <i style={styles.icon}>🎉</i>
+                        <i
+                            className="pl-3"
+                            style={{ ...styles.margin, fontSize: "2rem" }}
+                        >
+                            🎉
+                        </i>
                     </p>
                     <div className="pt-1 pb-5">
                         <ScrollArrow margin={50} />

@@ -12,6 +12,7 @@ import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import useImg, { Img } from "../../../hooks/media/useImg";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
+import { getNewAppPage } from "../../../pages/new-app/helpers/handleRedirectPages";
 // import useCount from '../../../hooks/useCount';
 
 const gotToken = localStorage.getItem("token");
@@ -90,28 +91,27 @@ function Navbar({ history, location }) {
         </Link>
     );
 
-    const showCallToActionBtn = () =>
-        locationNow === "/" && (
-            <Link
-                to="/novo-app/info-negocio"
-                className={
-                    [
-                        "/cliente/pontos-fidelidade",
-                        "/acesso/verificacao",
-                    ].includes(locationNow)
-                        ? "disabled-link"
-                        : "nav-link"
-                }
-            >
-                <RadiusBtn
-                    title={isSmall ? "Crie App" : "Crie seu App"}
-                    position="fixed"
-                    top={10}
-                    right={10}
-                    zIndex={1000}
-                />
-            </Link>
+    const showCallToActionBtn = () => {
+        const handleRedirect = async () => {
+            const newAppLink = await getNewAppPage();
+            history.push(newAppLink);
+        };
+
+        return (
+            <Fragment>
+                {locationNow === "/" && (
+                    <RadiusBtn
+                        title={isSmall ? "Crie App" : "Crie seu App"}
+                        position="fixed"
+                        onClick={handleRedirect}
+                        top={10}
+                        right={10}
+                        zIndex={1000}
+                    />
+                )}
+            </Fragment>
         );
+    };
 
     const showButtons = () => (
         <Fragment>

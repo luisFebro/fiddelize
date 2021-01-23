@@ -13,7 +13,7 @@ export const readHighestScores = (cliAdminId) =>
 // END USER
 
 // ACCOUNT
-export const createInstantAccount = () => `/api/user/instant-acc`; // POST
+export const createInstantApp = () => `/api/user/instant-app`; // POST
 export const readAppList = () => `/api/user/acc/app-list`; // GET
 export const setDefaultAccess = () => `/api/user/acc/set-default-access`; // POST
 

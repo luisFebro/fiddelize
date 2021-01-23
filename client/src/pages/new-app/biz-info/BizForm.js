@@ -9,7 +9,7 @@ import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import { setMultiVar, store } from "../../../hooks/storage/useVar";
-import generateBizCodeName from "../../../pages/download-app/instant-accout/helpers/generateBizCodeName";
+import generateBizCodeName from "../../../pages/download-app/instant-app/helpers/generateBizCodeName";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
@@ -154,8 +154,7 @@ export default function BizForm({ history }) {
 
         const data = [
             { doneBizInfo: true },
-            { field },
-            { clientAdminData: { bizName, bizCodeName } },
+            { clientAdminData: { bizName, bizCodeName, bizField: field } },
         ];
         await setMultiVar(data, store.pre_register);
 

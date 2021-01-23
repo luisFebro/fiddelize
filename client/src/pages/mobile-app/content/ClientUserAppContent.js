@@ -117,7 +117,6 @@ export default function ClientUserAppContent({
         rewardList,
         rewardDeadline,
         selfMilestoneIcon,
-        selfThemeSColor,
         selfThemeBackColor,
         arePrizesVisible,
         bizWhatsapp,
@@ -125,12 +124,12 @@ export default function ClientUserAppContent({
     } = useClientAdmin();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    if (rewardScoreTest) {
-        maxScore = Number(rewardScoreTest);
-    }
     maxScore = pickedObj.rewardScore;
     const mainReward = pickedObj.mainReward;
     selfMilestoneIcon = pickedObj.selfMilestoneIcon;
+    if (rewardScoreTest) {
+        maxScore = Number(rewardScoreTest);
+    }
 
     const userBeatChallenge = currScore >= maxScore;
 
@@ -272,11 +271,11 @@ export default function ClientUserAppContent({
                         width: needAppForPreview && "21.8em",
                     }}
                 ></div>
-                <div className={`${needAppForPreview && "enabledLink"}`}>
+                <div className={`${needAppForPreview && "disabledLink"}`}>
                     <AsyncBellNotifBtn
                         position="absolute"
                         forceCliUser={true}
-                        top={5}
+                        top={21}
                         left={needAppForPreview ? 258 : 270}
                         notifBorderColor={
                             "var(--themeBackground--" + backColorSelect + ")"
@@ -291,7 +290,11 @@ export default function ClientUserAppContent({
                 </div>
             </section>
             <div
-                style={{ position: "absolute", top: "1px", lineHeight: ".9em" }}
+                style={{
+                    position: "absolute",
+                    top: "21px",
+                    lineHeight: ".9em",
+                }}
                 className={`ml-3 mb-2 ${selectTxtStyle(colorP, {
                     bold: true,
                 })} text-subtitle text-left`}
@@ -385,7 +388,7 @@ export default function ClientUserAppContent({
         setShowMoreComps(true);
     };
 
-    const thisCurrTxtColor = currTxtColor(selfThemeSColor);
+    const thisCurrTxtColor = currTxtColor(colorS);
     const showSkipIconsBtn = () =>
         currScore >= 30 &&
         !showMoreComps && (
@@ -407,9 +410,7 @@ export default function ClientUserAppContent({
                     fontSize=".9em"
                     size="large"
                     color={thisCurrTxtColor}
-                    backgroundColor={
-                        "var(--themeSDark--" + selfThemeSColor + ")"
-                    }
+                    backgroundColor={"var(--themeSDark--" + colorS + ")"}
                     shadowColor={
                         selfThemeBackColor === "black" ? "white" : "black"
                     }

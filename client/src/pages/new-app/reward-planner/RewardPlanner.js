@@ -7,6 +7,7 @@ import GoalForm from "./GoalForm";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import useData, { sto } from "../../../hooks/useData";
+import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
@@ -23,6 +24,7 @@ export default function RewardPlanner({ history }) {
     const { bizName, bizCodeName } = clientAdminData;
 
     useScrollUp();
+    useNeedRedirectPage({ history, priorPageId: "doneBizInfo" });
 
     useAnimateElem(".intro-page--txt", { animaIn: "fadeInUp", speed: "slow" });
     useAnimateElem(".intro-page--txt-hero", {

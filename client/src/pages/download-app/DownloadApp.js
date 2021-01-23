@@ -19,6 +19,7 @@ import { handleRoleStorage } from "./helpers";
 import useAllowedLink from "./hooks/useAllowedLink";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
+import BackButton from "../../components/buttons/BackButton";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -78,11 +79,7 @@ const getStyles = ({ isCliAdmin, pColor }) => ({
     },
 });
 
-// Valid links:
-// general: site/baixe-app?negocio=${bizName}&id=${bizId}&cliente=1
-// custom name: site/baixe-app/${name}?negocio=${bizName}&id=${bizId}&cliente=1
-
-export default function DownloadApp({ match, location }) {
+export default function DownloadApp({ match, location, history }) {
     const [isPageReady, setPageReady] = useState(false);
     const [data, setData] = useState({
         run: false,
@@ -111,7 +108,6 @@ export default function DownloadApp({ match, location }) {
 
     const matchName = match.params.userName;
     const userName = matchName && matchName.replace(/\+/g, " ").cap();
-
     // MAIN VARIABLES
     const [
         bizName,
@@ -133,6 +129,7 @@ export default function DownloadApp({ match, location }) {
         isLinkInvalid,
         whichRole,
         primaryAgent,
+        needSelfServBackBtn,
     ] = getQueries({
         location,
     });
@@ -145,7 +142,12 @@ export default function DownloadApp({ match, location }) {
     // END STYLES
 
     // HOOKS
-    const isAllowedLink = useAllowedLink({ bizId, isCliUser, userScore });
+    const isAllowedLink = useAllowedLink({
+        bizId,
+        isCliUser,
+        isCliAdmin,
+        userScore,
+    });
     useEffect(() => {
         checkIfElemIsVisible(".target-download", (res) =>
             setData((prev) => ({ ...prev, run: true }))
@@ -195,15 +197,17 @@ export default function DownloadApp({ match, location }) {
     } = useClientAdmin();
 
     useEffect(() => {
-        readClientAdmin(dispatch, bizId).then((res) => {
-            if (res.status !== 200)
-                return showSnackbar(
-                    dispatch,
-                    "Ocorreu um problema. Verifique sua conexão",
-                    "error"
-                );
-            setData({ ...data, needSelfServiceData: true });
-        });
+        const run = whichRole !== "cliente-admin";
+        run &&
+            readClientAdmin(dispatch, bizId).then((res) => {
+                if (res.status !== 200)
+                    return showSnackbar(
+                        dispatch,
+                        "Ocorreu um problema. Verifique sua conexão",
+                        "error"
+                    );
+                setData({ ...data, needSelfServiceData: true });
+            });
     }, [bizId]);
 
     if (needSelfServiceData) {
@@ -404,9 +408,18 @@ export default function DownloadApp({ match, location }) {
         </section>
     );
 
+    const showBackColor = () => (
+        <section style={{ position: "absolute", top: -20, left: -20 }}>
+            <BackButton
+                onClick={() => history.push("/negocio/novo-app/cadastro-admin")}
+            />
+        </section>
+    );
+
     return (
         <section className="target--content-download">
             {showSpinner()}
+            {needSelfServBackBtn && showBackColor()}
             {(isLinkInvalid || !isAllowedLink) && !isBizTeam ? (
                 errorMsg()
             ) : (

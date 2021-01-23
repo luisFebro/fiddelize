@@ -110,7 +110,7 @@ export default function TeamApp({
             <div className="mb-3">
                 <img
                     src={
-                        thisBizLogo === "undefined"
+                        thisBizLogo === undefined
                             ? `/img/official-logo-name.png`
                             : thisBizLogo
                     }

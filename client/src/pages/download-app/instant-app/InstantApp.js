@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import createInstantAccount from "./helpers/createInstantAccount";
+import createInstantApp from "./helpers/createInstantApp";
 import getFilterDate from "../../../utils/dates/getFilterDate";
 import generateBizCodeName from "./helpers/generateBizCodeName";
 import {
@@ -91,7 +91,7 @@ export default function InstantAccount({
 
     const dispatch = useStoreDispatch();
     const handleInstantAccount = () => {
-        showSnackbar(dispatch, "Criando conta instantânea. Um momento...");
+        showSnackbar(dispatch, "Criando app instantâneo. Um momento...");
         (async () => {
             if (isCliUser) {
                 const thisLinkCode = await getVar("linkCode", store.user);
@@ -103,7 +103,7 @@ export default function InstantAccount({
                 loadingCreation: true,
             }));
 
-            const succ = await createInstantAccount({ body }).catch((e) => {
+            const succ = await createInstantApp({ body }).catch((e) => {
                 showSnackbar(dispatch, e.error, "error");
                 setData((prev) => ({ ...prev, errorOnce: true }));
             });

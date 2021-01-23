@@ -10,6 +10,7 @@ import "./style.scss";
 import lStorage from "../../../utils/storage/lStorage";
 import { getVar, setMultiVar, store } from "../../../hooks/storage/useVar";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
+import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 lStorage("removeItem", {
     collection: "clientAdmin",
@@ -39,7 +40,7 @@ const setLocalData = ({ type = "theming", colors, iconsData }) => {
     })();
 };
 
-function SelfServicePage({ location }) {
+function SelfServicePage({ location, history }) {
     //useCount();// RT = 3
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
     const [theme, setTheme] = useState({
@@ -52,6 +53,7 @@ function SelfServicePage({ location }) {
     const isPageReady = useDelay(2000);
 
     useScrollUp();
+    useNeedRedirectPage({ history, priorPageId: "doneRewardPlanner" });
 
     const [clientAdminData] = useData(["clientAdminData"], sto.re.pre_register);
     const { bizName, bizCodeName } = clientAdminData;
@@ -90,6 +92,7 @@ function SelfServicePage({ location }) {
                     <AppPickersHandler
                         bizCodeName={bizCodeName}
                         bizName={bizName}
+                        history={history}
                         clientName={clientName}
                         setLogoUrlPreview={setLogoUrlPreview}
                         theme={theme}

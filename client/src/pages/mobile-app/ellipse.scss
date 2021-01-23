@@ -1,6 +1,6 @@
 .ellipse {
     position: relative;
-    top: -20px;
+    top: -5px;
     left: -50px;
     height: 7em;
     width: 23em;
@@ -9,7 +9,7 @@
     border-radius: 50%;
     background-color: #e84393;
     border: 3px solid white;
-    box-shadow: inset 0 0 .4em #000;
+    box-shadow: inset 0 0 0.4em #000;
 }
 
 .all-scores--ellipse {
@@ -26,6 +26,6 @@
         border-radius: 50%;
         background-color: #fff;
         border: 3px solid white;
-        box-shadow: inset 0 0 .15em #000;
+        box-shadow: inset 0 0 0.15em #000;
     }
 }

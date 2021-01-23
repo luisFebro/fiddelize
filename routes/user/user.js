@@ -50,7 +50,7 @@ const {
 } = require("../../controllers/user/team/team");
 
 const {
-    mwCreateInstantAccount,
+    mwCreateInstantApp,
     setDefaultAccess,
     readAppList,
 } = require("../../controllers/user/account/account");
@@ -110,12 +110,7 @@ router.post("/cli-user/temp-score/encrypt", mwIsAuth, encryptLinkScore);
 router.get("/cli-user/temp-score/allowed-link", isLinkAllowed);
 
 // ACCOUNT
-router.post(
-    "/instant-acc",
-    mwCreateInstantAccount,
-    mwValidateRegister,
-    register
-);
+router.post("/instant-app", mwCreateInstantApp, mwValidateRegister, register);
 router.post("/acc/set-default-access", setDefaultAccess);
 router.get("/acc/app-list", readAppList);
 
