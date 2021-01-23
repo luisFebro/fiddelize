@@ -1,31 +1,38 @@
 export default function pickCurrChallData(rewardList, totalPrizesInd) {
+    if (!rewardList)
+        return {
+            selfMilestoneIcon: "star",
+            rewardScore: 800,
+            mainReward: "smt",
+        };
+
     const prizeInd = !totalPrizesInd ? 0 : totalPrizesInd;
 
     // change the original names to respectively rewardList ones...
     const keyAvalaible = {
-        selfMilestoneIcon: 'icon',
-        rewardScore: 'rewardScore',
-        mainReward: 'rewardDesc',
-    }
+        selfMilestoneIcon: "icon",
+        rewardScore: "rewardScore",
+        mainReward: "rewardDesc",
+    };
 
     const isProgressMode = rewardList.length > 1;
 
-    const getValues = selectedObj => {
+    const getValues = (selectedObj) => {
         const values = {
             selfMilestoneIcon: selectedObj[keyAvalaible.selfMilestoneIcon],
             rewardScore: selectedObj[keyAvalaible.rewardScore],
             mainReward: selectedObj[keyAvalaible.mainReward],
-        }
+        };
 
         return values;
-    }
+    };
 
-    if(isProgressMode) {
+    if (isProgressMode) {
         // Repeat the last challenge if there is no more of them in the cli-admin list
         let newObjValues = rewardList[prizeInd];
-        if(!newObjValues && prizeInd !== 0){
+        if (!newObjValues && prizeInd !== 0) {
             const lastValidInd = rewardList.length - 1;
-            newObjValues = rewardList[lastValidInd]
+            newObjValues = rewardList[lastValidInd];
         }
         return getValues(newObjValues);
     } else {

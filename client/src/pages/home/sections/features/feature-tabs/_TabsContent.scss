@@ -284,6 +284,10 @@
         }
     }
 
+    & .main-img-container .loader {
+        display: none;
+    }
+
     & .main-img-container .loader.loading {
         display: flex;
         justify-content: center;

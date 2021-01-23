@@ -84,6 +84,7 @@ export default function ClientUserAppContent({
     colorBack,
     businessId,
     rewardScoreTest,
+    clientNameTest,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currScoreRef = useRef(null);
@@ -95,7 +96,8 @@ export default function ClientUserAppContent({
         colorS = "default";
     }
     let { role, phone } = useProfile();
-    const [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
+    let [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
+    firstName = clientNameTest || firstName;
     const userIdLoading = Boolean(_id === "...");
 
     const totalNotifications = useCountNotif(_id, {

@@ -65,6 +65,7 @@ function ClientAppPreview({ location }) {
                 needAppForPreview={true}
                 runName={runName}
                 rewardScoreTest={rewardScore}
+                clientNameTest={clientName}
                 colorP={colorP}
                 colorS={colorS}
                 colorBack={colorBack}
