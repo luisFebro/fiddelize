@@ -24,7 +24,7 @@ export default function AdminRegister({ history }) {
     );
 
     const showAppInstantOption = () => (
-        <section className="my-5 text-white container-center text-small font-weight-bold">
+        <section className="my-5 text-white container-center-col text-small font-weight-bold">
             <p className="mb-2">Já possui uma conta da Fiddelize? </p>
             <RadiusBtn
                 title="Cadastre via App Instantâneo"

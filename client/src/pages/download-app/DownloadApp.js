@@ -360,7 +360,12 @@ export default function DownloadApp({ match, location, history }) {
                                 alguns segundos.
                             </p>
                             <p>
-                                2) Por último, instale o app manualmente.
+                                2) Verifique se seu dispositivo está atualizado
+                                verificando suas notificações ou indo em
+                                configurações.
+                            </p>
+                            <p>
+                                3) Por último, instale o app manualmente.
                                 <br />
                                 a) clique no botão no canto superior para
                                 mostrar mais opções nesta mesma página.

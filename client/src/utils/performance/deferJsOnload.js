@@ -6,36 +6,40 @@ Many people say "just use defer" or "just use async" or others say "just put you
 // deferring js render-blocking for performance.
 // ELEM is the target element either a src url or a function with component(s) or a function with instances (e.g ()=> {runComp(); runThat();}).
 // MODE can be "func" (function with component(s)) or "url" (link)
-export default function deferJsOnload(elem, mode, options = {}) { // n1 idea to remove script from html
-    const invalidMode = !(["func", "url"]).includes(mode);
-    if(!elem) throw new Error("An elem is required. it can be either a src url or a component")
-    if(invalidMode) throw new Error("Invalid mode. Only comp or url allowed.")
+export default function deferJsOnload(elem, mode, options = {}) {
+    // n1 idea to remove script from html
+    console.log("mode", typeof mode);
+    const invalidMode = !["func", "url"].includes(mode);
+    if (!elem)
+        throw new Error(
+            "An elem is required. it can be either a src url or a component"
+        );
+    if (invalidMode) throw new Error("Invalid mode. Only comp or url allowed.");
 
     const { integrity, crossorigin } = options;
     let { delay } = options;
-    if(!delay) delay = 0;
+    if (!delay) delay = 0;
 
     const appendElem = () => {
-        if(mode === "url") {
+        if (mode === "url") {
             const element = document.createElement("script");
 
             element.src = elem;
-            if(integrity) element.integrity = integrity;
-            if(crossorigin) element.crossOrigin = crossorigin;
+            if (integrity) element.integrity = integrity;
+            if (crossorigin) element.crossOrigin = crossorigin;
             element.async = true;
 
             document.body.appendChild(element);
         } else {
             return setTimeout(() => elem(), delay);
         }
-    }
+    };
 
     if (window.addEventListener) {
         window.addEventListener("load", appendElem, false);
     } else if (window.attachEvent) {
         window.attachEvent("onload", appendElem);
     } else window.onload = appendElem;
-
 }
 
 /* COMMENTS
