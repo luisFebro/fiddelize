@@ -8,7 +8,6 @@ Many people say "just use defer" or "just use async" or others say "just put you
 // MODE can be "func" (function with component(s)) or "url" (link)
 export default function deferJsOnload(elem, mode, options = {}) {
     // n1 idea to remove script from html
-    console.log("mode", typeof mode);
     const invalidMode = !["func", "url"].includes(mode);
     if (!elem)
         throw new Error(

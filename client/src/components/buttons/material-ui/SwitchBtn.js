@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
-import uuidv1 from "uuid/v1";
+import getId from "../../../utils/getId";
 import parse from "html-react-parser";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 // import { useStoreDispatch } from 'easy-peasy';
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const getStatusWithId = (bool) => `${bool}_${uuidv1()}`;
+const getStatusWithId = (bool) => `${bool}_${getId()}`;
 
 export default function SwitchBtn({
     titleLeft = "Não",

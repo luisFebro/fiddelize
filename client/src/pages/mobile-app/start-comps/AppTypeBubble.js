@@ -48,7 +48,7 @@ export default function AppTypeBubble({
         if (role === "cliente-membro") return "Membro";
         if (role === "cliente-admin" || isUrlAdmin) return "Admin";
         if (role === "cliente") return "Cliente";
-        return "...";
+        return "Admin";
     };
 
     const showAppType = handleAppType({

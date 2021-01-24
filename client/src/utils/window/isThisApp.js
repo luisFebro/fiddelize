@@ -1,10 +1,5 @@
-import { IS_DEV, IS_PROD } from "../../config/clientUrl";
-
-// change here only if it is the website to be developed in localhost
-let localHostWebsiteMode = true;
-localHostWebsiteMode = IS_PROD ? false : localHostWebsiteMode; // do not change this line.
-
-const localHostAppMode = IS_DEV ? true : false;
+// use mobile-app?abrir=1 to test mobile version in the dev desktop
+// to switch back to website version go to home.
 
 export default function isThisApp() {
     const isInWebAppiOS = window.navigator.userAgent.toLowerCase();
@@ -24,8 +19,7 @@ export default function isThisApp() {
         isAppFromSafariOrChrome ||
         isAndroidStockBrowserOrElse;
 
-    if (localHostWebsiteMode) return false; // && !isAndroidStockBrowserOrElse
-    return localHostAppMode ? true : checkBrowsers;
+    return checkBrowsers;
 }
 
 // https://stackoverflow.com/questions/53378576/detect-web-app-running-as-homescreen-app-on-android-stock-browser
@@ -38,7 +32,10 @@ function checkIfStockBrowser() {
 
     if (condition) {
         window.sessionStorage.setItem("isPWA", "1");
-    } else {
+    }
+
+    const isHomeSite = window.location.pathname === "/";
+    if (isHomeSite) {
         window.sessionStorage.removeItem("isPWA");
     }
 
@@ -66,3 +63,12 @@ another alternative solution:
 navigator.standalone = navigator.standalone || (screen.height-document.documentElement.clientHeight<40)
 https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
  */
+
+/* ARCHIVES
+// change here only if it is the website to be developed in localhost
+let localHostWebsiteMode = true;
+localHostWebsiteMode = false;//IS_PROD ? false : localHostWebsiteMode; // do not change this line.
+console.log("localHostWebsiteMode", localHostWebsiteMode);
+
+const localHostAppMode = false;//IS_DEV ? true : false;
+*/

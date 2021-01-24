@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 // End Moment
-import uuidv1 from 'uuid/v1';
+import getId from "../../../../../utils/getId";
 import ButtonMulti from '../../../../buttons/material-ui/ButtonMulti';
 // Redux
 import {useStoreState, useStoreDispatch} from 'easy-peasy';
@@ -81,7 +81,7 @@ const SendMsgToStoreBtn = (dispatch, allUsers, _idUser, userName) => { // n2
             objToSend: {
                 messageList: {
                     sender: `${userName}`,
-                    id: uuidv1(),
+                    id: getId(),
                     time: moment(Date.now()).fromNow(), // n1 - change Date.now with createdAt from DB
                     message: '', // this will be the message catch by modal text field
                     isMessageChecked: false,

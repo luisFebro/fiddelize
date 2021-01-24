@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import List from "./List.js";
-import uuidv1 from "uuid/v1";
 import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
 import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
 import useAPI, {
@@ -12,6 +11,7 @@ import useAPI, {
     treatBoolStatus,
 } from "../../../../../hooks/api/useAPI";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
+import getId from "../../../../../utils/getId";
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");
@@ -82,7 +82,7 @@ export default function HiddenGoalsAndRewards() {
                 <section className="position-relative">
                     <ButtonFab
                         position="relative"
-                        onClick={() => setNeedAdd(uuidv1())}
+                        onClick={() => setNeedAdd(getId())}
                         title="adicionar"
                         iconFontAwesome={<FontAwesomeIcon icon="plus" />}
                         iconFontSize="25px"

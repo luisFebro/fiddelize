@@ -78,7 +78,7 @@ function Navbar({ history, location }) {
                     className="text-subtitle text-s"
                     style={{
                         position: "relative",
-                        right: isSmall ? "-18px" : "",
+                        right: isSmall ? "-18px" : "40px",
                     }}
                 >
                     Acesso{" "}

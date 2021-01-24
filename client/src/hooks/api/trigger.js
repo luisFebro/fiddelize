@@ -1,5 +1,5 @@
-import uuidv1 from "uuid/v1";
-const getUniqueId = () => uuidv1();
+import getId from "../../utils/getId";
+const getUniqueId = () => getId();
 
 // trigger if there is the name of the component which is sending request from redux
 // the component should be followed by an unique id so that it can be trigger.

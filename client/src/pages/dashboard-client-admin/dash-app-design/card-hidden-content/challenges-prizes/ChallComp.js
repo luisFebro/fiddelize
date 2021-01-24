@@ -1,15 +1,15 @@
-import React, { useState, Fragment, useEffect } from 'react';
-import Card from '@material-ui/core/Card';
-import EditButton from '../../../../../components/buttons/EditButton';
-import PropTypes from 'prop-types';
+import React, { useState, Fragment, useEffect } from "react";
+import Card from "@material-ui/core/Card";
+import EditButton from "../../../../../components/buttons/EditButton";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import TextField from '@material-ui/core/TextField';
-import handleChange from '../../../../../utils/form/use-state/handleChange';
-import findAndReplaceObjInArray from '../../../../../utils/arrays/findAndReplaceObjInArray';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import EditLevelIconModalBtn from './EditLevelIconModalBtn';
-import DeleteModalBtn from './DeleteModalBtn';
-import uuidv1 from 'uuid/v1';
+import TextField from "@material-ui/core/TextField";
+import handleChange from "../../../../../utils/form/use-state/handleChange";
+import findAndReplaceObjInArray from "../../../../../utils/arrays/findAndReplaceObjInArray";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import EditLevelIconModalBtn from "./EditLevelIconModalBtn";
+import DeleteModalBtn from "./DeleteModalBtn";
+import getId from "../../../../../utils/getId";
 
 const truncate = (text, leng) => window.Helper.truncate(text, leng);
 
@@ -20,7 +20,7 @@ ChallComp.propTypes = {
     rewardDesc: PropTypes.string,
     isFirst: PropTypes.bool,
     currChallNumber: PropTypes.number,
-}
+};
 
 export default function ChallComp({
     id,
@@ -47,21 +47,21 @@ export default function ChallComp({
 
     const [edit, setEdit] = useState(false);
     const [saveChangeBtn, setSaveChangeBtn] = useState(false);
-    const [selectedIcon, setSelectedIcon] = useState('');
+    const [selectedIcon, setSelectedIcon] = useState("");
     useEffect(() => {
-        if(selectedIcon) {
-            setData({ ...data, icon: selectedIcon })
+        if (selectedIcon) {
+            setData({ ...data, icon: selectedIcon });
             setSaveChangeBtn(true);
         }
-    }, [selectedIcon])
+    }, [selectedIcon]);
 
     const txtStyle = "text-small text-white text-center m-0";
     const styles = {
         card: {
-            backgroundColor: 'var(--themeP)',
-            borderRadius: '15px',
-            padding: '15px',
-            overflow: 'visible',
+            backgroundColor: "var(--themeP)",
+            borderRadius: "15px",
+            padding: "15px",
+            overflow: "visible",
         },
         actionBtns: {
             top: -45,
@@ -69,22 +69,22 @@ export default function ChallComp({
         },
         levelIcon: {
             fontSize: 40,
-            color: '#ff0',
-            filter: 'drop-shadow(0 0 40px #ffc)',
+            color: "#ff0",
+            filter: "drop-shadow(0 0 40px #ffc)",
         },
         iconBanner: {
             width: 80,
-            lineHeight: '18px',
-            backgroundColor: 'var(--mainWhite)',
-            boxShadow: 'inset 0 0 .3em #000',
+            lineHeight: "18px",
+            backgroundColor: "var(--mainWhite)",
+            boxShadow: "inset 0 0 .3em #000",
         },
         fieldForm: {
-            padding: '5px 10px',
-            color: 'var(--mainPurple)',
-            backgroundColor: 'var(--mainWhite)',
-            font: 'normal 1em Poppins, sans-serif',
+            padding: "5px 10px",
+            color: "var(--mainPurple)",
+            backgroundColor: "var(--mainWhite)",
+            font: "normal 1em Poppins, sans-serif",
         },
-    }
+    };
 
     const handleDataChange = () => {
         showSnackbar(dispatch, "Fazendo alterações...");
@@ -94,18 +94,22 @@ export default function ChallComp({
                 icon: isFirst ? milestoneIcon : data.icon,
                 rewardScore: Number(data.rewardScore),
                 rewardDesc: data.rewardDesc && data.rewardDesc.toLowerCase(),
-            }
-        ]
-        const newArray = findAndReplaceObjInArray(challengesArray, updatedArray, "id")
+            },
+        ];
+        const newArray = findAndReplaceObjInArray(
+            challengesArray,
+            updatedArray,
+            "id"
+        );
         setChallengesArray(newArray);
-        setNeedUpdateData(uuidv1());
+        setNeedUpdateData(getId());
         setTimeout(() => setEdit(false), 2000);
-    }
+    };
 
     const showIcon = () => (
         <div
             className="container-center flex-row flex-md-column justify-content-start"
-            style={{flexBasis: '20%'}}
+            style={{ flexBasis: "20%" }}
         >
             <p className={txtStyle}>
                 {isFirst ? "Ícone Principal:" : "Ícone Desafio:"}
@@ -141,7 +145,7 @@ export default function ChallComp({
     const showRewardScore = () => (
         <div
             className="container-center flex-row flex-md-column"
-            style={{flexBasis: '20%'}}
+            style={{ flexBasis: "20%" }}
         >
             <p className={txtStyle}>Ponto-Prêmio:</p>
             {!edit ? (
@@ -152,12 +156,12 @@ export default function ChallComp({
                 <div className="animated zoomIn ml-md-0 ml-3">
                     <TextField
                         InputProps={{
-                            style: {...styles.fieldForm, width: '100px'},
+                            style: { ...styles.fieldForm, width: "100px" },
                         }}
                         margin="dense"
                         type="tel"
-                        onChange={e => {
-                            handleChange(setData, data)(e)
+                        onChange={(e) => {
+                            handleChange(setData, data)(e);
                             setSaveChangeBtn(true);
                         }}
                         name="rewardScore"
@@ -173,7 +177,7 @@ export default function ChallComp({
     const showPrizeDesc = () => (
         <div
             className="container-center flex-column align-self-center"
-            style={{flexBasis: '60%'}}
+            style={{ flexBasis: "60%" }}
         >
             <p className={txtStyle}>Descrição Prêmio:</p>
             {!edit ? (
@@ -188,8 +192,8 @@ export default function ChallComp({
                         }}
                         margin="dense"
                         type="text"
-                        onChange={e => {
-                            handleChange(setData, data)(e)
+                        onChange={(e) => {
+                            handleChange(setData, data)(e);
                             setSaveChangeBtn(true);
                         }}
                         name="rewardDesc"
@@ -205,16 +209,37 @@ export default function ChallComp({
     );
 
     const showActionBtns = () => (
-        <section className="d-flex justify-content-around" style={{width: '120px'}}>
+        <section
+            className="d-flex justify-content-around"
+            style={{ width: "120px" }}
+        >
             {saveChangeBtn ? (
-                <div className="animated rubberBand delay-2s" style={{animationIterationCount: 2}}>
+                <div
+                    className="animated rubberBand delay-2s"
+                    style={{ animationIterationCount: 2 }}
+                >
                     <ButtonFab
                         position="relative"
                         onClick={() => {
-                            let lastButOneRewardScore = isFirst ? 0 : challengesArray[challengesArray.length - 2].rewardScore;
-                            if(!isFirst && data.rewardScore < lastButOneRewardScore) return showSnackbar(dispatch, "O ponto-prêmio do desafio atual deve ser maior que o anterior", 'error');
-                            if(!Number(data.rewardScore)) {
-                                showSnackbar(dispatch, "Em ponto-prêmio, insira apenas números.", 'error');
+                            let lastButOneRewardScore = isFirst
+                                ? 0
+                                : challengesArray[challengesArray.length - 2]
+                                      .rewardScore;
+                            if (
+                                !isFirst &&
+                                data.rewardScore < lastButOneRewardScore
+                            )
+                                return showSnackbar(
+                                    dispatch,
+                                    "O ponto-prêmio do desafio atual deve ser maior que o anterior",
+                                    "error"
+                                );
+                            if (!Number(data.rewardScore)) {
+                                showSnackbar(
+                                    dispatch,
+                                    "Em ponto-prêmio, insira apenas números.",
+                                    "error"
+                                );
                             } else {
                                 handleDataChange();
                                 setEdit(false);

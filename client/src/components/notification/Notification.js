@@ -1,16 +1,15 @@
-import React, { Fragment, useState } from 'react';
-import NotifList from './NotifList';
-import RadiusBtn from '../../components/buttons/RadiusBtn';
-import useCountNotif from '../../hooks/notification/useCountNotif';
-import { markAllAsClicked } from '../../redux/actions/notificationActions';
-import './_Notification.scss';
-import { useProfile } from '../../hooks/useRoleData';
-import { setRun } from '../../hooks/useRunComp';
-import uuidv1 from 'uuid/v1';
-import { useStoreDispatch } from 'easy-peasy';
+import React, { Fragment, useState } from "react";
+import NotifList from "./NotifList";
+import RadiusBtn from "../../components/buttons/RadiusBtn";
+import useCountNotif from "../../hooks/notification/useCountNotif";
+import { markAllAsClicked } from "../../redux/actions/notificationActions";
+import "./_Notification.scss";
+import { useProfile } from "../../hooks/useRoleData";
+import { setRun } from "../../hooks/useRunComp";
+import { useStoreDispatch } from "easy-peasy";
+import getId from "../../utils/getId";
 
-
-export default function Notification({ forceCliUser = false, }) {
+export default function Notification({ forceCliUser = false }) {
     const [loading, setLoading] = useState(false);
     const [btnTitle, setBtnTitle] = useState(`Marcar todas ✔️`);
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -23,9 +22,7 @@ export default function Notification({ forceCliUser = false, }) {
 
     const showTitle = () => (
         <div className="mt-4">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
+            <p className="text-subtitle text-purple text-center font-weight-bold">
                 &#187; Novidades
             </p>
         </div>
@@ -33,36 +30,33 @@ export default function Notification({ forceCliUser = false, }) {
 
     const handleMarkAllClicked = () => {
         setLoading(true);
-        markAllAsClicked(_id, { forceCliUser })
-        .then(res => {
-            if(res.status !== 200) return console.log("smt wrong with handleMarkAllClicked")
-            setRun(dispatch, `notificationCount${uuidv1()}`)
-            // setRunList(`true${uuidv1()}`); not working for now
+        markAllAsClicked(_id, { forceCliUser }).then((res) => {
+            if (res.status !== 200)
+                return console.log("smt wrong with handleMarkAllClicked");
+            setRun(dispatch, `notificationCount${getId()}`);
+            // setRunList(`true${getId()}`); not working for now
             setLoading(false);
-            setBtnTitle("Todas Marcadas!")
+            setBtnTitle("Todas Marcadas!");
             setBtnDisabled(true);
-        })
-    }
+        });
+    };
 
-    const plural = totalNotifications <= 1 ? "" : "s"
+    const plural = totalNotifications <= 1 ? "" : "s";
 
     const showNotifStatus = () => {
-        return(
+        return (
             <section>
                 <div className="text-subtitle text-purple ml-3">
                     <p className="text-normal">
                         <strong>Status: </strong>
                         <br />
                         {totalNotifications === null && (
-                            <strong
-                                className="text-normal"
-                            >
+                            <strong className="text-normal">
                                 analisando...
                             </strong>
                         )}
 
-                        {totalNotifications === 0 &&
-                        (
+                        {totalNotifications === 0 && (
                             <Fragment>
                                 <strong className="text-normal">
                                     ✔️ Todas novidades vistas.
@@ -74,7 +68,8 @@ export default function Notification({ forceCliUser = false, }) {
                             <Fragment>
                                 <strong className="text-subtitle">
                                     • {totalNotifications}
-                                </strong> novidade{plural} não vista{plural}.
+                                </strong>{" "}
+                                novidade{plural} não vista{plural}.
                             </Fragment>
                         )}
                     </p>
@@ -85,14 +80,16 @@ export default function Notification({ forceCliUser = false, }) {
                             size="small"
                             disabled={btnDisabled}
                             title={loading ? "carregando..." : btnTitle}
-                            backgroundColor={'var(--themeSDark--' + "black" + ')'}
+                            backgroundColor={
+                                "var(--themeSDark--" + "black" + ")"
+                            }
                             onClick={handleMarkAllClicked}
                         />
                     )}
                 </div>
             </section>
         );
-    }
+    };
 
     return (
         <Fragment>

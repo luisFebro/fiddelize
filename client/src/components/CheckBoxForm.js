@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import uuidv1 from "uuid/v1";
+import getId from "../utils/getId";
 
-const getStatusWithId = (bool) => `${bool}_${uuidv1()}`;
+const getStatusWithId = (bool) => `${bool}_${getId()}`;
 
 export default function CheckBoxForm({
     text,
