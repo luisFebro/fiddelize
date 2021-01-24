@@ -8,6 +8,7 @@ const getStyles = () => ({
         background: "transparent",
         borderRadius: "50%",
         margin: "0 5px",
+        boxSizing: "border-box",
     },
     innerCircle: {
         padding: "12px",

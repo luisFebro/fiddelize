@@ -27,7 +27,7 @@ export default async function renewAccessToken(options = {}) {
     const newToken = res.data;
 
     // this will be handled by localforage for other projects.
-    await setVar({ token: newToken });
+    await setVar({ token: newToken }, store.user);
     localStorage.setItem("token", newToken);
 
     return "done";

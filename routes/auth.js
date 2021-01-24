@@ -50,7 +50,7 @@ router.post("/pswd/change", mwIsAuth, changePassword);
 // TOKEN
 router.post("/pswd/token", getToken);
 router.post("/pswd/decrypt-token", getDecryptedToken);
-router.post("/pswd/auth-tk", mwIsAuth, getAuthTk);
+router.post("/pswd/auth-tk", getAuthTk); // 403 error - mwIsAuth is giving issues when switching between apps
 // END TOKEN
 
 module.exports = router;

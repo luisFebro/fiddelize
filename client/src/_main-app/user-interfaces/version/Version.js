@@ -4,7 +4,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9585.8";
+const latestVersion = "3.9590.8";
 // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2

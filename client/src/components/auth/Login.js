@@ -155,12 +155,12 @@ export async function signInUserData(cpfValue, options = {}) {
         verificationPass,
         needCliUserWelcomeNotif,
         twoLastCpfDigits,
-        token,
         gender,
         linkId,
         memberJob,
         needAccountPanel,
         appId,
+        // token, token returns undefined unless it is cli-user since all requires password
         // nucleo-equipe data
         primaryAgent,
         agentJob,
