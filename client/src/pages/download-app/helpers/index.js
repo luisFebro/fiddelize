@@ -26,30 +26,30 @@ export const handleRoleStorage = ({
     let userPayload;
 
     if (isCliAdmin) {
-        userPayload = [{ lastRegisterBizId: bizId }];
+        userPayload = [{ role: whichRole }];
     }
 
     if (isCliUser) {
         userPayload = [
+            { role: whichRole },
             { lastRegisterBizId: bizId },
             { memberId },
             { memberRole: memberJob ? "cliente-membro" : "cliente-admin" },
             { memberJob: memberJob ? memberJob : "admin" },
-            { role: whichRole },
             { userScore },
         ];
     }
 
     if (isCliMember) {
         userPayload = [
-            { lastRegisterBizId: bizId },
             { role: whichRole },
+            { lastRegisterBizId: bizId },
             { memberJob: memberJob ? memberJob : "admin" },
         ];
     }
 
     if (isBizTeam) {
-        userPayload = [{ primaryAgent }, { role: whichRole }];
+        userPayload = [{ role: whichRole }, { primaryAgent }];
     }
 
     (async () => {

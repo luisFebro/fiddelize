@@ -32,7 +32,7 @@
 
 .live-app-area {
     position: relative;
-    margin-top: 140px;
+    margin-top: 160px;
     margin-bottom: 120px;
 }
 
@@ -64,7 +64,9 @@
 }
 
 @media only screen and (min-width: 768px) {
-    .scroll-instru-desktop { display: block; }
+    .scroll-instru-desktop {
+        display: block;
+    }
 }
 
 .app-preview-blob {

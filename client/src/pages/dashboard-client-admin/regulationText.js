@@ -5,7 +5,7 @@ export const regulationText = `Caro cliente, você está participando agora dos 
 Nunca foi tão prático e rápido adicionar e receber pontos. Nem precisamos pedir seu dispositivo móvel. Nossa equipe possui também um app que adiciona os pontos em poucos segundos. Você informa seu nome e recebe direto no seu app.
 
 @CARTÃO VIRTUAL 3D@
-Quando é adicionado pontos do seu app, você é notificado com um novo cartão virtual 3D interativo com o seu nome onde você adiciona e aplica os pontos recebidos.
+Quando é adicionado pontos no seu app, você é notificado com um novo cartão virtual interativo com o seu nome onde você aplica os novos pontos recebidos.
 
 @SISTEMA DE PONTOS@
 A quantidade de pontos ganhos é igual ao valor de sua compra. Por exemplo, com R$ 50 em compras, você ganha 50 pontos de fidelidade. É simples assim, ##nome-cliente!
@@ -19,9 +19,10 @@ Por exemplo, no seu *desafio atual de n.º ##desafio-atual*, você precisa alcan
 • O desafio possui 5 níveis com ##ponto-nivel cada.
 
 @RESGATE DO SEU PRÊMIO@
-Você tem ##prazo-premio para resgatar seu prêmio da ##nome-empresa contando a partir da data da última compra onde você atingiu a meta em pontos, vencendo seu desafio atual.
+Você tem ##prazo-premio para resgatar seu prêmio contando a partir da data da última compra onde você atingiu a meta em pontos e venceu seu desafio atual.
 
 ~Te desejamos uma ótima experiência de compras, ##nome-cliente!~
+~ - ##nome-empresa~.
 `;
 
 /*

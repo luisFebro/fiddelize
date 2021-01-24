@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import createInstantApp from "./helpers/createInstantApp";
 import getFilterDate from "../../../utils/dates/getFilterDate";
-import generateBizCodeName from "./helpers/generateBizCodeName";
 import {
     removeMultiVar,
     setMultiVar,
@@ -16,6 +15,7 @@ import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import lStorage, { needAppRegisterOp } from "../../../utils/storage/lStorage";
+import { removeCollection } from "../../../hooks/storage/useVar";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -64,13 +64,9 @@ export default function InstantAccount({
     let body = {
         cpf,
         ...payload,
-        clientAdminData: {
-            bizName,
-            bizCodeName: isCliAdmin && generateBizCodeName(bizName),
-            bizWhatsapp: "",
-        }, // bizWhatsapp is assigned in the backend after finding CPF with profile data.
         bizTeamData: { job: "afiliado", primaryAgent },
-        clientMemberData: { job: memberJob, bizId },
+        clientAdminData: undefined, // bizWhatsapp is assigned in the backend after finding CPF with profile data.
+        clientMemberData: { bizId, job: memberJob },
         clientUserData: { bizId, filterBirthday: "" },
         filter,
         bizName,
@@ -98,6 +94,14 @@ export default function InstantAccount({
                 body = { ...body, linkCode: thisLinkCode };
             }
 
+            if (isCliAdmin) {
+                const thisClientAdminData = await getVar(
+                    "clientAdminData",
+                    store.pre_register
+                );
+                body = { ...body, clientAdminData: thisClientAdminData };
+            }
+
             setData((prev) => ({
                 ...prev,
                 loadingCreation: true,
@@ -115,20 +119,24 @@ export default function InstantAccount({
 
             if (!succ) return;
 
-            // prevent register page to be shown. Display login page instead with the new account
-            // remove variables at the login access
+            // prevent register page to be shown. Display login page instead with the new account panel
             const storeElems = [
                 { isInstantAccount: true },
                 { instantBizImg: bizImg },
                 { instantBizName: bizName },
             ];
 
+            // remove variables at the login access
             await Promise.all([
                 removeMultiVar(["success", "memberId"], store.user),
                 setMultiVar(storeElems, store.user),
             ]).then((res) => {
                 lStorage("setItem", { ...needAppRegisterOp, value: false });
             });
+
+            if (isCliAdmin) {
+                await removeCollection("pre_register");
+            }
 
             setSuccess(true);
         })();

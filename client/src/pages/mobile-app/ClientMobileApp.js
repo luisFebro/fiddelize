@@ -4,7 +4,6 @@ import AsyncLogin from "../../components/auth/AsyncLogin";
 import { Link, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { CLIENT_URL } from "../../config/clientUrl";
-import lStorage, { needAppRegisterOp } from "../../utils/storage/lStorage";
 import {
     useProfile,
     useClientAdmin,
@@ -36,6 +35,7 @@ import { Load } from "../../components/code-splitting/LoadableComp";
 import usePersistentStorage from "../../hooks/storage/usePersistentStorage";
 import Card from "@material-ui/core/Card";
 import removeImgFormat from "../../utils/biz/removeImgFormat";
+import useLoginOrRegister from "./helpers/useLoginOrRegister";
 // import useCount from "../../hooks/useCount";
 
 const AsyncPWA = Load({
@@ -69,8 +69,6 @@ const AsyncRegisterBizTeam = Load({
             "../../components/auth/AsyncRegisterBizTeam" /* webpackChunkName: "biz-team-register-comp-lazy" */
         ),
 });
-
-const needAppRegister = lStorage("getItem", needAppRegisterOp);
 
 const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
@@ -129,21 +127,12 @@ function ClientMobileApp({ location, history }) {
         "instantBizName",
     ]);
 
-    // memberId is cleaned after a successful registration.
-    // While this id is still living in th local DB is an strong indication there is a pending registration.
-    // This is good in case users accidently leave the app and keep showing the form instead of login in prior versions
-    useEffect(() => {
-        if (memberId !== "..." && memberId && !isInstantAccount) {
-            setLoginOrRegister("register");
-        }
-    }, [memberId]);
-
-    useEffect(() => {
-        if (needAppRegister && !isInstantAccount) {
-            setLoginOrRegister("register");
-            // this is set to false just after registration with setStorageRegisterDone.
-        }
-    }, [needAppRegister]);
+    useLoginOrRegister({
+        setLoginOrRegister,
+        memberId,
+        role,
+        isInstantAccount,
+    });
 
     const loadingData = Boolean(rememberAccess === "...");
 
