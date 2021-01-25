@@ -48,6 +48,10 @@ import {
     AsyncAgentNewPassword,
     AsyncPayGatewayRegister,
     AsyncBizTeamPassword,
+    // biz docs and footer
+    AsyncServiceStatus,
+    AsyncTerms,
+    AsyncPrivacyPolicy,
 } from "./CommonImports";
 //END PAGES
 
@@ -179,6 +183,17 @@ function Website({ location, history }) {
                     path="/painel-de-apps"
                     exact
                     component={AsyncAppsPanel}
+                />
+                <Route
+                    path="/status-de-servicos"
+                    exact
+                    component={AsyncServiceStatus}
+                />
+                <Route path="/termos-de-uso" exact component={AsyncTerms} />
+                <Route
+                    path="/privacidade"
+                    exact
+                    component={AsyncPrivacyPolicy}
                 />
                 <Route component={Default} />
             </Switch>

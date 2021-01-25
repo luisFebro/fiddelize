@@ -36,7 +36,7 @@ const getStyles = () => ({
     },
 });
 
-export default function BizForm({ history }) {
+export default function BizForm() {
     const [data, setData] = useState({
         bizName: "",
         bizCodeName: "",
@@ -158,7 +158,8 @@ export default function BizForm({ history }) {
         ];
         await setMultiVar(data, store.pre_register);
 
-        history.push(`/${bizCodeName}/novo-app/metas`);
+        // need to be reloaded since the other fields are prevented to be opened somehow.
+        window.location.href = `/${bizCodeName}/novo-app/metas`;
     };
 
     const showButtonActions = () => (

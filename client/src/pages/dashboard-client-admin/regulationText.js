@@ -18,8 +18,15 @@ Por exemplo, no seu *desafio atual de n.º ##desafio-atual*, você precisa alcan
 
 • O desafio possui 5 níveis com ##ponto-nivel cada.
 
+@REGRAS GERAIS@
+##nome-empresa reserva o direito de excluir o usuário, tirar pontos parcial ou integral caso tenha ciência de algum uso ou adição indevida dos pontos.
+
 @RESGATE DO SEU PRÊMIO@
 Você tem ##prazo-premio para resgatar seu prêmio contando a partir da data da última compra onde você atingiu a meta em pontos e venceu seu desafio atual.
+
+Resgatar seu prêmio é prático. Basta informar seu nome cadastrado no app para um membro de nossa equipe. Se você venceu um desafio, seu nome aparece automaticamente em nossa lista de ganhadores e você fica apto a receber.
+
+Você recebe notificação no app quando o prêmio é entregue.
 
 ~Te desejamos uma ótima experiência de compras, ##nome-cliente!~
 ~ - ##nome-empresa~.

@@ -17,27 +17,23 @@ lStorage("removeItem", {
     property: "selfMilestoneIcon",
 });
 
-const setLocalData = ({ type = "theming", colors, iconsData }) => {
-    (async () => {
-        const priorAdminData = await getVar(
-            "clientAdminData",
-            store.pre_register
-        );
+const setLocalData = async ({ type = "theming", colors, iconsData }) => {
+    const priorAdminData = await getVar("clientAdminData", store.pre_register);
 
-        let newObj = { ...priorAdminData, ...colors };
+    let newObj = { ...priorAdminData, ...colors };
 
-        let stepObj = { doneSSTheming: true };
-        if (type !== "theming") {
-            newObj = { ...priorAdminData, ...iconsData };
-            stepObj = { doneSSRatingIcon: true };
-        }
+    let stepObj = { doneSSTheming: true };
+    if (type !== "theming") {
+        newObj = { ...priorAdminData, ...iconsData };
+        stepObj = { doneSSRatingIcon: true };
+    }
 
-        const newAdminData = newObj;
-        await setMultiVar(
-            [{ clientAdminData: newAdminData }, stepObj],
-            store.pre_register
-        );
-    })();
+    const newAdminData = newObj;
+
+    return await setMultiVar(
+        [{ clientAdminData: newAdminData }, stepObj],
+        store.pre_register
+    );
 };
 
 function SelfServicePage({ location, history }) {

@@ -1,13 +1,28 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState } from "react";
+import { withRouter, Link } from "react-router-dom";
 import useDelay from "../../../hooks/useDelay";
 import AsyncVersion from "../../../_main-app/user-interfaces/version/AsyncVersion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./_Footer.scss";
+import { Load } from "../../../components/code-splitting/LoadableComp";
+import ModalFullContent from "../../../components/modals/ModalFullContent";
+
+const AsyncFiddelizeContact = Load({
+    loader: () =>
+        import(
+            "../../../pages/dashboard-client-admin/comps/FiddelizeContact" /* webpackChunkName: "fiddelize-contact-modal-lazy" */
+        ),
+});
 
 const Footer = ({ location }) => {
+    const [fullOpen, setFullOpen] = useState(false);
     const versionReady = useDelay(3000);
     const locationNow = location.pathname;
     const isHome = locationNow === "/";
+
+    const handleFullClose = () => {
+        setFullOpen(false);
+    };
 
     const isBlackList =
         locationNow.includes("baixe-app") || locationNow.includes("/t/app");
@@ -28,28 +43,34 @@ const Footer = ({ location }) => {
         </section>
     );
 
-    const showImportantLinks = () => (
+    const showBizLinks = () => (
         <section className="col-md-4">
             <div className="footer-col middle">
                 <ul className="list-unstyled li-space-lg p-small">
                     <li className="media">
                         <i className="fas fa-square"></i>
                         <div className="media-body">
-                            <a href="">Acessar conta</a>
+                            <a
+                                onClick={() => {
+                                    setFullOpen(true);
+                                }}
+                            >
+                                Fale conosco
+                            </a>
                         </div>
                     </li>
                     <br />
                     <li className="media">
                         <i className="fas fa-square"></i>
                         <div className="media-body">
-                            <a href="">Termos e Condições</a>
+                            <Link to="/termos-de-uso">Termos de uso</Link>
                         </div>
                     </li>
                     <br />
                     <li className="media">
                         <i className="fas fa-square"></i>
                         <div className="media-body">
-                            <a href="">Política de Privacidade</a>
+                            <Link to="/privacidade">Privacidade</Link>
                         </div>
                     </li>
                 </ul>
@@ -57,14 +78,23 @@ const Footer = ({ location }) => {
         </section>
     );
 
-    const showContact = () => (
+    const showSupportLinks = () => (
         <section className="col-md-4">
             <div className="footer-col last">
                 <ul className="list-unstyled li-space-lg p-small">
                     <li className="media">
                         <i className="fas fa-square"></i>
                         <div className="media-body">
-                            <a href="">Contato</a>
+                            <Link to="/acesso/verificacao">Acessar conta</Link>
+                        </div>
+                    </li>
+                    <br />
+                    <li className="media">
+                        <i className="fas fa-square"></i>
+                        <div className="media-body">
+                            <Link to="/status-de-servicos">
+                                Status de serviços
+                            </Link>
                         </div>
                     </li>
                 </ul>
@@ -86,8 +116,8 @@ const Footer = ({ location }) => {
                 <div className={`container ${!isHome ? "theme-p-dark" : ""}`}>
                     <div className="row">
                         {showAboutColumn()}
-                        {showImportantLinks()}
-                        {showContact()}
+                        {showBizLinks()}
+                        {showSupportLinks()}
                     </div>
                 </div>
                 <div className="copyright-slogon">
@@ -100,16 +130,26 @@ const Footer = ({ location }) => {
                             Fiddelize
                         </strong>
                         <span className="d-inline-block mx-3 font-weight-bold text-small">
+                            © 2020-{new Date().getFullYear()} O próximo nível em
+                            pontos de fidelidade.
                             <br />
-                            © O próximo nível em pontos de fidelidade. Todos os
-                            direitos reservados.
+                            Todos os direitos reservados.
                             <br />
-                            Manaus - {new Date().getFullYear()}
+                            <br />
+                            Feito com <FontAwesomeIcon icon="heart" /> em Manaus
+                            - Am
                         </span>
                     </div>
                 </div>
                 {versionReady && (
                     <AsyncVersion position="absolute" bottom={0} left={10} />
+                )}
+                {fullOpen && (
+                    <ModalFullContent
+                        contentComp={<AsyncFiddelizeContact />}
+                        fullOpen={fullOpen}
+                        setFullOpen={handleFullClose}
+                    />
                 )}
             </footer>
         )

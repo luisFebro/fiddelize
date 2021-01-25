@@ -161,7 +161,7 @@ a {
 }
 
 a:hover {
-    color: #0056b3;
+    color: var(--themePLight);
     text-decoration: underline;
 }
 

@@ -121,7 +121,7 @@ export default function RewardPlanner({ history }) {
                     2) Muito se fala em atrair clientes com Marketing, mas já
                     pensou em suas estratégias de estimular os clientes a
                     continuar comprando? Poiser, o prêmio é seu investimento de
-                    Marketing interno para sua clientela ativa.
+                    Marketing de relacionamento para sua clientela ativa.
                     <br />
                     <br />
                     3) Sai bem mais em conta do que o Marketing para atrair

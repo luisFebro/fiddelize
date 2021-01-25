@@ -57,8 +57,8 @@ export default function FiddelizeContact() {
                             <FontAwesomeIcon icon="chart-pie" style={faStyle} />
                         }
                     />
-                    <p className="text-small text-grey text-center">
-                        compra, pagamentos,
+                    <p className="text-small text-grey text-left">
+                        investimentos, parcerias,
                         <br />
                         sugestões, assuntos
                         <br />
@@ -76,12 +76,12 @@ export default function FiddelizeContact() {
                             <FontAwesomeIcon icon="cogs" style={faStyle} />
                         }
                     />
-                    <p className="text-small text-grey text-center">
-                        sugestões app, relatar
+                    <p className="text-small text-grey text-left">
+                        sugestões, dúvidas, relatar
                         <br />
                         falhas, design, assuntos
                         <br />
-                        do app.
+                        sobre os apps ou plataforma.
                     </p>
                 </div>
             </section>
@@ -92,7 +92,7 @@ export default function FiddelizeContact() {
         <p className="text-small text-purple" style={{ margin: 0 }}>
             geralmente respondemos logo, mas fico ciente de que o{" "}
             <strong>tempo de resposta</strong> pode levar até{" "}
-            <strong>48 horas</strong>.
+            <strong>24 horas</strong>.
         </p>
     );
 
@@ -129,7 +129,7 @@ export default function FiddelizeContact() {
                 <WhatsappBtn
                     isDisabled={!isChecked}
                     elsePhone={mainTechWhatsapp}
-                    supportName="Luis"
+                    supportName="Febro"
                 />
             </div>
         );

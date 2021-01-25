@@ -12,7 +12,7 @@ footer {
 
     & a {
         color: var(--mainWhite);
-        text-decoration: underline;
+        text-decoration: underline !important;
     }
 
     & .footer-col {

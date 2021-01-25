@@ -64,9 +64,10 @@ export default function AppPickersHandler({
                 setLocalData({
                     type: "theming",
                     colors,
+                }).then((res) => {
+                    setStep({ currNumber: 3, nextTask: "" });
+                    setNextDisabled(false);
                 });
-                setStep({ currNumber: 3, nextTask: "" });
-                setNextDisabled(false);
                 break;
             case 3:
                 const iconsData = {
@@ -83,8 +84,10 @@ export default function AppPickersHandler({
                 setLocalData({
                     type: "icon",
                     iconsData,
+                }).then((res) => {
+                    // need to be reloaded since the other fields are prevented to be opened somehow.
+                    window.location.href = `/${bizCodeName}/novo-app/cadastro-admin`;
                 });
-                history.push(`/${bizCodeName}/novo-app/cadastro-admin`);
                 break;
             default:
                 console.log("Something went wrong with handleNextStep");

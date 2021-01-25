@@ -106,3 +106,25 @@ export const AsyncAppsPanel = Load({
             "../../pages/apps-painel/AppsPanel" /* webpackChunkName: "apps-panel-page-lazy" */
         ),
 });
+
+// BIZ DOCS AND FOOTER
+// support
+export const AsyncServiceStatus = Load({
+    loader: () =>
+        import(
+            "../../pages/ServiceStatus" /* webpackChunkName: "service-status-page-lazy" */
+        ),
+});
+// biz
+export const AsyncTerms = Load({
+    loader: () =>
+        import("../../pages/Terms" /* webpackChunkName: "terms-page-lazy" */),
+});
+
+export const AsyncPrivacyPolicy = Load({
+    loader: () =>
+        import(
+            "../../pages/PrivacyPolicy" /* webpackChunkName: "privacy-page-lazy" */
+        ),
+});
+// END BIZ DOCS AND FOOTER
