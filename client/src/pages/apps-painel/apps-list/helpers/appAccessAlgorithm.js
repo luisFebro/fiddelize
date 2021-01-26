@@ -140,6 +140,11 @@ export default async function handleOpenApp({
             return history.push(`/t/app/nucleo-equipe`);
         }
 
+        // cli-admin apps can be multiple
+        if (isCliAdminApp) {
+            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
+        }
+
         if (isCliMemberApp) {
             return history.push(`/t/app/equipe`);
         }
@@ -184,6 +189,11 @@ export default async function handleOpenApp({
         if (isCliMemberApp) {
             await removeSession();
             return history.push(`/senha-equipe`);
+        }
+
+        // cli-user apps can be multiple
+        if (isCliUserApp) {
+            return handleCliUser({ bizId, history });
         }
     }
 

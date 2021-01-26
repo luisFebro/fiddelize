@@ -8,15 +8,6 @@ const {
 } = require("../schemes.js");
 
 // SCHEMES
-const regulationData = {
-    text: {
-        type: String,
-        trim: true,
-    },
-    updatedAt: Date,
-};
-const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true does  not work as a subdocument
-
 const rewardListData = {
     id: String,
     icon: String,
@@ -155,8 +146,6 @@ const clientAdminData = {
     rewardList: [RewardListSchema],
 
     verificationPass: String,
-    regulation: RegulationSchema,
-
     onceChecked: OnceCheckedSchema,
     notifications: [NotificationsSchema],
     tasks: [TasksListSchema],
@@ -187,4 +176,13 @@ ClientAdminSchema.pre('save', function(next) {
     this.bizPlanCode = generatePlanCodes();
     next();
 });
+
+const regulationData = {
+    text: {
+        type: String,
+        trim: true,
+    },
+    updatedAt: Date,
+};
+const RegulationSchema = new Schema(regulationData, { _id: false }); // timestamps: true does  not work as a subdocument
  */

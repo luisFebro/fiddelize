@@ -13,7 +13,9 @@ exports.getAccount = async (userId, options = {}) => {
 
     const query = cpf ? { checkId: cpf } : { defaultUserId: userId };
 
-    const select = accounts ? "accounts -_id" : "defaultRole -_id";
+    const select = accounts
+        ? "accounts -_id"
+        : "defaultRole defaultUserId -_id";
 
     const data = await Account.findOne(query).select(select);
 
@@ -21,7 +23,7 @@ exports.getAccount = async (userId, options = {}) => {
 
     const res = accounts
         ? { accounts: data.accounts }
-        : { role: data.defaultRole };
+        : { role: data.defaultRole, defaultUserId: data.defaultUserId };
 
     return res;
 };

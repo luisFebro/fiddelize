@@ -4,7 +4,6 @@ import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState } from "easy-peasy";
-import HiddenScoreRegulation from "../card-hidden-content/score-regulation/HiddenScoreRegulation";
 import HiddenVerifPass from "../card-hidden-content/HiddenVerifPass";
 import HiddenProfile from "../card-hidden-content/HiddenProfile";
 import HiddenBizDataAndBackup from "../card-hidden-content/biz-data-and-backup/HiddenBizDataAndBackup";
@@ -24,9 +23,9 @@ export default function ShowExpansiblePanel() {
     const configList = [
         {
             id: 0,
-            name: "Regulamento<br />de Pontos",
-            leftIcon: <FontAwesomeIcon icon="list-ul" />,
-            hiddenContent: <HiddenScoreRegulation clientAdmin={clientAdmin} />,
+            name: "Seu Perfil",
+            leftIcon: <FontAwesomeIcon icon="user" />,
+            hiddenContent: <HiddenProfile userData={userData} />,
         },
         {
             id: 1,
@@ -36,12 +35,6 @@ export default function ShowExpansiblePanel() {
         },
         {
             id: 2,
-            name: "Seu Perfil",
-            leftIcon: <FontAwesomeIcon icon="user" />,
-            hiddenContent: <HiddenProfile userData={userData} />,
-        },
-        {
-            id: 3,
             name: `Dados Projeto<br />e Segurança`,
             leftIcon: <FontAwesomeIcon icon="database" />,
             hiddenContent: <HiddenBizDataAndBackup userData={userData} />,

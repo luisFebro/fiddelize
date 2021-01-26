@@ -104,7 +104,9 @@ export default function HiddenProfile({ userData }) {
             );
 
         const dataToSend = { ...data };
-        updateUser(dispatch, dataToSend, userData._id).then((res) => {
+        updateUser(dispatch, dataToSend, userData._id, {
+            thisRole: "cliente-admin",
+        }).then((res) => {
             if (res.status !== 200)
                 return showSnackbar(dispatch, res.data.msg, "error");
             showSnackbar(dispatch, "Seu perfil foi atualizado!", "success");

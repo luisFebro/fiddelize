@@ -12,6 +12,7 @@ import useAPI, {
 } from "../../../../../hooks/api/useAPI";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import getId from "../../../../../utils/getId";
+import useData from "../../../../../hooks/useData";
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");
@@ -22,6 +23,8 @@ export default function HiddenGoalsAndRewards() {
     const { businessId } = useAppSystem();
     const { arePrizesVisible } = useClientAdmin();
 
+    const [currRole] = useData(["role"]);
+
     // LESSON: dont declare db keys as object as will delete all others. INtead, write as string paths like clientAdminData.arePrizesVisible clientAdminData, not arePrizesVisible { arePrizesVisible ...
     const body = {
         "clientAdminData.arePrizesVisible": treatBoolStatus(visibleToggleBtn),
@@ -30,7 +33,7 @@ export default function HiddenGoalsAndRewards() {
         method: "put",
         url: updateUser(businessId),
         body,
-        trigger: visibleToggleBtn,
+        trigger: visibleToggleBtn && currRole !== "...",
     });
 
     const handleVisibility = (res) => {

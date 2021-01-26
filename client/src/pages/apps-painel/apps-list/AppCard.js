@@ -77,8 +77,10 @@ function AppCard({ data, payload, loading }, ref) {
         userId,
     };
 
-    const finalBizLogo =
+    let finalBizLogo =
         bizImg && bizImg.replace(/\/h_100,w_100|\/h_85,w_190/gi, "");
+    finalBizLogo =
+        finalBizLogo === "" ? `/img/official-logo-name.png` : finalBizLogo;
     const showCard = () => (
         <section className="shadow-babadoo app-card--root">
             <section className="upper-audio-camera">

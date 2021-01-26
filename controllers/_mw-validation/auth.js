@@ -97,17 +97,23 @@ exports.mwValidateLogin = async (req, res, next) => {
     const { cpf, appPanelUserId, appPanelRole } = req.body;
     const isCpfValid = new CPF().validate(cpf);
 
+    // important: for multi account with the same CPF inside the same app type,
+    // the search should be by _id and not by CPF since the query will select the first CPF found and can lead to mistakes.
+
     let role = appPanelRole;
+    let ultimateUserId = appPanelUserId;
     if (!appPanelUserId) {
-        const { role: thisRole } = await req.getAccount(null, { cpf });
+        const {
+            role: thisRole,
+            defaultUserId: thisDefaultUserId,
+        } = await req.getAccount(null, { cpf });
         if (!thisRole)
             return res.status(400).json({ error: "Acesso inválido." });
         role = thisRole;
+        ultimateUserId = thisDefaultUserId;
     }
 
-    const whichQuery = appPanelUserId
-        ? { _id: appPanelUserId }
-        : { cpf: jsEncrypt(cpf) };
+    const whichQuery = { _id: ultimateUserId };
 
     User(role)
         .findOne(whichQuery)

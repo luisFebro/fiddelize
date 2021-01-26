@@ -11,12 +11,35 @@ import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { updateUser } from "../../../redux/actions/userActions";
 import { readVerificationPass } from "../../../redux/actions/adminActions";
 import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
-import { regulationText } from "../regulationText";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 import { setVar, store } from "../../../hooks/storage/useVar";
 
 const isSmall = window.Helper.isSmallScreen();
+
+const styles = {
+    form: {
+        maxWidth: "350px",
+        width: "100%",
+        background: "var(--themeSDark)",
+        borderRadius: "10px",
+        padding: "25px",
+    },
+    fieldFormValue: {
+        backgroundColor: "var(--mainWhite)",
+        color: "var(--themeP)",
+        fontSize: "26px",
+        fontFamily: "var(--mainFont)",
+        // textAlign: 'center', it does not works
+        padding: "10px 14px",
+        zIndex: 2000,
+    },
+    lockIcon: {
+        top: 0,
+        left: "-70px",
+        zIndex: 3000,
+    },
+};
 
 export default function ShowPasswordForm({
     isFromCliAdminDash = false,
@@ -57,30 +80,6 @@ export default function ShowPasswordForm({
         }
     }, [businessId]);
 
-    const styles = {
-        form: {
-            maxWidth: "350px",
-            width: "100%",
-            background: "var(--themeSDark)",
-            borderRadius: "10px",
-            padding: "25px",
-        },
-        fieldFormValue: {
-            backgroundColor: "var(--mainWhite)",
-            color: "var(--themeP)",
-            fontSize: "26px",
-            fontFamily: "var(--mainFont)",
-            // textAlign: 'center', it does not works
-            padding: "10px 14px",
-            zIndex: 2000,
-        },
-        lockIcon: {
-            top: 0,
-            left: "-70px",
-            zIndex: 3000,
-        },
-    };
-
     const sendDataBackend = () => {
         if (!clientAdminData.verificationPass) {
             setError(true);
@@ -91,22 +90,16 @@ export default function ShowPasswordForm({
             );
             return;
         }
-        let dataToSend;
-        if (isFromCliAdminDash) {
-            dataToSend = {
-                "clientAdminData.verificationPass":
-                    clientAdminData.verificationPass,
-            };
-        } else {
-            dataToSend = {
-                "clientAdminData.verificationPass":
-                    clientAdminData.verificationPass,
-                "clientAdminData.regulation.text": regulationText,
-            };
-        }
+
+        const dataToSend = {
+            "clientAdminData.verificationPass":
+                clientAdminData.verificationPass,
+        };
 
         showSnackbar(dispatch, "Ok, registrando...");
-        updateUser(dispatch, dataToSend, businessId).then((res) => {
+        updateUser(dispatch, dataToSend, businessId, {
+            thisRole: "cliente-admin",
+        }).then((res) => {
             if (res.status !== 200)
                 return showSnackbar(dispatch, res.data.msg, "error");
 

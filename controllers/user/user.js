@@ -121,7 +121,7 @@ exports.update = async (req, res) => {
         req.body.cpf = jsEncrypt(req.body.cpf);
     }
 
-    const { role } = await req.getAccount(req.params.userId);
+    const role = req.role;
     User(role)
         .findOneAndUpdate(
             { _id: req.profile._id },

@@ -10,10 +10,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
 // CUSTOM DATA
-import {
-    deleteUser,
-    updateUser,
-} from "../../../../../../../redux/actions/userActions";
 import { setRun } from "../../../../../../../hooks/useRunComp";
 import { countField } from "../../../../../../../redux/actions/userActions";
 import { useAppSystem } from "../../../../../../../hooks/useRoleData";

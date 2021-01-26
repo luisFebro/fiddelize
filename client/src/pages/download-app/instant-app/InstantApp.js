@@ -130,22 +130,19 @@ export default function InstantAccount({
             await Promise.all([
                 removeMultiVar(["success", "memberId"], store.user),
                 setMultiVar(storeElems, store.user),
+                isCliAdmin ? removeCollection("pre_register") : undefined,
             ]).then((res) => {
+                setSuccess(true);
                 lStorage("setItem", { ...needAppRegisterOp, value: false });
             });
-
-            if (isCliAdmin) {
-                await removeCollection("pre_register");
-            }
-
-            setSuccess(true);
         })();
     };
 
     return (
-        <section className="container-center">
+        <section className="container-center-col">
             <TextField
                 placeholder="000.000.000-00"
+                type="tel"
                 InputProps={{
                     style: styles.fieldFormValue, // alignText is not working here... tried input types and variations
                 }}

@@ -1,5 +1,6 @@
 // default
-export const regulationText = `Caro cliente, você está participando agora dos desafios do app da ##nome-empresa onde você ganha um prêmio a cada desafio concluído com seus pontos acumulados em toda nova compra.
+export const updatedAt = "2021-01-26T00:12:14.416Z";
+const regulationText = `Caro cliente, você está participando agora dos desafios do app da ##nome-empresa onde você ganha um prêmio a cada desafio concluído com seus pontos acumulados em toda nova compra.
 
 @REGISTRO DE PONTOS@
 Nunca foi tão prático e rápido adicionar e receber pontos. Nem precisamos pedir seu dispositivo móvel. Nossa equipe possui também um app que adiciona os pontos em poucos segundos. Você informa seu nome e recebe direto no seu app.
@@ -31,6 +32,8 @@ Você recebe notificação no app quando o prêmio é entregue.
 ~Te desejamos uma ótima experiência de compras, ##nome-cliente!~
 ~ - ##nome-empresa~.
 `;
+
+export default regulationText;
 
 /*
 @SEGURANÇA DE DADOS@

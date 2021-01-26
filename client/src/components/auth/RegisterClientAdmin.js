@@ -238,15 +238,14 @@ function RegisterClientAdmin({ logo }) {
 
         await removeCollection("pre_register");
 
-        const userId = res.data.authUserId;
-
-        ReactGA.event({
-            // n1
-            label: "Form",
-            category: "cliAdmin",
-            action: "Created an account",
-            transport: "beacon",
-        });
+        ReactGA &&
+            ReactGA.event({
+                // n1
+                label: "Form",
+                category: "cliAdmin",
+                action: "Created an account",
+                transport: "beacon",
+            });
 
         const removalOptions = {
             collection: "onceChecked",
@@ -254,16 +253,11 @@ function RegisterClientAdmin({ logo }) {
         lStorage("removeItems", removalOptions);
 
         // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-        setTimeout(
-            () =>
-                (window.location.href = `/baixe-app/${getFirstName(
-                    name
-                )}?negocio=${
-                    clientAdminData.bizName
-                }&admin=1&logo=${logo}&bc=default&pc=default&sc=default`),
-            500
-        );
+        window.location.href = `/baixe-app/${getFirstName(name)}?negocio=${
+            clientAdminData.bizName
+        }&admin=1&logo=${logo}&bc=default&pc=default&sc=default`;
 
+        // const userId = res.data.authUserId;
         // sendEmail(userId);
         clearData();
     };

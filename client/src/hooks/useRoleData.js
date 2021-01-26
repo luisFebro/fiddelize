@@ -121,7 +121,6 @@ export const useClientAdmin = () => {
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
     const bizWhatsapp = clientAdmin && clientAdmin.bizWhatsapp;
-    const regulation = clientAdmin && clientAdmin.regulation;
     const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
     const totalClientUserActiveScores =
         clientAdmin && clientAdmin.totalClientUserActiveScores;
@@ -146,7 +145,6 @@ export const useClientAdmin = () => {
         maxScore,
         mainReward,
         rewardList,
-        regulation,
         rewardDeadline,
         totalClientUserActiveScores,
         totalClientUserScores,

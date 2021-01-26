@@ -57,13 +57,16 @@ export const readCentralAdmin = async (dispatch) => {
 export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
     // selectKeys: is a string with only the keys requires to return.
     // noResponse: update but do not return any data as response.
-    let { selectKeys, noResponse } = opts;
+    let { selectKeys, noResponse, thisRole } = opts;
     const selectQuery = selectKeys ? `selectKeys=${selectKeys}` : "";
-    !noResponse ? (noResponse = true) : (noResponse = false);
+    const noResponseQuery = !noResponse
+        ? `&noResponse=true`
+        : `&noResponse=false`;
+    const thisRoleQuery = thisRole ? `&thisRole=${thisRole}` : "";
 
     try {
         const res = await axios.put(
-            `/api/user/${_idUser}?${selectQuery}&noResponse=${noResponse}`,
+            `/api/user/${_idUser}?${selectQuery}${noResponseQuery}${thisRoleQuery}`,
             objToSend,
             getHeaderJson
         );

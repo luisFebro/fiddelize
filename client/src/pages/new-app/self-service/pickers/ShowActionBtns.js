@@ -43,7 +43,9 @@ export default function ShowActionBtns({
 
     const handleUpdateIcon = () => {
         showSnackbar(dispatch, titleBeforeOk);
-        updateUser(dispatch, objToSend, businessId).then((res) => {
+        updateUser(dispatch, objToSend, businessId, {
+            thisRole: "cliente-admin",
+        }).then((res) => {
             if (res.status !== 200)
                 return showSnackbar(
                     dispatch,

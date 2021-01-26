@@ -37,16 +37,6 @@ const currClientAdminData = {
     rewardScore: clientAdminData && clientAdminData.maxScore,
     mainReward: clientAdminData && clientAdminData.mainReward,
     rewardList: clientAdminData && clientAdminData.rewardList,
-    regulation: {
-        text:
-            clientAdminData &&
-            clientAdminData.regulation &&
-            clientAdminData.regulation.text,
-        updatedAt:
-            clientAdminData &&
-            clientAdminData.regulation &&
-            clientAdminData.regulation.updatedAt,
-    },
     rewardDeadline: clientAdminData && clientAdminData.rewardDeadline,
     totalClientUserActiveScores:
         clientAdminData && clientAdminData.totalClientUserActiveScores,

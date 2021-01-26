@@ -158,9 +158,8 @@ function AsyncClientScoresPanel({ history, location }) {
 
                 await getAPI({
                     method: "put",
-                    url: updateUser(_id),
+                    url: updateUser(_id, whichRole),
                     body: objToSend,
-                    params: { thisRole: whichRole },
                 }).catch((err) => {
                     console.log("ERROR: " + err);
                 });

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ButtonMulti, {
     faStyle,
 } from "../components/buttons/material-ui/ButtonMulti";
-import { useStoreDispatch } from "easy-peasy";
 import { Link } from "react-router-dom";
 import LoadingThreeDots from "../components/loadingIndicators/LoadingThreeDots";
 import Paper from "@material-ui/core/Paper";
@@ -11,26 +10,29 @@ import isThisApp from "../utils/window/isThisApp";
 import replaceVariablesInTxt from "../utils/string/replaceVariablesInTxt";
 import DateWithIcon from "../components/date-time/DateWithIcon";
 import getQueryByName from "../utils/string/getQueryByName";
-import { setRun } from "../redux/actions/globalActions";
 import { useClientAdmin, useClientUser } from "../hooks/useRoleData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import selectTxtStyle, { currTxtColor } from "../utils/biz/selectTxtStyle";
 import pickCurrChallData from "../utils/biz/pickCurrChallData";
 import defineCurrChallenge from "../utils/biz/defineCurrChallenge";
-import { regulationText } from "./dashboard-client-admin/regulationText";
+import regulationText, {
+    updatedAt,
+} from "./dashboard-client-admin/regulationText";
 import useBackColor from "../hooks/useBackColor";
 import useData from "../hooks/useData";
+import useScrollUp from "../hooks/scroll/useScrollUp";
+
+const isApp = isThisApp();
 
 export default function RegulationPage({ location }) {
-    const isClientAdmin = location.search.includes("cliAdmin=1");
     const needAppForCliAdmin = location.search.includes("client-admin=1");
     const bizCodeName = getQueryByName("bizCodeName", location.search);
 
+    useScrollUp();
     const [cliFirstName] = useData(["firstName"]);
 
     let {
         bizName,
-        regulation,
         mainReward,
         maxScore,
         rewardDeadline,
@@ -49,8 +51,6 @@ export default function RegulationPage({ location }) {
 
     const rewardScore = maxScore;
     const levelScore = rewardScore && rewardScore / 5;
-
-    const dispatch = useStoreDispatch();
 
     useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
 
@@ -92,29 +92,18 @@ export default function RegulationPage({ location }) {
     );
 
     const handlePath = () => {
-        if (isClientAdmin) {
-            return `/${bizCodeName}/cliente-admin/painel-de-controle`;
-        }
-
         if (needAppForCliAdmin) {
             return "/mobile-app?client-admin=1";
         }
 
-        return isThisApp() ? "/mobile-app" : "/";
+        return isApp ? "/mobile-app" : "/";
     };
 
     const showBackBtnAndTimeStamp = () => (
         <div className="d-flex justify-content-between my-5">
-            <Link
-                to={handlePath()}
-                onClick={() =>
-                    handlePath() &&
-                    handlePath().includes("/cliente-admin") &&
-                    setRun(dispatch, "goDash")
-                }
-            >
+            <Link to={handlePath()}>
                 <ButtonMulti
-                    title={isClientAdmin ? "voltar painel" : "voltar"}
+                    title="voltar"
                     color={currTxtColor(selfThemePColor || "default")}
                     backgroundColor={
                         "var(--themeSDark--" + selfThemeSColor + ")"
@@ -129,7 +118,7 @@ export default function RegulationPage({ location }) {
             </Link>
             <DateWithIcon
                 style={{ color: currTxtColor(selfThemeBackColor || "default") }}
-                date={regulation && regulation.updatedAt}
+                date={updatedAt}
                 msgIfNotValidDate="Nenhuma alteração."
                 marginTop={0}
                 needTxtShadow={true}
