@@ -81,6 +81,7 @@ import { faMusic } from "@fortawesome/free-solid-svg-icons/faMusic";
 import { faPaw } from "@fortawesome/free-solid-svg-icons/faPaw";
 import { faRobot } from "@fortawesome/free-solid-svg-icons/faRobot";
 import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
+import { faStarHalf } from "@fortawesome/free-solid-svg-icons/faStarHalf";
 import { faStethoscope } from "@fortawesome/free-solid-svg-icons/faStethoscope";
 import { faSun } from "@fortawesome/free-solid-svg-icons/faSun";
 import { faTshirt } from "@fortawesome/free-solid-svg-icons/faTshirt";
@@ -91,7 +92,12 @@ import { faBullhorn } from "@fortawesome/free-solid-svg-icons/faBullhorn";
 import { faStore } from "@fortawesome/free-solid-svg-icons/faStore";
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons/faCreditCard";
 import { faPhoneSquareAlt } from "@fortawesome/free-solid-svg-icons/faPhoneSquareAlt";
-//
+// rating nps
+import { faAngry } from "@fortawesome/free-solid-svg-icons/faAngry";
+import { faFrown } from "@fortawesome/free-solid-svg-icons/faFrown";
+import { faMeh } from "@fortawesome/free-solid-svg-icons/faMeh";
+import { faGrimace } from "@fortawesome/free-solid-svg-icons/faGrimace";
+import { faGrinWink } from "@fortawesome/free-solid-svg-icons/faGrinWink";
 
 library.add(
     faAngleDoubleRight,
@@ -174,13 +180,19 @@ library.add(
     faPaw,
     faRobot,
     faStar,
+    faStarHalf,
     faStethoscope,
     faSun,
     faTshirt,
     faUserTie,
     faReply,
-    faBolt
-    //end app milestone icons
+    faBolt,
+    // rating NPS
+    faAngry,
+    faFrown,
+    faMeh,
+    faGrimace,
+    faGrinWink
 );
 
 export const awesomeStyle = {

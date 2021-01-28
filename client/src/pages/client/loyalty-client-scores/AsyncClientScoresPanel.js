@@ -34,18 +34,41 @@ import getAPI, {
     updateUser,
     addPurchaseHistory,
 } from "../../../utils/promises/getAPI";
-import useGetVar, { getVar, setVar } from "../../../hooks/storage/useVar";
+import useGetVar, {
+    getVar,
+    setVar,
+    removeVar,
+} from "../../../hooks/storage/useVar";
 import useBackColor from "../../../hooks/useBackColor";
 import { getScoreData, getStyles } from "./helpers";
+import BuyRating from "./rating/BuyRating";
 
 const isSmall = window.Helper.isSmallScreen();
+const isApp = isThisApp();
 
 function AsyncClientScoresPanel({ history, location }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const [finishedWork, setFinishedWork] = useState(false);
     const [hideCurrScore, setHideCurrScore] = useState(false); // with updating, the currScore double when click on finish button. Then ofuscate it with "...".
+    const [ratingData, setRatingData] = useState({
+        type: "nps",
+        nps: "", // for nps
+        xpScore: "", // for buy experience
+        buyReport: "",
+        isDBLoaded: false,
+    });
+    const { type, isDBLoaded, buyReport, xpScore } = ratingData;
 
-    const { data: paidValue } = useGetVar("paidValue");
+    const handleBuyRating = (data) => {
+        setRatingData({
+            ...ratingData,
+            ...data,
+        });
+    };
+
+    const { data: paidValue, loading: paidValueLoading } = useGetVar(
+        "paidValue"
+    );
 
     // ROLES
     const { businessId } = useAppSystem();
@@ -92,6 +115,42 @@ function AsyncClientScoresPanel({ history, location }) {
     });
     useBackColor(`var(--themeBackground--${colorBack})`);
     // useCount("ClientScoresPanel"); // RT = 46
+    useEffect(() => {
+        if (!paidValueLoading && !paidValue) {
+            history.push(isApp ? "/mobile-app" : "/acesso/verificacao");
+        }
+    }, [paidValueLoading, paidValue]);
+
+    useEffect(() => {
+        (async () => {
+            // make sure to switch to the xp assess even if user faces a network issue.
+            // this is stored when user clicked in the finish button in the prior buy.
+            const alreadyNPS = await getVar("doneNPS");
+            if (alreadyNPS) {
+                setRatingData((prev) => ({
+                    ...prev,
+                    type: "stars",
+                }));
+            }
+            const dataCliReview = await readUser(dispatch, _id, {
+                role: "cliente",
+                select: "clientUserData.review",
+            });
+            const thisReview =
+                dataCliReview && dataCliReview.data.clientUserData.review;
+            if (!thisReview) return;
+
+            setRatingData((prev) => ({
+                ...prev,
+                type: thisReview.nps ? "stars" : "nps",
+                xpScore: thisReview.xpScore ? thisReview.xpScore : "",
+                buyReport: thisReview.buyReport,
+                isDBLoaded: Boolean(
+                    thisReview.nps || thisReview.xpScore || thisReview.buyReport
+                ),
+            }));
+        })();
+    }, []);
     // END USE HOOKS
 
     // MAIN VARIABLES
@@ -148,6 +207,9 @@ function AsyncClientScoresPanel({ history, location }) {
             }
 
             (async () => {
+                // remove this var so the it can be undefined and redirect user
+                await removeVar("paidValue");
+                if (!paidValue) return;
                 // avoid user to restart page and end up adding more scores
                 const alreadySetScore = await getVar("alreadySetTempScore");
                 if (alreadySetScore) {
@@ -184,11 +246,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     body: historyObj,
                 });
 
-                showSnackbar(
-                    dispatch,
-                    `Pontuação Registrada, ${getFirstName(name)}!`,
-                    "success"
-                );
+                showSnackbar(dispatch, `Pontuação Registrada!`, "success");
 
                 if (userBeatChallenge) {
                     const options = {
@@ -278,7 +336,35 @@ function AsyncClientScoresPanel({ history, location }) {
 
     const handleHomeBtnClick = async () => {
         setHideCurrScore(true);
-        if (isThisApp()) {
+        if (!ratingData.nps && type === "nps")
+            return showSnackbar(
+                dispatch,
+                "Clique em uma carinha para continuar",
+                "warning"
+            );
+        await setVar({ doneNPS: true });
+        showSnackbar(dispatch, "Salvando e finalizando...", "warning");
+        // update user with new rating
+
+        await getAPI({
+            method: "put",
+            url: updateUser(_id, whichRole),
+            body: {
+                "clientUserData.review.nps": !ratingData.nps
+                    ? undefined
+                    : ratingData.nps,
+                "clientUserData.review.xpScore": !ratingData.nps
+                    ? ratingData.xpScore
+                    : undefined,
+                "clientUserData.review.buyReport": !ratingData.buyReport
+                    ? undefined
+                    : ratingData.buyReport,
+            },
+        }).catch((err) => {
+            console.log("ERROR: " + err);
+        });
+
+        if (isApp) {
             await readUser(dispatch, _id, {
                 role: whichRole,
             });
@@ -293,7 +379,7 @@ function AsyncClientScoresPanel({ history, location }) {
     };
 
     const showHomeBtn = () => {
-        const title = finishedWork ? "Finalizar" : "Processando...";
+        const title = finishedWork ? "Salvar e Finalizar" : "Processando...";
         const backColorOnHover = "var(--themeSLight--" + colorS + ")";
         const backgroundColor = "var(--themeSDark--" + colorS + ")";
         return (
@@ -325,6 +411,14 @@ function AsyncClientScoresPanel({ history, location }) {
             >
                 {showHeader()}
                 {showScores()}
+                <BuyRating
+                    handleBuyRating={handleBuyRating}
+                    type={type || "nps"}
+                    isDBLoaded={isDBLoaded}
+                    ratingData={ratingData}
+                    defaultBuyReport={isDBLoaded && buyReport}
+                    defaultXpScore={isDBLoaded && xpScore}
+                />
                 {showHomeBtn()}
             </div>
         </section>

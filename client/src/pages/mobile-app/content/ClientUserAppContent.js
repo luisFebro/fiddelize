@@ -156,6 +156,7 @@ export default function ClientUserAppContent({
                 noResponse: true,
                 prizeDesc: mainReward,
                 trophyIcon: selfMilestoneIcon,
+                thisRole: role || "cliente",
             };
             getVar("pendingChall").then((resPending) => {
                 let thisMaxScore = maxScore;

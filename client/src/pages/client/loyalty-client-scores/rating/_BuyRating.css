@@ -1,0 +1,28 @@
+.nps-rating--root {
+    color: var(--mainWhite);
+    text-align: center;
+    font-family: var(--mainFont);
+}
+
+.nps-rating--root .grade-area {
+    font-size: 1.4rem;
+}
+
+.nps-rating--root .grade-area .grade {
+    color: var(--mainWhite);
+    background-color: var(--themeP);
+    border-radius: 30px;
+    font-size: 2.2rem;
+    font-weight: bold;
+}
+
+.nps-rating--root {
+    padding: 15px 30px 10px;
+    border-radius: 30px;
+    box-sizing: border-box;
+}
+
+.nps-rating--root .stars-group,
+.nps-rating--root .faces-group {
+    margin: 15px 0;
+}

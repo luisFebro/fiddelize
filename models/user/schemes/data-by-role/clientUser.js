@@ -54,6 +54,15 @@ const clientUserData = {
     filterHighestPurchase: Number,
     registeredBy: { type: ObjectId, ref: "CliMember" }, // not applicable for admin, need to fetch from admin doc
     tempScoreList: [TempScoreSchema], // store scores from members app. The elements will delete after usage...
+    review: {
+        nps: Number,
+        xpScore: Number, // buy experience score
+        buyReport: {
+            type: String,
+            trim: true,
+            lowercase: true,
+        },
+    },
 };
 
 const ClientUserSchema = new Schema(clientUserData, { _id: false });

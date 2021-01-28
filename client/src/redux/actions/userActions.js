@@ -106,7 +106,7 @@ export const readPurchaseHistory = async (
         prizeDesc,
         trophyIcon,
         trigger = true,
-        thisRole,
+        thisRole = "cliente",
     } = options;
 
     if (!trigger) return;

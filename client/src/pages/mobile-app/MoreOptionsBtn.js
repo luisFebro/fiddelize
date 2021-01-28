@@ -11,6 +11,7 @@ import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
+import StarIcon from "@material-ui/icons/Star";
 import ChatIcon from "@material-ui/icons/Chat";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import lStorage, {
@@ -24,10 +25,17 @@ import getFirstName from "../../utils/string/getFirstName";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import { disconnect } from "../../hooks/useAuthUser";
 
-const Async = Load({
+const AsyncHistory = Load({
     loader: () =>
         import(
             "./history-purchase-btn/AsyncPurchaseHistory" /* webpackChunkName: "cli-purchase-history-full-page-lazy" */
+        ),
+});
+
+const AsyncReview = Load({
+    loader: () =>
+        import(
+            "./modals/ReviewModal" /* webpackChunkName: "client-review-full-page-lazy" */
         ),
 });
 
@@ -67,6 +75,7 @@ function MoreOptionsBtn({
     const [blockAccess, setBlockAccess] = useState(false);
     const [purchaseModal, setPurchaseModal] = useState(false);
     const [contactModal, setContactModal] = useState(false);
+    const [reviewModal, setReviewModal] = useState(false);
 
     const styles = getStyles();
 
@@ -113,7 +122,7 @@ function MoreOptionsBtn({
         });
 
         const modalData = getModalData();
-        const AsyncPurchaseHistory = <Async modalData={modalData} />;
+        const AsyncPurchaseHistory = <AsyncHistory modalData={modalData} />;
 
         return (
             <ModalFullContent
@@ -161,6 +170,15 @@ function MoreOptionsBtn({
                 },
             },
             {
+                icon: <StarIcon style={styles.muStyle} />,
+                name: "Sua Avaliação ►",
+                backColor: "var(--themeSDark--" + colorS + ")",
+                onClick: () => {
+                    !needAppForPreview && setReviewModal(true);
+                    playBeep();
+                },
+            },
+            {
                 icon: <LocalMallIcon style={styles.muStyle} />,
                 name: "Seu Histórico ►",
                 backColor: "var(--themeSDark--" + colorS + ")",
@@ -200,6 +218,17 @@ function MoreOptionsBtn({
         );
     };
 
+    const showReviewComp = () => {
+        const Comp = <AsyncReview />;
+        return (
+            <ModalFullContent
+                contentComp={Comp}
+                fullOpen={reviewModal}
+                setFullOpen={setReviewModal}
+            />
+        );
+    };
+
     return (
         <div className="position-relative">
             <div
@@ -234,8 +263,9 @@ function MoreOptionsBtn({
                 }}
                 hidden={!showMoreBtn}
             />
-            {showPurchaseHistory()}
-            {showContactComp()}
+            {purchaseModal && showPurchaseHistory()}
+            {contactModal && showContactComp()}
+            {reviewModal && showReviewComp()}
         </div>
     );
 }

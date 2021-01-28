@@ -1,0 +1,92 @@
+.nps-rating--root .faces-group {
+    margin: 0 auto;
+}
+.nps-rating--root .faces-group svg {
+    font-size: 3rem;
+    padding: 0 3px;
+    margin: 5px;
+    border-radius: 30px;
+    border: 0px solid transparent;
+    background-color: var(--mainWhite);
+}
+
+.faces-group svg.curr-scale {
+    transform: scale(1.4);
+    transition: all 0.3s ease-out;
+    margin: 12px;
+}
+
+.nps-rating--root .faces-group svg.scale-1 {
+    color: rgba(255, 17, 0, 0.7);
+}
+.faces-group svg.scale-1.curr-scale {
+    color: rgba(255, 17, 0, 1);
+}
+
+.nps-rating--root .faces-group svg.scale-2 {
+    color: rgba(255, 17, 0, 0.6);
+}
+.faces-group svg.scale-2.curr-scale {
+    color: rgba(255, 17, 0, 0.9);
+}
+
+.nps-rating--root .faces-group svg.scale-3 {
+    color: rgba(255, 17, 0, 0.5);
+}
+.faces-group svg.scale-3.curr-scale {
+    color: rgba(255, 17, 0, 0.8);
+}
+
+.nps-rating--root .faces-group svg.scale-4 {
+    color: rgba(255, 17, 0, 0.4);
+}
+.faces-group svg.scale-4.curr-scale {
+    color: rgba(255, 17, 0, 0.8);
+}
+
+.nps-rating--root .faces-group svg.scale-5 {
+    color: rgba(255, 152, 0, 0.7);
+}
+.faces-group svg.scale-5.curr-scale {
+    color: rgba(255, 152, 0, 0.9);
+}
+
+.nps-rating--root .faces-group svg.scale-6 {
+    color: rgba(255, 152, 0, 0.6);
+}
+.faces-group svg.scale-6.curr-scale {
+    color: rgba(255, 152, 0, 1);
+}
+
+.nps-rating--root .faces-group svg.scale-7 {
+    color: rgba(139, 195, 74, 0.6);
+}
+.faces-group svg.scale-7.curr-scale {
+    color: rgba(139, 195, 74, 0.9);
+}
+.nps-rating--root .faces-group svg.scale-8 {
+    color: rgba(139, 195, 74, 0.7);
+}
+.faces-group svg.scale-8.curr-scale {
+    color: rgba(139, 195, 74, 1);
+}
+.nps-rating--root .faces-group svg.scale-9 {
+    color: rgba(139, 195, 74, 0.8);
+}
+.faces-group svg.scale-9.curr-scale {
+    color: rgba(169, 195, 74, 1);
+}
+.nps-rating--root .faces-group svg.scale-10 {
+    color: rgba(76, 175, 80, 0.9);
+}
+.faces-group svg.scale-10.curr-scale {
+    color: rgba(76, 175, 80, 1);
+}
+
+.nps-rating--root .faces-group svg.entire-full.curr-star-full {
+    padding: 0 0px;
+}
+
+.nps-rating--root .faces-group svg.empty-star {
+    color: rgba(255, 255, 0, 0.3) !important;
+}

@@ -269,7 +269,7 @@ exports.getGeneralTotals = async (req, res) => {
 exports.readCredits = async (req, res) => {
     const { userId } = req.query;
 
-    const { role } = await req.getAccount(userId);
+    const role = "cliente-admin";
 
     User(role)
         .findById(userId)

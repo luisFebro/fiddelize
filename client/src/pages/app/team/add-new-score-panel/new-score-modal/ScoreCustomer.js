@@ -242,6 +242,7 @@ export default function ScoreCustomer({
                     variant="outlined"
                     error={false}
                     autoComplete="off"
+                    disabled
                 />
             </section>
             <MoneyKeyboard

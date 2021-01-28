@@ -112,12 +112,13 @@ export default function InstantAccount({
                 setData((prev) => ({ ...prev, errorOnce: true }));
             });
 
-            setData((prev) => ({
-                ...prev,
-                loadingCreation: false,
-            }));
-
-            if (!succ) return;
+            if (!succ) {
+                setData((prev) => ({
+                    ...prev,
+                    loadingCreation: false,
+                }));
+                return;
+            }
 
             // prevent register page to be shown. Display login page instead with the new account panel
             const storeElems = [
@@ -134,6 +135,10 @@ export default function InstantAccount({
             ]).then((res) => {
                 setSuccess(true);
                 lStorage("setItem", { ...needAppRegisterOp, value: false });
+                setData((prev) => ({
+                    ...prev,
+                    loadingCreation: false,
+                }));
             });
         })();
     };

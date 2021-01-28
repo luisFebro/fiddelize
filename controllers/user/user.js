@@ -77,6 +77,9 @@ const handleUserRole = (isAdmin, profile, opts = {}) => {
         cliAdminObj.bizPlanCode = undefined;
         cliAdminObj.notifications = undefined;
         cliAdminObj.tasks = undefined;
+        cliAdminObj.orders = undefined;
+        cliAdminObj.allowedTempLinks = undefined;
+        cliAdminObj.lastCC = undefined;
 
         return cliAdminObj;
     } else {

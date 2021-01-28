@@ -72,7 +72,7 @@ const AllScores = ({
                             color: "var(--themeP)",
                             position: "absolute",
                             top: "-18px",
-                            left: needAppForPreview ? "160px" : "200px",
+                            left: needAppForPreview ? "170px" : "210px",
                         }}
                         className="text-em-0-7 text-nowrap font-weight-bold"
                     >

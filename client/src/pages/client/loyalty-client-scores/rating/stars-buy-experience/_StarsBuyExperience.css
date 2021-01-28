@@ -1,0 +1,44 @@
+.stars-rating--root .stars-group {
+    margin: 0 auto;
+}
+
+.stars-rating--root .stars-group svg {
+    font-size: 3rem;
+    padding: 0 3px;
+    margin-bottom: 10px;
+    color: var(--lightYellow);
+}
+
+.stars-rating--root .stars-group svg.entire-full.curr-star-full {
+    padding: 0 0px;
+}
+
+.stars-rating--root .stars-group svg.empty-star {
+    color: rgba(255, 255, 0, 0.3) !important;
+}
+
+.half-star {
+    position: relative;
+}
+
+.half-star svg.half {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: var(--lightYellow) !important;
+    z-index: 1;
+}
+
+.half-star svg.full {
+    color: rgba(255, 255, 0, 0.3) !important;
+    z-index: -1;
+}
+
+.stars-rating--root .instru {
+    color: var(--mainWhite);
+}
+
+.instru svg {
+    margin: 0 10px;
+}

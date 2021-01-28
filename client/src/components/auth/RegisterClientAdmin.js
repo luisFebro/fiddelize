@@ -215,10 +215,15 @@ function RegisterClientAdmin({ logo }) {
             dispatch,
             "Registrando... Aguarde um momento.",
             "warning",
-            7000
+            10000
         );
         const res = await registerEmail(dispatch, newUser);
-
+        showSnackbar(
+            dispatch,
+            "Preparando página de download...",
+            "warning",
+            5000
+        );
         if (res.status !== 200) {
             showSnackbar(
                 dispatch,
@@ -236,30 +241,31 @@ function RegisterClientAdmin({ logo }) {
             return;
         }
 
+        const bizName = clientAdminData.bizName;
+        const cliAdminName = getFirstName(name);
+
         await removeCollection("pre_register");
+        showSnackbar(dispatch, "Redirecionando...", "warning", 4000);
+        // ReactGA &&
+        //     ReactGA.event({
+        //         // n1
+        //         label: "Form",
+        //         category: "cliAdmin",
+        //         action: "Created an account",
+        //         transport: "beacon",
+        //     });
 
-        ReactGA &&
-            ReactGA.event({
-                // n1
-                label: "Form",
-                category: "cliAdmin",
-                action: "Created an account",
-                transport: "beacon",
-            });
-
-        const removalOptions = {
-            collection: "onceChecked",
-        };
-        lStorage("removeItems", removalOptions);
+        // const removalOptions = {
+        //     collection: "onceChecked",
+        // };
+        // lStorage("removeItems", removalOptions);
 
         // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-        window.location.href = `/baixe-app/${getFirstName(name)}?negocio=${
-            clientAdminData.bizName
-        }&admin=1&logo=${logo}&bc=default&pc=default&sc=default`;
-
+        //window.location.href = `/baixe-app/admin?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default&isFromSelfServ=1`
+        clearData();
+        window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
         // const userId = res.data.authUserId;
         // sendEmail(userId);
-        clearData();
     };
 
     const showTitle = () => (
