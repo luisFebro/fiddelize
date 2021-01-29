@@ -128,3 +128,12 @@ export const AsyncPrivacyPolicy = Load({
         ),
 });
 // END BIZ DOCS AND FOOTER
+
+// TEST
+export const AsyncPlayground = Load({
+    loader: () =>
+        import(
+            "../../pages/test/Playground" /* webpackChunkName: "playground-lazy" */
+        ),
+});
+// END TEST

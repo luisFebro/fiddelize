@@ -33,8 +33,12 @@
     color: var(--expenseRed);
 }
 
-.text-yellow {
-    color: var(--mainYellow);
+.text-dark-yellow {
+    color: #b0a519;
+}
+
+.text-nice-ui-yellow {
+    color: var(--niceUiYellow);
 }
 
 .text-pink {
@@ -75,6 +79,11 @@
 
 .text-light-grey {
     color: var(--lightGrey);
+}
+
+/* better than main green for textx */
+.text-alt-green {
+    color: #1a9a06;
 }
 
 .text-cyan {

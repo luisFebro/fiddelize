@@ -1,0 +1,139 @@
+// @import "_my-chartist-settings.scss";
+@import "chartist/dist/scss/chartist.scss";
+
+.speedometer-gauge--root {
+    position: relative;
+    box-sizing: border-box;
+
+    .speedometer-line {
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        top: 28%;
+        left: 26%;
+        transform: translate(-26%, -28%);
+        border-radius: 50%;
+        border: 20px solid var(--themePLight);
+        border-right: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+        transform: rotate(45deg);
+        display: inline-block;
+    }
+
+    .needle {
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        transform: translate(-50%, -15%);
+        width: 20px;
+        height: 130px;
+        background: var(--themeP);
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        border-top-left-radius: 100%;
+        border-top-right-radius: 100%;
+        display: inline-block;
+        -webkit-animation: move-needle 2s forwards;
+        transform-origin: bottom;
+        z-index: 1;
+    }
+
+    .needle:after {
+        content: " ";
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background-color: var(--vocarizaCyan);
+        z-index: 1000;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .rect {
+        position: absolute;
+        padding: 5px 10px;
+        color: var(--mainWhite);
+        font-weight: bold;
+        font-family: var(--mainFont);
+        text-shadow: 1px 1px 3px black;
+        bottom: 137px;
+        max-width: 50px;
+    }
+
+    .rect.min-value {
+        background-color: var(--mainRed);
+        left: 38px;
+    }
+
+    .rect.max-value {
+        background-color: green;
+        right: 38px;
+        min-width: 50px;
+        font-size: 1.5rem;
+    }
+
+    @media screen and (min-width: 768px) {
+        .rect.min-value {
+            left: 45px;
+        }
+
+        .rect.max-value {
+            right: 46px;
+        }
+    }
+}
+
+.ct-chart {
+    position: relative;
+    width: 400px;
+
+    .ct-series {
+        &.ct-series-a .ct-slice-donut-solid {
+            fill: var(--mainRed);
+        }
+        &.ct-series-b .ct-slice-donut-solid {
+            fill: var(--mainWhite);
+        }
+        &.ct-series-c .ct-slice-donut-solid {
+            fill: var(--niceUiYellow);
+        }
+        &.ct-series-d .ct-slice-donut-solid {
+            fill: var(--mainWhite);
+        }
+        &.ct-series-e .ct-slice-donut-solid {
+            fill: var(--mainGreen);
+        }
+        &.ct-series-f .ct-slice-donut-solid {
+            fill: var(--mainWhite);
+        }
+        &.ct-series-g .ct-slice-donut-solid {
+            fill: green;
+        }
+    }
+
+    .ct-chart-donut .ct-label {
+        fill: white;
+        text-shadow: 1px 1px 3px black;
+        font-size: 1.3rem;
+        font-weight: bold;
+        font-family: var(--mainFont);
+    }
+}
+
+.speedometer-text-result {
+    position: relative;
+    top: -90px;
+    font-family: var(--mainFont);
+    font-weight: bold;
+
+    p {
+        margin-top: 10px;
+        font-size: 1.1rem;
+        text-align: left;
+    }
+}
+
+.speedometer-caption {
+    padding: 0 40px;
+}

@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import Title from "../../../components/Title";
-// COMPONENTS
-// import RankingPondium from './RankingPondium';
-import AutomaticToDoList from "./automatic-to-do-list";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import LoadableVisible from "../../../components/code-splitting/LoadableVisible";
+import ClientReviews from "./clients-reviews/ClientsReviews";
+
+const AsyncAutomaticToDoList = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./automatic-to-do-list" /* webpackChunkName: "auto-tasks-comp-lazy" */
+        ),
+});
 
 const AsyncRankingPondium = LoadableVisible({
     loading: true,
@@ -39,7 +45,9 @@ export default function DashClients() {
     return (
         <div>
             <DashSectionTitle title={SectionTitle} />
-            <AutomaticToDoList />
+            <ClientReviews />
+            <hr className="lazer-purple" />
+            <AsyncAutomaticToDoList />
             <hr className="lazer-purple" />
             <Title
                 title="&#187; Pódio Fidelidade"

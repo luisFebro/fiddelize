@@ -167,7 +167,7 @@ export default function BuyRating({
                         onlyReportField ? "" : "mt-5"
                     } mb-3 text-shadow text-white text-center`}
                 >
-                    {defaultBuyReport && "Último "}Relato de Compra
+                    {defaultBuyReport && "Seu Último "}Relato de Compra
                 </h2>
                 {Boolean(defaultBuyReport) && !switchEdit ? (
                     <section className="mt-3">

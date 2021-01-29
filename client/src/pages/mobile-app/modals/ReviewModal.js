@@ -110,11 +110,10 @@ export default function ReviewModal() {
                             importante.
                         </p>
                     )}
-                    {nps && (
+                    {(nps || xpScore) && (
                         <AsyncBuyRating
-                            type="nps"
-                            defaultScale={nps}
-                            removeReportField={true}
+                            defaultBuyReport={buyReport || " "}
+                            onlyReportField={true}
                         />
                     )}
                     {xpScore && (
@@ -124,10 +123,11 @@ export default function ReviewModal() {
                             removeReportField={true}
                         />
                     )}
-                    {(nps || xpScore) && (
+                    {nps && (
                         <AsyncBuyRating
-                            defaultBuyReport={buyReport || " "}
-                            onlyReportField={true}
+                            type="nps"
+                            defaultScale={nps}
+                            removeReportField={true}
                         />
                     )}
                 </section>

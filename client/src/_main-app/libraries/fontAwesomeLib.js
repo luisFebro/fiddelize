@@ -86,6 +86,7 @@ import { faStethoscope } from "@fortawesome/free-solid-svg-icons/faStethoscope";
 import { faSun } from "@fortawesome/free-solid-svg-icons/faSun";
 import { faTshirt } from "@fortawesome/free-solid-svg-icons/faTshirt";
 import { faUserTie } from "@fortawesome/free-solid-svg-icons/faUserTie";
+import { faHeartBroken } from "@fortawesome/free-solid-svg-icons/faHeartBroken";
 // end app milestone icons
 // home marketing
 import { faBullhorn } from "@fortawesome/free-solid-svg-icons/faBullhorn";
@@ -187,6 +188,7 @@ library.add(
     faUserTie,
     faReply,
     faBolt,
+    faHeartBroken,
     // rating NPS
     faAngry,
     faFrown,

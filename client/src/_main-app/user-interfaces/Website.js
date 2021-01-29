@@ -52,6 +52,8 @@ import {
     AsyncServiceStatus,
     AsyncTerms,
     AsyncPrivacyPolicy,
+    // test
+    AsyncPlayground,
 } from "./CommonImports";
 //END PAGES
 
@@ -194,6 +196,11 @@ function Website({ location, history }) {
                     path="/privacidade"
                     exact
                     component={AsyncPrivacyPolicy}
+                />
+                <Route
+                    path="/test/playground"
+                    exact
+                    component={AsyncPlayground}
                 />
                 <Route component={Default} />
             </Switch>

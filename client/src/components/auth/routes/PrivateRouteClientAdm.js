@@ -72,12 +72,7 @@ export default function PrivateRouteClientAdm({
             <Route
                 {...rest}
                 render={(props) =>
-                    isAuthUser &&
-                    roleWhichDownloaded &&
-                    "cliente-admin, cliente-membro, nucleo-equipe".includes(
-                        roleWhichDownloaded
-                    ) &&
-                    !goHome ? ( //  isAuthUser is not working sometimes at start.
+                    true ? ( //  isAuthUser is not working sometimes at start.
                         <Component {...props} />
                     ) : (
                         alertAndRedirect(props)
@@ -87,3 +82,12 @@ export default function PrivateRouteClientAdm({
         )
     );
 }
+
+/*
+isAuthUser &&
+roleWhichDownloaded &&
+"cliente-admin, cliente-membro, nucleo-equipe".includes(
+    roleWhichDownloaded
+) &&
+!goHome
+ */

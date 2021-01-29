@@ -4,12 +4,12 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9650.8";
+const latestVersion = "3.9670.8";
 // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-    "servico sattisfacao clientes - ponto promotores e nota XP";
+    "servico sattisfacao clientes - ponto promotores e nota XP pt2";
 const history = [
     "novo app - self-service - fluxo e criação pt 5",
     "site - marketing - design com diferenciais pt 4",

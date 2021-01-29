@@ -60,7 +60,8 @@ function Navbar({ history, location }) {
         locationNow.includes("cartao-virtual") ||
         locationNow.includes("senha-equipe") ||
         locationNow.includes("pix") ||
-        locationNow.includes("painel-de-apps");
+        locationNow.includes("painel-de-apps") ||
+        locationNow.includes("playground");
 
     const showAccessBtn = () => (
         <Link
