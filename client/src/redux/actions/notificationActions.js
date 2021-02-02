@@ -10,7 +10,9 @@ export const countPendingNotif = async (userId, options = {}) => {
 
     try {
         return await axios.get(
-            `/api/notification/count-pending-notification?userId=${userId}&role=${role}${cliUserQuery}`,
+            `/api/notification/count-pending-notification?userId=${userId}&role=${
+                role || "cliente"
+            }${cliUserQuery}`,
             getHeaderJson
         );
     } catch (err) {

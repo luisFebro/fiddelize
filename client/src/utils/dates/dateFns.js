@@ -12,6 +12,7 @@ import isToday from "date-fns/isToday";
 import startOfWeek from "date-fns/startOfWeek";
 import endOfWeek from "date-fns/endOfWeek";
 import { getPureParsedDate } from "./helpers/dateFnsHelpers";
+import isAfter from "date-fns/isAfter";
 
 const localeObj = {
     default: ptBR,
@@ -81,6 +82,7 @@ export {
     isScheduledDate,
     endWeek,
     startWeek,
+    isAfter, // Is the first date after the second one?
 };
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time

@@ -48,7 +48,7 @@ export const getTextStatus = (value, isShortened) => {
         return {
             title: "Bom",
             advice:
-                "O objetivo é ter uma pontuação acima de zero. Saiba que a maioria das empresas estão nesta área de 0 - 30 pontos. É um desafio encantar muitos clientes. Curiosidade: De 400 empresas analisadas em diversas indústrias, a média foi somente 16 pontos",
+                "O objetivo é ter uma pontuação acima de zero. Saiba que a maioria das empresas estão nesta área de 0 - 30 pontos. É um desafio fidelizar boa parte dos clientes. Curiosidade: De 400 empresas analisadas em diversas indústrias, a média foi somente 16 pontos",
             icon: "flag-checkered",
         };
     if (value >= 30 && value < 70)

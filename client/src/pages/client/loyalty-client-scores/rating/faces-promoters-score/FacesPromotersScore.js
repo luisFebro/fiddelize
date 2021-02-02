@@ -42,6 +42,7 @@ export default function FacesPromotersScore({
             url: updateUser(userId, role),
             body: {
                 "clientUserData.review.nps": scale,
+                "clientUserData.review.npsUpdatedAt": new Date(),
             },
         }).catch((err) => {
             console.log("ERROR: " + err);
@@ -51,7 +52,7 @@ export default function FacesPromotersScore({
 
     return (
         <section>
-            <section className="d-flex">
+            <section className="d-flex justify-content-center">
                 <div className={`faces-group shadow-elevation-black`}>
                     {facePatterns.map((f, ind) => (
                         <FontAwesomeIcon

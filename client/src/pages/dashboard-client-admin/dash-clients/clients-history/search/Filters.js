@@ -160,6 +160,7 @@ export default function Filters({
                     optionsArray={mainOptions}
                     defaultSideIcon={defaultMainIcon}
                     offlineKey="selectedMainFilter"
+                    checkServicePro="orgganize_clients"
                 />
                 <span className="d-inline-block mt-4 mb-1 text-p text-normal text-left font-weight-bold"></span>
                 <AnimaIconsSelect
@@ -171,6 +172,7 @@ export default function Filters({
                     width={200}
                     needReverseBtn={false}
                     zIndex={4}
+                    checkServicePro="orgganize_clients"
                 />
                 <section className="my-3">
                     <FilterStatus loading={loading} />

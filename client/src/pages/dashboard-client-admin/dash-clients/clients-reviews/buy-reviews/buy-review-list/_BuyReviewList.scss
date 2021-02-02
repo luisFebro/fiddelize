@@ -1,0 +1,111 @@
+.buy-review--root {
+    position: relative;
+    font-family: var(--mainFont);
+    width: 330px;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: var(--mainWhite);
+    border-radius: 10px;
+
+    @media screen and (min-width: 500px) {
+        & {
+            width: 400px;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        & {
+            width: 500px;
+        }
+    }
+
+    .final-grade-area {
+        .final-score {
+            border-radius: 20px;
+            padding: 0px 9px;
+            font-size: 2rem;
+            color: var(--mainWhite);
+            background-color: black;
+        }
+
+        .grade-1 {
+            background-color: rgba(255, 17, 0, 1);
+        }
+        .grade-1-back {
+            color: rgba(255, 17, 0, 1);
+        }
+
+        .grade-2 {
+            background-color: rgba(255, 17, 0, 0.9);
+        }
+        .grade-2-back {
+            color: rgba(255, 17, 0, 0.9);
+        }
+
+        .grade-3 {
+            background-color: rgba(255, 17, 0, 0.8);
+        }
+        .grade-3-back {
+            color: rgba(255, 17, 0, 0.8);
+        }
+
+        .grade-4 {
+            background-color: rgba(255, 17, 0, 0.8);
+        }
+        .grade-4-back {
+            color: rgba(255, 17, 0, 0.8);
+        }
+
+        .grade-5 {
+            background-color: rgba(255, 152, 0, 0.9);
+        }
+        .grade-5-back {
+            color: rgba(255, 152, 0, 0.9);
+        }
+
+        .grade-6 {
+            background-color: rgba(255, 152, 0, 1);
+        }
+        .grade-6-back {
+            color: rgba(255, 152, 0, 1);
+        }
+
+        .grade-7 {
+            background-color: #009688;
+        }
+        .grade-7-back {
+            color: #009688;
+        }
+
+        .grade-8 {
+            background-color: #009688;
+        }
+        .grade-8-back {
+            color: #009688;
+        }
+
+        .grade-9,
+        .grade-10 {
+            background-color: rgba(76, 175, 80, 1);
+        }
+        .grade-9-back,
+        .grade-10-back {
+            color: rgba(76, 175, 80, 1);
+        }
+    }
+
+    .review-body {
+        font-size: 1.1rem;
+    }
+
+    .face {
+        svg {
+            font-size: 3rem;
+            padding: 0 3px;
+            color: #fff;
+            border-radius: 30px;
+            border: 0px solid transparent;
+            background-color: var(--mainWhite);
+        }
+    }
+}

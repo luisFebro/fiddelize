@@ -4,8 +4,8 @@ import useAPIList, { readAppList } from "../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../hooks/api/useElemDetection";
-import useData from "../../../hooks/useData";
 import repeat from "../../../utils/arrays/repeat";
+import useData from "../../../hooks/useData";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
@@ -106,8 +106,6 @@ export default function AppList({ history }) {
                                     data={app}
                                     payload={payload}
                                     loading={loading}
-                                    detectedCard={detectedCard}
-                                    checkDetectedElem={checkDetectedElem}
                                 />
                             </Fragment>
                         ) : (
@@ -116,8 +114,6 @@ export default function AppList({ history }) {
                                     data={app}
                                     payload={payload}
                                     loading={loading}
-                                    detectedCard={detectedCard}
-                                    checkDetectedElem={checkDetectedElem}
                                 />
                             </Fragment>
                         );

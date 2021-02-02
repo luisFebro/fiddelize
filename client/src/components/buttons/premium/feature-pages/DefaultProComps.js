@@ -108,6 +108,7 @@ export const ShowPicture = ({
                 <Img
                     dataSrc={dataSrc}
                     timeout={timeout}
+                    className="img-center"
                     src={src}
                     mode="skeleton"
                     imgContainerClass={imgContainerClass}
@@ -119,7 +120,7 @@ export const ShowPicture = ({
 
     return (
         <div
-            className={`img-center position-relative ${main ? "" : "my-3"}`}
+            className={`position-relative ${main ? "" : "my-3"}`}
             style={{ margin: main && "20px 0 0px" }}
         >
             {showImg()}

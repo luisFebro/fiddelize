@@ -1,0 +1,92 @@
+.review-result--root {
+    .score-calculation {
+        .block {
+            padding: 10px;
+            border-radius: 20px;
+            color: white;
+
+            &.block-promoters {
+                background-color: var(--mainGreen);
+            }
+
+            &.block-detractors {
+                background-color: var(--mainRed);
+            }
+
+            &.result {
+                background-color: green;
+            }
+
+            &.result p:last-of-type {
+                font-size: 3.5rem;
+            }
+        }
+
+        .sign {
+            width: 20px;
+            height: 5px;
+            background-color: var(--themeP);
+
+            &.minus {
+                margin-top: 60px;
+            }
+        }
+    }
+
+    .customers-type {
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 25px;
+    }
+
+    .quantitative-result {
+        font-family: var(--mainFont);
+
+        .block {
+            margin: 10px 0;
+            border-radius: 20px;
+
+            div {
+                color: var(--mainWhite);
+                height: 100%;
+                padding: 10px;
+                border-radius: 20px;
+                font-size: 1.3rem;
+                text-shadow: 1px 1px 3px black;
+            }
+
+            &.detractors {
+                background-color: rgba(237, 33, 58, 0.5);
+
+                div {
+                    background-color: var(--mainRed);
+                }
+            }
+
+            &.passives {
+                background-color: rgba(139, 134, 134, 0.5);
+
+                div {
+                    background-color: #8b8686;
+                }
+            }
+
+            &.promoters {
+                background-color: rgba(0, 128, 0, 0.5);
+
+                div {
+                    background-color: green;
+                }
+            }
+
+            &.result {
+                display: table;
+                background-color: var(--mainDark);
+                border-radius: 5px;
+                padding: 5px 10px;
+                color: var(--mainWhite);
+                font-size: 1.5rem;
+            }
+        }
+    }
+}

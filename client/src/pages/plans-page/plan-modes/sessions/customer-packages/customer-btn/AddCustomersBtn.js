@@ -19,7 +19,11 @@ const getStyles = (props) => ({
     },
 });
 
-export default function AddCustomersBtn({ btnTitle = "Adicionar", modalData }) {
+export default function AddCustomersBtn({
+    btnTitle = "Adicionar",
+    modalData = {},
+    linkTitle = "",
+}) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const styles = getStyles();
@@ -49,15 +53,27 @@ export default function AddCustomersBtn({ btnTitle = "Adicionar", modalData }) {
                     : "container-center mt-2"
             }
         >
-            <ButtonFab
-                size="large"
-                title={btnTitle}
-                onClick={handleFullOpen}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant="extended"
-                position="relative"
-                iconMu={PlusIcon}
-            />
+            {linkTitle ? (
+                <a
+                    className="text-link"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        handleFullOpen();
+                    }}
+                >
+                    {linkTitle}
+                </a>
+            ) : (
+                <ButtonFab
+                    size="large"
+                    title={btnTitle}
+                    onClick={handleFullOpen}
+                    backgroundColor={"var(--themeSDark--default)"}
+                    variant="extended"
+                    position="relative"
+                    iconMu={PlusIcon}
+                />
+            )}
             <ModalFullContent
                 contentComp={AsyncAddCustomersContent}
                 fullOpen={fullOpen}

@@ -13,6 +13,7 @@ import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
+import { useClientAdmin } from "../../../../hooks/useRoleData";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -38,8 +39,6 @@ export default function BuyRating({
     type = "stars",
     colorP,
     handleBuyRating,
-    isDBLoaded,
-    ratingData,
     defaultScale,
     defaultGrade,
     defaultBuyReport,
@@ -48,6 +47,7 @@ export default function BuyRating({
 }) {
     const [scale, setScale] = useState(null);
     const [grade, setGrade] = useState(5);
+    const [finalGrade] = useState(null);
     const [buyReport, setBuyReport] = useState("");
     const [switchEdit, setSwitchEdit] = useState(false);
 
@@ -55,10 +55,15 @@ export default function BuyRating({
     const dispatch = useStoreDispatch();
 
     const [firstName, userId, role] = useData(["firstName", "userId", "role"]);
+    const { bizName } = useClientAdmin();
 
     useEffect(() => {
         if (typeof handleBuyRating === "function") {
-            handleBuyRating({ buyReport, xpScore: grade, nps: scale });
+            handleBuyRating({
+                buyReport,
+                xpScore: grade,
+                nps: scale,
+            });
         }
     }, [buyReport, grade, scale]);
 
@@ -74,7 +79,9 @@ export default function BuyRating({
 
     const isNPS = type === "nps";
     const title = isNPS
-        ? `Em um escala de 1 a 10, quão provável você recomendaria a CHERIE'S BEAUTY para um amigo ou conhecido?`
+        ? `Em um escala de 1 a 10, quão provável você recomendaria a ${
+              bizName && bizName.toUpperCase()
+          } para um amigo ou conhecido?`
         : `Qual foi sua experiência de compra, ${firstName}?`;
 
     const handleReportDisplay = () => {
@@ -95,6 +102,7 @@ export default function BuyRating({
             url: updateUser(userId, role),
             body: {
                 "clientUserData.review.buyReport": buyReport,
+                "clientUserData.review.reportUpdatedAt": new Date(),
             },
         }).catch((err) => {
             console.log("ERROR: " + err);

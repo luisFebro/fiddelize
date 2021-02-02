@@ -83,7 +83,7 @@ export default function StarsBuyExperience({
 
     return (
         <Fragment>
-            <section className="stars-rating--root d-flex">
+            <section className="stars-rating--root d-flex justify-content-center">
                 {starPatterns[grade].map((patt, ind) => {
                     const isCurrStar =
                         ind + 1 === Math.ceil(grade / 2) ? true : false;

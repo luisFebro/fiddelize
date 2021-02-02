@@ -344,18 +344,17 @@ function AsyncClientScoresPanel({ history, location }) {
             );
         await setVar({ doneNPS: true });
         showSnackbar(dispatch, "Salvando e finalizando...", "warning");
+
         // update user with new rating
+        const thisNpsScore = !ratingData.nps ? undefined : ratingData.nps;
+        const thisXpScore = !ratingData.nps ? ratingData.xpScore : undefined;
 
         await getAPI({
             method: "put",
             url: updateUser(_id, whichRole),
             body: {
-                "clientUserData.review.nps": !ratingData.nps
-                    ? undefined
-                    : ratingData.nps,
-                "clientUserData.review.xpScore": !ratingData.nps
-                    ? ratingData.xpScore
-                    : undefined,
+                "clientUserData.review.nps": thisNpsScore,
+                "clientUserData.review.xpScore": thisXpScore,
                 "clientUserData.review.buyReport": !ratingData.buyReport
                     ? undefined
                     : ratingData.buyReport,
@@ -414,8 +413,6 @@ function AsyncClientScoresPanel({ history, location }) {
                 <BuyRating
                     handleBuyRating={handleBuyRating}
                     type={type || "nps"}
-                    isDBLoaded={isDBLoaded}
-                    ratingData={ratingData}
                     defaultBuyReport={isDBLoaded && buyReport}
                     defaultXpScore={isDBLoaded && xpScore}
                 />

@@ -62,7 +62,7 @@
 
 .text-link,
 .text-underline {
-    text-decoration: underline;
+    text-decoration: underline !important;
     font-weight: bold !important;
     color: var(--themeP);
     cursor: pointer;

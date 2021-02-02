@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         overflow: "hidden",
         paddingTop: (props) => props.paddingTop || "40%",
         position: "relative",
-        margin: (props) => props.margin || "15px 0",
+        margin: (props) => props.margin || "15px auto",
     },
     avatarLoader: {
         position: "absolute",
@@ -37,9 +37,7 @@ const getStyles = () => ({
     },
 });
 
-const { skeletonRoot } = getStyles();
-export { skeletonRoot };
-
+// LESSON: do not use container-center-col or container-center as a wrapper for Skeleton. Otherwise it will not show up.
 export default function Skeleton({
     variant = "rect",
     width,

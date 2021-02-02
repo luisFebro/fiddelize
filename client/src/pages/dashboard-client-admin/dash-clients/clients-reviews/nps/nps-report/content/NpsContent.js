@@ -1,12 +1,29 @@
-import React from "react";
+import React, { Fragment } from "react";
 import SpeedometerGauge from "../../../../../../../components/charts/speedometer-gauge/SpeedometerGauge";
 import colorsHandler from "../../../helpers/colorsHandler";
 import { getTextStatus } from "../../../../../../../components/charts/speedometer-gauge/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LoadableVisible from "../../../../../../../components/code-splitting/LoadableVisible";
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default function NpsContent({ nps }) {
+const AsyncLineChart = LoadableVisible({
+    loader: () =>
+        import(
+            "../../../../../../../components/charts/line-chart/LineChart" /* webpackChunkName: "line-chart-comp-lazy" */
+        ),
+});
+
+const AsyncReviewResults = LoadableVisible({
+    loader: () =>
+        import(
+            "../../review-results-faq/ReviewResults" /* webpackChunkName: "review-nps-res-comp-lazy" */
+        ),
+});
+
+export default function NpsContent({ mainData }) {
+    const { nps } = mainData;
+
     const { colorNPS } = colorsHandler({ nps });
     const { icon } = getTextStatus(nps);
 
@@ -21,14 +38,14 @@ export default function NpsContent({ nps }) {
                 Promotores
             </h1>
             <p
-                className="text-small text-purple text-center font-weight-bold"
+                className="text-small text-purple text-center"
                 style={{
                     fontSize: "1.1rem",
                 }}
             >
                 Promotores são os <strong>fãs do seu negócio</strong>. Quanto
-                maior a pontuação, mais clientes satisfeitos trazendo mais
-                vendas.
+                maior a pontuação, mais clientes satisfeitos querendo comprar
+                mais!
             </p>
         </div>
     );
@@ -63,13 +80,49 @@ export default function NpsContent({ nps }) {
         </div>
     );
 
-    return (
-        <section className="mx-3">
-            {showTitle()}
-            {showScore()}
-            <section className="container-center">
-                <SpeedometerGauge value={nps} />
+    const showPromotersHistoryChart = () => {
+        const xLabels = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
+        const dataArray = ["0", 100, 1, 40, -30, 20, 90];
+
+        return (
+            <section
+                className="my-5 position-relative"
+                style={{
+                    top: -100,
+                }}
+            >
+                <AsyncLineChart
+                    xLabels={xLabels}
+                    dataArray={dataArray}
+                    onlySmall={true}
+                />
             </section>
+        );
+    };
+
+    const showReviewResults = () => (
+        <section
+            className="position-relative"
+            style={{
+                top: -100,
+                marginBottom: 150,
+            }}
+        >
+            <AsyncReviewResults mainData={mainData} />
         </section>
+    );
+
+    return (
+        <Fragment>
+            <section className="mx-3">
+                {showTitle()}
+                {showScore()}
+                <section className="container-center">
+                    <SpeedometerGauge value={nps} />
+                </section>
+            </section>
+            {showPromotersHistoryChart()}
+            {showReviewResults()}
+        </Fragment>
     );
 }

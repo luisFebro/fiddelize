@@ -1,0 +1,67 @@
+@import "chartist/dist/scss/chartist.scss";
+
+.line-chart--root {
+    position: relative;
+    background-color: #1e2730;
+    .ct-series-a .ct-point,
+    .ct-series-a .ct-line,
+    .ct-series-a .ct-bar,
+    .ct-series-a .ct-slice-donut {
+        stroke: var(--vocarizaCyan);
+    }
+
+    .ct-series {
+        .ct-area {
+            fill: var(--mainWhite);
+        }
+        .ct-label {
+            fill: rgb(103, 137, 162);
+            &:first-of-type {
+                fill: none;
+            }
+            &:nth-last-of-type(2) {
+                fill: #ba81ff;
+                font-size: 18px;
+            }
+        }
+        .ct-point:last-of-type {
+            stroke-width: 15px;
+            stroke-linecap: round;
+        }
+    }
+
+    .ct-chart-line .ct-grids .ct-grid {
+        stroke: var(--themePLight);
+        stroke-width: 0.6px;
+    }
+
+    .ct-label {
+        color: var(--mainWhite);
+        font-weight: bold;
+        font-family: var(--mainFont);
+        font-size: 1rem;
+    }
+
+    .ct-label.ct-vertical {
+        font-size: 0.85rem;
+    }
+}
+
+// TOOLTIP
+.chartist-tooltip {
+    opacity: 0;
+    position: absolute;
+    font-weight: bold;
+    font-family: var(--mainFont);
+    margin: 20px 0 0 10px;
+    background: var(--themeP);
+    color: var(--vocarizaCyan);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.chartist-tooltip.tooltip-show {
+    opacity: 1;
+    position: absolute;
+    top: 70px !important;
+}

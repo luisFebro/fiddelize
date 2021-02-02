@@ -10,10 +10,10 @@ const Async = Load({
         ),
 });
 
-export default function NpsReportBtn() {
+export default function BuyReviewsBtn({ lastDateChecked }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncBuyReportContent = <Async />;
+    const AsyncBuyReportContent = <Async lastDateChecked={lastDateChecked} />;
 
     const handleFullOpen = () => {
         setFullOpen(true);

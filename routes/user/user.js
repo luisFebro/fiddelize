@@ -64,7 +64,7 @@ const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
 // @route  api/user
 // RUD
 router.get("/:userId", read); // mwIsAuth JWT ERROR: jwt must be provided when log it
-router.put("/:userId", update); // mwIsAuth highly vulnarable if attacker knows the id
+router.put("/:userId", mwIsAuth, update); // mwIsAuth highly vulnarable if attacker knows the id
 router.delete("/:userId", mwIsAuth, mwBackup, remove);
 // END RUD
 

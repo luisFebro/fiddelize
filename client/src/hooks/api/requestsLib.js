@@ -105,3 +105,8 @@ export const isLinkAllowed = () => `/api/user/cli-user/temp-score/allowed-link`;
 
 // EMAIL
 export const sendEmail = () => `/api/email/send`;
+
+// REVIEWS
+export const getBuyReviewsList = () => `/api/reviews/list/buy-reviews`;
+export const getMainReviewData = (userId) =>
+    `/api/reviews/main-data?userId=${userId}`;

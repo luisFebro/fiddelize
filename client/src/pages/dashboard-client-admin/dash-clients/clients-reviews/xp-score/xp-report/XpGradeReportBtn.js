@@ -10,7 +10,7 @@ const Async = Load({
         ),
 });
 
-export default function NpsReportBtn() {
+export default function XpGradeReportBtn({ disabled }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const AsyncXpGradeContent = <Async />;
@@ -32,6 +32,7 @@ export default function NpsReportBtn() {
                 backgroundColor={"var(--themeSDark--default)"}
                 variant="extended"
                 position="relative"
+                disabled={disabled}
             />
             <ModalFullContent
                 contentComp={AsyncXpGradeContent}

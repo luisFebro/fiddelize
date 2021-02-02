@@ -7,42 +7,6 @@ const {
     getSkip,
 } = require("../../../utils/array/getDataChunk");
 
-const getQuery = (role) => {
-    let mainQuery;
-    const me = { _id: { $ne: ObjectId("5e360888051f2617d0df2245") } };
-    const adminStaffQuery = {
-        $or: [
-            { role: "client-admin" },
-            { role: "admin" },
-            { role: "colaborador" },
-        ],
-    };
-    const withNonEmptyArray = { $exists: true, $ne: [] }; // staffBookingList: withNonEmptyArray}
-
-    switch (role) {
-        case "cliente":
-            mainQuery = {
-                $or: [{ role: "cliente" }, { role: "cliente-admin" }],
-            }; // for test mode in the dashboard, it is requires to search both client and client-admin;
-            break;
-        case "cliente-admin":
-            mainQuery = { role: "cliente-admin" };
-            break;
-        case "colaborador":
-            // This is not being used. Check getStaffWithBookings in admin
-            mainQuery = { role: "colaborador" };
-            break;
-        case "colaborador-e-admin":
-            mainQuery = { $and: [me, adminStaffQuery] };
-            break;
-        default:
-            mainQuery = {};
-    }
-    return {
-        mainQuery,
-    };
-};
-
 const handleFilter = (filter) => {
     const defaultSort = { role: -1 }; // for always sort considering client-admin as priority as test mode to be easy to be detected at client history.
 
@@ -140,7 +104,24 @@ const handleEmptyType = ({ search, sideTotalSize }) => {
     return "filter";
 };
 
-exports.getRecordedClientList = (req, res) => {
+const includesOnly = {
+    name: 1,
+    cpf: 1,
+    phone: 1,
+    email: 1,
+    maritalStatus: 1,
+    birthday: 1,
+    createdAt: 1,
+    "clientUserData.currScore": 1,
+    "clientUserData.totalPurchasePrize": 1,
+    "clientUserData.cashCurrScore": 1,
+    "clientUserData.totalGeneralScore": 1,
+    register: 1,
+    filter: 1,
+};
+const projectQuery = { $project: includesOnly };
+
+exports.getRecordedClientList = async (req, res) => {
     // n3 - New way of fetching data with $facet aggreagtion
     const {
         role,
@@ -162,7 +143,9 @@ exports.getRecordedClientList = (req, res) => {
     const limitQuery = { $limit: limit };
     const countQuery = { $count: "value" };
     const searchQuery = { name: { $regex: `${search}`, $options: "i" } };
-    const bizIdQuery = { "clientUserData.bizId": bizId };
+
+    const coreQuery = { role: "cliente", "clientUserData.bizId": bizId };
+
     const totalUserGeneralScoresQuery = {
         $group: {
             _id: null,
@@ -175,85 +158,76 @@ exports.getRecordedClientList = (req, res) => {
             value: { $sum: "$clientUserData.totalActiveScore" },
         },
     };
-
-    let { mainQuery } = getQuery(role);
-
-    mainQuery = Object.assign({}, mainQuery, bizIdQuery, periodQuery);
-    const sideQuery = Object.assign({}, mainQuery, bizIdQuery); // track total of items to set period illustration when empty
+    let mainQuery = Object.assign({}, coreQuery, periodQuery);
+    const sideQuery = Object.assign({}, mainQuery, coreQuery); // track total of items to set period illustration when empty
 
     if (search) {
         mainQuery = Object.assign({}, mainQuery, searchQuery);
     }
 
-    User(role)
-        .aggregate([
-            {
-                $facet: {
-                    sideTotalSize: [{ $match: sideQuery }, countQuery],
-                    list: [
-                        { $match: mainQuery },
-                        sortQuery,
-                        skipQuery,
-                        limitQuery,
-                    ],
-                    totalSize: [{ $match: mainQuery }, countQuery],
-                    totalCliUserScores: [
-                        { $match: mainQuery },
-                        totalUserGeneralScoresQuery,
-                    ],
-                    totalActiveScores: [
-                        { $match: mainQuery },
-                        totalActiveScoresQuery,
-                    ],
-                },
+    const docs = await User(role).aggregate([
+        {
+            $facet: {
+                sideTotalSize: [{ $match: sideQuery }, countQuery],
+                totalSize: [{ $match: mainQuery }, countQuery],
+                totalCliUserScores: [
+                    { $match: mainQuery },
+                    totalUserGeneralScoresQuery,
+                ],
+                totalActiveScores: [
+                    { $match: mainQuery },
+                    totalActiveScoresQuery,
+                ],
+                list: [
+                    { $match: mainQuery },
+                    projectQuery,
+                    sortQuery,
+                    skipQuery,
+                    limitQuery,
+                ],
             },
-        ])
-        .then((docs) => {
-            let {
-                sideTotalSize,
-                list,
-                totalSize,
-                totalCliUserScores,
-                totalActiveScores,
-            } = docs[0];
+        },
+    ]);
 
-            const emptyType = handleEmptyType({ search, sideTotalSize });
+    let {
+        sideTotalSize,
+        list,
+        totalSize,
+        totalCliUserScores,
+        totalActiveScores,
+    } = docs[0];
 
-            // remove sensitive cli-admin data
-            // note: check if notification will be include to be excluded too
-            const isCliAdmin = list.length && list[0].role === "cliente-admin"; // always the first object if available
-            if (isCliAdmin) {
-                delete list[0].clientAdminData;
-            }
+    const emptyType = handleEmptyType({ search, sideTotalSize });
 
-            const treatedList = list.map((profile) => {
-                return {
-                    ...profile,
-                    cpf: jsDecrypt(profile.cpf),
-                    email: decryptSync(profile.email),
-                    phone: decryptSync(profile.phone),
-                };
-            });
+    // remove sensitive cli-admin data
+    // note: check if notification will be include to be excluded too
+    const isCliAdmin = list.length && list[0].role === "cliente-admin"; // always the first object if available
+    if (isCliAdmin) {
+        delete list[0].clientAdminData;
+    }
 
-            totalCliUserScores =
-                totalCliUserScores[0] === undefined
-                    ? 0
-                    : totalCliUserScores[0].value;
-            totalActiveScores =
-                totalActiveScores[0] === undefined
-                    ? 0
-                    : totalActiveScores[0].value;
+    const treatedList = list.map((profile) => {
+        return {
+            ...profile,
+            cpf: profile.cpf && jsDecrypt(profile.cpf),
+            email: profile.email && decryptSync(profile.email),
+            phone: profile.phone && decryptSync(profile.phone),
+        };
+    });
 
-            const listTotal =
-                totalSize[0] === undefined ? 0 : totalSize[0].value;
+    totalCliUserScores =
+        totalCliUserScores[0] === undefined ? 0 : totalCliUserScores[0].value;
+    totalActiveScores =
+        totalActiveScores[0] === undefined ? 0 : totalActiveScores[0].value;
 
-            res.json({
-                list: treatedList,
-                chunksTotal: getChunksTotal(listTotal, limit),
-                listTotal,
-                content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};emptyType:${emptyType};`,
-            });
-        });
+    const listTotal = totalSize[0] === undefined ? 0 : totalSize[0].value;
+
+    res.json({
+        list: treatedList,
+        chunksTotal: getChunksTotal(listTotal, limit),
+        listTotal,
+        content: `totalCliUserScores:${totalCliUserScores};totalActiveScores:${totalActiveScores};emptyType:${emptyType};`,
+    });
 };
 
 exports.getHighestScores = (req, res) => {
@@ -282,32 +256,40 @@ exports.getHighestScores = (req, res) => {
         });
 };
 
-/* COMMENTS
-n1:
-Need test this in future implementation in the effort to cut down more the boilerplate
-in the current working implementation:
-db.collection.aggregate([
+/* ARCHIVES
+const getQuery = (role) => {
+    let mainQuery;
+    const me = { _id: { $ne: ObjectId("5e360888051f2617d0df2245") } };
+    const adminStaffQuery = {
+        $or: [
+            { role: "client-admin" },
+            { role: "admin" },
+            { role: "colaborador" },
+        ],
+    };
+    const withNonEmptyArray = { $exists: true, $ne: [] }; // staffBookingList: withNonEmptyArray}
 
-     //{$sort: {...}}
-
-     //{$match:{...}}
-
-     {$facet:{
-
-       "stage1" : [ $group:{_id:null, count:{$sum:1}} ],
-
-       "stage2" : [ { "$skip": 0}, {"$limit": 2} ]
-
-     }},
-
-
-    {$unwind: "$stage1"},
-
-     //output projection
-    {$project:{
-       count: "$stage1.count",
-       data: "$stage2"
-    }}
-
-]);
-*/
+    switch (role) {
+        case "cliente":
+            mainQuery = {
+                $or: [{ role: "cliente" }, { role: "cliente-admin" }],
+            }; // for test mode in the dashboard, it is requires to search both client and client-admin;
+            break;
+        case "cliente-admin":
+            mainQuery = { role: "cliente-admin" };
+            break;
+        case "colaborador":
+            // This is not being used. Check getStaffWithBookings in admin
+            mainQuery = { role: "colaborador" };
+            break;
+        case "colaborador-e-admin":
+            mainQuery = { $and: [me, adminStaffQuery] };
+            break;
+        default:
+            mainQuery = {};
+    }
+    return {
+        mainQuery,
+    };
+};
+ */

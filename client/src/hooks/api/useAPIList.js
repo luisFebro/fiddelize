@@ -12,7 +12,7 @@ import { useStoreDispatch } from "easy-peasy";
 import { logout } from "../../redux/actions/authActions";
 import { chooseHeader } from "../../utils/server/getHeaders";
 import { useToken } from "../../hooks/useRoleData";
-import Skeleton, { skeletonRoot } from "../../components/multimedia/Skeleton";
+import Skeleton from "../../components/multimedia/Skeleton";
 import { IS_DEV } from "../../config/clientUrl";
 import extractStrData from "../../utils/string/extractStrData";
 import isThisApp from "../../utils/window/isThisApp";
@@ -41,6 +41,8 @@ useAPIList.propTypes = {
     body: PropTypes.object, // body is the data to be sent as the request body - Only applicable for request methods 'PUT', 'POST', 'DELETE , and 'PATCH'
     timeout: PropTypes.number, // `timeout` specifies the number of milliseconds before the request times out. -- If the request takes longer than `timeout`, the request will be aborted.
 };
+
+const isSmall = window.Helper.isSmallScreen();
 
 export default function useAPIList({
     method = "GET",
@@ -248,7 +250,13 @@ export default function useAPIList({
     const ShowLoading = ({ size = "small" }) => <ShowLoadingComp size={size} />; // n2
     const ShowLoadingSkeleton = () => {
         return (
-            <section className="mx-2" style={skeletonRoot}>
+            <section
+                className={isSmall ? "mx-2" : ""}
+                style={{
+                    maxWidth: 500,
+                    margin: "0 auto",
+                }}
+            >
                 <Skeleton />
                 <Skeleton />
                 <Skeleton />

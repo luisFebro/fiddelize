@@ -166,6 +166,7 @@ const clientAdminData = {
             trim: true,
         },
     },
+    reviewLastChecked: Date, // to know which reviews are new to cli-admin.
 };
 const ClientAdminSchema = new Schema(clientAdminData, { _id: false });
 module.exports = ClientAdminSchema;

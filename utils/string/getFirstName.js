@@ -1,5 +1,5 @@
 function getFirstName(name, options = {}) {
-    const { surname = false } = options;
+    const { surname = false, addSurname = false } = options;
 
     if (surname) {
         const lastSpaceInd = name.lastIndexOf(" ");
@@ -14,6 +14,13 @@ function getFirstName(name, options = {}) {
     if (firstSpaceInd === -1) return name;
 
     const firstName = name.slice(0, firstSpaceInd);
+
+    if (addSurname) {
+        const lastSpaceInd = name.lastIndexOf(" ");
+        const surname = name.slice(lastSpaceInd + 1);
+
+        return `${firstName} ${surname}`;
+    }
 
     return firstName;
 }

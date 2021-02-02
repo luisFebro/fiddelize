@@ -1,26 +1,22 @@
-import React from 'react';
-import Img from '../../components/Img';
-import useElemShowOnScroll from '../../hooks/scroll/useElemShowOnScroll';
+import React from "react";
+import Img from "../../components/Img";
+import useElemShowOnScroll from "../../hooks/scroll/useElemShowOnScroll";
 
 export { useElemShowOnScroll };
 
-export const textStyle = 'text-purple text-left text-normal mx-3';
+export const textStyle = "text-purple text-left text-normal mx-3";
 
 export const ShowTitle = ({ title = "some main title" }) => (
     <div className="mt-4">
-        <h1
-            className="text-subtitle text-purple text-center font-weight-bold"
-        >
+        <h1 className="text-subtitle text-purple text-center font-weight-bold">
             {title}
         </h1>
     </div>
 );
 
 export const ShowArticleTitle = ({ title = "some title" }) => (
-    <h2
-        className="my-4 font-site text-em-1-3 text-purple text-center font-weight-bold"
-    >
-       {title}
+    <h2 className="my-4 font-site text-em-1-3 text-purple text-center font-weight-bold">
+        {title}
     </h2>
 );
 
@@ -35,13 +31,13 @@ export const ShowPicture = ({
 }) => {
     // images loaded with intersection observer...
     return (
-        <div className={`img-center position-relative ${main ? "mt-1 mb-5" : "my-3"}`}>
+        <div className={`position-relative ${main ? "mt-1 mb-5" : "my-3"}`}>
             <Img
                 dataSrc={dataSrc}
                 timeout={timeout}
                 src={src}
                 mode="skeleton"
-                className="shadow-elevation"
+                className="img-center shadow-elevation"
                 imgContainerClass={imgContainerClass}
                 alt="foto principal"
             />
@@ -52,8 +48,10 @@ export const ShowPicture = ({
             )}
 
             {subtitle && (
-                <p className="mt-2 text-purple text-center text-small font-weight-bold">{subtitle}</p>
+                <p className="mt-2 text-purple text-center text-small font-weight-bold">
+                    {subtitle}
+                </p>
             )}
         </div>
     );
-}
+};

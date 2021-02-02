@@ -184,7 +184,8 @@ export default function Simulator({
                 <span
                     className={`text-em-${unitSizeInc} font-site text-nowrap`}
                 >
-                    {totalCustomersReal} cliente{packages === 1 ? "" : "s"}
+                    {totalCustomersReal} cliente
+                    {totalCustomersReal === 1 ? "" : "s"}
                 </span>
                 <br />
                 <span className="text-title"> X </span>
@@ -193,7 +194,7 @@ export default function Simulator({
                         unit === 0.08 || unit === 0.09 ? "font-weight-bold" : ""
                     }`}
                 >
-                    {customersUnitReal}
+                    {customersUnitReal} (cada)
                 </span>
             </span>
         </section>

@@ -121,7 +121,7 @@ export default function SpeedometerGauge({ value }) {
             onClick={() => setCaptionOn(true)}
             position="absolute"
             right={10}
-            bottom={isSmall ? -45 : -55}
+            bottom={isSmall ? -45 : -100}
             variant="extended"
             size="small"
             backgroundColor="var(--themeSDark)"

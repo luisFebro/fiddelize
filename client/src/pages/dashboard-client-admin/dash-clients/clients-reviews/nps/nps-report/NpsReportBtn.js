@@ -10,10 +10,10 @@ const Async = Load({
         ),
 });
 
-export default function NpsReportBtn({ nps }) {
+export default function NpsReportBtn({ mainData, disabled }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncNpsContent = <Async nps={nps} />;
+    const AsyncNpsContent = <Async mainData={mainData} />;
 
     const handleFullOpen = () => {
         setFullOpen(true);
@@ -32,6 +32,7 @@ export default function NpsReportBtn({ nps }) {
                 backgroundColor={"var(--themeSDark--default)"}
                 variant="extended"
                 position="relative"
+                disabled={disabled}
             />
             <ModalFullContent
                 contentComp={AsyncNpsContent}

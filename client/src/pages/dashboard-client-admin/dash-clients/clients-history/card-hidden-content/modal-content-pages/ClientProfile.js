@@ -15,7 +15,6 @@ export default function ClientProfile({ data, title, subtitle }) {
         email,
         maritalStatus,
         birthday,
-        clientUserData,
         createdAt,
     } = data;
 

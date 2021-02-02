@@ -52,14 +52,9 @@
 }
 
 .img-center {
-    // does not require to specify image size
-    margin-left: 1rem !important;
-    margin-right: 1rem !important;
-
-    & img {
-        max-width: 100%;
-        height: auto;
-    }
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
 }
 
 .no-border {

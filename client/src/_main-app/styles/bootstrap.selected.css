@@ -156,7 +156,7 @@ small {
 
 a {
     color: #007bff;
-    text-decoration: none;
+    text-decoration: underline;
     background-color: transparent;
 }
 

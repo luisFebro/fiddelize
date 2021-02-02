@@ -60,6 +60,7 @@ app.use("/api/task", require("./routes/user/task"));
 app.use("/api/sms", require("./routes/sms"));
 app.use("/api/pay", require("./routes/pay"));
 app.use("/api/pro", require("./routes/pro"));
+app.use("/api/reviews", require("./routes/reviews"));
 // app.use("/api/push-notification", require("./routes/push-notification"));
 // Serve static files such as images, CSS files, and JavaScript files for the React frontend <app></app>
 isProduction && app.use(express.static(path.join(__dirname, "client/build")));

@@ -67,6 +67,7 @@ export default function AnimaIconsSelect({
     width,
     needReverseBtn = true,
     zIndex,
+    checkServicePro,
 }) {
     const [panel, setPanel] = useState(false);
     const [data, setData] = useState({
@@ -87,8 +88,12 @@ export default function AnimaIconsSelect({
         reverse,
         isReversed,
     } = data;
+    console.log("selected", selected);
 
-    const { isPro } = usePro({ feature: "orgganize_clients" });
+    const { isPro } = usePro({
+        feature: checkServicePro,
+        trigger: checkServicePro,
+    });
 
     const styles = getStyles();
 
@@ -103,14 +108,45 @@ export default function AnimaIconsSelect({
     const { offlineData, loading: loadingOffline } = useOfflineData({
         dataName: offlineKey,
         data: selected,
-        trigger: needTriggerOffData,
+        trigger: offlineKey && needTriggerOffData,
     });
 
     const toggleReverse = useRef(false);
 
     const alreadyOffline = useRef(false);
+
+    // allowing results when disabling offline feature:
+    const alreadyDefault = useRef(false);
+    useEffect(() => {
+        if (!offlineKey) {
+            const foundElem = optionsArray().find((opt) => {
+                const cond = !alreadyDefault.current
+                    ? opt.titleBr === defaultSelected
+                    : opt.titleBr === selected;
+
+                return cond;
+            });
+
+            if (foundElem) {
+                alreadyDefault.current = true;
+                const { Icon, title, reverse, titleBr, reverseBr } = foundElem;
+                setData({
+                    ...data,
+                    selected: titleBr,
+                    selectedOptionBr: titleBr,
+                    reverseOptionBr: reverseBr,
+                    title,
+                    reverse,
+                    CurrIcon: Icon,
+                });
+            }
+        }
+    }, [offlineKey, selected, alreadyDefault.current]);
+
     useEffect(() => {
         let thisSelected;
+
+        if (!offlineKey) return;
 
         if (!alreadyOffline.current && !loadingOffline) {
             thisSelected = !offlineData ? defaultSelected : offlineData;
@@ -272,6 +308,11 @@ export default function AnimaIconsSelect({
         </Fragment>
     );
 
+    const styleMainIcon = {
+        ...styles.currIcon,
+        zIndex: zIndex ? zIndex : 11,
+    };
+
     return (
         <section className="d-flex justify-content-start">
             <section className="position-relative">
@@ -293,10 +334,7 @@ export default function AnimaIconsSelect({
                         {showPanelOptions(optionsArray)}
                     </section>
                 </form>
-                <div
-                    style={{ ...styles.currIcon, zIndex: zIndex ? zIndex : 11 }}
-                    className="position-absolute"
-                >
+                <div style={styleMainIcon} className="position-absolute">
                     {CurrIcon}
                 </div>
                 {showReverseBtn()}
