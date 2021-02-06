@@ -10,10 +10,10 @@ const Async = Load({
         ),
 });
 
-export default function XpGradeReportBtn({ disabled }) {
+export default function XpGradeReportBtn({ disabled, payload }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncXpGradeContent = <Async />;
+    const AsyncXpGradeContent = <Async payload={payload} />;
 
     const handleFullOpen = () => {
         setFullOpen(true);

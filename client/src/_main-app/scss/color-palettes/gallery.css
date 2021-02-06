@@ -95,5 +95,5 @@
 }
 
 .text-voca-cyan {
-    color: var(--vocarizaCyan);
+    color: var(--vocarizaCyan) !important;
 }

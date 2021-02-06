@@ -80,6 +80,7 @@ export default function BuyReviewList({ lastDateChecked }) {
         <section className="container-center-col">
             {reviewsList.map((re, ind) => {
                 const isCardNew = isAfter(
+                    // is reportUpdated newest/latest than when admin checked it in the last time?
                     new Date(re.reportUpdatedAt),
                     new Date(lastDateChecked)
                 );

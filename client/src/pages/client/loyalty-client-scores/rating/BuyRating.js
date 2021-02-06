@@ -82,7 +82,7 @@ export default function BuyRating({
         ? `Em um escala de 1 a 10, quão provável você recomendaria a ${
               bizName && bizName.toUpperCase()
           } para um amigo ou conhecido?`
-        : `Qual foi sua experiência de compra, ${firstName}?`;
+        : `Qual foi sua experiência de compra hoje, ${firstName}?`;
 
     const handleReportDisplay = () => {
         if (onlyReportField) return "block";

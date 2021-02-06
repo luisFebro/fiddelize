@@ -5,6 +5,7 @@ const {
     getBuyReviewsList,
     getReviewMainData,
     getNpsChartData,
+    getXpScoreChartData,
 } = require("../controllers/reviews/reviews");
 
 const { mwIsAuth } = require("../controllers/auth");
@@ -14,6 +15,7 @@ const { mwIsAuth } = require("../controllers/auth");
 router.get("/list/buy-reviews", mwIsAuth, getBuyReviewsList);
 router.get("/main-data", getReviewMainData);
 router.get("/nps-chart", getNpsChartData);
+router.get("/xp-score-chart", getXpScoreChartData);
 // router.param("userId", mwUserId);
 
 module.exports = router;

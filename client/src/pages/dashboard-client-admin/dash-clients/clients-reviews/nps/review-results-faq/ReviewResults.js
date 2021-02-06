@@ -4,6 +4,7 @@ import FaqAccordion from "../../../../../../components/expansion-panels/faq/FaqA
 import "./_ReviewResults.scss";
 import { Load } from "../../../../../../components/code-splitting/LoadableComp";
 import AddCustomersBtn from "../../../../../../pages/plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
+import usePro from "../../../../../../hooks/pro/usePro";
 
 const textQ1 = (
     <p>
@@ -30,7 +31,7 @@ const textQ2 = (
         </p>
         <p>
             No mesmo app tem a opção <strong>Sua avaliação</strong> onde os
-            clientes podem atulizar a qualquer momento tanto suas avaliações
+            clientes podem atualizar a qualquer momento tanto suas avaliações
             como o relato de compras.
         </p>
     </Fragment>
@@ -51,6 +52,12 @@ const textQ3 = (
             No app dos clientes, eles podem atualizar suas avaliações pelo botão{" "}
             <strong>Sua avaliação</strong>
         </p>
+        <img
+            className="mt-3 img-center shadow-babadoo"
+            width={300}
+            src="/img/pro-features/sattisfacao-clientes/faq/faq-nps-chart.png"
+            alt="avaliação nota XP"
+        />
     </Fragment>
 );
 
@@ -70,73 +77,86 @@ const textQ5 = (
     </p>
 );
 
-const textQ8 = (
-    <Fragment>
-        <p>
-            Basta investir nos pacotes de apps para clientes. O serviço de
-            avaliações (Pontuação Promotores e Nota XP), relatos de compra e
-            análises automáticas são integrados{" "}
-            <strong>sem custos adicionais</strong>. É um serviço da Fiddelize
-            feito para aumentar o valor tanto para os apps como para os negócios
-            e seus clientes na plataforma.
-        </p>
-        <p>
-            Todas as funcionalidades tanto do app dos clientes como as dos
-            membros são <strong>gratuitas e sem anúncios</strong>. Além de, é
-            claro, os apps serem feitos totalmente com a cara do seu negócio com
-            logo, cores, ícones, etc.
-        </p>
-        <div>
-            <AddCustomersBtn linkTitle="Investir mais apps para clientes agora" />
-        </div>
-    </Fragment>
-);
-
-const dataArray = [
-    {
-        title: "Esta pesquisa é fundamentada em algum estudo?",
-        text: textQ1,
-    },
-    {
-        title: "Quando é feita esta avaliação?",
-        text: textQ2,
-    },
-    {
-        title: "Qual é a frequência das avaliações?",
-        text: textQ3,
-    },
-    {
-        title: "São quantas avaliações?",
-        text:
-            "São duas avaliações simples e práticas feitas em compras diferentes e são realizadas facilmente com um clique ou deslize dos dedos. Agrega para seu negócio em dados de análise dos clientes e não atrapalha no processo da compra.",
-    },
-    {
-        title: "Como que funciona a pesquisa para o cliente?",
-        text: textQ5,
-    },
-    {
-        title: "Por que é feito essa pergunta de recomendação?",
-        text:
-            "É a prova final de fidelidade quando um cliente coloca sua própria reputação em cena para recomendar seu negócio para conhecidos ou amigos.",
-    },
-    {
-        title: "É realmente eficiente/eficaz esta pesquisa?",
-        text:
-            "Sim. É usado no mundo todo por diferentes tamanhos de negócios. Segundo uma extensa pesquisa envolvendo diferentes perguntas de avaliação, esta se mostrou a que mensurou melhor a fidelidade dos clientes. A cada 7 pontos aumentado na pontuação de promotores, cerca de 1% é o aumento da receita das empresas em média.",
-    },
-    {
-        title: "Quando é feita a atualização das análises?",
-        text:
-            "Em tempo real. Sua pontuação pode ter variações inclusive no mesmo dia. É atualizada toda vez que os clientes fazem ou, de fato, atualizam suas avaliações nos apps.",
-    },
-    {
-        title: "Quanto custa?",
-        text: textQ8,
-    },
-];
-
 export default function ReviewResults({ mainData = {} }) {
     const { detractors, passives, promoters } = mainData;
+
+    const { plan: currPlan, usageTimeEnd, credits } = usePro({
+        service: "Novvos Clientes",
+    });
+
+    const modalData = {
+        isCreditsBadge: true, // it will allow period choice and handle individual order
+        currPlan: currPlan === "gratis" ? "bronze" : currPlan,
+        expiryDate: usageTimeEnd,
+    };
+
+    const textQ8 = (
+        <Fragment>
+            <p>
+                Basta investir nos pacotes de apps para clientes. O serviço de
+                avaliações (Pontuação Promotores e Nota XP), relatos de compra e
+                análises em tempo real são integrados{" "}
+                <strong>sem custos adicionais</strong>. É um serviço da
+                Fiddelize feito para aumentar o valor tanto para os apps como
+                para os negócios e seus clientes na plataforma.
+            </p>
+            <p>
+                Todas as funcionalidades do app dos clientes e dos membros são{" "}
+                <strong>gratuitas e sem anúncios</strong>. Além de, é claro, os
+                apps serem feitos totalmente com a cara do seu negócio com logo,
+                cores, ícones, etc.
+            </p>
+            <div>
+                <AddCustomersBtn
+                    linkTitle="Investir em mais apps para clientes agora"
+                    modalData={modalData}
+                />
+            </div>
+        </Fragment>
+    );
+
+    const dataArray = [
+        {
+            title: "Esta pesquisa é fundamentada em algum estudo?",
+            text: textQ1,
+        },
+        {
+            title: "Quando é feita esta avaliação?",
+            text: textQ2,
+        },
+        {
+            title: "Qual é a frequência das avaliações?",
+            text: textQ3,
+        },
+        {
+            title: "São quantas avaliações?",
+            text:
+                "São duas avaliações simples e práticas feitas em compras diferentes e são realizadas facilmente com um clique ou deslize dos dedos. Agrega para seu negócio em dados de análise dos clientes e não atrapalha no processo da compra.",
+        },
+        {
+            title: "Como que funciona a pesquisa para o cliente?",
+            text: textQ5,
+        },
+        {
+            title: "Por que é feito essa pergunta de recomendação?",
+            text:
+                "É a prova final de fidelidade quando um cliente coloca sua própria reputação em cena para recomendar seu negócio para conhecidos ou amigos.",
+        },
+        {
+            title: "É realmente eficiente/eficaz esta pesquisa?",
+            text:
+                "Sim. É usado no mundo todo por diferentes tamanhos de negócios. Segundo uma extensa pesquisa envolvendo diferentes perguntas de avaliação, esta se mostrou a que mensurou melhor a fidelidade dos clientes. A cada 7 pontos aumentado na pontuação de promotores, cerca de 1% é o aumento da receita das empresas em média.",
+        },
+        {
+            title: "Quando é feita a atualização das análises?",
+            text:
+                "Em tempo real. Sua pontuação pode ter variações inclusive no mesmo dia. É atualizada toda vez que os clientes fazem ou, de fato, atualizam suas avaliações nos apps.",
+        },
+        {
+            title: "Quanto custa?",
+            text: textQ8,
+        },
+    ];
 
     const { bizName } = useClientAdmin();
 

@@ -1,7 +1,7 @@
 const User = require("../../models/user");
 const { msgG } = require("../_msgs/globalMsgs");
 const httpRequest = require("../../utils/http/httpRequest");
-const requestPromisePool = require("../../utils/http/requestRequestPool");
+const requestPromisePool = require("../../utils/http/requestPromisePool");
 const convertPhoneStrToInt = require("../../utils/number/convertPhoneStrToInt");
 const findKeyAndAssign = require("../../utils/array/findKeyAndAssign");
 const { encryptSync, decryptSync } = require("../../utils/security/xCipher");

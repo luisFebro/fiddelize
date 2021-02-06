@@ -112,3 +112,5 @@ export const getMainReviewData = (userId) =>
     `/api/reviews/main-data?userId=${userId}`;
 export const getNpsChartData = (userId) =>
     `/api/reviews/nps-chart?userId=${userId}`;
+export const getXpScoreChartData = (userId) =>
+    `/api/reviews/xp-score-chart?userId=${userId}`;

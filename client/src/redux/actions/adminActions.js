@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { getHeaderJson, getHeaderToken } from '../../utils/server/getHeaders';
-import { getBodyRequest } from '../../utils/server/getBodyRequest';
-import { setLoadingProgress } from './globalActions';
+import axios from "axios";
+import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
+import { getBodyRequest } from "../../utils/server/getBodyRequest";
+import { setLoadingProgress } from "./globalActions";
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
 ////////////////////////////////////////////////////////////////////
@@ -10,15 +10,19 @@ import { setLoadingProgress } from './globalActions';
 
 export const updateAdmin = async (dispatch, bodyToSend) => {
     try {
-        return await axios.put('/api/admin', bodyToSend, getHeaderJson);
+        return await axios.put("/api/admin", bodyToSend, getHeaderJson);
     } catch (err) {
         return err.response;
     }
-}
+};
 
 export const updateConfig = async (dispatch, objToUpdate) => {
     try {
-        const res = await axios.put(`/api/admin/config`, objToUpdate, getHeaderJson);
+        const res = await axios.put(
+            `/api/admin/config`,
+            objToUpdate,
+            getHeaderJson
+        );
         // dispatch({ type: 'UPDATE_BIZ_INFO', payload: objToUpdate });
         return res;
     } catch (err) {
@@ -28,8 +32,12 @@ export const updateConfig = async (dispatch, objToUpdate) => {
 
 export const updateBusinessInfo = async (dispatch, objToUpdate) => {
     try {
-        const res = await axios.put(`/api/admin/business-info/update`, objToUpdate, getHeaderJson);
-        dispatch({ type: 'UPDATE_BIZ_INFO', payload: objToUpdate });
+        const res = await axios.put(
+            `/api/admin/business-info/update`,
+            objToUpdate,
+            getHeaderJson
+        );
+        dispatch({ type: "UPDATE_BIZ_INFO", payload: objToUpdate });
         return res;
     } catch (err) {
         return err.response;
@@ -38,26 +46,38 @@ export const updateBusinessInfo = async (dispatch, objToUpdate) => {
 
 export const readAllDbFromModels = async (dispatch, securityObj, model) => {
     try {
-        return await axios.get(`/api/database/db-from-models/list/${securityObj.adminId}?modelName=${model}`, getHeaderToken(securityObj.token));
+        return await axios.get(
+            `/api/database/db-from-models/list/${securityObj.adminId}?modelName=${model}&thisRole=cliente-admin`,
+            getHeaderToken(securityObj.token)
+        );
     } catch (err) {
         return err.response;
     }
 };
 
 // CLIENT-ADMIN
-export const readVerificationPass = async (bizId) => { // L
+export const readVerificationPass = async (bizId) => {
+    // L
     try {
-        const res = await axios.get(`/api/admin/verification-pass/${bizId}`, getHeaderJson);
+        const res = await axios.get(
+            `/api/admin/verification-pass/${bizId}`,
+            getHeaderJson
+        );
         return res;
     } catch (err) {
         return err.response;
     }
 };
 
-export const checkVerificationPass = async (dispatch, objToSend) => { // L
+export const checkVerificationPass = async (dispatch, objToSend) => {
+    // L
     setLoadingProgress(dispatch, true);
     try {
-        const res = await axios.post(`/api/admin/verification-pass`, objToSend, getHeaderJson);
+        const res = await axios.post(
+            `/api/admin/verification-pass`,
+            objToSend,
+            getHeaderJson
+        );
         setLoadingProgress(dispatch, false);
         return res;
     } catch (err) {
@@ -78,7 +98,6 @@ export const checkVerificationPass = async (dispatch, objToSend) => { // L
 /* COMMENTS
 n1: LESSON: never use GET METHOD if you want to send an object to backend, even in the case if it is working on Postman.
 */
-
 
 /* ARCHIVES
 // STAFF BOOKING

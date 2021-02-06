@@ -1,0 +1,86 @@
+@import "chartist/dist/scss/chartist.scss";
+
+// LESSON: nth-of-type is better bulletproof than nth-child for DOM selection
+.bar-chart--root {
+    position: relative;
+    background-color: #1e2730;
+
+    .ct-label {
+        color: var(--mainWhite);
+        font-weight: bold;
+        font-family: var(--mainFont);
+        font-size: 1rem;
+    }
+
+    .ct-grids .ct-grid {
+        stroke: var(--themePLight);
+        stroke-width: 0.6px;
+    }
+
+    .ct-series {
+        .ct-label {
+            fill: rgb(103, 137, 162);
+        }
+        .peak-circle {
+            &:nth-of-type(1),
+            &:nth-of-type(2) {
+                fill: #f44336 !important;
+            }
+            &:nth-of-type(3),
+            &:nth-of-type(4) {
+                fill: #f7928b !important;
+            }
+            &:nth-of-type(5),
+            &:nth-of-type(6) {
+                fill: #ef9e26 !important;
+            }
+            &:nth-of-type(7),
+            &:nth-of-type(8) {
+                fill: #0bccba !important;
+            }
+            &:nth-of-type(9),
+            &:nth-of-type(10) {
+                fill: #7bd77f !important;
+            }
+        }
+        .ct-bar:nth-of-type(1),
+        .ct-bar:nth-of-type(2) {
+            stroke: #f44336 !important;
+        }
+        .ct-bar:nth-of-type(3),
+        .ct-bar:nth-of-type(4) {
+            stroke: #f7928b !important;
+        }
+        .ct-bar:nth-of-type(5),
+        .ct-bar:nth-of-type(6) {
+            stroke: #ef9e26 !important;
+        }
+        .ct-bar:nth-of-type(7),
+        .ct-bar:nth-of-type(8) {
+            stroke: #0bccba !important;
+        }
+        .ct-bar:nth-of-type(9),
+        .ct-bar:nth-of-type(10) {
+            stroke: #7bd77f !important;
+        }
+    }
+}
+
+// TOOLTIP
+.chartist-tooltip {
+    opacity: 0;
+    position: absolute;
+    font-weight: bold;
+    font-family: var(--mainFont);
+    margin: 20px 0 0 10px;
+    background: var(--themeP);
+    color: var(--vocarizaCyan);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.chartist-tooltip.tooltip-show {
+    opacity: 1;
+    position: absolute;
+    top: 70px !important;
+}

@@ -1,53 +1,56 @@
 import React, { useState, useEffect, Fragment } from "react";
-// import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { useStoreDispatch, useStoreState } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
-import ButtonDropdown from "../../../../../components/buttons/material-ui/ButtonDropdown";
 import parse from "html-react-parser";
-import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
-
 import { readAllDbFromModels } from "../../../../../redux/actions/adminActions";
+import Img from "../../../../../components/Img";
+import useData from "../../../../../hooks/useData";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import { useClientAdmin } from "../../../../../hooks/useRoleData";
+import CheckBoxForm from "../../../../../components/CheckBoxForm";
+// import ButtonDropdown from "../../../../../components/buttons/material-ui/ButtonDropdown";
 
 const dbData = {
     users: {
-        brDbName: "usuários",
         dbModelName: "user",
-    },
-    staffBookings: {
-        brDbName: "agendamentos",
-        dbModelName: "staffBooking",
-    },
-    finances: {
-        brDbName: "finanças",
-        dbModelName: "finance",
     },
 };
 
 export default function BackUpToExcel() {
-    const [isThisLoading, setIsThisLoading] = useState(true);
-
     const [data, setData] = useState({
         dbDataList: [],
         brDbName: "",
         dbModelName: "",
         selectedButton: "SELECIONE BOTÃO",
+        isLoading: false,
+        securityAlertOn: false, // use agreed with security text
     });
-    const { dbDataList, selectedButton, dbModelName, brDbName } = data;
+    const {
+        securityAlertOn,
+        dbDataList,
+        selectedButton,
+        dbModelName,
+        brDbName,
+        isLoading,
+    } = data;
 
     const isArrayReady = dbDataList.length !== 0;
 
-    const { adminId, token } = useStoreState((state) => ({
+    const { token } = useStoreState((state) => ({
         token: state.authReducer.cases.tokenWhenLogin,
-        adminId: state.userReducer.cases.currentUser._id,
     }));
+    const [adminId] = useData(["userId"]);
+    const { bizCodeName } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
-    useEffect(() => {
-        if (adminId && selectedButton !== "SELECIONE BOTÃO") {
-            handleSubmit(adminId);
-        }
-    }, [selectedButton, adminId]);
+    const switchLoading = (status) => {
+        setData((prev) => ({
+            ...prev,
+            isLoading: status,
+        }));
+    };
 
     const handleSubmit = (adminId) => {
         const securityObj = {
@@ -55,28 +58,57 @@ export default function BackUpToExcel() {
             token,
         };
 
-        setIsThisLoading(true);
+        switchLoading(true);
         readAllDbFromModels(dispatch, securityObj, dbModelName).then((res) => {
+            if (res.status === 404) {
+                showSnackbar(dispatch, res.data.error, "error", 6000);
+                switchLoading(false);
+                return;
+            }
             if (res.status !== 200) {
                 showSnackbar(
                     dispatch,
-                    "Por segurança, os dados ficam disponíveis por 30 minutos. Faça seu login novamente",
+                    "Ocorreu um erro ao carregar dados de clientes",
                     "error",
                     9000
                 );
-                setIsThisLoading(false);
+                switchLoading(false);
                 return;
             }
             setData({
                 ...data,
                 dbDataList: res.data,
             });
-            setIsThisLoading(false);
+            switchLoading(false);
         });
     };
 
-    const showDownloadableDataBtn = () => (
-        <div>
+    useEffect(() => {
+        if (adminId !== "..." && selectedButton !== "SELECIONE BOTÃO") {
+            handleSubmit(adminId);
+        }
+    }, [selectedButton, adminId]);
+
+    const showExcelDownloadBtn = () => (
+        <div className="my-3">
+            <ReactHTMLTableToExcel
+                id=""
+                className={
+                    selectedButton === "SELECIONE BOTÃO" || isLoading
+                        ? "d-none"
+                        : `${
+                              !securityAlertOn ? "" : "text-voca-cyan theme-p"
+                          } MuiButtonBase-root MuiFab-root MuiFab-extended text-normal font-weight-bold ${
+                              isArrayReady && !securityAlertOn
+                                  ? "disabledLink"
+                                  : ""
+                          }`
+                }
+                table={brDbName} // file`s name
+                filename={brDbName}
+                sheet={`${brDbName} - dados`}
+                buttonText={isLoading ? "CARREGANDO..." : "BAIXAR CÓPIA"}
+            />
             <table id={brDbName} className="d-none">
                 <thead>
                     <tr>
@@ -100,51 +132,137 @@ export default function BackUpToExcel() {
         </div>
     );
 
-    const handleDbSelection = (selectedButton) => {
-        switch (selectedButton) {
-            case "GERAR DADOS - CLIENTES":
-                return "users";
-            default:
-                console.log("none selected");
-        }
-    };
-
     const onSelectedValue = (value) => {
         if (value !== "SELECIONE BOTÃO") {
-            const model = handleDbSelection(value);
+            const model = "users";
             setData({
                 ...data,
                 selectedButton: value,
-                brDbName: dbData[model].brDbName,
+                brDbName: `clientes-da-${bizCodeName}`,
                 dbModelName: dbData[model].dbModelName,
             });
         }
     };
 
-    const showDropDownBtn = () => (
-        <span className="position-relative my-4">
-            <ButtonDropdown
-                dropdown={{
-                    titleOptions: ["SELECIONE BOTÃO", "GERAR DADOS - CLIENTES"],
-                }}
-                onSelectedValue={(value) => null}
+    const showActionBtn = () => (
+        <Fragment>
+            <ButtonFab
+                title={isLoading ? "Solicitando..." : "Solicitar Cópia"}
+                backgroundColor="var(--themeSDark--default)"
+                onClick={() => onSelectedValue("users")}
+                position="relative"
+                variant="extended"
+                size="large"
             />
-            <PremiumButton
-                service="Coppia Segurança"
-                proPage=""
-                left={10}
-                top={-20}
-            />
-        </span>
+        </Fragment>
+    );
+
+    const handleChecked = (status) => {
+        setData({
+            ...data,
+            securityAlertOn: status,
+        });
+    };
+
+    const showAgreementAndBtn = () => (
+        <Fragment>
+            <section className="mt-5 text-small text-purple mx-3">
+                <h2 className="text-center text-normal font-weight-bold">
+                    Acordo de Segurança
+                </h2>
+                <p>
+                    <strong>Sua solicitação foi autorizada!</strong> Mas antes
+                    de baixar o arquivo, leia atentamente sobre a segurança dos
+                    dados.
+                </p>
+                <p>
+                    A Fiddelize prioriza a segurança dos dados com criptografia.
+                    No caso das cópias de segurança, os dados são
+                    excepcionalmente descriptografados após ter verificado que
+                    seu <strong>acesso é autêntico</strong> como admin.
+                </p>
+                <p>
+                    É dado o <strong>direito exclusivo</strong> para os admins
+                    de ter acesso aos dados dos seus clientes ao usar os apps na
+                    plataforma da Fiddelize.
+                </p>
+                <p>Ao baixar o arquivo, você concarda que:</p>
+                <p>
+                    {" "}
+                    - Usará o arquivo de <strong>forma privada</strong> e apenas
+                    para{" "}
+                    <strong>fins informativos ou transferência de dados</strong>{" "}
+                    para seu sistema comercial.
+                </p>
+                <p>
+                    {" "}
+                    - Após usar o arquivo,{" "}
+                    <strong>vai excluí-lo do seu dispositivo</strong>. Afinal, o
+                    arquivo vai ficar desatulizado logo. Você pode baixar a
+                    versão mais atual voltando aqui.
+                </p>
+                <p>
+                    {" "}
+                    - <strong>Evitar de enviar ou compartilhar</strong> o
+                    arquivo por quaisquer meios de comunicação online: email,
+                    chats, ou outros meios que permitam o envio e armazenamento
+                    de arquivos.
+                </p>
+                <CheckBoxForm
+                    text="concordo com as condições de uso"
+                    setIsBoxChecked={handleChecked}
+                />
+            </section>
+            {showExcelDownloadBtn()}
+            {!isArrayReady && (
+                <p className="animated fadeInUp delay-2s text-small font-weight-bold mx-3 text-grey my-3">
+                    Pode levar alguns instantes...
+                    <br />
+                    depende da sua conexão de internet ou tamanho de clientes
+                    cadastrados.
+                </p>
+            )}
+        </Fragment>
     );
 
     return (
-        <div className="my-5 container-center-col">
-            <p className="text-left text-normal font-weight-bold">
-                Fazer cópia de dados dos seus clientes:
+        <div className="mt-5 container-center-col">
+            <Img
+                className="img-fluid"
+                src="/img/icons/backup-excel.svg"
+                offline={true}
+                width={120}
+                height="auto"
+                alt="ícone excel"
+            />
+            <p className="text-center text-normal font-weight-bold">
+                Se precisar, faça aqui a cópia de dados mais recente dos seus
+                clientes
             </p>
-            {showDropDownBtn()}
-            {/*showDownloadableDataBtn()*/}
+            {isArrayReady ? showAgreementAndBtn() : showActionBtn()}
         </div>
     );
 }
+
+/* ARCHIVES
+
+function handleDbSelection(selectedButton) {
+    switch (selectedButton) {
+        case "GERAR DADOS - CLIENTES":
+            return "users";
+        default:
+            console.log("none selected");
+    }
+};
+
+const showDropDownBtn = () => (
+    <span className="position-relative my-4">
+        <ButtonDropdown
+            dropdown={{
+                titleOptions: ["SELECIONE BOTÃO", "GERAR DADOS - CLIENTES"],
+            }}
+            onSelectedValue={(value) => onSelectedValue(value)}
+        />
+    </span>
+);
+ */

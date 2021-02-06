@@ -345,10 +345,10 @@ function AsyncClientScoresPanel({ history, location }) {
         await setVar({ doneNPS: true });
         showSnackbar(dispatch, "Salvando e finalizando...", "warning");
 
+        // For future improvem: The update is happening in every component now by BuyRating
         // update user with new rating
         const thisNpsScore = !ratingData.nps ? undefined : ratingData.nps;
         const thisXpScore = !ratingData.nps ? ratingData.xpScore : undefined;
-
         await getAPI({
             method: "put",
             url: updateUser(_id, whichRole),
@@ -358,6 +358,15 @@ function AsyncClientScoresPanel({ history, location }) {
                 "clientUserData.review.buyReport": !ratingData.buyReport
                     ? undefined
                     : ratingData.buyReport,
+                "clientUserData.review.npsUpdatedAt": !ratingData.nps
+                    ? undefined
+                    : new Date(),
+                "clientUserData.review.xpUpdatedAt": !ratingData.nps
+                    ? new Date()
+                    : undefined,
+                "clientUserData.review.reportUpdatedAt": ratingData.buyReport
+                    ? undefined
+                    : new Date(),
             },
         }).catch((err) => {
             console.log("ERROR: " + err);

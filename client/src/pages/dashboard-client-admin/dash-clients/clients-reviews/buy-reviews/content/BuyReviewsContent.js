@@ -32,13 +32,13 @@ export default function BuyReviewsContent({ lastDateChecked }) {
                 Compra
             </h1>
             <p
-                className="m-0 mx-3 text-small text-purple text-center font-weight-bold"
+                className="m-0 mx-3 text-small text-purple text-center"
                 style={{
                     fontSize: "1.1rem",
                 }}
             >
-                Saiba o que seus clientes relatam sobre suas experiências de
-                compra mais recentes
+                Saiba o que seus <strong>clientes relatam</strong> sobre suas
+                experiências de compra mais recentes
             </p>
         </div>
     );

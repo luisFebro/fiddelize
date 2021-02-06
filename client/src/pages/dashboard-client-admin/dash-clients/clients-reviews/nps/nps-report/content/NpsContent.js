@@ -120,6 +120,7 @@ export default function NpsContent({ mainData }) {
                     dataArray={chData.dataArray}
                     onlySmall={true}
                     isMonday={currWeekDay === "Seg"}
+                    isSunday={currWeekDay === "Dom"}
                 />
             </section>
         );
@@ -192,11 +193,13 @@ function getLabelsAndData({ dataChart, currWeekDay }) {
     const finalWeekDay = weekDays.map((w, ind) => {
         if (w === currWeekDay) {
             indCurrWeekDay = ind;
-            return "Hoje";
+            return "HOJE";
         }
         return w;
     });
 
+    // the rest of data is hidden because all other dates ofter TODAY is the same like:
+    // 62 , 64 (today), 64, 64 ... repeats
     const finalChartData = dataChart
         ? dataChart.slice(0, indCurrWeekDay + 1)
         : ["0"];

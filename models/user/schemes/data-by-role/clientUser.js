@@ -62,6 +62,7 @@ const clientUserData = {
             trim: true,
             lowercase: true,
         },
+        xpUpdatedAt: Date,
         reportUpdatedAt: Date,
         npsUpdatedAt: Date,
     },

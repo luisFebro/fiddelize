@@ -74,6 +74,7 @@ export default function StarsBuyExperience({
             url: updateUser(userId, role),
             body: {
                 "clientUserData.review.xpScore": grade,
+                "clientUserData.review.xpUpdatedAt": new Date(),
             },
         }).catch((err) => {
             console.log("ERROR: " + err);

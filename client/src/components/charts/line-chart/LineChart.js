@@ -3,7 +3,6 @@ import Chartist from "chartist";
 import "chartist-plugin-tooltips";
 import "chartist-plugin-pointlabels";
 import getIncreasedPerc from "../../../utils/numbers/getIncreasedPerc";
-import parse from "html-react-parser";
 import "./_LineChart.scss";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -44,16 +43,16 @@ const options = {
 };
 
 // dataArray should have elements as numbers
-// if dataArray contains 0, it should be a stringm, otherwise it will be undefined
+// if dataArray contains 0, it should be "0.01", otherwise it will be undefined
 // data examples:
 // xLabels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
 // dataArray = ["0", 100, 1, 40, -30, 20, 90]
 export default function LineChart({
-    delay = 0,
     xLabels,
     dataArray,
     onlySmall = false, // useful especially when used in a modal when the width is limited regardless of the screen width size.
-    isMonday = false,
+    isMonday = false, // handle extreme left data visulization
+    isSunday = false,
 }) {
     const arrLen = dataArray && dataArray.length;
 
@@ -75,76 +74,67 @@ export default function LineChart({
     const showText = !Number.isNaN(lastButOne) && lastPerc !== 0;
 
     useEffect(() => {
-        setTimeout(() => {
-            (async () => {
-                const chart = new Chartist.Line(
-                    ".line-chart",
-                    {
-                        labels: xLabels,
-                        series: [dataArray],
-                    },
-                    options
-                );
+        (async () => {
+            const chart = new Chartist.Line(
+                ".line-chart",
+                {
+                    labels: xLabels,
+                    series: [dataArray],
+                },
+                options
+            );
 
-                chart.on("draw", function (data) {
-                    if (data.type === "line" || data.type === "area") {
-                        data.element.animate({
-                            d: {
-                                begin: 2000 * data.index,
-                                dur: 2000,
-                                from: data.path
-                                    .clone()
-                                    .scale(1, 0)
-                                    .translate(0, data.chartRect.height())
-                                    .stringify(),
-                                to: data.path.clone().stringify(),
-                                easing: Chartist.Svg.Easing.easeOutQuint,
-                            },
-                        });
-                    }
-                });
-                setTimeout(() => {
-                    const lastData = document.querySelector(
-                        "svg.ct-chart-line .ct-series text:last-of-type"
-                    );
-                    const parentElem = lastData.parentNode;
-                    const lastXAttrib =
-                        lastData.x && lastData.x.baseVal["0"].value;
-                    const lastYAttrib =
-                        lastData.y && lastData.y.baseVal["0"].value;
-                    lastData.innerHTML = isMonday ? "" : `${lastValue} pts`; // values in monday yAxis is too close to yLabels, that's why omitting it.
-
-                    const needUpperDiff = Number(lastValue) < 0 ? true : false;
-                    const distanceY =
-                        isSmall || onlySmall
-                            ? needUpperDiff
-                                ? -85
-                                : 55
-                            : needUpperDiff
-                            ? -70
-                            : 40;
-                    const distanceX = isSmall || onlySmall ? -25 : 65;
-
-                    const textObj = {
-                        props: {
-                            x: lastXAttrib - distanceX,
-                            y: lastYAttrib + distanceY,
-                            "text-anchor": "middle",
+            chart.on("draw", function (data) {
+                if (data.type === "line" || data.type === "area") {
+                    data.element.animate({
+                        d: {
+                            begin: 2000 * data.index,
+                            dur: 2000,
+                            from: data.path
+                                .clone()
+                                .scale(1, 0)
+                                .translate(0, data.chartRect.height())
+                                .stringify(),
+                            to: data.path.clone().stringify(),
+                            easing: Chartist.Svg.Easing.easeOutQuint,
                         },
-                        txtContent: null,
-                        style: `fill: ${
-                            isNegative ? "#fc8b95" : "var(--lightGreen)"
-                        }; font-size: ${isSmall ? "18" : "22"}px;`,
-                        multilineText: showText && [
-                            isNegative ? `${lastPerc}%` : `+${lastPerc}%`,
-                            `(${lastDiff}pts)`,
-                        ],
-                    };
-                    !isMonday && drawText(textObj, parentElem);
-                }, 3000);
-            })();
-        }, delay);
-    }, [delay, dataArray, lastValue, lastButOne, lastDiff, lastPerc]);
+                    });
+                }
+            });
+            setTimeout(() => {
+                const lastData = document.querySelector(
+                    "svg.ct-chart-line .ct-series text:last-of-type"
+                );
+                const parentElem = lastData.parentNode;
+                const lastXAttrib = lastData.x && lastData.x.baseVal["0"].value;
+                const lastYAttrib = lastData.y && lastData.y.baseVal["0"].value;
+                lastData.innerHTML = isMonday ? "" : `${lastValue} pts`; // values in monday yAxis is too close to yLabels, that's why omitting it.
+
+                const { distanceY, distanceX } = handleDiffLabelDistance({
+                    lastValue,
+                    onlySmall,
+                    isSunday,
+                });
+
+                const textObj = {
+                    props: {
+                        x: lastXAttrib - distanceX,
+                        y: lastYAttrib + distanceY,
+                        "text-anchor": "middle",
+                    },
+                    txtContent: null,
+                    style: `fill: ${
+                        isNegative ? "#fc8b95" : "var(--lightGreen)"
+                    }; font-size: ${isSmall ? "18" : "22"}px;`,
+                    multilineText: showText && [
+                        isNegative ? `${lastPerc}%` : `+${lastPerc}%`,
+                        `(${lastDiff}pts)`,
+                    ],
+                };
+                !isMonday && drawText(textObj, parentElem);
+            }, 3000);
+        })();
+    }, [dataArray, lastValue, lastButOne, lastDiff, lastPerc]);
 
     return (
         <section className="line-chart--root">
@@ -200,6 +190,33 @@ function drawText(o, parent) {
     parent.appendChild(text);
 
     return text;
+}
+
+function handleDiffLabelDistance({ lastValue, onlySmall, isSunday }) {
+    const needUpperDiff = Number(lastValue) < 0 ? true : false;
+    let distanceY;
+    let distanceX;
+
+    if (isSmall || onlySmall) {
+        distanceY = needUpperDiff ? -85 : 55;
+    } else {
+        distanceY = needUpperDiff ? -70 : 40;
+    }
+
+    if (isSmall || onlySmall) {
+        if (isSunday) {
+            distanceX = -5;
+        } else {
+            distanceX = -25;
+        }
+    } else {
+        distanceX = 65;
+    }
+
+    return {
+        distanceY,
+        distanceX,
+    };
 }
 // END HELPERS
 

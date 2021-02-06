@@ -4,11 +4,10 @@ export const getGradeText = (g) => {
     if (g >= 3 && g < 4) return "Ruim";
     if (g >= 4 && g < 5) return "Regular";
     if (g >= 5 && g < 6) return "Na média";
-    if (g >= 6 && g < 7) return "Normal";
-    if (g >= 7 && g < 8) return "Ok";
-    if (g >= 8 && g < 9) return "Bom";
-    if (g >= 9 && g < 10) return "Ótimo";
-    if (g >= 10) return "Excelente";
+    if (g >= 6 && g < 7) return "Ok";
+    if (g >= 7 && g < 8) return "Bom";
+    if (g >= 8 && g < 9) return "Ótimo";
+    if (g >= 9 && g <= 10) return "Excelente";
 };
 
 export const getColorGrade = (g) => {

@@ -57,10 +57,10 @@
 
     .grade-9,
     .grade-10 {
-        color: rgba(76, 175, 80, 1);
+        color: var(--themeBackground--green);
     }
     .grade-9-back,
     .grade-10-back {
-        background-color: rgba(76, 175, 80, 1);
+        background-color: var(--themeBackground--green);
     }
 }

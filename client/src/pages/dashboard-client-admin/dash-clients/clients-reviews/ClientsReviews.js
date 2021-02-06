@@ -9,8 +9,14 @@ import getAPI, { getMainReviewData } from "../../../../utils/promises/getAPI";
 import useData from "../../../../hooks/useData";
 import { getGradeText, getColorGrade } from "./xp-score/helpers";
 import "./_ClientsReviews.scss";
+import { getVar, setVar } from "../../../../hooks/storage/useVar";
 
 export default function ClientsReviews() {
+    const [dataScore, setDataScore] = useState({
+        xpScoreDiff: 0,
+        lastXpStatus: "",
+    });
+    const { xpScoreDiff, lastXpStatus } = dataScore;
     const { mainData, loading } = useMainReviewData();
     const {
         nps = "...",
@@ -20,6 +26,28 @@ export default function ClientsReviews() {
         npsScoreDiff,
     } = mainData;
 
+    useEffect(() => {
+        if (xpScore === "..." || !xpScore) return;
+        (async () => {
+            const lastXpScore = await getVar("lastXpScore");
+            if (!lastXpScore) {
+                await setVar({ lastXpScore: xpScore });
+                return;
+            }
+
+            const thisXpScoreDiff = handleIntOrFloat(xpScore - lastXpScore);
+            const thisLastXpStatus = handleLastXpStatus(thisXpScoreDiff);
+            await setDataScore({
+                xpScoreDiff: thisXpScoreDiff,
+                lastXpStatus: thisLastXpStatus,
+            });
+
+            if (lastXpScore !== xpScore) {
+                await setVar({ lastXpScore: xpScore });
+            }
+        })();
+    }, [xpScore]);
+
     const { colorNPS, backNPS } = colorsHandler({
         nps,
         xpScore,
@@ -28,7 +56,7 @@ export default function ClientsReviews() {
     const dataStatus = getTextStatus(nps, true);
 
     const plural = nps !== 1 || nps !== -1 || nps !== 0;
-    const scoreDiffColor = npsScoreDiff > 0 ? "text-sys-green" : "text-red";
+    const colorNPSDiff = npsScoreDiff > 0 ? "text-sys-green" : "text-red";
     const showNPS = () => (
         <section
             style={{
@@ -62,7 +90,7 @@ export default function ClientsReviews() {
             </p>
             <div className="position-relative text-title text-purple text-center">
                 <p
-                    className={`${scoreDiffColor} text-normal font-weight-bold position-absolute`}
+                    className={`${colorNPSDiff} text-normal font-weight-bold position-absolute`}
                     style={{
                         top: -3,
                         right: 15,
@@ -102,6 +130,14 @@ export default function ClientsReviews() {
     let gradeTextXp = getGradeText(xpScore);
     gradeTextXp = gradeTextXp === "Precário" && !xpScore ? "Sem" : gradeTextXp;
     const colorXP = getColorGrade(xpScore);
+
+    const xpPayload = {
+        xpScore,
+        xpScoreDiff,
+        lastXpStatus, // up, down, same
+    };
+
+    const colorXPDiff = xpScoreDiff > 0 ? "text-sys-green" : "text-red";
     const showXpGrade = () => (
         <section
             style={{
@@ -133,7 +169,16 @@ export default function ClientsReviews() {
             >
                 Experiência de compra
             </p>
-            <div className="text-title text-purple text-center">
+            <div className="position-relative text-title text-purple text-center">
+                <p
+                    className={`${colorXPDiff} text-normal font-weight-bold position-absolute`}
+                    style={{
+                        top: -3,
+                        right: 15,
+                    }}
+                >
+                    {handleScoreDiff(xpScoreDiff)}
+                </p>
                 <span
                     className={`${
                         !xpScore ? "text-purple" : colorXP
@@ -156,7 +201,7 @@ export default function ClientsReviews() {
             )}
             <div className="container-center">
                 <XpGradeReportBtn
-                    xpScore={xpScore}
+                    payload={xpPayload}
                     disabled={loading ? true : false}
                 />
             </div>
@@ -230,8 +275,23 @@ function useMainReviewData() {
 }
 
 // HELPERS
-function handleScoreDiff(npsScoreDiff) {
-    if (npsScoreDiff === 0) return "";
-    if (npsScoreDiff > 0) return `+${npsScoreDiff}`;
-    return npsScoreDiff;
+function handleScoreDiff(scoreDiff) {
+    if (scoreDiff === 0) return "";
+    if (scoreDiff > 0) return `+${scoreDiff}`;
+    return scoreDiff;
+}
+
+// for xpScoreDiff
+function handleIntOrFloat(num) {
+    if (Number.isNaN(num)) return 0;
+    return Number.isInteger(num) ? num : Number(num.toFixed(1));
+}
+
+function handleLastXpStatus(diffScore) {
+    if (diffScore === 0) return "same";
+    if (diffScore < 0) {
+        return "down";
+    } else {
+        return "up";
+    }
 }

@@ -5,6 +5,7 @@ const getPercentage = require("../../utils/number/perc/getPercentage");
 const startOfWeek = require("date-fns/startOfWeek");
 const addDays = require("date-fns/addDays");
 const { getFinalGrade, getNpsChartResult } = require("./helpers.js");
+const sortArray = require("../../utils/array/sortArray");
 
 const getUnwind = (path) => {
     return { $unwind: { path, preserveNullAndEmptyArrays: true } };
@@ -21,7 +22,7 @@ exports.getReviewMainData = async (req, res) => {
         "clientUserData.review.nps": { $lte: 6 },
     };
     const passivesQuery = {
-        $match: { "clientUserData.review.nps": { $gte: 7, $lte: 8 } },
+        "clientUserData.review.nps": { $gte: 7, $lte: 8 },
     };
     // Lesson: prefer using queries without $match or similars to be reusable
     const promotersQuery = {
@@ -29,14 +30,12 @@ exports.getReviewMainData = async (req, res) => {
     };
 
     const xpQuery = {
-        $match: { "clientUserData.review.xpScore": { $gte: 0 } },
+        "clientUserData.review.xpScore": { $gte: 0 },
     };
     const npsReviewQuery = {
         "clientUserData.review.nps": { $gte: 0 },
     };
-    const buyReportQuery = {
-        "clientUserData.review.buyReport": { $exists: true },
-    };
+
     const xpSumQuery = {
         $group: {
             _id: null,
@@ -51,7 +50,6 @@ exports.getReviewMainData = async (req, res) => {
         adminData && adminData.clientAdminData.reviewLastChecked;
 
     const uncheckedReviewsQuery = {
-        ...mainQuery,
         "clientUserData.review.reportUpdatedAt": {
             $gte: new Date(lastDateChecked),
         },
@@ -74,27 +72,36 @@ exports.getReviewMainData = async (req, res) => {
                 //     { $match: mainQuery },
                 //     { $project : { "_id": 0, "clientUserData.review.xpScore": 1, "clientUserData.review.nps": 1 } },
                 // ],
-                detractors: [{ $match: { ...detractorsQuery } }, countQuery],
-                passives: [passivesQuery, countQuery],
-                promoters: [{ $match: { ...promotersQuery } }, countQuery],
+                detractors: [
+                    { $match: { ...mainQuery, ...detractorsQuery } },
+                    countQuery,
+                ],
+                passives: [
+                    { $match: { ...mainQuery, ...passivesQuery } },
+                    countQuery,
+                ],
+                promoters: [
+                    { $match: { ...mainQuery, ...promotersQuery } },
+                    countQuery,
+                ],
                 totalNpsReviews: [
                     { $match: { ...mainQuery, ...npsReviewQuery } },
                     countQuery,
                 ],
-                totalBuyReports: [
-                    { $match: { ...mainQuery, ...buyReportQuery } },
+                xpSum: [{ $match: { ...mainQuery, ...xpQuery } }, xpSumQuery],
+                totalXpReviews: [
+                    { $match: { ...mainQuery, ...xpQuery } },
                     countQuery,
                 ],
-                xpSum: [xpQuery, xpSumQuery],
                 uncheckedReviews: [
-                    { $match: uncheckedReviewsQuery },
+                    { $match: { ...mainQuery, ...uncheckedReviewsQuery } },
                     countQuery,
                 ],
                 todayProm: [
                     {
                         $match: {
-                            ...todayNpsQuery,
                             ...mainQuery,
+                            ...todayNpsQuery,
                             ...promotersQuery,
                         },
                     },
@@ -103,8 +110,8 @@ exports.getReviewMainData = async (req, res) => {
                 todayDetr: [
                     {
                         $match: {
-                            ...todayNpsQuery,
                             ...mainQuery,
+                            ...todayNpsQuery,
                             ...detractorsQuery,
                         },
                     },
@@ -123,7 +130,7 @@ exports.getReviewMainData = async (req, res) => {
         },
         {
             $unwind: {
-                path: "$totalBuyReports",
+                path: "$totalXpReviews",
                 preserveNullAndEmptyArrays: true,
             },
         },
@@ -144,11 +151,11 @@ exports.getReviewMainData = async (req, res) => {
         passives,
         promoters,
         totalNpsReviews,
-        totalBuyReports,
-        xpSum,
         uncheckedReviews,
         todayProm,
         todayDetr,
+        xpSum,
+        totalXpReviews,
     } = docs[0];
 
     uncheckedReviews = uncheckedReviews ? uncheckedReviews.total : 0;
@@ -157,19 +164,20 @@ exports.getReviewMainData = async (req, res) => {
     passives = passives ? passives.total : 0;
     promoters = promoters ? promoters.total : 0;
     totalNpsReviews = totalNpsReviews ? totalNpsReviews.total : 0;
-    totalBuyReports = totalBuyReports ? totalBuyReports.total : 0;
+    totalXpReviews = totalXpReviews ? totalXpReviews.total : 0;
 
+    // LESSON: if you are testing a future dates and record them in the DB,
+    // then after returning to the current real date, it will have a mistached value in the score diff
+    // So, always test with the latest npsUpdatedAt date to avoid mistakes.
     todayProm = todayProm ? todayProm.total : 0;
     todayDetr = todayDetr ? todayDetr.total : 0;
 
+    // handle xp score
     xpSum = xpSum ? xpSum.total : 0;
 
-    let xpScore = xpSum / totalBuyReports;
-    xpScore = Number.isNaN(xpScore)
-        ? 0
-        : Number.isInteger(xpScore)
-        ? xpScore
-        : xpScore.toFixed(1);
+    let xpScore = xpSum / totalXpReviews;
+    xpScore = handleIntOrFloat(xpScore);
+    // end handle xp score
 
     const lastDayTotalNpsReviews = totalNpsReviews - (todayProm + todayDetr);
 
@@ -238,8 +246,8 @@ exports.getBuyReviewsList = async (req, res) => {
                         },
                     },
                     sortQuery,
-                    skipQuery,
-                    limitQuery,
+                    // skipQuery,
+                    // limitQuery,
                 ],
                 totalSize: [{ $match: mainQuery }, countQuery],
             },
@@ -277,6 +285,23 @@ exports.getBuyReviewsList = async (req, res) => {
             pushData();
         }
     });
+
+    if (needFilter) {
+        if (filterBy === "lowGrades") {
+            treatedList = sortArray(treatedList, {
+                sortBy: "lowest",
+                target: "finalGrade",
+            });
+            console.log("treatedList", treatedList);
+        }
+        if (filterBy === "highGrades") {
+            treatedList = sortArray(treatedList, {
+                sortBy: "highest",
+                target: "finalGrade",
+            });
+            console.log("treatedList", treatedList);
+        }
+    }
 
     return res.json({
         list: treatedList,
@@ -548,6 +573,228 @@ exports.getNpsChartData = async (req, res) => {
 
     res.json(finalNpsChartResult);
 };
+
+exports.getXpScoreChartData = async (req, res) => {
+    const { userId } = req.query;
+
+    // general queries
+    const mainQuery = {
+        "clientUserData.bizId": userId,
+    };
+    const countQuery = { $count: "total" };
+    // end general queries
+
+    // grades query
+    const oneQuery = { "clientUserData.review.xpScore": { $eq: 1 } };
+    const twoQuery = { "clientUserData.review.xpScore": { $eq: 2 } };
+    const threeQuery = { "clientUserData.review.xpScore": { $eq: 3 } };
+    const fourQuery = { "clientUserData.review.xpScore": { $eq: 4 } };
+    const fiveQuery = { "clientUserData.review.xpScore": { $eq: 5 } };
+    const sixQuery = { "clientUserData.review.xpScore": { $eq: 6 } };
+    const sevenQuery = { "clientUserData.review.xpScore": { $eq: 7 } };
+    const eightQuery = { "clientUserData.review.xpScore": { $eq: 8 } };
+    const nineQuery = { "clientUserData.review.xpScore": { $eq: 9 } };
+    const tenQuery = { "clientUserData.review.xpScore": { $eq: 10 } };
+    // end grades query
+
+    const docs = await User("cliente").aggregate([
+        {
+            $facet: {
+                one: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...oneQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                two: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...twoQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                three: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...threeQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                four: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...fourQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                five: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...fiveQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                six: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...sixQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                seven: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...sevenQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                eight: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...eightQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                nine: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...nineQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+                ten: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...tenQuery,
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            "clientUserData.review.xpScore": 1,
+                        },
+                    },
+                    countQuery,
+                ],
+            },
+        },
+        getUnwind("$one"),
+        getUnwind("$two"),
+        getUnwind("$three"),
+        getUnwind("$four"),
+        getUnwind("$five"),
+        getUnwind("$six"),
+        getUnwind("$seven"),
+        getUnwind("$eight"),
+        getUnwind("$nine"),
+        getUnwind("$ten"),
+    ]);
+
+    let { one, two, three, four, five, six, seven, eight, nine, ten } = docs[0];
+
+    one = one ? one.total : "0.01";
+    two = two ? two.total : "0.01";
+    three = three ? three.total : "0.01";
+    four = four ? four.total : "0.01";
+    five = five ? five.total : "0.01";
+    six = six ? six.total : "0.01";
+    seven = seven ? seven.total : "0.01";
+    eight = eight ? eight.total : "0.01";
+    nine = nine ? nine.total : "0.01";
+    ten = ten ? ten.total : "0.01";
+
+    return res.json([
+        one,
+        two,
+        three,
+        four,
+        five,
+        six,
+        seven,
+        eight,
+        nine,
+        ten,
+    ]);
+};
+
+function handleIntOrFloat(num) {
+    if (Number.isNaN(num)) return 0;
+    return Number.isInteger(num) ? num : Number(num.toFixed(1));
+}
 
 /* COMMENTS
 n1: $elemMatch
