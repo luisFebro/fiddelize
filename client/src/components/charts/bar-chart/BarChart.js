@@ -2,50 +2,50 @@ import React, { useEffect } from "react";
 import Chartist from "chartist";
 import "./_BarChart.scss";
 import "chartist-plugin-tooltips";
-import pluginLabelModified from "./pluginModified";
-pluginLabelModified(null, null, Chartist);
+import pluginLabelModified from "./pluginLabelModified";
+pluginLabelModified(" ", " ", Chartist);
 // const isSmall = window.Helper.isSmallScreen();
 
 const plugins = {
-    plugins: [
-        Chartist.plugins.ctPointLabels({
-            textAnchor: "middle", //get it horizontal-wise middle of the bar
-            labelOffset: { x: 0, y: -10 }, //adding a little offset to get some space
-        }),
-        Chartist.plugins.tooltip({
-            transformTooltipTextFnc: function (value) {
-                return value + " clientes";
-            },
-        }),
-    ],
+	plugins: [
+		Chartist.plugins.ctPointLabels({
+			textAnchor: "middle", //get it horizontal-wise middle of the bar
+			labelOffset: { x: 0, y: -10 }, //adding a little offset to get some space
+		}),
+		Chartist.plugins.tooltip({
+			transformTooltipTextFnc: function (value) {
+				return value + " clientes";
+			},
+		}),
+	],
 };
 
 const options = {
-    low: 1,
-    showGridBackground: false,
-    height: "300px",
-    axisY: {
-        // The offset of the chart drawing area to the border of the container
-        offset: 30, // d: 40
-        labelOffset: {
-            x: 5, // D.: 0 negative values move labels to left, positive the opposite.
-            y: 0,
-        },
-        // If the axis grid should be drawn or not
-        onlyInteger: true,
-    },
-    axisX: {
-        offset: 50, // D: 30
-        showGrid: false,
-    },
-    scaleMinSpace: 35, // D. 20
-    chartPadding: {
-        top: 25,
-        right: 15,
-        bottom: 5,
-        left: 10,
-    },
-    ...plugins,
+	low: 1,
+	showGridBackground: false,
+	height: "300px",
+	axisY: {
+		// The offset of the chart drawing area to the border of the container
+		offset: 30, // d: 40
+		labelOffset: {
+			x: 5, // D.: 0 negative values move labels to left, positive the opposite.
+			y: 0,
+		},
+		// If the axis grid should be drawn or not
+		onlyInteger: true,
+	},
+	axisX: {
+		offset: 50, // D: 30
+		showGrid: false,
+	},
+	scaleMinSpace: 35, // D. 20
+	chartPadding: {
+		top: 25,
+		right: 15,
+		bottom: 5,
+		left: 10,
+	},
+	...plugins,
 };
 
 // if dataArray contains 0, it should be "0.01", otherwise it will be undefined
@@ -54,86 +54,86 @@ const options = {
 // dataArray = [50, 50, 50, "0.01", 50, 50, 50, 50, 50, 50],
 // LESSON: this graph only appears when there are at least 2 in the total.
 export default function BarChart({
-    xLabels,
-    dataArray,
-    onlySmall = false, // useful especially when used in a modal when the width is limited regardless of the screen width size.
+	xLabels,
+	dataArray,
+	onlySmall = false, // useful especially when used in a modal when the width is limited regardless of the screen width size.
 }) {
-    const totalData = getTotalData(dataArray);
+	const totalData = getTotalData(dataArray);
 
-    useEffect(() => {
-        if (!dataArray) return;
-        (async () => {
-            const chart = new Chartist.Bar(
-                ".bar-chart",
-                {
-                    labels: xLabels,
-                    series: [dataArray],
-                },
-                options
-            );
+	useEffect(() => {
+		if (!dataArray) return;
+		(async () => {
+			const chart = new Chartist.Bar(
+				".bar-chart",
+				{
+					labels: xLabels,
+					series: [dataArray],
+				},
+				options
+			);
 
-            chart.on("draw", function (d) {
-                if (d.type === "bar") {
-                    d.element.animate({
-                        y2: {
-                            begin: 0,
-                            dur:
+			chart.on("draw", function (d) {
+				if (d.type === "bar") {
+					d.element.animate({
+						y2: {
+							begin: 0,
+							dur:
                                 (5000 * d.series[d.index]) /
                                 Math.max.apply(null, d.series),
-                            from: d.y1,
-                            to: d.y2,
-                            easing: Chartist.Svg.Easing.linear,
-                        },
-                    });
-                    d.group.append(
-                        new Chartist.Svg(
-                            "circle",
-                            {
-                                cx: d.x2,
-                                cy: d.y2,
-                                r: 5,
-                            },
-                            "peak-circle"
-                        )
-                    );
-                }
-            });
-        })();
-    }, [dataArray]);
+							from: d.y1,
+							to: d.y2,
+							easing: Chartist.Svg.Easing.linear,
+						},
+					});
+					d.group.append(
+						new Chartist.Svg(
+							"circle",
+							{
+								cx: d.x2,
+								cy: d.y2,
+								r: 5,
+							},
+							"peak-circle"
+						)
+					);
+				}
+			});
+		})();
+	}, [dataArray]);
 
-    return (
-        <section className="bar-chart--root">
-            <h2 className="py-3 text-normal font-weight-bold text-white text-center">
+	return (
+		<section className="bar-chart--root">
+			<h2 className="py-3 text-normal font-weight-bold text-white text-center">
                 Qtde. clientes e suas notas XP
-            </h2>
-            <div className={`bar-chart`}></div>
-            <div
-                className="text-white position-relative container-center"
-                style={{
-                    top: -10,
-                }}
-            >
-                <p
-                    className="d-table text-normal font-weight-bold text-shadow"
-                    style={{
-                        color: "rgb(103, 137, 162)",
-                    }}
-                >
+			</h2>
+			<div className={"bar-chart"}></div>
+			<div
+				className="text-white position-relative container-center"
+				style={{
+					top: -10,
+				}}
+			>
+				<p
+					className="d-table text-normal font-weight-bold text-shadow"
+					style={{
+						color: "rgb(103, 137, 162)",
+					}}
+				>
                     Total: {totalData} clientes
-                </p>
-            </div>
-        </section>
-    );
+				</p>
+			</div>
+		</section>
+	);
 }
 
 function getTotalData(data) {
-    return (
-        data &&
+	return (
+		data &&
         data.reduce((acc, next) => {
-            if (next === "0.01") return acc;
-            return acc + next;
+        	if (next === "0.01") return acc;
+        	return acc + next;
         }, 0)
-    );
+	);
 }
 /*
 var defaultOptions = {

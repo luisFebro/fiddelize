@@ -48,7 +48,7 @@
         "eject": "react-scripts eject",
         "analyse": "node scripts/analyse.js",
         "prettier:format": "prettier --write 'src/**/*.{js,jsx,css,scss}'",
-        "lint:fix": "eslint src -- --fix"
+        "lint:fix": "eslint --fix"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -87,7 +87,7 @@
         }
     },
     "lint-staged": {
-        "./src/*.{js,jsx,css}": [
+        "src/**/*.{js,jsx,css}": [
             "npm run lint:fix"
         ]
     }

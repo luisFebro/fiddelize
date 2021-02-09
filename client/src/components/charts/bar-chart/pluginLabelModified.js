@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Chartist.js plugin to display a data label on top of the points in a line chart.
  *

@@ -4,7 +4,7 @@ module.exports = {
         "es6": true
     },
     "extends": [
-        "airbnb",
+        "eslint:recommended",
         "plugin:react/recommended",
         "prettier"
     ],
@@ -17,7 +17,7 @@ module.exports = {
     },
     "plugins": [
         "react",
-        "unused-imports",
+        // "unused-imports",
     ],
     "rules": {
         "indent": [
@@ -38,15 +38,18 @@ module.exports = {
         ],
         // plugin unused-imports
         "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
-        "unused-imports/no-unused-imports": "error", // this will exclude all unused imports from my files
-        "unused-imports/no-unused-vars": [
-            "warn",
-            { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
-        ],
+        // "unused-imports/no-unused-imports": "error", // this will exclude all unused imports from my files
+        // "unused-imports/no-unused-vars": [
+        //     "warn",
+        //     { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+        // ],
         // end plugin unused-imports
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
-        "react/jsx-indent-props": "off"
+        "react/jsx-indent-props": "off",
+        "react/jsx-indent": "off",
+        "react/prop-types": "off",
+        // "unused-imports/no-unused-vars": "error",
     },
     "settings": {
         "react": {
