@@ -139,7 +139,7 @@ function Navbar({ history, location }) {
 
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo =
-        (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isApp);
+        selfBizLogoImg || (isAuthUser && selfBizLogoImg && isApp); // isApp &&
     const fiddelizeLogo = `/img/official-logo-name.png`;
     const handleLogoSrc = () => {
         if (needClientLogo) {
@@ -158,7 +158,9 @@ function Navbar({ history, location }) {
 
     const showLogo = () => {
         const isSquared =
-            isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+            locationNow !== "/" &&
+            selfBizLogoImg &&
+            selfBizLogoImg.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
         const handleSize = (side) => {
             let size;

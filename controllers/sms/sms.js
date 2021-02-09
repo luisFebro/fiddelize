@@ -483,19 +483,15 @@ exports.readSMSHistoryStatement = (req, res) => {
 
 // AUTOMATIC SMS
 
-exports.readAutoService = (req, res) => {
+exports.readAutoService = async (req, res) => {
     const { userId } = req.query;
 
-    User("cliente-admin")
+    const doc = await User("cliente-admin")
         .findById(userId)
-        .select("clientAdminData.smsAutomation -_id")
-        .exec((err, doc) => {
-            if (err)
-                return res.status(500).json(msgG("error.systemError", err));
+        .select("clientAdminData.smsAutomation -_id");
 
-            const automationData = doc.clientAdminData.smsAutomation;
-            res.json(automationData);
-        });
+    const automationData = doc && doc.clientAdminData.smsAutomation;
+    res.json(automationData);
 };
 
 // Method: put

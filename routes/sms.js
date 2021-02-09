@@ -28,7 +28,7 @@ router.get("/history/general-totals", getGeneralTotals);
 router.get("/history/read-main", mwIsAuth, readSMSMainHistory);
 router.get("/history/read-statement", mwIsAuth, readSMSHistoryStatement);
 router.put("/cancel", mwIsAuth, cancelSMS);
-router.get("/automatic/read", mwIsAuth, readAutoService);
+router.get("/automatic/read", readAutoService); // mwIsAuth, the middle is preventing to run this method
 router.put("/automatic/activate", mwIsAuth, activateAutoService);
 
 // router.param("userId", mwUserId);

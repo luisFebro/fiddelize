@@ -15,6 +15,13 @@ export const AsyncMemberTasksHistory = Load({
         ),
 });
 
+export const AsyncClientWinnersList = Load({
+    loader: () =>
+        import(
+            "./client-winners-list/AsyncClientWinnersList" /* webpackChunkName: "client-winners-list-full-page-lazy" */
+        ),
+});
+
 const getStyles = () => ({
     muStyle: {
         transform: "scale(1.1)",
@@ -34,6 +41,8 @@ const getStyles = () => ({
 
 export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
     const [memberTasks, openMemberTasks] = useState(false);
+    const [clientWinners, openClientWinners] = useState(false);
+
     const styles = getStyles();
 
     const speedDialActions = [
@@ -61,6 +70,20 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             backColor: "var(--themeSDark--" + sColor + ")",
             onClick: () => {
                 !disableClick && history.push("/painel-de-apps");
+                // playBeep();
+            },
+        },
+        {
+            icon: (
+                <FontAwesomeIcon
+                    icon="trophy"
+                    style={{ ...styles.muStyle, transform: "scale(1.3)" }}
+                />
+            ),
+            name: "Ganhadores ►",
+            backColor: "var(--themeSDark--" + sColor + ")",
+            onClick: () => {
+                !disableClick && openClientWinners(true);
                 // playBeep();
             },
         },
@@ -96,6 +119,13 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
                     contentComp={<AsyncMemberTasksHistory />}
                     fullOpen={memberTasks}
                     setFullOpen={openMemberTasks}
+                />
+            )}
+            {clientWinners && (
+                <ModalFullContent
+                    contentComp={<AsyncClientWinnersList />}
+                    fullOpen={clientWinners}
+                    setFullOpen={openClientWinners}
                 />
             )}
         </Fragment>

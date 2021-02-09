@@ -8,6 +8,7 @@ import LocalMallIcon from "@material-ui/icons/LocalMall";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import AmpStoriesIcon from "@material-ui/icons/AmpStories";
 import PermPhoneMsgIcon from "@material-ui/icons/PermPhoneMsg";
+import FindInPageIcon from "@material-ui/icons/FindInPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { proVersion } from "./proVersion";
 
@@ -20,7 +21,15 @@ const freeVersion = (styles) => [
         greyedout: false,
     },
     {
-        name: "Sistema de entrega<br />de prêmios",
+        name:
+            "Pesquisa satisfação:<br />métrica de fidelidade e<br />experiência de compra",
+        Icon: <FindInPageIcon style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
+        name: "Sistema de entrega<br />de prêmios para<br />admin e membros",
         Icon: <ListAltIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
@@ -68,25 +77,11 @@ const freeVersion = (styles) => [
         greyedout: false,
     },
     {
-        name: "2 apps (admin <br /> e clientes)",
+        name: "2 Apps gestão - 1 admin,<br />1 equipe (primeiro grátis)",
         Icon: <ImportantDevicesIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
         greyedout: false,
-    },
-    {
-        name: "3 opções de Prêmmios<br /> para clientes",
-        Icon: <FontAwesomeIcon icon="trophy" style={styles.muStyleGrey} />,
-        price: null,
-        proPage: "",
-        greyedout: true,
-    },
-    {
-        name: "10 Novvos clientes",
-        Icon: <GroupAddIcon style={styles.muStyleGrey} />,
-        price: null,
-        proPage: "",
-        greyedout: true,
     },
 ];
 

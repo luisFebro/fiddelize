@@ -1,11 +1,14 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import Title from '../../../../components/Title';
-import { useProfile, useClientAdmin } from '../../../../hooks/useRoleData';
-import { useRunComp } from '../../../../hooks/useRunComp';
-import useAPIList, { readTasks, getTrigger } from '../../../../hooks/api/useAPIList';
-import './_AutomaticTaskList.scss';
-import TaskList from './list/TaskList';
-import DoneTasksBtn from './done-tasks-modal/DoneTasksBtn';
+import React, { Fragment, useState, useEffect } from "react";
+import Title from "../../../../components/Title";
+import { useProfile, useClientAdmin } from "../../../../hooks/useRoleData";
+import { useRunComp } from "../../../../hooks/useRunComp";
+import useAPIList, {
+    readTasks,
+    getTrigger,
+} from "../../../../hooks/api/useAPIList";
+import "./_AutomaticTaskList.scss";
+import TaskList from "./list/TaskList";
+import DoneTasksBtn from "./done-tasks-modal/DoneTasksBtn";
 
 export default function AutomaticTaskList() {
     const [skip, setSkip] = useState(0);
@@ -14,7 +17,12 @@ export default function AutomaticTaskList() {
     const { runName } = useRunComp();
 
     const trigger = getTrigger(runName, "TaskCard");
-    const apiKeys = { url: readTasks(userId, false), trigger, skip, listName: "automaticTaskList" };
+    const apiKeys = {
+        url: readTasks(userId, false),
+        trigger,
+        skip,
+        listName: "automaticTaskList",
+    };
 
     const {
         list = [],
@@ -25,20 +33,29 @@ export default function AutomaticTaskList() {
         error,
         ShowLoading,
         ShowListTotals,
-        ShowError
+        ShowError,
     } = useAPIList(apiKeys);
 
-
     return (
-        <div className="text-normal container-center flex-column" style={{color: 'grey'}}>
+        <div
+            className="text-normal container-center flex-column"
+            style={{ color: "grey" }}
+        >
             <Title
-                title="&#187; Lista Automática de Tarefas"
+                title="&#187; Clientes Ganhadores"
                 color="var(--themeP)"
                 margin="my-4"
                 padding=" "
             />
 
-            <ShowListTotals />
+            <ShowListTotals
+                analysingTxt="Analisando..."
+                offlineTxt="Lista offline gerada"
+                noItemsTxt="nenhuma entrega de premiação pendente."
+                foundItemsTxt={`cliente${isPlural} ganhador${
+                    isPlural ? "es" : ""
+                }`}
+            />
 
             <TaskList list={list} rewardDeadline={rewardDeadline} />
             {loading && <ShowLoading />}

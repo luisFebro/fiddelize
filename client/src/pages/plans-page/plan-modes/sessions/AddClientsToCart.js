@@ -59,7 +59,14 @@ export default function AddClientsToCart({
                 <span className="d-inline-block font-size text-em-1-5 text-pill">
                     {addedCustomers}
                 </span>
-                <p className="text-subtitle ml-2 font-weight-bold text-purple text-center">
+                <p
+                    className="text-subtitle ml-2 font-weight-bold text-purple text-center"
+                    style={{ lineHeight: "20px" }}
+                >
+                    <span className="text-normal font-weight-bold">
+                        apps de
+                    </span>
+                    <br />
                     clientes
                 </p>
             </div>
@@ -89,7 +96,14 @@ export default function AddClientsToCart({
                 <span className="d-inline-block font-size text-em-1-5 text-pill">
                     {addedMembers}
                 </span>
-                <p className="text-subtitle ml-2 font-weight-bold text-purple text-center">
+                <p
+                    className="text-subtitle ml-2 font-weight-bold text-purple text-center"
+                    style={{ lineHeight: "20px" }}
+                >
+                    <span className="text-normal font-weight-bold">
+                        apps de
+                    </span>
+                    <br />
                     membros
                 </p>
             </div>
@@ -112,7 +126,8 @@ export default function AddClientsToCart({
                 {disableCliUser && (
                     <span className="d-block text-normal text-purple text-center">
                         Membros da sua equipe te ajudam a cadastrar pontos e
-                        clientes em segundos.
+                        clientes, confirmar desafios e entregas. Tudo em
+                        segundos.
                     </span>
                 )}
             </p>

@@ -37,7 +37,7 @@ export const ShowIllustration = ({
                 width={150}
                 height="auto"
             />
-            {role === "cliente" && (
+            {(role === "cliente" || role === "cliente-membro") && (
                 <div
                     className="position-absolute"
                     style={{
@@ -53,7 +53,7 @@ export const ShowIllustration = ({
                         height="auto"
                         width={!isSquared ? 140 : 90}
                         src={thisBizLogo || "/img/error.png"}
-                        alt="logo empresa"
+                        alt="logo"
                     />
                 </div>
             )}
@@ -75,8 +75,9 @@ export const ShowBrief = ({ brief, module = "fontSize" }) => {
 
 export const ShowActionBtn = ({
     role,
-    titleCliUser = "Explorar seu App",
+    titleCliUser = "Conhecer seu App",
     titleCliAdmin = "Abrir Painel de Controle",
+    titleCliMember = "Conhecer App",
     isConfirmedChall = false,
     children,
     callback,
@@ -91,6 +92,9 @@ export const ShowActionBtn = ({
 
     const handleBtnClick = () => {
         setLoading(true);
+        if (role === "cliente-membro") {
+            window.location.href = "/t/app/equipe";
+        }
         if (typeof callback === "function") callback(true);
         readUser(dispatch, _id, { role: loggedUserRole }).then((res) => {
             if (res.status !== 200)
@@ -115,6 +119,13 @@ export const ShowActionBtn = ({
             return `/${bizCodeName}/cliente-admin/painel-de-controle`;
     };
 
+    function handleBtnTitle() {
+        if (role === "cliente-admin") return titleCliAdmin;
+        if (role === "cliente-membro") return titleCliMember;
+        if (role === "cliente") return titleCliUser;
+    }
+
+    const buttonTitle = handleBtnTitle();
     return (
         <div className="my-4 container-center">
             {children ? (
@@ -126,9 +137,7 @@ export const ShowActionBtn = ({
                     onClick={handleBtnClick}
                 >
                     <ButtonMulti
-                        title={
-                            role === "cliente" ? titleCliUser : titleCliAdmin
-                        }
+                        title={buttonTitle}
                         color="var(--mainWhite)"
                         backgroundColor="var(--themeP)"
                     />

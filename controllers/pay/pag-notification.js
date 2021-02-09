@@ -20,7 +20,7 @@ const {
     getTransactionStatusTypes,
     getPaymentMethodType,
 } = require("./helpers/getTypes");
-const { sendBackendNotification } = require("../notification");
+const { sendBackendNotification } = require("../notification/notification");
 const handlePaymentDetails = require("./helpers/handlePaymentDetails");
 // real time notification to Fiddelize's system every time a transation's status change like pending to paid.
 /*

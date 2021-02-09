@@ -9,10 +9,22 @@ $color: #fff;
 // :after {
 //     box-sizing: inherit;
 // }
+.clickable-bell {
+    position: absolute;
+    display: block;
+    top: -10px;
+    left: -10px;
+    z-index: 1000;
+    padding: 35px 30px;
+    background-color: green;
+    // visibility: hidden;
+}
 
 //Icon
 .bell {
     filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
+    z-index: 1;
+    pointer-events: auto;
 
     .bell-top {
         width: 40px;

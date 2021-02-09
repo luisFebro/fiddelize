@@ -31,6 +31,7 @@ export default function pickCardType(cardType, options = {}) {
         bizName,
         userName,
         senderId,
+        updatedBy,
     } = options;
 
     const defaultProps = { brief, role, mainImg, bizName, userName };
@@ -56,6 +57,7 @@ export default function pickCardType(cardType, options = {}) {
                 senderId={senderId}
                 subtype={subtype}
                 content={content}
+                updatedBy={updatedBy}
             />
         ),
         system: (

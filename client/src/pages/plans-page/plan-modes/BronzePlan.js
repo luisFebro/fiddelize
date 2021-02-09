@@ -148,6 +148,7 @@ export default function BronzePlan({ setCurrPlan }) {
                     {!showMainUpperOpts ? (
                         <MinimizedUpperOptions
                             hidePlan="bronze"
+                            currPlanBr="Bronze"
                             period={period}
                             setCurrPlan={setCurrPlan}
                             isScrollingUpward={isScrollingUpward}

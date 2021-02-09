@@ -3,7 +3,6 @@ import Card from "@material-ui/core/Card";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import getServices from "./getServices";
-import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import parse from "html-react-parser";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -57,33 +56,7 @@ export default function ServicesCard({ period = "yearly", plan = "gold" }) {
             </section>
         ));
 
-        return (
-            <Fragment>
-                {!openFree ? (
-                    <section className="container-center">
-                        <RadiusBtn
-                            size="small"
-                            title="Abrir serviços grátis"
-                            onClick={() => setOpenFree(true)}
-                            backgroundColor="var(--themeSDark)"
-                        />
-                    </section>
-                ) : (
-                    <Fragment>
-                        <section className="container-center">
-                            <h2
-                                className="my-3 text-center text-em-1-4 main-font text-white font-weight-bold"
-                                style={styles.freeTitle}
-                            >
-                                Recursos Grátis
-                            </h2>
-                        </section>
-                        {FreeServicesList}
-                        <hr className="lazer-purple" />
-                    </Fragment>
-                )}
-            </Fragment>
-        );
+        return <Fragment>{FreeServicesList}</Fragment>;
     };
 
     const ServicesList = getServices("pro").map((serv) => {

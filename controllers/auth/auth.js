@@ -22,7 +22,7 @@ const {
     decryptLinkScore,
     removeAllowedLinkBack,
 } = require("../user/clients-session/tempScore");
-const { sendBackendNotification } = require("../notification");
+const { sendBackendNotification } = require("../notification/notification");
 const checkExpiryService = require("./helpers/checkExpiryService");
 const getUniqueLinkId = require("./helpers/getUniqueLinkId");
 const {
@@ -36,7 +36,8 @@ exports.mwIsAuth = async (req, res, next) => {
     if (
         req.query.isFebroBoss ||
         (req.query.nT && req.body.recipient) || // nT === no token
-        (req.body.nT && req.body._id)
+        (req.body.nT && req.body._id) ||
+        (req.query.nT && req.query._id)
     ) {
         return next();
     }
@@ -286,7 +287,16 @@ exports.register = async (req, res) => {
 
     if (isCliMember) {
         const adminId = clientMemberData.bizId;
-        await createLinkId(_id, { adminId });
+
+        const notifData = {
+            cardType: "welcome",
+            recipient: { role: "cliente-membro", id: _id },
+        };
+
+        await Promise.all([
+            sendBackendNotification({ notifData }),
+            createLinkId(_id, { adminId }),
+        ]);
     }
 
     res.json({

@@ -144,14 +144,14 @@ const PeriodSelection = ({ handlePeriod, containerCenter = false }) => {
 
 const MinimizedUpperOptions = ({
     isScrollingUpward,
-    hidePlan = "bronze",
+    hidePlan = "bronze", // hidePlan is always the current plan which corresponding the current page button itself
+    currPlanBr,
     period,
     setCurrPlan,
 }) => (
     <Fragment>
         <div className="minimized-upper period animated fadeInDown text-small text-white font-weight-bold">
-            Plano {hidePlan && hidePlan.cap()}{" "}
-            {period === "yearly" ? "Anual" : "Mensal"}
+            Plano {currPlanBr} {period === "yearly" ? "Anual" : "Mensal"}
         </div>
         {isScrollingUpward && (
             <section className="minimized-upper container-btns animated fadeInDown delay-1s">

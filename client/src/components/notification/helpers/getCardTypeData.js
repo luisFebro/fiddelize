@@ -9,12 +9,11 @@ export default function getCardTypeData(cardType, options = {}) {
     let brief;
     let circularImg;
 
-    const handledWelcomeBrief =
-        role === "cliente"
-            ? `Conheça sobre como você vai ficar conectado com seus pontos de fidelidade da ${bizName}`
-            : `${getFirstName(
-                  userName
-              )}, veja como a Fiddelize vai te deixar por dentro dos pontos de fidelidade dos seus clientes`;
+    const handledWelcomeBrief = handleWelcome({
+        role,
+        userFirstName: getFirstName(userName),
+        bizName,
+    });
 
     const handledBirthdayGreeting = (isBelated) => {
         return role === "cliente"
@@ -132,4 +131,14 @@ export default function getCardTypeData(cardType, options = {}) {
         brief,
         circularImg,
     };
+}
+
+// HELPERS
+function handleWelcome({ role, userFirstName, bizName }) {
+    if (role === "cliente-admin")
+        return `${userFirstName}, veja como a Fiddelize vai te deixar por dentro dos pontos de fidelidade dos seus clientes`;
+    if (role === "cliente-membro")
+        return `${userFirstName}, agora você está dentro! Um app prático para seu trabalho.`;
+    if (role === "cliente")
+        return `Conheça sobre como você vai ficar conectado com seus pontos de fidelidade da ${bizName}`;
 }

@@ -160,6 +160,7 @@ export default function GoldPlan({ setCurrPlan }) {
                     {!showMainUpperOpts ? (
                         <MinimizedUpperOptions
                             hidePlan="gold"
+                            currPlanBr="Ouro"
                             period={period}
                             setCurrPlan={setCurrPlan}
                             isScrollingUpward={isScrollingUpward}
@@ -168,8 +169,7 @@ export default function GoldPlan({ setCurrPlan }) {
                         showPlanSwitchBtns()
                     )}
                     <MainTitle
-                        planMsg="Desvende todo o potencial da Fiddelize para seu negócio.
-                        Invista menos por cada serviço."
+                        planMsg="Tenha todos os serviços da Fiddelize, maior alcance e melhor preço por app" // Desvende todo o potencial da Fiddelize para seu negócio. Invista menos por cada serviço.
                     />
                     <section className="period-selection">
                         <PeriodSelection handlePeriod={handlePeriod} />

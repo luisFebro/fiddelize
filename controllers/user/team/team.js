@@ -4,7 +4,7 @@ const {
     getDataChunk,
     getChunksTotal,
 } = require("../../../utils/array/getDataChunk");
-const { sendBackendNotification } = require("../../notification");
+const { sendBackendNotification } = require("../../notification/notification");
 const { getMemberTaskList } = require("./helpers");
 const sortDates = require("../../../utils/dates/sortDates");
 
@@ -32,9 +32,9 @@ exports.setTempScoreAndMemberData = async (req, res) => {
         const bizQuery = { "clientUserData.bizId": bizId };
         const query = { $and: [nameQuery, bizQuery] };
 
-        const { _id } = await User("cliente").findOne(query).select("_id");
-
-        return res.json(_id);
+        const cliData = await User("cliente").findOne(query).select("_id");
+        if (!cliData) return "";
+        return res.json(cliData._id);
     }
 
     const sendTempUserScore = async () => {

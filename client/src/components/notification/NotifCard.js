@@ -6,6 +6,7 @@ import useDelay from "../../hooks/useDelay";
 import { fromNow } from "../../utils/dates/dateFns";
 import getCardTypeData from "./helpers/getCardTypeData";
 import CardActionBtn from "./card-type-pages/CardActionBtn";
+import useData from "../../hooks/useData";
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -56,9 +57,20 @@ function NotifCard({
     content,
     clicked,
     forceCliUser = false,
+    bizId,
+    updatedBy,
 }) {
-    const { name: userName, _id: userId } = useProfile();
+    const [ultimateRole, ultimateName, ultimateUserId] = useData([
+        "role",
+        "firstName",
+        "userId",
+    ]);
+    let { name: userName, _id: userId } = useProfile();
+    userName = ultimateName !== "..." ? ultimateName : userName;
+    userId = ultimateUserId !== "..." ? ultimateUserId : userId;
+
     let { role } = useProfile();
+    role = ultimateRole !== "..." ? ultimateRole : role;
     if (forceCliUser) role = "cliente";
 
     const { bizName } = useClientAdmin();
@@ -66,6 +78,8 @@ function NotifCard({
     const grayScaleReady = useDelay(3000);
 
     const styles = getStyles({ clicked, backColor, grayScaleReady });
+
+    const isCliMember = updatedBy;
 
     const showDate = () => (
         <div className="time-stamp text-small text-white font-weight-bold">
@@ -106,10 +120,13 @@ function NotifCard({
             circularImg={circularImg}
             role={role}
             forceCliUser={forceCliUser}
+            bizId={bizId}
+            updatedBy={updatedBy}
         />
     );
 
     const showNewCardBadge = () =>
+        !isCliMember &&
         isCardNew && (
             <div
                 style={styles.newBadge}

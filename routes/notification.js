@@ -8,7 +8,7 @@ const {
     markAllAsClicked,
     markAllAsSeen,
     countPendingNotif,
-} = require("../controllers/notification");
+} = require("../controllers/notification/notification");
 
 const { mwIsAuth } = require("../controllers/auth");
 

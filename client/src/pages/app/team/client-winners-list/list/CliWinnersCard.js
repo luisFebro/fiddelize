@@ -20,7 +20,7 @@ Feito por: Febro.
 Atividade Feita:
  */
 
-function TaskCard(props, ref) {
+function CliWinnersCard(props, ref) {
     const {
         data = {},
         defaultStatus = false,
@@ -38,7 +38,6 @@ function TaskCard(props, ref) {
         taskTitle = "Entrega de Prêmio",
         content = "cliUserId:123;cliUserName:Ana Rodrigues;prizeDesc:tickets 1;challNum:5;deadline:14/07/20;",
         madeBy = "Febro",
-        deliveredBy,
         madeDate = "11/08/20 às 10:50",
         createdAt = new Date(),
     } = data;
@@ -52,19 +51,20 @@ function TaskCard(props, ref) {
         prizeId,
     } = extractStrData(content);
 
-    const { _id: userId } = useProfile();
-    const [adminName] = useData(["name"]);
+    let { _id: userId } = useProfile();
+    const [bizId, cliMemberName] = useData(["bizId", "name"]);
+    userId = userId || bizId;
 
     const taskBody = {
         userId,
         taskId,
         doneStatus: treatBoolStatus(toggleDone),
-        deliveredBy: adminName,
+        deliveredBy: cliMemberName,
     };
     const snackbar = {
-        timeSuccess: 8000,
+        timeSuccess: 7000,
         txtSuccess: treatBoolStatus(toggleDone)
-            ? `✔ Entrega marcada como FEITA!<br />✔ Novo status RECEBIDO marcado no histórico do cliente<br />✔ Movendo para HISTÓRICO PREMIAÇÕES...`
+            ? `✔ Entrega marcada como FEITA!<br />✔ Novo status RECEBIDO marcado no histórico do cliente`
             : `✔ Entrega DESFEITA<br /> ✔ Removido status RECEBIDO do seu cliente!`,
     };
     const trigger = toggleDone === undefined ? false : toggleDone;
@@ -76,14 +76,8 @@ function TaskCard(props, ref) {
         body: taskBody,
         snackbar,
         trigger,
-        runName: `TaskCard${taskId}`,
     });
-    useAPI({
-        method: "put",
-        url: changePrizeStatus(cliUserId, "received"),
-        params: prizeParams,
-        trigger,
-    });
+    // useAPI({ method: "put", url: changePrizeStatus(cliUserId, "received"), params: prizeParams, trigger })
 
     const { finalDeadline } = useDatesCountdown({
         deadline: rewardDeadline,
@@ -177,17 +171,9 @@ function TaskCard(props, ref) {
                         {done && moreInfo && (
                             <p className="text-white">
                                 <span className="font-weight-bold">
-                                    • CONFIRMADO POR:{" "}
+                                    • FEITO POR:{" "}
                                 </span>{" "}
                                 {madeBy}
-                            </p>
-                        )}
-                        {done && moreInfo && (
-                            <p className="text-white">
-                                <span className="font-weight-bold">
-                                    • ENTREGA POR:{" "}
-                                </span>{" "}
-                                {deliveredBy}
                             </p>
                         )}
                         {showDate()}
@@ -206,4 +192,4 @@ function TaskCard(props, ref) {
     );
 }
 
-export default forwardRef(TaskCard);
+export default forwardRef(CliWinnersCard);

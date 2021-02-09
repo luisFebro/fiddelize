@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import ModalFullContent from '../../../../../components/modals/ModalFullContent';
-import ModalContent from './ModalContent';
+import React, { useState } from "react";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "../../../../../components/modals/ModalFullContent";
+import ModalContent from "./ModalContent";
 
 export default function DoneTasksBtn({
     position = "relative",
@@ -17,19 +17,18 @@ export default function DoneTasksBtn({
 
     const handleFullOpen = () => {
         setFullOpen(true);
-    }
+    };
 
     const handleFullClose = () => {
         setFullOpen(false);
-    }
+    };
 
-    const ThisContent =
-    <ModalContent isOffline={isOffline} />
+    const ThisContent = <ModalContent isOffline={isOffline} />;
 
     return (
         <section>
             <ButtonFab
-                title="Tarefas Feitas"
+                title="Histórico Premiações"
                 iconMarginLeft=" "
                 backgroundColor="var(--themeSDark--default)"
                 onClick={handleFullOpen}

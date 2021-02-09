@@ -1,107 +1,66 @@
-const User = require("../models/user");
-const { msgG } = require("./_msgs/globalMsgs");
-const { getDataChunk, getChunksTotal } = require("../utils/array/getDataChunk");
-
-// UTILS
-const assignValueToObj = (arrayOfObjs, property, newValue) => {
-    return (
-        arrayOfObjs &&
-        arrayOfObjs.map((notification) => {
-            notification[property] = newValue;
-            return notification;
-        })
-    );
-};
-
-const findIdAndAssign = (arrayOfObjs, id, property, newValue) => {
-    return (
-        arrayOfObjs &&
-        arrayOfObjs.map((notification) => {
-            if (notification._id.toString() === id) {
-                notification[property] = newValue;
-            }
-            return notification;
-        })
-    );
-};
-
-const pickDataByProfile = (profileData, options = {}) => {
-    let { role } = profileData;
-    const { forceCliUser } = options;
-
-    if (forceCliUser) role = "cliente";
-
-    switch (role) {
-        case "cliente":
-            return profileData.clientUserData.notifications;
-        case "cliente-admin":
-            return profileData.clientAdminData.notifications;
-        default:
-            console.log("smt wrong with pickDataByProfile");
-    }
-};
-
-const pickObjByRole = (role, options = {}) => {
-    const { data, needUnshift } = options;
-    let handledData;
-    needUnshift
-        ? (handledData = { $each: [data], $position: 0 }) // $each needs $push asn precedent operator, otherwise it will fail
-        : (handledData = data);
-
-    // trimming data
-    if (data.recipient) {
-        delete data.recipient;
-    }
-
-    switch (role) {
-        case "cliente-admin":
-            return { "clientAdminData.notifications": handledData };
-        case "cliente":
-            return { "clientUserData.notifications": handledData };
-        case "ambos-clientes":
-            return {
-                "clientAdminData.notifications": handledData,
-                "clientUserData.notifications": handledData,
-            };
-        default:
-            console.log("smt wrong with pickObjByRole");
-    }
-};
-// END UTILS
+const User = require("../../models/user");
+const { msgG } = require("../_msgs/globalMsgs");
+const {
+    getDataChunk,
+    getChunksTotal,
+} = require("../../utils/array/getDataChunk");
+const {
+    assignValueToObj,
+    findIdAndAssign,
+    pickDataByProfile,
+    pickObjByRole,
+    handleNotifRolePath,
+    getTotalNotifDB,
+    getAdminChallengesNotif,
+} = require("./helpers");
 
 // Method: Get
+//
 exports.countPendingNotif = async (req, res) => {
-    let { userId, role, forceCliUser } = req.query;
+    let { userId, role, forceCliUser, forceCliMember, bizId } = req.query;
     forceCliUser = forceCliUser === "true";
+    forceCliMember = forceCliMember === "true";
 
-    let rolePath;
-    role === "cliente-admin"
-        ? (rolePath = "clientAdminData")
-        : (rolePath = "clientUserData");
+    const rolePath = handleNotifRolePath({
+        role,
+        forceCliUser,
+        forceCliMember,
+    });
 
-    if (forceCliUser) rolePath = "clientUserData";
+    const defaultProps = {
+        userId,
+        role,
+        rolePath,
+    };
 
-    User(role)
-        .find({ _id: userId, role })
-        .select(`${rolePath}.notifications -_id`)
-        .exec((err, data) => {
-            if (err)
-                return res.status(500).json(msgG("error.systemError", err));
-            if (!data[0]) return res.json({ total: 0 });
-            if (!data[0][rolePath]) return res.json({ total: 0 });
-            const notifs = data[0][rolePath]["notifications"];
-            const totalFilteredNotifs = notifs.filter(
-                (notif) => notif.clicked === false
-            );
-            res.json({ total: totalFilteredNotifs.length });
-        });
+    let totalNotifs;
+    if (bizId) {
+        // need check cli-admin db for all challenges related notifs to be sync with all cli-members too
+        const [totalMember, totalAdmin] = await Promise.all([
+            getTotalNotifDB(defaultProps),
+            getTotalNotifDB({ ...defaultProps, bizId }),
+        ]);
+
+        totalNotifs = totalMember + totalAdmin;
+    } else {
+        totalNotifs = await getTotalNotifDB(defaultProps);
+    }
+
+    return res.json({
+        total: totalNotifs,
+    });
 };
 
-exports.readNotifications = (req, res) => {
-    let { forceCliUser, skip, limit = 5 } = req.query;
+exports.readNotifications = async (req, res) => {
+    let { forceCliUser, skip, limit = 5, bizId } = req.query;
     forceCliUser = forceCliUser === "true";
 
-    const data = pickDataByProfile(req.profile, { forceCliUser });
+    let data;
+    data = pickDataByProfile(req.profile, { forceCliUser });
+    if (bizId) {
+        const adminNotif = await getAdminChallengesNotif({ bizId });
+        data = [...adminNotif, ...data];
+    }
 
     const dataSize = data.length;
     const dataRes = {
@@ -166,21 +125,59 @@ exports.sendBackendNotification = async ({ notifData }) => {
 
 // method: PUT
 // LESSON: only need to compare like yourVar === true if it is a "true" as string, if you are using a body as for a put method, it does not need it.
-exports.markOneClicked = (req, res) => {
+exports.markOneClicked = async (req, res) => {
     let forceCliUser = req.body.forceCliUser;
 
-    let { _id, role } = req.profile;
+    let _id = req.params.userId;
+    let { cardId, updatedBy, thisRole: role, cliMemberId } = req.query;
     if (forceCliUser) role = "cliente";
+    let notifications = pickDataByProfile(req.profile, { forceCliUser });
+    let options;
 
-    const { cardId } = req.query;
+    const isCliMember = updatedBy;
+    if (isCliMember) {
+        // for now, cli-member only receives one welcome notification, all the rests are sync with cli-admin won challenges
+        const cliMemberNotifs = await User("cliente-membro")
+            .findById(cliMemberId)
+            .select("clientMemberData.notifications -_id");
+        const welcomeNotif =
+            cliMemberNotifs &&
+            cliMemberNotifs.clientMemberData.notifications[0];
+        if (!welcomeNotif.clicked) {
+            _id = cliMemberId;
+            role = "cliente-membro";
+            notifications = cliMemberNotifs.clientMemberData.notifications;
+        } else {
+            return res.json({
+                msg: "first cli-member notif marked as Clicked already",
+            });
+        }
 
-    const notifications = pickDataByProfile(req.profile, { forceCliUser });
-    const resAction = findIdAndAssign(notifications, cardId, "clicked", true);
+        options = {
+            alsoObj: {
+                prop: "updatedBy",
+                value: {
+                    name: updatedBy,
+                    updatedAt: new Date(),
+                },
+            },
+        };
+    }
+
+    const resAction = findIdAndAssign(
+        notifications,
+        cardId,
+        "clicked",
+        true,
+        options
+    );
     const objToSet = pickObjByRole(role, { data: resAction });
 
     User(role)
         .findByIdAndUpdate(_id, objToSet, { new: false })
-        .select("clientAdminData.notifications clientUserData.notifications")
+        .select(
+            "clientAdminData.notifications clientMemberData.notifications clientUserData.notifications"
+        )
         .exec((err, user) => {
             if (err)
                 return res.status(500).json(msgG("error.systemError", err)); // NEED CREATE

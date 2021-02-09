@@ -7,13 +7,22 @@ import useElemDetection, {
 } from "../../hooks/api/useElemDetection";
 import getFirstName from "../../utils/string/getFirstName";
 
-export default function NotifList({ _id, userName, forceCliUser = false }) {
+export default function NotifList({
+    _id,
+    userName,
+    forceCliUser = false,
+    bizId,
+}) {
     const [skip, setSkip] = useState(0);
     const [firstChunkLoaded, setFirstChunkLoaded] = useState(false);
 
     userName = getFirstName(userName);
 
-    const params = { forceCliUser, skip };
+    const params = {
+        forceCliUser,
+        bizId,
+        skip,
+    };
     const apiKeys = {
         url: readNotifications(_id),
         skip,
@@ -36,7 +45,7 @@ export default function NotifList({ _id, userName, forceCliUser = false }) {
 
     useEffect(() => {
         if (list.length && !firstChunkLoaded) {
-            markAllAsSeen(_id, { forceCliUser });
+            !bizId && markAllAsSeen(_id, { forceCliUser });
             setFirstChunkLoaded(true);
         }
     }, [list, firstChunkLoaded]);
@@ -52,17 +61,21 @@ export default function NotifList({ _id, userName, forceCliUser = false }) {
             createdAt,
             clicked,
             content,
+            updatedBy,
         } = notif;
+
         const props = {
             cardId: _id,
             cardType,
             subtype,
             senderId,
             forceCliUser,
+            bizId,
             isCardNew,
             createdAt,
             clicked,
             content,
+            updatedBy,
         };
 
         return checkDetectedElem({ list, ind, indFromLast: 3 }) ? (

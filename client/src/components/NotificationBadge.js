@@ -24,6 +24,7 @@ function NotificationBadge({
     borderColor,
     right,
     top,
+    onClick,
 }) {
     const BorderedBadge = withStyles((theme) => ({
         badge: {
@@ -54,6 +55,7 @@ function NotificationBadge({
             max={99}
             overlap="rectangle"
             variant="standard"
+            onClick={onClick}
         >
             {children}
         </BorderedBadge>

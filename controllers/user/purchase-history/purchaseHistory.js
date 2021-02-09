@@ -21,10 +21,13 @@ const { msgG } = require("../../_msgs/globalMsgs");
 const { msg } = require("../../_msgs/user");
 
 exports.addPurchaseHistory = async (req, res) => {
-    const { _id, clientUserData } = req.profile;
-    if (!clientUserData) return res.json({ error: "requres user data array" });
+    const _id = req.params.id;
+    const dataCli = await User("cliente")
+        .findById(_id)
+        .select("clientUserData");
+    const clientUserData = dataCli && dataCli.clientUserData;
 
-    const role = req.role;
+    if (!clientUserData) return res.json({ error: "requres user data array" });
 
     const totalNonPrizeCards = clientUserData.purchaseHistory.filter(
         (card) => card.cardType === "record"
@@ -46,7 +49,7 @@ exports.addPurchaseHistory = async (req, res) => {
     if (lastCard) {
         const lastCardNumber = totalNonPrizeCards;
 
-        User(role)
+        User("cliente")
             .findOneAndUpdate(
                 { _id },
                 // remove the last object to update with a new order
@@ -62,18 +65,25 @@ exports.addPurchaseHistory = async (req, res) => {
             .exec((err) => {
                 if (err)
                     return res.status(500).json(msgG("error.systemError", err));
-                findOneAndUpdate(User(role), { res, _id, currCard, lastCard });
+                findOneAndUpdate(User("cliente"), {
+                    res,
+                    _id,
+                    currCard,
+                    lastCard,
+                });
             });
     } else {
         // Add without deleting the last card
-        findOneAndUpdate(User(role), { res, _id, currCard, lastCard });
+        findOneAndUpdate(User("cliente"), { res, _id, currCard, lastCard });
     }
 };
 
 exports.readHistoryList = async (req, res) => {
-    const { _id, clientUserData } = req.profile;
-
-    const { role } = await await req.getAccount(_id);
+    const _id = req.params.id;
+    const dataCli = await User("cliente")
+        .findById(_id)
+        .select("clientUserData");
+    const clientUserData = dataCli && dataCli.clientUserData;
 
     let {
         noResponse = false,
@@ -138,7 +148,7 @@ exports.readHistoryList = async (req, res) => {
         "prize, remainder".includes(newHistoryData[0].cardType);
 
     if (conditionToSave) {
-        User(role)
+        User("cliente")
             .findOneAndUpdate(
                 { _id },
                 { $set: { "clientUserData.purchaseHistory": newHistoryData } },
@@ -155,7 +165,7 @@ exports.readHistoryList = async (req, res) => {
 };
 
 // Prizes
-exports.readPrizes = (req, res) => {
+exports.readPrizes = async (req, res) => {
     // INFINITE SCROLLING NOT IMPLEMNTED
     const {
         cliAdminId,
@@ -167,13 +177,19 @@ exports.readPrizes = (req, res) => {
         rewardScore,
     } = req.query;
 
-    const { clientUserData = {} } = req.profile;
+    const userId = req.params.id;
+    const userData = await User("cliente")
+        .findById(userId)
+        .select(
+            "clientUserData.bizId clientUserData.purchaseHistory clientUserData.totalPurchasePrize clientUserData.currScore -_id"
+        );
+
     const {
         purchaseHistory,
         totalPurchasePrize = 0,
         currScore,
         bizId,
-    } = clientUserData;
+    } = userData.clientUserData;
 
     if (updatedValues) {
         const lastCardChall =
@@ -278,9 +294,15 @@ exports.readPrizes = (req, res) => {
         });
 };
 
-exports.changePrizeStatus = (req, res) => {
-    const { _id, role, clientUserData } = req.profile;
+exports.changePrizeStatus = async (req, res) => {
     let { statusType, newValue = undefined, prizeId } = req.query;
+
+    const _id = req.params.id;
+    const dataCli = await User("cliente")
+        .findById(_id)
+        .select("clientUserData");
+
+    const clientUserData = dataCli && dataCli.clientUserData;
 
     if (!"confirmed, received".includes(statusType))
         return res.status(400).json({
@@ -303,22 +325,18 @@ exports.changePrizeStatus = (req, res) => {
 
     if (status === "FAIL") return res.status(404).json({ error });
 
-    User(role)
-        .findById(_id) // LESSON - do not use select with SAVE.
-        .exec((err, doc) => {
-            if (err)
-                return res.status(500).json(msgG("error.systemError", err));
-            doc.clientUserData.purchaseHistory = newData;
-            if (statusType === "confirmed") {
-                doc.clientUserData.totalPurchasePrize = newChallengeN;
-            }
-            // modifying an array require we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
-            doc.markModified("clientUserData");
-            doc.save((err) =>
-                res.json({
-                    msg: `The status ${statusType.toUpperCase()} was successfully set challenge N.º ${newChallengeN}!`,
-                })
-            );
-        });
+    const doc = await User("cliente").findById(_id); // LESSON - do not use select with SAVE.
+
+    doc.clientUserData.purchaseHistory = newData;
+    if (statusType === "confirmed") {
+        doc.clientUserData.totalPurchasePrize = newChallengeN;
+    }
+    // modifying an array require we need to manual tell the mongoose the it is modified. reference: https://stackoverflow.com/questions/42302720/replace-object-in-array-in-mongoose
+    doc.markModified("clientUserData");
+    doc.save((err) =>
+        res.json({
+            msg: `The status ${statusType.toUpperCase()} was successfully set challenge N.º ${newChallengeN}!`,
+        })
+    );
 };
 // End Prizes

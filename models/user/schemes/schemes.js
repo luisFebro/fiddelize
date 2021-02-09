@@ -51,6 +51,11 @@ const notificationsData = {
     clicked: { type: Boolean, default: false }, // user read the message or clicked on the action button. This will be used to display different design both for card which was read and that ones that did not
     isImportant: { type: Boolean }, // this will not be mark as read/clicked if user markAllAsRead
     createdAt: { type: Date, default: Date.now },
+    updatedBy: {
+        // useful to know if the notification was saw or updated to another person. Useful for a collaborative teamwork.
+        name: String,
+        updatedAt: Date,
+    },
 };
 
 const NotificationsSchema = new Schema(notificationsData, { _id: true });

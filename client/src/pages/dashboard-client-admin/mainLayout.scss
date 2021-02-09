@@ -10,7 +10,10 @@
 }
 
 @media only screen and (min-width: 768px) {
-    .blob-action-btns--root .history-btn { margin-bottom: 0; margin-right: 60px }
+    .blob-action-btns--root .history-btn {
+        margin-bottom: 0;
+        margin-right: 60px;
+    }
 }
 
 .panel-hidden-content--root {
@@ -20,7 +23,9 @@
 }
 
 @media only screen and (min-width: 768px) {
-    .panel-hidden-content--root { width: 90% }
+    .panel-hidden-content--root {
+        width: 90%;
+    }
 }
 
 .blob-action-btns--root > .star {
@@ -32,12 +37,14 @@
     z-index: -1;
     top: -20px;
     left: -50px;
-    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
     transform: rotate(30deg);
-    filter: opacity(.6)
+    filter: opacity(0.6);
 }
 @media only screen and (min-width: 768px) {
-    .blob-action-btn--root .star { left: -65px }
+    .blob-action-btn--root .star {
+        left: -65px;
+    }
 }
 
 .blob-action-btn--root .star.star-align {
@@ -46,7 +53,6 @@
     font-size: 15px;
 }
 // end actionBtns.js
-
 
 // ModalFullScreenHistory
 .purchase-history-table-data--root {
@@ -131,7 +137,6 @@
     left: -13px;
 }
 
-
 .purchase-history-status-panel--root .board div > p {
     margin: 0 10px;
     padding: 0;
@@ -157,7 +162,7 @@
     margin: 0;
 }
 
-.purchase-history-sum--root .value, {
+.purchase-history-sum--root .value {
     font-size: 30px;
 }
 
@@ -177,11 +182,11 @@
     position: absolute;
     bottom: -20px;
     right: -5px;
-    filter: drop-shadow(.001em .1em .1em var(--mainDark));
+    filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
     border: solid 1px var(--mainWhite);
     border-radius: 20% 20%;
     padding: 5px;
-    height: 40px;
+    height: 50px;
     margin: 10px 5px;
     width: 130px;
     // background-color: var(--niceUiYellow);
@@ -196,7 +201,9 @@
 }
 
 @media only screen and (min-width: 768px) {
-    .card-total .badge-total-scores { right: 5px; }
+    .card-total .badge-total-scores {
+        right: 5px;
+    }
 }
 
 .card-total .badge-total-scores .text {

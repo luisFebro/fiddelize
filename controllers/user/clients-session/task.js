@@ -24,12 +24,8 @@ const pickObjByRole = ({ role = "cliente-admin", data }) => {
     switch (role) {
         case "cliente-admin":
             return { "clientAdminData.tasks": handledData };
-        case "cliente":
-            return null;
-        case "ambos-clientes":
-            return null;
         default:
-            console.log("smt wrong with pickObjByRole");
+            console.log("smt wrong with pickObjByRole TASK");
     }
 };
 // END UTILS
@@ -70,7 +66,7 @@ exports.readTasks = (req, res) => {
 
 // Method: Put
 exports.toggleDone = (req, res) => {
-    const { userId, taskId, doneStatus } = req.body;
+    const { userId, taskId, doneStatus, deliveredBy } = req.body;
 
     User("cliente-admin")
         .findById(userId) // LESSON - IMPORTANT: do not use select with SAVE because will delete all other not selected data in the object...
@@ -85,6 +81,7 @@ exports.toggleDone = (req, res) => {
                 keyValueObj = {
                     done: doneStatus,
                     madeDate: new Date(),
+                    deliveredBy,
                 };
 
             const newData = findKeyAndAssign({

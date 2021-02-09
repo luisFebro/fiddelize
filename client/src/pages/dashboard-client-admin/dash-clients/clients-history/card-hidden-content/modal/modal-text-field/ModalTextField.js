@@ -27,15 +27,15 @@ import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
 import {
     useAppSystem,
     useClientAdmin,
-    useProfile,
 } from "../../../../../../../hooks/useRoleData";
 import pickCurrChallData from "../../../../../../../utils/biz/pickCurrChallData";
 import { changePrizeStatus } from "../../../../../../../redux/actions/userActions";
 import { sendNotification } from "../../../../../../../redux/actions/notificationActions";
 import getFirstName from "../../../../../../../utils/string/getFirstName";
-import { addDays } from "../../../../../../../utils/dates/dateFns";
+import { addDays, calendar } from "../../../../../../../utils/dates/dateFns";
 import useAPI, { readPrizes } from "../../../../../../../hooks/api/useAPI";
 import sendSMS from "../../../../../../../hooks/sms/sendSMS";
+import useData from "../../../../../../../hooks/useData";
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -83,8 +83,8 @@ export default function ModalTextField({
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
-    const { name: cliAdminName } = useProfile();
     const { rewardList, rewardDeadline } = useClientAdmin();
+    const [teamMemberName] = useData(["name"]);
 
     const dispatch = useStoreDispatch();
 
@@ -102,6 +102,7 @@ export default function ModalTextField({
         name,
         phone,
         prizeId,
+        updatedBy,
     } = modalData;
 
     const currChall = totalPrizes + 1;
@@ -113,6 +114,7 @@ export default function ModalTextField({
     const { data: updatedValues, loading } = useAPI({
         url: readPrizes(userId),
         params: { updatedValues: true, rewardScore },
+        trigger: true,
     });
     const currRemainder = loading
         ? "..."
@@ -136,7 +138,7 @@ export default function ModalTextField({
     const userBeatScore = userCurrScore >= rewardScore;
 
     const handleDiscount = async () => {
-        if (loading) return;
+        if (loading || teamMemberName === "...") return;
 
         const updateUserBody = {
             "clientUserData.currScore": ultimateCurrScore,
@@ -158,11 +160,12 @@ export default function ModalTextField({
             new Date(),
             rewardDeadline + 1
         ).toLocaleString();
+
         const taskBody = {
             taskTitle: "Entrega de Prêmio",
             taskType: "pendingDelivery",
             content: `cliUserId:${userId};cliUserName:${name};prizeId:${prizeId};prizeDesc:${mainReward};challNum:${currChall};deadline:${deadlineDate};`,
-            madeBy: cliAdminName,
+            madeBy: teamMemberName,
         };
 
         showSnackbar(dispatch, `Atualizando pontuação...`, "success", 5000);
@@ -225,13 +228,13 @@ export default function ModalTextField({
             () =>
                 showSnackbar(
                     dispatch,
-                    `Ok, ${getFirstName(
-                        cliAdminName
-                    )}! Cliente foi notificado e ${rewardScore} pontos foram descontados de ${name}.`,
+                    `Ok! Cliente ${
+                        name && name.toUpperCase()
+                    } foi notificado(a) e está apto(a) a receber o prêmio.`,
                     "success",
-                    7000
+                    10000
                 ),
-            4900
+            2900
         );
 
         closeOtherModals(); // use to close other open notification pages.
@@ -367,19 +370,6 @@ export default function ModalTextField({
     //     </form>
     // );
 
-    const showActionButtons = () => (
-        <section style={styles.actionButtons}>
-            <ButtonMulti title={"Voltar"} onClick={onClose} variant="link" />
-            <ButtonMulti
-                title={txtBtn}
-                onClick={handleSubmit}
-                iconFontAwesome={iconBtn}
-                backgroundColor="var(--themeP)"
-                backColorOnHover="var(--themeP)"
-            />
-        </section>
-    );
-
     const showWarningBtn = () => (
         <section className="my-2">
             <div className="d-inline-block font-weight-bold">
@@ -405,6 +395,10 @@ export default function ModalTextField({
                     compras do cliente.
                     <br />- Os pontos restantes são registrado como o atual no
                     fidelidômetro do app.
+                    <br />- Após descontar a pontuação, o cliente fica apto a
+                    receber o prêmio. Você controla a entrega de prêmios no app
+                    da equipe na opção de ganhadores ou no app do admin na
+                    sessão clientes ganhadores.
                 </p>
             )}
         </section>
@@ -442,11 +436,38 @@ export default function ModalTextField({
         </section>
     );
 
-    // {showForm()} is discntinued to simplify algorithm from history purchase.
+    const alreadyDoneDiscount =
+        updatedBy &&
+        updatedBy.name &&
+        updatedValues &&
+        updatedValues.updatedCurrScore === 0;
+
+    const showActionButtons = () => (
+        <section style={styles.actionButtons}>
+            <ButtonMulti title={"Voltar"} onClick={onClose} variant="link" />
+            {!alreadyDoneDiscount && (
+                <ButtonMulti
+                    title={txtBtn}
+                    onClick={handleSubmit}
+                    iconFontAwesome={iconBtn}
+                    backgroundColor="var(--themeP)"
+                    backColorOnHover="var(--themeP)"
+                />
+            )}
+        </section>
+    );
+
     const showSuccessDialog = () => (
         <section className="container-center">
             {showSubtitleAndInfos()}
             {showWarningBtn()}
+            {alreadyDoneDiscount && (
+                <p className="my-4 text-normal text-center text-purple font-weight-bold mx-3">
+                    Atenção: Pontos já descontados pelo membro{" "}
+                    {updatedBy.name.toUpperCase()} no dia:{" "}
+                    {calendar(new Date(updatedBy.updatedAt))}.
+                </p>
+            )}
             {showActionButtons()}
         </section>
     );

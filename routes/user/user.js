@@ -63,18 +63,18 @@ const { mwValidateRegister } = require("../../controllers/_mw-validation/auth");
 const { mwIsClientAdmin, mwIsAuth } = require("../../controllers/auth");
 // @route  api/user
 // RUD
+router.put("/:userId", update); // mywIsAuth prevents some methods (like pipeline requests to discount scores) to run with lack of token. But this lack of mwIsAuth highly vulnarable if attacker knows the id. ALternatively, see some CORS solution.
 router.get("/:userId", read); // mwIsAuth JWT ERROR: jwt must be provided when log it
-router.put("/:userId", mwIsAuth, update); // mwIsAuth highly vulnarable if attacker knows the id
 router.delete("/:userId", mwIsAuth, mwBackup, remove);
 // END RUD
 
 router.get("/confirm-account/:authUserId", confirmUserAccount);
 
 // purchase history
-router.put("/purchase-history/:userId", addPurchaseHistory);
-router.put("/purchase-history/update-status/:userId", changePrizeStatus);
-router.get("/list/purchase-history/:userId", readHistoryList);
-router.get("/list/purchase-history/prizes/:userId", readPrizes);
+router.put("/purchase-history/:id", addPurchaseHistory);
+router.put("/purchase-history/update-status/:id", changePrizeStatus); // change :userId to :id so that we can fetch less data without worrying role
+router.get("/list/purchase-history/:id", readHistoryList);
+router.get("/list/purchase-history/prizes/:id", readPrizes);
 // end purchase history
 
 // LISTS

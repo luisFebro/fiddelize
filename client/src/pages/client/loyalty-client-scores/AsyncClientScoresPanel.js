@@ -72,7 +72,7 @@ function AsyncClientScoresPanel({ history, location }) {
 
     // ROLES
     const { businessId } = useAppSystem();
-    const { role, name, _id } = useProfile(); // _id is essencial here to read cli-users data
+    const { role, name, _id: cliUserId } = useProfile(); // cliUserId is essencial here to read cli-users data
     let {
         currScore: currentScore,
         lastScore: lastCurrScore,
@@ -132,7 +132,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     type: "stars",
                 }));
             }
-            const dataCliReview = await readUser(dispatch, _id, {
+            const dataCliReview = await readUser(dispatch, cliUserId, {
                 role: "cliente",
                 select: "clientUserData.review",
             });
@@ -220,7 +220,7 @@ function AsyncClientScoresPanel({ history, location }) {
 
                 await getAPI({
                     method: "put",
-                    url: updateUser(_id, whichRole),
+                    url: updateUser(cliUserId, whichRole),
                     body: objToSend,
                 }).catch((err) => {
                     console.log("ERROR: " + err);
@@ -229,7 +229,7 @@ function AsyncClientScoresPanel({ history, location }) {
                 if (role === "cliente") {
                     await getAPI({
                         method: "post",
-                        url: setLastScoreAsDone(_id),
+                        url: setLastScoreAsDone(cliUserId),
                         needAuth: true,
                     });
                 }
@@ -242,7 +242,7 @@ function AsyncClientScoresPanel({ history, location }) {
 
                 await getAPI({
                     method: "put",
-                    url: addPurchaseHistory(_id, whichRole),
+                    url: addPurchaseHistory(cliUserId, whichRole),
                     body: historyObj,
                 });
 
@@ -255,7 +255,7 @@ function AsyncClientScoresPanel({ history, location }) {
                         prizeDesc,
                         trophyIcon: selfMilestoneIcon,
                     };
-                    await readPurchaseHistory(_id, maxScore, options);
+                    await readPurchaseHistory(cliUserId, maxScore, options);
                     setFinishedWork(true);
                 } else {
                     setFinishedWork(true);
@@ -351,7 +351,7 @@ function AsyncClientScoresPanel({ history, location }) {
         const thisXpScore = !ratingData.nps ? ratingData.xpScore : undefined;
         await getAPI({
             method: "put",
-            url: updateUser(_id, whichRole),
+            url: updateUser(cliUserId, whichRole),
             body: {
                 "clientUserData.review.nps": thisNpsScore,
                 "clientUserData.review.xpScore": thisXpScore,
@@ -373,7 +373,7 @@ function AsyncClientScoresPanel({ history, location }) {
         });
 
         if (isApp) {
-            await readUser(dispatch, _id, {
+            await readUser(dispatch, cliUserId, {
                 role: whichRole,
             });
 

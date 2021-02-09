@@ -31,14 +31,14 @@ Quanto maior o número de Novvos Clientes que o cliente-admin investir, menor é
 const proVersion = (styles) => [
     {
         gold: {
-            name: "10.000 Novvos<br /> clientes",
+            name: "10.000 Apps<br />de Novvos clientes",
             price: {
                 yearly: 600,
                 monthly: 150,
             },
         },
         silver: {
-            name: "1.000 Novvos<br /> clientes",
+            name: "1.000 Apps <br />de Novvos clientes",
             price: {
                 yearly: 200,
                 monthly: 90,

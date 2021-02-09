@@ -13,6 +13,7 @@ import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "../../../hooks/useAuthUser";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
+import useCountNotif from "../../../hooks/notification/useCountNotif";
 // import ReturnBtn from '../../../components/buttons/ReturnBtn';
 
 export const AsyncBellNotifBtn = Load({
@@ -37,12 +38,21 @@ export default function TeamApp({
     isCliAdmin,
     toTab = "Cliente",
 }) {
-    const [firstName] = useData(["firstName"]);
+    const [firstName, userId, bizId] = useData([
+        "firstName",
+        "userId",
+        "bizId",
+    ]);
+    const isPreviewMode = location && location.search.includes("modo-prev=1");
 
     // redirect if not auth
     useAuth({ history, roles: "nucleo-equipe, cliente-membro, cliente-admin" });
 
-    const isPreviewMode = location && location.search.includes("modo-prev=1");
+    const allMemberNotif = useCountNotif(userId, {
+        role: "cliente-membro",
+        trigger: !isPreviewMode && bizId !== "...",
+        bizId,
+    });
 
     const needAdminDefaultTheme = isCliAdmin && !isPreviewMode;
 
@@ -77,24 +87,31 @@ export default function TeamApp({
             ></section>
         );
 
-        const allMemberNotif = 0; // member notif.
         const totalNotifications = isPreviewMode ? 0 : allMemberNotif;
         const displayBell = () => (
-            <AsyncBellNotifBtn
-                needClick={isPreviewMode ? false : true}
-                position="absolute"
-                top={-20}
-                right={25}
-                notifBorderColor={`var(--themeP${
-                    backColor === "black" ? "Light" : "Dark"
-                }--${pColor})`}
-                notifBackColor={
-                    backColor === "red"
-                        ? "var(--themePLight--black)"
-                        : "var(--expenseRed)"
-                }
-                badgeValue={totalNotifications}
-            />
+            <section
+                style={{
+                    float: "right", // float solves the problem of aligning and clickable div inside absolute container
+                }}
+            >
+                <AsyncBellNotifBtn
+                    needClick={!isPreviewMode ? true : false}
+                    position="relative"
+                    top={-25}
+                    right={25}
+                    notifBorderColor={`var(--themeP${
+                        backColor === "black" ? "Light" : "Dark"
+                    }--${pColor})`}
+                    notifBackColor={
+                        backColor === "red"
+                            ? "var(--themePLight--black)"
+                            : "var(--expenseRed)"
+                    }
+                    badgeValue={totalNotifications}
+                    userId={userId}
+                    bizId={bizId}
+                />
+            </section>
         );
 
         return (
@@ -106,7 +123,10 @@ export default function TeamApp({
     };
 
     const showMainAppTitle = () => (
-        <section className="animated fadeIn my-5 container-center-col">
+        <section
+            className="position-relative animated fadeIn my-5 container-center-col"
+            style={{ left: "20px" }}
+        >
             <div className="mb-3">
                 <img
                     src={

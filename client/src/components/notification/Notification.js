@@ -9,16 +9,28 @@ import { setRun } from "../../hooks/useRunComp";
 import { useStoreDispatch } from "easy-peasy";
 import getId from "../../utils/getId";
 
-export default function Notification({ forceCliUser = false }) {
+export default function Notification({
+    forceCliUser = false,
+    userId,
+    bizId,
+    totalNotif,
+}) {
     const [loading, setLoading] = useState(false);
     const [btnTitle, setBtnTitle] = useState(`Marcar todas ✔️`);
     const [btnDisabled, setBtnDisabled] = useState(false);
     // const [runList, setRunList] = useState(false);
 
+    const isCliMember = bizId;
     const { _id, name, role } = useProfile();
+    userId = userId || _id;
     const dispatch = useStoreDispatch();
 
-    const totalNotifications = useCountNotif(_id, { role, forceCliUser });
+    let totalNotifications = useCountNotif(_id, {
+        role,
+        forceCliUser,
+        trigger: !totalNotif,
+    });
+    totalNotifications = totalNotif || totalNotifications;
 
     const showTitle = () => (
         <div className="mt-4">
@@ -43,6 +55,7 @@ export default function Notification({ forceCliUser = false }) {
 
     const plural = totalNotifications <= 1 ? "" : "s";
 
+    const condMarkAll = !isCliMember && totalNotifications >= 2;
     const showNotifStatus = () => {
         return (
             <section>
@@ -58,9 +71,11 @@ export default function Notification({ forceCliUser = false }) {
 
                         {totalNotifications === 0 && (
                             <Fragment>
-                                <strong className="text-normal">
-                                    ✔️ Todas novidades vistas.
-                                </strong>
+                                {isCliMember ? null : (
+                                    <strong className="text-normal">
+                                        ✔️ Todas novidades vistas.
+                                    </strong>
+                                )}
                             </Fragment>
                         )}
 
@@ -75,7 +90,7 @@ export default function Notification({ forceCliUser = false }) {
                     </p>
                 </div>
                 <div className="container-center my-3">
-                    {totalNotifications >= 3 && (
+                    {condMarkAll && (
                         <RadiusBtn
                             size="small"
                             disabled={btnDisabled}
@@ -96,10 +111,11 @@ export default function Notification({ forceCliUser = false }) {
             {showTitle()}
             {showNotifStatus()}
             <NotifList
-                _id={_id}
+                _id={userId || _id}
                 userName={name}
                 runList={null}
                 forceCliUser={forceCliUser}
+                bizId={bizId}
             />
         </Fragment>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import BadaloBell from "../buttons/bells/badalo/BadaloBell";
 import ModalFullContent from "../modals/ModalFullContent";
 import Notification from "./Notification";
@@ -13,6 +13,8 @@ export default function BellNotifBtn({
     badgeValue,
     forceCliUser,
     needClick = true,
+    userId,
+    bizId,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -24,8 +26,17 @@ export default function BellNotifBtn({
         setFullOpen(false);
     };
 
+    const Comp = (
+        <Notification
+            forceCliUser={forceCliUser}
+            totalNotif={badgeValue}
+            userId={userId}
+            bizId={bizId}
+        />
+    );
+
     return (
-        <section>
+        <Fragment>
             <BadaloBell
                 onClick={needClick ? handleFullOpen : null}
                 position={position}
@@ -37,10 +48,10 @@ export default function BellNotifBtn({
                 badgeValue={badgeValue}
             />
             <ModalFullContent
-                contentComp={<Notification forceCliUser={forceCliUser} />}
+                contentComp={Comp}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />
-        </section>
+        </Fragment>
     );
 }

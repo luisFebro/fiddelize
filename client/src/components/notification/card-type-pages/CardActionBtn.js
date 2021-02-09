@@ -11,6 +11,7 @@ import pickCardType from "./pickCardType";
 import Spinner from "../../../components/loadingIndicators/Spinner";
 import { useClientAdmin, useProfile } from "../../../hooks/useRoleData";
 import getId from "../../../utils/getId";
+import { getMultiVar, store } from "../../../hooks/storage/useVar";
 
 function CardActionBtn({
     userId,
@@ -25,6 +26,8 @@ function CardActionBtn({
     circularImg,
     role,
     forceCliUser = false,
+    bizId,
+    updatedBy,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +47,7 @@ function CardActionBtn({
             selfBizLogoImg,
             bizName,
             userName,
+            updatedBy,
         };
         const PickedComp = pickCardType(cardType, opts);
         return <PickedComp />;
@@ -57,19 +61,30 @@ function CardActionBtn({
         setFullOpen(false);
     };
 
-    const handleClickedCard = () => {
+    const handleClickedCard = async () => {
         setIsLoading(true);
-        markOneClicked(userId, cardId, { forceCliUser }).then((res) => {
-            if (res.status !== 200) {
-                return setIsLoading(false);
-            }
-            setRun(dispatch, `notificationCount${getId()}`);
-            handleFullOpen();
-            setTimeout(() => {
-                setIsLoading(false);
-                setSeen(true);
-            }, 3000);
+        const [updatedBy, role] = await getMultiVar(
+            ["name", "role"],
+            store.user
+        );
+        const res = await markOneClicked(bizId || userId, cardId, {
+            forceCliUser,
+            thisRole: bizId ? "cliente-admin" : role,
+            updatedBy,
+            cliMemberId: userId,
         });
+
+        if (res.status !== 200) {
+            return setIsLoading(false);
+        }
+
+        setRun(dispatch, `notificationCount${getId()}`);
+
+        handleFullOpen();
+        setTimeout(() => {
+            setIsLoading(false);
+            setSeen(true);
+        }, 3000);
     };
 
     const handleBtnTitle = () => {

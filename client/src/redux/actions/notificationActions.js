@@ -3,16 +3,21 @@ import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
 
 // OK sometimes can not load (localhost, production is okay)
 export const countPendingNotif = async (userId, options = {}) => {
-    const { role, forceCliUser } = options;
+    if (!userId) return;
+
+    const { role, forceCliUser, bizId } = options;
 
     let cliUserQuery = "";
     if (forceCliUser) cliUserQuery = "&forceCliUser=true";
+
+    let cliMemberQuery = "";
+    if (role === "cliente-membro" && bizId) cliMemberQuery = `&bizId=${bizId}`; // bizId so that members can read all admin challanges related notifications
 
     try {
         return await axios.get(
             `/api/notification/count-pending-notification?userId=${userId}&role=${
                 role || "cliente"
-            }${cliUserQuery}`,
+            }${cliUserQuery}${cliMemberQuery}`,
             getHeaderJson
         );
     } catch (err) {
@@ -66,11 +71,18 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 
 // OK
 export const markOneClicked = async (userId, cardId, options = {}) => {
-    const { forceCliUser } = options;
+    const { forceCliUser, thisRole, updatedBy, cliMemberId } = options;
+
+    let thisRoleQuery;
+    if (thisRole) thisRoleQuery = `&thisRole=${thisRole}`;
+
+    let updatedByQuery;
+    if (updatedBy)
+        updatedByQuery = `&cliMemberId=${cliMemberId}&updatedBy=${updatedBy}`;
 
     try {
         return await axios.put(
-            `/api/notification/mark-one-clicked/${userId}?cardId=${cardId}`,
+            `/api/notification/mark-one-clicked/${userId}?cardId=${cardId}${thisRoleQuery}${updatedByQuery}`,
             options,
             getHeaderJson
         );
