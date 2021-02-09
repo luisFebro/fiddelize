@@ -17,7 +17,7 @@ module.exports = {
     },
     "plugins": [
         "react",
-        // "unused-imports",
+        "unused-imports",
     ],
     "rules": {
         "indent": [
@@ -37,12 +37,12 @@ module.exports = {
             "always"
         ],
         // plugin unused-imports
-        "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
-        // "unused-imports/no-unused-imports": "error", // this will exclude all unused imports from my files
-        // "unused-imports/no-unused-vars": [
-        //     "warn",
-        //     { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
-        // ],
+        "unused-imports/no-unused-imports": "error", // this will exclude all unused imports from my files
+        "unused-imports/no-unused-vars": [
+            "warn",
+            { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+        ],
+        "no-unused-vars": "off",
         // end plugin unused-imports
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
