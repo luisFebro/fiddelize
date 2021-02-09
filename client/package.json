@@ -87,7 +87,7 @@
         }
     },
     "lint-staged": {
-        "**/*.{js,jsx,css}": [
+        "./src/*.{js,jsx,css}": [
             "npm run lint:fix"
         ]
     }
