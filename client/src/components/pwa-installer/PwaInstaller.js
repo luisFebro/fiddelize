@@ -6,8 +6,8 @@ import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import parse from "html-react-parser";
 import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
-import lStorage from "../../utils/storage/lStorage";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
+import lStorage from "../../utils/storage/lStorage";
 
 const isApp = isThisApp();
 

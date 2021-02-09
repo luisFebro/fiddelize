@@ -4,13 +4,14 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.98.8";
+const latestVersion = "3.981003.8";
 // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-    "app membro - notificações e lista de clientes ganhadores";
+    "removing all warnings || using CI with ESlint, Prettier and Husks";
 const history = [
+    "app membro - notificações e lista de clientes ganhadores",
     "copia de segurança avançada dos dados clientes - feito",
     "servico sattisfacao clientes - ponto promotores e nota XP pt4",
     "novo app - self-service - fluxo e criação pt 5",

@@ -20,6 +20,7 @@
         "crypto-js": "^4.0.0",
         "date-fns": "^2.14.0",
         "easy-peasy": "3.1.0",
+        "eslint-plugin-import": "^2.22.1",
         "flickity": "^2.2.1",
         "html-react-parser": "^0.10.0",
         "http-proxy-middleware": "^1.0.5",
@@ -45,7 +46,9 @@
         "build": "CI=false && react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "analyse": "node scripts/analyse.js"
+        "analyse": "node scripts/analyse.js",
+        "prettier:format": "prettier --write 'src/**/*.{js,jsx,css,scss}'",
+        "lint:fix": "eslint '**/*.{js,jsx}' --fix"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -64,18 +67,28 @@
     },
     "devDependencies": {
         "cypress": "^4.9.0",
+        "eslint": "^6.6.0",
+        "eslint-config-airbnb": "^18.2.1",
+        "eslint-config-prettier": "^7.2.0",
+        "eslint-plugin-react": "^7.22.0",
+        "eslint-plugin-unused-imports": "^1.1.0",
         "fs": "0.0.1-security",
         "gulp": "^4.0.2",
         "husky": "^4.2.5",
+        "lint-staged": "^10.5.4",
         "path": "^0.12.7",
         "prettier": "2.1.1",
-        "pretty-quick": "^3.0.0",
         "progress-bar-webpack-plugin": "^2.1.0",
         "webpack-bundle-analyzer": "^3.8.0"
     },
     "husky": {
         "hooks": {
-            "pre-commit": "pretty-quick --staged"
+            "pre-commit": "lint-staged"
         }
+    },
+    "lint-staged": {
+        "**/*.{js,jsx,css}": [
+            "npm run lint:fix"
+        ]
     }
 }

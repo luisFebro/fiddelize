@@ -147,10 +147,6 @@ exports.markOneClicked = async (req, res) => {
             _id = cliMemberId;
             role = "cliente-membro";
             notifications = cliMemberNotifs.clientMemberData.notifications;
-        } else {
-            return res.json({
-                msg: "first cli-member notif marked as Clicked already",
-            });
         }
 
         options = {

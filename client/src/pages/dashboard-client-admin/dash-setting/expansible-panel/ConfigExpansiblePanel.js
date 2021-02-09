@@ -6,9 +6,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 // Customized Data
-import { useStoreDispatch } from 'easy-peasy';
 import './ExpansiblePanel.scss';
 import ToggleBtn from './ToggleBtn';
 // End Customized Data
@@ -50,8 +48,6 @@ export default function ConfigExpansiblePanel({
     statusAfterClick,
     needToggleButton = false, }) {
     const classes = useStyles();
-
-    const dispatch = useStoreDispatch();
 
     const styles = React.useMemo(() => ({
         Accordion: {

@@ -6,7 +6,6 @@ import { withRouter } from "react-router-dom";
 import ButtonFab, {
     faStyleSmall,
 } from "../../../components/buttons/material-ui/ButtonFab";
-import animateCSS from "../../../utils/animateCSS";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 
 function PremiumServicesBtn({ history }) {

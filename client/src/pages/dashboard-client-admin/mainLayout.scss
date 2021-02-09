@@ -90,7 +90,7 @@
     padding-top: 10px;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
 }
 
 .purchase-history-prize-card--root .gift-main-title div:last-child {
@@ -170,7 +170,7 @@
 .prize-card--challenge-brief {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     flex-direction: column;
 }
 
