@@ -1,11 +1,12 @@
 import React from "react";
 import QrCode from "../../components/QrCode";
-import Img from "../../components/Img.js";
 import "./_Pix.scss";
 
 export default function Pix() {
 	return (
-		<section className="mx-3 text-white">
+		<section
+			className="mx-3 text-white"
+		>
 			<section className="my-3 container-center">
 				<img
 					width={180}

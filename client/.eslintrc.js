@@ -4,7 +4,7 @@ module.exports = {
         "es6": true
     },
     "extends": [
-        "eslint:recommended",
+        "airbnb",
         "plugin:react/recommended",
         "prettier"
     ],
@@ -42,19 +42,19 @@ module.exports = {
             "warn",
             { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
         ],
-        "no-unused-vars": "off",
+        "no-unused-vars": 0,
         // end plugin unused-imports
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
-        "react/jsx-indent-props": "off",
-        "react/jsx-indent": "off",
-        "react/prop-types": "off",
+        "react/jsx-indent-props": 0,
+        "react/jsx-indent": 0,
+        "react/prop-types": 0,
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }], // (error  JSX not allowed in files with extension '.js') You can add the following to your config to allow .js extensions for JSX.
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+        "import/no-named-as-default": 0,
+        "import/no-named-as-default-member": 0,
+        "import/no-extraneous-dependencies": 0,
         // "unused-imports/no-unused-vars": "error",
-    },
-    "settings": {
-        "react": {
-            "version": "detect",
-        }
     }
 };
 
