@@ -86,10 +86,5 @@
         "hooks": {
             "pre-commit": "lint-staged"
         }
-    },
-    "lint-staged": {
-        "src/**/*.{js,jsx,css}": [
-            "npm run prettier:format"
-        ]
     }
 }
