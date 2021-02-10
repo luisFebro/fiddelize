@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
-import ModalConfYesNo from "../../../../../../../../components/modals/ModalYesNo";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalFullContent from "../../../../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../../../../components/code-splitting/LoadableComp";
 import useAPI, { readUser } from "../../../../../../../../hooks/api/useAPI";
@@ -55,9 +53,9 @@ export default function ModalBtn({ modalData = {} }) {
         setFullOpen(true);
     };
 
-    const onClose = () => {
-        setFullOpen(false);
-    };
+    // const onClose = () => {
+    //     setFullOpen(false);
+    // };
 
     return (
         <section>

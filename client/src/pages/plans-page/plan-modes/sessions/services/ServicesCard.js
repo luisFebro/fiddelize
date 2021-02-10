@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import Card from "@material-ui/core/Card";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
@@ -22,7 +22,7 @@ const getStyles = () => ({
 });
 
 export default function ServicesCard({ period = "yearly", plan = "gold" }) {
-    const [openFree, setOpenFree] = useState(false);
+    // const [openFree, setOpenFree] = useState(false);
 
     const styles = getStyles();
 

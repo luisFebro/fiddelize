@@ -11,10 +11,6 @@ import {
     translateColorToPtBr,
 } from "../../../../global-data/uiColors";
 import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
-import ButtonMulti, {
-    faStyle,
-} from "../../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ShowActionBtns from "./ShowActionBtns";
 import { useClientAdmin } from "../../../../hooks/useRoleData";
 
@@ -89,12 +85,15 @@ export default function PickTheming({
                         : `var(--themeP--${selfThemeBackColor})`,
             });
         }
+        // React Hook useEffect has a missing dependency: 'data'. Either include it or remove the dependency array. You can also do a functional update 'setData(d => ...)'
+        // eslint-disable-next-line
     }, [isFromDash, selfThemePColor, selfThemeSColor, selfThemeBackColor]);
 
     useEffect(() => {
         if (!isFromDash) {
             secondaryColorBr && goNext();
         }
+        // eslint-disable-next-line
     }, [secondaryColorBr, isFromDash]);
 
     useEffect(() => {
@@ -109,7 +108,7 @@ export default function PickTheming({
                 setTimeout(() => (doc.style.display = "none"), 5000);
             }
         }
-    }, [primaryColorBr, secondaryColorBr, backColorBr]);
+    }, [primaryColorBr, secondaryColorBr, isFromDash, backColorBr]);
 
     useEffect(() => {
         if (!isFromDash) {
@@ -119,6 +118,7 @@ export default function PickTheming({
                 setNextDisabled(true);
             }
         }
+        // eslint-disable-next-line
     }, [isBoxChecked, isFromDash]);
 
     const handleIsSelectedBackColor = () => {

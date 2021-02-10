@@ -1,4 +1,4 @@
-import React, { Fragment, useState, forwardRef } from "react";
+import React, { useState, forwardRef } from "react";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import "./_AppCard.scss";
 import Skeleton from "../../../components/multimedia/Skeleton";
@@ -111,7 +111,6 @@ function AppCard({ data, payload, loading }, ref) {
                     title={`${opening ? "iniciando..." : "abrir"}`}
                     variant="extended"
                     size="small"
-                    backgroundColor="var(--default)"
                     position="relative"
                     backgroundColor={`var(--themeSDark--default)`}
                     onClick={() => {

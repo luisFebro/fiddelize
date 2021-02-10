@@ -1,7 +1,4 @@
 import React, { Fragment } from "react";
-import getQueryByName from "../../../utils/string/getQueryByName";
-import ScrollArrow from "../../../keyframes/built/scroll-arrow/ScrollArrow";
-import parse from "html-react-parser";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import GoalForm from "./GoalForm";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
@@ -10,14 +7,7 @@ import useData, { sto } from "../../../hooks/useData";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 const isSmall = window.Helper.isSmallScreen();
-const truncate = (name, leng) => window.Helper.truncate(name, leng);
-
-const styles = {
-    confettiIcon: {
-        fontSize: "3rem",
-        fontWeight: "bold",
-    },
-};
+// const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
 export default function RewardPlanner({ history }) {
     const [clientAdminData] = useData(["clientAdminData"], sto.re.pre_register);

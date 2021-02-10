@@ -103,6 +103,7 @@ export default function AsyncBoleto({ modalData = {} }) {
 
             handleCancel(); // remove current orders
         })();
+        // eslint-disable-next-line
     }, []);
 
     const showTitle = () => (

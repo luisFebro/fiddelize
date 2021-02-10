@@ -7,7 +7,6 @@ import useElemDetection, {
 import repeat from "../../../utils/arrays/repeat";
 import useData from "../../../hooks/useData";
 import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
 // LESSON: if you are using a list, insert an id if you gonna need the cards indivudially.
 export default function AppList({ history }) {
@@ -34,7 +33,7 @@ export default function AppList({ history }) {
         error,
         ShowError,
         hasMore,
-        readyShowElems,
+        // readyShowElems,
         isOffline,
         ShowOverMsg,
     } = useAPIList({

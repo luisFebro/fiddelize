@@ -4,7 +4,7 @@ In case of failing or something unusual, the last working version was ^4.7.2
  */
 import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { lighten, makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,7 +17,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import Switch from "@material-ui/core/Switch";
+// import Switch from "@material-ui/core/Switch";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
 
 const MyTableCell = withStyles({
@@ -89,7 +89,7 @@ export default function MuSelectTable({
     const [orderBy, setOrderBy] = React.useState("name");
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage] = React.useState(10);
     const [colorHighlighted, setColorHighlighted] = React.useState(true);
 
     useEffect(() => {
@@ -98,6 +98,7 @@ export default function MuSelectTable({
 
     useEffect(() => {
         if (!loading) setSelected(rowsData.map((contact) => contact.name));
+        // eslint-disable-next-line
     }, [loading]);
 
     const handleColor = () => {
@@ -128,6 +129,7 @@ export default function MuSelectTable({
 
     useEffect(() => {
         if (typeof callback === "function") callback(selected);
+        // eslint-disable-next-line
     }, [selected]);
 
     const handleRequestSort = (event, property) => {

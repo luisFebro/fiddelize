@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import SwitchBtn from "../../../../components/buttons/material-ui/SwitchBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import animateCSS from "../../../../utils/animateCSS";

@@ -23,9 +23,9 @@ export default function RemoveMemberBtn({ modalData }) {
         setFullOpen(true);
     };
 
-    const onClose = () => {
-        setFullOpen(false);
-    };
+    // const onClose = () => {
+    //     setFullOpen(false);
+    // };
 
     const handleRemoval = (itemData) => {
         // if (itemData._id === "5e890d185162091014c53b56")

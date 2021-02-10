@@ -48,6 +48,7 @@ export default function usePayMethods(target, value) {
                 // console.log("Callback para todas chamadas", response);
             },
         });
+        // eslint-disable-next-line
     }, []);
 
     return { payMethod, error };

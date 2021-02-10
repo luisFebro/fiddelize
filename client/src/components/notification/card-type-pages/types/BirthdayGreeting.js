@@ -1,11 +1,20 @@
-import React from 'react';
-import { textStyle, ShowTitle, ShowIllustration, ShowBrief, ShowActionBtn } from './DefaultRenderComps';
-import extractStrData from '../../../../utils/string/extractStrData';
-import { formatDMY } from '../../../../utils/dates/dateFns';
+import React from "react";
+import {
+    ShowTitle,
+    ShowIllustration,
+    ShowBrief,
+    ShowActionBtn,
+} from "./DefaultRenderComps";
+import extractStrData from "../../../../utils/string/extractStrData";
+import { formatDMY } from "../../../../utils/dates/dateFns";
 
 export default function BirthdayGreeting({
-    role, brief, mainImg, bizLogo, content }) {
-
+    role,
+    brief,
+    mainImg,
+    bizLogo,
+    content,
+}) {
     const { birthdayDate } = extractStrData(content);
     const thisBirthdate = formatDMY(birthdayDate);
 
@@ -20,7 +29,11 @@ export default function BirthdayGreeting({
                 </p>
                 {thisBirthdate}
             </div>
-            <ShowActionBtn role={role} titleCliUser='Ir para App' titleCliAdmin="Ir panel de controle" />
+            <ShowActionBtn
+                role={role}
+                titleCliUser="Ir para App"
+                titleCliAdmin="Ir panel de controle"
+            />
         </section>
     );
 }

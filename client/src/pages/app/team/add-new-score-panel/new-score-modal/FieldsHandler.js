@@ -7,7 +7,6 @@ import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
     setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
-import useAuth from "../../../../../hooks/useAuthUser";
 import { withRouter } from "react-router-dom";
 import useData from "../../../../../hooks/useData";
 

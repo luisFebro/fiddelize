@@ -1,19 +1,15 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import InvestCard from "./card/accordion/InvestCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
-import parse from "html-react-parser";
 import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getFirstName from "../../../../../utils/string/getFirstName";
-import { useRunComp } from "../../../../../hooks/useRunComp";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import { Link } from "react-router-dom";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
     readTransactionHistory,
-    readSMSMainHistory,
 } from "../../../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
@@ -151,7 +147,7 @@ export default function AsyncCardsList() {
             } = data;
 
             const referenceArray = reference && reference.split("-");
-            const [planCode, qtt, period] = referenceArray;
+            const [planCode, , period] = referenceArray;
 
             const chosenPlan = handlePlanCode(planCode);
             const chosenPeriod = handlePeriod(period);

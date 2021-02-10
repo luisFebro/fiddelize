@@ -6,16 +6,15 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 // Customized Data
 import "./RecordedClientsAccordion.scss";
-import ToggleBtn from "./ToggleBtn";
 import { useStoreDispatch, useStoreState } from "easy-peasy";
+import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import { removeField } from "../../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
-import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { readUser } from "../../../../../redux/actions/userActions";
 import { setRun } from "../../../../../hooks/useRunComp";
 import PrizesBtn from "../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn";
@@ -84,7 +83,7 @@ export default function RegisteredClientsAccordion({
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useClientAdmin();
+    // const { bizCodeName } = useClientAdmin();
     const { businessId } = useAppSystem();
 
     const { runArray } = useStoreState((state) => ({
@@ -249,7 +248,8 @@ export default function RegisteredClientsAccordion({
             key: panel._id,
             className: "position-relative mb-3",
         };
-
+        // Arrow function expected a return value  array-callback-return ???
+        // eslint-disable-next-line
         if (!panel.isVisible) return;
 
         return checkDetectedElem({ list: actions, ind, indFromLast: 5 }) ? ( // 5 is in the middle of 10 chunks series to avoid detect card after reversing the order. The middle will be untouched unless user scroll down.

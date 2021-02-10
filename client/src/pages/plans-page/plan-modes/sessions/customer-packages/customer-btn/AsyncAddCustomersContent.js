@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Simulator from "./Simulator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useProfile } from "../../../../../../hooks/useRoleData";
-import getFirstName from "../../../../../../utils/string/getFirstName";
+// import { useProfile } from "../../../../../../hooks/useRoleData";
+// import getFirstName from "../../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../../components/Img";
 import { PeriodSelection } from "../../../comps/MainComps";
 import setProRenewal from "../../../../../../utils/biz/setProRenewal";
-import setProRef from "../../../../../../utils/biz/setProRef";
 import { withRouter } from "react-router-dom";
 
 export default withRouter(AsyncAddCustomersContent);
@@ -54,8 +53,8 @@ function AsyncAddCustomersContent({
         });
     };
 
-    let { name: userName } = useProfile();
-    userName = getFirstName(userName);
+    // let { name: userName } = useProfile();
+    // userName = getFirstName(userName);
 
     const handlePeriodName = () => {
         if (isCreditsBadge) return "";

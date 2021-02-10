@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { useClientAdmin } from "../../../../../../hooks/useRoleData";
 import FaqAccordion from "../../../../../../components/expansion-panels/faq/FaqAccordion";
 import "./_ReviewResults.scss";
-import { Load } from "../../../../../../components/code-splitting/LoadableComp";
 import AddCustomersBtn from "../../../../../../pages/plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
 import usePro from "../../../../../../hooks/pro/usePro";
 
@@ -80,7 +79,7 @@ const textQ5 = (
 export default function ReviewResults({ mainData = {} }) {
     const { detractors, passives, promoters } = mainData;
 
-    const { plan: currPlan, usageTimeEnd, credits } = usePro({
+    const { plan: currPlan, usageTimeEnd } = usePro({
         service: "Novvos Clientes",
     });
 

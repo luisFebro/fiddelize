@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import getAccurateDate from "../../utils/dates/getAccurateDate";
 import useAPI, {
     getNextExpiryDate,
-    removeServices,
+    // removeServices,
 } from "../../hooks/api/useAPI";
 import { default as checkToday } from "date-fns/isToday";
 import { getVar, store } from "../../hooks/storage/useVar";
@@ -28,7 +28,7 @@ export default function useManageProServices() {
         userId: null,
         isExpired: false,
     });
-    const { isToday, userId, isExpired } = data;
+    const { isToday, userId } = data; // isExpired
     const { bizPlan } = useClientAdmin();
 
     const [role] = useData(["role"]);
@@ -52,12 +52,12 @@ export default function useManageProServices() {
     const period = getPeriod(ref);
     const planDays = period === "yearly" ? 365 : 30;
 
-    const { data: removalRes } = useAPI({
-        method: "delete",
-        url: removeServices(userId),
-        trigger: nextExpiryDate && isExpired,
-        params: { nextExpiryDate },
-    });
+    // const { data: removalRes } = useAPI({
+    // method: "delete",
+    // url: removeServices(userId),
+    // trigger: nextExpiryDate && isExpired,
+    // params: { nextExpiryDate },
+    // });
 
     useEffect(() => {
         Promise.all([getVar("userId", store.user), getAccurateDate()]).then(
@@ -129,6 +129,7 @@ export default function useManageProServices() {
 
     useEffect(() => {
         checkForExpiryServices();
+        // eslint-disable-next-line
     }, [nextExpiryDate, expiryData]);
 
     useEffect(() => {

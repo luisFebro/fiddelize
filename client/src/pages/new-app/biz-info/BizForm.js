@@ -49,6 +49,7 @@ export default function BizForm() {
         if (selectedValue) {
             setData({ ...data, field: selectedValue });
         }
+        // eslint-disable-next-line
     }, [selectedValue]);
 
     const dispatch = useStoreDispatch();

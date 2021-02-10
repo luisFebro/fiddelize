@@ -48,6 +48,7 @@ export default function NotifList({
             !bizId && markAllAsSeen(_id, { forceCliUser });
             setFirstChunkLoaded(true);
         }
+        // eslint-disable-next-line
     }, [list, firstChunkLoaded]);
 
     const showCard = (props) => <NotifCard {...props} />;

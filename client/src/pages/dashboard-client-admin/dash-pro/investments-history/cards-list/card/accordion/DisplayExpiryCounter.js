@@ -9,7 +9,7 @@ import RadiusBtn from "../../../../../../../components/buttons/RadiusBtn";
 const handleRenewalClick = ({ panel, history }) => {
     const { reference } = panel;
     async function setAllVars(panel) {
-        const readyVar = await Promise.all([
+        await Promise.all([
             setVar({ orders_clientAdmin: panel.data.ordersStatement }),
             setVar({
                 totalMoney_clientAdmin: panel.data.investAmount,

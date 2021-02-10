@@ -53,6 +53,7 @@ function PanelHiddenContent({ history, data }) {
 
     const dispatch = useStoreDispatch();
 
+    // eslint-disable-next-line
     const displayCopyBtn = () => (
         <section className="d-flex justify-content-end my-3">
             <ButtonFab
@@ -227,7 +228,7 @@ function PanelHiddenContent({ history, data }) {
             transactionStatus !== "pendente" &&
             (renewal && renewal.priorRef) !== reference;
         const referenceArray = reference && reference.split("-");
-        const [planCode, qtt, period] = referenceArray;
+        const [planCode, , period] = referenceArray;
 
         const thisPlan = handlePlanCode(planCode);
         const thisPeriod = period === "A" ? "yearly" : "monthly";
@@ -258,7 +259,7 @@ function PanelHiddenContent({ history, data }) {
                                 onClick={() => {
                                     setLoadingOrderPage(true);
                                     async function setAllVars() {
-                                        const readyVar = await Promise.all([
+                                        await Promise.all([
                                             setVar({
                                                 orders_clientAdmin: orders,
                                             }),

@@ -43,7 +43,7 @@ export default function BuyReviewList({ lastDateChecked }) {
         ShowLoadingSkeleton,
         error,
         ShowError,
-        needEmptyIllustra,
+        // needEmptyIllustra,
         hasMore,
         isOffline,
         ShowOverMsg,
@@ -145,5 +145,5 @@ function useAdminChecked(trigger, bizId) {
         };
 
         trigger && runCheck();
-    }, [trigger]);
+    }, [trigger, bizId]);
 }

@@ -17,6 +17,7 @@ function SuccessFulCcPay({ history, setMainData }) {
             ...prev,
             hideCard: true,
         }));
+        // eslint-disable-next-line
     }, []);
 
     const { bizCodeName } = useClientAdmin();

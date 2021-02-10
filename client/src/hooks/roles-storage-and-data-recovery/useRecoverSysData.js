@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import lStorage from "../../utils/storage/lStorage";
 // import { useClientUser } from '../hooks/useRoleData';
-import useDispatch, { showSnackbar } from "../useDispatch";
 // import { updateUser } from "../../redux/actions/userActions";
 import { readClientAdmin } from "../../redux/actions/userActions";
 
@@ -35,6 +34,7 @@ export default function useRecoverSysData(role, userId, opts = {}) {
                 lStorage("setItems", { ...collection, newObj: updatedValues });
             }
         }
+        // eslint-disable-next-line
     }, [userId, role, bizSysId, needUpdateSys, isUserOnline, didUserLogout]);
 }
 

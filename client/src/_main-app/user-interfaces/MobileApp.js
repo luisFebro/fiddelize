@@ -12,7 +12,6 @@ import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClie
 
 // PAGES
 import LoginPage from "../../pages/auth/LoginPage"; // is it necessarybecauseit is only usedthe login compo inmobile app
-import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import ClientMobileApp from "../../pages/mobile-app/ClientMobileApp";
 import RegulationPage from "../../pages/RegulationPage";
@@ -66,6 +65,7 @@ function Mobile({ location, history }) {
     useEffect(() => {
         // loadReCaptcha();
         dispatch(loadUser(dispatch))(history);
+        // eslint-disable-next-line
     }, [dispatch]);
 
     return (

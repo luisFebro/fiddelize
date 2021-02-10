@@ -51,6 +51,7 @@ export default function AsyncSpecificCustomer({
             const { name, phone } = newAddedContact[0];
             handleAddContact({ name, phone });
         }
+        // eslint-disable-next-line
     }, [newAddedContact]);
 
     const [list, setList] = useState([]);
@@ -60,6 +61,7 @@ export default function AsyncSpecificCustomer({
         if (runName === "Contatos Selecionados") handleList(list);
         if (!list.length) handleShowMessage(false);
         handleList(list);
+        // eslint-disable-next-line
     }, [list, runName]);
 
     useEffect(() => {
@@ -67,6 +69,7 @@ export default function AsyncSpecificCustomer({
             setList(runOneArray);
             handleList(runOneArray);
         }
+        // eslint-disable-next-line
     }, [runName, runOneArray]);
 
     const handleRemoveLast = () => {

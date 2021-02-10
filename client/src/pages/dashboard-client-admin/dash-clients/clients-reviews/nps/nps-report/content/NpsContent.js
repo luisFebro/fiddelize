@@ -33,7 +33,7 @@ export default function NpsContent({ mainData }) {
     const { icon } = getTextStatus(nps);
     const currWeekDay = getWeekDayBr(null, { abbrev: true });
 
-    const { dataChart, loading } = useNpsChartData({
+    const { dataChart } = useNpsChartData({
         lastTotalDetractors: detractors && detractors.total,
         lastTotalPromoters: promoters && promoters.total,
     });
@@ -181,7 +181,7 @@ function useNpsChartData({ lastTotalPromoters, lastTotalDetractors }) {
             }));
         };
         userId !== "..." && lastTotalPromoters !== undefined && runAnalysis();
-    }, [userId, lastTotalPromoters]);
+    }, [userId, lastTotalPromoters, lastTotalDetractors]);
 
     return { dataChart, loading };
 }

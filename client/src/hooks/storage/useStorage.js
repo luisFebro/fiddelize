@@ -45,6 +45,7 @@ export default function useStorage({
         }
 
         return () => null;
+        // eslint-disable-next-line
     }, [key, value, trigger]);
 
     const gotData = !loading && data;

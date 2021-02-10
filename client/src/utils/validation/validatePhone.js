@@ -1,5 +1,7 @@
-export default function validatePhone(phone) { // n1
-    const regEx = /^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$/
+export default function validatePhone(phone) {
+    // n1
+    // eslint-disable-next-line
+    const regEx = /^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$/;
     return regEx.test(phone);
 }
 

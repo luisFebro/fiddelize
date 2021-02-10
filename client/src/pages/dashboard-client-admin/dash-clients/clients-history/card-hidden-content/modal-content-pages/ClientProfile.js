@@ -5,15 +5,12 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 // import DialogContentText from '@material-ui/core/DialogContentText';
 import parse from "html-react-parser";
 
-const isSmall = window.Helper.isSmallScreen();
-
 export default function ClientProfile({ data, title, subtitle }) {
     const {
-        name,
+        // name,
         cpf,
         phone,
         email,
-        maritalStatus,
         birthday,
         createdAt,
     } = data;

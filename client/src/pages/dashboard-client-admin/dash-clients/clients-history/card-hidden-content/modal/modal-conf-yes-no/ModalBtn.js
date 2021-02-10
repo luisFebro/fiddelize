@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
-import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
-import PropTypes from 'prop-types';
-import ModalConfYesNo from './ModalConfYesNo';
-import { buttonFabType } from '../../../../../../../types';
-import handleChange from '../../../../../../../utils/form/use-state/handleChange';
+import React, { useState } from "react";
+import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import PropTypes from "prop-types";
+import ModalConfYesNo from "./ModalConfYesNo";
+import { buttonFabType } from "../../../../../../../types";
 
 ModalBtn.propTypes = {
     modalData: PropTypes.object.isRequired,
     button: PropTypes.shape(buttonFabType),
     setSelectedValue: PropTypes.func,
-}
+};
 
 export default function ModalBtn({
-    modalData, button, setSelectedValue, setRun, run }) {
+    modalData,
+    button,
+    setSelectedValue,
+    setRun,
+    run,
+}) {
     const [open, setOpen] = useState(false);
 
     const {
@@ -22,21 +26,19 @@ export default function ModalBtn({
         iconFontAwesome,
         iconMarginLeft,
         shadowColor,
-        top,
-        left,
         backgroundColor,
         size,
-        iconMu, } = button;
+        iconMu,
+    } = button;
 
     const onOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
 
     const onClose = () => {
-      setOpen(false);
-      // setSelectedValue(value); using redux update instead
+        setOpen(false);
+        // setSelectedValue(value); using redux update instead
     };
-
 
     return (
         <div>

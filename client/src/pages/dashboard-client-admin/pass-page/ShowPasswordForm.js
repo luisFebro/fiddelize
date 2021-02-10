@@ -46,7 +46,7 @@ export default function ShowPasswordForm({
     dataFromPassPage = {},
     btnAction,
 }) {
-    const [error, setError] = useState("");
+    const [, setError] = useState("");
     const [data, setData] = useState({
         clientAdminData: { verificationPass: "" }, // We can simply declare clientAdminData.verificationPass in the sendDataToBackend obj
     });
@@ -59,9 +59,9 @@ export default function ShowPasswordForm({
 
     const { businessId } = useAppSystem();
 
-    const history = dataFromPassPage.history;
-    const clientAdminName = dataFromPassPage.clientAdminName;
-    const bizCodeName = dataFromPassPage.bizCodeName;
+    // const history = dataFromPassPage.history;
+    // const clientAdminName = dataFromPassPage.clientAdminName;
+    // const bizCodeName = dataFromPassPage.bizCodeName;
 
     const dispatch = useStoreDispatch();
 
@@ -78,6 +78,7 @@ export default function ShowPasswordForm({
                 setData(Object.assign({}, data, newObj));
             });
         }
+        // eslint-disable-next-line
     }, [businessId]);
 
     const sendDataBackend = () => {

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import Img from "../../../../../components/Img";
-import { useProfile } from "../../../../../hooks/useRoleData";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import RedirectLink from "../../../../../components/RedirectLink";
 

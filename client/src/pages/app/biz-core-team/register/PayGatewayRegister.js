@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect } from "react";
 import useData from "../../../../hooks/useData";
-import AccessPassCreation from "../../../dashboard-client-admin/pass-page/AccessPassCreation";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { getVar, setVar } from "../../../../hooks/storage/useVar";
 import isThisApp from "../../../../utils/window/isThisApp";
@@ -25,7 +24,7 @@ export default function PayGatewayRegister({ history, location }) {
                         : "/acesso/verificacao"
                 );
         })();
-    }, []);
+    }, [history]);
 
     return (
         <Fragment>

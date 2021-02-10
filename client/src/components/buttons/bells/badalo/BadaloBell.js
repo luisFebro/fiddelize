@@ -75,6 +75,7 @@ export default function BadaloBell({
                 </div>
             </NotificationBadge>
         ),
+        // eslint-disable-next-line
         [badgeValue]
     );
 

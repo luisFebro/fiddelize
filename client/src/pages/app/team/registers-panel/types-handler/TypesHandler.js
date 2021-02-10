@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import QuickRegister from "./QuickRegister";
 import CompleteRegister from "./CompleteRegister";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 
@@ -23,8 +23,6 @@ const Div = styled.div`
 // and wrapped up with a relative position...
 
 export default function AttentionWaves({ isActive, waveColor, waveSize }) {
-    const [stopWave, setStopWave] = useState(false);
-
     return (
         isActive && (
             <Div

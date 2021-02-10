@@ -50,8 +50,8 @@ export default function Illustration({
 
     const {
         txt,
-        txtColor,
-        txtStyle,
+        // txtColor,
+        // txtStyle,
         fontSize,
         txtAlign,
         txtBorder,
@@ -61,7 +61,7 @@ export default function Illustration({
     } = txtImgConfig;
 
     const showActionButton = (actionButton) => {
-        const { btnName, txt, to } = actionButton;
+        const { btnName, txt } = actionButton;
         return (
             btnName === "dark" && (
                 <div className="container-center">

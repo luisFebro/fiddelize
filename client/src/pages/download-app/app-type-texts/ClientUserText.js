@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 
 const isSmall = window.Helper.isSmallScreen();

@@ -51,6 +51,7 @@ export default function OrdersTable({
             servicesTotal: thisTotalServ,
             servicesAmount: rawOrderTotal,
         }); // it is here for cases when orderTotal loads as undefined when user jumps right to checkout page if h/s decides to come back later.
+        // eslint-disable-next-line
     }, [orders]);
 
     orderTotal = convertToReal(orderTotal, { moneySign: true });

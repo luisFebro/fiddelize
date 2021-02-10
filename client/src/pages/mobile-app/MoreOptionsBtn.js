@@ -1,5 +1,5 @@
 import React, { useState, Fragment, useEffect } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
 import { useStoreDispatch } from "easy-peasy";
 import { useClientUser, useProfile } from "../../hooks/useRoleData";
@@ -15,9 +15,9 @@ import StarIcon from "@material-ui/icons/Star";
 import ChatIcon from "@material-ui/icons/Chat";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import lStorage, {
-    tooltip1,
+    // tooltip1,
     yellowBtn2,
-    needSetTrueLocalKey,
+    // needSetTrueLocalKey,
 } from "../../utils/storage/lStorage";
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import Fab from "@material-ui/core/Fab";
@@ -39,11 +39,11 @@ const AsyncReview = Load({
         ),
 });
 
-const lastOption = tooltip1;
+// const lastOption = tooltip1;
 const currOption = yellowBtn2;
 
-const lastChecked = lStorage("getItem", lastOption);
-const currChecked = lStorage("getItem", currOption);
+// const lastChecked = lStorage("getItem", lastOption);
+// const currChecked = lStorage("getItem", currOption);
 
 const getStyles = () => ({
     muStyle: {
@@ -84,7 +84,7 @@ function MoreOptionsBtn({
 
     let {
         currScore,
-        purchaseHistory,
+        // purchaseHistory,
         totalGeneralScore,
         totalPurchasePrize,
     } = useClientUser();
@@ -106,7 +106,7 @@ function MoreOptionsBtn({
             if (totaldBPrizes !== totalPurchasePrize) setBlockAccess(true);
         });
         return () => (cancel = true);
-    }, [_id, totalPurchasePrize]);
+    }, [_id, totalPurchasePrize, dispatch]);
 
     const showPurchaseHistory = () => {
         const handlePurchaseClose = () => {

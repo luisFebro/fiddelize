@@ -15,7 +15,6 @@ import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClie
 // PAGES
 import Home from "../../pages/home/Home";
 import LoginPage from "../../pages/auth/LoginPage";
-import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import RegulationPage from "../../pages/RegulationPage";
 import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
@@ -66,6 +65,7 @@ function Website({ location, history }) {
     useEffect(() => {
         // loadReCaptcha();
         dispatch(loadUser(dispatch))(history);
+        // eslint-disable-next-line
     }, [dispatch]);
 
     return (

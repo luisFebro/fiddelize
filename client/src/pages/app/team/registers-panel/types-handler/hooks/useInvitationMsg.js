@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import generateAppDownloadLink from "../../../../../../utils/biz/generateAppDownloadLink";
 import getFirstName from "../../../../../../utils/string/getFirstName";
-import useData from "../../../../../../hooks/useData";
 
 export default function useInvitationMsg({
     name,
@@ -45,6 +44,7 @@ export default function useInvitationMsg({
             const text = handleTxt();
             setMsg(text);
         }
+        // eslint-disable-next-line
     }, [name, linkScore, linkId]);
 
     return msg;

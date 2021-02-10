@@ -7,17 +7,13 @@ import Card from "@material-ui/core/Card";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { loginEmail } from "../../redux/actions/authActions";
 import { readUser } from "../../redux/actions/userActions";
-import PropTypes from "prop-types";
 import KeypadButton from "../modals/keypad";
 import isThisApp from "../../utils/window/isThisApp";
-import showVanillaToast from "../../components/vanilla-js/toastify/showVanillaToast";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
-import { CLIENT_URL } from "../../config/clientUrl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import { deleteImage } from "../../utils/storage/lForage";
-import useCount from "../../hooks/useCount";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import {
     setMultiVar,
@@ -40,7 +36,7 @@ function Login({
 }) {
     const {
         selfThemeSColor,
-        selfThemePColor,
+        // selfThemePColor,
         selfThemeBackColor,
     } = useClientAdmin();
 
@@ -146,7 +142,7 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     const {
-        msg,
+        // msg,
         role,
         name,
         authUserId,

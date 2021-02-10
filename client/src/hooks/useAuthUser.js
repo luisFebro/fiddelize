@@ -48,6 +48,7 @@ export default function useAuth(options = {}) {
                 history.push(isApp ? "/mobile-app" : "/acesso/verificacao");
             })();
         }
+        // eslint-disable-next-line
     }, [success]);
 }
 

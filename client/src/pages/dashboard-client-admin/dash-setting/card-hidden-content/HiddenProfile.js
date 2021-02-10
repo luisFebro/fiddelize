@@ -33,7 +33,7 @@ export default function HiddenProfile({ userData }) {
         gender: "",
     });
 
-    const { name, cpf, birthday, email, phone, gender, bizWhatsapp } = data;
+    const { name, cpf, birthday, email, phone, gender } = data;
 
     const [error, setError] = useState("");
 
@@ -53,6 +53,7 @@ export default function HiddenProfile({ userData }) {
                 gender: res.data.gender,
             }));
         })();
+        // eslint-disable-next-line
     }, []);
 
     const dispatch = useStoreDispatch();

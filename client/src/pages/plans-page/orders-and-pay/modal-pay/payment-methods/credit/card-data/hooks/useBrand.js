@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function getBrand(cardNumber, { PagSeguro }) {
     // n1
@@ -43,6 +43,7 @@ export default function useBrand(cardNumber, { setData }) {
         } else {
             cleanData();
         }
+        // eslint-disable-next-line
     }, [cardNumber]);
 
     useEffect(() => {
@@ -74,6 +75,7 @@ export default function useBrand(cardNumber, { setData }) {
         };
 
         go();
+        // eslint-disable-next-line
     }, [firstSixChar]);
 }
 

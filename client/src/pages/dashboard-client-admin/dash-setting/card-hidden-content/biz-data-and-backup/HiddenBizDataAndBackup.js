@@ -46,6 +46,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
                 bizAddress: res.data.bizAddress,
             });
         });
+        // eslint-disable-next-line
     }, []);
 
     const dispatch = useStoreDispatch();

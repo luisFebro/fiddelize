@@ -20,7 +20,7 @@ export default function useDidDateExpire({
             const res = didDateExpire(lastPrizeDate, { afterDay: deadline });
             setDidExpire(res);
         }
-    }, [loading, lastPrizeDate]);
+    }, [loading, lastPrizeDate, deadline]);
 
     return didExpire;
 }

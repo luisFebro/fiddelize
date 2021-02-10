@@ -1,15 +1,16 @@
-import React, { useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import ModalBtn from "../../../components/buttons/ModalBtn";
 import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.981003.8";
+const latestVersion = "3.9850.8";
 // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
     "removing all warnings || using CI with ESlint, Prettier and Husks";
+// eslint-disable-next-line
 const history = [
     "app membro - notificações e lista de clientes ganhadores",
     "copia de segurança avançada dos dados clientes - feito",

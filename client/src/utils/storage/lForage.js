@@ -1,91 +1,113 @@
 // FOT STATIC ASSETS AND OFFLINE IMAGES
-import localforage from 'localforage';
-import gotArrayThisItem from '../../utils/arrays/gotArrayThisItem';
+import localforage from "localforage";
 // import lStorage from '../../utils/storage/lStorage';
 // export * from './lForageStore';
 
 // convert the blob (image) into a data-url (a base64 string) and set that as the src for your image element.
 // createInstance and config is required especially if you are reading or deleting a file. Requires the right collection to process.
 export const setImage = (collection, dataKey, imageUrlValue) => {
-    const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
+    const store = localforage.createInstance({
+        name: `fiddelize-${collection}`,
+    }); // n2
     store.config({ storeName: collection }); // n3 dataStore
     // This error condition is commented out because there is a need for dinamic name insertion.
     // if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
-    if(!imageUrlValue) console.log("WARNING: imageURL param is missing...")
+    if (!imageUrlValue) console.log("WARNING: imageURL param is missing...");
 
     return fetch(imageUrlValue)
-    .then(response => response.blob()) // n4 response e.g
-    .then(blob => convertBlobIntoDataUrlAndSet(collection, dataKey, blob, store))
-    .catch(console.log.bind(console))
-}
+        .then((response) => response.blob()) // n4 response e.g
+        .then((blob) =>
+            convertBlobIntoDataUrlAndSet(collection, dataKey, blob, store)
+        )
+        .catch(console.log.bind(console));
+};
 
 export const readImage = (collection, dataKey) => {
-    const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
+    const store = localforage.createInstance({
+        name: `fiddelize-${collection}`,
+    }); // n2
     store.config({ storeName: collection }); // n3 dataStore
     // if(!gotArrayThisItem(collectionStore[collection], dataKey)) throw new Error("Collection or dataKey not found. You should declare a new collection in lForageStore");
 
-    return store.getItem(dataKey)
-    .then(function(res) { return res })
-    .catch(err => false)
-}
+    return store
+        .getItem(dataKey)
+        .then(function (res) {
+            return res;
+        })
+        .catch((err) => false);
+};
 
 export const deleteImage = (collection, dataKey) => {
-    const store = localforage.createInstance({ name: `fiddelize-${collection}` }) // n2
+    const store = localforage.createInstance({
+        name: `fiddelize-${collection}`,
+    }); // n2
     store.config({ storeName: collection }); // n3 dataStore
 
-    return store.getItem(dataKey)
-    .then(generatedUrl => {
-        if(generatedUrl) {
-            store.removeItem(dataKey)
-            .then(deletedImage => {
-                console.log(`The image ${dataKey.toUpperCase()} was deleted successfully.`)
-                return;
-            }).catch(err => console.log("There was an issue while deleting your image. Details: " + err))
-        } else { console.log("No image found in the IndexedDB to be deleted") }
-    })
-    .catch(err => false)
-}
+    return store
+        .getItem(dataKey)
+        .then((generatedUrl) => {
+            if (generatedUrl) {
+                store
+                    .removeItem(dataKey)
+                    .then((deletedImage) => {
+                        console.log(
+                            `The image ${dataKey.toUpperCase()} was deleted successfully.`
+                        );
+                        return;
+                    })
+                    .catch((err) =>
+                        console.log(
+                            "There was an issue while deleting your image. Details: " +
+                                err
+                        )
+                    );
+            } else {
+                console.log("No image found in the IndexedDB to be deleted");
+            }
+        })
+        .catch((err) => false);
+};
 
-
-const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => { // n1
+const convertBlobIntoDataUrlAndSet = (collection, keyToSet, blob, store) => {
+    // n1
     let mySrc;
 
     const reader = new FileReader();
     reader.readAsDataURL(blob);
-    return reader.onloadend = function() {
+    return (reader.onloadend = function () {
         mySrc = reader.result;
-        return store.setItem(keyToSet, mySrc)
-    }
-}
+        return store.setItem(keyToSet, mySrc);
+    });
+};
 
 // export default function getImages(key, imageUrl) {
-    // // The same code, but using ES6 Promises.
-    // localforage.iterate(function(value, key, iterationNumber) {
-    //     // Resulting key/value pair -- this callback
-    //     // will be executed for every item in the
-    //     // database.
-    //     console.log([key, value]);
-    // }).then(function() {
-    //     console.log('Iteration has completed');
-    // }).catch(function(err) {
-    //     // This code runs if there were any errors
-    //     console.log(err);
-    // });
+// // The same code, but using ES6 Promises.
+// localforage.iterate(function(value, key, iterationNumber) {
+//     // Resulting key/value pair -- this callback
+//     // will be executed for every item in the
+//     // database.
+//     console.log([key, value]);
+// }).then(function() {
+//     console.log('Iteration has completed');
+// }).catch(function(err) {
+//     // This code runs if there were any errors
+//     console.log(err);
+// });
 
-    // // Exit the iteration early:
-    // localforage.iterate(function(value, key, iterationNumber) {
-    //     if (iterationNumber < 3) {
-    //         console.log([key, value]);
-    //     } else {
-    //         return [key, value];
-    //     }
-    // }).then(function(result) {
-    //     console.log('Iteration has completed, last iterated pair:');
-    //     console.log(result);
-    // }).catch(function(err) {
-    //     // This code runs if there were any errors
-    //     console.log(err);
-    // });
+// // Exit the iteration early:
+// localforage.iterate(function(value, key, iterationNumber) {
+//     if (iterationNumber < 3) {
+//         console.log([key, value]);
+//     } else {
+//         return [key, value];
+//     }
+// }).then(function(result) {
+//     console.log('Iteration has completed, last iterated pair:');
+//     console.log(result);
+// }).catch(function(err) {
+//     // This code runs if there were any errors
+//     console.log(err);
+// });
 // }
 
 /* COMMENTS

@@ -1,10 +1,9 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import getRemainder from '../../utils/numbers/getRemainder';
-import Tooltip from '../../components/tooltips/Tooltip';
-import lStorage, { tooltip1 } from '../../utils/storage/lStorage';
-import { convertDotToComma } from '../../utils/numbers/convertDotComma';
-import { useStoreDispatch } from 'easy-peasy';
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import getRemainder from "../../utils/numbers/getRemainder";
+import Tooltip from "../../components/tooltips/Tooltip";
+import lStorage, { tooltip1 } from "../../utils/storage/lStorage";
+import { convertDotToComma } from "../../utils/numbers/convertDotComma";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import { setRun } from '../../redux/actions/globalActions';
@@ -13,7 +12,7 @@ ProgressMsg.propTypes = {
     currScore: PropTypes.number,
     maxScore: PropTypes.number,
     playBeep: PropTypes.func,
-}
+};
 
 const options = tooltip1;
 const attentionBtnChecked = lStorage("getItem", options);
@@ -25,40 +24,44 @@ export default function ProgressMsg({
     playBeep,
     colorBack,
     colorS,
-    selectTxtStyle, }) {
+    selectTxtStyle,
+}) {
     const eachMilestone = maxScore / 5;
     const currMilestone = getRemainder("tens", currScore, eachMilestone);
     const milestoneLeft = convertDotToComma(eachMilestone - currMilestone);
-    const dispatch = useStoreDispatch();
 
     const maxLevel = Math.floor(maxScore / eachMilestone);
     let nextLevel = Math.floor(currScore / eachMilestone) + 1;
 
     const styles = {
         flagIcon: {
-            fontSize: '35px',
-            transform: 'rotate(18deg)',
-            padding: '0 5px',
-            color: selectTxtStyle(colorBack, {needDarkBool: true}) ? "var(--mainDark)" : "var(--mainWhite)",
+            fontSize: "35px",
+            transform: "rotate(18deg)",
+            padding: "0 5px",
+            color: selectTxtStyle(colorBack, { needDarkBool: true })
+                ? "var(--mainDark)"
+                : "var(--mainWhite)",
         },
         confettiIcon: {
-            fontSize: '20px',
-            fontWeight: 'normal',
-        }
-    }
+            fontSize: "20px",
+            fontWeight: "normal",
+        },
+    };
 
-    if(nextLevel > maxLevel) {
+    if (nextLevel > maxLevel) {
         nextLevel = maxLevel;
     }
 
     const showFlagWithGoals = () => (
-        <span onClick={() => {
-            lStorage("setItem", options);
-            playBeep();
-        }}>
+        <span
+            onClick={() => {
+                lStorage("setItem", options);
+                playBeep();
+            }}
+        >
             <Tooltip
                 needArrow
-                needAttentionWaves={attentionBtnChecked ? false : true }
+                needAttentionWaves={attentionBtnChecked ? false : true}
                 text={`► Desafio atual:<br />Alcançar <strong>${maxScore} Pontos<strong/><br /><br />► 5 níveis (ícones):<br />${eachMilestone} pontos cada`}
                 element={
                     <i>
@@ -76,21 +79,37 @@ export default function ProgressMsg({
 
     const showMsg = () => (
         <div className="text-center">
-            {!currScore
-            ? null
-            : (
+            {!currScore ? null : (
                 <Fragment>
-                    {currScore >= maxScore
-                    ? (
-                        <span className={`${selectTxtStyle(colorBack, {bold: true})} ml-2`}>
-                            Você venceu o desafio! <i style={styles.confettiIcon}>🎉</i>
+                    {currScore >= maxScore ? (
+                        <span
+                            className={`${selectTxtStyle(colorBack, {
+                                bold: true,
+                            })} ml-2`}
+                        >
+                            {/* eslint-disable-next-line */}
+                            Você venceu o desafio!{" "}
+                            <i style={styles.confettiIcon}>🎉</i>
                         </span>
-                    )  : (
-                        <span className={`${selectTxtStyle(colorBack, {bold: true})} ml-2`}>
-                            {nextLevel === 5
-                            ? <span className="text-left">Opa! Falta mais <strong>{milestoneLeft} pontos</strong> para você conseguir o último ícone e ganhar um prêmio.</span>
-                            : <span><strong>+ {milestoneLeft} pontos</strong> para nível {nextLevel}.</span>
-                            }
+                    ) : (
+                        <span
+                            className={`${selectTxtStyle(colorBack, {
+                                bold: true,
+                            })} ml-2`}
+                        >
+                            {nextLevel === 5 ? (
+                                <span className="text-left">
+                                    Opa! Falta mais{" "}
+                                    <strong>{milestoneLeft} pontos</strong> para
+                                    você conseguir o último ícone e ganhar um
+                                    prêmio.
+                                </span>
+                            ) : (
+                                <span>
+                                    <strong>+ {milestoneLeft} pontos</strong>{" "}
+                                    para nível {nextLevel}.
+                                </span>
+                            )}
                         </span>
                     )}
                 </Fragment>
@@ -101,7 +120,9 @@ export default function ProgressMsg({
     return (
         <div className="mt-3 text-normal text-white text-center">
             <span
-                className={`${selectTxtStyle(colorBack, {bold: true})} text-subtitle d-block mb-3`}
+                className={`${selectTxtStyle(colorBack, {
+                    bold: true,
+                })} text-subtitle d-block mb-3`}
             >
                 Desafio n.º {currChall}
             </span>
@@ -114,4 +135,4 @@ export default function ProgressMsg({
 }
 
 /* ARCHIVES
-*/
+ */

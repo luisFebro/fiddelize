@@ -3,7 +3,7 @@
 export const milestoneIcons = [
     {
         id: 0,
-        ptBr: 'estrela',
+        ptBr: "estrela",
         icon: "star", // n1
         fontSize: "60px",
         premium: false,
@@ -11,7 +11,7 @@ export const milestoneIcons = [
     },
     {
         id: 1,
-        ptBr: 'coração',
+        ptBr: "coração",
         icon: "heart",
         premium: false,
         appPreview: true,
@@ -19,7 +19,7 @@ export const milestoneIcons = [
     },
     {
         id: 2,
-        ptBr: 'círculo',
+        ptBr: "círculo",
         icon: "circle",
         premium: false,
         appPreview: true,
@@ -27,7 +27,7 @@ export const milestoneIcons = [
     },
     {
         id: 3,
-        ptBr: 'diamante',
+        ptBr: "diamante",
         icon: "gem",
         premium: false,
         appPreview: true,
@@ -35,49 +35,49 @@ export const milestoneIcons = [
     },
     {
         id: 4,
-        ptBr: 'sol',
+        ptBr: "sol",
         icon: "sun",
         premium: false,
         fontSize: "",
     },
     {
         id: 5,
-        ptBr: 'saduba',
+        ptBr: "saduba",
         icon: "hamburger",
         premium: false,
         fontSize: "",
     },
     {
         id: 6,
-        ptBr: 'tesoura',
+        ptBr: "tesoura",
         icon: "cut",
         premium: false,
         fontSize: "",
     },
     {
         id: 7,
-        ptBr: 'sorvete',
+        ptBr: "sorvete",
         icon: "ice-cream",
         premium: false,
         fontSize: "",
     },
     {
         id: 8,
-        ptBr: 'pet',
+        ptBr: "pet",
         icon: "paw",
         premium: false,
         fontSize: "",
     },
     {
         id: 9,
-        ptBr: 'bebida',
-        icon: 'cocktail',
+        ptBr: "bebida",
+        icon: "cocktail",
         premium: false,
         fontSize: "",
     },
     {
         id: 10,
-        ptBr: 'música',
+        ptBr: "música",
         icon: "music",
         premium: false,
         fontSize: "",
@@ -152,7 +152,7 @@ export const milestoneIcons = [
         id: 20,
         ptBr: "fogo",
         icon: "fire",
-        fontSize: "60px",
+        // fontSize: "60px",
         premium: false,
         fontSize: "",
     },
@@ -183,11 +183,11 @@ export const milestoneIcons = [
         icon: "cart-plus",
         premium: false,
         fontSize: "",
-    }
+    },
 ];
 
 const iconNamesOnly = [];
-for(let item of milestoneIcons) {
+for (let item of milestoneIcons) {
     iconNamesOnly.push(item.icon);
 }
 

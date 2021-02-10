@@ -17,7 +17,7 @@ function BizTeamPassword({ history }) {
             const isAuth = await getVar("success", store.user);
             if (isAuth) history.push("/t/app/nucleo-equipe");
         })();
-    }, []);
+    }, [history]);
 
     const handleLogout = () => {
         (async () => {

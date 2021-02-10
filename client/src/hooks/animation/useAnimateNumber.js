@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
-import animateNumber, { getAnimationDuration } from '../../utils/numbers/animateNumber';
+import { useEffect } from "react";
+import animateNumber, {
+    getAnimationDuration,
+} from "../../utils/numbers/animateNumber";
 
 export default function useAnimateNumber(elemRef, targetNumber, options = {}) {
     let { trigger, callback } = options;
@@ -15,11 +17,13 @@ export default function useAnimateNumber(elemRef, targetNumber, options = {}) {
                 getAnimationDuration(targetNumber),
                 callback
             );
-        }
+        };
 
-        if(cancel) return;
+        if (cancel) return;
         trigger && runAnimation();
 
-        return () => { cancel = true }
-    }, [trigger, elemRef, targetNumber])
+        return () => {
+            cancel = true;
+        };
+    }, [trigger, elemRef, targetNumber, callback]);
 }

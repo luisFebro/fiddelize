@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 // import extractStrData from "../../../../utils/string/extractStrData";
 // import useCount from '../../../../hooks/useCount';
 import {
-    textStyle,
+    // textStyle,
     ShowTitle,
     ShowIllustration,
     ShowBrief,

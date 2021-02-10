@@ -13,7 +13,7 @@ export default function CarouselCard({
     setOpenModal,
     size,
 }) {
-    const [flkty, setFlkty] = useState(null);
+    const [, setFlkty] = useState(null);
 
     useEffect(() => {
         const carouselElem2 = document.querySelector(".main-carousel");

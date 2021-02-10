@@ -146,6 +146,7 @@ export default function BriefAndValue({
                 amountPerInstallment,
             }));
         }
+        // eslint-disable-next-line
     }, [selectedInsta]);
 
     useEffect(() => {

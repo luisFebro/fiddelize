@@ -17,9 +17,9 @@ const loadConfetti = async (command) => {
 export default function useAnimateConfetti(options = {}) {
     const { trigger, showMoreComps } = options;
 
-    const [runSound, setRunSound] = useState(false);
+    const [, setRunSound] = useState(false);
 
-    // useAutoPlay("win-challenge--audio", { trigger: runSound, delay: 2500 })
+    // useAutoPlay("win-challenge--audio", { trigger: , delay: 2500 })
 
     useEffect(() => {
         let cancel;

@@ -27,7 +27,7 @@ export default function PrivateRouteClientAdm({
     ...rest
 }) {
     const { runName } = useRunComp();
-    const [goHome, setGoHome] = useState(checkPath(runName));
+    const [goHome] = useState(checkPath(runName));
     let { isAuthUser } = useAuthUser();
     let { roleWhichDownloaded } = useAppSystem();
     // const dispatch = useStoreDispatch();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ButtonFab, {
     faStyle,
 } from "../../../../../../../components/buttons/material-ui/ButtonFab";
@@ -7,8 +7,8 @@ import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ToggleBtn({ cardId, onClick }) {
-    const [panelId, setPanelId] = useState("");
-    const [togglePanel, setTogglePanel] = useState(false);
+    // const [panelId, setPanelId] = useState("");
+    // const [togglePanel, setTogglePanel] = useState(false);
 
     const dispatch = useStoreDispatch();
 

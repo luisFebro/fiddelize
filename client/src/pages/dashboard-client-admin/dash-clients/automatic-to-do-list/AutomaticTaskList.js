@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState } from "react";
 import Title from "../../../../components/Title";
 import { useProfile, useClientAdmin } from "../../../../hooks/useRoleData";
 import { useRunComp } from "../../../../hooks/useRunComp";
@@ -11,7 +11,7 @@ import TaskList from "./list/TaskList";
 import DoneTasksBtn from "./done-tasks-modal/DoneTasksBtn";
 
 export default function AutomaticTaskList() {
-    const [skip, setSkip] = useState(0);
+    const [skip] = useState(0);
     const { _id: userId } = useProfile();
     const { rewardDeadline } = useClientAdmin();
     const { runName } = useRunComp();
@@ -27,7 +27,7 @@ export default function AutomaticTaskList() {
     const {
         list = [],
         isPlural,
-        listTotal,
+        // listTotal,
         loading,
         isOffline,
         error,

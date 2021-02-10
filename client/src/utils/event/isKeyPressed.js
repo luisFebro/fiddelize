@@ -2,12 +2,12 @@
 // keyName needs to be a string with the name of the keyboard like Enter, d, g, etc...
 export default function isKeyPressed(event, keyName) {
     const keyTypedNow = event.key;
-    const charNumericCode = event.which || event.keyCode; // e.g 13 for Enter.
+    // const charNumericCode = event.which || event.keyCode; // e.g 13 for Enter.
     //console.log(`The code for ${keyTypedNow.toUpperCase()} is ${charNumericCode}`);
 
-    if(!keyName) throw new Error("Oops! It is required a keyName");
+    if (!keyName) throw new Error("Oops! It is required a keyName");
 
-    if(keyTypedNow === keyName){
+    if (keyTypedNow === keyName) {
         event.preventDefault(); // prevent submit a query string like with Enter key
         return true;
     }
@@ -19,9 +19,9 @@ export default function isKeyPressed(event, keyName) {
 // usage example: onKeyPress={e => handleEnterPress(e, checkAccess)}
 const handleEnterPress = (e, next) => {
     const isEnter = isKeyPressed(e, "Enter");
-    if(isEnter) {
+    if (isEnter) {
         next();
     }
-}
+};
 
 export { handleEnterPress };

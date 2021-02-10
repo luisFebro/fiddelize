@@ -47,7 +47,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "analyse": "node scripts/analyse.js",
-        "prettier:format": "prettier --write 'src/**/*.{js,jsx,css,scss}'",
+        "prettier:format": "prettier --write",
         "lint:fix": "eslint --fix"
     },
     "eslintConfig": {
@@ -70,6 +70,7 @@
         "eslint": "^6.6.0",
         "eslint-config-airbnb": "^18.2.1",
         "eslint-config-prettier": "^7.2.0",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
         "eslint-plugin-react": "^7.22.0",
         "eslint-plugin-unused-imports": "^1.1.0",
         "fs": "0.0.1-security",
@@ -88,7 +89,7 @@
     },
     "lint-staged": {
         "src/**/*.{js,jsx,css}": [
-            "npm run lint:fix"
+            "npm run prettier:format"
         ]
     }
 }

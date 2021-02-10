@@ -1,7 +1,6 @@
 import React from "react";
 import AnimaIconsSelect from "../../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
 import FilterStatus from "../../../../../../components/selects/anima-icons-select/FilterStatus";
-import PremiumButton from "../../../../../../components/buttons/premium/PremiumButton";
 // custom icons
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import EventIcon from "@material-ui/icons/Event";

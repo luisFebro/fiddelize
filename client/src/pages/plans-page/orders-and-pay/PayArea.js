@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
@@ -6,7 +6,6 @@ import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
-import convertToReal from "../../../utils/numbers/convertToReal";
 import { addDays } from "../../../utils/dates/dateFns";
 import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 import { readUser } from "../../../redux/actions/userActions";
@@ -57,7 +56,7 @@ export default function PayArea({
     } = data;
 
     const { bizCodeName, bizName } = useClientAdmin();
-    const { _id, phone, name: userName, email: senderEmail } = useProfile();
+    const { _id, phone, email: senderEmail } = useProfile();
 
     const startedPagseguro = useStartPagseguro();
     const { loading, error, ShowError } = useStartCheckout({
@@ -114,6 +113,7 @@ export default function PayArea({
                 senderBirthday: thisSenderBirthday,
             }));
         });
+        // eslint-disable-next-line
     }, [plan, servicesTotal, phone, servicesAmount, alreadyReadUser]);
 
     servicesAmount =

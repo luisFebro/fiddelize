@@ -2,7 +2,6 @@ import React, { useEffect, useState, Fragment, useRef } from "react";
 import getAPI, {
     recoverPassword,
     changePassword,
-    getUniqueId,
 } from "../../utils/promises/getAPI";
 import isThisApp from "../../utils/window/isThisApp";
 import { useStoreDispatch } from "easy-peasy";
@@ -91,6 +90,7 @@ export default function NewPassword({ location, match, history }) {
         };
 
         !changeMode && run();
+        // eslint-disable-next-line
     }, [changeMode]);
 
     const showTitle = () => (
@@ -239,6 +239,7 @@ export default function NewPassword({ location, match, history }) {
                 }
             })();
         }
+        // eslint-disable-next-line
     }, [currPswd, display, storedPswd, newPswd, newPswd2]);
 
     const showPendingContent = () => (

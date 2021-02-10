@@ -1,11 +1,10 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
@@ -77,7 +76,7 @@ const handleTransactionStatus = ({ panel, daysLeft }) => {
     const isPaid =
         transactionStatus === "pago" || transactionStatus === "disponível";
     const isPriorCardRenewal = renewal && renewal.priorRef === reference;
-    const isCurrCardRenewal = renewal && renewal.currRef === reference;
+    // const isCurrCardRenewal = renewal && renewal.currRef === reference;
 
     if (!transactionStatus) return "PENDENTE";
     if (isPaid && !isPriorCardRenewal) return "PAGO";
@@ -89,9 +88,9 @@ const handleTransactionStatus = ({ panel, daysLeft }) => {
             return "PENDENTE/RENOVAÇÃO";
         }
 
-        if (isPaid && renewal.isPaid && isCurrCardRenewal) {
-            return "PAGO/RENOVADO";
-        }
+        // if (isPaid && renewal.isPaid && isCurrCardRenewal) {
+        //     return "PAGO/RENOVADO";
+        // }
     }
 
     return transactionStatus && transactionStatus.toUpperCase();
@@ -200,7 +199,7 @@ export default function InvestCard({
     );
 
     const ActionsMap = actions.map((panel, ind) => {
-        const { planDueDate, renewal } = panel.data;
+        const { planDueDate } = panel.data;
         const daysLeft = !planDueDate ? null : getDatesCountdown(planDueDate);
 
         const props = {

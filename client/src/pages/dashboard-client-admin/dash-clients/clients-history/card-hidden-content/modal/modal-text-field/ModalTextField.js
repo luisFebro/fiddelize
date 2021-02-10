@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import { addAutomaticTask } from "../../../../../../../redux/actions/userActions";
-import isMoneyBrValidAndAlert from "../../../../../../../utils/numbers/isMoneyBrValidAndAlert";
-import Button from "@material-ui/core/Button";
 import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
 import Dialog from "@material-ui/core/Dialog";
-import TextField from "@material-ui/core/TextField";
 import InstructionBtn from "../../../../../../../components/buttons/InstructionBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import DialogTitle from '@material-ui/core/DialogTitle';
 // import DialogContentText from '@material-ui/core/DialogContentText';
 import parse from "html-react-parser";
@@ -15,13 +11,9 @@ import PropTypes from "prop-types";
 
 // CUSTOMIZED DATA
 import { modalTextFieldDashboardType } from "../../../../../../../types";
-import {
-    convertCommaToDot,
-    convertDotToComma,
-} from "../../../../../../../utils/numbers/convertDotComma";
+import { convertDotToComma } from "../../../../../../../utils/numbers/convertDotComma";
 import { updateUser } from "../../../../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
-import animateCSS from "../../../../../../../utils/animateCSS";
 import { fluidTextAlign } from "../../../../../../../utils/string/fluidTextAlign";
 import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
 import {
@@ -70,18 +62,19 @@ export default function ModalTextField({
     modalData,
     closeOtherModals,
 }) {
-    const [data, setData] = useState({
-        valueOnField:
-            modalData.userCurrScore && modalData.userCurrScore.toString(),
-        remainValue: "0,0",
-    });
-    const [gotError, setGotError] = useState(false);
+    // const [data] = useState({
+    //     valueOnField:
+    //         modalData.userCurrScore && modalData.userCurrScore.toString(),
+    //     remainValue: "0,0",
+    // });
+    // const { valueOnField } = data;
+
+    // const [gotError, setGotError] = useState(false);
     const [showInstruction, setShowInstruction] = useState(false);
-    const [trigger, setTrigger] = useState(false);
+    const [, setTrigger] = useState(false);
 
     const styles = getStyles();
 
-    const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
     const { rewardList, rewardDeadline } = useClientAdmin();
     const [teamMemberName] = useData(["name"]);
@@ -90,10 +83,10 @@ export default function ModalTextField({
 
     let {
         title,
-        subTitle,
+        // subTitle,
         txtBtn,
         iconBtn,
-        labelTxtField,
+        // labelTxtField,
         userId,
         userCurrScore,
         rewardScore,
@@ -242,6 +235,7 @@ export default function ModalTextField({
     };
 
     const handleSubmit = () => {
+        // not being triggered ??
         setTrigger(true);
         handleDiscount();
     };
@@ -364,7 +358,7 @@ export default function ModalTextField({
     //                 error={gotError ? true : false}
     //                 variant="outlined"
     //                 autoComplete="off"
-    //                 onChange={handleChange(setData, data)}
+    //                 onChange={handleChang, data)}
     //             />
     //         </div>
     //     </form>

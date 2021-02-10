@@ -69,6 +69,8 @@ export default function GoldPlan({ setCurrPlan }) {
             totalInvest: total,
             totalServices: defaultQuantity + totalServ,
         });
+
+        // eslint-disable-next-line
     }, [orders]);
 
     const styles = getStyles();
@@ -79,12 +81,12 @@ export default function GoldPlan({ setCurrPlan }) {
         const {
             order,
             orderGroup,
-            orderGroupPrice = 0,
+            // orderGroupPrice = 0,
             removeOrderGroup,
         } = options;
 
-        const orderPrice = order ? order.price : orderGroupPrice;
-        let newTotal = orders.currPlan.price + orderPrice;
+        // const orderPrice = order ? order.price : orderGroupPrice;
+        // let newTotal = orders.currPlan.price + orderPrice;
 
         // for SMS logics
         const needCurrRemoval = order && order.removeCurr;
@@ -136,6 +138,7 @@ export default function GoldPlan({ setCurrPlan }) {
         });
 
         handleStartInvest(newAmount, newTotal);
+        // eslint-disable-next-line
     }, [period]);
 
     useBackColor("var(--mainWhite)");

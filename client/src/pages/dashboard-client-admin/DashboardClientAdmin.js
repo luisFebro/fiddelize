@@ -1,9 +1,6 @@
 import React, { Fragment } from "react";
-import Title from "../../components/Title";
 import GroupedDashSessions from "./GroupedDashSessions";
 import getDayGreetingBr from "../../utils/getDayGreetingBr";
-import Navbar from "../../components/_layout/navbar";
-import isThisApp from "../../utils/window/isThisApp";
 import "./mainLayout.scss";
 import getFirstName from "../../utils/string/getFirstName";
 import { useProfile } from "../../hooks/useRoleData";

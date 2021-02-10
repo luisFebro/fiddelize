@@ -112,7 +112,8 @@ export default function MessageField({
 
             scrollIntoView("#smsHistoryTotals", config);
         }
-    }, [doneMsg, loading]);
+        // eslint-disable-next-line
+    }, [doneMsg, loading, dispatch]);
 
     const handleSendNow = () => {
         if (!message.length)

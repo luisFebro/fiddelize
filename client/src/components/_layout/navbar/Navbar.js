@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import { Link } from "react-router-dom";
 import RadiusBtn from "../../../components/buttons/RadiusBtn";
 import styled from "styled-components";
@@ -8,19 +7,17 @@ import isThisApp from "../../../utils/window/isThisApp";
 import "./NavbarLayout.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from "../../../hooks/useRoleData";
-import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import useImg, { Img } from "../../../hooks/media/useImg";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 import { getNewAppPage } from "../../../pages/new-app/helpers/handleRedirectPages";
 // import useCount from '../../../hooks/useCount';
 
-const gotToken = localStorage.getItem("token");
 const isApp = isThisApp();
 const isSmall = window.Helper.isSmallScreen();
 
 function Navbar({ history, location }) {
-    const [isSearchOpen, setSearchOpen] = useState(false);
+    // const [isSearchOpen, setSearchOpen] = useState(false);
 
     const [url, setUrl] = useState({
         logoBiz: "",
@@ -42,12 +39,10 @@ function Navbar({ history, location }) {
     const { isAuthUser } = useAuthUser();
     const { selfBizLogoImg, selfThemePColor } = useClientAdmin();
 
-    const dispatch = useStoreDispatch();
-
     // Render
     const locationNow = location.pathname;
     const isClientAdmin = location.search.includes("client-admin=1");
-    const isBizTeam = locationNow.includes("nucleo");
+    // const isBizTeam = locationNow.includes("nucleo");
 
     const isBlackList =
         locationNow.includes("baixe-app") ||
@@ -154,6 +149,7 @@ function Navbar({ history, location }) {
 
     useEffect(() => {
         handleLogoSrc();
+        // eslint-disable-next-line
     }, [needClientLogo]);
 
     const showLogo = () => {
@@ -227,6 +223,7 @@ function Navbar({ history, location }) {
 
     return (
         !isBlackList && (
+            // eslint-disable-next-line
             <NavWrapper
                 className="navbar navbar-expand-sm text-nav-items"
                 style={{
@@ -269,6 +266,7 @@ This is not wokring right... I cant seem to log out when clicked i the btn.
 */
 
 // STYLES
+// eslint-disable-next-line
 const DivWrapper = styled.div`
     position: sticky;
     top: 0;

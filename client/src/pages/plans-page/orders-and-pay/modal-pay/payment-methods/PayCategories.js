@@ -1,6 +1,4 @@
-import React, { useEffect, Fragment } from "react";
-import Spinner from "../../../../../components/loadingIndicators/Spinner";
-import useDelay from "../../../../../hooks/useDelay";
+import React, { Fragment } from "react";
 import CarouselCard from "../../../../../components/carousels/CarouselCard";
 import PayMethodsBtn from "./PayMethodsBtn";
 

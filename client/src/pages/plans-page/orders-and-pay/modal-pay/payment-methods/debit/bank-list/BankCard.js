@@ -10,7 +10,6 @@ export default function BankCard({ data, setMainData }) {
             title="selecionar"
             variant="extended"
             size="small"
-            backgroundColor="var(--default)"
             position="relative"
             backgroundColor={`var(--themeSDark--default)`}
             onClick={() => {

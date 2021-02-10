@@ -34,7 +34,7 @@ function TaskCard(props, ref) {
     const {
         _id: taskId,
         done = false,
-        taskType = "pendingDelivery",
+        // taskType = "pendingDelivery",
         taskTitle = "Entrega de Prêmio",
         content = "cliUserId:123;cliUserName:Ana Rodrigues;prizeDesc:tickets 1;challNum:5;deadline:14/07/20;",
         madeBy = "Febro",

@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import { useStoreState } from "easy-peasy";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./DashSetting.scss";
 import ShowConfigExpansiblePanel from "./expansible-panel/ShowExpansiblePanel";
 import PremiumServicesBtn from "./PremiumServicesBtn";

@@ -3,7 +3,7 @@ import { default as MuSkeleton } from "@material-ui/lab/Skeleton";
 import { makeStyles } from "@material-ui/core/styles";
 import { IS_DEV } from "../../config/clientUrl";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     avatarSkeletonContainer: {
         height: 0,
         overflow: "hidden",
@@ -29,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const getStyles = () => ({
-    root: {
-        textAlign: "center",
-        height: "100%",
-        width: "100%",
-    },
-});
+// const getStyles = () => ({
+//     root: {
+//         textAlign: "center",
+//         height: "100%",
+//         width: "100%",
+//     },
+// });
 
 // LESSON: do not use container-center-col or container-center as a wrapper for Skeleton. Otherwise it will not show up.
 export default function Skeleton({

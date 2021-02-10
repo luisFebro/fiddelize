@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import Title from "../Title";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,7 +11,7 @@ import RadiusBtn from "../../components/buttons/RadiusBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
 // import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
@@ -95,7 +95,7 @@ function ASyncRegisterCliUser({
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    let { role, name, email, gender, birthday, cpf, phone } = data;
+    let { name, email, gender, cpf, phone } = data;
     const cpfValue = autoCpfMaskBr(cpf);
 
     const {
@@ -149,6 +149,7 @@ function ASyncRegisterCliUser({
                 }));
             }, 4000);
         }
+        // eslint-disable-next-line
     }, [
         isReady,
         selfBizLogoImg,
@@ -190,7 +191,7 @@ function ASyncRegisterCliUser({
                 thisBirthCode
             );
         }
-    }, [selectedDate]);
+    }, [selectedDate, data]);
 
     const clearData = () => {
         setData({

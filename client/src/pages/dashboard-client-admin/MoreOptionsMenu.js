@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from "react";
-import { withRouter } from "react-router-dom";
 import {
     useClientAdmin,
     useAppSystem,
@@ -49,7 +48,7 @@ export default function MoreOptionsMenu({ location, history }) {
     const [fullOpen, setFullOpen] = useState(false);
     const { businessId } = useAppSystem();
     const { role, name } = useProfile();
-    const { bizCodeName, bizName, bizPlan } = useClientAdmin();
+    const { bizCodeName, bizName } = useClientAdmin();
 
     const handleFullOpen = (modalName) => {
         setCurrModal(modalName);

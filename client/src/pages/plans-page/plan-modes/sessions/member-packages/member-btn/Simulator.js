@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import MuSlider from "../../../../../../components/sliders/MuSlider";
-import isKeyPressed from "../../../../../../utils/event/isKeyPressed";
-import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../../../../utils/form/use-state/handleChange";
-import getIncreasedPerc from "../../../../../../utils/numbers/getIncreasedPerc";
 import { addDays, formatSlashDMY } from "../../../../../../utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -72,11 +68,11 @@ export default function Simulator({
     });
     // const [increasedPerc, setIncreasedPerc] = useState(null);
     // const [discountDiff, setDiscountDiff] = useState(null);
-    const { newQuantity, expiryDate, usageDays, formattedExpiryDate } = data;
+    const { newQuantity, usageDays, formattedExpiryDate } = data;
 
     const isYearly = period === "yearly";
 
-    const initialPrice = isYearly ? 50 : 25;
+    // const initialPrice = isYearly ? 50 : 25;
 
     useEffect(() => {
         let thisUsageDays = 30;
@@ -90,6 +86,7 @@ export default function Simulator({
             formattedExpiryDate: thisFormattedDate,
             usageDays: thisUsageDays,
         });
+        // eslint-disable-next-line
     }, [period]);
 
     useEffect(() => {
@@ -100,7 +97,7 @@ export default function Simulator({
         }
     }, [newQuantity]);
 
-    let [unit, expires, unitSizeDec, unitSizeInc] = getMembersData(packages);
+    let [unit, unitSizeDec] = getMembersData(packages);
 
     unit = isYearly ? unit * 2 : unit;
 
@@ -114,7 +111,7 @@ export default function Simulator({
     const onePackage = 1;
     const totalUnits = onePackage * packages;
     const totalFinalMoney = totalUnits * unit;
-    const firstPhasePrice = totalUnits * initialPrice;
+    // const firstPhasePrice = totalUnits * initialPrice;
 
     const MAX_UNIT_YEAR = 100;
     const MAX_UNIT_MONTH = 50;
@@ -130,9 +127,9 @@ export default function Simulator({
     });
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
     // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
-    const firstPhasePriceReal = convertToReal(firstPhasePrice, {
-        moneySign: true,
-    });
+    // const firstPhasePriceReal = convertToReal(firstPhasePrice, {
+    //     moneySign: true,
+    // });
 
     useEffect(() => {
         handleData({
@@ -140,6 +137,7 @@ export default function Simulator({
             totalUnits,
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
+        // eslint-disable-next-line
     }, [packages]);
 
     const showMultiPrice = () => (

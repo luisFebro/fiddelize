@@ -47,7 +47,7 @@ export default function BuyRating({
 }) {
     const [scale, setScale] = useState(null);
     const [grade, setGrade] = useState(5);
-    const [finalGrade] = useState(null);
+    // const [finalGrade] = useState(null);
     const [buyReport, setBuyReport] = useState("");
     const [switchEdit, setSwitchEdit] = useState(false);
 
@@ -65,12 +65,14 @@ export default function BuyRating({
                 nps: scale,
             });
         }
+        // eslint-disable-next-line
     }, [buyReport, grade, scale]);
 
     useEffect(() => {
         if (defaultScale) setScale(defaultScale);
         if (defaultBuyReport) setBuyReport(defaultBuyReport);
         if (defaultGrade) setGrade(defaultGrade);
+        // eslint-disable-next-line
     }, [defaultScale, defaultBuyReport]);
 
     const handleGrade = (newGrade) => {

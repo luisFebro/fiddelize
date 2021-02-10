@@ -38,6 +38,7 @@ export default function useElemShowOnScroll(elem, options = {}) {
             const theseOptions = { throttleSpan: tSpan || 300, detectionOnce };
             checkIfElemIsVisible(elem, (res) => setDidShow(res), theseOptions);
         }
+        // eslint-disable-next-line
     }, [withObserver, elem]);
 
     if (!elem && trueOnload) return true;

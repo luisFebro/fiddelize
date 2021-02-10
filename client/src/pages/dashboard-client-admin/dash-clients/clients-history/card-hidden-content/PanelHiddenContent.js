@@ -14,12 +14,6 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
         runArray: state.globalReducer.cases.runArray,
     }));
 
-    const styles = {
-        pointsContainer: {
-            position: "relative",
-        },
-    };
-
     const showInfos = () => {
         const infos = {
             "Última Pontuação": data && data.clientUserData.cashCurrScore,

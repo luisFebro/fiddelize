@@ -1,16 +1,13 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useClientAdmin } from "../../../../hooks/useRoleData";
-import useAPIList, {
-    readTasks,
-    getTrigger,
-} from "../../../../hooks/api/useAPIList";
+import useAPIList, { readTasks } from "../../../../hooks/api/useAPIList";
 import "./_AsyncClientWinnersList.scss";
 import CliWinnersList from "./list/CliWinnersList";
 import useData from "../../../../hooks/useData";
 import Illustration from "../../../../components/Illustration";
 
 export default function AsyncClientWinnersList() {
-    const [skip, setSkip] = useState(0);
+    const [skip] = useState(0);
     const { rewardDeadline } = useClientAdmin();
     const [bizId] = useData(["bizId"]);
 
@@ -25,8 +22,8 @@ export default function AsyncClientWinnersList() {
 
     const {
         list = [],
-        isPlural,
-        listTotal,
+        // isPlural,
+        // listTotal,
         loading,
         isOffline,
         needEmptyIllustra,

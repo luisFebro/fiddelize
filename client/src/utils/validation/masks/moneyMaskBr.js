@@ -1,5 +1,6 @@
 // resource: https://pt.stackoverflow.com/questions/166405/mascara-em-campo-input
 
+// eslint-disable-next-line
 String.prototype.reverse = function () {
     return this.split("").reverse().join("");
 };
@@ -11,7 +12,7 @@ export default function moneyMaskBr(targetStr) {
 
     var mask = "##.###.###,##".reverse();
     for (var x = 0, y = 0; x < mask.length && y < value.length; ) {
-        if (mask.charAt(x) != "#") {
+        if (mask.charAt(x) !== "#") {
             result += mask.charAt(x);
             x++;
         } else {

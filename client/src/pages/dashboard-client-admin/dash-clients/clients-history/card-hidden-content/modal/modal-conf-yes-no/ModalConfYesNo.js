@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
 import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
 import Dialog from "@material-ui/core/Dialog";

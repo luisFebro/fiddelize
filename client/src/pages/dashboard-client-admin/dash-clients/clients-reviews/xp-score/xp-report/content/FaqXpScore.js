@@ -62,7 +62,7 @@ const textQ3 = (
 );
 
 export default function FaqXpScore() {
-    const { plan: currPlan, usageTimeEnd, credits } = usePro({
+    const { plan: currPlan, usageTimeEnd } = usePro({
         service: "Novvos Clientes",
     });
 

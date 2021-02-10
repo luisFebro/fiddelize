@@ -10,7 +10,7 @@ export default function convertToReal(number, options = {}) {
     const {
         moneySign = false,
         needFraction = false,
-        toDefault = false, // transform back to american format (later update)
+        // toDefault = false, // transform back to american format (later update)
         comma = false,
     } = options;
 

@@ -60,6 +60,7 @@ export default function OrdersAndPay({
         if (!loadPeriod) period && setVar({ planPeriod_clientAdmin: period });
         if (!loadMoney)
             orderTotal && setVar({ totalMoney_clientAdmin: orderTotal });
+        // eslint-disable-next-line
     }, [loading, loadPlan, loadPeriod, loadMoney]);
 
     const { data: daysLeftData, loading: loadDaysLeft } = useGetVar(
@@ -82,6 +83,7 @@ export default function OrdersAndPay({
                     ...dataSer,
                     renewalReference: refData ? refData : undefined,
                 });
+        // eslint-disable-next-line
     }, [loadDaysLeft, loadRef]);
 
     const showTitle = () => (

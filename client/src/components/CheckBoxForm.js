@@ -30,6 +30,7 @@ export default function CheckBoxForm({
         const thisIsChecked = needId ? getStatusWithId(isChecked) : isChecked;
         setIsBoxChecked && setIsBoxChecked(thisIsChecked, embededData);
         callback && callback();
+        // eslint-disable-next-line
     }, [isChecked]);
 
     const handleChange = (event) => {

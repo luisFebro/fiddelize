@@ -7,7 +7,6 @@ import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../hooks/useRunComp";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import isObjEmpty from "../../utils/objects/isObjEmpty";
-import { ShowLoadingComp } from "./Comps";
 import { chooseHeader } from "../../utils/server/getHeaders";
 import { useToken } from "../../hooks/useRoleData";
 import { useOfflineData } from "../../hooks/storage/useOfflineListData";
@@ -176,6 +175,7 @@ export default function useAPI({
             cancel();
             clearTimeout(stopRequest);
         };
+        // eslint-disable-next-line
     }, [trigger, onlyOnce]);
 
     const gotData = Boolean(data && data.length);

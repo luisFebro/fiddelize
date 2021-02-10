@@ -42,7 +42,7 @@ export default function SuccessOp({
         } else {
             setMainTitle(title);
         }
-    }, [readyForwarding, title]);
+    }, [readyForwarding, title, isNewMember]);
 
     const styles = getStyles();
 

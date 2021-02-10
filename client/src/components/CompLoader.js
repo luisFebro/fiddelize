@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Skeleton from "@material-ui/lab/Skeleton";
 import Spinner from "./loadingIndicators/Spinner";
 import PropTypes from "prop-types";
 
@@ -39,14 +38,14 @@ export default function CompLoader({
         let unmounted;
 
         if (hide && !unmounted) {
-            const runThis = setTimeout(() => setStatus(false), timeout);
+            runThis = setTimeout(() => setStatus(false), timeout);
         }
 
         return () => {
             clearTimeout(runThis);
             unmounted = true;
         };
-    }, [hide]);
+    }, [hide, timeout]);
 
     return (
         <div

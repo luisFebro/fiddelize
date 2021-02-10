@@ -52,6 +52,7 @@ export default function ClientAdminText({
                     {showLogo()}
                     <p className="text-title">
                         O App da {bizName && bizName.cap()} ficou pronto!
+                        {/* eslint-disable-next-line */}
                         <i
                             className="pl-3"
                             style={{ ...styles.margin, fontSize: "2rem" }}

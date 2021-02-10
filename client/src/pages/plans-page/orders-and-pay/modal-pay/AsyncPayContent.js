@@ -21,7 +21,7 @@ export default function AsyncPayContent({ modalData }) {
         renewalCurrDays: null,
         renewalReady: false,
     });
-    const { newRenewalDaysLeft, renewalCurrDays, renewalReady } = renewalData;
+    const { newRenewalDaysLeft, renewalCurrDays } = renewalData;
 
     useEffect(() => {
         handleRenewalDays({

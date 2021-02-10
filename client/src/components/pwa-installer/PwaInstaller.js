@@ -11,170 +11,176 @@ import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 const isApp = isThisApp();
 
 PwaInstaller.propTypes = {
-	title: PropTypes.string,
-	icon: PropTypes.string,
-	run: PropTypes.bool,
-	setIsInstalled: PropTypes.func,
-	setData: PropTypes.func,
-	alwaysOn: PropTypes.bool,
+    title: PropTypes.string,
+    icon: PropTypes.string,
+    run: PropTypes.bool,
+    setIsInstalled: PropTypes.func,
+    setData: PropTypes.func,
+    alwaysOn: PropTypes.bool,
 };
 
 function closeWindow() {
-	window.close();
-	return false; // only desktop // preventing the browser to attempt to go to that URL (which it obviously isn't).
+    window.close();
+    return false; // only desktop // preventing the browser to attempt to go to that URL (which it obviously isn't).
 }
 
 const getStyles = () => ({
-	icon: {
-		animationDelay: "3s",
-	},
-	closeBtn: {
-		animationDelay: "5s",
-		animationIterationCount: 2,
-		zIndex: 2100,
-	},
+    icon: {
+        animationDelay: "3s",
+    },
+    closeBtn: {
+        animationDelay: "5s",
+        animationIterationCount: 2,
+        zIndex: 2100,
+    },
 });
 
 let deferredPrompt = null;
 const displayBannerOnDev = false;
 export default function PwaInstaller({
-	title,
-	icon,
-	run = true,
-	setData,
-	alwaysOn = false,
+    title,
+    icon,
+    run = true,
+    setData,
+    alwaysOn = false,
 }) {
-	// A2HS = App to HomeScreen
-	const [bannerVisible, setBannerVisible] = useState(alwaysOn || false);
-	useAnimateElem(".pwa-installer--text", {
-		animaIn: "fadeInUp",
-		speed: "slow",
-	});
+    // A2HS = App to HomeScreen
+    const [bannerVisible, setBannerVisible] = useState(alwaysOn || false);
+    useAnimateElem(".pwa-installer--text", {
+        animaIn: "fadeInUp",
+        speed: "slow",
+    });
 
-	const styles = getStyles();
+    const styles = getStyles();
 
-	const shouldRender =
+    const shouldRender =
         displayBannerOnDev || alwaysOn || (run && bannerVisible && !isApp);
 
-	useEffect(() => {
-		if (bannerVisible) {
-			setData &&
+    useEffect(() => {
+        if (bannerVisible) {
+            setData &&
                 setData((prev) => ({
-                	...prev,
-                	downloadAvailable: true,
+                    ...prev,
+                    downloadAvailable: true,
                 }));
-		}
-	}, [bannerVisible]);
+        }
+        // eslint-disable-next-line
+    }, [bannerVisible]);
 
-	const dispatch = useStoreDispatch();
+    const dispatch = useStoreDispatch();
 
-	useEffect(() => {
-		// This event requires the page to reload in order to set correctly...
-		window.addEventListener("beforeinstallprompt", (e) => {
-			// n1
-			// Prevent Chrome 67 and earlier from automatically showing the prompt
-			e.preventDefault();
-			// Stash the event so it can be triggered later.
-			deferredPrompt = e;
-			setBannerVisible(true);
+    useEffect(() => {
+        // This event requires the page to reload in order to set correctly...
+        window.addEventListener("beforeinstallprompt", (e) => {
+            // n1
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            setBannerVisible(true);
 
-			setData((prev) => ({
-				...prev,
-				beforeinstallprompt: `e:${  JSON.stringify(e)}`,
-			}));
-		});
-	}, []);
+            setData((prev) => ({
+                ...prev,
+                beforeinstallprompt: `e:${JSON.stringify(e)}`,
+            }));
+        });
+        // React Hook useEffect has a missing dependency: 'setData'. Either include it or remove the dependency array. If 'setData' changes too often, find the parent component that defines it and wrap that definition in useCallback
+        // eslint-disable-next-line
+    }, []);
 
-	const handlePwaInstall = () => {
-		if (deferredPrompt) {
-			// Show the prompt
-			setBannerVisible(false);
-			deferredPrompt.prompt();
-			// Wait for the user to respond to the prompts
-			deferredPrompt.userChoice.then((choiceResult) => {
-				if (choiceResult.outcome === "accepted") {
-					showSnackbar(
-						dispatch,
-						"Instalando seu App agora...",
-						"warning",
-						11000
-					);
-					setTimeout(() => {
-						showSnackbar(
-							dispatch,
-							"Instalado com sucesso! Você pode fechar essa janela e acessar o app na sua tela inicial",
-							"success",
-							8000
-						);
-						setTimeout(() => closeWindow(), 7000);
-						const timeoutDuration = 15000;
-						setTimeout(
-							() =>
-								(window.location.href = "/acesso/verificacao"),
-							timeoutDuration
-						);
-					}, 10990);
-				} else {
-					showSnackbar(
-						dispatch,
-						"A instalação do app foi cancelada.",
-						"warning"
-					);
-				}
-				deferredPrompt = null;
-			});
-		}
-	};
+    const handlePwaInstall = () => {
+        if (deferredPrompt) {
+            // Show the prompt
+            setBannerVisible(false);
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompts
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === "accepted") {
+                    showSnackbar(
+                        dispatch,
+                        "Instalando seu App agora...",
+                        "warning",
+                        11000
+                    );
+                    setTimeout(() => {
+                        showSnackbar(
+                            dispatch,
+                            "Instalado com sucesso! Você pode fechar essa janela e acessar o app na sua tela inicial",
+                            "success",
+                            8000
+                        );
+                        setTimeout(() => closeWindow(), 7000);
+                        const timeoutDuration = 15000;
+                        setTimeout(
+                            () =>
+                                (window.location.href = "/acesso/verificacao"),
+                            timeoutDuration
+                        );
+                    }, 10990);
+                } else {
+                    showSnackbar(
+                        dispatch,
+                        "A instalação do app foi cancelada.",
+                        "warning"
+                    );
+                }
+                deferredPrompt = null;
+            });
+        }
+    };
 
-	// RENDER
-	const showTitle = () => (
-		<div className="add-to-home-text text-normal">
-			<a className="text-white">{parse(title) || "Add to Home Screen"}</a>
-		</div>
-	);
+    // RENDER
+    // eslint-disable-next-line
+    const showTitle = () => (
+        <div className="add-to-home-text text-normal">
+            {/* eslint-disable-next-line */}
+            <a className="text-white">{parse(title) || "Add to Home Screen"}</a>
+        </div>
+    );
 
-	// const handleCloseBannerBtnClick = () => {
-	// 	setBannerVisible(false);
-	// };
+    // const handleCloseBannerBtnClick = () => {
+    // 	setBannerVisible(false);
+    // };
 
-	const showActionBtn = () => (
-		<div
-			style={styles.closeBtn}
-			className="add-to-home-close-btn animated wobble"
-			// onClick={handleCloseBannerBtnClick}
-		>
-			<ButtonMulti
-				title="baixar"
-				onClick={handlePwaInstall}
-				color="var(--mainWhite)"
-				backgroundColor="var(--themeSDark)"
-				backColorOnHover="var(--themeSDark)"
-			/>
-		</div>
-	);
+    const showActionBtn = () => (
+        <div
+            style={styles.closeBtn}
+            className="add-to-home-close-btn animated wobble"
+            // onClick={handleCloseBannerBtnClick}
+        >
+            <ButtonMulti
+                title="baixar"
+                onClick={handlePwaInstall}
+                color="var(--mainWhite)"
+                backgroundColor="var(--themeSDark)"
+                backColorOnHover="var(--themeSDark)"
+            />
+        </div>
+    );
 
-	return (
-		<div>
-			{shouldRender ? (
-				<div className="pwa-installer--text add-to-home-banner">
-					<div
-						onClick={handlePwaInstall}
-						className="add-to-home-content"
-					>
-						{icon ? (
-							<img
-								style={styles.icon}
-								className="add-to-home-icon animated slideInLeft"
-								src={icon}
-							/>
-						) : null}
-						{showTitle()}
-					</div>
-					{showActionBtn()}
-				</div>
-			) : null}
-		</div>
-	);
+    return (
+        <div>
+            {shouldRender ? (
+                <div className="pwa-installer--text add-to-home-banner">
+                    <div
+                        onClick={handlePwaInstall}
+                        className="add-to-home-content"
+                    >
+                        {icon ? (
+                            <img
+                                style={styles.icon}
+                                className="add-to-home-icon animated slideInLeft"
+                                src={icon}
+                                alt="icone baixar"
+                            />
+                        ) : null}
+                        {showTitle()}
+                    </div>
+                    {showActionBtn()}
+                </div>
+            ) : null}
+        </div>
+    );
 }
 
 /* COMMENTS

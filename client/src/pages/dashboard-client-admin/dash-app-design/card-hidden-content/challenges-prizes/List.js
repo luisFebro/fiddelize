@@ -46,6 +46,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
         } else {
             setHideAddBtn(false);
         }
+        // eslint-disable-next-line
     }, [limitFree, switchAddBtn]);
 
     useEffect(() => {
@@ -54,6 +55,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
             setIsConstantMode(false);
             updateThisUser(false, { addThisId: true });
         }
+        // eslint-disable-next-line
     }, [needAdd]);
 
     const updateThisUser = (needMsg = true, opts = {}) => {
@@ -120,10 +122,12 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
         if (needUpdateData) {
             updateThisUser();
         }
+        // eslint-disable-next-line
     }, [needUpdateData]);
 
     useEffect(() => {
         isConstantMode ? setMode("Constante") : setMode("Progressivo");
+        // eslint-disable-next-line
     }, [isConstantMode]);
 
     const txtStyle = "text-normal text-left font-weight-bold";

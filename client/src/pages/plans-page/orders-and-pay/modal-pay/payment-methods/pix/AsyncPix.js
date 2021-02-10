@@ -20,13 +20,13 @@ export default function AsyncPix({ modalData }) {
     useSendEmail({ type: "payAlert", payload: emailPayload });
 
     const {
-        responseData,
-        processing,
-        handleDataMethod,
-        itemDescription,
-        itemAmount,
+        // responseData,
+        // processing,
+        // handleDataMethod,
+        // itemDescription,
+        // itemAmount,
+        // PagSeguro,
         adminName,
-        PagSeguro,
     } = modalData;
 
     // useEffect(() => {

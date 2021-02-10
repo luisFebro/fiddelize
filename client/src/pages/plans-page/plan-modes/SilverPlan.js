@@ -68,6 +68,8 @@ export default function SilverPlan({ setCurrPlan }) {
             totalInvest: total,
             totalServices: defaultQuantity + totalServ,
         });
+        // React Hook useEffect has a missing dependency: 'data'. Either include it or remove the dependency array. You can also do a functional update 'setData(d => ...)' if you only need 'data' in the 'setData'
+        // eslint-disable-next-line
     }, [orders]);
 
     const styles = getStyles();
@@ -78,12 +80,12 @@ export default function SilverPlan({ setCurrPlan }) {
         const {
             order,
             orderGroup,
-            orderGroupPrice = 0,
+            // orderGroupPrice = 0,
             removeOrderGroup,
         } = options;
 
-        const orderPrice = order ? order.price : orderGroupPrice;
-        let newTotal = orders.currPlan.price + orderPrice;
+        // const orderPrice = order ? order.price : orderGroupPrice;
+        // let newTotal = orders.currPlan.price + orderPrice;
 
         // for SMS logics
         const needCurrRemoval = order && order.removeCurr;
@@ -135,6 +137,7 @@ export default function SilverPlan({ setCurrPlan }) {
         });
 
         handleStartInvest(newAmount, newTotal);
+        // eslint-disable-next-line
     }, [period]);
 
     useBackColor("var(--mainWhite)");

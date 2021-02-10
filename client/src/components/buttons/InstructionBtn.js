@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import ButtonFab from './material-ui/ButtonFab';
+import React, { useState } from "react";
+import ButtonFab from "./material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Tooltip from '../tooltips/Tooltip';
-import CloseButton from './CloseButton';
-import PropTypes from 'prop-types';
-import ModalFullContent from '../../components/modals/ModalFullContent';
-import pickArticle from '../../pages/articles/pickArticle';
+import Tooltip from "../tooltips/Tooltip";
+import CloseButton from "./CloseButton";
+import PropTypes from "prop-types";
+import ModalFullContent from "../../components/modals/ModalFullContent";
+import pickArticle from "../../pages/articles/pickArticle";
 
 InstructionBtn.propTypes = {
     mode: PropTypes.oneOf(["none", "tooltip", "modal"]),
-}
+};
 
 // a question instruction button for some functionalities explanations...
 export default function InstructionBtn({
@@ -19,35 +19,46 @@ export default function InstructionBtn({
     blurEffect = false,
     article = "SomeArticle_art1",
 }) {
-    const [closeBtn, setShowCloseBtn] = useState(false);
     const [needOpen, setNeedOpen] = useState(false);
 
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
         setFullOpen(true);
-    }
+    };
 
     const handlePickedComp = () => {
         const PickedComp = pickArticle({ article });
-        return(<PickedComp />)
-    }
+        return <PickedComp />;
+    };
 
     const PickedArticle = handlePickedComp();
 
-    const DefaultIcon =
-    <FontAwesomeIcon icon="question-circle" className="d-flex align-items-center" style={{fontSize: 30}} />
-
-    const TooltipBtn = // LESSON: Do not fucking pass a React Element without a html wrapper such as DIV cuz it is gives ref errors...
-    <div className="animated zoomIn delay-2s disable-blur">
-        <ButtonFab
-            position="relative"
-            color="var(--themePLight)"
-            backgroundColor="var(--mainWhite)"
-            iconFontAwesome={<FontAwesomeIcon icon="info-circle" className="d-flex align-items-center" style={{fontSize: 30}} />}
-            needIconShadow={false}
+    const DefaultIcon = (
+        <FontAwesomeIcon
+            icon="question-circle"
+            className="d-flex align-items-center"
+            style={{ fontSize: 30 }}
         />
-    </div>
+    );
+
+    const TooltipBtn = ( // LESSON: Do not fucking pass a React Element without a html wrapper such as DIV cuz it is gives ref errors...
+        <div className="animated zoomIn delay-2s disable-blur">
+            <ButtonFab
+                position="relative"
+                color="var(--themePLight)"
+                backgroundColor="var(--mainWhite)"
+                iconFontAwesome={
+                    <FontAwesomeIcon
+                        icon="info-circle"
+                        className="d-flex align-items-center"
+                        style={{ fontSize: 30 }}
+                    />
+                }
+                needIconShadow={false}
+            />
+        </div>
+    );
 
     return (
         <section>
@@ -77,7 +88,7 @@ export default function InstructionBtn({
                         arrowBottom="4px !important"
                         whiteSpace
                         needArrow
-                        needOpen={needOpen ? true : false }
+                        needOpen={needOpen ? true : false}
                         color="var(--mainWhite)"
                         backgroundColor="var(--mainDark)"
                         width={325}
@@ -86,9 +97,11 @@ export default function InstructionBtn({
                     {false && (
                         <CloseButton
                             delay={0}
-                            color='var(--mainDark)'
+                            color="var(--mainDark)"
                             position="absolute"
-                            onClick={() => { setNeedOpen(false); }}
+                            onClick={() => {
+                                setNeedOpen(false);
+                            }}
                             top={-20}
                             right={-25}
                             size="1.4em"

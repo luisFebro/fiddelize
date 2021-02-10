@@ -1,5 +1,4 @@
 import React from "react";
-import { ShowTitle, ShowPicture } from "../DefaultProComps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const getStyles = () => ({

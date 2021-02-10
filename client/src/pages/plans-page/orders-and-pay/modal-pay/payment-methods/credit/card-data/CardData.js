@@ -88,6 +88,7 @@ export default function CardData({
                 oneClickInvest: true,
             });
         }
+        // eslint-disable-next-line
     }, [isOneClickInvest]);
 
     const maskCardNumber = cardNumberMask(cardNumber);

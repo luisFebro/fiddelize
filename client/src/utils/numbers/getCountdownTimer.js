@@ -49,7 +49,7 @@ The textContent property sets or returns the text content of the specified node,
 If you set the textContent property, any child nodes are removed and replaced by a single Text node containing the specified string.
 */
 
-const res = getCountdownTimer({ dur: 16 });
+// const res = getCountdownTimer({ dur: 16 });
 
 /* DOM EXEMPLE
 window.onload = function () {

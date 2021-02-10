@@ -1,5 +1,5 @@
 import axios from "axios";
-import { readUser, readCentralAdmin } from "./userActions";
+import { readCentralAdmin } from "./userActions";
 import { setLoadingProgress, setRun } from "./globalActions";
 import { showSnackbar } from "./snackbarActions";
 import { getHeaderJson } from "../../utils/server/getHeaders";
@@ -12,7 +12,6 @@ import { setVar, store } from "../../hooks/storage/useVar";
 const isApp = isThisApp();
 
 // Check token & load user
-let alreadyPass = false;
 export const loadUser = () => (dispatch, getState) => (history) => {
     console.log("==USER LOADING==");
     axios

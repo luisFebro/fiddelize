@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import sendSMS from './sendSMS';
+import { useEffect } from "react";
+import sendSMS from "./sendSMS";
 // import { useAppSystem } from '../hooks/useRoleData';
 // Check why sometimes this is being trigger many times...
 export default function useSendSMS({
@@ -13,7 +13,7 @@ export default function useSendSMS({
     dispatch,
 }) {
     useEffect(() => {
-        if(trigger) {
+        if (trigger) {
             sendSMS({
                 serviceType,
                 userId,
@@ -23,9 +23,10 @@ export default function useSendSMS({
                 isAutomatic,
                 dispatch,
                 trigger,
-            })
+            });
         }
-    }, [trigger])
+        // eslint-disable-next-line
+    }, [trigger]);
 
     // return done;
 }

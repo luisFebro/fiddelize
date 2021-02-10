@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import MuSlider from "../../../../../components/sliders/MuSlider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./_StarsBuyExperience.css";

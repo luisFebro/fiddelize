@@ -50,6 +50,7 @@ export default function ShowCards({ setOpenComp }) {
 
     useEffect(() => {
         handleLogoSrc();
+        // eslint-disable-next-line
     }, [needClientLogo]);
 
     const logoContent = () => {
@@ -150,7 +151,7 @@ export default function ShowCards({ setOpenComp }) {
                 </div>
             </section>
         );
-    }, []);
+    }, [selfThemeBackColor, selfThemePColor, selfThemeSColor]);
 
     const iconContent = React.useCallback(() => {
         const icon = selfMilestoneIcon || "star";
@@ -163,7 +164,7 @@ export default function ShowCards({ setOpenComp }) {
                 <FontAwesomeIcon icon={icon} className="icon--selected-one" />
             </section>
         );
-    }, []);
+    }, [selfMilestoneIcon]);
 
     return (
         <section

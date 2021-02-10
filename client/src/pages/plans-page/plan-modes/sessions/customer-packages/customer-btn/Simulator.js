@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import MuSlider from "../../../../../../components/sliders/MuSlider";
-import isKeyPressed from "../../../../../../utils/event/isKeyPressed";
-import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../../../../utils/form/use-state/handleChange";
 import getIncreasedPerc from "../../../../../../utils/numbers/getIncreasedPerc";
 import { addDays, formatSlashDMY } from "../../../../../../utils/dates/dateFns";
 
@@ -92,15 +89,15 @@ export default function Simulator({
     animaDisabled,
 }) {
     const [packages, setPackages] = useState(1);
-    const [discountDiff, setDiscountDiff] = useState(null);
-    const [increasedPerc, setIncreasedPerc] = useState(null);
+    const [, setDiscountDiff] = useState(null);
+    const [, setIncreasedPerc] = useState(null);
     const [data, setData] = useState({
         newQuantity: null,
         expiryDate: "",
         usageDays: 30,
         formattedExpiryDate: "",
     });
-    const { newQuantity, expiryDate, usageDays, formattedExpiryDate } = data;
+    const { newQuantity, usageDays, formattedExpiryDate } = data;
 
     const isYearly = period === "yearly";
 
@@ -118,7 +115,7 @@ export default function Simulator({
             formattedExpiryDate: thisFormattedDate,
             usageDays: thisUsageDays,
         });
-    }, [period]);
+    }, [period, data]);
 
     useEffect(() => {
         if (newQuantity && !Number.isNaN(newQuantity)) {
@@ -128,10 +125,10 @@ export default function Simulator({
         }
     }, [newQuantity]);
 
-    const [unit, expires, unitSizeDec, unitSizeInc] = getCustomersData(
-        packages,
-        { initialPrice, period }
-    );
+    const [unit, unitSizeDec, unitSizeInc] = getCustomersData(packages, {
+        initialPrice,
+        period,
+    });
 
     const handlePackages = (newValue) => {
         setPackages(newValue);
@@ -151,10 +148,10 @@ export default function Simulator({
         needFraction: true,
     });
     const totalFinalMoneyReal = convertToReal(totalFinalMoney);
-    const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
-    const firstPhasePriceReal = convertToReal(firstPhasePrice, {
-        moneySign: true,
-    });
+    // const discountDiffReal = convertToReal(discountDiff, { moneySign: true });
+    // const firstPhasePriceReal = convertToReal(firstPhasePrice, {
+    //     moneySign: true,
+    // });
 
     useEffect(() => {
         handleData({
@@ -162,6 +159,7 @@ export default function Simulator({
             totalCustomers,
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
+        // eslint-disable-next-line
     }, [packages]);
 
     useEffect(() => {
@@ -173,7 +171,7 @@ export default function Simulator({
         } else {
             setDiscountDiff(null);
         }
-    }, [unit, firstPhasePrice]);
+    }, [unit, firstPhasePrice, totalFinalMoney]);
 
     const showMultiPrice = () => (
         <section className="mt-3 text-center">
@@ -207,24 +205,24 @@ export default function Simulator({
         </section>
     );
 
-    const showDiffDiscount = () =>
-        Boolean(discountDiff) && (
-            <section
-                className={`my-5 ${animaDisabled ? "" : "zoomIn animated"}`}
-            >
-                <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
-                    Automatizador de Desconto
-                </h2>
-                <p className="text-normal text-purple text-left">
-                    Você economiza{" "}
-                    <span className="text-subtitle font-weight-bold">
-                        {discountDiffReal} ({Math.ceil(increasedPerc)}%)
-                    </span>{" "}
-                    comparado com o preço total de {firstPhasePriceReal} - R$
-                    1,00 por cliente (preço de 1 pacote);
-                </p>
-            </section>
-        );
+    // const showDiffDiscount = () =>
+    //     Boolean(discountDiff) && (
+    //         <section
+    //             className={`my-5 ${animaDisabled ? "" : "zoomIn animated"}`}
+    //         >
+    //             <h2 className="text-purple text-center text-subtitle font-weight-bold m-0">
+    //                 Automatizador de Desconto
+    //             </h2>
+    //             <p className="text-normal text-purple text-left">
+    //                 Você economiza{" "}
+    //                 <span className="text-subtitle font-weight-bold">
+    //                     {discountDiffReal} ({Math.ceil(increasedPerc)}%)
+    //                 </span>{" "}
+    //                 comparado com o preço total de {firstPhasePriceReal} - R$
+    //                 1,00 por cliente (preço de 1 pacote);
+    //             </p>
+    //         </section>
+    //     );
 
     const handlePlanName = () => {
         if (currPlan === "ouro") return currPlan.cap();

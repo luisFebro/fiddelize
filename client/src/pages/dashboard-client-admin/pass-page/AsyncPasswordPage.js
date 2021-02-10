@@ -1,12 +1,10 @@
 import React, { useState, Fragment } from "react";
 import getQueryByName from "../../../utils/string/getQueryByName";
 import { CLIENT_URL } from "../../../config/clientUrl";
-import { withRouter } from "react-router-dom";
 import Illustration from "../../../components/Illustration";
 import ScrollArrow from "../../../keyframes/built/scroll-arrow/ScrollArrow";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 import ShowPasswordForm from "./ShowPasswordForm";
-import AccessPassCreation from "./AccessPassCreation";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 export const AsyncAccessPassCreation = Load({
     loader: () =>

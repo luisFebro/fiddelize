@@ -6,7 +6,7 @@ const convertBrToDollar = (str) => {
         str = str.toString();
     }
 
-    const formatted = str.replace(/\./gi, "").replace(/\,/gi, ".");
+    const formatted = str.replace(/\./gi, "").replace(/,/gi, ".");
 
     return Number(formatted);
 };
@@ -27,9 +27,8 @@ function convertDotToComma(stringNumber, options = {}) {
             : parseFloat(stringNumber).toString();
         res = converted.replace(".", ",");
         return res;
-    } else {
-        return stringNumber;
     }
+    return stringNumber;
 }
 
 function convertCommaToDot(stringNumber) {

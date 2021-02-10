@@ -7,7 +7,7 @@ import moneyMaskBr from "../../utils/validation/masks/moneyMaskBr";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 
-const isSmall = window.Helper.isSmallScreen();
+// const isSmall = window.Helper.isSmallScreen();
 
 MoneyKeyboard.propTypes = {
     setDisplay: PropTypes.func,

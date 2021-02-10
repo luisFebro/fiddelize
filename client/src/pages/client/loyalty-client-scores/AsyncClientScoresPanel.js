@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useStoreDispatch } from "easy-peasy";
 import {
     readUser,
     readPurchaseHistory,
@@ -10,13 +10,9 @@ import animateNumber, {
     getAnimationDuration,
 } from "../../../utils/numbers/animateNumber";
 import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
-import isInteger from "../../../utils/numbers/isInteger";
-import getMonthNowBr from "../../../utils/dates/getMonthNowBr";
-import { CLIENT_URL } from "../../../config/clientUrl";
 import isThisApp from "../../../utils/window/isThisApp";
 import { logout } from "../../../redux/actions/authActions";
-import { Link, withRouter } from "react-router-dom";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import { withRouter } from "react-router-dom";
 import {
     useProfile,
     useClientUser,
@@ -27,7 +23,7 @@ import getFirstName from "../../../utils/string/getFirstName";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../hooks/media/usePlayAudio";
-import useCount from "../../../hooks/useCount";
+// import useCount from "../../../hooks/useCount";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
 import getAPI, {
     setLastScoreAsDone,
@@ -77,7 +73,7 @@ function AsyncClientScoresPanel({ history, location }) {
         currScore: currentScore,
         lastScore: lastCurrScore,
         totalGeneralScore,
-        totalActiveScore,
+        // totalActiveScore,
         totalPurchasePrize = 0,
     } = useClientUser();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
@@ -85,9 +81,9 @@ function AsyncClientScoresPanel({ history, location }) {
     let {
         maxScore,
         selfMilestoneIcon,
-        bizName,
+        // bizName,
         rewardList,
-        bizCodeName,
+        // bizCodeName,
         selfThemeBackColor: colorBack,
         selfThemePColor: colorP,
         selfThemeSColor: colorS,
@@ -119,7 +115,7 @@ function AsyncClientScoresPanel({ history, location }) {
         if (!paidValueLoading && !paidValue) {
             history.push(isApp ? "/mobile-app" : "/acesso/verificacao");
         }
-    }, [paidValueLoading, paidValue]);
+    }, [paidValueLoading, paidValue, history]);
 
     useEffect(() => {
         (async () => {
@@ -150,7 +146,7 @@ function AsyncClientScoresPanel({ history, location }) {
                 ),
             }));
         })();
-    }, []);
+    }, [cliUserId, dispatch]);
     // END USE HOOKS
 
     // MAIN VARIABLES
@@ -262,6 +258,7 @@ function AsyncClientScoresPanel({ history, location }) {
                 }
             })();
         }
+        // eslint-disable-next-line
     }, [finishedWork, cashCurrScore]);
 
     const showHeader = () => (

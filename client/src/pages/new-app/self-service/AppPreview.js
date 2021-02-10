@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import { useRunComp } from "../../../hooks/useRunComp";
 import MobileScreenLoading from "../../../components/loadingIndicators/MobileScreenLoading";
@@ -53,6 +53,7 @@ function AppPreview({
         <div className="app-preview-iframe">
             <iframe
                 id="appIframe"
+                title="modelo app interativo"
                 src={iframeUrl()}
                 allowFullScreen={false}
                 width={320}

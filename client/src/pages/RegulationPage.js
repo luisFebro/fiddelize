@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import ButtonMulti, {
     faStyle,
 } from "../components/buttons/material-ui/ButtonMulti";
 import { Link } from "react-router-dom";
-import LoadingThreeDots from "../components/loadingIndicators/LoadingThreeDots";
 import Paper from "@material-ui/core/Paper";
-import { readAdmin } from "../redux/actions/adminActions";
 import isThisApp from "../utils/window/isThisApp";
 import replaceVariablesInTxt from "../utils/string/replaceVariablesInTxt";
 import DateWithIcon from "../components/date-time/DateWithIcon";
-import getQueryByName from "../utils/string/getQueryByName";
-import { useClientAdmin, useClientUser } from "../hooks/useRoleData";
+import { useClientAdmin } from "../hooks/useRoleData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import selectTxtStyle, { currTxtColor } from "../utils/biz/selectTxtStyle";
+import { currTxtColor } from "../utils/biz/selectTxtStyle";
 import pickCurrChallData from "../utils/biz/pickCurrChallData";
 import defineCurrChallenge from "../utils/biz/defineCurrChallenge";
 import regulationText, {
@@ -26,7 +23,6 @@ const isApp = isThisApp();
 
 export default function RegulationPage({ location }) {
     const needAppForCliAdmin = location.search.includes("client-admin=1");
-    const bizCodeName = getQueryByName("bizCodeName", location.search);
 
     useScrollUp();
     const [cliFirstName] = useData(["firstName"]);

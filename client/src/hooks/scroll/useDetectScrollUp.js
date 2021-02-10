@@ -1,5 +1,5 @@
 // detect when user is scrolling up to trigger some action
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import detectScrollDirection from "../../utils/window/detectScrollDirection";
 
 export default function useDetectScrollUp() {

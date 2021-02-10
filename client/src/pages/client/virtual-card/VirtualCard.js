@@ -137,13 +137,14 @@ function VirtualCard({ history }) {
         }
 
         if (cardsData && cardsData.tempScore) {
-            setData({
+            setData((data) => ({
                 ...data,
                 loading: false,
                 score: cardsData.tempScore,
                 createdAt: new Date(cardsData.createdAt),
-            });
+            }));
         }
+        // eslint-disable-next-line
     }, [cardsData]);
 
     const handlePathAndData = () => {

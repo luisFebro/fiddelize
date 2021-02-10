@@ -13,6 +13,7 @@ export default function useElemDetection({
     isOffline = false,
     isFiltering = false,
 }) {
+    // eslint Lesson: React Hook useCallback does nothing when called with only one argument. Did you forget to pass an array of dependencies?
     return useCallback(
         (elem) => {
             if (isFiltering) return;
@@ -35,6 +36,7 @@ export default function useElemDetection({
 
             if (elem) currObserver.observe(elem);
         },
+        // eslint-disable-next-line
         [loading, hasMore]
     );
 }

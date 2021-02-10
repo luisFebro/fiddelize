@@ -1,5 +1,4 @@
 import React from "react";
-import pluralizeBr from "../../../../../utils/string/pluralizeBr";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import ProCreditsBadge from "../../../../../components/pro/ProCreditsBadge";

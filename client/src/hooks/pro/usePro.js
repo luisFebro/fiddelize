@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSystem, useClientAdmin } from "../useRoleData";
 import useAPI, { getProData } from "../api/useAPI";
 import { getVar, store } from "../storage/useVar";
@@ -59,6 +59,7 @@ export default function usePro(options = {}) {
         if (backData) {
             setAllData(backData, setData, bizPlan);
         }
+        // eslint-disable-next-line
     }, [backData, loading]);
 
     if (service) {

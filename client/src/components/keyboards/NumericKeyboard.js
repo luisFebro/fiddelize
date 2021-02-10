@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
-import animateCSS from "../../utils/animateCSS";
+// import animateCSS from "../../utils/animateCSS";
 
-const isSmall = window.Helper.isSmallScreen();
+// const isSmall = window.Helper.isSmallScreen();
 
 NumericKeyboard.propTypes = {
     setDisplay: PropTypes.func,
@@ -21,7 +21,6 @@ export default function NumericKeyboard({
 }) {
     usePlayAudio("/sounds/confirmation-keypad.wav", ".keypadBeepConfirm");
 
-    const refAnima = React.useRef(null);
     const getValue = (value) => {
         if (display.length >= 6) return setDisplay(display);
 

@@ -1,8 +1,5 @@
 import React, { useState, Fragment } from "react";
 import Fab from "@material-ui/core/Fab";
-import clsx from "clsx";
-import PropTypes from "prop-types";
-import HowToRegIcon from "@material-ui/icons/HowToReg";
 import { buttonFabType } from "../../../types";
 
 ButtonFab.propTypes = buttonFabType;

@@ -8,6 +8,7 @@ export default function FeatureTabs({ tabsData = [] }) {
     const showTabsLinks = () => {
         const getTab = ({ id = 1, name, Icon = null }) => (
             <li className="nav-item" key={id}>
+                {/* eslint-disable-next-line */}
                 <a
                     className={`nav-link ${currTab === name ? "active" : ""}`}
                     id={`nav-tab-${id}`}

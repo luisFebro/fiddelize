@@ -27,7 +27,7 @@ export default function OrdersTableContent({
 
     useEffect(() => {
         if (needGenerateList) {
-            const { newList, thisTotalServ } = getOrderTableList(orders, {
+            const { newList } = getOrderTableList(orders, {
                 period,
                 plan,
             });
@@ -35,6 +35,7 @@ export default function OrdersTableContent({
         } else {
             setList(listData);
         }
+        // eslint-disable-next-line
     }, [listData, needGenerateList]);
 
     const notes = (

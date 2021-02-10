@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import ButtonMulti from "../../../../components/buttons/material-ui/ButtonMulti";
 import { Link } from "react-router-dom";
 import { setRun } from "../../../../hooks/useRunComp";
@@ -24,9 +24,7 @@ export const ShowIllustration = ({
     mainImg,
     bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png",
 }) => {
-    const { isSquared, width, height, newImg: thisBizLogo } = removeImgFormat(
-        bizLogo
-    );
+    const { isSquared, newImg: thisBizLogo } = removeImgFormat(bizLogo);
 
     return (
         <div className="container-center position-relative my-5">

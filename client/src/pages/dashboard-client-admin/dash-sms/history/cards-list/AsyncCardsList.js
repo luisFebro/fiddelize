@@ -2,11 +2,9 @@ import React, { Fragment, useState, useEffect } from "react";
 import SmsCard from "./card/accordion/SmsCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 // import SearchFilter from "../../../../../components/search/SearchFilter";
-import SearchResult from "../../../../../components/search/SearchResult";
+// import SearchResult from "../../../../../components/search/SearchResult";
 import { calendar } from "../../../../../utils/dates/dateFns";
-import parse from "html-react-parser";
-import { convertDotToComma } from "../../../../../utils/numbers/convertDotComma";
-import { useAppSystem, useProfile } from "../../../../../hooks/useRoleData";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import { useRunComp } from "../../../../../hooks/useRunComp";
@@ -73,7 +71,6 @@ export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
     const [forceCancel, setForceCancel] = useState(false); // solve real time update after calling off a scheduled date.
     const { businessId } = useAppSystem();
-    const { name } = useProfile();
 
     const styles = getStyles();
 

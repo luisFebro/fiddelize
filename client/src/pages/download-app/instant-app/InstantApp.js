@@ -8,7 +8,6 @@ import {
     store,
 } from "../../../hooks/storage/useVar";
 import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../utils/form/use-state/handleChange";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { useStoreDispatch } from "easy-peasy";

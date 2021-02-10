@@ -1,8 +1,8 @@
 import React, { useEffect, Fragment, useState } from "react";
 import Chartist from "chartist";
 import {
-    getBadZoneList,
-    getOkZoneList,
+    // getBadZoneList,
+    // getOkZoneList,
     getTextStatus,
     convertValueToDeg,
 } from "./helpers";
@@ -160,7 +160,9 @@ function useKeyframeAnimateNeedle({ finalValue }) {
     useEffect(() => {
         var style = document.createElement("style");
         style.type = "text/css";
+
         var keyFrames =
+            // eslint-disable-next-line
             "\
         @-webkit-keyframes move-needle {\
             0% {\
@@ -175,5 +177,5 @@ function useKeyframeAnimateNeedle({ finalValue }) {
 
         style.innerHTML = keyFrames.replace(/A_DYNAMIC_VALUE/g, finalValue);
         document.getElementsByTagName("head")[0].appendChild(style);
-    }, []);
+    }, [finalValue]);
 }

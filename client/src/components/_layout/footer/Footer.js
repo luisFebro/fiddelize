@@ -50,6 +50,7 @@ const Footer = ({ location }) => {
                     <li className="media">
                         <i className="fas fa-square"></i>
                         <div className="media-body">
+                            {/* eslint-disable-next-line */}
                             <a
                                 onClick={() => {
                                     setFullOpen(true);

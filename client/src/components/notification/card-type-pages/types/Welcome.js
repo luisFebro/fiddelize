@@ -1,5 +1,4 @@
 import React from "react";
-import ButtonMulti from "../../../../components/buttons/material-ui/ButtonMulti";
 import useCount from "../../../../hooks/useCount";
 import {
     textStyle,
@@ -49,6 +48,7 @@ function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
                     <strong>Você receberá novidades como:</strong>
                 </h2>
                 <p>
+                    {/* eslint-disable-next-line */}
                     <strong>✔️ Quando um cliente concluir um desafio.</strong> A
                     assistente da Fiddelize vai te notificar assim que um
                     cliente alcançar sua meta em pontos. Você nem precisa ficar

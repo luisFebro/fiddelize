@@ -2,7 +2,6 @@ import React, { useState, useEffect, Fragment } from "react";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { useStoreDispatch, useStoreState } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
-import parse from "html-react-parser";
 import { readAllDbFromModels } from "../../../../../redux/actions/adminActions";
 import Img from "../../../../../components/Img";
 import useData from "../../../../../hooks/useData";
@@ -87,6 +86,7 @@ export default function BackUpToExcel() {
         if (adminId !== "..." && selectedButton !== "SELECIONE BOTÃO") {
             handleSubmit(adminId);
         }
+        // eslint-disable-next-line
     }, [selectedButton, adminId]);
 
     const showExcelDownloadBtn = () => (

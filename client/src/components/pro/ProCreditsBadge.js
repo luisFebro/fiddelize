@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import convertToReal from "../../utils/numbers/convertToReal";
 import usePro from "../../hooks/pro/usePro";
 import ProCreditsBtn from "./pro-credits-btn/ProCreditsBtn";

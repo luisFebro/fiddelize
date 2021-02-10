@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import getAPI, { sendEmail } from "../../utils/promises/getAPI";
 
 export default function useSendEmail({

@@ -1,16 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import LocalMallIcon from "@material-ui/icons/LocalMall";
-import { muStyle } from "../../../../../components/buttons/material-ui/ButtonFab";
-import { faStyle } from "../../../../../components/buttons/material-ui/ButtonMulti";
 import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
 // import { default as DiscountModalBtn } from "./modal/modal-text-field/ModalBtn";
 import { useStoreState } from "easy-peasy";
 import ClientProfile from "./modal-content-pages/ClientProfile";
-import defineCurrChallenge from "../../../../../utils/biz/defineCurrChallenge";
-import getFirstName from "../../../../../utils/string/getFirstName";
 import PurchaseHistoryBtn from "../../../../mobile-app/history-purchase-btn/PurchaseHistoryBtn";
 
 const isSmall = window.Helper.isSmallScreen();

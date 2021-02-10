@@ -17,8 +17,10 @@ export default function AsyncBlocked({ lockMin, textColor, setLock }) {
 
         return () =>
             timerRef &&
+            // The ref value 'timerRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'timerRef.current' to a variable inside the effect, and use that variable in the cleanup function
+            // eslint-disable-next-line
             getCountdownTimer({ stop: true, elem: timerRef.current });
-    }, [timerRef]);
+    }, [timerRef, lockMin]); // LESSON: The ref value 'timerRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'timerRef.current' to a variable inside the effect, and use that variable in the cleanup function
 
     useEffect(() => {
         if (isOver) {
@@ -27,6 +29,7 @@ export default function AsyncBlocked({ lockMin, textColor, setLock }) {
                 isBlocked: false,
             });
         }
+        // eslint-disable-next-line
     }, [isOver]);
 
     return (

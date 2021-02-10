@@ -21,7 +21,7 @@ const variablesStore = (storeName = "global_variables") =>
 // using indexedDB with forage to store especially temporary variables.
 // differently from localstorage which requires reloads to update the newest stored variables,
 // indexedDB reads without the need of reloading...
-let ignoreGetVar;
+// let ignoreGetVar;
 export default function useGetVar(key, options = {}) {
     const { storeName } = options;
 
@@ -40,7 +40,7 @@ export default function useGetVar(key, options = {}) {
             .then((fetchedValue) => {
                 setData(fetchedValue);
                 setLoading(false);
-                ignoreGetVar = true;
+                // ignoreGetVar = true;
             })
             .catch((err) => {
                 console.log(
@@ -48,10 +48,8 @@ export default function useGetVar(key, options = {}) {
                 );
                 setLoading(false);
             });
-        return () => {
-            ignoreGetVar = true;
-        };
-    }, [key]);
+        return () => null;
+    }, [key, storeName]);
 
     return { data, loading };
 }
@@ -145,15 +143,6 @@ export const removeCollection = async (storeName) => {
     });
 };
 
-function getStrVersion(str) {
-    if (!str) return;
-    const underscoreInd = str.indexOf("_");
-    let version = str.slice(underscoreInd + 1);
-    version = Number(version);
-
-    return version;
-}
-
 // handle the variable version to be removed - challenge_1 - always insert _1 to get the version.
 export const removeVersion = ({ key, value }) => {
     if (!key || !value) return;
@@ -165,3 +154,15 @@ export const removeVersion = ({ key, value }) => {
         }
     });
 };
+
+/* ARCHIVES
+// function getStrVersion(str) {
+//     if (!str) return;
+//     const underscoreInd = str.indexOf("_");
+//     let version = str.slice(underscoreInd + 1);
+//     version = Number(version);
+
+//     return version;
+// }
+
+ */

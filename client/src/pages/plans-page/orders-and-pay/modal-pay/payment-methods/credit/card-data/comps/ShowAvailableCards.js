@@ -4,7 +4,7 @@ import usePayMethods from "../../../helpers/usePayMethods";
 export default function ShowAvailableCards({ modalData }) {
     const { itemAmount } = modalData;
 
-    const { payMethod: cardsAvailable, error } = usePayMethods(
+    const { payMethod: cardsAvailable } = usePayMethods(
         "CREDIT_CARD",
         itemAmount
     );

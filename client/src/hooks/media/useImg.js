@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { handleStorage } from "../../utils/storage/lForageStore";
 import { default as Img } from "../../components/Img";
 
@@ -32,6 +32,7 @@ export default function useImg(url, options = {}) {
         return () => {
             unmounted = true;
         };
+        // eslint-disable-next-line
     }, [url, trigger]);
 
     return src; // n1

@@ -1,13 +1,13 @@
 import { encrypt, decrypt } from "./xCipherFront";
 
 async function encryptCreditCard(data = {}) {
-    const {
-        cardHolder,
-        cardNumber,
-        expirationYear,
-        expirationMonth,
-        cvv,
-    } = data;
+    // const {
+    //     cardHolder,
+    //     cardNumber,
+    //     expirationYear,
+    //     expirationMonth,
+    //     cvv,
+    // } = data;
 
     const run = (resolve, reject) => {
         const encryptedObj = encrypt(data, { isObj: true });

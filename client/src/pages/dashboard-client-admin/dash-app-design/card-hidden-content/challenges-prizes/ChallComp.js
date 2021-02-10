@@ -53,6 +53,7 @@ export default function ChallComp({
             setData({ ...data, icon: selectedIcon });
             setSaveChangeBtn(true);
         }
+        // eslint-disable-next-line
     }, [selectedIcon]);
 
     const txtStyle = "text-small text-white text-center m-0";

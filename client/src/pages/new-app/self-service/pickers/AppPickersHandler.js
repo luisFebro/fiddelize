@@ -42,6 +42,7 @@ export default function AppPickersHandler({
             if (doneSSLogo) handleNextStep(1);
             if (doneSSTheming) handleNextStep(2);
         })();
+        // eslint-disable-next-line
     }, []);
 
     const { currNumber, nextTask } = step;

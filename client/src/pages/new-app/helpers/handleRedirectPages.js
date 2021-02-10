@@ -10,6 +10,7 @@ export const useNeedRedirectPage = ({ history, priorPageId }) => {
             const gotPriorPage = await getVar(priorPageId, store.pre_register);
             if (!gotPriorPage) history.push("/");
         })();
+        // eslint-disable-next-line
     }, []);
 };
 

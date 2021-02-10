@@ -80,7 +80,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
     const [trigger, setTrigger] = useState(false);
 
     const uniqueId = getUniqueId();
-    const runName = `UpdateSMSAll ${uniqueId}`;
+    // const runName = `UpdateSMSAll ${uniqueId}`;
 
     const isToday = checkToday(selectedDate);
 
@@ -126,6 +126,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
 
             scrollIntoView("#smsHistoryTotals", config);
         }
+        // eslint-disable-next-line
     }, [doneMsg, loading]);
 
     useEffect(() => {
@@ -137,7 +138,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
             sysDay: getTimezoneDate("day", { newDate: selectedDate }),
             sysHour: getTimezoneDate("hour", { newDate: selectedDate }),
         });
-    }, [selectedDate]);
+    }, [selectedDate, isToday]);
 
     const handleSchedule = () => {
         setTrigger(uniqueId);

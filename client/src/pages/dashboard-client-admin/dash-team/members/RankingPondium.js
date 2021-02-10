@@ -10,7 +10,7 @@ import useAPI, { getMembersPodium } from "../../../../hooks/api/useAPI";
 export default function RankingPondium() {
     const { businessId } = useAppSystem();
 
-    const { data: highestData, gotData, loading } = useAPI({
+    const { data: highestData, gotData } = useAPI({
         url: getMembersPodium(businessId),
         needAuth: false,
         dataName: "membersPodium",

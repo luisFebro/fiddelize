@@ -1,5 +1,5 @@
 import { chooseHeaderAsync } from "../../utils/server/getHeaders";
-import { logout } from "../../redux/actions/authActions";
+// import { logout } from "../../redux/actions/authActions";
 import axios from "axios";
 import { disconnect } from "../../hooks/useAuthUser";
 

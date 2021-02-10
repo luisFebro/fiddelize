@@ -107,7 +107,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                 }
             });
         }
-    }, [userId]);
+    }, [userId, role]);
 
     // PASS FIELD'S HANDLERS
     const showNextField = () => {
@@ -203,6 +203,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                 }, 1000);
             })();
         }
+        // eslint-disable-next-line
     }, [userId, completedFill, passOk]);
 
     const showInterativeLock = () => (

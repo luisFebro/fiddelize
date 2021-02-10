@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import Title from "../Title";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,7 +11,7 @@ import RadiusBtn from "../../components/buttons/RadiusBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
 // import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
@@ -21,7 +21,7 @@ import handleChange from "../../utils/form/use-state/handleChange";
 import lStorage from "../../utils/storage/lStorage";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
-import getDateCode from "../../utils/dates/getDateCode";
+// import getDateCode from "../../utils/dates/getDateCode";
 // import { setRun } from '../../hooks/useRunComp';
 // Material UI
 // import { makeStyles } from '@material-ui/core/styles';
@@ -77,7 +77,7 @@ function Register({
         selfThemeBackColor,
         selfBizLogoImg,
         bizName,
-        bizCodeName,
+        // bizCodeName,
     } = useClientAdmin();
 
     const [data, setData] = useState({
@@ -105,7 +105,7 @@ function Register({
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    let { role, name, email, gender, birthday, cpf, phone } = data;
+    let { name, email, gender, cpf, phone } = data;
     const cpfValue = autoCpfMaskBr(cpf);
 
     const [lastRegisterBizId, bizId, userId, memberJob] = useData([
@@ -133,6 +133,7 @@ function Register({
                 }));
             }, 4000);
         }
+        // eslint-disable-next-line
     }, [isReady, selfBizLogoImg, bizName, lastRegisterBizId, memberJob]);
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
@@ -156,9 +157,9 @@ function Register({
         if (selectedDate) {
             const opts = { needYear: true };
             const thisBirthDate = getDayMonthBr(selectedDate, opts);
-            const { code: thisBirthCode } = getDateCode(thisBirthDate);
+            // const { code: thisBirthCode } = getDateCode(thisBirthDate);
 
-            setData({ ...data, birthday: thisBirthDate });
+            setData((data) => ({ ...data, birthday: thisBirthDate }));
         }
     }, [selectedDate]);
 

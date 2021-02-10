@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 // import IconButton from '@material-ui/core/IconButton';
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import Badge from "@material-ui/core/Badge";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";

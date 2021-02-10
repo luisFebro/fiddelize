@@ -53,6 +53,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
 
             handleCancel(); // remove current orders
         })();
+        // eslint-disable-next-line
     }, [selectedBank]);
 
     return (
@@ -96,7 +97,6 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                                 title="acessar"
                                 variant="extended"
                                 size="large"
-                                backgroundColor="var(--default)"
                                 position="relative"
                                 backgroundColor={`var(--themeSDark--default)`}
                                 onClick={null}

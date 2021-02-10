@@ -1,17 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from "react";
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
-import ButtonMulti from '../../../../../../../components/buttons/material-ui/ButtonMulti';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import parse from 'html-react-parser';
-import PropTypes from 'prop-types';
-import CloseButton from '../../../../../../../components/buttons/CloseButton';
-// CUSTOM DATA
-import { setRun } from '../../../../../../../redux/actions/globalActions';
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import parse from "html-react-parser";
+import PropTypes from "prop-types";
+import CloseButton from "../../../../../../../components/buttons/CloseButton";
 
 const isSmall = window.Helper.isSmallScreen();
 // END CUSTOM DATA
@@ -22,18 +17,12 @@ ModalFullScreen.propTypes = {
     modalData: PropTypes.object,
 };
 
-export default function ModalFullScreen({
-    open,
-    onClose,
-    modalData, }) {
-    const dispatch = useStoreDispatch();
+export default function ModalFullScreen({ open, onClose, modalData }) {
     const { title, subTitle, componentContent } = modalData;
 
     const showTitle = () => (
         <DialogTitle id="form-dialog-title">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
+            <p className="text-subtitle text-purple text-center font-weight-bold">
                 {title && parse(title)}
             </p>
         </DialogTitle>
@@ -41,8 +30,8 @@ export default function ModalFullScreen({
 
     const showSubTitle = () => (
         <Fragment>
-            {subTitle && typeof subTitle !== "string" || typeof subTitle !== "object"
-            ? (
+            {subTitle &&
+            (typeof subTitle !== "string" || typeof subTitle !== "object") ? (
                 <div className="text-left ml-3 text-purple text-subtitle">
                     {subTitle}
                 </div>
@@ -59,7 +48,12 @@ export default function ModalFullScreen({
 
     return (
         <Dialog
-            PaperProps={{ style: {backgroundColor: 'var(--mainWhite)', maxWidth: '450px'}}}
+            PaperProps={{
+                style: {
+                    backgroundColor: "var(--mainWhite)",
+                    maxWidth: "450px",
+                },
+            }}
             maxWidth="md"
             fullWidth
             style={{ zIndex: 1500 }}
@@ -70,9 +64,7 @@ export default function ModalFullScreen({
         >
             {showTitle()}
             {showSubTitle()}
-            <DialogContent>
-                {componentContent}
-            </DialogContent>
+            <DialogContent>{componentContent}</DialogContent>
             <CloseButton
                 onClick={onClose}
                 size="40px"

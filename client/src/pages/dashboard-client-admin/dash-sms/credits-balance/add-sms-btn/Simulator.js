@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import MuSlider from "../../../../../components/sliders/MuSlider";
-import isKeyPressed from "../../../../../utils/event/isKeyPressed";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 import getIncreasedPerc from "../../../../../utils/numbers/getIncreasedPerc";
@@ -69,7 +68,7 @@ export default function Simulator({ handleData }) {
         }
     }, [newQuantity]);
 
-    const [unit, expires, unitSizeDec, unitSizeInc] = getSMSData(packages);
+    const [unit, unitSizeDec, unitSizeInc] = getSMSData(packages);
 
     const handlePackages = (newValue) => {
         setPackages(newValue);
@@ -100,6 +99,7 @@ export default function Simulator({ handleData }) {
             totalSMS,
             inv: parseInt(totalFinalMoney.toFixed(2)),
         });
+        // eslint-disable-next-line
     }, [packages]);
 
     useEffect(() => {
@@ -111,7 +111,7 @@ export default function Simulator({ handleData }) {
         } else {
             setDiscountDiff(null);
         }
-    }, [unit, firstPhasePrice]);
+    }, [unit, firstPhasePrice, totalFinalMoney]);
 
     const showMultiPrice = () => (
         <section className="mt-3 text-center">

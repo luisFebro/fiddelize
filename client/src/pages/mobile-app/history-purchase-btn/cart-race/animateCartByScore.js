@@ -1,13 +1,17 @@
-import { getNewRemainder } from '../../../../utils/numbers/getRemainder';
-import getFirstName from '../../../../utils/string/getFirstName';
-import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
+import { getNewRemainder } from "../../../../utils/numbers/getRemainder";
+import getFirstName from "../../../../utils/string/getFirstName";
+import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 
-export default function animateCartByScore(currUserScore, rewardScore, options) {
+export default function animateCartByScore(
+    currUserScore,
+    rewardScore,
+    options
+) {
     const {
         dots,
         flag,
         cart,
-        challengeMsg,
+        // challengeMsg,
         currChallenge,
         userName,
         selfThemeSColor,
@@ -15,7 +19,7 @@ export default function animateCartByScore(currUserScore, rewardScore, options) 
     } = options;
 
     let indScore;
-    if(!currUserScore) {
+    if (!currUserScore) {
         indScore = -1;
     }
 
@@ -30,49 +34,75 @@ export default function animateCartByScore(currUserScore, rewardScore, options) 
     const toLevel4 = level4 - 0.05;
     const toLevel5 = level5 - 0.05;
 
-    if(currUserScore >= level1 && currUserScore <= toLevel2) { indScore = 0 } // L
-    else if(currUserScore >= level2 && currUserScore <= toLevel3) { indScore = 1 }
-    else if(currUserScore >= level3 && currUserScore <= toLevel4) { indScore = 2 }
-    else if(currUserScore >= level4 && currUserScore <= toLevel5) { indScore = 3 }
-    else if(currUserScore >= rewardScore) { indScore = 4 }
+    if (currUserScore >= level1 && currUserScore <= toLevel2) {
+        indScore = 0;
+    } // L
+    else if (currUserScore >= level2 && currUserScore <= toLevel3) {
+        indScore = 1;
+    } else if (currUserScore >= level3 && currUserScore <= toLevel4) {
+        indScore = 2;
+    } else if (currUserScore >= level4 && currUserScore <= toLevel5) {
+        indScore = 3;
+    } else if (currUserScore >= rewardScore) {
+        indScore = 4;
+    }
 
     let arrayIconIds = dots.idsArray;
 
     let iconInArray;
     let count = 0;
-    for(iconInArray of arrayIconIds) {
-        if(count++ <= indScore) {
+    for (iconInArray of arrayIconIds) {
+        if (count++ <= indScore) {
             const delayToAnimated = parseInt(`${count + 1}000`); // from 3 secs forwards...
             // DOTS
             let dotIcon = document.querySelector("#" + iconInArray);
-            setTimeout(() => dotIcon.classList.add(`${dots.className}--${selfThemeSColor}`), delayToAnimated);
+            setTimeout(
+                () =>
+                    dotIcon.classList.add(
+                        `${dots.className}--${selfThemeSColor}`
+                    ),
+                delayToAnimated
+            );
         }
     }
 
     // CART
-    if(indScore >= 0) {
+    if (indScore >= 0) {
         const cartIcon = document.querySelector("#" + cart.idsArray[0]);
-        setTimeout(() => cartIcon.classList.add(cart.className[indScore]), 2000);
+        setTimeout(
+            () => cartIcon.classList.add(cart.className[indScore]),
+            2000
+        );
     }
 
     // FLAG
     const delayToAnimated = 4000;
-    if(currUserScore >= rewardScore) {
+    if (currUserScore >= rewardScore) {
         const flagIcon = document.querySelector("#" + flag.idsArray[0]);
-        setTimeout(() => flagIcon.classList.add(flag.className), delayToAnimated);
+        setTimeout(
+            () => flagIcon.classList.add(flag.className),
+            delayToAnimated
+        );
     }
 
     const handleLevel = () => {
-        if(indScore >= 5) return 5;
-        if(!indScore) return 1;
+        if (indScore >= 5) return 5;
+        if (!indScore) return 1;
         return indScore + 1;
-    }
+    };
 
     setTimeout(() => {
         const challengeMsg = msgRef;
         const currLevel = handleLevel();
-        if(challengeMsg) challengeMsg.innerHTML = getStatusMsg(eachMilestone, currLevel, currUserScore, currChallenge, userName);
-    }, 7000)
+        if (challengeMsg)
+            challengeMsg.innerHTML = getStatusMsg(
+                eachMilestone,
+                currLevel,
+                currUserScore,
+                currChallenge,
+                userName
+            );
+    }, 7000);
 }
 
 function chooseMsg(props) {
@@ -82,15 +112,18 @@ function chooseMsg(props) {
         eachLevelScore,
         userFirstName,
         currUserScore,
-        currChallenge } = props;
+        currChallenge,
+    } = props;
 
     let { nextScore } = props;
     nextScore = convertDotToComma(nextScore);
 
-    if(currUserScore < eachLevelScore) {
-        return `<strong>Vamos lá!<br /> Nível ${nextLevel ? nextLevel : '1'} logo alí. Falta ${nextScore} pontos.</strong>`;
+    if (currUserScore < eachLevelScore) {
+        return `<strong>Vamos lá!<br /> Nível ${
+            nextLevel ? nextLevel : "1"
+        } logo alí. Falta ${nextScore} pontos.</strong>`;
     } else {
-        switch(currLevel) {
+        switch (currLevel) {
             case 1:
                 return `<strong>Seu primeiro progresso!
                         <br />
@@ -117,16 +150,24 @@ function chooseMsg(props) {
                        <br />
                        Agora só aguardar
                        <br />
-                       a confirmação do prêmio.`
+                       a confirmação do prêmio.`;
             default:
                 console.log("Something went worng with chooseMsg");
         }
     }
 }
 
-function getStatusMsg(eachLevelScore, currLevel, currUserScore, currChallenge , userName) {
+function getStatusMsg(
+    eachLevelScore,
+    currLevel,
+    currUserScore,
+    currChallenge,
+    userName
+) {
     let nextLevelVal = currLevel + 1;
-    if(currLevel === -1) { nextLevelVal = 1; }
+    if (currLevel === -1) {
+        nextLevelVal = 1;
+    }
     const nextLevel = nextLevelVal;
 
     const remainder = getNewRemainder(currUserScore, eachLevelScore);
@@ -140,10 +181,9 @@ function getStatusMsg(eachLevelScore, currLevel, currUserScore, currChallenge , 
         nextScore,
         nextLevel,
         currChallenge,
-    }
+    };
 
     return chooseMsg(props);
-
 }
 
 export const options = {
@@ -157,9 +197,15 @@ export const options = {
     },
     cart: {
         idsArray: ["cart"],
-        className: ["move-down", "move-down-left", "move-down-left-two", "move-down-left-three", "move-down-left-final"],
+        className: [
+            "move-down",
+            "move-down-left",
+            "move-down-left-two",
+            "move-down-left-three",
+            "move-down-left-final",
+        ],
     },
     challengeMsg: {
-        id: "challenge-msg"
-    }
-}
+        id: "challenge-msg",
+    },
+};

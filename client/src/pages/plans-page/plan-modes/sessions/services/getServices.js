@@ -1,6 +1,4 @@
 import React from "react";
-import WhatsAppIcon from "@material-ui/icons/WhatsApp";
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import ListAltIcon from "@material-ui/icons/ListAlt";

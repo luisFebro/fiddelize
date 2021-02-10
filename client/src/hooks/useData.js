@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getMultiVar, store as st } from "./storage/useVar";
 import repeat from "../utils/arrays/repeat";
 
@@ -29,7 +29,7 @@ export default function useData(data, options = {}) {
         return () => {
             unmounted = true;
         };
-    }, [trigger, storeName]);
+    }, [trigger, storeName, data]);
 
     // this will automatically set a ... for data loading
     if (dots && trigger && !store.length) {

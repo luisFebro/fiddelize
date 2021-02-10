@@ -153,6 +153,7 @@ export default function FlipCreditCard({
                         <img
                             className="card__square mr-3"
                             src="/img/icons/credit-card/chip.png"
+                            alt="chip"
                         />
                         <p className="text-card m-0">
                             Este cartão é pessoal e intrasferível.

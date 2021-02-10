@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);

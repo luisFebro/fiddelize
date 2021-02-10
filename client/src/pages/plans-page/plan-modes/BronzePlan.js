@@ -68,6 +68,7 @@ export default function BronzePlan({ setCurrPlan }) {
             totalInvest: total,
             totalServices: totalServ,
         });
+        // eslint-disable-next-line
     }, [orders]);
 
     const styles = getStyles();
@@ -78,12 +79,12 @@ export default function BronzePlan({ setCurrPlan }) {
         const {
             order,
             orderGroup,
-            orderGroupPrice = 0,
+            // orderGroupPrice = 0,
             removeOrderGroup,
         } = options;
 
-        const orderPrice = order ? order.price : orderGroupPrice;
-        let newTotal = orderPrice;
+        // const orderPrice = order ? order.price : orderGroupPrice;
+        // let newTotal = orderPrice;
 
         // for SMS logics
         const needCurrRemoval = order && order.removeCurr;

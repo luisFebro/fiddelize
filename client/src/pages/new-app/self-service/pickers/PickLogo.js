@@ -102,6 +102,7 @@ export default function PickLogo({
             updateThisImg(dataToUpdate);
             setData({ sizeSquare: false });
         }
+        // eslint-disable-next-line
     }, [sizeSquare, sizeRect]);
 
     const gotPic = typeof uploadedPic === "object";
@@ -110,6 +111,7 @@ export default function PickLogo({
         if (!isFromDash) {
             gotPic && tempImgUrl && goNext();
         }
+        // eslint-disable-next-line
     }, [gotPic, tempImgUrl, isFromDash]);
 
     useEffect(() => {
@@ -125,6 +127,7 @@ export default function PickLogo({
                 setNextDisabled(true);
             }
         }
+        // eslint-disable-next-line
     }, [isBoxChecked, isFromDash]);
 
     const handleMediaChange = (e) => {

@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import green from "@material-ui/core/colors/green";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import { getVar, removeVar } from "../../hooks/storage/useVar";
 // import { setRun } from '../redux/actions/globalActions';
 
@@ -86,13 +85,11 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
-    const dispatch = useStoreDispatch();
-
     useEffect(() => {
         // Programatically set user to one section when redirecting to dashboard.
         getVar("name_tabLabel").then((targetSection) => {
             if (targetSection) {
-                data.map((tab, ind) => {
+                data.forEach((tab, ind) => {
                     if (tab.tabLabel === targetSection) setValue(ind);
                     removeVar("name_tabLabel");
                 });

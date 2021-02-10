@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import Title from "../Title";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,20 +11,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { withRouter } from 'react-router-dom';
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
-import { sendWelcomeConfirmEmail } from "../../redux/actions/emailActions";
 // Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
-import lStorage from "../../utils/storage/lStorage";
 import { handleNextField } from "../../utils/form/kit";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import getFilterDate from "../../utils/dates/getFilterDate";
 // Material Ui
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -34,7 +31,7 @@ import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import ReactGA from "react-ga";
+// import ReactGA from "react-ga";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import generateBizCodeName from "../../pages/download-app/instant-app/helpers/generateBizCodeName";
 import useData, { sto } from "../../hooks/useData";
@@ -44,13 +41,6 @@ import getFirstName from "../../utils/string/getFirstName";
 const filter = getFilterDate();
 
 const isSmall = window.Helper.isSmallScreen();
-
-const useStyles = makeStyles((theme) => ({
-    card: {
-        maxWidth: 345,
-        filter: "drop-shadow(.001em .001em .15em var(--mainDark))",
-    },
-}));
 
 const getStyles = () => ({
     fieldForm: {
@@ -95,12 +85,12 @@ function RegisterClientAdmin({ logo }) {
         bizName: "", // for account panel...
     });
     let {
-        role,
+        // role,
         name,
         clientAdminData,
         email,
         gender,
-        birthday,
+        // birthday,
         cpf,
         phone,
     } = data;
@@ -126,7 +116,7 @@ function RegisterClientAdmin({ logo }) {
                 }));
             }, 4000);
         }
-    }, [preRegisterCliAdminData]);
+    }, [preRegisterCliAdminData, data.clientAdminData]);
 
     // detecting field errors
     const [fieldError, setFieldError] = useState(null);
@@ -142,16 +132,17 @@ function RegisterClientAdmin({ logo }) {
 
     useEffect(() => {
         setData({ ...data, bizImg: selfBizLogoImg });
+        // eslint-disable-next-line
     }, [selfBizLogoImg]);
 
     const dispatch = useStoreDispatch();
 
-    const classes = useStyles();
     const styles = getStyles();
 
     useEffect(() => {
         const opts = { needYear: true };
         setData({ ...data, birthday: getDayMonthBr(selectedDate, opts) });
+        // eslint-disable-next-line
     }, [selectedDate]);
 
     useEffect(() => {
@@ -164,11 +155,12 @@ function RegisterClientAdmin({ logo }) {
                 finalDashedName
             );
         }
+        // eslint-disable-next-line
     }, [clientAdminData.bizName]);
 
     useEffect(() => {
         phone && setValObjWithStr(data, "clientAdminData.bizWhatsapp", phone);
-    }, [phone]);
+    }, [phone, data]);
 
     const clearData = () => {
         setData({

@@ -1,9 +1,8 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
-import React, { useRef, useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import AsyncLogin from "../../components/auth/AsyncLogin";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
-import { CLIENT_URL } from "../../config/clientUrl";
 import {
     useProfile,
     useClientAdmin,
@@ -25,7 +24,7 @@ import useBackColor from "../../hooks/useBackColor";
 import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
-import { getVar, removeVar, store } from "../../hooks/storage/useVar";
+import { getVar, removeVar } from "../../hooks/storage/useVar";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import useData from "../../hooks/useData";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
@@ -70,7 +69,7 @@ const AsyncRegisterBizTeam = Load({
         ),
 });
 
-const isSmall = window.Helper.isSmallScreen();
+// const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
 
 const showWelcomeMsg = (dispatch, userName) => {
@@ -172,7 +171,7 @@ function ClientMobileApp({ location, history }) {
         if (!loadingData && isCliAdmin) {
             showWelcomeMsg(dispatch, name);
         }
-    }, [loadingData, name, isCliAdmin]);
+    }, [loadingData, name, isCliAdmin, dispatch]);
 
     const {
         bizCodeName,
@@ -181,7 +180,7 @@ function ClientMobileApp({ location, history }) {
         selfThemeSColor,
         selfThemeBackColor,
     } = useClientAdmin();
-    const { currScore } = useClientUser();
+    // const { currScore } = useClientUser();
 
     const logoBiz = useImg(url.logoBiz, {
         trigger: url.logoBiz,
@@ -217,7 +216,7 @@ function ClientMobileApp({ location, history }) {
         if (runName === "logout") {
             history.push("/mobile-app");
         }
-    }, [runName]);
+    }, [runName, history]);
 
     const needClientLogo =
         (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
@@ -233,6 +232,7 @@ function ClientMobileApp({ location, history }) {
     };
     useEffect(() => {
         handleLogoSrc();
+        // eslint-disable-next-line
     }, [selfBizLogoImg]);
 
     if (isCliMember) {

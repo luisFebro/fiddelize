@@ -3,7 +3,6 @@ import Illustration from "../../../../components/Illustration";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 import Card from "@material-ui/core/Card";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import PrizeCard from "./PrizeCard";
 import { useClientAdmin, useProfile } from "../../../../hooks/useRoleData";
 import defineCurrChallenge from "../../../../utils/biz/defineCurrChallenge";
@@ -20,7 +19,7 @@ import useElemDetection, {
 } from "../../../../hooks/api/useElemDetection";
 import extractStrData from "../../../../utils/string/extractStrData";
 import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
-import useGetVar, { setVar, removeVar } from "../../../../hooks/storage/useVar";
+import useGetVar, { setVar } from "../../../../hooks/storage/useVar";
 
 const isSmall = window.Helper.isSmallScreen();
 

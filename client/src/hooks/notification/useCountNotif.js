@@ -7,7 +7,7 @@ export default function useCountNotif(userId, options = {}) {
         role,
         bizId,
         forceCliUser,
-        forceCliMember,
+        // forceCliMember,
         trigger = true,
     } = options;
 
@@ -35,6 +35,7 @@ export default function useCountNotif(userId, options = {}) {
         return () => {
             cancel = true;
         };
+        // eslint-disable-next-line
     }, [userId, runName, trigger]);
 
     return count;

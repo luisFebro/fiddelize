@@ -1,13 +1,10 @@
-import React, { Fragment, useEffect, useState, useContext } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { calendar } from "../../../../utils/dates/dateFns";
-import parse from "html-react-parser";
 import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import { useStoreDispatch } from "easy-peasy";
 import { updateUser } from "../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
-import Title from "../../../../components/Title";
 import {
     useAppSystem,
     useProfile,
@@ -16,7 +13,6 @@ import {
 import useAPIList, {
     readUserList,
     getTrigger,
-    getUniqueId,
 } from "../../../../hooks/api/useAPIList";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import useElemDetection, {
@@ -247,6 +243,7 @@ export default function AsyncRecordedClientsList() {
         updateUser(dispatch, objToSend, businessId, {
             thisRole: "cliente-admin",
         });
+        // eslint-disable-next-line
     }, [totalCliUserScores, totalActiveScores]);
 
     const params = handleParams({ search, filterName, period, getFilterDate });
@@ -292,7 +289,7 @@ export default function AsyncRecordedClientsList() {
             );
             setData({ ...data, totalCliUserScores, totalActiveScores });
         }
-    }, [content]);
+    }, [content, data]);
 
     // Accordion Content
     const highlightActiveScore =

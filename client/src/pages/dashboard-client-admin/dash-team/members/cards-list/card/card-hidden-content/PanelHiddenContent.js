@@ -1,6 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
 import RemoveMemberBtn from "./cta/RemoveMemberBtn";
 import SeeProfileBtn from "./cta/SeeProfileBtn";
 import getFirstName from "../../../../../../../utils/string/getFirstName";
@@ -10,17 +9,7 @@ PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-const getStyles = () => ({
-    empty: {},
-});
-
 function PanelHiddenContent({ history, data }) {
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
-
-    const styles = getStyles();
-
     const { newClientTotal, newScoreTotal } = data;
 
     const name = getFirstName(data.name && data.name.cap(), {

@@ -1,6 +1,5 @@
 import React from "react";
 import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
-import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState } from "easy-peasy";
@@ -15,9 +14,8 @@ const faStyle = {
 };
 
 export default function ShowExpansiblePanel() {
-    const { userData, clientAdmin } = useStoreState((state) => ({
+    const { userData } = useStoreState((state) => ({
         userData: state.userReducer.cases.currentUser,
-        clientAdmin: state.userReducer.cases.clientAdmin,
     }));
 
     const configList = [

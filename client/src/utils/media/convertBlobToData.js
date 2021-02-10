@@ -18,7 +18,7 @@ export default function convertBlobToData(blob, options = {}) {
 }
 
 export const convertBlobToDataAsync = async (blob, options = {}) => {
-    const { prerender, audio, mediaName } = options;
+    const { mediaName } = options;
 
     if (!blob || !mediaName) throw new Error("Missing arguments...");
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IS_DEV } from "../../../../../config/clientUrl";
 
 const sandboxMode = IS_DEV ? true : false;

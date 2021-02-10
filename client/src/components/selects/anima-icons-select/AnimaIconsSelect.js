@@ -141,7 +141,8 @@ export default function AnimaIconsSelect({
                 });
             }
         }
-    }, [offlineKey, selected, alreadyDefault.current]);
+        // eslint-disable-next-line
+    }, [offlineKey, selected]); // LESSON: utable values like 'alreadyDefault.current' aren't valid dependencies because mutating them doesn't re-render the component
 
     useEffect(() => {
         let thisSelected;
@@ -170,12 +171,14 @@ export default function AnimaIconsSelect({
                 CurrIcon: Icon,
             });
         }
+        // eslint-disable-next-line
     }, [selected, offlineData, alreadyOffline.current, loadingOffline]);
 
     useEffect(() => {
         if (typeof callback === "function") {
             callback({ selected: title, isReversed: false, needEmpty: true });
         }
+        // eslint-disable-next-line
     }, [selected, title]);
 
     const handleShowEmptyCards = (isChecked) => {

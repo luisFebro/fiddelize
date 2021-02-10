@@ -14,7 +14,8 @@ export default function SearchCustomer({ setCurr, textColor, bizId }) {
                 field: "score",
                 customerName: selectedValue,
             }));
-    }, [selectedValue]);
+        // eslint-disable-next-line
+    }, [selectedValue]); // If 'setCurr' changes too often, find the parent component that defines it and wrap that definition in useCallback
 
     const autocompleteUrl = `/api/sms/read/contacts?userId=${bizId}&autocomplete=true&autocompleteLimit=7`;
 

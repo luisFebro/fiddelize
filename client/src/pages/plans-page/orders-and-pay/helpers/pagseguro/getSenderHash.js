@@ -10,7 +10,7 @@ export default async function getSenderHash() {
 
     const run = (resolve, reject) => {
         PagSeguro.onSenderHashReady(function (response) {
-            if (response.status == "error") {
+            if (response.status === "error") {
                 reject(response);
             }
             // LESSON: { ...data, something: set } does not work on an asyncronous response, ...data can not be read from outside and returns undefined.

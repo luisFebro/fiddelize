@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import Title from "../../../components/Title";
-import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
+import { useClientAdmin } from "../../../hooks/useRoleData";
 import LoadableVisible from "../../../components/code-splitting/LoadableVisible";
 import ClientReviews from "./clients-reviews/ClientsReviews";
 
@@ -38,7 +38,7 @@ const getTitle = (bizName) => (
 
 export default function DashClients() {
     const { bizName } = useClientAdmin();
-    const { name } = useProfile();
+    // const { name } = useProfile();
 
     const SectionTitle = getTitle(bizName);
 

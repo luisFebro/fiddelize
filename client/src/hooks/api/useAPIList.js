@@ -74,7 +74,7 @@ export default function useAPIList({
         chunksTotal: null,
         content: null,
     });
-    const { list, listTotal, chunksTotal, content } = data;
+    const { list, listTotal, content } = data;
 
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState(false);
@@ -124,6 +124,7 @@ export default function useAPIList({
             setError(false);
             setReload(true);
             setLoading(false);
+            // eslint-disable-next-line
             timeout = 2000;
             setIgnore(true);
         }
@@ -186,8 +187,10 @@ export default function useAPIList({
             if (hasMore) setHasMore(false);
             return;
         }
-
+        // Assignments to the 'skip' variable from inside React Hook useEffect will be lost after each render. To preserve the value over time, store it in a useRef Hook and keep the mutable value in the '.current' property. Otherwise, you can move this variable directly inside useEffect
+        // eslint-disable-next-line
         const updateOnly = skip === 0 || updateFirstChunkOnly;
+        // eslint-disable-next-line
         if (updateOnly) skip = 0;
 
         const stopRequest = setTimeout(() => {
@@ -381,7 +384,6 @@ export default function useAPIList({
         noBlocking,
         readyShowElems,
         needEmptyIllustra: needEmptyIllustra,
-        emptyType,
         loading,
         error,
         ShowLoading,

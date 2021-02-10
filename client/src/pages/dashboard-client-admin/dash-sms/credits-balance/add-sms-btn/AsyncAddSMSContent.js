@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Simulator from "./Simulator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useProfile } from "../../../../../hooks/useRoleData";
-import getFirstName from "../../../../../utils/string/getFirstName";
+// import { useProfile } from "../../../../../hooks/useRoleData";
+// import getFirstName from "../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../components/Img";
 import { withRouter } from "react-router-dom";
@@ -28,7 +28,7 @@ function AsyncAddSMSContent({
         totalSMS: 0,
         inv: 0,
     });
-    const { inv, totalSMS, totalPackage, SKU } = data;
+    const { inv, totalSMS, totalPackage } = data;
 
     const handleData = (newData) => {
         setData({
@@ -37,8 +37,8 @@ function AsyncAddSMSContent({
         });
     };
 
-    let { name: userName } = useProfile();
-    userName = getFirstName(userName);
+    // let { name: userName } = useProfile();
+    // userName = getFirstName(userName);
 
     const showTitle = () => (
         <div className="mt-4">

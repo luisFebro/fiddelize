@@ -71,7 +71,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 
 // OK
 export const markOneClicked = async (userId, cardId, options = {}) => {
-    const { forceCliUser, thisRole, updatedBy, cliMemberId } = options;
+    const { thisRole, updatedBy, cliMemberId } = options;
 
     let thisRoleQuery;
     if (thisRole) thisRoleQuery = `&thisRole=${thisRole}`;
@@ -93,8 +93,6 @@ export const markOneClicked = async (userId, cardId, options = {}) => {
 
 // OK
 export const markAllAsClicked = async (userId, options = {}) => {
-    const { forceCliUser } = options;
-
     try {
         return await axios.put(
             `/api/notification/mark-all-clicked/${userId}`,
@@ -108,8 +106,6 @@ export const markAllAsClicked = async (userId, options = {}) => {
 
 // OK
 export const markAllAsSeen = async (userId, options = {}) => {
-    const { forceCliUser } = options;
-
     try {
         return await axios.put(
             `/api/notification/mark-all-seen/${userId}`,

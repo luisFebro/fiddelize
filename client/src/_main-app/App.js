@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import isThisApp from "../utils/window/isThisApp";
 import isWebpSupported from "../utils/media/isWebpSupported";

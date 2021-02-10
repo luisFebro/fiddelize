@@ -122,7 +122,7 @@ export default function ClientUserAppContent({
         selfThemeBackColor,
         arePrizesVisible,
         bizWhatsapp,
-        bizName,
+        // bizName,
     } = useClientAdmin();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
@@ -138,6 +138,7 @@ export default function ClientUserAppContent({
     const totalChallengesWon = Math.floor(currScore / maxScore);
     const pickedObjForPending = React.useMemo(
         () => pickCurrChallData(rewardList, totalPurchasePrize + 1),
+        // eslint-disable-next-line
         []
     ); // do not include params to run the first right result.
     useEffect(() => {
@@ -170,6 +171,7 @@ export default function ClientUserAppContent({
                 removeVar(key);
             }
         });
+        // eslint-disable-next-line
     }, [
         userIdLoading,
         _id,
@@ -206,6 +208,7 @@ export default function ClientUserAppContent({
             subtype: "clientWonChall",
             content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};phone:${phone};`,
         }),
+        // eslint-disable-next-line
         [userBeatChallenge, lastPrizeId, _id]
     );
     useSendNotif(businessId, "challenge", challNotifOptions());

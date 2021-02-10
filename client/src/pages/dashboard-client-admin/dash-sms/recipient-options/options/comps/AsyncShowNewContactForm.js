@@ -125,6 +125,7 @@ export default function AsyncShowNewContactForm({
                 job,
             });
         }
+        // eslint-disable-next-line
     }, [loadData, selectedMean]);
 
     const delayedType = useCallback(
@@ -163,6 +164,7 @@ export default function AsyncShowNewContactForm({
                 job,
             });
         }
+        // eslint-disable-next-line
     }, [isQuickRegister, readyMean, selectedMean, email, phone, name, job]);
     const needPhoneField = !isQuickRegister || selectedMean === "number";
     const needEmailField = selectedMean === "email";

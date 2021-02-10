@@ -36,6 +36,7 @@ export default function CreditsBalance({ handleBalance }) {
         if (!loading) {
             handleBalance(smsBalance);
         }
+        // eslint-disable-next-line
     }, [smsBalance, loading]);
 
     const modalData = {

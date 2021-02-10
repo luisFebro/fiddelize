@@ -33,7 +33,7 @@ export default function TeamPassword({ history }) {
     });
     const { pass } = data;
 
-    const [bizId, role, userId, firstName, success] = useData([
+    const [bizId, role, userId, firstName] = useData([
         "lastRegisterBizId",
         "role",
         "userId",

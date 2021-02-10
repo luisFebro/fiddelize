@@ -22,7 +22,7 @@ export default function AgentNewPassword({ history }) {
                         : "/acesso/verificacao"
                 );
         })();
-    }, []);
+    });
 
     if (userId === "...") {
         return (

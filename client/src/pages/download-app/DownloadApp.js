@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
 import ScrollArrow from "../../keyframes/built/scroll-arrow/ScrollArrow";
-import parse from "html-react-parser";
 import PwaInstaller from "../../components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "../../config/clientUrl";
 import checkIfElemIsVisible from "../../utils/window/checkIfElemIsVisible";
@@ -10,7 +9,6 @@ import { showSnackbar } from "../../redux/actions/snackbarActions";
 import lStorage from "../../utils/storage/lStorage";
 import { useStoreDispatch } from "easy-peasy";
 import Spinner from "../../components/loadingIndicators/Spinner";
-import useElemShowOnScroll from "../../hooks/scroll/useElemShowOnScroll";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 import useBackColor from "../../hooks/useBackColor";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
@@ -125,7 +123,7 @@ export default function DownloadApp({ match, location, history }) {
         isCliUser,
         isFromAdminPanel,
         // others
-        isValidRoleType,
+        // isValidRoleType,
         isLinkInvalid,
         whichRole,
         primaryAgent,
@@ -208,6 +206,7 @@ export default function DownloadApp({ match, location, history }) {
                     );
                 setData({ ...data, needSelfServiceData: true });
             });
+        // eslint-disable-next-line
     }, [bizId]);
 
     if (needSelfServiceData) {

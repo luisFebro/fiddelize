@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import convertBlobToData, {
     convertBlobToDataAsync,
 } from "../../utils/media/convertBlobToData";
@@ -100,5 +100,6 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
                 onendedCallback();
             });
         }
+        // eslint-disable-next-line
     }, [multi, trigger, autoplay]);
 }

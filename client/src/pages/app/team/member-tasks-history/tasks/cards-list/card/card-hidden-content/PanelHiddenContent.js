@@ -1,23 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
 import getFirstName from "../../../../../../../../utils/string/getFirstName";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-const getStyles = () => ({
-    empty: {},
-});
-
 function PanelHiddenContent({ history, data }) {
-    const { runArray } = useStoreState((state) => ({
-        runArray: state.globalReducer.cases.runArray,
-    }));
-
-    const styles = getStyles();
-
     return (
         <section className="position-relative text-normal enabledLink panel-hidden-content--root">
             <section className="my-4">

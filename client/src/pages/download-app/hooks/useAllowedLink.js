@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import useAPI, { isLinkAllowed } from "../../../hooks/api/useAPI";
 import useGetVar from "../../../hooks/storage/useVar";
 

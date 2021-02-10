@@ -134,6 +134,7 @@ export default function LineChart({
                 !isMonday && drawText(textObj, parentElem);
             }, 3000);
         })();
+        // eslint-disable-next-line
     }, [dataArray, lastValue, lastButOne, lastDiff, lastPerc]);
 
     return (
@@ -148,7 +149,7 @@ export default function LineChart({
 
 // https://stackoverflow.com/questions/54081437/how-to-dynamically-create-svg-text-elements-using-js
 function handleSVGMultiline({ svgParent, textArray, xDistance }) {
-    textArray.map((txt, ind) => {
+    textArray.forEach((txt, ind) => {
         const tspan = document.createElementNS(
             "http://www.w3.org/2000/svg",
             "tspan"

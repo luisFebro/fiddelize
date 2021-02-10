@@ -1,7 +1,5 @@
 import axios from "axios";
-import { showSnackbar } from "./snackbarActions";
-import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
-import { setLoadingProgress } from "./globalActions";
+import { getHeaderJson } from "../../utils/server/getHeaders";
 // import { tokenConfig } from './authActions';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
@@ -153,7 +151,7 @@ export const changePrizeStatus = async (userId, options = {}) => {
 // TASKS
 export const addAutomaticTask = async (userId, options = {}) => {
     // n1
-    const { madeBy, content, taskTitle, taskType } = options;
+    // const { madeBy, content, taskTitle, taskType } = options;
 
     try {
         return await axios.put(

@@ -101,6 +101,7 @@ export default function RatingIcons({
 
     useEffect(() => {
         paintStarsForScore(score);
+        // eslint-disable-next-line
     }, []);
 
     const levels = [100, 200, 300, 400, 500];

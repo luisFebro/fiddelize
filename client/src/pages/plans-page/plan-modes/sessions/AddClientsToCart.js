@@ -18,7 +18,7 @@ export default function AddClientsToCart({
         membersPrice: "R$ 0",
     });
 
-    let { addedCustomers, customersPrice, addedMembers, membersPrice } = data;
+    const { addedCustomers, customersPrice, addedMembers, membersPrice } = data;
 
     useEffect(() => {
         if (!currService) return;
@@ -42,7 +42,13 @@ export default function AddClientsToCart({
                 }),
             });
         }
-    }, [currService]);
+    }, [
+        currService,
+        data,
+        clientOrder.amount,
+        clientOrder.price,
+        clientOrder.totalPackage,
+    ]);
 
     const showNovvosClientes = () => (
         <section

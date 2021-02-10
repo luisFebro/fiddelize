@@ -9,16 +9,20 @@ module.exports = {
         "prettier"
     ],
     "parserOptions": {
+        // "parser": 'babel-eslint',
         "ecmaFeatures": {
             "jsx": true
         },
         "ecmaVersion": 2018, // understands let, const and other features
-        "sourceType": "module"
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
     },
     "plugins": [
         "react",
+        "jsx-a11y",
         "unused-imports",
     ],
+    //0 - Disable the rule, 1 - Warn about the rule, 2 - Throw error about the rule
     "rules": {
         "indent": [
             "error",
@@ -54,6 +58,9 @@ module.exports = {
         "import/no-named-as-default": 0,
         "import/no-named-as-default-member": 0,
         "import/no-extraneous-dependencies": 0,
+        "linebreak-style": 0,
+        "indent": 0,
+        "no-param-reassign": 0, // userId = userId || _id;
         // "unused-imports/no-unused-vars": "error",
     }
 };

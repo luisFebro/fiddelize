@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import lStorage, { needAppRegisterOp } from "../../../utils/storage/lStorage";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);
@@ -16,12 +16,14 @@ export default function useLoginOrRegister({
         if (memberId !== "..." && memberId && !isInstantAccount) {
             setLoginOrRegister("register");
         }
+        // eslint-disable-next-line
     }, [memberId]);
 
     useEffect(() => {
         if (role !== "..." && role === "cliente-admin") {
             setLoginOrRegister("login");
         }
+        // eslint-disable-next-line
     }, [role]);
 
     useEffect(() => {
@@ -29,5 +31,6 @@ export default function useLoginOrRegister({
             setLoginOrRegister("register");
             // this is set to false just after registration with setStorageRegisterDone.
         }
+        // eslint-disable-next-line
     }, [needAppRegister]);
 }

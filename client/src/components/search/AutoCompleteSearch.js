@@ -151,7 +151,8 @@ export default function AutoCompleteSearch({
     useEffect(() => {
         if (searchChange)
             setNewSearchUrl(`${autocompleteUrl}&search=${searchChange}`);
-    }, [searchChange]);
+        // eslint-disable-next-line
+    }, [searchChange]); // If 'setNewSearchUrl' needs the current value of 'autocompleteUrl', you can also switch to useReducer instead of useState and read 'autocompleteUrl' in the reducer
 
     useEffect(() => {
         let active = true;
@@ -203,7 +204,7 @@ export default function AutoCompleteSearch({
                         }`
                     );
 
-                    const { status } = e.response;
+                    // const { status } = e.response;
                     setLoading(false);
                 }
             }
@@ -216,6 +217,7 @@ export default function AutoCompleteSearch({
             clearTimeout(stopRequest);
             active = false;
         };
+        // eslint-disable-next-line
     }, [newSearchUrl]);
 
     useEffect(() => {
@@ -225,6 +227,7 @@ export default function AutoCompleteSearch({
         if (needHistory || searchChange.length === 0) {
             getValuesHistory();
         }
+        // eslint-disable-next-line
     }, [open, needHistory, searchChange]);
 
     return (

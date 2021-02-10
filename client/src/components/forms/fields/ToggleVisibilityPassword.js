@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import { Link } from "react-router-dom";
 // material ui
 import Input from "@material-ui/core/Input";
@@ -48,8 +47,6 @@ export default function ToggleVisibilityPassword({
         showPassword: false,
     });
     const { showPassword } = data;
-
-    const dispatch = useStoreDispatch();
 
     const handleClickShowPassword = () => {
         setData({ ...data, showPassword: !showPassword });

@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment } from "react";
 import AsyncLogin from "../../components/auth/AsyncLogin";
 import AsyncLoyaltyScoreHandler from "../client/loyalty-client-scores";
 import { useStoreState } from "easy-peasy";

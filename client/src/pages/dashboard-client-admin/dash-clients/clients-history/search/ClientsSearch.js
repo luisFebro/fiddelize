@@ -13,6 +13,7 @@ export default function ClientsSearch({ handleSearch }) {
         if (selectedValue) {
             handleSearch(selectedValue);
         }
+        // eslint-disable-next-line
     }, [selectedValue]);
 
     const { _id: adminId } = useProfile();

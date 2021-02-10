@@ -8,7 +8,6 @@ import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { withRouter } from "react-router-dom";
@@ -259,6 +258,7 @@ function GoalForm({ history, bizCodeName, bizName }) {
                     </div>
                 </div>
                 {mainReward && (
+                    // eslint-disable-next-line
                     <p className="animated fadeInUp delay-2s mt-3 text-shadow text-white text-small">
                         Nota: Se precisar, você pode mudar esses dados depois no
                         seu painel de controle na sessão de app. 👍

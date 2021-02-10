@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from "react";
-import Tooltip from "../../../components/tooltips/Tooltip";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import SpeedDialButton from "../../../components/buttons/SpeedDialButton";

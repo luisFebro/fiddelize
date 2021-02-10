@@ -4,226 +4,224 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../hooks/media/usePlayAudio";
 import animateCSS from "../../../utils/animateCSS";
-import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 
-const isSmall = window.Helper.isSmallScreen();
+import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 
 Keyboard.propTypes = {
-	keyboardType: PropTypes.oneOf(["numeric", "cpf"]).isRequired,
-	setDisplay: PropTypes.func,
-	display: PropTypes.string,
-	handleClose: PropTypes.func,
-	handleConfirm: PropTypes.func,
-    colorP:PropTypes.string,
+    keyboardType: PropTypes.oneOf(["numeric", "cpf"]).isRequired,
+    setDisplay: PropTypes.func,
+    display: PropTypes.string,
+    handleClose: PropTypes.func,
+    handleConfirm: PropTypes.func,
+    colorP: PropTypes.string,
 };
 
 export default function Keyboard({
-	keyboardType,
-	setDisplay,
-	display,
-	handleClose,
-	handleConfirm,
-	colorP,
+    keyboardType,
+    setDisplay,
+    display,
+    handleClose,
+    handleConfirm,
+    colorP,
 }) {
-	const [reachedLimit, setReachedLimit] = useState(false);
-	usePlayAudio("/sounds/confirmation-keypad.wav", ".keypadBeepConfirm");
+    const [reachedLimit, setReachedLimit] = useState(false);
+    usePlayAudio("/sounds/confirmation-keypad.wav", ".keypadBeepConfirm");
 
-	const refAnima = React.useRef(null);
-	const getValue = (value) => {
-		const handleCpf = () => {
-			if (reachedLimit) return;
+    const refAnima = React.useRef(null);
+    const getValue = (value) => {
+        const handleCpf = () => {
+            if (reachedLimit) return;
 
-			if (display === "Digite 11 dígitos") {
-				return setDisplay(value);
-			}
+            if (display === "Digite 11 dígitos") {
+                return setDisplay(value);
+            }
 
-			display += value;
-			setDisplay(autoCpfMaskBr(display));
+            display += value;
+            setDisplay(autoCpfMaskBr(display));
 
-			if (display.length === 14) {
-				refAnima &&
+            if (display.length === 14) {
+                refAnima &&
                     animateCSS(
-                    	refAnima.current,
-                    	"bounce",
-                    	"normal",
-                    	() => null
+                        refAnima.current,
+                        "bounce",
+                        "normal",
+                        () => null
                     );
-				setReachedLimit(true);
-			}
-		};
+                setReachedLimit(true);
+            }
+        };
 
-		if (keyboardType === "cpf") {
-			handleCpf();
-		}
+        if (keyboardType === "cpf") {
+            handleCpf();
+        }
 
-		keyboardType === "numeric" &&
+        keyboardType === "numeric" &&
             (display.charAt(0) === "0"
-            	? setDisplay(value)
-            	: setDisplay((display) => (display += value)));
-	};
+                ? setDisplay(value)
+                : setDisplay((display) => (display += value)));
+    };
 
-	const eraseLastChar = () => {
-		display.length === 1
-			? setDisplay("0")
-			: setDisplay((display) => display.slice(0, -1));
-		if (reachedLimit) setReachedLimit(false);
-	};
+    const eraseLastChar = () => {
+        display.length === 1
+            ? setDisplay("0")
+            : setDisplay((display) => display.slice(0, -1));
+        if (reachedLimit) setReachedLimit(false);
+    };
 
-	const playBeep = () => {
-		const elem = document.querySelector("#keypadBeep");
-		elem.play();
-	};
+    const playBeep = () => {
+        const elem = document.querySelector("#keypadBeep");
+        elem.play();
+    };
 
-	return (
-		<GridContainer
-			myGradient={`linear-gradient(to right, #16222a, var(--themePLight--${colorP}))`}
-		>
-			<div
-				onClick={() => {
-					getValue("1");
-					playBeep();
-				}}
-				className="item1"
-			>
+    return (
+        <GridContainer
+            myGradient={`linear-gradient(to right, #16222a, var(--themePLight--${colorP}))`}
+        >
+            <div
+                onClick={() => {
+                    getValue("1");
+                    playBeep();
+                }}
+                className="item1"
+            >
                 1
-			</div>
-			<div
-				onClick={() => {
-					getValue("2");
-					playBeep();
-				}}
-				className="item2"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("2");
+                    playBeep();
+                }}
+                className="item2"
+            >
                 2
-			</div>
-			<div
-				onClick={() => {
-					getValue("3");
-					playBeep();
-				}}
-				className="item3"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("3");
+                    playBeep();
+                }}
+                className="item3"
+            >
                 3
-			</div>
-			<div
-				onClick={() => {
-					eraseLastChar();
-					playBeep();
-				}}
-				style={{ fontSize: "1.8em" }}
-				className="d-flex align-items-center flex-row justify-content-center erase-last side-btn"
-			>
-				<FontAwesomeIcon
-					icon="arrow-left"
-					style={{ fontSize: ".9em" }}
-					className="mr-2 icon-shadow"
-				/>
-				<span style={{ fontSize: ".7em" }}>Corrigir</span>
-			</div>
-			<div
-				onClick={() => {
-					getValue("4");
-					playBeep();
-				}}
-				className="item4"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    eraseLastChar();
+                    playBeep();
+                }}
+                style={{ fontSize: "1.8em" }}
+                className="d-flex align-items-center flex-row justify-content-center erase-last side-btn"
+            >
+                <FontAwesomeIcon
+                    icon="arrow-left"
+                    style={{ fontSize: ".9em" }}
+                    className="mr-2 icon-shadow"
+                />
+                <span style={{ fontSize: ".7em" }}>Corrigir</span>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("4");
+                    playBeep();
+                }}
+                className="item4"
+            >
                 4
-			</div>
-			<div
-				onClick={() => {
-					getValue("5");
-					playBeep();
-				}}
-				className="item5"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("5");
+                    playBeep();
+                }}
+                className="item5"
+            >
                 5
-			</div>
-			<div
-				onClick={() => {
-					getValue("6");
-					playBeep();
-				}}
-				className="item6"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("6");
+                    playBeep();
+                }}
+                className="item6"
+            >
                 6
-			</div>
-			<div
-				onClick={() => {
-					handleClose();
-					playBeep();
-				}}
-				style={{ fontSize: "1.8em" }}
-				className="d-flex align-items-center justify-content-center cancel side-btn"
-			>
-				<FontAwesomeIcon
-					icon="times"
-					style={{ fontSize: ".9em" }}
-					className="mr-2 icon-shadow"
-				/>
-				<span style={{ fontSize: ".7em" }}>Cancelar</span>
-			</div>
-			<div
-				onClick={() => {
-					getValue("7");
-					playBeep();
-				}}
-				className="item7"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    handleClose();
+                    playBeep();
+                }}
+                style={{ fontSize: "1.8em" }}
+                className="d-flex align-items-center justify-content-center cancel side-btn"
+            >
+                <FontAwesomeIcon
+                    icon="times"
+                    style={{ fontSize: ".9em" }}
+                    className="mr-2 icon-shadow"
+                />
+                <span style={{ fontSize: ".7em" }}>Cancelar</span>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("7");
+                    playBeep();
+                }}
+                className="item7"
+            >
                 7
-			</div>
-			<div
-				onClick={() => {
-					getValue("8");
-					playBeep();
-				}}
-				className="item8"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("8");
+                    playBeep();
+                }}
+                className="item8"
+            >
                 8
-			</div>
-			<div
-				onClick={() => {
-					getValue("9");
-					playBeep();
-				}}
-				className="item9"
-			>
+            </div>
+            <div
+                onClick={() => {
+                    getValue("9");
+                    playBeep();
+                }}
+                className="item9"
+            >
                 9
-			</div>
-			<div
-				onClick={handleConfirm}
-				ref={refAnima}
-				className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn"
-			>
-				<FontAwesomeIcon
-					icon="check"
-					style={{ fontSize: "1.9em" }}
-					className="icon-shadow d-flex align-self-center"
-				/>
-				<span style={{ fontSize: ".9em" }}>Confirmar</span>
-			</div>
-			<div className="empty"></div>
-			<div
-				onClick={() => {
-					getValue("0");
-					playBeep();
-				}}
-				className="item0"
-			>
+            </div>
+            <div
+                onClick={handleConfirm}
+                ref={refAnima}
+                className="keypadBeepConfirm d-flex flex-column justify-content-center confirm side-btn"
+            >
+                <FontAwesomeIcon
+                    icon="check"
+                    style={{ fontSize: "1.9em" }}
+                    className="icon-shadow d-flex align-self-center"
+                />
+                <span style={{ fontSize: ".9em" }}>Confirmar</span>
+            </div>
+            <div className="empty"></div>
+            <div
+                onClick={() => {
+                    getValue("0");
+                    playBeep();
+                }}
+                className="item0"
+            >
                 0
-			</div>
-			<div
-				onClick={() => {
-					getValue(",");
-					playBeep();
-				}}
-				className="comma"
-			>
-				{keyboardType === "numeric" ? "," : ""}
-			</div>
-			<audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
-		</GridContainer>
-	);
+            </div>
+            <div
+                onClick={() => {
+                    getValue(",");
+                    playBeep();
+                }}
+                className="comma"
+            >
+                {keyboardType === "numeric" ? "," : ""}
+            </div>
+            <audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
+        </GridContainer>
+    );
 }
 
 const GridContainer = styled.div`
@@ -238,7 +236,7 @@ const GridContainer = styled.div`
 
     & > div {
         background: ${({ myGradient }) =>
-		myGradient || "linear-gradient(to right, #16222a, #3a6073)"};
+            myGradient || "linear-gradient(to right, #16222a, #3a6073)"};
         color: white;
         text-align: center;
         text-shadow: 1px 1px 3px black;
