@@ -46,8 +46,7 @@
         "build": "CI=false && react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "analyse": "node scripts/analyse.js",
-        "lint:fix": "eslint --fix"
+        "analyse": "node scripts/analyse.js"
     },
     "eslintConfig": {
         "extends": "react-app"
