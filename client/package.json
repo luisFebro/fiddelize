@@ -47,7 +47,6 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "analyse": "node scripts/analyse.js",
-        "prettier:format": "prettier --write",
         "lint:fix": "eslint --fix"
     },
     "eslintConfig": {
