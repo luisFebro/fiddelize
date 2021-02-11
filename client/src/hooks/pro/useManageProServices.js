@@ -38,11 +38,12 @@ export default function useManageProServices() {
         trigger: isToday && userId && role === "cliente-admin",
     });
 
-    const { nextExpiryData: expiryData } = usePro({
-        trigger: bizPlan === "gratis" || (nextExpiryDate && userId),
-        nextExpiryDate,
-        userId,
-    });
+    const expiryData = {};
+    // const { nextExpiryData: expiryData } = usePro({
+    //     trigger: bizPlan === "gratis" || (nextExpiryDate && userId),
+    //     nextExpiryDate,
+    //     userId,
+    // });
 
     const planBr = expiryData && expiryData.nextExPlan;
     const totalMoney = expiryData && expiryData.nextExTotalMoney;
