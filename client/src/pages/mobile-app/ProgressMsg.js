@@ -87,8 +87,8 @@ export default function ProgressMsg({
                                 bold: true,
                             })} ml-2`}
                         >
-                            {/* eslint-disable-next-line */}
                             Você venceu o desafio!{" "}
+                            {/* eslint-disable-next-line */}
                             <i style={styles.confettiIcon}>🎉</i>
                         </span>
                     ) : (

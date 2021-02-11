@@ -106,7 +106,8 @@ function MoreOptionsBtn({
             if (totaldBPrizes !== totalPurchasePrize) setBlockAccess(true);
         });
         return () => (cancel = true);
-    }, [_id, totalPurchasePrize, dispatch]);
+        // eslint-disable-next-line
+    }, [_id, totalPurchasePrize]);
 
     const showPurchaseHistory = () => {
         const handlePurchaseClose = () => {

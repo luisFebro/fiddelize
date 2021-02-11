@@ -78,7 +78,8 @@ export const useAuthUser = (options = {}) => {
         if (!isAuthUser && history) {
             isThisApp() ? history.push("/mobile-app") : history.push("/");
         }
-    }, [isAuthUser, history]);
+        // eslint-disable-next-line
+    }, [isAuthUser]);
 
     return {
         isAuthUser,

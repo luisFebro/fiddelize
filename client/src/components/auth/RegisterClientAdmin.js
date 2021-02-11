@@ -160,7 +160,8 @@ function RegisterClientAdmin({ logo }) {
 
     useEffect(() => {
         phone && setValObjWithStr(data, "clientAdminData.bizWhatsapp", phone);
-    }, [phone, data]);
+        // eslint-disable-next-line
+    }, [phone]);
 
     const clearData = () => {
         setData({

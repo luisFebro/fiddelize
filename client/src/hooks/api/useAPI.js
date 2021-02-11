@@ -1,7 +1,7 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
 // use GETAPI  on utils/promises for progaramatically make requests.
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../hooks/useRunComp";
@@ -26,12 +26,57 @@ useAPI.propTypes = {
     timeout: PropTypes.number, // `timeout` specifies the number of milliseconds before the request times out. -- If the request takes longer than `timeout`, the request will be aborted.
 };
 
+const init = {
+    data: null,
+    loading: true,
+    onlyOnce: false,
+    alreadyReqId: null,
+    error: false,
+};
+
+function reducer(state, action) {
+    switch (action.type) {
+        case "data":
+            return { ...state, data: action.payload };
+        case "loading":
+            return { ...state, loading: action.payload };
+        case "alreadyReqId":
+            return { ...state, alreadyReqId: action.payload };
+        case "onlyOnce":
+            return { ...state, onlyOnce: action.payload };
+        case "error":
+            return { ...state, error: action.payload };
+        default:
+            throw new Error("Unexpected action");
+    }
+}
+
+const setOnlyOnce = (dispatch, state) => {
+    dispatch({ type: "onlyOnce", payload: state });
+};
+
+const setLoading = (dispatch, state) => {
+    dispatch({ type: "loading", payload: state });
+};
+
+const setAlreadyReqId = (dispatch, state) => {
+    dispatch({ type: "alreadyReqId", payload: state });
+};
+
+const setData = (dispatch, state) => {
+    dispatch({ type: "data", payload: state });
+};
+
+const setError = (dispatch, state) => {
+    dispatch({ type: "error", payload: state });
+};
+
 export default function useAPI({
     method = "get",
     url,
     params = null,
     body = null,
-    timeout = 10000,
+    timeout = 20000,
     trigger = true,
     runName = null,
     snackbar = {},
@@ -41,27 +86,25 @@ export default function useAPI({
     dataName, // offline usage
     callback,
 }) {
-    const [data, setData] = useState(null);
-    const [onlyOnce, setOnlyOnce] = useState(false);
-    const [loading, setLoading] = useState(true); // WARNING> do not change to null since many request depend on the truthness to disnnull undefied object values...
-    const [alreadyReqId, setAlreadyReqId] = useState(null);
-    const [error, setError] = useState(false);
+    const [state, dispatch] = useReducer(reducer, init);
+    const { data, loading, onlyOnce, alreadyReqId, error } = state; // WARNING> do not change to null since many request depend on the truthness to disnnull undefied object values...
 
     const thisData = data;
     const { offlineData } = useOfflineData({ dataName, data: thisData });
     useEffect(() => {
         if (offlineData) {
-            setData(offlineData);
-            setLoading(false);
+            setData(dispatch, offlineData);
+            setLoading(dispatch, false);
         }
     }, [offlineData]);
 
     useEffect(() => {
-        if (needOnlyOnce && data) setOnlyOnce(true);
+        if (needOnlyOnce && data) setOnlyOnce(dispatch, true);
     }, [data, needOnlyOnce]);
 
     useEffect(() => {
-        if (typeof loadingStart === "boolean") setLoading(loadingStart);
+        if (typeof loadingStart === "boolean")
+            setLoading(dispatch, loadingStart);
     }, [loadingStart]);
 
     const {
@@ -72,7 +115,7 @@ export default function useAPI({
         txtFailure = "Não foi possível realizar operação. Tente novamente.",
     } = snackbar;
 
-    const dispatch = useStoreDispatch();
+    const reduxDispatch = useStoreDispatch();
     const needSnack = !isObjEmpty(snackbar);
 
     const token = useToken();
@@ -85,7 +128,7 @@ export default function useAPI({
         if (status === "pending" && timePending) time = timePending;
         if (status === "success" && timeSuccess) time = timeSuccess;
 
-        showSnackbar(dispatch, msg, type, time);
+        showSnackbar(reduxDispatch, msg, type, time);
         return true;
     };
 
@@ -104,16 +147,16 @@ export default function useAPI({
         const ok = getSnack(txtSuccess, { type: "success" });
         if (ok) {
             clearTimeout(stopRequest);
-            setData(response.data);
+            setData(dispatch, response.data);
             handleUpdateData();
-            setLoading(false);
-            setAlreadyReqId(trigger);
+            setLoading(dispatch, false);
+            setAlreadyReqId(dispatch, trigger);
         }
     }
 
     function handleError(status = 200) {
-        setAlreadyReqId(null);
-        setLoading(false);
+        setAlreadyReqId(dispatch, null);
+        setLoading(dispatch, false);
         getSnack(txtFailure, { type: "error" });
 
         const gotExpiredToken = status === 401 || status === 403;
@@ -121,7 +164,7 @@ export default function useAPI({
         if (gotExpiredToken) {
             (async () => {
                 await disconnect();
-                showSnackbar(dispatch, "Sua sessão terminou.", "warning");
+                showSnackbar(reduxDispatch, "Sua sessão terminou.", "warning");
             })();
         }
     }
@@ -138,7 +181,7 @@ export default function useAPI({
             handleError();
         }, timeout);
 
-        setLoading(true);
+        setLoading(dispatch, true);
 
         const config = {
             url,
@@ -159,7 +202,7 @@ export default function useAPI({
                 if (e.response) {
                     const thisStatus = e.response.status;
                     handleError(thisStatus);
-                    if (thisStatus !== 200) setError(e.response.data);
+                    if (thisStatus !== 200) setError(dispatch, e.response.data);
                     console.log(
                         `${JSON.stringify(
                             e.response.data
@@ -185,6 +228,7 @@ export default function useAPI({
             Oops! Esta parte não funcionou como esperado. Tente recarregar.
         </p>
     );
+
     return { data, gotData, loading, setRun, dispatch, error, ShowError };
 }
 

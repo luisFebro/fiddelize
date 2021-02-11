@@ -152,7 +152,8 @@ function Register({
 
             setData({ ...data, birthday: thisBirthDate });
         }
-    }, [selectedDate, data]);
+        // eslint-disable-next-line
+    }, [selectedDate]);
 
     const clearData = () => {
         setData({

@@ -18,6 +18,9 @@ const isSmall = window.Helper.isSmallScreen();
 
 function Navbar({ history, location }) {
     // const [isSearchOpen, setSearchOpen] = useState(false);
+    const locationNow = location.pathname;
+    const isClientAdmin = location.search.includes("client-admin=1");
+    const isHome = locationNow === "/";
 
     const [url, setUrl] = useState({
         logoBiz: "",
@@ -40,8 +43,6 @@ function Navbar({ history, location }) {
     const { selfBizLogoImg, selfThemePColor } = useClientAdmin();
 
     // Render
-    const locationNow = location.pathname;
-    const isClientAdmin = location.search.includes("client-admin=1");
     // const isBizTeam = locationNow.includes("nucleo");
 
     const isBlackList =
@@ -69,7 +70,7 @@ function Navbar({ history, location }) {
                     : "nav-link"
             }
         >
-            {locationNow === "/" ? (
+            {isHome ? (
                 <span
                     className="text-subtitle text-s"
                     style={{
@@ -95,7 +96,7 @@ function Navbar({ history, location }) {
 
         return (
             <Fragment>
-                {locationNow === "/" && (
+                {isHome && (
                     <RadiusBtn
                         title={isSmall ? "Crie App" : "Crie seu App"}
                         position="fixed"
@@ -134,7 +135,7 @@ function Navbar({ history, location }) {
 
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo =
-        selfBizLogoImg || (isAuthUser && selfBizLogoImg && isApp); // isApp &&
+        (!isHome && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isApp); // isApp &&
     const fiddelizeLogo = `/img/official-logo-name.png`;
     const handleLogoSrc = () => {
         if (needClientLogo) {

@@ -17,7 +17,7 @@ export const useOfflineData = ({ dataName, data, trigger }) => {
     useEffect(() => {
         if (!dataName || trigger === false) return;
 
-        setDataOff({ ...dataOff, loading: true });
+        setDataOff((dataOff) => ({ ...dataOff, loading: true }));
 
         if (data && isOnline) {
             setVar({ [dataName]: data }, store.request_api_data);
@@ -25,17 +25,17 @@ export const useOfflineData = ({ dataName, data, trigger }) => {
 
         if ((!isOnline || trigger) && !already) {
             getVar(dataName, store.request_api_data).then((offData) => {
-                setDataOff({
+                setDataOff((dataOff) => ({
                     ...dataOff,
                     offlineData: offData,
                     loading: false,
                     already: true,
-                });
+                }));
             });
         }
 
         return () => null;
-    }, [data, dataName, isOnline, trigger, dataOff, already]);
+    }, [data, dataName, isOnline, trigger, already]);
 
     const isOffline = Boolean(!isOnline && data);
 

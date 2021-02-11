@@ -191,7 +191,8 @@ function ASyncRegisterCliUser({
                 thisBirthCode
             );
         }
-    }, [selectedDate, data]);
+        // eslint-disable-next-line
+    }, [selectedDate]);
 
     const clearData = () => {
         setData({

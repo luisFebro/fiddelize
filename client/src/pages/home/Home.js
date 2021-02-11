@@ -43,7 +43,7 @@ export default function Home() {
                                 do seu negócio.
                             </h1>
                             <p className="mt-4 text-white">
-                                Faça seu app hoje. Transforme seu negócio em
+                                Faça seu app hoje. Transforme suas vendas em
                                 jogo de compras com{" "}
                                 <strong>pontos de fidelidade</strong>.
                             </p>

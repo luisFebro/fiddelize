@@ -48,6 +48,7 @@ export default function usePro(options = {}) {
         dataName: "proData",
         params,
         trigger: trigger && businessId !== "...",
+        needOnlyOnce: true,
     });
 
     // if some error happens, then fetch from most recent offline data storage

@@ -289,7 +289,8 @@ export default function AsyncRecordedClientsList() {
             );
             setData({ ...data, totalCliUserScores, totalActiveScores });
         }
-    }, [content, data]);
+        // eslint-disable-next-line
+    }, [content]);
 
     // Accordion Content
     const highlightActiveScore =

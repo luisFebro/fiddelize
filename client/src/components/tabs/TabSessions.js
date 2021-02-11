@@ -95,7 +95,8 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
                 });
             }
         });
-    }, [data]);
+        // eslint-disable-next-line
+    }, []);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);

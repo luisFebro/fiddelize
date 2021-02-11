@@ -57,7 +57,7 @@ const InstallMsg = () => (
     </div>
 );
 
-function Mobile({ location, history }) {
+function MobileApp({ location, history }) {
     const locationNow = location.pathname;
 
     const dispatch = useStoreDispatch();
@@ -186,7 +186,7 @@ function Mobile({ location, history }) {
     );
 }
 
-export default withRouter(Mobile);
+export default withRouter(MobileApp);
 
 /* ARCHIVES
 import ChangePassword from '../../pages/client/ChangePassword';

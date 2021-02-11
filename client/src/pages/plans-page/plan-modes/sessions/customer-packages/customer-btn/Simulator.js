@@ -115,7 +115,8 @@ export default function Simulator({
             formattedExpiryDate: thisFormattedDate,
             usageDays: thisUsageDays,
         });
-    }, [period, data]);
+        // eslint-disable-next-line
+    }, [period]);
 
     useEffect(() => {
         if (newQuantity && !Number.isNaN(newQuantity)) {

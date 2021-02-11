@@ -115,7 +115,8 @@ function AsyncClientScoresPanel({ history, location }) {
         if (!paidValueLoading && !paidValue) {
             history.push(isApp ? "/mobile-app" : "/acesso/verificacao");
         }
-    }, [paidValueLoading, paidValue, history]);
+        // eslint-disable-next-line
+    }, [paidValueLoading, paidValue]);
 
     useEffect(() => {
         (async () => {
@@ -146,7 +147,8 @@ function AsyncClientScoresPanel({ history, location }) {
                 ),
             }));
         })();
-    }, [cliUserId, dispatch]);
+        // eslint-disable-next-line
+    }, []);
     // END USE HOOKS
 
     // MAIN VARIABLES

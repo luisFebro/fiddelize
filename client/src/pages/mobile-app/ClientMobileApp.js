@@ -1,5 +1,5 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, useCallback, Fragment } from "react";
 import AsyncLogin from "../../components/auth/AsyncLogin";
 import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
@@ -60,7 +60,7 @@ const AsyncRegisterCliMember = Load({
             "../../components/auth/AsyncRegisterCliMember" /* webpackChunkName: "cli-member-register-comp-lazy" */
         ),
 });
-// import AccessSwitcher from "../../components/auth/password/AccessSwitcher";
+
 const AsyncRegisterBizTeam = Load({
     loading: true,
     loader: () =>
@@ -93,11 +93,6 @@ function ClientMobileApp({ location, history }) {
         logoFid: "",
     });
 
-    usePersistentStorage();
-    useScrollUp();
-    useManageProServices();
-    const dispatch = useStoreDispatch();
-
     const [
         userId,
         rememberAccess,
@@ -125,6 +120,11 @@ function ClientMobileApp({ location, history }) {
         "instantBizImg",
         "instantBizName",
     ]);
+
+    usePersistentStorage();
+    useScrollUp();
+    const dispatch = useStoreDispatch();
+    useManageProServices();
 
     useLoginOrRegister({
         setLoginOrRegister,
@@ -171,7 +171,8 @@ function ClientMobileApp({ location, history }) {
         if (!loadingData && isCliAdmin) {
             showWelcomeMsg(dispatch, name);
         }
-    }, [loadingData, name, isCliAdmin, dispatch]);
+        // eslint-disable-next-line
+    }, [loadingData, name, isCliAdmin]);
 
     const {
         bizCodeName,
@@ -180,7 +181,6 @@ function ClientMobileApp({ location, history }) {
         selfThemeSColor,
         selfThemeBackColor,
     } = useClientAdmin();
-    // const { currScore } = useClientUser();
 
     const logoBiz = useImg(url.logoBiz, {
         trigger: url.logoBiz,
@@ -201,7 +201,6 @@ function ClientMobileApp({ location, history }) {
         role,
         trigger: !loadingData,
     });
-    // useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(
         `var(--themeBackground--${isBizTeam ? "default" : selfThemeBackColor})`
     );
@@ -216,24 +215,29 @@ function ClientMobileApp({ location, history }) {
         if (runName === "logout") {
             history.push("/mobile-app");
         }
-    }, [runName, history]);
+        // eslint-disable-next-line
+    }, [runName]);
 
     const needClientLogo =
         (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
-    const handleLogoSrc = () => {
+
+    const handleLogoSrc = useCallback(() => {
         if (needClientLogo) {
             const { newImg: thisSelfBizLogoImg } = removeImgFormat(
                 selfBizLogoImg
             );
-            return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
+            return setUrl((prev) => ({ ...prev, logoBiz: thisSelfBizLogoImg }));
         } else {
-            return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
+            return setUrl((prev) => ({
+                ...prev,
+                logoFid: `/img/official-logo-name.png`,
+            }));
         }
-    };
+    }, [needClientLogo, selfBizLogoImg]);
+
     useEffect(() => {
         handleLogoSrc();
-        // eslint-disable-next-line
-    }, [selfBizLogoImg]);
+    }, [selfBizLogoImg, handleLogoSrc]);
 
     if (isCliMember) {
         // this var is removed when making login
@@ -484,8 +488,6 @@ function ClientMobileApp({ location, history }) {
 }
 
 export default withRouter(ClientMobileApp);
-
-ClientMobileApp.whyDidYouRender = false;
 
 /* COMMENTS
 n1: LESSON: Do not use Fragment inside session since Fragment can hide inner elements...

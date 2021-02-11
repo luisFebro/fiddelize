@@ -52,13 +52,6 @@ export default function useManageProServices() {
     const period = getPeriod(ref);
     const planDays = period === "yearly" ? 365 : 30;
 
-    // const { data: removalRes } = useAPI({
-    // method: "delete",
-    // url: removeServices(userId),
-    // trigger: nextExpiryDate && isExpired,
-    // params: { nextExpiryDate },
-    // });
-
     useEffect(() => {
         Promise.all([getVar("userId", store.user), getAccurateDate()]).then(
             (values) => {
@@ -147,4 +140,13 @@ now Sat Oct 10 2020 10:34:37 GMT-0400 (Amazon Standard Time)
 fetched Sat Oct 10 2020 10:20:00 GMT-0400 (Amazon Standard Time)
 const now = JSON.stringify(new Date().toLocaleDateString());
 const fetchedNow = JSON.stringify(date.toLocaleDateString());
+
+const { data: removalRes } = useAPI({
+    method: "delete",
+    url: removeServices(userId),
+    trigger: nextExpiryDate && isExpired,
+    params: { nextExpiryDate },
+});
+
+
 */
