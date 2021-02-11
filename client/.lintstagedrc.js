@@ -5,12 +5,12 @@ const getFileName = (fileName) => {
 
 const runPrettier = () => {
     return (filenames) =>
-        filenames.map((filename) => `echo ${getFileName(filename)} & prettier --write '${filename}'`);
+        filenames.map((filename) => `rem ✔️ ${getFileName(filename)} & prettier --write '${filename}'`);
 };
 
 const runEsLinter = () => {
     return (filenames) =>
-        filenames.map((filename) => `eslint --fix '${filename}'`);
+        filenames.map((filename) => `rem ✔️ ${getFileName(filename)} & eslint --fix '${filename}'`);
 };
 
 module.exports = {

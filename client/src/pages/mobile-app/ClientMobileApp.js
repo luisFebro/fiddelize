@@ -90,6 +90,7 @@ function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     const [url, setUrl] = useState({
         logoBiz: "",
+
         logoFid: "",
     });
 
