@@ -87,15 +87,18 @@ const showWelcomeMsg = (dispatch, userName) => {
 };
 
 function ClientMobileApp({ location, history }) {
-    const [loginOrRegister, setLoginOrRegister] = useState("login");
+    const [
+    loginOrRegister,
+    setLoginOrRegister] = useState(
+        "login");
     const [url, setUrl] = useState({
         logoBiz: "",
-
         logoFid: "",
     });
 
     const [
         userId,
+
         rememberAccess,
         success,
         role,
