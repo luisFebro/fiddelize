@@ -1,11 +1,11 @@
-// const getFileName = (fileName) => {
-//     const lastSlashInd = fileName.lastIndexOf("/");
-//     return fileName.slice(lastSlashInd + 1);
-// }
+const getFileName = (fileName) => {
+    const lastSlashInd = fileName.lastIndexOf("/");
+    return fileName.slice(lastSlashInd + 1);
+}
 
 const runPrettier = () => {
     return (filenames) =>
-        filenames.map((filename) => `prettier --write '${filename}'`);
+        filenames.map((filename) => `echo ${getFileName(filename)} & prettier --write '${filename}'`);
 };
 
 const runEsLinter = () => {
