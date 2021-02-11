@@ -78,5 +78,10 @@
         "prettier": "2.1.1",
         "progress-bar-webpack-plugin": "^2.1.0",
         "webpack-bundle-analyzer": "^3.8.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     }
 }
