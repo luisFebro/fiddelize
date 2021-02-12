@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import { Fragment } from "react";
 import ModalBtn from "../../../components/buttons/ModalBtn";
 import Img from "../../../components/Img";
 
@@ -8,7 +8,7 @@ const latestVersion = "3.9902.8"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-  "separação oficial do front e backend do projeto pt 3";
+    "separação oficial do front e backend do projeto pt 3";
 
 const history = [
   "reverted to app membro - notificações e lista de clientes ganhadores",

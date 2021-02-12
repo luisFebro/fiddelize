@@ -9,8 +9,6 @@ import { disconnect } from "../../../../hooks/useAuthUser";
 
 const isSmall = window.Helper.isSmallScreen();
 
-export default withRouter(BizTeamNavbar);
-
 export const menuIconStyle = {
     fontSize: "30px",
 };
@@ -59,3 +57,5 @@ function BizTeamNavbar({ history }) {
         </header>
     );
 }
+
+export default withRouter(BizTeamNavbar);
