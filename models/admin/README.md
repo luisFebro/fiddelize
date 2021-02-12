@@ -1,1 +1,0 @@
-### This package.json is used to avoid duplicate pathes such product-parent/product or a replacement for index.js. Just need the parent folder name.
