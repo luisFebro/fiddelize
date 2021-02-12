@@ -13,6 +13,7 @@ import generateBizCodeName from "../../../pages/download-app/instant-app/helpers
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
+import { API } from "../../../config/api";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -57,7 +58,7 @@ export default function BizForm() {
 
     //error options: bizName or field
     const [fieldError, setFieldError] = useState(null);
-    const autocompleteUrl = `/api/user/pre-register/fields-list?limit=30`;
+    const autocompleteUrl = `${API}/user/pre-register/fields-list?limit=30`;
 
     const generateThisBizCode = (ultimateBizName) => {
         if (ultimateBizName) {

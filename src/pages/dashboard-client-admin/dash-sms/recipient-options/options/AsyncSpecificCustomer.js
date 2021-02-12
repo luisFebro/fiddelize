@@ -8,6 +8,7 @@ import { useRunComp } from "../../../../../hooks/useRunComp";
 import useAPI, { readContacts } from "../../../../../hooks/api/useAPI";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import { API } from "../../../../../config/api.js";
 
 const AsyncShowNewContactForm = Load({
     loader: () =>
@@ -99,7 +100,7 @@ export default function AsyncSpecificCustomer({
     };
 
     const showSearch = () => {
-        const autocompleteUrl = `/api/sms/read/contacts?userId=${userId}&autocomplete=true`;
+        const autocompleteUrl = `${API}/sms/read/contacts?userId=${userId}&autocomplete=true`;
 
         const handleNewContact = () => {
             setNewContactOpen((prev) => !prev);

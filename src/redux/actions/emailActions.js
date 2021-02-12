@@ -2,10 +2,11 @@
 import axios from 'axios';
 import { getHeaderJson } from '../../utils/server/getHeaders';
 import { setLoadingProgress } from './globalActions';
+import { API } from "../../config/api"; // ${API}
 
 export const sendWelcomeConfirmEmail = async (bodyEmail, userId) => {
     try {
-        return await axios.post(`/api/email/client/welcome-and-confirm/${userId}`, bodyEmail, getHeaderJson);
+        return await axios.post(`${API}/email/client/welcome-and-confirm/${userId}`, bodyEmail, getHeaderJson);
     } catch (err) {
         return err.response;
     }
@@ -14,7 +15,7 @@ export const sendWelcomeConfirmEmail = async (bodyEmail, userId) => {
 export const sendBuyRequestEmail = async (dispatch, bodyEmail) => {
     setLoadingProgress(dispatch, true);
     try {
-        const res = await axios.post('/api/email/admin/order-request', bodyEmail, getHeaderJson);
+        const res = await axios.post(`${API}/email/admin/order-request`, bodyEmail, getHeaderJson);
         setLoadingProgress(dispatch, false);
         return res;
     } catch (err) {
@@ -26,7 +27,7 @@ export const sendBuyRequestEmail = async (dispatch, bodyEmail) => {
 export const sendNewPasswordLink = async (dispatch, bodyEmail) => {
     setLoadingProgress(dispatch, true);
     try {
-        const res = await axios.post('/api/email/client/new-password', bodyEmail, getHeaderJson)
+        const res = await axios.post(`${API}/email/client/new-password`, bodyEmail, getHeaderJson)
         setLoadingProgress(dispatch, false);
         return res;
     } catch(err) {

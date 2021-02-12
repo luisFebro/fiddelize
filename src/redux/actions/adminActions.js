@@ -2,6 +2,7 @@ import axios from "axios";
 import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
 import { getBodyRequest } from "../../utils/server/getBodyRequest";
 import { setLoadingProgress } from "./globalActions";
+import { API } from "../../config/api";
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
 ////////////////////////////////////////////////////////////////////
@@ -10,7 +11,7 @@ import { setLoadingProgress } from "./globalActions";
 
 export const updateAdmin = async (dispatch, bodyToSend) => {
     try {
-        return await axios.put("/api/admin", bodyToSend, getHeaderJson);
+        return await axios.put(`${API}/admin`, bodyToSend, getHeaderJson);
     } catch (err) {
         return err.response;
     }
@@ -19,7 +20,7 @@ export const updateAdmin = async (dispatch, bodyToSend) => {
 export const updateConfig = async (dispatch, objToUpdate) => {
     try {
         const res = await axios.put(
-            `/api/admin/config`,
+            `${API}/admin/config`,
             objToUpdate,
             getHeaderJson
         );
@@ -33,7 +34,7 @@ export const updateConfig = async (dispatch, objToUpdate) => {
 export const updateBusinessInfo = async (dispatch, objToUpdate) => {
     try {
         const res = await axios.put(
-            `/api/admin/business-info/update`,
+            `${API}/admin/business-info/update`,
             objToUpdate,
             getHeaderJson
         );
@@ -47,7 +48,7 @@ export const updateBusinessInfo = async (dispatch, objToUpdate) => {
 export const readAllDbFromModels = async (dispatch, securityObj, model) => {
     try {
         return await axios.get(
-            `/api/database/db-from-models/list/${securityObj.adminId}?modelName=${model}&thisRole=cliente-admin`,
+            `${API}/database/db-from-models/list/${securityObj.adminId}?modelName=${model}&thisRole=cliente-admin`,
             getHeaderToken(securityObj.token)
         );
     } catch (err) {
@@ -60,7 +61,7 @@ export const readVerificationPass = async (bizId) => {
     // L
     try {
         const res = await axios.get(
-            `/api/admin/verification-pass/${bizId}`,
+            `${API}/admin/verification-pass/${bizId}`,
             getHeaderJson
         );
         return res;
@@ -74,7 +75,7 @@ export const checkVerificationPass = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post(
-            `/api/admin/verification-pass`,
+            `${API}/admin/verification-pass`,
             objToSend,
             getHeaderJson
         );
@@ -88,7 +89,7 @@ export const checkVerificationPass = async (dispatch, objToSend) => {
 
 // export const countAppDownloads = async (dispatch, dataToSend) => {
 //     try {
-//         await axios.put(`/api/admin/app/downloads`, dataToSend, getHeaderJson);
+//         await axios.put(`${API}/admin/app/downloads`, dataToSend, getHeaderJson);
 //     } catch (err) {
 //         return err.response;
 //     }
@@ -105,7 +106,7 @@ export const getStaffWithBookingsList = async (dispatch, docsToSkip) => { // L
     // const searchQuery = search ? `&search=${search}` : "";
 
     try {
-        const res = await axios.get(`/api/admin/list/staff-with-bookings?skip=${docsToSkip}`, getHeaderJson);
+        const res = await axios.get(`${API}/admin/list/staff-with-bookings?skip=${docsToSkip}`, getHeaderJson);
         return res;
     } catch (err) {
         return err.response;
@@ -117,7 +118,7 @@ export const getStaffWithBookingsList = async (dispatch, docsToSkip) => { // L
 // SERVICES CRUD
 export const createService = async (dispatch, adminId, bodyToSend) => {
     try {
-        return await axios.post(`/api/admin/service/${adminId}`, bodyToSend, getHeaderJson);
+        return await axios.post(`${API}/admin/service/${adminId}`, bodyToSend, getHeaderJson);
     } catch (err) {
         return err.response;
     }
@@ -125,7 +126,7 @@ export const createService = async (dispatch, adminId, bodyToSend) => {
 
 export const readServicesList = async (dispatch) => {
     try {
-        const res = await axios.get(`/api/admin/service/list/all`, getHeaderJson);
+        const res = await axios.get(`${API}/admin/service/list/all`, getHeaderJson);
         dispatch({type: 'SERVICES_READ', payload: res.data })
         return res;
     } catch (err) {
@@ -135,7 +136,7 @@ export const readServicesList = async (dispatch) => {
 
 export const updateService = async (dispatch, adminId, itemId, bodyToSend) => {
     try {
-        return await axios.put(`/api/admin/service/${adminId}?serviceId=${itemId}`, bodyToSend, getHeaderJson);
+        return await axios.put(`${API}/admin/service/${adminId}?serviceId=${itemId}`, bodyToSend, getHeaderJson);
     } catch (err) {
         return err.response;
     }
@@ -143,7 +144,7 @@ export const updateService = async (dispatch, adminId, itemId, bodyToSend) => {
 
 export const deleteService = async (dispatch, adminId, serviceId) => {
     try {
-        return await axios.delete(`/api/admin/service/${adminId}?serviceId=${serviceId}`, getHeaderJson);
+        return await axios.delete(`${API}/admin/service/${adminId}?serviceId=${serviceId}`, getHeaderJson);
     } catch (err) {
         return err.response;
     }

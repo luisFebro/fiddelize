@@ -6,6 +6,7 @@ import { getHeaderJson } from "../../utils/server/getHeaders";
 import { readCliAdmin } from "../../hooks/roles-storage-and-data-recovery/useRecoverSysData";
 import isThisApp from "../../utils/window/isThisApp";
 import { setVar, store } from "../../hooks/storage/useVar";
+import { API } from "../../config/api";
 // import lStorage from '../../utils/storage/lStorage';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
@@ -16,7 +17,7 @@ let alreadyPass = false;
 export const loadUser = () => (dispatch, getState) => (history) => {
     console.log("==USER LOADING==");
     axios
-        .get("/api/auth/user", tokenConfig(getState))
+        .get(`${API}/auth/user`, tokenConfig(getState))
         .then((res) => {
             dispatch({ type: "USER_ONLINE", payload: true });
 
@@ -76,7 +77,7 @@ export const loginEmail = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post(
-            "/api/auth/login",
+            `${API}/auth/login`,
             objToSend,
             getHeaderJson
         );
@@ -113,7 +114,7 @@ export const registerEmail = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post(
-            "/api/auth/register",
+            `${API}/auth/register`,
             objToSend,
             getHeaderJson
         );
@@ -157,7 +158,7 @@ export const changePassword = async (dispatch, bodyPass, userId) => {
     setLoadingProgress(dispatch, true);
     try {
         const res = await axios.post(
-            `/api/auth/change-password?id=${userId}`,
+            `${API}/auth/change-password?id=${userId}`,
             bodyPass,
             getHeaderJson
         );

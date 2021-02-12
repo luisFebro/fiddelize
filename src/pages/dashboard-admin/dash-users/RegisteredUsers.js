@@ -125,7 +125,7 @@ export default function RegisteredUsers() {
 
 //     const showMoreItemsBtn = () => (
 //         <LoadMoreItemsButton
-//             url={`/api/user/list/all?skip=${"SKIP"}&role=colaborador-e-admin`}
+//             url={`${API}/user/list/all?skip=${"SKIP"}&role=colaborador-e-admin`}
 //             objPathes={{
 //                 strList: "data.list",
 //                 strChunkSize: "data.chunkSize",

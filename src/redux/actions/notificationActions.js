@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
-
+import { API } from "../../config/api"; // ${API}
 // OK sometimes can not load (localhost, production is okay)
 export const countPendingNotif = async (userId, options = {}) => {
     if (!userId) return;
@@ -15,7 +15,7 @@ export const countPendingNotif = async (userId, options = {}) => {
 
     try {
         return await axios.get(
-            `/api/notification/count-pending-notification?userId=${userId}&role=${
+            `${API}/notification/count-pending-notification?userId=${userId}&role=${
                 role || "cliente"
             }${cliUserQuery}${cliMemberQuery}`,
             getHeaderJson
@@ -60,7 +60,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 
     try {
         return await axios.put(
-            `/api/notification/send${queryNoToken}`,
+            `${API}/notification/send${queryNoToken}`,
             notificationOpts,
             getHeaderToken(token)
         );
@@ -82,7 +82,7 @@ export const markOneClicked = async (userId, cardId, options = {}) => {
 
     try {
         return await axios.put(
-            `/api/notification/mark-one-clicked/${userId}?cardId=${cardId}${thisRoleQuery}${updatedByQuery}`,
+            `${API}/notification/mark-one-clicked/${userId}?cardId=${cardId}${thisRoleQuery}${updatedByQuery}`,
             options,
             getHeaderJson
         );
@@ -97,7 +97,7 @@ export const markAllAsClicked = async (userId, options = {}) => {
 
     try {
         return await axios.put(
-            `/api/notification/mark-all-clicked/${userId}`,
+            `${API}/notification/mark-all-clicked/${userId}`,
             options,
             getHeaderJson
         );
@@ -112,7 +112,7 @@ export const markAllAsSeen = async (userId, options = {}) => {
 
     try {
         return await axios.put(
-            `/api/notification/mark-all-seen/${userId}`,
+            `${API}/notification/mark-all-seen/${userId}`,
             options,
             getHeaderJson
         );
