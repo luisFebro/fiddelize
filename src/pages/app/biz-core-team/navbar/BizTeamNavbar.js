@@ -1,10 +1,9 @@
-import React from "react";
 import "./_BizTeamNavbar.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { withRouter } from "react-router-dom";
 import Img from "../../../../components/Img";
 import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { withRouter } from "react-router-dom";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { disconnect } from "../../../../hooks/useAuthUser";
 
 const isSmall = window.Helper.isSmallScreen();
