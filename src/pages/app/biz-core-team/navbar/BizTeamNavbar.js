@@ -1,3 +1,4 @@
+import React from "react";
 import "./_BizTeamNavbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";

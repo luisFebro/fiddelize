@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import ModalBtn from "../../../components/buttons/ModalBtn";
 import Img from "../../../components/Img";
 

@@ -74,7 +74,7 @@
         "eslint-plugin-unused-imports": "^1.1.0",
         "fs": "0.0.1-security",
         "gulp": "^4.0.2",
-        "husky": "^4.2.5",
+        "husky": "^5.0.9",
         "lint-staged": "^10.5.4",
         "path": "^0.12.7",
         "prettier": "2.1.1",
@@ -85,5 +85,9 @@
         "hooks": {
             "pre-commit": "lint-staged"
         }
+    },
+    "lint-staged": {
+        "*.js": "eslint --cache --fix",
+        "*.{js,css,md}": "prettier --write"
     }
 }
