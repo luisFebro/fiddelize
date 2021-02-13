@@ -22,7 +22,7 @@ module.exports = {
         quotes: ["error", "double"],
         semi: ["error", "always"],
         // plugin unused-imports
-        "unused-imports/no-unused-imports": "error", // this will exclude all unused imports from my files
+        "unused-imports/no-unused-imports": "off",
         "unused-imports/no-unused-vars": [
             "warn",
             {
