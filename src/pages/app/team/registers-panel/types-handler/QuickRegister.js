@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import WhatsAppIcon from "@material-ui/icons/WhatsApp";
+import EmailIcon from "@material-ui/icons/Email";
+import { useStoreDispatch } from "easy-peasy";
 import AsyncShowNewContactForm from "../../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import {
@@ -9,7 +13,6 @@ import {
 import validatePhone from "../../../../../utils/validation/validatePhone";
 import validateEmail from "../../../../../utils/validation/validateEmail";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import convertPhoneStrToInt from "../../../../../utils/numbers/convertPhoneStrToInt";
 import useCheckBalance from "../../../../../hooks/sms/useCheckBalance";
 import ModalFullContent from "../../../../../components/modals/ModalFullContent";
@@ -18,15 +21,13 @@ import sendSMS from "../../../../../hooks/sms/sendSMS";
 import { getUniqueId } from "../../../../../hooks/api/useAPI";
 import SuccessOp from "./SuccessOp";
 import useCount from "../../../../../hooks/useCount";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import WhatsAppIcon from "@material-ui/icons/WhatsApp";
-import EmailIcon from "@material-ui/icons/Email";
 import { handleFocus } from "../../../../../utils/form/handleFocus";
-import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import usePro from "../../../../../hooks/pro/usePro";
 import useData from "../../../../../hooks/useData";
 import getAPI, { encryptLinkScore } from "../../../../../utils/promises/getAPI";
 import useInvitationMsg from "./hooks/useInvitationMsg";
+import copyText from "../../../../../utils/document/copyText";
+import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 
 const Async = Load({
     loader: () =>
@@ -48,7 +49,7 @@ const getStyles = () => ({
 });
 
 const runLink = (url) => {
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     a.target = "_blank";
     a.rel = "noopener noreferrer";
     a.href = url;
@@ -59,14 +60,14 @@ const getSmsObj = ({ businessId, dispatch, name, meanPayload }) => ({
     isAutomatic: false,
     userId: businessId,
     dispatch,
-    contactList: [{ name: name, phone: meanPayload }],
+    contactList: [{ name, phone: meanPayload }],
 });
 
 export default function QuickRegister({ formPayload, isNewMember }) {
     // useCount("QuickRegister");
     const [data, setData] = useState({
         meanPayload: "",
-        meanType: "", // number or email
+        meanType: "", // number, email, copy, qrCode
         name: "",
         job: "", // for team members only
         linkScore: "",
@@ -85,13 +86,13 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const [smsDisabled, setSmsDisabled] = useState(false);
     const AsyncNoCredits = <Async />;
 
-    let { isPro } = usePro();
+    const { isPro } = usePro();
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
 
     const [verifPass] = useData(["verifPass"], {
-        trigger: isNewMember ? true : false,
+        trigger: isNewMember,
     });
 
     const [linkId] = useData(["linkId"]);
@@ -133,12 +134,12 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         })();
     };
 
-    const handleSuccessOp = (title, ctaFunc, status, newOne) => {
+    const handleSuccessOp = (thisTitle, thisCtaFunc, status, thisNewOne) => {
         setSuccessOpData({
             successOp: status,
-            title,
-            ctaFunc,
-            newOne,
+            title: thisTitle,
+            ctaFunc: thisCtaFunc,
+            newOne: thisNewOne,
         });
     };
 
@@ -165,8 +166,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     });
 
     // Actions
-    const handleMeanData = (data) => {
-        const { meanPayload, meanType, name, job } = data;
+    const handleMeanData = ({ meanPayload, meanType, name, job }) => {
         setData({ meanPayload, meanType, name, job });
         setSuccessOpData({ ...successOpData, newOne: false });
     };
@@ -264,12 +264,12 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                     <div className="mr-4">
                         <ButtonFab
                             size="medium"
-                            needTxtNoWrap={true}
+                            needTxtNoWrap
                             title="Enviar"
                             height="60px"
                             disabled={smsDisabled}
                             onClick={() => handleNumberCTA("sms")}
-                            backgroundColor={"var(--themeSDark--default)"}
+                            backgroundColor="var(--themeSDark--default)"
                             iconFontAwesome={
                                 <FontAwesomeIcon icon="sms" style={muStyle} />
                             }
@@ -278,15 +278,9 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                         />
                     </div>
                     <section className="position-relative">
-                        <PremiumButton
-                            top={-40}
-                            right={-10}
-                            service="Envvio Whatsapp"
-                            proPage="EnvvioWhatsapp_2"
-                        />
                         <ButtonFab
                             size="medium"
-                            needTxtNoWrap={true}
+                            needTxtNoWrap
                             title="Enviar"
                             height="60px"
                             disabled={isPro ? false : true}
@@ -307,11 +301,11 @@ export default function QuickRegister({ formPayload, isNewMember }) {
             <section className="animated fadeInUp delay-1s container-center my-4">
                 <ButtonFab
                     size="medium"
-                    needTxtNoWrap={true}
+                    needTxtNoWrap
                     title="Enviar"
                     height="60px"
                     onClick={handleEmailCTA}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     iconMu={<EmailIcon style={muStyle} />}
                     variant="extended"
                     position="relative"
@@ -319,10 +313,18 @@ export default function QuickRegister({ formPayload, isNewMember }) {
             </section>
         );
 
+    const handleCopy = () => {
+        copyText(
+            msg,
+            () => showSnackbar(dispatch, "link de convite copiado!", "success"),
+            { parentId: "root--input-copy" }
+        );
+    };
+
     const showGeneratedMsg = () =>
         !successOp &&
         !newOne && (
-            <section>
+            <section id="root--input-copy" className="position-relative">
                 <p className="mt-5 text-purple text-subtitle text-center font-weight-bold">
                     {name ? "Convite gerado:" : ""}
                 </p>
@@ -351,6 +353,18 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                         senhas > senha de verificação
                     </p>
                 )}
+                {name && (
+                    <div
+                        className="position-absolute"
+                        style={{ right: "10px", bottom: "-20px" }}
+                    >
+                        <RadiusBtn
+                            size="small"
+                            title="copiar"
+                            onClick={handleCopy}
+                        />
+                    </div>
+                )}
             </section>
         );
 
@@ -368,7 +382,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         <section>
             <div className="my-5">
                 <AsyncShowNewContactForm
-                    isQuickRegister={true}
+                    isQuickRegister
                     isNewMember={isNewMember}
                     entryAnimation="animated fadeInUp"
                     clearForm={clearForm}
@@ -391,7 +405,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     );
 }
 
-//ARCHIVES
+// ARCHIVES
 // useEffect(() => {
 //     if(formPayload) {
 //         const { name: thisName, phone, email } = formPayload;

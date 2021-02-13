@@ -125,7 +125,7 @@ export default function TeamApp({
     const showMainAppTitle = () => (
         <section
             className="position-relative animated fadeIn my-5 container-center-col"
-            style={{ left: "20px" }}
+            style={{ left: !isCliAdmin ? "20px" : undefined }}
         >
             <div className="mb-3">
                 <img

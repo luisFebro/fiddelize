@@ -78,6 +78,7 @@ export const ShowPicture = ({
                     <Img
                         dataSrc={dataSrc}
                         timeout={timeout}
+                        width={350}
                         src={src}
                         mode="skeleton"
                         imgContainerClass={imgContainerClass}

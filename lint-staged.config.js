@@ -11,6 +11,6 @@ const runEsLint = () => {
 module.exports = {
     "*.{js,jsx,css}": [
         runPrettier(),
-        runEsLint()
+        // runEsLint()
     ],
 };

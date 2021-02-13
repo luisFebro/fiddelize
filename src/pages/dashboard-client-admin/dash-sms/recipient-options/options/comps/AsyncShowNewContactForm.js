@@ -5,6 +5,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import EmailIcon from "@material-ui/icons/Email";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
@@ -14,8 +16,6 @@ import { handleFocus } from "../../../../../../utils/form/handleFocus";
 import isKeyPressed from "../../../../../../utils/event/isKeyPressed";
 import phoneMaskBr from "../../../../../../utils/validation/masks/phoneMaskBr";
 import validatePhone from "../../../../../../utils/validation/validatePhone";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 import debounce from "../../../../../../utils/performance/debounce";
 import AddScoreCTAs from "./from-add-score/AddScoreCTAs";
 
@@ -105,7 +105,9 @@ export default function AsyncShowNewContactForm({
 
     useEffect(() => {
         // transfer: set data to the parent component
-        const needTransfer = loadData && selectedMean !== "selecione um modo:";
+        const isCopy = selectedMean === "copy";
+        const needTransfer =
+            (loadData && selectedMean !== "selecione um modo:") || isCopy;
 
         if (loadData && !needTransfer) {
             const {
@@ -113,6 +115,7 @@ export default function AsyncShowNewContactForm({
                 phone: thisPhone,
                 email: thisEmail,
             } = loadData;
+
             setData({ ...data, name: thisName, phone: thisPhone });
             setDataMean({ ...dataMean, email: thisEmail });
         }
@@ -272,6 +275,7 @@ export default function AsyncShowNewContactForm({
                         </MenuItem>
                         <MenuItem value={"number"}>Número de Contato</MenuItem>
                         <MenuItem value={"email"}>Email</MenuItem>
+                        <MenuItem value={"copy"}>Copiar apenas</MenuItem>
                     </Select>
                 </section>
             )}

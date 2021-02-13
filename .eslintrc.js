@@ -12,8 +12,8 @@ module.exports = {
         "prettier",
         "prettier/react",
     ], // add eslint-config-prettier to the "extends" array in your .eslintrc.* file. Make sure to put it last, so it gets the chance to override other configs. || other note: If you extend a config which uses a plugin, it is recommended to add "prettier/that-plugin" (if available). For example, eslint-config-airbnb enables eslint-plugin-react rules, so "prettier/react" is needed
+    parser: "babel-eslint",
     parserOptions: {
-        // "parser": 'babel-eslint',
         ecmaFeatures: {
             jsx: true,
         },
@@ -45,6 +45,11 @@ module.exports = {
         "react/jsx-uses-vars": "error",
         "react/jsx-indent-props": "off",
         "react/jsx-indent": "off",
+        "react/react-in-jsx-scope": "off", //  from React version 17 you don’t have to import React from 'react' anymore and you can disable linting rules
+        "react/jsx-fragments": "off", // enforces shorthand <></> but this causes styling issues with the underneath code for now
+        "react/jsx-uses-react": "off",
+        "react-hooks/rules-of-hooks": "error", // React (if using hooks)
+        "react-hooks/exhaustive-deps": "warn", // React (if using hooks)
         "react/prop-types": "off",
         "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }], // (error  JSX not allowed in files with extension '.js') You can add the following to your config to allow .js extensions for JSX.
         "import/no-extraneous-dependencies": [
@@ -57,11 +62,8 @@ module.exports = {
         "linebreak-style": "off",
         indent: "off",
         "no-param-reassign": "off", // userId = userId || _id;
-        "react/react-in-jsx-scope": "off", //  from React version 17 you don’t have to import React from 'react' anymore and you can disable linting rules
-        "react/jsx-uses-react": "off",
-        "react-hooks/rules-of-hooks": "error", // React (if using hooks)
-        "react-hooks/exhaustive-deps": "warn", // React (if using hooks)
         "max-len": "off", // max-length by line handled by prettier
+        semi: "off", // semicollons are inserted automatically with Prettier.
     },
     settings: {
         react: {

@@ -4,13 +4,14 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9910.8"; // PRÓXIMO:
+const latestVersion = "3.9911.8"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-    "separação oficial do front e backend do projeto pt 4";
+    "página qr code personalizado para convite baixar app || opçao de baixar qr code na pagina de compartilhar";
 
 /* HISTORY
+  "separação oficial do front e backend do projeto pt 4"
   "reverted to app membro - notificações e lista de clientes ganhadores",
   "copia de segurança avançada dos dados clientes - feito",
   "servico sattisfacao clientes - ponto promotores e nota XP pt4",

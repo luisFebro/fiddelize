@@ -74,32 +74,6 @@ const proVersion = (styles) => [
         proPage: "PremmiosClientes_pro",
     },
     {
-        name: "Envvio Whatsapp",
-        price: {
-            yearly: 56,
-            monthly: 28,
-        },
-        silver: {
-            name: "Envvio Whatsapp",
-            price: {
-                yearly: 46,
-                monthly: 23,
-            },
-        },
-        gold: {
-            name: "Envvio Whatsapp",
-            price: {
-                yearly: 36,
-                monthly: 18,
-            },
-        },
-        Icon: <WhatsAppIcon style={styles.muStyle} />,
-        cardDesc:
-            "Agilize o processo de compra de seus clientes enviando o convite",
-        customIcon: "/img/pro-features/envvio-whatsapp/envvio-whatsapp.svg",
-        proPage: "EnvvioWhatsapp_2",
-    },
-    {
         name: "Orgganize Clientes",
         price: {
             yearly: 62,
@@ -160,6 +134,33 @@ const proVersion = (styles) => [
     Icon: <ImportantDevicesIcon style={styles.muStyle} />,
     proPage: "",
 },
- */
 
+{
+    name: "Envvio Whatsapp",
+    price: {
+        yearly: 56,
+        monthly: 28,
+    },
+    silver: {
+        name: "Envvio Whatsapp",
+        price: {
+            yearly: 46,
+            monthly: 23,
+        },
+    },
+    gold: {
+        name: "Envvio Whatsapp",
+        price: {
+            yearly: 36,
+            monthly: 18,
+        },
+    },
+    Icon: <WhatsAppIcon style={styles.muStyle} />,
+    cardDesc:
+        "Agilize o processo de compra de seus clientes enviando o convite",
+    customIcon: "/img/pro-features/envvio-whatsapp/envvio-whatsapp.svg",
+    proPage: "EnvvioWhatsapp_2",
+},
+ */
+// eslint-disable-next-line
 export { proVersion };

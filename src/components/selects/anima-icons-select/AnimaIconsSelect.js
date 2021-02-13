@@ -88,7 +88,6 @@ export default function AnimaIconsSelect({
         reverse,
         isReversed,
     } = data;
-    console.log("selected", selected);
 
     const { isPro } = usePro({
         feature: checkServicePro,
