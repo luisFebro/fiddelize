@@ -85,9 +85,5 @@
         "hooks": {
             "pre-commit": "lint-staged"
         }
-    },
-    "lint-staged": {
-        "*.js": "eslint --cache --fix",
-        "*.{js,css,md}": "prettier --write"
     }
 }
