@@ -138,8 +138,8 @@ export default function AsyncShowNewContactForm({
     );
     const onChangeMean = (e, setObj) => {
         // LESSON: do not import the whole event element to debounce/throttle cuz react pooling or smt
-        const name = e.target.name;
-        const value = e.target.value;
+        const { name, value } = e.target;
+
         if (isQuickRegister) {
             setObj((prev) => ({ ...prev, [name]: value }));
             delayedType();
@@ -211,7 +211,7 @@ export default function AsyncShowNewContactForm({
                 <TextField
                     required
                     onChange={handleChange(setData)}
-                    error={error === "name" ? true : false}
+                    error={error === "name"}
                     variant="outlined"
                     margin="dense"
                     id="field1"
@@ -273,9 +273,9 @@ export default function AsyncShowNewContactForm({
                                 selecione um modo:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"number"}>Número de Contato</MenuItem>
-                        <MenuItem value={"email"}>Email</MenuItem>
-                        <MenuItem value={"copy"}>Copiar apenas</MenuItem>
+                        <MenuItem value="number">Número de Contato</MenuItem>
+                        <MenuItem value="email">Email</MenuItem>
+                        <MenuItem value="copy">Copiar apenas</MenuItem>
                     </Select>
                 </section>
             )}
@@ -312,10 +312,10 @@ export default function AsyncShowNewContactForm({
                                 selecione atuação:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"vendas"}>Vendas</MenuItem>
-                        <MenuItem value={"atendimento"}>Atendimento</MenuItem>
-                        <MenuItem value={"caixa"}>Caixa</MenuItem>
-                        <MenuItem value={"gerência"}>Gerência</MenuItem>
+                        <MenuItem value="vendas">Vendas</MenuItem>
+                        <MenuItem value="atendimento">Atendimento</MenuItem>
+                        <MenuItem value="caixa">Caixa</MenuItem>
+                        <MenuItem value="gerência">Gerência</MenuItem>
                     </Select>
                 </section>
             )}
@@ -334,7 +334,7 @@ export default function AsyncShowNewContactForm({
                         name="phone"
                         value={phone}
                         onChange={(e) => onChangeMean(e, setData)}
-                        error={error === "phone" ? true : false}
+                        error={error === "phone"}
                         onKeyPress={(e) =>
                             handleEvents(e, {
                                 setData,
@@ -348,7 +348,7 @@ export default function AsyncShowNewContactForm({
                                 eventName: "blur",
                             })
                         }
-                        helperText={"Digite apenas números com DDD"}
+                        helperText="Digite apenas números com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         type="tel"
                         autoComplete="off"
@@ -370,7 +370,7 @@ export default function AsyncShowNewContactForm({
                         id="selectedOpt"
                         margin="dense"
                         onChange={(e) => onChangeMean(e, setDataMean)}
-                        error={false ? true : false}
+                        error={!!false}
                         name="email"
                         variant="outlined"
                         value={email}
@@ -413,10 +413,10 @@ export default function AsyncShowNewContactForm({
                 <section className="container-center my-3">
                     <ButtonFab
                         size="medium"
-                        needTxtNoWrap={true}
+                        needTxtNoWrap
                         title="Adicionar"
                         onClick={handleCTA}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                         position="relative"
                     />
@@ -428,7 +428,7 @@ export default function AsyncShowNewContactForm({
     return (
         <Card
             className={`mt-0 mb-5 ${
-                entryAnimation ? entryAnimation : "animated zoomIn fast"
+                entryAnimation || "animated zoomIn fast"
             } shadow-elevation`}
             style={styles.card}
             elevation={false}

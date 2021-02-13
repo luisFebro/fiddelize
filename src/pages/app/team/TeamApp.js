@@ -36,7 +36,7 @@ export default function TeamApp({
     history,
     location,
     isCliAdmin,
-    toTab = "Cliente",
+    // toTab = "Cliente",
 }) {
     const [firstName, userId, bizId] = useData([
         "firstName",
@@ -84,7 +84,7 @@ export default function TeamApp({
                         backColor === "black" ? "Light" : "Dark"
                     }--${pColor})`,
                 }}
-            ></section>
+            />
         );
 
         const totalNotifications = isPreviewMode ? 0 : allMemberNotif;
@@ -95,7 +95,7 @@ export default function TeamApp({
                 }}
             >
                 <AsyncBellNotifBtn
-                    needClick={!isPreviewMode ? true : false}
+                    needClick={!isPreviewMode}
                     position="relative"
                     top={-25}
                     right={25}
@@ -131,13 +131,13 @@ export default function TeamApp({
                 <img
                     src={
                         thisBizLogo === undefined
-                            ? `/img/official-logo-name.png`
+                            ? "/img/official-logo-name.png"
                             : thisBizLogo
                     }
                     width={width} // bizLogo === "undefined" && 200
                     height={height}
-                    title={`logo empresa`}
-                    alt={`logo empresa`}
+                    title="logo empresa"
+                    alt="logo empresa"
                 />
             </div>
             <h1
@@ -174,17 +174,17 @@ export default function TeamApp({
                 <AddNewScoreBtn
                     backColor={needAdminDefaultTheme ? "default" : backColor}
                     sColor={needAdminDefaultTheme ? "default" : sColor}
-                    needClick={isPreviewMode ? false : true}
+                    needClick={!isPreviewMode}
                 />
                 <div className="ml-3">
                     <RegisterPanelBtn
                         title="CLIENTE"
-                        needPlusIcon={true}
+                        needPlusIcon
                         backColor={
                             needAdminDefaultTheme ? "default" : backColor
                         }
                         sColor={needAdminDefaultTheme ? "default" : sColor}
-                        needClick={isPreviewMode ? false : true}
+                        needClick={!isPreviewMode}
                     />
                 </div>
             </section>
@@ -213,7 +213,7 @@ export default function TeamApp({
 
     const showBackTestAdminBtn = () => (
         <BtnBackTestMode
-            isActive={isPreviewMode ? true : false}
+            isActive={!!isPreviewMode}
             mode="Membro"
             btnBackColor={backColor}
         />
@@ -229,7 +229,7 @@ export default function TeamApp({
                 <section className="animated zoomIn delay-3s">
                     <TeamSpeedDialBtn
                         sColor={sColor}
-                        disableClick={isPreviewMode ? true : false}
+                        disableClick={!!isPreviewMode}
                         history={history}
                     />
                 </section>
