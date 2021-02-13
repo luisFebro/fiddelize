@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import ModalBtn from "../../../components/buttons/ModalBtn";
 import Img from "../../../components/Img";
-// testing
+// testing again
 const isSmall = window.Helper.isSmallScreen();
 
 const latestVersion = "3.9902.8"; // PRÓXIMO:
