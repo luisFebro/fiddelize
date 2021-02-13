@@ -1,16 +1,16 @@
 import React, { Fragment } from "react";
 import ModalBtn from "../../../components/buttons/ModalBtn";
 import Img from "../../../components/Img";
-// testing again
+
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9902.8"; // PRÓXIMO:
+const latestVersion = "3.9910.8"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-    "separação oficial do front e backend do projeto pt 3";
+    "separação oficial do front e backend do projeto pt 4";
 
-const history = [
+/* HISTORY
   "reverted to app membro - notificações e lista de clientes ganhadores",
   "copia de segurança avançada dos dados clientes - feito",
   "servico sattisfacao clientes - ponto promotores e nota XP pt4",
@@ -51,88 +51,91 @@ const history = [
   "Componentes e Sistema de Notificações - concluído implementação completa no backend",
   "Painel de Controle - simplificação processo card teste || melhorias teclado || algoritmo modo progressivo || melhorias no sistema de pontuação cli-admin || otimização algoritmo do historico de compras",
   "Login/Acesso - Novo status para verificar novidades em funcionalidades com página de atualização",
-];
+*/
 
 const getStyles = () => ({
-  root: {
-    width: "200px",
-  },
-  versionBtn: {
-    backgroundColor: "black",
-    borderRadius: "30px",
-    color: "white",
-    padding: "4px 5px",
-    fontSize: "18px",
-    border: "3px solid white",
-    marginBottom: "10px",
-    marginLeft: "10px",
-  },
-  cta: {
-    right: "-15px",
-    top: "-20px",
-  },
+    root: {
+        width: "200px",
+    },
+    versionBtn: {
+        backgroundColor: "black",
+        borderRadius: "30px",
+        color: "white",
+        padding: "4px 5px",
+        fontSize: "18px",
+        border: "3px solid white",
+        marginBottom: "10px",
+        marginLeft: "10px",
+    },
+    cta: {
+        right: "-15px",
+        top: "-20px",
+    },
 });
 
 export default function AppVersion({ position = "relative", bottom, left }) {
-  const styles = getStyles();
+    const styles = getStyles();
 
-  return (
-    <section className={`position-${position}`} style={{ bottom, left }}>
-      <section className="position-relative mt-5" style={styles.root}>
-        <main
-          style={styles.versionBtn}
-          className="app-version text-nowrap text-small text-center"
-        >
-          Versão {latestVersion}
-        </main>
-        <div className="position-absolute" style={styles.cta}>
-          <ModalBtn modalComp={<FeatureUpdates />} />
-        </div>
-      </section>
-    </section>
-  );
+    return (
+        <section className={`position-${position}`} style={{ bottom, left }}>
+            <section className="position-relative mt-5" style={styles.root}>
+                <main
+                    style={styles.versionBtn}
+                    className="app-version text-nowrap text-small text-center"
+                >
+                    Versão
+                    {latestVersion}
+                </main>
+                <div className="position-absolute" style={styles.cta}>
+                    <ModalBtn modalComp={<FeatureUpdates />} />
+                </div>
+            </section>
+        </section>
+    );
 }
 
 function FeatureUpdates() {
-  const showTitle = () => (
-    <div className="my-4">
-      <p className="text-subtitle text-purple text-center font-weight-bold">
-        &#187; Atualizações App
-      </p>
-    </div>
-  );
+    const showTitle = () => (
+        <div className="my-4">
+            <p className="text-subtitle text-purple text-center font-weight-bold">
+                &#187; Atualizações App
+            </p>
+        </div>
+    );
 
-  const showMainContent = () => (
-    <div className="animated fadeInUp delay-1s" onClick={null}>
-      <header>
-        <h1 className="text-title text-purple text-center mb-3">
-          Versão {latestVersion}
-        </h1>
-      </header>
-      <div className="text-normal text-purple mx-3 mb-3">
-        <h2 className="text-center text-subtitle">Última Atualização:</h2>
-        {updateDescription}
-      </div>
-    </div>
-  );
+    const showMainContent = () => (
+        <div className="animated fadeInUp delay-1s">
+            <header>
+                <h1 className="text-title text-purple text-center mb-3">
+                    Versão {latestVersion}
+                </h1>
+            </header>
+            <div className="text-normal text-purple mx-3 mb-3">
+                <h2 className="text-center text-subtitle">
+                    Última Atualização:
+                </h2>
+                {updateDescription}
+            </div>
+        </div>
+    );
 
-  return (
-    <Fragment>
-      {showTitle()}
-      <div className="container-center mx-3">
-        <Img
-          className="img-fluid"
-          src="/img/illustrations/new.png"
-          offline={true}
-          height="auto"
-          style={{
-            maxHeight: !isSmall ? "110px" : "120px",
-            width: "120px",
-          }}
-          alt="novidades"
-        />
-      </div>
-      {showMainContent()}
-    </Fragment>
-  );
+    return (
+        <>
+            {showTitle()}
+            <div className="container-center mx-3">
+                <Img
+                    className="img-fluid"
+                    src="/img/illustrations/new.png"
+                    offline
+                    height="auto"
+                    style={{
+                        maxHeight: !isSmall ? "110px" : "120px",
+                        width: "120px",
+                    }}
+                    alt="novidades"
+                />
+            </div>
+            {showMainContent()}
+        </>
+    );
 }

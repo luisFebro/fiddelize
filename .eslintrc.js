@@ -4,7 +4,14 @@ module.exports = {
         es6: true,
         commonjs: true,
     },
-    extends: ["airbnb", "plugin:react/recommended", "plugin:import/errors", "plugin:import/warnings"],
+    extends: [
+        "airbnb",
+        "plugin:react/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "prettier",
+        "prettier/react",
+    ], // add eslint-config-prettier to the "extends" array in your .eslintrc.* file. Make sure to put it last, so it gets the chance to override other configs. || other note: If you extend a config which uses a plugin, it is recommended to add "prettier/that-plugin" (if available). For example, eslint-config-airbnb enables eslint-plugin-react rules, so "prettier/react" is needed
     parserOptions: {
         // "parser": 'babel-eslint',
         ecmaFeatures: {
@@ -18,7 +25,7 @@ module.exports = {
     //0 - Disable the rule, 1 - Warn about the rule, 2 - Throw error about the rule
     rules: {
         indent: ["error", "tab"],
-        "linebreak-style": ["error", "windows"],
+        "linebreak-style": "off", // If you aren't concerned about having different line endings within your code, then you can safely turn this rule off.
         quotes: ["error", "double"],
         semi: ["error", "always"],
         // plugin unused-imports
@@ -52,14 +59,15 @@ module.exports = {
         "no-param-reassign": "off", // userId = userId || _id;
         "react/react-in-jsx-scope": "off", //  from React version 17 you don’t have to import React from 'react' anymore and you can disable linting rules
         "react/jsx-uses-react": "off",
-        'react-hooks/rules-of-hooks': 'error', // React (if using hooks)
-        'react-hooks/exhaustive-deps': 'warn', // React (if using hooks)
+        "react-hooks/rules-of-hooks": "error", // React (if using hooks)
+        "react-hooks/exhaustive-deps": "warn", // React (if using hooks)
+        "max-len": "off", // max-length by line handled by prettier
     },
     settings: {
         react: {
-          version: 'detect', // React
-        }
-    }
+            version: "detect", // React
+        },
+    },
 };
 
 /*
