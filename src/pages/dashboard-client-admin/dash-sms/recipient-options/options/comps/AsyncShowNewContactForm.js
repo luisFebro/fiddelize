@@ -18,7 +18,7 @@ import phoneMaskBr from "../../../../../../utils/validation/masks/phoneMaskBr";
 import validatePhone from "../../../../../../utils/validation/validatePhone";
 import debounce from "../../../../../../utils/performance/debounce";
 import AddScoreCTAs from "./from-add-score/AddScoreCTAs";
-//
+////
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({

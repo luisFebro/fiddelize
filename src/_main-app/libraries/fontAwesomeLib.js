@@ -3,7 +3,7 @@
 // Warning: this destructing by line is due to tree-shaking and avoid to import the entire fas icons and thus a bloated bundle.
 // const fasPath = "@fortawesome/free-solid-svg-icons"; // Not possible for now to declare a variable and use it as >> ... from `${fasPath}/faCheck`...
 import { library } from "@fortawesome/fontawesome-svg-core";
-// ICONS n1
+// ICONS n1 //
 import { faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons/faAngleDoubleRight"; // generate something
 import { faBolt } from "@fortawesome/free-solid-svg-icons/faBolt"; // generate something
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons/faAngleRight";
