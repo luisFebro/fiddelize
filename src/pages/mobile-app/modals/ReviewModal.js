@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import getAPI, { readUser } from "../../../utils/promises/getAPI";
 import useData from "../../../hooks/useData";
 import { useClientAdmin } from "../../../hooks/useRoleData";
@@ -68,14 +68,14 @@ export default function ReviewModal() {
                 <img
                     src={
                         thisBizLogo === undefined
-                            ? `/img/official-logo-name.png`
+                            ? "/img/official-logo-name.png"
                             : thisBizLogo
                     }
                     className="shadow-babadoo"
                     width={width} // prior: bizLogo === "undefined" && 200
                     height={height}
-                    title={`logo empresa`}
-                    alt={`logo empresa`}
+                    title="logo empresa"
+                    alt="logo empresa"
                 />
             </div>
             <p className="mx-3 text-subtitle text-purple text-center font-weight-bold">
@@ -113,21 +113,21 @@ export default function ReviewModal() {
                     {(nps || xpScore) && (
                         <AsyncBuyRating
                             defaultBuyReport={buyReport || " "}
-                            onlyReportField={true}
+                            onlyReportField
                         />
                     )}
                     {xpScore && (
                         <AsyncBuyRating
                             type="stars"
                             defaultGrade={xpScore}
-                            removeReportField={true}
+                            removeReportField
                         />
                     )}
                     {nps && (
                         <AsyncBuyRating
                             type="nps"
                             defaultScale={nps}
-                            removeReportField={true}
+                            removeReportField
                         />
                     )}
                 </section>

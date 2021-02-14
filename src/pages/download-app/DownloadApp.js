@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import ScrollArrow from "../../keyframes/built/scroll-arrow/ScrollArrow";
-import parse from "html-react-parser";
 import PwaInstaller from "../../components/pwa-installer/PwaInstaller";
 import { CLIENT_URL } from "../../config/clientUrl";
 import checkIfElemIsVisible from "../../utils/window/checkIfElemIsVisible";
@@ -8,9 +8,7 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import { readClientAdmin } from "../../redux/actions/userActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import lStorage from "../../utils/storage/lStorage";
-import { useStoreDispatch } from "easy-peasy";
 import Spinner from "../../components/loadingIndicators/Spinner";
-import useElemShowOnScroll from "../../hooks/scroll/useElemShowOnScroll";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 import useBackColor from "../../hooks/useBackColor";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
@@ -247,7 +245,7 @@ export default function DownloadApp({ match, location, history }) {
 
     const errorMsg = () => (
         <div className="text-white text-center">
-            <p className={`pl-3 mt-5 text-center text-hero`}>
+            <p className="pl-3 mt-5 text-center text-hero">
                 Oops! Parece que esse link não é válido ou já usado.
             </p>
             <p
@@ -257,7 +255,7 @@ export default function DownloadApp({ match, location, history }) {
             >
                 Por favor, tente um outro link para baixar seu app.
             </p>
-            {/*FUTURE UPDATE*/}
+            {/* FUTURE UPDATE */}
             <div style={{ display: "none" }}>
                 A button which will take the user to a choose the company's page
                 in order to get the right link again...
@@ -323,7 +321,7 @@ export default function DownloadApp({ match, location, history }) {
             <p>Se a placa para baixar o app não apareceu. Tente por aqui:</p>
             <div className="my-3">
                 <a
-                    href={"/mobile-app?abrir=1&banner=1"}
+                    href="/mobile-app?abrir=1&banner=1"
                     className="no-text-decoration"
                 >
                     <ButtonFab

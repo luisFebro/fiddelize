@@ -1,10 +1,5 @@
-import React from "react";
-// Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
-// End Redux
-// Material UI
-import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
+import { useStoreDispatch } from "easy-peasy";
+
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -12,11 +7,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import parse from "html-react-parser";
 // End Material UI
 import PropTypes from "prop-types";
+import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 // CUSTOM DATA
-import { deleteUser } from "../../../redux/actions/userActions";
-import { setRun } from "../../../redux/actions/globalActions";
-
-// END CUSTOM DATA
 
 ModalConfYesNo.propTypes = {
     open: PropTypes.bool,

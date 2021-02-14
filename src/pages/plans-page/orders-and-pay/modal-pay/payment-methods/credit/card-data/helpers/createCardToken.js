@@ -19,19 +19,19 @@ export default function createCardToken({ cardData }) {
         const { month, year } = getValidationData(cardVal);
 
         PagSeguro.createCardToken({
-            cardNumber: cardNumber, // Número do cartão de crédito
+            cardNumber, // Número do cartão de crédito
             brand: cardBrand, // Bandeira do cartão
             cvv: cardCvv, // CVV do cartão
             expirationMonth: month, // Mês da expiração do cartão
             expirationYear: year.toString(), // Ano da expiração do cartão, é necessário os 4 dígitos.
-            success: function (response) {
+            success(response) {
                 // Retorna o cartão tokenizado.
                 resolve(response.card.token);
             },
-            error: function (response) {
+            error(response) {
                 reject(response);
             },
-            complete: function (response) {
+            complete(response) {
                 // Callback para todas chamadas.
             },
         });

@@ -1,14 +1,13 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import { Fragment, useState, useEffect } from "react";
+import { withRouter, Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
-import { Link } from "react-router-dom";
-import RadiusBtn from "../../../components/buttons/RadiusBtn";
+
 import styled from "styled-components";
+import RadiusBtn from "../../buttons/RadiusBtn";
 import isThisApp from "../../../utils/window/isThisApp";
 import "./NavbarLayout.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from "../../../hooks/useRoleData";
-import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import useImg, { Img } from "../../../hooks/media/useImg";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
@@ -37,7 +36,7 @@ function Navbar({ history, location }) {
         coll: "logos",
         key: "app_fiddelize_logo",
     });
-    const logoSrc = logoBiz ? logoBiz : logoFid;
+    const logoSrc = logoBiz || logoFid;
 
     const { isAuthUser } = useAuthUser();
     const { selfBizLogoImg, selfThemePColor } = useClientAdmin();
@@ -141,16 +140,15 @@ function Navbar({ history, location }) {
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo =
         (!isHome && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isApp); // isApp &&
-    const fiddelizeLogo = `/img/official-logo-name.png`;
+    const fiddelizeLogo = "/img/official-logo-name.png";
     const handleLogoSrc = () => {
         if (needClientLogo) {
             const { newImg: thisSelfBizLogoImg } = removeImgFormat(
                 selfBizLogoImg
             );
             return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
-        } else {
-            return setUrl({ ...url, logoFid: fiddelizeLogo });
         }
+        return setUrl({ ...url, logoFid: fiddelizeLogo });
     };
 
     useEffect(() => {
@@ -171,12 +169,10 @@ function Navbar({ history, location }) {
                 } else {
                     size = 200;
                 }
+            } else if (selfBizLogoImg) {
+                isSquared ? (size = 85) : (size = 67);
             } else {
-                if (selfBizLogoImg) {
-                    isSquared ? (size = 85) : (size = 67);
-                } else {
-                    size = 90;
-                }
+                size = 90;
             }
             return size;
         };
@@ -234,7 +230,7 @@ function Navbar({ history, location }) {
                     backgroundColor:
                         !isApp || locationNow.includes("/painel-de-controle")
                             ? "var(--themePDark--default)"
-                            : "var(--themePDark--" + selfThemePColor + ")",
+                            : `var(--themePDark--${selfThemePColor})`,
                 }}
             >
                 {showLogo()}
@@ -303,7 +299,7 @@ const NavWrapper = styled.nav`
     }
 `;
 
-/*ARCHIVES
+/* ARCHIVES
 import KeyAccessDashboard from './KeyAccessDashboard';
 const showKeyAccessDashboard = () => (
     <Link to="/painel-controle-admin">

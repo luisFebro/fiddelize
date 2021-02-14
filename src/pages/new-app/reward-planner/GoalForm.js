@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
+import { withRouter } from "react-router-dom";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../../utils/form";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
-import { withRouter } from "react-router-dom";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 import { setMultiVar, getVar, store } from "../../../hooks/storage/useVar";
 
@@ -52,7 +51,7 @@ const styles = {
         top: -20,
         right: 35,
         zIndex: 3000,
-        //animationIterationCount: 2,
+        // animationIterationCount: 2,
     },
     giftBagIcon: {
         right: -30,
@@ -165,9 +164,7 @@ function GoalForm({ history, bizCodeName, bizName }) {
                                 },
                             }}
                             type="number"
-                            helperText={
-                                "Lembre-se: é o ponto/R$ que o cliente precisa alcançar em compras"
-                            }
+                            helperText="Lembre-se: é o ponto/R$ que o cliente precisa alcançar em compras"
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
                             }}
@@ -183,7 +180,7 @@ function GoalForm({ history, bizCodeName, bizName }) {
                                 })
                             }
                             variant="outlined"
-                            error={error === "rewardScore" ? true : false}
+                            error={error === "rewardScore"}
                             autoComplete="off"
                         />
                         <div
@@ -202,7 +199,7 @@ function GoalForm({ history, bizCodeName, bizName }) {
                 </div>
                 <div
                     id="field2"
-                    className={`d-none animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}
+                    className="d-none animated slideInDown fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold"
                 >
                     <p className="text-shadow">
                         Qual é a descrição do prêmio simbólico?
@@ -225,9 +222,7 @@ function GoalForm({ history, bizCodeName, bizName }) {
                             }}
                             name="mainReward"
                             value={mainReward}
-                            helperText={
-                                "Lembre-se: um serviço, produto, benefício ou desconto."
-                            }
+                            helperText="Lembre-se: um serviço, produto, benefício ou desconto."
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
                             }}
@@ -241,7 +236,7 @@ function GoalForm({ history, bizCodeName, bizName }) {
                                 })
                             }
                             variant="outlined"
-                            error={error === "mainReward" ? true : false}
+                            error={error === "mainReward"}
                             autoComplete="off"
                         />
                         <div

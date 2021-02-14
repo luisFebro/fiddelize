@@ -1,4 +1,3 @@
-import React from "react";
 import repeat from "../../utils/arrays/repeat";
 
 const getStyles = () => ({
@@ -36,7 +35,7 @@ function CircleField({ needDark = false, ind }) {
                     ...styles.innerCircle,
                     background: needDark ? "#000" : "#fff",
                 }}
-            ></div>
+            />
         </div>
     );
 }

@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import CreatedAtBr from '../CreatedAtBr';
+import PropTypes from "prop-types";
+import CreatedAtBr from "../CreatedAtBr";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -19,15 +18,15 @@ export default function PanelHiddenContent({ data }) {
     } = data;
 
     const whichRole = () => {
-        if(role === "admin") return "Admin";
-        if(role === "colaborador") return "Colaborador";
-        if(role === "cliente") return "Cliente";
-    }
+        if (role === "admin") return "Admin";
+        if (role === "colaborador") return "Colaborador";
+        if (role === "cliente") return "Cliente";
+    };
 
     return (
         <div
             className="text-normal enabledLink"
-            style={{userSelect: 'text', margin: 'auto', width: '90%'}}
+            style={{ userSelect: "text", margin: "auto", width: "90%" }}
         >
             <div>
                 <p>Tipo Usuário: {whichRole()}</p>

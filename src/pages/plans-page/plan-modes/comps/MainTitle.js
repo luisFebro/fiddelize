@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
 
@@ -27,7 +27,7 @@ const getStyles = () => ({
 const CircleBack = () => {
     const styles = getStyles();
 
-    return <div style={styles.clipPathBack}></div>;
+    return <div style={styles.clipPathBack} />;
 };
 
 export { CircleBack };

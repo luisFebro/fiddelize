@@ -1,5 +1,4 @@
-import React from 'react';
-import { dataWorkingHour } from './working-hour/GetWorkingHour';
+import { dataWorkingHour } from "./working-hour/GetWorkingHour";
 
 export default function CheckWorkingHour() {
     return (

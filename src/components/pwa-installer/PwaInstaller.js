@@ -1,12 +1,11 @@
 import "./style.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import isThisApp from "../../utils/window/isThisApp";
 import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import parse from "html-react-parser";
-import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
-import lStorage from "../../utils/storage/lStorage";
+import isThisApp from "../../utils/window/isThisApp";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 
 const isApp = isThisApp();
@@ -79,7 +78,7 @@ export default function PwaInstaller({
 
             setData((prev) => ({
                 ...prev,
-                beforeinstallprompt: "e:" + JSON.stringify(e),
+                beforeinstallprompt: `e:${JSON.stringify(e)}`,
             }));
         });
     }, []);
@@ -90,7 +89,7 @@ export default function PwaInstaller({
             setBannerVisible(false);
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompts
-            deferredPrompt.userChoice.then(function (choiceResult) {
+            deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === "accepted") {
                     showSnackbar(
                         dispatch,

@@ -1,4 +1,5 @@
-import React, { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
 import { useProfile } from "../../../../../hooks/useRoleData";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
@@ -6,7 +7,6 @@ import { Load } from "../../../../../components/code-splitting/LoadableComp";
 import ShowSelectionArea from "./comps/ShowSelectionArea";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 import useAPI, { readContacts } from "../../../../../hooks/api/useAPI";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import { API } from "../../../../../config/api.js";
 
@@ -30,7 +30,7 @@ export default function AsyncSpecificCustomer({
     const dispatch = useStoreDispatch();
 
     const { runName, runOneArray } = useRunComp();
-    let { _id: userId } = useProfile();
+    const { _id: userId } = useProfile();
 
     const params = { contactFrom: selectedValue };
     const trigger = selectedValue;
@@ -113,7 +113,7 @@ export default function AsyncSpecificCustomer({
                     setData={setData}
                     placeholder="Procure cliente"
                     noOptionsText="Nenhum cliente encontrado"
-                    disableOpenOnFocus={true}
+                    disableOpenOnFocus
                     offlineKey="valuesHistory_specificCustomerSMS"
                 />
                 <div

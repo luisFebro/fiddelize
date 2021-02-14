@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 // import IconButton from '@material-ui/core/IconButton';
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import Badge from "@material-ui/core/Badge";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -28,14 +27,12 @@ function NotificationBadge({
 }) {
     const BorderedBadge = withStyles((theme) => ({
         badge: {
-            right: right || 0, //14
-            top: top || 1, //18
+            right: right || 0, // 14
+            top: top || 1, // 18
             height: 0,
             maxWidth: "14px",
             padding: padding || "14px",
-            border: `3px solid ${
-                borderColor ? borderColor : "var(--mainDark)"
-            }`,
+            border: `3px solid ${borderColor || "var(--mainDark)"}`,
             font: `bold ${fontSize || "20px"} var(--mainFont)`,
             backgroundColor: backgroundColor || "var(--themeSDark)",
             color: "white",
@@ -50,7 +47,7 @@ function NotificationBadge({
         <BorderedBadge
             badgeContent={badgeValue}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            invisible={!badgeValue ? true : false}
+            invisible={!badgeValue}
             showZero={false}
             max={99}
             overlap="rectangle"

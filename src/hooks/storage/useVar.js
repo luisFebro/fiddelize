@@ -15,7 +15,7 @@ export const store = {
 const variablesStore = (storeName = "global_variables") =>
     localforage.createInstance({
         name: `fiddelize-${storeName}`,
-        storeName: storeName,
+        storeName,
     });
 
 // using indexedDB with forage to store especially temporary variables.
@@ -44,7 +44,7 @@ export default function useGetVar(key, options = {}) {
             })
             .catch((err) => {
                 console.log(
-                    "Error with localForage white handling data: " + err
+                    `Error with localForage white handling data: ${err}`
                 );
                 setLoading(false);
             });
@@ -64,9 +64,9 @@ export const getVar = (key, options = {}) => {
 export const getMultiVar = async (arrayKeys, options = {}) => {
     const { storeName } = options;
 
-    const promises = arrayKeys.map((key) => {
-        return variablesStore(storeName).getItem(key);
-    });
+    const promises = arrayKeys.map((key) =>
+        variablesStore(storeName).getItem(key)
+    );
 
     return await Promise.all(promises);
 };
@@ -124,26 +124,25 @@ export const removeMultiVar = async (strArray, options = {}) => {
     const { storeName } = options;
     if (strArray && !strArray.length) return;
 
-    const promises = strArray.map((strElem) => {
-        return variablesStore(storeName)
+    const promises = strArray.map((strElem) =>
+        variablesStore(storeName)
             .removeItem(strElem)
             .then((res) => null)
             .catch((err) =>
                 console.log(
                     `the was an error removing key ${strElem}. Details: ${err}`
                 )
-            );
-    });
+            )
+    );
 
     return await Promise.all(promises);
 };
 
-export const removeCollection = async (storeName) => {
-    return await localforage.dropInstance({
+export const removeCollection = async (storeName) =>
+    await localforage.dropInstance({
         name: `fiddelize-${storeName}`,
         // storeName: storeName, // if this is specified, only the store inside collection is removed.
     });
-};
 
 function getStrVersion(str) {
     if (!str) return;

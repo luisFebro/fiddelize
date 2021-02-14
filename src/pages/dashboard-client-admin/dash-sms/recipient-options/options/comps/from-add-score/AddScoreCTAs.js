@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AddNewScoreBtn from "../../../../../../app/team/add-new-score-panel/AddNewScoreBtn";
 import useData from "../../../../../../../hooks/useData";
 import { useClientAdmin } from "../../../../../../../hooks/useRoleData";
@@ -46,7 +46,7 @@ export default function AddScoreCTAs({ clientName, handleScoreToLink }) {
                     }
                     backColor={isCliAdmin ? "default" : backColor}
                     sColor={isCliAdmin ? "default" : sColor}
-                    clientScoreOnly={true}
+                    clientScoreOnly
                     clientName={clientName}
                     handleCustomerScore={handleCustomerScore}
                 />

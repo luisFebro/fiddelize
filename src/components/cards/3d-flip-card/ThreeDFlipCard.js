@@ -1,5 +1,5 @@
 // reference: https://codepen.io/kivanfan/pen/BGxXKR
-import React, { Fragment, useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import "./_ThreeDFlipCard.scss";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import { formatSlashDMY } from "../../../utils/dates/dateFns";
@@ -74,19 +74,19 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
                 style={{
                     background: cardColor,
                 }}
-            ></div>
+            />
             <div
                 className="thickness"
                 style={{
                     background: cardColor,
                 }}
-            ></div>
+            />
             <div
                 className="thickness"
                 style={{
                     background: cardColor,
                 }}
-            ></div>
+            />
         </Fragment>
     );
 

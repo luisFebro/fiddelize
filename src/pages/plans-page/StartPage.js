@@ -1,4 +1,3 @@
-import React from "react";
 import { GoldBtn, SilverBtn, BronzeBtn } from "./ProBtns";
 import removeImgFormat from "../../utils/biz/removeImgFormat";
 
@@ -6,7 +5,7 @@ const getStyles = () => ({
     hightlighedName: {
         padding: "1px 10px",
         borderRadius: "45px",
-        background: `var(--themePLight--default)`,
+        background: "var(--themePLight--default)",
     },
     arrow: {
         transform: "rotate(30deg)",
@@ -32,7 +31,7 @@ export default function StartPage({
         <section>
             <div className="mb-2 container-center">
                 <img
-                    src={thisBizLogo ? thisBizLogo : ""}
+                    src={thisBizLogo || ""}
                     className="img-fluid"
                     width={width}
                     height={height}

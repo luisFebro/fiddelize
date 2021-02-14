@@ -1,6 +1,5 @@
-import React from 'react';
-import RegisteredUsers from './RegisteredUsers';
-import DashSectionTitle from '../../DashSectionTitle';
+import RegisteredUsers from "./RegisteredUsers";
+import DashSectionTitle from "../../DashSectionTitle";
 
 export default function DashUsers() {
     return (

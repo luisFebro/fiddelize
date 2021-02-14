@@ -1,13 +1,14 @@
-import areObjsEqual from '../objects/areObjsEqual';
-export * from './lStorageStore';
+import areObjsEqual from "../objects/areObjsEqual";
+
+export * from "./lStorageStore";
 // You need to specify here all the collections of the project.
 // This should be AN OBJECT
 const collectionStore = {
-    "onceChecked": {}, // this is for actions that need to be used only once in the app like introduction msgs.
-    "userProfile": {},
-    "clientAdmin": {},
-    "appSystem": {},
-    "centralAdmin": {},
+    onceChecked: {}, // this is for actions that need to be used only once in the app like introduction msgs.
+    userProfile: {},
+    clientAdmin: {},
+    appSystem: {},
+    centralAdmin: {},
 };
 
 export default function lStorage(type, options, next) {
@@ -16,126 +17,155 @@ export default function lStorage(type, options, next) {
     const notInCollection = !collectionStore.hasOwnProperty(collection);
     const objInCollection = JSON.parse(localStorage.getItem(collection));
     let notInProperty = true;
-    if(objInCollection) {
+    if (objInCollection) {
         notInProperty = !objInCollection.hasOwnProperty(property);
     }
 
     // Validation
-    if(!collection) throw new Error("Insert a collection's name");
-    if(!(["setItem", "setItems", "setItemsByArray", "getItem", "getItems", "removeItems", "removeItem", "removeCol", "compareCol"]).includes(type)) throw new Error("You need to specify the localStorage type: either setItem, setItems (any number of props and keys), setItemsByArray(quantity of props and values are equal), getItem, getItems, removeItems (remove all items from a collection), removeItem (One specific property from a collection), compareCol. Check also for typos...")
-    if(!value && type === "setItem" && typeof value !== 'boolean') throw new Error("Insert a value");
-    if(notInCollection && type === "getItem") throw new Error("This collection does not exists. You can not get anything...")
+    if (!collection) throw new Error("Insert a collection's name");
+    if (
+        ![
+            "setItem",
+            "setItems",
+            "setItemsByArray",
+            "getItem",
+            "getItems",
+            "removeItems",
+            "removeItem",
+            "removeCol",
+            "compareCol",
+        ].includes(type)
+    )
+        throw new Error(
+            "You need to specify the localStorage type: either setItem, setItems (any number of props and keys), setItemsByArray(quantity of props and values are equal), getItem, getItems, removeItems (remove all items from a collection), removeItem (One specific property from a collection), compareCol. Check also for typos..."
+        );
+    if (!value && type === "setItem" && typeof value !== "boolean")
+        throw new Error("Insert a value");
+    if (notInCollection && type === "getItem")
+        throw new Error(
+            "This collection does not exists. You can not get anything..."
+        );
     // End Validation
 
-
-    if(type === "setItem") {
+    if (type === "setItem") {
         let result;
-        if(notInCollection) throw new Error("You need to specify a new localStorage collection on utils/storage/lStorage.js file")
+        if (notInCollection)
+            throw new Error(
+                "You need to specify a new localStorage collection on utils/storage/lStorage.js file"
+            );
 
-        if(notInProperty) {
-            result = {...objInCollection, [property]: value};
+        if (notInProperty) {
+            result = { ...objInCollection, [property]: value };
         } else {
             objInCollection[property] = value;
             result = objInCollection;
         }
-        localStorage.setItem(collection, JSON.stringify(result))
+        localStorage.setItem(collection, JSON.stringify(result));
         return;
     }
 
-    if(type === "setItems") {
+    if (type === "setItems") {
         // by obj, more flexible, any keys can be changedfrom any collection
         // if array, only the current keys can be modified, can not insert new keys.
         let result;
-        if(!newObj) throw new Error("You should assign in the options an `newObj` with new props and values");
+        if (!newObj)
+            throw new Error(
+                "You should assign in the options an `newObj` with new props and values"
+            );
         const keys = Object.keys(newObj);
         const values = Object.values(newObj);
 
         const newProps = {};
         keys.forEach((key, ind) => {
             newProps[key] = values[ind];
-        })
+        });
 
-        result = {...objInCollection, ...newProps};
+        result = { ...objInCollection, ...newProps };
 
-        localStorage.setItem(collection, JSON.stringify(result))
+        localStorage.setItem(collection, JSON.stringify(result));
         return;
     }
 
-    if(type === "setItemsByArray") {
-        if(notInCollection) throw new Error("You need to specify a new localStorage collection on utils/storage/lStorage.js file")
+    if (type === "setItemsByArray") {
+        if (notInCollection)
+            throw new Error(
+                "You need to specify a new localStorage collection on utils/storage/lStorage.js file"
+            );
         const isBothKeyArray = Array.isArray(property) && Array.isArray(value);
 
-        if(!isBothKeyArray) throw new Error("If you specify either property or value as an array, then BOTH need to an array. Not one of them...")
-        if(isBothKeyArray && property.length !== value.length) throw new Error("A value is missing... Both property and value key should have equal values' length")
+        if (!isBothKeyArray)
+            throw new Error(
+                "If you specify either property or value as an array, then BOTH need to an array. Not one of them..."
+            );
+        if (isBothKeyArray && property.length !== value.length)
+            throw new Error(
+                "A value is missing... Both property and value key should have equal values' length"
+            );
 
-        if(isBothKeyArray) {
-            let addedObj = {};
+        if (isBothKeyArray) {
+            const addedObj = {};
             property.forEach((prop, ind) => {
                 addedObj[prop] = value[ind];
-            })
-            localStorage.setItem(collection, JSON.stringify(addedObj))
+            });
+            localStorage.setItem(collection, JSON.stringify(addedObj));
             return;
         }
     }
 
-    if(type === "getItem") {
+    if (type === "getItem") {
         let valueRes = null;
-        if(objInCollection) {
-           valueRes = objInCollection[property];
+        if (objInCollection) {
+            valueRes = objInCollection[property];
         }
 
         return valueRes;
     }
 
-    if(type === "getItems") {
+    if (type === "getItems") {
         return objInCollection;
     }
 
-
-    if(type === "removeItem") {
-        if(notInProperty) {
-            //console.warn(`Property key not found. The ${collection.toUpperCase()} collection got not ${property.toUpperCase()} property`)
+    if (type === "removeItem") {
+        if (notInProperty) {
+            // console.warn(`Property key not found. The ${collection.toUpperCase()} collection got not ${property.toUpperCase()} property`)
             return null;
-        } else {
-            const objInCollection = JSON.parse(localStorage.getItem(collection));
-
-            delete objInCollection[property];
-
-            localStorage.setItem(collection, JSON.stringify(objInCollection));
-            return;
         }
+        const objInCollection = JSON.parse(localStorage.getItem(collection));
+
+        delete objInCollection[property];
+
+        localStorage.setItem(collection, JSON.stringify(objInCollection));
+        return;
     }
 
-    if(type === "removeItems") {
-        localStorage.setItem(collection, JSON.stringify({}))
+    if (type === "removeItems") {
+        localStorage.setItem(collection, JSON.stringify({}));
         return;
     }
     // remove an entire collection
-    if(type === "removeCol") {
+    if (type === "removeCol") {
         localStorage.removeItem(collection);
         return;
     }
 
-    if(type === "compareCol") {
-        if(!compareThisObj) throw new Error("You need the target object as an option")
+    if (type === "compareCol") {
+        if (!compareThisObj)
+            throw new Error("You need the target object as an option");
         const Obj1 = objInCollection;
         const Obj2 = compareThisObj;
         // if(!areObjsEqual(Obj1, Obj2)) {
-            // console.log("The following objs NOT EQUAL:")
-            // console.log("Obj1 at lStorageStore", Obj1);
-            // console.log("Obj2 at useRoleData/setDataOnline", Obj2);
+        // console.log("The following objs NOT EQUAL:")
+        // console.log("Obj1 at lStorageStore", Obj1);
+        // console.log("Obj2 at useRoleData/setDataOnline", Obj2);
         // }
 
         return areObjsEqual(Obj1, Obj2);
     }
 
-    if(typeof next === 'function') {
+    if (typeof next === "function") {
         next();
     }
 }
-
-
-
 
 // ENTIRE REFERENCE FOR LOCALSTORAGE FROM BOOKMANIA.
 /**

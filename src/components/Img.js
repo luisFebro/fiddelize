@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Skeleton from "@material-ui/lab/Skeleton";
-import Spinner from "./loadingIndicators/Spinner";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
+import parse from "html-react-parser";
+import Spinner from "./loadingIndicators/Spinner";
 import { IS_DEV } from "../config/clientUrl";
 import useImg from "../hooks/media/useImg";
-import parse from "html-react-parser";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,7 +64,7 @@ export default function Img({
     skelBackColor,
     title,
 }) {
-    let [status, setStatus] = useState(true);
+    const [status, setStatus] = useState(true);
 
     const thisSrc = useImg(src, { trigger: offline, coll, key: alt || src });
 

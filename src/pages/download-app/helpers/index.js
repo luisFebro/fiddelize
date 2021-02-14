@@ -35,7 +35,7 @@ export const handleRoleStorage = ({
             { lastRegisterBizId: bizId },
             { memberId },
             { memberRole: memberJob ? "cliente-membro" : "cliente-admin" },
-            { memberJob: memberJob ? memberJob : "admin" },
+            { memberJob: memberJob || "admin" },
             { userScore },
         ];
     }
@@ -44,7 +44,7 @@ export const handleRoleStorage = ({
         userPayload = [
             { role: whichRole },
             { lastRegisterBizId: bizId },
-            { memberJob: memberJob ? memberJob : "admin" },
+            { memberJob: memberJob || "admin" },
         ];
     }
 

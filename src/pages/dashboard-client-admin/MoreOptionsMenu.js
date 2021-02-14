@@ -1,20 +1,19 @@
-import React, { Fragment, useState } from "react";
-import { withRouter } from "react-router-dom";
+import { Fragment, useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import {
     useClientAdmin,
     useAppSystem,
     useProfile,
 } from "../../hooks/useRoleData";
 import { logout } from "../../redux/actions/authActions";
-import { useStoreDispatch } from "easy-peasy";
 import isThisApp from "../../utils/window/isThisApp";
 import ButtonMenu from "../../components/buttons/material-ui/button-menu/ButtonMenu";
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import { setVar, store } from "../../hooks/storage/useVar";
 // ICONS
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 // END ICONS
 
 export const menuIconStyle = {

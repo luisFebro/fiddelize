@@ -1,21 +1,25 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import ButtonMulti from '../../../../../components/buttons/material-ui/ButtonMulti';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import EditButton from '../../../../../components/buttons/EditButton';
-import TextField from '@material-ui/core/TextField';
-import handleChange from '../../../../../utils/form/use-state/handleChange';
-import useAPI, { activateAutoService, readAutoService, getUniqueId } from '../../../../../hooks/api/useAPI';
+import { useState, useEffect } from "react";
+import TextField from "@material-ui/core/TextField";
+import ButtonMulti from "../../../../../components/buttons/material-ui/ButtonMulti";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import EditButton from "../../../../../components/buttons/EditButton";
+import handleChange from "../../../../../utils/form/use-state/handleChange";
+import useAPI, {
+    activateAutoService,
+    readAutoService,
+    getUniqueId,
+} from "../../../../../hooks/api/useAPI";
 
 const getStyles = () => ({
     msgField: {
-        background: 'var(--themeP)',
-        borderRadius: '30px',
+        background: "var(--themeP)",
+        borderRadius: "30px",
     },
     fieldFormValue: {
-        backgroundColor: 'var(--mainWhite)',
-        color: 'var(--themeP)',
-        fontSize: '20px',
-        fontFamily: 'var(--mainFont)',
+        backgroundColor: "var(--mainWhite)",
+        color: "var(--themeP)",
+        fontSize: "20px",
+        fontFamily: "var(--mainFont)",
     },
 });
 
@@ -24,48 +28,48 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
     const [message, setMessage] = useState("");
     const [edit, setEdit] = useState(false);
     const { msg, title, subtitle, body } = modal;
-    const userId = body.userId;
+    const { userId } = body;
 
     useEffect(() => {
         setMessage(msg);
-    }, [])
+    }, []);
 
-    const { data: serviceData, loading } = useAPI({ url: readAutoService(userId), needAuth: true })
+    const { data: serviceData, loading } = useAPI({
+        url: readAutoService(userId),
+        needAuth: true,
+    });
 
     const { loading: loadingChange } = useAPI({
-        method: 'put',
+        method: "put",
         url: activateAutoService(),
         body: { ...body, targetKey: "msg", msg: message, active: true },
         trigger,
         needAuth: true,
         loadingStart: false,
-        snackbar: { txtSuccess: "Mudanças Salvas!" }
-    })
+        snackbar: { txtSuccess: "Mudanças Salvas!" },
+    });
 
     const styles = getStyles();
 
     const handleEdit = () => {
-        setEdit(prev => !prev);
-    }
+        setEdit((prev) => !prev);
+    };
 
     const handleUpdate = () => {
         handleEdit();
 
         const randomId = getUniqueId();
         setTrigger(randomId);
-    }
+    };
 
     const showTitle = () => (
         <div className="my-5">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
+            <p className="text-subtitle text-purple text-center font-weight-bold">
                 {title}
             </p>
-            <p
-                className="text-normal text-purple text-left mx-3"
-            >
-                <span className="font-weight-bold">Sobre: </span>{subtitle}
+            <p className="text-normal text-purple text-left mx-3">
+                <span className="font-weight-bold">Sobre: </span>
+                {subtitle}
             </p>
         </div>
     );
@@ -85,7 +89,7 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
                             style: styles.fieldFormValue,
                         }}
                         inputProps={{
-                            maxLength: 160
+                            maxLength: 160,
                         }}
                         name="message"
                         value={message}
@@ -94,10 +98,11 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
                         variant="outlined"
                         fullWidth
                     />
-                    <div className="position-relative text-purple text-nowrap pl-1" style={{top: '10px'}}>
-                        <span
-                            className="font-weight-bold"
-                        >
+                    <div
+                        className="position-relative text-purple text-nowrap pl-1"
+                        style={{ top: "10px" }}
+                    >
+                        <span className="font-weight-bold">
                             {message.length}/160 characteres
                         </span>
                     </div>
@@ -109,10 +114,11 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
                 >
                     {message}
                     {title !== "Conclusão de desafio" && (
-                        <div className="position-absolute" style={{ bottom: -15, right: -20 }}>
-                            <EditButton
-                                onClick={handleEdit}
-                            />
+                        <div
+                            className="position-absolute"
+                            style={{ bottom: -15, right: -20 }}
+                        >
+                            <EditButton onClick={handleEdit} />
                         </div>
                     )}
                 </section>
@@ -123,7 +129,9 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
     const showCTABtns = () => (
         <section className="d-flex justify-content-around align-items-center mt-2 mb-5">
             {loadingChange ? (
-                <p className="my-3 text-center text-normal text-grey">Mudando...</p>
+                <p className="my-3 text-center text-normal text-grey">
+                    Mudando...
+                </p>
             ) : (
                 <ButtonMulti
                     title="Voltar"
@@ -139,8 +147,8 @@ export default function AsyncSMSDetailsContent({ modal, handleFullClose }) {
                         title="Atualizar"
                         position="relative"
                         onClick={handleUpdate}
-                        backgroundColor={"var(--themeSDark--default)"}
-                        variant = 'extended'
+                        backgroundColor="var(--themeSDark--default)"
+                        variant="extended"
                     />
                 </div>
             )}

@@ -1,9 +1,8 @@
-import React from "react";
+import { useStoreDispatch } from "easy-peasy";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import RedirectLink from "../../../components/RedirectLink";
 import RadiusBtn from "../../../components/buttons/RadiusBtn";
 import { logout } from "../../../redux/actions/authActions";
-import { useStoreDispatch } from "easy-peasy";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
 const AsyncAccessGateKeeper = Load({
@@ -53,9 +52,7 @@ export default function GatewayAndCTAs({
                     >
                         <RadiusBtn
                             title="acessar"
-                            backgroundColor={
-                                "var(--themeSDark--" + selfThemeSColor + ")"
-                            }
+                            backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
                         />
                     </RedirectLink>
                     <span>

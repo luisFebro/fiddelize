@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SilverBtn, BronzeBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -19,6 +19,7 @@ import AddClientsToCart from "./sessions/AddClientsToCart";
 import AddSMS from "./sessions/AddSMS";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
+
 const AsyncOrdersAndPay = Load({
     loader: () =>
         import(
@@ -59,7 +60,7 @@ export default function GoldPlan({ setCurrPlan }) {
 
         const defaultQuantity = orders.currPlan.amount - 1; // this amount counts twicein the obj
         let totalServ = 0;
-        for (let serv in orders) {
+        for (const serv in orders) {
             ++totalServ;
             total += orders[serv].price;
         }
@@ -84,7 +85,7 @@ export default function GoldPlan({ setCurrPlan }) {
         } = options;
 
         const orderPrice = order ? order.price : orderGroupPrice;
-        let newTotal = orders.currPlan.price + orderPrice;
+        const newTotal = orders.currPlan.price + orderPrice;
 
         // for SMS logics
         const needCurrRemoval = order && order.removeCurr;
@@ -174,18 +175,18 @@ export default function GoldPlan({ setCurrPlan }) {
                     <section className="period-selection">
                         <PeriodSelection handlePeriod={handlePeriod} />
                     </section>
-                    <div style={{ height: 50 }}></div>
+                    <div style={{ height: 50 }} />
 
                     <ServicesCard plan="gold" period={period} />
-                    <div style={{ marginBottom: 100 }}></div>
+                    <div style={{ marginBottom: 100 }} />
 
                     <AddClientsToCart
                         modalData={modalClientsData}
                         clientOrder={orders[currService]}
                         currService={currService}
-                        disableCliUser={true}
+                        disableCliUser
                     />
-                    <div style={{ marginBottom: 100 }}></div>
+                    <div style={{ marginBottom: 100 }} />
 
                     <AddSMS
                         smsOrder={orders.sms}

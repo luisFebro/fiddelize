@@ -1,17 +1,23 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import Title from "../Title";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import EmailIcon from "@material-ui/icons/Email";
+import MoneyIcon from "@material-ui/icons/Money";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
+import Title from "../Title";
 import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RadiusBtn from "../buttons/RadiusBtn";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
 // import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
@@ -25,12 +31,6 @@ import getDateCode from "../../utils/dates/getDateCode";
 // import { setRun } from '../../hooks/useRunComp';
 // Material UI
 // import { makeStyles } from '@material-ui/core/styles';
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import EmailIcon from "@material-ui/icons/Email";
-import MoneyIcon from "@material-ui/icons/Money";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
@@ -40,6 +40,7 @@ import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import { setStorageRegisterDone } from "./helpers";
 import useData from "../../hooks/useData";
+
 const filter = getFilterDate();
 
 const isSmall = window.Helper.isSmallScreen();
@@ -68,7 +69,7 @@ function Register({
     needLoginBtn = false,
 }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
-    const [switchNumToText, setSwitchNumToText] = useState(false); //n1
+    const [switchNumToText, setSwitchNumToText] = useState(false); // n1
 
     const {
         selfThemePColor,
@@ -104,7 +105,7 @@ function Register({
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    let { role, name, email, gender, birthday, cpf, phone } = data;
+    const { role, name, email, gender, birthday, cpf, phone } = data;
     const cpfValue = autoCpfMaskBr(cpf);
 
     const [primaryAgent] = useData(["primaryAgent"]);
@@ -251,7 +252,7 @@ function Register({
 
     const showLoginForm = (needLoginBtn) =>
         needLoginBtn && (
-            <div class="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
+            <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
                 <p
                     className={`${selectTxtStyle(
                         selfThemeBackColor
@@ -268,9 +269,7 @@ function Register({
                             setStorageRegisterDone();
                             setLoginOrRegister("login");
                         }}
-                        backgroundColor={
-                            "var(--themeSDark--" + selfThemeSColor + ")"
-                        }
+                        backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
                     />
                 </div>
             </div>
@@ -282,8 +281,8 @@ function Register({
                 title="Faça seu cadastro"
                 subTitle=""
                 color="var(--mainWhite)"
-                needShadow={true}
-                backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
+                needShadow
+                backgroundColor={`var(--themePDark--${selfThemePColor})`}
             />
         </div>
     );
@@ -302,7 +301,7 @@ function Register({
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
-                    error={errorName ? true : false}
+                    error={!!errorName}
                     variant="outlined"
                     margin="dense"
                     id="name"
@@ -334,16 +333,13 @@ function Register({
                     }}
                 />
             </div>
-            <div
-                id="field2"
-                className={`d-none animated slideInLeft fast mt-3`}
-            >
+            <div id="field2" className="d-none animated slideInLeft fast mt-3">
                 Ok, informe seu CPF
                 <TextField
                     required
                     margin="dense"
                     onChange={handleChange(setData, data)}
-                    error={errorCpf ? true : false}
+                    error={!!errorCpf}
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
@@ -379,7 +375,7 @@ function Register({
                     }}
                 />
             </div>
-            <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field3" className="d-none animated fadeInUp fast mt-3">
                 {name ? (
                     <span>{name.cap()}, quando é o seu aniversário?</span>
                 ) : (
@@ -393,10 +389,10 @@ function Register({
                         required
                         inputVariant="outlined"
                         margin="dense"
-                        error={errorBirthday ? true : false}
+                        error={!!errorBirthday}
                         openTo="year"
-                        disableFuture={true}
-                        allowKeyboardControl={true}
+                        disableFuture
+                        allowKeyboardControl
                         maxDate={new Date(`${maxYear}-12-31`)}
                         minDate={new Date("1940-01-01")}
                         autoOk={false}
@@ -422,7 +418,7 @@ function Register({
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section id="field4" className={`d-none animated slideInUp fast`}>
+            <section id="field4" className="d-none animated slideInUp fast">
                 <p className="text-left my-2">Para finalizar o cadastro...</p>
                 <div className="mt-3">
                     Email
@@ -434,7 +430,7 @@ function Register({
                         onBlur={(e) =>
                             handleNextField(e, "field4", { event: "onBlur" })
                         }
-                        error={errorEmail ? true : false}
+                        error={!!errorEmail}
                         name="email"
                         variant="outlined"
                         value={email}
@@ -458,7 +454,7 @@ function Register({
                         required
                         margin="dense"
                         onChange={handleChange(setData, data)}
-                        error={errorPhone ? true : false}
+                        error={!!errorPhone}
                         onKeyPress={(e) => {
                             handleNextField(e, "field5", {
                                 callback: () =>
@@ -479,7 +475,7 @@ function Register({
                             });
                         }}
                         name="phone"
-                        helperText={"Digite apenas números com DDD"}
+                        helperText="Digite apenas números com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         value={phone}
                         type="tel"
@@ -507,7 +503,7 @@ function Register({
                         fullWidth
                         value={gender}
                         variant="outlined"
-                        error={errorGender ? true : false}
+                        error={!!errorGender}
                         style={{ backgroundColor: "var(--mainWhite)" }}
                     >
                         <MenuItem value={gender}>
@@ -521,8 +517,8 @@ function Register({
                                 selecione forma tratamento:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"Ela"}>Ela</MenuItem>
-                        <MenuItem value={"Ele"}>Ele</MenuItem>
+                        <MenuItem value="Ela">Ela</MenuItem>
+                        <MenuItem value="Ele">Ele</MenuItem>
                     </Select>
                 </div>
             </section>
@@ -534,11 +530,11 @@ function Register({
         <div className="container-center">
             <ButtonMulti
                 onClick={registerThisUser}
-                disabled={actionBtnDisabled ? true : false}
+                disabled={!!actionBtnDisabled}
                 title="Registrar"
                 color="var(--mainWhite)"
-                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
-                backColorOnHover={"var(--themeSDark--" + selfThemeSColor + ")"}
+                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                backColorOnHover={`var(--themeSDark--${selfThemeSColor})`}
                 iconFontAwesome={
                     <FontAwesomeIcon icon="save" style={faStyle} />
                 }

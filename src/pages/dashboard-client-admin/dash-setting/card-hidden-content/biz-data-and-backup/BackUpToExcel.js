@@ -1,8 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { useStoreDispatch, useStoreState } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
-import parse from "html-react-parser";
 import { readAllDbFromModels } from "../../../../../redux/actions/adminActions";
 import Img from "../../../../../components/Img";
 import useData from "../../../../../hooks/useData";
@@ -122,9 +121,9 @@ export default function BackUpToExcel() {
                     {dbDataList.length !== 0 &&
                         dbDataList.docs.map((doc, ind) => (
                             <tr key={ind}>
-                                {dbDataList.fields.map((field, ind) => {
-                                    return <td key={ind}>{doc[field]}</td>;
-                                })}
+                                {dbDataList.fields.map((field, ind) => (
+                                    <td key={ind}>{doc[field]}</td>
+                                ))}
                             </tr>
                         ))}
                 </tbody>
@@ -230,7 +229,7 @@ export default function BackUpToExcel() {
             <Img
                 className="img-fluid"
                 src="/img/icons/backup-excel.svg"
-                offline={true}
+                offline
                 width={120}
                 height="auto"
                 alt="ícone excel"

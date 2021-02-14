@@ -1,14 +1,13 @@
-import React from 'react';
-import { Switch, Route } from 'react-router';
+import { Switch, Route } from "react-router";
 
 export default (
     // Switch is added in v4 react-router
     <Switch>
-        {/*Categories Pages*/}
+        {/* Categories Pages */}
         <Route path="/lingeries" />
         <Route path="/cosmeticos" />
         <Route path="/comestiveis" />
-        {/*End Categories Pages*/}
+        {/* End Categories Pages */}
         <Route path="/loja" />
         <Route path="/seu-carrinho" />
         <Route path="/finalizar-compra" />

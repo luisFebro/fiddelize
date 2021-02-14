@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EventIcon from "@material-ui/icons/Event";
-import { setVar } from "../../../../../../../hooks/storage/useVar";
 import { withRouter } from "react-router-dom";
+import { setVar } from "../../../../../../../hooks/storage/useVar";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 import RadiusBtn from "../../../../../../../components/buttons/RadiusBtn";
 

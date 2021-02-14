@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
-import ModalConfYesNo from "../../../../../../../../components/modals/ModalYesNo";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalFullContent from "../../../../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../../../../components/code-splitting/LoadableComp";
 import useAPI, { readUser } from "../../../../../../../../hooks/api/useAPI";
@@ -38,7 +36,7 @@ export default function ModalBtn({ modalData = {} }) {
     const AsyncMemberProfile = (
         <Async
             data={data}
-            title={`&#187; Perfil do Membro`}
+            title={"&#187; Perfil do Membro"}
             subtitle={
                 <p>
                     <span className="font-weight-bold text-normal">
@@ -66,7 +64,7 @@ export default function ModalBtn({ modalData = {} }) {
                 size="large"
                 title="Ver Perfil"
                 onClick={onOpen}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
             />
             <ModalFullContent

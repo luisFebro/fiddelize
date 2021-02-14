@@ -21,7 +21,7 @@
 // }
 
 /* A Queue object for queue-like functionality over JavaScript arrays. */
-var Queue = function () {
+const Queue = function () {
     this.items = [];
 };
 Queue.prototype.enqueue = function (obj) {
@@ -41,10 +41,10 @@ Queue.prototype.isEmpty = function () {
  * @returns {array} Array of objects describing each vertex, like
  *     [{distance: _, predecessor: _ }]
  */
-var doBFS = function (graph, source) {
-    var bfsInfo = [];
+const doBFS = function (graph, source) {
+    const bfsInfo = [];
 
-    for (var i = 0; i < graph.length; i++) {
+    for (let i = 0; i < graph.length; i++) {
         bfsInfo[i] = {
             distance: null,
             predecessor: null,
@@ -53,24 +53,24 @@ var doBFS = function (graph, source) {
 
     bfsInfo[source].distance = 0;
 
-    var queue = new Queue();
+    const queue = new Queue();
     queue.enqueue(source);
 
     // Traverse the graph
     // As long as the queue is not empty:
     while (!queue.isEmpty()) {
         //  Repeatedly dequeue a vertex u from the queue.
-        var vertex = queue.dequeue();
+        const vertex = queue.dequeue();
         // For each neighbor v of u that has not been visited:
-        for (var u = 0; u < graph[vertex].length; u++) {
-            var neighbor = graph[vertex][u];
+        for (let u = 0; u < graph[vertex].length; u++) {
+            const neighbor = graph[vertex][u];
 
             if (bfsInfo[neighbor].distance === null) {
-                //Set distance to 1 greater than u's distance
+                // Set distance to 1 greater than u's distance
                 bfsInfo[neighbor].distance = bfsInfo[vertex].distance + 1;
-                //Set predecessor to u
+                // Set predecessor to u
                 bfsInfo[neighbor].predecessor = vertex;
-                //Enqueue v
+                // Enqueue v
                 queue.enqueue(neighbor);
             }
         }
@@ -79,7 +79,7 @@ var doBFS = function (graph, source) {
     return bfsInfo;
 };
 
-var adjList = [
+const adjList = [
     [1],
     [0, 4, 5],
     [3, 4, 5],
@@ -90,14 +90,9 @@ var adjList = [
     [],
 ];
 
-var bfsInfo = doBFS(adjList, 3);
-for (var i = 0; i < adjList.length; i++) {
+const bfsInfo = doBFS(adjList, 3);
+for (let i = 0; i < adjList.length; i++) {
     console.log(
-        "vertex " +
-            i +
-            ": distance = " +
-            bfsInfo[i].distance +
-            ", predecessor = " +
-            bfsInfo[i].predecessor
+        `vertex ${i}: distance = ${bfsInfo[i].distance}, predecessor = ${bfsInfo[i].predecessor}`
     );
 }

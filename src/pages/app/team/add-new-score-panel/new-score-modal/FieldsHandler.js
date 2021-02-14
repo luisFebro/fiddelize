@@ -1,4 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
+import { withRouter } from "react-router-dom";
 import SearchCustomer from "./SearchCustomer";
 import ScoreCustomer from "./ScoreCustomer";
 import SuccessMsg from "./SuccessMsg";
@@ -7,8 +8,6 @@ import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
     setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
-import useAuth from "../../../../../hooks/useAuthUser";
-import { withRouter } from "react-router-dom";
 import useData from "../../../../../hooks/useData";
 
 const setCustomerId = async (clientName, bizId, memberId) => {
@@ -73,7 +72,7 @@ function FieldsHandler({
     if (clientScoreOnly) {
         return (
             <ScoreCustomer
-                clientScoreOnly={true}
+                clientScoreOnly
                 closeModal={closeModal}
                 handleCustomerScore={handleCustomerScore}
                 setCurr={setCurr}

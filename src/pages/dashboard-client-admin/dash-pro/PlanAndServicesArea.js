@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import { Fragment } from "react";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import RedirectLink from "../../../components/RedirectLink";
 import AdminFidelidometro from "./admin-fidelidometro/AdminFidelidometro";
 import usePro from "../../../hooks/pro/usePro";
@@ -30,7 +30,7 @@ export default function PlanAndServicesArea() {
                     size="large"
                     title={title}
                     onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                     position="relative"
                     iconMu={noIcon ? undefined : PlusIcon}
@@ -79,7 +79,7 @@ export default function PlanAndServicesArea() {
             <div className="text-subtitle font-weight-bold text-purple">
                 Versão {handleVersion()}:
                 <span className="d-block text-em-1-7">
-                    {isFree ? "" : "Plano"} {currPlan ? currPlan : "..."}
+                    {isFree ? "" : "Plano"} {currPlan || "..."}
                 </span>
             </div>
             {showClubCTA()}

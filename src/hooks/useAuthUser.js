@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useStoreState } from "easy-peasy";
 import isThisApp from "../utils/window/isThisApp";
-import useData from "../hooks/useData";
-import { getVar, setMultiVar, removeVar, store } from "../hooks/storage/useVar";
+import useData from "./useData";
+import { getVar, setMultiVar, removeVar, store } from "./storage/useVar";
 
 const isApp = isThisApp();
 const gotToken = localStorage.getItem("token");
@@ -17,7 +17,7 @@ export const disconnect = async (options = {}) => {
 
     await Promise.all([
         setMultiVar(
-            [{ success: false }, { rememberAccess: isCliAdmin ? true : false }],
+            [{ success: false }, { rememberAccess: !!isCliAdmin }],
             store.user
         ),
         removeVar("token"),

@@ -24,9 +24,7 @@ NotifCard.propTypes = {
 
 const getStyles = ({ clicked, backColor, grayScaleReady }) => ({
     card: {
-        backgroundColor: !clicked
-            ? "var(--themePDark--" + backColor + ")"
-            : "grey",
+        backgroundColor: !clicked ? `var(--themePDark--${backColor})` : "grey",
         overflow: "visible",
     },
     newBadge: {
@@ -95,16 +93,14 @@ function NotifCard({
     );
 
     const cardBrief = brief && brief.replace(/§/gi, "");
-    const showCardDesc = (cardType) => {
-        return (
-            <section className="desc text-left text-white font-weight-bold">
-                <p className="brief my-2 text-small">
-                    {truncate(cardBrief, isSmall ? 52 : 75)}
-                </p>
-                {showDate()}
-            </section>
-        );
-    };
+    const showCardDesc = (cardType) => (
+        <section className="desc text-left text-white font-weight-bold">
+            <p className="brief my-2 text-small">
+                {truncate(cardBrief, isSmall ? 52 : 75)}
+            </p>
+            {showDate()}
+        </section>
+    );
 
     const showActionBtn = () => (
         <CardActionBtn
@@ -155,7 +151,7 @@ function NotifCard({
         <Card className="mb-3" style={styles.card}>
             <section className="notif-card--root position-relative">
                 {showTitle()}
-                <main className={`font-weight-bold text-normal text-center`}>
+                <main className="font-weight-bold text-normal text-center">
                     {showCardDesc()}
                     {showActionBtn()}
                 </main>

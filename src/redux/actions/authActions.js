@@ -1,5 +1,5 @@
 import axios from "axios";
-import { readUser, readCentralAdmin } from "./userActions";
+import { readCentralAdmin } from "./userActions";
 import { setLoadingProgress, setRun } from "./globalActions";
 import { showSnackbar } from "./snackbarActions";
 import { getHeaderJson } from "../../utils/server/getHeaders";
@@ -13,7 +13,7 @@ import { API } from "../../config/api";
 const isApp = isThisApp();
 
 // Check token & load user
-let alreadyPass = false;
+const alreadyPass = false;
 export const loadUser = () => (dispatch, getState) => (history) => {
     console.log("==USER LOADING==");
     axios
@@ -26,12 +26,12 @@ export const loadUser = () => (dispatch, getState) => (history) => {
             // const gotError = isApp && res.data && res.data.error;
             // if (gotError) logout(dispatch, { history });
 
-            const role = res.data.profile.role;
+            const { role } = res.data.profile;
             const userId = res.data.profile._id;
             const userDataPath = res.data.profile.clientUserData;
             const bizId = userDataPath && userDataPath.bizId;
             readCliAdmin(dispatch, role, {
-                userId: userId,
+                userId,
                 bizId: bizId || "0",
             });
 
@@ -98,7 +98,7 @@ export const loginEmail = async (dispatch, objToSend) => {
 
         return res;
     } catch (err) {
-        console.log("err" + err);
+        console.log(`err${err}`);
         dispatch({
             type: "LOGIN_ERROR",
         });
@@ -173,8 +173,8 @@ export const changePassword = async (dispatch, bodyPass, userId) => {
 // Setup config/headers and token
 export const tokenConfig = (getState) => {
     // n2
-    //getState method accesses redux store outside of a react component
-    const token = getState().authReducer.cases.token;
+    // getState method accesses redux store outside of a react component
+    const { token } = getState().authReducer.cases;
     console.log("token from tokenConfig", token);
     // Headers
     const config = {

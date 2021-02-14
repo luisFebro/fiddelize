@@ -1,9 +1,6 @@
-import React, { Fragment, useState, useEffect } from "react";
+import { useState } from "react";
 import { useClientAdmin } from "../../../../hooks/useRoleData";
-import useAPIList, {
-    readTasks,
-    getTrigger,
-} from "../../../../hooks/api/useAPIList";
+import useAPIList, { readTasks } from "../../../../hooks/api/useAPIList";
 import "./_AsyncClientWinnersList.scss";
 import CliWinnersList from "./list/CliWinnersList";
 import useData from "../../../../hooks/useData";
@@ -66,7 +63,7 @@ export default function AsyncClientWinnersList() {
                     alt="Ilustração"
                     txtImgConfig={{
                         topPos: "80%",
-                        txt: `Nenhum cliente ganhador`,
+                        txt: "Nenhum cliente ganhador",
                     }}
                 />
             </section>

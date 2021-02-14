@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
-import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
-import PropTypes from 'prop-types';
-import { buttonFabType } from '../../../../../../../types';
-import handleChange from '../../../../../../../utils/form/use-state/handleChange';
-import { setRun } from '../../../../../../../hooks/useRunComp';
-import { useStoreDispatch } from 'easy-peasy';
-import ModalTextField from  './ModalTextField';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { useStoreDispatch } from "easy-peasy";
+import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import { buttonFabType } from "../../../../../../../types";
+import { setRun } from "../../../../../../../hooks/useRunComp";
+import ModalTextField from "./ModalTextField";
 
 ModalBtn.propTypes = {
     modalData: PropTypes.object.isRequired,
     button: PropTypes.shape(buttonFabType),
     setSelectedValue: PropTypes.func,
-}
+};
 
-export default function ModalBtn({
-    modalData, button, setSelectedValue }) {
+export default function ModalBtn({ modalData, button, setSelectedValue }) {
     const [open, setOpen] = useState(false);
 
     const dispatch = useStoreDispatch();
@@ -28,20 +26,21 @@ export default function ModalBtn({
         backgroundColor,
         position,
         size,
-        needCloseOtherModals, } = button;
+        needCloseOtherModals,
+    } = button;
 
     const onOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
 
     const onClose = () => {
-      setOpen(false);
-      // setSelectedValue(value); using redux update instead
+        setOpen(false);
+        // setSelectedValue(value); using redux update instead
     };
 
     const handleCloseModals = () => {
         needCloseOtherModals && setRun(dispatch, "closeModalFullContent");
-    }
+    };
 
     return (
         <div>

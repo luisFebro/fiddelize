@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import EmailIcon from "@material-ui/icons/Email";
@@ -20,7 +20,6 @@ import { Load } from "../../../../../components/code-splitting/LoadableComp";
 import sendSMS from "../../../../../hooks/sms/sendSMS";
 import { getUniqueId } from "../../../../../hooks/api/useAPI";
 import SuccessOp from "./SuccessOp";
-import useCount from "../../../../../hooks/useCount";
 import { handleFocus } from "../../../../../utils/form/handleFocus";
 import usePro from "../../../../../hooks/pro/usePro";
 import useData from "../../../../../hooks/useData";
@@ -283,9 +282,9 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                             needTxtNoWrap
                             title="Enviar"
                             height="60px"
-                            disabled={isPro ? false : true}
+                            disabled={!isPro}
                             onClick={() => handleNumberCTA("whatsapp")}
-                            backgroundColor={"var(--themeSDark--default)"}
+                            backgroundColor="var(--themeSDark--default)"
                             iconMu={<WhatsAppIcon style={muStyle} />}
                             variant="extended"
                             position="relative"

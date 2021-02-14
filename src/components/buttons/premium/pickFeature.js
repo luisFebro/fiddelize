@@ -1,5 +1,4 @@
-import React from "react";
-import { Load } from "../../../components/code-splitting/LoadableComp";
+import { Load } from "../../code-splitting/LoadableComp";
 
 const AsyncOrgganizeClients = Load({
     loader: () =>
@@ -50,9 +49,7 @@ export default function pickFeature({
     options = {},
     data,
 }) {
-    const pickComp = () => {
-        return featureStore(data)[feature];
-    };
+    const pickComp = () => featureStore(data)[feature];
 
     return pickComp;
 }

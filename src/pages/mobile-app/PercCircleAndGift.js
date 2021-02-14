@@ -1,5 +1,5 @@
+import { Fragment, useState } from "react";
 import ReactjsPercentageCircle from "../../components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle";
-import React, { Fragment, useState } from "react";
 import getPercentage from "../../utils/numbers/getPercentage";
 import Tooltip from "../../components/tooltips/Tooltip";
 import GiftBox from "./gift-box/GiftBox";
@@ -43,18 +43,18 @@ export default function PercCircleAndGift({
 
     const handleColorSelection = () => {
         if (colorS === "white") {
-            return "var(--themePLight--" + colorP + ")";
-        } else if (colorBack === "black" && colorS === "black") {
-            return "var(--themeP--" + colorP + ")";
-        } else {
-            return "var(--themeS--" + colorS + ")";
+            return `var(--themePLight--${colorP})`;
         }
+        if (colorBack === "black" && colorS === "black") {
+            return `var(--themeP--${colorP})`;
+        }
+        return `var(--themeS--${colorS})`;
     };
 
     const percentageColor =
         colorS === "white"
-            ? "var(--themePLight--" + colorP + ")"
-            : "var(--themeSDark--" + colorS + ")";
+            ? `var(--themePLight--${colorP})`
+            : `var(--themeSDark--${colorS})`;
     const indicatorBarColor = handleColorSelection();
 
     const styles = {
@@ -67,7 +67,7 @@ export default function PercCircleAndGift({
             borderRadius: "30px",
             backgroundColor: didPrizeExpired
                 ? "var(--expenseRed)"
-                : "var(--themeSDark--" + colorS + ")",
+                : `var(--themeSDark--${colorS})`,
             border: "3px solid white",
         },
         timerIcon: {
@@ -113,7 +113,7 @@ export default function PercCircleAndGift({
                     ) : (
                         <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
                             {didPrizeExpired
-                                ? `expirou`
+                                ? "expirou"
                                 : `${finalDeadline} dia${plural}`}
                         </p>
                     )}
@@ -155,14 +155,14 @@ export default function PercCircleAndGift({
                     <div className="zoom-it container-center text-em-2-5 animated zoomIn">
                         <ReactjsPercentageCircle
                             percent={percentageAchieved}
-                            radius={75} /*circle size*/
+                            radius={75} /* circle size */
                             borderWidth={20}
-                            color={indicatorBarColor} /*external line color*/
+                            color={indicatorBarColor} /* external line color */
                             textStyle={styles.percentageCircle}
                         />
                     </div>
                 }
-                backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                backgroundColor={`var(--themeSDark--${colorS})`}
                 colorS={colorS}
             />
         </section>
@@ -206,7 +206,7 @@ export default function PercCircleAndGift({
                                 })}
                             </div>
                         }
-                        backgroundColor={"var(--themeS--" + colorS + ")"}
+                        backgroundColor={`var(--themeS--${colorS})`}
                         colorS={colorS}
                     />
                     {!arePrizesVisible && (

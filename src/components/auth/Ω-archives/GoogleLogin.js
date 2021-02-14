@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // import { default as GL } from "react-google-login";
-import getAPI, { makeGoogleLogin } from "../../utils/promises/getAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from "react-router-dom";
+import { useStoreDispatch } from "easy-peasy";
+import getAPI, { makeGoogleLogin } from "../../utils/promises/getAPI";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
 import { getVar, store } from "../../hooks/storage/useVar";
-import authenticate from "../../components/auth/helpers/authenticate";
-import { withRouter } from "react-router-dom";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import { useClientAdmin } from "../../hooks/useRoleData";
 
 const awesomeStyle = {
@@ -76,7 +75,7 @@ function GoogleLogin({ history }) {
                 responseType="" // the code is useless for server validation though If responseType is 'code', callback will return the authorization code that can be used to retrieve a refresh token from the server.
                 // accessType="offline"
                 uxMode="popup" // popup does not appear on mobile.
-                cookiePolicy={"single_host_origin"}
+                cookiePolicy="single_host_origin"
                 // n1 other props
             >
                 <CustomBtn />

@@ -1,5 +1,5 @@
 // reference: https://material-ui.com/components/autocomplete/
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -169,7 +169,7 @@ export default function AutoCompleteSearch({
         const config = {
             url: newSearchUrl,
             method: "get",
-            headers: chooseHeader({ token: token, needAuth }),
+            headers: chooseHeader({ token, needAuth }),
             cancelToken: new axios.CancelToken((c) => (cancel = c)),
         };
 
@@ -322,7 +322,7 @@ export default function AutoCompleteSearch({
                             <Fragment>
                                 {loading ? (
                                     <CircularProgress
-                                        color={"inherit"}
+                                        color="inherit"
                                         size={35}
                                     />
                                 ) : null}

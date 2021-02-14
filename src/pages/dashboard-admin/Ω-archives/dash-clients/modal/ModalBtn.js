@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
-import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
-import PropTypes from 'prop-types';
-import ModalTextField from './ModalTextField';
-import { buttonFabType } from '../../../../types';
-import handleChange from '../../../../utils/form/use-state/handleChange';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import ModalTextField from "./ModalTextField";
+import { buttonFabType } from "../../../../types";
 
 ModalBtn.propTypes = {
     modal: PropTypes.object.isRequired,
     button: PropTypes.shape(buttonFabType),
     setSelectedValue: PropTypes.func,
-}
+};
 
-export default function ModalBtn({
-    modal, button, setSelectedValue }) {
+export default function ModalBtn({ modal, button, setSelectedValue }) {
     const [open, setOpen] = useState(false);
 
     const {
@@ -21,23 +19,23 @@ export default function ModalBtn({
         variant,
         top,
         left,
-        backgroundColor } = button;
+        backgroundColor,
+    } = button;
 
     const onOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
 
     const onClose = () => {
-      setOpen(false);
-      // setSelectedValue(value); using redux update instead
+        setOpen(false);
+        // setSelectedValue(value); using redux update instead
     };
 
     const styles = {
         fab: {
-            transform: 'translate(-50%, -50%)'
+            transform: "translate(-50%, -50%)",
         },
-    }
-
+    };
 
     return (
         <div>
@@ -51,11 +49,7 @@ export default function ModalBtn({
                 backgroundColor={backgroundColor}
                 onClick={onOpen}
             />
-            <ModalTextField
-                open={open}
-                onClose={onClose}
-                modal={modal}
-            />
+            <ModalTextField open={open} onClose={onClose} modal={modal} />
         </div>
     );
 }

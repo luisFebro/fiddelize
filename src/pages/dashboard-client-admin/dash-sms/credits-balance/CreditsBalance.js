@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import AddSMSBtn from "./add-sms-btn/AddSMSBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import useAPI, { readCredits, needTrigger } from "../../../../hooks/api/useAPI";
@@ -23,7 +23,7 @@ export default function CreditsBalance({ handleBalance }) {
 
     const trigger = needTrigger(runName, "UpdateSMSAll");
 
-    let { data: smsBalance, loading } = useAPI({
+    const { data: smsBalance, loading } = useAPI({
         url: readCredits(userId),
         trigger,
         dataName: "smsCredits",

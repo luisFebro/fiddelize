@@ -1,11 +1,10 @@
-import React, { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
@@ -42,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
 
 const getStyles = ({ color, backgroundColor }) => ({
     accordion: {
-        color: color,
-        backgroundColor: backgroundColor,
+        color,
+        backgroundColor,
         margin: "25px 0 0",
     },
     totalPrizesBadge: {
@@ -57,7 +56,7 @@ const getStyles = ({ color, backgroundColor }) => ({
 });
 
 const handleTransactionStatus = ({ panel, daysLeft }) => {
-    let {
+    const {
         paymentMethod,
         transactionStatus,
         payDueDate,
@@ -85,9 +84,8 @@ const handleTransactionStatus = ({ panel, daysLeft }) => {
     if (renewal && (isPaid || transactionStatus === "pendente")) {
         if (isPriorCardRenewal && renewal.isPaid) {
             return "RENOVADO";
-        } else {
-            return "PENDENTE/RENOVAÇÃO";
         }
+        return "PENDENTE/RENOVAÇÃO";
 
         if (isPaid && renewal.isPaid && isCurrCardRenewal) {
             return "PAGO/RENOVADO";
@@ -136,7 +134,7 @@ export default function InvestCard({
                     position="absolute"
                     top={-20}
                     right={0}
-                    disabled={true}
+                    disabled
                     title={transactionStatus}
                     variant="extended"
                     fontWeight="bolder"
@@ -148,41 +146,37 @@ export default function InvestCard({
         );
     };
 
-    const showPanel = (panel, daysLeft) => {
-        return (
-            <section>
-                <AccordionSummary
-                    expandIcon={
-                        <div className="enabledLink">
-                            {needToggleButton && (
-                                <ToggleBtn cardId={panel._id} />
-                            )}
-                        </div>
-                    }
-                    aria-controls={`panel${panel._id}bh-content`}
-                    id={`panel${panel._id}bh-header`}
-                >
-                    {isSmall ? (
-                        <section className="position-relative">
-                            <div>{panel.mainHeading}</div>
+    const showPanel = (panel, daysLeft) => (
+        <section>
+            <AccordionSummary
+                expandIcon={
+                    <div className="enabledLink">
+                        {needToggleButton && <ToggleBtn cardId={panel._id} />}
+                    </div>
+                }
+                aria-controls={`panel${panel._id}bh-content`}
+                id={`panel${panel._id}bh-header`}
+            >
+                {isSmall ? (
+                    <section className="position-relative">
+                        <div>{panel.mainHeading}</div>
+                        {panel.secondaryHeading}
+                    </section>
+                ) : (
+                    <Fragment>
+                        <Typography className="ex-pa-main-heading ex-pa--headings">
+                            {panel.mainHeading}
+                        </Typography>
+                        <Typography className="ex-pa--headings">
                             {panel.secondaryHeading}
-                        </section>
-                    ) : (
-                        <Fragment>
-                            <Typography className="ex-pa-main-heading ex-pa--headings">
-                                {panel.mainHeading}
-                            </Typography>
-                            <Typography className="ex-pa--headings">
-                                {panel.secondaryHeading}
-                            </Typography>
-                        </Fragment>
-                    )}
-                </AccordionSummary>
-                {displayStatusBadge(panel, daysLeft)}
-                <DisplayExpiryCounter panel={panel} daysLeft={daysLeft} />
-            </section>
-        );
-    };
+                        </Typography>
+                    </Fragment>
+                )}
+            </AccordionSummary>
+            {displayStatusBadge(panel, daysLeft)}
+            <DisplayExpiryCounter panel={panel} daysLeft={daysLeft} />
+        </section>
+    );
 
     const showHiddenPanel = (panel) => (
         <AccordionDetails>{panel.hiddenContent}</AccordionDetails>

@@ -1,8 +1,8 @@
 (function () {
     function checkCompatibility() {
         if (
-            "undefined" == typeof window.postMessage ||
-            "undefined" == typeof Element
+            typeof window.postMessage === "undefined" ||
+            typeof Element === "undefined"
         ) {
             return false;
         }
@@ -16,12 +16,12 @@
     }
 
     function onDocumentReady(callback) {
-        var eventName = document.addEventListener
+        const eventName = document.addEventListener
             ? "DOMContentLoaded"
             : "onreadystatechange";
         if (
-            "complete" === document.readyState ||
-            ("loading" !== document.readyState && !document.attachEvent)
+            document.readyState === "complete" ||
+            (document.readyState !== "loading" && !document.attachEvent)
         ) {
             callback();
             return;
@@ -32,8 +32,8 @@
             eventName,
             function () {
                 if (
-                    "DOMContentLoaded" == eventName ||
-                    "complete" === document.readyState
+                    eventName == "DOMContentLoaded" ||
+                    document.readyState === "complete"
                 ) {
                     callback();
                     document[
@@ -46,12 +46,12 @@
             false
         );
     }
-    var lightbox = document.createElement("iframe"),
-        styleNode = document.createElement("style"),
-        styleSheets = [
-            ".uolPSMediator {position:fixed; left:0px; top:0px; width:100%; height:100%; background-color:transparent; border:0px none transparent; overflow:hidden; display:none; z-index:9999;}",
-        ].join(""),
-        PagSeguro = PagSeguro || {};
+    const lightbox = document.createElement("iframe");
+    const styleNode = document.createElement("style");
+    const styleSheets = [
+        ".uolPSMediator {position:fixed; left:0px; top:0px; width:100%; height:100%; background-color:transparent; border:0px none transparent; overflow:hidden; display:none; z-index:9999;}",
+    ].join("");
+    var PagSeguro = PagSeguro || {};
     lightbox.setAttribute(
         "src",
         "https://pagseguro.uol.com.br/checkout/embedded/i-ck.html"
@@ -84,10 +84,10 @@
     };
     PagSeguro.Lightbox.prototype = {
         constructor: PagSeguro.Lightbox,
-        checkout: function () {
-            var _that = this;
+        checkout() {
+            const _that = this;
             if (!this.ready) {
-                setTimeout(function () {
+                setTimeout(() => {
                     _that.checkout();
                 }, 150);
                 return;
@@ -97,45 +97,44 @@
             }
             this.sendToken();
         },
-        showLightbox: function () {
+        showLightbox() {
             this.lightbox.style.display = "block";
         },
-        hideLightbox: function () {
+        hideLightbox() {
             this.lightbox.style.display = "none";
         },
-        execCallback: function () {
+        execCallback() {
             if (
-                "ABORTED" != this.transactionCode &&
-                "" != this.transactionCode
+                this.transactionCode != "ABORTED" &&
+                this.transactionCode != ""
             ) {
-                if (this.callback["success"]) {
-                    this.callback["success"](this.transactionCode);
+                if (this.callback.success) {
+                    this.callback.success(this.transactionCode);
                 }
             } else {
-                this.callback["abort"](this.recoveryCode);
+                this.callback.abort(this.recoveryCode);
             }
         },
-        syntonize: function () {
+        syntonize() {
             this.publish(
                 {
                     command: "syntonize",
-                    value:
-                        window.location.protocol + "//" + window.location.host,
+                    value: `${window.location.protocol}//${window.location.host}`,
                 },
                 "lightbox"
             );
         },
-        setToken: function (token) {
+        setToken(token) {
             this.token =
-                "string" === typeof token
-                    ? "code=" + token
+                typeof token === "string"
+                    ? `code=${token}`
                     : token instanceof HTMLFormElement
                     ? this.serializeForm(token)
                     : this.serialize(token);
         },
-        sendToken: function () {
-            var tokenToSent = this.token;
-            if (tokenToSent === this.lastSentToken && "" != this.recoveryCode) {
+        sendToken() {
+            let tokenToSent = this.token;
+            if (tokenToSent === this.lastSentToken && this.recoveryCode != "") {
                 tokenToSent = this.serialize({
                     recoveryCode: this.recoveryCode,
                 });
@@ -151,8 +150,8 @@
             );
             this.lastSentToken = this.token;
         },
-        catchCommunicationException: function () {
-            if (-1 != window.location.toString().indexOf("file:///")) {
+        catchCommunicationException() {
+            if (window.location.toString().indexOf("file:///") != -1) {
                 this.publish(
                     {
                         command: "error",
@@ -162,40 +161,40 @@
                 );
             }
         },
-        publish: function (message, channel) {
+        publish(message, channel) {
             this.mediator.postMessage(message, channel);
         },
-        subscribe: function (channel, callback) {
+        subscribe(channel, callback) {
             this.mediator.acceptMessage(channel, callback);
         },
-        serialize: function (obj) {
-            var str = "",
-                i;
+        serialize(obj) {
+            let str = "";
+            let i;
             for (i in obj) {
-                str += i + "=" + obj[i] + "&";
+                str += `${i}=${obj[i]}&`;
             }
             return str.replace(/\&$/, "");
         },
-        serializeForm: function (htmlForm) {
-            var obj = {},
-                elements = htmlForm.elements,
-                i,
-                l;
+        serializeForm(htmlForm) {
+            const obj = {};
+            const { elements } = htmlForm;
+            let i;
+            let l;
             for (i = 0, l = elements.length; i < l; i++) {
                 if (
-                    "submit" != elements[i].type &&
+                    elements[i].type != "submit" &&
                     elements[i].name &&
                     !obj[elements[i].name] &&
-                    "undefined" != typeof elements[i].value
+                    typeof elements[i].value !== "undefined"
                 ) {
                     obj[elements[i].name] = elements[i].value;
                 }
             }
             return this.serialize(obj);
         },
-        listenChannels: function () {
-            var _that = this;
-            this.subscribe("lightbox", function (data) {
+        listenChannels() {
+            const _that = this;
+            this.subscribe("lightbox", (data) => {
                 switch (data.command) {
                     case "setTransactionCode":
                         _that.transactionCode = data.value;
@@ -216,7 +215,7 @@
         },
     };
     PagSeguro.APIMediator = function (core) {
-        var channels = {
+        const channels = {
             lightbox: {
                 context: core.lightbox.contentWindow,
                 url: "https://pagseguro.uol.com.br",
@@ -232,14 +231,14 @@
             }
         };
         this.acceptMessage = function (channel, callback) {
-            var _that = this,
-                callbacks = channels[channel].callbacks;
+            const _that = this;
+            const { callbacks } = channels[channel];
             callbacks[callbacks.length] = function (event) {
                 if (!channels[channel]) {
                     return;
                 }
                 if (event.origin == channels[channel].url) {
-                    var data = JSON.parse(event.data);
+                    const data = JSON.parse(event.data);
                     callback(data);
                 }
             };
@@ -252,8 +251,8 @@
             );
         };
         this.ignoreMessage = function (channel) {
-            var _that = this,
-                i = channels[channel].callbacks.length;
+            const _that = this;
+            let i = channels[channel].callbacks.length;
             if (channels[channel]) {
                 while (i--) {
                     window[
@@ -271,22 +270,16 @@
     };
 
     function _logErrors(e, method) {
-        var i = new Image();
+        const i = new Image();
         i.src =
-            "https://pagseguro.uol.com.br/checkout/fe-logger.jhtml?log=" +
-            e.toString() +
-            " at(l:" +
-            e.lineNumber +
-            ", c:" +
-            e.columnNumber +
-            ")" +
-            "&jsMethod=" +
-            method +
-            "&jsOrigin=pagseguro.lightbox.js";
+            `https://pagseguro.uol.com.br/checkout/fe-logger.jhtml?log=${e.toString()} at(l:${
+                e.lineNumber
+            }, c:${e.columnNumber})` +
+            `&jsMethod=${method}&jsOrigin=pagseguro.lightbox.js`;
     }
     window.PagSeguroLightbox = (function () {
-        var ltb;
-        onDocumentReady(function () {
+        let ltb;
+        onDocumentReady(() => {
             document.getElementsByTagName("body")[0].appendChild(lightbox);
 
             function _onload() {
@@ -307,7 +300,7 @@
 
         function initLightbox(token, callback) {
             if (void 0 === ltb) {
-                setTimeout(function () {
+                setTimeout(() => {
                     initLightbox(token, callback);
                 }, 100);
                 return;
@@ -315,7 +308,7 @@
             ltb.setToken(token);
             ltb.transactionCode = "ABORTED";
             ltb.callback = callback || {
-                abort: function () {},
+                abort() {},
             };
             ltb.checkout();
         }

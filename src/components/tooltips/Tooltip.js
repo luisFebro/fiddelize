@@ -1,15 +1,15 @@
 // cómponents should be pure without intermidiate components handling props. Otherwise it will pop up some ref errors.
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
 // import this to component later!!!
-import {default as TooltipMU} from '@material-ui/core/Tooltip';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Zoom from '@material-ui/core/Zoom';
-import parse from 'html-react-parser';
-import  '../../keyframes/pulseWaves.css';
-import selectTxtStyle from '../../utils/biz/selectTxtStyle';
-import { useClientAdmin } from '../../hooks/useRoleData';
+import { default as TooltipMU } from "@material-ui/core/Tooltip";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Zoom from "@material-ui/core/Zoom";
+import parse from "html-react-parser";
+import "../../keyframes/pulseWaves.css";
+import selectTxtStyle from "../../utils/biz/selectTxtStyle";
+import { useClientAdmin } from "../../hooks/useRoleData";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -21,7 +21,7 @@ Tooltip.propTypes = {
     width: PropTypes.number,
     whiteSpace: PropTypes.bool,
     padding: PropTypes.string,
-}
+};
 
 // IMPORTANT: the element should be wrapped around with a div or i so that it will work properly.export
 // ButtonFav will not work without the div element.
@@ -52,7 +52,6 @@ export default function Tooltip({
     hover = false,
     needClickAway = true,
     arrowBottom,
-
 }) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
@@ -61,34 +60,43 @@ export default function Tooltip({
     const { selfThemeBackColor } = useClientAdmin();
 
     useEffect(() => {
-        if(needOpen) { setOpen(true); } else { setOpen(false); }
-    }, [needOpen])
+        if (needOpen) {
+            setOpen(true);
+        } else {
+            setOpen(false);
+        }
+    }, [needOpen]);
 
-    const { color: txtColor } = selectTxtStyle(colorS, { mode: "style" })
-    const needShadow = selectTxtStyle(colorS, { needShadow: true })
+    const { color: txtColor } = selectTxtStyle(colorS, { mode: "style" });
+    const needShadow = selectTxtStyle(colorS, { needShadow: true });
 
     const handleTooltipClose = () => {
-        if(typeof onClickAway === "function") { onClickAway(); }
+        if (typeof onClickAway === "function") {
+            onClickAway();
+        }
         setOpen(false);
     };
 
     const handleTooltipOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
 
-    const radiusTooltipStyle = makeStyles(theme => ({
+    const radiusTooltipStyle = makeStyles((theme) => ({
         tooltip: {
-            fontSize: '15px',
-            backgroundColor: backgroundColor || 'var(--themeSDark)',
-            fontWeight: 'bold',
-            borderRadius: '15px 15px',
-            padding: padding ? padding : '10px',
-            margin: margin || '40px 0',
-            whiteSpace: whiteSpace ? null : 'nowrap',
-            textShadow: needShadow ? '1px 1px 3px black' : undefined,
-            width: width ? width : '100%',
+            fontSize: "15px",
+            backgroundColor: backgroundColor || "var(--themeSDark)",
+            fontWeight: "bold",
+            borderRadius: "15px 15px",
+            padding: padding || "10px",
+            margin: margin || "40px 0",
+            whiteSpace: whiteSpace ? null : "nowrap",
+            textShadow: needShadow ? "1px 1px 3px black" : undefined,
+            width: width || "100%",
             color: txtColor,
-            filter: (selfThemeBackColor === 'black' || colorS === "black") ? "drop-shadow(.001em .1em .1em var(--mainWhite))" : "drop-shadow(.001em .1em .1em var(--mainDark))",
+            filter:
+                selfThemeBackColor === "black" || colorS === "black"
+                    ? "drop-shadow(.001em .1em .1em var(--mainWhite))"
+                    : "drop-shadow(.001em .1em .1em var(--mainDark))",
             // top: 20,
         },
         popper: {
@@ -96,35 +104,37 @@ export default function Tooltip({
         },
         arrow: {
             fontSize: 25,
-            color: backgroundColor || 'var(--themeSDark)',
-            bottom: arrowBottom ? arrowBottom : undefined,
+            color: backgroundColor || "var(--themeSDark)",
+            bottom: arrowBottom || undefined,
         },
     }));
 
     const classes = radiusTooltipStyle();
 
-    return(
+    return (
         <ClickAwayListener onClickAway={handleTooltipClose}>
-            <div className={`${className ? className : ""} position-relative c-pointer`} onClick={() => setStopWave(true)}>
-                {needAttentionWaves
-                ? (
+            <div
+                className={`${className || ""} position-relative c-pointer`}
+                onClick={() => setStopWave(true)}
+            >
+                {needAttentionWaves ? (
                     <div className={`${stopWave ? "" : "pulse-waves"}`}>
-                        <span style={{visibility: 'hidden'}}>.</span>
+                        <span style={{ visibility: "hidden" }}>.</span>
                     </div>
                 ) : null}
 
                 <TooltipMU
-                    style={{top: 15}}
-                    arrow={needArrow ? true : false}
+                    style={{ top: 15 }}
+                    arrow={!!needArrow}
                     title={typeof text === "string" ? parse(text) : text}
                     classes={classes}
                     onClick={handleTooltipOpen}
-                    disableFocusListener={true}
-                    disableHoverListener={(hover && !isSmall) ? false : true}
-                    disableTouchListener={true}
+                    disableFocusListener
+                    disableHoverListener={!(hover && !isSmall)}
+                    disableTouchListener
                     interactive
                     onClose={handleTooltipClose}
-                    open={(hover && !isSmall) ? undefined : open}
+                    open={hover && !isSmall ? undefined : open}
                     placement={placement || "top"}
                     TransitionComponent={Zoom}
                     TransitionProps={{ timeout: 200 }}

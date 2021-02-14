@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NotificationBadge from "../../components/NotificationBadge";
 import useGetVar from "../../hooks/storage/useVar";
 import { useClientAdmin, useProfile } from "../../hooks/useRoleData";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default withRouter(PlanBadges);
 
@@ -22,7 +22,7 @@ function PlanBadges({ history }) {
 
     const showUpdateBtn = () => (
         <NotificationBadge
-            badgeValue={totalServs ? totalServs : 0}
+            badgeValue={totalServs || 0}
             badgeInvisible={false}
             backgroundColor="var(--mainRed)"
             borderColor="var(--mainWhite)"
@@ -56,7 +56,7 @@ function PlanBadges({ history }) {
                 style={{ top: -10, right: -90 }}
             >
                 <NotificationBadge
-                    badgeValue={totalServs ? totalServs : 0}
+                    badgeValue={totalServs || 0}
                     badgeInvisible={false}
                     backgroundColor="var(--mainRed)"
                     borderColor="var(--mainWhite)"

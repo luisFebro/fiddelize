@@ -1,32 +1,35 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import ToggleVisibilityPassword from '../forms/fields/ToggleVisibilityPassword';
-import ButtonMulti from '../buttons/material-ui/ButtonMulti'
+import { useState, useEffect, Fragment } from "react";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import ToggleVisibilityPassword from "../forms/fields/ToggleVisibilityPassword";
+import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 // Helpers
-import handleChange from '../../utils/form/use-state/handleChange';
-import handleChecked from '../../utils/form/use-state/handleChecked';
-import clearForm from '../../utils/form/use-state/clearForm';
-import detectErrorField from '../../utils/validation/detectErrorField';
+import handleChange from "../../utils/form/use-state/handleChange";
+import handleChecked from "../../utils/form/use-state/handleChecked";
+import clearForm from "../../utils/form/use-state/clearForm";
+import detectErrorField from "../../utils/validation/detectErrorField";
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
-import { closeModal, showModalRegister } from '../../redux/actions/modalActions';
-import { readUserList } from '../../redux/actions/userActions';
-import { loginEmail } from '../../redux/actions/authActions';
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import {
+    closeModal,
+    showModalRegister,
+} from "../../redux/actions/modalActions";
+import { readUserList } from "../../redux/actions/userActions";
+import { loginEmail } from "../../redux/actions/authActions";
 // Material UI
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // End Material UI
 
 export default function ModalLogin() {
     const [data, setData] = useState({
-        nameOrEmail: '',
-        password: '',
-        needKeepLoggedIn: true
+        nameOrEmail: "",
+        password: "",
+        needKeepLoggedIn: true,
     });
     // detecting field errors
     const [fieldError, setFieldError] = useState(null);
@@ -36,14 +39,16 @@ export default function ModalLogin() {
     // end detecting field errors
     // Redux
     // > set state
-    const { isModalLoginOpen, isUserAuthenticated } = useStoreState(state => ({
-        isModalLoginOpen: state.modalReducers.cases.isModalLoginOpen,
-        isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
-    }));
+    const { isModalLoginOpen, isUserAuthenticated } = useStoreState(
+        (state) => ({
+            isModalLoginOpen: state.modalReducers.cases.isModalLoginOpen,
+            isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
+        })
+    );
     const dispatch = useStoreDispatch();
     // End Redux
 
-    let { nameOrEmail, password, needKeepLoggedIn } = data;
+    const { nameOrEmail, password, needKeepLoggedIn } = data;
 
     // If authenticated, close modal and salute user
     useEffect(() => {
@@ -57,68 +62,81 @@ export default function ModalLogin() {
     const clearData = () => {
         clearForm(setData, data);
         setFieldError(null);
-    }
+    };
 
-    const signInThisUser = e => {
+    const signInThisUser = (e) => {
         // e.preventDefault();
 
         const userData = {
             nameOrEmail,
             password,
-            needKeepLoggedIn
+            needKeepLoggedIn,
         };
 
         // Attempt to login
-        loginEmail(dispatch, userData)
-        .then(res => {
-            if(res.status !== 200) {
-                showSnackbar(dispatch, res.data.msg, 'error');
+        loginEmail(dispatch, userData).then((res) => {
+            if (res.status !== 200) {
+                showSnackbar(dispatch, res.data.msg, "error");
                 // detect field errors
                 const objFields = Object.keys(data);
                 const foundObjError = detectErrorField(res.data.msg, objFields);
                 setFieldError(foundObjError);
                 return;
             }
-            showSnackbar(dispatch, res.data.msg, 'success');
+            showSnackbar(dispatch, res.data.msg, "success");
             clearData();
-        })
+        });
     };
 
     // Render
     const showHeader = () => (
         <Fragment>
-            <div style={{'display': 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <img width="90" height="90" src="img/babadoo-logo_no-slogon.png" alt="loja babadoo"/>
-            </div>
-            <DialogTitle
-                id="form-dialog-title"
-                className="text-center"
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
             >
-            ACESSO LOGIN
-            <br />
-            Entrar com Nome ou Email Cadastrado
-            <br/>
-            <span className="text-normal">
-                Seu Primeiro acesso ?{' '}
-                <button
-                    style={{ padding: '2px 5px', borderRadius: '20px', backgroundColor: 'var(--mainYellow)' }}
-                    onClick={() => showModalRegister(dispatch)}
-                >
-                    Faça seu Cadastro
-                </button>
-            </span>
+                <img
+                    width="90"
+                    height="90"
+                    src="img/babadoo-logo_no-slogon.png"
+                    alt="loja babadoo"
+                />
+            </div>
+            <DialogTitle id="form-dialog-title" className="text-center">
+                ACESSO LOGIN
+                <br />
+                Entrar com Nome ou Email Cadastrado
+                <br />
+                <span className="text-normal">
+                    Seu Primeiro acesso ?{" "}
+                    <button
+                        style={{
+                            padding: "2px 5px",
+                            borderRadius: "20px",
+                            backgroundColor: "var(--mainYellow)",
+                        }}
+                        onClick={() => showModalRegister(dispatch)}
+                    >
+                        Faça seu Cadastro
+                    </button>
+                </span>
             </DialogTitle>
-
         </Fragment>
     );
 
     // Form
     const showActionButtons = () => (
-        <div style={{ display: 'flex', justifyContent: 'center', margin: '5px 5px 15px' }}>
-            <ButtonMulti
-                onClick={() => closeModal(dispatch)}
-                variant='link'
-            >
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "5px 5px 15px",
+            }}
+        >
+            <ButtonMulti onClick={() => closeModal(dispatch)} variant="link">
                 Voltar
             </ButtonMulti>
             <ButtonMulti
@@ -135,12 +153,12 @@ export default function ModalLogin() {
     );
 
     const showForm = () => (
-        <form style={{ margin: 'auto', width: '80%' }}>
+        <form style={{ margin: "auto", width: "80%" }}>
             <TextField
                 required
                 onChange={handleChange(setData, data)}
                 margin="dense"
-                error={errorEmail || errorName ? true : false}
+                error={!!(errorEmail || errorName)}
                 name="nameOrEmail"
                 type="email"
                 label="Nome ou Email"
@@ -149,11 +167,11 @@ export default function ModalLogin() {
                 autoComplete="off"
                 fullWidth
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <AccountCircle />
+                        </InputAdornment>
+                    ),
                 }}
             />
             <ToggleVisibilityPassword
@@ -164,13 +182,13 @@ export default function ModalLogin() {
             />
             <FormControlLabel
                 control={
-                  <Checkbox
-                    onChange={handleChecked(setData, data)}
-                    name="needKeepLoggedIn"
-                    checked={Boolean(needKeepLoggedIn)}
-                    color="primary"
-                    size="medium"
-                  />
+                    <Checkbox
+                        onChange={handleChecked(setData, data)}
+                        name="needKeepLoggedIn"
+                        checked={Boolean(needKeepLoggedIn)}
+                        color="primary"
+                        size="medium"
+                    />
                 }
                 label="Manter-se conectado."
             />

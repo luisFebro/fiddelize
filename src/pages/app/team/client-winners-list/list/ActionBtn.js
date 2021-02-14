@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import useAPI, {
@@ -54,7 +54,8 @@ function ShowExpiredCardFunc({ dataExpired = defaultBody, taskId }) {
     const [trigger, setTrigger] = useState(false);
 
     const snackbar = {
-        txtPending: `Apagando tarefa e marcando prêmio do cliente como expirado...`,
+        txtPending:
+            "Apagando tarefa e marcando prêmio do cliente como expirado...",
         timePending: 6000,
         txtSuccess: "Tarefa apagada e prêmio expirado!",
     };

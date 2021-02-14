@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import useSendEmail from "../../../../../../hooks/email/useSendEmail";
@@ -57,7 +57,7 @@ export default function AsyncPix({ modalData }) {
         <Fragment>
             {showTitle()}
             {showMaintenanceMsg()}
-            <ShowPayWatermarks needAnima={false} isPix={true} />
+            <ShowPayWatermarks needAnima={false} isPix />
         </Fragment>
     );
 }

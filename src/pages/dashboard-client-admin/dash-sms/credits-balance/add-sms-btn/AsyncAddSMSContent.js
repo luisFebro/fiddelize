@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import Simulator from "./Simulator";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from "react-router-dom";
+import Simulator from "./Simulator";
 import { useProfile } from "../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../components/Img";
-import { withRouter } from "react-router-dom";
 import setProRenewal from "../../../../../utils/biz/setProRenewal";
 
 export default withRouter(AsyncAddSMSContent);
@@ -68,7 +68,7 @@ function AsyncAddSMSContent({
             totalPackage,
             amount: totalSMS,
             price: inv,
-            removeCurr: needCurrRemoval ? true : false,
+            removeCurr: !!needCurrRemoval,
         };
         isFunc && handleNewOrder("sms", { order: orderObj });
         isFunc && handleFullClose();
@@ -93,7 +93,7 @@ function AsyncAddSMSContent({
                 size="large"
                 title="Adicionar"
                 onClick={handleCTA}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
                 position="relative"
             />

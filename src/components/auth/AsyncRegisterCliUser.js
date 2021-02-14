@@ -1,17 +1,23 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import Title from "../Title";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import EmailIcon from "@material-ui/icons/Email";
+import MoneyIcon from "@material-ui/icons/Money";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
+import Title from "../Title";
 import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RadiusBtn from "../buttons/RadiusBtn";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
 // import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
@@ -23,12 +29,6 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import EmailIcon from "@material-ui/icons/Email";
-import MoneyIcon from "@material-ui/icons/Money";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
@@ -68,7 +68,7 @@ function ASyncRegisterCliUser({
     needLoginBtn = false,
 }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
-    const [switchNumToText, setSwitchNumToText] = useState(false); //n1
+    const [switchNumToText, setSwitchNumToText] = useState(false); // n1
     const [data, setData] = useState({
         role: "cliente",
         name: "",
@@ -95,7 +95,7 @@ function ASyncRegisterCliUser({
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    let { role, name, email, gender, birthday, cpf, phone } = data;
+    const { role, name, email, gender, birthday, cpf, phone } = data;
     const cpfValue = autoCpfMaskBr(cpf);
 
     const {
@@ -225,7 +225,7 @@ function ASyncRegisterCliUser({
     const registerThisUser = (e) => {
         setActionBtnDisabled(true);
 
-        let newUser = {
+        const newUser = {
             ...data,
         };
 
@@ -295,7 +295,7 @@ function ASyncRegisterCliUser({
 
     const showLoginForm = (needLoginBtn) =>
         needLoginBtn && (
-            <div class="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
+            <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
                 <p
                     className={`${selectTxtStyle(
                         selfThemeBackColor
@@ -312,9 +312,7 @@ function ASyncRegisterCliUser({
                             setStorageRegisterDone();
                             setLoginOrRegister("login");
                         }}
-                        backgroundColor={
-                            "var(--themeSDark--" + selfThemeSColor + ")"
-                        }
+                        backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
                     />
                 </div>
             </div>
@@ -326,8 +324,8 @@ function ASyncRegisterCliUser({
                 title={isStaff ? "Cadastro" : "Cadastre-se!"}
                 subTitle={isStaff ? "Novo Cliente" : "É rápido e fácil."}
                 color="var(--mainWhite)"
-                needShadow={true}
-                backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
+                needShadow
+                backgroundColor={`var(--themePDark--${selfThemePColor})`}
             />
         </div>
     );
@@ -346,7 +344,7 @@ function ASyncRegisterCliUser({
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
-                    error={errorName ? true : false}
+                    error={!!errorName}
                     variant="outlined"
                     margin="dense"
                     id="name"
@@ -378,16 +376,13 @@ function ASyncRegisterCliUser({
                     }}
                 />
             </div>
-            <div
-                id="field2"
-                className={`d-none animated slideInLeft fast mt-3`}
-            >
+            <div id="field2" className="d-none animated slideInLeft fast mt-3">
                 {isStaff ? "Ok, informe CPF do cliente" : "Ok, informe seu CPF"}
                 <TextField
                     required
                     margin="dense"
                     onChange={handleChange(setData, data)}
-                    error={errorCpf ? true : false}
+                    error={!!errorCpf}
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
@@ -423,7 +418,7 @@ function ASyncRegisterCliUser({
                     }}
                 />
             </div>
-            <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field3" className="d-none animated fadeInUp fast mt-3">
                 {isStaff ? (
                     "Quando é aniversário do cliente?"
                 ) : name ? (
@@ -439,10 +434,10 @@ function ASyncRegisterCliUser({
                         required
                         inputVariant="outlined"
                         margin="dense"
-                        error={errorBirthday ? true : false}
+                        error={!!errorBirthday}
                         openTo="year"
-                        disableFuture={true}
-                        allowKeyboardControl={true}
+                        disableFuture
+                        allowKeyboardControl
                         maxDate={new Date(`${maxYear}-12-31`)}
                         minDate={new Date("1940-01-01")}
                         autoOk={false}
@@ -468,7 +463,7 @@ function ASyncRegisterCliUser({
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section id="field4" className={`d-none animated slideInUp fast`}>
+            <section id="field4" className="d-none animated slideInUp fast">
                 <p className="text-left my-2">Para finalizar o cadastro...</p>
                 <div className="mt-3">
                     Email
@@ -480,7 +475,7 @@ function ASyncRegisterCliUser({
                         onBlur={(e) =>
                             handleNextField(e, "field4", { event: "onBlur" })
                         }
-                        error={errorEmail ? true : false}
+                        error={!!errorEmail}
                         name="email"
                         variant="outlined"
                         value={email}
@@ -504,7 +499,7 @@ function ASyncRegisterCliUser({
                         required
                         margin="dense"
                         onChange={handleChange(setData, data)}
-                        error={errorPhone ? true : false}
+                        error={!!errorPhone}
                         onKeyPress={(e) => {
                             handleNextField(e, "field5", {
                                 callback: () =>
@@ -525,7 +520,7 @@ function ASyncRegisterCliUser({
                             });
                         }}
                         name="phone"
-                        helperText={"Digite apenas números com DDD"}
+                        helperText="Digite apenas números com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         value={phone}
                         type="tel"
@@ -553,7 +548,7 @@ function ASyncRegisterCliUser({
                         fullWidth
                         value={gender}
                         variant="outlined"
-                        error={errorGender ? true : false}
+                        error={!!errorGender}
                         style={{ backgroundColor: "var(--mainWhite)" }}
                     >
                         <MenuItem value={gender}>
@@ -567,8 +562,8 @@ function ASyncRegisterCliUser({
                                 selecione forma tratamento:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"Ela"}>Ela</MenuItem>
-                        <MenuItem value={"Ele"}>Ele</MenuItem>
+                        <MenuItem value="Ela">Ela</MenuItem>
+                        <MenuItem value="Ele">Ele</MenuItem>
                     </Select>
                 </div>
             </section>
@@ -580,11 +575,11 @@ function ASyncRegisterCliUser({
         <div className="container-center">
             <ButtonMulti
                 onClick={registerThisUser}
-                disabled={actionBtnDisabled ? true : false}
+                disabled={!!actionBtnDisabled}
                 title="Registrar"
                 color="var(--mainWhite)"
-                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
-                backColorOnHover={"var(--themeSDark--" + selfThemeSColor + ")"}
+                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                backColorOnHover={`var(--themeSDark--${selfThemeSColor})`}
                 iconFontAwesome={
                     <FontAwesomeIcon icon="save" style={faStyle} />
                 }

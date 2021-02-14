@@ -1,6 +1,4 @@
-import React, { useEffect, Fragment } from "react";
-import Spinner from "../../../../../components/loadingIndicators/Spinner";
-import useDelay from "../../../../../hooks/useDelay";
+import { Fragment } from "react";
 import CarouselCard from "../../../../../components/carousels/CarouselCard";
 import PayMethodsBtn from "./PayMethodsBtn";
 
@@ -23,42 +21,37 @@ const thisData = [
     },
 ];
 
-const CardList = ({ modalData }) => {
-    return (
-        <Fragment>
-            {thisData.map((card) => {
-                const ShowIcon = () => (
-                    <section className="mb-2 container-center">
-                        <img
-                            width="120px"
-                            height="120px"
-                            src={card.img}
-                            alt="categorias de pagamento"
+const CardList = ({ modalData }) => (
+    <Fragment>
+        {thisData.map((card) => {
+            const ShowIcon = () => (
+                <section className="mb-2 container-center">
+                    <img
+                        width="120px"
+                        height="120px"
+                        src={card.img}
+                        alt="categorias de pagamento"
+                    />
+                </section>
+            );
+
+            return (
+                <section key={card.title} className="carousel-cell no-outline">
+                    <p className="m-0 mt-3 text-grey text-normal text-center font-weight-bold">
+                        {card.title}
+                    </p>
+                    <ShowIcon />
+                    <section className="container-center">
+                        <PayMethodsBtn
+                            method={card.title}
+                            modalData={modalData}
                         />
                     </section>
-                );
-
-                return (
-                    <section
-                        key={card.title}
-                        className="carousel-cell no-outline"
-                    >
-                        <p className="m-0 mt-3 text-grey text-normal text-center font-weight-bold">
-                            {card.title}
-                        </p>
-                        <ShowIcon />
-                        <section className="container-center">
-                            <PayMethodsBtn
-                                method={card.title}
-                                modalData={modalData}
-                            />
-                        </section>
-                    </section>
-                );
-            })}
-        </Fragment>
-    );
-};
+                </section>
+            );
+        })}
+    </Fragment>
+);
 
 export default function PayCategories({ modalData }) {
     const ThisCard = <CardList modalData={modalData} />;

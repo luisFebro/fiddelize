@@ -1,12 +1,10 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from "react-router-dom";
 import getFirstName from "../../../utils/string/getFirstName";
 import { useProfile } from "../../../hooks/useRoleData";
-import { withRouter } from "react-router-dom";
 import ButtonFab, {
     faStyleSmall,
 } from "../../../components/buttons/material-ui/ButtonFab";
-import animateCSS from "../../../utils/animateCSS";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 
 function PremiumServicesBtn({ history }) {

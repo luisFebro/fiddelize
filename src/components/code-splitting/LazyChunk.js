@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 // only dynamic import for default components...
 // NOT WORKING...
@@ -7,15 +7,14 @@ export default function LazyChunk(importPath) {
     const [module, setModule] = useState(null);
 
     useEffect(() => {
-        loadComponent().then(res => console.log(res))
-    }, [])
+        loadComponent().then((res) => console.log(res));
+    }, []);
 
     async function loadComponent() {
         const comp = await import(importPath);
         console.log("comp", comp);
         return comp.default;
     }
-
 
     return module;
 }

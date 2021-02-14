@@ -2,20 +2,20 @@
 // Pass all subkeys inside an array for the second argument.
 export default function getDataObjDiffKeys(response, arrayOfSubKeys) {
     const objLength = Object.keys(response).length;
-    let data = {};
+    const data = {};
     let x = 0;
 
     // Creating new keys provided by the array of the second argument
     for (; x < objLength; x++) {
-        let currKey = arrayOfSubKeys[x];
+        const currKey = arrayOfSubKeys[x];
         data[currKey] = [];
     }
 
-    //Populating obj
+    // Populating obj
     // getting keys from array
-    for (let key of arrayOfSubKeys) {
-        //getting each subkeys from diff objs
-        for (let diffKey in response) {
+    for (const key of arrayOfSubKeys) {
+        // getting each subkeys from diff objs
+        for (const diffKey in response) {
             data[key].push(response[diffKey][key]);
         }
     }

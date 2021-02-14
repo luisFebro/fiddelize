@@ -1,4 +1,3 @@
-import React from "react";
 import useImg, { Img } from "../../../hooks/media/useImg";
 
 const handleAppType = ({

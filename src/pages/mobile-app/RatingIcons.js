@@ -1,9 +1,9 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Tooltip from "../../components/tooltips/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Tooltip from "../../components/tooltips/Tooltip";
 import animateCSS from "../../utils/animateCSS";
 import {
     milestoneIcons,
@@ -72,7 +72,7 @@ export default function RatingIcons({
         //     indScore = 0;
         // }
 
-        let arrayIconIds = [
+        const arrayIconIds = [
             "icon-100",
             "icon-200",
             "icon-300",
@@ -84,7 +84,7 @@ export default function RatingIcons({
         let count = 0;
         for (iconInArray of arrayIconIds) {
             if (count++ <= indScore) {
-                let selectedIcon = document.querySelector("#" + iconInArray);
+                const selectedIcon = document.querySelector(`#${iconInArray}`);
                 const delayToAnimated = parseInt(`${count + 2}000`); // from 3 secs forwards...
                 setTimeout(
                     () =>
@@ -105,11 +105,11 @@ export default function RatingIcons({
 
     const levels = [100, 200, 300, 400, 500];
     const { fontSize, icon } = milestoneIcons.find(
-        (obj) => obj["icon"] === selectedIcon
+        (obj) => obj.icon === selectedIcon
     );
 
     const handleEffect = (e) => {
-        let currIconElemParent = e.target.parentElement;
+        const currIconElemParent = e.target.parentElement;
         animateCSS(currIconElemParent, "rubberBand", "fast");
     };
 
@@ -133,7 +133,7 @@ export default function RatingIcons({
                                     icon={icon}
                                     className="icon rating-icon--audio"
                                     style={{
-                                        fontSize: fontSize,
+                                        fontSize,
                                         filter: needDark
                                             ? "drop-shadow(grey 0px 0px 4px)"
                                             : undefined,
@@ -143,7 +143,7 @@ export default function RatingIcons({
                                 />
                             </i>
                         }
-                        backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                        backgroundColor={`var(--themeSDark--${colorS})`}
                         colorS={colorS}
                         needArrow
                         margin="60px 0"

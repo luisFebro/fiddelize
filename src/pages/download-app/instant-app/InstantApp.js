@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import TextField from "@material-ui/core/TextField";
+import { useStoreDispatch } from "easy-peasy";
 import createInstantApp from "./helpers/createInstantApp";
 import getFilterDate from "../../../utils/dates/getFilterDate";
 import {
@@ -6,16 +8,13 @@ import {
     setMultiVar,
     getVar,
     store,
+    removeCollection,
 } from "../../../hooks/storage/useVar";
-import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../utils/form/use-state/handleChange";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import lStorage, { needAppRegisterOp } from "../../../utils/storage/lStorage";
-import { removeCollection } from "../../../hooks/storage/useVar";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -168,7 +167,7 @@ export default function InstantAccount({
                 <div className="animated fadeInUp mt-3 container-center">
                     <ButtonFab
                         title={loadingCreation ? "criando..." : "Criar conta"}
-                        disabled={loadingCreation ? true : false}
+                        disabled={!!loadingCreation}
                         color={
                             txtPColor && txtPColor.includes("text-white")
                                 ? "#fff"
@@ -202,7 +201,7 @@ export default function InstantAccount({
                                         ? "#fff"
                                         : "#000"
                                 }
-                                underline={true}
+                                underline
                                 margin="0 16px 50px"
                             />
                         </div>

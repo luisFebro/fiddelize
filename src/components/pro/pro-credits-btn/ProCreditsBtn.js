@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import ModalFullContent from "../../../components/modals/ModalFullContent";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import { useState } from "react";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import ModalFullContent from "../../modals/ModalFullContent";
+import ButtonFab from "../../buttons/material-ui/ButtonFab";
 import pickPackageService from "./pickPackageService";
 
 const addIconStyle = {
@@ -40,8 +40,8 @@ export default function ProCreditsBtn({
                 onClick={handleFullOpen}
                 iconMu={AddCircleIcon}
                 size="medium"
-                color={"white"}
-                backgroundColor={"var(--themeSDark--default)"}
+                color="white"
+                backgroundColor="var(--themeSDark--default)"
             />
             <ModalFullContent
                 contentComp={PickedComponent}

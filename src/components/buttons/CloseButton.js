@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import animateCSS from "../../utils/animateCSS";
@@ -25,8 +24,8 @@ export default function CloseButton({
         closeBtn: {
             position: position || "fixed",
             top: top || "0px",
-            left: left,
-            right: right,
+            left,
+            right,
             fontSize: size || "1.9em",
             color: color || "var(--mainWhite)",
             cursor: "pointer",

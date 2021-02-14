@@ -16,12 +16,7 @@ oneOf,
 oneOfType,
  */
 
-import {
-    number,
-    string,
-    shape,
-    object,
-} from 'prop-types';
+import { number, string, shape, object } from "prop-types";
 
 export const modalDefaultType = {
     title: string,
@@ -30,7 +25,7 @@ export const modalDefaultType = {
     iconBtn: string,
     userId: string,
     modalData: object,
-}
+};
 
 export const modalTextFieldDashboardType = shape({
     mainSubject: string,
@@ -42,9 +37,7 @@ export const modalTextFieldDashboardType = shape({
     labelTxtField: string,
     userCurrentScore: number,
     userId: string,
-})
-
-
+});
 
 /* COMMENTS
 n1: Anything that can be rendered: numbers, strings, elements or an array

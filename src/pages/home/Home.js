@@ -1,32 +1,23 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { CLIENT_URL } from "../../config/clientUrl";
-import ScrollArrow from "../../keyframes/built/scroll-arrow/ScrollArrow";
 import "./_Home.scss";
 import FeaturesSection from "./sections/features/FeaturesSection";
-import CtaSection from "./sections/CtaSection.js";
+import CtaSection from "./sections/CtaSection";
 import preloadMedia from "../../utils/media/preloadMedia";
 // import CompLoader from "../../components/CompLoader";
 // import AppShowCase from "./AppShowCase";
 // import { Link } from 'react-router-dom';
 
-const isSmall = window.Helper.isSmallScreen();
-
 export default function Home() {
     useEffect(() => {
         preloadMedia({
-            href:
-                CLIENT_URL +
-                "/img/illustrations/home/feature-mobiles/cli-admin.gif",
+            href: `${CLIENT_URL}/img/illustrations/home/feature-mobiles/cli-admin.gif`,
         });
         preloadMedia({
-            href:
-                CLIENT_URL +
-                "/img/illustrations/home/feature-mobiles/cli-member.gif",
+            href: `${CLIENT_URL}/img/illustrations/home/feature-mobiles/cli-member.gif`,
         });
         preloadMedia({
-            href:
-                CLIENT_URL +
-                "/img/illustrations/home/feature-mobiles/cli-user.gif",
+            href: `${CLIENT_URL}/img/illustrations/home/feature-mobiles/cli-user.gif`,
         });
     }, []);
     // const [viewPhone, setViewPhone] = useState(false);

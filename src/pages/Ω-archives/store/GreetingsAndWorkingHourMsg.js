@@ -1,6 +1,5 @@
-import React from 'react';
-import GreetingWithPic from './GreetingWithPic';
-import WorkingHourMsg from './WorkingHourMsg';
+import GreetingWithPic from "./GreetingWithPic";
+import WorkingHourMsg from "./WorkingHourMsg";
 
 export default function GreetingsAndWorkingHourMsg() {
     return (

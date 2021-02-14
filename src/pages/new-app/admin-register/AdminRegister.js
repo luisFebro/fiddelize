@@ -1,4 +1,3 @@
-import React from "react";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import RegisterClientAdmin from "../../../components/auth/RegisterClientAdmin";
 import RadiusBtn from "../../../components/buttons/RadiusBtn";

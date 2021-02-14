@@ -1,12 +1,11 @@
-import React, { useState, useEffect, Fragment } from "react";
-import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
+import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import { setRun } from "../../../redux/actions/globalActions";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
-import convertToReal from "../../../utils/numbers/convertToReal";
 import { addDays } from "../../../utils/dates/dateFns";
 import getDashYearMonthDay from "../../../utils/dates/getDashYearMonthDay";
 import { readUser } from "../../../redux/actions/userActions";
@@ -46,7 +45,7 @@ export default function PayArea({
         senderBirthday: "", // for credit card
         firstDueDate: "", // for boleto
     });
-    let {
+    const {
         SKU,
         servDesc,
         senderCPF,
@@ -84,8 +83,8 @@ export default function PayArea({
             let thisCPF = res.data.cpf;
             if (thisCPF === "111.111.111-11") thisCPF = "319.683.234-14"; // for testing only
 
-            let desc = `Plano ${plan} ${handlePeriod()} com ${
-                servicesTotal ? servicesTotal : ""
+            const desc = `Plano ${plan} ${handlePeriod()} com ${
+                servicesTotal || ""
             } serviço${servicesTotal > 1 ? "s" : ""} no valor total de: `;
             // if(servicesTotal > planServiceTotal) {
             //     const leftover = serviceTotal - planServiceTotal;
@@ -143,7 +142,7 @@ export default function PayArea({
         renewalDaysLeft,
         renewalReference,
         isSingleRenewal,
-        bizName, //for email alert only
+        bizName, // for email alert only
     };
 
     const showCTAs = () =>
@@ -159,7 +158,7 @@ export default function PayArea({
                         onClick={null}
                         variant="link"
                         color="var(--themeP)"
-                        underline={true}
+                        underline
                         margin="0 16px 50px"
                         zIndex={-1}
                     />

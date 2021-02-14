@@ -14,7 +14,7 @@ export const uiColors = [
     {
         id: "purple",
         ptColorName: "roxo",
-        hexValue: 'var(--mainPurple)',
+        hexValue: "var(--mainPurple)",
         isDefault: false,
     },
     {
@@ -50,13 +50,13 @@ export const uiColors = [
     {
         id: "green",
         ptColorName: "verde",
-        hexValue: 'var(--incomeGreen)',
+        hexValue: "var(--incomeGreen)",
         isDefault: false,
     },
     {
         id: "brown",
         ptColorName: "marrom",
-        hexValue: 'var(--mainBrown)',
+        hexValue: "var(--mainBrown)",
         isDefault: false,
     },
     {
@@ -67,17 +67,17 @@ export const uiColors = [
     },
 ];
 
-export const translateColorToPtBr = color => {
-    const foundColor = uiColors.find(c => c.id === color);
-    if(!foundColor) return "";
+export const translateColorToPtBr = (color) => {
+    const foundColor = uiColors.find((c) => c.id === color);
+    if (!foundColor) return "";
     return foundColor.ptColorName;
-}
+};
 
-export const translateColorToEng = cor => {
-    const foundColor = uiColors.find(c => c.ptColorName === cor);
-    if(!foundColor) return "";
+export const translateColorToEng = (cor) => {
+    const foundColor = uiColors.find((c) => c.ptColorName === cor);
+    if (!foundColor) return "";
     return foundColor.id;
-}
+};
 
 // Next colors:
 // grey

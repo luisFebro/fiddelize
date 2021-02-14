@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
-import { spin } from "../../keyframes/spin";
-import Picture from "../../components/Picture";
 import PropTypes from "prop-types";
+import { spin } from "../../keyframes/spin";
+import Picture from "../Picture";
 
 const logoOpts = {
     large: "100px",
@@ -67,7 +67,7 @@ export default function Spinner({
             className={`${isCenter && "container-center"} ${
                 logo ? "container-center-col" : null
             }`}
-            style={{ minHeight: marginY ? marginY : "85px", margin }}
+            style={{ minHeight: marginY || "85px", margin }}
         >
             <div style={{ margin: !marginX ? 0 : calculatedRelativeMargin }}>
                 {logo && (
@@ -99,4 +99,4 @@ let config = {
 }
  */
 
-/* concept from: https://codepen.io/smashtheshell/pen/jqGxzr*/
+/* concept from: https://codepen.io/smashtheshell/pen/jqGxzr */

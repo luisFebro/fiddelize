@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useEffect, useRef, useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
+import { withRouter } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     readUser,
     readPurchaseHistory,
@@ -10,13 +12,8 @@ import animateNumber, {
     getAnimationDuration,
 } from "../../../utils/numbers/animateNumber";
 import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
-import isInteger from "../../../utils/numbers/isInteger";
-import getMonthNowBr from "../../../utils/dates/getMonthNowBr";
-import { CLIENT_URL } from "../../../config/clientUrl";
 import isThisApp from "../../../utils/window/isThisApp";
 import { logout } from "../../../redux/actions/authActions";
-import { Link, withRouter } from "react-router-dom";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import {
     useProfile,
     useClientUser,
@@ -25,9 +22,7 @@ import {
 } from "../../../hooks/useRoleData";
 import getFirstName from "../../../utils/string/getFirstName";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../hooks/media/usePlayAudio";
-import useCount from "../../../hooks/useCount";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
 import getAPI, {
     setLastScoreAsDone,
@@ -223,7 +218,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     url: updateUser(cliUserId, whichRole),
                     body: objToSend,
                 }).catch((err) => {
-                    console.log("ERROR: " + err);
+                    console.log(`ERROR: ${err}`);
                 });
 
                 if (role === "cliente") {
@@ -246,7 +241,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     body: historyObj,
                 });
 
-                showSnackbar(dispatch, `Pontuação Registrada!`, "success");
+                showSnackbar(dispatch, "Pontuação Registrada!", "success");
 
                 if (userBeatChallenge) {
                     const options = {
@@ -277,8 +272,8 @@ function AsyncClientScoresPanel({ history, location }) {
                 title="Sua nova pontuação"
                 color="var(--mainWhite)"
                 fontSize="text-hero"
-                needShadow={true}
-                backgroundColor={"var(--themePDark--" + colorP + ")"}
+                needShadow
+                backgroundColor={`var(--themePDark--${colorP})`}
             />
             <section className="position-absolute" style={styles.challN}>
                 <p className="text-subtitle font-weight-bold text-white text-shadow text-center m-0 text-nowrap mx-3">
@@ -293,7 +288,7 @@ function AsyncClientScoresPanel({ history, location }) {
             className={`${selectTxtStyle(
                 colorBack
             )} text-weight-bold text-title pt-5 pb-1 px-3`}
-            style={{ backgroundColor: "var(--themePLight--" + colorP + ")" }}
+            style={{ backgroundColor: `var(--themePLight--${colorP})` }}
         >
             <section>
                 <p className="text-center text-nowrap">
@@ -369,7 +364,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     : new Date(),
             },
         }).catch((err) => {
-            console.log("ERROR: " + err);
+            console.log(`ERROR: ${err}`);
         });
 
         if (isApp) {
@@ -381,19 +376,19 @@ function AsyncClientScoresPanel({ history, location }) {
 
             history.push(path);
         } else {
-            window.location.href = `/acesso/verificacao`;
+            window.location.href = "/acesso/verificacao";
             logout(dispatch);
         }
     };
 
     const showHomeBtn = () => {
         const title = finishedWork ? "Salvar e Finalizar" : "Processando...";
-        const backColorOnHover = "var(--themeSLight--" + colorS + ")";
-        const backgroundColor = "var(--themeSDark--" + colorS + ")";
+        const backColorOnHover = `var(--themeSLight--${colorS})`;
+        const backgroundColor = `var(--themeSDark--${colorS})`;
         return (
             <section className="container-center">
                 <button
-                    disabled={finishedWork ? false : true}
+                    disabled={!finishedWork}
                     className="win-challenge--audio text-shadow my-5 pressed-to-left"
                     style={styles.finishButton}
                     onClick={handleHomeBtnClick}
@@ -433,7 +428,7 @@ function AsyncClientScoresPanel({ history, location }) {
 
 export default withRouter(AsyncClientScoresPanel);
 
-/*ARCHIVES
+/* ARCHIVES
 const showSharingBtn = () => (
     <Link
         to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}

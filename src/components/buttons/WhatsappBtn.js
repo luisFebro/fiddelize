@@ -1,24 +1,24 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { useClientAdmin } from '../../hooks/useRoleData';
-import convertPhoneStrToInt from '../../utils/numbers/convertPhoneStrToInt';
-import ButtonMulti, {faStyle} from './material-ui/ButtonMulti';
-import PropTypes from 'prop-types';
+import { useStoreDispatch } from "easy-peasy";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { showSnackbar } from '../../redux/actions/snackbarActions';
+import { useClientAdmin } from "../../hooks/useRoleData";
+import convertPhoneStrToInt from "../../utils/numbers/convertPhoneStrToInt";
+import ButtonMulti, { faStyle } from "./material-ui/ButtonMulti";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
 
 WhatsappBtn.propTypes = {
     elsePhone: PropTypes.string,
-}
+};
 
 export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
     const { bizWhatsapp, bizName, selfThemeSColor } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
-    const targetedNumber = elsePhone ? elsePhone : bizWhatsapp;
+    const targetedNumber = elsePhone || bizWhatsapp;
     const convertedWhatsapp = convertPhoneStrToInt(targetedNumber);
-    const greetingTxt = elsePhone ? `Oi ${supportName}, vim pelo app para suporte da Fiddelize e preciso ...` : `Oi, vim pelo app de ${bizName} e preciso ...`;
+    const greetingTxt = elsePhone
+        ? `Oi ${supportName}, vim pelo app para suporte da Fiddelize e preciso ...`
+        : `Oi, vim pelo app de ${bizName} e preciso ...`;
 
     return (
         <a
@@ -27,16 +27,25 @@ export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
             className="no-text-decoration"
             title="Clique aqui para enviar uma mensagem em nosso WhatsApp"
             href={`https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${greetingTxt}`}
-            onClick={() => showSnackbar(dispatch, "Um momento. Redirecionando...", "warning", 8000)}
+            onClick={() =>
+                showSnackbar(
+                    dispatch,
+                    "Um momento. Redirecionando...",
+                    "warning",
+                    8000
+                )
+            }
         >
             <ButtonMulti
                 title="Iniciar chat"
                 onClick={null}
                 disabled={isDisabled}
                 color="var(--mainWhite)"
-                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
-                backColorOnHover={"var(--themeSDark--" + selfThemeSColor + ")"}
-                iconFontAwesome={<FontAwesomeIcon icon="comment" style={faStyle} />}
+                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                backColorOnHover={`var(--themeSDark--${selfThemeSColor})`}
+                iconFontAwesome={
+                    <FontAwesomeIcon icon="comment" style={faStyle} />
+                }
             />
         </a>
     );

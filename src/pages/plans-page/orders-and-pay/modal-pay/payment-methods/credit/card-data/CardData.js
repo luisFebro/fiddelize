@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import FlipCreditCard from "../../../../../../../components/cards/flip-credit-card/FlipCreditCard";
 import handleChange from "../../../../../../../utils/form/use-state/handleChange";
 import cardNumberMask from "../../../../../../../utils/validation/masks/cardNumberMask";

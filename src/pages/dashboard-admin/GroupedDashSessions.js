@@ -1,30 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import isSmallScreen from '../../utils/isSmallScreen';
-// material-ui
-import TabSessions from '../../components/tabs/TabSessions';
-import DashUsers from './dash-users';
+import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import TabSessions from "../../components/tabs/TabSessions";
+import DashUsers from "./dash-users";
 // Icons from Tabs
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 // End Material UI
 
 const data = [
     {
         tabLabel: "Usuários Gerenciamento",
         tabIcon: <SupervisedUserCircleIcon />,
-        tabContentPanel: <DashUsers />
+        tabContentPanel: <DashUsers />,
     },
-
-]
+];
 
 export default function GroupedDashSessions() {
-    return (
-        <TabSessions
-            data={data}
-        />
-    );
+    return <TabSessions data={data} />;
 }
-
 
 /* ARCHIVES
 import DashClients from './dash-clients';

@@ -1,8 +1,7 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { useStoreDispatch } from "easy-peasy";
 import { useClientAdmin } from "../hooks/useRoleData";
 // for dashboard redirection
-import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../redux/actions/globalActions";
 import { setVar } from "../hooks/storage/useVar";
 // import { showSnackbar } from "../redux/actions/snackbarActions";
@@ -25,16 +24,15 @@ export default function RedirectLink({
             // it is now switchin tabs fast enough and msg became lazy
             // if (pendingMsg) showSnackbar(dispatch, pendingMsg, "warning", 3000);
             return setVar({ name_tabLabel: toDashTab });
-        } else {
-            goDash && setRun(dispatch, "goDash");
         }
+        goDash && setRun(dispatch, "goDash");
     };
 
     return (
         <Link
             className={`${className} no-text-decoration`}
             to={to || `/${bizCodeName}/cliente-admin/painel-de-controle`}
-            onClick={onClick ? onClick : () => handleClick()}
+            onClick={onClick || (() => handleClick())}
         >
             {children}
         </Link>

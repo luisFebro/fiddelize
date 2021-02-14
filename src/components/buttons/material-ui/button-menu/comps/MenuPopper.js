@@ -1,4 +1,3 @@
-import React from "react";
 import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
@@ -89,5 +88,5 @@ export default function MenuPopper({ open, optionsArray, setOpen, anchorRef }) {
 }
 
 // ARCHIVES
-//<ClickAwayListener onClickAway={() => null}> {/*LESSON: disabled temporarily until finding a solution to toggle to close icon without triggering this...*/}
-//</ClickAwayListener>
+// <ClickAwayListener onClickAway={() => null}> {/*LESSON: disabled temporarily until finding a solution to toggle to close icon without triggering this...*/}
+// </ClickAwayListener>

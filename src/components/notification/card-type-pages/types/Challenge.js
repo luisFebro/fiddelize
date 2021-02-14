@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import extractStrData from "../../../../utils/string/extractStrData";
 import { default as DiscountModalBtn } from "../../../../pages/dashboard-client-admin/dash-clients/clients-history/card-hidden-content/modal/modal-text-field/ModalBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addDays, formatDMY } from "../../../../utils/dates/dateFns";
 import { removeVersion, removeVar } from "../../../../hooks/storage/useVar";
 import { useClientUser } from "../../../../hooks/useRoleData";

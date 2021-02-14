@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import DateWithIcon from '../../../../../components/date-time/DateWithIcon';
-import ShowFormText from './ShowFormText';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import { useState } from "react";
+import DateWithIcon from "../../../../../components/date-time/DateWithIcon";
+import ShowFormText from "./ShowFormText";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import "./HiddenScoreRegulation.scss";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 HiddenScoreRegulation.propTypes = {
     clientAdmin: PropTypes.object,
-}
+};
 // DEFINE IF(updatedAt === createdAt) === NO CHANGES MADE....
 
 let showInstru = false;
@@ -15,8 +15,11 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
     const [openCommands, setOpenCommands] = useState(false);
     const [generateRegulation, setGenerateRegulation] = useState("");
 
-    const dateUpdated = clientAdmin && clientAdmin.regulation && clientAdmin.regulation.updatedAt;
-    if(!dateUpdated) {
+    const dateUpdated =
+        clientAdmin &&
+        clientAdmin.regulation &&
+        clientAdmin.regulation.updatedAt;
+    if (!dateUpdated) {
         showInstru = true;
     }
 
@@ -29,24 +32,31 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
                         <p>*sua expressão negrito*</p>
                         <p>dois asterísticos deixa em negrito</p>
                     </div>
-                    <p><strong>*sua expressão negrito*</strong></p>
+                    <p>
+                        <strong>*sua expressão negrito*</strong>
+                    </p>
                 </div>
                 <div className="row">
                     <div>
                         <p>~sua expressão itálico~</p>
                         <p>dois tils entre enpressão fica em itálico</p>
                     </div>
-                    <p><em>sua expressão itálico</em></p>
+                    <p>
+                        <em>sua expressão itálico</em>
+                    </p>
                 </div>
                 <div className="row">
                     <div>
                         <p>@sua expressão título@</p>
                         <p>transforma em título, texto centralizado</p>
                     </div>
-                    <p style={{color: 'var(--mainPurple)'}}><strong>SUA EMPRESSÃO TÍTULO</strong></p>
+                    <p style={{ color: "var(--mainPurple)" }}>
+                        <strong>SUA EMPRESSÃO TÍTULO</strong>
+                    </p>
                 </div>
                 <div>
-                    - Espaços separam os parágrafos. Pule uma linha no final de cada um.
+                    - Espaços separam os parágrafos. Pule uma linha no final de
+                    cada um.
                 </div>
             </div>
             <div className="key-values">
@@ -65,32 +75,46 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
                 </div>
                 <div>
                     <p>##ponto-premio</p>
-                    <p>ponto que o seu cliente precisa alcançar no desafio atual.</p>
+                    <p>
+                        ponto que o seu cliente precisa alcançar no desafio
+                        atual.
+                    </p>
                 </div>
                 <div>
                     <p>##prazo-premio</p>
-                    <p>Prazo para o cliente receber o prêmio após alcançar a meta de cada desafio.</p>
+                    <p>
+                        Prazo para o cliente receber o prêmio após alcançar a
+                        meta de cada desafio.
+                    </p>
                 </div>
                 <div>
                     <p>##ponto-nivel</p>
-                    <p>quanto vale cada nível no total de 5. Se 500 é o ponto-premio, 100 é o ponto-nivel.</p>
+                    <p>
+                        quanto vale cada nível no total de 5. Se 500 é o
+                        ponto-premio, 100 é o ponto-nivel.
+                    </p>
                 </div>
                 <div>
                     <p>##desafio-atual</p>
-                    <p>É o desafio atual do usuário que está visualizando o regulamento.</p>
+                    <p>
+                        É o desafio atual do usuário que está visualizando o
+                        regulamento.
+                    </p>
                 </div>
                 <p>
-                    - Não é preciso acentuar os valores chaves do sistema e formatadores de texto.
+                    - Não é preciso acentuar os valores chaves do sistema e
+                    formatadores de texto.
                 </p>
             </div>
         </main>
     );
 
     const showTitleAndExplanation = () => (
-        <section style={{padding: '0 20px'}}>
+        <section style={{ padding: "0 20px" }}>
             {showInstru && (
                 <p className="text-grey">
-                    Seu primeiro regulamento de pontos já foi criado automaticamente para seus clientes.
+                    Seu primeiro regulamento de pontos já foi criado
+                    automaticamente para seus clientes.
                     <br />
                     <br />
                     Fique à vontade para alterar ou adicionar mais detalhes.
@@ -109,7 +133,11 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
                     />
                     <div className="mt-4">
                         <ButtonFab
-                            title={generateRegulation ? "Refazer" : "Gerar texto padrão"}
+                            title={
+                                generateRegulation
+                                    ? "Refazer"
+                                    : "Gerar texto padrão"
+                            }
                             position="relative"
                             variant="extended"
                             color="var(--mainWhite)"
@@ -117,7 +145,7 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
                             backgroundColor="var(--mainPurple)"
                             onClick={() => {
                                 // undo and generate handling
-                                if(generateRegulation === "") {
+                                if (generateRegulation === "") {
                                     setGenerateRegulation(true);
                                 } else {
                                     setGenerateRegulation(!generateRegulation);
@@ -132,11 +160,14 @@ export default function HiddenScoreRegulation({ clientAdmin }) {
     );
 
     return (
-        <div className="hidden-content--root text-normal" style={{padding: '20px 0'}}>
+        <div
+            className="hidden-content--root text-normal"
+            style={{ padding: "20px 0" }}
+        >
             {showTitleAndExplanation()}
             <ShowFormText generateRegulation={generateRegulation} />
             <DateWithIcon
-                style={{marginTop: 15}}
+                style={{ marginTop: 15 }}
                 date={dateUpdated}
                 msgIfNotValidDate="Nenhuma alteração."
             />

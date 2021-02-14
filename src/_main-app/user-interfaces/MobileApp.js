@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { loadUser } from "../../redux/actions/authActions";
@@ -12,7 +12,6 @@ import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClie
 
 // PAGES
 import LoginPage from "../../pages/auth/LoginPage"; // is it necessarybecauseit is only usedthe login compo inmobile app
-import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import ClientMobileApp from "../../pages/mobile-app/ClientMobileApp";
 import RegulationPage from "../../pages/RegulationPage";
@@ -44,7 +43,7 @@ import {
     // test
     AsyncPlayground,
 } from "./CommonImports";
-//END PAGES
+// END PAGES
 
 // This is the msg to be displayed for desktop users when popping up the
 // new screen right after the download.

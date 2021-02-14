@@ -1,44 +1,44 @@
 export const data = [
     {
-        weekDay: 'Domingo',
+        weekDay: "Domingo",
         closeDay: true,
         from: 7,
-        to: 20
+        to: 20,
     },
     {
-        weekDay: 'Segunda-Feira',
+        weekDay: "Segunda-Feira",
         closeDay: false,
         from: 7,
-        to: 20
+        to: 20,
     },
     {
-        weekDay: 'Terça-Feira',
+        weekDay: "Terça-Feira",
         closeDay: false,
         from: 9,
-        to: 18
+        to: 18,
     },
     {
-        weekDay: 'Quarta-Feira',
+        weekDay: "Quarta-Feira",
         closeDay: false,
         from: 7,
-        to: 20
+        to: 20,
     },
     {
-        weekDay: 'Quinta-Feira',
+        weekDay: "Quinta-Feira",
         closeDay: false,
         from: 7,
-        to: 20
+        to: 20,
     },
     {
-        weekDay: 'Sexta-Feira',
+        weekDay: "Sexta-Feira",
         closeDay: false,
         from: 7,
-        to: 20
+        to: 20,
     },
     {
-        weekDay: 'Sábado',
+        weekDay: "Sábado",
         closeDay: false,
         from: 7,
-        to: 20
-    }
+        to: 20,
+    },
 ];

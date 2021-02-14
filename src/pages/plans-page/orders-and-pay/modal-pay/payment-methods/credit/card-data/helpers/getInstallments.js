@@ -9,17 +9,17 @@ export default async function getInstallments({ amount, brand = "visa" }) {
             amount,
             brand, // n3
             maxInstallmentNoInterest: MAX_INSTALLMENT_NO_INTEREST, // n2
-            success: function (response) {
+            success(response) {
                 // Retorna as opções de parcelamento disponíveis
                 const installmentOpts = response.installments[brand];
                 const onlyInstallments =
                     installmentOpts && installmentOpts.slice(1); // the first option is in cash and already have it.
                 resolve(onlyInstallments);
             },
-            error: function (response) {
+            error(response) {
                 reject(response);
             },
-            complete: function (response) {
+            complete(response) {
                 // Callback para todas chamadas.
             },
         });

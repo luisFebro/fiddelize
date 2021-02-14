@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import CliWinnersCard from "./card/accordion/CliWinnersCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
@@ -28,20 +28,18 @@ const getStyles = () => ({
     },
 });
 
-const handleSecHeading = (data, styles) => {
-    return (
-        <section>
-            <p
-                className="text-nowrap position-absolute d-block m-0 mt-3"
-                style={styles.dateBadge}
-            >
-                <span className="text-small text-shadow font-weight-bold">
-                    Feito: {calendar(data.createdAt)}.
-                </span>
-            </p>
-        </section>
-    );
-};
+const handleSecHeading = (data, styles) => (
+    <section>
+        <p
+            className="text-nowrap position-absolute d-block m-0 mt-3"
+            style={styles.dateBadge}
+        >
+            <span className="text-small text-shadow font-weight-bold">
+                Feito: {calendar(data.createdAt)}.
+            </span>
+        </p>
+    </section>
+);
 // END HELPERS
 
 export default function CliWinnersList() {
@@ -59,7 +57,7 @@ export default function CliWinnersList() {
         skip,
     };
 
-    const trigger = getTrigger(null, null, { cond2: `filter_"{filterBy}"` });
+    const trigger = getTrigger(null, null, { cond2: 'filter_"{filterBy}"' });
     const {
         list,
         loading,
@@ -93,7 +91,7 @@ export default function CliWinnersList() {
                     alt="Ilustração"
                     txtImgConfig={{
                         topPos: "80%",
-                        txt: `Nenhum cliente ganhador`,
+                        txt: "Nenhum cliente ganhador",
                     }}
                 />
             </section>
@@ -117,7 +115,7 @@ export default function CliWinnersList() {
         return (
             <section className="d-flex">
                 <span
-                    className={`position-relative  d-inline-block text-subtitle font-weight-bold text-shadow`}
+                    className="position-relative  d-inline-block text-subtitle font-weight-bold text-shadow"
                     style={{ lineHeight: "25px", top: 5 }}
                 >
                     {taskDesc}
@@ -172,7 +170,7 @@ export default function CliWinnersList() {
                     actions={actions}
                     backgroundColor="var(--themePLight)"
                     color="white"
-                    needToggleButton={true}
+                    needToggleButton
                 />
             </section>
         );

@@ -5,11 +5,11 @@ export default function getCountdownTimer({ dur, elem, stop, overCallback }) {
         return console.log("ERROR: dur should be a number");
     dur = 60 * dur;
 
-    let timer = dur,
-        minutes,
-        seconds;
+    let timer = dur;
+    let minutes;
+    let seconds;
 
-    const running = setInterval(function () {
+    const running = setInterval(() => {
         minutes = parseInt(timer / 60, 10); // n1 the second argument - radix - base number
         seconds = parseInt(timer % 60, 10);
 
@@ -21,7 +21,7 @@ export default function getCountdownTimer({ dur, elem, stop, overCallback }) {
             seconds = "00";
         }
 
-        elem.textContent = minutes + ":" + seconds; // n2
+        elem.textContent = `${minutes}:${seconds}`; // n2
         // console.log(minutes + ":" + seconds)
 
         if (--timer < 0) {

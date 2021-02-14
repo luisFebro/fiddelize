@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
+import { Link } from "react-router-dom";
+import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import useDelay from "../../../hooks/useDelay";
 import convertToReal from "../../../utils/numbers/convertToReal";
-import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../../redux/actions/globalActions";
 import { useClientAdmin } from "../../../hooks/useRoleData";
-import { Link } from "react-router-dom";
 import getOrderTableList from "./helpers/getOrderTableList";
 import OrdersTableContent from "./OrdersTableContent";
 
@@ -102,9 +102,9 @@ export default function OrdersTable({
                         title="cancelar pedido"
                         onClick={() => handleCancel("explicit")}
                         variant="link"
-                        margin={"0px"}
+                        margin="0px"
                         color="var(--mainRed)"
-                        underline={true}
+                        underline
                         textTransform="lowercase"
                     />
                 </Link>

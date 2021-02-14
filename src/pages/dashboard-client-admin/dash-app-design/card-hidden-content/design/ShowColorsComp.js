@@ -1,15 +1,11 @@
-import React, { Fragment } from 'react';
-import PickTheming from '../../../../../pages/new-app/self-service/pickers/PickTheming';
-import BackButton from '../../../../../components/buttons/BackButton';
+import { Fragment } from "react";
+import PickTheming from "../../../../new-app/self-service/pickers/PickTheming";
+import BackButton from "../../../../../components/buttons/BackButton";
 
 export default function ShowColorsComp({ openComp, onBackBtnClick }) {
-
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
-            <BackButton
-                title="Voltar Opções"
-                onClick={onBackBtnClick}
-            />
+            <BackButton title="Voltar Opções" onClick={onBackBtnClick} />
         </div>
     );
 
@@ -20,11 +16,9 @@ export default function ShowColorsComp({ openComp, onBackBtnClick }) {
                     {showBackBtn()}
                     <div
                         className="animated zoomIn slow container-center text-purple"
-                        style={{margin: '50px 0px 0px'}}
+                        style={{ margin: "50px 0px 0px" }}
                     >
-                        <PickTheming
-                            isFromDash={true}
-                        />
+                        <PickTheming isFromDash />
                     </div>
                 </Fragment>
             )}

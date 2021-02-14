@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../utils/form/use-state/handleChange";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
@@ -40,7 +40,7 @@ const getModalData = ({
     handleUpdateSession,
     userId,
     contactList,
-    whichTab: whichTab ? whichTab : "Lista de Clientes",
+    whichTab: whichTab || "Lista de Clientes",
     message,
     handleShowMessage,
 });
@@ -148,7 +148,7 @@ export default function MessageField({
                 title="Enviar agora"
                 position="relative"
                 onClick={handleSendNow}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
             />
         </section>

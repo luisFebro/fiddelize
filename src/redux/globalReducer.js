@@ -1,6 +1,6 @@
-import { reducer } from 'easy-peasy';
+import { reducer } from "easy-peasy";
 // About: Reusable with many components, especially for true-false states
-//Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
+// Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
 // REDUCERS
 const initialState = {
@@ -11,8 +11,8 @@ const initialState = {
     errorMsg: null,
     currentItemFound: null,
     run: false,
-    runName: '',
-    runName2: '',
+    runName: "",
+    runName2: "",
     runArray: [], // for history of executed elements...
     runOneArray: [],
     // variables: {},
@@ -27,13 +27,13 @@ export const globalReducer = {
             //         ...state,
             //         variables: { ...initialState.variable, ...action.payload }
             //     };
-            case 'CURRENT_ITEM_FOUND':
+            case "CURRENT_ITEM_FOUND":
                 return {
                     ...state,
-                    currentItemFound: action.payload
+                    currentItemFound: action.payload,
                 };
-            case 'RUN_SET': {
-                const payload = action.data.payload;
+            case "RUN_SET": {
+                const { payload } = action.data;
                 const newArr = state.runArray;
                 newArr.push(payload);
                 return {
@@ -43,47 +43,47 @@ export const globalReducer = {
                     runName2: action.data.runName2,
                     runArray: newArr,
                     runOneArray: action.data.array, // for arrays which does not change
-                }
+                };
             }
-            //Show
-            case 'SHOW_LOADING':
+            // Show
+            case "SHOW_LOADING":
                 return {
                     ...state,
-                    isLoading: true
+                    isLoading: true,
                 };
-            case 'SHOW_ERROR':
+            case "SHOW_ERROR":
                 return {
                     ...state,
-                    errorMsg: action.payload
+                    errorMsg: action.payload,
                 };
-            case 'LOADING_PROGRESS_TOGGLED':
+            case "LOADING_PROGRESS_TOGGLED":
                 return {
                     ...state,
-                    isLinearPLoading: action.payload
-                }
-            case 'CUSTOM_LOADING_TOGGLED':
-                return {
-                    ...state,
-                    isCustomLoading: action.payload
-                }
-            case 'CUSTOM_LOADING_2_TOGGLED':
-                return {
-                    ...state,
-                    isCustom2Loading: action.payload
-                }
-            //Clear
-            case 'CLEAR_LOADING':
-                return {
-                    ...state,
-                    isLoading: false
+                    isLinearPLoading: action.payload,
                 };
-            case 'CLEAR_ERROR':
+            case "CUSTOM_LOADING_TOGGLED":
                 return {
                     ...state,
-                    errorMsg: ''
+                    isCustomLoading: action.payload,
+                };
+            case "CUSTOM_LOADING_2_TOGGLED":
+                return {
+                    ...state,
+                    isCustom2Loading: action.payload,
+                };
+            // Clear
+            case "CLEAR_LOADING":
+                return {
+                    ...state,
+                    isLoading: false,
+                };
+            case "CLEAR_ERROR":
+                return {
+                    ...state,
+                    errorMsg: "",
                 };
             default:
                 return state;
         }
-    })
+    }),
 };

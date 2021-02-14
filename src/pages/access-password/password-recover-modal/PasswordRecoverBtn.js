@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 

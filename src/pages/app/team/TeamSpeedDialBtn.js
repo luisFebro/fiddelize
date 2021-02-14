@@ -1,12 +1,11 @@
-import React, { Fragment, useState } from "react";
-import Tooltip from "../../../components/tooltips/Tooltip";
+import { Fragment, useState } from "react";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SpeedDialButton from "../../../components/buttons/SpeedDialButton";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import { disconnect } from "../../../hooks/useAuthUser";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AsyncMemberTasksHistory = Load({
     loader: () =>
@@ -35,7 +34,7 @@ const getStyles = () => ({
     fabTooltip: {
         backgroundColor: "var(--lightYellow)",
         color: "var(--mainDark)",
-        filter: ``, // drop-shadow(0 0 8px #ffc)
+        filter: "", // drop-shadow(0 0 8px #ffc)
     },
 });
 
@@ -46,11 +45,11 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
     const styles = getStyles();
 
     const speedDialActions = [
-        //the order rendered is inverse from the bottom to top
+        // the order rendered is inverse from the bottom to top
         {
             icon: <ExitToAppIcon style={styles.muStyle} />,
             name: "Sair ►",
-            backColor: "var(--themeSDark--" + sColor + ")",
+            backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
                 if (!disableClick) {
                     (async () => {
@@ -67,7 +66,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
                 />
             ),
             name: "Trocar App ►",
-            backColor: "var(--themeSDark--" + sColor + ")",
+            backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
                 !disableClick && history.push("/painel-de-apps");
                 // playBeep();
@@ -81,7 +80,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
                 />
             ),
             name: "Ganhadores ►",
-            backColor: "var(--themeSDark--" + sColor + ")",
+            backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
                 !disableClick && openClientWinners(true);
                 // playBeep();
@@ -90,7 +89,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
         {
             icon: <AssignmentIcon style={styles.muStyle} />,
             name: "Tarefas Recentes ►",
-            backColor: "var(--themeSDark--" + sColor + ")",
+            backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
                 !disableClick && openMemberTasks(true);
                 // playBeep();
@@ -104,13 +103,13 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
                 actions={speedDialActions}
                 root={styles.fabRoot}
                 onClick={null} // playBeep
-                tooltipOpen={true}
-                backColor={"var(--themeSDark--" + sColor + ")"}
+                tooltipOpen
+                backColor={`var(--themeSDark--${sColor})`}
                 size="large"
                 FabProps={{
-                    backgroundColor: "var(--themeSDark--" + sColor + ")",
+                    backgroundColor: `var(--themeSDark--${sColor})`,
                     size: "medium",
-                    filter: `drop-shadow(.5px .5px 3px black)`, // still not working
+                    filter: "drop-shadow(.5px .5px 3px black)", // still not working
                 }}
                 hidden={false}
             />

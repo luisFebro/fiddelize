@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import TeamTasksCard from "./card/accordion/TeamTasksCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../../utils/dates/dateFns";
@@ -29,20 +29,18 @@ const getStyles = () => ({
     },
 });
 
-const handleSecHeading = (data, styles) => {
-    return (
-        <section>
-            <p
-                className="text-nowrap position-absolute d-block m-0 mt-3"
-                style={styles.dateBadge}
-            >
-                <span className="text-small text-shadow font-weight-bold">
-                    Feito: {calendar(data.createdAt)}.
-                </span>
-            </p>
-        </section>
-    );
-};
+const handleSecHeading = (data, styles) => (
+    <section>
+        <p
+            className="text-nowrap position-absolute d-block m-0 mt-3"
+            style={styles.dateBadge}
+        >
+            <span className="text-small text-shadow font-weight-bold">
+                Feito: {calendar(data.createdAt)}.
+            </span>
+        </p>
+    </section>
+);
 // END HELPERS
 
 export default function TeamTasksList() {
@@ -134,7 +132,7 @@ export default function TeamTasksList() {
         return (
             <section className="d-flex">
                 <span
-                    className={`position-relative  d-inline-block text-subtitle font-weight-bold text-shadow`}
+                    className="position-relative  d-inline-block text-subtitle font-weight-bold text-shadow"
                     style={{ lineHeight: "25px", top: 5 }}
                 >
                     {taskDesc}
@@ -189,7 +187,7 @@ export default function TeamTasksList() {
                     actions={actions}
                     backgroundColor="var(--themePLight)"
                     color="white"
-                    needToggleButton={true}
+                    needToggleButton
                 />
             </section>
         );

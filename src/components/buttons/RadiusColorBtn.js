@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function RadiusBtn({
     selectedColor,
     onClick,
@@ -12,21 +10,21 @@ export default function RadiusBtn({
     position,
     top,
     left,
-    value, }) {
-
-    let styles = {
+    value,
+}) {
+    const styles = {
         btn: {
             position,
             top,
             left,
-            padding: padding || '10px',
-            borderRadius: '50px',
-            backgroundColor: backgroundColor || 'var(--lightGrey)',
+            padding: padding || "10px",
+            borderRadius: "50px",
+            backgroundColor: backgroundColor || "var(--lightGrey)",
             outline: "none",
-            width: size || '70px',
-            height: size || '70px',
-        }
-    }
+            width: size || "70px",
+            height: size || "70px",
+        },
+    };
 
     // const extraSmallConfig = {
     //     position,
@@ -41,18 +39,20 @@ export default function RadiusBtn({
     //     fontSize: "12px",
     // }
 
-    if(size === 'small') {
+    if (size === "small") {
         className = "my-1";
     }
 
     const showCircleColor = () => (
-        <div style={{
-            backgroundColor: selectedColor || 'var(--mainDark)',
-            borderRadius: '50px',
-            filter: 'drop-shadow(.001em .1em .1em var(--mainDark))',
-            width: '100%',
-            height: '100%',
-        }}></div>
+        <div
+            style={{
+                backgroundColor: selectedColor || "var(--mainDark)",
+                borderRadius: "50px",
+                filter: "drop-shadow(.001em .1em .1em var(--mainDark))",
+                width: "100%",
+                height: "100%",
+            }}
+        />
     );
 
     return (
@@ -60,7 +60,7 @@ export default function RadiusBtn({
             className={className}
             style={styles.btn}
             onClick={onClick}
-            type='button'
+            type="button"
             name={name}
             value={value}
         >

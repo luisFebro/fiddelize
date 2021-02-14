@@ -1,11 +1,11 @@
-import React from "react";
-import { Load } from "../../../components/code-splitting/LoadableComp";
+import { Load } from "../../code-splitting/LoadableComp";
 // CARD TYPES
 import Welcome from "./types/Welcome";
 import FiddelizeSystem from "./types/FiddelizeSystem";
 import BirthdayGreeting from "./types/BirthdayGreeting";
 import BirthdaysInWeek from "./types/BirthdaysInWeek";
 import Challenge from "./types/Challenge";
+
 const AsyncProPay = Load({
     loader: () =>
         import(
@@ -72,7 +72,7 @@ export default function pickCardType(cardType, options = {}) {
             <AsyncProPay
                 {...defaultProps}
                 subtype={subtype}
-                content={content ? content : undefined}
+                content={content || undefined}
             />
         ),
         score: (
@@ -85,9 +85,7 @@ export default function pickCardType(cardType, options = {}) {
         ),
     };
 
-    const pickComp = () => {
-        return typeList[cardType];
-    };
+    const pickComp = () => typeList[cardType];
 
     return pickComp;
 }

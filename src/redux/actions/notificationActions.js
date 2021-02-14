@@ -50,7 +50,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
         cardType,
         subtype,
         recipient: { id: userId, role, name },
-        senderId: senderId ? senderId : undefined,
+        senderId: senderId || undefined,
         content,
     };
     let queryNoToken = "";

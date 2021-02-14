@@ -1,8 +1,7 @@
-import React from "react";
-import { ShowTitle, ShowPicture, useElemShowOnScroll } from "./DefaultProComps";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { ShowTitle, ShowPicture, useElemShowOnScroll } from "./DefaultProComps";
+import ButtonFab from "../../material-ui/ButtonFab";
 
 const checkIcon = {
     fontSize: "25px",
@@ -178,7 +177,7 @@ export default function ProFeature({ data }) {
                 iconHeight={100}
                 timeout={2000}
                 reference=""
-                main={true}
+                main
             />
             {showMainBenefit()}
             <section className="mx-3">

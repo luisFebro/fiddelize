@@ -1,14 +1,13 @@
-import React from 'react';
-import './_GiftBox.scss';
-import GiftCard from './GiftCard'; // LESSON; watch out for wrong naming because will freeze the whole fucking thing.
+import "./_GiftBox.scss";
+import GiftCard from "./GiftCard"; // LESSON; watch out for wrong naming because will freeze the whole fucking thing.
 
 const pickColor = ({ boxPColor, backColor }) => {
-    const firstCond = (backColor === "black" || backColor === boxPColor);
-    const secondCond = (boxPColor === "purple" || boxPColor === "black");
+    const firstCond = backColor === "black" || backColor === boxPColor;
+    const secondCond = boxPColor === "purple" || boxPColor === "black";
 
-    if(firstCond && secondCond) return "var(--themeSLight--" + boxPColor + ")"
+    if (firstCond && secondCond) return `var(--themeSLight--${boxPColor})`;
 
-    return "var(--themeS--" + boxPColor + ")";
+    return `var(--themeS--${boxPColor})`;
 };
 
 export default function GiftBox({
@@ -26,35 +25,33 @@ export default function GiftBox({
     const boxBodyColor2 = pickColor({ boxPColor, backColor });
 
     const handleClick = () => {
-        if(typeof callback === "function") callback(true);
-    }
+        if (typeof callback === "function") callback(true);
+    };
 
     const showBox = () => (
         <main
-            className={`${className} ${disableClick ? "disabled-link" : ""} gift-box--root ${needSmallBox ? "small" : undefined }`}
-            style={{ background: `linear-gradient(${boxBodyColor1}, ${boxBodyColor2})` }}
+            className={`${className} ${
+                disableClick ? "disabled-link" : ""
+            } gift-box--root ${needSmallBox ? "small" : undefined}`}
+            style={{
+                background: `linear-gradient(${boxBodyColor1}, ${boxBodyColor2})`,
+            }}
             onClick={handleClick}
         >
             <section className="gift-card">
-                <GiftCard
-                    prizeDesc={prizeDesc}
-                    colorS={boxPColor}
-                />
+                <GiftCard prizeDesc={prizeDesc} colorS={boxPColor} />
             </section>
             <section
                 className="box-lid"
                 style={{ backgroundColor: boxLidColor }}
             >
-                <div className="box-bowtie"></div>
+                <div className="box-bowtie" />
             </section>
         </main>
     );
 
     return (
-        <section
-            className={`container-center`}
-            style={{ opacity }}
-        >
+        <section className="container-center" style={{ opacity }}>
             {showBox()}
         </section>
     );

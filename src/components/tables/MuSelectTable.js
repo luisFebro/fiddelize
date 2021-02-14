@@ -4,7 +4,7 @@ In case of failing or something unusual, the last working version was ^4.7.2
  */
 import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { lighten, makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,7 +17,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import Switch from "@material-ui/core/Switch";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
 
 const MyTableCell = withStyles({
@@ -141,7 +140,6 @@ export default function MuSelectTable({
             const newSelecteds = rowsData.map((n) => n.name);
             setSelected(newSelecteds);
             setColorHighlighted(true);
-            return;
         } else {
             setSelected([]);
             setColorHighlighted(false);
@@ -262,14 +260,10 @@ const ShowTableMainTitle = ({
                 <ButtonFab
                     size="medium"
                     width="230px"
-                    needTxtNoWrap={true}
-                    title={
-                        Boolean(selected.length)
-                            ? "Desmarcar todos"
-                            : "Marcar Todos"
-                    }
+                    needTxtNoWrap
+                    title={selected.length ? "Desmarcar todos" : "Marcar Todos"}
                     onClick={onSelectAllClick}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                     position="relative"
                 />

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useDelay from "../../../hooks/useDelay";
 import AsyncVersion from "../../../_main-app/user-interfaces/version/AsyncVersion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./_Footer.scss";
-import { Load } from "../../../components/code-splitting/LoadableComp";
-import ModalFullContent from "../../../components/modals/ModalFullContent";
+import { Load } from "../../code-splitting/LoadableComp";
+import ModalFullContent from "../../modals/ModalFullContent";
 
 const AsyncFiddelizeContact = Load({
     loader: () =>
@@ -48,7 +48,7 @@ const Footer = ({ location }) => {
             <div className="footer-col middle">
                 <ul className="list-unstyled li-space-lg p-small">
                     <li className="media">
-                        <i className="fas fa-square"></i>
+                        <i className="fas fa-square" />
                         <div className="media-body">
                             <a
                                 onClick={() => {
@@ -61,14 +61,14 @@ const Footer = ({ location }) => {
                     </li>
                     <br />
                     <li className="media">
-                        <i className="fas fa-square"></i>
+                        <i className="fas fa-square" />
                         <div className="media-body">
                             <Link to="/termos-de-uso">Termos de uso</Link>
                         </div>
                     </li>
                     <br />
                     <li className="media">
-                        <i className="fas fa-square"></i>
+                        <i className="fas fa-square" />
                         <div className="media-body">
                             <Link to="/privacidade">Privacidade</Link>
                         </div>
@@ -83,14 +83,14 @@ const Footer = ({ location }) => {
             <div className="footer-col last">
                 <ul className="list-unstyled li-space-lg p-small">
                     <li className="media">
-                        <i className="fas fa-square"></i>
+                        <i className="fas fa-square" />
                         <div className="media-body">
                             <Link to="/acesso/verificacao">Acessar conta</Link>
                         </div>
                     </li>
                     <br />
                     <li className="media">
-                        <i className="fas fa-square"></i>
+                        <i className="fas fa-square" />
                         <div className="media-body">
                             <Link to="/status-de-servicos">
                                 Status de serviços

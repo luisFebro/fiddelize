@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react";
-import getAccurateDate from "../../utils/dates/getAccurateDate";
-import useAPI, {
-    getNextExpiryDate,
-    removeServices,
-} from "../../hooks/api/useAPI";
+import { useEffect, useState } from "react";
 import { default as checkToday } from "date-fns/isToday";
-import { getVar, store } from "../../hooks/storage/useVar";
+import getAccurateDate from "../../utils/dates/getAccurateDate";
+import useAPI, { getNextExpiryDate, removeServices } from "../api/useAPI";
+import { getVar, store } from "../storage/useVar";
 import { isScheduledDate, addDays } from "../../utils/dates/dateFns";
 import { IS_PROD } from "../../config/clientUrl";
 import didRunOnce from "../../utils/storage/didRunOnce";
 import { sendNotification } from "../../redux/actions/notificationActions";
-import usePro from "../../hooks/pro/usePro";
-import { useClientAdmin } from "../../hooks/useRoleData";
-import useData from "../../hooks/useData";
+import usePro from "./usePro";
+import { useClientAdmin } from "../useRoleData";
+import useData from "../useData";
 
 const getPeriod = (ref) => {
     if (!ref) return;
@@ -139,7 +136,7 @@ export default function useManageProServices() {
     }, [isToday, userId]);
 }
 
-/*ARCHIVES
+/* ARCHIVES
 Using isToday from fns-date instead...
 comparison between dates are 15 minutes diferent.
 now Sat Oct 10 2020 10:34:37 GMT-0400 (Amazon Standard Time)

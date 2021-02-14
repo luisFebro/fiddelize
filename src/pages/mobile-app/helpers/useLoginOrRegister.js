@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import lStorage, { needAppRegisterOp } from "../../../utils/storage/lStorage";
 
 const needAppRegister = lStorage("getItem", needAppRegisterOp);

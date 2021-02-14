@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function RadiusBtn({
     title,
     onClick,
@@ -18,7 +16,7 @@ export default function RadiusBtn({
     display,
     zIndex,
 }) {
-    let styles = {
+    const styles = {
         btn: {
             position,
             top,
@@ -69,12 +67,9 @@ export default function RadiusBtn({
 
     return (
         <button
-            className={
-                className +
-                ` text-small ${
-                    needTxtShadow ? "text-shadow" : ""
-                } font-weight-bold cursor-pointer`
-            }
+            className={`${className} text-small ${
+                needTxtShadow ? "text-shadow" : ""
+            } font-weight-bold cursor-pointer`}
             style={{
                 ...styles.btn,
                 borderWidth: 2,

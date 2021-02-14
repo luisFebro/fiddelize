@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import SwitchBtn from '../../../../components/buttons/material-ui/SwitchBtn'
-import convertToReal from '../../../../utils/numbers/convertToReal';
-import DetailsBtn from './details-btn/DetailsBtn';
-import useAPI, { activateAutoService, treatBoolStatus } from '../../../../hooks/api/useAPI';
-import { useAppSystem } from '../../../../hooks/useRoleData';
+import { useState, useEffect } from "react";
+import SwitchBtn from "../../../../components/buttons/material-ui/SwitchBtn";
+import convertToReal from "../../../../utils/numbers/convertToReal";
+import DetailsBtn from "./details-btn/DetailsBtn";
+import useAPI, {
+    activateAutoService,
+    treatBoolStatus,
+} from "../../../../hooks/api/useAPI";
+import { useAppSystem } from "../../../../hooks/useRoleData";
 
 export default function Operation({
     active = false,
@@ -16,18 +19,21 @@ export default function Operation({
 }) {
     const [trigger, setTrigger] = useState(false);
     const [data, setData] = useState({
-        service: '',
-        serviceId: '',
+        service: "",
+        serviceId: "",
         innerActive: false,
     });
     const { service, serviceId, innerActive } = data;
 
     const { businessId: userId } = useAppSystem();
 
-
     useEffect(() => {
-        setData({ ...data, service: dataSwitch.service , serviceId: dataSwitch.serviceId  });
-    }, [])
+        setData({
+            ...data,
+            service: dataSwitch.service,
+            serviceId: dataSwitch.serviceId,
+        });
+    }, []);
 
     usage = convertToReal(usage);
 
@@ -40,13 +46,15 @@ export default function Operation({
     };
 
     const { loading: loadingSwitch } = useAPI({
-        method: 'put',
+        method: "put",
         url: activateAutoService(),
         body,
         trigger,
         needAuth: true,
-        snackbar: { txtSuccess: innerActive ? `Pronto! Serviço ${title} ativado.` : "" }
-    })
+        snackbar: {
+            txtSuccess: innerActive ? `Pronto! Serviço ${title} ativado.` : "",
+        },
+    });
 
     const plural = usage > 1 ? "s" : "";
 
@@ -59,21 +67,19 @@ export default function Operation({
             service,
             serviceId,
             innerActive: treatedStatus,
-        })
-    }
+        });
+    };
 
     const modal = {
         msg,
         title,
         subtitle,
         body,
-    }
+    };
 
     const showTitle = () => (
         <section className="container-center-col">
-            <div
-                className="ml-3 text-justify text-normal text-purple font-weight-bold"
-            >
+            <div className="ml-3 text-justify text-normal text-purple font-weight-bold">
                 {title}
             </div>
             <section>
@@ -91,12 +97,14 @@ export default function Operation({
                     disabled={false}
                     loading={loadingSwitch}
                     data={dataSwitch}
-                    pillStyle={true}
+                    pillStyle
                 />
             )}
             <div
-                className={`text-normal text-center ${active ? "text-purple" : "text-grey"}`}
-                style={{ lineHeight: '10px' }}
+                className={`text-normal text-center ${
+                    active ? "text-purple" : "text-grey"
+                }`}
+                style={{ lineHeight: "10px" }}
             >
                 <span className="text-title">{loading ? "..." : usage} </span>
                 SMS usado{plural}

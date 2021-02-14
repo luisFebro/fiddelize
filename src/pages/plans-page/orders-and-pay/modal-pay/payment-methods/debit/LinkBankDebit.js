@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
 import getSenderHash from "../../../helpers/pagseguro/getSenderHash";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
@@ -98,7 +98,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                                 size="large"
                                 backgroundColor="var(--default)"
                                 position="relative"
-                                backgroundColor={`var(--themeSDark--default)`}
+                                backgroundColor="var(--themeSDark--default)"
                                 onClick={null}
                             />
                         </a>
@@ -108,9 +108,7 @@ export default function LinkBankDebit({ selectedBank, modalData }) {
                                     size="small"
                                     title="Ir para Histórico"
                                     onClick={null}
-                                    backgroundColor={
-                                        "var(--themeSDark--default)"
-                                    }
+                                    backgroundColor="var(--themeSDark--default)"
                                     variant="extended"
                                     position="relative"
                                 />

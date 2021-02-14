@@ -1,6 +1,4 @@
-import React, { useState } from "react";
 import Img from "../../../../../components/Img";
-import { useProfile } from "../../../../../hooks/useRoleData";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import RedirectLink from "../../../../../components/RedirectLink";
 
@@ -23,15 +21,17 @@ export default function AsyncModalContent() {
                     mode="skeleton"
                     width="100%"
                     alt="Ilustração prêmios admin"
-                    offline={true}
-                    title={`<span class="d-inline-block text-subtitle font-weight-bold text-purple">Nenhum prêmio.</span><p class="mx-3 text-normal font-weight-bold text-purple">Acumule pontos e ganhe prêmios da Fiddelize!</p>`}
+                    offline
+                    title={
+                        '<span class="d-inline-block text-subtitle font-weight-bold text-purple">Nenhum prêmio.</span><p class="mx-3 text-normal font-weight-bold text-purple">Acumule pontos e ganhe prêmios da Fiddelize!</p>'
+                    }
                 />
                 <RedirectLink to="/planos?cliente-admin=1">
                     <ButtonFab
                         size="large"
                         title="Começar"
                         onClick={null}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                         position="relative"
                     />

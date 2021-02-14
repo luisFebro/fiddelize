@@ -1,10 +1,9 @@
-import React from 'react';
-import './_BubbleTabs.scss';
-import parse from 'html-react-parser';
-import addDashesToString from '../../../utils/string/addDashesToString';
-import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
-import { useStoreDispatch } from 'easy-peasy';
-import { setRun } from '../../../hooks/useRunComp';
+import "./_BubbleTabs.scss";
+import parse from "html-react-parser";
+import { useStoreDispatch } from "easy-peasy";
+import addDashesToString from "../../../utils/string/addDashesToString";
+import ButtonFab from "../../buttons/material-ui/ButtonFab";
+import { setRun } from "../../../hooks/useRunComp";
 
 export default function BubbleTabs({
     firstLabel = "I am label 1",
@@ -17,7 +16,6 @@ export default function BubbleTabs({
     ctaAction,
     setWhichTab,
 }) {
-
     const firstLabelId = addDashesToString(firstLabel);
     const secondLabelId = addDashesToString(secondLabel);
     firstLabel = parse(firstLabel);
@@ -27,16 +25,21 @@ export default function BubbleTabs({
 
     function openTab(evt, component) {
         // reference: https://www.w3schools.com/howto/howto_js_tabs.asp
-        let i, tabcontent, tablinks;
+        let i;
+        let tabcontent;
+        let tablinks;
 
         tabcontent = document.getElementsByClassName("tab-content");
         for (i = 0; i < tabcontent.length; i++) {
-          tabcontent[i].style.display = "none";
+            tabcontent[i].style.display = "none";
         }
 
         tablinks = document.getElementsByClassName("nav-link");
         for (i = 0; i < tablinks.length; i++) {
-          tablinks[i].className = tablinks[i].className.replace(" active", "");
+            tablinks[i].className = tablinks[i].className.replace(
+                " active",
+                ""
+            );
         }
 
         document.getElementById(component).style.display = "block";
@@ -49,12 +52,12 @@ export default function BubbleTabs({
                 <a
                     id="bubbleTabsBtn1"
                     className="nav-link font-site active"
-                    onClick={e => {
-                        if(typeof setWhichTab === "function") {
+                    onClick={(e) => {
+                        if (typeof setWhichTab === "function") {
                             setWhichTab(firstName);
                             setRun(dispatch, firstName);
                         }
-                        openTab(e, firstLabelId)
+                        openTab(e, firstLabelId);
                     }}
                 >
                     {firstLabel}
@@ -64,12 +67,12 @@ export default function BubbleTabs({
                 <a
                     id="bubbleTabsBtn2"
                     className="nav-link font-site"
-                    onClick={e => {
-                        if(typeof setWhichTab === "function") {
+                    onClick={(e) => {
+                        if (typeof setWhichTab === "function") {
                             setWhichTab(secondName);
                             setRun(dispatch, secondName);
                         }
-                        openTab(e, secondLabelId)
+                        openTab(e, secondLabelId);
                     }}
                 >
                     {secondLabel}
@@ -81,32 +84,28 @@ export default function BubbleTabs({
     const showTabPanes = () => (
         <section className="d-flex justify-content-center">
             <section id={firstLabelId} className="tab-content active">
-                <div className="tab-pane">
-                    {FirstComp}
-                </div>
+                <div className="tab-pane">{FirstComp}</div>
             </section>
             <section id={secondLabelId} className="tab-content">
-                <div className="tab-pane">
-                    {SecondComp}
-                </div>
+                <div className="tab-pane">{SecondComp}</div>
             </section>
         </section>
     );
 
-    const showCTAButton = () => (
-        ctaTitle &&
-        <section className="container-center">
-            <ButtonFab
-                size="large"
-                title={ctaTitle}
-                onClick={ctaAction}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
-                position = 'relative'
-                top={-30}
-            />
-        </section>
-    );
+    const showCTAButton = () =>
+        ctaTitle && (
+            <section className="container-center">
+                <ButtonFab
+                    size="large"
+                    title={ctaTitle}
+                    onClick={ctaAction}
+                    backgroundColor="var(--themeSDark--default)"
+                    variant="extended"
+                    position="relative"
+                    top={-30}
+                />
+            </section>
+        );
 
     return (
         <section className="bubble-tabs--root">

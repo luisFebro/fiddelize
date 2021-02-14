@@ -13,7 +13,7 @@ export default function detectSingleElemScroll(elemQuery, options = {}) {
         "intersectionRatio" in window.IntersectionObserverEntry.prototype
     ) {
         const observer = new IntersectionObserver((entries) => {
-            const isIntersecting = entries[0].isIntersecting;
+            const { isIntersecting } = entries[0];
             callback(isIntersecting);
         });
         observer.observe(finalElem);

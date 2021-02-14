@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
-import { setRun } from "../../../../../hooks/useRunComp";
+import { useState, useRef } from "react";
 import { useStoreDispatch } from "easy-peasy";
+import { setRun } from "../../../../../hooks/useRunComp";
 import SuccessOp from "./SuccessOp";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
 
@@ -42,12 +42,12 @@ export default function CompleteRegister({ handleNewSendingEnv, isNewMember }) {
             <section className="my-5">
                 {isNewMember ? (
                     <AsyncRegisterMember
-                        isStaff={true} // isStaff define if is from the dashboard or not
+                        isStaff // isStaff define if is from the dashboard or not
                         callback={handleSuccessfulRegister}
                     />
                 ) : (
                     <AsyncRegister
-                        isStaff={true}
+                        isStaff
                         callback={handleSuccessfulRegister}
                     />
                 )}

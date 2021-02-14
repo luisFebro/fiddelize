@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
-import getId from "../../../utils/getId";
 import parse from "html-react-parser";
+import getId from "../../../utils/getId";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 // import { useStoreDispatch } from 'easy-peasy';
 // import { showSnackbar } from '../../../redux/actions/snackbarActions';
@@ -11,7 +11,7 @@ import { useClientAdmin } from "../../../hooks/useRoleData";
 const getStyles = ({ pillStyle, pillBack }) => ({
     pill: pillStyle
         ? {
-              background: pillBack ? pillBack : "rgb(202, 211, 200, .4)",
+              background: pillBack || "rgb(202, 211, 200, .4)",
               padding: "5px 8px",
               borderRadius: "30px",
           }
@@ -95,9 +95,9 @@ export default function SwitchBtn({
     };
 
     const on = `m-0 ${animationOn ? "animated rubberBand" : ""} text-normal ${
-        customColor ? customColor : "text-purple font-weight-bold"
+        customColor || "text-purple font-weight-bold"
     }`;
-    const off = `m-0 text-normal ${customColor ? customColor : "text-grey"}`;
+    const off = `m-0 text-normal ${customColor || "text-grey"}`;
     const txtStyle1 = checked ? off : on;
     const txtStyle2 = !checked ? off : on;
 

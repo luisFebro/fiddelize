@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../../../components/modals/ModalFullContent";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
 
 const AsyncModalContent = Load({
@@ -36,7 +36,7 @@ export default function AdminPrizesBtn() {
                 size="large"
                 title="Galeria Prêmios"
                 onClick={handleFullOpen}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
                 position="relative"
                 iconFontAwesome={

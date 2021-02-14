@@ -1,4 +1,3 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./_FacesPromotersScore.css";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
@@ -45,7 +44,7 @@ export default function FacesPromotersScore({
                 "clientUserData.review.npsUpdatedAt": new Date(),
             },
         }).catch((err) => {
-            console.log("ERROR: " + err);
+            console.log(`ERROR: ${err}`);
         });
         showSnackbar(dispatch, "Avaliação Atualizada!", "success");
     };
@@ -53,7 +52,7 @@ export default function FacesPromotersScore({
     return (
         <section>
             <section className="d-flex justify-content-center">
-                <div className={`faces-group shadow-elevation-black`}>
+                <div className="faces-group shadow-elevation-black">
                     {facePatterns.map((f, ind) => (
                         <FontAwesomeIcon
                             key={ind}

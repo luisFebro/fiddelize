@@ -1,47 +1,48 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import { Link } from 'react-router-dom';// n3
-import PropTypes from 'prop-types';
+import Typography from "@material-ui/core/Typography";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import { Link } from "react-router-dom"; // n3
+import PropTypes from "prop-types";
 // helpers
-import getBreadCrumbData from '../../../utils/getBreadCrumbData';
-import truncateWords from '../../../utils/string/truncateWords';
+import getBreadCrumbData from "../../../utils/getBreadCrumbData";
+import truncateWords from "../../../utils/string/truncateWords";
 
 BreadCrumbs.propTypes = {
     currentPath: PropTypes.object,
-}
+};
 
 export default function BreadCrumbs({ history }) {
     const currPath = history.location.pathname;
-    const showBreadCrumbs = currentPath => {
-        const isHome = currentPath === '/';
+    const showBreadCrumbs = (currentPath) => {
+        const isHome = currentPath === "/";
         const data = getBreadCrumbData(currentPath);
-        const showData = data.map(obj => {
-            let link = obj.link;
-            let subdirName, key;
+        const showData = data.map((obj) => {
+            const { link } = obj;
+            let subdirName;
+            let key;
             subdirName = key = truncateWords(obj.subdir, 30); // n2
-            if(link === '') return <Typography key={key} color="textPrimary">{subdirName}</Typography>; //n1
+            if (link === "")
+                return (
+                    <Typography key={key} color="textPrimary">
+                        {subdirName}
+                    </Typography>
+                ); // n1
 
             return (
                 <Link key={key} color="inherit" to={link}>
                     {subdirName}
                 </Link>
             );
-        })
+        });
 
-        return(
-            !isHome &&
-            <Breadcrumbs aria-label="breadcrumb">
-                {showData}
-            </Breadcrumbs>
+        return (
+            !isHome && (
+                <Breadcrumbs aria-label="breadcrumb">{showData}</Breadcrumbs>
+            )
         );
-
-    }
+    };
 
     return (
-        <div style={{marginLeft: '20px'}}>
-            {showBreadCrumbs(currPath)}
-        </div>
+        <div style={{ marginLeft: "20px" }}>{showBreadCrumbs(currPath)}</div>
     );
 }
 

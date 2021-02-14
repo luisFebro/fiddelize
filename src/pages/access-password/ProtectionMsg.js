@@ -1,4 +1,3 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 

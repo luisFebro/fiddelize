@@ -1,4 +1,3 @@
-import React from "react";
 import "./_FeaturesSection.scss";
 import FeatureTabs from "./feature-tabs/FeatureTabs";
 import tabsData from "./tabsData";

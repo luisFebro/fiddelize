@@ -1,13 +1,10 @@
-import React, { Fragment, useEffect, useState, useContext } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import { calendar } from "../../../../utils/dates/dateFns";
-import parse from "html-react-parser";
 import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
-import { useStoreDispatch } from "easy-peasy";
 import { updateUser } from "../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
-import Title from "../../../../components/Title";
 import {
     useAppSystem,
     useProfile,
@@ -16,7 +13,6 @@ import {
 import useAPIList, {
     readUserList,
     getTrigger,
-    getUniqueId,
 } from "../../../../hooks/api/useAPIList";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import useElemDetection, {
@@ -404,19 +400,19 @@ export default function AsyncRecordedClientsList() {
         const handleVisible = () => {
             if (needEmpty) return true;
             if (filterName === "birthdayCustomers") {
-                return cliUser.filterBirthday ? true : false;
+                return !!cliUser.filterBirthday;
             }
             if (filterName === "buyLessCustomers") {
-                return cliUser.totalGeneralScore ? true : false;
+                return !!cliUser.totalGeneralScore;
             }
             if (filterName === "firstPurchases") {
-                return cliUser.filterLastPurchase ? true : false;
+                return !!cliUser.filterLastPurchase;
             }
             if (filterName === "lowestActiveScores") {
-                return cliUser.currScore ? true : false;
+                return !!cliUser.currScore;
             }
             if (filterName === "lowestSinglePurchases") {
-                return cliUser.filterHighestPurchase ? true : false;
+                return !!cliUser.filterHighestPurchase;
             }
             if (defaultCond) {
                 return true;
@@ -461,11 +457,11 @@ export default function AsyncRecordedClientsList() {
                 actions={actions}
                 backgroundColor="var(--themePLight)"
                 color="white"
-                needToggleButton={true}
+                needToggleButton
             />
         </section>
     );
-    //End Accordion Content
+    // End Accordion Content
 
     const showFixedCTA = () =>
         showCTA && (
@@ -476,8 +472,8 @@ export default function AsyncRecordedClientsList() {
                 <RegisterPanelBtn
                     title="Novo Cadastro"
                     size="medium"
-                    isCliAdmin={true}
-                    needTeamApp={true}
+                    isCliAdmin
+                    needTeamApp
                 />
             </section>
         );
@@ -504,7 +500,7 @@ export default function AsyncRecordedClientsList() {
                                         style={{ fontSize: 30 }}
                                     />
                                 }
-                                needIconShadow={true}
+                                needIconShadow
                             />
                         </section>
                     ) : (
@@ -526,7 +522,7 @@ export default function AsyncRecordedClientsList() {
                         onClick={() => setOpenSearch(null)}
                         color="var(--mainWhite)"
                         backgroundColor="var(--themeSDark)"
-                        needIconShadow={true}
+                        needIconShadow
                         variant="extended"
                         title="Filtros e Totais"
                         textTransform=" "

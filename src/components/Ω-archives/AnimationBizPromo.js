@@ -1,39 +1,43 @@
-import React from 'react';
-// import parse from 'html-react-parser';
-// Redux
-import {useStoreState, useStoreDispatch} from 'easy-peasy';
-import {showModalDefault} from '../redux/actions/modalActions.js';
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import styled from "styled-components";
+import { showModalDefault } from "../redux/actions/modalActions.js";
 // End Redux
-import ModalDefault from './modals/ModalDefault.js';
-import {ButtonContainerPressedEffectYellow as BtnYellow} from './buttons/Default';
-import styled from 'styled-components';
+import ModalDefault from "./modals/ModalDefault.js";
+import { ButtonContainerPressedEffectYellow as BtnYellow } from "./buttons/Default";
 
 export default function AnimationBizPromo() {
     // const [isClosed, setIsClosed] = useState(false);
 
-    const {isAuthenticated, name, gotCoupons, isFirstBuyCouponOn} = useStoreState(state => ({
+    const {
+        isAuthenticated,
+        name,
+        gotCoupons,
+        isFirstBuyCouponOn,
+    } = useStoreState((state) => ({
         isAuthenticated: state.authReducer.cases.isUserAuthenticated,
         name: state.userReducer.cases.currentUser.name,
         gotCoupons: state.userReducer.cases.gotCoupons,
-        isFirstBuyCouponOn: state.adminReducer.cases.isFirstBuyCouponOn
+        isFirstBuyCouponOn: state.adminReducer.cases.isFirstBuyCouponOn,
     }));
     const dispatch = useStoreDispatch();
     const closeBtn = () => {
-        const mainSection = document.getElementById('main-section'),
-            closeBtn = document.getElementById('closeBtn');
+        const mainSection = document.getElementById("main-section");
+        const closeBtn = document.getElementById("closeBtn");
 
-        closeBtn.className = 'fas fa-times-circle animated rotateOut';
-        mainSection.classList.add('animated', 'slideOutRight', 'slow');
-        mainSection.style.animationDelay = '0s';
+        closeBtn.className = "fas fa-times-circle animated rotateOut";
+        mainSection.classList.add("animated", "slideOutRight", "slow");
+        mainSection.style.animationDelay = "0s";
     };
 
     return (
-        <div style={{zIndex: 1490}}>
+        <div style={{ zIndex: 1490 }}>
             <ModalDefault
                 propTitle={`Parabéns, ${name}!`}
-                propMsg={'Você ganhou um coupon de desconto de 10% na sua primeira conta'}
-                propTxtBtn={'aplicar desconto'}
-                objToSend={{couponList: {type: '10% desconto qualquer produto'}}}
+                propMsg="Você ganhou um coupon de desconto de 10% na sua primeira conta"
+                propTxtBtn="aplicar desconto"
+                objToSend={{
+                    couponList: { type: "10% desconto qualquer produto" },
+                }}
                 closeAnimation={closeBtn}
             />
             {isAuthenticated ? (
@@ -43,11 +47,11 @@ export default function AnimationBizPromo() {
                         id="main-section"
                         className="animated slideInRight slower"
                         style={{
-                            animationDelay: '10s',
-                            position: 'fixed',
-                            bottom: '12px',
-                            right: '25px',
-                            zIndex: 1490
+                            animationDelay: "10s",
+                            position: "fixed",
+                            bottom: "12px",
+                            right: "25px",
+                            zIndex: 1490,
                         }}
                     >
                         <ImageWrapper
@@ -57,7 +61,9 @@ export default function AnimationBizPromo() {
                             onClick={() => showModalDefault(dispatch)}
                         />
                         <div>
-                            <BtnYellow onClick={() => showModalDefault(dispatch)}>
+                            <BtnYellow
+                                onClick={() => showModalDefault(dispatch)}
+                            >
                                 <p className="text-normal">
                                     Hey {name}!<br />
                                     Você ganhou desconto. Veja!
@@ -70,7 +76,7 @@ export default function AnimationBizPromo() {
                                     onClick={() => {
                                         closeBtn();
                                     }}
-                                ></i>
+                                />
                             </SpanWrapper>
                         </div>
                     </section>

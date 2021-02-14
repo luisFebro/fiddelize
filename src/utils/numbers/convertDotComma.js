@@ -27,9 +27,8 @@ function convertDotToComma(stringNumber, options = {}) {
             : parseFloat(stringNumber).toString();
         res = converted.replace(".", ",");
         return res;
-    } else {
-        return stringNumber;
     }
+    return stringNumber;
 }
 
 function convertCommaToDot(stringNumber) {

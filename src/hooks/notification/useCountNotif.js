@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { countPendingNotif } from "../../redux/actions/notificationActions";
-import { useRunComp } from "../../hooks/useRunComp";
+import { useRunComp } from "../useRunComp";
 
 export default function useCountNotif(userId, options = {}) {
     const {

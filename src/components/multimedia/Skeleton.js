@@ -1,4 +1,3 @@
-import React from "react";
 import { default as MuSkeleton } from "@material-ui/lab/Skeleton";
 import { makeStyles } from "@material-ui/core/styles";
 import { IS_DEV } from "../../config/clientUrl";

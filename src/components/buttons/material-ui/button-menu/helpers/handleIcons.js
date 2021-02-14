@@ -1,4 +1,3 @@
-import React from "react";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";

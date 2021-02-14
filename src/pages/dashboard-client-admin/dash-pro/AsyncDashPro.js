@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import InvestHistory from "./investments-history/InvestHistory";
 import PlanAndServicesArea from "./PlanAndServicesArea";

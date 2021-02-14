@@ -1,30 +1,32 @@
-import React, { Fragment, useState } from 'react';
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import PurchaseValue from './PurchaseValue';
-import StaffConfirmation from './StaffConfirmation';
-import AsyncClientScoresPanel from './AsyncClientScoresPanel';
-import HomeButton from '../../../components/buttons/HomeButton';
-import { useClientAdmin } from '../../../hooks/useRoleData';
+import { Fragment, useState } from "react";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import PurchaseValue from "./PurchaseValue";
+import StaffConfirmation from "./StaffConfirmation";
+import AsyncClientScoresPanel from "./AsyncClientScoresPanel";
+import HomeButton from "../../../components/buttons/HomeButton";
+import { useClientAdmin } from "../../../hooks/useRoleData";
 
 export default function LoyaltyScoreHandler() {
-    const [valuePaid, setValuePaid]  = useState("0");
-    const [verification, setVerification]  = useState(false);
+    const [valuePaid, setValuePaid] = useState("0");
+    const [verification, setVerification] = useState(false);
 
-    const { selfThemeBackColor, selfThemePColor, selfThemeSColor } = useClientAdmin();
+    const {
+        selfThemeBackColor,
+        selfThemePColor,
+        selfThemeSColor,
+    } = useClientAdmin();
 
     const dispatch = useStoreDispatch();
 
-    const {
-        currentComp,
-    } = useStoreState(state => ({
+    const { currentComp } = useStoreState((state) => ({
         currentComp: state.componentReducer.cases.currentComp,
-    }))
+    }));
 
     let purchaseValue = false;
     let staffConfirmation = false;
     let clientScoresPanel = false;
 
-    switch(currentComp) {
+    switch (currentComp) {
         case "purchaseValue":
             purchaseValue = true;
             break;
@@ -35,12 +37,15 @@ export default function LoyaltyScoreHandler() {
             clientScoresPanel = true;
             break;
         default:
-            console.log("Something is wrong with your name")
+            console.log("Something is wrong with your name");
     }
 
     return (
         <div
-            style={{color: 'white', backgroundColor: 'var(--themeBackground--' + selfThemeBackColor + ')'}}
+            style={{
+                color: "white",
+                backgroundColor: `var(--themeBackground--${selfThemeBackColor})`,
+            }}
             className="container-center"
         >
             <PurchaseValue
@@ -61,12 +66,9 @@ export default function LoyaltyScoreHandler() {
                 colorBack={selfThemeBackColor}
             />
             <Fragment>
-               {
-                    !purchaseValue &&
-                    !staffConfirmation &&
-                    !clientScoresPanel &&
+                {!purchaseValue && !staffConfirmation && !clientScoresPanel && (
                     <HomeButton />
-               }
+                )}
             </Fragment>
         </div>
     );

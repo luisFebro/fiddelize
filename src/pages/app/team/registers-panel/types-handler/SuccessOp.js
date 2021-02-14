@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Card from "@material-ui/core/Card";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import useDelay from "../../../../../hooks/useDelay";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -77,7 +77,7 @@ export default function SuccessOp({
                             title={btnTitle}
                             position="relative"
                             onClick={ctaFunc}
-                            backgroundColor={"var(--themeSDark--default)"}
+                            backgroundColor="var(--themeSDark--default)"
                             variant="extended"
                         />
                     </div>

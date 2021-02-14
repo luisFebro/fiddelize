@@ -1,14 +1,20 @@
 // WARNING: to avoid conflict of data, it does not requires to use lStorage in other components
 // Declare them all here otherwise may arise some issues while comparing online and offline data...
-import { useEffect } from 'react';
-import { clientAdminColl, userProfileColl, centralAdminColl } from '../../utils/storage/lStorage';
-import setDataIfOnline from '../../utils/storage/setDataIfOnline';
-import useRecoverSysData from './useRecoverSysData';
+import { useStoreState } from "easy-peasy";
+import lStorage, {
+    clientAdminColl,
+    userProfileColl,
+    centralAdminColl,
+} from "../../utils/storage/lStorage";
+import setDataIfOnline from "../../utils/storage/setDataIfOnline";
+import useRecoverSysData from "./useRecoverSysData";
 import {
-    useProfile, useClientAdmin, useClientUser, useCentralAdmin } from '../useRoleData';
-import { useStoreState } from 'easy-peasy';
-import { useAppSystem } from '../useRoleData';
-import lStorage from '../../utils/storage/lStorage';
+    useProfile,
+    useClientAdmin,
+    useClientUser,
+    useCentralAdmin,
+    useAppSystem,
+} from "../useRoleData";
 
 const collection = { collection: "appSystem" };
 const appSystem = lStorage("getItems", collection);
@@ -16,7 +22,7 @@ const bizSysId = appSystem && appSystem.businessId;
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
 // end data
 export const useRecoveryAndDataOffline = () => {
-    const { isUserOnline, runName } = useStoreState(state => ({
+    const { isUserOnline, runName } = useStoreState((state) => ({
         runName: state.globalReducer.cases.runName,
         isUserOnline: state.authReducer.cases.isUserOnline,
     }));
@@ -35,13 +41,13 @@ export const useRecoveryAndDataOffline = () => {
     // data
     const centralAdminNewObj = useCentralAdmin();
     const clientAdminNewObj = useClientAdmin();
-    const userProfileNewObj = { ...profileValues, ...clientUserValues }
+    const userProfileNewObj = { ...profileValues, ...clientUserValues };
 
     setDataIfOnline(userProfileColl, userProfileNewObj, isUserOnline);
     setDataIfOnline(clientAdminColl, clientAdminNewObj, isUserOnline);
     setDataIfOnline(centralAdminColl, centralAdminNewObj, isUserOnline);
     useRecoverSysData(role, _id, { bizId, isUserOnline, didUserLogout });
-}
+};
 
 /* ARCHIVES
     // const dispatch = useStoreDispatch();

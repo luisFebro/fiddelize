@@ -1,4 +1,3 @@
-import React from "react";
 import usePayMethods from "../../../helpers/usePayMethods";
 
 export default function ShowAvailableCards({ modalData }) {

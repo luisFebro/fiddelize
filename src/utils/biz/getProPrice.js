@@ -112,11 +112,11 @@ function getProPrice(
     const resPer = resourceGrade * unitPrice;
 
     let p = (devPer + resPer) / CLI;
-    p = p - selectedDiscount;
+    p -= selectedDiscount;
 
     p = getSimplifiedUnit(p);
 
-    if (period === "monthly") p = p * MONTHLY_UNIT;
+    if (period === "monthly") p *= MONTHLY_UNIT;
 
     return p;
 }

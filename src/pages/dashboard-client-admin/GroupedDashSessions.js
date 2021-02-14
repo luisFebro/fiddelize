@@ -1,15 +1,13 @@
-import React from "react";
-// material-ui
-import TabSessions from "../../components/tabs/TabSessions";
 // Icons from Tabs
 import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import BuildIcon from "@material-ui/icons/Build";
 import ChatIcon from "@material-ui/icons/Chat";
 import PhonelinkSetupIcon from "@material-ui/icons/PhonelinkSetup";
-import DashClients from "./dash-clients";
-import LoadableVisible from "../../components/code-splitting/LoadableVisible";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LoadableVisible from "../../components/code-splitting/LoadableVisible";
+import TabSessions from "../../components/tabs/TabSessions";
+import DashClients from "./dash-clients";
 
 const AsyncTeam = LoadableVisible({
     loader: () =>

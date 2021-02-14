@@ -1,9 +1,10 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import { useStoreDispatch } from "easy-peasy";
 import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import isThisApp from "../../utils/window/isThisApp";
-import { Link } from "react-router-dom";
 import Lock from "./interative-lock/Lock";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import useBackColor from "../../hooks/useBackColor";
@@ -11,7 +12,6 @@ import useScrollUp from "../../hooks/scroll/useScrollUp";
 import ProtectionMsg from "./ProtectionMsg";
 import useData from "../../hooks/useData";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import getAPI, {
     checkPassword,
     getDecryptedToken,
@@ -119,7 +119,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
     };
 
     const undoClick = () => {
-        let counter = display.length;
+        const counter = display.length;
         const currTypingField = document.querySelector(
             `.pass-block-${counter}`
         );

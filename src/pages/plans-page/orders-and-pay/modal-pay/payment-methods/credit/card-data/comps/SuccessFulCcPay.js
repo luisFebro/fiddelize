@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { withRouter } from "react-router-dom";
 import Img from "../../../../../../../../components/Img";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import isThisApp from "../../../../../../../../utils/window/isThisApp";
-import { withRouter } from "react-router-dom";
 import { useClientAdmin } from "../../../../../../../../hooks/useRoleData";
 import useScrollUp from "../../../../../../../../hooks/scroll/useScrollUp";
+
 const isApp = isThisApp();
 
 export default withRouter(SuccessFulCcPay);
@@ -33,7 +34,7 @@ function SuccessFulCcPay({ history, setMainData }) {
             <Img
                 className="img-fluid"
                 src="/img/icons/credit-card/processing-transaction.svg"
-                offline={true}
+                offline
                 height="auto"
                 width="200px"
                 alt="cartão em analise"
@@ -66,7 +67,7 @@ function SuccessFulCcPay({ history, setMainData }) {
                     size="large"
                     position="relative"
                     variant="extended"
-                    backgroundColor={`var(--themeSDark--default)`}
+                    backgroundColor="var(--themeSDark--default)"
                     onClick={handleFinish}
                 />
             </div>

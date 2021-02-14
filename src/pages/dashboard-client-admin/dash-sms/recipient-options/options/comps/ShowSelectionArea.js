@@ -1,24 +1,24 @@
-import React from 'react';
-// import TextField from '@material-ui/core/TextField';
-import RadiusBtn from '../../../../../../components/buttons/RadiusBtn';
-import ContactPill from './ContactPill';
+import RadiusBtn from "../../../../../../components/buttons/RadiusBtn";
+import ContactPill from "./ContactPill";
 
 const getStyles = () => ({
     field: {
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
         display: "flex",
-        flexFlow: 'row wrap',
-        width: '100%',
-        minHeight: '50px',
-        boxShadow: 'inset 0 0 0.4em grey',
+        flexFlow: "row wrap",
+        width: "100%",
+        minHeight: "50px",
+        boxShadow: "inset 0 0 0.4em grey",
     },
     root: {
-        marginBottom: '50px',
-    }
+        marginBottom: "50px",
+    },
 });
 
 export default function ShowSelectionArea({
-    list = [], handleRemoveLast, handleClearAll,
+    list = [],
+    handleRemoveLast,
+    handleClearAll,
 }) {
     const styles = getStyles();
 
@@ -27,11 +27,8 @@ export default function ShowSelectionArea({
     const showField = () => (
         <section style={styles.field}>
             {list.map((user, ind) => (
-                <section key={ind} >
-                    <ContactPill
-                        name={user.name}
-                        phone={user.phone}
-                    />
+                <section key={ind}>
+                    <ContactPill name={user.name} phone={user.phone} />
                 </section>
             ))}
         </section>
@@ -43,9 +40,7 @@ export default function ShowSelectionArea({
                 {list.length} Selecionado{plural}
             </p>
             {showField()}
-            <p
-                className="text-small text-grey m-0 mt-2 font-weight-bold"
-            >
+            <p className="text-small text-grey m-0 mt-2 font-weight-bold">
                 Para ver número, clique no nome.
             </p>
             <div className="d-flex justify-content-end mt-1">

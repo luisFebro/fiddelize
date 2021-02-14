@@ -140,20 +140,18 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
                 </Tabs>
             </AppBar>
             {data &&
-                data.map((tab, ind) => {
-                    return (
-                        <TabPanel
-                            style={{ overflow: "hidden", minHeight: "500px" }}
-                            key={ind}
-                            value={value}
-                            index={ind}
-                            dir={theme.direction}
-                            boxPadding={tab.boxPadding}
-                        >
-                            {tab.tabContentPanel}
-                        </TabPanel>
-                    );
-                })}
+                data.map((tab, ind) => (
+                    <TabPanel
+                        style={{ overflow: "hidden", minHeight: "500px" }}
+                        key={ind}
+                        value={value}
+                        index={ind}
+                        dir={theme.direction}
+                        boxPadding={tab.boxPadding}
+                    >
+                        {tab.tabContentPanel}
+                    </TabPanel>
+                ))}
         </div>
     );
 }

@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { loadUser } from "../../redux/actions/authActions";
-//LAYOUT
+// LAYOUT
 import Navbar from "../../components/_layout/navbar";
 import Footer from "../../components/_layout/footer/Footer";
 // END LAYOUT
@@ -15,7 +15,6 @@ import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClie
 // PAGES
 import Home from "../../pages/home/Home";
 import LoginPage from "../../pages/auth/LoginPage";
-import Dashboard from "../../pages/dashboard-admin";
 import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import RegulationPage from "../../pages/RegulationPage";
 import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
@@ -55,7 +54,7 @@ import {
     // test
     AsyncPlayground,
 } from "./CommonImports";
-//END PAGES
+// END PAGES
 
 function Website({ location, history }) {
     const locationNow = location.pathname;

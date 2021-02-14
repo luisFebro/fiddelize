@@ -1,8 +1,8 @@
-import React, { useState, Fragment } from 'react';
-import ModalFullContent from '../../../../components/modals/ModalFullContent';
-import PrizesGallery from './PrizesGallery';
-import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
-import RadiusBtn from '../../../../components/buttons/RadiusBtn';
+import { useState, Fragment } from "react";
+import ModalFullContent from "../../../../components/modals/ModalFullContent";
+import PrizesGallery from "./PrizesGallery";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 
 export default function PrizesBtn({
     colorS,
@@ -19,38 +19,41 @@ export default function PrizesBtn({
 
     const handleFullOpen = () => {
         setFullOpen(true);
-    }
+    };
 
     const handleFullClose = () => {
         setFullOpen(false);
-    }
+    };
 
-    const Gallery = <PrizesGallery targetId={targetId} />
+    const Gallery = <PrizesGallery targetId={targetId} />;
 
     const showBtn = () => (
         <Fragment>
-            {radiusBtn
-            ? (
+            {radiusBtn ? (
                 <RadiusBtn
                     size={size}
                     title={title}
                     onClick={handleFullOpen}
                     position="relative"
-                    backgroundColor={backgroundColor ? backgroundColor : "var(--themeSDark--" + colorS +  ")"}
+                    backgroundColor={
+                        backgroundColor || `var(--themeSDark--${colorS})`
+                    }
                 />
             ) : (
-                 <ButtonFab
+                <ButtonFab
                     position={position}
                     top={top}
                     size={size}
                     onClick={handleFullOpen}
                     title={title}
                     shadowColor={shadowColor}
-                    needBtnShadow={shadowColor ? true : false}
-                    needTxtNoWrap={true}
+                    needBtnShadow={!!shadowColor}
+                    needTxtNoWrap
                     variant="extended"
                     color="white"
-                    backgroundColor={backgroundColor ? backgroundColor : "var(--themeSDark--" + colorS +  ")"}
+                    backgroundColor={
+                        backgroundColor || `var(--themeSDark--${colorS})`
+                    }
                 />
             )}
         </Fragment>

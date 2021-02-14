@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 // comps
 import BankList from "./bank-list/BankList"; // const isSmall = window.Helper.isSmallScreen();

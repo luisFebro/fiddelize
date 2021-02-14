@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getUrlLink } from "../redux/actions/userActions";
 import { setVar, store } from "../hooks/storage/useVar";
 

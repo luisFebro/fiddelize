@@ -1,14 +1,16 @@
-import React, { useState, useEffect, Fragment } from "react";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import { useState, useEffect, Fragment } from "react";
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
-import { dateFnsUtils, ptBRLocale } from "../../../../../utils/dates/dateFns";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import getTimezoneDate from "../../../../../utils/dates/getTimezoneDate";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import {
+    dateFnsUtils,
+    ptBRLocale,
     formatDMY,
     getLocalHour,
     checkToday,
 } from "../../../../../utils/dates/dateFns";
+import getTimezoneDate from "../../../../../utils/dates/getTimezoneDate";
+
 import getWeekDayBr from "../../../../../utils/dates/getWeekDayBr";
 import useAPI, { sendSMS, getUniqueId } from "../../../../../hooks/api/useAPI";
 import scrollIntoView from "../../../../../utils/document/scrollIntoView";
@@ -190,7 +192,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
                             onChange={handleDateChange}
                             onClose={closePicker}
                             onOpen={openPicker}
-                            showTodayButton={true}
+                            showTodayButton
                             todayLabel={todayLabel}
                             cancelLabel={cancelLabel}
                             okLabel={okLabel}
@@ -203,27 +205,24 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
         );
     };
 
-    const datePickerBtn = () => {
-        return (
-            !done && (
-                <section>
-                    <p className="font-weight-bold text-normal text-purple text-center">
-                        Escolha dia e horário:
-                    </p>
-                    <div className="mb-5 container-center">
-                        <ButtonFab
-                            size="large"
-                            title="ESCOLHER"
-                            position="relative"
-                            onClick={openPicker}
-                            backgroundColor={"var(--themeSDark--default)"}
-                            variant="extended"
-                        />
-                    </div>
-                </section>
-            )
+    const datePickerBtn = () =>
+        !done && (
+            <section>
+                <p className="font-weight-bold text-normal text-purple text-center">
+                    Escolha dia e horário:
+                </p>
+                <div className="mb-5 container-center">
+                    <ButtonFab
+                        size="large"
+                        title="ESCOLHER"
+                        position="relative"
+                        onClick={openPicker}
+                        backgroundColor="var(--themeSDark--default)"
+                        variant="extended"
+                    />
+                </div>
+            </section>
         );
-    };
 
     const numContacts = contactList.length;
     const plural = numContacts > 1 ? "s" : "";
@@ -262,7 +261,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
                         title="Mudar"
                         position="relative"
                         onClick={openPicker}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                     />
                     <ButtonFab
@@ -271,7 +270,7 @@ export default function AsyncSchedulerContent({ modal, handleFullClose }) {
                         disabled={disabled}
                         position="relative"
                         onClick={handleSchedule}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                     />
                 </div>

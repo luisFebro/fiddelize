@@ -48,7 +48,7 @@ export default function AppShowCase({ setData }) {
                 }}
             >
                 <Picture
-                    isResponsive={true}
+                    isResponsive
                     path="/img/illustrations/hand-held-mobile/one-hand-held-mobile"
                     className="img-fluid shape-elevation"
                     dataClass="one-hand-held-mobile"

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, {
     faStyle as faStyleMulti,
 } from "../../../components/buttons/material-ui/ButtonMulti";

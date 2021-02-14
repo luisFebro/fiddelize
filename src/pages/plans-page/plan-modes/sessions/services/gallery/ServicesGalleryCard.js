@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import truncateWords from "../../../../../../utils/string/truncateWords";
+import { useState } from "react";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveIcon from "@material-ui/icons/Remove";
+import truncateWords from "../../../../../../utils/string/truncateWords";
 import PremiumButton from "../../../../../../components/buttons/premium/PremiumButton";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
@@ -146,7 +146,7 @@ export default function ServicesGalleryCard({ handleNewOrder, data }) {
                         title="ADICIONADO!"
                         titleSize="small"
                         position="relative"
-                        disabled={true}
+                        disabled
                         color="var(--mainWhite)"
                         backgroundColor="var(--themeP)"
                         variant="extended"

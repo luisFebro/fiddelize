@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../../../hooks/media/usePlayAudio";
 import useData from "../../../../../hooks/useData";
@@ -37,13 +37,13 @@ export default function SuccessMsg({
                 <img
                     src={
                         thisBizLogo === undefined
-                            ? `/img/official-logo-name.png`
+                            ? "/img/official-logo-name.png"
                             : thisBizLogo
                     }
                     width={width} // prior: bizLogo === "undefined" && 200
                     height={height}
-                    title={`logo empresa`}
-                    alt={`logo empresa`}
+                    title="logo empresa"
+                    alt="logo empresa"
                 />
             </div>
             <div className="animated fadeInUp">
@@ -51,7 +51,7 @@ export default function SuccessMsg({
                     className={`text-subtitle ${textColor} mx-3 text-center`}
                     style={{ marginTop: 150 }}
                 >
-                    {succMsg ? succMsg : "..."}{" "}
+                    {succMsg || "..."}{" "}
                     <FontAwesomeIcon
                         icon="check-circle"
                         style={{

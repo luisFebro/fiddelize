@@ -1,4 +1,3 @@
-import React from "react";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 // Handle object into object and return custom data for table:
 // const thisModel = { currPlan: {amount: 4, price: 350}}
@@ -12,7 +11,7 @@ const handleServiceName = ({
     packageQtt,
 }) => {
     if (serv === "currPlan")
-        return `Plano ${plan ? plan : "profissional"} ${
+        return `Plano ${plan || "profissional"} ${
             period === "yearly" ? "anual" : !plan ? "" : "mensal"
         } com ${amount} serviços`;
 
@@ -46,7 +45,7 @@ export default function getOrderTableList(orders, options = {}) {
     const newList = [];
     let thisTotalServ = 0;
 
-    for (let serv in orders) {
+    for (const serv in orders) {
         let { amount, price, totalPackage, isPreSale } = orders[serv];
         price = convertToReal(price, {
             moneySign: true,

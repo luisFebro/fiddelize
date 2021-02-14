@@ -1,5 +1,6 @@
-import React, { useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
+import { useStoreDispatch } from "easy-peasy";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import MoneyKeyboard from "../../../../../components/keyboards/MoneyKeyboard";
 import { convertBrToDollar } from "../../../../../utils/numbers/convertDotComma";
@@ -8,7 +9,6 @@ import useData from "../../../../../hooks/useData";
 import { setVar, store } from "../../../../../hooks/storage/useVar";
 import { prerenderAudio } from "../../../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../../../utils/arrays/getRandomArray";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import getAPI, {
     setTempScoreAndMemberData,

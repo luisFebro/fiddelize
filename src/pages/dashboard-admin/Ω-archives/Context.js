@@ -2,7 +2,7 @@
 // https://milddev.com/react/react-createcontext/
 // THIS SHIT IS NOT WORKING AND NOT BEING USED......
 // REDUX is used instead,,,
-import React, { useState, createContext } from 'react';
+import { useState, createContext } from "react";
 
 export const GroupContext = createContext();
 
@@ -14,4 +14,4 @@ export const GroupProvider = (props) => {
             {props.children}
         </GroupContext.Provider>
     );
-}
+};

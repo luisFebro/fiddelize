@@ -1,14 +1,14 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { useStoreState } from "easy-peasy";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
+import { withRouter } from "react-router-dom";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import { Load } from "../../../../../../../components/code-splitting/LoadableComp";
 import copyTextToClipboard from "../../../../../../../utils/document/copyTextToClipboard";
-import { useStoreDispatch } from "easy-peasy";
+
 import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
 import { setVar } from "../../../../../../../hooks/storage/useVar";
-import { withRouter } from "react-router-dom";
 import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 import extractStrData from "../../../../../../../utils/string/extractStrData";
@@ -59,7 +59,7 @@ function PanelHiddenContent({ history, data }) {
                 size="medium"
                 title="Copiar"
                 onClick={handleCopy}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
             />
         </section>
@@ -114,9 +114,7 @@ function PanelHiddenContent({ history, data }) {
                                     size="small"
                                     title="copiar"
                                     onClick={handleCopy}
-                                    backgroundColor={
-                                        "var(--themeSDark--default)"
-                                    }
+                                    backgroundColor="var(--themeSDark--default)"
                                     variant="extended"
                                 />
                             </div>
@@ -134,9 +132,7 @@ function PanelHiddenContent({ history, data }) {
                                     size="medium"
                                     title="Abrir Boleto"
                                     onClick={null}
-                                    backgroundColor={
-                                        "var(--themeSDark--default)"
-                                    }
+                                    backgroundColor="var(--themeSDark--default)"
                                     variant="extended"
                                 />
                             </a>
@@ -159,7 +155,7 @@ function PanelHiddenContent({ history, data }) {
                     size="medium"
                     title="Acessar Banco"
                     onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                 />
             </a>
@@ -172,7 +168,7 @@ function PanelHiddenContent({ history, data }) {
 
         return (
             <section className="mt-4">
-                <p class="text-normal font-weight-bold text-white text-shadow text-left">
+                <p className="text-normal font-weight-bold text-white text-shadow text-left">
                     • Investimento {installmentDesc}
                 </p>
             </section>
@@ -239,9 +235,9 @@ function PanelHiddenContent({ history, data }) {
                         Extrato
                     </h2>
                     <AsyncOrdersTableContent
-                        needGenerateList={true}
+                        needGenerateList
                         orders={orders}
-                        loading={!orders ? true : false}
+                        loading={!orders}
                         plan={thisPlan}
                         period={thisPeriod}
                         notesColor="white"
@@ -285,7 +281,7 @@ function PanelHiddenContent({ history, data }) {
 
                                     setAllVars();
                                 }}
-                                backgroundColor={"var(--themeSDark--default)"}
+                                backgroundColor="var(--themeSDark--default)"
                                 variant="extended"
                             />
                         </section>

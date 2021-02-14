@@ -1,6 +1,5 @@
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import CarouselCard from "../../../../../../components/carousels/CarouselCard";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import getServices from "../getServices";
 import OffplanBtn from "./offplan-btn/OffplanBtn";
 import CheckBoxForm from "../../../../../../components/CheckBoxForm";
@@ -37,7 +36,7 @@ function getDiscount(normalPrice, options = {}) {
 
     const discount = perc * normalPrice;
 
-    let finalValue = normalPrice - discount;
+    const finalValue = normalPrice - discount;
 
     return finalValue;
 }

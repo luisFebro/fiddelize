@@ -1,4 +1,3 @@
-import React from "react";
 import ServicesGalleryCard from "./ServicesGalleryCard";
 import getServices from "../getServices";
 

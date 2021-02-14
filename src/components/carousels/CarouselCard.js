@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "flickity/dist/flickity.css";
 // jquery module is required to run this path
 import Flickity from "flickity";
@@ -24,13 +24,13 @@ export default function CarouselCard({
             wrapAround: true,
             freeScroll: false, // if true, this produces an awkward alignment of cards when dragging them
             pageDots: false,
-            prevNextButtons: isSmall ? false : true, //
+            prevNextButtons: !isSmall, //
             friction: 0.28, // default: 0.28
             dragThreshold: 3, // default: 3
             percentagePosition: false, // default: true;
             selectedAttraction: 0.1, // default: 0.025
             on: {
-                ready: function () {
+                ready() {
                     console.log("Flickity ready");
                 },
             },

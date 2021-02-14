@@ -1,22 +1,21 @@
-import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import styled from 'styled-components';
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
     },
     paper: {
         height: 100,
-        width: 140
+        width: 140,
     },
     text: {
-        textAlign: 'center',
-        fontSize: '1.1em',
-        fontWeight: 'bold'
-    }
+        textAlign: "center",
+        fontSize: "1.1em",
+        fontWeight: "bold",
+    },
 }));
 
 export default function ServiceCard({ data }) {
@@ -30,7 +29,7 @@ export default function ServiceCard({ data }) {
             </Paper>
             <section className="icon-container">
                 <div>
-                    <img src={data.icon}></img>
+                    <img src={data.icon} />
                 </div>
             </section>
         </DivWrapper>

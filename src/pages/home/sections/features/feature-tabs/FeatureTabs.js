@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./_Tabs.scss";
 import TabsContent from "./TabsContent";
 
@@ -28,13 +28,13 @@ export default function FeatureTabs({ tabsData = [] }) {
 
         return (
             <ul className="nav nav-tabs" id="templateTabs" role="tablist">
-                {tabsData.map((t, ind) => {
-                    return getTab({
+                {tabsData.map((t, ind) =>
+                    getTab({
                         id: ind + 1,
                         name: t.tabsName,
                         Icon: t.Icon,
-                    });
-                })}
+                    })
+                )}
             </ul>
         );
     };

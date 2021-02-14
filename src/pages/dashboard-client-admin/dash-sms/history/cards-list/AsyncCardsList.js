@@ -1,19 +1,16 @@
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SmsCard from "./card/accordion/SmsCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 // import SearchFilter from "../../../../../components/search/SearchFilter";
-import SearchResult from "../../../../../components/search/SearchResult";
-import { calendar } from "../../../../../utils/dates/dateFns";
-import parse from "html-react-parser";
-import { convertDotToComma } from "../../../../../utils/numbers/convertDotComma";
+import { calendar, isScheduledDate } from "../../../../../utils/dates/dateFns";
 import { useAppSystem, useProfile } from "../../../../../hooks/useRoleData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import scrollIntoView from "../../../../../utils/document/scrollIntoView";
-import { isScheduledDate } from "../../../../../utils/dates/dateFns";
+
 import useAPIList, {
     readSMSMainHistory,
     getTrigger,
@@ -21,6 +18,7 @@ import useAPIList, {
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../hooks/api/useElemDetection";
+
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -39,8 +37,8 @@ const getStyles = () => ({
 });
 
 const handleSecHeading = (data, styles, forceCancel) => {
-    const isScheduled = data.isScheduled;
-    const isCanceled = data.isCanceled;
+    const { isScheduled } = data;
+    const { isCanceled } = data;
     const needScheduling = isScheduledDate(data.scheduledDate);
 
     const handleDate = () => {
@@ -147,7 +145,7 @@ export default function AsyncCardsList() {
         const actions = list.map((data) => {
             const arrayData = data.firstContacts;
             const contactsLength = data.totalSMS;
-            const isCanceled = data.isCanceled;
+            const { isCanceled } = data;
             const areMoreThanOne = contactsLength > 2;
             const needScheduling = isScheduledDate(data.scheduledDate);
             const firstContactsNames =
@@ -169,8 +167,8 @@ export default function AsyncCardsList() {
                 <section
                     className={
                         isCardIn
-                            ? `d-flex flex-column align-self-start animated fadeInUp`
-                            : `d-flex flex-column align-self-start animated fadeInDown`
+                            ? "d-flex flex-column align-self-start animated fadeInUp"
+                            : "d-flex flex-column align-self-start animated fadeInDown"
                     }
                 >
                     {displayTotalSMS({ isCardIn, data })}
@@ -227,7 +225,7 @@ export default function AsyncCardsList() {
                 actions={actions}
                 backgroundColor="var(--themePLight)"
                 color="white"
-                needToggleButton={true}
+                needToggleButton
                 forceCancel={forceCancel}
             />
         );
@@ -248,7 +246,7 @@ export default function AsyncCardsList() {
                 <Img
                     className="img-fluid margin-auto-90"
                     src="/img/illustrations/empty-sms-history.png"
-                    offline={true}
+                    offline
                     alt="sem histórico de SMS"
                     title="No seu aguardo para o primeiro lançamento de envios."
                 />
@@ -258,7 +256,7 @@ export default function AsyncCardsList() {
                         title="ENVIAR"
                         position="relative"
                         onClick={handleClick}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                     />
                 </div>

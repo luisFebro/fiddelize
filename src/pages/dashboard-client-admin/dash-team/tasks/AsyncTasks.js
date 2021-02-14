@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 
 const AsyncTeamTasksList = LoadableVisible({

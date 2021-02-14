@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 // https://web.dev/persistent-storage/
 
 export default function usePersistentStorage() {

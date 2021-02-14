@@ -1,9 +1,9 @@
-import React, { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect } from "react";
 import Card from "@material-ui/core/Card";
-import EditButton from "../../../../../components/buttons/EditButton";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
+import EditButton from "../../../../../components/buttons/EditButton";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 import findAndReplaceObjInArray from "../../../../../utils/arrays/findAndReplaceObjInArray";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
@@ -221,7 +221,7 @@ export default function ChallComp({
                     <ButtonFab
                         position="relative"
                         onClick={() => {
-                            let lastButOneRewardScore = isFirst
+                            const lastButOneRewardScore = isFirst
                                 ? 0
                                 : challengesArray[challengesArray.length - 2]
                                       .rewardScore;
@@ -253,8 +253,8 @@ export default function ChallComp({
                         fontWeight="bolder"
                         fontSize=".9em"
                         size="medium"
-                        color={"white"}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        color="white"
+                        backgroundColor="var(--themeSDark--default)"
                         needBtnShadow={false}
                     />
                 </div>

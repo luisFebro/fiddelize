@@ -1,7 +1,3 @@
-import React from "react";
-import AnimaIconsSelect from "../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
-import FilterStatus from "../../../../../components/selects/anima-icons-select/FilterStatus";
-import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 // custom icons
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import CakeIcon from "@material-ui/icons/Cake";
@@ -12,6 +8,9 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import EventIcon from "@material-ui/icons/Event";
+import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
+import AnimaIconsSelect from "../../../../../components/selects/anima-icons-select/AnimaIconsSelect";
+import FilterStatus from "../../../../../components/selects/anima-icons-select/FilterStatus";
 
 // do not include btn styling for free options...
 const mainOptions = (isPro) => [
@@ -162,7 +161,7 @@ export default function Filters({
                     offlineKey="selectedMainFilter"
                     checkServicePro="orgganize_clients"
                 />
-                <span className="d-inline-block mt-4 mb-1 text-p text-normal text-left font-weight-bold"></span>
+                <span className="d-inline-block mt-4 mb-1 text-p text-normal text-left font-weight-bold" />
                 <AnimaIconsSelect
                     callback={handlePeriodFilter}
                     defaultSelected="Hoje"

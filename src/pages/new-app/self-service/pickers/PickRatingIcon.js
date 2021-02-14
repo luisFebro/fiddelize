@@ -1,28 +1,36 @@
-import React from 'react';
-import CarouselFlickity from '../../../../components/carousels/CarouselFlickity';
-import { milestoneIcons } from '../../../../global-data/milestoneIcons';
-import { milestoneIconsSorted, getIconIndex } from '../../../../global-data/milestoneIconsSorted';
-import { useClientAdmin } from '../../../../hooks/useRoleData';
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import CarouselFlickity from "../../../../components/carousels/CarouselFlickity";
+import { milestoneIcons } from "../../../../global-data/milestoneIcons";
+import {
+    milestoneIconsSorted,
+    getIconIndex,
+} from "../../../../global-data/milestoneIconsSorted";
+import { useClientAdmin } from "../../../../hooks/useRoleData";
 
 PickRatingIcon.propTypes = {
     step: PropTypes.number,
     setNextDisabled: PropTypes.func,
-}
+};
 
 export default function PickRatingIcon({
-    step, setNextDisabled, isTest, isFromDash }) {
-    const selectedMilestoneIcons = isFromDash ? milestoneIconsSorted : milestoneIcons.filter(iconObj => iconObj.appPreview === true);
+    step,
+    setNextDisabled,
+    isTest,
+    isFromDash,
+}) {
+    const selectedMilestoneIcons = isFromDash
+        ? milestoneIconsSorted
+        : milestoneIcons.filter((iconObj) => iconObj.appPreview === true);
     const showCondition = isFromDash ? true : step === 3;
 
     const { selfMilestoneIcon } = useClientAdmin();
     const currIconInd = getIconIndex(selfMilestoneIcon);
     // n1
-    return(
+    return (
         <div
             style={{
                 visibility: showCondition ? "visible" : "hidden",
-                height: showCondition ? 260 : 0
+                height: showCondition ? 260 : 0,
             }}
         >
             {isFromDash ? (
@@ -39,8 +47,9 @@ export default function PickRatingIcon({
                 isFromDash={isFromDash}
                 currIconInd={isFromDash ? currIconInd : 0}
                 style={{
-                    maxWidth: isFromDash && '100%',
-                    boxShadow: isFromDash && '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
+                    maxWidth: isFromDash && "100%",
+                    boxShadow:
+                        isFromDash && "0 31px 120px -6px rgba(0, 0, 0, 0.35)",
                 }}
             />
             {!isFromDash && (

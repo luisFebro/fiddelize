@@ -31,10 +31,10 @@ export const getNewAppPage = async () => {
 
     if (!clientAdminData) return "/novo-app/info-negocio";
 
-    const bizName = clientAdminData.bizName;
-    const bizCodeName = clientAdminData.bizCodeName;
-    const mainReward = clientAdminData.mainReward;
-    const rewardScore = clientAdminData.rewardScore;
+    const { bizName } = clientAdminData;
+    const { bizCodeName } = clientAdminData;
+    const { mainReward } = clientAdminData;
+    const { rewardScore } = clientAdminData;
 
     if (doneSSRatingIcon) return `/${bizCodeName}/novo-app/cadastro-admin`;
     if (doneRewardPlanner)

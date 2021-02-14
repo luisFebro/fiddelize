@@ -5,7 +5,7 @@ export const getStyles = ({ colorP, colorS, colorBack, dynamicTxtColor }) => ({
         fontSize: "1.5em",
         padding: "25px 35px",
         borderRadius: "20px",
-        backgroundColor: "var(--themeSDark--" + colorS + ")",
+        backgroundColor: `var(--themeSDark--${colorS})`,
         color: "var(--mainWhite)",
         outline: "none",
         filter: `drop-shadow(.001em .15em .2em ${
@@ -22,7 +22,7 @@ export const getStyles = ({ colorP, colorS, colorBack, dynamicTxtColor }) => ({
         color: dynamicTxtColor,
     },
     challN: {
-        backgroundColor: "var(--themePDark--" + colorP + ")",
+        backgroundColor: `var(--themePDark--${colorP})`,
         borderRadius: "50%",
         padding: "8px",
         left: "50%",

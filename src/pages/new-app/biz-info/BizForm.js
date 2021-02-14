@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../utils/form/use-state/handleChange";
-import { handleNextField } from "../../../utils/form/kit";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
+import { useStoreDispatch } from "easy-peasy";
+import handleChange from "../../../utils/form/use-state/handleChange";
+import { handleNextField } from "../../../utils/form/kit";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import { setMultiVar, store } from "../../../hooks/storage/useVar";
-import generateBizCodeName from "../../../pages/download-app/instant-app/helpers/generateBizCodeName";
-import { useStoreDispatch } from "easy-peasy";
+import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
 import { API } from "../../../config/api";
@@ -56,7 +56,7 @@ export default function BizForm() {
 
     const styles = getStyles();
 
-    //error options: bizName or field
+    // error options: bizName or field
     const [fieldError, setFieldError] = useState(null);
     const autocompleteUrl = `${API}/user/pre-register/fields-list?limit=30`;
 
@@ -81,7 +81,7 @@ export default function BizForm() {
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
-                    error={fieldError === "bizName" ? true : false}
+                    error={fieldError === "bizName"}
                     variant="outlined"
                     margin="dense"
                     name="bizName"
@@ -117,7 +117,7 @@ export default function BizForm() {
                     }}
                 />
             </div>
-            <div id="field2" className={`mt-3`}>
+            <div id="field2" className="mt-3">
                 Qual ramo de atividade?
                 <AutoCompleteSearch
                     autocompleteUrl={autocompleteUrl}

@@ -36,9 +36,10 @@
         "react-loadable": "^5.5.0",
         "react-loadable-visibility": "^3.0.2",
         "react-router-dom": "^5.1.2",
-        "react-scripts": "^3.4.1",
+        "react-scripts": "^4.0.2",
         "sharethis-reactjs": "^1.5.0",
         "styled-components": "^4.4.1",
+        "web-vitals": "^0.2.4",
         "zenscroll": "^4.0.2"
     },
     "scripts": {
@@ -46,10 +47,15 @@
         "build": "CI=false && react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "analyse": "node scripts/analyse.js"
+        "analyse": "node scripts/analyse.js",
+        "lint:check": "eslint ./src/**/*.js*",
+        "lint:fix": "eslint ./src/**/*.js* --fix"
     },
     "eslintConfig": {
-        "extends": "react-app"
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
     },
     "browserslist": {
         "production": [
@@ -65,7 +71,7 @@
     },
     "devDependencies": {
         "cypress": "^4.9.0",
-        "eslint": "^6.6.0",
+        "eslint": "^7.11.0",
         "eslint-config-airbnb": "^18.2.1",
         "eslint-config-prettier": "^7.2.0",
         "eslint-plugin-import": "^2.22.1",
@@ -75,7 +81,7 @@
         "eslint-plugin-unused-imports": "^1.1.0",
         "fs": "0.0.1-security",
         "gulp": "^4.0.2",
-        "husky": "^4.2.3",
+        "husky": "4.2.3",
         "lint-staged": "^10.5.4",
         "path": "^0.12.7",
         "prettier": "2.1.1",

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import TextField from "@material-ui/core/TextField";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import MuSlider from "../../../../../components/sliders/MuSlider";
-import isKeyPressed from "../../../../../utils/event/isKeyPressed";
-import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 import getIncreasedPerc from "../../../../../utils/numbers/getIncreasedPerc";
 
@@ -197,9 +196,9 @@ export default function Simulator({ handleData }) {
                 color="var(--themeP)"
                 value={packages}
                 callback={handlePackages}
-                disabled={newQuantity ? true : false}
+                disabled={!!newQuantity}
             />
-            {packages <= 230 && !Boolean(newQuantity) && (
+            {packages <= 230 && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardRight}
@@ -210,7 +209,7 @@ export default function Simulator({ handleData }) {
                 </div>
             )}
 
-            {packages >= 55 && !Boolean(newQuantity) && (
+            {packages >= 55 && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardLeft}

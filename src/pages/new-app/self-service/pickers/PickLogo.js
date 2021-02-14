@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Card from "@material-ui/core/Card";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
-import Card from "@material-ui/core/Card";
 import CheckBoxForm from "../../../../components/CheckBoxForm";
 import RadioGroupForm from "../../../../components/RadioGroupForm";
 import { CLIENT_URL } from "../../../../config/clientUrl";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import {
     readClientAdmin,
     uploadImages,
@@ -43,7 +43,7 @@ export default function PickLogo({
     setLogoUrlPreview,
     isFromDash = false,
 }) {
-    //useCount("pickLogo"); //RT 3 (OK) || COMPLETE INTERACTION RT: 49 (ATTENTION) - last rendering after running all functionalaties: 49 times.
+    // useCount("pickLogo"); //RT 3 (OK) || COMPLETE INTERACTION RT: 49 (ATTENTION) - last rendering after running all functionalaties: 49 times.
 
     const [isBoxChecked, setIsBoxChecked] = useState(false);
     const [uploadedPic, setUploadedPic] = useState("");
@@ -130,12 +130,12 @@ export default function PickLogo({
     const handleMediaChange = (e) => {
         const formData = new FormData();
 
-        const name = e.target.name;
+        const { name } = e.target;
         const fileValue = e.target.files[0];
 
         // Validattion
         if (!fileValue)
-            return console.log(`Nenhuma imagem encontrada. Tente novamente.`);
+            return console.log("Nenhuma imagem encontrada. Tente novamente.");
         // Size Reference: 1mb = 1.000.000 / 1kb 1.000
         if (fileValue.size > 1000000)
             return showSnackbar(

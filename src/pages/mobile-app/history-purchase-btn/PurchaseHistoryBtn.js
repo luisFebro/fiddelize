@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import { useState } from "react";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
+import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
@@ -52,20 +52,20 @@ export default function PurchaseHistoryBtn({
                     size="large"
                     title="Ver Histórico"
                     onClick={handleFullOpen}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                     position="relative"
                     iconMu={MallIcon}
                 />
             ) : (
                 <ButtonFab
-                    backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                    backgroundColor={`var(--themeSDark--${colorS})`}
                     onClick={handleFullOpen}
                     iconMu={MallIcon}
                     right={right}
                     bottom={bottom}
                     shadowColor={colorS === "black" ? "white" : "black"}
-                    needBtnShadow={true}
+                    needBtnShadow
                 />
             )}
             <ModalFullContent

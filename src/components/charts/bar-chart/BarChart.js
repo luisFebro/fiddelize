@@ -1,20 +1,21 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Chartist from "chartist";
 import "./_BarChart.scss";
 import "chartist-plugin-tooltips";
-import pluginLabelModified from "./pluginModified";
+import pluginLabelModified from "./pluginLabelModified";
+
 pluginLabelModified(null, null, Chartist);
 // const isSmall = window.Helper.isSmallScreen();
 
 const plugins = {
     plugins: [
         Chartist.plugins.ctPointLabels({
-            textAnchor: "middle", //get it horizontal-wise middle of the bar
-            labelOffset: { x: 0, y: -10 }, //adding a little offset to get some space
+            textAnchor: "middle", // get it horizontal-wise middle of the bar
+            labelOffset: { x: 0, y: -10 }, // adding a little offset to get some space
         }),
         Chartist.plugins.tooltip({
-            transformTooltipTextFnc: function (value) {
-                return value + " clientes";
+            transformTooltipTextFnc(value) {
+                return `${value} clientes`;
             },
         }),
     ],
@@ -72,7 +73,7 @@ export default function BarChart({
                 options
             );
 
-            chart.on("draw", function (d) {
+            chart.on("draw", (d) => {
                 if (d.type === "bar") {
                     d.element.animate({
                         y2: {
@@ -106,7 +107,7 @@ export default function BarChart({
             <h2 className="py-3 text-normal font-weight-bold text-white text-center">
                 Qtde. clientes e suas notas XP
             </h2>
-            <div className={`bar-chart`}></div>
+            <div className="bar-chart" />
             <div
                 className="text-white position-relative container-center"
                 style={{

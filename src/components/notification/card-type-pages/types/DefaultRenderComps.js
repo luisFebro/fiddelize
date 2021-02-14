@@ -1,14 +1,15 @@
-import React, { Fragment, useState } from "react";
-import ButtonMulti from "../../../../components/buttons/material-ui/ButtonMulti";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { setRun } from "../../../../hooks/useRunComp";
 import { useStoreDispatch } from "easy-peasy";
+import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
+import { setRun } from "../../../../hooks/useRunComp";
 import { useClientAdmin, useProfile } from "../../../../hooks/useRoleData";
-import Img from "../../../../components/Img";
+import Img from "../../../Img";
 import applyTextStyle from "../../../../utils/string/applyTextStyle";
 import { readUser } from "../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import removeImgFormat from "../../../../utils/biz/removeImgFormat";
+
 export const textStyle = "text-purple text-left text-normal mx-3";
 
 export const ShowTitle = ({ text }) => (
@@ -128,9 +129,7 @@ export const ShowActionBtn = ({
     const buttonTitle = handleBtnTitle();
     return (
         <div className="my-4 container-center">
-            {children ? (
-                children
-            ) : (
+            {children || (
                 <Link
                     className="no-text-decoration"
                     to={handleBtnPath}

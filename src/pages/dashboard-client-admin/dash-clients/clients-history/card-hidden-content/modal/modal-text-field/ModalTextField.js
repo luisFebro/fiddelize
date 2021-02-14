@@ -1,27 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
-import { addAutomaticTask } from "../../../../../../../redux/actions/userActions";
-import isMoneyBrValidAndAlert from "../../../../../../../utils/numbers/isMoneyBrValidAndAlert";
-import Button from "@material-ui/core/Button";
-import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
 import Dialog from "@material-ui/core/Dialog";
-import TextField from "@material-ui/core/TextField";
-import InstructionBtn from "../../../../../../../components/buttons/InstructionBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import DialogTitle from '@material-ui/core/DialogTitle';
-// import DialogContentText from '@material-ui/core/DialogContentText';
+
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
+import InstructionBtn from "../../../../../../../components/buttons/InstructionBtn";
+import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
+import {
+    addAutomaticTask,
+    updateUser,
+    changePrizeStatus,
+} from "../../../../../../../redux/actions/userActions";
 
 // CUSTOMIZED DATA
 import { modalTextFieldDashboardType } from "../../../../../../../types";
-import {
-    convertCommaToDot,
-    convertDotToComma,
-} from "../../../../../../../utils/numbers/convertDotComma";
-import { updateUser } from "../../../../../../../redux/actions/userActions";
+import { convertDotToComma } from "../../../../../../../utils/numbers/convertDotComma";
+
 import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
-import animateCSS from "../../../../../../../utils/animateCSS";
 import { fluidTextAlign } from "../../../../../../../utils/string/fluidTextAlign";
 import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
 import {
@@ -29,7 +24,7 @@ import {
     useClientAdmin,
 } from "../../../../../../../hooks/useRoleData";
 import pickCurrChallData from "../../../../../../../utils/biz/pickCurrChallData";
-import { changePrizeStatus } from "../../../../../../../redux/actions/userActions";
+
 import { sendNotification } from "../../../../../../../redux/actions/notificationActions";
 import getFirstName from "../../../../../../../utils/string/getFirstName";
 import { addDays, calendar } from "../../../../../../../utils/dates/dateFns";
@@ -109,7 +104,7 @@ export default function ModalTextField({
 
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
     rewardScore = pickedObj.rewardScore;
-    const mainReward = pickedObj.mainReward;
+    const { mainReward } = pickedObj;
 
     const { data: updatedValues, loading } = useAPI({
         url: readPrizes(userId),
@@ -168,7 +163,7 @@ export default function ModalTextField({
             madeBy: teamMemberName,
         };
 
-        showSnackbar(dispatch, `Atualizando pontuação...`, "success", 5000);
+        showSnackbar(dispatch, "Atualizando pontuação...", "success", 5000);
 
         const prizeStatusRes = await changePrizeStatus(userId, {
             statusType: "confirmed",
@@ -178,12 +173,12 @@ export default function ModalTextField({
             if (prizeStatusRes.data.error.indexOf("critical") !== -1)
                 return showSnackbar(
                     dispatch,
-                    `Não foi possível descontar pontos. Por favor, contate suporte técnico da Fiddelize.`,
+                    "Não foi possível descontar pontos. Por favor, contate suporte técnico da Fiddelize.",
                     "error"
                 );
             return showSnackbar(
                 dispatch,
-                `Pontos deste desafio já foram descontados e podem está desatualizados.`,
+                "Pontos deste desafio já foram descontados e podem está desatualizados.",
                 "error"
             );
         }
@@ -218,7 +213,7 @@ export default function ModalTextField({
         if (taskRes.status !== 200)
             return showSnackbar(
                 dispatch,
-                `Ocorreu um problema ao adicionar tarefa automática.`,
+                "Ocorreu um problema ao adicionar tarefa automática.",
                 "error"
             );
         if (smsRes.status !== 200)
@@ -373,9 +368,9 @@ export default function ModalTextField({
     const showWarningBtn = () => (
         <section className="my-2">
             <div className="d-inline-block font-weight-bold">
-                {/*<span>
+                {/* <span>
                     {parseInt(remainValue) === 0 ? "0" : convertDotToComma(remainValue)} Pontos.
-                </span>*/}
+                </span> */}
                 <div className="ml-3">
                     <InstructionBtn
                         onClick={() => {
@@ -405,10 +400,8 @@ export default function ModalTextField({
     );
 
     const showPartialDiscountBtn = () => (
-        <section
-            className={`d-block my-3 d-flex flex-column-reverse flex-md-row justify-content-center`}
-        >
-            <ButtonMulti title={"Voltar"} onClick={onClose} variant="link" />
+        <section className="d-block my-3 d-flex flex-column-reverse flex-md-row justify-content-center">
+            <ButtonMulti title="Voltar" onClick={onClose} variant="link" />
         </section>
     );
 
@@ -420,7 +413,7 @@ export default function ModalTextField({
             </p>
             <div className="container-center">
                 <ButtonMulti
-                    title={"Voltar"}
+                    title="Voltar"
                     onClick={onClose}
                     backgroundColor="var(--themeP)"
                     backColorOnHover="var(--themeP)"
@@ -444,7 +437,7 @@ export default function ModalTextField({
 
     const showActionButtons = () => (
         <section style={styles.actionButtons}>
-            <ButtonMulti title={"Voltar"} onClick={onClose} variant="link" />
+            <ButtonMulti title="Voltar" onClick={onClose} variant="link" />
             {!alreadyDoneDiscount && (
                 <ButtonMulti
                     title={txtBtn}

@@ -200,7 +200,7 @@ export default function Keyboard({
                 />
                 <span style={{ fontSize: ".9em" }}>Confirmar</span>
             </div>
-            <div className="empty"></div>
+            <div className="empty" />
             <div
                 onClick={() => {
                     getValue("0");
@@ -219,7 +219,7 @@ export default function Keyboard({
             >
                 {keyboardType === "numeric" ? "," : ""}
             </div>
-            <audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
+            <audio id="keypadBeep" src="/sounds/tock.mp3" />
         </GridContainer>
     );
 }
@@ -236,7 +236,7 @@ const GridContainer = styled.div`
 
     & > div {
         background: ${({ myGradient }) =>
-            myGradient || `linear-gradient(to right, #16222a, #3a6073)`};
+            myGradient || "linear-gradient(to right, #16222a, #3a6073)"};
         color: white;
         text-align: center;
         text-shadow: 1px 1px 3px black;

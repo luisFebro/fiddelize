@@ -1,14 +1,14 @@
 // reference: https://codepen.io/himalayasingh/pen/pxKKgd
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import "./_AnimaIconsSelect.scss";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import handleChange from "../../../utils/form/use-state/handleChange";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import handleChange from "../../../utils/form/use-state/handleChange";
+import ButtonFab from "../../buttons/material-ui/ButtonFab";
 import usePro from "../../../hooks/pro/usePro";
 import { useOfflineData } from "../../../hooks/storage/useOfflineListData";
-import CheckBoxForm from "../../../components/CheckBoxForm";
+import CheckBoxForm from "../../CheckBoxForm";
 import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
 
 const getStyles = () => ({
@@ -231,7 +231,7 @@ export default function AnimaIconsSelect({
                         className="s-c bottom"
                         type="radio"
                         name="selected"
-                        disabled={opt.pro ? true : false}
+                        disabled={!!opt.pro}
                         value={opt.titleBr}
                         onChange={handleChange(setData)}
                     />
@@ -257,7 +257,7 @@ export default function AnimaIconsSelect({
                     )}
                 </div>
             ))}
-            <div id="option-bg"></div>
+            <div id="option-bg" />
         </section>
     );
 
@@ -275,7 +275,7 @@ export default function AnimaIconsSelect({
             setData({
                 ...data,
                 selected: selectedOptionBr,
-                title: title,
+                title,
                 isReversed: false,
             });
             toggleReverse.current = false;
@@ -300,7 +300,7 @@ export default function AnimaIconsSelect({
                             />
                         }
                         onClick={handleReverse}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                     />
                 </div>
             )}
@@ -309,7 +309,7 @@ export default function AnimaIconsSelect({
 
     const styleMainIcon = {
         ...styles.currIcon,
-        zIndex: zIndex ? zIndex : 11,
+        zIndex: zIndex || 11,
     };
 
     return (
@@ -319,8 +319,8 @@ export default function AnimaIconsSelect({
                     id="app-cover"
                     onChange={togglePanel}
                     style={{
-                        width: width ? width : 300,
-                        zIndex: zIndex ? zIndex : 5,
+                        width: width || 300,
+                        zIndex: zIndex || 5,
                     }}
                 >
                     <section id="select-box">
@@ -340,8 +340,8 @@ export default function AnimaIconsSelect({
                 {needEmptyOpt && (
                     <CheckBoxForm
                         margin="120px 0"
-                        txtFontweight={true}
-                        defaultState={true}
+                        txtFontweight
+                        defaultState
                         text="mostrar resultados vazios."
                         callback={handleShowEmptyCards}
                         position="position-absolute"
@@ -351,7 +351,7 @@ export default function AnimaIconsSelect({
             <div
                 className={panel ? "anima-icons-overlay" : ""}
                 onClick={togglePanel}
-            ></div>
+            />
         </section>
     );
 }

@@ -2,45 +2,47 @@
 // choose timezone: https://momentjs.com/timezone/
 
 const getConfig = ({ mode, hour12 }) => {
-    switch(mode) {
+    switch (mode) {
         case "hour":
-            return({
-                timeZone: 'America/Sao_Paulo',
-                hour: 'numeric',
-                minute: 'numeric',
+            return {
+                timeZone: "America/Sao_Paulo",
+                hour: "numeric",
+                minute: "numeric",
                 hour12,
-            })
+            };
         case "day":
-            return({
-                timeZone: 'America/Sao_Paulo',
-                year: 'numeric', month: 'numeric', day: 'numeric',
-            });
+            return {
+                timeZone: "America/Sao_Paulo",
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            };
         default:
-            return console.log("Smt wrong with getConfig")
+            return console.log("Smt wrong with getConfig");
     }
-}
+};
 
 export default function getTimezoneDate(mode = "hour", options = {}) {
-
-    const {
-        hour12 = false,
-        locale = "pt-BR",
-        newDate = new Date(),
-    } = options;
+    const { hour12 = false, locale = "pt-BR", newDate = new Date() } = options;
 
     const config = getConfig({ mode, hour12 });
 
     const date = new Intl.DateTimeFormat(locale, config);
 
-    if(mode === "day") {
-        let [{ value: day },,{ value: month },,{ value: year }] = date.formatToParts(newDate);
+    if (mode === "day") {
+        const [
+            { value: day },
+            ,
+            { value: month },
+            ,
+            { value: year },
+        ] = date.formatToParts(newDate);
         // day = treatZero(day);
         // month = treatZero(month);
         return `${day}/${month}/${year}`;
     }
 
     return date.format(new Date(newDate)); // n1
-
 }
 
 // ex:
@@ -79,4 +81,3 @@ Já o Acre, que tem DUAS horas a menos que Brasília. Com horário de verão che
 // };
 // console.log(new Intl.DateTimeFormat('en-US', options).format(dateTest));
 // → "12/19/2012, 19:00:00"
-

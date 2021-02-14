@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../style.scss";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import getId from "../../../../utils/getId";
 import { getMultiVar, store } from "../../../../hooks/storage/useVar";
-//pickers
+// pickers
 import PickLogo from "./PickLogo";
 import AsyncPickRatingIcon from "./AsyncPickRatingIcon";
 import AsyncPickTheming from "./AsyncPickTheming";
@@ -76,7 +76,7 @@ export default function AppPickersHandler({
                         {
                             id,
                             icon: runName,
-                            rewardScore: rewardScore,
+                            rewardScore,
                             rewardDesc: rewardDesc || "Sem Descrição",
                         },
                     ],
@@ -102,7 +102,7 @@ export default function AppPickersHandler({
             <ButtonMulti
                 onClick={() => handleNextStep(currNumber)}
                 title={`Continuar ${nextTask}`}
-                disabled={nextDisabled ? true : false}
+                disabled={!!nextDisabled}
                 color="var(--mainWhite)"
                 backgroundColor="var(--themeSDark)"
                 backColorOnHover="var(--themeSDark)"

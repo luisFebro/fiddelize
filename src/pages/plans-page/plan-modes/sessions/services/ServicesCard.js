@@ -1,9 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, Fragment } from "react";
 import Card from "@material-ui/core/Card";
+import parse from "html-react-parser";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import getServices from "./getServices";
-import parse from "html-react-parser";
 
 const isSmall = window.Helper.isSmallScreen();
 

@@ -8,4 +8,4 @@ export default function addDays(date, days) {
     return result;
 }
 
-//console.log(addDays(new Date(), 365)); // 2021-07-02T06:56:02.903Z
+// console.log(addDays(new Date(), 365)); // 2021-07-02T06:56:02.903Z

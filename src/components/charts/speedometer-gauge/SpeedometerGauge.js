@@ -1,15 +1,10 @@
-import React, { useEffect, Fragment, useState } from "react";
+import { useEffect, Fragment, useState } from "react";
 import Chartist from "chartist";
-import {
-    getBadZoneList,
-    getOkZoneList,
-    getTextStatus,
-    convertValueToDeg,
-} from "./helpers";
+import { getTextStatus, convertValueToDeg } from "./helpers";
 import "./_SpeedometerGauge.scss";
 import colorsHandler from "../../../pages/dashboard-client-admin/dash-clients/clients-reviews/helpers/colorsHandler";
 import Dialog from "@material-ui/core/Dialog";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import ButtonFab from "../../buttons/material-ui/ButtonFab";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -135,14 +130,14 @@ export default function SpeedometerGauge({ value }) {
                     className={`ct-chart ${
                         isSmall ? "ct-minor-third" : "ct-major-third"
                     }`}
-                ></div>
-                <span className="speedometer-line"></span>
+                />
+                <span className="speedometer-line" />
                 <span
                     className="needle"
                     style={{
                         transform: `rotate(${degSelected}deg)`,
                     }}
-                ></span>
+                />
                 <span className="rect min-value">-100</span>
                 <span className="rect max-value">100</span>
             </section>
@@ -156,11 +151,11 @@ export default function SpeedometerGauge({ value }) {
 }
 
 function useKeyframeAnimateNeedle({ finalValue }) {
-    //reference: https://stackoverflow.com/questions/18481550/how-to-dynamically-create-keyframe-css-animations
+    // reference: https://stackoverflow.com/questions/18481550/how-to-dynamically-create-keyframe-css-animations
     useEffect(() => {
-        var style = document.createElement("style");
+        const style = document.createElement("style");
         style.type = "text/css";
-        var keyFrames =
+        const keyFrames =
             "\
         @-webkit-keyframes move-needle {\
             0% {\

@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from "react";
+import { Fragment } from "react";
+import { Link, withRouter } from "react-router-dom";
 import { useClientAdmin } from "../../../../hooks/useRoleData";
 import useDelay from "../../../../hooks/useDelay";
 import TypesHandler from "./types-handler/TypesHandler";
-import { Link, withRouter } from "react-router-dom";
 import useAuth from "../../../../hooks/useAuthUser";
 import removeImgFormat from "../../../../utils/biz/removeImgFormat";
 
@@ -31,7 +31,7 @@ function RegistersPanel({ history, isNewMember = false }) {
 
     const showHeader = () => (
         <Fragment>
-            <div style={styles.clipPathBack}></div>
+            <div style={styles.clipPathBack} />
             <div className="position-relative container-center-col my-3">
                 <img
                     src={thisBizLogo}

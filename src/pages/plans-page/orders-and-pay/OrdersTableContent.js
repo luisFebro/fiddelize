@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import MuSelectTable from "../../../components/tables/MuSelectTable";
 import getOrderTableList from "./helpers/getOrderTableList";
 import NotesSwitcher from "../../../components/buttons/NotesSwitcher";

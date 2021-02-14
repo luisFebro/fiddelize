@@ -1,16 +1,16 @@
-import { greetings } from '../data/dataIllustrations';
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
+import { greetings } from "../data/dataIllustrations";
 
 export default function getPeriodOfDayWithPic(nameUser) {
-    let name = nameUser || 'visitante';
-    let hourNow = new Date().getHours();
-    let res = {
-        greeting: '',
+    const name = nameUser || "visitante";
+    const hourNow = new Date().getHours();
+    const res = {
+        greeting: "",
         illustration: {
-            img: '',
-            color: 'var(--mainYellow)',
-            alt: ''
-        }
+            img: "",
+            color: "var(--mainYellow)",
+            alt: "",
+        },
     };
     if (hourNow >= 0 && hourNow <= 4) {
         res.greeting = parse(`Boa Madrugada,<br />${name}!`);

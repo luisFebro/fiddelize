@@ -1,7 +1,6 @@
-import React from "react";
-import { setRun } from "../../../../hooks/useRunComp";
 import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
+import { setRun } from "../../../../hooks/useRunComp";
 import { useClientAdmin } from "../../../../hooks/useRoleData";
 import "./_BtnBackTesteMode.scss";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
@@ -47,9 +46,7 @@ function BtnBackTestMode({
                         <RadiusBtn
                             size="extra-small"
                             title="voltar painel"
-                            backgroundColor={
-                                "var(--themeSDark--" + btnBackColor + ")"
-                            }
+                            backgroundColor={`var(--themeSDark--${btnBackColor})`}
                             onClick={handleBackBtnClick}
                         />
                     </div>
@@ -67,9 +64,7 @@ function BtnBackTestMode({
                         position="relative"
                         size="extra-small"
                         title="trocar"
-                        backgroundColor={
-                            "var(--themeSDark--" + btnBackColor + ")"
-                        }
+                        backgroundColor={`var(--themeSDark--${btnBackColor})`}
                         onClick={handleChangeApp}
                     />
                 </div>

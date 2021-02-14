@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import Skeleton from "@material-ui/lab/Skeleton";
-import Spinner from "./loadingIndicators/Spinner";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Spinner from "./loadingIndicators/Spinner";
 
 CompLoader.propTypes = {
     comp: PropTypes.any,
@@ -32,7 +31,7 @@ export default function CompLoader({
     needLoader = true,
     logo = false,
 }) {
-    let [status, setStatus] = useState(true);
+    const [status, setStatus] = useState(true);
 
     useEffect(() => {
         let runThis;
@@ -65,7 +64,7 @@ export default function CompLoader({
                     marginY={height}
                     isCenter={false}
                     size={size || "large"}
-                    logo={logo ? logo : undefined}
+                    logo={logo || undefined}
                 />
             </div>
             <div style={{ display: status ? "none" : "block" }}>

@@ -1,8 +1,5 @@
-import React, { useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import Fab from "@material-ui/core/Fab";
-import clsx from "clsx";
-import PropTypes from "prop-types";
-import HowToRegIcon from "@material-ui/icons/HowToReg";
 import { buttonFabType } from "../../../types";
 
 ButtonFab.propTypes = buttonFabType;
@@ -79,8 +76,8 @@ export default function ButtonFab({
             marginLeft: iconMarginLeft,
         },
         fab: {
-            fontWeight: fontWeight,
-            fontSize: fontSize,
+            fontWeight,
+            fontSize,
             position,
             top,
             left,
@@ -116,7 +113,7 @@ export default function ButtonFab({
                 <i
                     style={styles.icon}
                     className={toggle ? iconAfterClick : iconFontAwesome}
-                ></i>
+                />
             )
         );
     };

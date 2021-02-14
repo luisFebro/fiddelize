@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
+import RadiusBtn from "./RadiusBtn";
 
 export default function NotesSwitcher({
     color = "text-white",

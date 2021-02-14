@@ -1,7 +1,9 @@
-import LoadableComp from '../../components/code-splitting/LoadableComp';
+import LoadableComp from "../../components/code-splitting/LoadableComp";
 
-const AsyncWebsite = LoadableComp({ // n1
-  loader: () => import("./Website" /* webpackChunkName: "website-content-lazy" */),
+const AsyncWebsite = LoadableComp({
+    // n1
+    loader: () =>
+        import("./Website" /* webpackChunkName: "website-content-lazy" */),
 });
 
 export default AsyncWebsite;

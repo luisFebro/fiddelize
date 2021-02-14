@@ -1,10 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useStoreState } from 'easy-peasy';
+import styled from "styled-components";
+import { useStoreState } from "easy-peasy";
 
 export default function WhatsappIcon() {
-    let { role } = useStoreState(state => ({
-        role: state.userReducer.cases.currentUser.role
+    const { role } = useStoreState((state) => ({
+        role: state.userReducer.cases.currentUser.role,
     }));
     return (
         <DivWrapper>
@@ -13,12 +12,15 @@ export default function WhatsappIcon() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="link-whatsapp-web text-hide animated rubberBand fast"
-                    style={{ animationDelay: '15s', animationIterationCount: '3' }}
+                    style={{
+                        animationDelay: "15s",
+                        animationIterationCount: "3",
+                    }}
                     title="Clique aqui para enviar uma mensagem em nosso WhatsApp"
                     href="http://linkwhatsapp.com.br/go/9tL"
                 >
-                    {' '}
-                    {/*(92) 99506-6603*/}
+                    {" "}
+                    {/* (92) 99506-6603 */}
                 </a>
             ) : null}
         </DivWrapper>

@@ -1,55 +1,63 @@
-import React, { useEffect, Fragment } from 'react';
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { CLIENT_URL } from '../../../config/clientUrl';
-import Title from '../../../components/Title';
-import truncateWords from '../../../utils/string/truncateWords';
-import styled from 'styled-components';
-import { readHighestScores } from '../../../redux/actions/userActions';
-import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
+import { useEffect, Fragment } from "react";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import styled from "styled-components";
+import { CLIENT_URL } from "../../../config/clientUrl";
+import Title from "../../../components/Title";
+import truncateWords from "../../../utils/string/truncateWords";
+import { readHighestScores } from "../../../redux/actions/userActions";
+import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
 
 export default function RankingPondium() {
-    const highestScores = useStoreState(state => state.userReducer.cases.highestScores);
+    const highestScores = useStoreState(
+        (state) => state.userReducer.cases.highestScores
+    );
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
         readHighestScores(dispatch);
-    }, [])
+    }, []);
 
     const showScores = () => (
         <Fragment>
-            {highestScores.length !== 0 && highestScores.map((user, id) => {
-                const { name, loyaltyScores } = user;
-                const css = ["first-place", "second-place", "third-place"];
-                return(
-                    <div
-                        key={id}
-                        className={`${css[id]} text-main-container text-shadow-white`}
-                    >
-                        {!loyaltyScores
-                        ? (
-                          <p>
-                            <i className="fas fa-question"></i>
-                          </p>
-                        ) : (
-                            <p className={id === 0 ? `bounce-repeat animated bounce delay-3s` : ""}>
-                                {truncateWords(name.cap(), 14)}
-                                <br />
-                                <span>
-                                    {loyaltyScores && convertDotToComma(loyaltyScores.currentScore)}
-                                </span>
-                            </p>
-                        )
-                        }
-                    </div>
-                );
-            })}
+            {highestScores.length !== 0 &&
+                highestScores.map((user, id) => {
+                    const { name, loyaltyScores } = user;
+                    const css = ["first-place", "second-place", "third-place"];
+                    return (
+                        <div
+                            key={id}
+                            className={`${css[id]} text-main-container text-shadow-white`}
+                        >
+                            {!loyaltyScores ? (
+                                <p>
+                                    <i className="fas fa-question" />
+                                </p>
+                            ) : (
+                                <p
+                                    className={
+                                        id === 0
+                                            ? "bounce-repeat animated bounce delay-3s"
+                                            : ""
+                                    }
+                                >
+                                    {truncateWords(name.cap(), 14)}
+                                    <br />
+                                    <span>
+                                        {loyaltyScores &&
+                                            convertDotToComma(
+                                                loyaltyScores.currentScore
+                                            )}
+                                    </span>
+                                </p>
+                            )}
+                        </div>
+                    );
+                })}
         </Fragment>
     );
 
     return (
-        <DivPodium
-            className="my-3 container-center flex-column"
-        >
+        <DivPodium className="my-3 container-center flex-column">
             <Title
                 title="Podium Fidelidade"
                 color="var(--mainPink)"
@@ -91,8 +99,8 @@ const DivPodium = styled.div`
     }
 
     & .first-place,
-      .second-place,
-      .third-place {
+    .second-place,
+    .third-place {
         text-align: center;
         font-weight: bold;
         min-width: 200px;

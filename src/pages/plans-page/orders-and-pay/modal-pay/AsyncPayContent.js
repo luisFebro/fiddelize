@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./_PayContent.scss";
 import PayCategories from "./payment-methods/PayCategories";
 // import { Load } from "../../../../components/code-splitting/LoadableComp";
@@ -49,7 +49,7 @@ export default function AsyncPayContent({ modalData }) {
         userFirstName,
         renewalCurrDays,
         renewalDaysLeft: newRenewalDaysLeft,
-        renewalReference: renewalReference ? renewalReference : undefined,
+        renewalReference: renewalReference || undefined,
         ...modalData,
     };
 

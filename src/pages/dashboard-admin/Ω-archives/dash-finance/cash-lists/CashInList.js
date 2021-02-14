@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { convertDotToComma } from '../../../../utils/numbers/convertDotComma';
-import LoadMoreItemsButton from '../../../../components/buttons/LoadMoreItemsButton';
-import { getPeriodQuery } from '../../../../redux/actions/financeActions';
-import PropTypes from 'prop-types';
-import CashExpansiblePanel from './cash-expansible-panels/CashExpansiblePanel';
-import CashPanelHiddenContent from './cash-expansible-panels/CashPanelHiddenContent';
-import parse from 'html-react-parser';
-import moment from 'moment';
+import React from "react";
+import PropTypes from "prop-types";
+import parse from "html-react-parser";
+import moment from "moment";
+import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
+import LoadMoreItemsButton from "../../../../components/buttons/LoadMoreItemsButton";
+import { getPeriodQuery } from "../../../../redux/actions/financeActions";
+import CashExpansiblePanel from "./cash-expansible-panels/CashExpansiblePanel";
+import CashPanelHiddenContent from "./cash-expansible-panels/CashPanelHiddenContent";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -16,7 +16,7 @@ CashInList.propTypes = {
     isParentLoading: PropTypes.bool,
     loadingIndicator: PropTypes.node,
     queryData: PropTypes.object,
-}
+};
 
 export default function CashInList({
     setRun,
@@ -25,56 +25,62 @@ export default function CashInList({
     cashInData,
     queryData,
     isParentLoading,
-    loadingIndicator }) {
-
+    loadingIndicator,
+}) {
     const { period, chosenDate } = queryData;
 
     const styles = {
         root: {
-            margin: '15px auto',
-            paddingBottom: '25px',
-            width: `${isSmall ? '100%' : '90%'}`,
-            maxWidth: '450px',
-            height: 'auto',
-            borderRadius: '10px',
-            backgroundColor: '#34495e', //wet alphabet dark
-            color: 'var(--mainWhite)'
+            margin: "15px auto",
+            paddingBottom: "25px",
+            width: `${isSmall ? "100%" : "90%"}`,
+            maxWidth: "450px",
+            height: "auto",
+            borderRadius: "10px",
+            backgroundColor: "#34495e", // wet alphabet dark
+            color: "var(--mainWhite)",
         },
         panel: {
-            margin: '15px auto',
-            width: '85%',
-            height: '100px',
-            backgroundColor: '#2ecc71', //emerald green
-        }
-    }
+            margin: "15px auto",
+            width: "85%",
+            height: "100px",
+            backgroundColor: "#2ecc71", // emerald green
+        },
+    };
 
     const showTitleAndSummary = () => (
         <section>
-            <p
-                className="pt-4 text-main-container text-center text-em-2-0"
-            >
+            <p className="pt-4 text-main-container text-center text-em-2-0">
                 ENTRADA
             </p>
-            <p
-                className="py-3 px-3 text-main-container text-left"
-            >
-                Total de Operações: <strong className="text-em-2">{isParentLoading ? "..." : cashInData.totalSize}</strong>
+            <p className="py-3 px-3 text-main-container text-left">
+                Total de Operações:{" "}
+                <strong className="text-em-2">
+                    {isParentLoading ? "..." : cashInData.totalSize}
+                </strong>
                 <br />
-                Valor Total: {isSmall ? <br /> : null}<strong className="text-em-2">{isParentLoading ? "..." : `R$ ${convertDotToComma(cashInData.sumAll)}`}</strong>
+                Valor Total: {isSmall ? <br /> : null}
+                <strong className="text-em-2">
+                    {isParentLoading
+                        ? "..."
+                        : `R$ ${convertDotToComma(cashInData.sumAll)}`}
+                </strong>
             </p>
         </section>
     );
 
     // Accordion Content
-    const actions = cashInData.list.map(item => {
-        return({
-           _id: item._id,
-           mainHeading: item.cashInValue,
-           secondaryHeading: parse(`&#187; Realizado pelo ${item.agentRole.toUpperCase()}: <br /><strong>${item.agentName.cap()}<strong /><br />&#187; Atualizado ${moment(item.updatedAt).fromNow()}  atrás.`),
-           itemData: item,
-           hiddenContent: <CashPanelHiddenContent data={item} />
-        });
-    })
+    const actions = cashInData.list.map((item) => ({
+        _id: item._id,
+        mainHeading: item.cashInValue,
+        secondaryHeading: parse(
+            `&#187; Realizado pelo ${item.agentRole.toUpperCase()}: <br /><strong>${item.agentName.cap()}<strong /><br />&#187; Atualizado ${moment(
+                item.updatedAt
+            ).fromNow()}  atrás.`
+        ),
+        itemData: item,
+        hiddenContent: <CashPanelHiddenContent data={item} />,
+    }));
 
     const showExpansionPanel = () => (
         <CashExpansiblePanel
@@ -85,11 +91,14 @@ export default function CashInList({
             run={run}
         />
     );
-    //End Accordion Content
+    // End Accordion Content
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton
-            url={`/api/finance/cash-ops/list/${period}?skip=${"SKIP"}${getPeriodQuery(period, chosenDate)}`}
+            url={`/api/finance/cash-ops/list/${period}?skip=${"SKIP"}${getPeriodQuery(
+                period,
+                chosenDate
+            )}`}
             objPathes={{
                 strList: "data.cashInOps.list",
                 strChunkSize: "data.cashInOps.chunkSize",
@@ -100,7 +109,7 @@ export default function CashInList({
             button={{
                 title: "Carregar mais Registros",
                 loadingIndicator: "Carregando mais agora...",
-                backgroundColor: '#2ecc71',
+                backgroundColor: "#2ecc71",
             }}
         />
     );
@@ -108,9 +117,9 @@ export default function CashInList({
     return (
         <div style={styles.root}>
             {showTitleAndSummary()}
-            {isParentLoading
-            ? loadingIndicator
-            : (
+            {isParentLoading ? (
+                loadingIndicator
+            ) : (
                 <React.Fragment>
                     {showExpansionPanel()}
                     {showMoreItemsBtn()}

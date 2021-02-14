@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import BuyReviewCard from "./BuyReviewCard";
 import BuyReviewFilter from "./BuyReviewFilter";
 import useAPIList, {
@@ -140,7 +140,7 @@ function useAdminChecked(trigger, bizId) {
                 },
                 trigger,
             }).catch((err) => {
-                console.log("ERROR: " + err);
+                console.log(`ERROR: ${err}`);
             });
         };
 

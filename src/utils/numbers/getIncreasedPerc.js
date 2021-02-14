@@ -1,10 +1,10 @@
 // get increased percentage
 // reference: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
 export default function getIncreasedPerc(startingVal, finalVal) {
-    if (typeof startingVal !== `number`) {
+    if (typeof startingVal !== "number") {
         startingVal = Number(startingVal);
     }
-    if (typeof finalVal !== `number`) {
+    if (typeof finalVal !== "number") {
         finalVal = Number(finalVal);
     }
     const isBothNegative =

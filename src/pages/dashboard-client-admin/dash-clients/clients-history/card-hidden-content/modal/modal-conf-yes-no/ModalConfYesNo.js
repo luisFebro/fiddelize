@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
-import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
+import { useStoreDispatch } from "easy-peasy";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
+import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
+import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
 // CUSTOM DATA
 import { setRun } from "../../../../../../../hooks/useRunComp";
 import { countField } from "../../../../../../../redux/actions/userActions";
@@ -88,7 +88,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 <ButtonMulti title="NÃO" onClick={onClose} variant="link" />
                 <ButtonMulti
                     title="SIM"
-                    disabled={isYesBtnDisabled ? true : false}
+                    disabled={!!isYesBtnDisabled}
                     onClick={() => handleRemoval(itemData)}
                     backgroundColor="var(--mainRed)"
                     backColorOnHover="var(--mainRed)"

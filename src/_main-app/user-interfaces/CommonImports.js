@@ -1,4 +1,3 @@
-import React from "react";
 import { Load } from "../../components/code-splitting/LoadableComp";
 // All component pages which are using both in website and mobile app goes here in next updates...
 

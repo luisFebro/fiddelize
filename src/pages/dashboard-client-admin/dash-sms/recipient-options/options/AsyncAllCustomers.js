@@ -1,13 +1,18 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import MuSelectTable from '../../../../../components/tables/MuSelectTable';
-import { useRunComp } from '../../../../../hooks/useRunComp';
-import useAPI, { readContacts } from '../../../../../hooks/api/useAPI';
-import { useProfile } from '../../../../../hooks/useRoleData';
+import { useState, useEffect, Fragment } from "react";
+import MuSelectTable from "../../../../../components/tables/MuSelectTable";
+import { useRunComp } from "../../../../../hooks/useRunComp";
+import useAPI, { readContacts } from "../../../../../hooks/api/useAPI";
+import { useProfile } from "../../../../../hooks/useRoleData";
 
 const headCells = [
-    { id: 'name', numeric: false, disablePadding: false, label: 'Nome Cliente' },
-    { id: 'phone', numeric: false, disablePadding: false, label: 'Contato' },
-]
+    {
+        id: "name",
+        numeric: false,
+        disablePadding: false,
+        label: "Nome Cliente",
+    },
+    { id: "phone", numeric: false, disablePadding: false, label: "Contato" },
+];
 
 export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     const [selectedContacts, setSelectedContacts] = useState([]);
@@ -15,86 +20,91 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     const [init, setInit] = useState(true);
 
     const { _id: userId } = useProfile();
-    let { data: list, loading } = useAPI({ url: readContacts(userId), needAuth: true, dataName: "allSMSContactList" })
-    if(!list) list = [];
+    let { data: list, loading } = useAPI({
+        url: readContacts(userId),
+        needAuth: true,
+        dataName: "allSMSContactList",
+    });
+    if (!list) list = [];
 
     const { runName } = useRunComp();
 
     const totalSelected = selectedContacts.length;
-    const isSendEverybodyMode = Boolean(totalSelected !== 0 && list.length === totalSelected);
+    const isSendEverybodyMode = Boolean(
+        totalSelected !== 0 && list.length === totalSelected
+    );
 
     useEffect(() => {
-        if(list.length) setSelectedContacts(list.map(contact => contact.name))
-    }, [list])
+        if (list.length)
+            setSelectedContacts(list.map((contact) => contact.name));
+    }, [list]);
 
     useEffect(() => {
         const getList = () => {
-            if(isSendEverybodyMode) {
+            if (isSendEverybodyMode) {
                 return list;
-            } else {
-                const filteredSelectedList = list.filter(contact => {
-                    return selectedContacts.indexOf(contact.name) !== -1;
-                })
-                return filteredSelectedList;
             }
-        }
+            const filteredSelectedList = list.filter(
+                (contact) => selectedContacts.indexOf(contact.name) !== -1
+            );
+            return filteredSelectedList;
+        };
 
-        const runSelection = selectedContacts.length || selectedContacts.length === 0;
-        if(runName === "Lista de Clientes" || init || runSelection) {
+        const runSelection =
+            selectedContacts.length || selectedContacts.length === 0;
+        if (runName === "Lista de Clientes" || init || runSelection) {
             const selectedList = getList();
             handleList(selectedList);
             isSendEverybodyMode && setInit(false);
         }
-    }, [list, init, selectedContacts, isSendEverybodyMode, runName])
+    }, [list, init, selectedContacts, isSendEverybodyMode, runName]);
 
     useEffect(() => {
-        if(!selectedContacts.length) handleShowMessage(false);
-    }, [selectedContacts])
+        if (!selectedContacts.length) handleShowMessage(false);
+    }, [selectedContacts]);
 
     useEffect(() => {
-        if(runName === "Lista de Clientes") {
+        if (runName === "Lista de Clientes") {
             setSelectedContacts([]);
             setEmptySelection(true);
         }
-    }, [runName])
+    }, [runName]);
 
-    const checkSelected = newSelection => {
+    const checkSelected = (newSelection) => {
         setEmptySelection(false);
         setSelectedContacts(newSelection);
-    }
+    };
 
-    const showMode = () => (
-        !loading &&
-        <Fragment>
-            {!list.length ? (
-                <p className="text-title mode text-center text-grey">
-                    SEM CLIENTES
-                    <span
-                        className="d-block text-normal text-grey text-center"
-                    >
-                        Cadastre clientes!
+    const showMode = () =>
+        !loading && (
+            <Fragment>
+                {!list.length ? (
+                    <p className="text-title mode text-center text-grey">
+                        SEM CLIENTES
+                        <span className="d-block text-normal text-grey text-center">
+                            Cadastre clientes!
+                            <br />
+                            Todos aparecerão aqui.
+                        </span>
+                    </p>
+                ) : (
+                    <p className="text-title mode text-center text-purple">
+                        MODO:
                         <br />
-                        Todos aparecerão aqui.
-                    </span>
-                </p>
-            ) : (
-                <p className="text-title mode text-center text-purple">
-                    MODO:
-                    <br />
-                    <br />
-                    {isSendEverybodyMode ? (
-                        <span>Todos da Lista</span>
-                    ) : (
-                        <span>Somente Marcados</span>
-                    )}
-                    <br />
-                    <span className="text-subtitle text-purple text-center">
-                      (Total: {totalSelected} clientes)
-                    </span>
-                </p>
-            )}
-        </Fragment>
-    );
+                        <br />
+                        {isSendEverybodyMode ? (
+                            <span>Todos da Lista</span>
+                        ) : (
+                            <span>Somente Marcados</span>
+                        )}
+                        <br />
+                        <span className="text-subtitle text-purple text-center">
+                            (Total: {totalSelected} clientes)
+                        </span>
+                    </p>
+                )}
+            </Fragment>
+        );
 
     return (
         <section className="all-customers--root">

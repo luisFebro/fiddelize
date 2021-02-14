@@ -1,23 +1,23 @@
-import React from "react";
-import Loadable from "react-loadable";
-import LoadableComp from '../../components/code-splitting/LoadableComp';
-import FullPageLoading from '../../components/loadingIndicators/FullPageLoading';
+import LoadableComp from "../../components/code-splitting/LoadableComp";
+import FullPageLoading from "../../components/loadingIndicators/FullPageLoading";
 // n1 -magic comments for two or more modules..
 
 const AsyncDashAppDesign = LoadableComp({
-  loader: () => import("./DashComps" /* webpackChunkName: "cli-admin-dashboard-lazy" */).then(comp => comp.DashAppDesign),
+    loader: () =>
+        import(
+            "./DashComps" /* webpackChunkName: "cli-admin-dashboard-lazy" */
+        ).then((comp) => comp.DashAppDesign),
 });
 
 const AsyncDashSetting = LoadableComp({
-  loader: () => import("./DashComps" /* webpackChunkName: "cli-admin-dashboard-lazy"*/).then(comp => comp.DashSetting),
-  loading: FullPageLoading, // not working...
+    loader: () =>
+        import(
+            "./DashComps" /* webpackChunkName: "cli-admin-dashboard-lazy" */
+        ).then((comp) => comp.DashSetting),
+    loading: FullPageLoading, // not working...
 });
 
-export {
-  AsyncDashAppDesign,
-  AsyncDashSetting,
-};
-
+export { AsyncDashAppDesign, AsyncDashSetting };
 
 /* COMMENTS
 n1:

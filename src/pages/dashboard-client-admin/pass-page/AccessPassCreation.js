@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
+import { withRouter } from "react-router-dom";
+import { useStoreDispatch } from "easy-peasy";
 import PasswordCircleFields from "../../../components/fields/PasswordCircleFields.js";
 import NumericKeyboard from "../../../components/keyboards/NumericKeyboard";
 import getAPI, { createPassword } from "../../../utils/promises/getAPI";
 import getFirstName from "../../../utils/string/getFirstName";
-import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { setVar } from "../../../hooks/storage/useVar";
 
@@ -31,18 +31,18 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
     };
 
     const undoClick = () => {
-        let counter = display.length;
+        const counter = display.length;
         const currTypingField = document.querySelector(
             `.pass-block-${counter}`
         );
         if (currTypingField) currTypingField.classList.toggle("d-block");
     };
 
-    let storedPswd = useRef(""); // not clear newPswd after switching to newPswd2
+    const storedPswd = useRef(""); // not clear newPswd after switching to newPswd2
     const restartFields = (restartAll) => {
         setDisplay("");
 
-        const fields = document.querySelectorAll(`.pass-circle`);
+        const fields = document.querySelectorAll(".pass-circle");
         if (fields) {
             fields.forEach((f) => {
                 f.classList.remove("d-block");
@@ -113,7 +113,7 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                                 (async () => {
                                     await setVar({ donePswd: true });
                                     history.push(
-                                        `/t/app/nucleo-equipe/cadastro/pagseguro`
+                                        "/t/app/nucleo-equipe/cadastro/pagseguro"
                                     );
                                 })();
                             } else {
@@ -123,7 +123,7 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                                     "warning",
                                     3000
                                 );
-                                history.push(`/mobile-app`);
+                                history.push("/mobile-app");
                             }
                         }, 2900);
                     }

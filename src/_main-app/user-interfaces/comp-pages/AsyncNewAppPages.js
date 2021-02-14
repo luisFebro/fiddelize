@@ -1,4 +1,3 @@
-import React from "react";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
 export const AsyncBizInfo = Load({

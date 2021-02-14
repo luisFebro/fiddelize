@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import SwitchBtn from '../../../../../components/buttons/material-ui/SwitchBtn';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import useAPI, { getUniqueId, removeTaskAndExpireCliPrize } from '../../../../../hooks/api/useAPI';
+import { useState } from "react";
+import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import useAPI, {
+    getUniqueId,
+    removeTaskAndExpireCliPrize,
+} from "../../../../../hooks/api/useAPI";
 
 export default function ActionBtn({
     type = "pendingDelivery",
@@ -9,13 +12,19 @@ export default function ActionBtn({
     defaultStatus = false,
     taskId,
     expired = false,
-    dataExpired, }) {
-    if(type === "pendingDelivery") {
-
+    dataExpired,
+}) {
+    if (type === "pendingDelivery") {
         const selectedCardType = () => {
-            if(expired) return <ShowExpiredCardFunc dataExpired={dataExpired} taskId={taskId} />;
+            if (expired)
+                return (
+                    <ShowExpiredCardFunc
+                        dataExpired={dataExpired}
+                        taskId={taskId}
+                    />
+                );
 
-            return(
+            return (
                 <SwitchBtn
                     leftTitle="Não"
                     rightTitle="Sim"
@@ -24,7 +33,7 @@ export default function ActionBtn({
                     defaultStatus={defaultStatus}
                 />
             );
-        }
+        };
 
         const expiredCss = expired ? "expired" : "";
         return (
@@ -39,19 +48,31 @@ const defaultBody = {
     adminId: "123",
     taskId: "123",
     cliUserId: "123",
-    prizeId: "123"
-}
+    prizeId: "123",
+};
 function ShowExpiredCardFunc({ dataExpired = defaultBody, taskId }) {
     const [trigger, setTrigger] = useState(false);
 
-    const snackbar = { txtPending: `Apagando tarefa e marcando prêmio do cliente como expirado...`, timePending: 6000, txtSuccess: "Tarefa apagada e prêmio expirado!" }
+    const snackbar = {
+        txtPending:
+            "Apagando tarefa e marcando prêmio do cliente como expirado...",
+        timePending: 6000,
+        txtSuccess: "Tarefa apagada e prêmio expirado!",
+    };
 
-    useAPI({ method: 'put', url: removeTaskAndExpireCliPrize(), body: dataExpired, trigger, snackbar, runName: `TaskCard${taskId}` })
+    useAPI({
+        method: "put",
+        url: removeTaskAndExpireCliPrize(),
+        body: dataExpired,
+        trigger,
+        snackbar,
+        runName: `TaskCard${taskId}`,
+    });
 
     const handleExpiredRequest = () => {
         const randomId = getUniqueId();
         setTrigger(randomId);
-    }
+    };
 
     return (
         <section className="task-card--expired-msg">

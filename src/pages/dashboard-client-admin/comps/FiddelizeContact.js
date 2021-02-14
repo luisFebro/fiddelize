@@ -1,12 +1,12 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import WhatsappBtn from "../../../components/buttons/WhatsappBtn";
 import { useCentralAdmin } from "../../../hooks/useRoleData";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import animateCSS from "../../../utils/animateCSS";
 import Img from "../../../components/Img";
 
@@ -159,7 +159,7 @@ export default function FiddelizeContact() {
                 <Img
                     src="/img/illustrations/online-chat.svg"
                     className="img-fluid"
-                    offline={true}
+                    offline
                     coll="illustrations"
                     height="auto"
                     style={{

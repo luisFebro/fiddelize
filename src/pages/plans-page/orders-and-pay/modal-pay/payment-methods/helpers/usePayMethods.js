@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-//Esse método recebe opcionalmente o valor da transação e retorna um JSON contendo os meios de pagamento disponíveis, compatíveis com o valor informado. Caso não seja informado o valor, será retornado todos os meios de pagamento.
+// Esse método recebe opcionalmente o valor da transação e retorna um JSON contendo os meios de pagamento disponíveis, compatíveis com o valor informado. Caso não seja informado o valor, será retornado todos os meios de pagamento.
 // Observe que os meios de pagamento Balance e Deposit são retornados, porém atualmente não podem ser implementados.
 // Com essas informações você poderá apresentar as opções para pagamento ao comprador.
 
@@ -35,16 +35,16 @@ export default function usePayMethods(target, value) {
         if (payMethod) return;
         PagSeguro.getPaymentMethods({
             amount: value, // returns all methods if not defined.
-            success: function (response) {
+            success(response) {
                 const allOptions = response.paymentMethods[target].options;
                 const assetAvailable = getAvailableAssets(allOptions);
                 setPayMethod(assetAvailable);
             },
-            error: function (response) {
+            error(response) {
                 console.log("Callback para chamadas que falharam", response);
                 setError(true);
             },
-            complete: function (response) {
+            complete(response) {
                 // console.log("Callback para todas chamadas", response);
             },
         });

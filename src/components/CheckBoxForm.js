@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import getId from "../utils/getId";
@@ -49,10 +49,8 @@ export default function CheckBoxForm({
 
     return (
         <div
-            className={`${
-                position ? position : "d-flex justify-content-center"
-            }`}
-            style={{ width: "100%", margin: margin }}
+            className={`${position || "d-flex justify-content-center"}`}
+            style={{ width: "100%", margin }}
         >
             <FormControlLabel
                 className={position ? "" : "ml-2"}
@@ -62,7 +60,7 @@ export default function CheckBoxForm({
                         onClick={onClick}
                         onChange={() => handleChange()}
                         color="primary"
-                        style={{ color: color ? color : undefined }}
+                        style={{ color: color || undefined }}
                     />
                 }
                 label={showText()}

@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TextField from "@material-ui/core/TextField";
+import PropTypes from "prop-types";
+import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti, {
     faStyle,
 } from "../../../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 // import DateWithIcon from '../../../../../components/date-time/DateWithIcon';
-import PropTypes from "prop-types";
 import {
     updateUser,
     readClientAdmin,
 } from "../../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import BackUpToExcel from "./BackUpToExcel";
 import phoneMaskBr from "../../../../../utils/validation/masks/phoneMaskBr";
 import isKeyPressed from "../../../../../utils/event/isKeyPressed";
@@ -121,7 +121,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
                 <p className="text-shadow text-subtitle font-weight-bold">
                     Atualize Dados Comerciais
                 </p>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Nome sua Empresa/Projeto</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
@@ -134,7 +134,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
                         value={bizName}
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Whatsapp Comercial</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
@@ -153,14 +153,14 @@ export default function HiddenBizDataAndBackup({ userData }) {
                                 bizWhatsapp: phoneMaskBr(bizWhatsapp),
                             })
                         }
-                        error={error === "phone" ? true : false}
+                        error={error === "phone"}
                         autoComplete="off"
                         onChange={handleChange(setData, data)}
                         name="bizWhatsapp"
                         value={bizWhatsapp}
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Endereço Comercial</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
@@ -175,7 +175,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
                         fullWidth
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">CEP</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}

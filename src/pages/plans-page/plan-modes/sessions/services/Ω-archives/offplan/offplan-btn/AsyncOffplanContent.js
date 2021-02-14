@@ -1,4 +1,3 @@
-import React from "react";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import {
     ShowTitle,
@@ -43,7 +42,7 @@ export default function AsyncOffplanContent({ modalData }) {
 
     return (
         <section>
-            <ShowTitle title={title} offplan={true} />
+            <ShowTitle title={title} offplan />
             <ShowPicture
                 floatit={false}
                 src="/img/pro-features/feature-development.svg"
@@ -52,7 +51,7 @@ export default function AsyncOffplanContent({ modalData }) {
                 iconHeight={100}
                 timeout={2000}
                 reference=""
-                main={true}
+                main
             />
             {PickedFeature}
             {showCTA()}

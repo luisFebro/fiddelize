@@ -3,7 +3,6 @@ import Card from "@material-ui/core/Card";
 import { fromNow, formatDMY } from "../../../../../utils/dates/dateFns";
 import useAPI, {
     toggleDoneUrl,
-    changePrizeStatus,
     treatBoolStatus,
 } from "../../../../../hooks/api/useAPI";
 import ActionBtn from "./ActionBtn";
@@ -64,8 +63,8 @@ function CliWinnersCard(props, ref) {
     const snackbar = {
         timeSuccess: 7000,
         txtSuccess: treatBoolStatus(toggleDone)
-            ? `✔ Entrega marcada como FEITA!<br />✔ Novo status RECEBIDO marcado no histórico do cliente`
-            : `✔ Entrega DESFEITA<br /> ✔ Removido status RECEBIDO do seu cliente!`,
+            ? "✔ Entrega marcada como FEITA!<br />✔ Novo status RECEBIDO marcado no histórico do cliente"
+            : "✔ Entrega DESFEITA<br /> ✔ Removido status RECEBIDO do seu cliente!",
     };
     const trigger = toggleDone === undefined ? false : toggleDone;
     const prizeParams = { newValue: treatBoolStatus(toggleDone), prizeId };

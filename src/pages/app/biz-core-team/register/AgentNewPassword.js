@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useData from "../../../../hooks/useData";
 import AccessPassCreation from "../../../dashboard-client-admin/pass-page/AccessPassCreation";
 import { getVar } from "../../../../hooks/storage/useVar";
@@ -32,7 +32,5 @@ export default function AgentNewPassword({ history }) {
         );
     }
 
-    return (
-        <AccessPassCreation userName={name} userId={userId} isBizTeam={true} />
-    );
+    return <AccessPassCreation userName={name} userId={userId} isBizTeam />;
 }

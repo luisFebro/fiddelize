@@ -1,23 +1,18 @@
-import React from "react";
-import Title from "../../components/Title";
 import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import Card from "@material-ui/core/Card";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Title from "../Title";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { loginEmail } from "../../redux/actions/authActions";
 import { readUser } from "../../redux/actions/userActions";
-import PropTypes from "prop-types";
 import KeypadButton from "../modals/keypad";
 import isThisApp from "../../utils/window/isThisApp";
-import showVanillaToast from "../../components/vanilla-js/toastify/showVanillaToast";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
-import { CLIENT_URL } from "../../config/clientUrl";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RadiusBtn from "../buttons/RadiusBtn";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import { deleteImage } from "../../utils/storage/lForage";
-import useCount from "../../hooks/useCount";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import {
     setMultiVar,
@@ -51,7 +46,7 @@ function Login({
             title="Acessar Conta"
             color="var(--mainWhite)"
             padding="py-2 px-2"
-            needShadow={true}
+            needShadow
             backgroundColor={`var(--themePDark--${
                 isBizTeam ? "default" : selfThemeSColor
             })`}
@@ -98,9 +93,9 @@ function Login({
                             title="aqui"
                             onClick={handleLoginAndRegister}
                             backgroundColor={
-                                "var(--themeSDark--" + isBizTeam
+                                `var(--themeSDark--${isBizTeam}`
                                     ? "default"
-                                    : selfThemeSColor + ")"
+                                    : `${selfThemeSColor})`
                             }
                         />
                     </div>
@@ -109,7 +104,7 @@ function Login({
         );
 
     return (
-        <div className={rootClassname ? rootClassname : "my-5"}>
+        <div className={rootClassname || "my-5"}>
             <Card
                 style={{ maxWidth: 330 }}
                 className="animated zoomIn fast card-elevation"
@@ -327,11 +322,11 @@ export async function signInUserData(cpfValue, options = {}) {
         await setMultiVar(storeElems, store.user);
 
         if (!pswd) {
-            //redirect user to password page
+            // redirect user to password page
             return history.push("/t/app/nucleo-equipe/cadastro/senha");
         }
         if (!publicKey) {
-            //redirect user to pagseguro agent registration
+            // redirect user to pagseguro agent registration
             return history.push("/t/app/nucleo-equipe/cadastro/pagseguro");
         }
 
@@ -378,7 +373,7 @@ function handleCliUserPath({ authUserId, dispatch, history }) {
 
 // END HELPERS
 
-/*ARCHIVES
+/* ARCHIVES
 
 showSnackbar(
     dispatch,

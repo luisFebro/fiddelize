@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import Illustration from '../Illustration';
-import { CLIENT_URL } from '../../config/clientUrl';
-import InstructionBtn from '../../components/buttons/InstructionBtn';
+import { Fragment } from "react";
+import PropTypes from "prop-types";
+import Illustration from "../Illustration";
+import InstructionBtn from "../buttons/InstructionBtn";
 
 SearchResult.propTypes = {
     filteredUsersLength: PropTypes.number,
@@ -11,18 +10,18 @@ SearchResult.propTypes = {
     searchTerm: PropTypes.string,
     mainSubject: PropTypes.string,
     totalCliUserScores: PropTypes.number,
-}
+};
 
 const styles = {
     accumulativeScore: {
-        display: 'table', // table has the advantage of preserve the blocking settings such as padding, margin and alignment, differently from inline type.
-        fontSize: '28px',
-        backgroundColor: 'var(--themeP)',
-        color: 'var(--mainWhite)',
-        borderRadius: '35px',
-        lineHeight: '25px',
-    }
-}
+        display: "table", // table has the advantage of preserve the blocking settings such as padding, margin and alignment, differently from inline type.
+        fontSize: "28px",
+        backgroundColor: "var(--themeP)",
+        color: "var(--mainWhite)",
+        borderRadius: "35px",
+        lineHeight: "25px",
+    },
+};
 
 export default function SearchResult({
     isLoading,
@@ -33,27 +32,25 @@ export default function SearchResult({
     totalActiveScores,
     totalCliUserScores,
 }) {
-
-    const pluralizeBr = word => {
+    const pluralizeBr = (word) => {
         let res;
         const wordLastLetter = word.slice(-1);
         const vowals = ["a", "e", "i", "o", "e"];
 
-        if(vowals.includes(wordLastLetter)) {
-            res = word + "s";
-            return res.cap();
-        } else {
-            res = word + "es";
+        if (vowals.includes(wordLastLetter)) {
+            res = `${word}s`;
             return res.cap();
         }
-    }
+        res = `${word}es`;
+        return res.cap();
+    };
 
-    const textInstru = "É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos."
+    const textInstru =
+        "É o total de pontos de todos desafios não concluídos e que ainda não foram descontados e, desta forma, estão ativos.";
 
     return (
         <div className="text-main-container my-5">
-            {!filteredUsersLength
-            ? (
+            {!filteredUsersLength ? (
                 <Fragment>
                     {!isLoading && (
                         <Illustration
@@ -61,11 +58,15 @@ export default function SearchResult({
                             className="dash_no_search_illustra"
                             alt="Busca Vazia"
                             imgStyle={{
-                                maxWidth: 400
+                                maxWidth: 400,
                             }}
-                            txtImgConfig = {{
+                            txtImgConfig={{
                                 topPos: "15%",
-                                txt: `Nenhum ${mainSubject} foi encontrado ${searchTerm.length === 0 ? "" : `para ${searchTerm.toUpperCase()}`}`,
+                                txt: `Nenhum ${mainSubject} foi encontrado ${
+                                    searchTerm.length === 0
+                                        ? ""
+                                        : `para ${searchTerm.toUpperCase()}`
+                                }`,
                                 txtBorder: "border-white",
                             }}
                         />
@@ -73,15 +74,17 @@ export default function SearchResult({
                 </Fragment>
             ) : (
                 <Fragment>
-                    {searchTerm !== ""
-                    ? (
+                    {searchTerm !== "" ? (
                         <div>
                             <h2 className="text-subtitle text-p text-left pl-5">
-                                {isLoading
-                                ? ""
-                                : (
+                                {isLoading ? (
+                                    ""
+                                ) : (
                                     <span>
-                                        {`${pluralizeBr(mainSubject)} Encontrados:`} <strong>{filteredUsersLength}</strong>
+                                        {`${pluralizeBr(
+                                            mainSubject
+                                        )} Encontrados:`}{" "}
+                                        <strong>{filteredUsersLength}</strong>
                                     </span>
                                 )}
                             </h2>
@@ -89,17 +92,30 @@ export default function SearchResult({
                     ) : (
                         <div>
                             <h2 className="text-subtitle text-p text-left pl-1">
-                                {isLoading
-                                ? ""
-                                : (
-                                    <div className="ml-3 position-relative" style={{top: '30px'}}>
-                                        <span className="text-title">Totais Gerais:</span>
+                                {isLoading ? (
+                                    ""
+                                ) : (
+                                    <div
+                                        className="ml-3 position-relative"
+                                        style={{ top: "30px" }}
+                                    >
+                                        <span className="text-title">
+                                            Totais Gerais:
+                                        </span>
                                         <br />
-                                        <strong>• {`${allUsersLength} ${pluralizeBr(mainSubject)}`}</strong>
+                                        <strong>
+                                            •{" "}
+                                            {`${allUsersLength} ${pluralizeBr(
+                                                mainSubject
+                                            )}`}
+                                        </strong>
                                         <br />
                                         <div className="m-0 d-flex">
                                             <p className="m-0 mr-2">
-                                                <strong>• {`${totalActiveScores} Pontos Ativos`}</strong>
+                                                <strong>
+                                                    •{" "}
+                                                    {`${totalActiveScores} Pontos Ativos`}
+                                                </strong>
                                             </p>
                                             <div>
                                                 <InstructionBtn

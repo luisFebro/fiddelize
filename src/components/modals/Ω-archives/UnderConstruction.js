@@ -1,20 +1,24 @@
-import React from 'react';
-// Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { closeModal } from '../../redux/actions/modalActions';
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import styled from "styled-components";
+import { closeModal } from "../../redux/actions/modalActions";
 // End Redux
-import styled from 'styled-components';
-import { underConstruction } from '../../data/dataIllustrations';
-import { ButtonContainerPressedEffectDark as DarkBtn } from '../buttons/Default';
+import { underConstruction } from "../../data/dataIllustrations";
+import { ButtonContainerPressedEffectDark as DarkBtn } from "../buttons/Default";
+
 export default function UnderConstruction() {
-    const isModalUnderConstructionOpen = useStoreState(state => state.modalReducers.cases.isModalUnderConstructionOpen);
+    const isModalUnderConstructionOpen = useStoreState(
+        (state) => state.modalReducers.cases.isModalUnderConstructionOpen
+    );
     const dispatch = useStoreDispatch();
 
     return isModalUnderConstructionOpen ? (
         <ModalContainer>
             <div className="container">
                 <div className="row">
-                    <div id="modal" className="col-10 mx-auto col-md-6 col-lg-4 text-center text-capitalize p-1">
+                    <div
+                        id="modal"
+                        className="col-10 mx-auto col-md-6 col-lg-4 text-center text-capitalize p-1"
+                    >
                         <section>
                             <img
                                 className="img-fluid mx-auto my-2 shadow-elevation"
@@ -24,7 +28,10 @@ export default function UnderConstruction() {
                             <h2>Em Manutenção.</h2>
                             <h2>Logo ficará disponível! :)</h2>
                         </section>
-                        <DarkBtn className="my-4" onClick={() => closeModal(dispatch)}>
+                        <DarkBtn
+                            className="my-4"
+                            onClick={() => closeModal(dispatch)}
+                        >
                             Entendi.
                         </DarkBtn>
                     </div>

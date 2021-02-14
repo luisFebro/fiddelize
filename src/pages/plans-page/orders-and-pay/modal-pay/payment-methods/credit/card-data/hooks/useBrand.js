@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function getBrand(cardNumber, { PagSeguro }) {
     // n1
@@ -6,16 +6,16 @@ function getBrand(cardNumber, { PagSeguro }) {
         PagSeguro.getBrand({
             // PagSeguro is typeof Object, getBrand is a regular function, not a promise.
             cardBin: cardNumber, // n1
-            success: function (response) {
-                //bandeira encontrada
+            success(response) {
+                // bandeira encontrada
                 resolve(response.brand);
             },
-            error: function (response) {
-                //tratamento do erro
+            error(response) {
+                // tratamento do erro
                 reject(response);
             },
-            complete: function (response) {
-                //tratamento comum para todas chamadas
+            complete(response) {
+                // tratamento comum para todas chamadas
             },
         });
     };

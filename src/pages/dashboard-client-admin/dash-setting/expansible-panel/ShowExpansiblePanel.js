@@ -1,9 +1,7 @@
-import React from "react";
-import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
-import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState } from "easy-peasy";
+import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
 import HiddenVerifPass from "../card-hidden-content/HiddenVerifPass";
 import HiddenProfile from "../card-hidden-content/HiddenProfile";
 import HiddenBizDataAndBackup from "../card-hidden-content/biz-data-and-backup/HiddenBizDataAndBackup";
@@ -35,7 +33,7 @@ export default function ShowExpansiblePanel() {
         },
         {
             id: 2,
-            name: `Dados Projeto<br />e Segurança`,
+            name: "Dados Projeto<br />e Segurança",
             leftIcon: <FontAwesomeIcon icon="database" />,
             hiddenContent: <HiddenBizDataAndBackup userData={userData} />,
         },
@@ -52,15 +50,13 @@ export default function ShowExpansiblePanel() {
         </section>
     );
 
-    const actions = configList.map((config) => {
-        return {
-            _id: config.id,
-            mainHeading: handleMainHeading(config),
-            secondaryHeading: null,
-            configData: config,
-            hiddenContent: config.hiddenContent,
-        };
-    });
+    const actions = configList.map((config) => ({
+        _id: config.id,
+        mainHeading: handleMainHeading(config),
+        secondaryHeading: null,
+        configData: config,
+        hiddenContent: config.hiddenContent,
+    }));
 
     return (
         <ConfigExpansiblePanel

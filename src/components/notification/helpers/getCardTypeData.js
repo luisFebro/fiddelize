@@ -15,15 +15,14 @@ export default function getCardTypeData(cardType, options = {}) {
         bizName,
     });
 
-    const handledBirthdayGreeting = (isBelated) => {
-        return role === "cliente"
+    const handledBirthdayGreeting = (isBelated) =>
+        role === "cliente"
             ? `Ei ${getFirstName(
                   userName
               )}, a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário repleto de prosperidade e conquistas!`
             : `Surpresa, ${getFirstName(
                   userName
               )}! Você também recebe uma mensagem de aniversário. A Fiddelize te deseja ainda mais clientes para seu negócio recheada de conquistas e decorada com sucesso!`;
-    };
 
     switch (cardType) {
         case "welcome":
@@ -39,11 +38,11 @@ export default function getCardTypeData(cardType, options = {}) {
             } = extractStrData(content);
 
             if (subtype === "clientWonChall") {
-                title = `Desafio Concluído`;
+                title = "Desafio Concluído";
                 brief = `Cliente §${clientFullName}§ concluíu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
             }
             if (subtype === "confirmedChall") {
-                title = `Desafio Confirmado`;
+                title = "Desafio Confirmado";
                 brief = `Opa! Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio disponível para resgate.`;
             }
             circularImg = "/img/icons/trophies/fiddelize-trophy.svg";
@@ -51,12 +50,12 @@ export default function getCardTypeData(cardType, options = {}) {
         case "birthday":
             if (subtype === "greeting") {
                 const { birthdayDate } = extractStrData(content);
-                title = `Feliz Aniversário!`;
+                title = "Feliz Aniversário!";
                 brief = handledBirthdayGreeting(birthdayDate);
                 circularImg = "/img/icons/notif/birthday-cake.svg";
             }
             if (subtype === "weeklyReport") {
-                title = `Aniversários da semana`;
+                title = "Aniversários da semana";
                 brief =
                     "Lista de clientes aniversariantes da semana 21/07 por ordem de pontos acumulados";
                 circularImg = "/img/icons/notif/birthday-customers.svg";

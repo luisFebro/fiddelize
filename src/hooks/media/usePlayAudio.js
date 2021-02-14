@@ -1,8 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import convertBlobToData, {
     convertBlobToDataAsync,
 } from "../../utils/media/convertBlobToData";
-import { getVar, store } from "../../hooks/storage/useVar";
+import { getVar, store } from "../storage/useVar";
 
 // For prerender audio when we need to use the mediaElem name twice, one to prerender the audio and to actually play it.
 // export const store = {
@@ -96,7 +96,7 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
         }
 
         if (typeof onendedCallback === "function") {
-            audio.addEventListener("ended", function () {
+            audio.addEventListener("ended", () => {
                 onendedCallback();
             });
         }

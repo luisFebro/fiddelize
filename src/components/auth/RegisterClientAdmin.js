@@ -1,40 +1,37 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import Title from "../Title";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
-import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
-import getDayMonthBr from "../../utils/dates/getDayMonthBr";
-import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { withRouter } from 'react-router-dom';
-// import ReCaptchaCheckbox from "../ReCaptcha";
-// Redux
-import { useStoreState, useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
-import { registerEmail } from "../../redux/actions/authActions";
-import { sendWelcomeConfirmEmail } from "../../redux/actions/emailActions";
-// Helpers
-import detectErrorField from "../../utils/validation/detectErrorField";
-import handleChange from "../../utils/form/use-state/handleChange";
-import lStorage from "../../utils/storage/lStorage";
-import { handleNextField } from "../../utils/form/kit";
-import setValObjWithStr from "../../utils/objects/setValObjWithStr";
-import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
-import getFilterDate from "../../utils/dates/getFilterDate";
-// Material Ui
+import { useStoreDispatch } from "easy-peasy";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
+import Title from "../Title";
+import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
+import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
+import getDayMonthBr from "../../utils/dates/getDayMonthBr";
+import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
+// import { withRouter } from 'react-router-dom';
+// import ReCaptchaCheckbox from "../ReCaptcha";
+// Redux
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import { registerEmail } from "../../redux/actions/authActions";
+
+import detectErrorField from "../../utils/validation/detectErrorField";
+import handleChange from "../../utils/form/use-state/handleChange";
+import { handleNextField } from "../../utils/form/kit";
+import setValObjWithStr from "../../utils/objects/setValObjWithStr";
+import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
+import getFilterDate from "../../utils/dates/getFilterDate";
+// Material Ui
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import CakeIcon from "@material-ui/icons/Cake";
 import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import ReactGA from "react-ga";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import generateBizCodeName from "../../pages/download-app/instant-app/helpers/generateBizCodeName";
 import useData, { sto } from "../../hooks/useData";
@@ -73,7 +70,7 @@ const getStyles = () => ({
 });
 
 function RegisterClientAdmin({ logo }) {
-    const [switchNumToText, setSwitchNumToText] = useState(false); //n1
+    const [switchNumToText, setSwitchNumToText] = useState(false); // n1
 
     const dateNow = new Date();
     const minAge = 16;
@@ -94,7 +91,7 @@ function RegisterClientAdmin({ logo }) {
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
     });
-    let {
+    const {
         role,
         name,
         clientAdminData,
@@ -241,7 +238,7 @@ function RegisterClientAdmin({ logo }) {
             return;
         }
 
-        const bizName = clientAdminData.bizName;
+        const { bizName } = clientAdminData;
         const cliAdminName = getFirstName(name);
 
         await removeCollection("pre_register");
@@ -261,7 +258,7 @@ function RegisterClientAdmin({ logo }) {
         // lStorage("removeItems", removalOptions);
 
         // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-        //window.location.href = `/baixe-app/admin?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default&isFromSelfServ=1`
+        // window.location.href = `/baixe-app/admin?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default&isFromSelfServ=1`
         clearData();
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
         // const userId = res.data.authUserId;
@@ -292,7 +289,7 @@ function RegisterClientAdmin({ logo }) {
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
-                    error={errorName ? true : false}
+                    error={!!errorName}
                     variant="outlined"
                     margin="dense"
                     name="name"
@@ -323,13 +320,13 @@ function RegisterClientAdmin({ logo }) {
                     }}
                 />
             </div>
-            <div id="field2" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field2" className="d-none animated fadeInUp fast mt-3">
                 Ok, informe seu CPF
                 <TextField
                     required
                     margin="dense"
                     onChange={handleChange(setData, data)}
-                    error={errorCpf ? true : false}
+                    error={!!errorCpf}
                     name="cpf"
                     variant="outlined"
                     autoOk={false}
@@ -365,7 +362,7 @@ function RegisterClientAdmin({ logo }) {
                     }}
                 />
             </div>
-            <div id="field3" className={`d-none animated fadeInUp fast mt-3`}>
+            <div id="field3" className="d-none animated fadeInUp fast mt-3">
                 {name ? (
                     <span>{name.cap()}, quando é o seu aniversário?</span>
                 ) : (
@@ -379,11 +376,11 @@ function RegisterClientAdmin({ logo }) {
                         required
                         inputVariant="outlined"
                         margin="dense"
-                        error={errorBirthday ? true : false}
+                        error={!!errorBirthday}
                         openTo="year"
                         autoOk={false}
-                        disableFuture={true}
-                        allowKeyboardControl={true}
+                        disableFuture
+                        allowKeyboardControl
                         maxDate={new Date(`12-31-${maxYear}`)}
                         minDate={new Date("01-01-1940")}
                         views={["year", "month", "date"]}
@@ -408,7 +405,7 @@ function RegisterClientAdmin({ logo }) {
                     />
                 </MuiPickersUtilsProvider>
             </div>
-            <section id="field4" className={`d-none animated slideInUp fast`}>
+            <section id="field4" className="d-none animated slideInUp fast">
                 <p className="text-left my-2">Para finalizar seu cadastro...</p>
                 <div className="mt-3">
                     Email
@@ -420,7 +417,7 @@ function RegisterClientAdmin({ logo }) {
                         onBlur={(e) =>
                             handleNextField(e, "field4", { event: "onBlur" })
                         }
-                        error={errorEmail ? true : false}
+                        error={!!errorEmail}
                         name="email"
                         variant="outlined"
                         value={email}
@@ -444,7 +441,7 @@ function RegisterClientAdmin({ logo }) {
                         required
                         margin="dense"
                         onChange={handleChange(setData)}
-                        error={errorPhone ? true : false}
+                        error={!!errorPhone}
                         onKeyPress={(e) => {
                             handleNextField(e, "field5", {
                                 callback: () =>
@@ -466,7 +463,7 @@ function RegisterClientAdmin({ logo }) {
                         }}
                         name="phone"
                         value={phone}
-                        helperText={"Digite apenas números com DDD"}
+                        helperText="Digite apenas números com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         type="tel"
                         autoComplete="off"
@@ -493,7 +490,7 @@ function RegisterClientAdmin({ logo }) {
                         fullWidth
                         value={gender}
                         variant="outlined"
-                        error={errorGender ? true : false}
+                        error={!!errorGender}
                         style={{ backgroundColor: "var(--mainWhite)" }}
                     >
                         <MenuItem value={gender}>
@@ -507,8 +504,8 @@ function RegisterClientAdmin({ logo }) {
                                 selecione forma tratamento:
                             </span>
                         </MenuItem>
-                        <MenuItem value={"Ela"}>Ela</MenuItem>
-                        <MenuItem value={"Ele"}>Ele</MenuItem>
+                        <MenuItem value="Ela">Ela</MenuItem>
+                        <MenuItem value="Ele">Ele</MenuItem>
                     </Select>
                 </div>
             </section>

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import NotesSwitcher from "../../../../../../components/buttons/NotesSwitcher";
 import BuyReviewList from "../buy-review-list/BuyReviewList.js";
 

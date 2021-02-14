@@ -1,4 +1,3 @@
-import React from "react";
 import Img from "../../../../components/Img";
 import RegisterPanelBtn from "./register-panel-btn/RegisterPanelBtn";
 
@@ -44,7 +43,7 @@ export default function AsyncShowIllustra({ emptyType }) {
             <Img
                 className="img-fluid"
                 src={src}
-                offline={true}
+                offline
                 alt={alt}
                 title={title}
             />

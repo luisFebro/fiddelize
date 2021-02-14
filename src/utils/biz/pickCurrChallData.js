@@ -35,10 +35,9 @@ export default function pickCurrChallData(rewardList, totalPrizesInd) {
             newObjValues = rewardList[lastValidInd];
         }
         return getValues(newObjValues);
-    } else {
-        const sameValues = rewardList[0];
-        return getValues(sameValues);
     }
+    const sameValues = rewardList[0];
+    return getValues(sameValues);
 }
 
 /*

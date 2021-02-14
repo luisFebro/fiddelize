@@ -1,49 +1,50 @@
-import { reducer } from 'easy-peasy';
-import updateKeyWithId from './helpers/updateKeyWithId'
+import { reducer } from "easy-peasy";
+import updateKeyWithId from "./helpers/updateKeyWithId";
 // You can use only one isntance of object like 'cases' for each object.
 // Check for mispellings in case of one action not being dispatched properly.
 // Reducer Naming Structure: type: MAIN/SUBJECT + PARTICIPLE VERB eg. USER_CLEARED
 
-
 // REDUCERS
 const initialState = {
-    allProductsList: []
+    allProductsList: [],
 };
 
 export const productReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
             // CRUD PATTERN
-            case 'ADD_PRODUCT':
+            case "ADD_PRODUCT":
                 return {
                     ...state,
-                    allProductsList: [action.payload, ...state.allProductsList]
+                    allProductsList: [action.payload, ...state.allProductsList],
                 };
-            case 'GET_ALL_PRODUCTS':
+            case "GET_ALL_PRODUCTS":
                 return {
                     ...state,
-                    allProductsList: action.payload //n1
+                    allProductsList: action.payload, // n1
                 };
-            case 'CHANGE_PRODUCT':
+            case "CHANGE_PRODUCT":
                 updateKeyWithId(state.allProductsList, action.payload);
                 // after updating, return the whole state.
                 return {
-                    ...state
+                    ...state,
                 };
-            case 'DELETE_PRODUCT':
+            case "DELETE_PRODUCT":
                 return {
                     ...state,
-                    allProductsList: state.allProductsList.filter(product => product._id !== action.payload._id)
+                    allProductsList: state.allProductsList.filter(
+                        (product) => product._id !== action.payload._id
+                    ),
                 };
             // END CRUD PATTERN
-            case 'DETAIL_PRODUCT':
+            case "DETAIL_PRODUCT":
                 return {
-                    ...state
+                    ...state,
                 };
             default:
                 return state;
         }
-    })
+    }),
 };
 
 // n1:

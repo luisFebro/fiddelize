@@ -1,11 +1,8 @@
 // WARNING: This will be replaced by useData hook
 import { useStoreState } from "easy-peasy";
-import lStorage, {
-    appSystemColl,
-    userProfileColl,
-} from "../utils/storage/lStorage";
+import lStorage, { appSystemColl } from "../utils/storage/lStorage";
 import getFirstName from "../utils/string/getFirstName";
-import useData from "../hooks/useData";
+import useData from "./useData";
 
 export { getFirstName };
 

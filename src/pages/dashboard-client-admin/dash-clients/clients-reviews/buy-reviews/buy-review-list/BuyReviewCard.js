@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fromNow } from "../../../../../../utils/dates/dateFns";
 
@@ -49,7 +49,7 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
                     {finalGrade}
                 </p>
                 <div className="face shadow-elevation-black">
-                    <FontAwesomeIcon className={color + "-back"} icon={icon} />
+                    <FontAwesomeIcon className={`${color}-back`} icon={icon} />
                 </div>
             </div>
             <p className="m-0 text-small">{updatedDate}</p>

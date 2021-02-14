@@ -1,4 +1,4 @@
-import removeDashes from './string/removeDashes';
+import removeDashes from "./string/removeDashes";
 
 /**
  * get an obj with subdir's names and links to navigate
@@ -6,38 +6,38 @@ import removeDashes from './string/removeDashes';
  * @return {object}
  */
 export default function getBreadCrumbData(currentPath) {
-    if(currentPath === '/') return [];
-    const arraySubdirects = currentPath.split('/');
+    if (currentPath === "/") return [];
+    const arraySubdirects = currentPath.split("/");
 
     // const rootDomain = "http://youvippshop.com"; // this is not necessary.explanation: www = subdomain / youvippshop = domain name /.com = Top-Level Domain
     const mainFileName = arraySubdirects[arraySubdirects.length - 1];
 
     let accumulatedUrls = "";
     const arrayUrls = arraySubdirects.map((subdir, ind) => {
-        if(mainFileName === subdir) return "";
-        ind === 1 ? // n1
-        (accumulatedUrls += `${subdir}`) :
-        (accumulatedUrls += `/${subdir}`)
+        if (mainFileName === subdir) return "";
+        ind === 1 // n1
+            ? (accumulatedUrls += `${subdir}`)
+            : (accumulatedUrls += `/${subdir}`);
 
-        if(subdir === arraySubdirects[0]) {
-            arraySubdirects[0] = 'vitrine';
+        if (subdir === arraySubdirects[0]) {
+            arraySubdirects[0] = "vitrine";
         }
         return accumulatedUrls;
-    })
+    });
 
     const result = [];
     arraySubdirects.forEach((each, ind) => {
-        let obj = {
-            subdir: '',
-            link: ''
-        }
+        const obj = {
+            subdir: "",
+            link: "",
+        };
 
-        if(each.slice(-2) === 'np') each = "Nova Senha"; // n2
+        if (each.slice(-2) === "np") each = "Nova Senha"; // n2
 
         obj.subdir = removeDashes(each);
         obj.link = arrayUrls[ind];
         result.push(obj);
-    })
+    });
 
     return result;
 }

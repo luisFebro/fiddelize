@@ -1,17 +1,17 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
 import axios from "axios";
-import React, { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
+import { useStoreDispatch } from "easy-peasy";
 import { ShowLoadingComp } from "./Comps";
 import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
-import useOfflineListData from "../../hooks/storage/useOfflineListData";
+import useOfflineListData from "../storage/useOfflineListData";
 import getFirstName from "../../utils/string/getFirstName";
-import { useProfile } from "../../hooks/useRoleData";
+import { useProfile, useToken } from "../useRoleData";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import { logout } from "../../redux/actions/authActions";
 import { chooseHeader } from "../../utils/server/getHeaders";
-import { useToken } from "../../hooks/useRoleData";
+
 import Skeleton from "../../components/multimedia/Skeleton";
 import { IS_DEV } from "../../config/clientUrl";
 import extractStrData from "../../utils/string/extractStrData";
@@ -140,9 +140,9 @@ export default function useAPIList({
         const listType = updateOnly
             ? response.data.list
             : [...list, ...response.data.list];
-        const listTotal = response.data.listTotal;
-        const chunksTotal = response.data.chunksTotal;
-        const content = response.data.content; // for all other kind of data
+        const { listTotal } = response.data;
+        const { chunksTotal } = response.data;
+        const { content } = response.data; // for all other kind of data
         IS_DEV && console.log("listType", listType);
 
         setData({
@@ -153,8 +153,8 @@ export default function useAPIList({
             content,
         });
 
-        const hasCards = listTotal > skip ? true : false;
-        const firstCards = 5 >= listTotal;
+        const hasCards = listTotal > skip;
+        const firstCards = listTotal <= 5;
         setHasMore(hasCards && !firstCards);
         setReachedChunksLimit(skip >= chunksTotal);
         setOfflineBtn(false);
@@ -203,7 +203,7 @@ export default function useAPIList({
             method,
             data: body,
             params: { ...params, skip },
-            headers: chooseHeader({ token: token, needAuth }),
+            headers: chooseHeader({ token, needAuth }),
             cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
         };
 
@@ -248,23 +248,21 @@ export default function useAPIList({
     };
 
     const ShowLoading = ({ size = "small" }) => <ShowLoadingComp size={size} />; // n2
-    const ShowLoadingSkeleton = () => {
-        return (
-            <section
-                className={isSmall ? "mx-2" : ""}
-                style={{
-                    maxWidth: 500,
-                    margin: "0 auto",
-                }}
-            >
-                <Skeleton />
-                <Skeleton />
-                <Skeleton />
-                <Skeleton />
-                <Skeleton />
-            </section>
-        );
-    };
+    const ShowLoadingSkeleton = () => (
+        <section
+            className={isSmall ? "mx-2" : ""}
+            style={{
+                maxWidth: 500,
+                margin: "0 auto",
+            }}
+        >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+        </section>
+    );
 
     const ShowError = () => (
         <section>
@@ -303,7 +301,7 @@ export default function useAPIList({
                 />
                 {!isOffline && !offlineBtn && (
                     <ButtonMulti
-                        titleNowrap={true}
+                        titleNowrap
                         title="Acesso offline"
                         onClick={handleOfflineBtn}
                         color="var(--mainWhite)"
@@ -380,7 +378,7 @@ export default function useAPIList({
         isPlural,
         noBlocking,
         readyShowElems,
-        needEmptyIllustra: needEmptyIllustra,
+        needEmptyIllustra,
         emptyType,
         loading,
         error,

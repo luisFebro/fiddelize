@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 const AsyncNewRegister = Load({
     loading: true,
@@ -64,7 +64,7 @@ export default function RegisterPanelBtn({
                     title="CADASTRAR TAREFA"
                     position="relative"
                     onClick={handleFullOpen}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                 />
             )}
@@ -86,7 +86,7 @@ export default function RegisterPanelBtn({
                     title={title}
                     position="relative"
                     onClick={handleFullOpen}
-                    backgroundColor={`var(--themeSDark--default)`}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                 />
             )}

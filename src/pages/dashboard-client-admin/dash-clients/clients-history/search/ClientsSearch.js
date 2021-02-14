@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
 import { useProfile } from "../../../../../hooks/useRoleData";
 import { API } from "../../../../../config/api.js";
@@ -29,7 +29,7 @@ export default function ClientsSearch({ handleSearch }) {
                     setData={setData}
                     placeholder="Ei, procure um cliente"
                     noOptionsText="Nenhum cliente encontrado"
-                    disableOpenOnFocus={true}
+                    disableOpenOnFocus
                     offlineKey="history_adminClients"
                     maxHistory={7}
                 />

@@ -1,4 +1,3 @@
-import React from "react";
 import ButtonMulti from "../components/buttons/material-ui/ButtonMulti";
 import isThisApp from "../utils/window/isThisApp";
 import useBackColor from "../hooks/useBackColor";
@@ -13,7 +12,7 @@ export default function AsyncFixDatePage() {
     return (
         <div className="container-center flex-column">
             <img
-                src={`/img/illustrations/fix-date-page.svg`}
+                src="/img/illustrations/fix-date-page.svg"
                 alt="conserte data ilustração"
                 className="mt-2 image-center svg-elevation"
             />
@@ -29,7 +28,7 @@ export default function AsyncFixDatePage() {
                 <ButtonMulti
                     title="Tentar acesso novamente"
                     onClick={handleRedirect}
-                    backgroundColor={"var(--themeSDark)"}
+                    backgroundColor="var(--themeSDark)"
                 />
             </div>
         </div>

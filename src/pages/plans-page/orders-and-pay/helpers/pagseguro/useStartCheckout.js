@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useAPI, { startCheckout } from "../../../../../hooks/api/useAPI";
 
 // start checkout and get and set session id.

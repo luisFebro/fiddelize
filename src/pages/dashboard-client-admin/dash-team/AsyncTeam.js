@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import "./_AsyncTeam.scss";
 import { useStoreState } from "easy-peasy";

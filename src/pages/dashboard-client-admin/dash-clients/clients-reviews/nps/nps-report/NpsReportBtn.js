@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../../components/code-splitting/LoadableComp";
@@ -29,7 +29,7 @@ export default function NpsReportBtn({ mainData, disabled }) {
                 size="large"
                 title="Relatório"
                 onClick={handleFullOpen}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
                 position="relative"
                 disabled={disabled}

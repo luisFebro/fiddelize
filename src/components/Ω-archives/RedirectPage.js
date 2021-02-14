@@ -1,38 +1,33 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Redirect } from "react-router-dom";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 RedirectPage.propTypes = {
     activated: PropTypes.bool,
     to: PropTypes.string,
     waitSec: PropTypes.number,
-}
+};
 
-export default function RedirectPage({ activated = false, to = "/", waitSec = 0 }) {
+export default function RedirectPage({
+    activated = false,
+    to = "/",
+    waitSec = 0,
+}) {
     const [redirect, setRedirect] = useState(false);
 
     const timeToRedirect = useCallback(() => {
         const milisecs = waitSec * 1000;
         setTimeout(() => setRedirect(true), milisecs);
-    }
-    , [waitSec]);
+    }, [waitSec]);
 
     useEffect(() => {
         timeToRedirect();
-    }, [timeToRedirect])
+    }, [timeToRedirect]);
 
-    const needRedirect = () => (
-        (activated && redirect) &&
-        <Redirect to={to}/>
-    );
+    const needRedirect = () => activated && redirect && <Redirect to={to} />;
 
-    return(
-        <div>
-            {needRedirect()}
-        </div>
-    );
+    return <div>{needRedirect()}</div>;
 }
-
 
 /* COMMENTS
 n1: references:

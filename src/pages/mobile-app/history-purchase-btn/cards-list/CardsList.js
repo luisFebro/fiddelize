@@ -1,9 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
-import Illustration from "../../../../components/Illustration";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 import Card from "@material-ui/core/Card";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import Illustration from "../../../../components/Illustration";
+import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 import PrizeCard from "./PrizeCard";
 import { useClientAdmin, useProfile } from "../../../../hooks/useRoleData";
 import defineCurrChallenge from "../../../../utils/biz/defineCurrChallenge";
@@ -20,7 +19,7 @@ import useElemDetection, {
 } from "../../../../hooks/api/useElemDetection";
 import extractStrData from "../../../../utils/string/extractStrData";
 import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
-import useGetVar, { setVar, removeVar } from "../../../../hooks/storage/useVar";
+import useGetVar, { setVar } from "../../../../hooks/storage/useVar";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -90,11 +89,11 @@ export default function CardsList({ data }) {
         ? "..."
         : totalPurchasePrize;
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
-    const rewardScore = pickedObj.rewardScore;
+    const { rewardScore } = pickedObj;
     maxScore = convertDotToComma(pickedObj.rewardScore);
 
     const isAfterFirstChall = totalPurchasePrize >= 1 || hasPendingChall;
-    const confirmedChallenges = totalPurchasePrize ? totalPurchasePrize : 0;
+    const confirmedChallenges = totalPurchasePrize || 0;
     const challengeN = hasPendingChall
         ? defineCurrChallenge(totalPurchasePrize) + 1
         : defineCurrChallenge(totalPurchasePrize);
@@ -310,7 +309,7 @@ export default function CardsList({ data }) {
             historyData.challengeN - 1
         );
         return (
-            <section className={`desc text-left`}>
+            <section className="desc text-left">
                 <div className={`${!isRemainder ? "inner-container" : ""}`}>
                     {!isRemainder && (
                         <div>
@@ -424,9 +423,7 @@ export default function CardsList({ data }) {
                         style={{
                             backgroundColor:
                                 !isRemainder || embodyRemainderCard(historyData)
-                                    ? "var(--themePDark--" +
-                                      selfThemeBackColor +
-                                      ")"
+                                    ? `var(--themePDark--${selfThemeBackColor})`
                                     : "var(--themePLight--black)",
                         }}
                     >
@@ -467,7 +464,7 @@ export default function CardsList({ data }) {
     const mainData = list.map((historyData, ind) => {
         const isRemainder = historyData.cardType === "remainder";
 
-        const isLastRecordCard = historyData.isLastRecordCard;
+        const { isLastRecordCard } = historyData;
         const props = { key: historyData._id };
 
         return !isOffList &&
@@ -500,7 +497,7 @@ export default function CardsList({ data }) {
 
     return (
         <div>
-            {Boolean(!totalGeneralForIllustra) ? (
+            {!totalGeneralForIllustra ? (
                 illustrationIfEmpty()
             ) : (
                 <Fragment>

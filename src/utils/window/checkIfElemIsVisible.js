@@ -19,7 +19,7 @@ export default function checkIfElemIsVisible(elem, callback, opts = {}) {
 
     const handleScrollEvent = () => {
         window.onscroll = throttle(
-            function () {
+            () => {
                 // LESSON
                 isElemVisible(elem, callback, needPartial);
             },

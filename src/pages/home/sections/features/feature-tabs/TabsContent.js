@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import "./_TabsContent.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
@@ -7,17 +7,11 @@ import Spinner from "../../../../../components/loadingIndicators/Spinner";
 export default function TabsContent({ tabsData, currTab }) {
     return (
         <section className="tab-content" id="templateTabsContent">
-            {tabsData.map((tabData, ind) => {
-                return (
-                    <Fragment key={ind + 1}>
-                        <ShowTab
-                            id={ind + 1}
-                            tabData={tabData}
-                            currTab={currTab}
-                        />
-                    </Fragment>
-                );
-            })}
+            {tabsData.map((tabData, ind) => (
+                <Fragment key={ind + 1}>
+                    <ShowTab id={ind + 1} tabData={tabData} currTab={currTab} />
+                </Fragment>
+            ))}
         </section>
     );
 }
@@ -59,9 +53,7 @@ function ShowTab({ tabData, id, currTab }) {
     const showIconCardsPanelLeft = () => (
         <section className="col-lg-4">
             <ul className="list-unstyled li-space-lg first">
-                {tabData.dataPanel.left.map((dataP) => {
-                    return showCardsPanel(dataP);
-                })}
+                {tabData.dataPanel.left.map((dataP) => showCardsPanel(dataP))}
             </ul>
         </section>
     );
@@ -73,8 +65,8 @@ function ShowTab({ tabData, id, currTab }) {
                 src={play ? tabData.mainGif : tabData.mainImg}
                 alt="aplicativo admin"
             />
-            <span className={"play-button" + dNone} onClick={playGif}>
-                <span></span>
+            <span className={`play-button${dNone}`} onClick={playGif}>
+                <span />
             </span>
             <div className={`loader ${isLoading ? "loading" : ""}`}>
                 <div>
@@ -88,9 +80,9 @@ function ShowTab({ tabData, id, currTab }) {
         <section className="col-lg-4">
             <ul className="list-unstyled li-space-lg">
                 <ul className="list-unstyled li-space-lg">
-                    {tabData.dataPanel.right.map((dataP) => {
-                        return showCardsPanel(dataP);
-                    })}
+                    {tabData.dataPanel.right.map((dataP) =>
+                        showCardsPanel(dataP)
+                    )}
                 </ul>
             </ul>
         </section>

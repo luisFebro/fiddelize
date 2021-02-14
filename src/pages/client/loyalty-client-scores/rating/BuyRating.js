@@ -1,11 +1,11 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
+import TextField from "@material-ui/core/TextField";
 import StarsBuyExperience, {
     getGradeText,
 } from "./stars-buy-experience/StarsBuyExperience";
 import FacesPromotersScore, {
     getScaleText,
 } from "./faces-promoters-score/FacesPromotersScore";
-import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../utils/form/use-state/handleChange";
 import useData from "../../../../hooks/useData";
 import "./_BuyRating.css";
@@ -105,7 +105,7 @@ export default function BuyRating({
                 "clientUserData.review.reportUpdatedAt": new Date(),
             },
         }).catch((err) => {
-            console.log("ERROR: " + err);
+            console.log(`ERROR: ${err}`);
         });
         showSnackbar(dispatch, "Relato Atualizado!", "success");
         setSwitchEdit(false);
@@ -114,7 +114,7 @@ export default function BuyRating({
     return (
         <section
             className="nps-rating--root my-5"
-            style={{ backgroundColor: `var(--themePLight--default)` }}
+            style={{ backgroundColor: "var(--themePLight--default)" }}
         >
             {!onlyReportField && (
                 <Fragment>

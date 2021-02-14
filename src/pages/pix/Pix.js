@@ -1,4 +1,3 @@
-import React from "react";
 import QrCode from "../../components/QrCode";
 import "./_Pix.scss";
 

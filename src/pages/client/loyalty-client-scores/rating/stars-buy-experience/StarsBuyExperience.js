@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from "react";
-import MuSlider from "../../../../../components/sliders/MuSlider";
+import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MuSlider from "../../../../../components/sliders/MuSlider";
 import "./_StarsBuyExperience.css";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../../utils/promises/getAPI";
@@ -77,7 +77,7 @@ export default function StarsBuyExperience({
                 "clientUserData.review.xpUpdatedAt": new Date(),
             },
         }).catch((err) => {
-            console.log("ERROR: " + err);
+            console.log(`ERROR: ${err}`);
         });
         showSnackbar(dispatch, "Avaliação Atualizada!", "success");
     };
@@ -86,13 +86,12 @@ export default function StarsBuyExperience({
         <Fragment>
             <section className="stars-rating--root d-flex justify-content-center">
                 {starPatterns[grade].map((patt, ind) => {
-                    const isCurrStar =
-                        ind + 1 === Math.ceil(grade / 2) ? true : false;
+                    const isCurrStar = ind + 1 === Math.ceil(grade / 2);
 
                     return (
                         <div
                             key={ind}
-                            className={`stars-group shadow-elevation-black`}
+                            className="stars-group shadow-elevation-black"
                         >
                             {starStatus(isCurrStar)[patt]}
                         </div>

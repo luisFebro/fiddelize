@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useStoreDispatch } from "easy-peasy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import ToggleVisibilityPassword from "../../../components/forms/fields/ToggleVisibilityPassword";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { updateUser } from "../../../redux/actions/userActions";
 import { readVerificationPass } from "../../../redux/actions/adminActions";
@@ -59,9 +59,9 @@ export default function ShowPasswordForm({
 
     const { businessId } = useAppSystem();
 
-    const history = dataFromPassPage.history;
-    const clientAdminName = dataFromPassPage.clientAdminName;
-    const bizCodeName = dataFromPassPage.bizCodeName;
+    const { history } = dataFromPassPage;
+    const { clientAdminName } = dataFromPassPage;
+    const { bizCodeName } = dataFromPassPage;
 
     const dispatch = useStoreDispatch();
 
@@ -75,7 +75,7 @@ export default function ShowPasswordForm({
 
                 setValObjWithStr(data, keyName, passValue);
                 const newObj = data;
-                setData(Object.assign({}, data, newObj));
+                setData({ ...data, ...newObj });
             });
         }
     }, [businessId]);
@@ -120,7 +120,7 @@ export default function ShowPasswordForm({
         <div className="container-center" style={{ marginTop: "20px" }}>
             <ButtonMulti
                 title={isFromCliAdminDash ? "Alterar senha" : "Continuar"}
-                needParse={true}
+                needParse
                 onClick={() => {
                     sendDataBackend();
                 }}
@@ -138,9 +138,8 @@ export default function ShowPasswordForm({
     const handleBottomValues = () => {
         if (isFromCliAdminDash) {
             return "";
-        } else {
-            return isSmall ? "-50px" : "-300px";
         }
+        return isSmall ? "-50px" : "-300px";
     };
 
     return (
@@ -153,9 +152,7 @@ export default function ShowPasswordForm({
                 onBlur={() => setError("")}
                 style={styles.form}
             >
-                <div
-                    className={`animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold`}
-                >
+                <div className="animated zoomIn fast position-relative mt-4 margin-auto-90 text-white text-normal font-weight-bold">
                     <p className="text-shadow">
                         {isFromCliAdminDash
                             ? "Altere aqui sua senha sempre que precisar"
@@ -163,7 +160,7 @@ export default function ShowPasswordForm({
                     </p>
                     <div className="position-relative">
                         <ToggleVisibilityPassword
-                            showGeneratePass={true}
+                            showGeneratePass
                             generatePassObj={{
                                 setObj: setData,
                                 obj: data,

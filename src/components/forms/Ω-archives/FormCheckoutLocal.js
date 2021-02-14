@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
-import { showSnackbar } from '../../redux/actions/snackbarActions';
-import { sendBuyRequestEmail } from '../../redux/actions/emailActions';
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Redirect } from "react-router-dom";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+import { sendBuyRequestEmail } from "../../redux/actions/emailActions";
 // helpers
-import clearForm from '../../utils/form/use-state/clearForm';
-import detectErrorField from '../../utils/validation/detectErrorField';
+import clearForm from "../../utils/form/use-state/clearForm";
+import detectErrorField from "../../utils/validation/detectErrorField";
 
 export default function FormCheckoutLocal() {
     const [values, setValues] = useState({
-        name: '',
-        phone: '',
-        address: '',
-        additional: '',
-        itemDescription: '',
-        totalPay: ''
+        name: "",
+        phone: "",
+        address: "",
+        additional: "",
+        itemDescription: "",
+        totalPay: "",
     });
     const [redirect, setRedirect] = useState(false);
-    const { name, phone, address, additional, itemDescription, totalPay } = values;
-     // detecting field errors
+    const {
+        name,
+        phone,
+        address,
+        additional,
+        itemDescription,
+        totalPay,
+    } = values;
+    // detecting field errors
     const [fieldError, setFieldError] = useState(null);
     const errorName = fieldError && fieldError.name;
     const errorPhone = fieldError && fieldError.phone;
@@ -27,7 +34,7 @@ export default function FormCheckoutLocal() {
     // end detecting field errors
 
     // REDUX
-    const { bizInfo } = useStoreState(state => ({
+    const { bizInfo } = useStoreState((state) => ({
         bizInfo: state.adminReducer.cases.businessInfo,
     }));
     const dispatch = useStoreDispatch();
@@ -39,7 +46,7 @@ export default function FormCheckoutLocal() {
         setInfoProducts();
     }, []);
 
-    const handleChange = e => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setValues({ ...values, [name]: value });
     };
@@ -47,9 +54,9 @@ export default function FormCheckoutLocal() {
     const clearData = () => {
         clearForm(setValues, values);
         setFieldError(null);
-    }
+    };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const bodyData = {
             name,
@@ -60,32 +67,31 @@ export default function FormCheckoutLocal() {
             totalPay,
             bizName,
             bizWebsite,
-            bizEmail
+            bizEmail,
         };
 
-        sendBuyRequestEmail(dispatch, bodyData)
-        .then(res => {
-            if(res.status !== 200) {
-                showSnackbar(dispatch, res.data.msg, 'error');
+        sendBuyRequestEmail(dispatch, bodyData).then((res) => {
+            if (res.status !== 200) {
+                showSnackbar(dispatch, res.data.msg, "error");
                 // detect field errors
-                const objFields = ['name', 'phone', 'address', 'additional'];
+                const objFields = ["name", "phone", "address", "additional"];
                 const foundObjError = detectErrorField(res.data.msg, objFields);
                 setFieldError(foundObjError);
                 return;
             }
             clearData();
-            showSnackbar(dispatch, res.data.msg, 'success', 4000);
+            showSnackbar(dispatch, res.data.msg, "success", 4000);
             setTimeout(() => setRedirect(true), 5000);
-        })
+        });
     };
 
     const setInfoProducts = () => {
-        const items = document.getElementById('items').innerHTML;
-        const totalPay = document.getElementById('total').innerHTML;
-        setValues({ itemDescription: items, totalPay: totalPay });
+        const items = document.getElementById("items").innerHTML;
+        const totalPay = document.getElementById("total").innerHTML;
+        setValues({ itemDescription: items, totalPay });
     };
 
-    const needRedirect = redirect => {
+    const needRedirect = (redirect) => {
         if (redirect) {
             return <Redirect to="/" />;
         }
@@ -98,48 +104,71 @@ export default function FormCheckoutLocal() {
             </div>
             <form id="contactForm">
                 <p className="full">
-                    <label
-                        style={{'color': errorName ? 'red' : 'black'}}
-                    >
-                    Seu Nome
+                    <label style={{ color: errorName ? "red" : "black" }}>
+                        Seu Nome
                     </label>
                     <input
-                        style={{'border': `1px solid ${errorName ? 'red' : '#c9e6ff'}`}}
+                        style={{
+                            border: `1px solid ${
+                                errorName ? "red" : "#c9e6ff"
+                            }`,
+                        }}
                         type="text"
                         name="name"
                         onChange={handleChange}
-                        value={name} /> {/*n1*/}
+                        value={name}
+                    />{" "}
+                    {/* n1 */}
                 </p>
                 <p className="full">
-                    <label style={{'color': errorPhone ? 'red' : 'black'}}>Telefone/Whatsapp</label>
-                    <input style={{'border': `1px solid ${errorPhone ? 'red' : '#c9e6ff'}`}} type="tel" name="phone" onChange={handleChange} value={phone} />
+                    <label style={{ color: errorPhone ? "red" : "black" }}>
+                        Telefone/Whatsapp
+                    </label>
+                    <input
+                        style={{
+                            border: `1px solid ${
+                                errorPhone ? "red" : "#c9e6ff"
+                            }`,
+                        }}
+                        type="tel"
+                        name="phone"
+                        onChange={handleChange}
+                        value={phone}
+                    />
                 </p>
                 <p className="full">
-                    <label
-                        style={{'color': errorAddress ? 'red' : 'black'}}
-                    >
+                    <label style={{ color: errorAddress ? "red" : "black" }}>
                         Endereço para Entrega
-                        <br /> (Rua/Avenida, Número, Bairro, Referência){' '}
+                        <br /> (Rua/Avenida, Número, Bairro, Referência){" "}
                     </label>
                     <textarea
-                        style={{'border': `1px solid ${errorAddress ? 'red' : '#c9e6ff'}`}}
+                        style={{
+                            border: `1px solid ${
+                                errorAddress ? "red" : "#c9e6ff"
+                            }`,
+                        }}
                         name="address"
                         rows="8"
                         onChange={handleChange}
                         value={address}
-                    ></textarea>
+                    />
                 </p>
                 <p className="full">
                     <label>Alguma Informação Adicional? (Opcional)</label>
-                    <textarea name="additional" rows="8" onChange={handleChange} value={additional}></textarea>
+                    <textarea
+                        name="additional"
+                        rows="8"
+                        onChange={handleChange}
+                        value={additional}
+                    />
                 </p>
                 <p className="full">
                     <button
                         onClick={handleSubmit}
                         type="submit"
                         style={{
-                            color: 'var(--mainWhite)',
-                            background: 'var(--mainYellow)'
+                            color: "var(--mainWhite)",
+                            background: "var(--mainYellow)",
                         }}
                     >
                         Concluir Compra
@@ -168,7 +197,7 @@ const DivContainer = styled.div`
         background: #92bde7;
         color: #485e74;
         line-height: 1.6em;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         padding: 1em;
     }
 

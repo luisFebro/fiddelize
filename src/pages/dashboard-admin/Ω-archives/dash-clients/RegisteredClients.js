@@ -1,22 +1,22 @@
-import React, { Fragment, useEffect, useState, useContext } from 'react';
+import { Fragment, useEffect, useState } from "react";
+import moment from "moment";
+import parse from "html-react-parser";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
 import SearchFilter from "../../../components/search/SearchFilter";
 import SearchResult from "../../../components/search/SearchResult";
-import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
-import RankingPondium from './RankingPondium';
-import moment from 'moment';
-import parse from 'html-react-parser';
-import { convertDotToComma } from '../../../utils/numbers/convertDotComma';
+import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import RankingPondium from "./RankingPondium";
+import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { readUserList } from '../../../redux/actions/userActions';
-import { showSnackbar } from '../../../redux/actions/snackbarActions';
-import ExpansiblePanel from '../ExpansiblePanel';
-import PanelHiddenContent from './PanelHiddenContent';
+import { readUserList } from "../../../redux/actions/userActions";
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import ExpansiblePanel from "../ExpansiblePanel";
+import PanelHiddenContent from "./PanelHiddenContent";
 // End Redux
-import LoadingThreeDots from '../../../components/loadingIndicators/LoadingThreeDots';
-import LoadMoreItemsButton from '../../../components/buttons/LoadMoreItemsButton';
+import LoadingThreeDots from "../../../components/loadingIndicators/LoadingThreeDots";
+import LoadMoreItemsButton from "../../../components/buttons/LoadMoreItemsButton";
 
-moment.updateLocale('pt-br');
+moment.updateLocale("pt-br");
 
 const initialSkip = 0;
 let searchTerm = "";
@@ -30,7 +30,7 @@ export default function RegisteredClientsList() {
     });
     const { list, totalSize } = clientsData;
 
-    const { isLoading, adminName, run, runName } = useStoreState(state => ({
+    const { isLoading, adminName, run, runName } = useStoreState((state) => ({
         run: state.globalReducer.cases.run,
         runName: state.globalReducer.cases.runName,
         isLoading: state.globalReducer.cases.isLinearPLoading,
@@ -40,39 +40,39 @@ export default function RegisteredClientsList() {
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        if(init || runName === "registered") {
-            readUserList(dispatch, initialSkip, "cliente")
-            .then(res => {
-
-                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+        if (init || runName === "registered") {
+            readUserList(dispatch, initialSkip, "cliente").then((res) => {
+                if (res.status !== 200)
+                    return showSnackbar(dispatch, res.data.msg, "error");
                 setClientsData({
                     ...clientsData,
                     list: res.data.list,
                     chunkSize: res.data.chunkSize,
-                    totalSize: res.data.totalSize
-                })
+                    totalSize: res.data.totalSize,
+                });
                 setInit(false);
-            })
+            });
         }
-    }, [run, runName])
+    }, [run, runName]);
 
     // search
-    const onSearchChange = e => {
+    const onSearchChange = (e) => {
         const querySearched = e.target.value;
         searchTerm = querySearched;
 
-        readUserList(dispatch, initialSkip, "cliente", querySearched)
-        .then(res => {
-
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            setClientsData({
-                ...clientsData,
-                list: res.data.list,
-                chunkSize: res.data.chunkSize,
-                totalSize: res.data.totalSize
-            })
-        })
-    }
+        readUserList(dispatch, initialSkip, "cliente", querySearched).then(
+            (res) => {
+                if (res.status !== 200)
+                    return showSnackbar(dispatch, res.data.msg, "error");
+                setClientsData({
+                    ...clientsData,
+                    list: res.data.list,
+                    chunkSize: res.data.chunkSize,
+                    totalSize: res.data.totalSize,
+                });
+            }
+        );
+    };
 
     const showSearchBar = () => (
         <div className="container-center my-4">
@@ -85,15 +85,19 @@ export default function RegisteredClientsList() {
     // end search
 
     // Accordion Content
-    const actions = list.map(user => {
-        return({
-           _id: user._id,
-           mainHeading: user.name.cap(),
-           secondaryHeading: parse(`> Pontos Acumulados: <br />${typeof user.loyaltyScores === "undefined" ? "Sem pontuação" : convertDotToComma(user.loyaltyScores.currentScore)} <br />> Atualizado ${moment(user.updatedAt).fromNow()}  atrás.`),
-           userData: user,
-           hiddenContent: <PanelHiddenContent data={user} />
-        });
-    })
+    const actions = list.map((user) => ({
+        _id: user._id,
+        mainHeading: user.name.cap(),
+        secondaryHeading: parse(
+            `> Pontos Acumulados: <br />${
+                typeof user.loyaltyScores === "undefined"
+                    ? "Sem pontuação"
+                    : convertDotToComma(user.loyaltyScores.currentScore)
+            } <br />> Atualizado ${moment(user.updatedAt).fromNow()}  atrás.`
+        ),
+        userData: user,
+        hiddenContent: <PanelHiddenContent data={user} />,
+    }));
 
     const showExpansionPanel = () => (
         <ExpansiblePanel
@@ -116,8 +120,7 @@ export default function RegisteredClientsList() {
             }
         />
     );
-    //End Accordion Content
-
+    // End Accordion Content
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton
@@ -134,7 +137,7 @@ export default function RegisteredClientsList() {
             button={{
                 title: "Carregar mais Clientes",
                 loadingIndicator: "Carregando mais agora...",
-                backgroundColor: 'var(--mainPink)',
+                backgroundColor: "var(--mainPink)",
             }}
         />
     );
@@ -150,9 +153,9 @@ export default function RegisteredClientsList() {
                 searchTerm={searchTerm}
                 mainSubject="cliente"
             />
-            {isLoading
-            ? <LoadingThreeDots />
-            : (
+            {isLoading ? (
+                <LoadingThreeDots />
+            ) : (
                 <Fragment>
                     <div className="text-normal">{showExpansionPanel()}</div>
                     {showMoreItemsBtn()}

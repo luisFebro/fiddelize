@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
 import { API } from "../../../../../config/api.js";
+
 export default function SearchCustomer({ setCurr, textColor, bizId }) {
     const [data, setData] = useState({
         selectedValue: "",
@@ -37,7 +38,7 @@ export default function SearchCustomer({ setCurr, textColor, bizId }) {
                     autocompleteUrl={autocompleteUrl}
                     setData={setData}
                     placeholder=""
-                    autoFocus={true}
+                    autoFocus
                     openOnFocus={false}
                     selectOnFocus={false}
                     noOptionsText="Cliente não cadastrado"

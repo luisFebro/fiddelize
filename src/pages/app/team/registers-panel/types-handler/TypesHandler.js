@@ -1,8 +1,8 @@
-import React, { useState, Fragment } from "react";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import QuickRegister from "./QuickRegister";
 import CompleteRegister from "./CompleteRegister";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 
 const getStyles = () => ({
@@ -33,9 +33,7 @@ export default function TypesHandler({ isNewMember = false }) {
     const [open, setOpen] = useState("quick"); // complete or quick
     const [formPayload, setFormPayload] = useState(null);
 
-    const whichAudience = () => {
-        return isNewMember ? "membro" : "cliente";
-    };
+    const whichAudience = () => (isNewMember ? "membro" : "cliente");
 
     const styles = getStyles();
 
@@ -107,7 +105,7 @@ export default function TypesHandler({ isNewMember = false }) {
                         title={thisTitle}
                         position="relative"
                         onClick={() => handleOpen(openThis)}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                     />
                 </section>

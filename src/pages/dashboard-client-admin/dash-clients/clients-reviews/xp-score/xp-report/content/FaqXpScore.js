@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
-import FaqAccordion from "../../../../../../../components/expansion-panels/faq/FaqAccordion";
-import AddCustomersBtn from "../../../../../../../pages/plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
+import { Fragment } from "react";
 import parse from "html-react-parser";
+import FaqAccordion from "../../../../../../../components/expansion-panels/faq/FaqAccordion";
+import AddCustomersBtn from "../../../../../../plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
 import usePro from "../../../../../../../hooks/pro/usePro";
 
 const textQ1 = (
@@ -132,7 +132,7 @@ export default function FaqXpScore() {
             <h2 className="text-subtitle text-center font-weight-bold text-purple">
                 Perguntas Frequentes
             </h2>
-            <FaqAccordion dataArray={dataArray} lazyLoading={true} />
+            <FaqAccordion dataArray={dataArray} lazyLoading />
         </Fragment>
     );
 }

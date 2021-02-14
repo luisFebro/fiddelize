@@ -2,19 +2,17 @@
 // mount for DOM browser rendering
 // TIP: if the component has many functionalities such redux and diffent functions, try to write a new component with only the essencial logic...
 // render
-import React from 'react';
-import { shallow } from 'enzyme';
-import Home from './Home';
+import { shallow } from "enzyme";
+import Home from "./Home";
 
 it("expect to render Home Component", () => {
     expect(shallow(<Home />)).toMatchSnapshot(); // n1
-})
+});
 
 // it("expect to render Home Component", () => {
 //     expect(shallow(<Home />).length).toEqual(1);
 // })
 // console.log(shallow(<Home />));
-
 
 /* COMMENTS
 n1: Snapshot tests are a very useful tool whenever you want to make sure your UI does not change unexpectedly.

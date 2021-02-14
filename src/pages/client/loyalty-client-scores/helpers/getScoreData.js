@@ -4,7 +4,7 @@ import { convertCommaToDot } from "../../../../utils/numbers/convertDotComma";
 export default function getScoreData({ currentScore, paidValue }) {
     if (!paidValue) return {};
 
-    let currScoreBefore = currentScore ? currentScore : 0;
+    let currScoreBefore = currentScore || 0;
     currScoreBefore = getIntOrFloat(currScoreBefore);
 
     let cashCurrScore = convertCommaToDot(paidValue);

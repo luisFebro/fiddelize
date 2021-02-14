@@ -1,4 +1,3 @@
-import React from "react";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 
 export default function NavBtns({
@@ -14,7 +13,7 @@ export default function NavBtns({
                         title="voltar"
                         position="relative"
                         variant="extended"
-                        backgroundColor={`var(--themeSDark--default)`}
+                        backgroundColor="var(--themeSDark--default)"
                         onClick={returnCallback}
                     />
                 </div>
@@ -23,7 +22,7 @@ export default function NavBtns({
                 title={continueTitle}
                 position="relative"
                 variant="extended"
-                backgroundColor={`var(--themeSDark--default)`}
+                backgroundColor="var(--themeSDark--default)"
                 onClick={continueCallback}
                 size="large"
             />

@@ -14,9 +14,8 @@ export const chooseHeader = ({ token, needAuth = true }) => {
             "Content-type": "application/json",
             Authorization: `Bearer ${token}`,
         };
-    } else {
-        return undefined; //{ 'Content-type': 'application/json' }
     }
+    return undefined; // { 'Content-type': 'application/json' }
 };
 
 export const chooseHeaderAsync = async ({ token, needAuth = true }) => {
@@ -33,9 +32,8 @@ export const chooseHeaderAsync = async ({ token, needAuth = true }) => {
             "Content-type": "application/json",
             Authorization: `Bearer ${token}`,
         };
-    } else {
-        return undefined; //{ 'Content-type': 'application/json' }
     }
+    return undefined; // { 'Content-type': 'application/json' }
 };
 
 export const getHeaderToken = (token) => {

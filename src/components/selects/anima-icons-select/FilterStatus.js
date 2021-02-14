@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useDelay from "../../../hooks/useDelay";
 
@@ -20,9 +20,8 @@ export default function FilterStatus({ isReversed, loading, gotData = true }) {
         const handleStatus = () => {
             if (loading) {
                 return isReversed ? "invertendo ordem..." : "organizando...";
-            } else {
-                return "Organizado!";
             }
+            return "Organizado!";
         };
 
         const thisTitle = readyStart ? handleStatus() : "Iniciando...";

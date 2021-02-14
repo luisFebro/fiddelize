@@ -10,9 +10,9 @@ navigator.deviceMemory: Device Memory
  */
 
 if (navigator.connection && navigator.connection.effectiveType) {
-  if (navigator.connection.effectiveType === '4g') {
-    // Load video
-  } else {
-    // Load image
-  }
+    if (navigator.connection.effectiveType === "4g") {
+        // Load video
+    } else {
+        // Load image
+    }
 }

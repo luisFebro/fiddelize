@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function DashSetting() {
     return (
         <section className="text-hero text-center">

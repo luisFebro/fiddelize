@@ -1,5 +1,4 @@
 // reference: https://codepen.io/JakubHonisek/pen/qjpeeO
-import React from "react";
 import "./style.css";
 import PropTypes from "prop-types";
 
@@ -22,9 +21,9 @@ export default function ScrollArrow({ color, margin, id }) {
     return (
         <div id={id} style={styles.margin}>
             <div className="chevron--container">
-                <div className="chevron"></div>
-                <div className="chevron"></div>
-                <div className="chevron"></div>
+                <div className="chevron" />
+                <div className="chevron" />
+                <div className="chevron" />
             </div>
         </div>
     );

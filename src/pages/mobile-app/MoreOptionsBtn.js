@@ -1,26 +1,22 @@
-import React, { useState, Fragment, useEffect } from "react";
-import { Link, withRouter } from "react-router-dom";
-import SpeedDialButton from "../../components/buttons/SpeedDialButton";
+import { useState, Fragment, useEffect } from "react";
+import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
-import { useClientUser, useProfile } from "../../hooks/useRoleData";
-import { CLIENT_URL } from "../../config/clientUrl";
-import WhatsappBtn from "../../components/buttons/WhatsappBtn";
-import { readUser } from "../../redux/actions/userActions";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
-// SpeedDial and Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import StarIcon from "@material-ui/icons/Star";
 import ChatIcon from "@material-ui/icons/Chat";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import lStorage, {
-    tooltip1,
-    yellowBtn2,
-    needSetTrueLocalKey,
-} from "../../utils/storage/lStorage";
-import ModalFullContent from "../../components/modals/ModalFullContent";
 import Fab from "@material-ui/core/Fab";
+import SpeedDialButton from "../../components/buttons/SpeedDialButton";
+import { useClientUser, useProfile } from "../../hooks/useRoleData";
+import { CLIENT_URL } from "../../config/clientUrl";
+import WhatsappBtn from "../../components/buttons/WhatsappBtn";
+import { readUser } from "../../redux/actions/userActions";
+import { showSnackbar } from "../../redux/actions/snackbarActions";
+// SpeedDial and Icons
+import lStorage, { tooltip1, yellowBtn2 } from "../../utils/storage/lStorage";
+import ModalFullContent from "../../components/modals/ModalFullContent";
 import getFirstName from "../../utils/string/getFirstName";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import { disconnect } from "../../hooks/useAuthUser";
@@ -58,7 +54,7 @@ const getStyles = () => ({
     fabTooltip: {
         backgroundColor: "var(--lightYellow)",
         color: "var(--mainDark)",
-        filter: ``, // drop-shadow(0 0 8px #ffc)
+        filter: "", // drop-shadow(0 0 8px #ffc)
     },
 });
 
@@ -82,7 +78,7 @@ function MoreOptionsBtn({
     const { _id } = useProfile();
     const dispatch = useStoreDispatch();
 
-    let {
+    const {
         currScore,
         purchaseHistory,
         totalGeneralScore,
@@ -96,8 +92,8 @@ function MoreOptionsBtn({
             select: "clientUserData.totalPurchasePrize",
             role: "cliente",
         }).then((res) => {
-            //if user does not have the same quantity of prize in the db and thus not updateed
-            //then, block access to loyalty score page to avoid registration of accumulative score from the last challenge.
+            // if user does not have the same quantity of prize in the db and thus not updateed
+            // then, block access to loyalty score page to avoid registration of accumulative score from the last challenge.
             if (res.status !== 200)
                 return console.log("smt wrong with readUser from morebtn");
             const totaldBPrizes =
@@ -135,11 +131,11 @@ function MoreOptionsBtn({
 
     const speedDial = {
         actions: [
-            //the order rendered is inverse from the bottom to top
+            // the order rendered is inverse from the bottom to top
             {
                 icon: <ExitToAppIcon style={styles.muStyle} />,
                 name: "Sair ►",
-                backColor: "var(--themeSDark--" + colorS + ")",
+                backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     if (needAppForPreview) return;
                     (async () => {
@@ -155,7 +151,7 @@ function MoreOptionsBtn({
                     />
                 ),
                 name: "Trocar App ►",
-                backColor: "var(--themeSDark--" + colorS + ")",
+                backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     !needAppForPreview && history.push("/painel-de-apps");
                 },
@@ -163,7 +159,7 @@ function MoreOptionsBtn({
             {
                 icon: <ChatIcon style={styles.muStyle} />,
                 name: "Fale Conosco ►", // Insert wahtsapp button and redirect user to it.
-                backColor: "var(--themeSDark--" + colorS + ")",
+                backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     !needAppForPreview && setContactModal(true);
                     playBeep();
@@ -172,7 +168,7 @@ function MoreOptionsBtn({
             {
                 icon: <StarIcon style={styles.muStyle} />,
                 name: "Sua Avaliação ►",
-                backColor: "var(--themeSDark--" + colorS + ")",
+                backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     !needAppForPreview && setReviewModal(true);
                     playBeep();
@@ -181,7 +177,7 @@ function MoreOptionsBtn({
             {
                 icon: <LocalMallIcon style={styles.muStyle} />,
                 name: "Seu Histórico ►",
-                backColor: "var(--themeSDark--" + colorS + ")",
+                backColor: `var(--themeSDark--${colorS})`,
                 onClick: () => {
                     !needAppForPreview && setPurchaseModal(true);
                     playBeep();
@@ -249,13 +245,13 @@ function MoreOptionsBtn({
             <SpeedDialButton
                 actions={speedDial.actions}
                 onClick={playBeep}
-                tooltipOpen={true}
-                backColor={"var(--themeSDark--" + colorS + ")"}
+                tooltipOpen
+                backColor={`var(--themeSDark--${colorS})`}
                 size="large"
                 FabProps={{
-                    backgroundColor: "var(--themeSDark--" + colorS + ")",
+                    backgroundColor: `var(--themeSDark--${colorS})`,
                     size: "medium",
-                    filter: `drop-shadow(.5px .5px 3px black)`, // still not working
+                    filter: "drop-shadow(.5px .5px 3px black)", // still not working
                 }}
                 root={{
                     bottom: "30px",
@@ -299,7 +295,7 @@ const ContactComp = () => {
     );
 };
 
-/*ARCHIVES
+/* ARCHIVES
 <Tooltip
     needArrow
     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}

@@ -1,7 +1,6 @@
-import React from "react";
 import "./_CtaSection.scss";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { withRouter } from "react-router-dom";
+import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 
 export default withRouter(CtaSection);
 function CtaSection({ history }) {

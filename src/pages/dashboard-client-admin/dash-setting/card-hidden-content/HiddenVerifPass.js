@@ -1,7 +1,6 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import ShowPasswordForm from "../../pass-page/ShowPasswordForm";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import { Link } from "react-router-dom";
 // import DateWithIcon from '../../../../components/date-time/DateWithIcon';
 
 // TEST
@@ -18,7 +17,7 @@ export default function HiddenVerifPass({ userData }) {
                     size="large"
                     title="Mudar senha de acesso"
                     onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                     position="relative"
                 />
@@ -29,7 +28,7 @@ export default function HiddenVerifPass({ userData }) {
     return (
         <div className="hidden-content--root text-normal">
             {showChangePassBtn()}
-            <ShowPasswordForm isFromCliAdminDash={true} />
+            <ShowPasswordForm isFromCliAdminDash />
         </div>
     );
 }

@@ -1,10 +1,9 @@
-import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
 import moneyMaskBr from "../../utils/validation/masks/moneyMaskBr";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -201,7 +200,7 @@ export default function MoneyKeyboard({
                         />
                         <span style={{ fontSize: ".9em" }}>Confirmar</span>
                     </div>
-                    <div className="empty"></div>
+                    <div className="empty" />
                     <div
                         onClick={() => {
                             getValue("0");
@@ -211,9 +210,9 @@ export default function MoneyKeyboard({
                     >
                         0
                     </div>
-                    <div className="empty"></div>
+                    <div className="empty" />
                 </section>
-                <audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
+                <audio id="keypadBeep" src="/sounds/tock.mp3" />
             </GridContainer>
         </section>
     );
@@ -238,7 +237,7 @@ const GridContainer = styled.div`
 
     & > section div {
         background: ${({ myGradient }) =>
-            myGradient || `linear-gradient(to right, #16222a, #3a6073)`};
+            myGradient || "linear-gradient(to right, #16222a, #3a6073)"};
         color: white;
         text-align: center;
         text-shadow: 1px 1px 3px black;

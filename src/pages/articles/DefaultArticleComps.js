@@ -1,4 +1,3 @@
-import React from "react";
 import Img from "../../components/Img";
 import useElemShowOnScroll from "../../hooks/scroll/useElemShowOnScroll";
 
@@ -28,30 +27,28 @@ export const ShowPicture = ({
     timeout,
     main = false,
     imgContainerClass, // for reading intersection observer
-}) => {
+}) => (
     // images loaded with intersection observer...
-    return (
-        <div className={`position-relative ${main ? "mt-1 mb-5" : "my-3"}`}>
-            <Img
-                dataSrc={dataSrc}
-                timeout={timeout}
-                src={src}
-                mode="skeleton"
-                className="img-center shadow-elevation"
-                imgContainerClass={imgContainerClass}
-                alt="foto principal"
-            />
-            {reference && (
-                <p className="mt-2 text-purple text-right text-small font-weight-bold">
-                    fonte: {reference}
-                </p>
-            )}
+    <div className={`position-relative ${main ? "mt-1 mb-5" : "my-3"}`}>
+        <Img
+            dataSrc={dataSrc}
+            timeout={timeout}
+            src={src}
+            mode="skeleton"
+            className="img-center shadow-elevation"
+            imgContainerClass={imgContainerClass}
+            alt="foto principal"
+        />
+        {reference && (
+            <p className="mt-2 text-purple text-right text-small font-weight-bold">
+                fonte: {reference}
+            </p>
+        )}
 
-            {subtitle && (
-                <p className="mt-2 text-purple text-center text-small font-weight-bold">
-                    {subtitle}
-                </p>
-            )}
-        </div>
-    );
-};
+        {subtitle && (
+            <p className="mt-2 text-purple text-center text-small font-weight-bold">
+                {subtitle}
+            </p>
+        )}
+    </div>
+);

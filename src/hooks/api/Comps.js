@@ -1,24 +1,19 @@
-import React from 'react';
-import Spinner from '../../components/loadingIndicators/Spinner';
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from "@material-ui/lab/Skeleton";
+import Spinner from "../../components/loadingIndicators/Spinner";
 
 export const ShowLoadingComp = ({ size = "small" }) => (
-    <Spinner
-        marginY={100}
-        size={size}
-    />
+    <Spinner marginY={100} size={size} />
 );
-
 
 const taskSkeleton = {
     rect: {
-        backgroundColor: 'grey',
+        backgroundColor: "grey",
     },
     text: {
-        backgroundColor: 'grey',
+        backgroundColor: "grey",
         marginLeft: 150,
-    }
-}
+    },
+};
 export const ShowTaskSkeleton = () => (
     <section className="my-2">
         <Skeleton

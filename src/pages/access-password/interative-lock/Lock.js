@@ -1,5 +1,5 @@
 // reference: https://codepen.io/RCMiron/pen/bYPqPp
-import React, { Fragment, useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import "./_Lock.scss";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -109,7 +109,7 @@ function ShowSvgLock({ backColor }) {
 
     return (
         <svg
-            viewBox="0 0 100 100" //n1 viewBox
+            viewBox="0 0 100 100" // n1 viewBox
             className="shake-it"
         >
             {showLockTop()}

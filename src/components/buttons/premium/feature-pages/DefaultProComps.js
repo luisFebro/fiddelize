@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Img from "../../../Img";
 import useElemShowOnScroll from "../../../../hooks/scroll/useElemShowOnScroll";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export { useElemShowOnScroll };
 
@@ -34,7 +34,7 @@ export const ShowTitle = ({
 
     return (
         <div className="mt-2">
-            <div style={styles.clipPathBack}></div>
+            <div style={styles.clipPathBack} />
             <h1 className="text-shadow position-relative text-white text-subtitle text-purple text-center font-weight-bold">
                 Fiddelize{" "}
                 {offplan ? (

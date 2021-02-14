@@ -1,21 +1,18 @@
-import React, { Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { Fragment } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 
 // Customized Data
-import { useStoreDispatch } from 'easy-peasy';
-import ButtonFab from '../../../../components/buttons/material-ui/ButtonFab';
-import { showModalConfYesNo } from '../../../../redux/actions/modalActions';
-import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import { removeBooking } from '../../../../redux/actions/staffBookingActions';
-import ModalBtn from '../staff-modal-form/ModalBtn';
-import { default as ModalYesNoBtn }  from './modal-conf-yes-no/ModalBtn';
+import { useStoreDispatch } from "easy-peasy";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
+import ModalBtn from "../staff-modal-form/ModalBtn";
+import { default as ModalYesNoBtn } from "./modal-conf-yes-no/ModalBtn";
 // End Customized Data
 
 ExpansiblePanel.propTypes = {
@@ -24,7 +21,7 @@ ExpansiblePanel.propTypes = {
             id: PropTypes.string,
             mainHeading: PropTypes.string,
             secondaryHeading: PropTypes.string,
-            hiddenContent: PropTypes.any
+            hiddenContent: PropTypes.any,
         })
     ).isRequired,
     ToggleButton: PropTypes.element,
@@ -33,27 +30,27 @@ ExpansiblePanel.propTypes = {
     statusAfterClick: PropTypes.bool,
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        width: window.Helper.isSmallScreen() ? '100%' : '95%',
-        margin: 'auto',
+        width: window.Helper.isSmallScreen() ? "100%" : "95%",
+        margin: "auto",
     },
     heading: {
-        fontSize: '1em',
-        fontWeight: 'bold',
-        flexBasis: '33.33%',
+        fontSize: "1em",
+        fontWeight: "bold",
+        flexBasis: "33.33%",
         flexShrink: 0,
-        textShadow: '1px 1px 3px black'
+        textShadow: "1px 1px 3px black",
     },
     secondaryHeading: {
-        paddingLeft: '10px',
+        paddingLeft: "10px",
         fontSize: theme.typography.pxToRem(15),
-        textShadow: '1px 1px 3px black'
-    }
+        textShadow: "1px 1px 3px black",
+    },
 }));
 
-const getStatusColor = status => {
-    switch(status) {
+const getStatusColor = (status) => {
+    switch (status) {
         case "cancelado":
             return "var(--mainRed)";
         case "pendente":
@@ -65,7 +62,7 @@ const getStatusColor = status => {
         default:
             return "grey";
     }
-}
+};
 
 export default function ExpansiblePanel({
     actions,
@@ -74,8 +71,8 @@ export default function ExpansiblePanel({
     color,
     allUsers,
     setRun,
-    run }) {
-
+    run,
+}) {
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
@@ -86,26 +83,25 @@ export default function ExpansiblePanel({
 
     const styles = {
         Accordion: {
-            color: color,
-            backgroundColor: backgroundColor, // default is paper color
-            margin: '40px 0',
+            color,
+            backgroundColor, // default is paper color
+            margin: "40px 0",
         },
         button: {
-            transform: 'translate(-50%, -50%)'
+            transform: "translate(-50%, -50%)",
         },
         iconContainer: {
-            position: 'absolute',
+            position: "absolute",
             top: -10,
-            left: 10
+            left: 10,
         },
         heading: {
-            display: 'flex',
-            alignItems: 'center',
-        }
+            display: "flex",
+            alignItems: "center",
+        },
+    };
 
-    }
-
-    const showStatus = panel => (
+    const showStatus = (panel) => (
         <div className="animated zoomIn delay-1s">
             <div className="disabledLink">
                 <ButtonFab
@@ -114,24 +110,24 @@ export default function ExpansiblePanel({
                     title={panel.staffBooking.status.substring(1)}
                     variant="extended"
                     style={styles.button}
-                    color={panel.staffBooking.status === "3pendente" ? "black" : "white"}
-                    backgroundColor={getStatusColor(panel.staffBooking.status.substring(1))}
+                    color={
+                        panel.staffBooking.status === "3pendente"
+                            ? "black"
+                            : "white"
+                    }
+                    backgroundColor={getStatusColor(
+                        panel.staffBooking.status.substring(1)
+                    )}
                 />
             </div>
         </div>
     );
 
-    const showPanel = panel => (
+    const showPanel = (panel) => (
         <AccordionSummary
             expandIcon={
-                <div
-                    style={styles.iconContainer}
-                    className="enabledLink"
-                >
-                    {ToggleButton
-                    ? ToggleButton
-                    : <ExpandMoreIcon />
-                    }
+                <div style={styles.iconContainer} className="enabledLink">
+                    {ToggleButton || <ExpandMoreIcon />}
                 </div>
             }
             aria-controls={`panel${panel._id}bh-content`}
@@ -152,25 +148,23 @@ export default function ExpansiblePanel({
         </AccordionSummary>
     );
 
-    const showHiddenPanel = panel => (
-        <AccordionDetails>
-            {panel.hiddenContent}
-        </AccordionDetails>
+    const showHiddenPanel = (panel) => (
+        <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
     );
 
-    const showConfigBtns = panel => (
+    const showConfigBtns = (panel) => (
         <Fragment>
             <ModalYesNoBtn
                 button={{
                     iconFontAwesome: "fas fa-trash-alt",
                     backgroundColor: "purple",
-                    iconMarginLeft: '0px',
+                    iconMarginLeft: "0px",
                     size: "small",
                     top: -33,
-                    left: 185
+                    left: 185,
                 }}
                 modalData={{
-                    title: `Confirmação de exclusão de agendamento`,
+                    title: "Confirmação de exclusão de agendamento",
                     subTitle: `Excluir o agendamento do cliente:<br /><strong>${panel.staffBooking.clientName.cap()}</strong> ?`,
                     staffId: panel.staffBooking.staffId,
                     itemId: panel.staffBooking._id,
@@ -182,14 +176,14 @@ export default function ExpansiblePanel({
                 button={{
                     iconFontAwesome: "fas fa-pencil-alt",
                     backgroundColor: "var(--mainPink)",
-                    iconMarginLeft:  '0px',
+                    iconMarginLeft: "0px",
                     fontSize: ".8em",
                     size: "small",
                     top: -33,
                     left: 230,
                 }}
                 modal={{
-                    title: `Agendamento de Clientes<br />(ATUALIZAÇÃO ADMIN)`,
+                    title: "Agendamento de Clientes<br />(ATUALIZAÇÃO ADMIN)",
                     txtBtn: "Atualizar",
                     iconBtn: "fas fa-exchange-alt",
                     modalData: panel,
@@ -202,15 +196,16 @@ export default function ExpansiblePanel({
 
     return (
         <div className={classes.root}>
-            {actions.map(panel => (
-                <div
-                    key={panel._id}
-                    className="position-relative"
-                >
+            {actions.map((panel) => (
+                <div key={panel._id} className="position-relative">
                     <Accordion
                         style={styles.Accordion}
                         className="disabledLink"
-                        disabled={["2cancelado", "1feito"].includes(panel.staffBooking.status) ? true : false}
+                        disabled={
+                            !!["2cancelado", "1feito"].includes(
+                                panel.staffBooking.status
+                            )
+                        }
                     >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}

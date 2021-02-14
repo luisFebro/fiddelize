@@ -1,12 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
-import { fromNow, calendar } from '../../utils/dates/dateFns';
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import { fromNow, calendar } from "../../utils/dates/dateFns";
 
 DateWithIcon.propTypes = {
     marginTop: PropTypes.number,
-}
+};
 
 // FOR TESTING DIFFERENT DATES
 // let date = new Date();
@@ -16,7 +15,7 @@ DateWithIcon.propTypes = {
 
 const Div = styled.div`
     .last-update {
-        margin-top: ${({ cssProps }) => `${cssProps.marginTop}px;` || "70px;" }
+        margin-top: ${({ cssProps }) => `${cssProps.marginTop}px;` || "70px;"}
         display: flex;
         justify-content: flex-end;
         padding: 10px;
@@ -41,22 +40,30 @@ export default function DateWithIcon({
     date,
     msgIfNotValidDate = "Sem atualização.",
     marginTop,
-    needTxtShadow = false, }) {
+    needTxtShadow = false,
+}) {
     return (
         <Div cssProps={{ marginTop }}>
             <section className="last-update" style={style}>
                 <div className="icon">
-                    <FontAwesomeIcon icon="clock" style={{filter: needTxtShadow && 'drop-shadow(.5px .5px 1.5px black)'}} />
+                    <FontAwesomeIcon
+                        icon="clock"
+                        style={{
+                            filter:
+                                needTxtShadow &&
+                                "drop-shadow(.5px .5px 1.5px black)",
+                        }}
+                    />
                 </div>
                 <p className={`text ${needTxtShadow && "text-shadow"}`}>
                     • Última atualização:
                     <br />
-                    {date
-                    ? (
+                    {date ? (
                         <span className="text-small font-weight-bold">
                             {calendar(date)}
                             <br />
-                            {" - "}{fromNow(date)}
+                            {" - "}
+                            {fromNow(date)}
                         </span>
                     ) : (
                         <span className="text-small font-weight-bold">

@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import NotifList from "./NotifList";
-import RadiusBtn from "../../components/buttons/RadiusBtn";
+import RadiusBtn from "../buttons/RadiusBtn";
 import useCountNotif from "../../hooks/notification/useCountNotif";
 import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
@@ -16,7 +16,7 @@ export default function Notification({
     totalNotif,
 }) {
     const [loading, setLoading] = useState(false);
-    const [btnTitle, setBtnTitle] = useState(`Marcar todas ✔️`);
+    const [btnTitle, setBtnTitle] = useState("Marcar todas ✔️");
     const [btnDisabled, setBtnDisabled] = useState(false);
     // const [runList, setRunList] = useState(false);
 
@@ -56,55 +56,49 @@ export default function Notification({
     const plural = totalNotifications <= 1 ? "" : "s";
 
     const condMarkAll = !isCliMember && totalNotifications >= 2;
-    const showNotifStatus = () => {
-        return (
-            <section>
-                <div className="text-subtitle text-purple ml-3">
-                    <p className="text-normal">
-                        <strong>Status: </strong>
-                        <br />
-                        {totalNotifications === null && (
-                            <strong className="text-normal">
-                                analisando...
-                            </strong>
-                        )}
-
-                        {totalNotifications === 0 && (
-                            <Fragment>
-                                {isCliMember ? null : (
-                                    <strong className="text-normal">
-                                        ✔️ Todas novidades vistas.
-                                    </strong>
-                                )}
-                            </Fragment>
-                        )}
-
-                        {totalNotifications > 0 && (
-                            <Fragment>
-                                <strong className="text-subtitle">
-                                    • {totalNotifications}
-                                </strong>{" "}
-                                novidade{plural} não vista{plural}.
-                            </Fragment>
-                        )}
-                    </p>
-                </div>
-                <div className="container-center my-3">
-                    {condMarkAll && (
-                        <RadiusBtn
-                            size="small"
-                            disabled={btnDisabled}
-                            title={loading ? "carregando..." : btnTitle}
-                            backgroundColor={
-                                "var(--themeSDark--" + "black" + ")"
-                            }
-                            onClick={handleMarkAllClicked}
-                        />
+    const showNotifStatus = () => (
+        <section>
+            <div className="text-subtitle text-purple ml-3">
+                <p className="text-normal">
+                    <strong>Status: </strong>
+                    <br />
+                    {totalNotifications === null && (
+                        <strong className="text-normal">analisando...</strong>
                     )}
-                </div>
-            </section>
-        );
-    };
+
+                    {totalNotifications === 0 && (
+                        <Fragment>
+                            {isCliMember ? null : (
+                                <strong className="text-normal">
+                                    ✔️ Todas novidades vistas.
+                                </strong>
+                            )}
+                        </Fragment>
+                    )}
+
+                    {totalNotifications > 0 && (
+                        <Fragment>
+                            <strong className="text-subtitle">
+                                • {totalNotifications}
+                            </strong>{" "}
+                            novidade{plural} não vista{plural}.
+                        </Fragment>
+                    )}
+                </p>
+            </div>
+            <div className="container-center my-3">
+                {condMarkAll && (
+                    <RadiusBtn
+                        size="small"
+                        disabled={btnDisabled}
+                        title={loading ? "carregando..." : btnTitle}
+                        backgroundColor={"var(--themeSDark--" + "black" + ")"}
+                        onClick={handleMarkAllClicked}
+                    />
+                )}
+            </div>
+        </section>
+    );
 
     return (
         <Fragment>

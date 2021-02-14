@@ -2,11 +2,13 @@ import React, { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import { useAuthUser } from "../../../hooks/useAuthUser";
-import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
+import selectTxtStyle, {
+    currTxtColor,
+} from "../../../utils/biz/selectTxtStyle";
 import "../ellipse.scss";
 import AsyncBellNotifBtn from "../../../components/notification/AsyncBellNotifBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { currTxtColor } from "../../../utils/biz/selectTxtStyle";
+
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useElemShowOnScroll from "../../../hooks/scroll/useElemShowOnScroll";
 import CompLoader from "../../../components/CompLoader";
@@ -51,9 +53,7 @@ const getAutoSMSObj = ({
     currChall,
     bizWhatsapp,
 }) => ({
-    trigger: needMissingMsg
-        ? needMissingMsg
-        : Boolean(userBeatChallenge && lastPrizeId),
+    trigger: needMissingMsg || Boolean(userBeatChallenge && lastPrizeId),
     serviceType: needMissingMsg ? "missingPurchase" : "finishedChall",
     userId: businessId,
     smsId: needMissingMsg ? now.getMonth() : lastPrizeId,
@@ -95,7 +95,7 @@ export default function ClientUserAppContent({
     if (!colorS) {
         colorS = "default";
     }
-    let { role, phone } = useProfile();
+    const { role, phone } = useProfile();
     let [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
     firstName = clientNameTest || firstName;
     const userIdLoading = Boolean(_id === "...");
@@ -106,7 +106,7 @@ export default function ClientUserAppContent({
         trigger: !userIdLoading,
     });
 
-    let {
+    const {
         currScore,
         lastScore,
         totalPurchasePrize,
@@ -127,7 +127,7 @@ export default function ClientUserAppContent({
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
-    const mainReward = pickedObj.mainReward;
+    const { mainReward } = pickedObj;
     selfMilestoneIcon = pickedObj.selfMilestoneIcon;
     if (rewardScoreTest) {
         maxScore = Number(rewardScoreTest);
@@ -270,19 +270,17 @@ export default function ClientUserAppContent({
                 <div
                     className="ellipse"
                     style={{
-                        backgroundColor: "var(--themePLight--" + colorP + ")",
+                        backgroundColor: `var(--themePLight--${colorP})`,
                         width: needAppForPreview && "21.8em",
                     }}
-                ></div>
+                />
                 <div className={`${needAppForPreview && "disabledLink"}`}>
                     <AsyncBellNotifBtn
                         position="absolute"
-                        forceCliUser={true}
+                        forceCliUser
                         top={21}
                         left={needAppForPreview ? 258 : 270}
-                        notifBorderColor={
-                            "var(--themeBackground--" + backColorSelect + ")"
-                        }
+                        notifBorderColor={`var(--themeBackground--${backColorSelect})`}
                         notifBackColor={
                             backColorSelect === "red"
                                 ? "var(--themePLight--black)"
@@ -413,7 +411,7 @@ export default function ClientUserAppContent({
                     fontSize=".9em"
                     size="large"
                     color={thisCurrTxtColor}
-                    backgroundColor={"var(--themeSDark--" + colorS + ")"}
+                    backgroundColor={`var(--themeSDark--${colorS})`}
                     shadowColor={
                         selfThemeBackColor === "black" ? "white" : "black"
                     }
@@ -436,7 +434,7 @@ export default function ClientUserAppContent({
                         }
                     >
                         <div
-                            className={`no-text-decoration text-center pressed-to-left`}
+                            className="no-text-decoration text-center pressed-to-left"
                             onClick={playBeep}
                             style={styles.rulesBtn}
                         >
@@ -465,7 +463,7 @@ export default function ClientUserAppContent({
 
     const backBtnForCliAdmin = () => (
         <BtnBackTestMode
-            isActive={needAppForCliAdmin ? true : false}
+            isActive={!!needAppForCliAdmin}
             btnBackColor={backColorSelect}
         />
     );
@@ -484,7 +482,7 @@ export default function ClientUserAppContent({
             {showRules()}
             {showMoreOptionsBtn()}
             {backBtnForCliAdmin()}
-            <audio id="appBtn" src="/sounds/app-btn-sound.wav"></audio>
+            <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
         </div>
     );
 }

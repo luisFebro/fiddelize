@@ -1,7 +1,6 @@
-import React from "react";
+import { useStoreDispatch } from "easy-peasy";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 import copyText from "../../../../utils/document/copyText";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 
 export default function ShareLink() {

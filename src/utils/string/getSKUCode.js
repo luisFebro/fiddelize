@@ -19,9 +19,7 @@ const getPeriod = (per) => {
     if (per === "monthly") return "M";
 };
 
-const getQuantity = (total) => {
-    return `Q${total}`;
-};
+const getQuantity = (total) => `Q${total}`;
 
 const getServiceSKU = (options = {}) => {
     const { plan = "gold", total = 0, period } = options;
@@ -37,9 +35,9 @@ const getServiceSKU = (options = {}) => {
 
 const getProductSKU = (productName) => {
     productName = removeDiacritics(productName);
-    let abbrev = productName.split(" ").map((each) => {
-        return each.substr(0, 1).toUpperCase();
-    });
+    const abbrev = productName
+        .split(" ")
+        .map((each) => each.substr(0, 1).toUpperCase());
 
     return abbrev.join("");
 };

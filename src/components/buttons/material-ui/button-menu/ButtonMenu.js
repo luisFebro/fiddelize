@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import "./_ButtonMenu.scss";
 import handleIcons from "./helpers/handleIcons";
@@ -11,7 +11,7 @@ export default function ButtonMenu({
 }) {
     const mainIcons = ["hamburger", "moreVert"];
     if (!mainIcons.includes(mainIcon))
-        throw new Error("mainIcon should be: " + mainIcons);
+        throw new Error(`mainIcon should be: ${mainIcons}`);
 
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);

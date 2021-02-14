@@ -1,7 +1,5 @@
 import axios from "axios";
-import { showSnackbar } from "./snackbarActions";
-import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
-import { setLoadingProgress } from "./globalActions";
+import { getHeaderJson } from "../../utils/server/getHeaders";
 import { API } from "../../config/api"; // ${API}
 // import { tokenConfig } from './authActions';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
@@ -58,11 +56,11 @@ export const readCentralAdmin = async (dispatch) => {
 export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
     // selectKeys: is a string with only the keys requires to return.
     // noResponse: update but do not return any data as response.
-    let { selectKeys, noResponse, thisRole } = opts;
+    const { selectKeys, noResponse, thisRole } = opts;
     const selectQuery = selectKeys ? `selectKeys=${selectKeys}` : "";
     const noResponseQuery = !noResponse
-        ? `&noResponse=true`
-        : `&noResponse=false`;
+        ? "&noResponse=true"
+        : "&noResponse=false";
     const thisRoleQuery = thisRole ? `&thisRole=${thisRole}` : "";
 
     try {
@@ -112,12 +110,12 @@ export const readPurchaseHistory = async (
 
     if (!trigger) return;
 
-    let noResponseQuery = "",
-        skipQuery = "",
-        limitQuery = "",
-        scoreQuery = "",
-        prizeDescQuery = "",
-        trophyIconQuery = "";
+    let noResponseQuery = "";
+    let skipQuery = "";
+    let limitQuery = "";
+    let scoreQuery = "";
+    let prizeDescQuery = "";
+    let trophyIconQuery = "";
     if (skip || skip === 0) skipQuery = `&skip=${skip}`;
     if (limit) limitQuery = `&limit=${limit}`;
     if (challengeN) scoreQuery = `&challengeN=${challengeN}`;

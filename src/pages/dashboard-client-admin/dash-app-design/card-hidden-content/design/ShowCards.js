@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OptionCard from "./OptionCard";
 import { useClientAdmin } from "../../../../../hooks/useRoleData";
 import { useAuthUser } from "../../../../../hooks/useAuthUser";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.scss";
 import { translateColorToPtBr } from "../../../../../global-data/uiColors";
 import useImg, { Img } from "../../../../../hooks/media/useImg";
@@ -33,7 +33,7 @@ export default function ShowCards({ setOpenComp }) {
         coll: "logos",
         key: "app_fiddelize_logo",
     });
-    const logoSrc = logoBiz ? logoBiz : logoFid;
+    const logoSrc = logoBiz || logoFid;
 
     const needClientLogo = selfBizLogoImg || isAuthUser;
 
@@ -43,9 +43,8 @@ export default function ShowCards({ setOpenComp }) {
                 selfBizLogoImg
             );
             return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
-        } else {
-            return setUrl({ ...url, logoFid: `/img/official-logo-name.png` });
         }
+        return setUrl({ ...url, logoFid: "/img/official-logo-name.png" });
     };
 
     useEffect(() => {
@@ -62,7 +61,7 @@ export default function ShowCards({ setOpenComp }) {
                     <Img
                         src={logoSrc}
                         alt="logo negócio"
-                        className={`animated zoomIn slow shadow-elevation`}
+                        className="animated zoomIn slow shadow-elevation"
                         style={{
                             position: "relative",
                             margin: "15px 0",
@@ -106,7 +105,7 @@ export default function ShowCards({ setOpenComp }) {
                                 style={{
                                     backgroundColor: `var(--themeP--${colorP}`,
                                 }}
-                            ></div>
+                            />
                             <span className="text-center color-title text-purple text-small">
                                 {translatedColorP}
                             </span>
@@ -122,7 +121,7 @@ export default function ShowCards({ setOpenComp }) {
                                 style={{
                                     backgroundColor: `var(--themeS--${colorS}`,
                                 }}
-                            ></div>
+                            />
                             <span className="text-center color-title text-purple text-small">
                                 {translatedColorS}
                             </span>
@@ -141,7 +140,7 @@ export default function ShowCards({ setOpenComp }) {
                                             ? "var(--mainWhite)"
                                             : `var(--themeBackground--${colorBack}`,
                                 }}
-                            ></div>
+                            />
                             <span className="text-center color-title text-purple text-small">
                                 {translatedColorBack}
                             </span>
@@ -159,7 +158,7 @@ export default function ShowCards({ setOpenComp }) {
                 <div
                     className="icon--circle"
                     style={{ backgroundColor: "var(--themeP)" }}
-                ></div>
+                />
                 <FontAwesomeIcon icon={icon} className="icon--selected-one" />
             </section>
         );

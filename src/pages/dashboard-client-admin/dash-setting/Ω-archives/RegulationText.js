@@ -1,18 +1,21 @@
-import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function RegulationText() {
     const updateRegText = () => {
-        showSnackbar(dispatch, "Atualizando Texto...", 'warning', 6000);
+        showSnackbar(dispatch, "Atualizando Texto...", "warning", 6000);
         const objToSend = {
             regulationText,
-        }
-        updateUser(dispatch, objToSend)
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            showSnackbar(dispatch, "Texto acabou de ser atualizado!", 'success');
-        })
-    }
+        };
+        updateUser(dispatch, objToSend).then((res) => {
+            if (res.status !== 200)
+                return showSnackbar(dispatch, res.data.msg, "error");
+            showSnackbar(
+                dispatch,
+                "Texto acabou de ser atualizado!",
+                "success"
+            );
+        });
+    };
 
     const showActionBtn = () => (
         <div className="d-flex justify-content-end mr-2">
@@ -23,7 +26,7 @@ export default function RegulationText() {
                     backgroundColor="var(--mainPink)"
                     backColorOnHover="var(--mainPink)"
                     iconFontAwesome={<FontAwesomeIcon icon="file-alt" />}
-                    textTransform='uppercase'
+                    textTransform="uppercase"
                 >
                     Ver Resultado
                 </ButtonMulti>
@@ -34,7 +37,7 @@ export default function RegulationText() {
     const showTextForm = () => (
         <div className="container-center text-break text-normal">
             <TextField
-                style={{fontSize: '1.3em'}}
+                style={{ fontSize: "1.3em" }}
                 multiline
                 rows={10}
                 name="regulationText"
@@ -47,7 +50,7 @@ export default function RegulationText() {
                 margin="dense"
             />
         </div>
-    )
+    );
 
     return (
         <section className="margin-auto-90">

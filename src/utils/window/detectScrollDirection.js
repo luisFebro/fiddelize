@@ -6,7 +6,7 @@ export default function detectScrollDirection(callback) {
 
     const wait = 300;
 
-    window.onscroll = throttle(function () {
+    window.onscroll = throttle(() => {
         // LESSON
         const scrollResult = checkScroll();
         callback(scrollResult);
@@ -20,10 +20,9 @@ export default function detectScrollDirection(callback) {
             // scrolling downward
             lastScroll = currentScroll;
             return false;
-        } else {
-            // scrolling upward
-            lastScroll = currentScroll;
-            return true;
         }
+        // scrolling upward
+        lastScroll = currentScroll;
+        return true;
     }
 }

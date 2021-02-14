@@ -1,8 +1,7 @@
-import React, { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import SwitchBtn from "../../../../components/buttons/material-ui/SwitchBtn";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import animateCSS from "../../../../utils/animateCSS";
@@ -97,7 +96,7 @@ const TotalInvest = ({ totalInvest, totalServices }) => {
 
     return (
         <Fragment>
-            <div style={styles.clipPathBottom}></div>
+            <div style={styles.clipPathBottom} />
             <section className="position-fixed d-flex" style={{ bottom: 0 }}>
                 {showCart()}
                 <div className="text-subtitle text-white font-weight-bold">
@@ -134,8 +133,8 @@ const PeriodSelection = ({ handlePeriod, containerCenter = false }) => {
                 titleLeft="Mensal"
                 titleRight="Anual"
                 callback={handlePeriodChange}
-                defaultStatus={true}
-                pillStyle={true}
+                defaultStatus
+                pillStyle
                 pillBack="var(--mainWhite)"
             />
         </section>

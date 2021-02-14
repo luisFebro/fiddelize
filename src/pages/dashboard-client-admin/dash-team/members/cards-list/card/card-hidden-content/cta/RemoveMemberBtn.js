@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import ModalConfYesNo from "../../../../../../../../components/modals/ModalYesNo";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import getAPI, {
     removeUser,
 } from "../../../../../../../../utils/promises/getAPI";
@@ -88,7 +88,7 @@ export default function RemoveMemberBtn({ modalData }) {
                 variant="extended"
             />
             <ModalConfYesNo
-                title={`Confirmação<br />de Exclusão de Membro`}
+                title="Confirmação<br />de Exclusão de Membro"
                 subTitle={`Nota: o crédito usado não é reutilizado. Confirmado a exclusão de:<br /><strong>${name}</strong> ?`}
                 setFullOpen={setFullOpen}
                 fullOpen={fullOpen}

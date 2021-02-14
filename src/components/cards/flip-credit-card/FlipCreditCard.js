@@ -1,7 +1,7 @@
 // reference: https://codepen.io/veronicadev/pen/VXqZgR
 // The credit card should follow the interactive field inspired on netlify>
 // https://app.netlify.com/teams/luisfebro/billing/general
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./_FlipCreditCard.scss";
 import { brandedCardImgs } from "./brandedCardImgs";
 import gotArrayThisItem from "../../../utils/arrays/gotArrayThisItem";
@@ -13,7 +13,7 @@ const handleFinalCardNumber = (cardNumber, options = {}) => {
         return `•••• •••• •••• ${lastFourDigits || "••••"}`;
     }
 
-    return cardNumber ? cardNumber : "•••• •••• •••• ••••";
+    return cardNumber || "•••• •••• •••• ••••";
 };
 
 export default function FlipCreditCard({
@@ -27,7 +27,7 @@ export default function FlipCreditCard({
     isOneClick = false,
 }) {
     const finalCardNumber = handleFinalCardNumber(cardNumber, { isOneClick });
-    const finalCardFullName = cardFullName ? cardFullName : "Nome no cartão";
+    const finalCardFullName = cardFullName || "Nome no cartão";
     const finalCardVal = cardVal
         ? cardVal && cardVal.replace(/\s/g, "")
         : "••/••";
@@ -101,7 +101,7 @@ export default function FlipCreditCard({
             className={`card__front card__part ${!isCardValid && "disabled"}`}
         >
             {!isCardValid && !isUnknown ? (
-                <div className="card-brand"></div>
+                <div className="card-brand" />
             ) : (
                 <img
                     className="card-brand"
@@ -111,8 +111,8 @@ export default function FlipCreditCard({
                     alt=""
                     onError={(e) => {
                         // this works but requiers src returns an invalid src, not undefined.
-                        //e.target.onerror = null;
-                        //e.target.src = brandedCardImgs.unknown;
+                        // e.target.onerror = null;
+                        // e.target.src = brandedCardImgs.unknown;
                     }}
                 />
             )}
@@ -143,7 +143,7 @@ export default function FlipCreditCard({
         <section
             className={`card__back card__part ${!isCardValid && "disabled"}`}
         >
-            <div className="card__black-line"></div>
+            <div className="card__black-line" />
             <div className="card__back-content">
                 <div className="card__secret">
                     <p className="card__secret--last">{finalCardCvv}</p>

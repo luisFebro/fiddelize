@@ -1,6 +1,3 @@
-import React from "react";
-import WhatsAppIcon from "@material-ui/icons/WhatsApp";
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import ListAltIcon from "@material-ui/icons/ListAlt";
@@ -171,6 +168,6 @@ export default function getServices(version = "gratis", options = {}) {
 
     if (version === "gratis") return freeVersion(styles);
     if (version === "pro") return proVersion(styles);
-    //discountPerc: 30%
+    // discountPerc: 30%
     if (version === "offplan") return offplanVersion();
 }

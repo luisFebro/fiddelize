@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -6,17 +6,19 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PropTypes from "prop-types";
-import clsx from "clsx";
-// Customized Data
+
 import "./RecordedClientsAccordion.scss";
-import ToggleBtn from "./ToggleBtn";
 import { useStoreDispatch, useStoreState } from "easy-peasy";
+import ToggleBtn from "./ToggleBtn";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
-import { removeField } from "../../../../../redux/actions/userActions";
+import {
+    removeField,
+    readUser,
+} from "../../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
-import { readUser } from "../../../../../redux/actions/userActions";
+
 import { setRun } from "../../../../../hooks/useRunComp";
 import PrizesBtn from "../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn";
 // End Customized Data
@@ -50,8 +52,8 @@ const useStyles = makeStyles((theme) => ({
 
 const getStyles = ({ color, backgroundColor }) => ({
     Accordion: {
-        color: color,
-        backgroundColor: backgroundColor, // default is paper color
+        color,
+        backgroundColor, // default is paper color
         margin: "25px 0 0",
     },
     totalPrizesBadge: {
@@ -160,7 +162,7 @@ export default function RegisteredClientsAccordion({
                                 title="prêmios"
                                 size="extra-small"
                                 targetId={panel._id}
-                                radiusBtn={true}
+                                radiusBtn
                             />
                         </div>
                     </div>

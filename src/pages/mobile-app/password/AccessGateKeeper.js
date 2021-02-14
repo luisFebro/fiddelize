@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import ProtectionMsg from "../../access-password/ProtectionMsg";
 import AccessSwitcher from "../../../components/auth/password/AccessSwitcher";
 import { getMultiVar, store } from "../../../hooks/storage/useVar";
@@ -52,7 +52,7 @@ export default function AccessGateKeeper({
     );
 
     const showGateKeeperCTAs = () => (
-        <section className={accessClassname ? accessClassname : "mt-3"}>
+        <section className={accessClassname || "mt-3"}>
             <p
                 className={`text-subtitle text-center ${selectTxtStyle(
                     backColor

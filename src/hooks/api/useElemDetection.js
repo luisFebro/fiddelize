@@ -1,9 +1,8 @@
 import { useCallback } from "react";
 
-export const checkDetectedElem = ({ list, ind: currInd, indFromLast = 0 }) => {
+export const checkDetectedElem = ({ list, ind: currInd, indFromLast = 0 }) =>
     // lastCard ind is 0;
-    return list.length - indFromLast === currInd;
-};
+    list.length - indFromLast === currInd;
 
 export default function useElemDetection({
     loading,

@@ -1,19 +1,15 @@
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 import InvestCard from "./card/accordion/InvestCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
-import parse from "html-react-parser";
 import { useAppSystem } from "../../../../../hooks/useRoleData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getFirstName from "../../../../../utils/string/getFirstName";
-import { useRunComp } from "../../../../../hooks/useRunComp";
 import Img from "../../../../../components/Img";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import { Link } from "react-router-dom";
 // import { isScheduledDate } from '../../../../../utils/dates/dateFns';
 import useAPIList, {
     readTransactionHistory,
-    readSMSMainHistory,
 } from "../../../../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
@@ -37,20 +33,18 @@ const getStyles = () => ({
     },
 });
 
-const handleSecHeading = (data, styles) => {
-    return (
-        <section>
-            <p
-                className="text-nowrap position-absolute d-block m-0 mt-3"
-                style={styles.dateBadge}
-            >
-                <span className="text-small text-shadow font-weight-bold">
-                    Gerado em: {calendar(data.createdAt)}.
-                </span>
-            </p>
-        </section>
-    );
-};
+const handleSecHeading = (data, styles) => (
+    <section>
+        <p
+            className="text-nowrap position-absolute d-block m-0 mt-3"
+            style={styles.dateBadge}
+        >
+            <span className="text-small text-shadow font-weight-bold">
+                Gerado em: {calendar(data.createdAt)}.
+            </span>
+        </p>
+    </section>
+);
 // END HELPERS
 
 export default function AsyncCardsList() {
@@ -133,7 +127,7 @@ export default function AsyncCardsList() {
                     }}
                 />
                 <span
-                    className={`position-relative  d-inline-block text-subtitle font-weight-bold text-shadow`}
+                    className="position-relative  d-inline-block text-subtitle font-weight-bold text-shadow"
                     style={{ lineHeight: "25px", top: 5 }}
                 >
                     {planDesc}
@@ -197,39 +191,37 @@ export default function AsyncCardsList() {
                 actions={actions}
                 backgroundColor="var(--themePLight)"
                 color="white"
-                needToggleButton={true}
+                needToggleButton
             />
         );
     };
 
-    const showEmptyData = () => {
-        return (
-            <section>
-                <Img
-                    className="img-fluid margin-auto-90"
-                    src="/img/illustrations/empty-fiddelize-invest.svg"
-                    offline={true}
-                    alt="sem investimentos"
-                    title="Sem investimentos. Seu porquinho está vazio."
-                />
-                <div className="mt-3 mb-5 container-center">
-                    <Link
-                        to="/planos?cliente-admin=1"
-                        className="no-text-decoration"
-                    >
-                        <ButtonFab
-                            size="large"
-                            title="FAZER O PRIMEIRO"
-                            position="relative"
-                            onClick={null}
-                            backgroundColor={"var(--themeSDark--default)"}
-                            variant="extended"
-                        />
-                    </Link>
-                </div>
-            </section>
-        );
-    };
+    const showEmptyData = () => (
+        <section>
+            <Img
+                className="img-fluid margin-auto-90"
+                src="/img/illustrations/empty-fiddelize-invest.svg"
+                offline
+                alt="sem investimentos"
+                title="Sem investimentos. Seu porquinho está vazio."
+            />
+            <div className="mt-3 mb-5 container-center">
+                <Link
+                    to="/planos?cliente-admin=1"
+                    className="no-text-decoration"
+                >
+                    <ButtonFab
+                        size="large"
+                        title="FAZER O PRIMEIRO"
+                        position="relative"
+                        onClick={null}
+                        backgroundColor="var(--themeSDark--default)"
+                        variant="extended"
+                    />
+                </Link>
+            </div>
+        </section>
+    );
 
     return (
         <Fragment>

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import Display from "./Display";
-import IconAndTitle from "./IconAndTitle";
+import { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
-import Keyboard from "./Keyboard";
 import PropTypes from "prop-types";
 import { useStoreDispatch } from "easy-peasy";
+import Display from "./Display";
+import IconAndTitle from "./IconAndTitle";
+import Keyboard from "./Keyboard";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import "./_KeypadHandler.scss";
@@ -59,8 +59,8 @@ export default function NumericKeypad({
     return (
         <Dialog
             className="animated backInUp slower"
-            maxWidth={"md"}
-            disableBackdropClick={true}
+            maxWidth="md"
+            disableBackdropClick
             onClose={handleClose}
             aria-labelledby="keypad"
             open={open}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AppPreview from "./AppPreview";
 import AppPickersHandler from "./pickers/AppPickersHandler";
 import getQueryByName from "../../../utils/string/getQueryByName";
@@ -37,7 +37,7 @@ const setLocalData = async ({ type = "theming", colors, iconsData }) => {
 };
 
 function SelfServicePage({ location, history }) {
-    //useCount();// RT = 3
+    // useCount();// RT = 3
     const [logoUrlPreview, setLogoUrlPreview] = useState("");
     const [theme, setTheme] = useState({
         colorP: "default",
@@ -56,7 +56,7 @@ function SelfServicePage({ location, history }) {
     // API
     const clientName = getQueryByName("nome-cliente", location.search);
     let rewardScore = getQueryByName("ponto-premio", location.search);
-    let rewardDesc = getQueryByName("premio-desc", location.search);
+    const rewardDesc = getQueryByName("premio-desc", location.search);
     let currScore = getQueryByName("ponto-atual", location.search);
     if (typeof rewardScore === "object") {
         rewardScore = 500;

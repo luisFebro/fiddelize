@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import useData from "../../../../hooks/useData";
-import AccessPassCreation from "../../../dashboard-client-admin/pass-page/AccessPassCreation";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { getVar, setVar } from "../../../../hooks/storage/useVar";
 import isThisApp from "../../../../utils/window/isThisApp";
@@ -81,7 +80,7 @@ function AgentRedirect() {
                         size="medium"
                         title="Ir para Pagseguro"
                         onClick={null}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                         position="relative"
                     />
@@ -115,7 +114,7 @@ function GatewaySuccess({ history }) {
                     size="medium"
                     title="Acessar App"
                     onClick={handleClick}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                     position="relative"
                 />

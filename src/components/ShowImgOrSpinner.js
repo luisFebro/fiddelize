@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
-import Spinner from './loadingIndicators/Spinner';
+import { Fragment } from "react";
+import PropTypes from "prop-types";
+import Spinner from "./loadingIndicators/Spinner";
 import { CLIENT_URL } from "../config/clientUrl";
-import PropTypes from 'prop-types';
 
 ShowImgOrSpinner.propTypes = {
     id: PropTypes.string,
@@ -19,8 +19,8 @@ ShowImgOrSpinner.propTypes = {
     imgOpt: PropTypes.shape({
         style: PropTypes.object,
         className: PropTypes.string,
-    })
-}
+    }),
+};
 
 export default function ShowImgOrSpinner({
     id,
@@ -31,15 +31,16 @@ export default function ShowImgOrSpinner({
     setStatus,
     status,
     spinnerOpt,
-    imgOpt }) {
+    imgOpt,
+}) {
     const imageUrl = `${CLIENT_URL}/api/${url}/photo/${id}`;
 
-    return(
+    return (
         <Fragment>
-            <div style={{ display: status ? 'block' : 'none'}}>
+            <div style={{ display: status ? "block" : "none" }}>
                 <Spinner />
             </div>
-            <div style={{ display: status ? 'none' : 'block'}}>
+            <div style={{ display: status ? "none" : "block" }}>
                 <img
                     className={imgOpt && imgOpt.className}
                     src={imageUrl}

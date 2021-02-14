@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
-import LocalMallIcon from "@material-ui/icons/LocalMall";
 import ModalFullContent from "../../../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../../../components/code-splitting/LoadableComp";
 

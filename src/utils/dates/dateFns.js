@@ -1,6 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import getDayMonthBr from "./getDayMonthBr"; // 20 de Junho de 2020 is better than 20º de junho, 2020...
 import formatDistance from "date-fns/formatDistance";
 import formatRelative from "date-fns/formatRelative";
 import format from "date-fns/format";
@@ -11,8 +10,9 @@ import getMinutes from "date-fns/getMinutes";
 import isToday from "date-fns/isToday";
 import startOfWeek from "date-fns/startOfWeek";
 import endOfWeek from "date-fns/endOfWeek";
-import { getPureParsedDate } from "./helpers/dateFnsHelpers";
 import isAfter from "date-fns/isAfter";
+import { getPureParsedDate } from "./helpers/dateFnsHelpers";
+import getDayMonthBr from "./getDayMonthBr"; // 20 de Junho de 2020 is better than 20º de junho, 2020...
 
 const localeObj = {
     default: ptBR,

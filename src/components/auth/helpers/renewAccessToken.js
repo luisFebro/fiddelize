@@ -1,5 +1,4 @@
 import getAPI, { getAuthTk } from "../../../utils/promises/getAPI";
-import getId from "../../../utils/getId";
 import { setVar, store } from "../../../hooks/storage/useVar";
 
 export default async function renewAccessToken(options = {}) {

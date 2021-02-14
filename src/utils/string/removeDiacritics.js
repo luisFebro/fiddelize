@@ -1,6 +1,5 @@
-const removeDiacritics = string => {
-    return string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // n1
-}
+const removeDiacritics = (string) =>
+    string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // n1
 
 module.exports = removeDiacritics;
 /* COMMENTS

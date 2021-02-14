@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import ButtonMulti from '../../../../components/buttons/material-ui/ButtonMulti';
-import SideBar from './SideBar';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import ButtonMulti from "../../../../components/buttons/material-ui/ButtonMulti";
+import SideBar from "./SideBar";
 
 DrawerBtn.propTypes = {
     drawer: PropTypes.object,
     button: PropTypes.object,
-}
+};
 
 // FIND: DashBooking.js
 export default function DrawerBtn({ drawer, button }) {
@@ -18,15 +18,15 @@ export default function DrawerBtn({ drawer, button }) {
         variant,
         size,
         backgroundColor,
-        backColorOnHover } = button;
-
+        backColorOnHover,
+    } = button;
 
     const onOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
 
     const onClose = () => {
-      setOpen(false);
+        setOpen(false);
     };
 
     return (
@@ -39,11 +39,7 @@ export default function DrawerBtn({ drawer, button }) {
                 backColorOnHover={backColorOnHover}
                 onClick={onOpen}
             />
-            <SideBar
-                drawer={drawer}
-                open={open}
-                onClose={onClose}
-            />
+            <SideBar drawer={drawer} open={open} onClose={onClose} />
         </div>
     );
 }

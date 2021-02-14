@@ -3,12 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../../hooks/useRunComp";
 import { markOneClicked } from "../../../redux/actions/notificationActions";
-import ButtonMulti, {
-    faStyle,
-} from "../../../components/buttons/material-ui/ButtonMulti";
-import ModalFullContent from "../../../components/modals/ModalFullContent";
+import ButtonMulti, { faStyle } from "../../buttons/material-ui/ButtonMulti";
+import ModalFullContent from "../../modals/ModalFullContent";
 import pickCardType from "./pickCardType";
-import Spinner from "../../../components/loadingIndicators/Spinner";
+import Spinner from "../../loadingIndicators/Spinner";
 import { useClientAdmin, useProfile } from "../../../hooks/useRoleData";
 import getId from "../../../utils/getId";
 import { getMultiVar, store } from "../../../hooks/storage/useVar";
@@ -90,11 +88,11 @@ function CardActionBtn({
     const handleBtnTitle = () => {
         if (isLoading) {
             return <Spinner size="mini" marginY="5px" />;
-        } else if (seen) {
-            return "Visto";
-        } else {
-            return !clicked ? "Ver" : `Ok ✔️`;
         }
+        if (seen) {
+            return "Visto";
+        }
+        return !clicked ? "Ver" : "Ok ✔️";
     };
 
     return (
@@ -113,7 +111,7 @@ function CardActionBtn({
                 color={!clicked ? "var(--mainWhite)" : "var(--mainDark)"}
                 backgroundColor={
                     !clicked
-                        ? "var(--themeSDark--" + backColor + ")"
+                        ? `var(--themeSDark--${backColor})`
                         : "var(--lightGrey)"
                 }
             >

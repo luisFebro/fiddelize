@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 // Redux
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../../../../redux/actions/snackbarActions';
-import handleChange from '../../../../../../utils/form/use-state/handleChange';
-import parse from 'html-react-parser';
+import { useStoreDispatch } from "easy-peasy";
+import parse from "html-react-parser";
 // Material UI
-import ButtonMulti from '../../../../../../components/buttons/material-ui/ButtonMulti';
-import { makeStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
+import { makeStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
 // import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import PropTypes from 'prop-types';
-import { modalDefaultType } from '../../../../../../types';
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import PropTypes from "prop-types";
+import ButtonMulti from "../../../../../../components/buttons/material-ui/ButtonMulti";
+import handleChange from "../../../../../../utils/form/use-state/handleChange";
+import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import { modalDefaultType } from "../../../../../../types";
 
-//CUSTOM DATA
-import { updateFinance } from '../../../../../../redux/actions/financeActions';
+// CUSTOM DATA
+import { updateFinance } from "../../../../../../redux/actions/financeActions";
 
 ModalSelect_cashEdit.propTypes = {
     open: PropTypes.bool,
@@ -26,26 +26,32 @@ ModalSelect_cashEdit.propTypes = {
 };
 // End Material UI
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     button: {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
     },
     media: {
         height: 50,
-        width: '50%',
-        margin: 'auto'
+        width: "50%",
+        margin: "auto",
     },
     textField: {
         marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1)
-    }
+        marginRight: theme.spacing(1),
+    },
 }));
 
-export default function ModalSelect_cashEdit({ open, onClose, modal, setRun, run }) {
+export default function ModalSelect_cashEdit({
+    open,
+    onClose,
+    modal,
+    setRun,
+    run,
+}) {
     const [error, setError] = useState(false);
     const [data, setData] = useState({
         selected: "selecione novo status:",
-        paymentType: 'dinheiro',
+        paymentType: "dinheiro",
         installmentsIfCredit: 2,
     });
     const { selected, paymentType, installmentsIfCredit } = data;
@@ -55,11 +61,11 @@ export default function ModalSelect_cashEdit({ open, onClose, modal, setRun, run
     const clearForm = () => {
         setData({
             selected: "selecione novo status:",
-        })
-    }
+        });
+    };
 
     let itemsSelection;
-    switch(modalData.statusCheck) {
+    switch (modalData.statusCheck) {
         case "pago":
             itemsSelection = ["pendente"];
             break;
@@ -74,20 +80,19 @@ export default function ModalSelect_cashEdit({ open, onClose, modal, setRun, run
 
     const styles = {
         actionButtons: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '28px'
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "28px",
         },
         fieldForm: {
-            backgroundColor: 'var(--mainWhite)',
-            textAlign:'center',
-            zIndex: 2000
-        }
-    }
-
+            backgroundColor: "var(--mainWhite)",
+            textAlign: "center",
+            zIndex: 2000,
+        },
+    };
 
     const handleSubmit = () => {
-        if(selected.includes("selecione")) {
+        if (selected.includes("selecione")) {
             showSnackbar(dispatch, "Selecione um novo status", "error");
             setError(true);
             return;
@@ -96,16 +101,20 @@ export default function ModalSelect_cashEdit({ open, onClose, modal, setRun, run
         const objToSend = {
             ...data,
             statusCheck: selected,
-        }
+        };
         onClose();
         showSnackbar(dispatch, "Alterando...", "warning", 3000);
-        updateFinance(dispatch,  modalData._id, objToSend)
-        .then(res => {
+        updateFinance(dispatch, modalData._id, objToSend).then((res) => {
             clearForm();
-            showSnackbar(dispatch, `O status mudou para ${selected.toUpperCase()}. Pagamento no ${paymentType.toUpperCase()}.`, 'success', 8000);
-            setRun(!run)
-        })
-    }
+            showSnackbar(
+                dispatch,
+                `O status mudou para ${selected.toUpperCase()}. Pagamento no ${paymentType.toUpperCase()}.`,
+                "success",
+                8000
+            );
+            setRun(!run);
+        });
+    };
 
     const classes = useStyles();
 
@@ -129,68 +138,69 @@ export default function ModalSelect_cashEdit({ open, onClose, modal, setRun, run
 
     const showMainSelect = () => (
         <form
-            style={{ margin: 'auto', width: '90%' }}
+            style={{ margin: "auto", width: "90%" }}
             onBlur={() => setError(false)}
         >
             <Select
-              style={{ margin: '9px 0' }}
-              labelId="selected"
-              onChange={handleChange(setData, data)}
-              name="selected"
-              error={error ? true : false}
-              value={selected}
-              fullWidth
+                style={{ margin: "9px 0" }}
+                labelId="selected"
+                onChange={handleChange(setData, data)}
+                name="selected"
+                error={!!error}
+                value={selected}
+                fullWidth
             >
-              <MenuItem value={selected}>
-                selecione novo status:
-              </MenuItem>
-              {itemsSelection.map((item, ind) => (
-                  <MenuItem key={ind} value={item}>{item}</MenuItem>
-               ))}
+                <MenuItem value={selected}>selecione novo status:</MenuItem>
+                {itemsSelection.map((item, ind) => (
+                    <MenuItem key={ind} value={item}>
+                        {item}
+                    </MenuItem>
+                ))}
             </Select>
         </form>
     );
 
     const showPaySelect = () => (
         <form
-            style={{ margin: 'auto', width: '90%' }}
+            style={{ margin: "auto", width: "90%" }}
             onBlur={() => setError(false)}
         >
             <div className="mt-3">
                 <span className="text-white text-normal text-em-1 font-weight-bold">
                     "FORMA DE PAGAMENTO:
                     <Select
-                      style={styles.fieldForm}
-                      fullWidth
-                      variant="outlined"
-                      name="paymentType"
-                      value={paymentType}
-                      onChange={handleChange(setData, data)}
+                        style={styles.fieldForm}
+                        fullWidth
+                        variant="outlined"
+                        name="paymentType"
+                        value={paymentType}
+                        onChange={handleChange(setData, data)}
                     >
-                        <MenuItem value={paymentType}>
-                          dinheiro
-                        </MenuItem>
-                        <MenuItem value={'crédito'}>crédito</MenuItem>
-                        <MenuItem value={'débito'}>débito</MenuItem>
+                        <MenuItem value={paymentType}>dinheiro</MenuItem>
+                        <MenuItem value="crédito">crédito</MenuItem>
+                        <MenuItem value="débito">débito</MenuItem>
                     </Select>
                 </span>
             </div>
-            {paymentType === "crédito"
-            ? (
+            {paymentType === "crédito" ? (
                 <div className="animated zoomIn mt-3">
                     <span className="text-white text-normal text-em-1 font-weight-bold">
                         QTDE. PARCELAS:
                         <br />
                         <TextField
-                          InputProps={{
-                              style: {fontSize: '2em', width: '80px', backgroundColor: 'var(--mainWhite)',},
-                              inputProps: { min: 2, max: 12 }
-                          }}
-                          variant="outlined"
-                          type="number"
-                          name="installmentsIfCredit"
-                          value={installmentsIfCredit}
-                          onChange={handleChange(setData, data)}
+                            InputProps={{
+                                style: {
+                                    fontSize: "2em",
+                                    width: "80px",
+                                    backgroundColor: "var(--mainWhite)",
+                                },
+                                inputProps: { min: 2, max: 12 },
+                            }}
+                            variant="outlined"
+                            type="number"
+                            name="installmentsIfCredit"
+                            value={installmentsIfCredit}
+                            onChange={handleChange(setData, data)}
                         />
                     </span>
                 </div>
@@ -199,20 +209,16 @@ export default function ModalSelect_cashEdit({ open, onClose, modal, setRun, run
     );
 
     return (
-        <Dialog
-            open={open}
-            aria-labelledby="form-dialog-title"
-        >
+        <Dialog open={open} aria-labelledby="form-dialog-title">
             <div className="container-center flex-column pb-2">
                 <DialogTitle id="form-dialog-title">
-                    <span
-                        className="text-main-container text-center font-weight-bold"
-                    >
+                    <span className="text-main-container text-center font-weight-bold">
                         {parse(title)}
                     </span>
                 </DialogTitle>
                 <p className="text-left">
-                    Pagamento Atual: <strong>{modalData.paymentType.cap()}</strong>
+                    Pagamento Atual:{" "}
+                    <strong>{modalData.paymentType.cap()}</strong>
                     <br />
                     Status atual: <strong>{modalData.statusCheck.cap()}</strong>
                 </p>

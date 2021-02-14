@@ -37,8 +37,8 @@ const defaultClientAdmin = {
     ],
     regulation: { text: "...", updatedAt: "..." },
     rewardDeadline: 0,
-    totalClientUserActiveScores: 0, //not used,fetched from db in recordeduserslist, but can be useful to display in home all results so far for instance,,,
-    totalClientUserScores: 0, //not used,fetched from db in recordeduserslist
+    totalClientUserActiveScores: 0, // not used,fetched from db in recordeduserslist, but can be useful to display in home all results so far for instance,,,
+    totalClientUserScores: 0, // not used,fetched from db in recordeduserslist
     totalClientUsers: 0,
     selfBizLogoImg: "",
     selfMilestoneIcon: "star",
@@ -95,7 +95,7 @@ const appSystemColl = coll3;
 const setSystemOp = (role, id) => {
     if (!role || !id) throw new Error("arguments missing...");
     // roleWhichDownloaded: cliente || cliente-admin || dev || rep
-    const obj = { roleWhichDownloaded: role, businessId: id }; //|| 'cliente'
+    const obj = { roleWhichDownloaded: role, businessId: id }; // || 'cliente'
     const res = { ...appSystemColl, newObj: obj };
 
     return res;
@@ -118,6 +118,5 @@ export {
     centralAdminColl,
 };
 
-export const needSetTrueLocalKey = (lastChecked, currChecked) => {
-    return !lastChecked || currChecked ? false : true;
-};
+export const needSetTrueLocalKey = (lastChecked, currChecked) =>
+    !(!lastChecked || currChecked);

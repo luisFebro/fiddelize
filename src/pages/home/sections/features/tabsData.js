@@ -1,4 +1,3 @@
-import React from "react";
 import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";

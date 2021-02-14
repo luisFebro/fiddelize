@@ -1,4 +1,3 @@
-import React, { Fragment } from "react";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -26,7 +25,7 @@ export default function ClientMemberText({
                     <img
                         src={
                             thisBizLogo === undefined
-                                ? `/img/official-logo-name.png`
+                                ? "/img/official-logo-name.png"
                                 : thisBizLogo
                         }
                         width={width} // bizLogo === "undefined" && 200
@@ -48,17 +47,14 @@ export default function ClientMemberText({
                         className={`${txtPColor} d-inline-block mt-2 animated bounce repeat-2 delay-3s`}
                         style={styles.hightlighedName}
                     >
-                        {userName ? userName : "você!"}
+                        {userName || "você!"}
                     </div>
                     <div className="pt-1 pb-5">
                         <ScrollArrow margin={50} />
                     </div>
                 </div>
             </section>
-            <p
-                className={`px-2 text-center text-hero`}
-                style={{ lineHeight: 1 }}
-            >
+            <p className="px-2 text-center text-hero" style={{ lineHeight: 1 }}>
                 <span>
                     Oi,
                     <br />{" "}

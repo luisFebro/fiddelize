@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import LocalMallIcon from "@material-ui/icons/LocalMall";
 import ModalFullContent from "../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
 
@@ -68,7 +67,7 @@ export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {
                 size="medium"
                 title="Esta aqui"
                 onClick={handleFullOpen}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
                 position="relative"
             />

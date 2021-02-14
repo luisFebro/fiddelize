@@ -18,7 +18,7 @@ export default function applyTextStyle(text, module, opts) {
     const newFormat = {
         center: "<center>$1</center>",
         italic: "<em>$1</em>",
-        bold: `<strong>$1</strong>`,
+        bold: "<strong>$1</strong>",
         fontSize: `<span style="font-size:${fontSize};">$1</span>`, // LESSON2 !!! $1 refers to group 1 in the regex wrapped in parentheses.
     };
 

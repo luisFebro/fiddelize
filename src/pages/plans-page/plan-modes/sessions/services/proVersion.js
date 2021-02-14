@@ -1,7 +1,4 @@
-import React from "react";
-import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /*

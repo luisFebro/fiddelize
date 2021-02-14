@@ -1,4 +1,3 @@
-import React from "react";
 import BizForm from "./BizForm";
 import useScrollUp from "../../../hooks/scroll/useScrollUp.js";
 

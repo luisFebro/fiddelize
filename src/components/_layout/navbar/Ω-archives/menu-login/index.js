@@ -1,17 +1,16 @@
-import React, { Fragment, useEffect } from 'react';
-import NotifDropDown from './notification/NotifDropDown';
-import Badge from '@material-ui/core/Badge';
+import { Fragment, useEffect } from "react";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import NotifDropDown from "./notification/NotifDropDown";
 // import { withStyles } from '@material-ui/core/styles';
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { logout } from '../../../../redux/actions/authActions';
+import { logout } from "../../../../redux/actions/authActions";
 // End Redux
 // Utils
-import isRealObj from '../../../../utils/isRealObj';
-import truncateWords from '../../../../utils/string/truncateWords';
+import isRealObj from "../../../../utils/isRealObj";
+import truncateWords from "../../../../utils/string/truncateWords";
 // End Utils
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 // import { bizWhatsapp } from '../../../../data/dataBiz';
 
 // const BorderedBadge = withStyles(theme => ({
@@ -26,49 +25,54 @@ import { Link } from 'react-router-dom';
 
 export default function MenuLogin() {
     // Redux
-    const { isUserAuthenticated, currUser } = useStoreState(state => ({
+    const { isUserAuthenticated, currUser } = useStoreState((state) => ({
         isUserAuthenticated: state.authReducer.cases.isUserAuthenticated,
         currUser: state.userReducer.cases.currentUser,
     }));
-    const { name, picture } = currUser; //favoriteList
+    const { name, picture } = currUser; // favoriteList
 
     const dispatch = useStoreDispatch();
     // End Redux
     const animateZoomOut = () => {
-        //NOT WORKING
-        const mainNav = document.querySelector('#mainNav');
+        // NOT WORKING
+        const mainNav = document.querySelector("#mainNav");
 
-        mainNav.classList.add('animated', 'zoomOut', 'slow');
-        mainNav.style.animationDelay = '0s';
+        mainNav.classList.add("animated", "zoomOut", "slow");
+        mainNav.style.animationDelay = "0s";
     };
     const changeCss = () => {
-        const navElement = document.querySelector('#mainNav');
-        const logo = document.querySelector('#logo-login-wrapper');
-        const logoImg = document.querySelector('#logo-login-img');
+        const navElement = document.querySelector("#mainNav");
+        const logo = document.querySelector("#logo-login-wrapper");
+        const logoImg = document.querySelector("#logo-login-img");
         if (isRealObj(navElement)) {
             if (window.scrollY > 50) {
-                //transition and animaiton not working at all
-                navElement.className += ' shadow-elevation-soft';
-                logo.style.transition = '3s';
-                logoImg.className += 'animated slideOutLeft slow';
-                logo.style.display = 'block';
+                // transition and animaiton not working at all
+                navElement.className += " shadow-elevation-soft";
+                logo.style.transition = "3s";
+                logoImg.className += "animated slideOutLeft slow";
+                logo.style.display = "block";
             }
             if (window.scrollY < 50) {
-                logo.style.transition = '3s';
-                logoImg.className += 'animated slideOutLeft slow';
-                logo.style.display = 'none';
+                logo.style.transition = "3s";
+                logoImg.className += "animated slideOutLeft slow";
+                logo.style.display = "none";
             }
         }
     };
 
-    useEffect(() => window.addEventListener('scroll', changeCss, true), []);
+    useEffect(() => window.addEventListener("scroll", changeCss, true), []);
 
     return (
         <Fragment>
             {isUserAuthenticated ? (
                 <DivWrapper id="mainNav" className="animated zoomIn slower">
                     <nav className="navbar navbar-expand-sm px-sm-3 text-nav-items py-0 my-0">
-                        <Link to="/" className="px-1" id="logo-login-wrapper" style={{ display: 'none' }}>
+                        <Link
+                            to="/"
+                            className="px-1"
+                            id="logo-login-wrapper"
+                            style={{ display: "none" }}
+                        >
                             <img
                                 id="logo-login-img"
                                 src="img/official-logo.jpg"
@@ -100,8 +104,11 @@ export default function MenuLogin() {
                                 </Link>
                                 <p className="user-name-greeting badge badge-warning">
                                     {name
-                                        ? `Olá, ${truncateWords(name.cap(), 12)}`
-                                        : 'Olá, ...'}
+                                        ? `Olá, ${truncateWords(
+                                              name.cap(),
+                                              12
+                                          )}`
+                                        : "Olá, ..."}
                                 </p>
                             </li>
                         </ul>
@@ -117,7 +124,11 @@ export default function MenuLogin() {
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
                                 <button
-                                    style={{ cursor: 'pointer', padding: '0 4px', border: 'none' }}
+                                    style={{
+                                        cursor: "pointer",
+                                        padding: "0 4px",
+                                        border: "none",
+                                    }}
                                     className="logout-btn badge badge-danger"
                                     onClick={() => {
                                         animateZoomOut();
@@ -155,7 +166,7 @@ const DivWrapper = styled.div`
     p,
     nav,
     span {
-        font: normal 1rem 'Cabin', sans-serif;
+        font: normal 1rem "Cabin", sans-serif;
     }
 
     .profilePic {
@@ -172,14 +183,14 @@ const DivWrapper = styled.div`
         color: var(--mainDark);
         padding: 0 3px;
         position: absolute;
-        font: normal 1rem 'Cabin', sans-serif;
+        font: normal 1rem "Cabin", sans-serif;
         top: 3.5rem;
     }
 
     .logout-btn {
         background: var(--mainRed);
         position: absolute;
-        font: normal 1rem 'Cabin', sans-serif;
+        font: normal 1rem "Cabin", sans-serif;
         top: 1px;
         right: 4px;
         padding: 0 3px;
@@ -196,14 +207,14 @@ const DivWrapper = styled.div`
     @media only screen and (min-width: 600px) {
         .logout-btn {
             top: 4px;
-            font: normal 1.2rem 'Cabin', sans-serif;
+            font: normal 1.2rem "Cabin", sans-serif;
             padding: 5px 8px;
         }
         i {
             //font-size: 1.9rem;
         }
         .user-name-greeting {
-            font: normal 1.1rem 'Cabin', sans-serif;
+            font: normal 1.1rem "Cabin", sans-serif;
             padding: 2px 5px;
             //top: 3.4rem;
         }

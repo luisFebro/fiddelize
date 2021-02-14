@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import { useRunComp } from "../../../hooks/useRunComp";
 import MobileScreenLoading from "../../../components/loadingIndicators/MobileScreenLoading";
 // import useCount from '../../../hooks/useCount';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.scss";
 import PropTypes from "prop-types";
 
@@ -57,7 +57,7 @@ function AppPreview({
                 allowFullScreen={false}
                 width={320}
                 height={450}
-            ></iframe>
+            />
         </div>
     );
 
@@ -75,7 +75,7 @@ function AppPreview({
     const showLoading = () => (
         <div className="app-loading-screen">
             <MobileScreenLoading
-                backgroundColor={"var(--themePLight--" + colorP + ")"}
+                backgroundColor={`var(--themePLight--${colorP})`}
             />
         </div>
     );

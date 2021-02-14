@@ -1,20 +1,16 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { makeStyles } from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 
 // Customized Data
-import { useStoreDispatch } from 'easy-peasy';
+import { useStoreDispatch } from "easy-peasy";
 // import ModalBtn from './modal/select/ModalBtn';
-import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
-import { findAnItem } from '../../../redux/actions/globalActions';
-import { showModalConfYesNo } from '../../../redux/actions/modalActions';
-// End Customized Data
+import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 
 ExpansiblePanel.propTypes = {
     actions: PropTypes.arrayOf(
@@ -22,7 +18,7 @@ ExpansiblePanel.propTypes = {
             id: PropTypes.string,
             mainHeading: PropTypes.string,
             secondaryHeading: PropTypes.string,
-            hiddenContent: PropTypes.any
+            hiddenContent: PropTypes.any,
         })
     ).isRequired,
     ToggleButton: PropTypes.element,
@@ -31,31 +27,31 @@ ExpansiblePanel.propTypes = {
     statusAfterClick: PropTypes.bool,
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        width: window.Helper.isSmallScreen() ? '100%' : '80%',
-        margin: 'auto',
+        width: window.Helper.isSmallScreen() ? "100%" : "80%",
+        margin: "auto",
     },
     heading: {
-        fontSize: '1em',
-        fontWeight: 'bold',
-        flexBasis: '33.33%',
+        fontSize: "1em",
+        fontWeight: "bold",
+        flexBasis: "33.33%",
         flexShrink: 0,
-        textShadow: '1px 1px 3px black'
+        textShadow: "1px 1px 3px black",
     },
     secondaryHeading: {
-        paddingLeft: '10px',
+        paddingLeft: "10px",
         fontSize: theme.typography.pxToRem(15),
-        textShadow: '1px 1px 3px black'
-    }
+        textShadow: "1px 1px 3px black",
+    },
 }));
 
 export default function ExpansiblePanel({
     actions,
     backgroundColor,
     ToggleButton,
-    color }) {
-
+    color,
+}) {
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
@@ -66,26 +62,25 @@ export default function ExpansiblePanel({
 
     const styles = {
         Accordion: {
-            color: color,
-            backgroundColor: backgroundColor, // default is paper color
-            margin: '35px 0',
+            color,
+            backgroundColor, // default is paper color
+            margin: "35px 0",
         },
         button: {
-            transform: 'translate(-50%, -50%)'
+            transform: "translate(-50%, -50%)",
         },
         iconContainer: {
-            position: 'absolute',
+            position: "absolute",
             top: -10,
-            left: 10
+            left: 10,
         },
         heading: {
-            display: 'flex',
-            alignItems: 'center',
-        }
+            display: "flex",
+            alignItems: "center",
+        },
+    };
 
-    }
-
-    const showStatus = panel => (
+    const showStatus = (panel) => (
         <div className="animated zoomIn delay-1s">
             <div className="disabledLink">
                 <ButtonFab
@@ -103,17 +98,11 @@ export default function ExpansiblePanel({
         </div>
     );
 
-    const showPanel = panel => (
+    const showPanel = (panel) => (
         <AccordionSummary
             expandIcon={
-                <div
-                    style={styles.iconContainer}
-                    className="enabledLink"
-                >
-                    {ToggleButton
-                    ? ToggleButton
-                    : <ExpandMoreIcon />
-                    }
+                <div style={styles.iconContainer} className="enabledLink">
+                    {ToggleButton || <ExpandMoreIcon />}
                 </div>
             }
             aria-controls={`panel${panel._id}bh-content`}
@@ -134,19 +123,14 @@ export default function ExpansiblePanel({
         </AccordionSummary>
     );
 
-    const showHiddenPanel = panel => (
-        <AccordionDetails>
-            {panel.hiddenContent}
-        </AccordionDetails>
+    const showHiddenPanel = (panel) => (
+        <AccordionDetails>{panel.hiddenContent}</AccordionDetails>
     );
 
     return (
         <div className={classes.root}>
-            {actions.map(panel => (
-                <div
-                    key={panel._id}
-                    className="position-relative"
-                >
+            {actions.map((panel) => (
+                <div key={panel._id} className="position-relative">
                     <Accordion
                         TransitionProps={{ unmountOnExit: true }} // only render when the panel is opened
                         style={styles.Accordion}

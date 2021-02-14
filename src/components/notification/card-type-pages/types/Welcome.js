@@ -1,5 +1,4 @@
 import React from "react";
-import ButtonMulti from "../../../../components/buttons/material-ui/ButtonMulti";
 import useCount from "../../../../hooks/useCount";
 import {
     textStyle,
@@ -15,7 +14,7 @@ import {
 export default React.memo(Welcome);
 
 function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
-    useCount("Welcome"); //RT =
+    useCount("Welcome"); // RT =
 
     const showCliAdminContent = () =>
         role === "cliente-admin" && (

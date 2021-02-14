@@ -1,9 +1,8 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import { keyframes } from "styled-components";
 
-/*SHAKE IMAGE*/
-/*All credits for this section here goes to w3school.
-Source here: https://www.w3schools.com/howto/howto_css_shake_image.asp*/
+/* SHAKE IMAGE */
+/* All credits for this section here goes to w3school.
+Source here: https://www.w3schools.com/howto/howto_css_shake_image.asp */
 // .shakeImg:hover {
 //     animation: shake 0.5s infinite;
 //     animation-iteration-count: infinite;

@@ -1,16 +1,18 @@
-import React, { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
+import { withRouter } from "react-router-dom";
 import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCard";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useData from "../../../hooks/useData";
 import useAPI, { readTempScoreList } from "../../../hooks/api/useAPI";
 import ReturnBtn from "../../../components/buttons/ReturnBtn";
-import { withRouter } from "react-router-dom";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import useBackColor from "../../../hooks/useBackColor";
 import { setVar, store } from "../../../hooks/storage/useVar";
-import { prerenderAudio } from "../../../hooks/media/usePlayAudio";
+import usePlayAudio, {
+    prerenderAudio,
+} from "../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../utils/arrays/getRandomArray";
-import usePlayAudio from "../../../hooks/media/usePlayAudio";
+
 import Img from "../../../components/Img";
 // import FlipCreditCard from "../../../components/cards/flip-credit-card/FlipCreditCard";
 // Use the 3D card with the flip animation from flipCreditCard.
@@ -52,7 +54,7 @@ const getTtsStore = ({ isShe, isSmall }) => ({
         },
         {
             audio: `${defaultPath}/no-card/no-card-at-moment.mp3`,
-            text: `Nenhum cartão com pontos no momento.`,
+            text: "Nenhum cartão com pontos no momento.",
         },
     ],
 });
@@ -187,7 +189,7 @@ function VirtualCard({ history }) {
         <Img
             className="img-fluid"
             src="/img/illustrations/client-no-wing-card.svg"
-            offline={true}
+            offline
             height="auto"
             width="400px"
             alt="sem cartão com pontos"
@@ -202,16 +204,12 @@ function VirtualCard({ history }) {
                 btnColor={sColor}
             />
             {error && (
-                <h2
-                    className={`mx-3 text-center full-height container-center text-subtitle font-weight-bold text-black`}
-                >
+                <h2 className="mx-3 text-center full-height container-center text-subtitle font-weight-bold text-black">
                     Ocorreu um problema de conexão. Tente novamente!
                 </h2>
             )}
             {loadingAll && (
-                <h2
-                    className={`mx-3 text-center full-height container-center text-subtitle font-weight-bold text-black`}
-                >
+                <h2 className="mx-3 text-center full-height container-center text-subtitle font-weight-bold text-black">
                     Carregando cartão...
                 </h2>
             )}
@@ -219,9 +217,7 @@ function VirtualCard({ history }) {
             {!loadingAll && showNoCardMsg && (
                 <section className="full-page mx-3">
                     {showIllustra()}
-                    <h1
-                        className={`mt-3 text-left text-subtitle font-weight-bold text-black`}
-                    >
+                    <h1 className="mt-3 text-left text-subtitle font-weight-bold text-black">
                         {failureMsg}
                     </h1>
                 </section>

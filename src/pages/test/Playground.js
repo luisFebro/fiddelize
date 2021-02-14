@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import useBackColor from "../../hooks/useBackColor";
 import "./_Playground.scss";
 // TEMP DATA
@@ -12,7 +12,7 @@ export default function Playground() {
             <h1 className="mx-3 text-title text-center my-5 text-purple">
                 Playground for testing
             </h1>
-            <main className="" style={{ marginBottom: 700 }}></main>
+            <main className="" style={{ marginBottom: 700 }} />
         </Fragment>
     );
 }

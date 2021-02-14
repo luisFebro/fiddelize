@@ -1,4 +1,3 @@
-import React from "react";
 import { convertDotToComma } from "../../utils/numbers/convertDotComma";
 import PurchaseHistoryBtn from "./history-purchase-btn/PurchaseHistoryBtn";
 
@@ -43,7 +42,7 @@ const AllScores = ({
                 </p>
                 <span className={`ml-2 ${selectedTxtStyle}`}>Pontos</span>
             </div>
-            {/*LAST SCORE*/}
+            {/* LAST SCORE */}
             {currScore === 0 || !currScore || !showPercentage ? null : (
                 <section className="text-normal position-relative animated slideInLeft slow">
                     <section>
@@ -56,7 +55,7 @@ const AllScores = ({
                             <div
                                 className="body"
                                 style={{ left: needAppForPreview && "160px" }}
-                            ></div>
+                            />
                             <PurchaseHistoryBtn
                                 bottom={-15}
                                 right={-5}

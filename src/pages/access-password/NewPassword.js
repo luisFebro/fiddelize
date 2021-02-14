@@ -1,13 +1,12 @@
-import React, { useEffect, useState, Fragment, useRef } from "react";
+import { useEffect, useState, Fragment, useRef } from "react";
+import { useStoreDispatch } from "easy-peasy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getAPI, {
     recoverPassword,
     changePassword,
-    getUniqueId,
 } from "../../utils/promises/getAPI";
 import isThisApp from "../../utils/window/isThisApp";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useBackColor from "../../hooks/useBackColor";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
@@ -37,7 +36,7 @@ export default function NewPassword({ location, match, history }) {
     const [display, setDisplay] = useState("");
     const [okContent, setOkContent] = useState(false);
 
-    const changeMode = match.params.token === "mudar" ? true : false;
+    const changeMode = match.params.token === "mudar";
     const isBizTeam = location.search.includes("?nucleo-equipe=1");
     const role = isBizTeam ? "nucleo-equipe" : "cliente-admin";
 
@@ -108,7 +107,7 @@ export default function NewPassword({ location, match, history }) {
     const showCloseBtn = () => (
         <RedirectLink
             toDashTab={changeMode ? "Ajustes" : undefined}
-            goDash={changeMode ? true : false}
+            goDash={!!changeMode}
             to={!changeMode ? whichPath : undefined}
         >
             <FontAwesomeIcon
@@ -127,11 +126,8 @@ export default function NewPassword({ location, match, history }) {
                 return currPswd === 1
                     ? "Digite senha atual:"
                     : "Digite senha nova:";
-            } else {
-                return currPswd === 1
-                    ? "Digite nova senha:"
-                    : "Digite de novo:";
             }
+            return currPswd === 1 ? "Digite nova senha:" : "Digite de novo:";
         };
 
         return (
@@ -157,18 +153,18 @@ export default function NewPassword({ location, match, history }) {
     };
 
     const undoClick = () => {
-        let counter = display.length;
+        const counter = display.length;
         const currTypingField = document.querySelector(
             `.pass-block-${counter}`
         );
         if (currTypingField) currTypingField.classList.toggle("d-block");
     };
 
-    let storedPswd = useRef(""); // not clear newPswd after switching to newPswd2
+    const storedPswd = useRef(""); // not clear newPswd after switching to newPswd2
     const restartFields = (restartAll) => {
         setDisplay("");
 
-        const fields = document.querySelectorAll(`.pass-circle`);
+        const fields = document.querySelectorAll(".pass-circle");
         if (fields) {
             fields.forEach((f) => {
                 f.classList.remove("d-block");
@@ -216,7 +212,7 @@ export default function NewPassword({ location, match, history }) {
                     method: "post",
                     url: changeMode ? changePassword() : recoverPassword(),
                     body,
-                    needAuth: changeMode ? true : false,
+                    needAuth: !!changeMode,
                 }).catch(({ error }) => {
                     showSnackbar(
                         dispatch,
@@ -280,7 +276,7 @@ export default function NewPassword({ location, match, history }) {
             <div className="container-center my-5">
                 <RedirectLink
                     toDashTab={changeMode ? "Ajustes" : undefined}
-                    goDash={changeMode ? true : false}
+                    goDash={!!changeMode}
                     to={!changeMode ? finalDestiny : undefined}
                 >
                     <ButtonFab

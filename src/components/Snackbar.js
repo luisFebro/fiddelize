@@ -1,7 +1,4 @@
-import React from "react";
-// Redux
 import { useStoreState, useStoreDispatch } from "easy-peasy";
-import { closeSnackbar } from "../redux/actions/snackbarActions";
 import parse from "html-react-parser";
 // End Redux
 import green from "@material-ui/core/colors/green";
@@ -13,6 +10,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { closeSnackbar } from "../redux/actions/snackbarActions";
 
 const useStyles = makeStyles((theme) => ({
     snackbar: {
@@ -27,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     close: {
         padding: theme.spacing(0.5),
     },
-    //colors
+    // colors
     success: {
         backgroundColor: green[600],
     },
@@ -74,7 +72,7 @@ export default function SnackbarRedux() {
         <Snackbar
             className={classes.snackbar}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            disableWindowBlurListener={true} //n1
+            disableWindowBlurListener // n1
             TransitionComponent={Slide}
             transitionDuration={{ enter: 300, exit: 300 }}
             style={{ zIndex: 30000 }}

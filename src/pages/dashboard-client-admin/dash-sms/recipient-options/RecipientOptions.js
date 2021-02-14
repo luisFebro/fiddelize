@@ -1,20 +1,45 @@
-import React from 'react';
-import BubbleTabs from '../../../../components/tabs/bubble-tabs/BubbleTabs';
-import Title from '../../../../components/Title';
-import LoadableVisible from '../../../../components/code-splitting/LoadableVisible';
+import BubbleTabs from "../../../../components/tabs/bubble-tabs/BubbleTabs";
+import Title from "../../../../components/Title";
+import LoadableVisible from "../../../../components/code-splitting/LoadableVisible";
 
-const AsyncAllCustomers = LoadableVisible({ loading: true, loader: () => import('./options/AsyncAllCustomers'  /* webpackChunkName: "all-customers-comp-sms-lazy" */ )});
-const AsyncSpecificCustomer = LoadableVisible({ loading: true, loader: () => import('./options/AsyncSpecificCustomer'  /* webpackChunkName: "specific-customer-comp-sms-lazy" */ )});
+const AsyncAllCustomers = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./options/AsyncAllCustomers" /* webpackChunkName: "all-customers-comp-sms-lazy" */
+        ),
+});
+const AsyncSpecificCustomer = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./options/AsyncSpecificCustomer" /* webpackChunkName: "specific-customer-comp-sms-lazy" */
+        ),
+});
 
 export default function RecipientOptions({
     setWhichTab,
     handleList,
-    handleShowMessage }) {
-    const FirstComp = <AsyncAllCustomers handleList={handleList} handleShowMessage={handleShowMessage} />
-    const SecondComp = <AsyncSpecificCustomer handleList={handleList} handleShowMessage={handleShowMessage} />
+    handleShowMessage,
+}) {
+    const FirstComp = (
+        <AsyncAllCustomers
+            handleList={handleList}
+            handleShowMessage={handleShowMessage}
+        />
+    );
+    const SecondComp = (
+        <AsyncSpecificCustomer
+            handleList={handleList}
+            handleShowMessage={handleShowMessage}
+        />
+    );
 
     return (
-        <section id="recipientOptions" className="container-center-max-width-500">
+        <section
+            id="recipientOptions"
+            className="container-center-max-width-500"
+        >
             <Title
                 title="&#187; Para quem enviar?"
                 color="var(--themeP)"

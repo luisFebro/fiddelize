@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import MuSlider from "../../../../../../components/sliders/MuSlider";
-import isKeyPressed from "../../../../../../utils/event/isKeyPressed";
-import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../../../../utils/form/use-state/handleChange";
 import getIncreasedPerc from "../../../../../../utils/numbers/getIncreasedPerc";
 import { addDays, formatSlashDMY } from "../../../../../../utils/dates/dateFns";
 
@@ -272,9 +269,9 @@ export default function Simulator({
                 marks={packageMarks}
                 value={packages}
                 callback={handlePackages}
-                disabled={newQuantity ? true : false}
+                disabled={!!newQuantity}
             />
-            {packages <= (isYearly ? 130 : 3) && !Boolean(newQuantity) && (
+            {packages <= (isYearly ? 130 : 3) && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardRight}
@@ -285,7 +282,7 @@ export default function Simulator({
                 </div>
             )}
 
-            {packages >= (isYearly ? 55 : 3) && !Boolean(newQuantity) && (
+            {packages >= (isYearly ? 55 : 3) && !newQuantity && (
                 <div
                     className="position-absolute font-weight-bold text-shadow text-center"
                     style={styles.delimeterBoardLeft}

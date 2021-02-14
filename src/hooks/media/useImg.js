@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { handleStorage } from "../../utils/storage/lForageStore";
 import { default as Img } from "../../components/Img";
 

@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
-import truncateWords from "../../../../utils/string/truncateWords";
+import { Fragment } from "react";
 import styled from "styled-components";
 // import convertToReal from "../../../../utils/numbers/convertToReal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import truncateWords from "../../../../utils/string/truncateWords";
 import { useAppSystem } from "../../../../hooks/useRoleData";
 import Img from "../../../../components/Img";
 import useAPI, { getMembersPodium } from "../../../../hooks/api/useAPI";
@@ -45,7 +45,7 @@ export default function RankingPondium() {
                             <p
                                 className={
                                     ind === 0
-                                        ? `bounce-repeat animated bounce delay-3s`
+                                        ? "bounce-repeat animated bounce delay-3s"
                                         : ""
                                 }
                             >
@@ -74,7 +74,7 @@ export default function RankingPondium() {
                 <Img
                     className="shadow-elevation-black"
                     src="/img/icons/podium.png"
-                    offline={true}
+                    offline
                     alt="pódio da fiddelize"
                     width={300}
                     height={250}

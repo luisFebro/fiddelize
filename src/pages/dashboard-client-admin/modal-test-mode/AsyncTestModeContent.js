@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Img from "../../../components/Img";
 
@@ -20,7 +19,7 @@ export default function AsyncTestModeContent() {
                 <Img
                     className="mx-5 mt-5 mb-3"
                     src="/img/icons/test-mode/clients-test.svg"
-                    offline={true}
+                    offline
                     width="120px"
                     height="auto"
                     alt="teste app clientes"
@@ -40,7 +39,7 @@ export default function AsyncTestModeContent() {
                 <Img
                     className="mx-5 mt-5 mb-3"
                     src="/img/icons/test-mode/members-test.svg"
-                    offline={true}
+                    offline
                     width="120px"
                     height="auto"
                     alt="teste app membros"

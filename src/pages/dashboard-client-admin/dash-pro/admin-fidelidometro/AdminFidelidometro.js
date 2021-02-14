@@ -1,4 +1,3 @@
-import React from "react";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import AdminPrizesBtn from "./admin-prizes-modal/AdminPrizesBtn";
 

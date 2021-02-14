@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
-import ModalFullContent from '../../../../../components/modals/ModalFullContent';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from 'prop-types';
-import CarouselFlickity from '../../../../../components/carousels/CarouselFlickity';
-import { milestoneIconsSorted, getIconIndex } from '../../../../../global-data/milestoneIconsSorted';
+import PropTypes from "prop-types";
+import ModalFullContent from "../../../../../components/modals/ModalFullContent";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import CarouselFlickity from "../../../../../components/carousels/CarouselFlickity";
+import {
+    milestoneIconsSorted,
+    getIconIndex,
+} from "../../../../../global-data/milestoneIconsSorted";
 
 EditLevelIconModalBtn.propTypes = {
     currChallNumber: PropTypes.number,
     currIcon: PropTypes.string,
-}
+};
 
 export default function EditLevelIconModalBtn({
-    currChallNumber, currIcon, setSelectedIcon, }) {
+    currChallNumber,
+    currIcon,
+    setSelectedIcon,
+}) {
     const [fullOpen, setFullOpen] = useState(false);
 
     return (
@@ -27,8 +33,8 @@ export default function EditLevelIconModalBtn({
                 fontWeight="bolder"
                 fontSize=".4.5em"
                 size="small"
-                color={"white"}
-                backgroundColor={"var(--themeSDark--default)"}
+                color="white"
+                backgroundColor="var(--themeSDark--default)"
                 needBtnShadow={false}
             />
             <ModalFullContent
@@ -48,14 +54,14 @@ export default function EditLevelIconModalBtn({
 }
 
 const LevelIconComp = ({
-    currChallNumber, currIcon, setSelectedIcon, setFullOpen
+    currChallNumber,
+    currIcon,
+    setSelectedIcon,
+    setFullOpen,
 }) => {
-
     const showTitle = () => (
         <div className="my-4">
-            <p
-                className="text-subtitle text-purple text-center font-weight-bold"
-            >
+            <p className="text-subtitle text-purple text-center font-weight-bold">
                 Mude Ícone de Nível
                 <br />
                 do <strong>Desafio n.º {currChallNumber}</strong>
@@ -69,19 +75,19 @@ const LevelIconComp = ({
         <div className="mt-5">
             <CarouselFlickity
                 data={selectedMilestoneIcons}
-                isFromDash={true}
+                isFromDash
                 setSelectedIcon={setSelectedIcon}
                 setOpenModal={setFullOpen}
                 currIconInd={currIconInd}
                 style={{
-                    maxWidth: '100%',
-                    boxShadow: '0 31px 120px -6px rgba(0, 0, 0, 0.35)'
+                    maxWidth: "100%",
+                    boxShadow: "0 31px 120px -6px rgba(0, 0, 0, 0.35)",
                 }}
             />
         </div>
     );
 
-    return(
+    return (
         <section>
             {showTitle()}
             {showIconsCarousel()}

@@ -23,11 +23,10 @@ export default function didRunOnce(
 
         if (!valueKey) {
             return insertNewValue(uniqueKey, uniqueValue);
-        } else {
-            if (JSON.stringify(valueKey) !== JSON.stringify(uniqueValue)) {
-                return insertNewValue(uniqueKey, uniqueValue);
-            }
-            return true;
         }
+        if (JSON.stringify(valueKey) !== JSON.stringify(uniqueValue)) {
+            return insertNewValue(uniqueKey, uniqueValue);
+        }
+        return true;
     });
 }

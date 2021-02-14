@@ -4,26 +4,22 @@ export default function isOffline() {
     const file = "https://www.fiddelize.com.br/img/error.png";
     const randomNum = Math.round(Math.random() * 10000);
 
-    if(window.navigator.onLine) {
+    if (window.navigator.onLine) {
         return false;
     }
 
-    xhr.open('HEAD', file + "?rand=" + randomNum, false);
+    xhr.open("HEAD", `${file}?rand=${randomNum}`, false);
 
     try {
         xhr.send();
 
-        return (xhr.status >= 200 && xhr.status < 304)
-        ? true
-        : false
-
+        return !!(xhr.status >= 200 && xhr.status < 304);
     } catch (e) {
         return true;
     }
 }
 
-
-/*ARCHIVES
+/* ARCHIVES
  // window.addEventListener('offline', () => {
     //     return true;
     // })

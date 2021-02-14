@@ -35,7 +35,7 @@ const handleCliUser = ({ bizId, history }) => {
     const updatedValues = { roleWhichDownloaded: "cliente", businessId: bizId };
     lStorage("setItems", { collection: "appSystem", newObj: updatedValues });
     // need to reload so that some variables in the local storage can be loaded properly.
-    return (window.location.href = `/mobile-app`);
+    return (window.location.href = "/mobile-app");
 };
 
 export default async function handleOpenApp({
@@ -70,7 +70,7 @@ export default async function handleOpenApp({
             url: setDefaultAccess(),
             body: {
                 userRole: appRole,
-                appId: appId,
+                appId,
                 userId: clickedAppUserId,
             },
         }).catch((e) => {
@@ -105,7 +105,7 @@ export default async function handleOpenApp({
 
     if (isCurrApp) {
         if (isBizTeam) {
-            return history.push(`/t/app/nucleo-equipe`);
+            return history.push("/t/app/nucleo-equipe");
         }
 
         if (isCliAdmin) {
@@ -113,7 +113,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliMemberApp) {
-            return history.push(`/t/app/equipe`);
+            return history.push("/t/app/equipe");
         }
 
         if (isCliUserApp) {
@@ -127,7 +127,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliMemberApp) {
-            return history.push(`/t/app/equipe`);
+            return history.push("/t/app/equipe");
         }
 
         if (isCliUserApp) {
@@ -137,7 +137,7 @@ export default async function handleOpenApp({
 
     if (isCliAdmin) {
         if (isFiddelizeApp) {
-            return history.push(`/t/app/nucleo-equipe`);
+            return history.push("/t/app/nucleo-equipe");
         }
 
         // cli-admin apps can be multiple
@@ -146,7 +146,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliMemberApp) {
-            return history.push(`/t/app/equipe`);
+            return history.push("/t/app/equipe");
         }
 
         if (isCliUserApp) {
@@ -156,7 +156,7 @@ export default async function handleOpenApp({
 
     if (isCliMember) {
         if (isFiddelizeApp) {
-            return history.push(`/t/app/nucleo-equipe`);
+            return history.push("/t/app/nucleo-equipe");
         }
 
         if (isCliAdminApp) {
@@ -178,17 +178,17 @@ export default async function handleOpenApp({
 
         if (isFiddelizeApp) {
             await removeSession();
-            return history.push(`/t/app/nucleo-equipe/acesso`);
+            return history.push("/t/app/nucleo-equipe/acesso");
         }
 
         if (isCliAdminApp) {
             await removeSession();
-            return history.push(`/senha-de-acesso`);
+            return history.push("/senha-de-acesso");
         }
 
         if (isCliMemberApp) {
             await removeSession();
-            return history.push(`/senha-equipe`);
+            return history.push("/senha-equipe");
         }
 
         // cli-user apps can be multiple

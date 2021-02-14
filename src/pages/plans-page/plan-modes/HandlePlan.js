@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
 const AsyncGoldPlan = Load({

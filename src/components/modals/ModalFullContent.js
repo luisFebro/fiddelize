@@ -1,10 +1,9 @@
-import React from "react";
 import PropTypes from "prop-types";
+import Dialog from "@material-ui/core/Dialog";
 import CloseButton from "../buttons/CloseButton";
 import RadiusBtn from "../buttons/RadiusBtn";
-import Dialog from "@material-ui/core/Dialog";
 import { useRunComp } from "../../hooks/useRunComp";
-import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
+import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 
 ModalFullContent.propTypes = {
     contentComp: PropTypes.node,
@@ -56,7 +55,7 @@ export default function ModalFullContent({
             maxWidth="md"
             fullWidth
             style={styles.root}
-            fullScreen={true}
+            fullScreen
             open={handleOpen()}
             aria-labelledby="form-dialog-title"
             className={`${animatedClass || ""}`}

@@ -1,4 +1,3 @@
-import React from "react";
 import CliWinnersCard from "./CliWinnersCard";
 
 export default function CliWinnersList({ list, rewardDeadline }) {

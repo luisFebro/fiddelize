@@ -1,4 +1,3 @@
-import React from "react";
 import AsyncTasks from "./tasks/AsyncTasks";
 
 export default function AsyncMemberTasksHistory() {

@@ -1,130 +1,145 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from "react";
 // import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import { useStoreDispatch, useStoreState } from 'easy-peasy';
-import { showSnackbar } from '../../../redux/actions/snackbarActions';
-import ButtonDropdown from '../../../components/buttons/material-ui/ButtonDropdown';
-import parse from 'html-react-parser';
+import { useStoreDispatch, useStoreState } from "easy-peasy";
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import ButtonDropdown from "../../../components/buttons/material-ui/ButtonDropdown";
 
-import { readAllDbFromModels } from '../../../redux/actions/adminActions';
+import { readAllDbFromModels } from "../../../redux/actions/adminActions";
 
 const dbData = {
     users: {
-        brDbName: 'usuários',
-        dbModelName: 'user',
+        brDbName: "usuários",
+        dbModelName: "user",
     },
     staffBookings: {
-        brDbName: 'agendamentos',
-        dbModelName: 'staffBooking',
+        brDbName: "agendamentos",
+        dbModelName: "staffBooking",
     },
     finances: {
-        brDbName: 'finanças',
-        dbModelName: 'finance',
-    }
+        brDbName: "finanças",
+        dbModelName: "finance",
+    },
 };
-
-
 
 export default function BackUpToExcel() {
     const [isThisLoading, setIsThisLoading] = useState(true);
 
     const [data, setData] = useState({
         dbDataList: [],
-        brDbName: '',
-        dbModelName: '',
-        selectedButton: 'SELECIONE BOTÃO',
-    })
+        brDbName: "",
+        dbModelName: "",
+        selectedButton: "SELECIONE BOTÃO",
+    });
     const { dbDataList, selectedButton, dbModelName, brDbName } = data;
 
     const isArrayReady = dbDataList.length !== 0;
 
-    const { adminId, token } = useStoreState(state => ({
+    const { adminId, token } = useStoreState((state) => ({
         token: state.authReducer.cases.tokenWhenLogin,
         adminId: state.userReducer.cases.currentUser._id,
-    }))
+    }));
 
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        if(adminId && selectedButton !== 'SELECIONE BOTÃO') {
+        if (adminId && selectedButton !== "SELECIONE BOTÃO") {
             handleSubmit(adminId);
         }
-    }, [selectedButton, adminId])
+    }, [selectedButton, adminId]);
 
-    const handleSubmit = adminId => {
+    const handleSubmit = (adminId) => {
         const securityObj = {
             adminId,
             token,
-        }
+        };
 
         setIsThisLoading(true);
-        readAllDbFromModels(dispatch, securityObj, dbModelName)
-        .then(res => {
-            if(res.status !== 200) {
-                showSnackbar(dispatch, "Por segurança, os dados ficam disponíveis por 30 minutos. Faça seu login novamente", 'error', 9000)
+        readAllDbFromModels(dispatch, securityObj, dbModelName).then((res) => {
+            if (res.status !== 200) {
+                showSnackbar(
+                    dispatch,
+                    "Por segurança, os dados ficam disponíveis por 30 minutos. Faça seu login novamente",
+                    "error",
+                    9000
+                );
                 setIsThisLoading(false);
                 return;
             }
             setData({
                 ...data,
                 dbDataList: res.data,
-            })
+            });
             setIsThisLoading(false);
-        })
-    }
+        });
+    };
 
     const showDownloadableDataBtn = () => (
         <div>
             <table id={brDbName} className="d-none">
                 <thead>
                     <tr>
-                        {isArrayReady && dbDataList.fields.map((field, ind) => (
-                            <th key={ind}>{field}</th>
-                        ))}
+                        {isArrayReady &&
+                            dbDataList.fields.map((field, ind) => (
+                                <th key={ind}>{field}</th>
+                            ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {dbDataList.length !== 0 && dbDataList.docs.map((doc, ind) => (
-                        <tr key={ind}>
-                            {dbDataList.fields.map((field, ind) => {
-                                return <td key={ind}>{doc[field]}</td>
-                            })}
-                        </tr>
-                    ))}
+                    {dbDataList.length !== 0 &&
+                        dbDataList.docs.map((doc, ind) => (
+                            <tr key={ind}>
+                                {dbDataList.fields.map((field, ind) => (
+                                    <td key={ind}>{doc[field]}</td>
+                                ))}
+                            </tr>
+                        ))}
                 </tbody>
             </table>
         </div>
     );
 
     const handleDbSelection = (selectedButton) => {
-        switch(selectedButton) {
-            case 'GERAR DADOS - USUÁRIOS':
-                return 'users';
-            case 'GERAR DADOS - AGENDAMENTOS':
-                return 'staffBookings';
-            case 'GERAR DADOS - FINANÇAS':
-                return 'finances';
+        switch (selectedButton) {
+            case "GERAR DADOS - USUÁRIOS":
+                return "users";
+            case "GERAR DADOS - AGENDAMENTOS":
+                return "staffBookings";
+            case "GERAR DADOS - FINANÇAS":
+                return "finances";
             default:
                 console.log("none selected");
         }
-    }
+    };
 
-    const onSelectedValue = value => {
-        if(value !== 'SELECIONE BOTÃO') {
+    const onSelectedValue = (value) => {
+        if (value !== "SELECIONE BOTÃO") {
             const model = handleDbSelection(value);
-            setData({ ...data, selectedButton: value, brDbName: dbData[model].brDbName, dbModelName: dbData[model].dbModelName})
+            setData({
+                ...data,
+                selectedButton: value,
+                brDbName: dbData[model].brDbName,
+                dbModelName: dbData[model].dbModelName,
+            });
         }
-    }
+    };
 
     return (
         <div className="my-5 container-center">
-            <p className="text-left text-normal font-weight-bold">Fazer cópia de dados do sistema via Excel:</p>
+            <p className="text-left text-normal font-weight-bold">
+                Fazer cópia de dados do sistema via Excel:
+            </p>
             <ButtonDropdown
                 dropdown={{
-                    titleOptions: ['SELECIONE BOTÃO', "GERAR DADOS - USUÁRIOS", "GERAR DADOS - AGENDAMENTOS", "GERAR DADOS - FINANÇAS"],
+                    titleOptions: [
+                        "SELECIONE BOTÃO",
+                        "GERAR DADOS - USUÁRIOS",
+                        "GERAR DADOS - AGENDAMENTOS",
+                        "GERAR DADOS - FINANÇAS",
+                    ],
                 }}
-                onSelectedValue={value => onSelectedValue(value)}
+                onSelectedValue={(value) => onSelectedValue(value)}
             />
-            {/*showDownloadableDataBtn()*/}
+            {/* showDownloadableDataBtn() */}
         </div>
     );
 }

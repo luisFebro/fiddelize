@@ -1,30 +1,32 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import PropTypes from 'prop-types';
+import styled, { keyframes } from "styled-components";
+import PropTypes from "prop-types";
 
 LoadingThreeDots.propTypes = {
     color: PropTypes.string,
-}
+};
 
 export default function LoadingThreeDots({ color }) {
-    const styles={
+    const styles = {
         text: {
             color: color || "var(--mainDark)",
         },
-        spinner:{
-            backgroundColor: color || '#333'
-        }
-    }
+        spinner: {
+            backgroundColor: color || "#333",
+        },
+    };
 
     return (
         <div className="col-10 mx-auto">
             <DivWrapper>
-                <section className="loading-container" style={styles && styles.text}>
+                <section
+                    className="loading-container"
+                    style={styles && styles.text}
+                >
                     <h2 className="main-font">Carregando</h2>
                     <div className="spinner">
-                        <div style={styles.spinner} className="bounce1"></div>
-                        <div style={styles.spinner} className="bounce2"></div>
-                        <div style={styles.spinner} className="bounce3"></div>
+                        <div style={styles.spinner} className="bounce1" />
+                        <div style={styles.spinner} className="bounce2" />
+                        <div style={styles.spinner} className="bounce3" />
                     </div>
                 </section>
             </DivWrapper>
@@ -57,7 +59,7 @@ const DivWrapper = styled.div`
         //margin: 100px auto 0;
         width: 100%;
         text-align: center;
-        filter: drop-shadow(.001em .1em .1em var(--mainDark));
+        filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
     }
 
     & .spinner > div {

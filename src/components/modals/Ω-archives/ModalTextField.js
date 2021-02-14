@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { closeModal } from '../../redux/actions/modalActions';
-import { sendNotification } from '../../redux/actions/userActions';
+import { useStoreState, useStoreDispatch } from "easy-peasy";
 // Material UI
-import { makeStyles } from '@material-ui/core/styles';
-import { CardMedia } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from "@material-ui/core/styles";
+import { CardMedia } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 // import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import TextField from '@material-ui/core/TextField';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import parse from 'html-react-parser';
-import PropTypes from 'prop-types';
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import TextField from "@material-ui/core/TextField";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import parse from "html-react-parser";
+import PropTypes from "prop-types";
+import { sendNotification } from "../../redux/actions/userActions";
+import { closeModal } from "../../redux/actions/modalActions";
 
 ModalTextField.propTypes = {
     currItemFound: PropTypes.shape({
@@ -22,30 +22,30 @@ ModalTextField.propTypes = {
         propSubTitle: PropTypes.string,
         propTxtBtn: PropTypes.string,
         // mainSubject: PropTypes.string,
-        objToSend: PropTypes.object
-    })
+        objToSend: PropTypes.object,
+    }),
 };
 // End Material UI
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     button: {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
     },
     media: {
         height: 50,
-        width: '50%',
-        margin: 'auto'
+        width: "50%",
+        margin: "auto",
     },
     textField: {
         marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1)
-    }
+        marginRight: theme.spacing(1),
+    },
 }));
 
 export default function ModalTextField({ currItemFound }) {
-    const [newMessage, setNewMessage] = useState('');
-    const { isModalTextFieldOpen } = useStoreState(state => ({
-        isModalTextFieldOpen: state.modalReducers.cases.isModalTextFieldOpen
+    const [newMessage, setNewMessage] = useState("");
+    const { isModalTextFieldOpen } = useStoreState((state) => ({
+        isModalTextFieldOpen: state.modalReducers.cases.isModalTextFieldOpen,
     }));
     const dispatch = useStoreDispatch();
     const name = currItemFound ? currItemFound.name : null;
@@ -58,12 +58,12 @@ export default function ModalTextField({ currItemFound }) {
     const mainKey = currItemFound ? currItemFound.mainKey : null;
 
     const setObjToSend = () => {
-        let data = objToSend;
+        const data = objToSend;
         objToSend.messageList.message = newMessage.message;
         sendNotification(dispatch, data, _idClient);
     };
 
-    const onChange = e => {
+    const onChange = (e) => {
         const { name, value } = e.target;
         setNewMessage({ [name]: value });
     };
@@ -71,8 +71,16 @@ export default function ModalTextField({ currItemFound }) {
     const classes = useStyles();
     return (
         <div>
-            <Dialog style={{ zIndex: 1500 }} open={isModalTextFieldOpen} aria-labelledby="form-dialog-title">
-                <CardMedia className={classes.media} image="img/babadoo-logo_no-slogon.png" title="loja babadoo" />
+            <Dialog
+                style={{ zIndex: 1500 }}
+                open={isModalTextFieldOpen}
+                aria-labelledby="form-dialog-title"
+            >
+                <CardMedia
+                    className={classes.media}
+                    image="img/babadoo-logo_no-slogon.png"
+                    title="loja babadoo"
+                />
                 <DialogTitle id="form-dialog-title">{propTitle}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -81,7 +89,9 @@ export default function ModalTextField({ currItemFound }) {
                     <form onChange={onChange}>
                         <TextField
                             id="outlined-multiline-static"
-                            label={parse(`Mensagem para <br /><strong>${name}</strong>`)}
+                            label={parse(
+                                `Mensagem para <br /><strong>${name}</strong>`
+                            )}
                             multiline
                             rows="5"
                             fullWidth
@@ -93,7 +103,13 @@ export default function ModalTextField({ currItemFound }) {
                         />
                     </form>
                     <section>
-                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '28px' }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                marginTop: "28px",
+                            }}
+                        >
                             <Button
                                 onClick={() => {
                                     closeModal(dispatch);
@@ -112,7 +128,10 @@ export default function ModalTextField({ currItemFound }) {
                                 className={classes.button}
                             >
                                 {propTxtBtn}
-                                <i className="fas fa-paper-plane" style={{ marginLeft: '5px' }}></i>
+                                <i
+                                    className="fas fa-paper-plane"
+                                    style={{ marginLeft: "5px" }}
+                                />
                             </Button>
                         </div>
                     </section>

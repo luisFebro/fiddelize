@@ -1,31 +1,37 @@
-import React from 'react';
-import MuSelectTable from '../../../../../../../components/tables/MuSelectTable';
-import ButtonFab from '../../../../../../../components/buttons/material-ui/ButtonFab';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useDelay from '../../../../../../../hooks/useDelay';
-import scrollIntoView from '../../../../../../../utils/document/scrollIntoView';
-import click from '../../../../../../../utils/event/click';
-import { setRun } from '../../../../../../../hooks/useRunComp';
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../../../../../redux/actions/snackbarActions';
-import { useAppSystem } from '../../../../../../../hooks/useRoleData';
-import useAPI, { readSMSHistoryStatement, needTrigger } from '../../../../../../../hooks/api/useAPI';
-import { useRunComp } from '../../../../../../../hooks/useRunComp';
+import { useStoreDispatch } from "easy-peasy";
+import MuSelectTable from "../../../../../../../components/tables/MuSelectTable";
+import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import useDelay from "../../../../../../../hooks/useDelay";
+import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
+import click from "../../../../../../../utils/event/click";
+import { setRun, useRunComp } from "../../../../../../../hooks/useRunComp";
+import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
+import { useAppSystem } from "../../../../../../../hooks/useRoleData";
+import useAPI, {
+    readSMSHistoryStatement,
+    needTrigger,
+} from "../../../../../../../hooks/api/useAPI";
 
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
     title: {
         marginTop: 80,
-    }
+    },
 });
 
 const headCells = [
-    { id: 'name', numeric: false, disablePadding: false, label: 'Nome' },
-    { id: 'phone', numeric: false, disablePadding: false, label: 'Contato' },
-    { id: 'carrier', numeric: false, disablePadding: false, label: 'Operadora' },
-    { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
-]
+    { id: "name", numeric: false, disablePadding: false, label: "Nome" },
+    { id: "phone", numeric: false, disablePadding: false, label: "Contato" },
+    {
+        id: "carrier",
+        numeric: false,
+        disablePadding: false,
+        label: "Operadora",
+    },
+    { id: "status", numeric: false, disablePadding: false, label: "Status" },
+];
 
 export default function AsyncExtract({ extractId }) {
     const loading = false;
@@ -39,9 +45,9 @@ export default function AsyncExtract({ extractId }) {
         url: readSMSHistoryStatement(userId, extractId),
         needAuth: true,
         trigger,
-    })
+    });
 
-    list = !list ? list = [] : list;
+    list = !list ? (list = []) : list;
 
     const dispatch = useStoreDispatch();
 
@@ -51,27 +57,32 @@ export default function AsyncExtract({ extractId }) {
 
     const handleResending = () => {
         const handleTabFunc = () => {
-            list.forEach(data => {
+            list.forEach((data) => {
                 delete data.carrier;
                 delete data.status;
-            })
+            });
             setRun(dispatch, "asyncExtractList", { array: list });
-            showSnackbar(dispatch, "Pronto!", "success")
-        }
+            showSnackbar(dispatch, "Pronto!", "success");
+        };
 
         const postFunction = () => {
             click("#bubbleTabsBtn2", { callback: () => handleTabFunc() });
-        }
+        };
 
         const config = {
             mode: "center",
             offset: 10,
             duration: 3000,
             onDone: () => postFunction(),
-        }
-        showSnackbar(dispatch, "Adicionando contatos... Um momento!", "warning", 7000)
-        scrollIntoView("#recipientOptions", config)
-    }
+        };
+        showSnackbar(
+            dispatch,
+            "Adicionando contatos... Um momento!",
+            "warning",
+            7000
+        );
+        scrollIntoView("#recipientOptions", config);
+    };
 
     const displayCTA = () => (
         <ButtonFab
@@ -79,9 +90,9 @@ export default function AsyncExtract({ extractId }) {
             title="Novo reenvio"
             onClick={handleResending}
             position="relative"
-            needTxtNoWrap={true}
-            backgroundColor={"var(--themeSDark--default)"}
-            variant = 'extended'
+            needTxtNoWrap
+            backgroundColor="var(--themeSDark--default)"
+            variant="extended"
         />
     );
 
@@ -98,8 +109,13 @@ export default function AsyncExtract({ extractId }) {
             </div>
             {isSmall && (
                 <p
-                    className={`${vanishMsgReady ? "animated zoomOut" : ""} align-items-center mb-2 mr-3 text-normal font-weight-bold text-white text-shadow text-center`}
-                    style={{ display: vanishMsgReady ? "none" : "block", transition: "all 4s"}}
+                    className={`${
+                        vanishMsgReady ? "animated zoomOut" : ""
+                    } align-items-center mb-2 mr-3 text-normal font-weight-bold text-white text-shadow text-center`}
+                    style={{
+                        display: vanishMsgReady ? "none" : "block",
+                        transition: "all 4s",
+                    }}
                 >
                     Deslize para mais <FontAwesomeIcon icon="arrow-right" />
                 </p>

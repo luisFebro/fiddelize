@@ -1,9 +1,9 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import truncateWords from "../utils/string/truncateWords";
-import { ButtonContainerPressedEffectDark as Dark } from "../components/buttons/Ω-archives/Default";
 import parse from "html-react-parser";
+import truncateWords from "../utils/string/truncateWords";
+import { ButtonContainerPressedEffectDark as Dark } from "./buttons/Ω-archives/Default";
 import Spinner from "./loadingIndicators/Spinner";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -92,7 +92,7 @@ export default function Illustration({
                 <section style={{ display: status ? "none" : "block" }}>
                     <img
                         className={`${
-                            className ? className : ""
+                            className || ""
                         } image-center svg-elevation`}
                         src={img}
                         width=""
@@ -108,7 +108,7 @@ export default function Illustration({
                     <div className="container-center">
                         <p
                             className={`move-txt-from-center ${
-                                txtBorder ? txtBorder : ""
+                                txtBorder || ""
                             } ${
                                 txtClassName
                                     ? `${txtClassName} text-subtitle font-weight-bold`

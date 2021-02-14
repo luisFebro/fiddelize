@@ -1,10 +1,9 @@
-import React, { Fragment } from "react";
-import ButtonMulti from "../../../../components/buttons/material-ui/ButtonMulti";
+import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
+import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
 // import extractStrData from "../../../../utils/string/extractStrData";
 // import useCount from '../../../../hooks/useCount';
 import {
-    textStyle,
     ShowTitle,
     ShowIllustration,
     ShowBrief,

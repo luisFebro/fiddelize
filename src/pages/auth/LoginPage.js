@@ -1,7 +1,7 @@
-import React, { useState, Fragment } from "react";
+import { Fragment } from "react";
+import { useStoreState } from "easy-peasy";
 import AsyncLogin from "../../components/auth/AsyncLogin";
 import AsyncLoyaltyScoreHandler from "../client/loyalty-client-scores";
-import { useStoreState } from "easy-peasy";
 import CompLoader from "../../components/CompLoader";
 import useData from "../../hooks/useData";
 import { Load } from "../../components/code-splitting/LoadableComp";
@@ -40,7 +40,7 @@ export default function LoginPage() {
             ) : (
                 <section
                     className="container-center"
-                    style={{ margin: `30px 0` }}
+                    style={{ margin: "30px 0" }}
                 >
                     {needGateKeeper && (
                         <section className="container-center-col">

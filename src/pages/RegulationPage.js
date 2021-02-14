@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import Paper from "@material-ui/core/Paper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti, {
     faStyle,
 } from "../components/buttons/material-ui/ButtonMulti";
-import { Link } from "react-router-dom";
-import LoadingThreeDots from "../components/loadingIndicators/LoadingThreeDots";
-import Paper from "@material-ui/core/Paper";
-import { readAdmin } from "../redux/actions/adminActions";
 import isThisApp from "../utils/window/isThisApp";
 import replaceVariablesInTxt from "../utils/string/replaceVariablesInTxt";
 import DateWithIcon from "../components/date-time/DateWithIcon";
 import getQueryByName from "../utils/string/getQueryByName";
-import { useClientAdmin, useClientUser } from "../hooks/useRoleData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import selectTxtStyle, { currTxtColor } from "../utils/biz/selectTxtStyle";
+import { useClientAdmin } from "../hooks/useRoleData";
+import { currTxtColor } from "../utils/biz/selectTxtStyle";
 import pickCurrChallData from "../utils/biz/pickCurrChallData";
 import defineCurrChallenge from "../utils/biz/defineCurrChallenge";
 import regulationText, {
@@ -105,9 +102,7 @@ export default function RegulationPage({ location }) {
                 <ButtonMulti
                     title="voltar"
                     color={currTxtColor(selfThemePColor || "default")}
-                    backgroundColor={
-                        "var(--themeSDark--" + selfThemeSColor + ")"
-                    }
+                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
                     iconFontAwesome={
                         <FontAwesomeIcon icon="home" style={faStyle} />
                     }
@@ -121,7 +116,7 @@ export default function RegulationPage({ location }) {
                 date={updatedAt}
                 msgIfNotValidDate="Nenhuma alteração."
                 marginTop={0}
-                needTxtShadow={true}
+                needTxtShadow
             />
         </div>
     );

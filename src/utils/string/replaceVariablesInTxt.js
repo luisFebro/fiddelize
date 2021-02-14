@@ -38,14 +38,14 @@ export default function replaceVariablesInTxt(text, variableObj, opts) {
     const boldResArray = text.match(boldRegex);
     if (boldResArray) {
         boldResArray.forEach((res) => {
-            newText = newText.replace(boldRegex, `<strong>$1</strong>`); // $1 refers to group 1 in the regex wrapped in parentheses.
+            newText = newText.replace(boldRegex, "<strong>$1</strong>"); // $1 refers to group 1 in the regex wrapped in parentheses.
         });
     }
 
     const italicResArray = newText.match(italicRegex);
     if (italicResArray) {
         italicResArray.forEach((res) => {
-            newText = newText.replace(italicRegex, `<em>$1</em>`);
+            newText = newText.replace(italicRegex, "<em>$1</em>");
         });
     }
 
@@ -54,7 +54,7 @@ export default function replaceVariablesInTxt(text, variableObj, opts) {
         centerResArray.forEach((res) => {
             newText = newText.replace(
                 centerRegex,
-                `<center style="display: block; margin: 10px 0px;"><strong><span style="text-transform:uppercase; color: var(--mainPurple);">$1</span></strong></center>`
+                '<center style="display: block; margin: 10px 0px;"><strong><span style="text-transform:uppercase; color: var(--mainPurple);">$1</span></strong></center>'
             );
         });
     }

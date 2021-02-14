@@ -1,23 +1,24 @@
-import { data } from './dataWorkingHour';
-import parse from 'html-react-parser';
-let isStoreOpened = '';
+import parse from "html-react-parser";
+import { data } from "./dataWorkingHour";
 
-const checkTodayDay = weekDays => {
-    let today = '';
+let isStoreOpened = "";
+
+const checkTodayDay = (weekDays) => {
+    let today = "";
     weekDays.forEach((obj, ind) => {
-        let date = new Date();
+        const date = new Date();
         if (date.getDay() === ind) {
             today = obj.weekDay;
         }
     });
     return today;
 };
-let todayResult = checkTodayDay(data);
+const todayResult = checkTodayDay(data);
 
-const getHours = day => {
+const getHours = (day) => {
     let openHour = 0;
     let closeHour = 0;
-    data.forEach(obj => {
+    data.forEach((obj) => {
         if (obj.weekDay === day) {
             openHour = obj.from;
             closeHour = obj.to;
@@ -26,17 +27,17 @@ const getHours = day => {
     return [openHour, closeHour];
 };
 
-let hourResults = getHours(todayResult);
+const hourResults = getHours(todayResult);
 
 const checking = (openHour, closeHour) => {
     isStoreOpened = true;
     const hourNow = new Date().getHours();
-    let msg = '';
-    let msgFalse = parse(`
+    let msg = "";
+    const msgFalse = parse(`
                 Parace que nossa loja física está fechada agora.<br />
                 Deixe um recado via <a href=092992817363>Whatsapp</a>...<br />
                 Ou faça seu pedido a qualquer hora <a href=https://yoursite.com.br>por aqui mesmo!</a>`);
-    if (todayResult === 'Domingo') {
+    if (todayResult === "Domingo") {
         return [msgFalse, false];
     }
     if (hourNow >= openHour && hourNow < closeHour) {

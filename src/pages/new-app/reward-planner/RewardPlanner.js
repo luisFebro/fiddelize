@@ -1,7 +1,4 @@
-import React, { Fragment } from "react";
-import getQueryByName from "../../../utils/string/getQueryByName";
-import ScrollArrow from "../../../keyframes/built/scroll-arrow/ScrollArrow";
-import parse from "html-react-parser";
+import { Fragment } from "react";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import GoalForm from "./GoalForm";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";

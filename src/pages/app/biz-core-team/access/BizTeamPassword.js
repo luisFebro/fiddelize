@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect } from "react";
-import AccessPassword from "../../../access-password/AccessPassword";
+import { Fragment, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import { useStoreDispatch } from "easy-peasy";
+import AccessPassword from "../../../access-password/AccessPassword";
+import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import { getVar, setVar, store } from "../../../../hooks/storage/useVar";
 import { disconnect } from "../../../../hooks/useAuthUser";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
@@ -45,7 +45,7 @@ function BizTeamPassword({ history }) {
     return (
         <Fragment>
             {showLogoutBtn()}
-            <AccessPassword isBizTeam={true} history={history} />
+            <AccessPassword isBizTeam history={history} />
         </Fragment>
     );
 }

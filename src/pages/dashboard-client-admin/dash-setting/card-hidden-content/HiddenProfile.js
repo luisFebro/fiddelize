@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TextField from "@material-ui/core/TextField";
+import PropTypes from "prop-types";
+import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti, {
     faStyle,
 } from "../../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../utils/form/use-state/handleChange";
 // import DateWithIcon from '../../../../components/date-time/DateWithIcon';
-import PropTypes from "prop-types";
 import CreatedAtBr from "../../CreatedAtBr";
 import { updateUser, readUser } from "../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import isValidName from "../../../../utils/validation/isValidName";
 import phoneMaskBr from "../../../../utils/validation/masks/phoneMaskBr";
 import isKeyPressed from "../../../../utils/event/isKeyPressed";
@@ -139,21 +139,21 @@ export default function HiddenProfile({ userData }) {
                 <p className="text-shadow text-subtitle font-weight-bold">
                     Atualize informações de Perfil
                 </p>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Nome</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         onChange={handleChange(setData, data)}
                         fullWidth
-                        error={error === "name" ? true : false}
+                        error={error === "name"}
                         autoComplete="off"
                         type="text"
                         name="name"
                         value={name}
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">CPF</p>
                     <TextField
                         InputProps={{
@@ -169,7 +169,7 @@ export default function HiddenProfile({ userData }) {
                         disabled
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Contato</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
@@ -178,7 +178,7 @@ export default function HiddenProfile({ userData }) {
                         onBlur={() =>
                             setData({ ...data, phone: phoneMaskBr(phone) })
                         }
-                        error={error === "phone" ? true : false}
+                        error={error === "phone"}
                         onKeyPress={(e) =>
                             isKeyPressed(e, "Enter") &&
                             setData({ ...data, phone: phoneMaskBr(phone) })
@@ -190,7 +190,7 @@ export default function HiddenProfile({ userData }) {
                         fullWidth
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Data de Nascimento</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
@@ -202,13 +202,13 @@ export default function HiddenProfile({ userData }) {
                         value={birthday}
                     />
                 </div>
-                <div className={`mt-4 margin-auto-95 text-normal`}>
+                <div className="mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Email</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
                         variant="outlined"
                         onChange={handleChange(setData, data)}
-                        error={error === "email" ? true : false}
+                        error={error === "email"}
                         autoComplete="off"
                         type="text"
                         name="email"
@@ -216,7 +216,7 @@ export default function HiddenProfile({ userData }) {
                         fullWidth
                     />
                 </div>
-                <div className={`d-none mt-4 margin-auto-95 text-normal`}>
+                <div className="d-none mt-4 margin-auto-95 text-normal">
                     <p className="text-shadow">Forma de Tratamento</p>
                     <TextField
                         InputProps={{ style: styles.fieldForm }}
@@ -228,7 +228,7 @@ export default function HiddenProfile({ userData }) {
                         fullWidth
                     />
                 </div>
-                <div className={`mt-3`}>
+                <div className="mt-3">
                     <CreatedAtBr
                         createdAt={userData.createdAt}
                         needTextShadow

@@ -1,13 +1,12 @@
-import debounce from  './debounce';
-import isRealObj from '../isRealObj';
+import debounce from "./debounce";
+import isRealObj from "../isRealObj";
 /*
 LEading and trailing egdes
 One gotcha here is if you specify leading and trailing set to false, the callback does not fire. Setting the leading to true will begin callback execution immediately and then throttle. When you set both leading and trailing to true, this guarantees execution per interval.
  */
 
-
 /** Used as the `TypeError` message for "Functions" methods. */
-var FUNC_ERROR_TEXT = 'Expected a function';
+const FUNC_ERROR_TEXT = "Expected a function";
 
 /**
  * Creates a throttled function that only invokes `func` at most once per
@@ -51,24 +50,22 @@ var FUNC_ERROR_TEXT = 'Expected a function';
  * jQuery(window).on('popstate', throttled.cancel);
  */
 export default function throttle(func, wait, options) {
-  var leading = true,
-      trailing = true;
+    let leading = true;
+    let trailing = true;
 
-  if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  if (isRealObj(options)) {
-    leading = 'leading' in options ? !!options.leading : leading;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
-  }
-  return debounce(func, wait, {
-    'leading': leading,
-    'maxWait': wait,
-    'trailing': trailing
-  });
+    if (typeof func !== "function") {
+        throw new TypeError(FUNC_ERROR_TEXT);
+    }
+    if (isRealObj(options)) {
+        leading = "leading" in options ? !!options.leading : leading;
+        trailing = "trailing" in options ? !!options.trailing : trailing;
+    }
+    return debounce(func, wait, {
+        leading: leading,
+        maxWait: wait,
+        trailing: trailing,
+    });
 }
-
-
 
 /* exemples:
 recommended timing: 300 miliseconds

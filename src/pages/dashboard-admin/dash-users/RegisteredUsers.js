@@ -1,11 +1,5 @@
-import React from 'react';
-
 export default function RegisteredUsers() {
-    return (
-        <div>
-          I am RegisteredUsers
-        </div>
-    );
+    return <div>I am RegisteredUsers</div>;
 }
 
 // import React, { Fragment, useEffect, useState, useContext } from 'react';

@@ -1,13 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import styled from "styled-components";
+import PropTypes from "prop-types";
 
 Message.propTypes = {
     data: PropTypes.shape({
         sender: PropTypes.string.isRequired,
         time: PropTypes.string.isRequired,
         message: PropTypes.string,
-    })
+    }),
 };
 export default function Message({ data }) {
     // TODO: message needs to write a condition to not allow users to send empty messges
@@ -15,7 +14,7 @@ export default function Message({ data }) {
     return (
         <DivWrapper>
             <p className="text-normal text-capitalize">{sender}</p>
-            <p style={{ wordWrap: 'breakWord' }} className="text-sub-container">
+            <p style={{ wordWrap: "breakWord" }} className="text-sub-container">
                 {message}
             </p>
             <span>

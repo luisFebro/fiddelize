@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import detectSingleElemScroll from "../../utils/window/detectSingleElemScroll";
 
 export default function useDetectScrollSingle(elemQuery) {

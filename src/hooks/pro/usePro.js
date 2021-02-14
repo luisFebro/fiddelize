@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSystem, useClientAdmin } from "../useRoleData";
 import useAPI, { getProData } from "../api/useAPI";
 import { getVar, store } from "../storage/useVar";
 import getDatesCountdown from "../dates/getDatesCountdown";
 
-const setAllData = (thisData, setData, bizPlan) => {
-    return setData((prevData) => ({
+const setAllData = (thisData, setData, bizPlan) =>
+    setData((prevData) => ({
         ...prevData,
         isPro: thisData ? thisData.isPro : bizPlan,
         plan: thisData && thisData.plan,
@@ -14,7 +14,6 @@ const setAllData = (thisData, setData, bizPlan) => {
         bizPlanList: thisData && thisData.bizPlanList,
         bizFreeCredits: thisData && thisData.bizFreeCredits,
     }));
-};
 
 export default function usePro(options = {}) {
     const { service, trigger = true, nextExpiryDate, userId } = options;
@@ -75,7 +74,7 @@ export default function usePro(options = {}) {
 
         const daysLeft = getDatesCountdown(usageTimeEnd);
         const freeCredits = bizFreeCredits && bizFreeCredits[service];
-        credits += freeCredits ? freeCredits : 0;
+        credits += freeCredits || 0;
 
         return {
             loading,

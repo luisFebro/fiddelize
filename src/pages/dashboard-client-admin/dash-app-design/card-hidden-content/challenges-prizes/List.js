@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import ChallComp from "./ChallComp";
 import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
 import {
     readClientAdmin,
     updateUser,
 } from "../../../../../redux/actions/userActions";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import ShowBizNotes from "./ShowBizNotes";
 
@@ -20,7 +20,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     } = useClientAdmin();
 
     // jsut in case user by any change does not pass throu self-service and decide to log in withot data recorded...
-    let firstMainData = {
+    const firstMainData = {
         id: businessId,
         icon: selfMilestoneIcon,
         rewardScore: maxScore,
@@ -80,7 +80,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
         if (addThisId) {
             let lastRewardScore =
                 challengesArray[challengesArray.length - 1].rewardScore;
-            let lastIcon = challengesArray[challengesArray.length - 1].icon;
+            const lastIcon = challengesArray[challengesArray.length - 1].icon;
             const addedObj = {
                 id: needAdd,
                 icon: lastIcon,
@@ -93,9 +93,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
 
         const dataToSend = {
             ...constObj,
-            "clientAdminData.rewardList": newModifiedArray
-                ? newModifiedArray
-                : challengesArray,
+            "clientAdminData.rewardList": newModifiedArray || challengesArray,
         };
 
         updateUser(dispatch, dataToSend, businessId, {

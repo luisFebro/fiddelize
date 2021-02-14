@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import { treatBoolStatus } from "../../../hooks/api/trigger";
 import { setVar, store } from "../../../hooks/storage/useVar";
-import SwitchBtn from "../../../components/buttons/material-ui/SwitchBtn";
-import { useStoreDispatch } from "easy-peasy";
+import SwitchBtn from "../../buttons/material-ui/SwitchBtn";
 import { logout } from "../../../redux/actions/authActions";
-import { Load } from "../../../components/code-splitting/LoadableComp";
+import { Load } from "../../code-splitting/LoadableComp";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 // import { useClientAdmin } from '../../../hooks/useRoleData';
@@ -50,7 +50,7 @@ export default function AccessSwitcher({
                 }
                 customColor={`${selectTxtStyle(backColor)} text-normal`}
                 animationOn={false}
-                needCustomColor={true}
+                needCustomColor
                 callback={handleAccessSwitcher}
             />
             {fullOpen && (

@@ -1,22 +1,23 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import Operation from './Operation';
+import { Fragment, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAppSystem, useClientAdmin } from '../../../../hooks/useRoleData';
-import useAPI, { readAutoService } from '../../../../hooks/api/useAPI';
+import Operation from "./Operation";
+import { useAppSystem, useClientAdmin } from "../../../../hooks/useRoleData";
+import useAPI, { readAutoService } from "../../../../hooks/api/useAPI";
 
 const getStyles = () => ({
     icon: {
-        fontSize: '24px',
-        color: 'var(--themeP)',
+        fontSize: "24px",
+        color: "var(--themeP)",
     },
 });
 
-const serviceOptions = ({ bizName }) => ([
+const serviceOptions = ({ bizName }) => [
     {
         serviceId: 1,
         service: "missingPurchase",
         title: "Mensagem de Saudade",
-        subtitle: "Mensagem automática de saudade, quando cliente tiver 30 dias sem realizar uma compra.",
+        subtitle:
+            "Mensagem automática de saudade, quando cliente tiver 30 dias sem realizar uma compra.",
         usage: 0,
         msg: `Sentimos sua falta. Estamos aqui ao seu dispor para te atender novamente. Faça nos uma visita da saudade. Fechado? ;) Abçs - ${bizName.toUpperCase()}`,
     },
@@ -24,7 +25,8 @@ const serviceOptions = ({ bizName }) => ([
         serviceId: 2,
         service: "confirmedChall",
         title: "Confimação de desafio",
-        subtitle: "Aviso automático para o cliente quando você confirma/desconta um desafio concluído para resgate de prêmio",
+        subtitle:
+            "Aviso automático para o cliente quando você confirma/desconta um desafio concluído para resgate de prêmio",
         usage: 0,
         msg: `DESAFIO CONFIRMADO DA ${bizName.toUpperCase()} - Opa! Seu desafio foi confirmado. Abra seu app e confira: https://fiddelize.com.br/mobile-app?abrir=1`,
     },
@@ -32,12 +34,13 @@ const serviceOptions = ({ bizName }) => ([
         serviceId: 3,
         service: "finishedChall",
         title: "Conclusão de desafio",
-        subtitle: "Saiba em tempo real quando seu cliente bater a meta em pontos e concluir um desafio.",
+        subtitle:
+            "Saiba em tempo real quando seu cliente bater a meta em pontos e concluir um desafio.",
         usage: 0,
-        msg: `CONCLUSÃO DE DESAFIO - [Nome Cliente] acabou de concluir desafio N.º [Número Desafio].`,
+        msg:
+            "CONCLUSÃO DE DESAFIO - [Nome Cliente] acabou de concluir desafio N.º [Número Desafio].",
     },
-]);
-
+];
 
 export default function AutomaticOperations() {
     const [services, setServices] = useState([]);
@@ -46,36 +49,39 @@ export default function AutomaticOperations() {
     const { businessId: userId } = useAppSystem();
     const { bizName } = useClientAdmin();
 
-    const { data, gotData, loading } = useAPI({ url: readAutoService(userId), needAuth: true })
+    const { data, gotData, loading } = useAPI({
+        url: readAutoService(userId),
+        needAuth: true,
+    });
 
     useEffect(() => {
-        if(!loading) {
-            if(gotData) {
+        if (!loading) {
+            if (gotData) {
                 const serviceArray = [];
 
                 serviceOptions({ bizName }).forEach((option, ind) => {
                     const db = data[ind];
-                    if(!db) return serviceArray.push(option);
+                    if (!db) return serviceArray.push(option);
 
-                    if(option.service === db.service) {
+                    if (option.service === db.service) {
                         const newOption = {
                             ...option,
                             serviceId: db.serviceId,
                             active: db.active,
                             usage: db.usage,
                             msg: db.msg,
-                        }
+                        };
                         serviceArray.push(newOption);
                     } else {
                         serviceArray.push(option);
                     }
-                })
+                });
                 setServices(serviceArray);
             }
 
-            if(!gotData) setServices(serviceOptions({ bizName }));
+            if (!gotData) setServices(serviceOptions({ bizName }));
         }
-    }, [data, gotData, loading])
+    }, [data, gotData, loading]);
 
     const showHeader = () => (
         <header className="d-flex justify-content-around">
@@ -95,11 +101,15 @@ export default function AutomaticOperations() {
         </header>
     );
 
-    const MapServices = (Boolean(services && services.length)) && services.map(service => {
-        return(
+    const MapServices =
+        Boolean(services && services.length) &&
+        services.map((service) => (
             <Fragment key={service.serviceId}>
                 <Operation
-                    dataSwitch={{ serviceId: service.serviceId, service: service.service }}
+                    dataSwitch={{
+                        serviceId: service.serviceId,
+                        service: service.service,
+                    }}
                     usage={service.usage}
                     msg={service.msg}
                     title={service.title}
@@ -108,18 +118,18 @@ export default function AutomaticOperations() {
                     loading={loading}
                 />
             </Fragment>
-        );
-    });
-
+        ));
 
     return (
         <section>
             {showHeader()}
-            {loading
-            ? (
+            {loading ? (
                 <p className="my-5 text-center text-purple text-subtitle font-weight-bold">
                     Carregando serviços...
                 </p>
-            ) : MapServices}
+            ) : (
+                MapServices
+            )}
         </section>
-    );}
+    );
+}

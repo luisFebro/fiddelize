@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import AddCustomersBtn from "./customer-packages/customer-btn/AddCustomersBtn";
 import AddMembersBtn from "./member-packages/member-btn/AddMembersBtn";
@@ -18,7 +18,7 @@ export default function AddClientsToCart({
         membersPrice: "R$ 0",
     });
 
-    let { addedCustomers, customersPrice, addedMembers, membersPrice } = data;
+    const { addedCustomers, customersPrice, addedMembers, membersPrice } = data;
 
     useEffect(() => {
         if (!currService) return;

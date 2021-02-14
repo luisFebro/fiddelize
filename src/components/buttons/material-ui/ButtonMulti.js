@@ -1,10 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import { buttonMultiType } from "../../../types";
 import clsx from "clsx";
 import parse from "html-react-parser";
+import { buttonMultiType } from "../../../types";
 
 ButtonMulti.propTypes = buttonMultiType;
 
@@ -93,7 +91,7 @@ export default function ButtonMulti({
         }
 
         return (
-            iconFontAwesome && <i className={clsx(iconFontAwesome, sIcon)}></i>
+            iconFontAwesome && <i className={clsx(iconFontAwesome, sIcon)} />
         );
     };
 
@@ -110,8 +108,8 @@ export default function ButtonMulti({
             disabled={disabled}
             component={component}
             style={{
-                margin: margin ? margin : undefined,
-                zIndex: zIndex ? zIndex : undefined,
+                margin: margin || undefined,
+                zIndex: zIndex || undefined,
                 outline: 0,
             }}
         >
@@ -124,7 +122,7 @@ export default function ButtonMulti({
                           } main-font font-weight-bold`
                 }
                 style={{
-                    color: color ? color : undefined,
+                    color: color || undefined,
                     textTransform,
                 }}
             >

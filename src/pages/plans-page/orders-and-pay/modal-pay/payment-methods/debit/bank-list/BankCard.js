@@ -1,4 +1,3 @@
-import React from "react";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import "./_BankCard.scss";
 
@@ -12,7 +11,7 @@ export default function BankCard({ data, setMainData }) {
             size="small"
             backgroundColor="var(--default)"
             position="relative"
-            backgroundColor={`var(--themeSDark--default)`}
+            backgroundColor="var(--themeSDark--default)"
             onClick={() => {
                 setMainData((prev) => ({
                     ...prev,

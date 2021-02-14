@@ -1,7 +1,7 @@
-import React, { Fragment, useState } from "react";
-import Skeleton from '@material-ui/lab/Skeleton';
+import { Fragment } from "react";
+import Skeleton from "@material-ui/lab/Skeleton";
+import PropTypes from "prop-types";
 import { CLIENT_URL } from "../config/clientUrl";
-import PropTypes from 'prop-types';
 
 ShowImgOrSkeleton.propTypes = {
     id: PropTypes.string,
@@ -12,7 +12,7 @@ ShowImgOrSkeleton.propTypes = {
     width: PropTypes.string,
     height: PropTypes.string,
     skeletonOpt: PropTypes.shape({
-        variant: PropTypes.oneOf(['text', 'rect', 'circle']),
+        variant: PropTypes.oneOf(["text", "rect", "circle"]),
         width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         backgroundColor: PropTypes.string,
@@ -20,24 +20,33 @@ ShowImgOrSkeleton.propTypes = {
     imgOpt: PropTypes.shape({
         style: PropTypes.object,
         className: PropTypes.string,
-    })
-}
+    }),
+};
 
 export default function ShowImgOrSkeleton({
-    id, url, alt, width, height, setStatus, status, skeletonOpt, imgOpt }) {
+    id,
+    url,
+    alt,
+    width,
+    height,
+    setStatus,
+    status,
+    skeletonOpt,
+    imgOpt,
+}) {
     const imageUrl = `${CLIENT_URL}/api/${url}/photo/${id}`;
 
-    return(
+    return (
         <Fragment>
-            <div style={{ display: status ? 'block' : 'none'}}>
+            <div style={{ display: status ? "block" : "none" }}>
                 <Skeleton
                     variant={skeletonOpt.variant}
                     width={skeletonOpt.width}
                     height={skeletonOpt.height}
-                    style={{ backgroundColor: skeletonOpt.backgroundColor}}
+                    style={{ backgroundColor: skeletonOpt.backgroundColor }}
                 />
             </div>
-            <div style={{ display: status ? 'none' : 'block'}}>
+            <div style={{ display: status ? "none" : "block" }}>
                 <img
                     className={imgOpt && imgOpt.className}
                     src={imageUrl}

@@ -1,67 +1,79 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import Card from '@material-ui/core/Card';
-import ShowImgOrSpinner from '../../../components/ShowImgOrSpinner';
-import handleChangeForm from '../../../utils/form/use-state/handleChangeForm';
-import isSmallScreen from '../../../utils/isSmallScreen';
-import ToggleVisibilityPassword from '../../../components/forms/fields/ToggleVisibilityPassword';
-import handleChange from '../../../utils/form/use-state/handleChange';
-import BackUpToExcel from './BackUpToExcel';
+import { useState, useEffect } from "react";
+import Card from "@material-ui/core/Card";
+import { useStoreDispatch } from "easy-peasy";
+import ShowImgOrSpinner from "../../../components/ShowImgOrSpinner";
+import handleChangeForm from "../../../utils/form/use-state/handleChangeForm";
+import isSmallScreen from "../../../utils/isSmallScreen";
+import ToggleVisibilityPassword from "../../../components/forms/fields/ToggleVisibilityPassword";
+import BackUpToExcel from "./BackUpToExcel";
 // Redux
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../redux/actions/snackbarActions';
-import { readAdmin, updateAdmin, updateConfig, readVerificationPass } from '../../../redux/actions/adminActions';
-import './style.scss';
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import {
+    readAdmin,
+    updateConfig,
+    readVerificationPass,
+} from "../../../redux/actions/adminActions";
+import "./style.scss";
 
 export default function UpdateConfigForm() {
     const [showSpinner, setShowSpinner] = useState(true);
     const [imgMsg, setImgMsg] = useState(false);
 
     const [data, setData] = useState({
-        trademark: '',
-        siteBackgroundColor: '',
-        verificationPass: '',
-        formData: '',
-        regulationText: '',
-    })
-    const { trademark, siteBackgroundColor, verificationPass, formData, regulationText } = data;
+        trademark: "",
+        siteBackgroundColor: "",
+        verificationPass: "",
+        formData: "",
+        regulationText: "",
+    });
+    const {
+        trademark,
+        siteBackgroundColor,
+        verificationPass,
+        formData,
+        regulationText,
+    } = data;
     const dispatch = useStoreDispatch();
 
     const getBackgroundColor = () => {
-        readAdmin(dispatch)
-        .then(res => {
+        readAdmin(dispatch).then((res) => {
             // if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
             setData({
                 siteBackgroundColor: res.data.siteBackgroundColor,
                 regulationText: res.data.regulationText,
-                formData: new FormData() //formData isdeclared here, otherwise will be undefined.
-            })
-        })
-    }
+                formData: new FormData(), // formData isdeclared here, otherwise will be undefined.
+            });
+        });
+    };
 
     const init = () => {
-        readVerificationPass()
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+        readVerificationPass().then((res) => {
+            if (res.status !== 200)
+                return showSnackbar(dispatch, res.data.msg, "error");
             setData({
                 ...data,
                 verificationPass: res.data.verificationPass,
-            })
-            getBackgroundColor()
-        })
-    }
+            });
+            getBackgroundColor();
+        });
+    };
 
     useEffect(() => {
         init();
-    }, [])
+    }, []);
 
     const updateData = () => {
-        updateConfig(dispatch, formData)
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+        updateConfig(dispatch, formData).then((res) => {
+            if (res.status !== 200)
+                return showSnackbar(dispatch, res.data.msg, "error");
             window.location.reload();
-            showSnackbar(dispatch, "A sua configuração foi efutuada", 'success');
-        })
-    }
+            showSnackbar(
+                dispatch,
+                "A sua configuração foi efutuada",
+                "success"
+            );
+        });
+    };
 
     // const updateRegText = () => {
     //     showSnackbar(dispatch, "Atualizando Texto...", 'warning', 6000);
@@ -122,11 +134,11 @@ export default function UpdateConfigForm() {
     // )
 
     const showImageUploader = () => {
-        const displayImg = idImg => (
+        const displayImg = (idImg) => (
             <div className="mr-md-5">
                 <span>
                     <p
-                        style={{backgroundColor: "grey"}}
+                        style={{ backgroundColor: "grey" }}
                         className="text-white py-2 text-center font-weight-bold"
                     >
                         Imagem Atual:
@@ -135,14 +147,14 @@ export default function UpdateConfigForm() {
                 <div className="border-dashed-grey">
                     <ShowImgOrSpinner
                         url="admin"
-                        id={"5db4301ed39a4e12546277a8"} //admin id
-                        alt='logomarca studio love beauty'
+                        id="5db4301ed39a4e12546277a8" // admin id
+                        alt="logomarca studio love beauty"
                         width="200px"
                         height="100px"
                         setStatus={setShowSpinner}
                         status={showSpinner}
-                        imgOpt= {{
-                            className: "image-apresentation"
+                        imgOpt={{
+                            className: "image-apresentation",
                         }}
                     />
                 </div>
@@ -153,9 +165,14 @@ export default function UpdateConfigForm() {
             <div>
                 <input
                     accept="image/*"
-                    onChange={handleChangeForm(setData, data, formData, "trademark")}
+                    onChange={handleChangeForm(
+                        setData,
+                        data,
+                        formData,
+                        "trademark"
+                    )}
                     name="trademark"
-                    style={{ display: 'none'}}
+                    style={{ display: "none" }}
                     id="contained-button-file"
                     type="file"
                 />
@@ -167,27 +184,30 @@ export default function UpdateConfigForm() {
                         backgroundColor="var(--mainDark)"
                         backColorOnHover="var(--mainDark)"
                         iconFontAwesome="fas fa-upload"
-                        textTransform='uppercase'
+                        textTransform="uppercase"
                     >
-                      Nova Imagem
+                        Nova Imagem
                     </ButtonMulti>
                 </label>
                 <div
-                    style={{display: typeof trademark === "object" ? "block" : "none"}}
+                    style={{
+                        display:
+                            typeof trademark === "object" ? "block" : "none",
+                    }}
                 >
                     <p
-                        style={{backgroundColor: "var(--mainDark)"}}
+                        style={{ backgroundColor: "var(--mainDark)" }}
                         className="text-center text-white"
-                    >Nova imagem inserida. Salve para alterar</p>
+                    >
+                        Nova imagem inserida. Salve para alterar
+                    </p>
                 </div>
             </div>
         );
 
-        return(
+        return (
             <div className="mt-4">
-                <p
-                    className="text-normal font-weight-bold"
-                >
+                <p className="text-normal font-weight-bold">
                     Trocar Imagem da Logomarca:
                 </p>
                 <div className="d-flex flex-column flex-md-row justify-content-md-center align-items-md-center">
@@ -200,8 +220,10 @@ export default function UpdateConfigForm() {
 
     const showVerificationPassField = () => (
         <div className="mt-4">
-            <p className="text-normal font-weight-bold">Mudar senha de verificação:</p>
-            <div style={{margin: 'auto', width: '60%'}}>
+            <p className="text-normal font-weight-bold">
+                Mudar senha de verificação:
+            </p>
+            <div style={{ margin: "auto", width: "60%" }}>
                 <ToggleVisibilityPassword
                     showForgotPass={false}
                     onChange={handleChangeForm(setData, data, formData)}
@@ -217,7 +239,9 @@ export default function UpdateConfigForm() {
 
     const showColorPicker = () => (
         <div className="mt-4">
-            <p className="text-normal my-2 font-weight-bold">Escolha outra cor de fundo do site:</p>
+            <p className="text-normal my-2 font-weight-bold">
+                Escolha outra cor de fundo do site:
+            </p>
             <div className="d-flex flex-row">
                 <div className="mr-3 font-weight-bold">
                     {`${isSmallScreen() ? "Toque" : "Clique"} e Selecione:`}
@@ -240,13 +264,18 @@ export default function UpdateConfigForm() {
             <ButtonMulti
                 onClick={() => {
                     updateData();
-                    showSnackbar(dispatch, 'Salvando suas preferências...', 'warning', 5000);
+                    showSnackbar(
+                        dispatch,
+                        "Salvando suas preferências...",
+                        "warning",
+                        5000
+                    );
                 }}
                 color="var(--mainWhite)"
                 backgroundColor="var(--mainPink)"
                 backColorOnHover="var(--mainPink)"
                 iconFontAwesome="fas fa-save"
-                textTransform='uppercase'
+                textTransform="uppercase"
             >
                 Salvar
             </ButtonMulti>
@@ -255,7 +284,8 @@ export default function UpdateConfigForm() {
     return (
         <Card
             className="container-center"
-            style={{margin: '0 auto 600px', width: '90%'}}>
+            style={{ margin: "0 auto 600px", width: "90%" }}
+        >
             <form className="py-5 px-2">
                 {showRegulationText()}
                 <BackUpToExcel />

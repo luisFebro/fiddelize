@@ -1,9 +1,7 @@
-import React from "react";
-// material-ui
-import TabSessions from "../../../components/tabs/TabSessions";
 // Icons from Tabs
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import BuildIcon from "@material-ui/icons/Build";
+import TabSessions from "../../../components/tabs/TabSessions";
 import DashSales from "./dash-sales/DashSales";
 import LoadableVisible from "../../../components/code-splitting/LoadableVisible";
 
@@ -33,5 +31,5 @@ const data = [
 ];
 
 export default function GroupedDashSessions() {
-    return <TabSessions data={data} needTabFullWidth={true} />;
+    return <TabSessions data={data} needTabFullWidth />;
 }

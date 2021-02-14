@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreDispatch } from "easy-peasy";
 import { Link } from "react-router-dom";
@@ -82,7 +82,7 @@ export default function ToggleVisibilityPassword({
 
             setValObjWithStr(obj, name, passValue);
             const newObj = obj;
-            setObj(Object.assign({}, obj, newObj));
+            setObj({ ...obj, ...newObj });
             setData({ showPassword: true });
         }
     };
@@ -107,10 +107,7 @@ export default function ToggleVisibilityPassword({
         );
 
     return (
-        <FormControl
-            fullWidth
-            style={{ maxWidth: maxWidth ? maxWidth : undefined }}
-        >
+        <FormControl fullWidth style={{ maxWidth: maxWidth || undefined }}>
             <InputLabel
                 htmlFor="adornment-password"
                 style={{ color: error ? "red" : "black" }}
@@ -124,7 +121,7 @@ export default function ToggleVisibilityPassword({
                 style={style}
                 name={name || "password"}
                 margin="dense"
-                error={error ? true : false}
+                error={!!error}
                 onChange={onChange}
                 onKeyPress={onKeyPress}
                 autoFocus={autoFocus}

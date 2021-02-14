@@ -1,9 +1,8 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { useClientAdmin } from "../../../../../../hooks/useRoleData";
 import FaqAccordion from "../../../../../../components/expansion-panels/faq/FaqAccordion";
 import "./_ReviewResults.scss";
-import { Load } from "../../../../../../components/code-splitting/LoadableComp";
-import AddCustomersBtn from "../../../../../../pages/plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
+import AddCustomersBtn from "../../../../../plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
 import usePro from "../../../../../../hooks/pro/usePro";
 
 const textQ1 = (
@@ -238,7 +237,7 @@ export default function ReviewResults({ mainData = {} }) {
                             {percPromoters}%
                         </p>
                     </div>
-                    <div className="sign minus"></div>
+                    <div className="sign minus" />
                     <div className="block block-detractors">
                         <p className="text-normal text-shadow text-white">
                             Insatisfeitos:
@@ -249,8 +248,8 @@ export default function ReviewResults({ mainData = {} }) {
                     </div>
                 </section>
                 <div className="container-center-col mt-3">
-                    <div className="mt-3 mb-2 sign equal"></div>
-                    <div className="mb-3 sign equal"></div>
+                    <div className="mt-3 mb-2 sign equal" />
+                    <div className="mb-3 sign equal" />
                     <div className="block result">
                         <p className="text-normal text-shadow text-white">
                             Pontuação Atual:
@@ -280,7 +279,7 @@ export default function ReviewResults({ mainData = {} }) {
             <h2 className="text-subtitle text-center font-weight-bold">
                 Perguntas Frequentes
             </h2>
-            <FaqAccordion dataArray={dataArray} lazyLoading={true} />
+            <FaqAccordion dataArray={dataArray} lazyLoading />
         </Fragment>
     );
 

@@ -1,12 +1,10 @@
 export default function getValObjWithStr(obj, path) {
-    const paths = path.split('.');
+    const paths = path.split(".");
     let curr = obj;
 
-    paths.forEach(path => {
-        return curr[path] === undefined
-        ? undefined
-        : curr = curr[path];
-    })
+    paths.forEach((path) =>
+        curr[path] === undefined ? undefined : (curr = curr[path])
+    );
 
     return curr;
 }

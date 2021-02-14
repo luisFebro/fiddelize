@@ -9,7 +9,7 @@ export default async function getSenderHash() {
     const PagSeguro = window.PagSeguroDirectPayment;
 
     const run = (resolve, reject) => {
-        PagSeguro.onSenderHashReady(function (response) {
+        PagSeguro.onSenderHashReady((response) => {
             if (response.status == "error") {
                 reject(response);
             }

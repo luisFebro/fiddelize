@@ -14,7 +14,7 @@ const handleDestiny = ({ role, bizCodeName }) => {
     if (role === "cliente-membro") return "/t/app/equipe";
     if (role === "cliente-admin")
         return isApp
-            ? `/mobile-app`
+            ? "/mobile-app"
             : `${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
 };
 

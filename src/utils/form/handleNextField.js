@@ -27,9 +27,8 @@ export const handleNextField = (e, currField, options = {}) => {
         if (isNewFieldToArray) {
             passedFields.push(currField);
             return true;
-        } else {
-            return null;
         }
+        return null;
     };
 
     const runNextField = () => {

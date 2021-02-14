@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import SwitchBtn from "../../../../../../../../components/buttons/material-ui/SwitchBtn";
-import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
+import { useState, useEffect } from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import { useStoreDispatch } from "easy-peasy";
+import SwitchBtn from "../../../../../../../../components/buttons/material-ui/SwitchBtn";
+import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
 import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
 import { treatBoolStatus } from "../../../../../../../../hooks/api/trigger";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import createCardToken, { getValidationData } from "../helpers/createCardToken";
 import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import getSenderHash from "../../../../../helpers/pagseguro/getSenderHash";
 import { encryptCreditCard } from "../../../../../../../../utils/security/creditCard";
 import goFinishCheckout from "../../../../../helpers/pagseguro/goFinishCheckout";
@@ -36,8 +36,8 @@ const getEncryptedCC = async (mainData) => {
     });
 };
 
-const getFinalTokens = async ({ cardData, dispatch }) => {
-    return await Promise.all([
+const getFinalTokens = async ({ cardData, dispatch }) =>
+    await Promise.all([
         getSenderHash().catch((e) => {
             showSnackbar(
                 dispatch,
@@ -68,7 +68,7 @@ const getFinalTokens = async ({ cardData, dispatch }) => {
                 );
             }
             if (e.errors["10003"]) {
-                //invalid security field.
+                // invalid security field.
                 return showSnackbar(
                     dispatch,
                     "Código de segurança é inválido. Edite seu cartão.",
@@ -76,7 +76,7 @@ const getFinalTokens = async ({ cardData, dispatch }) => {
                 );
             }
             if (e.errors["10004"]) {
-                //invalid security field.
+                // invalid security field.
                 return showSnackbar(
                     dispatch,
                     "Código CVV/CVC é obrigatório. Edite seu cartão.",
@@ -99,7 +99,6 @@ const getFinalTokens = async ({ cardData, dispatch }) => {
             console.log(e);
         }),
     ]);
-};
 
 export default function BriefAndValue({
     brand,
@@ -241,7 +240,7 @@ export default function BriefAndValue({
                 titleLeft="parcelado"
                 titleRight="à vista"
                 callback={handleSwitch}
-                defaultStatus={true}
+                defaultStatus
             />
             {payMethod === "installment" && displayInstallmentSelect()}
             Valor total {installmentTotalAmount && "parcelado"}:{" "}
@@ -261,7 +260,7 @@ export default function BriefAndValue({
             left={20}
             top={-60}
             variant="extended"
-            backgroundColor={`var(--themeSDark--default)`}
+            backgroundColor="var(--themeSDark--default)"
             onClick={() => setCurrComp("cardNumber")}
         />
     );
@@ -292,7 +291,7 @@ export default function BriefAndValue({
             left={20}
             top={-60}
             variant="extended"
-            backgroundColor={`var(--expenseRed)`}
+            backgroundColor="var(--expenseRed)"
             onClick={handleDeleteCard}
         />
     );
@@ -346,7 +345,7 @@ export default function BriefAndValue({
                 size="large"
                 position="relative"
                 variant="extended"
-                backgroundColor={`var(--themeSDark--default)`}
+                backgroundColor="var(--themeSDark--default)"
                 onClick={handleInvestConclusion}
             />
         </section>

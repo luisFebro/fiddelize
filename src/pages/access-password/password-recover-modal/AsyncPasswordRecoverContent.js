@@ -1,18 +1,18 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../utils/form/use-state/handleChange";
-import { handleNextField } from "../../../utils/form/kit";
-import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreDispatch } from "easy-peasy";
+import handleChange from "../../../utils/form/use-state/handleChange";
+import { handleNextField } from "../../../utils/form/kit";
+import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import getAPI, { forgotPasswordRequest } from "../../../utils/promises/getAPI";
 import useData from "../../../hooks/useData";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
 const isSmall = window.Helper.isSmallScreen();

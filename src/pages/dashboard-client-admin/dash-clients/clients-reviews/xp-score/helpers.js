@@ -1,5 +1,5 @@
 export const getGradeText = (g) => {
-    if (2 > g) return "Precário";
+    if (g < 2) return "Precário";
     if (g >= 2 && g < 3) return "Péssimo";
     if (g >= 3 && g < 4) return "Ruim";
     if (g >= 4 && g < 5) return "Regular";

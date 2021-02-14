@@ -1,26 +1,26 @@
-import React, { useState, Fragment } from 'react';
-import Title from '../../../../components/Title';
-import { makeStyles } from '@material-ui/core/styles';
-import { useStoreDispatch } from 'easy-peasy';
-import Card from '@material-ui/core/Card';
-import { showComponent } from '../../../../redux/actions/componentActions';
-import { showSnackbar } from '../../../../redux/actions/snackbarActions';
-import PropTypes from 'prop-types';
-import KeypadButton from '../../../../components/modals/keypad';
-import isMoneyBrValidAndAlert from '../../../../utils/numbers/isMoneyBrValidAndAlert';
+import { useState, Fragment } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useStoreDispatch } from "easy-peasy";
+import Card from "@material-ui/core/Card";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useClientAdmin } from '../../../../hooks/useRoleData'
+import Title from "../../../../components/Title";
+import { showComponent } from "../../../../redux/actions/componentActions";
+import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import KeypadButton from "../../../../components/modals/keypad";
+import isMoneyBrValidAndAlert from "../../../../utils/numbers/isMoneyBrValidAndAlert";
+import { useClientAdmin } from "../../../../hooks/useRoleData";
 // import AddOrSearch from '../../../../components/search/AddOrSearch';
 
 InsertValue.propTypes = {
     success: PropTypes.bool,
     setValuePaid: PropTypes.func,
-}
+};
 
-const useStyles = makeStyles(theme => ({
-  card: {
-    maxWidth: 330,
-  }
+const useStyles = makeStyles((theme) => ({
+    card: {
+        maxWidth: 330,
+    },
 }));
 
 const plan = "free";
@@ -35,13 +35,13 @@ export default function InsertValue({ success, setValuePaid }) {
     const classes = useStyles();
     const dispatch = useStoreDispatch();
 
-    const handleSwitch = valuePaid => {
-        if(!isMoneyBrValidAndAlert(valuePaid, showSnackbar, dispatch)) {
+    const handleSwitch = (valuePaid) => {
+        if (!isMoneyBrValidAndAlert(valuePaid, showSnackbar, dispatch)) {
             return;
         }
-        if(success) {
+        if (success) {
             setValuePaid(valuePaid);
-            showComponent(dispatch, 'staffConfirmation')
+            showComponent(dispatch, "staffConfirmation");
         }
     };
 
@@ -49,8 +49,8 @@ export default function InsertValue({ success, setValuePaid }) {
         <Title
             title="Informações da compra"
             color="var(--mainWhite)"
-            needShadow={true}
-            backgroundColor={"var(--themePDark--" + selfThemePColor + ")"}
+            needShadow
+            backgroundColor={`var(--themePDark--${selfThemePColor})`}
         />
     );
 
@@ -61,20 +61,15 @@ export default function InsertValue({ success, setValuePaid }) {
                 titleIcon={<FontAwesomeIcon icon="money-bill-alt" />}
                 setSelectedValue={setData}
                 confirmFunction={handleSwitch}
-                backgroundColor={"var(--themeSDark--" + selfThemeSColor + ")"}
+                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
             />
         </div>
     );
 
-    const showSearch = () => (
-        <div className="mt-3 margin-auto-95 d-none">
-        </div>
-    );
+    const showSearch = () => <div className="mt-3 margin-auto-95 d-none" />;
 
     return (
-        <div
-            className='animated zoomIn fast mt-5 card-elevation'
-        >
+        <div className="animated zoomIn fast mt-5 card-elevation">
             <Card className={classes.card}>
                 {showTitle()}
                 <section className="text-p text-normal">
@@ -86,7 +81,11 @@ export default function InsertValue({ success, setValuePaid }) {
                             {showSearch()}
                         </Fragment>
                     )}
-                    <div className={`ml-2 font-weight-bold ${plan !== "free" ? "mt-5" : "mt-2"}`}>
+                    <div
+                        className={`ml-2 font-weight-bold ${
+                            plan !== "free" ? "mt-5" : "mt-2"
+                        }`}
+                    >
                         Insira Valor da Compra:
                     </div>
                     {showKeypadButton()}

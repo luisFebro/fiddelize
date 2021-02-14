@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import ButtonFab, {faStyle} from '../../../../components/buttons/material-ui/ButtonFab';
-import { setRun } from '../../../../redux/actions/globalActions';
-import { useStoreDispatch } from 'easy-peasy';
+import { useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ButtonFab, {
+    faStyle,
+} from "../../../../components/buttons/material-ui/ButtonFab";
+import { setRun } from "../../../../redux/actions/globalActions";
 
 export default function ToggleBtn({ cardId, onClick }) {
     const [panelId, setPanelId] = useState("");
@@ -16,7 +18,7 @@ export default function ToggleBtn({ cardId, onClick }) {
             iconFontAwesome={<FontAwesomeIcon icon="plus" style={faStyle} />}
             iconAfterClick={<FontAwesomeIcon icon="minus" style={faStyle} />}
             toggleStatus={cardId}
-            needClickAndToggle={true}
+            needClickAndToggle
             onClick={() => setRun(dispatch, cardId)}
         />
     );

@@ -24,7 +24,7 @@ import {
     arrayOf,
     shape,
     oneOfType,
-} from 'prop-types';
+} from "prop-types";
 
 export const productType = shape({
     _id: string,
@@ -37,20 +37,19 @@ export const productType = shape({
     sold: number,
     inCart: bool,
     info: oneOfType([string, object]),
-})
+});
 
 export const productInfoType = shape({
     colors: shape({
         main: string,
-        moreOptions: arrayOf(string)
+        moreOptions: arrayOf(string),
     }),
     company: string,
     howToUse: string,
     refCode: string,
     sizeOrDimmension: number,
-    "unitsPerPackage": number,
+    unitsPerPackage: number,
 });
-
 
 /* COMMENTS
 n1: Anything that can be rendered: numbers, strings, elements or an array

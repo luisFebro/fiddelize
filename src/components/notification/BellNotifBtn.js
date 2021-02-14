@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import BadaloBell from "../buttons/bells/badalo/BadaloBell";
 import ModalFullContent from "../modals/ModalFullContent";
 import Notification from "./Notification";

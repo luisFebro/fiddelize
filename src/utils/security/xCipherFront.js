@@ -1,5 +1,6 @@
 const CryptoAES = require("crypto-js/aes");
 const encUtf8 = require("crypto-js/enc-utf8");
+
 const KRYPTO_SECRET = `${process.env.REACT_APP_KRYPTO_SECRET}`;
 
 function encrypt(data, options = {}) {

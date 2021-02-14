@@ -1,7 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import CreatedAtBr from '../../../CreatedAtBr';
-import capitalize from '../../../../../utils/string/capitalize';
+import PropTypes from "prop-types";
+import CreatedAtBr from "../../../CreatedAtBr";
+import capitalize from "../../../../../utils/string/capitalize";
 
 CashHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
@@ -20,17 +19,16 @@ export default function CashHiddenContent({ data, isCashOut = false }) {
 
     const styles = {
         pointsContainer: {
-            position: 'relative'
-        }
-    }
+            position: "relative",
+        },
+    };
 
     return (
         <div
             className="text-normal enabledLink"
-            style={{userSelect: 'text', margin: 'auto', width: '90%'}}
+            style={{ userSelect: "text", margin: "auto", width: "90%" }}
         >
-            {!isCashOut
-            ? (
+            {!isCashOut ? (
                 <p>
                     <span className="font-weight-bold">&#187; Serviço:</span>
                     <br />
@@ -38,8 +36,7 @@ export default function CashHiddenContent({ data, isCashOut = false }) {
                 </p>
             ) : null}
 
-            {!isCashOut && agentRole === "colaborador"
-            ? (
+            {!isCashOut && agentRole === "colaborador" ? (
                 <p>
                     <span className="font-weight-bold">&#187; Cliente:</span>
                     <br />
@@ -54,9 +51,14 @@ export default function CashHiddenContent({ data, isCashOut = false }) {
             </p>
 
             <p>
-                <span className="font-weight-bold">&#187; Meio de Pagamento:</span>
+                <span className="font-weight-bold">
+                    &#187; Meio de Pagamento:
+                </span>
                 <br />
-                {paymentType}{paymentType === 'crédito' ? ` em ${installmentsIfCredit} vezes.` : ""}
+                {paymentType}
+                {paymentType === "crédito"
+                    ? ` em ${installmentsIfCredit} vezes.`
+                    : ""}
             </p>
 
             <CreatedAtBr

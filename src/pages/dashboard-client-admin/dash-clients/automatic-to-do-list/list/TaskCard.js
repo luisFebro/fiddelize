@@ -64,8 +64,8 @@ function TaskCard(props, ref) {
     const snackbar = {
         timeSuccess: 8000,
         txtSuccess: treatBoolStatus(toggleDone)
-            ? `✔ Entrega marcada como FEITA!<br />✔ Novo status RECEBIDO marcado no histórico do cliente<br />✔ Movendo para HISTÓRICO PREMIAÇÕES...`
-            : `✔ Entrega DESFEITA<br /> ✔ Removido status RECEBIDO do seu cliente!`,
+            ? "✔ Entrega marcada como FEITA!<br />✔ Novo status RECEBIDO marcado no histórico do cliente<br />✔ Movendo para HISTÓRICO PREMIAÇÕES..."
+            : "✔ Entrega DESFEITA<br /> ✔ Removido status RECEBIDO do seu cliente!",
     };
     const trigger = toggleDone === undefined ? false : toggleDone;
     const prizeParams = { newValue: treatBoolStatus(toggleDone), prizeId };

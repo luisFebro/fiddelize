@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
-import animateCSS from "../../utils/animateCSS";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -158,7 +157,7 @@ export default function NumericKeyboard({
                         <span style={{ fontSize: ".7em" }}>Corrigir</span>
                     </div>
                 </section>
-                <audio id="keypadBeep" src="/sounds/tock.mp3"></audio>
+                <audio id="keypadBeep" src="/sounds/tock.mp3" />
             </GridContainer>
         </section>
     );
@@ -182,7 +181,7 @@ const GridContainer = styled.div`
 
     & > section div {
         background: ${({ myGradient }) =>
-            myGradient || `linear-gradient(to right, #16222a, #3a6073)`};
+            myGradient || "linear-gradient(to right, #16222a, #3a6073)"};
         color: white;
         text-align: center;
         text-shadow: 1px 1px 3px black;

@@ -1,14 +1,14 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Card from "@material-ui/core/Card";
+import { useStoreDispatch } from "easy-peasy";
+import TextField from "@material-ui/core/TextField";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import copyTextToClipboard from "../../../../../../utils/document/copyTextToClipboard";
-import { useStoreDispatch } from "easy-peasy";
 import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
-import TextField from "@material-ui/core/TextField";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getSlashDayMonthYear from "../../../../../../utils/dates/getSlashDayMonthYear";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RedirectLink from "../../../../../../components/RedirectLink";
 import getSenderHash from "../../../helpers/pagseguro/getSenderHash";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
@@ -206,7 +206,7 @@ export default function AsyncBoleto({ modalData = {} }) {
                     size="medium"
                     title="Ver Doc."
                     onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                     position="relative"
                 />
@@ -215,7 +215,7 @@ export default function AsyncBoleto({ modalData = {} }) {
                 size="medium"
                 title="Copiar Linha"
                 onClick={handleCopy}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
                 position="relative"
             />
@@ -271,7 +271,7 @@ export default function AsyncBoleto({ modalData = {} }) {
                         size="large"
                         title="Ir para Histórico"
                         onClick={null}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        backgroundColor="var(--themeSDark--default)"
                         variant="extended"
                         position="relative"
                     />

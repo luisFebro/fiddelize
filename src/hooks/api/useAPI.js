@@ -1,22 +1,21 @@
 // API, in English, please: https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/
 // use GETAPI  on utils/promises for progaramatically make requests.
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreDispatch } from "easy-peasy";
-import { setRun } from "../../hooks/useRunComp";
+import { setRun } from "../useRunComp";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import isObjEmpty from "../../utils/objects/isObjEmpty";
-import { ShowLoadingComp } from "./Comps";
 import { chooseHeader } from "../../utils/server/getHeaders";
-import { useToken } from "../../hooks/useRoleData";
-import { useOfflineData } from "../../hooks/storage/useOfflineListData";
-import { disconnect } from "../../hooks/useAuthUser";
+import { useToken } from "../useRoleData";
+import { useOfflineData } from "../storage/useOfflineListData";
+import { disconnect } from "../useAuthUser";
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
 
-//Global axios defaults
+// Global axios defaults
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 useAPI.propTypes = {
@@ -146,7 +145,7 @@ export default function useAPI({
             method,
             data: body,
             params,
-            headers: chooseHeader({ token: token, needAuth }),
+            headers: chooseHeader({ token, needAuth }),
             cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
         };
 

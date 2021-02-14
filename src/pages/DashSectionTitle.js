@@ -1,35 +1,32 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Img from '../components/Img';
+import PropTypes from "prop-types";
+import Img from "../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
 DashSectionTitle.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+        .isRequired,
 };
 
 const getStyles = () => ({
     title: {
-        top: '45%',
-        minWidth: isSmall ? '350px' : '700px',
-        lineHeight: '10px',
-        color: 'var(--mainWhite)',
-        background: 'inherit',
+        top: "45%",
+        minWidth: isSmall ? "350px" : "700px",
+        lineHeight: "10px",
+        color: "var(--mainWhite)",
+        background: "inherit",
     },
 });
 
-
-function DashSectionTitle({
-    title, backgroundColor
-}) {
+function DashSectionTitle({ title, backgroundColor }) {
     const styles = getStyles();
 
     return (
         <div className="container-center">
             <div className="d-block position-relative">
                 <Img
-                    src={"/img/shapes/blob-dashboard-header.svg"}
-                    offline={true}
+                    src="/img/shapes/blob-dashboard-header.svg"
+                    offline
                     coll="illustrations"
                     width={440}
                     needLoader={false}

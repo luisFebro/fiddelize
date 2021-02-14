@@ -1,11 +1,10 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import MembersCard from "./card/accordion/MembersCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 import { calendar } from "../../../../../utils/dates/dateFns";
 import { useAppSystem } from "../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../utils/string/getFirstName";
-import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-// import { isScheduledDate } from '../../../../../utils/dates/dateFns';
+
 import useAPIList, {
     readTeamMemberList,
     getTrigger,
@@ -30,20 +29,18 @@ const getStyles = () => ({
     },
 });
 
-const handleSecHeading = (data, styles) => {
-    return (
-        <section>
-            <p
-                className="text-nowrap position-absolute d-block m-0 mt-3"
-                style={styles.dateBadge}
-            >
-                <span className="text-small text-shadow font-weight-bold">
-                    Cadastro: {calendar(data.createdAt)}.
-                </span>
-            </p>
-        </section>
-    );
-};
+const handleSecHeading = (data, styles) => (
+    <section>
+        <p
+            className="text-nowrap position-absolute d-block m-0 mt-3"
+            style={styles.dateBadge}
+        >
+            <span className="text-small text-shadow font-weight-bold">
+                Cadastro: {calendar(data.createdAt)}.
+            </span>
+        </p>
+    </section>
+);
 // END HELPERS
 
 export default function AsyncCardsList() {
@@ -52,7 +49,7 @@ export default function AsyncCardsList() {
 
     const styles = getStyles();
 
-    const showCTA = true; //useDetectScrollSingle("#showNewCTA");
+    const showCTA = true; // useDetectScrollSingle("#showNewCTA");
     const showFixedCTA = () =>
         showCTA && (
             <section
@@ -61,7 +58,7 @@ export default function AsyncCardsList() {
             >
                 <RegisterPanelBtn
                     title="Novo Membro"
-                    isNewMember={true}
+                    isNewMember
                     needTeamApp={false}
                     size="medium"
                 />
@@ -98,20 +95,18 @@ export default function AsyncCardsList() {
     });
 
     // scoreAdded or registeredClient - task's desc will be handled in the backend .
-    const displayMember = (memberName) => {
-        return (
-            <section className="d-flex">
-                <span
-                    className={`position-relative  d-inline-block text-subtitle font-weight-bold text-shadow`}
-                    style={{ lineHeight: "25px", top: 5 }}
-                >
-                    {getFirstName(memberName && memberName.cap(), {
-                        addSurname: true,
-                    })}
-                </span>
-            </section>
-        );
-    };
+    const displayMember = (memberName) => (
+        <section className="d-flex">
+            <span
+                className="position-relative  d-inline-block text-subtitle font-weight-bold text-shadow"
+                style={{ lineHeight: "25px", top: 5 }}
+            >
+                {getFirstName(memberName && memberName.cap(), {
+                    addSurname: true,
+                })}
+            </span>
+        </section>
+    );
 
     const showAccordion = () => {
         const actions = list.map((data) => {
@@ -153,7 +148,7 @@ export default function AsyncCardsList() {
                     actions={actions}
                     backgroundColor="var(--themePLight)"
                     color="white"
-                    needToggleButton={true}
+                    needToggleButton
                 />
             </section>
         );

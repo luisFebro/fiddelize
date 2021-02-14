@@ -1,3 +1,6 @@
+// use to fix all fixable warnings
+// npx eslint ./src/**/*.js* --fix
+
 module.exports = {
     env: {
         browser: true,
@@ -22,14 +25,13 @@ module.exports = {
         allowImportExportEverywhere: true,
     },
     plugins: ["react", "jsx-a11y", "unused-imports", "react-hooks"],
-    //0 - Disable the rule, 1 - Warn about the rule, 2 - Throw error about the rule
+    // 0 - Disable the rule, 1 - Warn about the rule, 2 - Throw error about the rule
     rules: {
-        indent: ["error", "tab"],
         "linebreak-style": "off", // If you aren't concerned about having different line endings within your code, then you can safely turn this rule off.
-        quotes: ["error", "double"],
-        semi: ["error", "always"],
+        semi: "off", // semicollons are inserted automatically with Prettier.
+        quotes: "off", // handled by prettier
         // plugin unused-imports
-        "unused-imports/no-unused-imports": "off",
+        "unused-imports/no-unused-imports": "error", // imports are only removed with this warning on (error) // before off
         "unused-imports/no-unused-vars": [
             "warn",
             {
@@ -41,7 +43,6 @@ module.exports = {
         ],
         "no-unused-vars": "off",
         // end plugin unused-imports
-        "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
         "react/jsx-indent-props": "off",
         "react/jsx-indent": "off",
@@ -52,18 +53,13 @@ module.exports = {
         "react-hooks/exhaustive-deps": "warn", // React (if using hooks)
         "react/prop-types": "off",
         "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }], // (error  JSX not allowed in files with extension '.js') You can add the following to your config to allow .js extensions for JSX.
-        "import/no-extraneous-dependencies": [
-            "error",
-            { devDependencies: true },
-        ],
+        "import/no-extraneous-dependencies": "off", // alerts for "@material-ui/core/Card", "react"
         "import/no-named-as-default": "off",
         "import/no-named-as-default-member": "off",
-        "import/no-extraneous-dependencies": "off",
-        "linebreak-style": "off",
+        "import/no-named-default": "off", // reports when { default as newName } renaming import structure
         indent: "off",
         "no-param-reassign": "off", // userId = userId || _id;
         "max-len": "off", // max-length by line handled by prettier
-        semi: "off", // semicollons are inserted automatically with Prettier.
     },
     settings: {
         react: {

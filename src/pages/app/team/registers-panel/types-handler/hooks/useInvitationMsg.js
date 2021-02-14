@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import generateAppDownloadLink from "../../../../../../utils/biz/generateAppDownloadLink";
 import getFirstName from "../../../../../../utils/string/getFirstName";
-import useData from "../../../../../../hooks/useData";
 
 export default function useInvitationMsg({
     name,
@@ -32,13 +31,12 @@ export default function useInvitationMsg({
                 return `Segue o app de fidelidade para membros da ${
                     bizName && bizName.toUpperCase()
                 }. Acesse: ${downloadLink} | Senha: ${verifPass}`;
-            } else {
-                return `${getFirstName(
-                    name.toUpperCase()
-                )}, segue convite para o programa de fidelidade da ${
-                    bizName && bizName.toUpperCase()
-                }. Acesse: ${downloadLink}`;
             }
+            return `${getFirstName(
+                name.toUpperCase()
+            )}, segue convite para o programa de fidelidade da ${
+                bizName && bizName.toUpperCase()
+            }. Acesse: ${downloadLink}`;
         };
 
         if (name) {

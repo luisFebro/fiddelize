@@ -1,11 +1,9 @@
-import React from 'react';
-import { mount } from 'enzyme';
-import Default from './Default';
+import { mount } from "enzyme";
+import Default from "./Default";
 
 it("expect to render Default Component", () => {
     expect(mount(<Default />)).toMatchSnapshot(); // n1
-})
-
+});
 
 /* COMMENTS
 n1: Snapshot tests are a very useful tool whenever you want to make sure your UI does not change unexpectedly.

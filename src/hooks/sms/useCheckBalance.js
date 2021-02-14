@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import useAPI, { readCredits } from "../api/useAPI";
 import { useAppSystem } from "../useRoleData";
 

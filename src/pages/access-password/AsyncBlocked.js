@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import getCountdownTimer from "../../utils/numbers/getCountdownTimer";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 
@@ -47,10 +47,7 @@ export default function AsyncBlocked({ lockMin, textColor, setLock }) {
                 style={{ bottom: 15 }}
             >
                 Por favor, aguarde para tentar de novo ou{" "}
-                <PasswordRecoverBtn
-                    textColor={textColor}
-                    fromBlockedComp={true}
-                />
+                <PasswordRecoverBtn textColor={textColor} fromBlockedComp />
             </p>
         </Fragment>
     );

@@ -1,14 +1,11 @@
-import React, { Fragment } from 'react';
-import BackButton from '../../../../../components/buttons/BackButton';
-import PickRatingIcon from '../../../../../pages/new-app/self-service/pickers/PickRatingIcon';
+import { Fragment } from "react";
+import BackButton from "../../../../../components/buttons/BackButton";
+import PickRatingIcon from "../../../../new-app/self-service/pickers/PickRatingIcon";
 
 export default function ShowIconComp({ openComp, onBackBtnClick }) {
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
-            <BackButton
-                title="Voltar Opções"
-                onClick={onBackBtnClick}
-            />
+            <BackButton title="Voltar Opções" onClick={onBackBtnClick} />
         </div>
     );
 
@@ -19,11 +16,9 @@ export default function ShowIconComp({ openComp, onBackBtnClick }) {
                     {showBackBtn()}
                     <div
                         className="animated zoomIn slow container-center text-purple text-hero"
-                        style={{margin: '50px 0px 110px'}}
+                        style={{ margin: "50px 0px 110px" }}
                     >
-                        <PickRatingIcon
-                            isFromDash={true}
-                        />
+                        <PickRatingIcon isFromDash />
                     </div>
                 </Fragment>
             )}

@@ -1,11 +1,10 @@
-import React, { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import "./Accordion.scss";
 import ToggleBtn from "./ToggleBtn";
 
@@ -38,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const getStyles = ({ color, backgroundColor }) => ({
     accordion: {
-        color: color,
-        backgroundColor: backgroundColor,
+        color,
+        backgroundColor,
         margin: "15px 0 0",
     },
     totalPrizesBadge: {
@@ -64,39 +63,35 @@ export default function TeamTasksCard({
         backgroundColor: "var(--themePLight)",
     });
 
-    const showPanel = (panel) => {
-        return (
-            <section>
-                <AccordionSummary
-                    expandIcon={
-                        <div className="enabledLink">
-                            {needToggleButton && (
-                                <ToggleBtn cardId={panel._id} />
-                            )}
-                        </div>
-                    }
-                    aria-controls={`panel${panel._id}bh-content`}
-                    id={`panel${panel._id}bh-header`}
-                >
-                    {isSmall ? (
-                        <section className="position-relative">
-                            <div>{panel.mainHeading}</div>
+    const showPanel = (panel) => (
+        <section>
+            <AccordionSummary
+                expandIcon={
+                    <div className="enabledLink">
+                        {needToggleButton && <ToggleBtn cardId={panel._id} />}
+                    </div>
+                }
+                aria-controls={`panel${panel._id}bh-content`}
+                id={`panel${panel._id}bh-header`}
+            >
+                {isSmall ? (
+                    <section className="position-relative">
+                        <div>{panel.mainHeading}</div>
+                        {panel.secondaryHeading}
+                    </section>
+                ) : (
+                    <Fragment>
+                        <Typography className="ex-pa-main-heading ex-pa--headings">
+                            {panel.mainHeading}
+                        </Typography>
+                        <Typography className="ex-pa--headings">
                             {panel.secondaryHeading}
-                        </section>
-                    ) : (
-                        <Fragment>
-                            <Typography className="ex-pa-main-heading ex-pa--headings">
-                                {panel.mainHeading}
-                            </Typography>
-                            <Typography className="ex-pa--headings">
-                                {panel.secondaryHeading}
-                            </Typography>
-                        </Fragment>
-                    )}
-                </AccordionSummary>
-            </section>
-        );
-    };
+                        </Typography>
+                    </Fragment>
+                )}
+            </AccordionSummary>
+        </section>
+    );
 
     const showHiddenPanel = (panel) => (
         <AccordionDetails>{panel.hiddenContent}</AccordionDetails>

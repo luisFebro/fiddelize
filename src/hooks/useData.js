@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getMultiVar, store as st } from "./storage/useVar";
 import repeat from "../utils/arrays/repeat";
 
@@ -19,7 +19,7 @@ export default function useData(data, options = {}) {
             (async () => {
                 const dataArray = await getMultiVar(data, st[storeName]).catch(
                     (err) => {
-                        console.log("ERROR: " + err);
+                        console.log(`ERROR: ${err}`);
                     }
                 );
                 if (dataArray) setStore(dataArray);

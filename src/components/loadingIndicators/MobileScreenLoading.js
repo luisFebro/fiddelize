@@ -1,6 +1,5 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import { CLIENT_URL } from '../../config/clientUrl';
+import styled, { keyframes } from "styled-components";
+import { CLIENT_URL } from "../../config/clientUrl";
 
 export default function MobileScreenLoading({ color, backgroundColor }) {
     return (
@@ -8,9 +7,9 @@ export default function MobileScreenLoading({ color, backgroundColor }) {
             <div
                 className="container-center-col"
                 style={{
-                    color: color || 'var(--mainWhite)',
-                    padding: '105px 0',
-                    backgroundColor: backgroundColor || 'var(--lightPurple)',
+                    color: color || "var(--mainWhite)",
+                    padding: "105px 0",
+                    backgroundColor: backgroundColor || "var(--lightPurple)",
                 }}
             >
                 <img
@@ -23,9 +22,9 @@ export default function MobileScreenLoading({ color, backgroundColor }) {
                 <DivLoadingTxt className="loading-container text-shadow">
                     <h2 className="loading-text">Carregando</h2>
                     <div className="spinner text-shadow">
-                        <div className="bounce1"></div>
-                        <div className="bounce2"></div>
-                        <div className="bounce3"></div>
+                        <div className="bounce1" />
+                        <div className="bounce2" />
+                        <div className="bounce3" />
                     </div>
                 </DivLoadingTxt>
             </div>
@@ -50,7 +49,7 @@ const DivLoadingTxt = styled.div`
 
     .loading-text {
         color: ${({ color }) => color || "var(--mainWhite)"};
-        fontWeight: bold;
+        fontweight: bold;
     }
 
     & .spinner {
@@ -64,7 +63,7 @@ const DivLoadingTxt = styled.div`
         width: 6px;
         height: 6px;
         background-color: var(--mainWhite);
-        filter: drop-shadow(.001em .1em .1em var(--mainDark));
+        filter: drop-shadow(0.001em 0.1em 0.1em var(--mainDark));
 
         border-radius: 100%;
         display: inline-block;
@@ -79,7 +78,6 @@ const DivLoadingTxt = styled.div`
         animation-delay: -0.16s;
     }
 `;
-
 
 /* ARCHIVES
 // const loadImage = () => {

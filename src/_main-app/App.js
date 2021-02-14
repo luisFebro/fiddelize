@@ -1,24 +1,24 @@
-import React, { useEffect, Fragment } from "react";
+import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
+import ReactGA from "react-ga"; // google analytics
 import isThisApp from "../utils/window/isThisApp";
 import isWebpSupported from "../utils/media/isWebpSupported";
 import deferJsOnload from "../utils/performance/deferJsOnload";
 import useOffline from "../hooks/useOffline";
 import { useRecoveryAndDataOffline } from "../hooks/roles-storage-and-data-recovery";
-import ReactGA from "react-ga"; // google analytics
 import { IS_PROD } from "../config/clientUrl";
 import "../utils/globalHelpers";
-//STYLING
+// STYLING
 import "./scss/App.scss";
 // I inlined all critical bootstrap classes on critical css... OMG!!
 // Selected is just the other ones...
 import "./styles/bootstrap.selected.css";
 import "./libraries/fontAwesomeLib";
-//END STYLING
+// END STYLING
 // import { loadReCaptcha } from 'react-recaptcha-google';
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
-//END UIs
+// END UIs
 import useCustomerBirthdayToday from "../hooks/notification/useCustomerBirthdayToday";
 // import ScrollToTop from 'react-router-scroll-top';
 
@@ -31,7 +31,7 @@ export default function App() {
         isWebpSupported(
             "lossy",
             (lossy, res) =>
-                res && console.log("This browser suppors webp image: " + res)
+                res && console.log(`This browser suppors webp image: ${res}`)
         );
 
         const runGoogleAnalytics = () => {

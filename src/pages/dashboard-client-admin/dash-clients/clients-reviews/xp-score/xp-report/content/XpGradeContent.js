@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
+import parse from "html-react-parser";
 import getAPI, {
     getXpScoreChartData,
 } from "../../../../../../../utils/promises/getAPI";
 import useData from "../../../../../../../hooks/useData";
 import LoadableVisible from "../../../../../../../components/code-splitting/LoadableVisible";
-import parse from "html-react-parser";
 import { getGradeText, getColorGrade } from "../../helpers";
 import "../../../_ClientsReviews.scss";
 import FaqXpScore from "./FaqXpScore";
@@ -138,7 +138,7 @@ function getXpDiffStatus({ scoreDiff, status }) {
     }
     if (status === "same") {
         return parse(
-            `a nota é a <span class="text-grey font-weight-bold">mesma</span><br />desde último acesso`
+            'a nota é a <span class="text-grey font-weight-bold">mesma</span><br />desde último acesso'
         );
     }
 }

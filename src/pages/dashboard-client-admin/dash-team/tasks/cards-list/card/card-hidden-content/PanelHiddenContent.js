@@ -1,4 +1,3 @@
-import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreState } from "easy-peasy";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
@@ -50,7 +49,7 @@ function PanelHiddenContent({ history, data }) {
                     size="large"
                     title="Ver Cliente"
                     onClick={null}
-                    backgroundColor={"var(--themeSDark--default)"}
+                    backgroundColor="var(--themeSDark--default)"
                     variant="extended"
                 />
             </div>

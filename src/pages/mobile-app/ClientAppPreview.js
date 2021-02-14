@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
+import { withRouter } from "react-router-dom";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import ClientUserAppContent from "./content/ClientUserAppContent";
-import { withRouter } from "react-router-dom";
 import getQueryByName from "../../utils/string/getQueryByName";
 import Img from "../../components/Img";
 import removeImgFormat from "../../utils/biz/removeImgFormat";
@@ -14,12 +14,12 @@ function ClientAppPreview({ location }) {
 
     const runName = getQueryByName("runName", location.search);
     const clientName = getQueryByName("clientName", location.search);
-    let logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
+    const logoUrlPreview = getQueryByName("logoUrlPreview", location.search);
     const colorP = getQueryByName("colorP", location.search);
     const colorS = getQueryByName("colorS", location.search);
     const colorBack = getQueryByName("colorBack", location.search);
-    let rewardScore = getQueryByName("rewardScore", location.search);
-    let currScore = getQueryByName("currScore", location.search);
+    const rewardScore = getQueryByName("rewardScore", location.search);
+    const currScore = getQueryByName("currScore", location.search);
 
     const useProfile = () => ({
         role: "cliente",
@@ -62,7 +62,7 @@ function ClientAppPreview({ location }) {
                 useProfile={useProfile}
                 useClientUser={useClientUser}
                 useClientAdmin={useClientAdmin}
-                needAppForPreview={true}
+                needAppForPreview
                 runName={runName}
                 rewardScoreTest={rewardScore}
                 clientNameTest={clientName}

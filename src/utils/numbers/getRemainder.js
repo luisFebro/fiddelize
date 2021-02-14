@@ -2,50 +2,55 @@
 // get remainder from multiple of ten
 
 export const getNewRemainder = (targetNumber, originalNumber) => {
-    //validation
-    if(typeof targetNumber !== "number" || typeof originalNumber !== "number") {
+    // validation
+    if (
+        typeof targetNumber !== "number" ||
+        typeof originalNumber !== "number"
+    ) {
         throw new Error("The arguments should be number type");
     }
-    //end validation
+    // end validation
 
     let remainder = targetNumber % originalNumber;
-    if(!remainder) {
+    if (!remainder) {
         remainder = 0;
     }
 
     const isInteger = Number.isInteger(parseFloat(targetNumber));
-    if(!isInteger) {
+    if (!isInteger) {
         remainder = remainder.toFixed(2);
     }
 
     return remainder;
-}
+};
 
 export default function getRemainder(type, targetNumber, eachMilestone) {
-    //validation
-    if(typeof targetNumber !== "number") {
+    // validation
+    if (typeof targetNumber !== "number") {
         throw new Error("The second argument should be a number");
     }
-    if(!["hundreds", "tens", "units"].includes(type)) {
-        throw new Error("Oops! You should includes one of valid unit measures: hundreds, tens, units")
+    if (!["hundreds", "tens", "units"].includes(type)) {
+        throw new Error(
+            "Oops! You should includes one of valid unit measures: hundreds, tens, units"
+        );
     }
-    //end validation
+    // end validation
 
     const metrics = {
         hundreds: 1000,
         tens: eachMilestone || 100,
         units: 10,
-    }
+    };
 
     const chosenMetric = metrics[type];
 
     let remainder = targetNumber % chosenMetric;
-    if(!remainder) {
+    if (!remainder) {
         remainder = 0;
     }
 
     const isInteger = Number.isInteger(parseFloat(targetNumber));
-    if(!isInteger) {
+    if (!isInteger) {
         remainder = remainder.toFixed(2);
     }
 

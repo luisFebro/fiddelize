@@ -28,7 +28,7 @@ export const authReducer = {
                 };
             case "LOGIN_EMAIL":
             case "REGISTER_EMAIL":
-                const role = action.payload.role;
+                const { role } = action.payload;
                 const allowTokenWhen = role === "cliente"; // ther apps are handled in access password page.
 
                 if (allowTokenWhen) {

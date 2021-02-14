@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import CardData from "./card-data/CardData";
 import useAPI, {

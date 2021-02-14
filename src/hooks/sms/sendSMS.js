@@ -51,7 +51,7 @@ export default function sendSMS({
                 const isServiceOn = foundService && foundService.active;
 
                 if (isServiceOn) {
-                    msg = customMsg ? customMsg : foundService.msg;
+                    msg = customMsg || foundService.msg;
                     serviceId = foundService.serviceId;
                     triggerInner = true;
                 }

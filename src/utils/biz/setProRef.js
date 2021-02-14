@@ -1,5 +1,5 @@
 import { getVar } from "../../hooks/storage/useVar";
-import { getServiceSKU } from "../../utils/string/getSKUCode.js";
+import { getServiceSKU } from "../string/getSKUCode.js";
 
 export default function setProRef({ setData, planBr, period }) {
     getVar("totalServices_clientAdmin").then((totalServ) => {

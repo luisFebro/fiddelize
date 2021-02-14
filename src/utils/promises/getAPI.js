@@ -1,6 +1,5 @@
-import { chooseHeaderAsync } from "../../utils/server/getHeaders";
-import { logout } from "../../redux/actions/authActions";
 import axios from "axios";
+import { chooseHeaderAsync } from "../server/getHeaders";
 import { disconnect } from "../../hooks/useAuthUser";
 
 export * from "../../hooks/api/requestsLib";
@@ -85,7 +84,7 @@ export default function getAPI({
 }
 
 // Alternative
-//fetchUsers(data)
+// fetchUsers(data)
 // const fetchUsers = async () => {
 //     const response = await axios.get('api/user/list/all');
 //     setData(response.data);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Title from "../../../../components/Title";
 import NpsReportBtn from "./nps/nps-report/NpsReportBtn";
 import XpGradeReportBtn from "./xp-score/xp-report/XpGradeReportBtn";
@@ -119,10 +119,7 @@ export default function ClientsReviews() {
                 {dataStatus && dataStatus.title.toUpperCase()}
             </p>
             <div className="container-center">
-                <NpsReportBtn
-                    mainData={mainData}
-                    disabled={loading ? true : false}
-                />
+                <NpsReportBtn mainData={mainData} disabled={!!loading} />
             </div>
         </section>
     );
@@ -187,9 +184,9 @@ export default function ClientsReviews() {
                     {xpScore}
                 </span>
                 <p
-                    className={`position-relative text-subtitle font-weight-bold text-center`}
+                    className="position-relative text-subtitle font-weight-bold text-center"
                     style={{ top: -25, visibility: "hidden" }}
-                ></p>
+                />
             </div>
             {!loading && (
                 <p
@@ -200,10 +197,7 @@ export default function ClientsReviews() {
                 </p>
             )}
             <div className="container-center">
-                <XpGradeReportBtn
-                    payload={xpPayload}
-                    disabled={loading ? true : false}
-                />
+                <XpGradeReportBtn payload={xpPayload} disabled={!!loading} />
             </div>
         </section>
     );
@@ -291,7 +285,6 @@ function handleLastXpStatus(diffScore) {
     if (diffScore === 0) return "same";
     if (diffScore < 0) {
         return "down";
-    } else {
-        return "up";
     }
+    return "up";
 }

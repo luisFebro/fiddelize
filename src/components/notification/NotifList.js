@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import NotifCard from "./NotifCard";
 import { markAllAsSeen } from "../../redux/actions/notificationActions";
 import useAPIList, { readNotifications } from "../../hooks/api/useAPIList";

@@ -1,16 +1,15 @@
-import React from "react";
-import Spinner from "../loadingIndicators/Spinner";
 import Loadable from "react-loadable";
+import Spinner from "../loadingIndicators/Spinner";
 // import FullPageLoading from './loadingIndicators/FullPageLoading';
 
 // This Load one will be the official one which will be placed
 // directed into the component wihtout the need of create an Async file.
 // MAke sure to name the component with prefix Async...
 export const Load = ({ loader, loading, ...otherProps }) =>
-    LoadableComp({ loader, loading: loading === false ? false : true });
+    LoadableComp({ loader, loading: loading !== false });
 
 export default function LoadableComp(opts) {
-    //n1
+    // n1
     if (opts.loading === true) {
         opts = {
             ...opts,
@@ -23,16 +22,12 @@ export default function LoadableComp(opts) {
         };
     }
 
-    return Loadable(
-        Object.assign(
-            {
-                loading: () => null,
-                delay: 200,
-                timeout: 10000,
-            },
-            opts
-        )
-    );
+    return Loadable({
+        loading: () => null,
+        delay: 200,
+        timeout: 10000,
+        ...opts,
+    });
 }
 
 /* COMMENTS

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import GroupedDashSessions from "./GroupedDashSessions";
 import ShareLink from "./share-link/ShareLink";

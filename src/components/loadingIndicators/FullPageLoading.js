@@ -1,6 +1,5 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import { CLIENT_URL } from '../../config/clientUrl';
+import styled, { keyframes } from "styled-components";
+import { CLIENT_URL } from "../../config/clientUrl";
 
 export default function FullPageLoading({ color, backgroundColor }) {
     return (
@@ -15,9 +14,9 @@ export default function FullPageLoading({ color, backgroundColor }) {
             <section className="loading-container">
                 <h2 className="loading-text">Carregando</h2>
                 <div className="spinner">
-                    <div className="bounce1"></div>
-                    <div className="bounce2"></div>
-                    <div className="bounce3"></div>
+                    <div className="bounce1" />
+                    <div className="bounce2" />
+                    <div className="bounce3" />
                 </div>
             </section>
         </DivWrapper>
@@ -42,7 +41,8 @@ const DivWrapper = styled.div`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    background: ${({ backgroundColor }) => backgroundColor || "var(--mainWhite)"};
+    background: ${({ backgroundColor }) =>
+        backgroundColor || "var(--mainWhite)"};
     color: var(--mainDark);
     z-index: 999;
 
@@ -58,7 +58,7 @@ const DivWrapper = styled.div`
 
     .loading-text {
         color: ${({ color }) => color || "var(--mainPurple)"};
-        fontWeight: bold;
+        fontweight: bold;
     }
 
     & .spinner {
@@ -86,7 +86,6 @@ const DivWrapper = styled.div`
         animation-delay: -0.16s;
     }
 `;
-
 
 /* ARCHIVES
 // const loadImage = () => {

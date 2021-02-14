@@ -1,9 +1,7 @@
-import React from "react";
-// import { fluidTextAlign } from '../../../../../../utils/string/fluidTextAlign';
-import CreatedAtBr from "../../../../CreatedAtBr";
 import DialogTitle from "@material-ui/core/DialogTitle";
 // import DialogContentText from '@material-ui/core/DialogContentText';
 import parse from "html-react-parser";
+import CreatedAtBr from "../../../../CreatedAtBr";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -59,7 +57,7 @@ export default function ClientProfile({ data, title, subtitle }) {
     };
 
     return (
-        <section className={`text-purple text-normal`}>
+        <section className="text-purple text-normal">
             {title && showMainTitle()}
             <div className="container-center" style={{ marginTop: 180 }}>
                 {showMainFormData()}

@@ -1,18 +1,18 @@
-import React, { Fragment, useEffect, useState, useContext } from 'react';
+import { Fragment, useEffect, useState } from "react";
+import { useStoreState, useStoreDispatch } from "easy-peasy";
+import moment from "moment";
+import parse from "html-react-parser";
 import SearchFilter from "../../../components/search/SearchFilter";
 import SearchResult from "../../../components/search/SearchResult";
-import ExpansiblePanel from '../ExpansiblePanel';
-import ButtonFab from '../../../components/buttons/material-ui/ButtonFab';
+import ExpansiblePanel from "../ExpansiblePanel";
+import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 // Redux
-import { useStoreState, useStoreDispatch } from 'easy-peasy';
-import { readUserList } from '../../../redux/actions/userActions';
-import { showSnackbar } from '../../../redux/actions/snackbarActions';
-import moment from 'moment';
-import parse from 'html-react-parser';
-import PanelHiddenContent from './PanelHiddenContent';
+import { readUserList } from "../../../redux/actions/userActions";
+import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import PanelHiddenContent from "./PanelHiddenContent";
 // End Redux
-import LoadingThreeDots from '../../../components/loadingIndicators/LoadingThreeDots';
-import LoadMoreItemsButton from '../../../components/buttons/LoadMoreItemsButton';
+import LoadingThreeDots from "../../../components/loadingIndicators/LoadingThreeDots";
+import LoadMoreItemsButton from "../../../components/buttons/LoadMoreItemsButton";
 
 const initialSkip = 0;
 let searchTerm = "";
@@ -26,48 +26,56 @@ export default function RegisteredUsersList() {
     });
     const { list, chunkSize, totalSize } = clientsData;
 
-    const { allUsers, isLoading, run, runName, adminName } = useStoreState(state => ({
-        run: state.globalReducer.cases.run,
-        runName: state.globalReducer.cases.runName,
-        isLoading: state.globalReducer.cases.isLinearPLoading,
-        adminName: state.userReducer.cases.currentUser.name,
-    }));
+    const { allUsers, isLoading, run, runName, adminName } = useStoreState(
+        (state) => ({
+            run: state.globalReducer.cases.run,
+            runName: state.globalReducer.cases.runName,
+            isLoading: state.globalReducer.cases.isLinearPLoading,
+            adminName: state.userReducer.cases.currentUser.name,
+        })
+    );
 
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        if(init || runName === "registered") {
-            readUserList(dispatch, initialSkip, "colaborador-e-admin")
-            .then(res => {
-
-                if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-                setClientsData({
-                    ...clientsData,
-                    list: res.data.list,
-                    chunkSize: res.data.chunkSize,
-                    totalSize: res.data.totalSize
-                })
-                setInit(false);
-            })
+        if (init || runName === "registered") {
+            readUserList(dispatch, initialSkip, "colaborador-e-admin").then(
+                (res) => {
+                    if (res.status !== 200)
+                        return showSnackbar(dispatch, res.data.msg, "error");
+                    setClientsData({
+                        ...clientsData,
+                        list: res.data.list,
+                        chunkSize: res.data.chunkSize,
+                        totalSize: res.data.totalSize,
+                    });
+                    setInit(false);
+                }
+            );
         }
-    }, [run, runName])
+    }, [run, runName]);
 
     // search
-    const onSearchChange = e => {
+    const onSearchChange = (e) => {
         const querySearched = e.target.value;
         searchTerm = querySearched;
 
-        readUserList(dispatch, initialSkip, "colaborador-e-admin", querySearched)
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
+        readUserList(
+            dispatch,
+            initialSkip,
+            "colaborador-e-admin",
+            querySearched
+        ).then((res) => {
+            if (res.status !== 200)
+                return showSnackbar(dispatch, res.data.msg, "error");
             setClientsData({
                 ...clientsData,
                 list: res.data.list,
                 chunkSize: res.data.chunkSize,
-                totalSize: res.data.totalSize
-            })
-        })
-    }
+                totalSize: res.data.totalSize,
+            });
+        });
+    };
 
     const showSearchBar = () => (
         <div className="container-center my-4">
@@ -80,15 +88,17 @@ export default function RegisteredUsersList() {
     // end search
 
     // Accordion Content
-    const actions = list.map(user => {
-        return({
-           _id: user._id,
-           mainHeading: user.name.cap(),
-           secondaryHeading: parse(`> Função Gerenciamento: ${user.role.cap()} <br />> Atualizado ${moment(user.updatedAt).fromNow()}  atrás.`),
-           userData: user,
-           hiddenContent: <PanelHiddenContent data={user} />
-        });
-    })
+    const actions = list.map((user) => ({
+        _id: user._id,
+        mainHeading: user.name.cap(),
+        secondaryHeading: parse(
+            `> Função Gerenciamento: ${user.role.cap()} <br />> Atualizado ${moment(
+                user.updatedAt
+            ).fromNow()}  atrás.`
+        ),
+        userData: user,
+        hiddenContent: <PanelHiddenContent data={user} />,
+    }));
 
     const showExpansionPanel = () => (
         <ExpansiblePanel
@@ -111,7 +121,7 @@ export default function RegisteredUsersList() {
             }
         />
     );
-    //End Accordion Content
+    // End Accordion Content
 
     const showMoreItemsBtn = () => (
         <LoadMoreItemsButton
@@ -128,7 +138,7 @@ export default function RegisteredUsersList() {
             button={{
                 title: "Carregar mais Usuários",
                 loadingIndicator: "Carregando mais agora...",
-                backgroundColor: 'var(--mainPink)',
+                backgroundColor: "var(--mainPink)",
             }}
         />
     );
@@ -142,9 +152,9 @@ export default function RegisteredUsersList() {
                 allUsersLength={totalSize}
                 searchTerm={searchTerm}
             />
-            {isLoading
-            ? <LoadingThreeDots />
-            : (
+            {isLoading ? (
+                <LoadingThreeDots />
+            ) : (
                 <Fragment>
                     <div className="text-normal">{showExpansionPanel()}</div>
                     {showMoreItemsBtn()}

@@ -1,7 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
-import ActionBtns from "./ActionBtns";
 import { useStoreState } from "easy-peasy";
+import ActionBtns from "./ActionBtns";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import getFirstName from "../../../../../utils/string/getFirstName";
 

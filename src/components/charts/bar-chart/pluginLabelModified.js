@@ -1,10 +1,5 @@
-/**
- * Chartist.js plugin to display a data label on top of the points in a line chart.
- *
- */
-/* global Chartist */
 export default function pluginLabelModified(window, document, Chartist) {
-    var defaultOptions = {
+    const defaultOptions = {
         labelClass: "ct-label",
         labelOffset: {
             x: 0,
@@ -15,27 +10,27 @@ export default function pluginLabelModified(window, document, Chartist) {
         labelInterpolationFnc: Chartist && Chartist.noop,
     };
 
-    var labelPositionCalculation = {
-        point: function (data) {
+    const labelPositionCalculation = {
+        point(data) {
             return {
                 x: data.x,
                 y: data.y,
             };
         },
         bar: {
-            left: function (data) {
+            left(data) {
                 return {
                     x: data.x2,
                     y: data.y2,
                 };
             },
-            center: function (data) {
+            center(data) {
                 return {
                     x: data.x2 + (data.x2 - data.x2) / 2,
                     y: data.y2,
                 };
             },
-            right: function (data) {
+            right(data) {
                 return {
                     x: data.x2,
                     y: data.y2,
@@ -50,9 +45,9 @@ export default function pluginLabelModified(window, document, Chartist) {
 
         function addLabel(position, data) {
             // if x and y exist concat them otherwise output only the existing value
-            var value =
+            const value =
                 data.value.x !== undefined && data.value.y
-                    ? data.value.x + ", " + data.value.y
+                    ? `${data.value.x}, ${data.value.y}`
                     : data.value.y || data.value.x;
 
             data.group
@@ -61,7 +56,7 @@ export default function pluginLabelModified(window, document, Chartist) {
                     {
                         x: position.x + options.labelOffset.x,
                         y: position.y + options.labelOffset.y,
-                        style: "text-anchor: " + options.textAnchor,
+                        style: `text-anchor: ${options.textAnchor}`,
                     },
                     options.labelClass
                 )
@@ -73,8 +68,8 @@ export default function pluginLabelModified(window, document, Chartist) {
                 chart instanceof Chartist.Line ||
                 chart instanceof Chartist.Bar
             ) {
-                chart.on("draw", function (data) {
-                    var positonCalculator =
+                chart.on("draw", (data) => {
+                    const positonCalculator =
                         (labelPositionCalculation[data.type] &&
                             labelPositionCalculation[data.type][
                                 options.align

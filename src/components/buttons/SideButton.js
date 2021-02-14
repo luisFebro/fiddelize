@@ -1,5 +1,4 @@
-import React from 'react';
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // need to set flexBasis to the mainContent in order to sum up to 100% in total.
 export default function SideButton({
@@ -7,22 +6,25 @@ export default function SideButton({
     fontAwesomeIcon,
     flexBasis,
     height,
-    backgroundColor }) {
+    backgroundColor,
+}) {
     const styles = {
         btn: {
             flexBasis: flexBasis || "10%",
-            height: height || 'auto',
-            backgroundColor:  backgroundColor || 'var(--lightGrey)',
-        }
-    }
+            height: height || "auto",
+            backgroundColor: backgroundColor || "var(--lightGrey)",
+        },
+    };
     return (
         <BtnWrapper
             style={styles.btn}
             onClick={onClick}
-            onMouseOver={e => e.target.style.backgroundColor = 'grey'}
-            onMouseOut={e => e.target.style.backgroundColor = 'var(--lightGrey)'}
+            onMouseOver={(e) => (e.target.style.backgroundColor = "grey")}
+            onMouseOut={(e) =>
+                (e.target.style.backgroundColor = "var(--lightGrey)")
+            }
         >
-            <i className={`${fontAwesomeIcon || "fas fa-angle-right"}`}></i>
+            <i className={`${fontAwesomeIcon || "fas fa-angle-right"}`} />
         </BtnWrapper>
     );
 }
@@ -36,6 +38,6 @@ const BtnWrapper = styled.button`
     & i {
         font-size: 5em;
         color: white;
-        filter: drop-shadow(.001em .001em .15em var(--mainDark));
+        filter: drop-shadow(0.001em 0.001em 0.15em var(--mainDark));
     }
 `;

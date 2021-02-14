@@ -1,23 +1,26 @@
-import React from 'react';
-import AsyncAutoCompleteSearch from '../../components/search/Ω-archives/AsyncAutoCompleteSearch';
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import AsyncAutoCompleteSearch from "./Ω-archives/AsyncAutoCompleteSearch";
 
 AddOrSearch.propTypes = {
     autoCompleteUrl: PropTypes.string.isRequired,
     setData: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
-}
+};
 
-export default function AddOrSearch({ autoCompleteUrl, setSearchData, searchData }) {
-    //auto complete data handling
-    const onAutoSelectChange = selectedValue => {
-        setSearchData({ ...searchData, buyDesc: selectedValue })
-    }
+export default function AddOrSearch({
+    autoCompleteUrl,
+    setSearchData,
+    searchData,
+}) {
+    // auto complete data handling
+    const onAutoSelectChange = (selectedValue) => {
+        setSearchData({ ...searchData, buyDesc: selectedValue });
+    };
 
-    const onValueChange = changedValue => {
-        setSearchData({ ...searchData, buyDesc: changedValue })
-    }
-    //end auto complete data handling
+    const onValueChange = (changedValue) => {
+        setSearchData({ ...searchData, buyDesc: changedValue });
+    };
+    // end auto complete data handling
 
     return (
         <AsyncAutoCompleteSearch
@@ -25,14 +28,14 @@ export default function AddOrSearch({ autoCompleteUrl, setSearchData, searchData
             formWidth="auto"
             autoCompleteUrlStr={autoCompleteUrl}
             circularProgressColor="secondary"
-            freeSolo={true}
+            freeSolo
             onAutoSelectChange={onAutoSelectChange}
             onValueChange={onValueChange}
-            noOptionsText={`Nada encontrado...`}
-            backgroundColor='white'
-            color='var(--themePLight)'
+            noOptionsText="Nada encontrado..."
+            backgroundColor="white"
+            color="var(--themePLight)"
             fontSize="1.1em"
-            disableOpenOnFocus={true}
+            disableOpenOnFocus
             placeholder="adicione ou busque"
         />
     );

@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import AppCard from "./AppCard";
 import useAPIList, { readAppList } from "../../../hooks/api/useAPIList";
 import useElemDetection, {
@@ -6,10 +7,7 @@ import useElemDetection, {
 } from "../../../hooks/api/useElemDetection";
 import repeat from "../../../utils/arrays/repeat";
 import useData from "../../../hooks/useData";
-import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
-// LESSON: if you are using a list, insert an id if you gonna need the cards indivudially.
 export default function AppList({ history }) {
     const [skip, setSkip] = useState(0);
 
@@ -94,8 +92,8 @@ export default function AppList({ history }) {
             </Fragment>
             <section className="container">
                 <div className="row">
-                    {installedApps.map((app, ind) => {
-                        return checkDetectedElem({
+                    {installedApps.map((app, ind) =>
+                        checkDetectedElem({
                             list: installedApps,
                             ind,
                             indFromLast: 5,
@@ -116,8 +114,8 @@ export default function AppList({ history }) {
                                     loading={loading}
                                 />
                             </Fragment>
-                        );
-                    })}
+                        )
+                    )}
                 </div>
             </section>
             <ShowOverMsg />

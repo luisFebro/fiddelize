@@ -1,9 +1,9 @@
 export default function setValObjWithStr(obj, path, value) {
-    if(!obj || !value || !path) return;
+    if (!obj || !value || !path) return;
 
-    var curr = obj;
-    var paths = path.split('.');
-    var len = paths.length;
+    let curr = obj;
+    const paths = path.split(".");
+    const len = paths.length;
 
     // paths.forEach(path => {
     //     return !curr[path]
@@ -11,15 +11,15 @@ export default function setValObjWithStr(obj, path, value) {
     //     : curr = curr[path];
     // })
 
-    for(var i = 0; i < len-1; i++) {
-        var elem = paths[i];
-        if( !curr[elem] ) {
-            curr[elem] = {}
+    for (let i = 0; i < len - 1; i++) {
+        const elem = paths[i];
+        if (!curr[elem]) {
+            curr[elem] = {};
         }
         curr = curr[elem];
     }
 
-    curr[paths[len-1]] = value;
+    curr[paths[len - 1]] = value;
 
     return curr;
 }

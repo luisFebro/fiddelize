@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useCallback } from "react";
+import { useState, useEffect, Fragment, useCallback } from "react";
 import Card from "@material-ui/core/Card";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -18,7 +18,7 @@ import phoneMaskBr from "../../../../../../utils/validation/masks/phoneMaskBr";
 import validatePhone from "../../../../../../utils/validation/validatePhone";
 import debounce from "../../../../../../utils/performance/debounce";
 import AddScoreCTAs from "./from-add-score/AddScoreCTAs";
-
+//
 const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -274,8 +274,9 @@ export default function AsyncShowNewContactForm({
                             </span>
                         </MenuItem>
                         <MenuItem value="number">Número de Contato</MenuItem>
+                        <MenuItem value="qrCode">Escaneiar QR Code</MenuItem>
                         <MenuItem value="email">Email</MenuItem>
-                        <MenuItem value="copy">Copiar apenas</MenuItem>
+                        <MenuItem value="copy">Copiar convite</MenuItem>
                     </Select>
                 </section>
             )}

@@ -1,8 +1,8 @@
-import React, { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SpeedometerGauge from "../../../../../../../components/charts/speedometer-gauge/SpeedometerGauge";
 import colorsHandler from "../../../helpers/colorsHandler";
 import { getTextStatus } from "../../../../../../../components/charts/speedometer-gauge/helpers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoadableVisible from "../../../../../../../components/code-splitting/LoadableVisible";
 import getAPI, {
     getNpsChartData,
@@ -107,24 +107,22 @@ export default function NpsContent({ mainData }) {
         });
     }, [dataChart, currWeekDay]);
 
-    const showPromotersHistoryChart = () => {
-        return (
-            <section
-                className="my-5 position-relative"
-                style={{
-                    top: -100,
-                }}
-            >
-                <AsyncLineChart
-                    xLabels={chData.xLabels}
-                    dataArray={chData.dataArray}
-                    onlySmall={true}
-                    isMonday={currWeekDay === "Seg"}
-                    isSunday={currWeekDay === "Dom"}
-                />
-            </section>
-        );
-    };
+    const showPromotersHistoryChart = () => (
+        <section
+            className="my-5 position-relative"
+            style={{
+                top: -100,
+            }}
+        >
+            <AsyncLineChart
+                xLabels={chData.xLabels}
+                dataArray={chData.dataArray}
+                onlySmall
+                isMonday={currWeekDay === "Seg"}
+                isSunday={currWeekDay === "Dom"}
+            />
+        </section>
+    );
 
     const showReviewResults = () => (
         <section

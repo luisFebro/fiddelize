@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const faStyle = {
     fontSize: "25px",

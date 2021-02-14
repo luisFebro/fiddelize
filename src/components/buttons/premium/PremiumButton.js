@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab, { faStyle } from "../material-ui/ButtonFab";
 import RadiusBtn from "../RadiusBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AttentionWaves from "./AttentionWaves";
 import ModalFullContent from "../../modals/ModalFullContent";
 import useStorage from "../../../hooks/storage/useStorage";
@@ -36,7 +36,7 @@ export default function PremiumButton({
     const [trigger, setTrigger] = useState(false);
     const [waveOn, setWaveOn] = useState(false);
 
-    let { isActive } = usePro({ service });
+    const { isActive } = usePro({ service });
 
     const { gotData, loading } = useStorage({ key: service, trigger });
 
@@ -72,7 +72,7 @@ export default function PremiumButton({
         <Fragment>
             {btnType === "pill" && (
                 <RadiusBtn
-                    size={`${size ? size : "extra-small"}`}
+                    size={`${size || "extra-small"}`}
                     title="conhecer"
                     onClick={handleFullOpen}
                     backgroundColor="var(--themeSDark)"
@@ -85,7 +85,7 @@ export default function PremiumButton({
                     className="position-absolute"
                 >
                     <AttentionWaves
-                        isActive={waveOn ? true : false}
+                        isActive={!!waveOn}
                         waveColor="rgba(255, 242, 0, 0.3)"
                         waveSize="40px"
                     />

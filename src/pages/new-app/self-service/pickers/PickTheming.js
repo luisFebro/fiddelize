@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import RadiusColorBtn from "../../../../components/buttons/RadiusColorBtn";
 import Card from "@material-ui/core/Card";
+import RadiusColorBtn from "../../../../components/buttons/RadiusColorBtn";
 import CheckBoxForm from "../../../../components/CheckBoxForm";
 import { CLIENT_URL } from "../../../../config/clientUrl";
 import ModalFullContent from "../../../../components/modals/ModalFullContent";
@@ -11,10 +11,7 @@ import {
     translateColorToPtBr,
 } from "../../../../global-data/uiColors";
 import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
-import ButtonMulti, {
-    faStyle,
-} from "../../../../components/buttons/material-ui/ButtonMulti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import ShowActionBtns from "./ShowActionBtns";
 import { useClientAdmin } from "../../../../hooks/useRoleData";
 
@@ -85,7 +82,7 @@ export default function PickTheming({
                 hexValueSecondary: `var(--themeS--${selfThemeSColor})`,
                 hexBackValue:
                     selfThemeBackColor === ""
-                        ? `var(--themeP--default)`
+                        ? "var(--themeP--default)"
                         : `var(--themeP--${selfThemeBackColor})`,
             });
         }
@@ -124,11 +121,11 @@ export default function PickTheming({
     const handleIsSelectedBackColor = () => {
         if (backColorBr !== "padrão" && primaryColorBr !== "padrão") {
             return true;
-        } else if (primaryColorBr !== "padrão") {
-            return false;
-        } else {
-            return true;
         }
+        if (primaryColorBr !== "padrão") {
+            return false;
+        }
+        return true;
     };
     const showBackColorBtn = () =>
         primaryColorBr !== "padrão" && (
@@ -346,9 +343,8 @@ const ColorPicker = ({
                 ? (colorArray = ["branco", "preto"])
                 : (colorArray = ["branco", "preto", notIncludeColorPrimary]);
             return !gotArrayThisItem(colorArray, loopColor);
-        } else {
-            return false; //Boolean(loopColor === notIncludeColorPrimary || loopColor === notIncludeColorSecondary);
         }
+        return false; // Boolean(loopColor === notIncludeColorPrimary || loopColor === notIncludeColorSecondary);
     };
 
     const showTitle = () => (

@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from "react";
+import { Fragment } from "react";
 import PropTypes from "prop-types";
 import { useStoreState } from "easy-peasy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RemoveMemberBtn from "./cta/RemoveMemberBtn";
 import SeeProfileBtn from "./cta/SeeProfileBtn";
 import getFirstName from "../../../../../../../utils/string/getFirstName";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,

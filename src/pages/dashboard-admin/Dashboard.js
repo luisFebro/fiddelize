@@ -1,27 +1,25 @@
-import React, { Fragment } from 'react';
-import Title from '../../components/Title';
-import { useStoreState } from 'easy-peasy';
-import GroupedDashSessions from './GroupedDashSessions';
-import getDayGreetingBr from '../../utils/getDayGreetingBr';
-import Navbar from '../../components/_layout/navbar';
-import isThisApp from '../../utils/window/isThisApp';
+import { Fragment } from "react";
+import { useStoreState } from "easy-peasy";
+import GroupedDashSessions from "./GroupedDashSessions";
+import getDayGreetingBr from "../../utils/getDayGreetingBr";
+import Navbar from "../../components/_layout/navbar";
+import isThisApp from "../../utils/window/isThisApp";
 
 export default function Dashboard() {
-    const name = useStoreState(state => state.userReducer.cases.currentUser.name);
+    const name = useStoreState(
+        (state) => state.userReducer.cases.currentUser.name
+    );
 
     return (
         <Fragment>
-            {isThisApp()
-            ? (
-                <Navbar />
-            ) : null}
+            {isThisApp() ? <Navbar /> : null}
             <p
-                style={{color: "white", margin: 0, paddingLeft: 20}}
+                style={{ color: "white", margin: 0, paddingLeft: 20 }}
                 className="text-normal"
             >
                 {`${getDayGreetingBr()}${name ? `, ${name.cap()}!` : " ..."}`}
             </p>
-            <br/>
+            <br />
             <GroupedDashSessions />
         </Fragment>
     );

@@ -1,10 +1,10 @@
-import React, { useState, Fragment } from "react";
+import { useState, Fragment } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     useProfile,
     useClientAdmin,
     useCentralAdmin,
 } from "../../../../hooks/useRoleData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getFirstName from "../../../../utils/string/getFirstName";
 import usePro from "../../../../hooks/pro/usePro";
 
@@ -131,7 +131,8 @@ export default function AsyncFreeAccountsLimitMsg() {
             handleCloseCustomerModal,
             openModal,
         });
-    } else if (totalClientUsers >= 7) {
+    }
+    if (totalClientUsers >= 7) {
         return aboutToExpireMsg({
             limitFreePlanNewUsers,
             totalClientUsers,
@@ -141,7 +142,6 @@ export default function AsyncFreeAccountsLimitMsg() {
             openModal,
             modalData,
         });
-    } else {
-        return null;
     }
+    return null;
 }

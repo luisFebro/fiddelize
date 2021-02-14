@@ -1,8 +1,14 @@
 // arguments should be Array of objects preferencially with id.
-export default function findAndReplaceObjInArray(rootArray, newArray, keyToFind) {
-    const result = rootArray.map(elem => {
-        const newItem = newArray.find(elem2 => elem2[keyToFind] === elem[keyToFind]); // n1 - destructuring
-        return newItem ? newItem : elem;
+export default function findAndReplaceObjInArray(
+    rootArray,
+    newArray,
+    keyToFind
+) {
+    const result = rootArray.map((elem) => {
+        const newItem = newArray.find(
+            (elem2) => elem2[keyToFind] === elem[keyToFind]
+        ); // n1 - destructuring
+        return newItem || elem;
     });
     return result;
 }

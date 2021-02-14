@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import ButtonFab from '../../../../../components/buttons/material-ui/ButtonFab';
-import ModalFullContent from '../../../../../components/modals/ModalFullContent';
-import { Load } from '../../../../../components/code-splitting/LoadableComp'
-import { useStoreDispatch } from 'easy-peasy';
-import { showSnackbar } from '../../../../../redux/actions/snackbarActions';
+import { useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
+import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "../../../../../components/modals/ModalFullContent";
+import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 
 // change webpackMode: "eager" to "lazy" to production. This is because it is delaying to load wiin lazy mode.
-const Async = Load({ loader: () => import('./AsyncSchedulerContent'  /* webpackChunkName: "scheduler-full-page-lazy", webpackMode: "eager", webpackIgnore: false */ )});
+const Async = Load({
+    loader: () =>
+        import(
+            "./AsyncSchedulerContent" /* webpackChunkName: "scheduler-full-page-lazy", webpackMode: "eager", webpackIgnore: false */
+        ),
+});
 
 export default function SchedulingBtn({ modal }) {
     const [fullOpen, setFullOpen] = useState(false);
@@ -14,17 +19,18 @@ export default function SchedulingBtn({ modal }) {
     const dispatch = useStoreDispatch();
 
     const handleFullOpen = () => {
-        if(!modal.message) return showSnackbar(dispatch, "Insira alguma mensagem", "error")
+        if (!modal.message)
+            return showSnackbar(dispatch, "Insira alguma mensagem", "error");
         setFullOpen(true);
-    }
-
-
+    };
 
     const handleFullClose = () => {
         setFullOpen(false);
-    }
+    };
 
-    const AsyncSchedulerContent = <Async modal={modal} handleFullClose={handleFullClose} />;
+    const AsyncSchedulerContent = (
+        <Async modal={modal} handleFullClose={handleFullClose} />
+    );
 
     return (
         <section>
@@ -33,8 +39,8 @@ export default function SchedulingBtn({ modal }) {
                 title="Agendar"
                 position="relative"
                 onClick={handleFullOpen}
-                backgroundColor={"var(--themeSDark--default)"}
-                variant = 'extended'
+                backgroundColor="var(--themeSDark--default)"
+                variant="extended"
             />
             <ModalFullContent
                 contentComp={AsyncSchedulerContent}

@@ -1,6 +1,5 @@
-import React from 'react';
-import RegisteredClients from './RegisteredClients';
-import DashSectionTitle from '../../DashSectionTitle';
+import RegisteredClients from "./RegisteredClients";
+import DashSectionTitle from "../../DashSectionTitle";
 
 export default function DashClients() {
     return (

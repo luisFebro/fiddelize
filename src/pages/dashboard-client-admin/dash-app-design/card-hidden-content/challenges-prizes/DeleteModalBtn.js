@@ -1,41 +1,47 @@
-import React, { useState } from 'react';
-import DeleteButton from '../../../../../components/buttons/DeleteButton';
-import { useAppSystem } from '../../../../../hooks/useRoleData';
-import { gotUsersInThisChallenge } from '../../../../../redux/actions/userActions';
-import ModalYesNo from '../../../../../components/modals/ModalYesNo';
-import PropTypes from 'prop-types';
-import parse from 'html-react-parser';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import parse from "html-react-parser";
+import DeleteButton from "../../../../../components/buttons/DeleteButton";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
+import { gotUsersInThisChallenge } from "../../../../../redux/actions/userActions";
+import ModalYesNo from "../../../../../components/modals/ModalYesNo";
 
 DeleteModalBtn.propTypes = {
     id: PropTypes.string,
     challengeNumber: PropTypes.number,
     updateThisUser: PropTypes.func,
-}
+};
 
-export default function DeleteModalBtn({ id, challengeNumber, updateThisUser }) {
+export default function DeleteModalBtn({
+    id,
+    challengeNumber,
+    updateThisUser,
+}) {
     const [fullOpen, setFullOpen] = useState(false);
-    const [errorMsg, setErrorMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState("");
 
     const { businessId } = useAppSystem();
 
-    const handleDelete = arrayId => {
+    const handleDelete = (arrayId) => {
         const currChallInd = challengeNumber - 1;
-        gotUsersInThisChallenge(businessId, currChallInd)
-        .then(res => {
-            if(res.status !== 200) return console.log("Something went wrong with gotUsersInThisChallenge request")
-            if(typeof res.data === "number") {
-                setErrorMsg(`Não é possível excluir.<br />Tem ${res.data} cliente(s) neste desafio.`);
+        gotUsersInThisChallenge(businessId, currChallInd).then((res) => {
+            if (res.status !== 200)
+                return console.log(
+                    "Something went wrong with gotUsersInThisChallenge request"
+                );
+            if (typeof res.data === "number") {
+                setErrorMsg(
+                    `Não é possível excluir.<br />Tem ${res.data} cliente(s) neste desafio.`
+                );
             } else {
-                updateThisUser(false, {deleteThisId: arrayId});
+                updateThisUser(false, { deleteThisId: arrayId });
             }
-        })
-    }
+        });
+    };
 
     return (
         <section>
-            <DeleteButton
-                onClick={() => setFullOpen(true)}
-            />
+            <DeleteButton onClick={() => setFullOpen(true)} />
             <ModalYesNo
                 title="Exclusão de desafio"
                 contentComp={
@@ -55,14 +61,14 @@ export default function DeleteModalBtn({ id, challengeNumber, updateThisUser }) 
 const DeleteContent = ({ errorMsg, challengeNumber }) => {
     const txtStyle = "text-normal font-weight-bold text-left mx-3";
 
-    return(
+    return (
         <div>
             {errorMsg ? (
-                <p className={txtStyle + " text-red"}>
+                <p className={`${txtStyle} text-red`}>
                     {errorMsg && parse(errorMsg)}
                 </p>
             ) : (
-                <p className={txtStyle + " text-purple"}>
+                <p className={`${txtStyle} text-purple`}>
                     Confirmado a exclusão do
                     <br />
                     desafio n.º {challengeNumber} ?
@@ -70,4 +76,4 @@ const DeleteContent = ({ errorMsg, challengeNumber }) => {
             )}
         </div>
     );
-}
+};

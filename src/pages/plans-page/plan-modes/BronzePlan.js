@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import { GoldBtn, SilverBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -10,7 +11,6 @@ import {
     PeriodSelection,
 } from "./comps/MainComps";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
 import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
@@ -21,6 +21,7 @@ import ServicesGallery from "./sessions/services/gallery/ServicesGallery";
 import AddSMS from "./sessions/AddSMS";
 
 import { Load } from "../../../components/code-splitting/LoadableComp";
+
 const AsyncOrdersAndPay = Load({
     loader: () =>
         import(
@@ -58,7 +59,7 @@ export default function BronzePlan({ setCurrPlan }) {
         let total = 0;
 
         let totalServ = 0;
-        for (let serv in orders) {
+        for (const serv in orders) {
             ++totalServ;
             total += orders[serv].price;
         }
@@ -83,7 +84,7 @@ export default function BronzePlan({ setCurrPlan }) {
         } = options;
 
         const orderPrice = order ? order.price : orderGroupPrice;
-        let newTotal = orderPrice;
+        const newTotal = orderPrice;
 
         // for SMS logics
         const needCurrRemoval = order && order.removeCurr;
@@ -164,20 +165,20 @@ export default function BronzePlan({ setCurrPlan }) {
                     <section className="period-selection">
                         <PeriodSelection handlePeriod={handlePeriod} />
                     </section>
-                    <div style={{ height: 180 }}></div>
+                    <div style={{ height: 180 }} />
 
                     <AddClientsToCart
                         modalData={modalClientsData}
                         clientOrder={orders[currService]}
                         currService={currService}
                     />
-                    <div style={{ marginBottom: 100 }}></div>
+                    <div style={{ marginBottom: 100 }} />
 
                     <ServicesGallery
                         handleNewOrder={handleNewOrder}
                         period={period}
                     />
-                    <div style={{ marginBottom: 50 }}></div>
+                    <div style={{ marginBottom: 50 }} />
 
                     <AddSMS
                         smsOrder={orders.sms}

@@ -45,7 +45,7 @@ export default async function goFinishCheckout(props) {
         itemId: reference,
         senderName: userName,
         senderEmail: sandboxMode
-            ? `teste.fiddelize@sandbox.pagseguro.com.br`
+            ? "teste.fiddelize@sandbox.pagseguro.com.br"
             : senderEmail,
         senderCPF,
         senderAreaCode,

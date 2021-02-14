@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 
@@ -19,7 +19,7 @@ export default function ClientAdminText({
             <img
                 src={
                     thisBizLogo === undefined
-                        ? `/img/official-logo-name.png`
+                        ? "/img/official-logo-name.png"
                         : thisBizLogo
                 }
                 width={width}

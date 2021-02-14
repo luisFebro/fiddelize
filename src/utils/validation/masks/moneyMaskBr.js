@@ -9,8 +9,8 @@ export default function moneyMaskBr(targetStr) {
     const value = targetStr.replace(/[^\d]+/gi, "").reverse();
     let result = "";
 
-    var mask = "##.###.###,##".reverse();
-    for (var x = 0, y = 0; x < mask.length && y < value.length; ) {
+    const mask = "##.###.###,##".reverse();
+    for (let x = 0, y = 0; x < mask.length && y < value.length; ) {
         if (mask.charAt(x) != "#") {
             result += mask.charAt(x);
             x++;

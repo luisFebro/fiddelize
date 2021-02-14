@@ -1,14 +1,13 @@
-import React, { Fragment } from "react";
 import ModalBtn from "../../../components/buttons/ModalBtn";
 import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9911.8"; // PRÓXIMO:
+const latestVersion = "3.9912.8"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-    "página qr code personalizado para convite baixar app || opçao de baixar qr code na pagina de compartilhar";
+    "warnings and QA testers fix and CRA4 || página qr code personalizado para convite baixar app || opçao de baixar qr code na pagina de compartilhar";
 
 /* HISTORY
   "separação oficial do front e backend do projeto pt 4"

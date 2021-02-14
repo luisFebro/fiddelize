@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Chartist from "chartist";
 import "chartist-plugin-tooltips";
 import "chartist-plugin-pointlabels";
@@ -13,8 +13,8 @@ const plugins = {
             textAnchor: "middle",
         }),
         Chartist.plugins.tooltip({
-            transformTooltipTextFnc: function (value) {
-                return value + " pontos";
+            transformTooltipTextFnc(value) {
+                return `${value} pontos`;
             },
         }),
     ],
@@ -61,8 +61,8 @@ export default function LineChart({
 
     let lastDiff;
     let lastPerc;
-    let lastButOneTreated = lastButOne === "0.01" ? 0 : lastButOne;
-    let lastValueTreated = lastValue === "0.01" ? 0 : lastValue;
+    const lastButOneTreated = lastButOne === "0.01" ? 0 : lastButOne;
+    const lastValueTreated = lastValue === "0.01" ? 0 : lastValue;
     if (!Number.isNaN(lastValue) && !Number.isNaN(lastButOne)) {
         lastDiff = lastValueTreated - lastButOneTreated;
         lastPerc = Math.round(
@@ -84,7 +84,7 @@ export default function LineChart({
                 options
             );
 
-            chart.on("draw", function (data) {
+            chart.on("draw", (data) => {
                 if (data.type === "line" || data.type === "area") {
                     data.element.animate({
                         d: {
@@ -141,7 +141,7 @@ export default function LineChart({
             <h2 className="py-3 text-normal font-weight-bold text-white text-center">
                 Histórico pontuação promotores
             </h2>
-            <div className={`line-chart`}></div>
+            <div className="line-chart" />
         </section>
     );
 }
@@ -167,7 +167,7 @@ function handleSVGMultiline({ svgParent, textArray, xDistance }) {
 function drawText(o, parent) {
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
 
-    for (var name in o.props) {
+    for (const name in o.props) {
         if (o.props.hasOwnProperty(name)) {
             text.setAttributeNS(null, name, o.props[name]);
         }
@@ -193,7 +193,7 @@ function drawText(o, parent) {
 }
 
 function handleDiffLabelDistance({ lastValue, onlySmall, isSunday }) {
-    const needUpperDiff = Number(lastValue) < 0 ? true : false;
+    const needUpperDiff = Number(lastValue) < 0;
     let distanceY;
     let distanceX;
 

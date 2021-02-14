@@ -18,18 +18,16 @@ BARCode({
 	Copyright (c) 2020 Constantine
  */
 
-"use strict";
-
 function BARCode(B) {
     function c128(c) {
         c = c.charCodeAt(0);
 
-        return c > 126 ? (128 == c ? 0 : c - 50) : c > 32 ? c - 32 : 0;
+        return c > 126 ? (c == 128 ? 0 : c - 50) : c > 32 ? c - 32 : 0;
     }
 
     function check(o) {
-        var r = 0,
-            c = o.length;
+        let r = 0;
+        let c = o.length;
 
         while (c) r += c-- * c128(o[c]);
 
@@ -37,7 +35,7 @@ function BARCode(B) {
     }
 
     function def(i) {
-        if (106 < i)
+        if (i > 106)
             console.warn("BCode: {bad char} was used and it was replaced by X"),
                 (i = 56),
                 (er = 1);
@@ -154,8 +152,8 @@ function BARCode(B) {
     }
 
     function bin(o) {
-        var r = [],
-            c = o.length;
+        const r = [];
+        let c = o.length;
 
         while (c) r[--c] = parseInt(o[c]);
 
@@ -163,8 +161,8 @@ function BARCode(B) {
     }
 
     function encode(o) {
-        var r = [],
-            c = o.length;
+        const r = [];
+        let c = o.length;
 
         while (c) r[--c] = def(c128(o[c]));
 
@@ -179,24 +177,24 @@ function BARCode(B) {
         return /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(c);
     }
 
-    var b = "string" == typeof B ? { msg: B } : B || {},
-        msg = b.msg,
-        dir = 0,
-        l = 0,
-        dim = b.dim || [320, 80],
-        pad = b.pad || [20, 16],
-        pal = b.pal || ["#000"],
-        w = abs(dim[0]),
-        h = abs(dim[1]),
-        px = abs(pad[0]),
-        py = abs(pad[1]),
-        fg = pal[0],
-        bg = pal[1],
-        sx = 1,
-        sy = 1,
-        er = 0;
+    const b = typeof B === "string" ? { msg: B } : B || {};
+    let { msg } = b;
+    let dir = 0;
+    let l = 0;
+    const dim = b.dim || [320, 80];
+    const pad = b.pad || [20, 16];
+    const pal = b.pal || ["#000"];
+    let w = abs(dim[0]);
+    let h = abs(dim[1]);
+    let px = abs(pad[0]);
+    let py = abs(pad[1]);
+    let fg = pal[0];
+    let bg = pal[1];
+    let sx = 1;
+    let sy = 1;
+    var er = 0;
 
-    if (!msg || "string" !== typeof msg) {
+    if (!msg || typeof msg !== "string") {
         console.warn("BCode: Expected {msg} should be not empty string!");
 
         msg = "error!";
@@ -207,13 +205,13 @@ function BARCode(B) {
     l = msg.length;
 
     /* ecc: reset to default values and relative width */
-    if (0 == w && 0 == h) (px = 20), (py = 16), (w = 2 * (l + px)), (h = 80);
+    if (w == 0 && h == 0) (px = 20), (py = 16), (w = 2 * (l + px)), (h = 80);
 
     dir = h > w;
 
     /* deal with auto width or height */
-    if (0 == w) (w = 2 * (l + px)), (dir = 0);
-    if (0 == h) (h = 2 * (l + py)), (dir = 1);
+    if (w == 0) (w = 2 * (l + px)), (dir = 0);
+    if (h == 0) (h = 2 * (l + py)), (dir = 1);
 
     if (w < px) {
         px = w;
@@ -244,26 +242,26 @@ function BARCode(B) {
         function svg(n, a) {
             n = document.createElementNS(ns, n);
 
-            for (var o in a || {}) {
+            for (const o in a || {}) {
                 n.setAttribute(o, a[o]);
             }
 
             return n;
         }
 
-        var r,
-            ns = "http://www.w3.org/2000/svg",
-            path = "",
-            c = l,
-            d = 0;
+        let r;
+        var ns = "http://www.w3.org/2000/svg";
+        let path = "";
+        let c = l;
+        let d = 0;
 
         while (c) {
             msg[--c] &&
                 ++d &&
                 !msg[c - 1] &&
                 ((path += dir
-                    ? "M1," + c + "H0v" + d + "h1v-" + d + "z"
-                    : "M" + c + ",1h" + d + "V0h-" + d + "v1z"),
+                    ? `M1,${c}H0v${d}h1v-${d}z`
+                    : `M${c},1h${d}V0h-${d}v1z`),
                 (d = 0));
         }
 
@@ -281,13 +279,13 @@ function BARCode(B) {
             r.appendChild(
                 svg("path", {
                     fill: bg,
-                    d: "M0,0V" + h + "H" + w + "V0H0Z",
+                    d: `M0,0V${h}H${w}V0H0Z`,
                 })
             );
 
         r.appendChild(
             svg("path", {
-                transform: "matrix(" + [sx, 0, 0, sy, px, py] + ")",
+                transform: `matrix(${[sx, 0, 0, sy, px, py]})`,
                 d: path,
             })
         );

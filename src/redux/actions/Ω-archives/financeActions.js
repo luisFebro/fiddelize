@@ -1,12 +1,12 @@
-import axios from 'axios';
-import { getHeaderJson } from '../../utils/server/getHeaders';
-import addSpacingPlusToQuery from '../../utils/string/addSpacingPlusToQuery';
-import { setCustomLoading } from './globalActions';
+import axios from "axios";
+import { getHeaderJson } from "../../utils/server/getHeaders";
+import addSpacingPlusToQuery from "../../utils/string/addSpacingPlusToQuery";
+import { setCustomLoading } from "./globalActions";
 
 // CRUD
 export const createFinance = async (dispatch, objToSend) => {
     try {
-        return await axios.post(`/api/finance`, objToSend, getHeaderJson);
+        return await axios.post("/api/finance", objToSend, getHeaderJson);
     } catch (err) {
         return err.response;
     }
@@ -14,23 +14,30 @@ export const createFinance = async (dispatch, objToSend) => {
 
 // read
 export const getPeriodQuery = (period, chosenDate) => {
-    switch(period) {
-        case 'day':
+    switch (period) {
+        case "day":
             return `&thisDayMonth=${addSpacingPlusToQuery(chosenDate)}`;
-        case 'month':
+        case "month":
             return `&thisMonthYear=${addSpacingPlusToQuery(chosenDate)}`;
-        case 'all':
-            return ``;
+        case "all":
+            return "";
         default:
-            console.log("Something did not work in the query switch")
+            console.log("Something did not work in the query switch");
     }
-}
+};
 
-export const getCashOpsList = async (dispatch, period, skip, chosenDate, search, autocomplete) => {
+export const getCashOpsList = async (
+    dispatch,
+    period,
+    skip,
+    chosenDate,
+    search,
+    autocomplete
+) => {
     console.log("Why period is displaying ALL in the first rendering?", period);
     const periodQuery = getPeriodQuery(period, chosenDate);
     const searchQuery = search ? `&search=${search}` : "";
-    const autocompleteQuery = autocomplete ? `&autocomplete=true` : "";
+    const autocompleteQuery = autocomplete ? "&autocomplete=true" : "";
 
     setCustomLoading(dispatch, true);
 
@@ -48,7 +55,11 @@ export const getCashOpsList = async (dispatch, period, skip, chosenDate, search,
 
 export const updateFinance = async (dispatch, itemId, bodyToSend) => {
     try {
-        return await axios.put(`/api/finance/${itemId}`, bodyToSend, getHeaderJson);
+        return await axios.put(
+            `/api/finance/${itemId}`,
+            bodyToSend,
+            getHeaderJson
+        );
     } catch (err) {
         return err.response;
     }
@@ -61,13 +72,15 @@ export const removeFinance = async (dispatch, itemId) => {
         return err.response;
     }
 };
-//END CRUD
-
+// END CRUD
 
 // LIST
 export const getAllAvailableNames = async (dispatch, isAdmin = false) => {
     try {
-        return await axios.get(`/api/finance/staff/list/names${isAdmin ? `?role=admin` : ""}`, getHeaderJson);
+        return await axios.get(
+            `/api/finance/staff/list/names${isAdmin ? "?role=admin" : ""}`,
+            getHeaderJson
+        );
     } catch (err) {
         return err.response;
     }

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import OrdersTable from "./OrdersTable";
 import PayArea from "./PayArea";
-import { setVar, removeVar } from "../../../hooks/storage/useVar";
+import useGetVar, { setVar, removeVar } from "../../../hooks/storage/useVar";
 import useBackColor from "../../../hooks/useBackColor";
-import useGetVar from "../../../hooks/storage/useVar";
-import { useStoreDispatch } from "easy-peasy";
+
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 
@@ -22,7 +22,7 @@ export default function OrdersAndPay({
         renewalDaysLeft: null,
         renewalReference: null,
     });
-    let {
+    const {
         servicesAmount,
         servicesTotal,
         renewalDaysLeft,
@@ -80,7 +80,7 @@ export default function OrdersAndPay({
             refData &&
                 setDataSer({
                     ...dataSer,
-                    renewalReference: refData ? refData : undefined,
+                    renewalReference: refData || undefined,
                 });
     }, [loadDaysLeft, loadRef]);
 

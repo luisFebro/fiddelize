@@ -70,8 +70,8 @@ export default function BadaloBell({
                 onClick={handleBadaloClick}
             >
                 <div className="bell" onClick={handleBadaloClick}>
-                    <div className="bell-top"></div>
-                    <div className="bell-bot"></div>
+                    <div className="bell-top" />
+                    <div className="bell-bot" />
                 </div>
             </NotificationBadge>
         ),

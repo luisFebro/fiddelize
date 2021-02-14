@@ -1,13 +1,12 @@
-import React, { useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import getQueryByName from "../../../utils/string/getQueryByName";
 import { CLIENT_URL } from "../../../config/clientUrl";
-import { withRouter } from "react-router-dom";
 import Illustration from "../../../components/Illustration";
 import ScrollArrow from "../../../keyframes/built/scroll-arrow/ScrollArrow";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 import ShowPasswordForm from "./ShowPasswordForm";
-import AccessPassCreation from "./AccessPassCreation";
 import { Load } from "../../../components/code-splitting/LoadableComp";
+
 export const AsyncAccessPassCreation = Load({
     loader: () =>
         import(
@@ -22,7 +21,7 @@ export default function PasswordPage({ location, match, history }) {
 
     const clientAdminId = getQueryByName("id", location.search);
     const clientAdminName = getQueryByName("name", location.search).cap();
-    const bizCodeName = match.params.bizCodeName;
+    const { bizCodeName } = match.params;
 
     useAnimateElem(".password-page--img", {
         animaIn: "fadeInTopLeft",

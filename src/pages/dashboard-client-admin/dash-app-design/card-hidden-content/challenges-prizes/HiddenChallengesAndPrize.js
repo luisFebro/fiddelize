@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from "react";
-import Title from "../../../../../components/Title";
+import { useState, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Title from "../../../../../components/Title";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import List from "./List.js";
@@ -51,33 +51,31 @@ export default function HiddenGoalsAndRewards() {
         },
     };
 
-    const showPrizeAndGoalsVisibility = () => {
-        return (
-            <section className="container-center-col">
-                <section className="position-relative">
-                    <header className="mb-3 text-purple font-weight-bold text-subtitle text-center">
-                        Revelar prêmios e metas para clientes?
-                    </header>
-                    <div
-                        className="position-absolute"
-                        style={styles.visibleInstruBtn}
-                    >
-                        <InstructionBtn
-                            mode="modal"
-                            article="GiftVisibility_art1"
-                        />
-                    </div>
-                </section>
-                <SwitchBtn
-                    titleLeft="Escondido<br />Durante<br />Desafios"
-                    titleRight="Sempre<br />Revelado"
-                    callback={handleVisibility}
-                    defaultStatus={arePrizesVisible}
-                />
-                <hr className="lazer-purple" />
+    const showPrizeAndGoalsVisibility = () => (
+        <section className="container-center-col">
+            <section className="position-relative">
+                <header className="mb-3 text-purple font-weight-bold text-subtitle text-center">
+                    Revelar prêmios e metas para clientes?
+                </header>
+                <div
+                    className="position-absolute"
+                    style={styles.visibleInstruBtn}
+                >
+                    <InstructionBtn
+                        mode="modal"
+                        article="GiftVisibility_art1"
+                    />
+                </div>
             </section>
-        );
-    };
+            <SwitchBtn
+                titleLeft="Escondido<br />Durante<br />Desafios"
+                titleRight="Sempre<br />Revelado"
+                callback={handleVisibility}
+                defaultStatus={arePrizesVisible}
+            />
+            <hr className="lazer-purple" />
+        </section>
+    );
 
     const showBtnAction = () =>
         !hideAddBtn && (
@@ -93,8 +91,8 @@ export default function HiddenGoalsAndRewards() {
                         fontWeight="bolder"
                         fontSize=".9em"
                         size="large"
-                        color={"white"}
-                        backgroundColor={"var(--themeSDark--default)"}
+                        color="white"
+                        backgroundColor="var(--themeSDark--default)"
                         needBtnShadow={false}
                     />
                     <PremiumButton

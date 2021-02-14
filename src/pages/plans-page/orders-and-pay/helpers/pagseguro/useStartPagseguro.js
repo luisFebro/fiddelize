@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IS_DEV } from "../../../../../config/clientUrl";
 
-const sandboxMode = IS_DEV ? true : false;
+const sandboxMode = !!IS_DEV;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";
@@ -27,7 +27,7 @@ export default function useStartPagseguro() {
         );
 
         return () => {
-            //document.body.removeChild(script);
+            // document.body.removeChild(script);
         };
     }, []);
 

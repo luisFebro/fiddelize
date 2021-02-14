@@ -1,5 +1,4 @@
-import React from "react";
-import { Load } from "../../../components/code-splitting/LoadableComp";
+import { Load } from "../../code-splitting/LoadableComp";
 
 const AsyncNovvosClientes = Load({
     loader: () =>
@@ -24,9 +23,7 @@ export default function pickPackageService({
     service = "Novvos Clientes",
     data,
 }) {
-    const pickComp = () => {
-        return packageServiceStore(data)[service];
-    };
+    const pickComp = () => packageServiceStore(data)[service];
 
     return pickComp;
 }

@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import Simulator from "./Simulator";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from "react-router-dom";
+import Simulator from "./Simulator";
 import { useProfile } from "../../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../../components/Img";
 import { PeriodSelection } from "../../../comps/MainComps";
 import setProRenewal from "../../../../../../utils/biz/setProRenewal";
-import setProRef from "../../../../../../utils/biz/setProRef";
-import { withRouter } from "react-router-dom";
 
 export default withRouter(AsyncAddCustomersContent);
 
@@ -37,7 +36,7 @@ function AsyncAddCustomersContent({
     });
     const { inv, totalCustomers, totalPackage, innerPeriod } = data;
 
-    period = period ? period : innerPeriod;
+    period = period || innerPeriod;
 
     // useEffect(() => {
     //     isCreditsBadge && setProRef({ setData, period, planBr: currPlan });
@@ -139,7 +138,7 @@ function AsyncAddCustomersContent({
                 size="large"
                 title="Adicionar"
                 onClick={handleCTA}
-                backgroundColor={"var(--themeSDark--default)"}
+                backgroundColor="var(--themeSDark--default)"
                 variant="extended"
                 position="relative"
             />
@@ -157,10 +156,7 @@ function AsyncAddCustomersContent({
     );
 
     const showPeriodSelection = () => (
-        <PeriodSelection
-            containerCenter={true}
-            handlePeriod={handleInnerPeriod}
-        />
+        <PeriodSelection containerCenter handlePeriod={handleInnerPeriod} />
     );
 
     return (
@@ -175,7 +171,7 @@ function AsyncAddCustomersContent({
                 handleData={handleData}
                 period={period}
                 currPlan={currPlan}
-                animaDisabled={true}
+                animaDisabled
             />
             {showNotes()}
             {showCTA()}

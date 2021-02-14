@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import ButtonMulti, {
-    faStyle,
-} from "../../components/buttons/material-ui/ButtonMulti";
+import { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 
 ModalConfYesNo.propTypes = {
     title: PropTypes.string,
@@ -38,7 +36,7 @@ export default function ModalConfYesNo({
                 />
                 <ButtonMulti
                     title="SIM"
-                    disabled={isYesBtnDisabled ? true : false}
+                    disabled={!!isYesBtnDisabled}
                     onClick={() => {
                         actionFunc();
                         setIsYesBtnDisabled(true);

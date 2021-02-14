@@ -1,4 +1,3 @@
-import React from "react";
 import useBackColor from "../../hooks/useBackColor";
 import AppList from "./apps-list/AppList";
 import useAuth from "../../hooks/useAuthUser";

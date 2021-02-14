@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import MuSlider from "../../../../../../components/sliders/MuSlider";
-import isKeyPressed from "../../../../../../utils/event/isKeyPressed";
-import TextField from "@material-ui/core/TextField";
-import handleChange from "../../../../../../utils/form/use-state/handleChange";
-import getIncreasedPerc from "../../../../../../utils/numbers/getIncreasedPerc";
 import { addDays, formatSlashDMY } from "../../../../../../utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -148,7 +144,7 @@ export default function Simulator({
                 className="d-inline-block ml-2 text-title text-purple"
                 style={styles.totalUnits}
             >
-                <span className={`text-em-1-2 font-site text-nowrap`}>
+                <span className="text-em-1-2 font-site text-nowrap">
                     + {totalReal} {subject}
                     {packages === 1 ? "" : "s"}
                 </span>
@@ -222,11 +218,11 @@ export default function Simulator({
                 step={1}
                 value={packages}
                 callback={handlePackages}
-                disabled={newQuantity ? true : false}
+                disabled={!!newQuantity}
             />
             {packages <=
                 (isYearly ? MAX_UNIT_YEAR * 0.3 : MAX_UNIT_MONTH * 0.2) &&
-                !Boolean(newQuantity) && (
+                !newQuantity && (
                     <div
                         className="position-absolute font-weight-bold text-shadow text-center"
                         style={styles.delimeterBoardRight}
@@ -239,7 +235,7 @@ export default function Simulator({
 
             {packages >=
                 (isYearly ? MAX_UNIT_YEAR * 0.3 : MAX_UNIT_MONTH * 0.2) &&
-                !Boolean(newQuantity) && (
+                !newQuantity && (
                     <div
                         className="position-absolute font-weight-bold text-shadow text-center"
                         style={styles.delimeterBoardLeft}
