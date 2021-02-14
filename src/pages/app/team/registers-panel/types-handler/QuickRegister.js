@@ -27,7 +27,7 @@ import getAPI, { encryptLinkScore } from "../../../../../utils/promises/getAPI";
 import useInvitationMsg from "./hooks/useInvitationMsg";
 import copyText from "../../../../../utils/document/copyText";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
-//
+
 const Async = Load({
     loader: () =>
         import(
