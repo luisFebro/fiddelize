@@ -3,10 +3,10 @@ import QRCode from "qrcode.react";
 
 const imgDefault = {
     src: "/icons/mobile-icon-512.png",
+    width: 35,
+    height: 35,
     x: null, // none, will center // 76 to the bottom corner right
     y: null, // none, will center // 76 to the bottom corner right
-    height: 35,
-    width: 35,
     excavate: false, // default false foreground to nearest whole module
 };
 
@@ -19,6 +19,7 @@ export default function QrCode({
     renderAs = "svg",
     includeMargin = false,
     imageSettings = imgDefault,
+    imageSquare = true,
 }) {
     const levels = ["L", "M", "Q", "H"];
     if (!levels.includes(level))
@@ -37,7 +38,11 @@ export default function QrCode({
             level={level}
             renderAs={renderAs}
             includeMargin={includeMargin}
-            imageSettings={imageSettings}
+            imageSettings={{
+                ...imageSettings,
+                width: imageSquare ? 35 : 60,
+                height: imageSquare ? 35 : 30,
+            }}
         />
     );
 }

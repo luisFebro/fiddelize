@@ -60,6 +60,7 @@ module.exports = {
         indent: "off",
         "no-param-reassign": "off", // userId = userId || _id;
         "max-len": "off", // max-length by line handled by prettier
+        "no-console": "off", // using switchConsoleLogs security utils. activated only in dev
     },
     settings: {
         react: {

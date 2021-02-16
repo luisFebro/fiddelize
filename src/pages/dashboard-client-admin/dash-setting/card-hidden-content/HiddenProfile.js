@@ -12,7 +12,7 @@ import CreatedAtBr from "../../CreatedAtBr";
 import { updateUser, readUser } from "../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import isValidName from "../../../../utils/validation/isValidName";
-import phoneMaskBr from "../../../../utils/validation/masks/phoneMaskBr";
+import autoPhoneMask from "../../../../utils/validation/masks/autoPhoneMask";
 import isKeyPressed from "../../../../utils/event/isKeyPressed";
 import validatePhone from "../../../../utils/validation/validatePhone";
 import validateEmail from "../../../../utils/validation/validateEmail";
@@ -33,7 +33,8 @@ export default function HiddenProfile({ userData }) {
         gender: "",
     });
 
-    const { name, cpf, birthday, email, phone, gender, bizWhatsapp } = data;
+    const { name, cpf, birthday, email, phone, gender } = data;
+    const phoneValue = autoPhoneMask(phone);
 
     const [error, setError] = useState("");
 
@@ -176,16 +177,16 @@ export default function HiddenProfile({ userData }) {
                         variant="outlined"
                         onChange={handleChange(setData, data)}
                         onBlur={() =>
-                            setData({ ...data, phone: phoneMaskBr(phone) })
+                            setData({ ...data, phone: autoPhoneMask(phone) })
                         }
                         error={error === "phone"}
                         onKeyPress={(e) =>
                             isKeyPressed(e, "Enter") &&
-                            setData({ ...data, phone: phoneMaskBr(phone) })
+                            setData({ ...data, phone: autoPhoneMask(phone) })
                         }
                         autoComplete="off"
                         name="phone"
-                        value={phone}
+                        value={phoneValue}
                         type="tel"
                         fullWidth
                     />

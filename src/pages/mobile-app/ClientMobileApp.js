@@ -38,6 +38,14 @@ import removeImgFormat from "../../utils/biz/removeImgFormat";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
 // import useCount from "../../hooks/useCount";
 
+const AsyncAdminQuickActions = Load({
+    loading: false,
+    loader: () =>
+        import(
+            "./AdminQuickActions" /* webpackChunkName: "admin-quick-actions-comp-lazy" */
+        ),
+});
+
 const AsyncPWA = Load({
     loading: true,
     loader: () =>
@@ -70,7 +78,7 @@ const AsyncRegisterBizTeam = Load({
         ),
 });
 
-const isSmall = window.Helper.isSmallScreen();
+// const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
 
 const showWelcomeMsg = (dispatch, userName) => {
@@ -456,14 +464,21 @@ function ClientMobileApp({ location, history }) {
 
                     {isCliAdmin && !isSessionOver && showNotificationBell()}
                     {isCliAdmin && !isCliUser && (
-                        <GatewayAndCTAs
-                            isSessionOver={isSessionOver}
-                            selfThemeBackColor={selfThemeBackColor}
-                            selfThemeSColor={selfThemeSColor}
-                            fullName={fullName}
-                            bizCodeName={bizCodeName}
-                            loadingAccess={loadingData}
-                        />
+                        <Fragment>
+                            <GatewayAndCTAs
+                                isSessionOver={isSessionOver}
+                                selfThemeBackColor={selfThemeBackColor}
+                                selfThemeSColor={selfThemeSColor}
+                                fullName={fullName}
+                                bizCodeName={bizCodeName}
+                                loadingAccess={loadingData}
+                            />
+                            <AsyncAdminQuickActions
+                                playBeep={undefined}
+                                showMoreBtn={!isSessionOver}
+                                colorS={selfThemeSColor}
+                            />
+                        </Fragment>
                     )}
                     {!isAuthUser && isCliAdmin && showLogin()}
                 </section>

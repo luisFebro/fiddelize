@@ -15,11 +15,11 @@ import WhatsappBtn from "../../components/buttons/WhatsappBtn";
 import { readUser } from "../../redux/actions/userActions";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 // SpeedDial and Icons
-import lStorage, { tooltip1, yellowBtn2 } from "../../utils/storage/lStorage";
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import getFirstName from "../../utils/string/getFirstName";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import { disconnect } from "../../hooks/useAuthUser";
+// import lStorage from "../../utils/storage/lStorage";
 
 const AsyncHistory = Load({
     loader: () =>
@@ -34,12 +34,6 @@ const AsyncReview = Load({
             "./modals/ReviewModal" /* webpackChunkName: "client-review-full-page-lazy" */
         ),
 });
-
-const lastOption = tooltip1;
-const currOption = yellowBtn2;
-
-const lastChecked = lStorage("getItem", lastOption);
-const currChecked = lStorage("getItem", currOption);
 
 const getStyles = () => ({
     muStyle: {
@@ -60,13 +54,13 @@ const getStyles = () => ({
 
 function MoreOptionsBtn({
     history,
-    animaClass,
     playBeep,
     showMoreBtn,
     userName,
     needAppForCliAdmin,
     needAppForPreview,
     colorS,
+    // animaClass,
 }) {
     const [blockAccess, setBlockAccess] = useState(false);
     const [purchaseModal, setPurchaseModal] = useState(false);
@@ -80,9 +74,9 @@ function MoreOptionsBtn({
 
     const {
         currScore,
-        purchaseHistory,
         totalGeneralScore,
         totalPurchasePrize,
+        // purchaseHistory,
     } = useClientUser();
 
     useEffect(() => {
@@ -200,7 +194,7 @@ function MoreOptionsBtn({
             : "/cartao-virtual";
         history.push(path);
         playBeep();
-        lStorage("setItem", currOption);
+        // lStorage("setItem", currOption);
     };
 
     const showContactComp = () => {
@@ -296,6 +290,12 @@ const ContactComp = () => {
 };
 
 /* ARCHIVES
+const lastOption = tooltip1;
+const currOption = yellowBtn2;
+
+const lastChecked = lStorage("getItem", lastOption);
+const currChecked = lStorage("getItem", currOption);
+
 <Tooltip
     needArrow
     needOpen={needSetTrueLocalKey(lastChecked, currChecked)}

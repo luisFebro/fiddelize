@@ -27,6 +27,7 @@ import getAPI, { encryptLinkScore } from "../../../../../utils/promises/getAPI";
 import useInvitationMsg from "./hooks/useInvitationMsg";
 import copyText from "../../../../../utils/document/copyText";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
+import QrInvitationBtn from "./qr-code-invitation-btn/QrInvitationBtn";
 
 const Async = Load({
     loader: () =>
@@ -152,7 +153,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         appType,
     };
 
-    const msg = useInvitationMsg({
+    const { msg, downloadLink } = useInvitationMsg({
         name,
         linkScore,
         isNewMember,
@@ -312,6 +313,16 @@ export default function QuickRegister({ formPayload, isNewMember }) {
             </section>
         );
 
+    const showQrCodeCTA = () => (
+        <div className="container-center my-5 animated fadeInUp">
+            <QrInvitationBtn
+                qrValue={downloadLink}
+                cliName={name}
+                isNewMember={isNewMember}
+            />
+        </div>
+    );
+
     const handleCopy = () => {
         copyText(
             msg,
@@ -329,9 +340,21 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                 </p>
                 <main className="mx-3" style={styles.msgField}>
                     {name ? (
-                        <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
-                            {msg}
-                        </p>
+                        <section className="position-relative">
+                            <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
+                                {msg}
+                            </p>
+                            <div
+                                className="position-absolute"
+                                style={{ right: "10px", bottom: "-20px" }}
+                            >
+                                <RadiusBtn
+                                    size="small"
+                                    title="copiar"
+                                    onClick={handleCopy}
+                                />
+                            </div>
+                        </section>
                     ) : (
                         <p className="m-0 p-3 text-normal text-white text-break text-left mx-3">
                             {userName && userName.cap()}, no aguardo do nome do{" "}
@@ -352,18 +375,6 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                         senhas > senha de verificação
                     </p>
                 )}
-                {name && (
-                    <div
-                        className="position-absolute"
-                        style={{ right: "10px", bottom: "-20px" }}
-                    >
-                        <RadiusBtn
-                            size="small"
-                            title="copiar"
-                            onClick={handleCopy}
-                        />
-                    </div>
-                )}
             </section>
         );
 
@@ -383,15 +394,16 @@ export default function QuickRegister({ formPayload, isNewMember }) {
                 <AsyncShowNewContactForm
                     isQuickRegister
                     isNewMember={isNewMember}
-                    entryAnimation="animated fadeInUp"
+                    entryAnimation=" "
                     clearForm={clearForm}
                     handleMeanData={handleMeanData}
                     loadData={formPayload}
                     handleScoreToLink={handleScoreToLink}
                 />
             </div>
-            {meanType && meanType === "number" && showNumberCTAs()}
-            {meanType && meanType === "email" && showEmailCTA()}
+            {name && meanType && meanType === "number" && showNumberCTAs()}
+            {name && meanType && meanType === "email" && showEmailCTA()}
+            {name && meanType && meanType === "qrCode" && showQrCodeCTA()}
             {showSuccessOp()}
             {showGeneratedMsg()}
             <ModalFullContent

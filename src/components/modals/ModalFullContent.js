@@ -23,12 +23,12 @@ export default function ModalFullContent({
     contentComp,
     fullOpen,
     setFullOpen,
-    style,
     animatedClass,
     exitBtn,
     showBackBtn = false,
     needIndex = true,
     backgroundColor,
+    // style,
 }) {
     const { runName } = useRunComp();
 

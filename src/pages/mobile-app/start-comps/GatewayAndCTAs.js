@@ -51,7 +51,7 @@ export default function GatewayAndCTAs({
                         to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
                     >
                         <RadiusBtn
-                            title="acessar"
+                            title="painel"
                             backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
                         />
                     </RedirectLink>

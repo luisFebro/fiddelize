@@ -18,13 +18,16 @@ import getFirstName from "../../utils/string/getFirstName";
 import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaButtons";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 import { handleFocus } from "../../utils/form/handleFocus";
-import copyTextToClipboard from "../../utils/document/copyTextToClipboard";
+import copyText from "../../utils/document/copyText";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import {
     useClientAdmin,
     useAppSystem,
     useProfile,
 } from "../../hooks/useRoleData";
+import downloadImg from "../../utils/media/download-img/downloadImg";
+import QrCode from "../../components/QrCode";
+import "../app/team/registers-panel/types-handler/qr-code-invitation-btn/_QrInvitationModal.scss";
 
 const addSpace = (str) => addSpacingPlusToQuery(str);
 
@@ -67,6 +70,17 @@ const getStyles = () => ({
         zIndex: 3000,
     },
 });
+
+const handleFgColor = (fgColor) => {
+    const strongColorsRequired =
+        fgColor === "white" || fgColor === "red" || fgColor === "yellow";
+    if (strongColorsRequired) {
+        return `var(--themePDark--${fgColor})`;
+    }
+
+    return `var(--themeBackground--${fgColor})`;
+};
+
 export default function AppSharer({ location, match }) {
     const [showLink, setShowLink] = useState(false);
     const [data, setData] = useState({
@@ -78,12 +92,17 @@ export default function AppSharer({ location, match }) {
 
     const dispatch = useStoreDispatch();
     const styles = getStyles();
-    const { bizCodeName: codeName, bizName: businessName } = useClientAdmin();
+    const {
+        bizCodeName: thisBizCode,
+        bizName: businessName,
+        selfBizLogoImg: bizLogo,
+        selfThemePColor: pColor,
+    } = useClientAdmin();
     const { name: cliName } = useProfile();
     const { businessId } = useAppSystem();
 
     const role = getQueryByName("role", location.search) || "cliente-admin";
-    const bizCodeName = match.params.bizCodeName || codeName;
+    const bizCodeName = match.params.bizCodeName || thisBizCode;
     const bizName = getQueryByName("negocio", location.search) || businessName;
     const cliAdminName =
         getQueryByName("adminName", location.search) || cliName;
@@ -92,8 +111,15 @@ export default function AppSharer({ location, match }) {
     const indLastSlash = bizCodeName.lastIndexOf("-");
     const onlyBizCode = bizCodeName.slice(indLastSlash + 1);
 
+    const handleQrDownload = async () => {
+        await downloadImg({
+            imgContainer: ".qr-container",
+            fileName: `codigo-qr-convite-da-${bizCodeName}`,
+        });
+    };
+
     const showBackBtn = () => (
-        <div className="mt-2 ml-5 d-flex align-self-start">
+        <div className="position-absolute" style={{ right: 10, top: -10 }}>
             <Link
                 to={
                     role !== "cliente-admin"
@@ -113,20 +139,8 @@ export default function AppSharer({ location, match }) {
 
     const showHeader = () => (
         <header className={`${fluidTextAlign} container-center-col`}>
-            <p className="text-hero text-center">
-                {!isSmall ? (
-                    <span>
-                        Compartilhe ou baixe
-                        <br />
-                        seu App onde estiver
-                    </span>
-                ) : (
-                    <span>
-                        Comparti-
-                        <br />
-                        lhe ou baixe seu App onde estiver
-                    </span>
-                )}
+            <p className="mt-5 mx-3 text-title text-center">
+                Compartilhe ou baixe seu App onde estiver
             </p>
         </header>
     );
@@ -198,7 +212,7 @@ export default function AppSharer({ location, match }) {
 
     const showCliAdminArea = () => (
         <section className="my-5">
-            <div className="text-title text-white text-center">
+            <div className="text-subtitle text-white text-center">
                 Use seu App Admin
                 <br />
                 em outros aparelhos
@@ -224,7 +238,7 @@ export default function AppSharer({ location, match }) {
 
     const showCliUserArea = () => (
         <section className="my-5">
-            <p className="text-title text-white text-center">
+            <p className="text-subtitle text-white text-center">
                 Divulgue para <br /> seus clientes.
             </p>
             <section className="container-center mx-2 mt-4">
@@ -291,12 +305,10 @@ export default function AppSharer({ location, match }) {
     const showSharingBtns = (targetBr) => {
         const sharingData = {
             titleShare: "",
-            pageURL: generatedLink,
             pageImg: "i.imgur.com/9GjtAiW",
-            pageTitle: "", // `Ei, baixe o App de pontos de fidelidade`,
-            // get pageDescription() {
-            //     return `Baixe nosso App de pontos de fidelidade`;
-            // }
+            pageTitle: "Convite para participar do clube de fiddelidade",
+            pageDescription: officialAdminLink,
+            pageURL: officialAdminLink,
         };
         const displayLink = () => (
             <section className="user-select-text">
@@ -312,7 +324,7 @@ export default function AppSharer({ location, match }) {
                         backgroundColor="var(--mainDark)"
                         size="small"
                         onClick={() =>
-                            copyTextToClipboard("#linkArea", () =>
+                            copyText(generatedLink, () =>
                                 showSnackbar(
                                     dispatch,
                                     "Link copiado!",
@@ -415,6 +427,38 @@ export default function AppSharer({ location, match }) {
         );
     };
 
+    const imageSquare = bizLogo && bizLogo.includes("h_100,w_100");
+    const imageSettings = {
+        src: bizLogo,
+    };
+
+    const showDownloadableQrCode = () => (
+        <section className="my-5">
+            <div className="text-subtitle text-white text-center">
+                Divulgue com seu
+                <br />
+                Código QR personalizado
+            </div>
+            <section className="mt-5 container-center">
+                <div className="qr-container">
+                    <QrCode
+                        value={`${CLIENT_URL}/app/${onlyBizCode}`}
+                        fgColor={handleFgColor(pColor)}
+                        imageSettings={imageSettings}
+                        imageSquare={imageSquare}
+                    />
+                </div>
+            </section>
+            <div className="mt-2 mb-5 container-center">
+                <ButtonMulti
+                    title="Baixar Código QR"
+                    backgroundColor="var(--themeSDark)"
+                    onClick={handleQrDownload}
+                />
+            </div>
+        </section>
+    );
+
     return (
         <div className="text-white text-center text-title">
             {showBackBtn()}
@@ -423,6 +467,7 @@ export default function AppSharer({ location, match }) {
                 {showCliAdminArea()}
                 {showCliUserArea()}
             </section>
+            {showDownloadableQrCode()}
             <img
                 width="100%"
                 height="auto"

@@ -11,7 +11,7 @@ import MoneyIcon from "@material-ui/icons/Money";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import Title from "../Title";
-import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
+import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
@@ -107,6 +107,7 @@ function Register({
 
     const { role, name, email, gender, birthday, cpf, phone } = data;
     const cpfValue = autoCpfMaskBr(cpf);
+    const phoneValue = autoPhoneMask(phone);
 
     const [primaryAgent] = useData(["primaryAgent"]);
 
@@ -297,7 +298,7 @@ function Register({
             }}
         >
             <div id="field1" className="mt-3">
-                Qual é o seu nome?
+                Qual é o seu nome e sobrenome?
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
@@ -460,7 +461,7 @@ function Register({
                                 callback: () =>
                                     setData({
                                         ...data,
-                                        phone: phoneMaskBr(phone),
+                                        phone: autoPhoneMask(phone),
                                     }),
                             });
                         }}
@@ -470,14 +471,14 @@ function Register({
                                 callback: () =>
                                     setData({
                                         ...data,
-                                        phone: phoneMaskBr(phone),
+                                        phone: autoPhoneMask(phone),
                                     }),
                             });
                         }}
                         name="phone"
-                        helperText="Digite apenas números com DDD"
+                        helperText="Digite com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
-                        value={phone}
+                        value={phoneValue}
                         type="tel"
                         autoComplete="off"
                         fullWidth

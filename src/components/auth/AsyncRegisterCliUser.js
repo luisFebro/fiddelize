@@ -11,7 +11,7 @@ import MoneyIcon from "@material-ui/icons/Money";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import Title from "../Title";
-import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
+import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
@@ -95,8 +95,9 @@ function ASyncRegisterCliUser({
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    const { role, name, email, gender, birthday, cpf, phone } = data;
+    const { name, email, gender, cpf, phone } = data;
     const cpfValue = autoCpfMaskBr(cpf);
+    const phoneValue = autoPhoneMask(phone);
 
     const {
         selfThemePColor,
@@ -340,7 +341,9 @@ function ASyncRegisterCliUser({
             }}
         >
             <div id="field1" className="mt-3">
-                {isStaff ? "Qual nome do cliente?" : "Qual é o seu nome?"}
+                {isStaff
+                    ? "Qual nome do cliente?"
+                    : "Qual é o seu nome e sobrenome?"}
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
@@ -505,7 +508,7 @@ function ASyncRegisterCliUser({
                                 callback: () =>
                                     setData({
                                         ...data,
-                                        phone: phoneMaskBr(phone),
+                                        phone: autoPhoneMask(phone),
                                     }),
                             });
                         }}
@@ -515,14 +518,14 @@ function ASyncRegisterCliUser({
                                 callback: () =>
                                     setData({
                                         ...data,
-                                        phone: phoneMaskBr(phone),
+                                        phone: autoPhoneMask(phone),
                                     }),
                             });
                         }}
                         name="phone"
-                        helperText="Digite apenas números com DDD"
+                        helperText="Digite com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
-                        value={phone}
+                        value={phoneValue}
                         type="tel"
                         autoComplete="off"
                         fullWidth

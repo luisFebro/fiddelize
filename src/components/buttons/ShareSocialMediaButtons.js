@@ -54,9 +54,9 @@ export default function ShareSocialMediaButtons({ data, config = {} }) {
                     language: "pt", // which language to use (see LANGUAGES)
                     networks: [
                         // opt 'sms (works only on mobile)', 'facebook', 'email (works only on mobile)', 'whatsapp', 'messenger', 'twitter'
+                        // "sms",
                         "email",
                         "whatsapp",
-                        "sms",
                         "messenger",
                     ],
                     padding: padding || 12,

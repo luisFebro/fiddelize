@@ -12,7 +12,7 @@ export default function Pix() {
                     alt="pix logo"
                 />
             </section>
-            <section className="qr-root container-center my-5">
+            <section className="container-center my-5">
                 <div className="qr-container">
                     <QrCode
                         value="0136947D2D86-0B8F-4E8D-8196-4933A"

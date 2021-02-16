@@ -3,13 +3,14 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.991205.8"; // PRÓXIMO:
+const latestVersion = "3.9915.8"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-    "warnings and QA testers fix and CRA4 || página qr code personalizado para convite baixar app || opçao de baixar qr code na pagina de compartilhar";
+    "menu ações rápidas para cli-admin app || mascara automatica para campos de celulares";
 
 /* HISTORY
+  "warnings and QA testers fix and CRA4 || página qr code personalizado para convite baixar app || opçao de baixar qr code na pagina de compartilhar"
   "separação oficial do front e backend do projeto pt 4"
   "reverted to app membro - notificações e lista de clientes ganhadores",
   "copia de segurança avançada dos dados clientes - feito",

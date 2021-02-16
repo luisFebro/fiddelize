@@ -83,7 +83,7 @@ export default function AppTypeBubble({
                     </div>
                     <p
                         style={{
-                            zIndex: 100,
+                            zIndex: 1,
                             top: "25px",
                             left: "50%",
                             transform: "translateX(-50%)",

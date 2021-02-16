@@ -14,7 +14,7 @@ import {
 } from "../../../../../redux/actions/userActions";
 import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import BackUpToExcel from "./BackUpToExcel";
-import phoneMaskBr from "../../../../../utils/validation/masks/phoneMaskBr";
+import autoPhoneMask from "../../../../../utils/validation/masks/autoPhoneMask";
 import isKeyPressed from "../../../../../utils/event/isKeyPressed";
 import validatePhone from "../../../../../utils/validation/validatePhone";
 
@@ -34,6 +34,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
     const [error, setError] = useState("");
 
     const { bizName, bizWhatsapp, bizCep, bizAddress } = data;
+    const bizWhatsappValue = autoPhoneMask(bizWhatsapp);
 
     useEffect(() => {
         readClientAdmin(dispatch, userData._id).then((res) => {
@@ -144,20 +145,20 @@ export default function HiddenBizDataAndBackup({ userData }) {
                             isKeyPressed(e, "Enter") &&
                             setData({
                                 ...data,
-                                bizWhatsapp: phoneMaskBr(bizWhatsapp),
+                                bizWhatsapp: autoPhoneMask(bizWhatsapp),
                             })
                         }
                         onBlur={() =>
                             setData({
                                 ...data,
-                                bizWhatsapp: phoneMaskBr(bizWhatsapp),
+                                bizWhatsapp: autoPhoneMask(bizWhatsapp),
                             })
                         }
                         error={error === "phone"}
                         autoComplete="off"
                         onChange={handleChange(setData, data)}
                         name="bizWhatsapp"
-                        value={bizWhatsapp}
+                        value={bizWhatsappValue}
                     />
                 </div>
                 <div className="mt-4 margin-auto-95 text-normal">

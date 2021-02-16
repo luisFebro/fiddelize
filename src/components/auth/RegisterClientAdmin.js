@@ -11,7 +11,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
 import Title from "../Title";
-import phoneMaskBr from "../../utils/validation/masks/phoneMaskBr";
+import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
@@ -103,6 +103,7 @@ function RegisterClientAdmin({ logo }) {
     } = data;
 
     const cpfValue = autoCpfMaskBr(cpf);
+    const phoneValue = autoPhoneMask(phone);
 
     const [preRegisterCliAdminData] = useData(
         ["clientAdminData"],
@@ -150,18 +151,6 @@ function RegisterClientAdmin({ logo }) {
         const opts = { needYear: true };
         setData({ ...data, birthday: getDayMonthBr(selectedDate, opts) });
     }, [selectedDate]);
-
-    useEffect(() => {
-        const thisBizName = clientAdminData.bizName;
-        if (thisBizName) {
-            const finalDashedName = generateBizCodeName(thisBizName);
-            setValObjWithStr(
-                data,
-                "clientAdminData.bizCodeName",
-                finalDashedName
-            );
-        }
-    }, [clientAdminData.bizName]);
 
     useEffect(() => {
         phone && setValObjWithStr(data, "clientAdminData.bizWhatsapp", phone);
@@ -285,7 +274,7 @@ function RegisterClientAdmin({ logo }) {
             <div id="field1" className="mt-3">
                 Empreendedor(a),
                 <br />
-                qual é o seu nome?
+                qual é o seu nome e sobrenome?
                 <TextField
                     required
                     onChange={handleChange(setData, data)}
@@ -436,18 +425,18 @@ function RegisterClientAdmin({ logo }) {
                     />
                 </div>
                 <div id="field5" className="mt-3">
-                    Contato/Whatsapp
+                    Celular/Whatsapp
                     <TextField
                         required
                         margin="dense"
-                        onChange={handleChange(setData)}
+                        onChange={handleChange(setData, data)}
                         error={!!errorPhone}
                         onKeyPress={(e) => {
                             handleNextField(e, "field5", {
                                 callback: () =>
                                     setData({
                                         ...data,
-                                        phone: phoneMaskBr(phone),
+                                        phone: autoPhoneMask(phone),
                                     }),
                             });
                         }}
@@ -457,13 +446,13 @@ function RegisterClientAdmin({ logo }) {
                                 callback: () =>
                                     setData({
                                         ...data,
-                                        phone: phoneMaskBr(phone),
+                                        phone: autoPhoneMask(phone),
                                     }),
                             });
                         }}
                         name="phone"
-                        value={phone}
-                        helperText="Digite apenas números com DDD"
+                        value={phoneValue}
+                        helperText="Digite com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         type="tel"
                         autoComplete="off"

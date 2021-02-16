@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import generateAppDownloadLink from "../../../../../../utils/biz/generateAppDownloadLink";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 
@@ -15,10 +15,12 @@ export default function useInvitationMsg({
 }) {
     const [msg, setMsg] = useState("");
 
+    const downloadLink = useRef(null);
+
     useEffect(() => {
         if (linkId === "..." || !trigger) return;
 
-        const downloadLink = generateAppDownloadLink({
+        downloadLink.current = generateAppDownloadLink({
             bizCodeName,
             name,
             payload,
@@ -28,15 +30,15 @@ export default function useInvitationMsg({
 
         const handleTxt = () => {
             if (isNewMember) {
-                return `Segue o app de fidelidade para membros da ${
+                return `Segue o app do clube de fidelidade para membros da ${
                     bizName && bizName.toUpperCase()
-                }. Acesse: ${downloadLink} | Senha: ${verifPass}`;
+                }. Acesse: ${downloadLink.current} | Senha: ${verifPass}`;
             }
             return `${getFirstName(
                 name.toUpperCase()
-            )}, segue convite para o programa de fidelidade da ${
+            )}, segue convite para o clube de fidelidade da ${
                 bizName && bizName.toUpperCase()
-            }. Acesse: ${downloadLink}`;
+            }. Acesse: ${downloadLink.current}`;
         };
 
         if (name) {
@@ -45,5 +47,5 @@ export default function useInvitationMsg({
         }
     }, [name, linkScore, linkId]);
 
-    return msg;
+    return { msg, downloadLink: downloadLink.current };
 }

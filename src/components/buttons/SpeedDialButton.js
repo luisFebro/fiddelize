@@ -1,9 +1,10 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Backdrop from "@material-ui/core/Backdrop";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import MultiIconButton from "./MultiIconButton";
 // import EditIcon from '@material-ui/icons/Edit';
@@ -18,17 +19,6 @@ SpeedDialButton.propTypes = {
     }),
 };
 
-const styles = {
-    fabIcon: {
-        textShadow: ".5px .5px 3px black",
-    },
-    muStyle: {
-        transform: "scale(1.2)",
-        filter: "drop-shadow(.5px .5px 1.5px black)",
-        color: "#fff",
-    },
-};
-
 export default function SpeedDialButton({
     actions,
     direction,
@@ -38,8 +28,16 @@ export default function SpeedDialButton({
     onClick,
     root,
     hidden,
+    mainIcon,
+    handleOpenStatus,
 }) {
-    const [isOpen, setOpen] = React.useState(false);
+    const [isOpen, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (typeof handleOpenStatus === "function") {
+            handleOpenStatus(isOpen);
+        }
+    }, [isOpen, handleOpenStatus]);
 
     const useStyles = makeStyles({
         staticTooltipLabel: {
@@ -70,7 +68,7 @@ export default function SpeedDialButton({
 
     const styles = {
         root: {
-            zIndex: 1501,
+            zIndex: 1,
             position: root.position || "fixed",
             top: root.top, // LESSON: do not use 0 as default
             left: root.left,
@@ -85,13 +83,26 @@ export default function SpeedDialButton({
         },
     };
 
+    const selectedMainIcon = mainIcon || (
+        <FontAwesomeIcon icon="plus" style={{ fontSize: "25px" }} />
+    );
+
+    const selectedOpenIcon = !mainIcon ? null : (
+        <FontAwesomeIcon icon="times" style={{ fontSize: "25px" }} />
+    );
+
     return (
         <div style={styles.root}>
             <Backdrop open={isOpen} />
             <SpeedDial
                 ariaLabel="SpeedDial tooltip example"
                 hidden={hidden || false}
-                icon={<SpeedDialIcon openIcon={null} />}
+                icon={
+                    <SpeedDialIcon
+                        icon={selectedMainIcon}
+                        openIcon={selectedOpenIcon}
+                    />
+                }
                 onClick={onClick}
                 onClose={handleClose}
                 direction={direction || "up"}
@@ -103,7 +114,7 @@ export default function SpeedDialButton({
                             "drop-shadow(.001em .1em .1em var(--mainWhite))",
                     },
                     size: FabProps.size || "large",
-                    icon: styles.muStyle,
+                    icon: null,
                 }}
                 onOpen={handleOpen}
                 open={isOpen}

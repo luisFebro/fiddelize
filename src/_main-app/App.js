@@ -7,6 +7,7 @@ import deferJsOnload from "../utils/performance/deferJsOnload";
 import useOffline from "../hooks/useOffline";
 import { useRecoveryAndDataOffline } from "../hooks/roles-storage-and-data-recovery";
 import { IS_PROD } from "../config/clientUrl";
+import switchConsoleLogs from "../utils/security/switchConsoleLogs";
 import "../utils/globalHelpers";
 // STYLING
 import "./scss/App.scss";
@@ -28,6 +29,7 @@ export default function App() {
     useCustomerBirthdayToday();
 
     useEffect(() => {
+        switchConsoleLogs();
         isWebpSupported(
             "lossy",
             (lossy, res) =>
@@ -40,7 +42,8 @@ export default function App() {
             ReactGA.pageview(window.location.pathname + window.location.search);
         };
 
-        IS_PROD && deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
+        if (IS_PROD) deferJsOnload(runGoogleAnalytics, "func", { delay: 5000 });
+
         deferJsOnload(
             "https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js",
             "url",

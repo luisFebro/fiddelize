@@ -14,7 +14,7 @@ import handleChange from "../../../../../../utils/form/use-state/handleChange";
 import { default as clearThisForm } from "../../../../../../utils/form/use-state/clearForm";
 import { handleFocus } from "../../../../../../utils/form/handleFocus";
 import isKeyPressed from "../../../../../../utils/event/isKeyPressed";
-import phoneMaskBr from "../../../../../../utils/validation/masks/phoneMaskBr";
+import autoPhoneMask from "../../../../../../utils/validation/masks/autoPhoneMask";
 import validatePhone from "../../../../../../utils/validation/validatePhone";
 import debounce from "../../../../../../utils/performance/debounce";
 import AddScoreCTAs from "./from-add-score/AddScoreCTAs";
@@ -92,6 +92,8 @@ export default function AsyncShowNewContactForm({
         phone: "",
     });
     const { name, phone } = data;
+    const phoneValue = autoPhoneMask(phone);
+
     const [dataMean, setDataMean] = useState({
         selectedMean: "selecione um modo:",
         job: "vendas", // only for team members
@@ -102,12 +104,15 @@ export default function AsyncShowNewContactForm({
     const [readyMean, setReadyMean] = useState(false);
 
     const isAfterCompleteRegister = Boolean(loadData && loadData.name);
+    const alreadySelectedMethod = selectedMean !== "selecione um modo:";
+    const needPhoneField = !isQuickRegister || selectedMean === "number";
+    const needEmailField = selectedMean === "email";
 
     useEffect(() => {
         // transfer: set data to the parent component
-        const isCopy = selectedMean === "copy";
         const needTransfer =
-            (loadData && selectedMean !== "selecione um modo:") || isCopy;
+            (loadData && selectedMean !== "selecione um modo:") ||
+            alreadySelectedMethod;
 
         if (loadData && !needTransfer) {
             const {
@@ -128,7 +133,7 @@ export default function AsyncShowNewContactForm({
                 job,
             });
         }
-    }, [loadData, selectedMean]);
+    }, [loadData, selectedMean, alreadySelectedMethod]);
 
     const delayedType = useCallback(
         debounce((value) => {
@@ -167,8 +172,6 @@ export default function AsyncShowNewContactForm({
             });
         }
     }, [isQuickRegister, readyMean, selectedMean, email, phone, name, job]);
-    const needPhoneField = !isQuickRegister || selectedMean === "number";
-    const needEmailField = selectedMean === "email";
 
     const dispatch = useStoreDispatch();
 
@@ -207,7 +210,9 @@ export default function AsyncShowNewContactForm({
             }}
         >
             <div className="mt-3">
-                {!isQuickRegister ? "Nome" : "Primeiro nome"}
+                {!isQuickRegister
+                    ? "Nome"
+                    : `Primeiro nome ${isNewMember ? "(membro)" : "(cliente)"}`}
                 <TextField
                     required
                     onChange={handleChange(setData)}
@@ -273,8 +278,8 @@ export default function AsyncShowNewContactForm({
                                 selecione um modo:
                             </span>
                         </MenuItem>
-                        <MenuItem value="number">Número de Contato</MenuItem>
-                        <MenuItem value="qrCode">Escaneiar QR Code</MenuItem>
+                        <MenuItem value="qrCode">Código QR</MenuItem>
+                        <MenuItem value="number">Celular</MenuItem>
                         <MenuItem value="email">Email</MenuItem>
                         <MenuItem value="copy">Copiar convite</MenuItem>
                     </Select>
@@ -333,23 +338,23 @@ export default function AsyncShowNewContactForm({
                         id="selectedOpt" // this is the essential fields which can be either phone or email in this form.
                         margin="dense"
                         name="phone"
-                        value={phone}
+                        value={phoneValue}
                         onChange={(e) => onChangeMean(e, setData)}
                         error={error === "phone"}
                         onKeyPress={(e) =>
                             handleEvents(e, {
                                 setData,
-                                newValue: phoneMaskBr(phone),
+                                newValue: autoPhoneMask(phone),
                             })
                         }
                         onBlur={(e) =>
                             handleEvents(e, {
                                 setData,
-                                newValue: phoneMaskBr(phone),
+                                newValue: autoPhoneMask(phone),
                                 eventName: "blur",
                             })
                         }
-                        helperText="Digite apenas números com DDD"
+                        helperText="Digite com DDD"
                         FormHelperTextProps={{ style: styles.helperFromField }}
                         type="tel"
                         autoComplete="off"
@@ -391,7 +396,7 @@ export default function AsyncShowNewContactForm({
             )}
             {isQuickRegister &&
                 !isNewMember &&
-                (needPhoneField || needEmailField) &&
+                alreadySelectedMethod &&
                 !isAfterCompleteRegister && (
                     <AddScoreCTAs
                         clientName={name}
