@@ -110,6 +110,7 @@ export default function AppSharer({ location, match }) {
 
     const indLastSlash = bizCodeName.lastIndexOf("-");
     const onlyBizCode = bizCodeName.slice(indLastSlash + 1);
+    const officialAdminLink = `${CLIENT_URL}/app/${onlyBizCode}`;
 
     const handleQrDownload = async () => {
         await downloadImg({
@@ -163,7 +164,7 @@ export default function AppSharer({ location, match }) {
                 ? (link = `${CLIENT_URL}/app/${getFirstName(
                       clientName.toLowerCase()
                   )}_${onlyBizCode}`)
-                : (link = `${CLIENT_URL}/app/${onlyBizCode}`);
+                : (link = officialAdminLink);
 
             setData({
                 ...data,
@@ -174,20 +175,20 @@ export default function AppSharer({ location, match }) {
         }
     };
 
-    const showBlob = () => (
-        <div
-            className="position-absolute animated slideIn"
-            style={{ left: "-200px", top: "-200px" }}
-        >
-            <img
-                style={{ zIndex: -1000 }}
-                width={300}
-                height={300}
-                src={`${CLIENT_URL}/img/shapes/blob-sharing-page.svg`}
-                alt="blob página de compartilhar"
-            />
-        </div>
-    );
+    // const showBlob = () => (
+    //     <div
+    //         className="position-absolute animated slideIn"
+    //         style={{ left: "-200px", top: "-200px" }}
+    //     >
+    //         <img
+    //             style={{ zIndex: -1000 }}
+    //             width={300}
+    //             height={300}
+    //             src={`${CLIENT_URL}/img/shapes/blob-sharing-page.svg`}
+    //             alt="blob página de compartilhar"
+    //         />
+    //     </div>
+    // );
 
     const showButtonAction = (targetBr) => (
         <div className="container-center mt-4">
@@ -442,7 +443,7 @@ export default function AppSharer({ location, match }) {
             <section className="mt-5 container-center">
                 <div className="qr-container">
                     <QrCode
-                        value={`${CLIENT_URL}/app/${onlyBizCode}`}
+                        value={officialAdminLink}
                         fgColor={handleFgColor(pColor)}
                         imageSettings={imageSettings}
                         imageSquare={imageSquare}

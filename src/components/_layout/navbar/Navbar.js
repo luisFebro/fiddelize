@@ -157,11 +157,13 @@ function Navbar({ history, location }) {
     }, [needClientLogo]);
 
     const showLogo = () => {
-        const isSquared =
-            locationNow !== "/" &&
-            isAdminDash &&
-            selfBizLogoImg &&
-            selfBizLogoImg.includes("h_100,w_100");
+        const imgFormatRaw =
+            selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const webCond = locationNow !== "/" && isAdminDash && imgFormatRaw;
+
+        const appCond = isApp && imgFormatRaw;
+
+        const isSquared = webCond || appCond;
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
         const handleSize = (side) => {
             let size;
