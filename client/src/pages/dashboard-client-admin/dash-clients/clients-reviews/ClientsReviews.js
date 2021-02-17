@@ -17,6 +17,7 @@ export default function ClientsReviews() {
         xpScore = "...",
         uncheckedReviews = "...",
         lastDateChecked,
+        npsScoreDiff,
     } = mainData;
 
     const { colorNPS, backNPS } = colorsHandler({
@@ -27,6 +28,7 @@ export default function ClientsReviews() {
     const dataStatus = getTextStatus(nps, true);
 
     const plural = nps !== 1 || nps !== -1 || nps !== 0;
+    const scoreDiffColor = npsScoreDiff > 0 ? "text-sys-green" : "text-red";
     const showNPS = () => (
         <section
             style={{
@@ -58,7 +60,16 @@ export default function ClientsReviews() {
             >
                 Métrica de fidelidade
             </p>
-            <div className="text-title text-purple text-center">
+            <div className="position-relative text-title text-purple text-center">
+                <p
+                    className={`${scoreDiffColor} text-normal font-weight-bold position-absolute`}
+                    style={{
+                        top: -3,
+                        right: 15,
+                    }}
+                >
+                    {handleScoreDiff(npsScoreDiff)}
+                </p>
                 <span
                     className={`${colorNPS} d-inline-block font-size text-em-2`}
                 >
@@ -216,4 +227,11 @@ function useMainReviewData() {
     }, [userId]);
 
     return { mainData, loading };
+}
+
+// HELPERS
+function handleScoreDiff(npsScoreDiff) {
+    if (npsScoreDiff === 0) return "";
+    if (npsScoreDiff > 0) return `+${npsScoreDiff}`;
+    return npsScoreDiff;
 }

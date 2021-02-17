@@ -1,9 +1,14 @@
-import React, { Fragment } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import SpeedometerGauge from "../../../../../../../components/charts/speedometer-gauge/SpeedometerGauge";
 import colorsHandler from "../../../helpers/colorsHandler";
 import { getTextStatus } from "../../../../../../../components/charts/speedometer-gauge/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoadableVisible from "../../../../../../../components/code-splitting/LoadableVisible";
+import getAPI, {
+    getNpsChartData,
+} from "../../../../../../../utils/promises/getAPI";
+import useData from "../../../../../../../hooks/useData";
+import getWeekDayBr from "../../../../../../../utils/dates/getWeekDayBr";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -22,10 +27,16 @@ const AsyncReviewResults = LoadableVisible({
 });
 
 export default function NpsContent({ mainData }) {
-    const { nps } = mainData;
+    const { nps, detractors, promoters } = mainData;
 
     const { colorNPS } = colorsHandler({ nps });
     const { icon } = getTextStatus(nps);
+    const currWeekDay = getWeekDayBr(null, { abbrev: true });
+
+    const { dataChart, loading } = useNpsChartData({
+        lastTotalDetractors: detractors && detractors.total,
+        lastTotalPromoters: promoters && promoters.total,
+    });
 
     const showTitle = () => (
         <div className="my-4">
@@ -80,10 +91,23 @@ export default function NpsContent({ mainData }) {
         </div>
     );
 
-    const showPromotersHistoryChart = () => {
-        const xLabels = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
-        const dataArray = ["0", 100, 1, 40, -30, 20, 90];
+    const [chData, setChData] = useState({
+        xLabels: "",
+        dataArray: "",
+    });
 
+    useEffect(() => {
+        const { xLabels, dataArray } = getLabelsAndData({
+            dataChart,
+            currWeekDay,
+        });
+        setChData({
+            xLabels,
+            dataArray,
+        });
+    }, [dataChart, currWeekDay]);
+
+    const showPromotersHistoryChart = () => {
         return (
             <section
                 className="my-5 position-relative"
@@ -92,9 +116,10 @@ export default function NpsContent({ mainData }) {
                 }}
             >
                 <AsyncLineChart
-                    xLabels={xLabels}
-                    dataArray={dataArray}
+                    xLabels={chData.xLabels}
+                    dataArray={chData.dataArray}
                     onlySmall={true}
+                    isMonday={currWeekDay === "Seg"}
                 />
             </section>
         );
@@ -125,4 +150,59 @@ export default function NpsContent({ mainData }) {
             {showReviewResults()}
         </Fragment>
     );
+}
+
+function useNpsChartData({ lastTotalPromoters, lastTotalDetractors }) {
+    const [data, setData] = useState({
+        dataChart: null,
+        loading: true,
+    });
+    const { dataChart, loading } = data;
+
+    const [userId] = useData(["userId"]);
+
+    useEffect(() => {
+        const runAnalysis = async () => {
+            const params = {
+                lastTotalPromoters,
+                lastTotalDetractors,
+            };
+
+            const thisChartData = await getAPI({
+                url: getNpsChartData(userId),
+                params,
+            });
+
+            setData((prev) => ({
+                ...prev,
+                loading: false,
+                dataChart: thisChartData && thisChartData.data,
+            }));
+        };
+        userId !== "..." && lastTotalPromoters !== undefined && runAnalysis();
+    }, [userId, lastTotalPromoters]);
+
+    return { dataChart, loading };
+}
+
+function getLabelsAndData({ dataChart, currWeekDay }) {
+    const weekDays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
+
+    let indCurrWeekDay;
+    const finalWeekDay = weekDays.map((w, ind) => {
+        if (w === currWeekDay) {
+            indCurrWeekDay = ind;
+            return "Hoje";
+        }
+        return w;
+    });
+
+    const finalChartData = dataChart
+        ? dataChart.slice(0, indCurrWeekDay + 1)
+        : ["0"];
+
+    return {
+        xLabels: finalWeekDay,
+        dataArray: finalChartData,
+    };
 }

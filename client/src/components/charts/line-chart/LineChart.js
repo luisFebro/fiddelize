@@ -26,6 +26,7 @@ const options = {
     high: 100,
     showGridBackground: false,
     showArea: true,
+    lineSmooth: true,
     height: "250px",
     axisX: {
         showGrid: true,
@@ -52,6 +53,7 @@ export default function LineChart({
     xLabels,
     dataArray,
     onlySmall = false, // useful especially when used in a modal when the width is limited regardless of the screen width size.
+    isMonday = false,
 }) {
     const arrLen = dataArray && dataArray.length;
 
@@ -60,9 +62,13 @@ export default function LineChart({
 
     let lastDiff;
     let lastPerc;
+    let lastButOneTreated = lastButOne === "0.01" ? 0 : lastButOne;
+    let lastValueTreated = lastValue === "0.01" ? 0 : lastValue;
     if (!Number.isNaN(lastValue) && !Number.isNaN(lastButOne)) {
-        lastDiff = lastValue - lastButOne;
-        lastPerc = Math.round(getIncreasedPerc(lastButOne, lastValue));
+        lastDiff = lastValueTreated - lastButOneTreated;
+        lastPerc = Math.round(
+            getIncreasedPerc(lastButOneTreated, lastValueTreated)
+        );
     }
 
     const isNegative = lastPerc < 0;
@@ -106,10 +112,18 @@ export default function LineChart({
                         lastData.x && lastData.x.baseVal["0"].value;
                     const lastYAttrib =
                         lastData.y && lastData.y.baseVal["0"].value;
-                    lastData.innerHTML = `${lastValue} pts`;
+                    lastData.innerHTML = isMonday ? "" : `${lastValue} pts`; // values in monday yAxis is too close to yLabels, that's why omitting it.
 
-                    const distanceY = isSmall || onlySmall ? 55 : 40;
-                    const distanceX = isSmall || onlySmall ? 10 : 65;
+                    const needUpperDiff = Number(lastValue) < 0 ? true : false;
+                    const distanceY =
+                        isSmall || onlySmall
+                            ? needUpperDiff
+                                ? -85
+                                : 55
+                            : needUpperDiff
+                            ? -70
+                            : 40;
+                    const distanceX = isSmall || onlySmall ? -25 : 65;
 
                     const textObj = {
                         props: {
@@ -126,11 +140,11 @@ export default function LineChart({
                             `(${lastDiff}pts)`,
                         ],
                     };
-                    const newText = drawText(textObj, parentElem);
+                    !isMonday && drawText(textObj, parentElem);
                 }, 3000);
             })();
         }, delay);
-    }, [delay]);
+    }, [delay, dataArray, lastValue, lastButOne, lastDiff, lastPerc]);
 
     return (
         <section className="line-chart--root">

@@ -110,3 +110,5 @@ export const sendEmail = () => `/api/email/send`;
 export const getBuyReviewsList = () => `/api/reviews/list/buy-reviews`;
 export const getMainReviewData = (userId) =>
     `/api/reviews/main-data?userId=${userId}`;
+export const getNpsChartData = (userId) =>
+    `/api/reviews/nps-chart?userId=${userId}`;

@@ -1,10 +1,14 @@
 const User = require("../../models/user/User");
-const getFinalGrade = require("./helpers.js");
 const getFirstName = require("../../utils/string/getFirstName");
 const { getChunksTotal, getSkip } = require("../../utils/array/getDataChunk");
 const getPercentage = require("../../utils/number/perc/getPercentage");
 const startOfWeek = require("date-fns/startOfWeek");
 const addDays = require("date-fns/addDays");
+const { getFinalGrade, getNpsChartResult } = require("./helpers.js");
+
+const getUnwind = (path) => {
+    return { $unwind: { path, preserveNullAndEmptyArrays: true } };
+};
 
 exports.getReviewMainData = async (req, res) => {
     const { userId } = req.query;
@@ -14,17 +18,24 @@ exports.getReviewMainData = async (req, res) => {
 
     // NPS SEARCH PARAMS
     const detractorsQuery = {
-        $match: { "clientUserData.review.nps": { $lte: 6 } },
+        "clientUserData.review.nps": { $lte: 6 },
     };
     const passivesQuery = {
         $match: { "clientUserData.review.nps": { $gte: 7, $lte: 8 } },
     };
-    const promotorsQuery = {
-        $match: { "clientUserData.review.nps": { $gte: 9, $lte: 10 } },
+    // Lesson: prefer using queries without $match or similars to be reusable
+    const promotersQuery = {
+        "clientUserData.review.nps": { $gte: 9, $lte: 10 },
     };
 
     const xpQuery = {
         $match: { "clientUserData.review.xpScore": { $gte: 0 } },
+    };
+    const npsReviewQuery = {
+        "clientUserData.review.nps": { $gte: 0 },
+    };
+    const buyReportQuery = {
+        "clientUserData.review.buyReport": { $exists: true },
     };
     const xpSumQuery = {
         $group: {
@@ -46,6 +57,15 @@ exports.getReviewMainData = async (req, res) => {
         },
     };
 
+    const today = new Date().setUTCHours(0, 0, 0, 0);
+    const tomorrow = addDays(new Date(), 1).setUTCHours(0, 0, 0, 0);
+    const todayNpsQuery = {
+        "clientUserData.review.npsUpdatedAt": {
+            $gte: new Date(today),
+            $lt: new Date(tomorrow),
+        },
+    };
+
     // LESSON: $facet accepts only arrays
     const docs = await User("cliente").aggregate([
         {
@@ -54,13 +74,40 @@ exports.getReviewMainData = async (req, res) => {
                 //     { $match: mainQuery },
                 //     { $project : { "_id": 0, "clientUserData.review.xpScore": 1, "clientUserData.review.nps": 1 } },
                 // ],
-                detractors: [detractorsQuery, countQuery],
+                detractors: [{ $match: { ...detractorsQuery } }, countQuery],
                 passives: [passivesQuery, countQuery],
-                promoters: [promotorsQuery, countQuery],
-                totalReviews: [{ $match: mainQuery }, countQuery],
+                promoters: [{ $match: { ...promotersQuery } }, countQuery],
+                totalNpsReviews: [
+                    { $match: { ...mainQuery, ...npsReviewQuery } },
+                    countQuery,
+                ],
+                totalBuyReports: [
+                    { $match: { ...mainQuery, ...buyReportQuery } },
+                    countQuery,
+                ],
                 xpSum: [xpQuery, xpSumQuery],
                 uncheckedReviews: [
                     { $match: uncheckedReviewsQuery },
+                    countQuery,
+                ],
+                todayProm: [
+                    {
+                        $match: {
+                            ...todayNpsQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                todayDetr: [
+                    {
+                        $match: {
+                            ...todayNpsQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
                     countQuery,
                 ],
             },
@@ -70,7 +117,13 @@ exports.getReviewMainData = async (req, res) => {
         { $unwind: { path: "$promoters", preserveNullAndEmptyArrays: true } },
         {
             $unwind: {
-                path: "$totalReviews",
+                path: "$totalNpsReviews",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $unwind: {
+                path: "$totalBuyReports",
                 preserveNullAndEmptyArrays: true,
             },
         },
@@ -81,6 +134,8 @@ exports.getReviewMainData = async (req, res) => {
                 preserveNullAndEmptyArrays: true,
             },
         },
+        { $unwind: { path: "$todayProm", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$todayDetr", preserveNullAndEmptyArrays: true } },
         // if none value found, the path is not included in the result.
     ]);
 
@@ -88,9 +143,12 @@ exports.getReviewMainData = async (req, res) => {
         detractors,
         passives,
         promoters,
-        totalReviews,
+        totalNpsReviews,
+        totalBuyReports,
         xpSum,
         uncheckedReviews,
+        todayProm,
+        todayDetr,
     } = docs[0];
 
     uncheckedReviews = uncheckedReviews ? uncheckedReviews.total : 0;
@@ -98,22 +156,39 @@ exports.getReviewMainData = async (req, res) => {
     detractors = detractors ? detractors.total : 0;
     passives = passives ? passives.total : 0;
     promoters = promoters ? promoters.total : 0;
-    totalReviews = totalReviews ? totalReviews.total : 0;
+    totalNpsReviews = totalNpsReviews ? totalNpsReviews.total : 0;
+    totalBuyReports = totalBuyReports ? totalBuyReports.total : 0;
+
+    todayProm = todayProm ? todayProm.total : 0;
+    todayDetr = todayDetr ? todayDetr.total : 0;
 
     xpSum = xpSum ? xpSum.total : 0;
 
-    let xpScore = xpSum / totalReviews;
+    let xpScore = xpSum / totalBuyReports;
     xpScore = Number.isNaN(xpScore)
         ? 0
         : Number.isInteger(xpScore)
         ? xpScore
         : xpScore.toFixed(1);
 
-    const percDetractors = getPercentage(totalReviews, detractors);
-    const percPassives = getPercentage(totalReviews, passives);
-    const percPromoters = getPercentage(totalReviews, promoters);
+    const lastDayTotalNpsReviews = totalNpsReviews - (todayProm + todayDetr);
+
+    const percDetractors = getPercentage(totalNpsReviews, detractors);
+    const percPassives = getPercentage(totalNpsReviews, passives);
+    const percPromoters = getPercentage(totalNpsReviews, promoters);
+
+    const lastDayPercDetr = getPercentage(
+        lastDayTotalNpsReviews,
+        detractors - todayDetr
+    );
+    const lastDayPercProm = getPercentage(
+        lastDayTotalNpsReviews,
+        promoters - todayProm
+    );
 
     const nps = Math.round(percPromoters - percDetractors);
+    const lastNps = Math.round(lastDayPercProm - lastDayPercDetr);
+    const npsScoreDiff = nps - lastNps;
 
     res.json({
         detractors: {
@@ -132,6 +207,7 @@ exports.getReviewMainData = async (req, res) => {
         xpScore: Number(xpScore),
         uncheckedReviews,
         lastDateChecked,
+        npsScoreDiff,
     });
 };
 
@@ -227,10 +303,17 @@ exports.getNpsChartData = async (req, res) => {
     const friD = addDays(new Date(thuD), 1).setUTCHours(0, 0, 0, 0);
     const satD = addDays(new Date(friD), 1).setUTCHours(0, 0, 0, 0);
     const sunD = addDays(new Date(satD), 1).setUTCHours(0, 0, 0, 0);
+    const closingWeekMonD = addDays(new Date(sunD), 1).setUTCHours(0, 0, 0, 0);
 
-    const npsSumQuery = {
-        $group: { _id: null, total: { $sum: "$clientUserData.review.nps" } },
+    // general queries
+    const countQuery = { $count: "total" };
+    const promotersQuery = {
+        "clientUserData.review.nps": { $gte: 9, $lte: 10 },
     };
+    const detractorsQuery = {
+        "clientUserData.review.nps": { $lte: 6 },
+    };
+    // end general queries
     const monQuery = {
         "clientUserData.review.npsUpdatedAt": {
             $gte: new Date(monD),
@@ -268,49 +351,202 @@ exports.getNpsChartData = async (req, res) => {
         },
     };
     const sunQuery = {
-        "clientUserData.review.npsUpdatedAt": { $gte: new Date(sunD) },
+        "clientUserData.review.npsUpdatedAt": {
+            $gte: new Date(sunD),
+            $lt: new Date(closingWeekMonD),
+        },
+    };
+    const wholeWeekQuery = {
+        "clientUserData.review.npsUpdatedAt": {
+            $gte: new Date(startWeek),
+            $lte: new Date(closingWeekMonD),
+        },
     };
 
-    // const countQuery = { $count: "total" };
     const docs = await User("cliente").aggregate([
         {
             $facet: {
-                mon: [{ $match: { ...mainQuery, ...monQuery } }, npsSumQuery],
-                tue: [{ $match: { ...mainQuery, ...tueQuery } }, npsSumQuery],
-                wed: [{ $match: { ...mainQuery, ...wedQuery } }, npsSumQuery],
-                thu: [{ $match: { ...mainQuery, ...thuQuery } }, npsSumQuery],
-                fri: [{ $match: { ...mainQuery, ...friQuery } }, npsSumQuery],
-                sat: [{ $match: { ...mainQuery, ...satQuery } }, npsSumQuery],
-                sun: [{ $match: { ...mainQuery, ...sunQuery } }, npsSumQuery],
+                monPro: [
+                    {
+                        $match: {
+                            ...monQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                monDet: [
+                    {
+                        $match: {
+                            ...monQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                tuePro: [
+                    {
+                        $match: {
+                            ...tueQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                tueDet: [
+                    {
+                        $match: {
+                            ...tueQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                wedPro: [
+                    {
+                        $match: {
+                            ...wedQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                wedDet: [
+                    {
+                        $match: {
+                            ...wedQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                thuPro: [
+                    {
+                        $match: {
+                            ...thuQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                thuDet: [
+                    {
+                        $match: {
+                            ...thuQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                friPro: [
+                    {
+                        $match: {
+                            ...friQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                friDet: [
+                    {
+                        $match: {
+                            ...friQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                satPro: [
+                    {
+                        $match: {
+                            ...satQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                satDet: [
+                    {
+                        $match: {
+                            ...satQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                sunPro: [
+                    {
+                        $match: {
+                            ...sunQuery,
+                            ...mainQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                sunDet: [
+                    {
+                        $match: {
+                            ...sunQuery,
+                            ...mainQuery,
+                            ...detractorsQuery,
+                        },
+                    },
+                    countQuery,
+                ],
+                totalWeekReviews: [
+                    { $match: { ...mainQuery, ...wholeWeekQuery } },
+                    countQuery,
+                ],
+                totalWeekProms: [
+                    {
+                        $match: {
+                            ...mainQuery,
+                            ...wholeWeekQuery,
+                            ...promotersQuery,
+                        },
+                    },
+                    countQuery,
+                ],
             },
         },
-        { $unwind: { path: "$mon", preserveNullAndEmptyArrays: true } },
-        { $unwind: { path: "$tue", preserveNullAndEmptyArrays: true } },
-        { $unwind: { path: "$wed", preserveNullAndEmptyArrays: true } },
-        { $unwind: { path: "$thu", preserveNullAndEmptyArrays: true } },
-        { $unwind: { path: "$fri", preserveNullAndEmptyArrays: true } },
-        { $unwind: { path: "$sat", preserveNullAndEmptyArrays: true } },
-        { $unwind: { path: "$sun", preserveNullAndEmptyArrays: true } },
+        getUnwind("$monPro"),
+        getUnwind("$monDet"),
+        getUnwind("$tuePro"),
+        getUnwind("$tueDet"),
+        getUnwind("$wedPro"),
+        getUnwind("$wedDet"),
+        getUnwind("$thuPro"),
+        getUnwind("$thuDet"),
+        getUnwind("$friPro"),
+        getUnwind("$friDet"),
+        getUnwind("$satPro"),
+        getUnwind("$satDet"),
+        getUnwind("$sunPro"),
+        getUnwind("$sunDet"),
+        getUnwind("$totalWeekReviews"),
+        getUnwind("$totalWeekProms"),
     ]);
 
-    let { mon, tue, wed, thu, fri, sat, sun } = docs[0];
-    mon = mon ? mon.total : 0;
-    tue = tue ? tue.total : 0;
-    wed = wed ? wed.total : 0;
-    thu = thu ? thu.total : 0;
-    fri = fri ? fri.total : 0;
-    sat = sat ? sat.total : 0;
-    sun = sun ? sun.total : 0;
-
-    res.json({
-        mon,
-        tue,
-        wed,
-        thu,
-        fri,
-        sat,
-        sun,
+    const finalNpsChartResult = await getNpsChartResult({
+        docs: docs[0],
+        lastTotalPromoters,
+        lastTotalDetractors,
     });
+
+    res.json(finalNpsChartResult);
 };
 
 /* COMMENTS

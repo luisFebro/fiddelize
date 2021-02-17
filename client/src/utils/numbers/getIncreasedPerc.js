@@ -7,7 +7,8 @@ export default function getIncreasedPerc(startingVal, finalVal) {
     if (typeof finalVal !== `number`) {
         finalVal = Number(finalVal);
     }
-    const isBothNegative = startingVal < 0 && finalVal < 0;
+    const isBothNegative =
+        startingVal < 0 && finalVal < 0 && startingVal < finalVal; // startingVal < finalVal makes sure the start is the least and has an increase
 
     // switching starting values with negative
     if (startingVal < 0) {
