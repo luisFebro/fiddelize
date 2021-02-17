@@ -1,7 +1,6 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
 import { useEffect, useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import Card from "@material-ui/core/Card";
 import AsyncLogin from "../../components/auth/AsyncLogin";
 import {
@@ -27,7 +26,6 @@ import useCountNotif from "../../hooks/notification/useCountNotif";
 import useImg, { Img } from "../../hooks/media/useImg";
 import useManageProServices from "../../hooks/pro/useManageProServices";
 import { getVar, removeVar } from "../../hooks/storage/useVar";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import useData from "../../hooks/useData";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
@@ -81,20 +79,6 @@ const AsyncRegisterBizTeam = Load({
 // const isSmall = window.Helper.isSmallScreen();
 const isApp = isThisApp();
 
-const showWelcomeMsg = (dispatch, userName) => {
-    getVar("welcomeMsg").then((res) => {
-        if (res) {
-            showSnackbar(
-                dispatch,
-                `Olá de volta, ${userName}!`,
-                "success",
-                2000
-            );
-            removeVar("welcomeMsg");
-        }
-    });
-};
-
 function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
     const [url, setUrl] = useState({
@@ -105,7 +89,6 @@ function ClientMobileApp({ location, history }) {
     usePersistentStorage();
     useScrollUp();
     useManageProServices();
-    const dispatch = useStoreDispatch();
 
     const [
         userId,
@@ -175,12 +158,6 @@ function ClientMobileApp({ location, history }) {
     }
     const accessCheck = !isStaff || (!loadingData && !rememberAccess);
     // END MAIN VARIABLES
-
-    useEffect(() => {
-        if (!loadingData && isCliAdmin) {
-            showWelcomeMsg(dispatch, name);
-        }
-    }, [loadingData, name, isCliAdmin]);
 
     const {
         bizCodeName,
@@ -518,4 +495,24 @@ n1: LESSON: Do not use Fragment inside session since Fragment can hide inner ele
 <div className="my-3 container-center">
     <img src="/img/official-logo.jpg" alt="logo" width={300} height="auto"/>
 </div>
+
+const showWelcomeMsg = (dispatch, userName) => {
+    getVar("welcomeMsg").then((res) => {
+        if (res) {
+            showSnackbar(
+                dispatch,
+                `Olá de volta, ${userName}!`,
+                "success",
+                2000
+            );
+            removeVar("welcomeMsg");
+        }
+    });
+};
+
+useEffect(() => {
+    if (!loadingData && isCliAdmin) {
+        showWelcomeMsg(dispatch, name);
+    }
+}, [loadingData, name, isCliAdmin]);
  */

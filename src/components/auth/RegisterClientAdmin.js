@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
+import CakeIcon from "@material-ui/icons/Cake";
+import Card from "@material-ui/core/Card";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
@@ -15,28 +18,22 @@ import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
-// import { withRouter } from 'react-router-dom';
-// import ReCaptchaCheckbox from "../ReCaptcha";
-// Redux
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
-
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../utils/form/kit";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import getFilterDate from "../../utils/dates/getFilterDate";
-// Material Ui
-import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
-import CakeIcon from "@material-ui/icons/Cake";
-import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { useClientAdmin } from "../../hooks/useRoleData";
-import generateBizCodeName from "../../pages/download-app/instant-app/helpers/generateBizCodeName";
 import useData, { sto } from "../../hooks/useData";
 import { removeCollection } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
+import CheckBoxForm from "../../components/CheckBoxForm";
+import { CLIENT_URL } from "../../config/clientUrl";
+// import ReCaptchaCheckbox from "../ReCaptcha";
 
 const filter = getFilterDate();
 
@@ -90,16 +87,20 @@ function RegisterClientAdmin({ logo }) {
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
+        showAgreement: false,
+        agreementDone: false,
     });
     const {
-        role,
         name,
         clientAdminData,
         email,
         gender,
-        birthday,
         cpf,
         phone,
+        showAgreement,
+        agreementDone,
+        // birthday,
+        // role,
     } = data;
 
     const cpfValue = autoCpfMaskBr(cpf);
@@ -203,6 +204,16 @@ function RegisterClientAdmin({ logo }) {
             "warning",
             10000
         );
+
+        if (!agreementDone) {
+            return showSnackbar(
+                dispatch,
+                "Clique na caixa para concordar com termos de uso e privacidade",
+                "error",
+                5000
+            );
+        }
+
         const res = await registerEmail(dispatch, newUser);
         showSnackbar(
             dispatch,
@@ -232,15 +243,16 @@ function RegisterClientAdmin({ logo }) {
 
         await removeCollection("pre_register");
         showSnackbar(dispatch, "Redirecionando...", "warning", 4000);
-        // ReactGA &&
-        //     ReactGA.event({
-        //         // n1
-        //         label: "Form",
-        //         category: "cliAdmin",
-        //         action: "Created an account",
-        //         transport: "beacon",
-        //     });
 
+        if (Boolean(ReactGA)) {
+            ReactGA.event({
+                // n1
+                label: "Form",
+                category: "cliAdmin",
+                action: "Created an account",
+                transport: "beacon",
+            });
+        }
         // const removalOptions = {
         //     collection: "onceChecked",
         // };
@@ -263,6 +275,36 @@ function RegisterClientAdmin({ logo }) {
                 backgroundColor="var(--themePDark)"
             />
         </div>
+    );
+
+    const handleAgreementChecked = (currStatus) => {
+        setData({
+            ...data,
+            agreementDone: currStatus,
+        });
+    };
+
+    const agreementTxtElem = (
+        <span>
+            concordo com os{" "}
+            <a
+                className="text-link"
+                href={`${CLIENT_URL}/termos-de-uso`}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                termos de uso
+            </a>{" "}
+            e{" "}
+            <a
+                className="text-link"
+                href={`${CLIENT_URL}/privacidade`}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                privacidade
+            </a>
+        </span>
     );
 
     const showForm = () => (
@@ -377,6 +419,7 @@ function RegisterClientAdmin({ logo }) {
                         value={selectedDate}
                         onChange={(e) => {
                             handleDateChange(e);
+                            setData({ ...data, showAgreement: true });
                             handleNextField(e, "field3", {
                                 event: "onChange",
                                 ignoreValue: true,
@@ -498,7 +541,15 @@ function RegisterClientAdmin({ logo }) {
                     </Select>
                 </div>
             </section>
-            <SafeEnvironmentMsg />
+            {showAgreement && (
+                <section className="mt-3">
+                    <CheckBoxForm
+                        text={agreementTxtElem}
+                        setIsBoxChecked={handleAgreementChecked}
+                    />
+                </section>
+            )}
+            <SafeEnvironmentMsg mt={showAgreement ? "mt-0" : ""} />
         </form>
     );
 

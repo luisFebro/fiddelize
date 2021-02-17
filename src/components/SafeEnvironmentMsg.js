@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function SafeEnviromentMsg() {
+export default function SafeEnviromentMsg({ mt }) {
     return (
-        <div className="text-center text-p mb-2 mt-4 main-font">
+        <div className={`${mt || "mt-4"} text-center text-p mb-2 main-font`}>
             <span style={{ fontWeight: "bolder", fontSize: "14px" }}>
                 <FontAwesomeIcon icon="lock" /> <span>Ambiente seguro!</span>
                 <br />

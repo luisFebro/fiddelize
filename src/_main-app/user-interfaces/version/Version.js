@@ -3,11 +3,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9915.8"; // PRÓXIMO:
+const latestVersion = "3.9950.8"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
-    "menu ações rápidas para cli-admin app || mascara automatica para campos de celulares";
+    "biz docs - termos de uso e privacidade - e caixa de consentimento formulário";
 
 /* HISTORY
   "warnings and QA testers fix and CRA4 || página qr code personalizado para convite baixar app || opçao de baixar qr code na pagina de compartilhar"

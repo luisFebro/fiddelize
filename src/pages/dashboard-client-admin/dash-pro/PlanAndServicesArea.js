@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import RedirectLink from "../../../components/RedirectLink";
-import AdminFidelidometro from "./admin-fidelidometro/AdminFidelidometro";
 import usePro from "../../../hooks/pro/usePro";
+// import AdminFidelidometro from "./admin-fidelidometro/AdminFidelidometro";
 
 const getStyles = () => ({
     muStyle: {
@@ -83,7 +83,10 @@ export default function PlanAndServicesArea() {
                 </span>
             </div>
             {showClubCTA()}
-            <AdminFidelidometro loading={loading} totalScore={totalScore} />
         </section>
     );
 }
+
+/*
+<AdminFidelidometro loading={loading} totalScore={totalScore} />
+ */

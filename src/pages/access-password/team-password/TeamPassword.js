@@ -82,15 +82,6 @@ export default function TeamPassword({ history }) {
             });
 
             await authenticate(token, { history, role });
-            if (role === "cliente-membro") {
-                showSnackbar(
-                    dispatch,
-                    `Olá de volta, ${firstName}!`,
-                    "success"
-                );
-
-                // call fundamental admin data
-            }
         }
     };
 
@@ -156,3 +147,15 @@ export default function TeamPassword({ history }) {
         </section>
     );
 }
+
+/* ARCHIVES
+if (role === "cliente-membro") {
+    showSnackbar(
+        dispatch,
+        `Olá de volta, ${firstName}!`,
+        "success"
+    );
+
+    // call fundamental admin data
+}
+ */

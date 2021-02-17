@@ -1,12 +1,11 @@
 import { Fragment, useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styled from "styled-components";
 import RadiusBtn from "../../buttons/RadiusBtn";
 import isThisApp from "../../../utils/window/isThisApp";
 import "./NavbarLayout.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import useImg, { Img } from "../../../hooks/media/useImg";
@@ -14,13 +13,11 @@ import removeImgFormat from "../../../utils/biz/removeImgFormat";
 import { getNewAppPage } from "../../../pages/new-app/helpers/handleRedirectPages";
 // import useCount from '../../../hooks/useCount';
 
-const gotToken = localStorage.getItem("token");
+// const gotToken = localStorage.getItem("token");
 const isApp = isThisApp();
 const isSmall = window.Helper.isSmallScreen();
 
 function Navbar({ history, location }) {
-    const [isSearchOpen, setSearchOpen] = useState(false);
-
     const [url, setUrl] = useState({
         logoBiz: "",
         logoFid: "",
@@ -41,13 +38,16 @@ function Navbar({ history, location }) {
     const { isAuthUser } = useAuthUser();
     const { selfBizLogoImg, selfThemePColor } = useClientAdmin();
 
-    const dispatch = useStoreDispatch();
+    // const dispatch = useStoreDispatch();
 
     // Render
     const locationNow = location.pathname;
     const isHome = locationNow === "/";
+    const isAdminDash = locationNow.includes(
+        "cliente-admin/painel-de-controle"
+    );
     const isClientAdmin = location.search.includes("client-admin=1");
-    const isBizTeam = locationNow.includes("nucleo");
+    // const isBizTeam = locationNow.includes("nucleo");
 
     const isBlackList =
         locationNow.includes("baixe-app") ||
@@ -139,7 +139,8 @@ function Navbar({ history, location }) {
 
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo =
-        (!isHome && selfBizLogoImg) || (isAuthUser && selfBizLogoImg && isApp); // isApp &&
+        (isAdminDash && selfBizLogoImg) ||
+        (isAuthUser && selfBizLogoImg && isApp); // isApp &&
     const fiddelizeLogo = "/img/official-logo-name.png";
     const handleLogoSrc = () => {
         if (needClientLogo) {
@@ -158,6 +159,7 @@ function Navbar({ history, location }) {
     const showLogo = () => {
         const isSquared =
             locationNow !== "/" &&
+            isAdminDash &&
             selfBizLogoImg &&
             selfBizLogoImg.includes("h_100,w_100");
         // gotArrayThisItem(["/cliente-admin/painel-de-controle", ], locationNow)
