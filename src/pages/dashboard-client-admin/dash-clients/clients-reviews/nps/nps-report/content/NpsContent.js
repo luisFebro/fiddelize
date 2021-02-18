@@ -49,21 +49,20 @@ export default function NpsContent({ mainData }) {
                 Promotores
             </h1>
             <p
-                className="text-small text-purple text-center"
+                className="m-0 text-small text-purple text-center"
                 style={{
                     fontSize: "1.1rem",
                 }}
             >
                 Promotores são os <strong>fãs do seu negócio</strong>. Quanto
-                maior a pontuação, mais clientes satisfeitos querendo comprar
-                mais!
+                maior a pontuação, melhor!
             </p>
         </div>
     );
 
     const plural = nps !== 1 || nps !== -1 || nps !== 0;
     const showScore = () => (
-        <div className="position-relative my-2 text-title text-purple text-center">
+        <div className="position-relative text-title text-purple text-center">
             <span
                 className={`${colorNPS} d-inline-block font-size text-em-2-1`}
             >

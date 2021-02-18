@@ -15,7 +15,12 @@ function PremiumServicesBtn({ history }) {
     });
 
     return (
-        <section className="bottom-action-btns--root">
+        <section
+            className="bottom-action-btns--root"
+            style={{
+                margin: "20px 0 50px 0",
+            }}
+        >
             <div className="bottom-action-btn--biz premium-btn">
                 <ButtonFab
                     position="relative"

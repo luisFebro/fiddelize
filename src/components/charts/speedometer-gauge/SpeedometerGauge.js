@@ -114,12 +114,12 @@ export default function SpeedometerGauge({ value }) {
         <ButtonFab
             title="legenda"
             onClick={() => setCaptionOn(true)}
-            position="absolute"
-            right={10}
-            bottom={isSmall ? -45 : -100}
+            position="relative"
             variant="extended"
+            bottom={120}
             size="small"
             backgroundColor="var(--themeSDark)"
+            zIndex={10000}
         />
     );
 
@@ -141,11 +141,11 @@ export default function SpeedometerGauge({ value }) {
                 <span className="rect min-value">-100</span>
                 <span className="rect max-value">100</span>
             </section>
+            {captionOn ? showDialogCaption() : showCaptionBtn()}
             <h2 className={`${colorNPS} speedometer-text-result text-center`}>
                 {textStatus}
                 <p>{advice}</p>
             </h2>
-            {captionOn ? showDialogCaption() : showCaptionBtn()}
         </Fragment>
     );
 }

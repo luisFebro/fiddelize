@@ -4,10 +4,38 @@ import DashSectionTitle from "../../DashSectionTitle";
 import "./DashSetting.scss";
 import ShowConfigExpansiblePanel from "./expansible-panel/ShowExpansiblePanel";
 import PremiumServicesBtn from "./PremiumServicesBtn";
+import { CLIENT_URL } from "../../../config/clientUrl";
 
 const DashSettingTitle = <Title />;
 // IMPLEMENT SOME CODE SPLITTING TO THE SETTING COMPONENTS
 export default function DashSetting() {
+    const showBizDocs = () => (
+        <div className="d-flex justify-content-around align-items-center">
+            <a
+                className="text-link text-small"
+                href={`${CLIENT_URL}/termos-de-uso`}
+                rel="noopener noreferrer"
+                target="_blank"
+                color={{
+                    color: "grey",
+                }}
+            >
+                termos de uso
+            </a>
+            <a
+                className="text-link text-small"
+                href={`${CLIENT_URL}/privacidade`}
+                rel="noopener noreferrer"
+                target="_blank"
+                color={{
+                    color: "grey",
+                }}
+            >
+                privacidade
+            </a>
+        </div>
+    );
+
     return (
         <Fragment>
             <div style={{ marginTop: "16px", display: "block" }}>
@@ -17,6 +45,8 @@ export default function DashSetting() {
                 <ShowConfigExpansiblePanel />
             </main>
             <PremiumServicesBtn />
+            {showBizDocs()}
+            <div style={{ marginBottom: 50 }} />
         </Fragment>
     );
 }

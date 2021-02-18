@@ -9,8 +9,18 @@ const loadVanillaToast = async (txt, time) => {
 
 let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 isToastActivated = isToastActivated && isThisApp();
-// WARNING: The currentVersion needsfds to be actually the NEXT ONE because the next cache client receives is not updated.
-// const currentVersion = "";
+
+// This optional code is used to register a service worker.
+// register() is not called by default.
+
+// This lets the app load faster on subsequent visits in production, and gives
+// it offline capabilities. However, it also means that developers (and users)
+// will only see deployed updates on subsequent visits to a page, after all the
+// existing tabs open on the page have been closed, since previously cached
+// resources are updated in the background.
+
+// To learn more about the benefits of this model and instructions on how to
+// opt-in, read https://cra.link/PWA
 
 const isLocalhost = Boolean(
     window.location.hostname === "localhost" ||
@@ -24,7 +34,6 @@ const isLocalhost = Boolean(
 
 export function register(config) {
     if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
-        // disable service locally for push notification testing
         // The URL constructor is available in all browsers that support SW.
         const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
         if (publicUrl.origin !== window.location.origin) {
@@ -35,11 +44,7 @@ export function register(config) {
         }
 
         window.addEventListener("load", () => {
-            const swFileName =
-                process.env.NODE_ENV === "production"
-                    ? "service-worker.js"
-                    : "custom-sw.js";
-            const swUrl = `${process.env.PUBLIC_URL}/${swFileName}`;
+            const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
             if (isLocalhost) {
                 // This is running on localhost. Let's check if a service worker still exists or not.
@@ -50,7 +55,7 @@ export function register(config) {
                 navigator.serviceWorker.ready.then(() => {
                     console.log(
                         "This web app is being served cache-first by a service " +
-                            "worker. To learn more, visit https://bit.ly/CRA-PWA"
+                            "worker. To learn more, visit https://cra.link/PWA"
                     );
                 });
             } else {
@@ -76,13 +81,13 @@ function registerValidSW(swUrl, config) {
                             // At this point, the updated precached content has been fetched,
                             // but the previous service worker will still serve the older
                             // content until all client tabs are closed.
-                            // isToastActivated &&
-                            isToastActivated &&
+                            if (isToastActivated) {
                                 loadVanillaToast(
                                     "Opa! App atualizado com novidades. 🎉",
                                     3500
                                 );
-                            // isToastActivated &&
+                            }
+
                             setTimeout(
                                 () =>
                                     isToastActivated &&
@@ -92,13 +97,6 @@ function registerValidSW(swUrl, config) {
                                     ),
                                 1900
                             );
-                            // isToastActivated &&
-                            // setTimeout(() => isToastActivated && loadVanillaToast("Se tiver usando alguma página do site, feche também.", 8000), 10000);
-                            console.log(
-                                "New content is available and will be used when all " +
-                                    "tabs for this page are closed. See https://bit.ly/CRA-PWA."
-                            );
-
                             // Execute callback
                             if (config && config.onUpdate) {
                                 config.onUpdate(registration);
@@ -107,7 +105,6 @@ function registerValidSW(swUrl, config) {
                             // At this point, everything has been precached.
                             // It's the perfect time to display a
                             // "Content is cached for offline use." message.
-                            // isToastActivated &&
                             loadVanillaToast(
                                 "App foi atualizado para a mais recente versão!",
                                 5000
@@ -153,11 +150,12 @@ function checkValidServiceWorker(swUrl, config) {
             }
         })
         .catch(() => {
-            isToastActivated &&
+            if (isToastActivated) {
                 loadVanillaToast(
                     "Sem acesso à internet. App está funcionando em modo offline",
                     7000
                 );
+            }
             console.log(
                 "No internet connection found. App is running in offline mode."
             );
@@ -166,10 +164,12 @@ function checkValidServiceWorker(swUrl, config) {
 
 export function unregister() {
     if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.ready.then((registration) => {
-            registration.unregister();
-        });
+        navigator.serviceWorker.ready
+            .then((registration) => {
+                registration.unregister();
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
     }
 }
-
-//
