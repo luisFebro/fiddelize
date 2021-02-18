@@ -6,6 +6,7 @@ import ShowConfigExpansiblePanel from "./expansible-panel/ShowExpansiblePanel";
 import PremiumServicesBtn from "./PremiumServicesBtn";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import isThisApp from "../../../utils/window/isThisApp";
+import { Link } from "react-router-dom";
 
 const isApp = isThisApp();
 
@@ -32,14 +33,12 @@ export default function DashSetting() {
                     privacidade
                 </a>
             </div>
-            <a
+            <Link
+                to="/status-de-servicos"
                 className="mt-4 container-center text-link text-small"
-                href="https://stats.uptimerobot.com/w7mAMsL5EN"
-                rel="noopener noreferrer"
-                target="_blank"
             >
                 status de serviços
-            </a>
+            </Link>
         </section>
     );
 

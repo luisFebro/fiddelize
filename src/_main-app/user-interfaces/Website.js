@@ -48,6 +48,7 @@ import {
     AsyncPayGatewayRegister,
     AsyncBizTeamPassword,
     // biz docs and footer
+    AsyncServicesStatus,
     AsyncTerms,
     AsyncPrivacyPolicy,
     // test
@@ -189,6 +190,11 @@ function Website({ location, history }) {
                     path="/privacidade"
                     exact
                     component={AsyncPrivacyPolicy}
+                />
+                <Route
+                    path="/status-de-servicos"
+                    exact
+                    component={AsyncServicesStatus}
                 />
                 <Route
                     path="/test/playground"
