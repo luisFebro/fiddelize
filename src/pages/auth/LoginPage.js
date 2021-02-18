@@ -6,6 +6,7 @@ import CompLoader from "../../components/CompLoader";
 import useData from "../../hooks/useData";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import useBackColor from "../../hooks/useBackColor";
+import useScrollUp from "../../hooks/scroll/useScrollUp";
 
 export const AsyncAccessGateKeeper = Load({
     loader: () =>
@@ -19,6 +20,7 @@ export default function LoginPage() {
         currentComp: state.componentReducer.cases.currentComp,
     }));
 
+    useScrollUp();
     useBackColor("var(--themeP)");
 
     const [rememberAccess, name, role] = useData([

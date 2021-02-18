@@ -35,10 +35,10 @@ const proVersion = (styles) => [
             },
         },
         silver: {
-            name: "1.000 Apps <br />de Novvos clientes",
+            name: "5.000 Apps <br />de Novvos clientes",
             price: {
-                yearly: 200,
-                monthly: 90,
+                yearly: 400,
+                monthly: 100, // for 1.000
             },
         },
         Icon: <GroupAddIcon style={styles.muStyle} />,
@@ -60,8 +60,8 @@ const proVersion = (styles) => [
         gold: {
             name: "Prêmmios Clientes<br />ilimitados",
             price: {
-                yearly: 30,
-                monthly: 15,
+                yearly: 40,
+                monthly: 20,
             },
         },
         Icon: <FontAwesomeIcon icon="trophy" style={styles.muStyle} />,
@@ -73,21 +73,21 @@ const proVersion = (styles) => [
     {
         name: "Orgganize Clientes",
         price: {
-            yearly: 62,
-            monthly: 31,
+            yearly: 50,
+            monthly: 25,
         },
         silver: {
             name: "Orgganize Clientes",
             price: {
-                yearly: 52,
-                monthly: 26,
+                yearly: 40,
+                monthly: 20,
             },
         },
         gold: {
             name: "Orgganize Clientes",
             price: {
-                yearly: 42,
-                monthly: 21,
+                yearly: 40,
+                monthly: 20,
             },
         },
         Icon: (

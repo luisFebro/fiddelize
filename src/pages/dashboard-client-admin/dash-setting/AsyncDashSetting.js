@@ -5,35 +5,42 @@ import "./DashSetting.scss";
 import ShowConfigExpansiblePanel from "./expansible-panel/ShowExpansiblePanel";
 import PremiumServicesBtn from "./PremiumServicesBtn";
 import { CLIENT_URL } from "../../../config/clientUrl";
+import isThisApp from "../../../utils/window/isThisApp";
+
+const isApp = isThisApp();
 
 const DashSettingTitle = <Title />;
 // IMPLEMENT SOME CODE SPLITTING TO THE SETTING COMPONENTS
 export default function DashSetting() {
     const showBizDocs = () => (
-        <div className="d-flex justify-content-around align-items-center">
+        <section>
+            <div className="d-flex justify-content-around align-items-center">
+                <a
+                    className="text-link text-small"
+                    href={`${CLIENT_URL}/termos-de-uso`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    termos de uso
+                </a>
+                <a
+                    className="text-link text-small"
+                    href={`${CLIENT_URL}/privacidade`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    privacidade
+                </a>
+            </div>
             <a
-                className="text-link text-small"
-                href={`${CLIENT_URL}/termos-de-uso`}
+                className="mt-4 container-center text-link text-small"
+                href="https://stats.uptimerobot.com/w7mAMsL5EN"
                 rel="noopener noreferrer"
                 target="_blank"
-                color={{
-                    color: "grey",
-                }}
             >
-                termos de uso
+                status de serviços
             </a>
-            <a
-                className="text-link text-small"
-                href={`${CLIENT_URL}/privacidade`}
-                rel="noopener noreferrer"
-                target="_blank"
-                color={{
-                    color: "grey",
-                }}
-            >
-                privacidade
-            </a>
-        </div>
+        </section>
     );
 
     return (
@@ -45,7 +52,7 @@ export default function DashSetting() {
                 <ShowConfigExpansiblePanel />
             </main>
             <PremiumServicesBtn />
-            {showBizDocs()}
+            {isApp && showBizDocs()}
             <div style={{ marginBottom: 50 }} />
         </Fragment>
     );

@@ -3,7 +3,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9960.8"; // PRÓXIMO:
+const latestVersion = "3.9961.9"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
 const updateDescription =
@@ -84,8 +84,7 @@ export default function AppVersion({ position = "relative", bottom, left }) {
                     style={styles.versionBtn}
                     className="app-version text-nowrap text-small text-center"
                 >
-                    Versão
-                    {latestVersion}
+                    Versão {latestVersion}
                 </main>
                 <div className="position-absolute" style={styles.cta}>
                     <ModalBtn modalComp={<FeatureUpdates />} />

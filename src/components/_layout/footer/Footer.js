@@ -92,9 +92,14 @@ const Footer = ({ location }) => {
                     <li className="media">
                         <i className="fas fa-square" />
                         <div className="media-body">
-                            <Link to="/status-de-servicos">
+                            <a
+                                className="text-link text-white font-weight-normal"
+                                href="https://stats.uptimerobot.com/w7mAMsL5EN"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                            >
                                 Status de serviços
-                            </Link>
+                            </a>
                         </div>
                     </li>
                 </ul>

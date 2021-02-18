@@ -37,7 +37,6 @@ import {
     AsyncPayGatewayRegister,
     AsyncBizTeamPassword,
     // biz docs and footer
-    AsyncServiceStatus,
     AsyncTerms,
     AsyncPrivacyPolicy,
     // test
@@ -161,11 +160,6 @@ function Mobile({ location, history }) {
                     path="/painel-de-apps"
                     exact
                     component={AsyncAppsPanel}
-                />
-                <Route
-                    path="/status-de-servicos"
-                    exact
-                    component={AsyncServiceStatus}
                 />
                 <Route path="/termos-de-uso" exact component={AsyncTerms} />
                 <Route

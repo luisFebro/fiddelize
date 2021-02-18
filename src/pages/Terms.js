@@ -227,10 +227,10 @@ const text5 = (
         <p>
             A Fiddelize não utiliza assinaturas, mas sim um sistema de planos
             mais flexível da metodologia pré-paga de{" "}
-            <strong>invista e use até expirar</strong> com prazos
-            pré-determinados (anual ou mensal) de uso. Isto significa que você
-            pode investir/atualizar seus serviços individuamente escolhendo o
-            prazo de uso para cada um.
+            <strong>investimento por créditos</strong> com períodos de uso
+            mensais ou anuais. Isto significa que você pode escolher quantidades
+            de créditos, quais serviços investir/atualizar e em qual período de
+            uso, de forma individual ou em conjunto.
         </p>
         <p>
             A precificação dos serviços da Fiddelize é feita de duas formas:{" "}
@@ -259,14 +259,13 @@ const text5 = (
 
         <h2 className="font-weight-bold text-normal">TABELA DE PREÇOS</h2>
         <p>
-            <strong>PLANO BRONZE: </strong>a partir de R$ 30 mensal / R$ 100
-            anual.
+            <strong>PLANO BRONZE: </strong>a partir de R$ 30
         </p>
         <p>
-            <strong>PLANO PRATA: </strong>a definir.
+            <strong>PLANO PRATA: </strong>R$480/anual - R$140/mensal
         </p>
         <p>
-            <strong>PLANO OURO: </strong>a definir.
+            <strong>PLANO OURO: </strong>R$680/anual - R$190/mensal
         </p>
         <p>
             Apesar de ainda não ter feito nenhuma alteração no preço desde 2020,

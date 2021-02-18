@@ -107,13 +107,6 @@ export const AsyncAppsPanel = Load({
 });
 
 // BIZ DOCS AND FOOTER
-// support
-export const AsyncServiceStatus = Load({
-    loader: () =>
-        import(
-            "../../pages/ServiceStatus" /* webpackChunkName: "service-status-page-lazy" */
-        ),
-});
 // biz
 export const AsyncTerms = Load({
     loader: () =>
