@@ -27,6 +27,13 @@ export const AsyncDetectedApp = Load({
             "./detected-app/DetectedApp" /* webpackChunkName: "detected-app-comp-lazy" */
         ),
 });
+
+export const AsyncNotInstalledInstru = Load({
+    loader: () =>
+        import(
+            "./NotInstalledInstru" /* webpackChunkName: "not-installed-instru-comp-lazy" */
+        ),
+});
 // CONTENTS
 export const AsyncBizTeamText = Load({
     loader: () =>
@@ -83,7 +90,7 @@ export default function DownloadApp({ match, location, history }) {
         run: false,
         downloadAvailable: false, // LESSON: false is default
         analysis: true,
-        showDesktopMsg: false,
+        showNotInstalledInstru: false,
         needSelfServiceData: false,
         // for test only
         testMode: false,
@@ -96,7 +103,7 @@ export default function DownloadApp({ match, location, history }) {
         run,
         downloadAvailable,
         analysis,
-        showDesktopMsg,
+        showNotInstalledInstru,
         needSelfServiceData,
         testMode,
         appinstalled,
@@ -316,9 +323,22 @@ export default function DownloadApp({ match, location, history }) {
         if (isBizTeam) return <AsyncBizTeamText {...props} />;
     };
 
-    const showMissingBannerMsg = () => (
+    const handleNotInstalled = () => {
+        setData({
+            ...data,
+            showNotInstalledInstru: true,
+        });
+    };
+
+    const showTroubleShooting = () => (
         <section className="container-center-col" style={{ marginBottom: 150 }}>
-            <p>Se a placa para baixar o app não apareceu. Tente por aqui:</p>
+            <h2 className="text-subtitle text-center text-white">
+                Soluções comuns para falhas
+            </h2>
+            <p>
+                Se a placa/banner para baixar o app não apareceu nesta página.
+                Tente por aqui:
+            </p>
             <div className="my-3">
                 <a
                     href="/mobile-app?abrir=1&banner=1"
@@ -343,71 +363,33 @@ export default function DownloadApp({ match, location, history }) {
                     />
                 </a>
             </div>
-            {showDesktopMsg && (
-                <Fragment>
-                    <p className="text-center my-3">ou</p>
-                    <h2 className="text-subtitle">
-                        Instruções caso não tenha encontrado o app
-                    </h2>
-                    {isSmall ? (
-                        <Fragment>
-                            <p>
-                                1) Verifique sua conexão. Mesmo que tenha
-                                aparecido uma mensagem de instalação
-                                bem-sucedida, às vezes, o download pode demorar
-                                alguns segundos.
-                            </p>
-                            <p>
-                                2) Verifique se seu dispositivo está atualizado
-                                verificando suas notificações ou indo em
-                                configurações.
-                            </p>
-                            <p>
-                                3) Por último, instale o app manualmente.
-                                <br />
-                                a) clique no botão no canto superior para
-                                mostrar mais opções nesta mesma página.
-                                <div className="container-center">
-                                    <img
-                                        src="/img/demos/pwa/not-found-app-instru-1.jpg"
-                                        width="260px"
-                                        height="auto"
-                                        alt="botão abri app desktop"
-                                    />
-                                </div>
-                                <br />
-                                b) Nas opções, procure e clique em{" "}
-                                <strong>instalar aplicativo</strong> e confirme
-                                para baixar.
-                                <div className="container-center">
-                                    <img
-                                        src="/img/demos/pwa/not-found-app-instru-2.jpg"
-                                        width="310px"
-                                        height="auto"
-                                        alt="botão abri app desktop"
-                                    />
-                                </div>
-                            </p>
-                        </Fragment>
-                    ) : (
-                        <Fragment>
-                            <p>
-                                No Desktop, caso não tenha encontrado o app na
-                                tela inicial, você pode abrir o app com um botão
-                                similar a este:
-                            </p>
-                            <div className="container-center">
-                                <img
-                                    src="/img/demos/pwa/button-to-open-pwa-desktop.png"
-                                    width="189"
-                                    height="auto"
-                                    alt="botão abri app desktop"
-                                />
-                            </div>
-                        </Fragment>
-                    )}
-                </Fragment>
-            )}
+            <Fragment>
+                <p className="text-center my-3">ou</p>
+                <h2 className="text-normal mb-3">
+                    O app web ainda não apareceu na sua tela inicial?
+                </h2>
+                {!showNotInstalledInstru ? (
+                    <ButtonFab
+                        title="Ver Instruções"
+                        color={
+                            txtPColor && txtPColor.includes("text-white")
+                                ? "#fff"
+                                : "#000"
+                        }
+                        backgroundColor={`var(--themeSDark--${
+                            pColor || "default"
+                        })`}
+                        onClick={handleNotInstalled}
+                        position="relative"
+                        variant="extended"
+                        size="medium"
+                        needBtnShadow
+                        shadowColor="white"
+                    />
+                ) : (
+                    <AsyncNotInstalledInstru />
+                )}
+            </Fragment>
         </section>
     );
 
@@ -429,7 +411,7 @@ export default function DownloadApp({ match, location, history }) {
                 <Fragment>
                     <section className={`mx-3 text-normal ${txtBackColor}`}>
                         {handleAppTypeText()}
-                        {downloadAvailable && showMissingBannerMsg()}
+                        {downloadAvailable && showTroubleShooting()}
                         {!downloadAvailable && showAlreadyDownloadedApp()}
                     </section>
                     <PwaInstaller

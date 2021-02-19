@@ -3,10 +3,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9962.11"; // PRÓXIMO:
+const latestVersion = "3.9963.11"; // PRÓXIMO:
 // app fiddelize pt 8
 // split de pagamento backend pt2
-const updateDescription = "biz team app - pay and automatic selling system";
+const updateDescription =
+    "biz team app - pay and automatic selling system - register affiliates - pt2";
 
 /* HISTORY
   "biz docs - termos de uso e privacidade - e caixa de consentimento formulário"

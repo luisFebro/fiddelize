@@ -77,7 +77,6 @@ export default function DetectedApp({
                                     setData((prev) => ({
                                         ...prev,
                                         downloadAvailable: true,
-                                        showDesktopMsg: true,
                                     }));
                                 }}
                                 variant="link"

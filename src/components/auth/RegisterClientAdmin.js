@@ -31,7 +31,7 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import useData, { sto } from "../../hooks/useData";
 import { removeCollection } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
-import CheckBoxForm from "../../components/CheckBoxForm";
+import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 
@@ -284,6 +284,7 @@ function RegisterClientAdmin({ logo }) {
         });
     };
 
+    // this should be a tag link because Link erases all data when user returns back
     const agreementTxtElem = (
         <span>
             concordo com os{" "}

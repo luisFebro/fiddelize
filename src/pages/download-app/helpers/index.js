@@ -44,6 +44,7 @@ export const handleRoleStorage = ({
             { lastRegisterBizId: bizId },
             { memberJob: memberJob || "admin" },
             { memberId: true },
+            { disconnectCliMember: true },
         ];
     }
 
@@ -52,6 +53,7 @@ export const handleRoleStorage = ({
             { role: whichRole },
             { primaryAgent },
             { memberId: true },
+            { disconnectAgent: true },
         ];
     }
 

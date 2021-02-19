@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+import ReactGA from "react-ga";
+import CakeIcon from "@material-ui/icons/Cake";
+import Card from "@material-ui/core/Card";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,12 +19,8 @@ import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
-// import ReCaptchaCheckbox from "../ReCaptcha";
-// Redux
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
-// import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
-// Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
 import lStorage from "../../utils/storage/lStorage";
@@ -29,17 +28,15 @@ import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getDateCode from "../../utils/dates/getDateCode";
 // import { setRun } from '../../hooks/useRunComp';
-// Material UI
 // import { makeStyles } from '@material-ui/core/styles';
-import CakeIcon from "@material-ui/icons/Cake";
-import Card from "@material-ui/core/Card";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
-import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import { setStorageRegisterDone } from "./helpers";
 import useData from "../../hooks/useData";
+import CheckBoxForm from "../CheckBoxForm";
+import { CLIENT_URL } from "../../config/clientUrl";
 
 const filter = getFilterDate();
 
@@ -95,6 +92,8 @@ function Register({
         filter,
         bizImg: "/img/official-logo-name.png", // for account panel...
         bizName: "fiddelize", // for account panel...
+        showAgreement: false,
+        agreementDone: false,
     });
 
     const styles = getStyles();
@@ -105,7 +104,15 @@ function Register({
     dateNow.setFullYear(maxYear);
     const [selectedDate, handleDateChange] = useState(dateNow);
 
-    const { role, name, email, gender, birthday, cpf, phone } = data;
+    const {
+        name,
+        email,
+        gender,
+        cpf,
+        phone,
+        showAgreement,
+        agreementDone,
+    } = data;
     const cpfValue = autoCpfMaskBr(cpf);
     const phoneValue = autoPhoneMask(phone);
 
@@ -207,6 +214,15 @@ function Register({
             7000
         );
 
+        if (!agreementDone) {
+            return showSnackbar(
+                dispatch,
+                "Clique na caixa para concordar com termos de uso e privacidade",
+                "error",
+                5000
+            );
+        }
+
         registerEmail(dispatch, newUser).then((res) => {
             if (res.status !== 200) {
                 showSnackbar(
@@ -286,6 +302,37 @@ function Register({
                 backgroundColor={`var(--themePDark--${selfThemePColor})`}
             />
         </div>
+    );
+
+    const handleAgreementChecked = (currStatus) => {
+        setData({
+            ...data,
+            agreementDone: currStatus,
+        });
+    };
+
+    // this should be a tag link because Link erases all data when user returns back
+    const agreementTxtElem = (
+        <span>
+            concordo com os{" "}
+            <a
+                className="text-link"
+                href={`${CLIENT_URL}/termos-de-uso`}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                termos de uso
+            </a>{" "}
+            e{" "}
+            <a
+                className="text-link"
+                href={`${CLIENT_URL}/privacidade`}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                privacidade
+            </a>
+        </span>
     );
 
     const showForm = () => (
@@ -402,6 +449,7 @@ function Register({
                         value={selectedDate}
                         onChange={(e) => {
                             handleDateChange(e);
+                            setData({ ...data, showAgreement: true });
                             handleNextField(e, "field3", {
                                 event: "onChange",
                                 ignoreValue: true,
@@ -523,7 +571,15 @@ function Register({
                     </Select>
                 </div>
             </section>
-            <SafeEnvironmentMsg />
+            {showAgreement && (
+                <section className="mt-3">
+                    <CheckBoxForm
+                        text={agreementTxtElem}
+                        setIsBoxChecked={handleAgreementChecked}
+                    />
+                </section>
+            )}
+            <SafeEnvironmentMsg mt={showAgreement ? "mt-0" : ""} />
         </form>
     );
 

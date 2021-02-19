@@ -191,7 +191,6 @@ export default function InstantAccount({
                                     setMainData((prev) => ({
                                         ...prev,
                                         downloadAvailable: true,
-                                        showDesktopMsg: true,
                                     }));
                                 }}
                                 variant="link"
