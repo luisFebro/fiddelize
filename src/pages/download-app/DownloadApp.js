@@ -331,7 +331,7 @@ export default function DownloadApp({ match, location, history }) {
                                 ? "#fff"
                                 : "#000"
                         }
-                        backgroundColor={`var(--themeS--${
+                        backgroundColor={`var(--themeSDark--${
                             pColor || "default"
                         })`}
                         onClick={null}
@@ -433,15 +433,11 @@ export default function DownloadApp({ match, location, history }) {
                         {!downloadAvailable && showAlreadyDownloadedApp()}
                     </section>
                     <PwaInstaller
-                        title={
-                            isCliAdmin
-                                ? `<strong>${
-                                      userName && userName.cap()
-                                  },<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`
-                                : `<strong>${
-                                      userName ? userName.cap() : "Ei"
-                                  },<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`
-                        }
+                        title={handlePwaTitle({
+                            isCliAdmin,
+                            isBizTeam,
+                            userName,
+                        })}
                         icon={`${CLIENT_URL}/img/official-logo-white.png`}
                         run={run}
                         setData={setData}
@@ -472,6 +468,22 @@ export default function DownloadApp({ match, location, history }) {
             )}
         </section>
     );
+}
+
+function handlePwaTitle({ isCliAdmin, isBizTeam, userName }) {
+    if (isCliAdmin)
+        return `<strong>${
+            userName && userName.cap()
+        },<br />baixe o app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />ao seu painel de controle.`;
+
+    if (isBizTeam)
+        return `<strong>${
+            userName ? userName.cap() : "Ei"
+        },<br />baixe o app comercial<br />da Fiddelize aqui`;
+
+    return `<strong>${
+        userName ? userName.cap() : "Ei"
+    },<br />baixe nosso app aqui</strong><br />e tenha <strong>acesso rápido</strong><br />aos seus pontos de fidelidade.`;
 }
 
 /*

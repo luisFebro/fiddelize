@@ -2,12 +2,7 @@ import lStorage, {
     setSystemOp,
     needAppRegisterOp,
 } from "../../../utils/storage/lStorage";
-import {
-    getVar,
-    setMultiVar,
-    removeMultiVar,
-    store,
-} from "../../../hooks/storage/useVar";
+import { getVar, setMultiVar, store } from "../../../hooks/storage/useVar";
 
 export const handleRoleStorage = ({
     userScore,
@@ -22,6 +17,9 @@ export const handleRoleStorage = ({
     const isCliAdmin = whichRole === "cliente-admin";
     const isCliMember = whichRole === "cliente-membro";
     const isCliUser = whichRole === "cliente";
+
+    // memberId: true is used to force registration.
+    // if it is instant app, than it will have no affect
 
     let userPayload;
 
@@ -45,26 +43,38 @@ export const handleRoleStorage = ({
             { role: whichRole },
             { lastRegisterBizId: bizId },
             { memberJob: memberJob || "admin" },
+            { memberId: true },
         ];
     }
 
     if (isBizTeam) {
-        userPayload = [{ role: whichRole }, { primaryAgent }];
+        userPayload = [
+            { role: whichRole },
+            { primaryAgent },
+            { memberId: true },
+        ];
     }
 
     (async () => {
         const isInstantAccount = await getVar("isInstantAccount", store.user);
-        !isInstantAccount &&
+        if (!isInstantAccount) {
             lStorage("setItem", { ...needAppRegisterOp, value: true });
+        }
 
         await setMultiVar(userPayload, store.user);
-        await removeMultiVar(
-            ["rememberAccess", "success", "verifPass"],
+        await setMultiVar(
+            [
+                { rememberAccess: false },
+                { success: false },
+                { verifPass: false },
+            ],
             store.user
         );
 
         const needSysOp = whichRole && bizId;
-        needSysOp && lStorage("setItems", setSystemOp(whichRole, bizId));
+        if (needSysOp) {
+            lStorage("setItems", setSystemOp(whichRole, bizId));
+        }
 
         // for garantee that the current app is logged out.
         // Otherwise, the app will be displayed with wrong and mingled app's pages.
