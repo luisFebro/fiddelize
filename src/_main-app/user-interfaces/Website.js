@@ -73,6 +73,7 @@ function Website({ location, history }) {
             {dontNeedLayout && <Navbar />}
             <Switch>
                 <Route path="/" exact component={Home} />
+                <Route path="/de/:associateId" exact component={Home} />
                 <Route path="/acesso/verificacao" exact component={LoginPage} />
                 <Route
                     path="/cliente/pontos-fidelidade"

@@ -20,7 +20,7 @@ module.exports = {
         ecmaFeatures: {
             jsx: true,
         },
-        ecmaVersion: 2018, // understands let, const and other features
+        ecmaVersion: 8, // understands let, const and other features
         sourceType: "module",
         allowImportExportEverywhere: true,
     },

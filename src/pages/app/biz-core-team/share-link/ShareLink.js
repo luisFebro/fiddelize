@@ -1,11 +1,20 @@
+import { useState, useEffect } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 import copyText from "../../../../utils/document/copyText";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import { getVar, store } from "../../../../hooks/storage/useVar";
 
 export default function ShareLink() {
-    const memberId = "ana";
-    const link = `fiddelize.com.br/de/${memberId}`;
+    const [link, setLink] = useState("fiddelize.com.br/de/...");
+
+    useEffect(() => {
+        (async () => {
+            const memberId = await getVar("uniqueLinkId", store.user);
+            const thisLink = `fiddelize.com.br/de/${memberId}`;
+            setLink(thisLink);
+        })();
+    }, []);
 
     const dispatch = useStoreDispatch();
 

@@ -42,7 +42,7 @@ function Navbar({ history, location }) {
 
     // Render
     const locationNow = location.pathname;
-    const isHome = locationNow === "/";
+    const isHome = locationNow === "/" || locationNow.includes("/de/");
     const isAdminDash = locationNow.includes(
         "cliente-admin/painel-de-controle"
     );
@@ -215,7 +215,7 @@ function Navbar({ history, location }) {
                     : "nav-link"
             }`}
         >
-            {locationNow === "/" ? (
+            {isHome ? (
                 <span className="text-normal text-s">
                     Acesso{" "}
                     <FontAwesomeIcon

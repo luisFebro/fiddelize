@@ -33,18 +33,19 @@ import { removeCollection } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
+import ReactGA from "react-ga";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 
 const filter = getFilterDate();
 
 const isSmall = window.Helper.isSmallScreen();
 
-const useStyles = makeStyles((theme) => ({
-    card: {
-        maxWidth: 345,
-        filter: "drop-shadow(.001em .001em .15em var(--mainDark))",
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     card: {
+//         maxWidth: 345,
+//         filter: "drop-shadow(.001em .001em .15em var(--mainDark))",
+//     },
+// }));
 
 const getStyles = () => ({
     fieldForm: {
@@ -87,6 +88,7 @@ function RegisterClientAdmin({ logo }) {
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
+        referrer: "",
         showAgreement: false,
         agreementDone: false,
     });
@@ -106,8 +108,8 @@ function RegisterClientAdmin({ logo }) {
     const cpfValue = autoCpfMaskBr(cpf);
     const phoneValue = autoPhoneMask(phone);
 
-    const [preRegisterCliAdminData] = useData(
-        ["clientAdminData"],
+    const [preRegisterCliAdminData, bizTeamReferrer] = useData(
+        ["clientAdminData", "referrer"],
         sto.re.pre_register
     );
 
@@ -119,13 +121,14 @@ function RegisterClientAdmin({ logo }) {
                 setData((prev) => ({
                     ...prev,
                     clientAdminData: {
-                        ...data.clientAdminData,
+                        ...prev.clientAdminData,
                         ...preRegisterCliAdminData,
                     },
+                    referrer: bizTeamReferrer,
                 }));
             }, 4000);
         }
-    }, [preRegisterCliAdminData]);
+    }, [preRegisterCliAdminData, bizTeamReferrer]);
 
     // detecting field errors
     const [fieldError, setFieldError] = useState(null);
@@ -145,7 +148,6 @@ function RegisterClientAdmin({ logo }) {
 
     const dispatch = useStoreDispatch();
 
-    const classes = useStyles();
     const styles = getStyles();
 
     useEffect(() => {
@@ -244,15 +246,13 @@ function RegisterClientAdmin({ logo }) {
         await removeCollection("pre_register");
         showSnackbar(dispatch, "Redirecionando...", "warning", 4000);
 
-        if (Boolean(ReactGA)) {
-            ReactGA.event({
-                // n1
-                label: "Form",
-                category: "cliAdmin",
-                action: "Created an account",
-                transport: "beacon",
-            });
-        }
+        ReactGA.event({
+            // n1
+            label: "Form",
+            category: "cliAdmin",
+            action: "Created an account",
+            transport: "beacon",
+        });
         // const removalOptions = {
         //     collection: "onceChecked",
         // };

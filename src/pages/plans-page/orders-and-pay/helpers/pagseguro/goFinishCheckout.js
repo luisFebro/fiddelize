@@ -28,6 +28,7 @@ export default async function goFinishCheckout(props) {
         firstDueDate,
         renewalDaysLeft,
         renewalReference,
+        referrer,
     } = modalData;
 
     const params = {
@@ -37,8 +38,9 @@ export default async function goFinishCheckout(props) {
     const isBoleto = selectedMethod === "boleto";
     const isCreditCard = selectedMethod === "creditCard";
     const isBankDebit = selectedMethod === "eft";
+    const isPix = selectedMethod === "pix";
 
-    const body = {
+    let body = {
         paymentMethod: selectedMethod,
         senderHash,
         reference,
@@ -82,7 +84,27 @@ export default async function goFinishCheckout(props) {
         creditCardHolderAreaCode: isCreditCard ? senderAreaCode : undefined,
         creditCardHolderPhone: isCreditCard ? senderPhone : undefined,
         brand: props.brand,
+        // split
+        referrer,
     };
+
+    if (isPix) {
+        body = {
+            paymentMethod: selectedMethod,
+            reference,
+            senderName: userName,
+            filter,
+            itemAmount1: testValue || itemAmount,
+            ordersStatement,
+            // renewal
+            renewalCurrDays,
+            isSingleRenewal,
+            renewalDaysLeft,
+            renewalReference,
+            // split
+            referrer,
+        };
+    }
 
     return await getAPI({
         method: "post",

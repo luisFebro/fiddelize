@@ -162,7 +162,8 @@ const text4 = (
             <li>
                 <strong>CPF: </strong>garantir que o acesso da conta seja único
                 ao sistema. É usado para transações de cartão de crédito e
-                boleto (Veja parte 5). Recuperação de senhas
+                boleto (Veja parte 5), atualização de serviços como Pix.
+                Recuperação de senhas
             </li>
             <li>
                 <strong>celular: </strong>Usado para SMS, redirecionamento de
@@ -387,7 +388,7 @@ export default function PrivacyPolicy() {
             </section>
             <DateWithIcon
                 style={{ color: "var(--mainWhite)" }}
-                date="2021-02-17T02:57:13.873Z" // first time: "2021-02-17T02:57:13.873Z"
+                date="2021-02-28T03:39:46.915Z" // first time: "2021-02-17T02:57:13.873Z"
                 msgIfNotValidDate="Nenhuma alteração."
                 marginTop={-10}
                 needTxtShadow

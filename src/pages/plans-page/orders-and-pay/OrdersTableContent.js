@@ -22,6 +22,7 @@ export default function OrdersTableContent({
     plan,
     period,
     notesColor,
+    showNotes = true,
 }) {
     const [list, setList] = useState([]);
 
@@ -92,13 +93,19 @@ export default function OrdersTableContent({
                 marginBottom=" "
                 enumeration=" "
             />
-            <NotesSwitcher
-                color={notesColor === "white" ? "text-white" : "text-purple"}
-                btnStyle={{ top: -35, right: -60 }}
-                notes={notes}
-                rootClassName={notesColor === "purple" ? "mx-3" : undefined}
-                shadowTitle={notesColor === "white" ? "text-shadow" : undefined}
-            />
+            {showNotes && (
+                <NotesSwitcher
+                    color={
+                        notesColor === "white" ? "text-white" : "text-purple"
+                    }
+                    btnStyle={{ top: -35, right: -60 }}
+                    notes={notes}
+                    rootClassName={notesColor === "purple" ? "mx-3" : undefined}
+                    shadowTitle={
+                        notesColor === "white" ? "text-shadow" : undefined
+                    }
+                />
+            )}
         </Fragment>
     );
 }

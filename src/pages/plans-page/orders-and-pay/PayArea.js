@@ -44,6 +44,7 @@ export default function PayArea({
         senderPhone: "",
         senderBirthday: "", // for credit card
         firstDueDate: "", // for boleto
+        referrer: "", // split, to get the associate's public key
     });
     const {
         SKU,
@@ -53,6 +54,7 @@ export default function PayArea({
         senderPhone,
         senderBirthday,
         firstDueDate,
+        referrer,
     } = data;
 
     const { bizCodeName, bizName } = useClientAdmin();
@@ -75,13 +77,14 @@ export default function PayArea({
     useEffect(() => {
         if (alreadyReadUser) return;
         readUser(dispatch, _id, {
-            select: "cpf birthday -_id",
+            select: "cpf birthday referrer -_id",
             role: "cliente-admin",
         }).then((res) => {
             setAlreadyReadUser(true);
+            const thisReferrer = res.data.referrer;
             const thisBirthDay = res.data.birthday;
             let thisCPF = res.data.cpf;
-            if (thisCPF === "111.111.111-11") thisCPF = "319.683.234-14"; // for testing only
+            if (thisCPF === "111.111.111-00") thisCPF = "319.683.234-14"; // for testing only
 
             const desc = `Plano ${plan} ${handlePeriod()} com ${
                 servicesTotal || ""
@@ -105,6 +108,7 @@ export default function PayArea({
 
             setData((thisData) => ({
                 ...thisData,
+                referrer: thisReferrer,
                 servDesc: desc,
                 senderCPF: thisSenderCPF,
                 senderAreaCode: thisSenderAreaCode,
@@ -143,6 +147,7 @@ export default function PayArea({
         renewalReference,
         isSingleRenewal,
         bizName, // for email alert only
+        referrer,
     };
 
     const showCTAs = () =>

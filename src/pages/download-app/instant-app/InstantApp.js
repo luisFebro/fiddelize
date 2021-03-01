@@ -63,7 +63,7 @@ export default function InstantAccount({
     let body = {
         cpf,
         ...payload,
-        bizTeamData: { job: "afiliado", primaryAgent },
+        bizTeamData: { job: "associado", primaryAgent }, // if rep-comercial, it should be manually set in DB for now.
         clientAdminData: undefined, // bizWhatsapp is assigned in the backend after finding CPF with profile data.
         clientMemberData: { bizId, job: memberJob },
         clientUserData: { bizId, filterBirthday: "" },

@@ -130,7 +130,7 @@ export default function DownloadApp({ match, location, history }) {
         isCliUser,
         isFromAdminPanel,
         // others
-        isValidRoleType,
+        // isValidRoleType,
         isLinkInvalid,
         whichRole,
         primaryAgent,
@@ -320,7 +320,8 @@ export default function DownloadApp({ match, location, history }) {
             );
         if (isCliMember) return <AsyncClientMemberText {...props} />;
         if (isCliUser) return <AsyncClientUserText {...props} />;
-        if (isBizTeam) return <AsyncBizTeamText {...props} />;
+        if (isBizTeam)
+            return <AsyncBizTeamText {...props} primaryAgent={primaryAgent} />;
     };
 
     const handleNotInstalled = () => {
@@ -365,9 +366,9 @@ export default function DownloadApp({ match, location, history }) {
             </div>
             <Fragment>
                 <p className="text-center my-3">ou</p>
-                <h2 className="text-normal mb-3">
+                <p className="mb-3">
                     O app web ainda não apareceu na sua tela inicial?
-                </h2>
+                </p>
                 {!showNotInstalledInstru ? (
                     <ButtonFab
                         title="Ver Instruções"

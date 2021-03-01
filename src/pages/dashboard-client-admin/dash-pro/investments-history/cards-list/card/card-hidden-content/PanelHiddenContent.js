@@ -20,6 +20,13 @@ const AsyncOrdersTableContent = Load({
         ),
 });
 
+const AsyncPixDetails = Load({
+    loader: () =>
+        import(
+            "./pix-details-pay/AsyncPixDetails" /* webpackChunkName: "pix-details-pay-comp-lazy" */
+        ),
+});
+
 PanelHiddenContent.propTypes = {
     data: PropTypes.object.isRequired,
 };
@@ -175,12 +182,17 @@ function PanelHiddenContent({ history, data }) {
         );
     };
 
+    const showPixDetails = (data) => (
+        <AsyncPixDetails itemAmount={data.investAmount} />
+    );
+
     const showPayDetails = (data) => {
         const payMethod = data.paymentMethod;
 
         const isBoleto = payMethod === "boleto";
         const isBankDebit = payMethod === "débito bancário";
         const isCreditCard = payMethod === "cartão crédito";
+        const isPix = payMethod === "pix";
 
         return (
             <section className="mt-4 mb-5">
@@ -195,6 +207,7 @@ function PanelHiddenContent({ history, data }) {
                     {isBoleto && showBoletoDetails(data)}
                     {isBankDebit && showBankDebitDetails(data)}
                     {isCreditCard && showCreditCardDetails(data)}
+                    {isPix && showPixDetails(data)}
                 </p>
             </section>
         );

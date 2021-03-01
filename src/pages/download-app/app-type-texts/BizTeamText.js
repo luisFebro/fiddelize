@@ -7,7 +7,10 @@ export default function ClientMemberText({
     userName,
     ScrollArrow,
     showMainScrollArray,
+    primaryAgent,
 }) {
+    const isBizRep = primaryAgent === "fiddelize";
+
     return (
         <section
             className={`${
@@ -58,8 +61,9 @@ export default function ClientMemberText({
                     Você ganha tanto com vendas passivas e ativas.
                 </p>
                 <p className="download-app--txt" style={styles.margin}>
-                    Sua comissão é de 30% por cada transação de pagamento dos
-                    seus clientes. Não somente a primeira!
+                    Sua comissão é de {isBizRep ? "45" : "30"}% por cada
+                    transação de pagamento dos seus clientes. Não somente a
+                    primeira!
                 </p>
                 <p className="download-app--txt" style={styles.margin}>
                     Você recebe no mesmo dia caso o seu cliente pague com PIX,

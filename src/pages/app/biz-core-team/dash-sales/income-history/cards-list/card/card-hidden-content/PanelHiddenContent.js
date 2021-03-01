@@ -1,0 +1,114 @@
+import { Fragment } from "react";
+import PropTypes from "prop-types";
+import { useStoreState } from "easy-peasy";
+import { withRouter } from "react-router-dom";
+import { Load } from "../../../../../../../../components/code-splitting/LoadableComp";
+// import TextField from "@material-ui/core/TextField";
+
+const AsyncOrdersTableContent = Load({
+    loader: () =>
+        import(
+            "../../../../../../../../pages/plans-page/orders-and-pay/OrdersTableContent" /* webpackChunkName: "orders-table-content-comp-lazy" */
+        ),
+});
+
+PanelHiddenContent.propTypes = {
+    data: PropTypes.object.isRequired,
+};
+
+// const getStyles = () => ({
+//     pointsContainer: {
+//         position: "relative",
+//     },
+//     fieldFormValue: {
+//         backgroundColor: "#fff",
+//         color: "var(--themeP)",
+//         fontSize: "20px",
+//         fontWeight: "bold",
+//         fontFamily: "var(--mainFont)",
+//     },
+// });
+
+function PanelHiddenContent({ data }) {
+    const { runArray } = useStoreState((state) => ({
+        runArray: state.globalReducer.cases.runArray,
+    }));
+
+    // const styles = getStyles();
+
+    const showInvestExtract = (data) => {
+        const isOpen = runArray.includes(data._id); // only when the card is open is loaded.
+
+        const handlePlanCode = (code) => {
+            if (code === "OU") return "ouro";
+            if (code === "PR") return "prata";
+            if (code === "BR") return "bronze";
+        };
+
+        const { ordersStatement: orders, reference } = data;
+        const referenceArray = reference && reference.split("-");
+        const [planCode, , period] = referenceArray;
+
+        const thisPlan = handlePlanCode(planCode);
+        const thisPeriod = period === "A" ? "yearly" : "monthly";
+
+        return (
+            isOpen && (
+                <Fragment>
+                    <h2 className="mb-2 text-normal font-weight-bold text-white text-shadow">
+                        • Serviços investidos:
+                    </h2>
+                    <AsyncOrdersTableContent
+                        needGenerateList
+                        orders={orders}
+                        loading={!orders}
+                        plan={thisPlan}
+                        period={thisPeriod}
+                        notesColor="white"
+                        showNotes={false}
+                    />
+                </Fragment>
+            )
+        );
+    };
+
+    return (
+        <section className="position-relative text-normal enabledLink panel-hidden-content--root">
+            <section className="mt-4 mb-5">
+                <p className="text-normal font-weight-bold text-shadow">
+                    • Referência:
+                    <span className="d-block text-normal font-weight-bold">
+                        {data.reference}
+                    </span>
+                </p>
+                <p className="text-normal font-weight-bold text-shadow">
+                    • Cliente investiu via:
+                    <span className="d-block text-normal font-weight-bold">
+                        {data.paymentMethod}
+                    </span>
+                </p>
+            </section>
+            {showInvestExtract(data)}
+        </section>
+    );
+}
+
+export default withRouter(PanelHiddenContent);
+
+/* ARCHIVES
+<TextField
+    multiline
+    rows={8}
+    id="msgArea"
+    name="message"
+    InputProps={{
+        style: styles.fieldFormValue,
+    }}
+    value={data.sentMsgDesc}
+    variant="outlined"
+    fullWidth
+/>
+
+<p className="animated flip slow delay-2s"> first flip that I was looking for with the style of  a n entire 360 with zooming.
+<CreatedAtBr createdAt={createdAt} />
+*/

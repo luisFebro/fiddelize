@@ -130,8 +130,8 @@ const Footer = ({ location }) => {
                             Fiddelize
                         </strong>
                         <span className="d-inline-block mx-3 font-weight-bold text-small">
-                            © 2020-{new Date().getFullYear()} O próximo nível em
-                            pontos de fidelidade.
+                            © 2020-{new Date().getFullYear()} Próximo nível na
+                            conquista de clientes.
                             <br />
                             Todos os direitos reservados.
                             <br />

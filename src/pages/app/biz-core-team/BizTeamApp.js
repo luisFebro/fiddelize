@@ -6,9 +6,10 @@ import BizTeamNavbar from "./navbar/BizTeamNavbar";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "../../../hooks/useAuthUser";
+import useData from "../../../hooks/useData";
 
 export default function BizTeamApp({ history }) {
-    const userFirstName = "Febro";
+    const [userFirstName] = useData(["firstName"]);
 
     useAuth({ history, roles: "nucleo-equipe, cliente-admin, cliente-membro" });
 

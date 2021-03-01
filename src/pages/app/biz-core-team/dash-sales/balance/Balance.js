@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./_Balance.scss";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
+import { setVar, getVar } from "../../../../../hooks/storage/useVar";
+import useAPI, {
+    readAgentIncomeHistory,
+} from "../../../../../hooks/api/useAPI";
+import useData from "../../../../../hooks/useData";
 
 const muStyle = {
     fontSize: "35px",
@@ -11,29 +16,54 @@ const muStyle = {
 };
 
 export default function Balance() {
+    const [loadingBalance, setLoadingBalance] = useState(true);
     const [hideMoney, setHideMoney] = useState(false);
 
-    const data = {
-        salesAmount: 100,
-        generalSalesAmount: 1000.5,
-        receivableAmount: 50.5,
-        period: "today",
+    const [uniqueLinkId, primaryAgent] = useData([
+        "uniqueLinkId",
+        "primaryAgent",
+    ]);
+
+    const params = {
+        totalsOnly: true,
+        uniqueLinkId,
+        primaryAgent,
     };
 
-    const salesAmount = convertToReal(data.salesAmount, {
+    const { data, loading: loadingAPI } = useAPI({
+        url: readAgentIncomeHistory(),
+        params,
+        trigger: uniqueLinkId !== "...",
+    });
+
+    const isLoadingData = loadingBalance || loadingAPI;
+
+    useBalanceSwitch({
+        setHideMoney,
+        hideMoney,
+        setLoadingBalance,
+    });
+
+    const todayTotalAmount = convertToReal(data && data.todayTotalAmount, {
         needFraction: true,
     });
 
-    const generalSalesAmount = convertToReal(data.generalSalesAmount, {
+    const generalTotalAmount = convertToReal(data && data.generalTotalAmount, {
         needFraction: true,
     });
 
-    const receivableAmount = convertToReal(data.receivableAmount, {
-        needFraction: true,
-    });
+    const receivableTotalAmount = convertToReal(
+        data && data.receivableTotalAmount,
+        {
+            needFraction: true,
+        }
+    );
 
     const showVisibilityIcon = () => (
-        <div className="position-absolute" style={{ top: 15, right: 25 }}>
+        <div
+            className="animated fadeIn position-absolute"
+            style={{ top: 15, right: 25 }}
+        >
             {!hideMoney ? (
                 <VisibilityOffIcon
                     style={muStyle}
@@ -48,20 +78,45 @@ export default function Balance() {
         </div>
     );
 
+    const salesAmountCond = hideMoney ? "•••••••••" : todayTotalAmount;
+    const generalSalesAmountCond = hideMoney ? "•••••••••" : generalTotalAmount;
+    const receivableAmountCond = hideMoney
+        ? "•••••••••"
+        : receivableTotalAmount;
     return (
         <section className="biz-team-balance--root">
-            <p className="m-0 text-normal font-weight-bold">Vendas Hoje:</p>
+            <p className="m-0 text-normal font-weight-bold">Ganhos Hoje:</p>
             <p className="text-em-1-9 main-font text-strong-green">
-                R$ {hideMoney ? "•••••••••" : salesAmount}
+                R$ {isLoadingData ? "..." : salesAmountCond}
             </p>
             <span className="text-em-1-1 main-font font-weight-bold">
-                geral: R$ {hideMoney ? "•••••••••" : generalSalesAmount}
+                geral: R$ {isLoadingData ? "..." : generalSalesAmountCond}
             </span>
             <br />
             <span className="text-em-1-1 main-font font-weight-bold">
-                a receber: R$ {hideMoney ? "•••••••••" : receivableAmount}
+                a receber: R$ {isLoadingData ? "..." : receivableAmountCond}
             </span>
-            {showVisibilityIcon()}
+            {isLoadingData ? "..." : showVisibilityIcon()}
         </section>
     );
+}
+
+function useBalanceSwitch({ setHideMoney, hideMoney, setLoadingBalance }) {
+    useEffect(() => {
+        (async () => {
+            const hideBizTeamBalance = await getVar("hideBizTeamBalance");
+            setLoadingBalance(false);
+            if (hideBizTeamBalance) {
+                setHideMoney(true);
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        if (hideMoney) {
+            setVar({ hideBizTeamBalance: true });
+        } else {
+            setVar({ hideBizTeamBalance: false });
+        }
+    }, [hideMoney]);
 }

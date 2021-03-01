@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IS_DEV } from "../../../../../config/clientUrl";
 
-const sandboxMode = !!IS_DEV;
+const sandboxMode = IS_DEV;
 const payUrl = sandboxMode
     ? "https://stc.sandbox.pagseguro.uol.com.br"
     : "https://stc.pagseguro.uol.com.br";

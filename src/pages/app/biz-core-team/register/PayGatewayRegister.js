@@ -1,11 +1,11 @@
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import useData from "../../../../hooks/useData";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import { getVar, setVar } from "../../../../hooks/storage/useVar";
-import isThisApp from "../../../../utils/window/isThisApp";
 import useBackColor from "../../../../hooks/useBackColor";
+// import isThisApp from "../../../../utils/window/isThisApp";
 
-const isApp = isThisApp();
+// const isApp = isThisApp();
 // register agent in the payment gateway provider (Pagseguro)
 export default function PayGatewayRegister({ history, location }) {
     useBackColor("var(--themeP)");
@@ -14,17 +14,17 @@ export default function PayGatewayRegister({ history, location }) {
         "successFiddelizeAuthorization=true"
     );
 
-    useEffect(() => {
-        (async () => {
-            const isDone = await getVar("donePayGateway");
-            if (isDone)
-                history.push(
-                    isApp
-                        ? "/t/app/nucleo-equipe/acesso"
-                        : "/acesso/verificacao"
-                );
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         const isDone = await getVar("donePayGateway");
+    //         if (isDone)
+    //             history.push(
+    //                 isApp
+    //                     ? "/t/app/nucleo-equipe/acesso"
+    //                     : "/acesso/verificacao"
+    //             );
+    //     })();
+    // }, []);
 
     return (
         <Fragment>
@@ -106,7 +106,7 @@ function GatewaySuccess({ history }) {
                     alt="pagseguro logo"
                 />
             </div>
-            <h1 className="text-subtitle">
+            <h1 className="text-subtitle mt-5">
                 Conectado pelo Pagseguro com sucesso!
             </h1>
             <div className="my-5">

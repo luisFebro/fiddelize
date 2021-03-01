@@ -3,13 +3,13 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "3.9963.11"; // PRÓXIMO:
-// app fiddelize pt 8
-// split de pagamento backend pt2
+const latestVersion = "4.0.0"; // PRÓXIMO:
+
 const updateDescription =
-    "biz team app - pay and automatic selling system - register affiliates - pt2";
+    "pix - sistema completo de pagamento com suporte app equipe fiddelize";
 
 /* HISTORY
+"biz team app - pay and automatic selling system - register associates - pt2"
   "biz docs - termos de uso e privacidade - e caixa de consentimento formulário"
   "warnings and QA testers fix and CRA4 || página qr code personalizado para convite baixar app || opçao de baixar qr code na pagina de compartilhar"
   "separação oficial do front e backend do projeto pt 4"

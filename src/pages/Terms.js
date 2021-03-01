@@ -228,9 +228,10 @@ const text5 = (
             A Fiddelize não utiliza assinaturas, mas sim um sistema de planos
             mais flexível da metodologia pré-paga de{" "}
             <strong>investimento por créditos</strong> com períodos de uso
-            mensais ou anuais. Isto significa que você pode escolher quantidades
-            de créditos, quais serviços investir/atualizar e em qual período de
-            uso, de forma individual ou em conjunto.
+            mensais ou anuais. Isto significa que você tem a opção de fazer
+            microinvestimentos em vez de investir em um plano completo, escolher
+            quantidades de créditos, quais serviços investir/atualizar e em qual
+            período de uso, de forma individual ou em conjunto.
         </p>
         <p>
             A precificação dos serviços da Fiddelize é feita de duas formas:{" "}
@@ -286,7 +287,8 @@ const text6 = (
             ambiente do site ou apps sem devida permissão escrita da Fiddelize;
         </p>
         <p>
-            b) Revender os serviços e planos sem devido cadastro como afiliado;
+            b) Revender os serviços e planos sem devido cadastro no programa de
+            associados;
         </p>
         <p>
             c) É proibido o uso da plataforma para atividades ilícitas. Assim

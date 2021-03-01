@@ -74,7 +74,7 @@ function Register({
         selfThemeBackColor,
         selfBizLogoImg,
         bizName,
-        bizCodeName,
+        // bizCodeName,
     } = useClientAdmin();
 
     const [data, setData] = useState({
@@ -86,7 +86,7 @@ function Register({
         cpf: "",
         gender: "selecione forma tratamento",
         bizTeamData: {
-            job: "afiliado", // if rep-comercial, it should be manually set in DB for now.
+            job: "associado", // if rep-comercial, it should be manually set in DB for now.
             primaryAgent: "",
         },
         filter,
@@ -128,7 +128,7 @@ function Register({
                     ...prev,
                     bizTeamData: {
                         ...data.bizTeamData,
-                        primaryAgent,
+                        primaryAgent: primaryAgent || "fiddelize",
                     },
                 }));
             }, 4000);

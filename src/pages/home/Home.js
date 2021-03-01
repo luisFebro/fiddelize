@@ -4,11 +4,12 @@ import "./_Home.scss";
 import FeaturesSection from "./sections/features/FeaturesSection";
 import CtaSection from "./sections/CtaSection";
 import preloadMedia from "../../utils/media/preloadMedia";
+import { setVar, store } from "../../hooks/storage/useVar";
 // import CompLoader from "../../components/CompLoader";
 // import AppShowCase from "./AppShowCase";
 // import { Link } from 'react-router-dom';
 
-export default function Home() {
+export default function Home({ match }) {
     useEffect(() => {
         preloadMedia({
             href: `${CLIENT_URL}/img/illustrations/home/feature-mobiles/cli-admin.gif`,
@@ -19,7 +20,12 @@ export default function Home() {
         preloadMedia({
             href: `${CLIENT_URL}/img/illustrations/home/feature-mobiles/cli-user.gif`,
         });
-    }, []);
+
+        const gotReferrer = match.params.associateId;
+        if (gotReferrer) {
+            setVar({ referrer: gotReferrer }, store.pre_register);
+        }
+    }, [match]);
     // const [viewPhone, setViewPhone] = useState(false);
     const showHero = () => (
         <section className="hero-section">

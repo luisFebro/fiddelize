@@ -4,12 +4,12 @@ import PayMethodsBtn from "./PayMethodsBtn";
 
 const thisData = [
     {
-        title: "Cartão de Crédito",
-        img: "/img/icons/pay/categories/credit-card-selection.svg",
-    },
-    {
         title: "Pix",
         img: "/img/icons/pay/categories/pix-selection.png",
+    },
+    {
+        title: "Cartão de Crédito",
+        img: "/img/icons/pay/categories/credit-card-selection.svg",
     },
     {
         title: "Boleto Automático",

@@ -14,8 +14,8 @@ export default function ServicesStatus() {
                 width="100%"
                 style={{
                     position: "absolute",
-                    // top: 0,
-                    height: "100%",
+                    top: 0,
+                    height: "100vh",
                     border: 0,
                 }}
             />

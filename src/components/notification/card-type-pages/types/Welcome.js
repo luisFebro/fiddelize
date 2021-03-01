@@ -20,7 +20,7 @@ function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
         role === "cliente-admin" && (
             <section className={textStyle}>
                 <p>
-                    A Fiddelize - pontos de fidelidade - busca trazer uma{" "}
+                    A Fiddelize busca trazer uma{" "}
                     <strong>experiência moderna e prática</strong> para seu
                     negócio para servir melhor tanto o seu app e o dos seus
                     clientes.

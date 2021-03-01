@@ -36,16 +36,19 @@ export const readTasks = (userId, doneStatus) =>
     `${API}/task/read/${userId}?doneStatus=${doneStatus}&thisRole=cliente-admin`; // GET
 export const addTask = (userId) => `${API}/task/add?userId=${userId}`; // PUT
 export const toggleDoneUrl = () => `${API}/task/toggle`; // PUT
-export const removeTaskAndExpireCliPrize = () => `${API}/task/remove-and-expire`;
+export const removeTaskAndExpireCliPrize = () =>
+    `${API}/task/remove-and-expire`;
 
 // Notifications
-export const readNotifications = (userId) => `${API}/notification/read/${userId}`; // GET
+export const readNotifications = (userId) =>
+    `${API}/notification/read/${userId}`; // GET
 
 // SMS
 export const readContacts = (userId) =>
     `${API}/sms/read/contacts?userId=${userId}`;
 export const sendSMS = () => `${API}/sms/send`; // POST
-export const readCredits = (userId) => `${API}/sms/credits/read?userId=${userId}`;
+export const readCredits = (userId) =>
+    `${API}/sms/credits/read?userId=${userId}`;
 export const getGeneralTotals = (userId) =>
     `${API}/sms/history/general-totals?userId=${userId}`;
 export const readSMSMainHistory = (userId) =>
@@ -96,13 +99,18 @@ export const setTempScoreAndMemberData = () =>
 export const getMembersPodium = (bizId) =>
     `${API}/user/team/members/podium?bizId=${bizId}`;
 
+// BIZ FIDDELIZE TEAM
+export const readAgentIncomeHistory = () =>
+    `${API}/user/biz-fiddelize-team/income/history`;
+
 // TEMP SCORE
 export const readTempScoreList = (userId) =>
     `${API}/user/cli-user/temp-score/list?userId=${userId}`;
 export const setLastScoreAsDone = (userId) =>
     `${API}/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
 export const encryptLinkScore = () => `${API}/user/cli-user/temp-score/encrypt`; // POST
-export const isLinkAllowed = () => `${API}/user/cli-user/temp-score/allowed-link`; // GET
+export const isLinkAllowed = () =>
+    `${API}/user/cli-user/temp-score/allowed-link`; // GET
 
 // EMAIL
 export const sendEmail = () => `${API}/email/send`;
