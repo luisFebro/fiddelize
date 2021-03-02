@@ -123,15 +123,10 @@ const Footer = ({ location }) => {
                 <div className="copyright-slogon">
                     {" "}
                     <div className="position-relative target-download theme-p-dark text-s text-center pt-3">
-                        <strong
-                            className="d-block"
-                            style={{ fontSize: "24px" }}
-                        >
-                            Fiddelize
-                        </strong>
                         <span className="d-inline-block mx-3 font-weight-bold text-small">
-                            © 2020-{new Date().getFullYear()} Próximo nível na
-                            conquista de clientes.
+                            © 2020-{new Date().getFullYear()} Fiddelize
+                            <br />
+                            Conquiste clientes. Venda no próximo nível.
                             <br />
                             Todos os direitos reservados.
                             <br />

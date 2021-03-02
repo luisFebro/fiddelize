@@ -205,9 +205,16 @@ export default function AsyncPix({ modalData }) {
             <h2 className="text-normal font-weight-bold">Notas Importantes:</h2>
             <p className="text-small">
                 - O Pix deve ter <strong>o mesmo CPF do seu cadastro</strong>,
-                pois o sistema da Fiddelize busca sua conta através da parte do
-                CPF visível do pix com seu primeiro nome para atualizar seus
+                pois o sistema da Fiddelize identifica sua conta através da
+                parte do CPF visível do pix (6 dígitos) e o seu primeiro nome
+                junto com a ID desta transição para atualizar seus novos
                 serviços.
+            </p>
+            <p className="text-small">
+                - Caso não seja possível atualizar os serviços e você já tenha
+                transferido, o{" "}
+                <strong>valor é reembolsado integralmente no mesmo dia</strong>{" "}
+                e a transação é cancelada.
             </p>
             <p className="text-small">
                 - O projeto da Fiddelize é ainda mantido como{" "}
@@ -218,7 +225,7 @@ export default function AsyncPix({ modalData }) {
             <p className="text-small">
                 - Apesar da natureza do pagamento ser instantâneo, os serviços
                 contratados são ativados no período entre{" "}
-                <strong>20 minutos até 12 horas</strong> - todos os dias.
+                <strong>5 minutos até 12 horas</strong> - todos os dias.
             </p>
         </section>
     );

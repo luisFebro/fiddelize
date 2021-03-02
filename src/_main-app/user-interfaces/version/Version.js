@@ -3,10 +3,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.0.0"; // PRÓXIMO:
+const latestVersion = "4.1.0"; // PRÓXIMO:
 
 const updateDescription =
-    "pix - sistema completo de pagamento com suporte app equipe fiddelize";
+    "pix - sistema completo de pagamento com suporte app equipe fiddelize pt2";
 
 /* HISTORY
 "biz team app - pay and automatic selling system - register associates - pt2"

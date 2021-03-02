@@ -44,7 +44,7 @@ function ShowTab({ tabData, id, currTab }) {
                 />
             </span>
             <div className="media-body">
-                <h4>{dataPanel.title}</h4>
+                <h4 className="text-normal">{dataPanel.title}</h4>
                 <p>{dataPanel.text}</p>
             </div>
         </li>

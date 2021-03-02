@@ -93,6 +93,7 @@ export default async function goFinishCheckout(props) {
             paymentMethod: selectedMethod,
             reference,
             senderName: userName,
+            senderCPF,
             filter,
             itemAmount1: testValue || itemAmount,
             ordersStatement,

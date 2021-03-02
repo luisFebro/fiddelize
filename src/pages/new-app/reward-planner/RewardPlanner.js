@@ -104,9 +104,7 @@ export default function RewardPlanner({ history }) {
                 </div>
                 <div
                     style={{ marginTop: "50px" }}
-                    className={`intro-page--txt margin-auto-90 text-normal ${
-                        isSmall ? "text-left pl-1" : "text-center"
-                    }`}
+                    className={`intro-page--txt margin-auto-90 text-normal text-left pl-1`}
                 >
                     <strong>4 Motivos de um prêmio</strong>
                     <br />
@@ -117,7 +115,7 @@ export default function RewardPlanner({ history }) {
                     <br />
                     2) Muito se fala em atrair clientes com Marketing, mas já
                     pensou em suas estratégias de estimular os clientes a
-                    continuar comprando? Poiser, o prêmio é seu investimento de
+                    continuar comprando? Isso, o prêmio é seu investimento de
                     Marketing de relacionamento para sua clientela ativa.
                     <br />
                     <br />
@@ -128,7 +126,7 @@ export default function RewardPlanner({ history }) {
                     <br />
                     <br />
                     4) Por fim, clientes mais satisfeitos são encorajados a
-                    voltar mais. A {bizName} agradece!
+                    voltar mais!
                 </div>
                 <div
                     style={{ marginTop: "90px" }}

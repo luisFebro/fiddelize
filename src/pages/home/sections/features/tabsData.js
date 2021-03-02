@@ -9,19 +9,19 @@ const dataPanelCliUser = {
             icon: "gamepad",
             title: "Jogo de compras",
             text:
-                "Seus clientes acompanham seus pontos, metas por etapa, recebem troféis por meta atingida e medalhas por conquistas de tarefas.",
+                "Seus clientes acompanham seus pontos, metas por etapa, recebem troféis por meta atingida e mais.",
         },
         {
             icon: "shopping-cart",
             title: "Histórico de compra automático",
             text:
-                "Seus clientes ganham pontos e os robôs da Fiddelize cuidam de adicionar o histórico de compras com descrição automática.",
+                "Seus clientes ganham pontos e a Fiddelize cuida de adicionar o histórico de compras com descrição automática.",
         },
         {
             icon: "credit-card",
             title: "Cartão Virtual 3D",
             text:
-                "Assim que é adicionado pontos, seu cliente é notificado em tempo real e recebe um cartão virtual com a sua logo e cores.",
+                "Assim que é adicionado pontos, seu cliente é notificado em tempo real e recebe um cartão virtual interativo com a sua logo e cores.",
         },
     ],
     right: [
@@ -40,7 +40,7 @@ const dataPanelCliUser = {
             icon: "bolt",
             title: "App leve e rápido",
             text:
-                "Todos os apps usam o que há mais moderno na tecnologia web para trazer maior perfomance e tamanho compacto.",
+                "Todos os apps usam o que há de mais moderno na tecnologia web para trazer maior perfomance e tamanho compacto. Provalvemente é o menor da sua lista de apps, confira!",
         },
     ],
 };
@@ -49,40 +49,41 @@ const dataPanelCliMember = {
     left: [
         {
             icon: "bolt",
-            title: "Adicione pontos rápido",
+            title: "Adicione pontos rápido e seguro",
             text:
-                "O app equipe visa ser eficiente no processo de compra. Após acesso de um membro, adicione pontos em até 30 segundos.",
+                "O app equipe visa ser eficiente no processo de compra. Após acesso autorizado, membro adiciona pontos em até 30 segundos.",
         },
         {
             icon: "bolt",
-            title: "Cadastre clientes rápido",
+            title: "Cadastre clientes rápido e à distância",
             text:
-                "Para agilizar, os clientes fazem o cadastro depois que baixam o app sem precisar cadastrar no fluxo de compra. Basta enviar o link do seu convite para eles.",
+                "Basta enviar o link cadastrável para os clientes baixarem seus apps web. Não precisa pedir o dispositivo de nenhum cliente e tudo fica mais prático e seguro",
         },
         {
-            icon: "clock",
-            title: "Cadastre cliente na hora",
+            icon: "lock",
+            title: "Link de cadastro com pontos",
             text:
-                "Se o cliente realmente quiser cadastrar na hora, há a opção de cadastrar na hora também.",
+                "Envie pontuação no primeiro cadastro dos clientes no seu clube de fidelidade. Pontos são protegidos por criptografia no link do convite.",
         },
     ],
     right: [
         {
             icon: "paper-plane",
-            title: "Envio de convite dos apps",
-            text: "Envie seus convites por email, whatsapp, código QR e mais.",
+            title: "Envio fácil de convite para entrar no seu clube",
+            text:
+                "Envie seus convites por SMS, código QR personalizado com sua marca, email e whatsapp. Você abre e tem tudo dentro do app.",
         },
         {
             icon: "star",
-            title: "Saiba sobre a experiência de compras",
+            title: "Lista de clientes ganhadores em tempo real",
             text:
-                "Os clientes dão nota ao atendimento. O app encoraja os clientes a avaliar seu negócio para melhorias ou elogios.",
+                "Você e sua equipe gerencia fácil a entrega de prêmios dos clientes e sabe quem são os clientes que ganharam algum prêmio, ou se já receberam",
         },
         {
             icon: "mobile-alt",
-            title: "Multiconta e painel de apps",
+            title: "Sistema multi apps com conta única",
             text:
-                "Após criar sua conta, você pode baixar mais de um tipo de app e trocar entre eles no painel de apps.",
+                "Basta baixar o app da plataforma uma vez e instalar os diferentes apps que precisar na sua conta. É como uma loja de apps, mas dedicada para conquista de clientes! ;)",
         },
     ],
 };
@@ -97,9 +98,9 @@ const dataPanelCliAdmin = {
         },
         {
             icon: "search",
-            title: "Conheça mais sobre seus clientes",
+            title: "Conheça e analise seus clientes",
             text:
-                "Você fica por dentro das maiores pontuações, aniversários, clientes que compram mais, últimas compras e mais.",
+                "Você tem acesso integrado a métrica de fidelidade, nota de experiência e relatos de compra",
         },
         {
             icon: "bullhorn",
@@ -119,13 +120,13 @@ const dataPanelCliAdmin = {
             icon: "heart",
             title: "Satisfação de clientes",
             text:
-                "Saiba sobre como anda a experiência e o grau de fidelidade de cada cliente.",
+                "Saiba sobre como anda a experiência e o grau de fidelidade de cada cliente com filtros inteligentes",
         },
         {
             icon: "lock",
             title: "Segurança",
             text:
-                "Seus dados e de seus clientes ficam seguros na Fiddelize. Você pode baixá-los para Excel. Toda informação sensível é criptograda por padrão.",
+                "Seus dados e de seus clientes ficam seguros na Fiddelize. Toda informação sensível é criptograda por padrão. Você ganha o direito de ter acesso e baixar os dados via Excel com um protocolo de segurança.",
         },
     ],
 };
