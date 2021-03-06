@@ -51,7 +51,7 @@ export default function AutomaticTaskList() {
             <ShowListTotals
                 analysingTxt="Analisando..."
                 offlineTxt="Lista offline gerada"
-                noItemsTxt="nenhuma entrega de premiação pendente."
+                noItemsTxt="nenhuma entrega de premiação pendente"
                 foundItemsTxt={`cliente${isPlural} ganhador${
                     isPlural ? "es" : ""
                 }`}

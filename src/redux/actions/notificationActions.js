@@ -73,10 +73,10 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 export const markOneClicked = async (userId, cardId, options = {}) => {
     const { forceCliUser, thisRole, updatedBy, cliMemberId } = options;
 
-    let thisRoleQuery;
+    let thisRoleQuery = "";
     if (thisRole) thisRoleQuery = `&thisRole=${thisRole}`;
 
-    let updatedByQuery;
+    let updatedByQuery = "";
     if (updatedBy)
         updatedByQuery = `&cliMemberId=${cliMemberId}&updatedBy=${updatedBy}`;
 

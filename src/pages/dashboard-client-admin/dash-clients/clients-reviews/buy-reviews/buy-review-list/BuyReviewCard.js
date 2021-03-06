@@ -1,6 +1,12 @@
 import { Fragment } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fromNow } from "../../../../../../utils/dates/dateFns";
+import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
+import getFirstName from "../../../../../../utils/string/getFirstName";
+import { useClientAdmin } from "../../../../../../hooks/useRoleData";
+import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import convertPhoneStrToInt from "../../../../../../utils/numbers/convertPhoneStrToInt";
 
 const getSmileyGrade = (g) => {
     if (!g) return {};
@@ -18,11 +24,52 @@ const getSmileyGrade = (g) => {
 };
 
 export default function BuyReviewCard({ data = {}, isCardNew }) {
-    const { reportUpdatedAt, clientName, review, finalGrade } = data;
-
+    const { reportUpdatedAt, clientName, review, finalGrade, whatsapp } = data;
     const { grade: color, icon } = getSmileyGrade(finalGrade);
 
     const updatedDate = reportUpdatedAt && fromNow(reportUpdatedAt);
+    const dispatch = useStoreDispatch();
+    const { bizName } = useClientAdmin();
+
+    const firstName = getFirstName(clientName);
+    const convertedWhatsapp = convertPhoneStrToInt(whatsapp);
+    const defaultWhatsappTxt = `Mensagem da ${bizName}: `;
+
+    const showContactBtn = () => (
+        <div
+            className="position-absolute"
+            style={{
+                bottom: -20,
+                right: 0,
+            }}
+        >
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-text-decoration"
+                title={`Envie uma mensagem para ${firstName}`}
+                href={`https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${defaultWhatsappTxt}`}
+                onClick={() =>
+                    showSnackbar(
+                        dispatch,
+                        "Um momento. Redirecionando...",
+                        "warning",
+                        8000
+                    )
+                }
+            >
+                <ButtonFab
+                    title={`Falar com ${firstName}`}
+                    backgroundColor="var(--themeSDark--default)"
+                    onClick={null}
+                    position="relative"
+                    variant="extended"
+                    size="small"
+                />
+            </a>
+        </div>
+    );
+
     const showCard = () => (
         <section className="buy-review--root shadow-babadoo">
             <div
@@ -40,7 +87,7 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
                 </span>{" "}
                 relatou:
             </span>
-            <p className="review-body my-3 text-left">
+            <p className="review-body my-2 text-left">
                 <em>"{review}"</em>
             </p>
             <div className="final-grade-area d-flex justify-content-around align-items-center">
@@ -53,6 +100,7 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
                 </div>
             </div>
             <p className="m-0 text-small">{updatedDate}</p>
+            {showContactBtn()}
         </section>
     );
 

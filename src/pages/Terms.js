@@ -176,9 +176,9 @@ const text3 = (
             quaisquer serviços investidos.
         </p>
         <p>
-            Portanto, o <strong>cancelamento de serviço</strong> acontece quando
-            o cliente parar de usar um serviço já pago ou ao final natural do
-            prazo de seu uso.
+            O <strong>cancelamento de serviço</strong> acontece quando o cliente
+            parar de usar um serviço já pago ou ao final natural do prazo de seu
+            uso.
         </p>
     </Fragment>
 );
@@ -260,7 +260,7 @@ const text5 = (
 
         <h2 className="font-weight-bold text-normal">TABELA DE PREÇOS</h2>
         <p>
-            <strong>PLANO BRONZE: </strong>a partir de R$ 30
+            <strong>PLANO BRONZE: </strong>a partir de R$ 28
         </p>
         <p>
             <strong>PLANO PRATA: </strong>R$480/anual - R$140/mensal

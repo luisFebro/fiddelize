@@ -62,6 +62,7 @@ module.exports = {
         "max-len": "off", // max-length by line handled by prettier
         "no-console": "off", // using switchConsoleLogs security utils. activated only in dev
         "no-use-before-define": ["error", { functions: false }], // allow functions to be declared after the usage
+        "no-return-await": "off",
     },
     settings: {
         react: {

@@ -3,7 +3,6 @@ import getAPI, { sendEmail } from "../../utils/promises/getAPI";
 
 export default function useSendEmail({
     trigger = true,
-    // toEmail,
     type = "payAlert",
     priority = "mailer",
     payload = {},

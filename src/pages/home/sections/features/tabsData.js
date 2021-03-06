@@ -71,7 +71,7 @@ const dataPanelCliMember = {
             icon: "paper-plane",
             title: "Envio fácil de convite para entrar no seu clube",
             text:
-                "Envie seus convites por SMS, código QR personalizado com sua marca, email e whatsapp. Você abre e tem tudo dentro do app.",
+                "Envie seus convites por SMS, email ou Whatsapp. Você pode também baixar ou ter código QR personalizado com sua marca e cor para divulgar.",
         },
         {
             icon: "star",
@@ -112,7 +112,7 @@ const dataPanelCliAdmin = {
     right: [
         {
             icon: "sms",
-            title: "SMS Marketing",
+            title: "Divulgação por SMS",
             text:
                 "Divulgue promoções, eventos e assuntos importantes do seu negócio para seus clientes com SMS sem prazo de expiração.",
         },

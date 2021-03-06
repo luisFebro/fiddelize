@@ -13,6 +13,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
+import ReactGA from "react-ga";
 import Title from "../Title";
 import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
@@ -33,7 +34,7 @@ import { removeCollection } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
-import ReactGA from "react-ga";
+import sendEmail from "../../hooks/email/sendEmail";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 
 const filter = getFilterDate();
@@ -172,28 +173,6 @@ function RegisterClientAdmin({ logo }) {
         setFieldError(null);
     };
 
-    // const { bizInfo } = useStoreState((state) => ({
-    //     bizInfo: state.adminReducer.cases.businessInfo,
-    // }));
-
-    // const { bizName, bizWebsite, bizInstagram } = bizInfo;
-
-    // const sendEmail = (userId) => {
-    //     const dataEmail = {
-    //         name,
-    //         email,
-    //         bizName,
-    //         bizWebsite,
-    //         bizInstagram,
-    //     };
-    //     sendWelcomeConfirmEmail(dataEmail, userId).then((res) => {
-    //         if (res.status !== 200)
-    //             return showSnackbar(dispatch, res.data.msg, "error");
-    //         clearData();
-    //         // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
-    //     });
-    // };
-
     const registerThisUser = async (e) => {
         clientAdminData.bizWhatsapp = phone;
         const newUser = {
@@ -244,7 +223,7 @@ function RegisterClientAdmin({ logo }) {
         const cliAdminName = getFirstName(name);
 
         await removeCollection("pre_register");
-        showSnackbar(dispatch, "Redirecionando...", "warning", 4000);
+        showSnackbar(dispatch, "Redirecionando...", "warning", 5000);
 
         ReactGA.event({
             // n1
@@ -253,17 +232,21 @@ function RegisterClientAdmin({ logo }) {
             action: "Created an account",
             transport: "beacon",
         });
-        // const removalOptions = {
-        //     collection: "onceChecked",
-        // };
-        // lStorage("removeItems", removalOptions);
 
-        // window.location.href reloads the page to trigger PWA beforeInstall. history.push does not reload the target page...
-        // window.location.href = `/baixe-app/admin?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default&isFromSelfServ=1`
+        const emailPayload = {
+            toEmail: email,
+            gender,
+            name,
+            bizName,
+        };
+
+        sendEmail({
+            type: "registerWelcome",
+            payload: emailPayload,
+        });
+
         clearData();
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
-        // const userId = res.data.authUserId;
-        // sendEmail(userId);
     };
 
     const showTitle = () => (

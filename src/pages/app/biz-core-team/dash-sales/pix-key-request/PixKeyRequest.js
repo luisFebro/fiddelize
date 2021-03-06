@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import EditButton from "../../../../../components/buttons/EditButton";
+import getAPI, {
+    updateUser,
+    readUser,
+} from "../../../../../utils/promises/getAPI";
+import useData from "../../../../../hooks/useData";
+import useAPI from "../../../../../hooks/api/useAPI";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -29,11 +37,47 @@ export default function PixKeyRequest() {
         alreadyHasPix: false,
     });
     const { pix, alreadyHasPix } = data;
+    const dispatch = useStoreDispatch();
+
+    const [userId] = useData(["userId"]);
+
+    const { data: dataUser, loading: loadingPix } = useAPI({
+        url: readUser(userId, "nucleo-equipe"),
+        trigger: userId !== "...",
+        params: {
+            select: "bizTeamData.pixKey",
+        },
+    });
+
+    useEffect(() => {
+        if (dataUser) {
+            const dbPix = dataUser.bizTeamData.pixKey;
+            setData((prev) => ({
+                ...prev,
+                pix: dbPix,
+                alreadyHasPix: true,
+            }));
+        }
+    }, [dataUser]);
 
     const styles = getStyles();
 
     const handleSubmitPix = () => {
-        setData({ ...data, alreadyHasPix: true });
+        (async () => {
+            setData({ ...data, alreadyHasPix: true });
+            const body = {
+                "bizTeamData.pixKey": pix,
+            };
+            // LESSON: if put is not working with data, probably you are missing to declare method put, mofo.
+            await getAPI({
+                method: "put",
+                url: updateUser(userId, "nucleo-equipe"),
+                trigger: userId !== "...",
+                body,
+            });
+
+            showSnackbar(dispatch, "Pix registrado!", "success");
+        })();
     };
 
     const handleEdit = () => {
@@ -102,6 +146,14 @@ export default function PixKeyRequest() {
             </div>
         </section>
     );
+
+    if (loadingPix) {
+        return (
+            <section className="my-5 text-grey text-center font-weight-bold text-normal">
+                Carregando Pix...
+            </section>
+        );
+    }
 
     return (
         <section>

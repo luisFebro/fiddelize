@@ -32,12 +32,9 @@ const Footer = ({ location }) => {
             <div className="footer-col first">
                 <h4>Sobre a Fiddelize</h4>
                 <p className="text-small text-voca-cyan">
-                    Somos a{" "}
-                    <strong>
-                        primeira plataforma de criação de apps web de fidelidade
-                    </strong>{" "}
-                    e ajudamos negócios a conquistar seus clientes com
-                    tecnologia.
+                    Somos a primeira plataforma de criação de apps web
+                    especializada em <strong>fidelidade da clientela</strong> e
+                    ajudamos negócios a oferecer benefícios aos seus clientes.
                 </p>
             </div>
         </section>
@@ -126,9 +123,7 @@ const Footer = ({ location }) => {
                         <span className="d-inline-block mx-3 font-weight-bold text-small">
                             © 2020-{new Date().getFullYear()} Fiddelize
                             <br />
-                            Conquiste clientes. Venda no próximo nível.
-                            <br />
-                            Todos os direitos reservados.
+                            Conquiste clientes no próximo nível.
                             <br />
                             <br />
                             Feito com <FontAwesomeIcon icon="heart" /> em Manaus

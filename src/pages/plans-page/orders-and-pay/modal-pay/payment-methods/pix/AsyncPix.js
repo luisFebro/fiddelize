@@ -62,6 +62,7 @@ export default function AsyncPix({ modalData }) {
         reference: modalData.reference,
         bizName: modalData.bizName,
     };
+
     useSendEmail({
         type: "payAlert",
         payload: emailPayload,

@@ -11,8 +11,9 @@ export default function FeaturesSection() {
                         Você ganha <strong>3 tipos de apps</strong>.
                     </h2>
                     <p>
-                        Isso mesmo. Não um, mas 3 deles! Todos os membros com um
-                        app.
+                        Cada um com seu melhor:
+                        <br />
+                        Seus clientes compram. A equipe ajuda. Você conquista!
                     </p>
                 </div>
             </header>
