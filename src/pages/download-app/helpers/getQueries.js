@@ -1,9 +1,9 @@
 import getQueryByName from "../../../utils/string/getQueryByName";
 
 const getWhichRole = (queries) => {
-    const [isBizTeam, isClientAdmin, isTeamMember, isClientUser] = queries;
+    const [isBizTeam, isCliAdmin, isTeamMember, isClientUser] = queries;
     if (isBizTeam) return "nucleo-equipe";
-    if (isClientAdmin) return "cliente-admin";
+    if (isCliAdmin) return "cliente-admin";
     if (isTeamMember) return "cliente-membro";
     if (isClientUser) return "cliente";
 };
@@ -24,9 +24,9 @@ export default function getQueries({ location }) {
 
     const roleQueries = roleData.map((q) => location.search.includes(q));
 
-    const [isBizTeam, isClientAdmin, isTeamMember, isClientUser] = roleQueries;
+    const [isBizTeam, isCliAdmin, isTeamMember, isClientUser] = roleQueries;
     const isValidRoleType =
-        isBizTeam || isClientAdmin || isTeamMember || isClientUser;
+        isBizTeam || isCliAdmin || isTeamMember || isClientUser;
 
     const whichRole = getWhichRole(roleQueries);
 

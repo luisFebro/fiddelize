@@ -406,7 +406,7 @@ export default function DownloadApp({ match, location, history }) {
         <section className="target--content-download">
             {showSpinner()}
             {needSelfServBackBtn && showBackColor()}
-            {(isLinkInvalid || !isAllowedLink) && !isBizTeam ? (
+            {(isLinkInvalid || !isAllowedLink) && !isBizTeam && !isCliAdmin ? (
                 errorMsg()
             ) : (
                 <Fragment>

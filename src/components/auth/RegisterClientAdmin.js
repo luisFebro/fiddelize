@@ -202,22 +202,23 @@ function RegisterClientAdmin({ logo }) {
             "warning",
             5000
         );
-        // if (res.status !== 200) {
-        //     showSnackbar(
-        //         dispatch,
-        //         res.data.error || res.data.msg,
-        //         "error",
-        //         6000
-        //     );
-        //     // detect field errors
-        //     const thisModalFields = Object.keys(data);
-        //     const foundObjError = detectErrorField(
-        //         res.data.msg,
-        //         thisModalFields
-        //     );
-        //     setFieldError(foundObjError);
-        //     return;
-        // }
+
+        if (res.status !== 200) {
+            showSnackbar(
+                dispatch,
+                res.data.error || res.data.msg,
+                "error",
+                6000
+            );
+            // detect field errors
+            const thisModalFields = Object.keys(data);
+            const foundObjError = detectErrorField(
+                res.data.msg,
+                thisModalFields
+            );
+            setFieldError(foundObjError);
+            return;
+        }
         // updating test
         const bizName = "Vipp";
         // const { bizName } = clientAdminData;
