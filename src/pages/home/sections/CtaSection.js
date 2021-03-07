@@ -1,6 +1,7 @@
 import "./_CtaSection.scss";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import gaEvent from "../../../utils/analytics/gaEvent";
 
 export default withRouter(CtaSection);
 function CtaSection({ history }) {
@@ -16,9 +17,15 @@ function CtaSection({ history }) {
                             title="Fazer primeiro app"
                             size="large"
                             backgroundColor="var(--themeSDark)"
-                            onClick={() =>
-                                history.push("/novo-app/info-negocio")
-                            }
+                            onClick={() => {
+                                history.push("/novo-app/info-negocio");
+                                gaEvent({
+                                    label: "CtaSection",
+                                    category: "CTA",
+                                    action:
+                                        "create cli-admin app (bottom page)",
+                                });
+                            }}
                         />
                     </div>
                 </div>

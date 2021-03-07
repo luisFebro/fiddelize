@@ -89,7 +89,7 @@ function RegisterClientAdmin({ logo }) {
         filter,
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
-        referrer: "",
+        referrer: "dev-fiddelize", // default
         showAgreement: false,
         agreementDone: false,
     });
@@ -247,6 +247,7 @@ function RegisterClientAdmin({ logo }) {
 
         clearData();
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
+        // Lesson: this await was preventing a tablet to redirect properly to the next page.
         await removeCollection("pre_register");
     };
 

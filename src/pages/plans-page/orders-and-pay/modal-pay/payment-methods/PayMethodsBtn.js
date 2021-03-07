@@ -2,6 +2,7 @@ import { useState } from "react";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
+import gaEvent from "../../../../../utils/analytics/gaEvent";
 
 const AsyncBoleto = Load({
     loading: true,
@@ -45,7 +46,10 @@ const pickPayMethod = (payMethod, modalData) => {
         return <AsyncDebit modalData={modalData} />;
 };
 
-export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {
+export default function PayMethodsBtn({
+    modalData,
+    method = "Boleto Automático",
+}) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const { isProUser, handleCancel } = modalData;
@@ -54,6 +58,11 @@ export default function PayMethodsBtn({ modalData, method = "No Boleto" }) {
 
     const handleFullOpen = () => {
         setFullOpen(true);
+        gaEvent({
+            label: "PayMethodsBtn",
+            category: "Payment Methods",
+            action: method,
+        });
         isProUser && handleCancel(); // remove curr order.
     };
 

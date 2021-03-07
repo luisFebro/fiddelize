@@ -1,8 +1,9 @@
 import { Fragment, useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import styled from "styled-components";
+
+import gaEvent from "../../../utils/analytics/gaEvent";
 import RadiusBtn from "../../buttons/RadiusBtn";
 import isThisApp from "../../../utils/window/isThisApp";
 import "./NavbarLayout.scss";
@@ -96,6 +97,11 @@ function Navbar({ history, location }) {
     const showCallToActionBtn = () => {
         const handleRedirect = async () => {
             const newAppLink = await getNewAppPage();
+            gaEvent({
+                label: "Navbar",
+                category: "Fixed Navegation Bar",
+                action: "create cli-admin app",
+            });
             history.push(newAppLink);
         };
 
