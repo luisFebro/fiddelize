@@ -219,13 +219,12 @@ function RegisterClientAdmin({ logo }) {
             setFieldError(foundObjError);
             return;
         }
-        // updating test
-        const bizName = "Vipp";
-        // const { bizName } = clientAdminData;
-        const cliAdminName = "luis"; //getFirstName(name);
 
-        // await removeCollection("pre_register");
+        const { bizName } = clientAdminData;
+        const cliAdminName = getFirstName(name);
+
         showSnackbar(dispatch, "Redirecionando...", "warning", 5000);
+        await removeCollection("pre_register");
 
         // ReactGA.event({
         //     // n1
@@ -235,17 +234,17 @@ function RegisterClientAdmin({ logo }) {
         //     transport: "beacon",
         // });
 
-        // const emailPayload = {
-        //     toEmail: email,
-        //     gender,
-        //     name,
-        //     bizName,
-        // };
+        const emailPayload = {
+            toEmail: email,
+            gender,
+            name,
+            bizName,
+        };
 
-        // sendEmail({
-        //     type: "registerWelcome",
-        //     payload: emailPayload,
-        // });
+        sendEmail({
+            type: "registerWelcome",
+            payload: emailPayload,
+        });
 
         clearData();
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
