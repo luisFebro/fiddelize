@@ -224,15 +224,14 @@ function RegisterClientAdmin({ logo }) {
         const cliAdminName = getFirstName(name);
 
         showSnackbar(dispatch, "Redirecionando...", "warning", 5000);
-        await removeCollection("pre_register");
 
-        // ReactGA.event({
-        //     // n1
-        //     label: "Form",
-        //     category: "cliAdmin",
-        //     action: "Created an account",
-        //     transport: "beacon",
-        // });
+        ReactGA.event({
+            // n1
+            label: "Form",
+            category: "cliAdmin",
+            action: "Created an account",
+            transport: "beacon",
+        });
 
         const emailPayload = {
             toEmail: email,
@@ -248,6 +247,7 @@ function RegisterClientAdmin({ logo }) {
 
         clearData();
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
+        await removeCollection("pre_register");
     };
 
     const showTitle = () => (
