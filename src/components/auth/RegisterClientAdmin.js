@@ -218,7 +218,7 @@ function RegisterClientAdmin({ logo }) {
         //     setFieldError(foundObjError);
         //     return;
         // }
-
+        // updating test
         const bizName = "Vipp";
         // const { bizName } = clientAdminData;
         const cliAdminName = "luis"; //getFirstName(name);
