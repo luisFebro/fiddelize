@@ -202,48 +202,49 @@ function RegisterClientAdmin({ logo }) {
             "warning",
             5000
         );
-        if (res.status !== 200) {
-            showSnackbar(
-                dispatch,
-                res.data.error || res.data.msg,
-                "error",
-                6000
-            );
-            // detect field errors
-            const thisModalFields = Object.keys(data);
-            const foundObjError = detectErrorField(
-                res.data.msg,
-                thisModalFields
-            );
-            setFieldError(foundObjError);
-            return;
-        }
+        // if (res.status !== 200) {
+        //     showSnackbar(
+        //         dispatch,
+        //         res.data.error || res.data.msg,
+        //         "error",
+        //         6000
+        //     );
+        //     // detect field errors
+        //     const thisModalFields = Object.keys(data);
+        //     const foundObjError = detectErrorField(
+        //         res.data.msg,
+        //         thisModalFields
+        //     );
+        //     setFieldError(foundObjError);
+        //     return;
+        // }
 
-        const { bizName } = clientAdminData;
-        const cliAdminName = getFirstName(name);
+        const bizName = "Vipp";
+        // const { bizName } = clientAdminData;
+        const cliAdminName = "luis"; //getFirstName(name);
 
-        await removeCollection("pre_register");
+        // await removeCollection("pre_register");
         showSnackbar(dispatch, "Redirecionando...", "warning", 5000);
 
-        ReactGA.event({
-            // n1
-            label: "Form",
-            category: "cliAdmin",
-            action: "Created an account",
-            transport: "beacon",
-        });
+        // ReactGA.event({
+        //     // n1
+        //     label: "Form",
+        //     category: "cliAdmin",
+        //     action: "Created an account",
+        //     transport: "beacon",
+        // });
 
-        const emailPayload = {
-            toEmail: email,
-            gender,
-            name,
-            bizName,
-        };
+        // const emailPayload = {
+        //     toEmail: email,
+        //     gender,
+        //     name,
+        //     bizName,
+        // };
 
-        sendEmail({
-            type: "registerWelcome",
-            payload: emailPayload,
-        });
+        // sendEmail({
+        //     type: "registerWelcome",
+        //     payload: emailPayload,
+        // });
 
         clearData();
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
