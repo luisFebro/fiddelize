@@ -5,13 +5,15 @@ import LocalMallIcon from "@material-ui/icons/LocalMall";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import AmpStoriesIcon from "@material-ui/icons/AmpStories";
 import PermPhoneMsgIcon from "@material-ui/icons/PermPhoneMsg";
+import CropFreeIcon from "@material-ui/icons/CropFree";
 import FindInPageIcon from "@material-ui/icons/FindInPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { proVersion } from "./proVersion";
 
 const freeVersion = (styles) => [
     {
-        name: "Convites de <br />cadastro com sua logo",
+        name:
+            "Links Cadastráveis e <br />Convites Personalizados<br />com sua logo e cores",
         Icon: <MailOutlineIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
@@ -19,7 +21,7 @@ const freeVersion = (styles) => [
     },
     {
         name:
-            "Pesquisa satisfação:<br />métrica de fidelidade e<br />experiência de compra",
+            "Avaliação de clientes:<br />- métrica de fidelidade;<br />- nota experiência;<br/>- relatos de compra;",
         Icon: <FindInPageIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
@@ -46,7 +48,7 @@ const freeVersion = (styles) => [
         proPage: "",
     },
     {
-        name: "Histórico Automático de <br />compras ilimitados",
+        name: "Histórico Automático de <br />compras de clientes",
         Icon: <LocalMallIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
@@ -60,8 +62,17 @@ const freeVersion = (styles) => [
         greyedout: false,
     },
     {
-        name: "Pódio Fidelidade",
+        name:
+            "Pódio Fidelidade para<br />você conhecer clientes<br/> que compram mais",
         Icon: <AmpStoriesIcon style={styles.muStyle} />,
+        price: null,
+        proPage: "",
+        greyedout: false,
+    },
+    {
+        name:
+            "Código QR com sua logo<br />para divulgação com<br />opção para baixar",
+        Icon: <CropFreeIcon style={styles.muStyle} />,
         price: null,
         proPage: "",
         greyedout: false,
@@ -74,7 +85,8 @@ const freeVersion = (styles) => [
         greyedout: false,
     },
     {
-        name: "2 Apps gestão - 1 admin,<br />1 equipe (primeiro grátis)",
+        name:
+            "2 Apps gestão:<br />- 1 admin;<br />- 1 equipe (primeiro grátis);",
         Icon: <ImportantDevicesIcon style={styles.muStyle} />,
         price: null,
         proPage: "",

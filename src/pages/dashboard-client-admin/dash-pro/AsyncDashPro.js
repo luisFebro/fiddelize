@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import DashSectionTitle from "../../DashSectionTitle";
 import InvestHistory from "./investments-history/InvestHistory";
 import PlanAndServicesArea from "./PlanAndServicesArea";
+import RateFiddelize from "./rate-fiddelize/RateFiddelize";
 
 const DashProTitle = <Title />;
 
@@ -12,6 +13,7 @@ export default function AsyncDashPro() {
                 <DashSectionTitle title={DashProTitle} />
             </div>
             <PlanAndServicesArea />
+            <RateFiddelize />
             <InvestHistory />
         </Fragment>
     );

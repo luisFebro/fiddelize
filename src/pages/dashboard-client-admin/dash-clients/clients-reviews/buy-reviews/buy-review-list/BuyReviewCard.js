@@ -18,9 +18,9 @@ const getSmileyGrade = (g) => {
     if (g >= 5 && g < 6) return { grade: "grade-5", icon: "meh" };
     if (g >= 6 && g < 7) return { grade: "grade-6", icon: "grimace" };
     if (g >= 7 && g < 8) return { grade: "grade-7", icon: "grimace" };
-    if (g >= 8 && g < 9) return { grade: "grade-8", icon: "grin-wink" };
-    if (g >= 9 && g <= 10) return { grade: "grade-9", icon: "grin-wink" };
-    if (g <= 10) return { grade: "grade-10", icon: "grin-wink" };
+    if (g >= 8 && g < 9) return { grade: "grade-8", icon: "grin-alt" };
+    if (g >= 9 && g <= 10) return { grade: "grade-9", icon: "grin-alt" };
+    if (g <= 10) return { grade: "grade-10", icon: "grin-alt" };
 };
 
 export default function BuyReviewCard({ data = {}, isCardNew }) {

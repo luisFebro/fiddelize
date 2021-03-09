@@ -170,7 +170,7 @@ export default function GoldPlan({ setCurrPlan }) {
                         showPlanSwitchBtns()
                     )}
                     <MainTitle
-                        planMsg="Maior alcance, melhor preço por app. +5.000 apps pela metade do preço do prata" // Desvende todo o potencial da Fiddelize para seu negócio. Invista menos por cada serviço.
+                        planMsg="Maior alcance, melhor preço por app - R$ 0.06. +10.000 apps para conquistar clientes" // Desvende todo o potencial da Fiddelize para seu negócio. Invista menos por cada serviço.
                     />
                     <section className="period-selection">
                         <PeriodSelection handlePeriod={handlePeriod} />

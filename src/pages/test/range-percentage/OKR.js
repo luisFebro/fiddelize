@@ -13,6 +13,8 @@ export default function OKR() {
 
     const showTitle = () => (
         <h1 className="mb-5 text-center text-title text-purple">
+            Cabine Fiddelize - performance e análise do negócio.
+            <br />
             OKR - Fiddelize
             <br />
             <span

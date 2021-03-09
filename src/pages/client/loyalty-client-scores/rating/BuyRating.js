@@ -1,4 +1,6 @@
 import { useState, useEffect, Fragment } from "react";
+import { useStoreDispatch } from "easy-peasy";
+import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import TextField from "@material-ui/core/TextField";
 import StarsBuyExperience, {
     getGradeText,
@@ -9,8 +11,6 @@ import FacesPromotersScore, {
 import handleChange from "../../../../utils/form/use-state/handleChange";
 import useData from "../../../../hooks/useData";
 import "./_BuyRating.css";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
-import { useStoreDispatch } from "easy-peasy";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
 import { useClientAdmin } from "../../../../hooks/useRoleData";

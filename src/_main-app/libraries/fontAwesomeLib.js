@@ -98,7 +98,7 @@ import { faAngry } from "@fortawesome/free-solid-svg-icons/faAngry";
 import { faFrown } from "@fortawesome/free-solid-svg-icons/faFrown";
 import { faMeh } from "@fortawesome/free-solid-svg-icons/faMeh";
 import { faGrimace } from "@fortawesome/free-solid-svg-icons/faGrimace";
-import { faGrinWink } from "@fortawesome/free-solid-svg-icons/faGrinWink";
+import { faGrinAlt } from "@fortawesome/free-solid-svg-icons/faGrinAlt";
 
 library.add(
     faAngleDoubleRight,
@@ -194,7 +194,7 @@ library.add(
     faFrown,
     faMeh,
     faGrimace,
-    faGrinWink
+    faGrinAlt
 );
 
 export const awesomeStyle = {

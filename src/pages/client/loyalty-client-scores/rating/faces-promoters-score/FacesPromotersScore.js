@@ -13,8 +13,8 @@ const facePatterns = [
     "meh",
     "grimace",
     "grimace",
-    "grin-wink",
-    "grin-wink",
+    "grin-alt",
+    "grin-alt",
 ];
 
 export const getScaleText = (s) => {
