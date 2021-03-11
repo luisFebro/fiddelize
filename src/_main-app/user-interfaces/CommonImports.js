@@ -97,6 +97,13 @@ export const AsyncBizTeamPassword = Load({
         ),
 });
 
+export const AsyncFiddelizeCabin = Load({
+    loader: () =>
+        import(
+            "../../pages/app/biz-core-team/fiddelize-cabin/Cabin" /* webpackChunkName: "fiddelize-cabin-lazy" */
+        ),
+});
+
 // END BIZ TEAM APP
 
 export const AsyncAppsPanel = Load({

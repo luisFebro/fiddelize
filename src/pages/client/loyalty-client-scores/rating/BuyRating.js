@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import TextField from "@material-ui/core/TextField";
+import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import StarsBuyExperience, {
     getGradeText,
 } from "./stars-buy-experience/StarsBuyExperience";

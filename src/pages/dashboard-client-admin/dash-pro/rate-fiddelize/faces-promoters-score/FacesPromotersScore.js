@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./_FacesPromotersScore.css";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-// import getAPI, { updateUser } from "../../../../../utils/promises/getAPI";
+import getAPI, { updateUser } from "../../../../../utils/promises/getAPI";
 // NPS (Net Promoter Score) Rating
 
 const facePatterns = [
@@ -32,21 +32,24 @@ export default function FacesPromotersScore({
     role = "cliente-admin",
     dispatch,
     showSnackbar,
-    removeReportField,
 }) {
     const handleUpdate = async () => {
-        // showSnackbar(dispatch, "Atualizando...", "warning", 6000);
-        // await getAPI({
-        //     method: "put",
-        //     url: updateUser(userId, role),
-        //     body: {
-        //         "clientUserData.review.nps": scale,
-        //         "clientUserData.review.npsUpdatedAt": new Date(),
-        //     },
-        // }).catch((err) => {
-        //     console.log(`ERROR: ${err}`);
-        // });
-        showSnackbar(dispatch, "Avaliação Atualizada!", "success");
+        showSnackbar(dispatch, "Enviando...", "warning", 6000);
+        await getAPI({
+            method: "put",
+            url: updateUser(userId, role),
+            body: {
+                "clientAdminData.review.nps": scale,
+                "clientAdminData.review.npsUpdatedAt": new Date(),
+            },
+        }).catch((err) => {
+            console.log(`ERROR: ${err}`);
+        });
+        showSnackbar(
+            dispatch,
+            "Avaliação recebida. Obrigada pelo retorno!",
+            "success"
+        );
     };
 
     return (
@@ -65,10 +68,10 @@ export default function FacesPromotersScore({
                     ))}
                 </div>
             </section>
-            {removeReportField && (
-                <div className="my-4 mx-3">
+            {scale && (
+                <div className="my-4 mx-3 animated fadeInUp">
                     <ButtonFab
-                        title="atualizar"
+                        title="enviar avaliação"
                         size="large"
                         onClick={handleUpdate}
                         width="100%"

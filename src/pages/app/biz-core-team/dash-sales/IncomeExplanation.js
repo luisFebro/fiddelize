@@ -15,6 +15,8 @@ export default function IncomeExplanation() {
         setAgentPerc(splitData.perc[agentJob]);
     }, [primaryAgent, agentJob]);
 
+    const isRep = agentJob === "rep-comercial";
+
     const showDialog = () => (
         <Dialog
             PaperProps={{ style: { backgroundColor: "var(--mainWhite)" } }}
@@ -91,7 +93,11 @@ export default function IncomeExplanation() {
                     serviços da Fiddelize de qualquer valor.
                 </h2>
                 <p className="text-small">
-                    Sua <strong>margem de ganhos</strong> é de{" "}
+                    Sua <strong>margem de ganhos</strong> como{" "}
+                    <strong>
+                        {isRep ? "representante comercial" : agentJob}
+                    </strong>{" "}
+                    é de{" "}
                     <span
                         className="text-pill text-shadow"
                         style={{ backgroundColor: "grey" }}

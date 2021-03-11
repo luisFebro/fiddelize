@@ -225,13 +225,12 @@ const text4 = (
 const text5 = (
     <Fragment>
         <p>
-            A Fiddelize não utiliza assinaturas, mas sim um sistema de planos
-            mais flexível da metodologia pré-paga de{" "}
-            <strong>investimento por créditos</strong> com períodos de uso
-            mensais ou anuais. Isto significa que você tem a opção de fazer
-            microinvestimentos em vez de investir em um plano completo, escolher
-            quantidades de créditos, quais serviços investir/atualizar e em qual
-            período de uso, de forma individual ou em conjunto.
+            A Fiddelize possui uma modelo de negócio de Software como Serviço
+            (SaaS) e oferta seus serviços com uma versão grátis e outra paga com{" "}
+            <strong>investimento por créditos ou assinatura</strong> com
+            períodos de uso mensais ou anuais. O cliente pode fazer{" "}
+            <strong>microinvestimentos</strong> podendo escolher serviços
+            individuais ou escolher um plano completo.
         </p>
         <p>
             A precificação dos serviços da Fiddelize é feita de duas formas:{" "}

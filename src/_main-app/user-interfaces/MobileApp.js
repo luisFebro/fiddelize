@@ -36,6 +36,7 @@ import {
     AsyncAgentNewPassword,
     AsyncPayGatewayRegister,
     AsyncBizTeamPassword,
+    AsyncFiddelizeCabin,
     // biz docs and footer
     AsyncServicesStatus,
     AsyncTerms,
@@ -155,6 +156,11 @@ function Mobile({ location, history }) {
                     path="/t/app/nucleo-equipe/acesso"
                     exact
                     component={AsyncBizTeamPassword}
+                />
+                <Route
+                    path="/t/app/nucleo-equipe/cabine-fiddelize"
+                    exact
+                    component={AsyncFiddelizeCabin}
                 />
                 <Route path="/pix" exact component={AsyncPix} />
                 <Route
