@@ -14,6 +14,7 @@ export default function getQueries({ location }) {
     const mainQueries = mainData.map((q) => getQueryByName(q, location.search));
     const [bizName, bizId] = mainQueries;
 
+    // LESSON: painel is to set a button for creation page stage. this is exception to role
     const roleData = [
         "nucleo-equipe=1",
         "admin=1",
@@ -24,7 +25,13 @@ export default function getQueries({ location }) {
 
     const roleQueries = roleData.map((q) => location.search.includes(q));
 
-    const [isBizTeam, isCliAdmin, isTeamMember, isClientUser] = roleQueries;
+    const [
+        isBizTeam,
+        isCliAdmin,
+        isTeamMember,
+        isClientUser,
+        isPanel,
+    ] = roleQueries;
     const isValidRoleType =
         isBizTeam || isCliAdmin || isTeamMember || isClientUser;
 
@@ -45,10 +52,12 @@ export default function getQueries({ location }) {
             getQueryByName("isFromSelfServ", location.search)
         );
     }
+
+    // LESSON: watch out when excluding these variables. They should be in order, otherwise it will cause a great bug with variables reaceiving wrong values...
     return [
         ...mainQueries,
-        ...roleQueries,
-        isValidRoleType,
+        ...roleQueries, // roleQueries include isPanel
+        // others
         isLinkInvalid,
         whichRole,
         primaryAgent,

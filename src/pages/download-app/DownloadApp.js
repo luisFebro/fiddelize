@@ -115,6 +115,7 @@ export default function DownloadApp({ match, location, history }) {
     const userName = matchName && matchName.replace(/\+/g, " ").cap();
     // MAIN VARIABLES
     const [
+        // mainQueries
         bizName,
         bizId,
         bizLogo,
@@ -128,9 +129,8 @@ export default function DownloadApp({ match, location, history }) {
         isCliAdmin,
         isCliMember,
         isCliUser,
-        isFromAdminPanel,
         // others
-        // isValidRoleType,
+        isPanel,
         isLinkInvalid,
         whichRole,
         primaryAgent,
@@ -314,7 +314,7 @@ export default function DownloadApp({ match, location, history }) {
             return (
                 <AsyncClientAdminText
                     {...props}
-                    isFromAdminPanel={isFromAdminPanel}
+                    isFromAdminPanel={isPanel}
                     iconStyle={iconStyle}
                 />
             );

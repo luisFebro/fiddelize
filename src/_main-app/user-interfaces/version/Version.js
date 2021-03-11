@@ -3,7 +3,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.37.0"; // PRÓXIMO:
+const latestVersion = "4.4.0"; // PRÓXIMO:
 
 const updateDescription = "atualizações lançamento - pt 5";
 

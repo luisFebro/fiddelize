@@ -1,7 +1,7 @@
 const isSmall = window.Helper.isSmallScreen();
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 
-export default function ClientMemberText({
+export default function BizTeamText({
     txtPColor,
     styles,
     userName,
@@ -61,7 +61,7 @@ export default function ClientMemberText({
                     Você ganha tanto com vendas passivas e ativas.
                 </p>
                 <p className="download-app--txt" style={styles.margin}>
-                    Sua comissão é de {isBizRep ? "45" : "30"}% por cada
+                    Seus ganhos são de {isBizRep ? "45" : "30"}% por cada
                     transação de pagamento dos seus clientes. Não somente a
                     primeira!
                 </p>
