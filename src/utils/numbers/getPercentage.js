@@ -3,7 +3,7 @@
 // also has a mode to return the value in which a perc represents from a total targetValue
 // e.g total 200 for 50 (%) returns 100.
 export default function getPercentage(targetValue, curValue, options = {}) {
-    const { mode = "perc" } = options; // mode: perc|value
+    const { mode = "perc", moreThan100 = false } = options; // mode: perc|value
 
     if (typeof targetValue !== `number`) {
         targetValue = Number(targetValue);
@@ -22,7 +22,7 @@ export default function getPercentage(targetValue, curValue, options = {}) {
         return 0;
     }
 
-    if (mode === "perc" && curValue > targetValue) {
+    if (mode === "perc" && !moreThan100 && curValue > targetValue) {
         return 100;
     }
 

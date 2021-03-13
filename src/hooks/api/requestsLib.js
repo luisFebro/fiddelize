@@ -99,10 +99,6 @@ export const setTempScoreAndMemberData = () =>
 export const getMembersPodium = (bizId) =>
     `${API}/user/team/members/podium?bizId=${bizId}`;
 
-// BIZ FIDDELIZE TEAM
-export const readAgentIncomeHistory = () =>
-    `${API}/user/biz-fiddelize-team/income/history`;
-
 // TEMP SCORE
 export const readTempScoreList = (userId) =>
     `${API}/user/cli-user/temp-score/list?userId=${userId}`;
@@ -123,3 +119,10 @@ export const getNpsChartData = (userId) =>
     `${API}/reviews/nps-chart?userId=${userId}`;
 export const getXpScoreChartData = (userId) =>
     `${API}/reviews/xp-score-chart?userId=${userId}`;
+
+// BIZ FIDDELIZE TEAM
+export const readAgentIncomeHistory = () =>
+    `${API}/user/biz-fiddelize-team/income/history`;
+
+// cabin fiddelize-cabin
+export const getCabinMainData = () => `${API}/admin/fiddelize-cabin/main-data`;

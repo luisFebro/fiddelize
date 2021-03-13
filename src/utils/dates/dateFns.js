@@ -33,8 +33,8 @@ const treatZero = (number) => {
 const pick = (locale) => (locale ? localeObj[locale] : localeObj.default);
 const now = new Date();
 
-const formatDMY = (date, short) =>
-    getDayMonthBr(date, { needYear: true, short });
+const formatDMY = (date, short = false, needYear = true) =>
+    getDayMonthBr(date, { needYear, short });
 const fromNow = (pastDate, locale) =>
     formatDistance(new Date(pastDate), now, {
         addSuffix: true,

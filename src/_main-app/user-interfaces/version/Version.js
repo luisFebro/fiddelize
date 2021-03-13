@@ -3,9 +3,9 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.4.0"; // PRÓXIMO:
+const latestVersion = "4.402.0"; // PRÓXIMO:
 
-const updateDescription = "atualizações lançamento - pt 5";
+const updateDescription = "atualizações lançamento - pt 6";
 
 /* HISTORY
 "pix - sistema completo de pagamento com suporte app equipe fiddelize pt2"

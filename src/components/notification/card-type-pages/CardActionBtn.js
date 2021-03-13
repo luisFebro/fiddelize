@@ -68,7 +68,10 @@ function CardActionBtn({
         const res = await markOneClicked(bizId || userId, cardId, {
             forceCliUser,
             thisRole: bizId ? "cliente-admin" : role,
-            updatedBy: role === "cliente-admin" ? undefined : updatedBy,
+            updatedBy:
+                role === "cliente-admin" || role === "cliente"
+                    ? undefined
+                    : updatedBy,
             cliMemberId: userId,
         });
 

@@ -37,19 +37,19 @@ export default function BizTeamApp({ history }) {
             </section>
             <br />
             <GroupedDashSessions />
-            <CabinButton agentJob={agentJob} />
+            <CabinButton agentJob={agentJob} history={history} />
         </Fragment>
     );
 }
 
-function CabinButton({ agentJob }) {
+function CabinButton({ agentJob, history }) {
     const needBtn = agentJob === "rep-comercial" || agentJob === "dev";
 
     return (
         <section
             className={`${
                 needBtn ? "d-block" : "d-none"
-            } animated fadeInUp delay-2s`}
+            } animated fadeInUp delay-1s`}
             style={{
                 position: "fixed",
                 bottom: 15,
@@ -61,7 +61,9 @@ function CabinButton({ agentJob }) {
                 title="Cabine Fiddelize"
                 backgroundColor="var(--themeP)"
                 color="var(--vocarizaCyan)"
-                onClick={null}
+                onClick={() => {
+                    history.push("/t/app/nucleo-equipe/cabine-fiddelize");
+                }}
                 style={{
                     zIndex: 2000,
                 }}
