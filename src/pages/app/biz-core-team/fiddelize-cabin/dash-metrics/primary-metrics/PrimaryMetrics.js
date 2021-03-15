@@ -1,0 +1,136 @@
+import RevenueHistoryBtn from "./revenue-history/RevenueHistoryBtn";
+import MonthlyCostRegisterBtn from "./monthly-cost-register/MonthlyCostRegisterBtn";
+import convertToReal from "../../../../../../utils/numbers/convertToReal";
+import getPercentage from "../../../../../../utils/numbers/getPercentage";
+
+export default function PrimaryMetrics() {
+    const revenue = 680;
+    const monthlyCosts = 0;
+    const profitValue = revenue - monthlyCosts; // Margem  = ( Lucro / Vendas ) * 100
+
+    let netProfitMargin = getPercentage(revenue, profitValue); // ((profitValue / revenue) * 100).toFixed(1)
+    netProfitMargin = netProfitMargin < 0 ? 0 : netProfitMargin;
+
+    const {
+        color: colorNetProfitMargin,
+        status,
+        backColor: backNetProfitMargin,
+    } = getColorStatusData(netProfitMargin);
+
+    const showRevenueAndCost = () => (
+        <section className="d-flex text-purple justify-content-between mx-3">
+            <div className="text-normal font-weight-bold">
+                <span className="font-site text-em-1-1">Vendas</span>
+                <br />
+                {convertToReal(revenue, { moneySign: true })}
+            </div>
+            <div className="position-relative text-normal font-weight-bold">
+                <span className="font-site text-em-1-1">Custos</span>
+                <br />
+                {convertToReal(monthlyCosts, { moneySign: true })}
+                <MonthlyCostRegisterBtn />
+            </div>
+        </section>
+    );
+
+    const showProfit = () => (
+        <section className="my-5 container-center">
+            <div
+                style={{
+                    borderRadius: "20px",
+                    padding: "10px",
+                    backgroundColor: "var(--mainWhite)",
+                    minWidth: 175,
+                }}
+                className="shadow-babadoo position-relative"
+            >
+                <div
+                    className="position-absolute text-nowrap"
+                    style={{
+                        top: -20,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                    }}
+                >
+                    <h2 className="text-pill text-center text-subtitle font-weight-bold text-white">
+                        Lucro
+                    </h2>
+                </div>
+                <p
+                    className="text-normal font-weight-bold d-block text-center text-purple"
+                    style={{
+                        lineHeight: "25px",
+                        margin: "20px 0 0",
+                    }}
+                >
+                    Margem Líquida
+                </p>
+                <div className="text-title text-center my-4">
+                    <span
+                        className={`${colorNetProfitMargin} d-inline-block font-size text-em-2`}
+                        style={{
+                            lineHeight: "30px",
+                        }}
+                    >
+                        {netProfitMargin}
+                        <span className="text-em-0-6">%</span>
+                        <br />
+                        <span className="font-size text-em-0-5">
+                            {convertToReal(profitValue, { moneySign: true })}
+                        </span>
+                    </span>
+                </div>
+                <p
+                    className={`${backNetProfitMargin} text-shadow text-center text-subtitle font-weight-bold d-table text-pill mb-3`}
+                    style={{ borderRadius: "0px", margin: "0 auto" }}
+                >
+                    {status}
+                </p>
+            </div>
+        </section>
+    );
+
+    return (
+        <section>
+            <h2 className="text-purple text-subtitle font-weight-bold text-center">
+                Receita Mensal Atual
+                <br />
+                (Março)
+            </h2>
+            {showRevenueAndCost()}
+            {showProfit()}
+            <section className="my-5 container-center">
+                <RevenueHistoryBtn />
+            </section>
+        </section>
+    );
+}
+
+function getColorStatusData(profitValue) {
+    if (profitValue <= 0)
+        return {
+            color: "text-red",
+            backColor: "theme-back--red",
+            status: "RUIM",
+        };
+    if (profitValue > 0 && profitValue < 10)
+        return {
+            color: "text-yellow",
+            backColor: "theme-back--yellow",
+            status: "BOM",
+        };
+    if (profitValue >= 10 && profitValue < 20)
+        return {
+            color: "text-alt-green",
+            backColor: "theme-back--green",
+            status: "ÓTIMO",
+        };
+    if (profitValue >= 20)
+        return {
+            color: "text-sys-green",
+            backColor: "theme-back--green",
+            status: "EXCELENTE",
+        };
+
+    return;
+}

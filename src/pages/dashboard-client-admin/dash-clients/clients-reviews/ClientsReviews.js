@@ -4,7 +4,7 @@ import NpsReportBtn from "./nps/nps-report/NpsReportBtn";
 import XpGradeReportBtn from "./xp-score/xp-report/XpGradeReportBtn";
 import BuyReviewsBtn from "./buy-reviews/BuyReviewsBtn";
 import colorsHandler from "./helpers/colorsHandler";
-import { getTextStatus } from "../../../../components/charts/speedometer-gauge/helpers.js";
+import { getTextStatus } from "../../../../components/charts/speedometer-gauge/helpers";
 import getAPI, { getMainReviewData } from "../../../../utils/promises/getAPI";
 import useData from "../../../../hooks/useData";
 import { getGradeText, getColorGrade } from "./xp-score/helpers";
