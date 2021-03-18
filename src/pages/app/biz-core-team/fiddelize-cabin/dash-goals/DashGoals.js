@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import DashSectionTitle from "../DashSectionTitle";
 import OKR from "./objectives-key-results/OKR";
+import useAPI, { getCabinMainData } from "../../../../../hooks/api/useAPI";
 
 const getTitle = () => (
     <span className="text-subtitle font-weight-bold">
@@ -17,14 +18,22 @@ const getTitle = () => (
     </span>
 );
 
-export default function DashGoals({ mainData = {} }) {
+export default function DashGoals() {
     const SectionTitle = getTitle();
-    const { allTimeCustomers } = mainData;
+
+    const { data, loading } = useAPI({
+        url: getCabinMainData(),
+        params: {
+            period: "weekly",
+        },
+    });
+
+    const mainData = loading ? {} : data;
 
     return (
         <Fragment>
             <DashSectionTitle title={SectionTitle} />
-            <OKR weeklyNewCustomers={allTimeCustomers} />
+            <OKR mainData={mainData} />
         </Fragment>
     );
 }

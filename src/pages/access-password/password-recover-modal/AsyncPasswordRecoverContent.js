@@ -58,10 +58,7 @@ export default function AsyncPasswordRecoverContent({ role }) {
         <form
             style={{ margin: "auto", width: "90%" }}
             className="text-p text-normal"
-            onBlur={() => {
-                // setFieldError(null);
-                // setActionBtnDisabled(false);
-            }}
+            onBlur={null}
         >
             <div id="field1" className="mt-3">
                 CPF

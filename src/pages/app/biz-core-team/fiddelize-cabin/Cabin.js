@@ -1,18 +1,11 @@
 import useBackColor from "../../../../hooks/useBackColor";
 import GroupedDashSessions from "./GroupedDashSessions";
-import useAPI, { getCabinMainData } from "../../../../hooks/api/useAPI";
 import ReturnBtn from "../../../../components/buttons/ReturnBtn";
 import useScrollUp from "../../../../hooks/scroll/useScrollUp";
 
 export default function Cabin({ history }) {
     useBackColor("var(--themeP)");
     useScrollUp();
-
-    let { data, loading } = useAPI({
-        url: getCabinMainData(),
-    });
-
-    data = loading ? {} : data;
 
     const showTitle = () => (
         <div className="mt-5">
@@ -37,7 +30,7 @@ export default function Cabin({ history }) {
             <ReturnBtn onClick={() => history.push("/t/app/nucleo-equipe")} />
             {showTitle()}
             <br />
-            <GroupedDashSessions mainData={data} />
+            <GroupedDashSessions />
         </section>
     );
 }

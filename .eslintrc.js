@@ -63,6 +63,7 @@ module.exports = {
         "no-console": "off", // using switchConsoleLogs security utils. activated only in dev
         "no-use-before-define": ["error", { functions: false }], // allow functions to be declared after the usage
         "no-return-await": "off",
+        "no-underscore-dangle": ["error", { allow: ["_id"] }],
     },
     settings: {
         react: {

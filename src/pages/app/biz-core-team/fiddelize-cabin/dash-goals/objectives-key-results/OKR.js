@@ -9,7 +9,8 @@ import {
     formatDMY,
 } from "../../../../../../utils/dates/dateFns";
 
-export default function OKR({ weeklyNewCustomers }) {
+export default function OKR({ mainData }) {
+    const { proCustomersCount } = mainData;
     // const endDate = "23 de junho";
     const showObjective = (
         goal = "consolidar serviços Fiddelize com primeiros <strong>10 clientes pro</strong> em um dos planos"
@@ -50,7 +51,7 @@ export default function OKR({ weeklyNewCustomers }) {
                     krDesc="atingir os primeiros <br /><strong>5 clientes pro</strong>"
                     krKeyword="cliente"
                     kr={5}
-                    curr={weeklyNewCustomers}
+                    curr={proCustomersCount}
                     mt={false}
                 />
             </Fragment>

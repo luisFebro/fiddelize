@@ -20,7 +20,11 @@ const muStyle = {
 
 const PlusIcon = <AddCircleOutlineIcon style={muStyle} />;
 
-export default function MonthlyCostRegisterBtn({ size = "medium" }) {
+export default function MonthlyCostRegisterBtn({
+    size = "medium",
+    currMonth,
+    handleNewCostValue,
+}) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
@@ -31,7 +35,9 @@ export default function MonthlyCostRegisterBtn({ size = "medium" }) {
         setFullOpen(false);
     };
 
-    const AsyncComp = <Async />;
+    const AsyncComp = (
+        <Async currMonth={currMonth} handleNewCostValue={handleNewCostValue} />
+    );
 
     return (
         <section>

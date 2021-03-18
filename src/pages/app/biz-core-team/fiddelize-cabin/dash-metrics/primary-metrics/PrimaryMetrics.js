@@ -1,34 +1,59 @@
+import { useState } from "react";
 import RevenueHistoryBtn from "./revenue-history/RevenueHistoryBtn";
 import MonthlyCostRegisterBtn from "./monthly-cost-register/MonthlyCostRegisterBtn";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getPercentage from "../../../../../../utils/numbers/getPercentage";
+import getMonthNowBr from "../../../../../../utils/dates/getMonthNowBr";
+import useAPI, { readFiddelizeCosts } from "../../../../../../hooks/api/useAPI";
 
-export default function PrimaryMetrics() {
-    const revenue = 680;
-    const monthlyCosts = 0;
-    const profitValue = revenue - monthlyCosts; // Margem  = ( Lucro / Vendas ) * 100
+export default function PrimaryMetrics({ mainData }) {
+    const [newCostValue, setNewCostValue] = useState(0);
+    const { revenueAmount } = mainData;
 
-    let netProfitMargin = getPercentage(revenue, profitValue); // ((profitValue / revenue) * 100).toFixed(1)
+    const { data, loading } = useAPI({
+        url: readFiddelizeCosts(),
+        params: {
+            amount: true,
+        },
+    });
+
+    const finalTotalCost =
+        (data && data.transactionsAmount) || newCostValue
+            ? data.transactionsAmount || 0 + newCostValue
+            : 0;
+
+    const monthlyCosts = loading ? "..." : finalTotalCost;
+    const profitValue = revenueAmount - monthlyCosts; // Margem  = ( Lucro / Vendas ) * 100
+
+    let netProfitMargin = getPercentage(revenueAmount, profitValue); // ((profitValue / revenue) * 100).toFixed(1)
     netProfitMargin = netProfitMargin < 0 ? 0 : netProfitMargin;
 
+    const currMonth = getMonthNowBr(new Date());
     const {
         color: colorNetProfitMargin,
         status,
         backColor: backNetProfitMargin,
     } = getColorStatusData(netProfitMargin);
 
-    const showRevenueAndCost = () => (
+    async function handleNewCostValue(newValue) {
+        setNewCostValue((prevValue) => prevValue + newValue);
+    }
+
+    const showRevenueAndCost = ({ currMonth }) => (
         <section className="d-flex text-purple justify-content-between mx-3">
             <div className="text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Vendas</span>
                 <br />
-                {convertToReal(revenue, { moneySign: true })}
+                {convertToReal(revenueAmount, { moneySign: true })}
             </div>
             <div className="position-relative text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Custos</span>
                 <br />
                 {convertToReal(monthlyCosts, { moneySign: true })}
-                <MonthlyCostRegisterBtn />
+                <MonthlyCostRegisterBtn
+                    currMonth={currMonth}
+                    handleNewCostValue={handleNewCostValue}
+                />
             </div>
         </section>
     );
@@ -95,9 +120,9 @@ export default function PrimaryMetrics() {
             <h2 className="text-purple text-subtitle font-weight-bold text-center">
                 Receita Mensal Atual
                 <br />
-                (Março)
+                (- {currMonth} -)
             </h2>
-            {showRevenueAndCost()}
+            {showRevenueAndCost({ currMonth })}
             {showProfit()}
             <section className="my-5 container-center">
                 <RevenueHistoryBtn />

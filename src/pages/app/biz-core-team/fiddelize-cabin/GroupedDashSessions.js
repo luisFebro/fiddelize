@@ -21,7 +21,7 @@ export default function GroupedDashSessions({ mainData }) {
         {
             tabLabel: "Objetivos",
             tabIcon: <TrackChangesIcon style={muStyle} />,
-            tabContentPanel: <DashGoals mainData={mainData} />,
+            tabContentPanel: <DashGoals />,
         },
         {
             tabLabel: "Métricas",

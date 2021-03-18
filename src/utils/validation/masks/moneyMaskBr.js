@@ -4,7 +4,10 @@ String.prototype.reverse = function () {
     return this.split("").reverse().join("");
 };
 
+// LESSON IMPORTANT: in order to convert to default programming dot floated format,
+// you should use convertBrToDollar from convertDotComma to get the right converted value.
 export default function moneyMaskBr(targetStr) {
+    if (!targetStr) return;
     // const key = (!ev) ? window.event.keyCode : ev.which;
     const value = targetStr.replace(/[^\d]+/gi, "").reverse();
     let result = "";

@@ -12,12 +12,12 @@ export default function SecondaryMetrics({ mainData }) {
                 <br />
                 Secundários
             </p>
-            - Retenção Clientes
-            <br />
             <section className="d-flex justify-content-around mt-5">
                 <NPS />
                 <RetentionRate mainData={mainData} />
             </section>
+            <br />
+            - Retenção Clientes
             <XpReports />
         </section>
     );
@@ -119,19 +119,12 @@ function NPS() {
 }
 
 function RetentionRate({ mainData }) {
-    const {
-        // allTimeFreeCustomers,
-        allTimeProCustomers,
-        allTimeCustomers,
-    } = mainData;
+    const { proCustomersCount, customersCount } = mainData;
 
     const loading = false;
-    const percProCustomers = getPercentage(
-        allTimeCustomers,
-        allTimeProCustomers
-    );
+    const percProCustomers = getPercentage(customersCount, proCustomersCount);
     const plural = true;
-    // const percFreeCustomers = getPercentage(allTimeCustomers, allTimeFreeCustomers);
+    // const percFreeCustomers = getPercentage(customersCount, allTimeFreeCustomers);
 
     const colorRetentionDiff = "green";
 

@@ -123,6 +123,10 @@ export const getXpScoreChartData = (userId) =>
 // BIZ FIDDELIZE TEAM
 export const readAgentIncomeHistory = () =>
     `${API}/user/biz-fiddelize-team/income/history`;
-
 // cabin fiddelize-cabin
 export const getCabinMainData = () => `${API}/admin/fiddelize-cabin/main-data`;
+export const getAppTotals = () => `${API}/admin/fiddelize-cabin/app-totals`;
+// costs
+export const readFiddelizeCosts = () =>
+    `${API}/admin/fiddelize-cabin/read-costs`;
+export const addFiddelizeCosts = () => `${API}/admin/fiddelize-cabin/add-costs`;
