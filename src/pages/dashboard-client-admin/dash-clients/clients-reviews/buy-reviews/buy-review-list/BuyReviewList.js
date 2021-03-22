@@ -3,6 +3,7 @@ import BuyReviewCard from "./BuyReviewCard";
 import BuyReviewFilter from "./BuyReviewFilter";
 import useAPIList, {
     getBuyReviewsList,
+    getXpReviewList,
     getTrigger,
 } from "../../../../../../hooks/api/useAPIList";
 import useData from "../../../../../../hooks/useData";
@@ -13,7 +14,7 @@ import getAPI, { updateUser } from "../../../../../../utils/promises/getAPI";
 import "./_BuyReviewList.scss";
 import { isAfter } from "../../../../../../utils/dates/dateFns";
 
-export default function BuyReviewList({ lastDateChecked }) {
+export default function BuyReviewList({ lastDateChecked, isBizAdmin = false }) {
     const [skip, setSkip] = useState(0);
     const [data, setData] = useState({
         filterBy: "all",
@@ -30,12 +31,12 @@ export default function BuyReviewList({ lastDateChecked }) {
     };
 
     const [bizId] = useData(["userId"]); // yep! userId is the same for bizId when it is the cli-admin logged in
-    const params = { userId: bizId, skip, filterBy };
+    const params = { userId: isBizAdmin ? undefined : bizId, skip, filterBy };
     const trigger =
         bizId !== "..." &&
         getTrigger(null, null, { cond2: `filter_${filterBy}` });
 
-    useAdminChecked(trigger, bizId);
+    useAdminChecked(trigger, bizId, isBizAdmin);
 
     const {
         list: reviewsList,
@@ -50,10 +51,10 @@ export default function BuyReviewList({ lastDateChecked }) {
         gotData,
         listTotal,
     } = useAPIList({
-        url: getBuyReviewsList(),
+        url: isBizAdmin ? getXpReviewList() : getBuyReviewsList(),
         skip,
         params,
-        listName: "buyReviewList",
+        listName: isBizAdmin ? "xpReviewList" : "buyReviewList",
         trigger,
         isFiltering,
     });
@@ -84,6 +85,7 @@ export default function BuyReviewList({ lastDateChecked }) {
                     new Date(re.reportUpdatedAt),
                     new Date(lastDateChecked)
                 );
+
                 const commonCardData = {
                     isCardNew,
                     data: re,
@@ -129,14 +131,20 @@ export default function BuyReviewList({ lastDateChecked }) {
     );
 }
 
-function useAdminChecked(trigger, bizId) {
+function useAdminChecked(trigger, bizId, isBizAdmin) {
     useEffect(() => {
         const runCheck = async () => {
+            const path = isBizAdmin
+                ? "bizTeamData.reviewLastChecked"
+                : "clientAdminData.reviewLastChecked";
+            const thisRole = isBizAdmin ? "nucleo-equipe" : "cliente-admin";
+            const thisId = isBizAdmin ? "604a9b7dff36c40017476cee" : bizId; // for now, it will track only primary account, after can track dinamically to check who read the last time the reports
+
             await getAPI({
                 method: "put",
-                url: updateUser(bizId, "cliente-admin"),
+                url: updateUser(thisId, thisRole),
                 body: {
-                    "clientAdminData.reviewLastChecked": new Date(),
+                    [`${path}`]: new Date(),
                 },
                 trigger,
             }).catch((err) => {
@@ -144,6 +152,8 @@ function useAdminChecked(trigger, bizId) {
             });
         };
 
-        trigger && runCheck();
-    }, [trigger]);
+        if (trigger) {
+            runCheck();
+        }
+    }, [trigger, isBizAdmin, bizId]);
 }

@@ -12,6 +12,10 @@
         font-size: 1rem;
     }
 
+    .ct-label.ct-vertical {
+        color: rgb(103, 137, 162);
+    }
+
     .ct-grids .ct-grid {
         stroke: var(--themePLight);
         stroke-width: 0.6px;
@@ -64,6 +68,21 @@
             stroke: #7bd77f !important;
         }
     }
+
+    .ct-axis-y-title {
+        fill: rgb(103, 137, 162);
+        font-family: var(--mainFont);
+        text-shadow: 1px 1px 3px black;
+        font-weight: bold;
+        z-index: 100;
+    }
+
+    .ct-axis-x-title {
+        fill: var(--mainWhite);
+        font-family: var(--mainFont);
+        text-shadow: 1px 1px 3px black;
+        font-weight: bold;
+    }
 }
 
 // TOOLTIP
@@ -84,3 +103,4 @@
     position: absolute;
     top: 70px !important;
 }
+// END TOOLTIPS

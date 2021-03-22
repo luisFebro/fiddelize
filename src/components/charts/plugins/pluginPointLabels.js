@@ -1,4 +1,8 @@
-export default function pluginLabelModified(window, document, Chartist) {
+/**
+ * Chartist.js plugin to display a data label on top of the points in a line chart.
+ *
+ */
+export default function pluginPointLabels(Chartist) {
     const defaultOptions = {
         labelClass: "ct-label",
         labelOffset: {
@@ -45,10 +49,15 @@ export default function pluginLabelModified(window, document, Chartist) {
 
         function addLabel(position, data) {
             // if x and y exist concat them otherwise output only the existing value
-            const value =
+            let value =
                 data.value.x !== undefined && data.value.y
                     ? `${data.value.x}, ${data.value.y}`
                     : data.value.y || data.value.x;
+
+            // to display zero on the label, not 'undefined'
+            if (typeof value === "undefined") {
+                value = 0;
+            }
 
             data.group
                 .elem(

@@ -27,6 +27,7 @@ export default function GroupedDashSessions({ mainData }) {
             tabLabel: "Métricas",
             tabIcon: <TrendingUpIcon style={muStyle} />,
             tabContentPanel: <AsyncDashMetrics mainData={mainData} />,
+            boxPadding: 1,
         },
     ];
 

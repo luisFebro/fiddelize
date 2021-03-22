@@ -76,7 +76,7 @@ const textQ5 = (
     </p>
 );
 
-export default function ReviewResults({ mainData = {} }) {
+export default function ReviewResults({ mainData = {}, isBizAdmin }) {
     const { detractors, passives, promoters } = mainData;
 
     const { plan: currPlan, usageTimeEnd, credits } = usePro({
@@ -287,7 +287,7 @@ export default function ReviewResults({ mainData = {} }) {
         <section className="review-result--root mx-3 text-purple">
             {showResearch()}
             {showScoreCalculation()}
-            {showFAQ()}
+            {!isBizAdmin && showFAQ()}
         </section>
     );
 }

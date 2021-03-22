@@ -4,10 +4,10 @@ import getAPI, {
     getXpScoreChartData,
 } from "../../../../../../../utils/promises/getAPI";
 import useData from "../../../../../../../hooks/useData";
-import LoadableVisible from "../../../../../../../components/code-splitting/LoadableVisible";
 import { getGradeText, getColorGrade } from "../../helpers";
 import "../../../_ClientsReviews.scss";
 import FaqXpScore from "./FaqXpScore";
+import LoadableVisible from "../../../../../../../components/code-splitting/LoadableVisible";
 
 const AsyncBarChart = LoadableVisible({
     loader: () =>
@@ -48,9 +48,16 @@ export default function XpGradeContent({ payload = {} }) {
     const showBarChart = () => {
         const xLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
         const dataArray = dataChart;
+        const title = "Qtde. clientes e suas notas XP";
         return (
             !loading && (
-                <AsyncBarChart xLabels={xLabels} dataArray={dataArray} />
+                <AsyncBarChart
+                    xLabels={xLabels}
+                    title={title}
+                    dataArray={dataArray}
+                    axisYTitle="clientes"
+                    axisXTitle="notas"
+                />
             )
         );
     };

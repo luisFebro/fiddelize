@@ -1,8 +1,9 @@
+import { Fragment } from "react";
 import DashSectionTitle from "../DashSectionTitle";
 import PrimaryMetrics from "./primary-metrics/PrimaryMetrics";
 import SecondaryMetrics from "./secondary-metrics/SecondaryMetrics";
 import useAPI, { getCabinMainData } from "../../../../../hooks/api/useAPI";
-import AppTotals from "./AppTotals";
+import ComplementaryData from "./complementary-data/ComplementaryData";
 
 const getTitle = () => (
     <span className="text-subtitle font-weight-bold">
@@ -25,19 +26,25 @@ export default function DashMetrics() {
     const { data, loading } = useAPI({
         url: getCabinMainData(),
         params: {
-            period: "monthly",
+            period: "all",
         },
+        timeout: 30000,
     });
 
-    const mainData = loading ? {} : data;
+    let mainData = loading ? {} : data;
+    if (mainData === "null") {
+        mainData = {};
+    }
 
     return (
-        <div>
+        <Fragment>
             <DashSectionTitle title={SectionTitle} />
             <div className="mt-5" />
             <PrimaryMetrics mainData={mainData} />
             <SecondaryMetrics mainData={mainData} />
-            <AppTotals />
-        </div>
+            <div style={{ marginBottom: 100 }} />
+            <ComplementaryData mainData={mainData} />
+            <div style={{ marginBottom: 100 }} />
+        </Fragment>
     );
 }

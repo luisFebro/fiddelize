@@ -44,7 +44,9 @@ export default function PrimaryMetrics({ mainData }) {
             <div className="text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Vendas</span>
                 <br />
-                {convertToReal(revenueAmount, { moneySign: true })}
+                {revenueAmount || revenueAmount === 0
+                    ? convertToReal(revenueAmount, { moneySign: true })
+                    : "R$ ..."}
             </div>
             <div className="position-relative text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Custos</span>

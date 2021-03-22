@@ -92,7 +92,7 @@ export default function FiddelizeContact() {
         <p className="text-small text-purple" style={{ margin: 0 }}>
             geralmente respondemos logo, mas fico ciente de que o{" "}
             <strong>tempo de resposta</strong> pode levar até{" "}
-            <strong>24 horas</strong>.
+            <strong>12 horas</strong>.
         </p>
     );
 

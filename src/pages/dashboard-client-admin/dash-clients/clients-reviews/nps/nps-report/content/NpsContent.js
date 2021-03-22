@@ -26,7 +26,7 @@ const AsyncReviewResults = LoadableVisible({
         ),
 });
 
-export default function NpsContent({ mainData }) {
+export default function NpsContent({ mainData, isBizAdmin }) {
     const { nps, detractors, promoters } = mainData;
 
     const { colorNPS } = colorsHandler({ nps });
@@ -36,6 +36,7 @@ export default function NpsContent({ mainData }) {
     const { dataChart, loading } = useNpsChartData({
         lastTotalDetractors: detractors && detractors.total,
         lastTotalPromoters: promoters && promoters.total,
+        isBizAdmin,
     });
 
     const showTitle = () => (
@@ -131,7 +132,7 @@ export default function NpsContent({ mainData }) {
                 marginBottom: 150,
             }}
         >
-            <AsyncReviewResults mainData={mainData} />
+            <AsyncReviewResults mainData={mainData} isBizAdmin={isBizAdmin} />
         </section>
     );
 
@@ -150,7 +151,11 @@ export default function NpsContent({ mainData }) {
     );
 }
 
-function useNpsChartData({ lastTotalPromoters, lastTotalDetractors }) {
+function useNpsChartData({
+    lastTotalPromoters,
+    lastTotalDetractors,
+    isBizAdmin,
+}) {
     const [data, setData] = useState({
         dataChart: null,
         loading: true,
@@ -164,6 +169,7 @@ function useNpsChartData({ lastTotalPromoters, lastTotalDetractors }) {
             const params = {
                 lastTotalPromoters,
                 lastTotalDetractors,
+                isBizAdmin,
             };
 
             const thisChartData = await getAPI({
@@ -177,13 +183,16 @@ function useNpsChartData({ lastTotalPromoters, lastTotalDetractors }) {
                 dataChart: thisChartData && thisChartData.data,
             }));
         };
-        userId !== "..." && lastTotalPromoters !== undefined && runAnalysis();
+
+        if (userId !== "..." && lastTotalPromoters !== undefined) {
+            runAnalysis();
+        }
     }, [userId, lastTotalPromoters]);
 
     return { dataChart, loading };
 }
 
-function getLabelsAndData({ dataChart, currWeekDay }) {
+function getLabelsAndData({ dataChart, currWeekDay, currNps = 50 }) {
     const weekDays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 
     let indCurrWeekDay;
@@ -195,11 +204,15 @@ function getLabelsAndData({ dataChart, currWeekDay }) {
         return w;
     });
 
-    // the rest of data is hidden because all other dates ofter TODAY is the same like:
+    // the rest of data is hidden because all other dates after TODAY is the same like:
     // 62 , 64 (today), 64, 64 ... repeats
     const finalChartData = dataChart
         ? dataChart.slice(0, indCurrWeekDay + 1)
-        : ["0"];
+        : [0];
+
+    // be sure that last nps is the same as generated in the mainData
+    // sometimes when thereis only detractors and promoters, it will calculate wrongly
+    finalChartData.splice(-1, 1, currNps);
 
     return {
         xLabels: finalWeekDay,

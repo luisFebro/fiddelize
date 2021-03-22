@@ -10,10 +10,12 @@ const Async = Load({
         ),
 });
 
-export default function BuyReviewsBtn({ lastDateChecked }) {
+export default function BuyReviewsBtn({ lastDateChecked, isBizAdmin }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncBuyReportContent = <Async lastDateChecked={lastDateChecked} />;
+    const AsyncBuyReportContent = (
+        <Async lastDateChecked={lastDateChecked} isBizAdmin={isBizAdmin} />
+    );
 
     const handleFullOpen = () => {
         setFullOpen(true);
@@ -27,7 +29,7 @@ export default function BuyReviewsBtn({ lastDateChecked }) {
         <section>
             <ButtonFab
                 size="large"
-                title="Ver Relatos de Compra"
+                title={isBizAdmin ? "Ver Relatos" : "Ver Relatos de Compra"}
                 onClick={handleFullOpen}
                 backgroundColor="var(--themeSDark--default)"
                 variant="extended"

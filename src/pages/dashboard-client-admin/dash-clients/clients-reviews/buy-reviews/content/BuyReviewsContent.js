@@ -20,40 +20,67 @@ const notes = (
     </Fragment>
 );
 
-export default function BuyReviewsContent({ lastDateChecked }) {
+export default function BuyReviewsContent({ lastDateChecked, isBizAdmin }) {
     const showTitle = () => (
         <div className="my-4">
-            <h1
-                className="text-subtitle text-purple text-center font-weight-bold"
-                style={{ lineHeight: "30px" }}
-            >
-                Relatos de
-                <br />
-                Compra
-            </h1>
-            <p
-                className="m-0 mx-3 text-small text-purple text-center"
-                style={{
-                    fontSize: "1.1rem",
-                }}
-            >
-                Saiba o que seus <strong>clientes relatam</strong> sobre suas
-                experiências de compra mais recentes
-            </p>
+            {isBizAdmin ? (
+                <h1
+                    className="text-subtitle text-purple text-center font-weight-bold"
+                    style={{ lineHeight: "30px" }}
+                >
+                    Relatos sobre
+                    <br />a Fiddelize
+                </h1>
+            ) : (
+                <h1
+                    className="text-subtitle text-purple text-center font-weight-bold"
+                    style={{ lineHeight: "30px" }}
+                >
+                    Relatos de
+                    <br />
+                    Compra
+                </h1>
+            )}
+            {isBizAdmin ? (
+                <p
+                    className="m-0 mx-3 text-small text-purple text-center"
+                    style={{
+                        fontSize: "1.1rem",
+                    }}
+                >
+                    Saiba o que os <strong>clientes relatam</strong> sobre a
+                    experiências de usar a Fiddelize
+                </p>
+            ) : (
+                <p
+                    className="m-0 mx-3 text-small text-purple text-center"
+                    style={{
+                        fontSize: "1.1rem",
+                    }}
+                >
+                    Saiba o que seus <strong>clientes relatam</strong> sobre
+                    suas experiências de compra mais recentes
+                </p>
+            )}
         </div>
     );
 
     return (
         <section>
             {showTitle()}
-            <BuyReviewList lastDateChecked={lastDateChecked} />
-            <NotesSwitcher
-                color="text-purple"
-                btnStyle={{ top: 0, right: 0 }}
-                notes={notes}
-                rootClassName="mx-3 mb-5"
-                shadowTitle={undefined}
+            <BuyReviewList
+                lastDateChecked={lastDateChecked}
+                isBizAdmin={isBizAdmin}
             />
+            {!isBizAdmin && (
+                <NotesSwitcher
+                    color="text-purple"
+                    btnStyle={{ top: 0, right: 0 }}
+                    notes={notes}
+                    rootClassName="mx-3 mb-5"
+                    shadowTitle={undefined}
+                />
+            )}
         </section>
     );
 }

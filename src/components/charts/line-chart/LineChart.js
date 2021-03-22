@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import Chartist from "chartist";
 import "chartist-plugin-tooltips";
-import "chartist-plugin-pointlabels";
 import getIncreasedPerc from "../../../utils/numbers/getIncreasedPerc";
 import "./_LineChart.scss";
+import pluginPointLabels from "../plugins/pluginPointLabels";
+
+pluginPointLabels(Chartist);
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -43,10 +45,9 @@ const options = {
 };
 
 // dataArray should have elements as numbers
-// if dataArray contains 0, it should be "0.01", otherwise it will be undefined
 // data examples:
 // xLabels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
-// dataArray = ["0", 100, 1, 40, -30, 20, 90]
+// dataArray = [0, 100, 1, 40, -30, 20, 90]
 export default function LineChart({
     xLabels,
     dataArray,
@@ -61,13 +62,10 @@ export default function LineChart({
 
     let lastDiff;
     let lastPerc;
-    const lastButOneTreated = lastButOne === "0.01" ? 0 : lastButOne;
-    const lastValueTreated = lastValue === "0.01" ? 0 : lastValue;
+
     if (!Number.isNaN(lastValue) && !Number.isNaN(lastButOne)) {
-        lastDiff = lastValueTreated - lastButOneTreated;
-        lastPerc = Math.round(
-            getIncreasedPerc(lastButOneTreated, lastValueTreated)
-        );
+        lastDiff = lastValue - lastButOne;
+        lastPerc = Math.round(getIncreasedPerc(lastButOne, lastValue));
     }
 
     const isNegative = lastPerc < 0;

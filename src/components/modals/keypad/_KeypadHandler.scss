@@ -1,4 +1,8 @@
-.MuiPaper-root {
-    margin-right: 0.4rem !important;
-    margin-left: 0.4rem !important;
+// Lesson: watch out for not inserting global CSS cuz
+// here MuiPaper-root was changing the behavior of a menu tab from multi apps.
+.keypad-handler--root {
+    .MuiPaper-root {
+        margin-right: 0.4rem !important;
+        margin-left: 0.4rem !important;
+    }
 }

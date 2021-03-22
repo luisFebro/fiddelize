@@ -9,8 +9,8 @@ import {
     formatDMY,
 } from "../../../../../../utils/dates/dateFns";
 
-export default function OKR({ mainData }) {
-    const { proCustomersCount } = mainData;
+export default function OKR({ mainData = {} }) {
+    const proCustomersCount = mainData && mainData.proCustomersCount;
     // const endDate = "23 de junho";
     const showObjective = (
         goal = "consolidar serviços Fiddelize com primeiros <strong>10 clientes pro</strong> em um dos planos"

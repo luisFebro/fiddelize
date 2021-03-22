@@ -1,20 +1,29 @@
 import { useState } from "react";
-import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
-import ModalFullContent from "../../../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../../../components/code-splitting/LoadableComp";
+import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "../../../../../../../components/modals/ModalFullContent";
+import { Load } from "../../../../../../../components/code-splitting/LoadableComp";
 
 const Async = Load({
     loader: () =>
         import(
-            "./content/NpsContent" /* webpackChunkName: "nps-full-page-lazy" */
+            "./ConversionRateReportContent" /* webpackChunkName: "conversion-rate-full-page-lazy" */
         ),
 });
 
-export default function NpsReportBtn({ mainData, disabled, isBizAdmin }) {
+export default function ConversionRateReportBtn({
+    mainData,
+    percFreeCustomers,
+    percProCustomers,
+    disabled,
+}) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const AsyncNpsContent = (
-        <Async mainData={mainData} isBizAdmin={isBizAdmin} />
+    const AsyncRevenueHistoryContent = (
+        <Async
+            mainData={mainData}
+            percFreeCustomers={percFreeCustomers}
+            percProCustomers={percProCustomers}
+        />
     );
 
     const handleFullOpen = () => {
@@ -37,7 +46,7 @@ export default function NpsReportBtn({ mainData, disabled, isBizAdmin }) {
                 disabled={disabled}
             />
             <ModalFullContent
-                contentComp={AsyncNpsContent}
+                contentComp={AsyncRevenueHistoryContent}
                 fullOpen={fullOpen}
                 setFullOpen={handleFullClose}
             />

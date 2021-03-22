@@ -126,6 +126,7 @@ export const readAgentIncomeHistory = () =>
 // cabin fiddelize-cabin
 export const getCabinMainData = () => `${API}/admin/fiddelize-cabin/main-data`;
 export const getAppTotals = () => `${API}/admin/fiddelize-cabin/app-totals`;
+export const getXpReviewList = () => `${API}/admin/fiddelize-cabin/xp-reviews`;
 // costs
 export const readFiddelizeCosts = () =>
     `${API}/admin/fiddelize-cabin/read-costs`;

@@ -2,12 +2,14 @@ import { useEffect } from "react";
 import Chartist from "chartist";
 import "./_BarChart.scss";
 import "chartist-plugin-tooltips";
-import pluginLabelModified from "./pluginLabelModified";
+import pluginPointLabels from "../plugins/pluginPointLabels";
+import pluginAxisTitle from "../plugins/pluginAxisTitle";
 
-pluginLabelModified(null, null, Chartist);
+pluginPointLabels(Chartist);
+pluginAxisTitle(Chartist);
 // const isSmall = window.Helper.isSmallScreen();
 
-const plugins = {
+const getPlugins = ({ axisXTitle, axisYTitle }) => ({
     plugins: [
         Chartist.plugins.ctPointLabels({
             textAnchor: "middle", // get it horizontal-wise middle of the bar
@@ -15,13 +17,33 @@ const plugins = {
         }),
         Chartist.plugins.tooltip({
             transformTooltipTextFnc(value) {
-                return `${value} clientes`;
+                return `${value} ${axisYTitle}`;
+            },
+        }),
+        Chartist.plugins.ctAxisTitle({
+            axisY: {
+                axisTitle: axisYTitle,
+                axisClass: "ct-axis-y-title",
+                offset: {
+                    x: 0,
+                    y: -3,
+                },
+                flipTitle: false,
+            },
+            axisX: {
+                axisTitle: axisXTitle,
+                axisClass: "ct-axis-x-title",
+                offset: {
+                    x: 0,
+                    y: 40,
+                },
+                textAnchor: "middle",
             },
         }),
     ],
-};
+});
 
-const options = {
+const getOptions = ({ axisYTitle, axisXTitle }) => ({
     low: 1,
     showGridBackground: false,
     height: "300px",
@@ -46,20 +68,26 @@ const options = {
         bottom: 5,
         left: 10,
     },
-    ...plugins,
-};
+    ...getPlugins({ axisXTitle, axisYTitle }),
+});
 
-// if dataArray contains 0, it should be "0.01", otherwise it will be undefined
 // data example:
 // xLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-// dataArray = [50, 50, 50, "0.01", 50, 50, 50, 50, 50, 50],
-// LESSON: this graph only appears when there are at least 2 in the total.
+// dataArray = [50, 50, 50, 0, 50, 50, 50, 50, 50, 50],
 export default function BarChart({
+    title,
     xLabels,
     dataArray,
-    onlySmall = false, // useful especially when used in a modal when the width is limited regardless of the screen width size.
+    axisYTitle,
+    axisXTitle,
+    totalY = true,
+    totalX = false, // only when both X and Y are numbers and we have to multiple x for y
+    // onlySmall = false, // useful especially when used in a modal when the width is limited regardless of the screen width size.
 }) {
-    const totalData = getTotalData(dataArray);
+    const totalYData = totalY ? getTotalData(dataArray) : undefined;
+    const totalXData = totalX
+        ? getTotalData(xLabels, { multiplyWith: dataArray })
+        : undefined;
 
     useEffect(() => {
         if (!dataArray) return;
@@ -70,7 +98,7 @@ export default function BarChart({
                     labels: xLabels,
                     series: [dataArray],
                 },
-                options
+                getOptions({ axisYTitle, axisXTitle })
             );
 
             chart.on("draw", (d) => {
@@ -102,10 +130,12 @@ export default function BarChart({
         })();
     }, [dataArray]);
 
+    const getTotalXText = () => `| ${totalXData} ${axisXTitle}`;
+
     return (
         <section className="bar-chart--root">
             <h2 className="py-3 text-normal font-weight-bold text-white text-center">
-                Qtde. clientes e suas notas XP
+                {title}
             </h2>
             <div className="bar-chart" />
             <div
@@ -114,27 +144,42 @@ export default function BarChart({
                     top: -10,
                 }}
             >
-                <p
-                    className="d-table text-normal font-weight-bold text-shadow"
-                    style={{
-                        color: "rgb(103, 137, 162)",
-                    }}
-                >
-                    Total: {totalData} clientes
-                </p>
+                {totalY && (
+                    <p
+                        className={`${
+                            axisXTitle ? "mt-2" : ""
+                        } d-table text-normal font-weight-bold text-shadow`}
+                        style={{
+                            color: "rgb(103, 137, 162)",
+                        }}
+                    >
+                        <span className="d-inline-block">
+                            {totalX ? "Totais:" : "Total: "}
+                        </span>
+                        {totalX && <br />} {` ${totalYData}`} {axisYTitle}{" "}
+                        {totalX && getTotalXText()}
+                    </p>
+                )}
             </div>
         </section>
     );
 }
 
-function getTotalData(data) {
-    return (
-        data &&
-        data.reduce((acc, next) => {
-            if (next === "0.01") return acc;
-            return acc + next;
-        }, 0)
-    );
+function getTotalData(data, options = {}) {
+    const { multiplyWith = [] } = options;
+
+    if (multiplyWith.length) {
+        let resultData = [];
+        data.forEach((d, ind) => {
+            const dataNum = Number(d);
+            const multiplyWithNum = Number(multiplyWith[ind]);
+            resultData.push(dataNum * multiplyWithNum);
+        });
+
+        return resultData.reduce((acc, next) => acc + next, 0);
+    }
+
+    return data && data.reduce((acc, next) => acc + next, 0);
 }
 /*
 var defaultOptions = {

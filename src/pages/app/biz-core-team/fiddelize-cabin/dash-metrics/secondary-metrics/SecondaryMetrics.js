@@ -3,6 +3,7 @@ import colorsHandler from "../../../../../dashboard-client-admin/dash-clients/cl
 import NpsReportBtn from "../../../../../dashboard-client-admin/dash-clients/clients-reviews/nps/nps-report/NpsReportBtn";
 import { getTextStatus } from "../../../../../../components/charts/speedometer-gauge/helpers";
 import XpReports from "./XpReports";
+import ConversionRateReportBtn from "./conversion-rate-report/ConversionRateReportBtn";
 
 export default function SecondaryMetrics({ mainData }) {
     return (
@@ -13,12 +14,11 @@ export default function SecondaryMetrics({ mainData }) {
                 Secundários
             </p>
             <section className="d-flex justify-content-around mt-5">
-                <NPS />
-                <RetentionRate mainData={mainData} />
+                <NPS mainData={mainData} />
+                <ConversionRate mainData={mainData} />
             </section>
             <br />
-            - Retenção Clientes
-            <XpReports />
+            <XpReports mainData={mainData} />
         </section>
     );
 }
@@ -31,15 +31,11 @@ function handleScoreDiff(scoreDiff) {
 }
 // END HELPERS
 
-function NPS() {
-    // const { mainData, loading } = useMainReviewData();
-    const loading = false;
+function NPS({ mainData }) {
+    // const { false } = useMainReviewData();
 
-    const mainData = {
-        nps: 10,
-        npsScoreDiff: 7,
-    };
     const { nps = "...", npsScoreDiff } = mainData;
+    const loading = Boolean(!nps);
 
     const { colorNPS, backNPS } = colorsHandler({
         nps,
@@ -96,7 +92,7 @@ function NPS() {
                 >
                     {nps}
                 </span>
-                {!loading && (
+                {false && (
                     <p
                         className={`m-0 ${colorNPS} position-relative text-subtitle font-weight-bold text-center`}
                         style={{ top: -25 }}
@@ -112,21 +108,26 @@ function NPS() {
                 {dataStatus && dataStatus.title.toUpperCase()}
             </p>
             <div className="container-center">
-                <NpsReportBtn mainData={mainData} disabled={true} />
+                <NpsReportBtn
+                    mainData={mainData}
+                    disabled={!!loading}
+                    isBizAdmin
+                />
             </div>
         </section>
     );
 }
 
-function RetentionRate({ mainData }) {
-    const { proCustomersCount, customersCount } = mainData;
+function ConversionRate({ mainData }) {
+    const { proCustomersCount, customersCount, freeCustomersCount } = mainData;
 
     const loading = false;
     const percProCustomers = getPercentage(customersCount, proCustomersCount);
+    const percFreeCustomers = getPercentage(customersCount, freeCustomersCount);
     const plural = true;
     // const percFreeCustomers = getPercentage(customersCount, allTimeFreeCustomers);
 
-    const colorRetentionDiff = "green";
+    const colorConversionRate = "green";
 
     const { color, status, backColor } = getColorConversionData(
         percProCustomers
@@ -165,7 +166,7 @@ function RetentionRate({ mainData }) {
             </p>
             <div className="position-relative text-title text-purple text-center">
                 <p
-                    className={`${colorRetentionDiff} text-normal font-weight-bold position-absolute`}
+                    className={`${colorConversionRate} text-normal font-weight-bold position-absolute`}
                     style={{
                         top: -3,
                         right: 15,
@@ -177,7 +178,7 @@ function RetentionRate({ mainData }) {
                     {percProCustomers}
                     <span className="text-em-0-6">%</span>
                 </span>
-                {!loading && (
+                {false && (
                     <p
                         className={`m-0 ${color} position-relative text-subtitle font-weight-bold text-center`}
                         style={{ top: -25 }}
@@ -193,7 +194,12 @@ function RetentionRate({ mainData }) {
                 {status}
             </p>
             <div className="container-center">
-                <NpsReportBtn mainData={mainData} disabled={true} />
+                <ConversionRateReportBtn
+                    mainData={mainData}
+                    disabled={!!loading}
+                    percFreeCustomers={percFreeCustomers}
+                    percProCustomers={percProCustomers}
+                />
             </div>
         </section>
     );

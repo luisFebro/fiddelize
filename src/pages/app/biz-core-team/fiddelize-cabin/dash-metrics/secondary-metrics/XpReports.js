@@ -1,9 +1,8 @@
 import BuyReviewsBtn from "../../../../../dashboard-client-admin/dash-clients/clients-reviews/buy-reviews/BuyReviewsBtn";
 
-export default function XpReports({
-    uncheckedReviews = 0,
-    lastDateChecked = new Date(),
-}) {
+export default function XpReports({ mainData }) {
+    const { uncheckedReviews, lastDateChecked } = mainData;
+
     const pluralReviews = uncheckedReviews > 1 ? "s" : "";
 
     return (
@@ -26,7 +25,7 @@ export default function XpReports({
                 não lido{pluralReviews}
             </p>
             <section className="container-center mt-4">
-                <BuyReviewsBtn lastDateChecked={lastDateChecked} />
+                <BuyReviewsBtn lastDateChecked={lastDateChecked} isBizAdmin />
             </section>
         </section>
     );

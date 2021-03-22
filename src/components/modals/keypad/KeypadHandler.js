@@ -58,7 +58,7 @@ export default function NumericKeypad({
 
     return (
         <Dialog
-            className="animated backInUp slower"
+            className="keypad-handler--root animated backInUp slower"
             maxWidth="md"
             disableBackdropClick
             onClose={handleClose}
