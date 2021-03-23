@@ -30,6 +30,10 @@
         }
     }
 
+    .ct-label.ct-vertical {
+        color: rgb(103, 137, 162);
+    }
+
     .ct-chart-line .ct-grids .ct-grid {
         stroke: var(--themePLight);
         stroke-width: 0.6px;

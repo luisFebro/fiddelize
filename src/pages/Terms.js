@@ -110,12 +110,13 @@ const text2 = (
             relacionadas à área de atuação da Fiddelize:
             <ul>
                 <li>
-                    <strong>motivos/formas</strong> para os clientes voltarem a
-                    comprar do seu negócio;
+                    <strong>Fidelidade da clientela</strong> para deixar seus
+                    clientes mais empolgados em continuar comprando do seu
+                    negócio usando tecnologia;
                 </li>
                 <li>
-                    Sugestões de <strong>divulgação para engajar</strong> sua
-                    clientela;
+                    <strong>Marketing de relacionamento</strong> para divulgar e
+                    engajar com sua clientela;
                 </li>
                 <li>
                     <strong>Análises para entender sua clientela</strong> e

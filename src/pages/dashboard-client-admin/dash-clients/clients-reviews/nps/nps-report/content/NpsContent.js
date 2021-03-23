@@ -107,6 +107,7 @@ export default function NpsContent({ mainData, isBizAdmin }) {
         });
     }, [dataChart, currWeekDay]);
 
+    const title = "Histórico pontuação promotores";
     const showPromotersHistoryChart = () => (
         <section
             className="my-5 position-relative"
@@ -117,9 +118,14 @@ export default function NpsContent({ mainData, isBizAdmin }) {
             <AsyncLineChart
                 xLabels={chData.xLabels}
                 dataArray={chData.dataArray}
+                title={title}
                 onlySmall
-                isMonday={currWeekDay === "Seg"}
-                isSunday={currWeekDay === "Dom"}
+                highestValue={100}
+                lowestValue={-100}
+                axisYTitle="pontos"
+                textAfterData="pts"
+                isFirstPos={currWeekDay === "Seg"}
+                isLastPos={currWeekDay === "Dom"}
             />
         </section>
     );

@@ -4,8 +4,8 @@ import ReturnBtn from "../../../../components/buttons/ReturnBtn";
 import useScrollUp from "../../../../hooks/scroll/useScrollUp";
 
 export default function Cabin({ history }) {
-    useBackColor("var(--themeP)");
     useScrollUp();
+    useBackColor("var(--themeP)");
 
     const showTitle = () => (
         <div className="mt-5">

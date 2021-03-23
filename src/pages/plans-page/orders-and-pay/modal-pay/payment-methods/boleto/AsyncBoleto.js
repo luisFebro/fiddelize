@@ -12,6 +12,7 @@ import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import RedirectLink from "../../../../../../components/RedirectLink";
 import getSenderHash from "../../../helpers/pagseguro/getSenderHash";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
+import useSendEmail from "../../../../../../hooks/email/useSendEmail";
 // import animateCSS from '../../../../utils/animateCSS';
 // import scrollIntoView from '../../../../utils/document/scrollIntoView';
 
@@ -104,6 +105,20 @@ export default function AsyncBoleto({ modalData = {} }) {
             handleCancel(); // remove current orders
         })();
     }, []);
+
+    const emailPayload = {
+        payMethod: "boleto",
+        amount: modalData.itemAmount,
+        cliName: modalData.userName,
+        servDesc: modalData.itemDescription,
+        reference: modalData.reference,
+        bizName: modalData.bizName,
+    };
+
+    useSendEmail({
+        type: "payAlert",
+        payload: emailPayload,
+    });
 
     const showTitle = () => (
         <div className="mt-2">

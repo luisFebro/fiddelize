@@ -8,7 +8,7 @@ import useAPI, { readFiddelizeCosts } from "../../../../../../hooks/api/useAPI";
 
 export default function PrimaryMetrics({ mainData }) {
     const [newCostValue, setNewCostValue] = useState(0);
-    const { revenueAmount } = mainData;
+    const revenueAmount = mainData && mainData.revenueAmount;
 
     const { data, loading } = useAPI({
         url: readFiddelizeCosts(),
@@ -29,6 +29,8 @@ export default function PrimaryMetrics({ mainData }) {
     netProfitMargin = netProfitMargin < 0 ? 0 : netProfitMargin;
 
     const currMonth = getMonthNowBr(new Date());
+    const gotData = revenueAmount || revenueAmount === 0;
+
     const {
         color: colorNetProfitMargin,
         status,
@@ -44,7 +46,7 @@ export default function PrimaryMetrics({ mainData }) {
             <div className="text-normal font-weight-bold">
                 <span className="font-site text-em-1-1">Vendas</span>
                 <br />
-                {revenueAmount || revenueAmount === 0
+                {gotData
                     ? convertToReal(revenueAmount, { moneySign: true })
                     : "R$ ..."}
             </div>
@@ -80,7 +82,7 @@ export default function PrimaryMetrics({ mainData }) {
                     }}
                 >
                     <h2 className="text-pill text-center text-subtitle font-weight-bold text-white">
-                        Lucro
+                        {profitValue > 0 ? "Lucro" : "Perca"}
                     </h2>
                 </div>
                 <p
@@ -92,26 +94,34 @@ export default function PrimaryMetrics({ mainData }) {
                 >
                     Margem Líquida
                 </p>
-                <div className="text-title text-center my-4">
+                <div className="text-title text-center mt-5 mb-4">
                     <span
-                        className={`${colorNetProfitMargin} d-inline-block font-size text-em-2`}
+                        className={`${
+                            !gotData ? "text-grey" : colorNetProfitMargin
+                        } d-inline-block font-size text-em-2`}
                         style={{
                             lineHeight: "30px",
                         }}
                     >
-                        {netProfitMargin}
+                        {gotData ? netProfitMargin : "..."}
                         <span className="text-em-0-6">%</span>
                         <br />
                         <span className="font-size text-em-0-5">
-                            {convertToReal(profitValue, { moneySign: true })}
+                            {gotData
+                                ? convertToReal(profitValue, {
+                                      moneySign: true,
+                                  })
+                                : "R$ ..."}
                         </span>
                     </span>
                 </div>
                 <p
-                    className={`${backNetProfitMargin} text-shadow text-center text-subtitle font-weight-bold d-table text-pill mb-3`}
+                    className={`${
+                        gotData ? backNetProfitMargin : ""
+                    } text-shadow text-center text-subtitle font-weight-bold d-table text-pill mb-3`}
                     style={{ borderRadius: "0px", margin: "0 auto" }}
                 >
-                    {status}
+                    {gotData ? status : "..."}
                 </p>
             </div>
         </section>

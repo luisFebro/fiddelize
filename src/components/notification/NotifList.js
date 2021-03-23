@@ -21,12 +21,11 @@ export default function NotifList({
     const params = {
         forceCliUser,
         bizId,
-        skip,
     };
     const apiKeys = {
         url: readNotifications(_id),
         skip,
-        params,
+        params, // LESSON: skip is automatically included in the params
         listName: "notifList",
     };
 

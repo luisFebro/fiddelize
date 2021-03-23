@@ -50,6 +50,7 @@ export default function useAPIList({
     params = null,
     body = null,
     skip = null,
+    limit = 5,
     timeout = IS_DEV ? 30000 : 10000, // default: 10000
     trigger,
     forceTrigger = false, // by default, in this API, trigger only serves as a reload rathan than preventing the list loading. To activate this later behavior, put it as true
@@ -154,7 +155,7 @@ export default function useAPIList({
         });
 
         const hasCards = listTotal > skip;
-        const firstCards = listTotal <= 5;
+        const firstCards = listTotal <= limit;
         setHasMore(hasCards && !firstCards);
         setReachedChunksLimit(skip >= chunksTotal);
         setOfflineBtn(false);

@@ -4,27 +4,42 @@ import "chartist-plugin-tooltips";
 import getIncreasedPerc from "../../../utils/numbers/getIncreasedPerc";
 import "./_LineChart.scss";
 import pluginPointLabels from "../plugins/pluginPointLabels";
+import convertToReal from "../../../utils/numbers/convertToReal";
+import getArrayAvg from "../../../utils/arrays/getArrayAvg";
 
 pluginPointLabels(Chartist);
 
 const isSmall = window.Helper.isSmallScreen();
 
-const plugins = {
-    plugins: [
-        Chartist.plugins.ctPointLabels({
-            textAnchor: "middle",
-        }),
-        Chartist.plugins.tooltip({
-            transformTooltipTextFnc(value) {
-                return `${value} pontos`;
-            },
-        }),
-    ],
+const getPlugins = ({ axisYTitle, isMoneyData, signBeforeData }) => {
+    const func = handleDataFormat({ isMoneyData, signBeforeData });
+
+    return {
+        plugins: [
+            Chartist.plugins.ctPointLabels({
+                textAnchor: "middle",
+                labelInterpolationFnc: func,
+            }),
+            Chartist.plugins.tooltip({
+                transformTooltipTextFnc(value) {
+                    return `${isMoneyData ? "R$" : ""} ${value} ${
+                        axisYTitle === undefined ? "" : axisYTitle
+                    }`;
+                },
+            }),
+        ],
+    };
 };
 
-const options = {
-    low: -100,
-    high: 100,
+const getOptions = ({
+    lowestValue,
+    highestValue,
+    axisYTitle,
+    isMoneyData,
+    signBeforeData,
+}) => ({
+    low: lowestValue,
+    high: highestValue,
     showGridBackground: false,
     showArea: true,
     lineSmooth: true,
@@ -39,10 +54,10 @@ const options = {
         top: 25,
         right: 0,
         bottom: 20,
-        left: 0,
+        left: isMoneyData ? 18 : 0, // it gives more spacing to put more digits
     },
-    ...plugins,
-};
+    ...getPlugins({ axisYTitle, isMoneyData, signBeforeData }),
+});
 
 // dataArray should have elements as numbers
 // data examples:
@@ -51,9 +66,16 @@ const options = {
 export default function LineChart({
     xLabels,
     dataArray,
+    title,
+    highestValue, // number
+    lowestValue, // number
+    axisYTitle, // string
+    isMoneyData = false,
+    signBeforeData = "",
+    textAfterData = "",
     onlySmall = false, // useful especially when used in a modal when the width is limited regardless of the screen width size.
-    isMonday = false, // handle extreme left data visulization
-    isSunday = false,
+    isFirstPos = false, // handle extreme left data visulization
+    isLastPos = false,
 }) {
     const arrLen = dataArray && dataArray.length;
 
@@ -71,6 +93,16 @@ export default function LineChart({
     const isNegative = lastPerc < 0;
     const showText = !Number.isNaN(lastButOne) && lastPerc !== 0;
 
+    const handleLastDiff = (val, options = {}) => {
+        const { isDiff } = options;
+        if (isMoneyData) {
+            const mainMoneyCond = val ? `R$${convertToReal(val)}` : "R$...";
+            return isDiff ? `(R$${convertToReal(val)})` : mainMoneyCond;
+        }
+
+        return `(${val}${textAfterData})`;
+    };
+
     useEffect(() => {
         (async () => {
             const chart = new Chartist.Line(
@@ -79,7 +111,13 @@ export default function LineChart({
                     labels: xLabels,
                     series: [dataArray],
                 },
-                options
+                getOptions({
+                    highestValue,
+                    lowestValue,
+                    axisYTitle,
+                    isMoneyData,
+                    signBeforeData,
+                })
             );
 
             chart.on("draw", (data) => {
@@ -103,15 +141,23 @@ export default function LineChart({
                 const lastData = document.querySelector(
                     "svg.ct-chart-line .ct-series text:last-of-type"
                 );
-                const parentElem = lastData.parentNode;
-                const lastXAttrib = lastData.x && lastData.x.baseVal["0"].value;
-                const lastYAttrib = lastData.y && lastData.y.baseVal["0"].value;
-                lastData.innerHTML = isMonday ? "" : `${lastValue} pts`; // values in monday yAxis is too close to yLabels, that's why omitting it.
+
+                const parentElem = lastData && lastData.parentNode;
+                const lastXAttrib =
+                    lastData && lastData.x && lastData.x.baseVal["0"].value;
+                const lastYAttrib =
+                    lastData && lastData.y && lastData.y.baseVal["0"].value;
+                if (lastData) {
+                    lastData.innerHTML = isFirstPos
+                        ? ""
+                        : handleLastDiff(lastValue); // values in first position in the yAxis is too close to yLabels, that's why omitting it.
+                }
 
                 const { distanceY, distanceX } = handleDiffLabelDistance({
                     lastValue,
                     onlySmall,
-                    isSunday,
+                    isLastPos,
+                    dataArray,
                 });
 
                 const textObj = {
@@ -126,18 +172,21 @@ export default function LineChart({
                     }; font-size: ${isSmall ? "18" : "22"}px;`,
                     multilineText: showText && [
                         isNegative ? `${lastPerc}%` : `+${lastPerc}%`,
-                        `(${lastDiff}pts)`,
+                        handleLastDiff(lastDiff, { isDiff: true }),
                     ],
                 };
-                !isMonday && drawText(textObj, parentElem);
+                if (!isFirstPos && dataArray.length) {
+                    drawText(textObj, parentElem);
+                }
             }, 3000);
         })();
-    }, [dataArray, lastValue, lastButOne, lastDiff, lastPerc]);
+        // return () => clearTimeout(timer)
+    }, [dataArray, lastValue, lastButOne, lastDiff, lastPerc, isFirstPos]);
 
     return (
         <section className="line-chart--root">
             <h2 className="py-3 text-normal font-weight-bold text-white text-center">
-                Histórico pontuação promotores
+                {title}
             </h2>
             <div className="line-chart" />
         </section>
@@ -190,8 +239,25 @@ function drawText(o, parent) {
     return text;
 }
 
-function handleDiffLabelDistance({ lastValue, onlySmall, isSunday }) {
-    const needUpperDiff = Number(lastValue) < 0;
+function handleDiffLabelDistance({
+    lastValue,
+    onlySmall,
+    isLastPos,
+    dataArray,
+}) {
+    // if the value is the heighest
+    const handleUpperDiff = () => {
+        const isLastMaxValue = Math.max(...dataArray) === lastValue;
+        const isLastMinValue = Math.min(...dataArray) === lastValue;
+
+        if (isLastMaxValue) return false;
+        if (isLastMinValue) return true;
+
+        const avg = getArrayAvg(dataArray);
+        return lastValue < avg; // ? true : false
+    };
+
+    const needUpperDiff = handleUpperDiff();
     let distanceY;
     let distanceX;
 
@@ -202,7 +268,7 @@ function handleDiffLabelDistance({ lastValue, onlySmall, isSunday }) {
     }
 
     if (isSmall || onlySmall) {
-        if (isSunday) {
+        if (isLastPos) {
             distanceX = -5;
         } else {
             distanceX = -25;
@@ -215,6 +281,24 @@ function handleDiffLabelDistance({ lastValue, onlySmall, isSunday }) {
         distanceY,
         distanceX,
     };
+}
+
+function handleDataFormat({ isMoneyData = false, signBeforeData }) {
+    if (isMoneyData) {
+        const getValue = (value) =>
+            Number.isInteger(value) ? value : value.toFixed(1);
+        return (value) =>
+            `R$${!value && value !== 0 ? "..." : getValue(value)}`;
+    }
+
+    if (signBeforeData) {
+        return (value) => {
+            if (!value && value !== 0) return "...";
+            return signBeforeData + value;
+        };
+    }
+
+    return "...";
 }
 // END HELPERS
 

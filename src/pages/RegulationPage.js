@@ -83,7 +83,7 @@ export default function RegulationPage({ location }) {
             style={{ top: "20px" }}
             className="position-relative text-center text-white text-title my-4"
         >
-            REGULAMENTO DO PROGRAMA DE FIDELIDADE -{" "}
+            REGULAMENTO DO PROGRAMA DE PONTOS -{" "}
             <span>{new Date().getFullYear()}</span>
         </p>
     );
