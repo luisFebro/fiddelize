@@ -27,15 +27,13 @@ const AsyncReviewResults = LoadableVisible({
 });
 
 export default function NpsContent({ mainData, isBizAdmin }) {
-    const { nps, detractors, promoters } = mainData;
+    const { nps } = mainData;
 
     const { colorNPS } = colorsHandler({ nps });
     const { icon } = getTextStatus(nps);
     const currWeekDay = getWeekDayBr(null, { abbrev: true });
 
     const { dataChart, loading } = useNpsChartData({
-        lastTotalDetractors: detractors && detractors.total,
-        lastTotalPromoters: promoters && promoters.total,
         isBizAdmin,
     });
 
@@ -157,11 +155,7 @@ export default function NpsContent({ mainData, isBizAdmin }) {
     );
 }
 
-function useNpsChartData({
-    lastTotalPromoters,
-    lastTotalDetractors,
-    isBizAdmin,
-}) {
+function useNpsChartData({ isBizAdmin }) {
     const [data, setData] = useState({
         dataChart: null,
         loading: true,
@@ -173,8 +167,6 @@ function useNpsChartData({
     useEffect(() => {
         const runAnalysis = async () => {
             const params = {
-                lastTotalPromoters,
-                lastTotalDetractors,
                 isBizAdmin,
             };
 
@@ -190,15 +182,15 @@ function useNpsChartData({
             }));
         };
 
-        if (userId !== "..." && lastTotalPromoters !== undefined) {
+        if (userId !== "...") {
             runAnalysis();
         }
-    }, [userId, lastTotalPromoters]);
+    }, [userId]);
 
     return { dataChart, loading };
 }
 
-function getLabelsAndData({ dataChart, currWeekDay, currNps = 50 }) {
+function getLabelsAndData({ dataChart, currWeekDay }) {
     const weekDays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 
     let indCurrWeekDay;
@@ -210,15 +202,10 @@ function getLabelsAndData({ dataChart, currWeekDay, currNps = 50 }) {
         return w;
     });
 
-    // the rest of data is hidden because all other dates after TODAY is the same like:
-    // 62 , 64 (today), 64, 64 ... repeats
+    // make sure only data up until today is loaded, although it will never have a tomorrow nps data. Only for tests purposes.
     const finalChartData = dataChart
         ? dataChart.slice(0, indCurrWeekDay + 1)
         : [0];
-
-    // be sure that last nps is the same as generated in the mainData
-    // sometimes when thereis only detractors and promoters, it will calculate wrongly
-    finalChartData.splice(-1, 1, currNps);
 
     return {
         xLabels: finalWeekDay,

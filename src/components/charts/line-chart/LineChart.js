@@ -100,7 +100,7 @@ export default function LineChart({
             return isDiff ? `(R$${convertToReal(val)})` : mainMoneyCond;
         }
 
-        return `(${val}${textAfterData})`;
+        return isDiff ? `(${val}${textAfterData})` : `${val}${textAfterData}`;
     };
 
     useEffect(() => {

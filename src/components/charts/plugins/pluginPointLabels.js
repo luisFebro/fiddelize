@@ -69,7 +69,11 @@ export default function pluginPointLabels(Chartist) {
                     },
                     options.labelClass
                 )
-                .text(options.labelInterpolationFnc(value));
+                .text(
+                    typeof options.labelInterpolationFnc === "function"
+                        ? options.labelInterpolationFnc(value)
+                        : value
+                );
         }
 
         return function ctPointLabels(chart) {
