@@ -4,6 +4,10 @@
 
 export default function convertToReal(number, options = {}) {
     if (!number && number !== 0) return;
+
+    if (typeof number === "number") {
+        number = Math.abs(number);
+    }
     if (number.toString().indexOf(",") > 0)
         return console.log("the number should not contain a comma");
 

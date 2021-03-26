@@ -51,7 +51,7 @@ export default function RevenueList({ handleRevenueChart }) {
                 <h2
                     className="text-center text-grey text-normal font-weight-bold"
                     style={{
-                        marginTop: 150,
+                        margin: "150px 0",
                     }}
                 >
                     Sem receita registrada.

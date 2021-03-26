@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import AppTotals from "./AppTotals";
 import RetentionGraph from "./RetentionGraph";
 import ProPlanData from "./ProPlanData";
+import AvgTicket from "./AvgTicket";
 
 export default function ComplementaryData({ mainData }) {
     return (
@@ -12,6 +13,7 @@ export default function ComplementaryData({ mainData }) {
                 Complementares
             </p>
             <RetentionGraph mainData={mainData} />
+            <AvgTicket mainData={mainData} />
             <ProPlanData mainData={mainData} />
             <AppTotals />
         </Fragment>

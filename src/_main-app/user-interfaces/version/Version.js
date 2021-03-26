@@ -3,10 +3,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.6.0-75"; // PRÓXIMO:
+const latestVersion = "4.7.0"; // PRÓXIMO:
 
 const updateDescription =
-    "cabine Fiddelize - análise e desempenho do negócio pt 6";
+    "cabine Fiddelize - análise e desempenho do negócio pt 7";
 
 /* HISTORY
 "atualizações lançamento - pt 6"

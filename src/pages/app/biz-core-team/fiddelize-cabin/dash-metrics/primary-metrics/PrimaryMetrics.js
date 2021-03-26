@@ -1,14 +1,20 @@
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RevenueHistoryBtn from "./revenue-history/RevenueHistoryBtn";
 import MonthlyCostRegisterBtn from "./monthly-cost-register/MonthlyCostRegisterBtn";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getPercentage from "../../../../../../utils/numbers/getPercentage";
 import getMonthNowBr from "../../../../../../utils/dates/getMonthNowBr";
 import useAPI, { readFiddelizeCosts } from "../../../../../../hooks/api/useAPI";
+import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 
 export default function PrimaryMetrics({ mainData }) {
     const [newCostValue, setNewCostValue] = useState(0);
+    const [revenueMode, setRevenueMode] = useState("netProfit"); //or allTimeRevenue
     const revenueAmount = mainData && mainData.revenueAmount;
+
+    const allTimeRevenueAmount = mainData && mainData.allTimeRevenueAmount;
+    const allTimeNetProfitAmount = mainData && mainData.allTimeNetProfitAmount;
 
     const { data, loading } = useAPI({
         url: readFiddelizeCosts(),
@@ -19,7 +25,7 @@ export default function PrimaryMetrics({ mainData }) {
 
     const finalTotalCost =
         (data && data.transactionsAmount) || newCostValue
-            ? data.transactionsAmount || 0 + newCostValue
+            ? data.transactionsAmount + newCostValue
             : 0;
 
     const monthlyCosts = loading ? "..." : finalTotalCost;
@@ -28,7 +34,7 @@ export default function PrimaryMetrics({ mainData }) {
     let netProfitMargin = getPercentage(revenueAmount, profitValue); // ((profitValue / revenue) * 100).toFixed(1)
     netProfitMargin = netProfitMargin < 0 ? 0 : netProfitMargin;
 
-    const currMonth = getMonthNowBr(new Date());
+    const currMonth = getMonthNowBr();
     const gotData = revenueAmount || revenueAmount === 0;
 
     const {
@@ -127,6 +133,63 @@ export default function PrimaryMetrics({ mainData }) {
         </section>
     );
 
+    const displayChangeModeBtn = () => (
+        <ButtonFab
+            position="relative"
+            backgroundColor="var(--themeSDark)"
+            iconFontAwesome={
+                <FontAwesomeIcon
+                    icon="sync-alt"
+                    className="d-flex align-items-center"
+                    style={{ fontSize: 25 }}
+                    needIconShadow={false}
+                    onClick={() => {
+                        let thisChange = "";
+                        if (revenueMode === "netProfit") {
+                            thisChange = "allTimeRevenue";
+                        } else {
+                            thisChange = "netProfit";
+                        }
+                        setRevenueMode(thisChange);
+                    }}
+                />
+            }
+        />
+    );
+
+    const showTotalRevenue = () => (
+        <section className="my-3 text-purple text-center">
+            <h2 className="m-0 text-normal font-weight-bold">
+                {revenueMode === "netProfit"
+                    ? "Caixa Disponível "
+                    : "Receita Geral Total "}
+                {displayChangeModeBtn()}
+            </h2>
+            {gotData ? (
+                <p
+                    className={`m-0 ${
+                        allTimeRevenueAmount < 0 ? "text-red" : "text-sys-green"
+                    } text-subtitle font-weight-bold`}
+                >
+                    R${" "}
+                    {convertToReal(
+                        revenueMode === "netProfit"
+                            ? allTimeNetProfitAmount - newCostValue
+                            : allTimeRevenueAmount
+                    )}
+                </p>
+            ) : (
+                <p
+                    className={`m-0 ${
+                        allTimeRevenueAmount < 0 ? "text-red" : "text-sys-green"
+                    } text-subtitle font-weight-bold`}
+                >
+                    R$ ...
+                </p>
+            )}
+        </section>
+    );
+
     return (
         <section>
             <h2 className="text-purple text-subtitle font-weight-bold text-center">
@@ -136,6 +199,7 @@ export default function PrimaryMetrics({ mainData }) {
             </h2>
             {showRevenueAndCost({ currMonth })}
             {showProfit()}
+            {showTotalRevenue()}
             <section className="my-5 container-center">
                 <RevenueHistoryBtn />
             </section>

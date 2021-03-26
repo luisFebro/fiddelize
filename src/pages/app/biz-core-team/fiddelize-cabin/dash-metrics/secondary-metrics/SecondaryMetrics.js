@@ -92,14 +92,12 @@ function NPS({ mainData }) {
                 >
                     {nps}
                 </span>
-                {false && (
-                    <p
-                        className={`m-0 ${colorNPS} position-relative text-subtitle font-weight-bold text-center`}
-                        style={{ top: -25 }}
-                    >
-                        {plural ? "pontos" : "ponto"}
-                    </p>
-                )}
+                <p
+                    className={`m-0 ${colorNPS} position-relative text-subtitle font-weight-bold text-center`}
+                    style={{ top: -25 }}
+                >
+                    {plural ? "pontos" : "ponto"}
+                </p>
             </div>
             <p
                 className={`${backNPS} text-shadow text-center text-subtitle font-weight-bold text-purple d-table text-pill mb-3`}
@@ -178,14 +176,12 @@ function ConversionRate({ mainData }) {
                     {percProCustomers}
                     <span className="text-em-0-6">%</span>
                 </span>
-                {false && (
-                    <p
-                        className={`m-0 ${color} position-relative text-subtitle font-weight-bold text-center`}
-                        style={{ top: -25 }}
-                    >
-                        {plural ? "clientes" : "cliente"}
-                    </p>
-                )}
+                <p
+                    className={`m-0 ${color} position-relative text-subtitle font-weight-bold text-center`}
+                    style={{ top: -25 }}
+                >
+                    {plural ? "clientes" : "cliente"}
+                </p>
             </div>
             <p
                 className={`${backColor} text-shadow text-center text-subtitle font-weight-bold text-purple d-table text-pill mb-3`}
