@@ -1,7 +1,6 @@
 // reference: https://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates
 
-export default function getDiffDays(targetDate, options = {}) {
-    const { countdownLimit /* number */ } = options;
+export default function getDiffDays(targetDate) {
     // e.g date format new Date(2020, 12 (month), 31 (day))
     if (typeof targetDate === "string") targetDate = new Date(targetDate);
     if (!targetDate) targetDate = new Date();

@@ -3,12 +3,12 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.7.0"; // PRÓXIMO:
+const latestVersion = "4.8.0"; // PRÓXIMO:
 
-const updateDescription =
-    "cabine Fiddelize - análise e desempenho do negócio pt 7";
+const updateDescription = "salarios pessoais Fiddelize - pt 1";
 
 /* HISTORY
+""cabine Fiddelize - análise e desempenho do negócio pt 7" - "4.8.0"
 "atualizações lançamento - pt 6"
 "pix - sistema completo de pagamento com suporte app equipe fiddelize pt2"
 "biz team app - pay and automatic selling system - register associates - pt2"

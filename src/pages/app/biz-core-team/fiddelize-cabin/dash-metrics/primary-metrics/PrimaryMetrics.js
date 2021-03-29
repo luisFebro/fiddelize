@@ -7,6 +7,7 @@ import getPercentage from "../../../../../../utils/numbers/getPercentage";
 import getMonthNowBr from "../../../../../../utils/dates/getMonthNowBr";
 import useAPI, { readFiddelizeCosts } from "../../../../../../hooks/api/useAPI";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
+import CashflowBtn from "./cash-flow/CashflowBtn";
 
 export default function PrimaryMetrics({ mainData }) {
     const [newCostValue, setNewCostValue] = useState(0);
@@ -63,6 +64,7 @@ export default function PrimaryMetrics({ mainData }) {
                 <MonthlyCostRegisterBtn
                     currMonth={currMonth}
                     handleNewCostValue={handleNewCostValue}
+                    mainData={mainData}
                 />
             </div>
         </section>
@@ -157,13 +159,22 @@ export default function PrimaryMetrics({ mainData }) {
         />
     );
 
+    const displayMoreOptBtn = () => <CashflowBtn mainData={mainData} />;
+
     const showTotalRevenue = () => (
         <section className="my-3 text-purple text-center">
             <h2 className="m-0 text-normal font-weight-bold">
                 {revenueMode === "netProfit"
                     ? "Caixa Disponível "
                     : "Receita Geral Total "}
-                {displayChangeModeBtn()}
+                <div style={{ display: "inline-flex" }}>
+                    {displayChangeModeBtn()}
+                    {revenueMode === "netProfit" ? (
+                        <div className="animated fadeIn">
+                            {displayMoreOptBtn()}
+                        </div>
+                    ) : undefined}
+                </div>
             </h2>
             {gotData ? (
                 <p

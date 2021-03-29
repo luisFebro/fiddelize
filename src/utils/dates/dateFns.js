@@ -9,6 +9,7 @@ import getHours from "date-fns/getHours";
 import getMinutes from "date-fns/getMinutes";
 import isToday from "date-fns/isToday";
 import startOfWeek from "date-fns/startOfWeek";
+import endOfMonth from "date-fns/endOfMonth";
 import endOfWeek from "date-fns/endOfWeek";
 import isAfter from "date-fns/isAfter";
 import { getPureParsedDate } from "./helpers/dateFnsHelpers";
@@ -65,6 +66,7 @@ const isScheduledDate = (targetDate, options = {}) => {
 const checkToday = (date) => isToday(new Date(date));
 const endWeek = endOfWeek(new Date(), { weekStartsOn: 1 });
 const startWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
+const endMonth = endOfMonth(new Date());
 
 const formatSlashDMY = (newDate = new Date()) => format(newDate, "dd/MM/yyyy");
 
@@ -83,6 +85,7 @@ export {
     endWeek,
     startWeek,
     isAfter, // Is the first date after the second one?
+    endMonth,
 };
 
 // reference: https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time

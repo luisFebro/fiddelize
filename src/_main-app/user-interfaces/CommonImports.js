@@ -104,6 +104,12 @@ export const AsyncFiddelizeCabin = Load({
         ),
 });
 
+export const AsyncCeoFinance = Load({
+    loader: () =>
+        import(
+            "../../pages/app/biz-core-team/finance/ceo/CeoFinance" /* webpackChunkName: "ceo-finance-lazy" */
+        ),
+});
 // END BIZ TEAM APP
 
 export const AsyncAppsPanel = Load({

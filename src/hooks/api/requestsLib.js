@@ -127,9 +127,15 @@ export const readAgentIncomeHistory = () =>
 export const getCabinMainData = () => `${API}/admin/fiddelize-cabin/main-data`;
 export const getAppTotals = () => `${API}/admin/fiddelize-cabin/app-totals`;
 export const getXpReviewList = () => `${API}/admin/fiddelize-cabin/xp-reviews`;
+// finance
 export const getFiddelizeRevenueHistory = () =>
     `${API}/admin/fiddelize-cabin/revenue-history`;
-// costs
+export const convertCurrency = () => `${API}/admin/fiddelize-cabin/curr-conv`;
 export const readFiddelizeCosts = () =>
     `${API}/admin/fiddelize-cabin/read-costs`;
 export const addFiddelizeCosts = () => `${API}/admin/fiddelize-cabin/add-costs`;
+// personal finance usage
+export const readFinanceTransactions = () =>
+    `${API}/admin/finance/transaction-history`; // GET
+export const addFinanceTransaction = () =>
+    `${API}/admin/finance/add-transaction`; // POST

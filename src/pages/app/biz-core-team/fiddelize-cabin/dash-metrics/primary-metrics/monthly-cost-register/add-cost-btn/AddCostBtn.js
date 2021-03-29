@@ -2,7 +2,7 @@ import { useState } from "react";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import CostForm from "./CostForm";
 
-export default function AddCostBtn({ handleNewCostCard }) {
+export default function AddCostBtn({ handleNewCostCard, mainData }) {
     const [newCost, setNewCost] = useState(false);
 
     const switchCostPanel = (newVal) => {
@@ -24,6 +24,7 @@ export default function AddCostBtn({ handleNewCostCard }) {
         <CostForm
             switchCostPanel={switchCostPanel}
             handleNewCostCard={handleNewCostCard}
+            mainData={mainData}
         />
     );
 

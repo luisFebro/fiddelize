@@ -5,6 +5,7 @@ import AddCostBtn from "./add-cost-btn/AddCostBtn";
 export default function MonthlyCostRegisterContent({
     currMonth = "...",
     handleNewCostValue,
+    mainData,
 }) {
     const [newCardSet, setNewCardSet] = useState([]);
 
@@ -26,7 +27,10 @@ export default function MonthlyCostRegisterContent({
     return (
         <section>
             {showTitle()}
-            <AddCostBtn handleNewCostCard={handleNewCostCard} />
+            <AddCostBtn
+                handleNewCostCard={handleNewCostCard}
+                mainData={mainData}
+            />
             <MonthlyCostsList newCardSet={newCardSet} />
         </section>
     );

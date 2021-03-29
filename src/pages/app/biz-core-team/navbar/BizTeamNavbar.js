@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import Img from "../../../../components/Img";
 import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";
 import { disconnect } from "../../../../hooks/useAuthUser";
+import useData from "../../../../hooks/useData";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -13,12 +14,26 @@ export const menuIconStyle = {
 };
 
 function BizTeamNavbar({ history }) {
+    const [agentJob] = useData(["agentJob"]);
+    const isDev = agentJob === "dev";
+
     const showMoreOptionsBtn = () => {
-        const optArray = [
+        let optArray = [
             {
                 icon: <FontAwesomeIcon icon="sync-alt" style={menuIconStyle} />,
                 text: "trocar app",
                 callback: () => history.push("/painel-de-apps"),
+            },
+            {
+                icon: (
+                    <FontAwesomeIcon
+                        icon="money-bill-alt"
+                        style={menuIconStyle}
+                    />
+                ),
+                text: "Salário CEO",
+                callback: () =>
+                    history.push("/t/app/nucleo-equipe/financeiro/ceo"),
             },
             {
                 icon: <ExitToAppIcon style={menuIconStyle} />,
@@ -30,6 +45,11 @@ function BizTeamNavbar({ history }) {
                 },
             },
         ];
+
+        if (!isDev) {
+            delete optArray[1];
+        }
+
         return (
             <ButtonMenu
                 mainIcon="moreVert"

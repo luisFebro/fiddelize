@@ -48,6 +48,7 @@ import {
     AsyncPayGatewayRegister,
     AsyncBizTeamPassword,
     AsyncFiddelizeCabin,
+    AsyncCeoFinance,
     // biz docs and footer
     AsyncServicesStatus,
     AsyncTerms,
@@ -185,6 +186,11 @@ function Website({ location, history }) {
                     path="/t/app/nucleo-equipe/cabine-fiddelize"
                     exact
                     component={AsyncFiddelizeCabin}
+                />
+                <Route
+                    path="/t/app/nucleo-equipe/financeiro/ceo"
+                    exact
+                    component={AsyncCeoFinance}
                 />
                 <Route path="/pix" exact component={AsyncPix} />
                 <Route

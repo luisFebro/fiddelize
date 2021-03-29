@@ -1,0 +1,27 @@
+#bottom-tabs--root {
+    .MuiTab-root {
+        padding: 0px;
+        line-height: 1.00;
+        outline: none;
+    }
+
+    .MuiTab-labelIcon {
+        min-height: 35px;
+    }
+
+    .PrivateTabIndicator-root-13 {
+        height: 4px;
+    }
+
+    .MuiAppBar-positionFixed {
+        top: auto;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: auto;
+    }
+
+    .MuiTab-labelIcon .MuiTab-wrapper > *:first-child {
+      margin-bottom: 1px;
+    }
+}

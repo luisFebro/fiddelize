@@ -13,29 +13,40 @@ import getAPI, {
 } from "../../../../../../../../utils/promises/getAPI";
 import moneyMaskBr from "../../../../../../../../utils/validation/masks/moneyMaskBr";
 import useData from "../../../../../../../../hooks/useData";
-import { convertBrToDollar } from "../../../../../../../../utils/numbers/convertDotComma";
+import converToReal, {
+    convertToDollar,
+} from "../../../../../../../../utils/numbers/convertToReal";
+import getPercentage from "../../../../../../../../utils/numbers/getPercentage";
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
     fieldForm: {
         backgroundColor: "var(--mainWhite)",
         color: "var(--themeP)",
-        // zIndex: 2000,
         font: "normal 1em Poppins, sans-serif",
     },
-    // helperFromField: {
-    //     color: "grey",
-    //     fontFamily: "Poppins, sans-serif",
-    //     fontSize: isSmall ? ".8em" : ".6em",
-    // },
 });
 
-export default function CostForm({ switchCostPanel, handleNewCostCard }) {
+export default function CostForm({
+    mainData,
+    switchCostPanel,
+    handleNewCostCard,
+}) {
     const [data, setData] = useState({
         desc: "",
         value: null,
+        alreadySalary: false,
     });
-    const { desc, value } = data;
+    const { desc, value, alreadySalary } = data;
+
+    const availableCash = mainData && mainData.allTimeNetProfitAmount;
+    const alreadyCurrMonthWithdrawal = mainData
+        ? mainData.alreadyCurrMonthWithdrawal
+        : null;
+    const CEO_PERC_SALARY = 15;
+    const ceoSalary = getPercentage(availableCash, CEO_PERC_SALARY, {
+        mode: "value",
+    });
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
@@ -61,8 +72,7 @@ export default function CostForm({ switchCostPanel, handleNewCostCard }) {
 
             const newCostCard = {
                 desc,
-                value: convertBrToDollar(formattedValue),
-                createdAt: new Date(),
+                value: convertToDollar(formattedValue),
             };
 
             await getAPI({
@@ -71,8 +81,11 @@ export default function CostForm({ switchCostPanel, handleNewCostCard }) {
                 body: newCostCard,
             });
 
+            // update by adding this new card to the list of loaded cards
             await handleNewCostCard(newCostCard);
-            switchCostPanel(false);
+            // close panel
+            await switchCostPanel(false);
+
             showSnackbar(
                 dispatch,
                 `Novo Custo registrado, ${firstName}!`,
@@ -95,6 +108,103 @@ export default function CostForm({ switchCostPanel, handleNewCostCard }) {
             />
         </section>
     );
+
+    const handleSalaryWithdrawal = async () => {
+        showSnackbar(
+            dispatch,
+            `Retirando e registrando salário!<br />Um momento...`,
+            "warning"
+        );
+
+        const newCostCard = {
+            desc: "salário",
+            value: ceoSalary,
+            isSalary: true,
+        };
+
+        await getAPI({
+            method: "post",
+            url: addFiddelizeCosts(),
+            body: newCostCard,
+        });
+
+        await setData((prev) => ({
+            ...prev,
+            alreadySalary: true,
+        }));
+        await handleNewCostCard(newCostCard);
+
+        showSnackbar(dispatch, `Salário Retirado, ${firstName}!`, "success");
+    };
+
+    const showSalaryArea = () => {
+        if (alreadyCurrMonthWithdrawal === null) {
+            return (
+                <h2 className="text-center text-purple text-subtitle font-weight-bold">
+                    Carregando...
+                </h2>
+            );
+        }
+
+        if (alreadyCurrMonthWithdrawal === false) {
+            return (
+                <section
+                    className="text-purple"
+                    style={{
+                        backgroundColor: "rgb(148, 224, 148)",
+                        padding: "30px 0",
+                        borderRadius: "25px",
+                    }}
+                >
+                    <h2
+                        className="text-center text-black text-subtitle font-weight-bold"
+                        style={{
+                            lineHeight: "25px",
+                        }}
+                    >
+                        Salário Mensal
+                        <br />
+                        Disponível
+                    </h2>
+                    <div className="container-center">
+                        <p
+                            className="mt-3 text-pill text-normal text-center font-weight-bold"
+                            style={{
+                                backgroundColor: "green",
+                            }}
+                        >
+                            {converToReal(ceoSalary, { moneySign: true })} (
+                            {CEO_PERC_SALARY}%)
+                        </p>
+                    </div>
+                    <section className="container-center my-4">
+                        <ButtonFab
+                            onClick={handleSalaryWithdrawal}
+                            disabled={false}
+                            title="Retirar"
+                            color="var(--mainWhite)"
+                            size="large"
+                            backgroundColor="green"
+                            variant="extended"
+                        />
+                    </section>
+                </section>
+            );
+        }
+
+        return (
+            <h2
+                className="text-center text-grey text-normal font-weight-bold"
+                style={{
+                    backgroundColor: "var(--themeBackground--white)",
+                    borderRadius: "25px",
+                    marginTop: "100px",
+                }}
+            >
+                Salário do mês já retirado.
+            </h2>
+        );
+    };
 
     return (
         <form
@@ -161,6 +271,7 @@ export default function CostForm({ switchCostPanel, handleNewCostCard }) {
                 />
             </div>
             {showCTA()}
+            {!alreadySalary && showSalaryArea()}
         </form>
     );
 }

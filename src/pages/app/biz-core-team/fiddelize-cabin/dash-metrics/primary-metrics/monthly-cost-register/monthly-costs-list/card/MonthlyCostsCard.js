@@ -6,7 +6,7 @@ export default function MonthlyCostsCard({ data }) {
     const { desc, value, createdAt } = data;
 
     const investedValue = convertToReal(value, { moneySign: true });
-    const registerDate = calendar(createdAt);
+    const registerDate = createdAt && calendar(createdAt);
     return (
         <div className="my-3 text-normal text-white monthly-costs-card--root">
             <h2 className="text-normal text-white">{desc}</h2>

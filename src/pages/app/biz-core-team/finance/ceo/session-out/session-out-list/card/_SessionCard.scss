@@ -1,0 +1,24 @@
+.revenue-card--root {
+    background-color: var(--themeP);
+    border-radius: 20px;
+    padding: 10px;
+
+    .profit-area {
+        color: var(--themeP);
+        background-color: var(--mainWhite);
+        padding: 0 10px;
+        border-radius: 20px;
+
+        .profit-rate {
+            position: absolute;
+            background-color: var(--mainWhite);
+            border-radius: 10px;
+            padding: 0 2px;
+
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            // right: -35px;
+        }
+    }
+}

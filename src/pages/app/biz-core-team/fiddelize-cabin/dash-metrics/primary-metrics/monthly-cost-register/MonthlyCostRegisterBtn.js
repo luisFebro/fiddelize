@@ -24,6 +24,7 @@ export default function MonthlyCostRegisterBtn({
     size = "medium",
     currMonth,
     handleNewCostValue,
+    mainData,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -36,7 +37,11 @@ export default function MonthlyCostRegisterBtn({
     };
 
     const AsyncComp = (
-        <Async currMonth={currMonth} handleNewCostValue={handleNewCostValue} />
+        <Async
+            currMonth={currMonth}
+            handleNewCostValue={handleNewCostValue}
+            mainData={mainData}
+        />
     );
 
     return (

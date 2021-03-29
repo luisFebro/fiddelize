@@ -392,8 +392,8 @@ export default function useAPIList({
         isOffline,
         isOffList,
         content,
-        emptyType,
         gotData: Boolean(gotListItems),
+        extractStrData,
     };
 }
 

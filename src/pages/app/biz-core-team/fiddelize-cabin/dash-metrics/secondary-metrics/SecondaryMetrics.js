@@ -34,7 +34,8 @@ function handleScoreDiff(scoreDiff) {
 function NPS({ mainData }) {
     // const { false } = useMainReviewData();
 
-    const { nps = "...", npsScoreDiff } = mainData;
+    const nps = mainData ? mainData.nps : "...";
+    const npsScoreDiff = mainData ? mainData.npsScoreDiff : "...";
     const loading = Boolean(!nps && nps !== 0);
 
     const { colorNPS, backNPS } = colorsHandler({

@@ -31,20 +31,6 @@ export default function AvgTicket({ mainData }) {
             </p>
             <section className="d-flex justify-content-around">
                 <div
-                    className="my-3 text-center text-subtitle font-weight-bold text-purple"
-                    style={{
-                        lineHeight: "20px",
-                    }}
-                >
-                    R$ {convertToReal(currAvgTicket)}
-                    <br />
-                    <span className="text-normal">mês atual</span>
-                    <br />
-                    <span className="text-small font-weight-bold">
-                        ({currMonthSalesCount} venda{pluralCurrSales})
-                    </span>
-                </div>
-                <div
                     className="my-3 text-center text-normal font-weight-bold text-purple"
                     style={{
                         lineHeight: "20px",
@@ -58,6 +44,20 @@ export default function AvgTicket({ mainData }) {
                     <br />
                     <span className="text-small font-weight-bold">
                         ({lastMonthSalesCount} venda{pluralLastSales})
+                    </span>
+                </div>
+                <div
+                    className="my-3 text-center text-subtitle font-weight-bold text-purple"
+                    style={{
+                        lineHeight: "20px",
+                    }}
+                >
+                    R$ {convertToReal(currAvgTicket)}
+                    <br />
+                    <span className="text-normal">mês atual</span>
+                    <br />
+                    <span className="text-small font-weight-bold">
+                        ({currMonthSalesCount} venda{pluralCurrSales})
                     </span>
                 </div>
             </section>

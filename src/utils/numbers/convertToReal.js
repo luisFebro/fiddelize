@@ -44,6 +44,18 @@ export default function convertToReal(number, options = {}) {
     return res; // n2
 }
 
+export const convertToDollar = (str) => {
+    if (!str) return console.log("No number string");
+
+    if (typeof str !== "string") {
+        str = str.toString();
+    }
+
+    const formatted = str.replace(/\./gi, "").replace(/\,/gi, ".");
+
+    return Number(formatted);
+};
+
 /* COMMENTS
 n1: although the function returns as a string, the target value should be a number.
 otherwise, no effect will be made.

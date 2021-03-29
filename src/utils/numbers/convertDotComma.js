@@ -1,4 +1,5 @@
 // better option to convert than below ones.
+// This function now is in the convertToReal method instead... use that for now
 const convertBrToDollar = (str) => {
     if (!str) return console.log("No number string");
 

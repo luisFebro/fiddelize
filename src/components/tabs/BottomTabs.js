@@ -4,11 +4,10 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import green from "@material-ui/core/colors/green";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import { getVar, removeVar } from "../../hooks/storage/useVar";
+import "./_BottomTabs.scss";
 // import { setRun } from '../redux/actions/globalActions';
 
 const isSmall = window.Helper.isSmallScreen();
@@ -30,12 +29,6 @@ function TabPanel(props) {
     );
 }
 
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
-
 function a11yProps(index) {
     return {
         id: `action-tab-${index}`,
@@ -45,22 +38,11 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        backgroundColor: "#f7f1e3",
+        backgroundColor: "var(--mainWhite)",
+        borderRadius: "20px",
         width: "100%",
         margin: "auto",
         overflow: "hidden",
-    },
-    fab: {
-        position: "absolute",
-        bottom: theme.spacing(2),
-        right: theme.spacing(2),
-    },
-    fabGreen: {
-        color: theme.palette.common.white,
-        backgroundColor: green[500],
-        "&:hover": {
-            backgroundColor: green[600],
-        },
     },
     selected: {
         fontFamily: "var(--mainFont)",
@@ -70,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-TabSessions.propTypes = {
+BottomTabs.propTypes = {
     data: PropTypes.arrayOf(
         PropTypes.shape({
             tabLabel: PropTypes.string.isRequired,
@@ -81,12 +63,10 @@ TabSessions.propTypes = {
     needTabFullWidth: PropTypes.bool,
 };
 
-export default function TabSessions({ data, needTabFullWidth = false }) {
+export default function BottomTabs({ data, needTabFullWidth = false }) {
     const classes = useStyles();
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
-
-    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         // Programatically set user to one section when redirecting to dashboard.
@@ -109,8 +89,21 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
     // };
 
     return (
-        <div className={classes.root}>
-            <AppBar position="static" color="default">
+        <div id="bottom-tabs--root" className={classes.root}>
+            {data &&
+                data.map((tab, ind) => (
+                    <TabPanel
+                        style={{ overflow: "hidden", minHeight: "500px" }}
+                        key={ind}
+                        value={value}
+                        index={ind}
+                        dir={theme.direction}
+                        boxPadding={tab.boxPadding}
+                    >
+                        {ind === value && tab.tabContentPanel}
+                    </TabPanel>
+                ))}
+            <AppBar position="fixed" color="default">
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -139,19 +132,6 @@ export default function TabSessions({ data, needTabFullWidth = false }) {
                         ))}
                 </Tabs>
             </AppBar>
-            {data &&
-                data.map((tab, ind) => (
-                    <TabPanel
-                        style={{ overflow: "hidden", minHeight: "500px" }}
-                        key={ind}
-                        value={value}
-                        index={ind}
-                        dir={theme.direction}
-                        boxPadding={tab.boxPadding}
-                    >
-                        {ind === value && tab.tabContentPanel}
-                    </TabPanel>
-                ))}
         </div>
     );
 }
