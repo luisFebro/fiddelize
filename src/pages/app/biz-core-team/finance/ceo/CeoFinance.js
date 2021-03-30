@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "@material-ui/core/Card";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import getDiffDays from "../../../../../utils/dates/getDiffDays";
-import { endMonth } from "../../../../../utils/dates/dateFns";
 import GroupedAppBar from "./GroupedAppBar";
+import {
+    getMultiVar,
+    setMultiVar,
+    removeMultiVar,
+} from "../../../../../hooks/storage/useVar";
+import { checkToday, endMonth } from "../../../../../utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -16,11 +21,77 @@ const getStyles = () => ({
 });
 
 export default function CeoFinance() {
-    const [ceoBalance, setCeoBalance] = useState(null);
+    const [dataFreeze, setDataFreeze] = useState({
+        firstDate: null,
+        firstBalance: 0,
+        todayCosts: 0,
+    });
+    const { firstDate, firstBalance, todayCosts } = dataFreeze;
+
+    const [ceoBalance, handleBalance] = useState(null);
     const gotData = Boolean(ceoBalance !== null);
 
-    const handleBalance = (val) => {
-        setCeoBalance(val);
+    useEffect(() => {
+        (async () => {
+            const [
+                thisFirstDate,
+                thisFirstBalance,
+                thisTodayCosts,
+            ] = await getMultiVar([
+                "finTodayDate",
+                "firstTodayBalance",
+                "todayCosts",
+            ]);
+            if (!thisFirstDate && !thisFirstBalance) return;
+
+            const isToday = checkToday(thisFirstDate);
+
+            setDataFreeze({
+                firstDate: thisFirstDate,
+                firstBalance: isToday ? thisFirstBalance : 0,
+                todayCosts: isToday ? thisTodayCosts : 0,
+            });
+        })();
+    }, []);
+
+    useEffect(() => {
+        if (!firstDate) return;
+        const isToday = checkToday(firstDate);
+        if (isToday) return;
+        removeMultiVar(["finTodayDate", "firstTodayBalance", "todayCosts"]);
+    }, [firstDate]);
+
+    const handleNewCostValue = async (cost) => {
+        // allow setVar only if thereis no transaction in the current day.
+        if (!firstBalance) {
+            await setMultiVar([
+                {
+                    finTodayDate: new Date(),
+                },
+                {
+                    firstTodayBalance: ceoBalance,
+                },
+            ]);
+
+            await setDataFreeze((prev) => ({
+                ...prev,
+                firstBalance: ceoBalance,
+            }));
+        }
+
+        // HANDLE COSTS
+        await setMultiVar([
+            {
+                todayCosts: todayCosts + cost,
+            },
+        ]);
+        await setDataFreeze((prev) => ({
+            ...prev,
+            todayCosts: todayCosts + cost,
+        }));
+        // END HANDLE COSTS
+
+        await handleBalance((prev) => prev - cost);
     };
 
     const styles = getStyles();
@@ -29,12 +100,14 @@ export default function CeoFinance() {
     const daysBeforeEndMonth = getDiffDays(endMonth);
     const daysBeforeEndMonthCalculation =
         daysBeforeEndMonth < MIN_DIVISION ? MIN_DIVISION : daysBeforeEndMonth;
-    const availableToday = ceoBalance / daysBeforeEndMonthCalculation || 0;
+    const availableToday =
+        (firstBalance || ceoBalance) / daysBeforeEndMonthCalculation || 0;
+    const needMinus = todayCosts > availableToday;
 
     const showTitle = () => (
         <div className="my-4">
             <p className="text-subtitle text-white text-center font-weight-bold">
-                Salário Pessoal CEO
+                Salário Pessoal (15%)
             </p>
         </div>
     );
@@ -81,10 +154,13 @@ export default function CeoFinance() {
                         <span
                             className="d-block text-em-1-1 site-font text-pill"
                             style={{
-                                backgroundColor: "green",
+                                backgroundColor: needMinus
+                                    ? "var(--expenseRed)"
+                                    : "green",
                             }}
                         >
-                            {convertToReal(availableToday, {
+                            {needMinus ? "-" : ""}
+                            {convertToReal(availableToday - todayCosts, {
                                 moneySign: true,
                                 needFraction: true,
                             })}
@@ -107,7 +183,10 @@ export default function CeoFinance() {
         <section>
             {showTitle()}
             {showOverviewData()}
-            <GroupedAppBar handleBalance={handleBalance} />
+            <GroupedAppBar
+                handleBalance={handleBalance}
+                handleNewCostValue={handleNewCostValue}
+            />
         </section>
     );
 }

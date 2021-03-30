@@ -11,17 +11,22 @@ const AsyncSessionIn = LoadableVisible({
         ),
 });
 
-export default function GroupedAppBar({ handleBalance }) {
+export default function GroupedAppBar({ handleBalance, handleNewCostValue }) {
     const data = [
         {
             tabLabel: "Saída",
             tabIcon: <ArrowDownwardIcon />,
-            tabContentPanel: <SessionOut handleBalance={handleBalance} />,
+            tabContentPanel: (
+                <SessionOut
+                    handleBalance={handleBalance}
+                    handleNewCostValue={handleNewCostValue}
+                />
+            ),
         },
         {
             tabLabel: "Entrada",
             tabIcon: <ArrowUpwardIcon />,
-            tabContentPanel: <AsyncSessionIn />,
+            tabContentPanel: <AsyncSessionIn handleBalance={handleBalance} />,
         },
     ];
 

@@ -3,9 +3,9 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.8.0"; // PRÓXIMO:
+const latestVersion = "4.9.0"; // PRÓXIMO:
 
-const updateDescription = "salarios pessoais Fiddelize - pt 1";
+const updateDescription = "salarios pessoais Fiddelize - pt 2";
 
 /* HISTORY
 ""cabine Fiddelize - análise e desempenho do negócio pt 7" - "4.8.0"

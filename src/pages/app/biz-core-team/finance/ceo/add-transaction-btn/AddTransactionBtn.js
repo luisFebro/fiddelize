@@ -5,6 +5,8 @@ import NewTransactionForm from "./NewTransactionForm";
 export default function AddTransactionBtn({ mainData }) {
     const [newCost, setNewCost] = useState(false);
 
+    const type = mainData && mainData.type;
+
     const switchTransactionPanel = (newVal) => {
         setNewCost(newVal);
     };
@@ -12,7 +14,9 @@ export default function AddTransactionBtn({ mainData }) {
     const showCTA = () => (
         <ButtonFab
             title="Adicionar"
-            backgroundColor="var(--expenseRed)"
+            backgroundColor={
+                type === "in" ? "var(--incomeGreen)" : "var(--expenseRed)"
+            }
             onClick={() => switchTransactionPanel(true)}
             position="relative"
             variant="extended"

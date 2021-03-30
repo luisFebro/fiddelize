@@ -12,8 +12,8 @@ import getAPI, {
     addFinanceTransaction,
 } from "../../../../../../utils/promises/getAPI";
 import moneyMaskBr from "../../../../../../utils/validation/masks/moneyMaskBr";
-import useData from "../../../../../../hooks/useData";
 import { convertToDollar } from "../../../../../../utils/numbers/convertToReal";
+// import useData from "../../../../../../hooks/useData";
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({
@@ -31,6 +31,7 @@ export default function NewTransactionForm({
     const type = (mainData && mainData.type) || "out";
     const handleNewTransactionCard =
         mainData && mainData.handleNewTransactionCard;
+    const handleBalance = mainData && mainData.handleBalance;
 
     const [data, setData] = useState({
         desc: "",
@@ -40,7 +41,6 @@ export default function NewTransactionForm({
 
     const styles = getStyles();
     const dispatch = useStoreDispatch();
-    const [firstName] = useData(["firstName"]);
     const isExpense = type === "out";
 
     const formattedValue = moneyMaskBr(value);
@@ -74,13 +74,18 @@ export default function NewTransactionForm({
             });
 
             // update by adding this new card to the list of loaded cards
+            if (type === "in") {
+                await handleBalance(
+                    (prevBa) => prevBa + newTransactionCard.value
+                );
+            }
             await handleNewTransactionCard(newTransactionCard);
             await switchTransactionPanel(false);
 
             const confirmedMsg = isExpense
-                ? "Nova Despesa registrada"
-                : "Novo ganho registrado";
-            showSnackbar(dispatch, `${confirmedMsg}, ${firstName}!`, "success");
+                ? "Despesa registrada"
+                : "Ganho registrado";
+            showSnackbar(dispatch, `${confirmedMsg}!`, "success");
         })();
     };
 
@@ -93,7 +98,9 @@ export default function NewTransactionForm({
                 color="var(--mainWhite)"
                 iconFontAwesome={<FontAwesomeIcon icon="save" style={null} />}
                 size="large"
-                backgroundColor="var(--expenseRed)"
+                backgroundColor={
+                    type === "in" ? "var(--incomeGreen)" : "var(--expenseRed)"
+                }
                 variant="extended"
             />
         </section>

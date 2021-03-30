@@ -1,16 +1,20 @@
+import { useState } from "react";
 import AddTransactionBtn from "../add-transaction-btn/AddTransactionBtn";
 import SessionOutList from "./session-out-list/SessionOutList";
 
-export default function SessionOut({ handleBalance }) {
+export default function SessionOut({ handleBalance, handleNewCostValue }) {
+    const [newCardSet, setNewCardSet] = useState([]);
+
     async function handleNewTransactionCard(newCard) {
-        // await handleNewCostValue(newCard.value);
-        // await setNewCardSet((prevCardSet) => [newCard, ...prevCardSet]);
+        await handleNewCostValue(newCard.value);
+        await setNewCardSet((prevCardSet) => [newCard, ...prevCardSet]);
     }
 
     const mainData = {
         type: "out",
         handleNewTransactionCard,
         handleBalance,
+        newCardSet,
     };
 
     return (

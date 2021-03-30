@@ -64,6 +64,7 @@ module.exports = {
         "no-use-before-define": ["error", { functions: false }], // allow functions to be declared after the usage
         "no-return-await": "off",
         "no-underscore-dangle": ["error", { allow: ["_id"] }],
+        "react/jsx-props-no-spreading": "off",
     },
     settings: {
         react: {

@@ -7,45 +7,35 @@ import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../../../hooks/api/useElemDetection";
 
-export default function SessionOutList({ mainData }) {
+export default function SessionInList({ mainData }) {
     const [skip, setSkip] = useState(0);
 
-    const handleBalance = mainData && mainData.handleBalance;
     const newCardSet = mainData && mainData.newCardSet;
 
     const params = {
-        type: "out",
+        type: "in",
     };
 
     const {
         list = [],
         listTotal,
         isPlural,
-        ShowOverMsg,
         hasMore,
-        content,
-        extractStrData,
         loading,
         ShowLoadingSkeleton,
         error,
         ShowError,
+        ShowOverMsg,
     } = useAPIList({
         url: readFinanceTransactions(),
         skip,
         params,
-        listName: "ExpenseFinanceSessionList",
+        listName: "EarningsFinanceSessionList",
         limit: 10,
     });
 
-    useEffect(() => {
-        if (!loading && content) {
-            const { balance } = extractStrData(content);
-            handleBalance(Number(balance));
-        }
-    }, [loading, content]);
-
     const finalList = [...newCardSet, ...list];
-    const gotRegisters = Boolean(newCardSet.length || Boolean(listTotal));
+    const gotRegisters = Boolean(newCardSet.length || listTotal);
 
     // INFINITY LOADING LIST
     const detectedCard = useElemDetection({ loading, hasMore, setSkip });
@@ -85,7 +75,7 @@ export default function SessionOutList({ mainData }) {
                         margin: "150px 0",
                     }}
                 >
-                    Sem despesas registradas.
+                    Sem ganhos registrados.
                 </h2>
             )}
             {error && <ShowError />}

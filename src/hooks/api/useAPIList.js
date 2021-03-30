@@ -140,7 +140,10 @@ export default function useAPIList({
         clearTimeout(stopRequest);
         const listType = updateOnly
             ? response.data.list
-            : [...list, ...response.data.list];
+            : [...list, ...response.data.list].filter(
+                  (val, ind, arr) =>
+                      arr.findIndex((t) => t._id === val._id) === ind
+              ); // allow only unique objects by comparing their ids
         const { listTotal } = response.data;
         const { chunksTotal } = response.data;
         const { content } = response.data; // for all other kind of data
@@ -356,7 +359,12 @@ export default function useAPIList({
     const ShowOverMsg = () => (
         <Fragment>
             {!hasMore && readyShowElems && (
-                <p className="my-5 text-normal text-center font-weight-bold text-purple">
+                <p
+                    className="text-normal text-center font-weight-bold text-purple"
+                    style={{
+                        margin: "70px 0 100px",
+                    }}
+                >
                     Isso é tudo, {userName}.
                 </p>
             )}

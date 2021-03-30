@@ -3,18 +3,23 @@ import RevenueCard from "./card/RevenueCard";
 import useAPIList, {
     getFiddelizeRevenueHistory,
 } from "../../../../../../../../hooks/api/useAPIList";
+import useElemDetection, {
+    checkDetectedElem,
+} from "../../../../../../../../hooks/api/useElemDetection";
 
 export default function RevenueList({ handleRevenueChart }) {
     const [skip, setSkip] = useState(0);
 
     const {
         list = [],
-        ShowOverMsg,
+        listTotal,
+        isPlural,
+        hasMore,
         loading,
-        // isOffline,
-        // error,
-        // ShowLoading,
-        // ShowError,
+        ShowLoadingSkeleton,
+        error,
+        ShowError,
+        ShowOverMsg,
     } = useAPIList({
         url: getFiddelizeRevenueHistory(),
         skip,
@@ -29,24 +34,37 @@ export default function RevenueList({ handleRevenueChart }) {
         }
     }, [list]);
 
-    const listTotal = !loading ? list.length : 0;
-    const plural = listTotal > 1 ? "s" : "";
     const gotRegisters = Boolean(listTotal);
 
-    const listMap = list.map((revenue) => (
-        <RevenueCard key={revenue._id} data={revenue} />
-    ));
+    // INFINITY LOADING LIST
+    const detectedCard = useElemDetection({ loading, hasMore, setSkip });
+    const showCard = (revenue) => <RevenueCard data={revenue} />;
+    const listMap = list.map((revenue) =>
+        checkDetectedElem({ list, ind, indFromLast: 3 }) ? (
+            <section key={revenue._id} ref={detectedCard}>
+                {showCard(revenue)}
+            </section>
+        ) : (
+            <section key={revenue._id}>{showCard(revenue)}</section>
+        )
+    );
+    // END INFINITY LOADING LIST
+
+    const showTotal = () => (
+        <h2 className="my-3 text-subtitle text-purple">
+            {gotRegisters && (
+                <Fragment>
+                    <strong>Total:</strong> {listTotal} registro{isPlural}
+                </Fragment>
+            )}
+        </h2>
+    );
 
     return (
         <section className="mx-3">
-            <h2 className="my-3 text-subtitle text-purple">
-                {gotRegisters && (
-                    <Fragment>
-                        <strong>Total:</strong> {listTotal} registro{plural}
-                    </Fragment>
-                )}
-            </h2>
+            {showTotal()}
             <section className="mt-3 mb-5">{listMap}</section>
+            {loading && <ShowLoadingSkeleton />}
             {!gotRegisters && (
                 <h2
                     className="text-center text-grey text-normal font-weight-bold"
@@ -57,6 +75,7 @@ export default function RevenueList({ handleRevenueChart }) {
                     Sem receita registrada.
                 </h2>
             )}
+            {error && <ShowError />}
             <ShowOverMsg />
         </section>
     );
