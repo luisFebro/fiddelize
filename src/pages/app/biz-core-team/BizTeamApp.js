@@ -9,9 +9,7 @@ import useAuth from "../../../hooks/useAuthUser";
 import useData from "../../../hooks/useData";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
-import showNotification, {
-    getNotifications,
-} from "../../../components/pwa-push-notification/pushNotifications";
+import showNotification from "../../../components/pwa-push-notification/pushNotifications";
 
 export default function BizTeamApp({ history }) {
     const [userFirstName, agentJob] = useData(["firstName", "agentJob"]);
@@ -34,9 +32,6 @@ export default function BizTeamApp({ history }) {
 
     const handleNotif = async () => {
         await showNotification();
-        // TEST
-        const getNotifRes = await getNotifications();
-        console.log("getNotifRes", getNotifRes);
     };
 
     return (

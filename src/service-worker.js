@@ -71,3 +71,22 @@ self.addEventListener("message", (event) => {
 });
 
 // Any other custom service worker logic can go here.
+
+/*
+The common practice for a notification click is for it to close and perform some other logic (i.e. open a window or make some API call to the application)
+https://developers.google.com/web/fundamentals/push-notifications/notification-behaviour
+https://stackoverflow.com/questions/48547295/pwa-service-worker-notification-click
+*/
+self.addEventListener("notificationclick", (event) => {
+    alert("event", JSON.stringify(event));
+    const clickedNotification = event.notification;
+    console.log("clickedNotification", clickedNotification);
+    // clickedNotification.close();
+
+    // Do something as the result of the notification click
+    // const promiseChain = doSomething();
+    // event.waitUntil(promiseChain); // You still need to make use of event.waitUntil() to keep the service worker running while your code is busy. - So, the waitUntil method is used to tell the browser not to terminate the service worker until the promise passed to waitUntil is either resolved or rejected.
+
+    // Note that you don't have window access there. To navigate to the URL, you'd need to use clients.openWindow instead.
+    //clients.openWindow("https://youtube.com")
+});

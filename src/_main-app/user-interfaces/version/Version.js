@@ -3,7 +3,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.9.0-2"; // PRÓXIMO:
+const latestVersion = "4.9.0-3"; // PRÓXIMO:
 
 const updateDescription = "push notification implementation - pt2";
 
