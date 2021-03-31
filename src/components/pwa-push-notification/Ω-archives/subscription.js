@@ -1,4 +1,4 @@
-import { CLIENT_URL } from "./config/clientUrl";
+import { CLIENT_URL } from "../../config/clientUrl";
 
 function urlBase64ToUint8Array(base64String) {
     if (!base64String) {

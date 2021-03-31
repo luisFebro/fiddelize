@@ -72,6 +72,7 @@ import { faCocktail } from "@fortawesome/free-solid-svg-icons/faCocktail";
 import { faCut } from "@fortawesome/free-solid-svg-icons/faCut";
 import { faDragon } from "@fortawesome/free-solid-svg-icons/faDragon";
 import { faDumbbell } from "@fortawesome/free-solid-svg-icons/faDumbbell";
+import { faBell } from "@fortawesome/free-solid-svg-icons/faBell";
 import { faFire } from "@fortawesome/free-solid-svg-icons/faFire";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons/faGamepad";
 import { faGrinHearts } from "@fortawesome/free-solid-svg-icons/faGrinHearts";
@@ -158,6 +159,7 @@ library.add(
     faSortAmountDown,
     faSortAmountDownAlt,
     faMapMarkedAlt,
+    faBell,
     // home marketing
     faBullhorn,
     faStore,

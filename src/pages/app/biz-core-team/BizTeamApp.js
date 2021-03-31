@@ -8,6 +8,10 @@ import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "../../../hooks/useAuthUser";
 import useData from "../../../hooks/useData";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
+import showNotification, {
+    getNotifications,
+} from "../../../components/pwa-push-notification/pushNotifications";
 
 export default function BizTeamApp({ history }) {
     const [userFirstName, agentJob] = useData(["firstName", "agentJob"]);
@@ -28,6 +32,13 @@ export default function BizTeamApp({ history }) {
         </p>
     );
 
+    const handleNotif = async () => {
+        await showNotification();
+        // TEST
+        const getNotifRes = await getNotifications();
+        console.log("getNotifRes", getNotifRes);
+    };
+
     return (
         <Fragment>
             <BizTeamNavbar />
@@ -38,6 +49,16 @@ export default function BizTeamApp({ history }) {
             <br />
             <GroupedDashSessions />
             <CabinButton agentJob={agentJob} history={history} />
+            <NotifPermissionBanner />
+            <div
+                style={{
+                    position: "fixed",
+                    bottom: "70px",
+                    left: "15px",
+                }}
+            >
+                <button onClick={handleNotif}>see notification</button>
+            </div>
         </Fragment>
     );
 }

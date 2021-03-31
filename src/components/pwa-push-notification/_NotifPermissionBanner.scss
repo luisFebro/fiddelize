@@ -1,0 +1,43 @@
+.notif-permission-banner {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background: linear-gradient(to right, #12005e, #1f1c18);
+    cursor: pointer;
+    text-align: left;
+    -webkit-user-select: none;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .notif-content {
+        display: flex;
+        align-items: center;
+    }
+
+    .notif-icon {
+        color: var(--mainWhite);
+        width: 60px;
+        height: 65px;
+        padding: 10px;
+        padding-right: 0;
+    }
+
+    .notif-text {
+        display: inline-block;
+        font-size: 16px;
+        padding-left: 10px;
+    }
+
+    .notif-close-btn {
+        display: inline-block;
+        position: relative;
+        padding: 0 2px;
+        right: 4px;
+        float: right;
+        font-size: 32px;
+        z-index: 2100;
+    }
+}
+
