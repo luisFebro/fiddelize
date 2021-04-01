@@ -11,6 +11,7 @@ const loadVanillaToast = async (txt, time) => {
 
 let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 isToastActivated = isToastActivated && isApp;
+const activateLocalhostWorker = false;
 
 // This optional code is used to register a service worker.
 // register() is not called by default.
@@ -35,7 +36,10 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
-    if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+    if (
+        (activateLocalhostWorker && "serviceWorker" in navigator) ||
+        (process.env.NODE_ENV === "production" && "serviceWorker" in navigator)
+    ) {
         // The URL constructor is available in all browsers that support SW.
         const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
         if (publicUrl.origin !== window.location.origin) {

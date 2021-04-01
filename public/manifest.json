@@ -1,11 +1,11 @@
 {
     "name": "Fiddelize",
     "short_name": "Fiddelize",
-    "description": "Plataforma de pontos de fidelidade e valorização do consumo de clientes",
+    "description": "Conquiste clientes no próximo nível",
     "start_url": "/mobile-app?abrir=1",
     "display": "standalone",
     "scope": ".",
-    "categories": ["business", "lifestyle", "utilities"],
+    "categories": ["business", "relationship", "customers"],
     "theme_color": "#000000",
     "background_color": "#000000",
     "icons": [
