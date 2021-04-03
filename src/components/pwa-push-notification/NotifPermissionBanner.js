@@ -4,44 +4,53 @@ import parse from "html-react-parser";
 import "./_NotifPermissionBanner.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
-import { showPermissionBanner, requestPermission } from "./pushNotifications";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import requestPermission, { showPermissionBanner } from "./pushNotifPermission";
+import useData from "../../hooks/useData";
+import isThisApp from "../../utils/window/isThisApp";
 
+const isApp = isThisApp();
 const permissionStatus = showPermissionBanner();
 
 export default function NotifPermissionBanner({
-    title = "Receba notificações que importam para seu negócio!",
+    title = "Receba notificações sobre clientes!", // saiba dos relatos de compra e quando uma meta alcançada.
+    subtitle = "saiba dos relatos de compra e quando uma meta é alcançada em tempo real",
 }) {
-    const [shouldRender, setShouldRender] = useState(permissionStatus);
+    const [backDrop, setBackDrop] = useState(false);
+    const [shouldRender, setShouldRender] = useState(permissionStatus && isApp);
 
     const dispatch = useStoreDispatch();
 
+    const [userId, role] = useData(["userId", "role"]);
+
     const handleNotifPermission = async () => {
-        const permission = await requestPermission();
-        const isGranted = permission === "granted";
-        const isDenied = permission === "denied";
-
-        if (isDenied) {
-            showSnackbar(
-                dispatch,
-                "Se precisar ativar depois, vá em ajustes > notificações",
-                "warning",
-                6000
-            );
-        }
-
-        if (!isGranted) return;
-        // subscribe user here
+        if (userId === "...") return;
         setShouldRender(false);
-        showSnackbar(dispatch, "Notificações ativadas!", "success");
+        setBackDrop(true);
+        await requestPermission({
+            dispatch,
+            setShouldRender,
+            setBackDrop,
+            userId,
+            role,
+        });
     };
 
     const showTitle = () => (
-        <div className="notif-text text-normal text-white">{parse(title)}</div>
+        <div
+            className="py-2 notif-text font-site text-white"
+            style={{
+                lineHeight: "20px",
+            }}
+        >
+            <span className="d-block text-center font-weight-bold">
+                {parse(title)}
+            </span>
+            <span className="text-em-0-9">{parse(subtitle)}</span>
+        </div>
     );
 
     const showActionBtn = () => (
-        <div className="notif-close-btn animated wobble delay-5s repeat-2">
+        <div className="notif-close-btn">
             <ButtonMulti
                 title="ativar"
                 onClick={handleNotifPermission}
@@ -53,7 +62,7 @@ export default function NotifPermissionBanner({
     );
 
     return (
-        <section>
+        <section className={backDrop ? "backdrop-strong" : ""}>
             {shouldRender ? (
                 <div className="notif-permission-banner animated fadeInUp">
                     <div className="notif-content">

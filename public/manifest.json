@@ -1,5 +1,5 @@
 {
-    "name": "Fiddelize",
+    "name": "",
     "short_name": "Fiddelize",
     "description": "Conquiste clientes no próximo nível",
     "start_url": "/mobile-app?abrir=1",
@@ -30,5 +30,6 @@
             "platform": "webapp",
             "url": "https://fiddelize.com.br/manifest.json"
         }
-    ]
+    ],
+    "gcm_sender_id": "716311192779"
 }

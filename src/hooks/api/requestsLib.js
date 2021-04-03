@@ -139,3 +139,6 @@ export const readFinanceTransactions = () =>
     `${API}/admin/finance/transaction-history`; // GET
 export const addFinanceTransaction = () =>
     `${API}/admin/finance/add-transaction`; // POST
+
+// PUSH NOTIFICATIONS
+export const subscribePushNotif = () => `${API}/push-notification/subscribe`; // POST
