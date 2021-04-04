@@ -4,28 +4,24 @@ const convertedVapidKey = urlBase64ToUint8Array(
     process.env.REACT_APP_PUBLIC_PUSH_NOTIF_KEY
 );
 
-export default async function subscribeUser({ role, userId }) {
+export default async function subscribeUser({ deviceType, role, userId }) {
     // n1
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
         // Service Worker isn't supported on this browser, disable or hide UI.
         // Push isn't supported on this browser, disable or hide UI.
-        return;
+        throw new Error("Navegador sem suporte a notificações.");
     }
 
     // Lesson: if no response from here, it means there's no service worker installed in the browser.
     const registration = await navigator.serviceWorker.ready;
 
-    if (!registration.pushManager) {
-        console.log("Push manager unavailable.");
-        return;
-    }
-
+    // for now, this did not work during test. So probably will create another subscription here and save it.
     const existedSubscription = await registration.pushManager.getSubscription();
 
     const gotAlreadySubscripted = existedSubscription !== null;
     if (gotAlreadySubscripted) {
-        sendSubscription(existedSubscription, { role, userId });
-        return;
+        sendSubscription(existedSubscription, { role, userId, deviceType });
+        return "ok";
     }
 
     const newSubscription = await registration.pushManager.subscribe({
@@ -33,18 +29,18 @@ export default async function subscribeUser({ role, userId }) {
         userVisibleOnly: true,
     });
 
-    sendSubscription(newSubscription, { role, userId });
+    sendSubscription(newSubscription, { role, userId, deviceType });
+    return "ok";
 }
 
 // HELPERS
-async function sendSubscription(subscription, options = {}) {
-    const { role, userId } = options;
+async function sendSubscription(subscription, params = {}) {
     // n1
     return await getAPI({
         method: "post",
         url: subscribePushNotif(),
         body: subscription,
-        params: { role, userId },
+        params, // role, userId, deviceType
     });
 }
 

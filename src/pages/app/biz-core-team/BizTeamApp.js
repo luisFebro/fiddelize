@@ -39,7 +39,10 @@ export default function BizTeamApp({ history }) {
             <br />
             <GroupedDashSessions />
             <CabinButton agentJob={agentJob} history={history} />
-            <NotifPermissionBanner />
+            <NotifPermissionBanner
+                title="Receba notificações sobre vendas!"
+                subtitle="saiba quando suas vendas são realizadas em tempo real"
+            />
         </Fragment>
     );
 }

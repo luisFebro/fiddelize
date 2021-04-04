@@ -1,6 +1,43 @@
 import { Load } from "../../components/code-splitting/LoadableComp";
 // All component pages which are using both in website and mobile app goes here in next updates...
 
+export const AsyncLoginPage = Load({
+    loader: () =>
+        import(
+            "../../pages/auth/LoginPage" /* webpackChunkName: "login-page-lazy" */
+        ),
+});
+
+// CLI-ADMIN
+export const AsyncDashboardClientAdmin = Load({
+    loader: () =>
+        import(
+            "../../pages/dashboard-client-admin" /* webpackChunkName: "cli-admin-dashboard-lazy" */
+        ),
+});
+
+export const AsyncOrdersAndPay = Load({
+    loader: () =>
+        import(
+            "../../pages/plans-page/orders-and-pay/OrdersAndPay" /* webpackChunkName: "orders-and-pay-page-lazy" */
+        ),
+});
+
+export const AsyncAppSharer = Load({
+    loader: () =>
+        import(
+            "../../pages/app-sharer/AppSharer" /* webpackChunkName: app-sharer-page-lazy" */
+        ),
+});
+
+export const AsyncPlansPage = Load({
+    loader: () =>
+        import(
+            "../../pages/plans-page/PlansPage" /* webpackChunkName: plans-page-lazy" */
+        ),
+});
+// END CLI-ADMIN
+
 // PASSWORDS
 export const AsyncAccessPassword = Load({
     loader: () =>
@@ -141,6 +178,15 @@ export const AsyncPrivacyPolicy = Load({
         ),
 });
 // END BIZ DOCS AND FOOTER
+
+// WEBSITE PLATFORM
+export const AsyncClientAppPreview = Load({
+    loader: () =>
+        import(
+            "../../pages/mobile-app/ClientAppPreview" /* webpackChunkName: "client-app-preview-comp-lazy" */
+        ),
+});
+// END WEBSITE PLATFORM
 
 // TEST
 export const AsyncPlayground = Load({

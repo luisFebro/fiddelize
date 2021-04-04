@@ -14,24 +14,24 @@ import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClie
 
 // PAGES
 import Home from "../../pages/home/Home";
-import LoginPage from "../../pages/auth/LoginPage";
-import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import RegulationPage from "../../pages/RegulationPage";
 import AsyncDownloadApp from "../../pages/download-app/AsyncDownloadApp";
-import AsyncAppSharer from "../../pages/app-sharer/AsyncAppSharer";
 import {
     AsyncBizInfo,
     AsyncRewardPlanner,
     AsyncSelfService,
     AsyncAdminRegister,
 } from "./comp-pages/AsyncNewAppPages";
-import PlansPage from "../../pages/plans-page/PlansPage";
-import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
 import RedirectLink from "../../pages/RedirectLink";
-import ClientAppPreview from "../../pages/mobile-app/ClientAppPreview";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
 import {
+    AsyncLoginPage,
+    // cli-admin
+    AsyncDashboardClientAdmin,
+    AsyncOrdersAndPay,
+    AsyncAppSharer,
+    // end cli-admin
     AsyncAccessPassword,
     AsyncNewPassword,
     AsyncFixDatePage,
@@ -55,6 +55,8 @@ import {
     AsyncPrivacyPolicy,
     // test
     AsyncPlayground,
+    // exclusive website
+    AsyncClientAppPreview,
 } from "./CommonImports";
 // END PAGES
 
@@ -76,7 +78,11 @@ function Website({ location, history }) {
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/de/:associateId" exact component={Home} />
-                <Route path="/acesso/verificacao" exact component={LoginPage} />
+                <Route
+                    path="/acesso/verificacao"
+                    exact
+                    component={AsyncLoginPage}
+                />
                 <Route
                     path="/cliente/pontos-fidelidade"
                     exact
@@ -119,18 +125,21 @@ function Website({ location, history }) {
                     exact
                     component={AsyncAppSharer}
                 />
-                <Route path="/planos" exact component={PlansPage} />
                 <Route
                     path="/mobile-app/preview"
-                    component={ClientAppPreview}
+                    component={AsyncClientAppPreview}
                 />
                 <Route path="/app/:nameAndCode" component={RedirectLink} />
                 <PrivateRouteClientAdm
                     path="/:bizCodeName/cliente-admin/painel-de-controle"
                     exact
-                    component={DashboardClientAdmin}
+                    component={AsyncDashboardClientAdmin}
                 />
-                <Route path="/pedidos/admin" exact component={OrdersAndPay} />
+                <Route
+                    path="/pedidos/admin"
+                    exact
+                    component={AsyncOrdersAndPay}
+                />
                 <Route
                     path="/temporariamente-indisponivel-503"
                     exact

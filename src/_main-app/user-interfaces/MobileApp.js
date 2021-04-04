@@ -11,16 +11,18 @@ import LinearProgress from "../../components/loadingIndicators/LinearProgress";
 import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
 // PAGES
-import LoginPage from "../../pages/auth/LoginPage"; // is it necessarybecauseit is only usedthe login compo inmobile app
-import DashboardClientAdmin from "../../pages/dashboard-client-admin";
 import ClientMobileApp from "../../pages/mobile-app/ClientMobileApp";
 import RegulationPage from "../../pages/RegulationPage";
-import AsyncAppSharer from "../../pages/app-sharer/AsyncAppSharer";
-import PlansPage from "../../pages/plans-page/PlansPage";
 import Default from "../../pages/Default";
 import UnavailableService from "../../pages/UnavailableService";
-import OrdersAndPay from "../../pages/plans-page/orders-and-pay/OrdersAndPay";
 import {
+    AsyncLoginPage,
+    // cli-admin
+    AsyncDashboardClientAdmin,
+    AsyncOrdersAndPay,
+    AsyncAppSharer,
+    AsyncPlansPage,
+    // end cli-admin
     AsyncAccessPassword,
     AsyncNewPassword,
     AsyncFixDatePage,
@@ -76,7 +78,11 @@ function Mobile({ location, history }) {
                 <Navbar />
             ) : null}
             <Switch>
-                <Route path="/acesso/verificacao" exact component={LoginPage} />
+                <Route
+                    path="/acesso/verificacao"
+                    exact
+                    component={AsyncLoginPage}
+                />
                 <Route path="/mobile-app" exact component={ClientMobileApp} />
                 <Route
                     path="/cliente/pontos-fidelidade"
@@ -100,13 +106,17 @@ function Mobile({ location, history }) {
                     exact
                     component={InstallMsg}
                 />
-                <Route path="/planos" exact component={PlansPage} />
+                <Route path="/planos" exact component={AsyncPlansPage} />
                 <PrivateRouteClientAdm
                     path="/:bizCodeName/cliente-admin/painel-de-controle"
                     exact
-                    component={DashboardClientAdmin}
+                    component={AsyncDashboardClientAdmin}
                 />
-                <Route path="/pedidos/admin" exact component={OrdersAndPay} />
+                <Route
+                    path="/pedidos/admin"
+                    exact
+                    component={AsyncOrdersAndPay}
+                />
                 <Route
                     path="/temporariamente-indisponivel-503"
                     exact

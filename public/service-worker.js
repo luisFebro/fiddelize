@@ -112,7 +112,7 @@ self.addEventListener("notificationclick", (event) => {
         // using brackets to limit scope - https://stackoverflow.com/questions/50752987/eslint-no-case-declaration-unexpected-lexical-declaration-in-case-block/50753272
         case "openApp": {
             const promise = focusOrOpenWindow(extraOptions.url_openApp);
-            event.waitUntil(promise);
+            event.waitUntil(promise); // n1 You still need to make use of event.waitUntil() to keep the service worker running while your code is busy. - So, the waitUntil method is used to tell the browser not to terminate the service worker until the promise passed to waitUntil is either resolved or rejected.
             break;
         }
         case "close": {
@@ -123,10 +123,6 @@ self.addEventListener("notificationclick", (event) => {
             console.log(`Unknown action clicked: '${event.action}'`);
             break;
     }
-
-    // Do something as the result of the notification click
-    // const promiseChain = doSomething();
-    // event.waitUntil(promiseChain); // n1 You still need to make use of event.waitUntil() to keep the service worker running while your code is busy. - So, the waitUntil method is used to tell the browser not to terminate the service worker until the promise passed to waitUntil is either resolved or rejected.
 });
 
 /*
@@ -246,7 +242,7 @@ https://developers.google.com/web/fundamentals/push-notifications/common-notific
 async function focusOrOpenWindow(url) {
     const urlToOpen = new URL(url, self.location.origin).href; // http://localhost:3000/mobile-app?abrir=1
 
-    const windowClients = await clients.matchAll({
+    const windowClients = await self.clients.matchAll({
         type: "window",
         includeUncontrolled: true,
     }); // n2
@@ -268,7 +264,7 @@ async function focusOrOpenWindow(url) {
     }
 
     // Note that you don't have window access in service-worker. To navigate to the URL, you'd need to use clients.openWindow instead.
-    return clients.openWindow(urlToOpen);
+    return self.clients.openWindow(urlToOpen);
 }
 // END HELPERS
 /* COMMENTS

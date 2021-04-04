@@ -64,30 +64,28 @@ export default async function requestPermission({
     setBackDrop,
     userId,
     role,
+    deviceType,
 }) {
+    const defaultData = {
+        dispatch,
+        userId,
+        role,
+        deviceType,
+    };
+
     if (checkNotificationPromise()) {
         const permission = await Notification.requestPermission();
 
         setBackDrop(false);
 
-        await handlePermission({
-            permission,
-            dispatch,
-            userId,
-            role,
-        });
+        await handlePermission({ permission, ...defaultData });
         return "ok";
     }
 
     // for safari or browsers which does not support promise, but callbacks
     Notification.requestPermission((permission) => {
         setBackDrop(false);
-        handlePermission({
-            permission,
-            dispatch,
-            userId,
-            role,
-        });
+        handlePermission({ permission, ...defaultData });
         return "ok";
     });
 
@@ -95,7 +93,13 @@ export default async function requestPermission({
 }
 
 // HELPERS
-async function handlePermission({ permission, dispatch, userId, role }) {
+async function handlePermission({
+    deviceType,
+    permission,
+    dispatch,
+    userId,
+    role,
+}) {
     const isGranted = permission === "granted";
     const isDenied = permission === "denied";
 
@@ -111,10 +115,16 @@ async function handlePermission({ permission, dispatch, userId, role }) {
     if (!isGranted) return;
 
     showSnackbar(dispatch, "Registrando...", "warning");
-    await subscribeUser({
+
+    const data = await subscribeUser({
         userId,
         role,
+        deviceType,
+    }).catch((err) => {
+        showSnackbar(dispatch, `${err}`, "error");
     });
+    if (!data) return;
+
     showSnackbar(dispatch, "Notificações ativadas!", "success");
 }
 

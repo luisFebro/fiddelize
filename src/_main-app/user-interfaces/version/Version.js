@@ -3,9 +3,9 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.10.0"; // PRÓXIMO:
+const latestVersion = "4.10.0-25"; // PRÓXIMO:
 
-const updateDescription = "push notification implementation - pt4";
+const updateDescription = "push notification implementation - pt5";
 
 /* HISTORY
 "salarios pessoais Fiddelize - pt 2"

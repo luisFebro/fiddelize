@@ -1,3 +1,4 @@
+import { withRouter } from "react-router-dom";
 import { Fragment } from "react";
 import GroupedDashSessions from "./GroupedDashSessions";
 import getDayGreetingBr from "../../utils/getDayGreetingBr";
@@ -6,9 +7,9 @@ import getFirstName from "../../utils/string/getFirstName";
 import { useProfile } from "../../hooks/useRoleData";
 import MoreOptionsMenu from "./MoreOptionsMenu";
 import PlanBadges from "./PlanBadges";
-import { withRouter } from "react-router-dom";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
+import NotifPermissionBanner from "../../components/pwa-push-notification/NotifPermissionBanner";
 
 function DashboardClientAdmin({ location, history }) {
     const { name } = useProfile();
@@ -33,6 +34,10 @@ function DashboardClientAdmin({ location, history }) {
             <br />
             <GroupedDashSessions />
             <MoreOptionsMenu location={location} history={history} />
+            <NotifPermissionBanner
+                title="Receba notificações sobre clientes!"
+                subtitle="saiba dos relatos de compra e quando uma meta é alcançada em tempo real"
+            />
         </Fragment>
     );
 }

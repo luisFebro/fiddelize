@@ -9,7 +9,6 @@ import CardsList from "./cards-list/CardsList";
 import { useProfile } from "../../../hooks/useRoleData";
 import getFirstName from "../../../utils/string/getFirstName";
 
-const isSmall = window.Helper.isSmallScreen();
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
 // END CUSTOM DATA

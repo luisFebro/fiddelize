@@ -6,17 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 import requestPermission, { showPermissionBanner } from "./pushNotifPermission";
 import useData from "../../hooks/useData";
-import isThisApp from "../../utils/window/isThisApp";
 
-const isApp = isThisApp();
+const isEvenSmall = window.Helper.isSmallScreen(450);
+const deviceType = isEvenSmall ? "mobile" : "desktop";
 const permissionStatus = showPermissionBanner();
 
-export default function NotifPermissionBanner({
-    title = "Receba notificações sobre clientes!", // saiba dos relatos de compra e quando uma meta alcançada.
-    subtitle = "saiba dos relatos de compra e quando uma meta é alcançada em tempo real",
-}) {
+export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
     const [backDrop, setBackDrop] = useState(false);
-    const [shouldRender, setShouldRender] = useState(permissionStatus && isApp);
+    const [shouldRender, setShouldRender] = useState(permissionStatus);
 
     const dispatch = useStoreDispatch();
 
@@ -32,6 +29,7 @@ export default function NotifPermissionBanner({
             setBackDrop,
             userId,
             role,
+            deviceType,
         });
     };
 
