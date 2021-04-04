@@ -104,7 +104,8 @@ self.addEventListener("notificationclick", (event) => {
 
     const isNormalNotifClick = !clickedActionBtn;
     if (isNormalNotifClick) {
-        console.log("Normal Notification Click.");
+        const promise = focusOrOpenWindow("/mobile-app?abrir=1");
+        event.waitUntil(promise);
         return;
     }
 
@@ -156,7 +157,7 @@ async function showNotification(payload = {}) {
         actions: payload.actions, // n2 array with objects - only works on mobile android - it does not appear in the desktop - the left side icon from the title
         lang: payload.lang || "pt-BR", // Specify the lang used within the notification. This string must be a valid BCP 47 language tag.
         data: payload.data || null, // Arbitrary data that you want to be associated with the notification. This can be of any data type.
-        renotify: payload.renotify || false, // A boolean that indicates whether to suppress vibrations and audible alerts when reusing a tag value. If renotify is true and tag is the empty string a TypeError will be thrown. - This largely applies to mobile devices at the time of writing. Setting this option makes new notifications vibrate and play a system sound. - There are scenarios where you might want a replacing notification to notify the user rather than silently update. Chat applications are a good example. In this case, you should set tag and renotify to true.
+        renotify: payload.renotify || false, // the notification beep still work even if it is false... A boolean that indicates whether to suppress vibrations and audible alerts when reusing a tag value. If renotify is true and tag is the empty string a TypeError will be thrown. - This largely applies to mobile devices at the time of writing. Setting this option makes new notifications vibrate and play a system sound. - There are scenarios where you might want a replacing notification to notify the user rather than silently update. Chat applications are a good example. In this case, you should set tag and renotify to true.
         silent: payload.silent || false,
     };
 
