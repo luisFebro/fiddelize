@@ -60,7 +60,7 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
     );
 
     return (
-        <section className={backDrop ? "backdrop-strong" : ""}>
+        <section className={backDrop ? "backdrop-medium" : ""}>
             {shouldRender ? (
                 <div className="notif-permission-banner animated fadeInUp">
                     <div className="notif-content">
