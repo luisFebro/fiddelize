@@ -111,7 +111,10 @@ export default function ConfigExpansiblePanel({
         <div className={classes.root}>
             {actions.map((panel) => (
                 <div key={panel._id} className="position-relative">
-                    <Accordion style={styles.Accordion}>
+                    <Accordion
+                        style={styles.Accordion}
+                        TransitionProps={{ unmountOnExit: true }}
+                    >
                         {showPanel(panel)}
                         {showHiddenPanel(panel)}
                     </Accordion>

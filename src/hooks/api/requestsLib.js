@@ -142,3 +142,5 @@ export const addFinanceTransaction = () =>
 
 // PUSH NOTIFICATIONS
 export const subscribePushNotif = () => `${API}/push-notification/subscribe`; // POST
+export const readOrUpdateNotifStatus = (action) =>
+    `${API}/push-notification/notif-status?action=${action}`; // PUT

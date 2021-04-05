@@ -97,8 +97,8 @@ https://stackoverflow.com/questions/48547295/pwa-service-worker-notification-cli
 */
 self.addEventListener("notificationclick", (event) => {
     const clickedNotification = event.notification;
-    const clickedActionBtn = event.action; // it is an empty string if not clicked
     const extraOptions = clickedNotification.data || {};
+    const clickedActionBtn = event.action; // it is an empty string if not clicked
 
     if (extraOptions.close) event.notification.close();
 
@@ -111,18 +111,16 @@ self.addEventListener("notificationclick", (event) => {
 
     switch (clickedActionBtn) {
         // using brackets to limit scope - https://stackoverflow.com/questions/50752987/eslint-no-case-declaration-unexpected-lexical-declaration-in-case-block/50753272
-        case "openApp": {
-            const promise = focusOrOpenWindow(extraOptions.url_openApp);
-            event.waitUntil(promise); // n1 You still need to make use of event.waitUntil() to keep the service worker running while your code is busy. - So, the waitUntil method is used to tell the browser not to terminate the service worker until the promise passed to waitUntil is either resolved or rejected.
-            break;
-        }
         case "close": {
             event.notification.close();
             break;
         }
-        default:
-            console.log(`Unknown action clicked: '${event.action}'`);
-            break;
+        default: {
+            const promise = focusOrOpenWindow(
+                extraOptions[`url_${clickedActionBtn}`]
+            );
+            event.waitUntil(promise); // n1 You still need to make use of event.waitUntil() to keep the service worker running while your code is busy. - So, the waitUntil method is used to tell the browser not to terminate the service worker until the promise passed to waitUntil is either resolved or rejected.
+        }
     }
 });
 
@@ -154,11 +152,11 @@ async function showNotification(payload = {}) {
         vibrate: payload.vibrate || [200, 100, 200, 100, 200, 100, 200], // n1
         // behavior options
         requireInteraction: payload.requireInteraction || false, // only on mobile - Indicates that on devices with sufficiently large screens, a notification should remain active until the user clicks or dismisses it. If this value is absent or false, the desktop version of Chrome will auto-minimize notifications after approximately twenty seconds. The default value is false.
-        actions: payload.actions, // n2 array with objects - only works on mobile android - it does not appear in the desktop - the left side icon from the title
+        actions: payload.actions || [], // n2 array with objects - only works on mobile android - it does not appear in the desktop - the left side icon from the title
         lang: payload.lang || "pt-BR", // Specify the lang used within the notification. This string must be a valid BCP 47 language tag.
         data: payload.data || null, // Arbitrary data that you want to be associated with the notification. This can be of any data type.
         renotify: payload.renotify || false, // the notification beep still work even if it is false... A boolean that indicates whether to suppress vibrations and audible alerts when reusing a tag value. If renotify is true and tag is the empty string a TypeError will be thrown. - This largely applies to mobile devices at the time of writing. Setting this option makes new notifications vibrate and play a system sound. - There are scenarios where you might want a replacing notification to notify the user rather than silently update. Chat applications are a good example. In this case, you should set tag and renotify to true.
-        silent: payload.silent || false,
+        silent: payload.silent || false, // WARNING: when this is true, the notification is not delivered.
     };
 
     if (!Notification) {
@@ -168,15 +166,21 @@ async function showNotification(payload = {}) {
     const { permission } = Notification;
     if (permission !== "granted") return false;
 
-    const { newTitle, newBody, newData } = await countAndMergeNotifications({
-        registration: self.registration,
-        options: payload,
-        data: config.data,
-    });
+    const needCountAndMerge = config.data && !config.data.closeMergeOff;
+    // newTitle and newBody is undefined for the first time. Only will return a value after the second notification in plural.
+    if (needCountAndMerge) {
+        const { newTitle, newBody, newData } = await countAndMergeNotifications(
+            {
+                registration: self.registration,
+                options: payload,
+                data: config.data,
+            }
+        );
 
-    title = newTitle || title;
-    config.body = newBody || config.body;
-    config.data = newData || config.data;
+        title = newTitle || title;
+        config.body = newBody || config.body;
+        config.data = newData || config.data;
+    }
 
     checkBrowserMaxActions();
 

@@ -4,6 +4,7 @@ import { useStoreState } from "easy-peasy";
 import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
 import HiddenVerifPass from "../card-hidden-content/HiddenVerifPass";
 import HiddenProfile from "../card-hidden-content/HiddenProfile";
+import HiddenPushNotif from "../card-hidden-content/push-notif/HiddenPushNotif";
 import HiddenBizDataAndBackup from "../card-hidden-content/biz-data-and-backup/HiddenBizDataAndBackup";
 
 const faStyle = {
@@ -13,9 +14,8 @@ const faStyle = {
 };
 
 export default function ShowExpansiblePanel() {
-    const { userData, clientAdmin } = useStoreState((state) => ({
+    const { userData } = useStoreState((state) => ({
         userData: state.userReducer.cases.currentUser,
-        clientAdmin: state.userReducer.cases.clientAdmin,
     }));
 
     const configList = [
@@ -33,6 +33,12 @@ export default function ShowExpansiblePanel() {
         },
         {
             id: 2,
+            name: "Notificações",
+            leftIcon: <FontAwesomeIcon icon="comment" />,
+            hiddenContent: <HiddenPushNotif />,
+        },
+        {
+            id: 3,
             name: "Dados Projeto<br />e Segurança",
             leftIcon: <FontAwesomeIcon icon="database" />,
             hiddenContent: <HiddenBizDataAndBackup userData={userData} />,

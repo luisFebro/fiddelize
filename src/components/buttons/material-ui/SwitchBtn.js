@@ -5,6 +5,8 @@ import purple from "@material-ui/core/colors/purple";
 import parse from "html-react-parser";
 import getId from "../../../utils/getId";
 import { useClientAdmin } from "../../../hooks/useRoleData";
+
+export { treatBoolStatus } from "../../../hooks/api/trigger";
 // import { useStoreDispatch } from 'easy-peasy';
 // import { showSnackbar } from '../../../redux/actions/snackbarActions';
 
