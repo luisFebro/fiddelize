@@ -23,8 +23,9 @@ import { getVar, removeVar, setVar } from "../../../hooks/storage/useVar";
 import { readPurchaseHistory } from "../../../redux/actions/userActions";
 import useSendSMS from "../../../hooks/sms/useSendSMS";
 import useDidDateExpire from "../../../hooks/dates/date-expires/useDidDateExpire";
-import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode.js";
+import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
 import useData from "../../../hooks/useData";
+import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 // import useCount from "../../../hooks/useCount";
 
 // APP COMPONENTS
@@ -469,7 +470,7 @@ export default function ClientUserAppContent({
     );
 
     return (
-        <div
+        <section
             className={`${
                 needAppForPreview && "disabledLink"
             } client-user-app-content`}
@@ -483,7 +484,11 @@ export default function ClientUserAppContent({
             {showMoreOptionsBtn()}
             {backBtnForCliAdmin()}
             <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
-        </div>
+            <NotifPermissionBanner
+                title="Receba notificações sobre seus benefícios!"
+                subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
+            />
+        </section>
     );
 }
 

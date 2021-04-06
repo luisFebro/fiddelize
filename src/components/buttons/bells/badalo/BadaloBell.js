@@ -35,10 +35,7 @@ export default function BadaloBell({
 }) {
     // const [badgeInvisible, setbadgeInvisible] = useState(false);
 
-    usePlayAudio(
-        "/sounds/bell-small-hand-single-ring-ping-very-high-pitched.mp3",
-        ".badalo-bell--audio"
-    );
+    usePlayAudio("/sounds/bell-small.mp3", ".badalo-bell--audio");
 
     useEffect(() => {
         let startPlayAnima;

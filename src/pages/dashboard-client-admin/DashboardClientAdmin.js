@@ -35,7 +35,7 @@ function DashboardClientAdmin({ location, history }) {
             <GroupedDashSessions />
             <MoreOptionsMenu location={location} history={history} />
             <NotifPermissionBanner
-                title="Receba notificações sobre clientes!"
+                title="Receba notificações sobre seus clientes!"
                 subtitle="saiba dos relatos de compra e quando uma meta é alcançada em tempo real"
             />
         </Fragment>

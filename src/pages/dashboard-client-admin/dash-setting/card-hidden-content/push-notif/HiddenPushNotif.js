@@ -45,7 +45,13 @@ export default function HiddenPushNotif() {
             trigger: userId !== "...",
         });
 
-        showSnackbar(dispatch, "Status alterado!", "success");
+        showSnackbar(
+            dispatch,
+            `Status alterado para ${
+                target === "isDesktopOn" ? "apps desktop" : "apps mobile"
+            }!`,
+            "success"
+        );
     };
 
     useEffect(() => {
@@ -115,6 +121,8 @@ export default function HiddenPushNotif() {
                 - Um cliente ganhar um desafio;
                 <br />
                 - Relatório de compras dos clientes;
+                <br />
+                - Status de investimentos;
                 <br />- Novidadades e atualizações sobre os apps do seu negócio
                 ou da plataforma Fiddelize.
                 <p className="my-3">

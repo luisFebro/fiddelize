@@ -15,14 +15,14 @@ export default function getCardTypeData(cardType, options = {}) {
         bizName,
     });
 
-    const handledBirthdayGreeting = (isBelated) =>
-        role === "cliente"
-            ? `Ei ${getFirstName(
+    const handledBirthdayGreeting = () =>
+        role === "cliente-admin"
+            ? `Surpresa, ${getFirstName(
                   userName
-              )}, a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário repleto de prosperidade e conquistas!`
-            : `Surpresa, ${getFirstName(
+              )}! Você também recebe uma mensagem de aniversário. A Fiddelize te deseja ainda mais clientes para seu negócio recheada de conquistas!`
+            : `Ei ${getFirstName(
                   userName
-              )}! Você também recebe uma mensagem de aniversário. A Fiddelize te deseja ainda mais clientes para seu negócio recheada de conquistas e decorada com sucesso!`;
+              )}, a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário repleto de prosperidade e conquistas!`;
 
     switch (cardType) {
         case "welcome":
@@ -39,11 +39,11 @@ export default function getCardTypeData(cardType, options = {}) {
 
             if (subtype === "clientWonChall") {
                 title = "Desafio Concluído";
-                brief = `Cliente §${clientFullName}§ concluíu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
+                brief = `Cliente §${clientFullName}§ concluiu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
             }
             if (subtype === "confirmedChall") {
                 title = "Desafio Confirmado";
-                brief = `Opa! Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio disponível para resgate.`;
+                brief = `Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio disponível para resgate.`;
             }
             circularImg = "/img/icons/trophies/fiddelize-trophy.svg";
             break;
@@ -95,12 +95,12 @@ export default function getCardTypeData(cardType, options = {}) {
                 circularImg = "/img/icons/notif/crown-near-expired.svg";
             }
             if (subtype === "proExpiredDate") {
-                title = "Plano expirado";
+                title = "Serviços Expirados";
                 brief = `Plano ${
                     planBr && planBr.cap()
                 } com ${totalServ} serviço${
                     totalServ > 1 ? "s" : ""
-                } acabou de expirar. Lembrando que todos os seus clientes ainda continuam utilizando os apps normalmente. Somente os serviços do plano atual são interrompidos.`;
+                } acabou de expirar. Renove seus serviços para continuar usando.`;
                 circularImg = "/img/icons/notif/crown-expired.svg";
             }
             break;

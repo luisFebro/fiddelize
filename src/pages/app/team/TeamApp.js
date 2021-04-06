@@ -13,6 +13,7 @@ import useAuth from "../../../hooks/useAuthUser";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 import useCountNotif from "../../../hooks/notification/useCountNotif";
+import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 // import ReturnBtn from '../../../components/buttons/ReturnBtn';
 
 export const AsyncBellNotifBtn = Load({
@@ -234,6 +235,12 @@ export default function TeamApp({
                 </section>
             )}
             {isPreviewMode && showAdminTestMsg()}
+            {!isPreviewMode && (
+                <NotifPermissionBanner
+                    title="Receba notificações para agilizar seu trabalho!"
+                    subtitle="Saiba quando um cliente estiver apto a receber algum benefício"
+                />
+            )}
         </Fragment>
     );
 }

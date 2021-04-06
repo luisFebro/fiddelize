@@ -215,14 +215,15 @@ async function countAndMergeNotifications({ registration, options, data }) {
 
     if (currentNotification) {
         const messageCount = currentNotification.data.count + 1;
-        const plural = currentNotification.data.titleP;
+        const titlePlural = currentNotification.data.titleP;
+        const bodyPlural = currentNotification.data.bodyP;
 
         // close the old notification
         currentNotification.close();
 
         return {
-            newTitle: plural,
-            newBody: `${messageCount} novos clientes completaram um desafio.`,
+            newTitle: titlePlural,
+            newBody: `${messageCount} ${bodyPlural}`,
             newData: {
                 ...data,
                 tag: currTag,
