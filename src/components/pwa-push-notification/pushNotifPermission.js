@@ -64,13 +64,11 @@ export default async function requestPermission({
     setBackDrop,
     userId,
     role,
-    deviceType,
 }) {
     const defaultData = {
         dispatch,
         userId,
         role,
-        deviceType,
     };
 
     if (checkNotificationPromise()) {
@@ -93,13 +91,7 @@ export default async function requestPermission({
 }
 
 // HELPERS
-async function handlePermission({
-    deviceType,
-    permission,
-    dispatch,
-    userId,
-    role,
-}) {
+async function handlePermission({ permission, dispatch, userId, role }) {
     const isGranted = permission === "granted";
     const isDenied = permission === "denied";
 
@@ -119,7 +111,6 @@ async function handlePermission({
     const data = await subscribeUser({
         userId,
         role,
-        deviceType,
     }).catch((err) => {
         showSnackbar(dispatch, `${err}`, "error");
     });

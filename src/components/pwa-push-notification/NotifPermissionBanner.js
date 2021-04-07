@@ -7,8 +7,6 @@ import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 import requestPermission, { showPermissionBanner } from "./pushNotifPermission";
 import useData from "../../hooks/useData";
 
-const isEvenSmall = window.Helper.isSmallScreen(450);
-const deviceType = isEvenSmall ? "mobile" : "desktop";
 const permissionStatus = showPermissionBanner();
 
 export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
@@ -29,7 +27,6 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
             setBackDrop,
             userId,
             role,
-            deviceType,
         });
     };
 

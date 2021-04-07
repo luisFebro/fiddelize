@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { useStoreDispatch } from "easy-peasy";
 import NotifList from "./NotifList";
 import RadiusBtn from "../buttons/RadiusBtn";
 import useCountNotif from "../../hooks/notification/useCountNotif";
@@ -6,7 +7,6 @@ import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
 import { useProfile } from "../../hooks/useRoleData";
 import { setRun } from "../../hooks/useRunComp";
-import { useStoreDispatch } from "easy-peasy";
 import getId from "../../utils/getId";
 
 export default function Notification({

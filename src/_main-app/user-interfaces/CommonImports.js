@@ -26,14 +26,14 @@ export const AsyncOrdersAndPay = Load({
 export const AsyncAppSharer = Load({
     loader: () =>
         import(
-            "../../pages/app-sharer/AppSharer" /* webpackChunkName: app-sharer-page-lazy" */
+            "../../pages/app-sharer/AppSharer" /* webpackChunkName: "app-sharer-page-lazy" */
         ),
 });
 
 export const AsyncPlansPage = Load({
     loader: () =>
         import(
-            "../../pages/plans-page/PlansPage" /* webpackChunkName: plans-page-lazy" */
+            "../../pages/plans-page/PlansPage" /* webpackChunkName: "plans-page-lazy" */
         ),
 });
 // END CLI-ADMIN

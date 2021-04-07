@@ -10,6 +10,7 @@ import useAPI, {
 } from "../../../../../hooks/api/useAPI";
 import getAPI from "../../../../../utils/promises/getAPI";
 import useData from "../../../../../hooks/useData";
+import subscribeUser from "../../../../../components/pwa-push-notification/subscription";
 
 export default function HiddenPushNotif() {
     const [data, setData] = useState({
@@ -34,6 +35,11 @@ export default function HiddenPushNotif() {
     });
 
     const handleStatusUpdate = async (status, target) => {
+        const isActive = status === true;
+        if (isActive) {
+            await subscribeUser({ role, userId });
+        }
+
         await getAPI({
             method: "put",
             url: readOrUpdateNotifStatus("update"),
@@ -47,8 +53,10 @@ export default function HiddenPushNotif() {
 
         showSnackbar(
             dispatch,
-            `Status alterado para ${
-                target === "isDesktopOn" ? "apps desktop" : "apps mobile"
+            `Notificações ${isActive ? "ativadas" : "desativadas"} ${
+                target === "isDesktopOn"
+                    ? "para apps desktop"
+                    : "para apps mobile"
             }!`,
             "success"
         );

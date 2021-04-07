@@ -4,7 +4,10 @@ const convertedVapidKey = urlBase64ToUint8Array(
     process.env.REACT_APP_PUBLIC_PUSH_NOTIF_KEY
 );
 
-export default async function subscribeUser({ deviceType, role, userId }) {
+const isEvenSmall = window.Helper.isSmallScreen(450);
+const deviceType = isEvenSmall ? "mobile" : "desktop";
+
+export default async function subscribeUser({ role, userId }) {
     // n1
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
         // Service Worker isn't supported on this browser, disable or hide UI.

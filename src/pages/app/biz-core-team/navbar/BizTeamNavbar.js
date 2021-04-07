@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./_BizTeamNavbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -6,6 +7,15 @@ import Img from "../../../../components/Img";
 import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";
 import { disconnect } from "../../../../hooks/useAuthUser";
 import useData from "../../../../hooks/useData";
+import ModalFullContent from "../../../../components/modals/ModalFullContent";
+import { Load } from "../../../../components/code-splitting/LoadableComp";
+
+const AsyncNotifyUsersContent = Load({
+    loader: () =>
+        import(
+            "./NotifyUsersContent" /* webpackChunkName: "notify-users-full-page-lazy", webpackMode: "lazy" */
+        ),
+});
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -15,6 +25,7 @@ export const menuIconStyle = {
 
 function BizTeamNavbar({ history }) {
     const [agentJob] = useData(["agentJob"]);
+    const [notifyUsers, setNotifyUsers] = useState(false);
     const isDev = agentJob === "dev";
 
     const showMoreOptionsBtn = () => {
@@ -34,6 +45,13 @@ function BizTeamNavbar({ history }) {
                 text: "Salário CEO",
                 callback: () =>
                     history.push("/t/app/nucleo-equipe/financeiro/ceo"),
+            },
+            {
+                icon: <FontAwesomeIcon icon="comment" style={menuIconStyle} />,
+                text: "Notificar usuários",
+                callback: () => {
+                    setNotifyUsers(true);
+                },
             },
             {
                 icon: <ExitToAppIcon style={menuIconStyle} />,
@@ -73,6 +91,14 @@ function BizTeamNavbar({ history }) {
                 alt="logo equipe"
             />
             {showMoreOptionsBtn()}
+            {notifyUsers && (
+                <ModalFullContent
+                    contentComp={<AsyncNotifyUsersContent />}
+                    fullOpen={notifyUsers}
+                    setFullOpen={setNotifyUsers}
+                    needIndex={false}
+                />
+            )}
         </header>
     );
 }
