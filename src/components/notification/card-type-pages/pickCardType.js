@@ -1,5 +1,6 @@
 import { Load } from "../../code-splitting/LoadableComp";
 // CARD TYPES
+import Announcement from "./types/Announcement";
 import Welcome from "./types/Welcome";
 import FiddelizeSystem from "./types/FiddelizeSystem";
 import BirthdayGreeting from "./types/BirthdayGreeting";
@@ -83,6 +84,7 @@ export default function pickCardType(cardType, options = {}) {
                 content={content}
             />
         ),
+        announcement: <Announcement mainImg={mainImg} content={content} />,
     };
 
     const pickComp = () => typeList[cardType];

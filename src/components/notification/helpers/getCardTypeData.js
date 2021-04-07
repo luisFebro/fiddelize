@@ -25,12 +25,13 @@ export default function getCardTypeData(cardType, options = {}) {
               )}, a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário repleto de prosperidade e conquistas!`;
 
     switch (cardType) {
-        case "welcome":
+        case "welcome": {
             title = `Boas vindas, ${getFirstName(userName)}`;
             brief = handledWelcomeBrief;
             circularImg = "/img/icons/notif/calendar-welcome.svg";
             break;
-        case "challenge":
+        }
+        case "challenge": {
             const {
                 clientFullName,
                 currChall: thisCurrChall,
@@ -47,7 +48,8 @@ export default function getCardTypeData(cardType, options = {}) {
             }
             circularImg = "/img/icons/trophies/fiddelize-trophy.svg";
             break;
-        case "birthday":
+        }
+        case "birthday": {
             if (subtype === "greeting") {
                 const { birthdayDate } = extractStrData(content);
                 title = "Feliz Aniversário!";
@@ -61,7 +63,8 @@ export default function getCardTypeData(cardType, options = {}) {
                 circularImg = "/img/icons/notif/birthday-customers.svg";
             }
             break;
-        case "pro":
+        }
+        case "pro": {
             const {
                 approvalDate,
                 expiryDate,
@@ -104,7 +107,8 @@ export default function getCardTypeData(cardType, options = {}) {
                 circularImg = "/img/icons/notif/crown-expired.svg";
             }
             break;
-        case "score":
+        }
+        case "score": {
             const { tempScore } = extractStrData(content);
 
             if (subtype === "scorePlus") {
@@ -115,12 +119,24 @@ export default function getCardTypeData(cardType, options = {}) {
                 circularImg = "/img/icons/notif/fidelity-card.svg";
             }
             break;
-        case "system":
+        }
+        case "announcement": {
+            const {
+                title: thisTitle, // "Nova Funcionalidade"
+                brief: thisBrief, // Novo jogo de compra agora disponível: Bilhete Premiado
+            } = extractStrData(content);
+            title = thisTitle;
+            brief = thisBrief;
+            circularImg = "/img/icons/notif/megaphone.svg";
+            break;
+        }
+        case "system": {
             title = "Fiddelize informa:";
             brief =
                 "this should be changed dynamically with a subtype variable from backend";
             circularImg = "teste.svg";
             break;
+        }
         default:
             return console.log("smt wrong with getCardTypeData");
     }
@@ -140,4 +156,6 @@ function handleWelcome({ role, userFirstName, bizName }) {
         return `${userFirstName}, agora você está dentro! Um app prático para seu trabalho.`;
     if (role === "cliente")
         return `Conheça sobre como você vai ficar conectado com seus pontos de fidelidade da ${bizName}`;
+
+    return " ";
 }
