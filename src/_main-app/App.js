@@ -29,6 +29,17 @@ export default function App() {
     useCustomerBirthdayToday();
 
     useEffect(() => {
+        const loadVanillaToast = async (txt, time = 3500, type) => {
+            const { default: showVanillaToast } = await import(
+                /* webpackChunkName: "toastify-module-lazy" */ "../components/vanilla-js/toastify/showVanillaToast"
+            );
+            return showVanillaToast(txt, { dur: "forever" });
+        };
+
+        loadVanillaToast(`🔔) this is an awesome toast`);
+    }, []);
+
+    useEffect(() => {
         switchConsoleLogs();
         isWebpSupported(
             "lossy",
@@ -53,6 +64,28 @@ export default function App() {
                 crossorigin: "anonymous",
             }
         );
+
+        window.addEventListener("DOMContentLoaded", () => {
+            // The DOMContentLoaded event fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
+            navigator.serviceWorker.addEventListener("message", (event) => {
+                // show toast for in-app notification
+                const { title, body } = event.data;
+
+                const loadVanillaToast = async (txt, options) => {
+                    const { default: showVanillaToast } = await import(
+                        /* webpackChunkName: "toastify-module-lazy" */ "../components/vanilla-js/toastify/showVanillaToast"
+                    );
+                    return showVanillaToast(txt, options);
+                };
+
+                loadVanillaToast(`🔔) ${title}: ${body}`, {
+                    dur: 15000,
+                    needActionBtn: true,
+                    actionBtnText: "ver",
+                    onClick: () => window.location.reload(),
+                });
+            });
+        });
     }, []);
 
     return (

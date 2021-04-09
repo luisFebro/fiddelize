@@ -175,9 +175,9 @@ export default function MuSelectTable({
                     onSelectAllClick={handleSelectAllClick}
                 />
                 {loading ? (
-                    <p className="my-5 text-center text-purple font-weight-bold text-subtitle">
+                    <div className="my-5 text-center text-purple font-weight-bold text-subtitle">
                         Carregando lista...
-                    </p>
+                    </div>
                 ) : (
                     <Fragment>
                         <TableContainer>

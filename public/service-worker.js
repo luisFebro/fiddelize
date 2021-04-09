@@ -83,7 +83,7 @@ self.addEventListener("message", (event) => {
 
 // Any other custom service worker logic can go here.
 
-self.addEventListener("push", (event) => {
+self.addEventListener("push", async (event) => {
     const payload = event.data.json();
     const notifPromise = showNotification(payload);
 
@@ -184,6 +184,26 @@ async function showNotification(payload = {}) {
 
     checkBrowserMaxActions();
 
+    // IN APP TOAST NOTIFICATION
+    const needUiMsg = await needInAppNotif();
+
+    if (needUiMsg) {
+        const windowClients = await self.clients.matchAll({
+            type: "window",
+            includeUncontrolled: true,
+        });
+
+        windowClients.forEach((windowClient) => {
+            windowClient.postMessage({
+                title: payload.title,
+                body: payload.body,
+            });
+        });
+
+        return false;
+    }
+    // END IN APP TOAST NOTIFICATION
+
     return self.registration.showNotification(title, config);
 }
 
@@ -272,6 +292,28 @@ async function focusOrOpenWindow(url) {
     // Note that you don't have window access in service-worker. To navigate to the URL, you'd need to use clients.openWindow instead.
     return self.clients.openWindow(urlToOpen);
 }
+
+// isClientFocused
+// https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns#the_exception_to_the_rule
+async function needInAppNotif() {
+    const windowClients = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+    });
+
+    let clientIsFocused = false;
+
+    for (let i = 0; i < windowClients.length; i++) {
+        const windowClient = windowClients[i];
+        if (windowClient.focused) {
+            clientIsFocused = true;
+            break;
+        }
+    }
+
+    return clientIsFocused;
+}
+
 // END HELPERS
 /* COMMENTS
 n1: waitUntil

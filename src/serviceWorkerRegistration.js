@@ -2,11 +2,11 @@ import isThisApp from "./utils/window/isThisApp";
 
 const isApp = isThisApp();
 
-const loadVanillaToast = async (txt, time) => {
+const loadVanillaToast = async (txt, time = 3500) => {
     const { default: showVanillaToast } = await import(
         /* webpackChunkName: "toastify-module-lazy" */ "./components/vanilla-js/toastify/showVanillaToast"
     );
-    return showVanillaToast(txt, time);
+    return showVanillaToast(txt, { dur: time });
 };
 
 let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service

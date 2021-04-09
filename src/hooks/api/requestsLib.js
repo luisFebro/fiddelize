@@ -144,3 +144,5 @@ export const addFinanceTransaction = () =>
 export const subscribePushNotif = () => `${API}/push-notification/subscribe`; // POST
 export const readOrUpdateNotifStatus = (action) =>
     `${API}/push-notification/notif-status?action=${action}`; // PUT
+export const readUserSubIds = () => `${API}/push-notification/read/sub-ids`; // GET
+export const sendPushNotifs = () => `${API}/push-notification/go-everybody`; // POST

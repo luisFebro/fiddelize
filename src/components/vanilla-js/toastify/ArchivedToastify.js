@@ -5,6 +5,8 @@
  *
  * Copyright (C) 2018 Varun A P
  */
+
+// LESSON: only works if initionalized on loading, otherwise throw an error on constructor
 (function (root, factory) {
     if (typeof module === "object" && module.exports) {
         module.exports = factory();

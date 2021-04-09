@@ -1,19 +1,38 @@
-import { Load } from "../../code-splitting/LoadableComp";
+import LoadableVisible from "../../../components/code-splitting/LoadableVisible";
 // CARD TYPES
-import Announcement from "./types/Announcement";
-import Welcome from "./types/Welcome";
-import FiddelizeSystem from "./types/FiddelizeSystem";
-import BirthdayGreeting from "./types/BirthdayGreeting";
-import BirthdaysInWeek from "./types/BirthdaysInWeek";
-import Challenge from "./types/Challenge";
-
-const AsyncProPay = Load({
+// import BirthdaysInWeek from "./types/BirthdaysInWeek";
+// import FiddelizeSystem from "./types/FiddelizeSystem";
+const AsyncChallenge = LoadableVisible({
+    loader: () =>
+        import(
+            "./types/Challenge" /* webpackChunkName: "challenge-picked-notif-page-lazy" */
+        ),
+});
+const AsyncBirthdayGreeting = LoadableVisible({
+    loader: () =>
+        import(
+            "./types/BirthdayGreeting" /* webpackChunkName: "birthday-greeting-picked-notif-page-lazy" */
+        ),
+});
+const AsyncWelcome = LoadableVisible({
+    loader: () =>
+        import(
+            "./types/Welcome" /* webpackChunkName: "welcome-picked-notif-page-lazy" */
+        ),
+});
+const AsyncAnnouncement = LoadableVisible({
+    loader: () =>
+        import(
+            "./types/Announcement" /* webpackChunkName: "announcement-picked-notif-page-lazy" */
+        ),
+});
+const AsyncProPay = LoadableVisible({
     loader: () =>
         import(
             "./types/ProPay" /* webpackChunkName: "pay-picked-notif-page-lazy" */
         ),
 });
-const AsyncScore = Load({
+const AsyncScore = LoadableVisible({
     loader: () =>
         import(
             "./types/Score" /* webpackChunkName: "score-picked-notif-page-lazy" */
@@ -40,20 +59,21 @@ export default function pickCardType(cardType, options = {}) {
     const chooseBirthday = () => {
         if (subtype === "greeting")
             return (
-                <BirthdayGreeting
+                <AsyncBirthdayGreeting
                     {...defaultProps}
                     bizLogo={bizLogo}
                     content={content}
                 />
             );
-        if (subtype === "weeklyReport")
-            return <BirthdaysInWeek {...defaultProps} />;
+        // if (subtype === "weeklyReport")
+        // return <BirthdaysInWeek {...defaultProps} />;
+        return false;
     };
 
     const typeList = {
-        welcome: <Welcome {...defaultProps} bizLogo={bizLogo} />,
+        welcome: <AsyncWelcome {...defaultProps} bizLogo={bizLogo} />,
         challenge: (
-            <Challenge
+            <AsyncChallenge
                 {...defaultProps}
                 senderId={senderId}
                 subtype={subtype}
@@ -61,13 +81,7 @@ export default function pickCardType(cardType, options = {}) {
                 updatedBy={updatedBy}
             />
         ),
-        system: (
-            <FiddelizeSystem
-                {...defaultProps}
-                subtype={subtype}
-                content={content}
-            />
-        ),
+        system: null,
         birthday: chooseBirthday(),
         pro: (
             <AsyncProPay
@@ -84,7 +98,7 @@ export default function pickCardType(cardType, options = {}) {
                 content={content}
             />
         ),
-        announcement: <Announcement mainImg={mainImg} content={content} />,
+        announcement: <AsyncAnnouncement mainImg={mainImg} content={content} />,
     };
 
     const pickComp = () => typeList[cardType];

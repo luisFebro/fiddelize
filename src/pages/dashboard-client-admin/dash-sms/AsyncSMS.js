@@ -116,7 +116,6 @@ export default function AsyncSMS() {
             {showInstruBtn()}
             <CreditsBalance handleBalance={handleBalance} />
             <RecipientOptions
-                whichTab={whichTab}
                 setWhichTab={handleWhichTab}
                 handleList={handleList}
                 handleShowMessage={handleShowMessage}

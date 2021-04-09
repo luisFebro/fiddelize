@@ -142,7 +142,7 @@ export default function PixKeyRequest() {
                     right: "-15px",
                 }}
             >
-                <EditButton onClick={handleEdit} />
+                <EditButton onClick={handleEdit} zIndex=" " />
             </div>
         </section>
     );

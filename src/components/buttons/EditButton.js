@@ -30,6 +30,7 @@ export default function EditButton({
     left,
     bottom,
     onClick,
+    zIndex,
 }) {
     const classes = useStyles();
 
@@ -44,7 +45,7 @@ export default function EditButton({
                 right: `${right || 0}px`,
                 left: `${left || 0}px`,
                 bottom: `${bottom || 0}px`,
-                zIndex: 1500,
+                zIndex: zIndex || 1500,
                 outline: "none",
                 color: "var(--mainWhite)",
                 backgroundColor: "var(--themeSDark)",

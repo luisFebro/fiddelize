@@ -79,7 +79,8 @@ function CardActionBtn({
             return setIsLoading(false);
         }
 
-        setRun(dispatch, `notificationCount${getId()}`);
+        // this was a bottleneck and causing a few seconds delay while clicking in the notif's card CTA
+        // setRun(dispatch, `notificationCount${getId()}`);
 
         handleFullOpen();
         setTimeout(() => {

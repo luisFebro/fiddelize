@@ -1,0 +1,38 @@
+
+.single-field--root.field {
+    .MuiInputBase-input {
+        background-color: #fff !important;
+        z-index: 2000;
+        color: var(--themeP) !important;
+        font: var(--mainFont);
+        padding: 10px;
+    }
+
+    .large {
+        margin: 0 5px !important;
+    }
+
+    .large div .MuiInputBase-input {
+        font-size: 2.5em;
+    }
+
+    .large div .MuiInputBase-input .MuiOutlinedInput-input {
+        padding: 10.5px 14px;
+    }
+
+    .medium div .MuiInputBase-input {
+        font-size: 1.5em;
+    }
+
+    .small div .MuiInputBase-input {
+        font-size: 1em;
+    }
+
+    .text-left div .MuiInputBase-input {
+        text-align: left !important;
+    }
+
+    .text-center div .MuiInputBase-input {
+        text-align: center !important;
+    }
+}

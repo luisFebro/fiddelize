@@ -13,7 +13,7 @@ import { Load } from "../../../../components/code-splitting/LoadableComp";
 const AsyncNotifyUsersContent = Load({
     loader: () =>
         import(
-            "./NotifyUsersContent" /* webpackChunkName: "notify-users-full-page-lazy", webpackMode: "lazy" */
+            "./notify-users/NotifyUsersContent" /* webpackChunkName: "notify-users-full-page-lazy", webpackMode: "lazy" */
         ),
 });
 
@@ -29,7 +29,7 @@ function BizTeamNavbar({ history }) {
     const isDev = agentJob === "dev";
 
     const showMoreOptionsBtn = () => {
-        let optArray = [
+        const optArray = [
             {
                 icon: <FontAwesomeIcon icon="sync-alt" style={menuIconStyle} />,
                 text: "trocar app",
@@ -66,6 +66,7 @@ function BizTeamNavbar({ history }) {
 
         if (!isDev) {
             delete optArray[1];
+            delete optArray[2];
         }
 
         return (
