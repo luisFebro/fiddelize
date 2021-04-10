@@ -16,7 +16,6 @@ import {
 import { modalTextFieldDashboardType } from "../../../../../../../types";
 import { convertDotToComma } from "../../../../../../../utils/numbers/convertDotComma";
 
-import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
 import { fluidTextAlign } from "../../../../../../../utils/string/fluidTextAlign";
 import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
 import {
@@ -31,6 +30,7 @@ import { addDays, calendar } from "../../../../../../../utils/dates/dateFns";
 import useAPI, { readPrizes } from "../../../../../../../hooks/api/useAPI";
 import sendSMS from "../../../../../../../hooks/sms/sendSMS";
 import useData from "../../../../../../../hooks/useData";
+import showToast from "../../../../../../../components/toasts";
 // END CUSTOMIZED DATA
 
 ModalTextField.propTypes = {
@@ -78,7 +78,12 @@ export default function ModalTextField({
 
     const { valueOnField, remainValue } = data;
     const { businessId } = useAppSystem();
-    const { rewardList, rewardDeadline } = useClientAdmin();
+    const {
+        selfBizLogoImg,
+        bizName,
+        rewardList,
+        rewardDeadline,
+    } = useClientAdmin();
     const [teamMemberName] = useData(["name"]);
 
     const dispatch = useStoreDispatch();
@@ -144,11 +149,25 @@ export default function ModalTextField({
             // "clientUserData.totalPurchasePrize": totalPrizes + 1, // the same as currScore, this is only used to differentiate from totalGeneralScore.
         };
 
-        const sendNotifBody = {
-            subtype: "confirmedChall",
-            content: `currChall:${currChall};prizeDeadline:${rewardDeadline};prizeDesc:${mainReward};prizeConfirmationDate:${new Date()};`,
+        const pushNotifData = {
+            isPushNotif: true,
+            type: "confirmedChall",
+            userId,
             role: "cliente",
-            senderId: businessId,
+            payload: {
+                customerName: getFirstName(name && name.cap()),
+                bizName,
+                currChall,
+                bizLogo: selfBizLogoImg,
+            },
+            notifCard: {
+                cardType: "challenge",
+                subtype: "confirmedChall",
+                currChall,
+                prizeDeadline: rewardDeadline,
+                prizeDesc: mainReward,
+                // senderId: businessId,
+            },
         };
 
         const deadlineDate = addDays(
@@ -163,7 +182,7 @@ export default function ModalTextField({
             madeBy: teamMemberName,
         };
 
-        showSnackbar(dispatch, "Atualizando pontuação...", "success", 5000);
+        showToast("Atualizando pontuação...");
 
         const prizeStatusRes = await changePrizeStatus(userId, {
             statusType: "confirmed",
@@ -171,22 +190,20 @@ export default function ModalTextField({
         });
         if (prizeStatusRes.status !== 200) {
             if (prizeStatusRes.data.error.indexOf("critical") !== -1)
-                return showSnackbar(
-                    dispatch,
+                return showToast(
                     "Não foi possível descontar pontos. Por favor, contate suporte técnico da Fiddelize.",
-                    "error"
+                    { type: "error", dur: 15000 }
                 );
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Pontos deste desafio já foram descontados e podem está desatualizados.",
-                "error"
+                { type: "error", dur: 9000 }
             );
         }
         const [updateRes, notifRes, taskRes, smsRes] = await Promise.all([
             updateUser(dispatch, updateUserBody, userId, {
                 thisRole: "cliente",
             }),
-            sendNotification(userId, "challenge", sendNotifBody),
+            sendNotification(userId, "challenge", pushNotifData),
             addAutomaticTask(businessId, taskBody),
             sendSMS({
                 userId: businessId,
@@ -199,35 +216,29 @@ export default function ModalTextField({
         ]);
 
         if (notifRes.status !== 200)
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Um problema aconteceu ao enviar notificação para o cliente",
-                "error"
+                { type: "error" }
             );
         if (updateRes.status !== 200)
-            return showSnackbar(
-                dispatch,
-                "Algo deu errado ao atualizar cliente",
-                "error"
-            );
+            return showToast("Algo deu errado ao atualizar cliente", {
+                type: "error",
+            });
         if (taskRes.status !== 200)
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Ocorreu um problema ao adicionar tarefa automática.",
-                "error"
+                { type: "error" }
             );
         if (smsRes.status !== 200)
             console.log("An error happened when sending SMS");
 
         setTimeout(
             () =>
-                showSnackbar(
-                    dispatch,
+                showToast(
                     `Ok! Cliente ${
                         name && name.toUpperCase()
                     } foi notificado(a) e está apto(a) a receber o prêmio.`,
-                    "success",
-                    10000
+                    { type: "success", dur: 12000 }
                 ),
             2900
         );

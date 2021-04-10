@@ -45,6 +45,26 @@ export const countPendingNotif = async (userId, options = {}) => {
 export const sendNotification = async (userId, cardType, options = {}) => {
     const { subtype, token, nT, content, role, name, senderId } = options;
 
+    let queryNoToken = "";
+    if (nT) {
+        queryNoToken = "?nT=1"; // it is used in auth controller to send notification without user's login with current condition: req.query.nT && req.query.cardType === "welcome"
+    }
+
+    const pushNotifData = options;
+    const needPushNotif = pushNotifData && pushNotifData.isPushNotif;
+    console.log("needPushNotif", needPushNotif);
+    if (needPushNotif) {
+        try {
+            return await axios.put(
+                `${API}/notification/send${queryNoToken}`,
+                pushNotifData,
+                getHeaderToken(token)
+            );
+        } catch (err) {
+            return err;
+        }
+    }
+
     const notificationOpts = {
         userId, // for authorization
         cardType,
@@ -53,10 +73,6 @@ export const sendNotification = async (userId, cardType, options = {}) => {
         senderId: senderId || undefined,
         content,
     };
-    let queryNoToken = "";
-    if (nT) {
-        queryNoToken = "?nT=1"; // it is used in auth controller to send notification without user's login with current condition: req.query.nT && req.query.cardType === "welcome"
-    }
 
     try {
         return await axios.put(

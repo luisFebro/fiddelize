@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import getAPI, { readUser } from "../../../utils/promises/getAPI";
 import useData from "../../../hooks/useData";
 import { useClientAdmin } from "../../../hooks/useRoleData";
@@ -19,8 +19,9 @@ export default function ReviewModal() {
         buyReport: null,
         gotReview: undefined,
         isLoading: true,
+        error: false,
     });
-    const { nps, xpScore, buyReport, gotReview, isLoading } = data;
+    const { nps, error, xpScore, buyReport, gotReview, isLoading } = data;
 
     const [role, userId] = useData(["role", "userId"]);
 
@@ -35,6 +36,11 @@ export default function ReviewModal() {
             const dataCliReview = await getAPI({
                 url: readUser(userId, role, false),
                 params,
+            }).catch((err) => {
+                setData((prev) => ({
+                    ...prev,
+                    error: true,
+                }));
             });
             const thisReview =
                 dataCliReview && dataCliReview.data.clientUserData.review;
@@ -84,10 +90,25 @@ export default function ReviewModal() {
         </div>
     );
 
+    if (error) {
+        return (
+            <Fragment>
+                {showTitle()}
+                <p
+                    className="text-grey font-weight-bold text-normal text-center mx-3"
+                    style={{ marginTop: 150 }}
+                >
+                    Não foi possível carregar no momento devido a conexão. Tente
+                    novamente!
+                </p>
+            </Fragment>
+        );
+    }
+
     return (
         <section>
             {showTitle()}
-            {isLoading ? (
+            {isLoading && !error ? (
                 <p
                     className="text-purple font-weight-bold text-subtitle text-center"
                     style={{ marginTop: 150 }}

@@ -2,11 +2,11 @@ import isThisApp from "./utils/window/isThisApp";
 
 const isApp = isThisApp();
 
-const loadVanillaToast = async (txt, time = 3500) => {
-    const { default: showVanillaToast } = await import(
-        /* webpackChunkName: "toastify-module-lazy" */ "./components/vanilla-js/toastify/showVanillaToast"
+const loadToast = async (txt, time = 3500) => {
+    const { default: showToast } = await import(
+        /* webpackChunkName: "toast-comp-lazy" */ "./components/toasts"
     );
-    return showVanillaToast(txt, { dur: time });
+    return showToast(txt, { dur: time });
 };
 
 let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
@@ -88,7 +88,7 @@ function registerValidSW(swUrl, config) {
                             // but the previous service worker will still serve the older
                             // content until all client tabs are closed.
                             if (isToastActivated) {
-                                loadVanillaToast(
+                                loadToast(
                                     "Opa! App atualizado com novidades. 🎉",
                                     3500
                                 );
@@ -97,7 +97,7 @@ function registerValidSW(swUrl, config) {
                             setTimeout(
                                 () =>
                                     isToastActivated &&
-                                    loadVanillaToast(
+                                    loadToast(
                                         "Basta reiniciar seu app para atualizar.",
                                         4000
                                     ),
@@ -111,7 +111,7 @@ function registerValidSW(swUrl, config) {
                             // At this point, everything has been precached.
                             // It's the perfect time to display a
                             // "Content is cached for offline use." message.
-                            loadVanillaToast(
+                            loadToast(
                                 "App foi atualizado para a mais recente versão!",
                                 5000
                             );
@@ -157,7 +157,7 @@ function checkValidServiceWorker(swUrl, config) {
         })
         .catch(() => {
             if (isToastActivated) {
-                loadVanillaToast(
+                loadToast(
                     "Sem acesso à internet. App está funcionando em modo offline",
                     7000
                 );

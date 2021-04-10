@@ -8,7 +8,7 @@ import ModalFullContent from "../../modals/ModalFullContent";
 import pickCardType from "./pickCardType";
 import Spinner from "../../loadingIndicators/Spinner";
 import { useClientAdmin, useProfile } from "../../../hooks/useRoleData";
-import getId from "../../../utils/getId";
+// import getId from "../../../utils/getId";
 import { getMultiVar, store } from "../../../hooks/storage/useVar";
 
 function CardActionBtn({

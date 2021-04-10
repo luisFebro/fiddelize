@@ -91,7 +91,7 @@ function PlanBadges({ history }) {
     );
 
     return (
-        <section className="plan-badge--root text-small text-white animated slideInLeft slow delay-1s">
+        <section className="plan-badge--root text-small text-white animated fadeIn">
             {bizPlan !== "gratis" && (
                 <div className={`${bizPlan}-icon position-relative`}>
                     <FontAwesomeIcon icon="crown" />

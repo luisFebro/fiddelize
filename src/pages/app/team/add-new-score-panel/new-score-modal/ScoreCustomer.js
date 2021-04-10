@@ -1,6 +1,5 @@
 import { useState, Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
-import { useStoreDispatch } from "easy-peasy";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import MoneyKeyboard from "../../../../../components/keyboards/MoneyKeyboard";
 import { convertBrToDollar } from "../../../../../utils/numbers/convertDotComma";
@@ -9,10 +8,11 @@ import useData from "../../../../../hooks/useData";
 import { setVar, store } from "../../../../../hooks/storage/useVar";
 import { prerenderAudio } from "../../../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../../../utils/arrays/getRandomArray";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
 import getAPI, {
     setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
+import showToast from "../../../../../components/toasts";
+import { useClientAdmin } from "../../../../../hooks/useRoleData";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -78,20 +78,16 @@ const ttsStore = [
     },
 ];
 
-const setUltimateData = async ({
-    clientId,
-    clientName,
-    memberId,
-    tempScore,
-    bizId,
-}) => {
+const setUltimateData = async (data) => {
     const body = {
-        userId: memberId, // for auth only
-        bizId,
-        clientId,
-        clientName,
-        memberId,
-        tempScore,
+        userId: data.memberId, // for auth only
+        bizId: data.bizId,
+        bizName: data.bizName,
+        bizLogo: data.bizLogo,
+        clientId: data.clientId,
+        clientName: data.clientName,
+        memberId: data.memberId,
+        tempScore: data.tempScore,
     };
 
     return await getAPI({
@@ -115,9 +111,8 @@ export default function ScoreCustomer({
     const [score, setScore] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
 
-    const dispatch = useStoreDispatch();
-
     const [memberName, memberId] = useData(["name", "userId"]);
+    const { selfBizLogoImg: bizLogo, bizName } = useClientAdmin();
 
     const cliUserName = getFirstName(customerName && customerName.cap(), {
         addSurname: true,
@@ -145,7 +140,7 @@ export default function ScoreCustomer({
     };
 
     const handleSuccessScore = () => {
-        if (memberId === "...") return;
+        if (memberId === "..." || !bizName) return;
 
         if (clientScoreOnly) {
             const firstCliName = getFirstName(
@@ -158,15 +153,13 @@ export default function ScoreCustomer({
         }
 
         if (!clientId) {
-            return showSnackbar(
-                dispatch,
+            showToast(
                 "Houve um problema ao buscar Id do cliente. Por favor, reinicie.",
-                "error",
-                3000
+                { dur: 3000, type: "error" }
             );
         }
 
-        showSnackbar(dispatch, "Adicionando...", "warning", 2000);
+        showToast("Adicionando...", { dur: 6000 });
         (async () => {
             const ultimateData = {
                 clientId,
@@ -174,6 +167,8 @@ export default function ScoreCustomer({
                 tempScore: convertBrToDollar(score),
                 memberId,
                 bizId,
+                bizName,
+                bizLogo,
             };
             await setUltimateData(ultimateData);
 

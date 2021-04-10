@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import { useAuthUser } from "../../../hooks/useAuthUser";
@@ -7,7 +8,6 @@ import selectTxtStyle, {
 } from "../../../utils/biz/selectTxtStyle";
 import "../ellipse.scss";
 import AsyncBellNotifBtn from "../../../components/notification/AsyncBellNotifBtn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useElemShowOnScroll from "../../../hooks/scroll/useElemShowOnScroll";
@@ -17,7 +17,7 @@ import useAnimateNumber from "../../../hooks/animation/useAnimateNumber";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
 import defineCurrChallenge from "../../../utils/biz/defineCurrChallenge";
 import useCountNotif from "../../../hooks/notification/useCountNotif";
-import useSendNotif from "../../../hooks/notification/useSendNotif";
+import useNotifyCliWonChall from "./hooks/useNotifyCliWonChall";
 import useAPI, { readPrizes } from "../../../hooks/api/useAPI";
 import { getVar, removeVar, setVar } from "../../../hooks/storage/useVar";
 import { readPurchaseHistory } from "../../../redux/actions/userActions";
@@ -36,41 +36,7 @@ import AllScores from "../AllScores";
 import AsyncPercCircleAndGift from "../AsyncPercCircleAndGift";
 // END APP COMPONENTS
 
-const styles = {
-    rulesBtn: {
-        width: "130px",
-        color: "var(--mainWhite)",
-        cursor: "pointer",
-    },
-};
-
 const now = new Date();
-const getAutoSMSObj = ({
-    needMissingMsg,
-    userBeatChallenge,
-    lastPrizeId,
-    businessId,
-    firstName,
-    currChall,
-    bizWhatsapp,
-}) => ({
-    trigger: needMissingMsg || Boolean(userBeatChallenge && lastPrizeId),
-    serviceType: needMissingMsg ? "missingPurchase" : "finishedChall",
-    userId: businessId,
-    smsId: needMissingMsg ? now.getMonth() : lastPrizeId,
-    customMsg: needMissingMsg
-        ? ""
-        : `CONCLUSÃO DE DESAFIO - ${firstName}, {
-              addSurname: true,
-          })} acabou de concluir desafio N.º ${currChall}.`,
-    contactList: [
-        {
-            name: needMissingMsg ? firstName : "Você",
-            phone: bizWhatsapp,
-        },
-    ],
-});
-
 const greeting = getDayGreetingBr();
 
 export default function ClientUserAppContent({
@@ -97,6 +63,7 @@ export default function ClientUserAppContent({
         colorS = "default";
     }
     const { role, phone } = useProfile();
+    // eslint-disable-next-line
     let [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
     firstName = clientNameTest || firstName;
     const userIdLoading = Boolean(_id === "...");
@@ -124,6 +91,7 @@ export default function ClientUserAppContent({
         arePrizesVisible,
         bizWhatsapp,
         bizName,
+        selfBizLogoImg,
     } = useClientAdmin();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
@@ -198,18 +166,23 @@ export default function ClientUserAppContent({
         params: { lastPrizeId: true, thisRole: "cliente" },
         trigger: !needAppForPreview && !userIdLoading,
     });
-    const challNotifOptions = React.useCallback(
-        () => ({
-            trigger: Boolean(userBeatChallenge && lastPrizeId),
-            storage: { key: "alreadyAlertChallenge", value: currChall },
-            senderId: _id,
-            role: "cliente-admin",
-            subtype: "clientWonChall",
-            content: `prizeId:${lastPrizeId};rewardScore:${maxScore};currScore:${currScore};totalPrizes:${totalPurchasePrize};currChall:${currChall};clientFullName:${fullName};prizeDesc:${mainReward};phone:${phone};`,
-        }),
-        [userBeatChallenge, lastPrizeId, _id]
-    );
-    useSendNotif(businessId, "challenge", challNotifOptions());
+
+    useNotifyCliWonChall(businessId, {
+        // for push notif data
+        businessId,
+        mainReward,
+        fullName,
+        currChall,
+        currScore,
+        selfBizLogoImg,
+        lastPrizeId,
+        maxScore,
+        totalPurchasePrize,
+        phone,
+        // trigger
+        userIdLoading,
+        userBeatChallenge,
+    });
 
     const needMissingMsg = useDidDateExpire({
         userId: _id,
@@ -266,7 +239,7 @@ export default function ClientUserAppContent({
     const selectedTxtStyle = selectTxtStyle(backColorSelect, { bold: true });
 
     const showGreetingAndNotific = () => (
-        <section className="mt-3 position-relative animated slideInLeft slow">
+        <section className="mt-3 position-relative">
             <section className="position-relative">
                 <div
                     className="ellipse"
@@ -437,7 +410,11 @@ export default function ClientUserAppContent({
                         <div
                             className="no-text-decoration text-center pressed-to-left"
                             onClick={playBeep}
-                            style={styles.rulesBtn}
+                            style={{
+                                width: "130px",
+                                color: "var(--mainWhite)",
+                                cursor: "pointer",
+                            }}
                         >
                             <span className={`${selectedTxtStyle} text-normal`}>
                                 Consulte
@@ -492,7 +469,32 @@ export default function ClientUserAppContent({
     );
 }
 
-ClientUserAppContent.whyDidYouRender = false;
+// HELPERS
+function getAutoSMSObj(data) {
+    const { needMissingMsg } = data;
+
+    return {
+        trigger:
+            needMissingMsg ||
+            Boolean(data.userBeatChallenge && data.lastPrizeId),
+        serviceType: needMissingMsg ? "missingPurchase" : "finishedChall",
+        userId: data.businessId,
+        smsId: needMissingMsg ? now.getMonth() : data.lastPrizeId,
+        customMsg: needMissingMsg
+            ? ""
+            : `CONCLUSÃO DE DESAFIO - ${data.firstName}, {
+                  addSurname: true,
+              })} acabou de concluir desafio N.º ${data.currChall}.`,
+        contactList: [
+            {
+                name: needMissingMsg ? data.firstName : "Você",
+                phone: data.bizWhatsapp,
+            },
+        ],
+    };
+}
+// END HELPERS
+
 /* COMMENTS
 n1:
 a) React.useCallback is essential to avoid to render + 15 times at start

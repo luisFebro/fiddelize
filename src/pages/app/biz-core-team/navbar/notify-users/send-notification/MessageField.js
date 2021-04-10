@@ -40,6 +40,7 @@ const handlePushPayloads = ({ body, ...data }) => ({
                 releaseBrief: body,
             },
             notifCard: {
+                cardType: "announcement",
                 title: "Novidade no App",
                 brief: body,
                 learnMoreUrl: data.learnMoreUrl,

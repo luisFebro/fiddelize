@@ -1,5 +1,5 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./_FacesPromotersScore.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../../utils/promises/getAPI";
 // NPS (Net Promoter Score) Rating
@@ -30,12 +30,11 @@ export default function FacesPromotersScore({
     setScale,
     userId,
     role,
-    dispatch,
-    showSnackbar,
+    showToast,
     removeReportField,
 }) {
     const handleUpdate = async () => {
-        showSnackbar(dispatch, "Atualizando...", "warning", 6000);
+        showToast("Atualizando...", { dur: 3000 });
         await getAPI({
             method: "put",
             url: updateUser(userId, role),
@@ -46,7 +45,7 @@ export default function FacesPromotersScore({
         }).catch((err) => {
             console.log(`ERROR: ${err}`);
         });
-        showSnackbar(dispatch, "Avaliação Atualizada!", "success");
+        showToast("Avaliação Atualizada!", { type: "success" });
     };
 
     return (

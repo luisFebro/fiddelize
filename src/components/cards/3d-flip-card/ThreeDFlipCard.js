@@ -101,7 +101,6 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
                     }}
                 >
                     <img
-                        className="animated fadeInUp delay-1s"
                         src={thisBizLogo}
                         width={width}
                         height={height}

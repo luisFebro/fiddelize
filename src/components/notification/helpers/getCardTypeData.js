@@ -32,19 +32,19 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "challenge": {
-            const {
-                clientFullName,
-                currChall: thisCurrChall,
-                prizeDesc,
-            } = extractStrData(content);
+            const { currChall: thisCurrChall, prizeDesc } = extractStrData(
+                content
+            );
 
             if (subtype === "clientWonChall") {
                 title = "Desafio Concluído";
-                brief = `Cliente §${clientFullName}§ concluiu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
+                brief = `Cliente §${getFirstName(userName, {
+                    addSurname: true,
+                })}§ concluiu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
             }
             if (subtype === "confirmedChall") {
                 title = "Desafio Confirmado";
-                brief = `Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio disponível para resgate.`;
+                brief = `Desafio n.º ${thisCurrChall} confirmado pela ${bizName} e prêmio (${prizeDesc}) disponível para resgate.`;
             }
             circularImg = "/img/icons/trophies/fiddelize-trophy.svg";
             break;

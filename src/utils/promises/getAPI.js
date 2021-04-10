@@ -24,7 +24,7 @@ export default function getAPI({
         let cancel;
 
         const stopRequest = setTimeout(() => {
-            cancel();
+            if (typeof cancel === "function") cancel();
             // LESSON: do not use Promise.reject inside a pure promise like this where there is reject method already. the request will fail
             return reject({
                 error: "Tempo de espera terminou. Tente novamente",
@@ -73,10 +73,10 @@ export default function getAPI({
                     })();
                 }
 
-                reject(error.response.data);
+                reject(error.response && error.response.data);
             }
 
-            reject(error.response.data);
+            reject(error.response && error.response.data);
         }
     };
 

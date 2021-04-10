@@ -6,6 +6,7 @@ const useStyles = makeStyles(() => ({
     // LESSON
     root: {
         color: (props) => props.color || "#52af77",
+        width: (props) => props.width || "100%",
         height: 8,
     },
     valueLabel: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles(() => ({
 
 export default function MuSlider({
     color = "var(--themeP)",
+    width,
     defaultValue = 1,
     valueLabelDisplay = "on",
     step = 1,
@@ -46,7 +48,7 @@ export default function MuSlider({
     max = 300,
 }) {
     const [labelSize, setLabelSize] = useState(null);
-    const classes = useStyles({ color, labelSize });
+    const classes = useStyles({ color, labelSize, width });
 
     useEffect(() => {
         if (value === 1000) {

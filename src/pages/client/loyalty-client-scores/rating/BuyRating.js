@@ -1,7 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import StarsBuyExperience, {
     getGradeText,
 } from "./stars-buy-experience/StarsBuyExperience";
@@ -13,7 +11,8 @@ import useData from "../../../../hooks/useData";
 import "./_BuyRating.css";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useAppSystem, useClientAdmin } from "../../../../hooks/useRoleData";
+import showToast from "../../../../components/toasts";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -52,10 +51,16 @@ export default function BuyRating({
     const [switchEdit, setSwitchEdit] = useState(false);
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
 
-    const [firstName, userId, role] = useData(["firstName", "userId", "role"]);
-    const { bizName } = useClientAdmin();
+    const [firstName, customerName, userId, role] = useData([
+        "firstName",
+        "name",
+        "userId",
+        "role",
+    ]);
+
+    const { bizName, selfBizLogoImg } = useClientAdmin();
+    const { businessId } = useAppSystem();
 
     useEffect(() => {
         if (typeof handleBuyRating === "function") {
@@ -96,24 +101,28 @@ export default function BuyRating({
     };
 
     const handleReportEditDone = async () => {
-        showSnackbar(dispatch, "Atualizando...", "warning", 6000);
+        showToast("Atualizando...", { dur: 3000 });
         await getAPI({
             method: "put",
             url: updateUser(userId, role),
             body: {
                 "clientUserData.review.buyReport": buyReport,
                 "clientUserData.review.reportUpdatedAt": new Date(),
+                customerName,
+                bizLogo: selfBizLogoImg,
+                businessId,
+                report: buyReport,
             },
         }).catch((err) => {
             console.log(`ERROR: ${err}`);
         });
-        showSnackbar(dispatch, "Relato Atualizado!", "success");
+        showToast("Relato Atualizado!", { type: "success" });
         setSwitchEdit(false);
     };
 
     return (
         <section
-            className="nps-rating--root my-5"
+            className="nps-rating--root my-5 mx-2"
             style={{ backgroundColor: "var(--themePLight--default)" }}
         >
             {!onlyReportField && (
@@ -148,8 +157,7 @@ export default function BuyRating({
                     setScale={setScale}
                     userId={userId}
                     role={role}
-                    dispatch={dispatch}
-                    showSnackbar={showSnackbar}
+                    showToast={showToast}
                     removeReportField={removeReportField}
                 />
             )}
@@ -159,8 +167,7 @@ export default function BuyRating({
                     handleGrade={handleGrade}
                     userId={userId}
                     role={role}
-                    dispatch={dispatch}
-                    showSnackbar={showSnackbar}
+                    showToast={showToast}
                     removeReportField={removeReportField}
                 />
             )}

@@ -1,4 +1,4 @@
-import truncateWords from "../../../utils/string/truncateWords";
+import truncateWords from "../../utils/string/truncateWords";
 /*!
  * Toastify js 1.10.0
  * https://github.com/apvarun/toastify-js
@@ -241,16 +241,8 @@ class Toastify {
 
                 avatarElement.className = "toastify-avatar";
 
-                if (this.options.position == "left") {
-                    // Adding close icon on the left of content
-                    divElement.appendChild(avatarElement);
-                } else {
-                    // Adding close icon on the right of content
-                    divElement.insertAdjacentElement(
-                        "afterbegin",
-                        avatarElement
-                    );
-                }
+                // Adding close icon on the left of content
+                divElement.insertAdjacentElement("afterbegin", avatarElement);
             }
         }
 
@@ -259,7 +251,7 @@ class Toastify {
             const p = document.createElement("p");
             p.style.textAlign = "left";
             p.style.margin = "0px";
-            p.innerHTML = truncateWords(this.options.text, 50);
+            p.innerText = truncateWords(this.options.text, 70);
             divElement.appendChild(p);
             const br = document.createElement("br");
             divElement.appendChild(br);
@@ -305,16 +297,8 @@ class Toastify {
             const width =
                 window.innerWidth > 0 ? window.innerWidth : screen.width;
 
-            // Adding the close icon to the toast element
-            // Display on the right if screen width is less than or equal to 360px
-            if (this.options.position == "left" && width > 360) {
-                // MY OWN personal preference change here
-                // Adding close icon on the right of content
-                divElement.appendChild(closeElement);
-            } else {
-                // Adding close icon on the left of content
-                divElement.insertAdjacentElement("afterbegin", closeElement);
-            }
+            // Adding close icon on the left of content
+            divElement.insertAdjacentElement("afterbegin", closeElement);
         }
 
         // Clear timeout while toast is focused
