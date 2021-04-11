@@ -6,7 +6,6 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
     const [sent, setSent] = useState(false);
 
     const {
-        // for push notif data
         businessId,
         mainReward,
         fullName,
@@ -17,10 +16,10 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
         maxScore,
         totalPurchasePrize,
         phone,
+        senderId,
         // trigger
         userIdLoading,
         userBeatChallenge,
-        // senderId
     } = data;
 
     const key = "alreadyAlertChallenge";
@@ -43,6 +42,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
                 bizLogo: selfBizLogoImg,
             },
             notifCard: {
+                senderId,
                 cardType: "challenge",
                 subtype: "clientWonChall",
                 lastPrizeId,

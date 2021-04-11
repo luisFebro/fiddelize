@@ -52,7 +52,7 @@ export const sendNotification = async (userId, cardType, options = {}) => {
 
     const pushNotifData = options;
     const needPushNotif = pushNotifData && pushNotifData.isPushNotif;
-    console.log("needPushNotif", needPushNotif);
+
     if (needPushNotif) {
         try {
             return await axios.put(

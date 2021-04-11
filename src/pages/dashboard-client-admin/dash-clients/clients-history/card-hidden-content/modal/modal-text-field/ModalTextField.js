@@ -82,7 +82,7 @@ export default function ModalTextField({
         selfBizLogoImg,
         bizName,
         rewardList,
-        rewardDeadline,
+        rewardDeadline = 30,
     } = useClientAdmin();
     const [teamMemberName] = useData(["name"]);
 

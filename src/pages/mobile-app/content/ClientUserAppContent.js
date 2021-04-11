@@ -168,7 +168,6 @@ export default function ClientUserAppContent({
     });
 
     useNotifyCliWonChall(businessId, {
-        // for push notif data
         businessId,
         mainReward,
         fullName,
@@ -179,6 +178,7 @@ export default function ClientUserAppContent({
         maxScore,
         totalPurchasePrize,
         phone,
+        senderId: _id,
         // trigger
         userIdLoading,
         userBeatChallenge,

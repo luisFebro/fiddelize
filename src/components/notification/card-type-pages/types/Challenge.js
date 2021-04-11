@@ -59,7 +59,7 @@ export default function Challenge({
         phone,
         // confirmedChall
         prizeId,
-        prizeDeadline,
+        prizeDeadline = 30,
         prizeDesc,
         prizeConfirmationDate,
     } = extractStrData(content);

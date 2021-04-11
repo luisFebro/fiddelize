@@ -56,20 +56,6 @@ export default function pickCardType(cardType, options = {}) {
 
     const defaultProps = { brief, role, mainImg, bizName, userName };
 
-    const chooseBirthday = () => {
-        if (subtype === "greeting")
-            return (
-                <AsyncBirthdayGreeting
-                    {...defaultProps}
-                    bizLogo={bizLogo}
-                    content={content}
-                />
-            );
-        // if (subtype === "weeklyReport")
-        // return <BirthdaysInWeek {...defaultProps} />;
-        return false;
-    };
-
     const typeList = {
         welcome: <AsyncWelcome {...defaultProps} bizLogo={bizLogo} />,
         challenge: (
@@ -82,7 +68,13 @@ export default function pickCardType(cardType, options = {}) {
             />
         ),
         system: null,
-        birthday: chooseBirthday(),
+        birthday: (
+            <AsyncBirthdayGreeting
+                {...defaultProps}
+                bizLogo={bizLogo}
+                content={content}
+            />
+        ),
         pro: (
             <AsyncProPay
                 {...defaultProps}

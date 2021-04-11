@@ -38,13 +38,23 @@ export default function useCustomerBirthDayToday() {
                 }
             }
 
+            const pushNotifData = {
+                cardType: "birthday",
+                role: role === "cliente-admin" ? "ambos-clientes" : role,
+                payload: {
+                    birthdayMsg: "Feliz aniversário",
+                },
+                notifCard: {
+                    birthdayMsg: "Feliz aniversário",
+                    birthdayDate: new Date(),
+                },
+            };
+
             if (needAlert && !alreadyAlerted) {
                 const options = {
                     subtype: "greeting",
                     role: role === "cliente-admin" ? "ambos-clientes" : role,
-                    content: isBelated
-                        ? `isBelated:true;birthdayDate:${new Date()};`
-                        : `birthdayDate:${new Date()};`,
+                    content: `birthdayDate:${new Date()};`,
                 };
                 sendNotification(userId, "birthday", options).then((res) => {
                     if (res.status !== 200)

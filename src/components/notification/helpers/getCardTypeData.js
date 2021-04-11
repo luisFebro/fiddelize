@@ -15,14 +15,14 @@ export default function getCardTypeData(cardType, options = {}) {
         bizName,
     });
 
-    const handledBirthdayGreeting = () =>
-        role === "cliente-admin"
-            ? `Surpresa, ${getFirstName(
-                  userName
-              )}! Você também recebe uma mensagem de aniversário. A Fiddelize te deseja ainda mais clientes para seu negócio recheada de conquistas!`
-            : `Ei ${getFirstName(
-                  userName
-              )}, a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário repleto de prosperidade e conquistas!`;
+    const handledBirthdayGreeting = (birthdayMsg) => {
+        let firstLineGreeting = `Ei ${getFirstName(userName)}`;
+        if (role === "cliente-admin") {
+            firstLineGreeting = `Surpresa, ${getFirstName(userName)}!`;
+        }
+
+        return `${firstLineGreeting}, ${birthdayMsg}`;
+    };
 
     switch (cardType) {
         case "welcome": {
@@ -50,18 +50,10 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "birthday": {
-            if (subtype === "greeting") {
-                const { birthdayDate } = extractStrData(content);
-                title = "Feliz Aniversário!";
-                brief = handledBirthdayGreeting(birthdayDate);
-                circularImg = "/img/icons/notif/birthday-cake.svg";
-            }
-            if (subtype === "weeklyReport") {
-                title = "Aniversários da semana";
-                brief =
-                    "Lista de clientes aniversariantes da semana 21/07 por ordem de pontos acumulados";
-                circularImg = "/img/icons/notif/birthday-customers.svg";
-            }
+            const { birthdayDate, birthdayMsg } = extractStrData(content);
+            title = "Feliz Aniversário!";
+            brief = handledBirthdayGreeting(birthdayMsg);
+            circularImg = "/img/icons/notif/birthday-cake.svg";
             break;
         }
         case "pro": {
