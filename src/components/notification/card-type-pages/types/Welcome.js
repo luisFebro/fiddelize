@@ -22,8 +22,8 @@ function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
                 <p>
                     A Fiddelize busca trazer uma{" "}
                     <strong>experiência moderna e prática</strong> para seu
-                    negócio para servir melhor tanto o seu app e o dos seus
-                    clientes.
+                    ajudar o seu negócio a trazer mais benefícios e uma
+                    experiência refinada para seus clientes usando tecnologia.
                 </p>
                 <p>
                     Começamos sua experiência com essa sessão de novidades
@@ -51,19 +51,29 @@ function Welcome({ brief, role, mainImg, bizLogo, bizName, userName }) {
                     <strong>✔️ Quando um cliente concluir um desafio.</strong> A
                     assistente da Fiddelize vai te notificar assim que um
                     cliente alcançar sua meta em pontos. Você nem precisa ficar
-                    se preocupando em procurar quem já alcançou ou não. Na
-                    Fiddelize é automático e prático esse processo.
+                    se preocupando em saber quem já alcançou ou não suas metas.
+                    Na Fiddelize é automático e prático esse processo.
                 </p>
                 <p>
-                    <strong>✔ Clientes aniversariantes da semana.</strong> Na
-                    segunda, você recebe uma lista de clientes - caso disponível
-                    - que fazem aniversário durante a semana.
-                    <br />
-                    <br />
-                    Precisa de mais praticidade? A Fiddelize vai além e cuida de
-                    notificar cada um de seus clientes com uma{" "}
-                    <strong>mensagem personalizada com sua marca</strong> para
-                    ser lembrada neste dia especial para eles.
+                    <strong>
+                        ✔ Alerta de aniversários de clientes automáticos.{" "}
+                    </strong>
+                    Precisa sua marca ser lembrada pelos seus clientes? A
+                    Fiddelize cuida de notificar cada um de seus clientes com
+                    uma{" "}
+                    <strong>
+                        mensagem personalizada que você pode escolher e com sua
+                        marca
+                    </strong>{" "}
+                    para ser lembrada neste dia especial para eles.
+                </p>
+                <p>
+                    <strong>✔ Relatos de compra. </strong>
+                    Sabe aquelas avaliações de usuários que você encontra em
+                    lojas de apps? Que tal você ter seu próprio sistema de
+                    avaliações de clientes? Na Fiddelize você fica por dentro
+                    sobre o que os clientes estão falando do seu negócio em
+                    tempo real.
                 </p>
                 <p>
                     <strong>✔ E mais novidades</strong> que interessam para sua

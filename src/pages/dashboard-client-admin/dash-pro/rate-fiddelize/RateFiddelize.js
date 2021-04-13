@@ -253,6 +253,7 @@ function ShowXpReportField({
         setEdit(false);
     };
 
+    const MAX_LEN = 300;
     const showResearchMode = () => (
         <Fragment>
             <TextField
@@ -264,7 +265,7 @@ function ShowXpReportField({
                 }}
                 // eslint-disable-next-line
                 inputProps={{
-                    maxLength: 280,
+                    maxLength: MAX_LEN,
                 }}
                 name="xpReport"
                 value={xpReport}
@@ -273,12 +274,9 @@ function ShowXpReportField({
                 variant="outlined"
                 fullWidth
             />
-            <div
-                className="mb-3 position-relative text-white text-left"
-                style={{ top: "5px" }}
-            >
-                <span className="text-purple text-small font-weight-bold">
-                    {xpReport.length}/280 characteres
+            <div className="mb-3 position-relative text-white text-left">
+                <span className="font-site text-em-0-7 text-purple font-weight-bold">
+                    {xpReport.length}/{MAX_LEN} characteres
                 </span>
             </div>
             {xpReport && (

@@ -1,6 +1,8 @@
 import setValObjWithStr from "../../objects/setValObjWithStr";
 // change state of a React Hook
 // the component need to have "name" explicitally assigned with the target key in the state.
+// LESSON: for a single field change detection, should be like this:
+// onChange={e => handleChange(setNewBirthdayMsg)(e)}
 const handleChange = (setObj, obj, isNestedObj = false) => (e) => {
     const { name, value } = e.target; // n1
 

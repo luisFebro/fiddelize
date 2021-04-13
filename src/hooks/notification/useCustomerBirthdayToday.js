@@ -4,6 +4,8 @@ import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import lStorage from "../../utils/storage/lStorage";
 import { getVar, removeVar, setVar } from "../storage/useVar";
 import needAlertBirthday from "../../utils/dates/birthday/needAlertBirthday";
+import { useClientAdmin } from "../useRoleData";
+import useData from "../useData";
 
 export default function useCustomerBirthDayToday() {
     const today = getDayMonthBr(new Date());
@@ -11,21 +13,22 @@ export default function useCustomerBirthDayToday() {
         collection: "userProfile",
         property: "birthday",
     });
-    const userId = lStorage("getItem", {
-        collection: "userProfile",
-        property: "_id",
-    });
-    const role = lStorage("getItem", {
-        collection: "userProfile",
-        property: "role",
-    });
+    // const userBirthDate = "11 de Abril de 1994";
+
+    const { selfBizLogoImg } = useClientAdmin();
+    const [firstName, userId, role] = useData(["firstName", "userId", "role"]);
 
     useEffect(() => {
-        getVar("alreadyBirthAlert").then((alreadyAlerted) => {
-            const {
-                alert: needAlert,
-                isBelated,
-            } = needAlertBirthday(userBirthDate, { trigger: !alreadyAlerted });
+        if (firstName === "..." || !userId === "...") return;
+
+        (async () => {
+            const resBirthdayStatus = await getVar("alreadyBirthAlert");
+
+            let alreadyAlerted = resBirthdayStatus;
+
+            const { alert: needAlert } = needAlertBirthday(userBirthDate, {
+                trigger: !alreadyAlerted,
+            });
 
             const currYear = new Date().getFullYear();
             // making sure to clean up for the next year...
@@ -38,35 +41,41 @@ export default function useCustomerBirthDayToday() {
                 }
             }
 
+            const birthdayMsg = "a Cherie's Beauty te deseja tudo de bom";
+
             const pushNotifData = {
-                cardType: "birthday",
-                role: role === "cliente-admin" ? "ambos-clientes" : role,
+                isPushNotif: true,
+                type: "birthday",
+                role,
+                userId,
                 payload: {
-                    birthdayMsg: "Feliz aniversário",
+                    role,
+                    userName: firstName,
+                    birthdayMsg,
+                    bizLogo: selfBizLogoImg,
                 },
                 notifCard: {
-                    birthdayMsg: "Feliz aniversário",
-                    birthdayDate: new Date(),
+                    cardType: "birthday",
+                    birthdayMsg,
                 },
             };
 
             if (needAlert && !alreadyAlerted) {
-                const options = {
-                    subtype: "greeting",
-                    role: role === "cliente-admin" ? "ambos-clientes" : role,
-                    content: `birthdayDate:${new Date()};`,
-                };
-                sendNotification(userId, "birthday", options).then((res) => {
-                    if (res.status !== 200)
-                        return console.log("wrong with sendNotification");
-                    console.log(
-                        `${
-                            isBelated ? "BELATED BIRTHDAY" : "BIRTHDAY"
-                        }'s note sent to ${role}`
+                const res = await sendNotification(
+                    userId,
+                    "birthday",
+                    pushNotifData
+                );
+                if (res.status !== 200)
+                    return console.log(
+                        "wrong sending birthday's push notification"
                     );
-                    setVar({ alreadyBirthAlert: `true.${currYear}` });
-                });
+
+                console.log(`BIRTHDAY's note sent to ${role}`);
+                setVar({ alreadyBirthAlert: `true.${currYear}` });
             }
-        });
-    }, [today, userBirthDate]);
+
+            return false;
+        })();
+    }, [today, role, userId, firstName, selfBizLogoImg, userBirthDate]);
 }

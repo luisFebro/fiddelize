@@ -50,7 +50,7 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "birthday": {
-            const { birthdayDate, birthdayMsg } = extractStrData(content);
+            const { birthdayMsg } = extractStrData(content);
             title = "Feliz Aniversário!";
             brief = handledBirthdayGreeting(birthdayMsg);
             circularImg = "/img/icons/notif/birthday-cake.svg";

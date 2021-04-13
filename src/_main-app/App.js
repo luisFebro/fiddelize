@@ -20,17 +20,28 @@ import "./libraries/fontAwesomeLib";
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // END UIs
-import useCustomerBirthdayToday from "../hooks/notification/useCustomerBirthdayToday";
+// import useCustomerBirthdayToday from "../hooks/notification/useCustomerBirthdayToday";
 import showToast from "../components/toasts";
 // import ScrollToTop from 'react-router-scroll-top';
 
 export default function App() {
     useRecoveryAndDataOffline();
     useOffline();
-    useCustomerBirthdayToday();
+    // useCustomerBirthdayToday();
 
     useEffect(() => {
         switchConsoleLogs();
+
+        // https://web.dev/nfc/ - Web NFC is available on Android in Chrome 89.
+        if ("NDEFReader" in window) {
+            console.log("Scan and write NFC tags");
+        }
+
+        // To experiment with the Notification Triggers API locally, without an origin trial token, enable the #enable-experimental-web-platform-features flag in chrome://flags
+        if ("showTrigger" in Notification.prototype) {
+            console.log("Notification Triggers supported");
+        }
+
         isWebpSupported(
             "lossy",
             (lossy, res) =>

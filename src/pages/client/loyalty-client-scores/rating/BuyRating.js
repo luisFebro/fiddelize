@@ -114,12 +114,14 @@ export default function BuyRating({
                 report: buyReport,
             },
         }).catch((err) => {
+            showToast("Ocorreu um erro ao atualizar", { type: "error" });
             console.log(`ERROR: ${err}`);
         });
         showToast("Relato Atualizado!", { type: "success" });
         setSwitchEdit(false);
     };
 
+    const MAX_LEN = 300;
     return (
         <section
             className="nps-rating--root my-5 mx-2"
@@ -215,21 +217,18 @@ export default function BuyRating({
                                 style: styles.fieldFormValue,
                             }}
                             inputProps={{
-                                maxLength: 280,
+                                maxLength: MAX_LEN,
                             }}
                             name="buyReport"
                             value={buyReport}
-                            onChange={handleChange(setBuyReport)}
+                            onChange={(e) => handleChange(setBuyReport)(e)}
                             onBlur={null}
                             variant="outlined"
                             fullWidth
                         />
-                        <div
-                            className="mb-3 position-relative text-white text-left"
-                            style={{ top: "5px" }}
-                        >
-                            <span className="font-weight-bold text-shadow">
-                                {buyReport.length}/280 characteres
+                        <div className="mb-3 position-relative text-white text-left">
+                            <span className="font-site text-em-0-7 font-weight-bold text-shadow">
+                                {buyReport.length}/{MAX_LEN} characteres
                             </span>
                         </div>
                         {Boolean(defaultBuyReport) && (

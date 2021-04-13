@@ -5,22 +5,24 @@ export default function needAlertBirthday(strBirthDate, options = {}) {
     let { daySpan, trigger } = options;
     if (!daySpan) daySpan = 7;
 
-    const isBelated = false;
+    // const isBelated = false;
     const todayWithoutYear = getDayMonthBr(new Date());
 
-    const negativeRes = { alert: false, isBelated: false };
-    const okRes = { alert: true, isBelated: false };
+    const negativeRes = { alert: false };
+    const okRes = { alert: true };
     if (!trigger) return negativeRes;
     if (strBirthDate && strBirthDate.includes(todayWithoutYear)) return okRes;
 
     const today = getDayMonthBr(new Date(), { needYear: true });
 
     const { code: todayCode, monthCode: todayMonth } = getDateCode(today);
+
     const {
         code: birthdayCode,
         maxDayMonth: birthMaxDayMonth,
         monthCode: birthMonth,
     } = getDateCode(strBirthDate);
+
     const maxDayCodeToAlert = getMaxCodeDate(birthdayCode, {
         todayCode,
         daySpan,
@@ -28,16 +30,17 @@ export default function needAlertBirthday(strBirthDate, options = {}) {
         todayMonth,
         birthMaxDayMonth,
     });
-    let isBirthdayBelated =
-        todayCode > birthdayCode && todayCode <= maxDayCodeToAlert;
-    if (maxDayCodeToAlert === false) isBirthdayBelated = null;
 
-    const alert = Boolean(isBirthdayBelated);
+    let needAlertBirthday =
+        todayCode > birthdayCode && todayCode <= maxDayCodeToAlert;
+    if (maxDayCodeToAlert === false) needAlertBirthday = null;
+
+    const alert = Boolean(needAlertBirthday);
 
     // isBelated status: null (no birthday timing span), false (birthday's date), true (belated)
     return {
-        isBelated: isBirthdayBelated,
         alert,
+        // isBelated: isBirthdayBelated,
     };
 }
 

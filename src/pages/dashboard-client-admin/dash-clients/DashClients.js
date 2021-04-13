@@ -3,6 +3,7 @@ import Title from "../../../components/Title";
 import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
 import LoadableVisible from "../../../components/code-splitting/LoadableVisible";
 import ClientReviews from "./clients-reviews/ClientsReviews";
+import ClientsBirthdayMsgBtn from "./clients-birthday-msg/ClientsBirthdayMsgBtn";
 
 const AsyncAutomaticToDoList = LoadableVisible({
     loading: true,
@@ -55,6 +56,15 @@ export default function DashClients() {
                 padding=" "
             />
             <AsyncRankingPondium />
+            <Title
+                title="&#187; Aniversário de clientes"
+                subTitle="Envie automaticamente uma mensagem para todos seus clientes lembrarem da sua marca em um dia especial"
+                subTitleClassName="text-small font-weight-bold"
+                color="var(--themeP)"
+                padding=" "
+            />
+            <ClientsBirthdayMsgBtn />
+            <hr className="lazer-purple" />
             <Title
                 title="&#187; Histórico de Clientes"
                 color="var(--themeP)"

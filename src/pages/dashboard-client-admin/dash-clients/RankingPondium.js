@@ -69,7 +69,7 @@ export default function RankingPondium() {
     );
 
     return (
-        <DivPodium className="animated fadeIn my-3 container-center flex-column">
+        <DivPodium className="animated fadeIn mt-3 container-center flex-column">
             {!gotData && !loading && (
                 <p className="text-normal mb-5" style={{ color: "grey" }}>
                     Aqui você acompanha as
