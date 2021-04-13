@@ -20,14 +20,12 @@ import "./libraries/fontAwesomeLib";
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // END UIs
-// import useCustomerBirthdayToday from "../hooks/notification/useCustomerBirthdayToday";
 import showToast from "../components/toasts";
 // import ScrollToTop from 'react-router-scroll-top';
 
 export default function App() {
     useRecoveryAndDataOffline();
     useOffline();
-    // useCustomerBirthdayToday();
 
     useEffect(() => {
         switchConsoleLogs();

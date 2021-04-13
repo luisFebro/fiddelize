@@ -3,7 +3,7 @@ import { sendNotification } from "../../redux/actions/notificationActions";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import lStorage from "../../utils/storage/lStorage";
 import { getVar, removeVar, setVar } from "../storage/useVar";
-import needAlertBirthday from "../../utils/dates/birthday/needAlertBirthday";
+import needAlertBirthday from "./birthday/needAlertBirthday";
 import { useClientAdmin } from "../useRoleData";
 import useData from "../useData";
 
