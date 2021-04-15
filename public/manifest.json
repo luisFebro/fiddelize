@@ -31,11 +31,5 @@
             "purpose": "any maskable"
         }
     ],
-    "related_applications": [
-        {
-            "platform": "webapp",
-            "url": "https://fiddelize.com.br/manifest.json"
-        }
-    ],
     "gcm_sender_id": "716311192779"
 }
