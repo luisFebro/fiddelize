@@ -17,25 +17,27 @@ import { sendNotification } from "../../redux/actions/notificationActions";
 import {
     setMultiVar,
     removeVar,
-    getVar,
+    getMultiVar,
     removeMultiVar,
     store,
 } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
-import { setStorageRegisterDone } from "./helpers/index";
+import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 
 const isApp = isThisApp();
 
 function Login({
     history,
     setLoginOrRegister,
-    dontNeedRegister,
+    needAppRegister,
     rootClassname,
     isBizTeam,
 }) {
+    needAppRegister = needAppRegister === "..." ? false : needAppRegister;
+
     const {
         selfThemeSColor,
-        selfThemePColor,
+        // selfThemePColor,
         selfThemeBackColor,
     } = useClientAdmin();
 
@@ -72,36 +74,33 @@ function Login({
         setLoginOrRegister("register");
     };
 
-    const showRegisterForm = () =>
-        isApp &&
-        !dontNeedRegister &&
-        false && ( // disable and replaced by dashboard register
-            <div className="animated zoomIn delay-2s p-2 mt-3">
-                <p
-                    className={`${selectTxtStyle(
-                        isBizTeam ? "default" : selfThemeBackColor || "default"
-                    )} d-flex justify-content-center text-small`}
-                >
-                    <span style={{ fontWeight: "bolder" }}>
-                        Novo Cliente?
-                        <br />
-                        Faça cadastro{"  "}
-                    </span>
-                    <div className="pl-2">
-                        <RadiusBtn
-                            size="small"
-                            title="aqui"
-                            onClick={handleLoginAndRegister}
-                            backgroundColor={
-                                `var(--themeSDark--${isBizTeam}`
-                                    ? "default"
-                                    : `${selfThemeSColor})`
-                            }
-                        />
-                    </div>
-                </p>
-            </div>
-        );
+    const showRegisterForm = () => (
+        <div className="animated zoomIn delay-2s p-2 mt-3">
+            <p
+                className={`${selectTxtStyle(
+                    isBizTeam ? "default" : selfThemeBackColor || "default"
+                )} d-flex justify-content-center text-small`}
+            >
+                <span style={{ fontWeight: "bolder" }}>
+                    Novo Cliente?
+                    <br />
+                    Faça cadastro{"  "}
+                </span>
+                <div className="pl-2">
+                    <RadiusBtn
+                        size="small"
+                        title="aqui"
+                        onClick={handleLoginAndRegister}
+                        backgroundColor={
+                            `var(--themeSDark--${isBizTeam}`
+                                ? "default"
+                                : `${selfThemeSColor})`
+                        }
+                    />
+                </div>
+            </p>
+        </div>
+    );
 
     return (
         <div className={rootClassname || "my-5"}>
@@ -112,7 +111,7 @@ function Login({
                 {showTitle()}
                 {showKeypadButton()}
             </Card>
-            {showRegisterForm()}
+            {isApp && needAppRegister && showRegisterForm()}
         </div>
     );
 }
@@ -167,7 +166,7 @@ export async function signInUserData(cpfValue, options = {}) {
 
     // clean up whatever logo from prior login to set new one (especially another account)
     deleteImage("logos", "app_biz_logo");
-    await removeInstantAccountData();
+    await removeInstantAppAndRegisterData();
 
     let whichRoute;
     if (role === "cliente-admin") {
@@ -345,15 +344,21 @@ async function sendWelcomeNotif({ userId, role = "cliente-admin" }) {
     // return showSnackbar(dispatch, notifRes.data.msg, "error");
 }
 
-async function removeInstantAccountData() {
-    const isInstantAccount = await getVar("isInstantAccount", store.user);
-    if (!isInstantAccount) return;
-
-    await removeMultiVar(
-        ["isInstantAccount", "instantBizImg", "instantBizName"],
+async function removeInstantAppAndRegisterData() {
+    // make sure that only when there is a pending registration is triggered to remove data
+    const [isInstantApp, needAppRegister] = await getMultiVar(
+        ["isInstantApp", "needAppRegister"],
         store.user
     );
-    setStorageRegisterDone();
+
+    if (!needAppRegister) return;
+    await setStorageRegisterDone();
+
+    if (!isInstantApp) return;
+    await removeMultiVar(
+        ["isInstantApp", "instantBizImg", "instantBizName"],
+        store.user
+    );
 }
 
 function handleCliUserPath({ authUserId, dispatch, history }) {

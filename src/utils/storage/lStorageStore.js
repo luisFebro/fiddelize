@@ -88,7 +88,6 @@ const setInitialStateOp = combine(collVal1, {
     property: "setInitialState",
     value: false,
 });
-const needAppRegisterOp = combine(collVal1, { property: "needAppRegister" });
 
 const appSystemColl = coll3;
 
@@ -113,7 +112,6 @@ export {
     userProfileColl,
     clientAdminColl,
     setInitialStateOp,
-    needAppRegisterOp,
     setSystemOp,
     centralAdminColl,
 };

@@ -37,7 +37,7 @@ import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import useData from "../../hooks/useData";
-import { setStorageRegisterDone } from "./helpers";
+import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 
 const filter = getFilterDate();
 
@@ -65,7 +65,6 @@ function ASyncRegisterCliUser({
     isStaff = false,
     callback,
     setLoginOrRegister,
-    needLoginBtn = false,
 }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); // n1
@@ -206,23 +205,6 @@ function ASyncRegisterCliUser({
         handleNextField(null, null, { clearFields: true });
     };
 
-    // Temporarily disabled (Not sending emails)
-    // const sendEmail = userId => {
-    //     const dataEmail = {
-    //         name,
-    //         email,
-    //         bizName,
-    //         bizWebsite,
-    //         bizInstagram
-    //     };
-    //     sendWelcomeConfirmEmail(dataEmail, userId)
-    //     .then(res => {
-    //         if (res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-    //         // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
-    //         clearData();
-    //     });
-    // };
-
     const registerThisUser = (e) => {
         setActionBtnDisabled(true);
 
@@ -294,30 +276,29 @@ function ASyncRegisterCliUser({
         });
     };
 
-    const showLoginForm = (needLoginBtn) =>
-        needLoginBtn && (
-            <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
-                <p
-                    className={`${selectTxtStyle(
-                        selfThemeBackColor
-                    )} m-0 font-weight-bold text-small`}
-                    style={{ whiteSpace: "nowrap" }}
-                >
-                    Já foi cadastrado(a)?{"  "}
-                </p>
-                <div className="pl-2">
-                    <RadiusBtn
-                        size="small"
-                        title="Faça login"
-                        onClick={() => {
-                            setStorageRegisterDone();
-                            setLoginOrRegister("login");
-                        }}
-                        backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
-                    />
-                </div>
+    const showLoginForm = () => (
+        <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
+            <p
+                className={`${selectTxtStyle(
+                    selfThemeBackColor
+                )} m-0 font-weight-bold text-small`}
+                style={{ whiteSpace: "nowrap" }}
+            >
+                Já foi cadastrado(a)?{"  "}
+            </p>
+            <div className="pl-2">
+                <RadiusBtn
+                    size="small"
+                    title="Faça login"
+                    onClick={() => {
+                        // setStorageRegisterDone runs when there is a success login. If not successful login, back to registration form
+                        setLoginOrRegister("login");
+                    }}
+                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                />
             </div>
-        );
+        </div>
+    );
 
     const showTitle = () => (
         <div className="position-relative">
@@ -602,7 +583,7 @@ function ASyncRegisterCliUser({
                 {showForm()}
                 {showButtonActions()}
             </Card>
-            {showLoginForm(needLoginBtn)}
+            {showLoginForm()}
         </div>
     );
 }

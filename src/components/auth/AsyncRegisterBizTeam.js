@@ -33,7 +33,7 @@ import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
-import { setStorageRegisterDone } from "./helpers";
+import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 import useData from "../../hooks/useData";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
@@ -60,11 +60,7 @@ const getStyles = () => ({
     },
 });
 
-function Register({
-    isStaff = false,
-    setLoginOrRegister,
-    needLoginBtn = false,
-}) {
+function Register({ isStaff = false, setLoginOrRegister }) {
     const [actionBtnDisabled, setActionBtnDisabled] = useState(false);
     const [switchNumToText, setSwitchNumToText] = useState(false); // n1
 
@@ -175,23 +171,6 @@ function Register({
         handleNextField(null, null, { clearFields: true });
     };
 
-    // Temporarily disabled (Not sending emails)
-    // const sendEmail = userId => {
-    //     const dataEmail = {
-    //         name,
-    //         email,
-    //         bizName,
-    //         bizWebsite,
-    //         bizInstagram
-    //     };
-    //     sendWelcomeConfirmEmail(dataEmail, userId)
-    //     .then(res => {
-    //         if (res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error');
-    //         // Dont show email toast =>> setTimeout(() => showSnackbar(dispatch, res.data.msg, 'warning', 3000), 4000);
-    //         clearData();
-    //     });
-    // };
-
     const registerThisUser = (e) => {
         setActionBtnDisabled(true);
 
@@ -267,30 +246,29 @@ function Register({
         });
     };
 
-    const showLoginForm = (needLoginBtn) =>
-        needLoginBtn && (
-            <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
-                <p
-                    className={`${selectTxtStyle(
-                        selfThemeBackColor
-                    )} m-0 font-weight-bold text-small`}
-                    style={{ whiteSpace: "nowrap" }}
-                >
-                    Já foi cadastrado(a)?{"  "}
-                </p>
-                <div className="pl-2">
-                    <RadiusBtn
-                        size="small"
-                        title="Faça login"
-                        onClick={() => {
-                            setStorageRegisterDone();
-                            setLoginOrRegister("login");
-                        }}
-                        backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
-                    />
-                </div>
+    const showLoginForm = () => (
+        <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
+            <p
+                className={`${selectTxtStyle(
+                    selfThemeBackColor
+                )} m-0 font-weight-bold text-small`}
+                style={{ whiteSpace: "nowrap" }}
+            >
+                Já foi cadastrado(a)?{"  "}
+            </p>
+            <div className="pl-2">
+                <RadiusBtn
+                    size="small"
+                    title="Faça login"
+                    onClick={() => {
+                        // setStorageRegisterDone runs when there is a success login. If not successful login, back to registration form
+                        setLoginOrRegister("login");
+                    }}
+                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                />
             </div>
-        );
+        </div>
+    );
 
     const showTitle = () => (
         <div className="position-relative">
@@ -611,7 +589,7 @@ function Register({
                 {showForm()}
                 {showButtonActions()}
             </Card>
-            {showLoginForm(needLoginBtn)}
+            {showLoginForm()}
         </div>
     );
 }

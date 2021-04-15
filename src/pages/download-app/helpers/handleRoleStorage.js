@@ -1,25 +1,19 @@
-import lStorage, {
-    setSystemOp,
-    needAppRegisterOp,
-} from "../../../utils/storage/lStorage";
-import { getVar, setMultiVar, store } from "../../../hooks/storage/useVar";
+import lStorage, { setSystemOp } from "../../../utils/storage/lStorage";
+import { setMultiVar, store } from "../../../hooks/storage/useVar";
 
-export const handleRoleStorage = ({
+export default function handleRoleStorage({
     userScore,
     whichRole,
     bizId,
     memberId,
     memberJob,
     primaryAgent,
-}) => {
+}) {
     // n1
     const isBizTeam = whichRole === "nucleo-equipe";
     const isCliAdmin = whichRole === "cliente-admin";
     const isCliMember = whichRole === "cliente-membro";
     const isCliUser = whichRole === "cliente";
-
-    // memberId: true is used to force registration.
-    // if it is instant app, than it will have no affect
 
     let userPayload;
 
@@ -43,7 +37,6 @@ export const handleRoleStorage = ({
             { role: whichRole },
             { lastRegisterBizId: bizId },
             { memberJob: memberJob || "admin" },
-            { memberId: true },
             { disconnectCliMember: true },
         ];
     }
@@ -52,23 +45,18 @@ export const handleRoleStorage = ({
         userPayload = [
             { role: whichRole },
             { primaryAgent },
-            { memberId: true },
             { disconnectAgent: true },
         ];
     }
 
     (async () => {
-        const isInstantAccount = await getVar("isInstantAccount", store.user);
-        if (!isInstantAccount) {
-            lStorage("setItem", { ...needAppRegisterOp, value: true });
-        }
-
         await setMultiVar(userPayload, store.user);
         await setMultiVar(
             [
                 { rememberAccess: false },
                 { success: false },
                 { verifPass: false },
+                { needAppRegister: true },
             ],
             store.user
         );
@@ -82,7 +70,7 @@ export const handleRoleStorage = ({
         // Otherwise, the app will be displayed with wrong and mingled app's pages.
         localStorage.removeItem("token");
     })();
-};
+}
 
 /* COMMENTS
 n1: LESSON: lStorage does not work with useEffect. just declare in the function body normally...

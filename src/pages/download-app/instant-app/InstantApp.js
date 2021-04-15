@@ -14,7 +14,6 @@ import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import { showSnackbar } from "../../../redux/actions/snackbarActions";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
-import lStorage, { needAppRegisterOp } from "../../../utils/storage/lStorage";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -121,19 +120,21 @@ export default function InstantAccount({
 
             // prevent register page to be shown. Display login page instead with the new account panel
             const storeElems = [
-                { isInstantAccount: true },
+                { isInstantApp: true },
                 { instantBizImg: bizImg },
                 { instantBizName: bizName },
             ];
 
             // remove variables at the login access
             await Promise.all([
-                removeMultiVar(["success", "memberId"], store.user),
+                removeMultiVar(
+                    ["success", "memberId", "needAppRegister"],
+                    store.user
+                ),
                 setMultiVar(storeElems, store.user),
                 isCliAdmin ? removeCollection("pre_register") : undefined,
             ]).then((res) => {
                 setSuccess(true);
-                lStorage("setItem", { ...needAppRegisterOp, value: false });
                 setData((prev) => ({
                     ...prev,
                     loadingCreation: false,

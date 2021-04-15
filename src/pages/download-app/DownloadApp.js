@@ -13,7 +13,7 @@ import useAnimateElem from "../../hooks/scroll/useAnimateElem";
 import useBackColor from "../../hooks/useBackColor";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getQueries from "./helpers/getQueries";
-import { handleRoleStorage } from "./helpers";
+import handleRoleStorage from "./helpers/handleRoleStorage";
 import useAllowedLink from "./hooks/useAllowedLink";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
@@ -183,7 +183,7 @@ export default function DownloadApp({ match, location, history }) {
     // END HOOKS
 
     // STORAGE
-    isAllowedLink &&
+    if (isAllowedLink) {
         handleRoleStorage({
             userScore,
             whichRole,
@@ -192,6 +192,7 @@ export default function DownloadApp({ match, location, history }) {
             memberJob,
             primaryAgent,
         });
+    }
     // admin app config
     const {
         selfBizLogoImg,

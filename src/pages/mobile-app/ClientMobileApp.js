@@ -92,34 +92,32 @@ function ClientMobileApp({ location, history }) {
         rememberAccess,
         success,
         role,
-        name,
         fullName,
-        memberId,
         disconnectCliMember,
         disconnectAgent,
-        isInstantAccount,
+        isInstantApp,
         instantBizImg,
         instantBizName,
+        needAppRegister,
     ] = useData([
         "userId",
         "rememberAccess",
         "success",
         "role",
-        "firstName",
         "name",
-        "memberId",
         "disconnectCliMember",
         "disconnectAgent",
-        "isInstantAccount",
+        "isInstantApp",
         "instantBizImg",
         "instantBizName",
+        "needAppRegister",
     ]);
 
     useLoginOrRegister({
         setLoginOrRegister,
-        memberId,
+        needAppRegister,
         role,
-        isInstantAccount,
+        isInstantApp,
     });
 
     const loadingData = Boolean(rememberAccess === "...");
@@ -275,6 +273,7 @@ function ClientMobileApp({ location, history }) {
                     >
                         <AsyncLogin
                             setLoginOrRegister={setLoginOrRegister}
+                            needAppRegister={needAppRegister}
                             isBizTeam={isBizTeam}
                             rootClassname=""
                         />
@@ -284,7 +283,7 @@ function ClientMobileApp({ location, history }) {
         </Fragment>
     );
 
-    const showRegister = (needLoginBtn, needSetFunc) => (
+    const showRegister = () => (
         <Fragment>
             <p
                 className="mx-2 mt-3 text-normal font-weight-bold text-center text-white"
@@ -304,20 +303,17 @@ function ClientMobileApp({ location, history }) {
                     <div className="position-relative" style={{ top: -120 }}>
                         {isCliUser && (
                             <AsyncRegisterCliUser
-                                setLoginOrRegister={setLoginOrRegister || true}
-                                needLoginBtn={needLoginBtn}
+                                setLoginOrRegister={setLoginOrRegister}
                             />
                         )}
                         {isCliMember && (
                             <AsyncRegisterCliMember
-                                setLoginOrRegister={setLoginOrRegister || true}
-                                needLoginBtn={needLoginBtn}
+                                setLoginOrRegister={setLoginOrRegister}
                             />
                         )}
                         {isBizTeam && (
                             <AsyncRegisterBizTeam
-                                setLoginOrRegister={setLoginOrRegister || true}
-                                needLoginBtn={needLoginBtn}
+                                setLoginOrRegister={setLoginOrRegister}
                             />
                         )}
                     </div>
@@ -343,8 +339,7 @@ function ClientMobileApp({ location, history }) {
         </div>
     );
 
-    const conditionRegister =
-        loginOrRegister === "register" && showRegister(true);
+    const conditionRegister = loginOrRegister === "register" && showRegister();
     const conditionLogin =
         (loginOrRegister === "login" && accessCheck && showLogin()) ||
         (loginOrRegister === "login" && !isAuthUser);
@@ -361,7 +356,7 @@ function ClientMobileApp({ location, history }) {
     return (
         <div style={{ overflowX: "hidden" }}>
             <span className="text-right text-white for-version-test" />
-            {isInstantAccount && !isAuthUser ? (
+            {isInstantApp && !isAuthUser ? (
                 <section className="container-center mx-3 text-normal">
                     <Card
                         className="animated fadeInDown delay-2s"
