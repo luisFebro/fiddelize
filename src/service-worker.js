@@ -7,8 +7,6 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
-// create-react-app v4+ will check for the presence of a src/service-worker.js file at build time, and if found, run workbox-webpack-plugin's InjectManifest plugin, passing in that file as the swSrc parameter.
-// https://dev.to/jeffposnick/service-workers-in-create-react-app-v4-3mm0
 import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
@@ -45,7 +43,7 @@ registerRoute(
 
         return true;
     },
-    createHandlerBoundToURL(`${process.env.PUBLIC_URL}/index.html`)
+    createHandlerBoundToURL(process.env.PUBLIC_URL + "/index.html")
 );
 
 // An example runtime caching route for requests that aren't handled by the
@@ -63,3 +61,13 @@ registerRoute(
         ],
     })
 );
+
+// This allows the web app to trigger skipWaiting via
+// registration.waiting.postMessage({type: 'SKIP_WAITING'})
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "SKIP_WAITING") {
+        self.skipWaiting();
+    }
+});
+
+// Any other custom service worker logic can go here.

@@ -1,12 +1,11 @@
 import "./style.css";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import parse from "html-react-parser";
 import isThisApp from "../../utils/window/isThisApp";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
+import showToast from "../../components/toasts";
 
 const isApp = isThisApp();
 
@@ -64,8 +63,6 @@ export default function PwaInstaller({
         }
     }, [bannerVisible]);
 
-    const dispatch = useStoreDispatch();
-
     useEffect(() => {
         // This event requires the page to reload in order to set correctly...
         window.addEventListener("beforeinstallprompt", (e) => {
@@ -91,18 +88,11 @@ export default function PwaInstaller({
             // Wait for the user to respond to the prompts
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === "accepted") {
-                    showSnackbar(
-                        dispatch,
-                        "Instalando seu App agora...",
-                        "warning",
-                        11000
-                    );
+                    showToast("Instalando seu App agora...", { dur: 11000 });
                     setTimeout(() => {
-                        showSnackbar(
-                            dispatch,
+                        showToast(
                             "Instalado com sucesso! Você pode fechar essa janela e acessar o app na sua tela inicial",
-                            "success",
-                            8000
+                            { type: "success", dur: 8000 }
                         );
                         setTimeout(() => closeWindow(), 7000);
                         const timeoutDuration = 15000;
@@ -113,11 +103,7 @@ export default function PwaInstaller({
                         );
                     }, 10990);
                 } else {
-                    showSnackbar(
-                        dispatch,
-                        "A instalação do app foi cancelada.",
-                        "warning"
-                    );
+                    showToast("A instalação do app foi cancelada.");
                 }
                 deferredPrompt = null;
             });
