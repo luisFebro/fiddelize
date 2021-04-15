@@ -1,5 +1,5 @@
 {
-    "name": "",
+    "name": "Fiddelize",
     "short_name": "Fiddelize",
     "description": "Conquiste clientes no próximo nível",
     "start_url": "/mobile-app?abrir=1",
@@ -23,6 +23,12 @@
             "src": "/icons/apple-touch-icon.png",
             "type": "image/png",
             "sizes": "180x180"
+        },
+        {
+            "src": "/icons/maskable_icon_x192.png",
+            "sizes": "196x196",
+            "type": "image/png",
+            "purpose": "any maskable"
         }
     ],
     "related_applications": [
