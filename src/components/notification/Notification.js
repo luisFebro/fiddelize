@@ -5,13 +5,12 @@ import RadiusBtn from "../buttons/RadiusBtn";
 import useCountNotif from "../../hooks/notification/useCountNotif";
 import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
-import { useProfile } from "../../hooks/useRoleData";
 import { setRun } from "../../hooks/useRunComp";
 import getId from "../../utils/getId";
+import useData from "../../hooks/useData";
 
 export default function Notification({
     forceCliUser = false,
-    userId,
     bizId,
     totalNotif,
 }) {
@@ -21,14 +20,14 @@ export default function Notification({
     // const [runList, setRunList] = useState(false);
 
     const isCliMember = bizId;
-    const { _id, name, role } = useProfile();
-    userId = userId || _id;
+    const [userId, firstName, role] = useData(["userId", "firstName", "role"]);
+
     const dispatch = useStoreDispatch();
 
-    let totalNotifications = useCountNotif(_id, {
+    let totalNotifications = useCountNotif(userId, {
         role,
         forceCliUser,
-        trigger: !totalNotif,
+        trigger: !totalNotif && userId !== "...",
     });
     totalNotifications = totalNotif || totalNotifications;
 
@@ -41,8 +40,9 @@ export default function Notification({
     );
 
     const handleMarkAllClicked = () => {
+        if (userId === "...") return;
         setLoading(true);
-        markAllAsClicked(_id, { forceCliUser }).then((res) => {
+        markAllAsClicked(userId, { forceCliUser }).then((res) => {
             if (res.status !== 200)
                 return console.log("smt wrong with handleMarkAllClicked");
             setRun(dispatch, `notificationCount${getId()}`);
@@ -105,8 +105,8 @@ export default function Notification({
             {showTitle()}
             {showNotifStatus()}
             <NotifList
-                _id={userId || _id}
-                userName={name}
+                _id={userId}
+                userName={firstName}
                 runList={null}
                 forceCliUser={forceCliUser}
                 bizId={bizId}
@@ -114,5 +114,3 @@ export default function Notification({
         </Fragment>
     );
 }
-
-Notification.whyDidYouRender = false;

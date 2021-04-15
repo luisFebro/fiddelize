@@ -5,7 +5,6 @@ import useAPIList, { readNotifications } from "../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../hooks/api/useElemDetection";
-import getFirstName from "../../utils/string/getFirstName";
 
 export default function NotifList({
     _id,
@@ -16,8 +15,6 @@ export default function NotifList({
     const [skip, setSkip] = useState(0);
     const [firstChunkLoaded, setFirstChunkLoaded] = useState(false);
 
-    userName = getFirstName(userName);
-
     const params = {
         forceCliUser,
         bizId,
@@ -27,6 +24,8 @@ export default function NotifList({
         skip,
         params, // LESSON: skip is automatically included in the params
         listName: "notifList",
+        trigger: _id !== "...",
+        // forceTrigger: true,
     };
 
     const {
@@ -43,11 +42,13 @@ export default function NotifList({
     const detectedCard = useElemDetection({ loading, hasMore, setSkip });
 
     useEffect(() => {
+        if (_id === "...") return;
+
         if (list.length && !firstChunkLoaded) {
             !bizId && markAllAsSeen(_id, { forceCliUser });
             setFirstChunkLoaded(true);
         }
-    }, [list, firstChunkLoaded]);
+    }, [list, firstChunkLoaded, _id]);
 
     const showCard = (props) => <NotifCard {...props} />;
     const renderedList = list.map((notif, ind) => {
@@ -105,5 +106,3 @@ export default function NotifList({
         </Fragment>
     );
 }
-
-NotifList.whyDidYouRender = false;

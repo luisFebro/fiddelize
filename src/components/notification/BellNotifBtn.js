@@ -13,7 +13,6 @@ export default function BellNotifBtn({
     badgeValue,
     forceCliUser,
     needClick = true,
-    userId,
     bizId,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
@@ -30,7 +29,6 @@ export default function BellNotifBtn({
         <Notification
             forceCliUser={forceCliUser}
             totalNotif={badgeValue}
-            userId={userId}
             bizId={bizId}
         />
     );
