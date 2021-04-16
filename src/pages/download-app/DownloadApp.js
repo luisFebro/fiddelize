@@ -335,7 +335,7 @@ export default function DownloadApp({ match, location, history }) {
     const showTroubleShooting = () => (
         <section className="container-center-col" style={{ marginBottom: 150 }}>
             <h2 className="text-subtitle text-center text-white">
-                Soluções comuns para falhas
+                Soluções comuns para baixar app
             </h2>
             <p>
                 Se a placa/banner para baixar o app não apareceu nesta página.

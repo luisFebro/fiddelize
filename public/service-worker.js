@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-globals */
+// FOR DEV ENVIRONMENT ONLY FILE - the production copy is generated with workbox.
 
 self.addEventListener("push", async (event) => {
     const payload = event.data.json();
