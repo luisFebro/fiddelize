@@ -100,6 +100,7 @@ export default function BuyRating({
     };
 
     const handleReportEditDone = async () => {
+        if (!buyReport) return;
         showToast("Atualizando...", { dur: 3000 });
         await getAPI({
             method: "put",

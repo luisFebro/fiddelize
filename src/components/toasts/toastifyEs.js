@@ -28,7 +28,10 @@ import truncateWords from "../../utils/string/truncateWords";
  * @property {Object} offset - Ability to add some offset to axis
  * @property {boolean} escapeMarkup - Toggle the default behavior of escaping HTML markup
  * @property {Object} style - Use the HTML DOM style property to add styles to toast
+ * @property {Boolean} fix - My own - if true, disable piling multiple toasts
  */
+
+let toastEsFix = false;
 
 class Toastify {
     constructor(options) {
@@ -167,9 +170,12 @@ class Toastify {
                 },
                 escapeMarkup: true,
                 style: {},
+                fix: false,
             },
             options
         );
+
+        toastEsFix = options.fix || toastEsFix;
 
         if (this.options.backgroundColor) {
             // This is being deprecated in favor of using the style HTML DOM property
@@ -446,6 +452,15 @@ class Toastify {
                     topRightOffsetSize[classUsed] += height + offset;
                 }
             }
+        }
+
+        // MY OWN - remove the last piled toast so that only one at the time can be shown without piling up
+        // fix behavior to disable piling is disable since piling up multiple toasts when they are prenty, can be rather annoying
+        const needRemovePile = allToasts && allToasts.length > 1;
+        if (needRemovePile) {
+            setTimeout(() => {
+                this._removeElement(allToasts[1]);
+            }, 250);
         }
     }
 

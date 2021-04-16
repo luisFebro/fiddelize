@@ -289,8 +289,8 @@ export default function useAPIList({
                     className="text-normal mx-2 text-grey text-left"
                     style={{ marginTop: "100px" }}
                 >
-                    Ufa! Ainda bem que o <strong>modo offline</strong> salvou
-                    sua lista.
+                    Não há mais nenhum dado a exibir no{" "}
+                    <strong>modo offline.</strong>
                     <br />
                     Você pode ter mais dados online.
                 </p>

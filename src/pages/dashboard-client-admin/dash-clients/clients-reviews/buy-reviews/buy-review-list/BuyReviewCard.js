@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fromNow } from "../../../../../../utils/dates/dateFns";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import getFirstName from "../../../../../../utils/string/getFirstName";
-import { useClientAdmin } from "../../../../../../hooks/useRoleData";
 import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
 import convertPhoneStrToInt from "../../../../../../utils/numbers/convertPhoneStrToInt";
 
@@ -29,11 +28,10 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
 
     const updatedDate = reportUpdatedAt && fromNow(reportUpdatedAt);
     const dispatch = useStoreDispatch();
-    const { bizName } = useClientAdmin();
 
     const firstName = getFirstName(clientName);
     const convertedWhatsapp = convertPhoneStrToInt(whatsapp);
-    const defaultWhatsappTxt = `Mensagem da ${bizName}: `;
+    const defaultWhatsappTxt = `Oi ${firstName}! `;
 
     const showContactBtn = () => (
         <div

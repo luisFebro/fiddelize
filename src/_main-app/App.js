@@ -24,8 +24,8 @@ import showToast from "../components/toasts";
 // import ScrollToTop from 'react-router-scroll-top';
 
 export default function App() {
-    useRecoveryAndDataOffline();
     useOffline();
+    useRecoveryAndDataOffline();
 
     useEffect(() => {
         switchConsoleLogs();
@@ -71,7 +71,7 @@ export default function App() {
                 const { title, body } = event.data;
 
                 showToast(`🔔) ${title}: ${body}`, {
-                    dur: 15000,
+                    fix: true,
                     needActionBtn: true,
                     actionBtnText: "ver",
                     onClick: () => window.location.reload(),

@@ -7,7 +7,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -19,7 +18,6 @@ import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
@@ -35,6 +33,7 @@ import getFirstName from "../../utils/string/getFirstName";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
 import sendEmail from "../../hooks/email/sendEmail";
+import showToast from "../toasts";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 
 const filter = getFilterDate();
@@ -179,37 +178,20 @@ function RegisterClientAdmin({ logo }) {
             ...data,
         };
 
-        showSnackbar(
-            dispatch,
-            "Registrando... Aguarde um momento.",
-            "warning",
-            10000
-        );
+        showToast("Registrando... Aguarde um momento.");
 
         if (!agreementDone) {
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Clique na caixa para concordar com termos de uso e privacidade",
-                "error",
-                5000
+                { type: "error" }
             );
         }
 
         const res = await registerEmail(dispatch, newUser);
-        showSnackbar(
-            dispatch,
-            "Preparando página de download...",
-            "warning",
-            5000
-        );
+        showToast("Preparando página de download...");
 
         if (res.status !== 200) {
-            showSnackbar(
-                dispatch,
-                res.data.error || res.data.msg,
-                "error",
-                6000
-            );
+            showToast(res.data.msg || res.data.error, { type: "error" });
             // detect field errors
             const thisModalFields = Object.keys(data);
             const foundObjError = detectErrorField(
@@ -223,7 +205,7 @@ function RegisterClientAdmin({ logo }) {
         const { bizName } = clientAdminData;
         const cliAdminName = getFirstName(name);
 
-        showSnackbar(dispatch, "Redirecionando...", "warning", 5000);
+        showToast("Redirecionando...");
 
         ReactGA.event({
             // n1

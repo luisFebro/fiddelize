@@ -1,50 +1,47 @@
 import { useEffect } from "react";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
-import { setUserOnline } from "../redux/actions/authActions";
 import isOffline from "../utils/server/isOffline";
-import { showSnackbar } from "../redux/actions/snackbarActions";
 import { setVar, removeVar, getVar } from "./storage/useVar";
-import getFirstName from "../utils/string/getFirstName";
+import showToast from "../components/toasts";
+import useData from "./useData";
 
 const isConexionOff = isOffline();
 
 export default function useOffline() {
-    const { isOnline, name } = useStoreState((state) => ({
-        name: state.userReducer.cases.currentUser.name,
-        isOnline: state.authReducer.cases.isUserOnline,
-    }));
-
-    const dispatch = useStoreDispatch();
+    const [firstName] = useData(["firstName"]);
 
     useEffect(() => {
+        if (firstName === "...") return;
+
         if (isConexionOff) {
-            setUserOnline(dispatch, false);
             getVar("offlineApp").then((res) => {
-                !res && showSnackbar(dispatch, "Modo Offline Ativado!");
+                if (!res)
+                    showToast(
+                        `MODO OFFLINE ATIVADO! ${
+                            `${firstName}, algumas` || "Algumas"
+                        } funcionalidades estão temporariamente desativadas.`,
+                        { dur: 20000 }
+                    );
             });
             setVar({ offlineApp: true });
         } else {
             getVar("offlineApp")
                 .then((res) => {
-                    setUserOnline(dispatch, true);
-
                     if (res) {
                         removeVar("offlineApp");
-                        showSnackbar(
-                            dispatch,
-                            `Legal!<br />A internet voltou, ${getFirstName(
-                                name
-                            )}!`,
-                            "success",
-                            6500
-                        );
+                        const internetBackTxt = firstName
+                            ? `Legal! A internet voltou, ${firstName}!`
+                            : `Legal! A internet voltou. Tenha uma ótima navegação!`;
+                        showToast(internetBackTxt, {
+                            type: "success",
+                            dur: 15000,
+                        });
                     }
                 })
                 .catch((e) =>
                     console.log(`smg wrong with offlineApp. Details: ${e}`)
                 );
         }
-    }, [isConexionOff]);
+    }, [firstName]);
 
-    return { isOffline: !isOnline };
+    return { isOffline: isConexionOff };
 }

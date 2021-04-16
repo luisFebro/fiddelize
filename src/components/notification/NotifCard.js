@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import PropTypes from "prop-types";
 import { useProfile, useClientAdmin } from "../../hooks/useRoleData";
@@ -7,6 +7,7 @@ import { fromNow } from "../../utils/dates/dateFns";
 import getCardTypeData from "./helpers/getCardTypeData";
 import CardActionBtn from "./card-type-pages/CardActionBtn";
 import useData from "../../hooks/useData";
+import { getVar } from "../../hooks/storage/useVar";
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -44,6 +45,20 @@ const getStyles = ({ clicked, backColor, grayScaleReady }) => ({
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
 
+const useGenderLetter = () => {
+    const [genderLetter, setGenderLetter] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            const gender = await getVar("gender");
+            const whichLetter = gender === "Ela" ? "a" : "o";
+            setGenderLetter(whichLetter);
+        })();
+    }, []);
+
+    return genderLetter;
+};
+
 function NotifCard({
     cardId,
     senderId,
@@ -67,6 +82,8 @@ function NotifCard({
     userName = ultimateName !== "..." ? ultimateName : userName;
     userId = ultimateUserId !== "..." ? ultimateUserId : userId;
 
+    const genderLetter = useGenderLetter();
+
     let { role } = useProfile();
     role = ultimateRole !== "..." ? ultimateRole : role;
     if (forceCliUser) role = "cliente";
@@ -85,7 +102,7 @@ function NotifCard({
         </div>
     );
 
-    const opts = { userName, bizName, role, content, subtype };
+    const opts = { genderLetter, userName, bizName, role, content, subtype };
     const { title, brief, circularImg } = getCardTypeData(cardType, opts);
 
     const showTitle = () => (

@@ -3,7 +3,7 @@ import extractStrData from "../../../utils/string/extractStrData";
 import { formatDMY } from "../../../utils/dates/dateFns";
 
 export default function getCardTypeData(cardType, options = {}) {
-    const { userName, bizName, role, content, subtype } = options;
+    const { genderLetter, userName, bizName, role, content, subtype } = options;
 
     let title;
     let brief;
@@ -24,23 +24,25 @@ export default function getCardTypeData(cardType, options = {}) {
         return `${firstLineGreeting}, ${birthdayMsg}`;
     };
 
+    const welcomeTxt = genderLetter ? `Bem-vind${genderLetter}` : "...";
+
     switch (cardType) {
         case "welcome": {
-            title = `Boas vindas, ${getFirstName(userName)}`;
+            title = `${welcomeTxt}, ${getFirstName(userName)}`;
             brief = handledWelcomeBrief;
             circularImg = "/img/icons/notif/calendar-welcome.svg";
             break;
         }
         case "challenge": {
-            const { currChall: thisCurrChall, prizeDesc } = extractStrData(
-                content
-            );
+            const {
+                currChall: thisCurrChall,
+                prizeDesc,
+                clientFullName,
+            } = extractStrData(content);
 
             if (subtype === "clientWonChall") {
                 title = "Desafio Concluído";
-                brief = `Cliente §${getFirstName(userName, {
-                    addSurname: true,
-                })}§ concluiu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
+                brief = `Cliente §${clientFullName}§ concluiu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
             }
             if (subtype === "confirmedChall") {
                 title = "Desafio Confirmado";

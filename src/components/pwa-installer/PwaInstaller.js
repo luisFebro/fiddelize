@@ -55,11 +55,10 @@ export default function PwaInstaller({
 
     useEffect(() => {
         if (bannerVisible) {
-            setData &&
-                setData((prev) => ({
-                    ...prev,
-                    downloadAvailable: true,
-                }));
+            setData((prev) => ({
+                ...prev,
+                downloadAvailable: true,
+            }));
         }
     }, [bannerVisible]);
 

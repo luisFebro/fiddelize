@@ -6,8 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 import requestPermission, { showPermissionBanner } from "./pushNotifPermission";
 import useData from "../../hooks/useData";
+import isOffline from "../../utils/server/isOffline";
 
-const permissionStatus = showPermissionBanner();
+const isOnline = !isOffline();
+
+const permissionStatus = showPermissionBanner() && isOnline;
 
 export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
     const [backDrop, setBackDrop] = useState(false);

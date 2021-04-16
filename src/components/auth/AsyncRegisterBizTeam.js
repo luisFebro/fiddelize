@@ -19,7 +19,6 @@ import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
@@ -37,6 +36,7 @@ import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 import useData from "../../hooks/useData";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
+import showToast from "../toasts";
 
 const filter = getFilterDate();
 
@@ -178,38 +178,25 @@ function Register({ isStaff = false, setLoginOrRegister }) {
             ...data,
         };
 
+        showToast("Registrando... Aguarde um momento.");
+
         if (!primaryAgent) {
-            showSnackbar(
-                dispatch,
+            showToast(
                 "O ID do app não foi encontrado. Tente reinstalar o app na página de convite.",
-                "error"
+                { type: "error" }
             );
         }
 
-        showSnackbar(
-            dispatch,
-            "Registrando... Aguarde um momento.",
-            "warning",
-            7000
-        );
-
         if (!agreementDone) {
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Clique na caixa para concordar com termos de uso e privacidade",
-                "error",
-                5000
+                { type: "error" }
             );
         }
 
         registerEmail(dispatch, newUser).then((res) => {
             if (res.status !== 200) {
-                showSnackbar(
-                    dispatch,
-                    res.data.msg || res.data.error,
-                    "error",
-                    6000
-                );
+                showToast(res.data.msg || res.data.error, { type: "error" });
                 // detect field errors
                 const thisModalFields = Object.keys(data);
                 const foundObjError = detectErrorField(
@@ -236,11 +223,9 @@ function Register({ isStaff = false, setLoginOrRegister }) {
             clearData();
 
             setLoginOrRegister("login");
-            showSnackbar(
-                dispatch,
+            showToast(
                 `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
-                "success",
-                9000
+                { type: "success", dur: 10000 }
             );
             // sendEmail(res.data.authUserId);
         });

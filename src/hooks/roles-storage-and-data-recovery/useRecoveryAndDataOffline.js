@@ -8,6 +8,7 @@ import lStorage, {
 } from "../../utils/storage/lStorage";
 import setDataIfOnline from "../../utils/storage/setDataIfOnline";
 import useRecoverSysData from "./useRecoverSysData";
+import isOffline from "../../utils/server/isOffline";
 import {
     useProfile,
     useClientAdmin,
@@ -21,10 +22,11 @@ const appSystem = lStorage("getItems", collection);
 const bizSysId = appSystem && appSystem.businessId;
 // import { showSnackbar } from '../../redux/actions/snackbarActions';
 // end data
+const isUserOnline = !isOffline();
+
 export const useRecoveryAndDataOffline = () => {
-    const { isUserOnline, runName } = useStoreState((state) => ({
+    const { runName } = useStoreState((state) => ({
         runName: state.globalReducer.cases.runName,
-        isUserOnline: state.authReducer.cases.isUserOnline,
     }));
 
     const didUserLogout = runName === "logout";

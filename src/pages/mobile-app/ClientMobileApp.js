@@ -289,7 +289,7 @@ function ClientMobileApp({ location, history }) {
                 className="mx-2 mt-3 text-normal font-weight-bold text-center text-white"
                 style={{ marginBottom: 100 }}
             >
-                {isCliUser &&
+                {isCliUser && // in near updates - rewards or discounts according to which games cli-admin has chosen
                     "Acumule pontos. Supere Desafios. Ganhe prêmios no jogo de compras feito para você!"}
                 {isCliMember &&
                     "Adicione pontos e clientes para o clube de fidelidade em segundos."}

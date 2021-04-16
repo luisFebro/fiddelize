@@ -25,7 +25,7 @@ export default function loadToast(title, options = {}) {
     StartToastifyInstance({
         text: buttonRequirement ? title : `${title} ${getToastIcon(type)}`,
         node: false,
-        duration: handleDuration(options.dur),
+        duration: handleDuration(options.dur, { isFixed: options.fix }),
         className: "toastify",
         fontWeight: "bolder",
         avatar: !options.avatar ? "" : imgHandlingCond,
@@ -37,21 +37,25 @@ export default function loadToast(title, options = {}) {
         onClick: options.onClick || function () {}, // Callback after click
         needActionBtn: options.needActionBtn === true,
         actionBtnText: options.actionBtnText,
+        fix: options.fix,
     }).showToast();
 }
 
 // HELPERS
 function handleToastColor(type) {
     if (type === "warning") return "#34495e";
-    if (type === "success") return "green";
+    if (type === "success") return "#218c74";
     if (type === "error") return "var(--mainRed)";
 
     return "#34495e";
 }
 
-function handleDuration(dur) {
+function handleDuration(dur, options = {}) {
+    const { isFixed } = options;
+
     // -1 for permanent display
     if (dur === "forever") return -1;
+    if (isFixed) return 60 * 60 * 24 * 1; // 24 hours
 
     const DEFAULT_DUR = 7000;
     return dur || DEFAULT_DUR;

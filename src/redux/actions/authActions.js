@@ -13,14 +13,11 @@ import { API } from "../../config/api";
 const isApp = isThisApp();
 
 // Check token & load user
-const alreadyPass = false;
 export const loadUser = () => (dispatch, getState) => (history) => {
     console.log("==USER LOADING==");
     axios
         .get(`${API}/auth/user`, tokenConfig(getState))
         .then((res) => {
-            dispatch({ type: "USER_ONLINE", payload: true });
-
             // this is redirect to home even redirect links page...
             // that's why there is "isApp" to check if is not website
             // const gotError = isApp && res.data && res.data.error;
@@ -45,10 +42,6 @@ export const loadUser = () => (dispatch, getState) => (history) => {
                 err.response.data.msg &&
                 err.response.data.msg.length !== 0;
 
-            if (gotObj && err.response.status === 500 && gotMsg) {
-                dispatch({ type: "USER_ONLINE", payload: false });
-            }
-
             // to avoid infinite request loop
             const isUnavailablePage =
                 window.location.href.indexOf(
@@ -65,10 +58,6 @@ export const loadUser = () => (dispatch, getState) => (history) => {
                 logout(dispatch, { history });
             }
         });
-};
-
-export const setUserOnline = (dispatch, status) => {
-    dispatch({ type: "USER_ONLINE", payload: status });
 };
 
 // login Email
@@ -93,7 +82,6 @@ export const loginEmail = async (dispatch, objToSend) => {
             type: "LOGIN_EMAIL",
             payload: { token: res.data.token, role: res.data.role },
         });
-        dispatch({ type: "USER_ONLINE", payload: true });
         setLoadingProgress(dispatch, false);
 
         return res;
@@ -127,7 +115,6 @@ export const registerEmail = async (dispatch, objToSend) => {
             }, 10000);
         }
         setLoadingProgress(dispatch, false);
-        dispatch({ type: "USER_ONLINE", payload: true });
         return res;
     } catch (err) {
         setLoadingProgress(dispatch, false);

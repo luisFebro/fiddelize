@@ -21,7 +21,6 @@ import SafeEnvironmentMsg from "../SafeEnvironmentMsg";
 import RadiusBtn from "../buttons/RadiusBtn";
 // import ReCaptchaCheckbox from "../ReCaptcha";
 // Redux
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { registerEmail } from "../../redux/actions/authActions";
 // import { sendWelcomeConfirmEmail } from '../../redux/actions/emailActions';
 // Helpers
@@ -38,6 +37,7 @@ import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import useData from "../../hooks/useData";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
+import showToast from "../../components/toasts";
 
 const filter = getFilterDate();
 
@@ -213,28 +213,17 @@ function ASyncRegisterCliUser({
         };
 
         if (!lastRegisterBizId) {
-            showSnackbar(
-                dispatch,
+            showToast(
                 "O ID do app não foi encontrado. Tente reinstalar o app na página de convite.",
-                "error"
+                { type: "error" }
             );
         }
 
-        showSnackbar(
-            dispatch,
-            "Registrando... Aguarde um momento.",
-            "warning",
-            7000
-        );
+        showToast("Registrando... Aguarde um momento.", { dur: 4000 });
 
         registerEmail(dispatch, newUser).then((res) => {
             if (res.status !== 200) {
-                showSnackbar(
-                    dispatch,
-                    res.data.msg || res.data.error,
-                    "error",
-                    6000
-                );
+                showToast(res.data.msg || res.data.error, { type: "error" });
                 // detect field errors
                 const thisModalFields = Object.keys(data);
                 const foundObjError = detectErrorField(
@@ -265,11 +254,9 @@ function ASyncRegisterCliUser({
                 callback(payload);
             } else {
                 setLoginOrRegister("login");
-                showSnackbar(
-                    dispatch,
+                showToast(
                     `${name}, seu cadastro foi realizado com sucesso. Faça seu acesso.`,
-                    "success",
-                    9000
+                    { type: "success", dur: 10000 }
                 );
                 // sendEmail(res.data.authUserId);
             }

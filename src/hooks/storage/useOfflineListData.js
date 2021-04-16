@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useStoreState } from "easy-peasy";
 import { setVar, getVar, store } from "./useVar";
+import isOffline from "../../utils/server/isOffline";
+
+const isOnline = !isOffline();
 
 export const useOfflineData = ({ dataName, data, trigger }) => {
     const [dataOff, setDataOff] = useState({
@@ -9,10 +11,6 @@ export const useOfflineData = ({ dataName, data, trigger }) => {
         already: false,
     });
     const { offlineData, loading, already } = dataOff;
-
-    const { isOnline } = useStoreState((state) => ({
-        isOnline: state.authReducer.cases.isUserOnline,
-    }));
 
     useEffect(() => {
         if (!dataName || trigger === false) return;
@@ -45,10 +43,6 @@ export const useOfflineData = ({ dataName, data, trigger }) => {
 export default function useOfflineListData({ listName, list, trigger }) {
     const [offlineList, setOfflineList] = useState(null);
     const [already, setAlready] = useState(false);
-
-    const { isOnline } = useStoreState((state) => ({
-        isOnline: state.authReducer.cases.isUserOnline,
-    }));
 
     useEffect(() => {
         if (!listName) return;
