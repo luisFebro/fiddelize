@@ -1,26 +1,5 @@
 /* eslint-disable no-restricted-globals */
 
-/*
-A service worker is a "special" JavaScript file. The browser can execute this JavaScript without your page being open. It can even execute this JavaScript when the browser is closed. A service worker also has API's, like push, that aren't available in the web page (i.e. API's that aren't available out of a service worker script).
-https://developers.google.com/web/fundamentals/push-notifications/how-push-works
-
-return navigator.serviceWorker.register('/service-worker.js')
-This function tells the browser that we have a service worker file and where it's located. In this case, the service worker file is at /service-worker.js. Behind the scenes the browser will take the following steps after calling register():
-Download the service worker file.
-Run the JavaScript.
-If everything runs correctly and there are no errors, the promise returned by register() will resolve. If there are errors of any kind, the promise will reject.
- */
-
-// This allows the web app to trigger skipWaiting via
-// registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener("message", (event) => {
-    if (event.data && event.data.type === "SKIP_WAITING") {
-        self.skipWaiting();
-    }
-});
-
-// Any other custom service worker logic can go here.
-
 self.addEventListener("push", async (event) => {
     const payload = event.data.json();
     const notifPromise = showNotification(payload);
@@ -28,11 +7,9 @@ self.addEventListener("push", async (event) => {
     event.waitUntil(notifPromise);
 });
 
-/*
-The common practice for a notification click is for it to close and perform some other logic (i.e. open a window or make some API call to the application)
-https://developers.google.com/web/fundamentals/push-notifications/notification-behaviour
-https://stackoverflow.com/questions/48547295/pwa-service-worker-notification-click
-*/
+// The common practice for a notification click is for it to close and perform some other logic (i.e. open a window or make some API call to the application)
+// https://developers.google.com/web/fundamentals/push-notifications/notification-behaviour
+// https://stackoverflow.com/questions/48547295/pwa-service-worker-notification-click
 self.addEventListener("notificationclick", (event) => {
     const clickedNotification = event.notification;
     const extraOptions = clickedNotification.data || {};
@@ -62,10 +39,8 @@ self.addEventListener("notificationclick", (event) => {
     }
 });
 
-/*
-There is also a notificationclose event that is called if the user dismisses one of your notifications (i.e. rather than clicking the notification, the user clicks the cross or swipes the notification away).
-This event is normally used for analytics to track user engagement with notifications.
- */
+// There is also a notificationclose event that is called if the user dismisses one of your notifications (i.e. rather than clicking the notification, the user clicks the cross or swipes the notification away).
+// This event is normally used for analytics to track user engagement with notifications.
 self.addEventListener("notificationclose", (event) => {
     const dismissedNotification = event.notification;
     console.log("dismissedNotification", dismissedNotification);

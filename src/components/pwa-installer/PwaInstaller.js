@@ -95,12 +95,6 @@ export default function PwaInstaller({
                             { type: "success", dur: 8000 }
                         );
                         setTimeout(() => closeWindow(), 7000);
-                        const timeoutDuration = 15000;
-                        setTimeout(
-                            () =>
-                                (window.location.href = "/acesso/verificacao"),
-                            timeoutDuration
-                        );
                     }, 10990);
                 } else {
                     showToast("A instalação do app foi cancelada.");

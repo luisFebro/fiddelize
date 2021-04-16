@@ -11,7 +11,7 @@ const loadToast = async (txt, time = 3500) => {
 
 let isToastActivated = true; // or using only in apps // this should be permenant because iframe is reloading the page forcing the toast to pop up in every change in the self service
 isToastActivated = isToastActivated && isApp;
-const activateLocalhostWorker = false;
+const activateLocalhostWorker = true;
 
 // This optional code is used to register a service worker.
 // register() is not called by default.
@@ -50,6 +50,7 @@ export function register(config) {
         }
 
         window.addEventListener("load", () => {
+            // LESSON: do not change the name of service-worker.js since  create-react-app v4+ will check for the presence of a src/service-worker.js file to run PWA
             const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
             if (isLocalhost) {

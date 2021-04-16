@@ -7,11 +7,27 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
-import { clientsClaim } from "workbox-core";
+// create-react-app v4+ will check for the presence of a src/service-worker.js file at build time, and if found, run workbox-webpack-plugin's InjectManifest plugin, passing in that file as the swSrc parameter.
+// https://dev.to/jeffposnick/service-workers-in-create-react-app-v4-3mm0
+
+import { clientsClaim, setCacheNameDetails } from "workbox-core";
+import { registerRoute } from "workbox-routing";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
-import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate } from "workbox-strategies";
+import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
+// import isThisApp from "./utils/window/isThisApp";
+
+// const isApp = isThisApp();
+
+// We recommend changing the prefix for each of your projects. This allows you to work on multiple projects using the same localhost port number without mixing up the caches
+// https://developers.google.com/web/tools/workbox/guides/configure-workbox
+setCacheNameDetails({
+    prefix: "fiddelize",
+    // suffix: 'v1'
+    precache: "fiddelize-precache",
+    runtime: "fiddelize-runtime",
+    // googleAnalytics: 'fiddelize-analytics'
+});
 
 clientsClaim();
 
@@ -19,55 +35,403 @@ clientsClaim();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
+// here are a number of items that are great candidates for precaching: your web app's start URL, your offline fallback page, and key JavaScript and CSS files. By precaching files, you’ll guarantee that they’re available in the cache when the service worker takes control of the page.
 precacheAndRoute(self.__WB_MANIFEST);
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
 const fileExtensionRegexp = new RegExp("/[^/?]+\\.[^/]+$");
+
+// Return false to exempt requests from being fulfilled by index.html.
+const matchFunction = ({ request, url }) => {
+    // If this isn't a navigation, skip.
+    if (request.mode !== "navigate") {
+        return false;
+    } // If this is a URL that starts with /_, skip.
+
+    if (url.pathname.startsWith("/_")) {
+        return false;
+    } // If this looks like a URL for a resource, because it contains // a file extension, skip.
+
+    if (url.pathname.match(fileExtensionRegexp)) {
+        return false;
+    } // Return true to signal that we want to use the handler.
+
+    return true;
+};
 registerRoute(
-    // Return false to exempt requests from being fulfilled by index.html.
-    ({ request, url }) => {
-        // If this isn't a navigation, skip.
-        if (request.mode !== "navigate") {
-            return false;
-        } // If this is a URL that starts with /_, skip.
-
-        if (url.pathname.startsWith("/_")) {
-            return false;
-        } // If this looks like a URL for a resource, because it contains // a file extension, skip.
-
-        if (url.pathname.match(fileExtensionRegexp)) {
-            return false;
-        } // Return true to signal that we want to use the handler.
-
-        return true;
-    },
+    matchFunction,
     createHandlerBoundToURL(process.env.PUBLIC_URL + "/index.html")
 );
 
 // An example runtime caching route for requests that aren't handled by the
 // precache, in this case same-origin .png requests like those from in public/
+// You might want to use a cache-first strategy for images, by matching against the intended destination of the request. - https://developers.google.com/web/tools/workbox/guides/common-recipes
 registerRoute(
     // Add in any other file extensions or routing criteria as needed.
     ({ url }) =>
-        url.origin === self.location.origin && url.pathname.endsWith(".png"), // Customize this strategy as needed, e.g., by changing to CacheFirst.
-    new StaleWhileRevalidate({
-        cacheName: "images",
+        (url.origin === self.location.origin &&
+            url.pathname.endsWith(".png")) ||
+        (url.origin === self.location.origin && url.pathname.endsWith(".svg")), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+    new CacheFirst({
+        cacheName: "fiddelize-static-imgs",
         plugins: [
             // Ensure that once this runtime cache reaches a maximum size the
             // least-recently used images are removed.
-            new ExpirationPlugin({ maxEntries: 50 }),
+            // expiring cached items after 30 days and only allowing 50 entries at once.
+            new ExpirationPlugin({
+                maxEntries: 50, // required - most effective for handling storage quota. Setting this is normally a good idea, unless you know that there are only a small number of possible URLs that ever might be handled by a given strategy
+                maxAgeSeconds: addDaysInMs(30), // Entries that were added to the cache more than this number of seconds ago will be considered stale (velho, mofento), and automatically cleaned up the next time the cache is accessed.
+                purgeOnQuotaError: true, // optional - allows you to mark a given cache as being safe to automatically delete in the event of your web app exceeding the available storage.
+            }),
         ],
     })
 );
 
+registerRoute(
+    ({ request }) => request.destination === "audio",
+    new CacheFirst({
+        cacheName: "fiddelize-audios",
+        plugins: [
+            new ExpirationPlugin({
+                maxEntries: 30,
+                maxAgeSeconds: addDaysInMs(30), // 30 Days
+            }),
+        ],
+    })
+);
+
+// Cache Google Fonts with a stale-while-revalidate strategy, with
+// a maximum number of entries.
+registerRoute(
+    ({ url }) =>
+        url.origin === "https://fonts.googleapis.com" ||
+        url.origin === "https://fonts.gstatic.com",
+    new StaleWhileRevalidate({
+        cacheName: "fiddelize-google-fonts",
+        plugins: [
+            new ExpirationPlugin({
+                maxEntries: 20,
+                purgeOnQuotaError: true, // default false -  Runtime caches should, in general, be resilient in the face of deletion, so setting this option to true is a good practice, and helps ensure your web app can automatically recover in the face of storage constraints.
+            }),
+        ],
+    })
+);
+
+// Make your JS and CSS ⚡ fast by returning the assets from the cache, while making sure they are updated in the background for the next use.
+registerRoute(
+    ({ request }) => request.destination === "script",
+    new StaleWhileRevalidate({
+        cacheName: "fiddelize-scripts",
+    })
+);
+
+registerRoute(
+    ({ request }) => request.destination === "style",
+    new StaleWhileRevalidate({
+        cacheName: "fiddelize-styles",
+    })
+);
+
+// EVENTS
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
+// https://developers.google.com/web/tools/workbox/guides/advanced-recipes
 self.addEventListener("message", (event) => {
     if (event.data && event.data.type === "SKIP_WAITING") {
         self.skipWaiting();
     }
 });
 
-// Any other custom service worker logic can go here.
+// notifications
+self.addEventListener("push", async (event) => {
+    const payload = event.data.json();
+    const notifPromise = showNotification(payload);
+
+    event.waitUntil(notifPromise);
+});
+
+// The common practice for a notification click is for it to close and perform some other logic (i.e. open a window or make some API call to the application)
+// https://developers.google.com/web/fundamentals/push-notifications/notification-behaviour
+// https://stackoverflow.com/questions/48547295/pwa-service-worker-notification-click
+self.addEventListener("notificationclick", (event) => {
+    const clickedNotification = event.notification;
+    const extraOptions = clickedNotification.data || {};
+    const clickedActionBtn = event.action; // it is an empty string if not clicked
+
+    if (extraOptions.close) event.notification.close();
+
+    const isNormalNotifClick = !clickedActionBtn;
+    if (isNormalNotifClick) {
+        const promise = focusOrOpenWindow("/mobile-app?abrir=1");
+        event.waitUntil(promise);
+        return;
+    }
+
+    switch (clickedActionBtn) {
+        // using brackets to limit scope - https://stackoverflow.com/questions/50752987/eslint-no-case-declaration-unexpected-lexical-declaration-in-case-block/50753272
+        case "close": {
+            event.notification.close();
+            break;
+        }
+        default: {
+            const promise = focusOrOpenWindow(
+                extraOptions[`url_${clickedActionBtn}`]
+            );
+            event.waitUntil(promise); // n1 You still need to make use of event.waitUntil() to keep the service worker running while your code is busy. - So, the waitUntil method is used to tell the browser not to terminate the service worker until the promise passed to waitUntil is either resolved or rejected.
+        }
+    }
+});
+
+// There is also a notificationclose event that is called if the user dismisses one of your notifications (i.e. rather than clicking the notification, the user clicks the cross or swipes the notification away).
+// This event is normally used for analytics to track user engagement with notifications.
+self.addEventListener("notificationclose", (event) => {
+    const dismissedNotification = event.notification;
+    console.log("dismissedNotification", dismissedNotification);
+    // const promiseChain = notificationCloseAnalytics();
+    // event.waitUntil(promiseChain);
+});
+// end notifications
+// END EVENTS
+
+// HELPERS
+function addDaysInMs(daysCount) {
+    if (typeof daysCount !== "number")
+        throw new Error("daysCount should be a number of days");
+    return 60 * 60 * 24 * daysCount;
+}
+
+// notification helpers
+// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
+async function showNotification(payload = {}) {
+    let { title } = payload;
+    const config = {
+        tag: payload.tag, // if no id is passed, then notification will show up multiple times even if the same category of message. - An ID for a given notification that allows you to find, replace, or remove the notification using a script if necessary. - The tag option is simply a way of grouping messages so that any old notifications that are currently displayed will be closed if they have the same tag as a new notification. A subtlety to using tag is that when it replaces a notification, it will do so without a sound or vibration.
+        // visual options
+        body: payload.body || "",
+        badge: payload.badge || "", // should be a transparent img - the icon alongside the site's url right in the right corner - The badge is a small monochrome icon that is used to portray a little more information to the user about where the notification is from -  a USVString containing the URL of an image to represent the notification when there is not enough space to display the notification itself such as for example, the Android Notification Bar. On Android devices, the badge should accommodate devices up to 4x resolution, about 96 by 96 px, and the image will be automatically masked.
+        icon: payload.icon || "", // the icon inside the message in the left corner (can be the customer biz's logo)
+        image: payload.image || "", // the body image - a USVString containing the URL of an image to be displayed in the notification.
+        dir: payload.dir || "ltr",
+        vibrate: payload.vibrate || [200, 100, 200, 100, 200, 100, 200], // n1
+        // behavior options
+        requireInteraction: payload.requireInteraction || false, // only on mobile - Indicates that on devices with sufficiently large screens, a notification should remain active until the user clicks or dismisses it. If this value is absent or false, the desktop version of Chrome will auto-minimize notifications after approximately twenty seconds. The default value is false.
+        actions: payload.actions || [], // n2 array with objects - only works on mobile android - it does not appear in the desktop - the left side icon from the title
+        lang: payload.lang || "pt-BR", // Specify the lang used within the notification. This string must be a valid BCP 47 language tag.
+        data: payload.data || null, // Arbitrary data that you want to be associated with the notification. This can be of any data type.
+        renotify: payload.renotify || false, // the notification beep still work even if it is false... A boolean that indicates whether to suppress vibrations and audible alerts when reusing a tag value. If renotify is true and tag is the empty string a TypeError will be thrown. - This largely applies to mobile devices at the time of writing. Setting this option makes new notifications vibrate and play a system sound. - There are scenarios where you might want a replacing notification to notify the user rather than silently update. Chat applications are a good example. In this case, you should set tag and renotify to true.
+        silent: payload.silent || false, // WARNING: when this is true, the notification is not delivered.
+    };
+
+    if (!Notification) {
+        console.log("This browser does not support notification");
+        return false;
+    }
+    const { permission } = Notification;
+    if (permission !== "granted") return false;
+
+    const needCountAndMerge = config.data && !config.data.closeMergeOff;
+    // newTitle and newBody is undefined for the first time. Only will return a value after the second notification in plural.
+    if (needCountAndMerge) {
+        const { newTitle, newBody, newData } = await countAndMergeNotifications(
+            {
+                registration: self.registration,
+                options: payload,
+                data: config.data,
+            }
+        );
+
+        title = newTitle || title;
+        config.body = newBody || config.body;
+        config.data = newData || config.data;
+    }
+
+    checkBrowserMaxActions();
+
+    // IN APP TOAST NOTIFICATION
+    const needUiMsg = await needInAppNotif();
+
+    if (needUiMsg) {
+        const windowClients = await self.clients.matchAll({
+            type: "window",
+            includeUncontrolled: true,
+        });
+
+        windowClients.forEach((windowClient) => {
+            windowClient.postMessage({
+                title: payload.title,
+                body: payload.body,
+            });
+        });
+
+        return false;
+    }
+    // END IN APP TOAST NOTIFICATION
+
+    return self.registration.showNotification(title, config);
+}
+
+function checkBrowserMaxActions() {
+    // how many action buttons can be placed in a notification in the current browser.
+    const maxVisibleActions = Notification.maxActions;
+    if (maxVisibleActions < 4) {
+        console.log(
+            `This notification will only display ${maxVisibleActions} actions.`
+        );
+    } else {
+        console.log(
+            `This notification can display up to ${maxVisibleActions} actions.`
+        );
+    }
+}
+
+async function countAndMergeNotifications({ registration, options, data }) {
+    const allNotifs = await registration.getNotifications(registration); // n3
+
+    let currentNotification;
+
+    const currTag = options.data.tag;
+    for (let i = 0; i < allNotifs.length; i++) {
+        if (allNotifs[i].data && allNotifs[i].data.tag === currTag) {
+            currentNotification = allNotifs[i];
+        }
+    }
+
+    if (currentNotification) {
+        const messageCount = currentNotification.data.count + 1;
+        const titlePlural = currentNotification.data.titleP;
+        const bodyPlural = currentNotification.data.bodyP;
+
+        // close the old notification
+        currentNotification.close();
+
+        return {
+            newTitle: titlePlural,
+            newBody: `${messageCount} ${bodyPlural}`,
+            newData: {
+                ...data,
+                tag: currTag,
+                count: messageCount,
+            },
+        };
+    }
+
+    return {
+        newData: {
+            ...data,
+            tag: currTag,
+            count: 1,
+        },
+    };
+}
+
+/*
+only possible for pages on your origin. This is because we can only see what pages are open that belong to our site. This prevents developers from being able to see all the sites their users are viewing.
+https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns
+ */
+async function focusOrOpenWindow(url) {
+    const urlToOpen = new URL(url, self.location.origin).href; // http://localhost:3000/mobile-app?abrir=1
+
+    const windowClients = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+    }); // n2
+
+    let matchingClient = null;
+
+    for (let i = 0; i < windowClients.length; i++) {
+        const windowClient = windowClients[i];
+
+        if (windowClient.url === urlToOpen) {
+            matchingClient = windowClient;
+            break;
+        }
+    }
+
+    // LESSONS: if the urlToOpen redirects to another page, then it always open a new window.
+    if (matchingClient) {
+        return matchingClient.focus();
+    }
+
+    // Note that you don't have window access in service-worker. To navigate to the URL, you'd need to use clients.openWindow instead.
+    return self.clients.openWindow(urlToOpen);
+}
+
+// isClientFocused
+// https://developers.google.com/web/fundamentals/push-notifications/common-notification-patterns#the_exception_to_the_rule
+async function needInAppNotif() {
+    const windowClients = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+    });
+
+    let clientIsFocused = false;
+
+    for (let i = 0; i < windowClients.length; i++) {
+        const windowClient = windowClients[i];
+        if (windowClient.focused) {
+            clientIsFocused = true;
+            break;
+        }
+    }
+
+    return clientIsFocused;
+}
+// end notification helpers
+// END HELPERS
+
+/* WORK-BOX ALL STRATEGIES
+Stale While Revalidate: This strategy will use a cached response for a request if it is available and update the cache in the background with a response from the network. (If it’s not cached it will wait for the network response and use that.) This is a fairly safe strategy as it means users are regularly updating their cache. The downside of this strategy is that it’s always requesting an asset from the network, using up the user’s bandwidth.
+Network First: This will try to get a response from the network first. If it receives a response, it’ll pass that to the browser and also save it to a cache. If the network request fails, the last cached response will be used.
+Cache First: This strategy will check the cache for a response first and use that if one is available. If the request isn’t in the cache, the network will be used and any valid response will be added to the cache before being passed to the browser.
+Network Only: Force the response to come from the network.
+Cache Only: Force the response to come from the cache.
+ */
+
+/* WORK-BOX ALL PLUGINS
+BackgroundSyncPlugin: If a network request ever fails, add it to a background sync queue and retry the request when the next sync event is triggered.
+BroadcastUpdatePlugin: Whenever a cache is updated, dispatch a message on a Broadcast Channel or via postMessage().
+CacheableResponsePlugin: Only cache requests that meet a certain criteria.
+ExpirationPlugin: Manage the number and maximum age of items in the cache.
+RangeRequestsPlugin: Respond to requests that include a Range: header with partial content from a cache.
+*/
+
+/* Cache Resources from a Specific Subdirectory
+You can route requests to files in a specific directory on your local web app by checking the origin and pathname properties of the URL object passed to the matchCallback function:
+
+import {registerRoute} from 'workbox-routing';
+import {StaleWhileRevalidate} from 'workbox-strategies';
+
+registerRoute(
+  ({url}) => url.origin === self.location.origin &&
+             url.pathname.startsWith('/static/'),
+  new StaleWhileRevalidate()
+);
+
+pathname is /dogs in the following url:
+'http://www.example.com/dogs'
+*/
+
+/*
+Cache Resources Based on Resource Type
+You can use the RequestDestination enumerate type of the destination of the request to determine a strategy. For example, when the target is <audio> data:
+
+import {registerRoute} from 'workbox-routing';
+import {CacheFirst} from 'workbox-strategies';
+import {ExpirationPlugin} from 'workbox-expiration';
+
+registerRoute(
+  // Custom `matchCallback` function
+  ({request}) => request.destination === 'audio',
+  new CacheFirst({
+    cacheName: 'audio',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 30,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+      }),
+    ],
+  })
+);
+ */
