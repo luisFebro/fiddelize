@@ -4,7 +4,6 @@ import { useClientAdmin } from "../hooks/useRoleData";
 // for dashboard redirection
 import { setRun } from "../redux/actions/globalActions";
 import { setVar } from "../hooks/storage/useVar";
-// import { showSnackbar } from "../redux/actions/snackbarActions";
 
 export default function RedirectLink({
     children,
@@ -22,7 +21,6 @@ export default function RedirectLink({
         if (toDashTab) {
             setRun(dispatch, "goDash");
             // it is now switchin tabs fast enough and msg became lazy
-            // if (pendingMsg) showSnackbar(dispatch, pendingMsg, "warning", 3000);
             return setVar({ name_tabLabel: toDashTab });
         }
         goDash && setRun(dispatch, "goDash");

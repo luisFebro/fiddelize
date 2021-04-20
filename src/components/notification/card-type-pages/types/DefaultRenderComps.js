@@ -7,7 +7,7 @@ import { useClientAdmin, useProfile } from "../../../../hooks/useRoleData";
 import Img from "../../../Img";
 import applyTextStyle from "../../../../utils/string/applyTextStyle";
 import { readUser } from "../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../toasts";
 import removeImgFormat from "../../../../utils/biz/removeImgFormat";
 
 export const textStyle = "text-purple text-left text-normal mx-3";
@@ -95,11 +95,9 @@ export const ShowActionBtn = ({
         if (typeof callback === "function") callback(true);
         readUser(dispatch, _id, { role: loggedUserRole }).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(
-                    dispatch,
-                    "Não foi possível atualizar. Reinicie app.",
-                    "error"
-                );
+                return showToast("Não foi possível atualizar. Reinicie app.", {
+                    type: "error",
+                });
             if (role === "cliente")
                 window.location.href =
                     loggedUserRole === "cliente-admin"

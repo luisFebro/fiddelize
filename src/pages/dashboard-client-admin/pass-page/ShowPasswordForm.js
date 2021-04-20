@@ -7,7 +7,7 @@ import handleChange from "../../../utils/form/use-state/handleChange";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import { updateUser } from "../../../redux/actions/userActions";
 import { readVerificationPass } from "../../../redux/actions/adminActions";
 import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
@@ -83,11 +83,9 @@ export default function ShowPasswordForm({
     const sendDataBackend = () => {
         if (!clientAdminData.verificationPass) {
             setError(true);
-            showSnackbar(
-                dispatch,
-                "Você precisa inserir a senha de verificação",
-                "error"
-            );
+            showToast("Você precisa inserir a senha de verificação", {
+                type: "error",
+            });
             return;
         }
 
@@ -96,19 +94,19 @@ export default function ShowPasswordForm({
                 clientAdminData.verificationPass,
         };
 
-        showSnackbar(dispatch, "Ok, registrando...");
+        showToast("Ok, registrando...");
         updateUser(dispatch, dataToSend, businessId, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
+                return showToast(res.data.msg, { type: "error" });
 
             setVar(
                 { verifPass: clientAdminData.verificationPass },
                 store.user
             ).then((res) => {
                 if (isFromCliAdminDash) {
-                    showSnackbar(dispatch, "Senha foi alterada!", "success");
+                    showToast("Senha foi alterada!", { type: "success" });
                 } else {
                     btnAction(true);
                 }

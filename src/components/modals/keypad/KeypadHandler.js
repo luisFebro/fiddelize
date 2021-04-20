@@ -1,11 +1,10 @@
 import { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
 import Display from "./Display";
 import IconAndTitle from "./IconAndTitle";
 import Keyboard from "./Keyboard";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../toasts";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 import "./_KeypadHandler.scss";
 
@@ -40,17 +39,13 @@ export default function NumericKeypad({
     const handleClose = () => {
         setDisplay(defaultValue[keyboardType]);
         onClose();
-        // showSnackbar(dispatch, "A operação foi cancelada.", "warning", 5000);
     };
 
     const handleConfirm = () => {
         if (display === "Digite 11 dígitos")
-            return showSnackbar(
-                dispatch,
-                "Por favor, insira seu CPF para acesso",
-                "error",
-                6000
-            );
+            return showToast("Por favor, insira seu CPF para acesso", {
+                type: "error",
+            });
         if (confirmFunction(display, confirmPayload)) {
             onClose();
         }

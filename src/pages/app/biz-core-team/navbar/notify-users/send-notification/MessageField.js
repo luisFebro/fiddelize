@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import handleChange from "../../../../../../utils/form/use-state/handleChange";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import useAPI, { sendPushNotifs } from "../../../../../../hooks/api/useAPI";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../components/toasts";
 import Title from "../../../../../../components/Title";
 import SelectField from "../../../../../../components/fields/SelectField";
 import Field from "../../../../../../components/fields/field";
@@ -104,7 +104,7 @@ export default function MessageField({
 
     const { trigger, triggerBody } = triggerData;
 
-    const { data: doneMsg, loading, dispatch } = useAPI({
+    const { data: doneMsg, loading } = useAPI({
         method: "post",
         url: sendPushNotifs(),
         body: triggerBody,
@@ -135,12 +135,9 @@ export default function MessageField({
 
     const handleSendNow = () => {
         if (!body.length)
-            return showSnackbar(
-                dispatch,
-                "Insira alguma mensagem para a notificação",
-                "error",
-                6000
-            );
+            return showToast("Insira alguma mensagem para a notificação", {
+                type: "error",
+            });
 
         const { dataToSend } = handlePushPayloads({
             body,

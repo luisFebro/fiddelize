@@ -288,64 +288,6 @@ export const gotUsersInThisChallenge = async (bizId, challengeInd) => {
 };
 // END CHALLENGES AND REWARDS
 
-/* ARCHIVES
-export const confirmUserAccount = async (userId) => {
-    try {
-        return await axios.get(`/api/user/confirm-account/${userId}`, getHeaderJson);
-    } catch (err) {
-        return err.response;
-    }
-}
-
-
-// FIELDS
-export const addElemArrayUser = async (dispatch, objToSend) => {
-    try {
-        const { userId, changeField } = objToSend;
-        const res = await axios.put(`/api/user/field/array/push/${userId}`, changeField, getHeaderJson);
-        dispatch({ type: 'USER_READ', payload: res.data.user });
-        return res;
-    } catch (err) {
-        return err;
-    }
-};
-
-export const removeElemArrayUser = async (dispatch, objToSend) => {
-    try {
-        const { userId, changeField } = objToSend;
-        const res = await axios.put(`/api/user/field/array/pull/${userId}`, changeField, getHeaderJson);
-        dispatch({ type: 'USER_READ', payload: res.data.user });
-        return res;
-    } catch (err) {
-        return err;
-    }
-};
-
-// Send a notification to admin or client
-// THIS WILL BE UPDATED TO RECEIVE add/removeElemArrayUser
-export const sendNotification = async (dispatch, objToSend, _idClient) => {
-    // if the sender is not the admin, then get his/her id and send to it
-    // if admin, then get the current_idClient and send to it
-    if (objToSend.messageList.sender !== 'Loja Babadoo') {
-        _idClient = '5db4301ed39a4e12546277a8';
-    }
-
-    try {
-        const res = await axios.put(`/api/user/lists/change-field/notifications/${_idClient}`, objToSend, getHeaderJson);
-        console.log('res from user Action', res);
-        readUserList(dispatch);
-        // change name form 'admin'to Loja Babadoo (this is how gonna be displayed to the user)
-        if (res.data.name === 'admin') res.data.name = 'Loja Babadoo';
-        showSnackbar(dispatch, `Mensagem enviada com sucesso para ${res.data.name}!`, 'success');
-    } catch (e) {
-        showSnackbar(dispatch, 'Ocorreu um erro ao enviar sua notificação. Tente mais tarde!', 'error');
-        console.log('updateUserERROR: ' + e);
-    }
-};
-// END  FIELDS
-
-*/
-
 /* COMMENTS
 n1:   // Making the logout of the user firstly to make sure the system will not crash with a remaining activate token left by the deleted user
     // Warning: Do not delete users directly from database without logout

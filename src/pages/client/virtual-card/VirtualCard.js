@@ -4,15 +4,15 @@ import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCar
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useData from "../../../hooks/useData";
 import useAPI, { readTempScoreList } from "../../../hooks/api/useAPI";
-import getAPI, { readUser } from "../../../utils/promises/getAPI";
 import ReturnBtn from "../../../components/buttons/ReturnBtn";
-import { useClientAdmin, useClientUser } from "../../../hooks/useRoleData";
+import { useClientAdmin } from "../../../hooks/useRoleData";
 import useBackColor from "../../../hooks/useBackColor";
 import { setVar, store } from "../../../hooks/storage/useVar";
 import usePlayAudio, {
     prerenderAudio,
 } from "../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../utils/arrays/getRandomArray";
+// import getAPI, { readUser } from "../../../utils/promises/getAPI";
 
 import Img from "../../../components/Img";
 // import FlipCreditCard from "../../../components/cards/flip-credit-card/FlipCreditCard";
@@ -130,14 +130,6 @@ function VirtualCard({ history }) {
     const loadingAll = name === "..." || loading;
     const cond3dCard = !loadingAll && !error && !showNoCardMsg;
 
-    const triggerAccess = !loadingAll && !showNoCardMsg;
-    const { totalPurchasePrize } = useClientUser();
-    const { blockAccess, loadingAccess } = useAccessChecker(
-        userId,
-        totalPurchasePrize,
-        triggerAccess
-    );
-
     useEffect(() => {
         if (cardsData === false) {
             setData({
@@ -177,13 +169,8 @@ function VirtualCard({ history }) {
                 />
             </main>
             <div className="animated fadeIn delay-3s mt-5">
-                {blockAccess && !loadingAccess && (
-                    <p className="text-center text-normal mx-3 my-3">
-                        {name}, reinicie seu app para atualizar sua pontuação.
-                    </p>
-                )}
                 <ButtonFab
-                    disabled={blockAccess}
+                    disabled={false}
                     title="Aplicar pontos"
                     backgroundColor={`var(--themeSDark--${sColor})`}
                     onClick={handlePathAndData}
@@ -241,6 +228,22 @@ function VirtualCard({ history }) {
     );
 }
 
+/* ARCHIVES
+{blockAccess && !loadingAccess && (
+    <p className="text-center text-normal mx-3 my-3">
+        {name}, reinicie seu app para atualizar sua pontuação.
+    </p>
+)}
+
+
+const triggerAccess = !loadingAll && !showNoCardMsg;
+const { totalPurchasePrize } = useClientUser();
+const { blockAccess, loadingAccess } = useAccessChecker(
+    userId,
+    totalPurchasePrize,
+    triggerAccess
+);
+
 // if user does not have the same quantity of prize in the db and thus not updateed
 // then, block access to user's score panel to avoid registration of accumulative score from the last challenge.
 function useAccessChecker(userId, totalPrize, trigger) {
@@ -280,3 +283,5 @@ function useAccessChecker(userId, totalPrize, trigger) {
 
     return { blockAccess, loadingAccess };
 }
+
+*/

@@ -2,7 +2,6 @@ import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import { withRouter } from "react-router-dom";
 import { CLIENT_URL } from "../../../config/clientUrl";
 import handleChange from "../../../utils/form/use-state/handleChange";
@@ -10,7 +9,7 @@ import { handleNextField } from "../../../utils/form";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 import { setMultiVar, getVar, store } from "../../../hooks/storage/useVar";
 
@@ -79,8 +78,6 @@ function GoalForm({ history, bizCodeName, bizName }) {
         speed: "normal",
     });
 
-    const dispatch = useStoreDispatch();
-
     const classes = useStyles();
 
     const saveData = async () => {
@@ -89,19 +86,15 @@ function GoalForm({ history, bizCodeName, bizName }) {
 
         if (!score) {
             setError("rewardScore");
-            return showSnackbar(
-                dispatch,
-                "Você precisa inserir o ponto de prêmio",
-                "error"
-            );
+            return showToast("Você precisa inserir o ponto de prêmio", {
+                type: "error",
+            });
         }
         if (!prize) {
             setError("mainReward");
-            return showSnackbar(
-                dispatch,
-                "Você precisa inserir uma descrição do prêmio",
-                "error"
-            );
+            return showToast("Você precisa inserir uma descrição do prêmio", {
+                type: "error",
+            });
         }
 
         const priorData = await getVar("clientAdminData", store.pre_register);

@@ -7,8 +7,6 @@ import getId from "../../../utils/getId";
 import { useClientAdmin } from "../../../hooks/useRoleData";
 
 export { treatBoolStatus } from "../../../hooks/api/trigger";
-// import { useStoreDispatch } from 'easy-peasy';
-// import { showSnackbar } from '../../../redux/actions/snackbarActions';
 
 const getStyles = ({ pillStyle, pillBack }) => ({
     pill: pillStyle
@@ -69,13 +67,9 @@ export default function SwitchBtn({
             : undefined,
     });
 
-    // const dispatch = useStoreDispatch();
-
     const handleChange = (event) => {
         const status = event.target.checked;
         const statusId = getStatusWithId(status);
-
-        // if(loading) return // showSnackbar(dispatch, "Aguarde finalização do último");
 
         setChecked(status);
         if (typeof callback === "function")
@@ -83,14 +77,12 @@ export default function SwitchBtn({
     };
 
     const setTrue = () => {
-        // if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(true);
         if (typeof callback === "function")
             callback(getStatusWithId(true), switchData.current);
     };
 
     const setFalse = () => {
-        // if(loading) return //showSnackbar(dispatch, "Aguarde finalização do último");
         setChecked(false);
         if (typeof callback === "function")
             callback(getStatusWithId(false), switchData.current);

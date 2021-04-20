@@ -1,7 +1,6 @@
 import { useState, useEffect, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 import isThisApp from "../../utils/window/isThisApp";
@@ -11,7 +10,7 @@ import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import ProtectionMsg from "./ProtectionMsg";
 import useData from "../../hooks/useData";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../../components/toasts";
 import getAPI, {
     checkPassword,
     getDecryptedToken,
@@ -61,7 +60,6 @@ export default function AccessPassword({ history, isBizTeam = false }) {
     } = useClientAdmin();
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
 
     const needDark = selectTxtStyle(backColor, { needDarkBool: true });
     useBackColor(
@@ -142,12 +140,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         }).catch((error) => {
             const wrongPassMsgCond = error === false;
             if (wrongPassMsgCond) {
-                showSnackbar(
-                    dispatch,
-                    "Senha de acesso inválida.",
-                    "error",
-                    2000
-                );
+                showToast("Senha de acesso inválida.", { type: "error" });
                 setData((prev) => ({ ...prev, loading: false }));
                 setDisplay("");
                 return;
@@ -163,12 +156,9 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                     loading: false,
                 }));
             } else {
-                showSnackbar(
-                    dispatch,
-                    "Ocorreu um erro. Verifique sua conexão.",
-                    "error",
-                    4000
-                );
+                showToast("Ocorreu um erro. Verifique sua conexão.", {
+                    type: "error",
+                });
                 setData((prev) => ({ ...prev, loading: false }));
             }
             setDisplay("");

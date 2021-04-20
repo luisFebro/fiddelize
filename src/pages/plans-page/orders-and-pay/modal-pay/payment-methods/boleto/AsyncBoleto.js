@@ -1,11 +1,10 @@
 import { useState, useEffect, Fragment } from "react";
 import Card from "@material-ui/core/Card";
-import { useStoreDispatch } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import copyTextToClipboard from "../../../../../../utils/document/copyTextToClipboard";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../components/toasts";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import getSlashDayMonthYear from "../../../../../../utils/dates/getSlashDayMonthYear";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
@@ -66,7 +65,6 @@ export default function AsyncBoleto({ modalData = {} }) {
     } = modalData;
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         (async () => {
@@ -198,11 +196,9 @@ export default function AsyncBoleto({ modalData = {} }) {
 
     const handleCopy = () => {
         setCopy(true);
-        showSnackbar(
-            dispatch,
-            "Linha Copiada! Use no App do seu banco favorito.",
-            "success"
-        );
+        showToast("Linha Copiada! Use no App do seu banco favorito.", {
+            type: "success",
+        });
         setTimeout(
             () => copyTextToClipboard("#barcodeLineArea", () => null),
             3000

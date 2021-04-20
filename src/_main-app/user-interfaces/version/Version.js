@@ -3,11 +3,11 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.15.8"; // PRÓXIMO:
+const latestVersion = "4.15.8-20"; // PRÓXIMO:
 
-const updateDescription =
-    "implementação do novo sistema de adição de pontos - pt 2";
+const updateDescription = "implementação novos snackbars | cronjob new tests";
 /* HISTORY
+"implementação do novo sistema de adição de pontos - pt 2"
 "push notification implementation - pt14"
 "salarios pessoais Fiddelize - pt 2"
 ""cabine Fiddelize - análise e desempenho do negócio pt 7" - "4.8.0"

@@ -8,7 +8,6 @@ import Footer from "../../components/_layout/footer/Footer";
 // END LAYOUT
 
 // COMPONENTS
-import SnackbarRedux from "../../components/Snackbar";
 import LinearProgress from "../../components/loadingIndicators/LinearProgress";
 import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
@@ -225,7 +224,6 @@ function Website({ location, history }) {
                 />
                 <Route component={Default} />
             </Switch>
-            <SnackbarRedux />
             {dontNeedLayout && <Footer />}
         </Fragment>
     );

@@ -5,7 +5,6 @@ import { useAuthUser } from "../../../hooks/useAuthUser";
 import isThisApp from "../../../utils/window/isThisApp";
 import { useRunComp } from "../../../hooks/useRunComp";
 import { getMultiVar, store } from "../../../hooks/storage/useVar";
-// import { showSnackbar } from '../../redux/actions/snackbarActions';
 
 const isApp = isThisApp();
 
@@ -55,7 +54,7 @@ export default function PrivateRouteClientAdm({
 
     const whichPath = isApp ? "/mobile-app" : "/";
     const alertAndRedirect = (props) => (
-        // THIS SHOWS EVEN IF THE USER IS ADMIN > showSnackbar(dispatch, 'Oops! Você não tem acesso a essa sessão', 'error', 5000);
+        // THIS SHOWS EVEN IF THE USER IS ADMIN > showToast(dispatch, 'Oops! Você não tem acesso a essa sessão', 'error', 5000);
         <Redirect
             to={{
                 pathname: whichPath,

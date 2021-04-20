@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import ModalConfYesNo from "../../../../../../../../components/modals/ModalYesNo";
-import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../../components/toasts";
 import getAPI, {
     removeUser,
 } from "../../../../../../../../utils/promises/getAPI";
@@ -28,23 +28,8 @@ export default function RemoveMemberBtn({ modalData }) {
     };
 
     const handleRemoval = (itemData) => {
-        // if (itemData._id === "5e890d185162091014c53b56")
-        //     return showSnackbar(
-        //         dispatch,
-        //         "O membro de teste não pode ser excluido.",
-        //         "error"
-        //     );
-        showSnackbar(dispatch, "Processando...", "warning", 3000);
-        setTimeout(
-            () =>
-                showSnackbar(
-                    dispatch,
-                    `Excluindo membro ${name}...`,
-                    "warning",
-                    5000
-                ),
-            2900
-        );
+        showToast("Processando...");
+        setTimeout(() => showToast(`Excluindo membro ${name}...`), 2900);
         setTimeout(() => {
             getAPI({
                 method: "delete",
@@ -52,23 +37,19 @@ export default function RemoveMemberBtn({ modalData }) {
                 params: { userId: businessId, thisRole: "cliente-membro" },
             }).then((res) => {
                 if (res.status !== 200)
-                    return showSnackbar(
-                        dispatch,
-                        "Membro excluído com sucesso.",
-                        "error"
-                    );
+                    return showToast("Membro excluído com sucesso.", {
+                        type: "error",
+                    });
                 countField(businessId, {
                     field: "clientAdminData.totalClientUsers",
                     type: "dec",
                     thisRole: "cliente-admin",
                 }).then((res) => {
                     if (res.status !== 200)
-                        return showSnackbar(dispatch, res.data.msg, "error");
-                    showSnackbar(
-                        dispatch,
+                        return showToast(res.data.msg, { type: "error" });
+                    showToast(
                         `Cliente ${name} foi excluído dos seus registros!`,
-                        "success",
-                        6000
+                        { type: "success" }
                     );
                     setRun(dispatch, "teamMemberList");
                 });

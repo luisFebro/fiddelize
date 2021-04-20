@@ -6,7 +6,7 @@ import { handleEnterPress } from "../../../utils/event/isKeyPressed";
 import { checkVerificationPass } from "../../../redux/actions/adminActions";
 import useData from "../../../hooks/useData";
 import { useAppSystem, useClientAdmin } from "../../../hooks/useRoleData";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import getAPI, { getAuthTk } from "../../../utils/promises/getAPI";
 import authenticate from "../../../components/auth/helpers/authenticate";
 import useBackColor from "../../../hooks/useBackColor";
@@ -59,13 +59,11 @@ export default function TeamPassword({ history }) {
         const res = await checkVerificationPass(dispatch, bodyToSend);
 
         if (!res || res.status === 500)
-            return showSnackbar(
-                dispatch,
-                "Algo deu errado. Verifique sua conexão.",
-                "error"
-            );
+            return showToast("Algo deu errado. Verifique sua conexão.", {
+                type: "error",
+            });
         if (res.status === 401)
-            return showSnackbar(dispatch, res.data.msg, "error");
+            return showToast(res.data.msg, { type: "error" });
 
         if (res.data.msg) {
             // authorize user first
@@ -97,7 +95,7 @@ export default function TeamPassword({ history }) {
             }),
          */
         (async () => {
-            showSnackbar(dispatch, "Saindo da conta...", "warning");
+            showToast("Saindo da conta...");
             await Promise.all([
                 setVar({ disconnectCliMember: true }, store.user),
                 disconnect(),
@@ -150,7 +148,7 @@ export default function TeamPassword({ history }) {
 
 /* ARCHIVES
 if (role === "cliente-membro") {
-    showSnackbar(
+    showToast(
         dispatch,
         `Olá de volta, ${firstName}!`,
         "success"

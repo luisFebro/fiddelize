@@ -1,10 +1,9 @@
-import { useStoreDispatch } from "easy-peasy";
 import QrCode from "../../components/QrCode";
 import getQueryByName from "../../utils/string/getQueryByName";
 import copyText from "../../utils/document/copyText";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 import convertToReal from "../../utils/numbers/convertToReal";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../../components/toasts";
 import "./_Pix.scss";
 
 export default function Pix({ location }) {
@@ -15,7 +14,6 @@ export default function Pix({ location }) {
         moneySign: true,
         needFraction: true,
     });
-    const dispatch = useStoreDispatch();
 
     const handleCopy = ({
         value,
@@ -23,12 +21,10 @@ export default function Pix({ location }) {
         durationSuccessTxt = 2000,
     }) => {
         copyText(value, () =>
-            showSnackbar(
-                dispatch,
-                successCopyTxt,
-                "success",
-                durationSuccessTxt
-            )
+            showToast(successCopyTxt, {
+                type: "success",
+                dur: durationSuccessTxt,
+            })
         );
     };
 

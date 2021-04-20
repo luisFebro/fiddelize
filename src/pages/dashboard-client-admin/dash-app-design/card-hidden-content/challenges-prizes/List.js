@@ -6,7 +6,7 @@ import {
     readClientAdmin,
     updateUser,
 } from "../../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import ShowBizNotes from "./ShowBizNotes";
 
 export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
@@ -100,16 +100,13 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(
-                    dispatch,
-                    "Algo deu errado. Verifique sua conexão.",
-                    "error"
-                );
+                return showToast("Algo deu errado. Verifique sua conexão.", {
+                    type: "error",
+                });
             readClientAdmin(dispatch, businessId).then((res) => {
                 if (res.status !== 200)
-                    return showSnackbar(dispatch, res.data.msg, "error");
-                needMsg &&
-                    showSnackbar(dispatch, "Alterações salvas!", "success");
+                    return showToast(res.data.msg, { type: "error" });
+                needMsg && showToast("Alterações salvas!", { type: "success" });
             });
         });
     };
@@ -141,8 +138,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
                         currChallNumber={ind + 1}
                         challengesArray={challengesArray}
                         setChallengesArray={setChallengesArray}
-                        showSnackbar={showSnackbar}
-                        dispatch={dispatch}
+                        showToast={showToast}
                         id={chall.id}
                         icon={chall.icon}
                         rewardScore={chall.rewardScore}

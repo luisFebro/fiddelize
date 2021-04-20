@@ -1,6 +1,5 @@
 import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import { useStoreDispatch } from "easy-peasy";
 import createInstantApp from "./helpers/createInstantApp";
 import getFilterDate from "../../../utils/dates/getFilterDate";
 import {
@@ -12,7 +11,7 @@ import {
 } from "../../../hooks/storage/useVar";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 
 const getStyles = () => ({
@@ -83,9 +82,8 @@ export default function InstantAccount({
         linkCode: "", // e.g alan_yvs493z0 or pedro_nucleo:fiddelize, etc // this is fetched from url param to check if it is authorized.
     };
 
-    const dispatch = useStoreDispatch();
     const handleInstantAccount = () => {
-        showSnackbar(dispatch, "Criando app instantâneo. Um momento...");
+        showToast("Criando app instantâneo. Um momento...");
         (async () => {
             if (isCliUser) {
                 const thisLinkCode = await getVar("linkCode", store.user);
@@ -106,7 +104,7 @@ export default function InstantAccount({
             }));
 
             const succ = await createInstantApp({ body }).catch((e) => {
-                showSnackbar(dispatch, e.error, "error");
+                showToast(e.error, { type: "error" });
                 setData((prev) => ({ ...prev, errorOnce: true }));
             });
 

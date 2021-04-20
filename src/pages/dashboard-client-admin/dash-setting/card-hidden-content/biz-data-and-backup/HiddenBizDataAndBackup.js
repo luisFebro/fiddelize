@@ -12,7 +12,7 @@ import {
     updateUser,
     readClientAdmin,
 } from "../../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import BackUpToExcel from "./BackUpToExcel";
 import autoPhoneMask from "../../../../../utils/validation/masks/autoPhoneMask";
 import isKeyPressed from "../../../../../utils/event/isKeyPressed";
@@ -39,7 +39,7 @@ export default function HiddenBizDataAndBackup({ userData }) {
     useEffect(() => {
         readClientAdmin(dispatch, userData._id).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
+                return showToast(res.data.msg, { type: "error" });
             setData({
                 bizName: res.data.bizName,
                 bizWhatsapp: res.data.bizWhatsapp,
@@ -72,14 +72,10 @@ export default function HiddenBizDataAndBackup({ userData }) {
     };
 
     const sendDataBackend = () => {
-        if (!validatePhone(bizWhatsapp))
-            return showSnackbar(
-                dispatch,
-                "Formato telefone inválido. Digita o número com DDD ex: (95) 97777-9999",
-                "error",
-                4000,
-                setError("phone")
-            );
+        if (!validatePhone(bizWhatsapp)) {
+            showToast("Formato telefone inválido.", { type: "error" });
+            return setError("phone");
+        }
 
         const dataToSend = {
             "clientAdminData.bizName": bizName,
@@ -91,8 +87,8 @@ export default function HiddenBizDataAndBackup({ userData }) {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
-            showSnackbar(dispatch, "Dados comerciais atualizados!", "success");
+                return showToast(res.data.msg, { type: "error" });
+            showToast("Dados comerciais atualizados!", { type: "success" });
         });
     };
 

@@ -1,11 +1,10 @@
 import { useState, Fragment, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import AutoCompleteSearch from "../../../../../../../components/search/AutoCompleteSearch";
 import ShowSelectionArea from "./comps/ShowSelectionArea";
 import { useRunComp } from "../../../../../../../hooks/useRunComp";
 import { API } from "../../../../../../../config/api";
 import SelectField from "../../../../../../../components/fields/SelectField";
-import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../components/toasts";
 import useAPI, { readUserSubIds } from "../../../../../../../hooks/api/useAPI";
 
 const defaultSelected = "selecione tipo app:";
@@ -32,8 +31,6 @@ export default function SelectedUsers({
         // eslint-disable-next-line
     }, [selectedApp, showSearchField]);
 
-    const dispatch = useStoreDispatch();
-
     const params = {
         role: selectedApp,
         userName: selectedValue,
@@ -52,7 +49,7 @@ export default function SelectedUsers({
                 userData.name.toLowerCase()
             );
             if (namesAddedList.indexOf(name.toLowerCase()) !== -1) {
-                showSnackbar(dispatch, "Nome já foi adicionado!", "error");
+                showToast("Nome já foi adicionado!", { type: "error" });
                 return [...data];
             }
             data.unshift({ name, userId });

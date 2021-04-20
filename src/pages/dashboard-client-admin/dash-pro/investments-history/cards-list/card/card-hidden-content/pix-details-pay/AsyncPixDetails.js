@@ -1,10 +1,9 @@
 import { Fragment } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import "./_Pix.scss";
 import QrCode from "../../../../../../../../components/QrCode";
 import copyText from "../../../../../../../../utils/document/copyText";
 import RadiusBtn from "../../../../../../../../components/buttons/RadiusBtn";
-import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../../components/toasts";
 import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
 
 export default function AsyncPixDetails({ itemAmount }) {
@@ -13,7 +12,6 @@ export default function AsyncPixDetails({ itemAmount }) {
         moneySign: true,
         needFraction: true,
     });
-    const dispatch = useStoreDispatch();
 
     const handleCopy = ({
         value,
@@ -21,12 +19,10 @@ export default function AsyncPixDetails({ itemAmount }) {
         durationSuccessTxt = 2000,
     }) => {
         copyText(value, () =>
-            showSnackbar(
-                dispatch,
-                successCopyTxt,
-                "success",
-                durationSuccessTxt
-            )
+            showToast(successCopyTxt, {
+                type: "success",
+                dur: durationSuccessTxt,
+            })
         );
     };
 

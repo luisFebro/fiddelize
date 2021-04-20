@@ -1,13 +1,13 @@
 import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { useStoreState, useStoreDispatch } from "easy-peasy";
+import { useStoreState } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
 import { withRouter } from "react-router-dom";
 import ButtonFab from "../../../../../../../components/buttons/material-ui/ButtonFab";
 import { Load } from "../../../../../../../components/code-splitting/LoadableComp";
 import copyTextToClipboard from "../../../../../../../utils/document/copyTextToClipboard";
 
-import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../components/toasts";
 import { setVar } from "../../../../../../../hooks/storage/useVar";
 import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
@@ -58,8 +58,6 @@ function PanelHiddenContent({ history, data }) {
 
     const styles = getStyles();
 
-    const dispatch = useStoreDispatch();
-
     const displayCopyBtn = () => (
         <section className="d-flex justify-content-end my-3">
             <ButtonFab
@@ -74,11 +72,9 @@ function PanelHiddenContent({ history, data }) {
 
     const handleCopy = () => {
         setCopy(true);
-        showSnackbar(
-            dispatch,
-            "Linha Copiada! Use no App do seu banco favorito.",
-            "success"
-        );
+        showToast("Linha Copiada! Use no App do seu banco favorito.", {
+            type: "success",
+        });
         setTimeout(
             () => copyTextToClipboard("#barcodeLineArea", () => null),
             3000

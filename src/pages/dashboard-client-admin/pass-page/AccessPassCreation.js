@@ -1,19 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import PasswordCircleFields from "../../../components/fields/PasswordCircleFields.js";
 import NumericKeyboard from "../../../components/keyboards/NumericKeyboard";
 import getAPI, { createPassword } from "../../../utils/promises/getAPI";
 import getFirstName from "../../../utils/string/getFirstName";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import { setVar } from "../../../hooks/storage/useVar";
 
 export default withRouter(AccessPassCreation);
 
 function AccessPassCreation({ isBizTeam, userName, userId, history }) {
     const [display, setDisplay] = useState("");
-
-    const dispatch = useStoreDispatch();
 
     const [data, setData] = useState({
         newPswd: null,
@@ -77,8 +74,7 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                     role: isBizTeam ? "nucleo-equipe" : "cliente-admin",
                 };
 
-                newPswdCond &&
-                    showSnackbar(dispatch, "Criando...", "warning", 2000);
+                newPswdCond && showToast("Criando...");
                 // LESSON: do not destruct await with catch. otherwise when catch returns will throw an error of data's undefined.
                 const finalRes = await getAPI({
                     method: "post",
@@ -87,10 +83,9 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                     needAuth: false,
                 }).catch(({ error }) => {
                     restartFields(true);
-                    showSnackbar(
-                        dispatch,
+                    showToast(
                         error || "Um problema aconteceu. Tente novamente",
-                        "error"
+                        { type: "error" }
                     );
                 });
 
@@ -102,12 +97,7 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
 
                     const { msg } = finalRes.data;
                     if (msg === "pass created") {
-                        showSnackbar(
-                            dispatch,
-                            "Senha criada!",
-                            "success",
-                            3000
-                        );
+                        showToast("Senha criada!", { type: "success" });
                         setTimeout(() => {
                             if (isBizTeam) {
                                 (async () => {
@@ -117,12 +107,7 @@ function AccessPassCreation({ isBizTeam, userName, userId, history }) {
                                     );
                                 })();
                             } else {
-                                showSnackbar(
-                                    dispatch,
-                                    "Tudo pronto!",
-                                    "warning",
-                                    3000
-                                );
+                                showToast("Tudo pronto!", { dur: 4000 });
                                 history.push("/mobile-app");
                             }
                         }, 2900);

@@ -6,7 +6,7 @@ import useDelay from "../../../../../../../hooks/useDelay";
 import scrollIntoView from "../../../../../../../utils/document/scrollIntoView";
 import click from "../../../../../../../utils/event/click";
 import { setRun, useRunComp } from "../../../../../../../hooks/useRunComp";
-import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../components/toasts";
 import { useAppSystem } from "../../../../../../../hooks/useRoleData";
 import useAPI, {
     readSMSHistoryStatement,
@@ -62,7 +62,7 @@ export default function AsyncExtract({ extractId }) {
                 delete data.status;
             });
             setRun(dispatch, "asyncExtractList", { array: list });
-            showSnackbar(dispatch, "Pronto!", "success");
+            showToast("Pronto!", { type: "success" });
         };
 
         const postFunction = () => {
@@ -75,12 +75,7 @@ export default function AsyncExtract({ extractId }) {
             duration: 3000,
             onDone: () => postFunction(),
         };
-        showSnackbar(
-            dispatch,
-            "Adicionando contatos... Um momento!",
-            "warning",
-            7000
-        );
+        showToast("Adicionando contatos... Um momento!");
         scrollIntoView("#recipientOptions", config);
     };
 

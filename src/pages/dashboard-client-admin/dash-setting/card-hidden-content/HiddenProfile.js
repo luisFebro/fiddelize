@@ -10,7 +10,7 @@ import handleChange from "../../../../utils/form/use-state/handleChange";
 // import DateWithIcon from '../../../../components/date-time/DateWithIcon';
 import CreatedAtBr from "../../CreatedAtBr";
 import { updateUser, readUser } from "../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../../components/toasts";
 import isValidName from "../../../../utils/validation/isValidName";
 import autoPhoneMask from "../../../../utils/validation/masks/autoPhoneMask";
 import isKeyPressed from "../../../../utils/event/isKeyPressed";
@@ -79,29 +79,20 @@ export default function HiddenProfile({ userData }) {
     };
 
     const sendDataBackend = () => {
-        if (!isValidName(name))
-            return showSnackbar(
-                dispatch,
-                "O nome deve conter um sobrenome",
-                "error",
-                4000,
-                setError("name")
-            );
+        if (!isValidName(name)) {
+            showToast("O nome deve conter um sobrenome", { type: "error" });
+            return setError("name");
+        }
+
         if (!validatePhone(phone))
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Formato telefone inválido. Digita o número com DDD ex: (95) 97777-9999",
-                "error",
-                4000,
-                setError("phone")
+                { type: "error", callback: () => setError("phone") }
             );
         if (!validateEmail(email))
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Email inválido. Verifique caracteres e tente novamente",
-                "error",
-                4000,
-                setError("email")
+                { type: "error", callback: () => setError("email") }
             );
 
         const dataToSend = { ...data };
@@ -109,8 +100,8 @@ export default function HiddenProfile({ userData }) {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
-            showSnackbar(dispatch, "Seu perfil foi atualizado!", "success");
+                return showToast(res.data.msg, { type: "error" });
+            showToast("Seu perfil foi atualizado!", { type: "success" });
         });
     };
 

@@ -7,7 +7,6 @@ import didRunOnce from "../../utils/storage/didRunOnce";
 import getFilterDate from "../../utils/dates/getFilterDate";
 
 const filter = getFilterDate();
-// import { showSnackbar } from '../../redux/actions/snackbarActions';
 
 export default function sendSMS({
     userId,

@@ -6,7 +6,6 @@ import { loadUser } from "../../redux/actions/authActions";
 import Navbar from "../../components/_layout/navbar";
 
 // COMPONENTS
-import SnackbarRedux from "../../components/Snackbar";
 import LinearProgress from "../../components/loadingIndicators/LinearProgress";
 import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
 
@@ -202,7 +201,6 @@ function Mobile({ location, history }) {
                 />
                 <Route component={Default} />
             </Switch>
-            <SnackbarRedux />
         </Fragment>
     );
 }

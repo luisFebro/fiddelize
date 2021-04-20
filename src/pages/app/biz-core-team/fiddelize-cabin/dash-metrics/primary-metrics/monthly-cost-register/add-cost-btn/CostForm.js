@@ -4,8 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../../components/toasts";
 import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, {
@@ -49,26 +48,21 @@ export default function CostForm({
     });
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
     const [firstName] = useData(["firstName"]);
 
     const formattedValue = moneyMaskBr(value);
 
     const handleNewCost = () => {
         if (!desc) {
-            return showSnackbar(dispatch, "Faltando descrição!", "error");
+            return showToast("Faltando descrição!", { type: "error" });
         }
 
         if (!value) {
-            return showSnackbar(dispatch, "Faltando valor!", "error");
+            return showToast("Faltando valor!", { type: "error" });
         }
 
         (async () => {
-            showSnackbar(
-                dispatch,
-                `Registrando agora!<br />Um momento...`,
-                "warning"
-            );
+            showToast(`Registrando agora! Um momento...`);
 
             const newCostCard = {
                 desc,
@@ -86,11 +80,9 @@ export default function CostForm({
             // close panel
             await switchCostPanel(false);
 
-            showSnackbar(
-                dispatch,
-                `Novo Custo registrado, ${firstName}!`,
-                "success"
-            );
+            showToast(`Novo Custo registrado, ${firstName}!`, {
+                type: "success",
+            });
         })();
     };
 
@@ -110,11 +102,7 @@ export default function CostForm({
     );
 
     const handleSalaryWithdrawal = async () => {
-        showSnackbar(
-            dispatch,
-            `Retirando e registrando salário!<br />Um momento...`,
-            "warning"
-        );
+        showToast(`Retirando e registrando salário! Um momento...`);
 
         const newCostCard = {
             desc: "salário",
@@ -134,7 +122,7 @@ export default function CostForm({
         }));
         await handleNewCostCard(newCostCard);
 
-        showSnackbar(dispatch, `Salário Retirado, ${firstName}!`, "success");
+        showToast(`Salário Retirado, ${firstName}!`, { type: "success" });
     };
 
     const showSalaryArea = () => {

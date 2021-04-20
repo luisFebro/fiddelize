@@ -7,7 +7,6 @@ import useAPI, {
     treatBoolStatus,
 } from "../../../../../hooks/api/useAPI";
 import ActionBtn from "./ActionBtn";
-import { useProfile } from "../../../../../hooks/useRoleData";
 import extractStrData from "../../../../../utils/string/extractStrData";
 import useDatesCountdown from "../../../../../hooks/dates/useDatesCountdown";
 import useData from "../../../../../hooks/useData";
@@ -52,11 +51,10 @@ function TaskCard(props, ref) {
         prizeId,
     } = extractStrData(content);
 
-    const { _id: userId } = useProfile();
-    const [adminName] = useData(["name"]);
+    const [adminId, adminName] = useData(["userId", "name"]);
 
     const taskBody = {
-        userId,
+        userId: adminId,
         taskId,
         doneStatus: treatBoolStatus(toggleDone),
         deliveredBy: adminName,
@@ -64,10 +62,11 @@ function TaskCard(props, ref) {
     const snackbar = {
         timeSuccess: 8000,
         txtSuccess: treatBoolStatus(toggleDone)
-            ? "✔ Entrega marcada como FEITA!<br />✔ Novo status RECEBIDO marcado no histórico do cliente<br />✔ Movendo para HISTÓRICO PREMIAÇÕES..."
-            : "✔ Entrega DESFEITA<br /> ✔ Removido status RECEBIDO do seu cliente!",
+            ? "✔ Entrega marcada como FEITA! | ✔ Novo status RECEBIDO marcado no histórico do cliente | ✔ Movendo para HISTÓRICO PREMIAÇÕES..."
+            : "✔ Entrega DESFEITA | ✔ Removido status RECEBIDO do seu cliente!",
     };
-    const trigger = toggleDone === undefined ? false : toggleDone;
+    const trigger =
+        toggleDone === undefined ? false : toggleDone && adminId !== "...";
     const prizeParams = { newValue: treatBoolStatus(toggleDone), prizeId };
 
     useAPI({
@@ -99,12 +98,12 @@ function TaskCard(props, ref) {
 
     const dataExpired = React.useMemo(
         () => ({
-            adminId: userId,
+            adminId,
             taskId,
             cliUserId,
             prizeId,
         }),
-        [userId, taskId, cliUserId, prizeId]
+        [adminId, taskId, cliUserId, prizeId]
     );
 
     const styles = {

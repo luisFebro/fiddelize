@@ -247,7 +247,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
             </div>
             <p className="text-normal text-center text-purple font-weight-bold mx-3">
                 Pontos do cliente já foram descontados
-                {role === "cliente-admin" ? (
+                {updatedBy.role === "cliente-admin" ? (
                     <span>
                         {" "}
                         por <span className="text-pill">você</span>

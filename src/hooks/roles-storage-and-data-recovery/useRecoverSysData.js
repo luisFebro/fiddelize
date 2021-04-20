@@ -47,13 +47,3 @@ export const readCliAdmin = (dispatch, role, opts = {}) => {
         readClientAdmin(dispatch, bizId); //  if clientAdmin, userId === bizId.
     }
 };
-// DEPRACATED
-// This data is now inserted in the register form directly.
-// export const setBizIdInDb = userId => {
-//     const objToSend = { "clientUserData.bizId": bizSysId }
-//     updateUser(useDispatch, objToSend, userId)
-//     .then(res => {
-//         if(res.status !== 200) return showSnackbar(useDispatch, res.data.msg, 'error')
-//         console.log("User was updated with bizId in her/his record in db")
-//     })
-// }

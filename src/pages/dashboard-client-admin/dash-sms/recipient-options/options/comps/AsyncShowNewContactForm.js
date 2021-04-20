@@ -7,8 +7,7 @@ import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import EmailIcon from "@material-ui/icons/Email";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../components/toasts";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import handleChange from "../../../../../../utils/form/use-state/handleChange";
 import { default as clearThisForm } from "../../../../../../utils/form/use-state/clearForm";
@@ -173,29 +172,26 @@ export default function AsyncShowNewContactForm({
         }
     }, [isQuickRegister, readyMean, selectedMean, email, phone, name, job]);
 
-    const dispatch = useStoreDispatch();
-
     const styles = getStyles();
 
     const handleCTA = () => {
         if (!name) {
-            showSnackbar(dispatch, "Insira o nome do destinatário", "error");
-            setError("name");
-            return;
+            return showToast("Insira o nome do destinatário", {
+                type: "error",
+                callback: () => setError("name"),
+            });
         }
         if (!phone) {
-            showSnackbar(dispatch, "Insira um telefone", "error");
-            setError("phone");
-            return;
+            return showToast("Insira um telefone", {
+                type: "error",
+                callback: () => setError("phone"),
+            });
         }
         if (!validatePhone(phone)) {
-            showSnackbar(
-                dispatch,
-                "Formato telefone inválido. exemplo:<br />95 9 9999 8888",
-                "error"
-            );
-            setError("phone");
-            return;
+            return showToast("Formato telefone inválido.", {
+                type: "error",
+                callback: () => setError("phone"),
+            });
         }
         clearThisForm(setData);
         handleAddContact({ name, phone });

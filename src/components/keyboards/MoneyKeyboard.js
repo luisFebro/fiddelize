@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
 import moneyMaskBr from "../../utils/validation/masks/moneyMaskBr";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../toasts";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -33,8 +32,6 @@ export default function MoneyKeyboard({
     colorP,
 }) {
     usePlayAudio("/sounds/confirmation-keypad.wav", ".keypadBeepConfirm");
-
-    const dispatch = useStoreDispatch();
 
     const getValue = (value) => {
         if (display.length >= 10) return setDisplay(display);
@@ -173,21 +170,16 @@ export default function MoneyKeyboard({
                     <div
                         onClick={() => {
                             if (!display)
-                                return showSnackbar(
-                                    dispatch,
+                                return showToast(
                                     "Insira o valor gasto pelo cliente em R$",
-                                    "error",
-                                    3000
+                                    { type: "error" }
                                 );
 
                             const errorInvalidMsg = isInvalidValue(display);
                             if (errorInvalidMsg)
-                                return showSnackbar(
-                                    dispatch,
-                                    errorInvalidMsg,
-                                    "error",
-                                    3000
-                                );
+                                return showToast(errorInvalidMsg, {
+                                    type: "error",
+                                });
 
                             handleConfirm();
                         }}

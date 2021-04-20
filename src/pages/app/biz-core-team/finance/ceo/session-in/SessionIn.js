@@ -17,7 +17,7 @@ export default function SessionIn({ handleBalance }) {
     };
 
     return (
-        <section className="text-purple">
+        <section className="animated fadeIn text-purple">
             <h2 className="text-subtitle font-weight-bold text-center">
                 Histórico Ganhos
             </h2>

@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { useStoreDispatch } from "easy-peasy";
 import SwitchBtn from "../../../../../../../../components/buttons/material-ui/SwitchBtn";
 import convertToReal from "../../../../../../../../utils/numbers/convertToReal";
 import handleChange from "../../../../../../../../utils/form/use-state/handleChange";
 import { treatBoolStatus } from "../../../../../../../../hooks/api/trigger";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import createCardToken, { getValidationData } from "../helpers/createCardToken";
-import { showSnackbar } from "../../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../../components/toasts";
 import getSenderHash from "../../../../../helpers/pagseguro/getSenderHash";
 import { encryptCreditCard } from "../../../../../../../../utils/security/creditCard";
 import goFinishCheckout from "../../../../../helpers/pagseguro/goFinishCheckout";
@@ -36,65 +35,55 @@ const getEncryptedCC = async (mainData) => {
     });
 };
 
-const getFinalTokens = async ({ cardData, dispatch }) =>
+const getFinalTokens = async ({ cardData }) =>
     await Promise.all([
         getSenderHash().catch((e) => {
-            showSnackbar(
-                dispatch,
-                "Erro ao processar transação. Tente reiniciar.",
-                "error"
-            );
+            showToast("Erro ao processar transação. Tente reiniciar.", {
+                type: "error",
+            });
         }),
         createCardToken({ cardData }).catch((e) => {
             if (e.errors["10000"]) {
-                return showSnackbar(
-                    dispatch,
-                    "Marca do cartão Inválido. Edite seu cartão",
-                    "error"
-                );
+                return showToast("Marca do cartão Inválido. Edite seu cartão", {
+                    type: "error",
+                });
             }
             if (e.errors["10001"]) {
-                return showSnackbar(
-                    dispatch,
+                return showToast(
                     "Número do cartão de crédito ou comprimento inválido. Edite seu cartão",
-                    "error"
+                    { type: "error" }
                 );
             }
             if (e.errors["10002"]) {
-                return showSnackbar(
-                    dispatch,
+                return showToast(
                     "Formato da data de expiração do cartão é inválido. Edite seu cartão.",
-                    "error"
+                    { type: "error" }
                 );
             }
             if (e.errors["10003"]) {
                 // invalid security field.
-                return showSnackbar(
-                    dispatch,
+                return showToast(
                     "Código de segurança é inválido. Edite seu cartão.",
-                    "error"
+                    { type: "error" }
                 );
             }
             if (e.errors["10004"]) {
                 // invalid security field.
-                return showSnackbar(
-                    dispatch,
+                return showToast(
                     "Código CVV/CVC é obrigatório. Edite seu cartão.",
-                    "error"
+                    { type: "error" }
                 );
             }
             if (e.errors["10006"]) {
-                return showSnackbar(
-                    dispatch,
+                return showToast(
                     "Campo de segurança com largura inválida. Edite seu cartão.",
-                    "error"
+                    { type: "error" }
                 );
             }
 
-            showSnackbar(
-                dispatch,
+            showToast(
                 "Dados inválidos. Edite o cartão, revise e corrija erros encontrados.",
-                "error"
+                { type: "error" }
             );
             console.log(e);
         }),
@@ -119,8 +108,6 @@ export default function BriefAndValue({
         errorInvest: false,
     });
     const { installmentOpts, selectedInsta, loadingInvest, errorInvest } = data;
-
-    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         if (selectedInsta !== "selecione parcela:") {
@@ -280,7 +267,7 @@ export default function BriefAndValue({
                 cardCvv: "",
             }));
             setCurrComp("cardNumber");
-            showSnackbar(dispatch, "Cartão removido com sucesso.", "success");
+            showToast("Cartão removido com sucesso.", { type: "success" });
         })();
     };
     const showDeleteCardBtn = () => (
@@ -301,7 +288,6 @@ export default function BriefAndValue({
         setData({ ...data, loadingInvest: true, errorInvest: false });
         const [senderHash, cardToken] = await getFinalTokens({
             cardData: mainData,
-            dispatch,
         });
         if (!senderHash || !cardToken) return;
 

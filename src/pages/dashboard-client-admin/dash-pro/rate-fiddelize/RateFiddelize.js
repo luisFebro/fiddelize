@@ -1,8 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../../components/toasts";
 import Title from "../../../../components/Title";
 import handleChange from "../../../../utils/form/use-state/handleChange";
 import FacesPromotersScore, {
@@ -25,7 +24,6 @@ export default function RateFiddelize() {
     });
     const { nps, xpReport } = dataDB;
 
-    const dispatch = useStoreDispatch();
     const [userId, customerName] = useData(["userId", "name"]);
     const loadingData = userId === "...";
 
@@ -62,15 +60,9 @@ export default function RateFiddelize() {
                 margin="mt-5"
                 padding=" "
             />
-            <ShowNPS
-                dbNps={nps}
-                dispatch={dispatch}
-                userId={userId}
-                loadingData={loadingData}
-            />
+            <ShowNPS dbNps={nps} userId={userId} loadingData={loadingData} />
             <ShowXpReportField
                 dbXpReport={xpReport}
-                dispatch={dispatch}
                 userId={userId}
                 loadingData={loadingData}
                 customerName={customerName}
@@ -104,7 +96,7 @@ const getSmiley = (g) => {
     if (g === 9 || g === 10) return { icon: "grin-alt" };
 };
 
-function ShowNPS({ dbNps, dispatch, userId, loadingData }) {
+function ShowNPS({ dbNps, userId, loadingData }) {
     const [scale, setScale] = useState(null);
     const [edit, setEdit] = useState(false);
 
@@ -201,8 +193,7 @@ function ShowNPS({ dbNps, dispatch, userId, loadingData }) {
                     scale={scale}
                     setScale={setScale}
                     userId={userId}
-                    dispatch={dispatch}
-                    showSnackbar={showSnackbar}
+                    showToast={showToast}
                 />
             )}
         </Fragment>
@@ -218,7 +209,6 @@ function ShowNPS({ dbNps, dispatch, userId, loadingData }) {
 
 function ShowXpReportField({
     dbXpReport,
-    dispatch,
     userId,
     role = "cliente-admin",
     loadingData,
@@ -236,7 +226,7 @@ function ShowXpReportField({
 
     const handleReportEditDone = async () => {
         if (loadingData) return;
-        showSnackbar(dispatch, "Atualizando...", "warning", 6000);
+        showToast("Atualizando...");
         await getAPI({
             method: "put",
             url: updateUser(userId, role),
@@ -250,11 +240,9 @@ function ShowXpReportField({
         }).catch((err) => {
             console.log(`ERROR: ${err}`);
         });
-        showSnackbar(
-            dispatch,
-            "Relato Enviado.<br />Obrigada por compartilhar!",
-            "success"
-        );
+        showToast("Relato Enviado. Obrigada por compartilhar!", {
+            type: "success",
+        });
         setEdit(false);
     };
 

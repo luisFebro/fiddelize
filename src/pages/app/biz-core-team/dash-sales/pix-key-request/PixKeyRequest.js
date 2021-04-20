@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import EditButton from "../../../../../components/buttons/EditButton";
@@ -37,7 +36,6 @@ export default function PixKeyRequest() {
         alreadyHasPix: false,
     });
     const { pix, alreadyHasPix } = data;
-    const dispatch = useStoreDispatch();
 
     const [userId] = useData(["userId"]);
 
@@ -76,7 +74,7 @@ export default function PixKeyRequest() {
                 body,
             });
 
-            showSnackbar(dispatch, "Pix registrado!", "success");
+            showToast("Pix registrado!", { type: "success" });
         })();
     };
 

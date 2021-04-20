@@ -1,4 +1,4 @@
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../toasts";
 import subscribeUser from "./subscription";
 
 /*
@@ -59,14 +59,8 @@ export function showPermissionBanner() {
 run a check to see whether the promise-based version of Notification.requestPermission() is supported. If it is, we run the promise-based version (supported everywhere except Safari), and if not, we run the older callback-based version (which is supported in Safari).
 https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
  */
-export default async function requestPermission({
-    dispatch,
-    setBackDrop,
-    userId,
-    role,
-}) {
+export default async function requestPermission({ setBackDrop, userId, role }) {
     const defaultData = {
-        dispatch,
         userId,
         role,
     };
@@ -91,32 +85,29 @@ export default async function requestPermission({
 }
 
 // HELPERS
-async function handlePermission({ permission, dispatch, userId, role }) {
+async function handlePermission({ permission, userId, role }) {
     const isGranted = permission === "granted";
     const isDenied = permission === "denied";
 
     if (isDenied) {
-        showSnackbar(
-            dispatch,
-            "Se precisar ativar depois, vá em ajustes > notificações",
-            "warning",
-            6000
-        );
+        showToast("Se precisar ativar depois, vá em ajustes > notificações", {
+            dur: 10000,
+        });
     }
 
     if (!isGranted) return;
 
-    showSnackbar(dispatch, "Registrando...", "warning");
+    showToast("Registrando...");
 
     const data = await subscribeUser({
         userId,
         role,
     }).catch((err) => {
-        showSnackbar(dispatch, `${err}`, "error");
+        showToast(`${err}`, { type: "error" });
     });
     if (!data) return;
 
-    showSnackbar(dispatch, "Notificações ativadas!", "success");
+    showToast("Notificações ativadas!", { type: "success" });
 }
 
 function checkNotificationPromise() {

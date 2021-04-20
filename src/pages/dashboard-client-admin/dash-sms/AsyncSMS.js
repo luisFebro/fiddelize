@@ -4,7 +4,7 @@ import DashSectionTitle from "../../DashSectionTitle";
 import "./_AsyncSMS.scss";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import scrollIntoView from "../../../utils/document/scrollIntoView";
 import { handleFocus } from "../../../utils/form/handleFocus";
 import InstructionBtn from "../../../components/buttons/InstructionBtn";
@@ -45,7 +45,7 @@ export default function AsyncSMS() {
     } = data;
 
     const handleUpdateSession = () => {
-        showSnackbar(dispatch, "Atualizando Histórico...");
+        showToast("Atualizando Histórico...");
         const uniqueId = getUniqueId();
         const runName = `UpdateSMSAll ${uniqueId}`;
         setRun(dispatch, runName);
@@ -67,11 +67,9 @@ export default function AsyncSMS() {
     const handleShowMessage = (close) => {
         if (!contactList.length) {
             if (close !== false) {
-                showSnackbar(
-                    dispatch,
-                    "Selecione, pelo menos, um contato",
-                    "error"
-                );
+                showToast("Selecione, pelo menos, um contato", {
+                    type: "error",
+                });
                 return;
             }
         }

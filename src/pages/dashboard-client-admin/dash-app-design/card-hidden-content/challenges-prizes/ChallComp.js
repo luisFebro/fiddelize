@@ -31,8 +31,7 @@ export default function ChallComp({
     setNeedUpdateData,
     challengesArray,
     setChallengesArray,
-    showSnackbar,
-    dispatch,
+    showToast,
     currChallNumber,
     milestoneIcon,
     updateThisUser,
@@ -87,7 +86,7 @@ export default function ChallComp({
     };
 
     const handleDataChange = () => {
-        showSnackbar(dispatch, "Fazendo alterações...");
+        showToast("Fazendo alterações...");
         const updatedArray = [
             {
                 id: data.id,
@@ -229,16 +228,14 @@ export default function ChallComp({
                                 !isFirst &&
                                 data.rewardScore < lastButOneRewardScore
                             )
-                                return showSnackbar(
-                                    dispatch,
+                                return showToast(
                                     "O ponto-prêmio do desafio atual deve ser maior que o anterior",
-                                    "error"
+                                    { type: "error" }
                                 );
                             if (!Number(data.rewardScore)) {
-                                showSnackbar(
-                                    dispatch,
+                                showToast(
                                     "Em ponto-prêmio, insira apenas números.",
-                                    "error"
+                                    { type: "error" }
                                 );
                             } else {
                                 handleDataChange();

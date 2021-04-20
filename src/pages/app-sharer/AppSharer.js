@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
-import { useStoreDispatch } from "easy-peasy";
 import getQueryByName from "../../utils/string/getQueryByName";
 import ButtonMulti, {
     faStyle,
@@ -19,7 +18,7 @@ import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaBu
 import { handleFocus } from "../../utils/form/handleFocus";
 import copyText from "../../utils/document/copyText";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../../components/toasts";
 import {
     useClientAdmin,
     useAppSystem,
@@ -90,7 +89,6 @@ export default function AppSharer({ location, match }) {
     });
     const { clientName, openSharingAreaTo, generatedLink } = data;
 
-    const dispatch = useStoreDispatch();
     const styles = getStyles();
     const {
         bizCodeName: thisBizCode,
@@ -326,11 +324,7 @@ export default function AppSharer({ location, match }) {
                         size="small"
                         onClick={() =>
                             copyText(generatedLink, () =>
-                                showSnackbar(
-                                    dispatch,
-                                    "Link copiado!",
-                                    "success"
-                                )
+                                showToast("Link copiado!", { type: "success" })
                             )
                         }
                     />

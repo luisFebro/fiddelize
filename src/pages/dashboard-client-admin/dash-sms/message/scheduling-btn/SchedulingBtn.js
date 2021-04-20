@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 
 // change webpackMode: "eager" to "lazy" to production. This is because it is delaying to load wiin lazy mode.
 const Async = Load({
@@ -16,11 +15,9 @@ const Async = Load({
 export default function SchedulingBtn({ modal }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const dispatch = useStoreDispatch();
-
     const handleFullOpen = () => {
         if (!modal.message)
-            return showSnackbar(dispatch, "Insira alguma mensagem", "error");
+            return showToast("Insira alguma mensagem", { type: "error" });
         setFullOpen(true);
     };
 

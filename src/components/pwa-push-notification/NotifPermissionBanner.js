@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import parse from "html-react-parser";
 import "./_NotifPermissionBanner.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,8 +15,6 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
     const [backDrop, setBackDrop] = useState(false);
     const [shouldRender, setShouldRender] = useState(permissionStatus);
 
-    const dispatch = useStoreDispatch();
-
     const [userId, role] = useData(["userId", "role"]);
 
     const handleNotifPermission = async () => {
@@ -25,7 +22,6 @@ export default function NotifPermissionBanner({ title = "", subtitle = "" }) {
         setShouldRender(false);
         setBackDrop(true);
         await requestPermission({
-            dispatch,
             setShouldRender,
             setBackDrop,
             userId,

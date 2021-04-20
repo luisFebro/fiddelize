@@ -1,6 +1,4 @@
 import { Fragment } from "react";
-// Redux
-import { useStoreDispatch } from "easy-peasy";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -20,7 +18,6 @@ ModalFullScreen.propTypes = {
 };
 
 export default function ModalFullScreen({ open, onClose, modalData }) {
-    const dispatch = useStoreDispatch();
     const { title, subTitle, componentContent } = modalData;
 
     const showTitle = () => (
@@ -96,17 +93,4 @@ const showActionBtns = dispatch => (
         </div>
     </section>
 );
-
-const handleRemoval = (itemData, dispatch) => {
-    showSnackbar(dispatch, "Processando...", 'warning', 3000);
-    setTimeout(() => showSnackbar(dispatch, "Fazendo cópia de segurança e excluindo usuário...", 'warning', 4000), 3000);
-    setTimeout(() => {
-        deleteUser(dispatch, itemData._id)
-        .then(res => {
-            if(res.status !== 200) return showSnackbar(dispatch, res.data.msg, 'error')
-            showSnackbar(dispatch, `O Usuário ${itemData.name.cap()} foi excluído com sucesso!`, 'success', 6000);
-            setRun(dispatch, "registered");
-        })
-    }, 7100);
-}
 */

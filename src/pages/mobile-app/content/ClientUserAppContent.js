@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import selectTxtStyle, {
@@ -10,7 +9,7 @@ import "../ellipse.scss";
 import AsyncBellNotifBtn from "../../../components/notification/AsyncBellNotifBtn";
 
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import useElemShowOnScroll from "../../../hooks/scroll/useElemShowOnScroll";
+// import useElemShowOnScroll from "../../../hooks/scroll/useElemShowOnScroll";
 import CompLoader from "../../../components/CompLoader";
 import useAnimateConfetti from "../../../hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "../../../hooks/animation/useAnimateNumber";
@@ -26,6 +25,7 @@ import useDidDateExpire from "../../../hooks/dates/date-expires/useDidDateExpire
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
 import useData from "../../../hooks/useData";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
+import GroupedAppBar from "./GroupedAppBar";
 // import useCount from "../../../hooks/useCount";
 
 // APP COMPONENTS
@@ -214,9 +214,10 @@ export default function ClientUserAppContent({
         callback: setShowMoreComps,
     };
     useAnimateNumber(currScoreRef.current, currScore, numberOptions);
-    const showMoreBtn = useElemShowOnScroll(".target--rules-page", {
-        tSpan: 20,
-    });
+    const showMoreBtn = true;
+    // useElemShowOnScroll(".target--rules-page", {
+    //     tSpan: 20,
+    // });
 
     // UTILS
     function playBeep() {
@@ -389,51 +390,16 @@ export default function ClientUserAppContent({
             </div>
         );
 
-    const showRules = () =>
-        showMoreComps && (
-            <div className="mb-4">
-                <div
-                    className="target--rules-page container-center position-relative"
-                    style={{ top: `${needAppForPreview && "15px"}` }}
-                >
-                    <Link
-                        to={
-                            needAppForCliAdmin
-                                ? "/regulamento?client-admin=1"
-                                : "/regulamento"
-                        }
-                    >
-                        <div
-                            className="no-text-decoration text-center pressed-to-left"
-                            onClick={playBeep}
-                            style={{
-                                width: "130px",
-                                color: "var(--mainWhite)",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <span className={`${selectedTxtStyle} text-normal`}>
-                                Consulte
-                                <br />
-                                Regras Aqui
-                            </span>
-                        </div>
-                    </Link>
-                </div>
-            </div>
-        );
-
-    const showMoreOptionsBtn = () =>
-        showMoreComps && (
-            <AsyncMoreOptionsBtn
-                playBeep={playBeep}
-                showMoreBtn={showMoreBtn}
-                userName={firstName}
-                needAppForCliAdmin={needAppForCliAdmin}
-                needAppForPreview={needAppForPreview}
-                colorS={colorS}
-            />
-        );
+    const showMoreOptionsBtn = () => (
+        <AsyncMoreOptionsBtn
+            playBeep={playBeep}
+            showMoreBtn={showMoreBtn}
+            userName={firstName}
+            needAppForCliAdmin={needAppForCliAdmin}
+            needAppForPreview={needAppForPreview}
+            colorS={colorS}
+        />
+    );
 
     const backBtnForCliAdmin = () => (
         <BtnBackTestMode
@@ -453,9 +419,9 @@ export default function ClientUserAppContent({
             {showPercCircleAndGift()}
             {showRatingIcons()}
             {showSkipIconsBtn()}
-            {showRules()}
             {showMoreOptionsBtn()}
             {backBtnForCliAdmin()}
+            {showMoreComps && <GroupedAppBar />}
             <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
             <NotifPermissionBanner
                 title="Receba notificações sobre seus benefícios!"
@@ -489,4 +455,41 @@ function getAutoSMSObj(data) {
 n1:
 a) React.useCallback is essential to avoid to render + 15 times at start
 b) When user log in, RT is 36
+*/
+
+/* ARCHIVES
+const showRules = () =>
+    showMoreComps && (
+        <div className="mb-4">
+            <div
+                className="target--rules-page container-center position-relative"
+                style={{ top: `${needAppForPreview && "15px"}` }}
+            >
+                <Link
+                    to={
+                        needAppForCliAdmin
+                            ? "/regulamento?client-admin=1"
+                            : "/regulamento"
+                    }
+                >
+                    <div
+                        className="no-text-decoration text-center pressed-to-left"
+                        onClick={playBeep}
+                        style={{
+                            width: "130px",
+                            color: "var(--mainWhite)",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <span className={`${selectedTxtStyle} text-normal`}>
+                            Consulte
+                            <br />
+                            Regras Aqui
+                        </span>
+                    </div>
+                </Link>
+            </div>
+        </div>
+    );
+
 */

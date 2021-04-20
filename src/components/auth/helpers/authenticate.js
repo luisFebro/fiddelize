@@ -5,7 +5,6 @@ import {
     store,
 } from "../../../hooks/storage/useVar";
 import isThisApp from "../../../utils/window/isThisApp";
-// import { showSnackbar } from "../../../redux/actions/snackbarActions";
 
 const isApp = isThisApp();
 

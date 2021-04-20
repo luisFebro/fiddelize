@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import useSendEmail from "../../../../../../hooks/email/useSendEmail";
 import useData from "../../../../../../hooks/useData";
@@ -7,7 +6,7 @@ import "./_Pix.scss";
 import QrCode from "../../../../../../components/QrCode";
 import copyText from "../../../../../../utils/document/copyText";
 import RadiusBtn from "../../../../../../components/buttons/RadiusBtn";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../components/toasts";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
 import goFinishCheckout from "../../../helpers/pagseguro/goFinishCheckout";
 import RedirectLink from "../../../../../../components/RedirectLink";
@@ -26,8 +25,6 @@ export default function AsyncPix({ modalData }) {
         itemAmount,
         handleCancel,
     } = modalData;
-
-    const dispatch = useStoreDispatch();
 
     useEffect(() => {
         if (alreadyPix) return;
@@ -111,12 +108,10 @@ export default function AsyncPix({ modalData }) {
         copyText(
             value,
             () =>
-                showSnackbar(
-                    dispatch,
-                    successCopyTxt,
-                    "success",
-                    durationSuccessTxt
-                ),
+                showToast(successCopyTxt, {
+                    type: "success",
+                    dur: durationSuccessTxt,
+                }),
             { parentId }
         );
     };

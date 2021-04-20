@@ -5,7 +5,7 @@ import { setVar, store } from "../../../hooks/storage/useVar";
 import SwitchBtn from "../../buttons/material-ui/SwitchBtn";
 import { logout } from "../../../redux/actions/authActions";
 import { Load } from "../../code-splitting/LoadableComp";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 // import { useClientAdmin } from '../../../hooks/useRoleData';
 
@@ -35,7 +35,7 @@ export default function AccessSwitcher({
     };
 
     const getModalCallback = async () => {
-        showSnackbar(dispatch, "Desconectando...", "warning");
+        showToast("Desconectando...");
         await setVar({ rememberAccess: false }, store.user);
         logout(dispatch, { needReload: true });
     };

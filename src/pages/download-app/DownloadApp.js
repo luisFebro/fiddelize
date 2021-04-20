@@ -6,7 +6,7 @@ import { CLIENT_URL } from "../../config/clientUrl";
 import checkIfElemIsVisible from "../../utils/window/checkIfElemIsVisible";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import { readClientAdmin } from "../../redux/actions/userActions";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../../components/toasts";
 import lStorage from "../../utils/storage/lStorage";
 import Spinner from "../../components/loadingIndicators/Spinner";
 import useAnimateElem from "../../hooks/scroll/useAnimateElem";
@@ -207,10 +207,9 @@ export default function DownloadApp({ match, location, history }) {
         run &&
             readClientAdmin(dispatch, bizId).then((res) => {
                 if (res.status !== 200)
-                    return showSnackbar(
-                        dispatch,
+                    return showToast(
                         "Ocorreu um problema. Verifique sua conexão",
-                        "error"
+                        { type: "error" }
                     );
                 setData({ ...data, needSelfServiceData: true });
             });

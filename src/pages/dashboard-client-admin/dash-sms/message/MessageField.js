@@ -4,7 +4,7 @@ import handleChange from "../../../../utils/form/use-state/handleChange";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import useAPI, { sendSMS, getUniqueId } from "../../../../hooks/api/useAPI";
 import { useAppSystem } from "../../../../hooks/useRoleData";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../../components/toasts";
 import Title from "../../../../components/Title";
 import SchedulingBtn from "./scheduling-btn/SchedulingBtn";
 import AccessDenialModal from "./denial-modal/AccessDenialModal";
@@ -89,16 +89,7 @@ export default function MessageField({
             setDisabled(false);
 
             const handleCallback = () => {
-                setTimeout(
-                    () =>
-                        showSnackbar(
-                            dispatch,
-                            "Atualizando Histórico...",
-                            "warning",
-                            5500
-                        ),
-                    4000
-                );
+                setTimeout(() => showToast("Atualizando Histórico..."), 4000);
                 setMessage("");
                 handleShowMessage(false);
                 setRun(dispatch, runName);
@@ -116,11 +107,9 @@ export default function MessageField({
 
     const handleSendNow = () => {
         if (!message.length)
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 "Insira alguma mensagem ou selecione uma sugestão abaixo",
-                "error",
-                6000
+                { type: "error" }
             );
         if (currBalance === 0) return setWhichDenial("NoCredits");
         if (currBalance < totalRecipients)

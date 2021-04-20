@@ -3,7 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
-import { useStoreDispatch } from "easy-peasy";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../../utils/form/kit";
 import ButtonMulti, {
@@ -11,7 +10,7 @@ import ButtonMulti, {
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import { setMultiVar, store } from "../../../hooks/storage/useVar";
 import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
 import { API } from "../../../config/api";
 
@@ -51,8 +50,6 @@ export default function BizForm() {
             setData({ ...data, field: selectedValue });
         }
     }, [selectedValue]);
-
-    const dispatch = useStoreDispatch();
 
     const styles = getStyles();
 
@@ -137,20 +134,12 @@ export default function BizForm() {
     const handleContinue = async () => {
         if (!bizName) {
             setFieldError("bizName");
-            return showSnackbar(
-                dispatch,
-                "Informe nome do seu negócio",
-                "error"
-            );
+            return showToast("Informe nome do seu negócio", { type: "error" });
         }
 
         if (!field) {
             setFieldError("field");
-            return showSnackbar(
-                dispatch,
-                "Informe ramo de atividade.",
-                "error"
-            );
+            return showToast("Informe ramo de atividade.", { type: "error" });
         }
 
         const data = [

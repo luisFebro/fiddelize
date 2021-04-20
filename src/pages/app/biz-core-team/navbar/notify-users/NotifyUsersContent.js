@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { handleFocus } from "../../../../../utils/form/handleFocus";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import RecipientOptions from "./recipient-options/RecipientOptions";
 import MessageField from "./send-notification/MessageField";
 // import { Load } from "../../../../../components/code-splitting/LoadableComp";
@@ -14,8 +13,6 @@ import MessageField from "./send-notification/MessageField";
 // });
 
 export default function NotifyUsersContent() {
-    const dispatch = useStoreDispatch();
-
     const [data, setData] = useState({
         usersList: [],
         appType: "", // actually the role
@@ -47,11 +44,9 @@ export default function NotifyUsersContent() {
     const handleShowMessage = (close) => {
         if (!usersList.length) {
             if (close !== false) {
-                showSnackbar(
-                    dispatch,
-                    "Selecione, pelo menos, um contato",
-                    "error"
-                );
+                showToast("Selecione, pelo menos, um contato", {
+                    type: "error",
+                });
                 return;
             }
         }

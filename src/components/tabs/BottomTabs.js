@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import { getVar, removeVar } from "../../hooks/storage/useVar";
 import "./_BottomTabs.scss";
+import clsx from "clsx";
 // import { setRun } from '../redux/actions/globalActions';
 
 const isSmall = window.Helper.isSmallScreen();

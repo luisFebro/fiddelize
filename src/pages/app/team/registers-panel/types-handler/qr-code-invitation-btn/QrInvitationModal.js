@@ -1,11 +1,10 @@
 import { Fragment } from "react";
 import parse from "html-react-parser";
-import { useStoreDispatch } from "easy-peasy";
 import QrCode from "../../../../../../components/QrCode";
 import "./_QrInvitationModal.scss";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import RadiusBtn from "../../../../../../components/buttons/RadiusBtn";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../components/toasts";
 import copyText from "../../../../../../utils/document/copyText";
 
 const handleFgColor = (fgColor) => {
@@ -45,12 +44,11 @@ export default function QrInvitationModal({
     };
 
     const selectedFgColor = handleFgColor(fgColor);
-    const dispatch = useStoreDispatch();
 
     const handleCopy = () => {
         copyText(
             qrValue,
-            () => showSnackbar(dispatch, "link de convite copiado!", "success"),
+            () => showToast("link de convite copiado!", { type: "success" }),
             { parentId: "root--quick-promote-input-copy" }
         );
     };

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import SwitchBtn, {
     treatBoolStatus,
 } from "../../../../../components/buttons/material-ui/SwitchBtn";
@@ -19,7 +18,6 @@ export default function HiddenPushNotif() {
     });
     const { isDesktopOn, isMobileOn } = data;
 
-    const dispatch = useStoreDispatch();
     const [role, userId] = useData(["role", "userId"]);
 
     const body = {
@@ -51,14 +49,13 @@ export default function HiddenPushNotif() {
             trigger: userId !== "...",
         });
 
-        showSnackbar(
-            dispatch,
+        showToast(
             `Notificações ${isActive ? "ativadas" : "desativadas"} ${
                 target === "isDesktopOn"
                     ? "para apps desktop"
                     : "para apps mobile"
             }!`,
-            "success"
+            { type: "success" }
         );
     };
 

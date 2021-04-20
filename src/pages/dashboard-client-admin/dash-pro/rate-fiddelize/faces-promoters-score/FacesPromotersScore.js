@@ -30,11 +30,10 @@ export default function FacesPromotersScore({
     setScale,
     userId,
     role = "cliente-admin",
-    dispatch,
-    showSnackbar,
+    showToast,
 }) {
     const handleUpdate = async () => {
-        showSnackbar(dispatch, "Enviando...", "warning", 6000);
+        showToast("Enviando...");
         await getAPI({
             method: "put",
             url: updateUser(userId, role),
@@ -45,11 +44,9 @@ export default function FacesPromotersScore({
         }).catch((err) => {
             console.log(`ERROR: ${err}`);
         });
-        showSnackbar(
-            dispatch,
-            "Avaliação recebida. Obrigada pelo retorno!",
-            "success"
-        );
+        showToast("Avaliação recebida. Obrigada pelo retorno!", {
+            type: "success",
+        });
     };
 
     return (

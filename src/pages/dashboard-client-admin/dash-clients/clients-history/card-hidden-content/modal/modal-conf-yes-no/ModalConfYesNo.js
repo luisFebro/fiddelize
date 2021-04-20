@@ -8,7 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
 import ButtonMulti from "../../../../../../../components/buttons/material-ui/ButtonMulti";
-import { showSnackbar } from "../../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../../components/toasts";
 // CUSTOM DATA
 import { setRun } from "../../../../../../../hooks/useRunComp";
 import { countField } from "../../../../../../../redux/actions/userActions";
@@ -33,20 +33,12 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
     const handleRemoval = (itemData) => {
         setIsYesBtnDisabled(true);
         if (itemData._id === "5e890d185162091014c53b56")
-            return showSnackbar(
-                dispatch,
-                "O usuário de teste não pode ser excluido.",
-                "error"
-            );
-        showSnackbar(dispatch, "Processando...", "warning", 3000);
+            return showToast("O usuário de teste não pode ser excluido.", {
+                type: "error",
+            });
+        showToast("Processando...");
         setTimeout(
-            () =>
-                showSnackbar(
-                    dispatch,
-                    `Excluindo cliente ${itemData.name.cap()}...`,
-                    "warning",
-                    5000
-                ),
+            () => showToast(`Excluindo cliente ${itemData.name.cap()}...`),
             2900
         );
         setTimeout(() => {
@@ -56,19 +48,17 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
                 params: { userId: businessId, thisRole: "cliente" },
             }).then((res) => {
                 if (res.status !== 200)
-                    return showSnackbar(dispatch, res.data.msg, "error");
+                    return showToast(res.data.msg, { type: "error" });
                 countField(businessId, {
                     field: "clientAdminData.totalClientUsers",
                     type: "dec",
                     thisRole: "cliente-admin",
                 }).then((res) => {
                     if (res.status !== 200)
-                        return showSnackbar(dispatch, res.data.msg, "error");
-                    showSnackbar(
-                        dispatch,
+                        return showToast(res.data.msg, { type: "error" });
+                    showToast(
                         `Cliente ${itemData.name.cap()} foi excluído dos seus registros!`,
-                        "success",
-                        6000
+                        { type: "success" }
                     );
                     setRun(dispatch, "RecordedClientsList");
                 });
@@ -76,7 +66,7 @@ export default function ModalConfYesNo({ open, onClose, modalData }) {
         }, 5900);
     };
 
-    const showActionBtns = (dispatch) => (
+    const showActionBtns = () => (
         <section>
             <div
                 style={{

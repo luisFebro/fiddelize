@@ -3,8 +3,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import HelpIcon from "@material-ui/icons/Help";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import SpeedDialButton from "../../../components/buttons/SpeedDialButton";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
@@ -46,7 +45,6 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
     const [clientWinners, openClientWinners] = useState(false);
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
 
     const speedDialActions = [
         // the order rendered is inverse from the bottom to top
@@ -67,12 +65,7 @@ export default function TeamDialSpeedBtn({ sColor, disableClick, history }) {
             name: "Suporte ►",
             backColor: `var(--themeSDark--${sColor})`,
             onClick: () => {
-                showSnackbar(
-                    dispatch,
-                    "Um momento. Redirecionando...",
-                    "warning",
-                    8000
-                );
+                showToast("Um momento. Redirecionando...", { dur: 12000 });
                 window.location.href = `https://api.whatsapp.com/send?phone=5592992817363`;
             },
         },

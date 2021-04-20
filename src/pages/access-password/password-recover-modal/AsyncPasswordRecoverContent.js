@@ -4,7 +4,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreDispatch } from "easy-peasy";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleNextField } from "../../../utils/form/kit";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
@@ -13,7 +12,7 @@ import ButtonMulti, {
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import getAPI, { forgotPasswordRequest } from "../../../utils/promises/getAPI";
 import useData from "../../../hooks/useData";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -41,7 +40,6 @@ export default function AsyncPasswordRecoverContent({ role }) {
     const cpfValue = autoCpfMaskBr(cpf);
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
 
     const [userId] = useData(["userId"]);
 
@@ -143,16 +141,14 @@ export default function AsyncPasswordRecoverContent({ role }) {
                 body,
                 url: forgotPasswordRequest(),
             }).catch(({ error }) => {
-                showSnackbar(dispatch, error, "error");
+                showToast(error, { type: "error" });
             });
 
             if (success) {
                 !visibleForm &&
-                    showSnackbar(
-                        dispatch,
-                        "Email foi enviado novamente.",
-                        "success"
-                    );
+                    showToast("Email foi enviado novamente.", {
+                        type: "success",
+                    });
                 setData((prev) => ({ ...prev, visibleForm: false }));
             }
         })();

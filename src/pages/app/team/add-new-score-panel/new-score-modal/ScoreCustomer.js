@@ -159,7 +159,7 @@ export default function ScoreCustomer({
             );
         }
 
-        showToast("Adicionando...", { dur: 3000 });
+        showToast("Adicionando...", { dur: 5500 });
         (async () => {
             const ultimateData = {
                 clientId,

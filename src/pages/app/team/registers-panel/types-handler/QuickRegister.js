@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import EmailIcon from "@material-ui/icons/Email";
-import { useStoreDispatch } from "easy-peasy";
 import AsyncShowNewContactForm from "../../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import {
@@ -12,7 +11,7 @@ import {
 } from "../../../../../hooks/useRoleData";
 import validatePhone from "../../../../../utils/validation/validatePhone";
 import validateEmail from "../../../../../utils/validation/validateEmail";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import convertPhoneStrToInt from "../../../../../utils/numbers/convertPhoneStrToInt";
 import useCheckBalance from "../../../../../hooks/sms/useCheckBalance";
 import ModalFullContent from "../../../../../components/modals/ModalFullContent";
@@ -56,10 +55,9 @@ const runLink = (url) => {
     a.click();
 };
 
-const getSmsObj = ({ businessId, dispatch, name, meanPayload }) => ({
+const getSmsObj = ({ businessId, name, meanPayload }) => ({
     isAutomatic: false,
     userId: businessId,
-    dispatch,
     contactList: [{ name, phone: meanPayload }],
 });
 
@@ -89,7 +87,6 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const { isPro } = usePro();
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
 
     const [verifPass] = useData(["verifPass"], {
         trigger: isNewMember,
@@ -182,37 +179,23 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const handleNumberCTA = (type = "sms") => {
         const number = meanPayload;
         if (!name)
-            return showSnackbar(
-                dispatch,
-                `Insira primeiro nome do ${whichAudience()}`,
-                "error"
-            );
+            return showToast(`Insira primeiro nome do ${whichAudience()}`, {
+                type: "error",
+            });
         if (!number)
-            return showSnackbar(
-                dispatch,
-                `Insira contato do ${whichAudience()}`,
-                "error"
-            );
+            return showToast(`Insira contato do ${whichAudience()}`, {
+                type: "error",
+            });
         if (!validatePhone(number))
-            return showSnackbar(
-                dispatch,
-                "Formato telefone inválido. exemplo:<br />95 9 9999 8888",
-                "error"
-            );
+            return showToast("Formato telefone inválido.", { type: "error" });
 
         if (type === "sms") {
             setSmsDisabled(true);
             if (smsBalance === 0) return setFullOpen(true);
-            showSnackbar(
-                dispatch,
-                `Enviando convite para ${name.cap()}!`,
-                "warning",
-                3000
-            );
+            showToast(`Enviando convite para ${name.cap()}!`);
 
             const smsObj = getSmsObj({
                 businessId,
-                dispatch,
                 name,
                 meanPayload,
             });
@@ -236,17 +219,11 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const handleEmailCTA = () => {
         const email = meanPayload;
         if (!name)
-            return showSnackbar(
-                dispatch,
-                `Insira primeiro nome do ${whichAudience()}`,
-                "error"
-            );
+            return showToast(`Insira primeiro nome do ${whichAudience()}`, {
+                type: "error",
+            });
         if (!validateEmail(email))
-            return showSnackbar(
-                dispatch,
-                "Formato de e-mail inválido.",
-                "error"
-            );
+            return showToast("Formato de e-mail inválido.", { type: "error" });
 
         const subject = `${name.cap()}, convite da ${bizName && bizName.cap()}`;
         const emailUrl = `mailto:${email}?subject=${subject}&body=${msg}`;
@@ -326,7 +303,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const handleCopy = () => {
         copyText(
             msg,
-            () => showSnackbar(dispatch, "link de convite copiado!", "success"),
+            () => showToast("link de convite copiado!", { type: "success" }),
             { parentId: "root--input-copy" }
         );
     };

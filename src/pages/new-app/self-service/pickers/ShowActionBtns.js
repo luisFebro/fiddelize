@@ -10,7 +10,7 @@ import {
     updateUser,
     readClientAdmin,
 } from "../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../../components/toasts";
 
 import isThisApp from "../../../../utils/window/isThisApp";
 import TestModeBtn from "../../../dashboard-client-admin/modal-test-mode/TestModeBtn";
@@ -44,20 +44,18 @@ export default function ShowActionBtns({
     }, [showUpdateBtn, needUpdateBtn]);
 
     const handleUpdateIcon = () => {
-        showSnackbar(dispatch, titleBeforeOk);
+        showToast(titleBeforeOk);
         updateUser(dispatch, objToSend, businessId, {
             thisRole: "cliente-admin",
         }).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(
-                    dispatch,
-                    "Algo deu errado. Verifique sua conexão",
-                    "error"
-                );
+                return showToast("Algo deu errado. Verifique sua conexão", {
+                    type: "error",
+                });
             readClientAdmin(dispatch, businessId).then((res) => {
                 if (res.status !== 200)
-                    return showSnackbar(dispatch, res.data.msg, "error");
-                showSnackbar(dispatch, titleAfterOk, "success");
+                    return showToast(res.data.msg, { type: "error" });
+                showToast(titleAfterOk, { type: "success" });
                 setShowAppBtn(true);
             });
         });
@@ -91,15 +89,3 @@ export default function ShowActionBtns({
         )
     );
 }
-
-/* ARCHIVE
-<Link to={`/mobile-app?client-admin=1`}>
-    <ButtonMulti
-        onClick={null}
-        title="resultado"
-        color="var(--mainWhite)"
-        backgroundColor="var(--themeSDark)"
-        iconFontAwesome={<FontAwesomeIcon icon="mobile-alt" style={faStyle} />}
-    />
-</Link>
- */

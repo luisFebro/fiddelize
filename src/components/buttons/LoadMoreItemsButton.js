@@ -1,8 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import { useStoreDispatch } from "easy-peasy";
 import PropTypes from "prop-types";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../../components/toasts";
 import ButtonMulti from "./material-ui/ButtonMulti";
 import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
 import getValObjWithStr from "../../utils/objects/getValObjWithStr";
@@ -63,8 +62,6 @@ export default function LoadMoreItemsButton({
     const { loadingIndicator, title, backgroundColor } = button;
     const { strList, strChunkSize, strTotalSize } = objPathes;
 
-    const dispatch = useStoreDispatch();
-
     const searchTerm = "";
 
     useEffect(() => {
@@ -81,7 +78,7 @@ export default function LoadMoreItemsButton({
             .then((res) => {
                 if (res.status !== 200) {
                     setIsThisLoading(false);
-                    showSnackbar(dispatch, res.data.msg, "error");
+                    showToast(res.data.msg, { type: "error" });
                     return;
                 }
                 const list = getValObjWithStr(res, strList);

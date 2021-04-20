@@ -8,6 +8,8 @@ export default function loadToast(title, options = {}) {
         type = "warning";
     }
 
+    handleCallback(options);
+
     const buttonRequirement =
         options.onClick && options.needActionBtn && options.actionBtnText;
     if (options.needActionBtn) {
@@ -69,5 +71,16 @@ function getToastIcon(type) {
     };
 
     return variantIcon[type];
+}
+
+function handleCallback(opts = {}) {
+    const func = opts.callback;
+    if (typeof func !== "function") return;
+
+    const duration = opts.dur;
+
+    setTimeout(() => {
+        func();
+    }, duration);
 }
 // END HELPERS

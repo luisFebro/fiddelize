@@ -1,12 +1,11 @@
 import { useEffect, useState, Fragment, useRef } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getAPI, {
     recoverPassword,
     changePassword,
 } from "../../utils/promises/getAPI";
 import isThisApp from "../../utils/window/isThisApp";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../../components/toasts";
 import useBackColor from "../../hooks/useBackColor";
 import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
@@ -49,7 +48,6 @@ export default function NewPassword({ location, match, history }) {
 
     const [userId] = useData(["userId"], { trigger: changeMode });
 
-    const dispatch = useStoreDispatch();
     const styles = getStyles();
 
     const {
@@ -75,11 +73,9 @@ export default function NewPassword({ location, match, history }) {
                 body,
             });
             if (!isValidToken) {
-                showSnackbar(
-                    dispatch,
-                    "Esse link já expirou. Solicite um novo.",
-                    "error"
-                );
+                showToast("Esse link já expirou. Solicite um novo.", {
+                    type: "error",
+                });
                 setTimeout(() => {
                     const destiny = isApp
                         ? "/mobile-app"
@@ -201,12 +197,7 @@ export default function NewPassword({ location, match, history }) {
                 };
 
                 newPswdCond &&
-                    showSnackbar(
-                        dispatch,
-                        changeMode ? "Mudando..." : "Recuperando...",
-                        "warning",
-                        2000
-                    );
+                    showToast(changeMode ? "Mudando..." : "Recuperando...");
                 // LESSON: do not destruct await with catch. otherwise when catch returns will throw an error of data's undefined.
                 const finalRes = await getAPI({
                     method: "post",
@@ -214,10 +205,9 @@ export default function NewPassword({ location, match, history }) {
                     body,
                     needAuth: !!changeMode,
                 }).catch(({ error }) => {
-                    showSnackbar(
-                        dispatch,
+                    showToast(
                         error || "Um problema aconteceu. Tente novamente",
-                        "error"
+                        { type: "error" }
                     );
                     restartFields(true);
                 });

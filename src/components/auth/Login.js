@@ -4,7 +4,6 @@ import Card from "@material-ui/core/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Title from "../Title";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { loginEmail } from "../../redux/actions/authActions";
 import { readUser } from "../../redux/actions/userActions";
 import KeypadButton from "../modals/keypad";
@@ -23,6 +22,7 @@ import {
 } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
+import showToast from "../toasts";
 
 const isApp = isThisApp();
 
@@ -135,7 +135,7 @@ export async function signInUserData(cpfValue, options = {}) {
     const res = await loginEmail(dispatch, objToSend);
 
     if (res.status !== 200) {
-        showSnackbar(dispatch, res.data.msg || res.data.error, "error", 6000);
+        showToast(res.data.msg || res.data.error, { type: "error" });
         return null;
     }
 
@@ -170,8 +170,7 @@ export async function signInUserData(cpfValue, options = {}) {
 
     let whichRoute;
     if (role === "cliente-admin") {
-        !appPanelUserId &&
-            showSnackbar(dispatch, "Iniciando...", "warning", 2000);
+        !appPanelUserId && showToast("Iniciando...", { dur: 5000 });
         // Pre login store data
         const storeElems = [
             { bizId },
@@ -200,18 +199,8 @@ export async function signInUserData(cpfValue, options = {}) {
                 userId: authUserId,
                 role: "cliente-admin",
             });
-            // showSnackbar(dispatch, notifRes.data.msg, "success");
-            showSnackbar(dispatch, "Verificando...", "warning", 3000);
-            setTimeout(
-                () =>
-                    showSnackbar(
-                        dispatch,
-                        "Redirecionando...",
-                        "warning",
-                        4000
-                    ),
-                2900
-            );
+            showToast("Verificando...", { dur: 5000 });
+            setTimeout(() => showToast("Redirecionando..."), 2900);
 
             whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
             !appPanelUserId && setTimeout(() => history.push(whichRoute), 5000);
@@ -221,8 +210,7 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "cliente-membro") {
-        !appPanelUserId &&
-            showSnackbar(dispatch, "Iniciando...", "warning", 2000);
+        !appPanelUserId && showToast("Iniciando...", { dur: 5000 });
         await removeVar("disconnectCliMember", store.user);
 
         const storeElems = [
@@ -272,7 +260,7 @@ export async function signInUserData(cpfValue, options = {}) {
         await setMultiVar(storeElems, store.user);
 
         if (needCliUserWelcomeNotif) {
-            showSnackbar(dispatch, "Preparando App...", "warning", 3000);
+            showToast("Preparando App...", { dur: 5000 });
 
             const cliNotifRes = await sendNotification(authUserId, "welcome", {
                 role,
@@ -296,8 +284,7 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "nucleo-equipe") {
-        !appPanelUserId &&
-            showSnackbar(dispatch, "Iniciando...", "warning", 2000);
+        !appPanelUserId && showToast("Iniciando...", { dur: 5000 });
         await removeVar("disconnectAgent", store.user);
         // Pre login store data
         const storeElems = [
@@ -341,7 +328,6 @@ async function sendWelcomeNotif({ userId, role = "cliente-admin" }) {
     };
     return await sendNotification(userId, "welcome", notifOptions);
     // if (notifRes.status !== 200)
-    // return showSnackbar(dispatch, notifRes.data.msg, "error");
 }
 
 async function removeInstantAppAndRegisterData() {
@@ -366,8 +352,8 @@ function handleCliUserPath({ authUserId, dispatch, history }) {
         .then((res) => {
             if (isThisApp()) {
                 if (res.status !== 200)
-                    return showSnackbar(dispatch, res.data.msg, "error");
-                showSnackbar(dispatch, "Iniciando...", "warning", 3000);
+                    return showToast(res.data.msg, { type: "error" });
+                showToast("Iniciando...", { dur: 5000 });
                 history.push("/mobile-app");
             } else {
                 window.location.href = "/mobile-app?abrir=1";
@@ -379,7 +365,7 @@ function handleCliUserPath({ authUserId, dispatch, history }) {
 
 /* ARCHIVES
 
-showSnackbar(
+showToast(
     dispatch,
     "Analisando Credenciais...",
     "warning",
@@ -387,7 +373,7 @@ showSnackbar(
 );
 setTimeout(
     () =>
-        showSnackbar(
+        showToast(
             dispatch,
             "Redirecionando...",
             "warning",
@@ -401,7 +387,7 @@ setTimeout(
 );
 setTimeout(
     () =>
-        showSnackbar(
+        showToast(
             dispatch,
             msg,
             "success",
@@ -411,7 +397,7 @@ setTimeout(
 );
 
 if (role === "admin") {
-    showSnackbar(
+    showToast(
         dispatch,
         "Analisando Credenciais...",
         "warning",
@@ -419,7 +405,7 @@ if (role === "admin") {
     );
     setTimeout(
         () =>
-            showSnackbar(
+            showToast(
                 dispatch,
                 "Redirecionando...",
                 "warning",
@@ -432,21 +418,21 @@ if (role === "admin") {
         5000
     );
     setTimeout(
-        () => showSnackbar(dispatch, msg, "success", 9000),
+        () => showToast(dispatch, msg, "success", 9000),
         7000
     );
 }
 
 if(role === "colaborador") {
-    showSnackbar(dispatch, "Analisando Credenciais...", 'warning', 3000);
-    setTimeout(() => showSnackbar(dispatch, "Redirecionando...", 'warning', 4000), 2900);
+    showToast(dispatch, "Analisando Credenciais...", 'warning', 3000);
+    setTimeout(() => showToast(dispatch, "Redirecionando...", 'warning', 4000), 2900);
     setTimeout(() => history.push(`/colaborador/quadro-administrativo/${authUserId}`), 5000);
-    setTimeout(() => showSnackbar(dispatch, msg, 'success', 9000), 7000);
+    setTimeout(() => showToast(dispatch, msg, 'success', 9000), 7000);
 }
 
 else if(!selfMilestoneIcon) {
         whichRoute = `/${bizCodeName}/novo-app/self-service/${authUserId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
-        showSnackbar(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
+        showToast(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
         setTimeout(() => window.location.href = whichRoute, 2900);
 
 <div className="mx-2 mb-4 text-left">

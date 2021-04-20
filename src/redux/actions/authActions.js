@@ -1,7 +1,7 @@
 import axios from "axios";
 import { readCentralAdmin } from "./userActions";
 import { setLoadingProgress, setRun } from "./globalActions";
-import { showSnackbar } from "./snackbarActions";
+import showToast from "../../components/toasts";
 import { getHeaderJson } from "../../utils/server/getHeaders";
 import { readCliAdmin } from "../../hooks/roles-storage-and-data-recovery/useRecoverSysData";
 import isThisApp from "../../utils/window/isThisApp";
@@ -107,10 +107,7 @@ export const registerEmail = async (dispatch, objToSend) => {
         );
         if (!res) {
             setTimeout(() => {
-                showSnackbar(
-                    dispatch,
-                    "Parece que há problemas de conexão com a internet."
-                );
+                showToast("Parece que há problemas de conexão com a internet.");
             }, 10000);
         }
         setLoadingProgress(dispatch, false);
@@ -176,15 +173,6 @@ export const tokenConfig = (getState) => {
 
     return config;
 };
-
-/* ARCHIVES
-showSnackbar(
-    dispatch,
-    "Sua sessão terminou. Faça seu acesso novamente.",
-    "warning",
-    10000
-); // err.response.data.msg
- */
 
 /* COMMENTS
 n1: eg when user authenticated

@@ -8,7 +8,7 @@ import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
 import useOfflineListData from "../storage/useOfflineListData";
 import getFirstName from "../../utils/string/getFirstName";
 import { useProfile, useToken } from "../useRoleData";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
+import showToast from "../../components/toasts";
 import { logout } from "../../redux/actions/authActions";
 import { chooseHeader } from "../../utils/server/getHeaders";
 
@@ -174,7 +174,7 @@ export default function useAPIList({
             window.location.href = isApp
                 ? "/mobile-app"
                 : "/acesso/verificacao";
-            showSnackbar(dispatch, "Sua sessão terminou.", "warning");
+            showToast("Sua sessão terminou.");
             logout(dispatch, { needSnackbar: false });
         }
     }

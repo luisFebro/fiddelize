@@ -20,7 +20,6 @@ import {
 const collection = { collection: "appSystem" };
 const appSystem = lStorage("getItems", collection);
 const bizSysId = appSystem && appSystem.businessId;
-// import { showSnackbar } from '../../redux/actions/snackbarActions';
 // end data
 const isUserOnline = !isOffline();
 
@@ -50,12 +49,3 @@ export const useRecoveryAndDataOffline = () => {
     setDataIfOnline(centralAdminColl, centralAdminNewObj, isUserOnline);
     useRecoverSysData(role, _id, { bizId, isUserOnline, didUserLogout });
 };
-
-/* ARCHIVES
-    // const dispatch = useStoreDispatch();
-    // useEffect(() => {
-    //     if(isUserOnline === false) {
-    //         showSnackbar(dispatch, "Modo offline ativado!", "warning", 3000);
-    //     }
-    // }, [isUserOnline])
-*/

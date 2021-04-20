@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 import copyText from "../../../../utils/document/copyText";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../../components/toasts";
 import { getVar, store } from "../../../../hooks/storage/useVar";
 
 export default function ShareLink() {
@@ -16,12 +15,8 @@ export default function ShareLink() {
         })();
     }, []);
 
-    const dispatch = useStoreDispatch();
-
     const handleCopy = () => {
-        copyText(link, () =>
-            showSnackbar(dispatch, "link copiado!", "success")
-        );
+        copyText(link, () => showToast("link copiado!", { type: "success" }));
     };
 
     return (

@@ -1,10 +1,9 @@
 import { Fragment } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fromNow } from "../../../../../../utils/dates/dateFns";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import getFirstName from "../../../../../../utils/string/getFirstName";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../components/toasts";
 import convertPhoneStrToInt from "../../../../../../utils/numbers/convertPhoneStrToInt";
 
 const getSmileyGrade = (g) => {
@@ -27,7 +26,6 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
     const { grade: color, icon } = getSmileyGrade(finalGrade);
 
     const updatedDate = reportUpdatedAt && fromNow(reportUpdatedAt);
-    const dispatch = useStoreDispatch();
 
     const firstName = getFirstName(clientName);
     const convertedWhatsapp = convertPhoneStrToInt(whatsapp);
@@ -48,12 +46,7 @@ export default function BuyReviewCard({ data = {}, isCardNew }) {
                 title={`Envie uma mensagem para ${firstName}`}
                 href={`https://api.whatsapp.com/send?phone=55${convertedWhatsapp}&text=${defaultWhatsappTxt}`}
                 onClick={() =>
-                    showSnackbar(
-                        dispatch,
-                        "Um momento. Redirecionando...",
-                        "warning",
-                        8000
-                    )
+                    showToast("Um momento. Redirecionando...", { dur: 12000 })
                 }
             >
                 <ButtonFab

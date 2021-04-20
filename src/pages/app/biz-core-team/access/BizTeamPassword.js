@@ -1,8 +1,7 @@
 import { Fragment, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import AccessPassword from "../../../access-password/AccessPassword";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../../components/toasts";
 import { getVar, setVar, store } from "../../../../hooks/storage/useVar";
 import { disconnect } from "../../../../hooks/useAuthUser";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
@@ -10,8 +9,6 @@ import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 export default withRouter(BizTeamPassword);
 
 function BizTeamPassword({ history }) {
-    const dispatch = useStoreDispatch();
-
     useEffect(() => {
         (async () => {
             const isAuth = await getVar("success", store.user);
@@ -21,7 +18,7 @@ function BizTeamPassword({ history }) {
 
     const handleLogout = () => {
         (async () => {
-            showSnackbar(dispatch, "Saindo da conta...", "warning");
+            showToast("Saindo da conta...");
             await Promise.all([
                 setVar({ disconnectAgent: true }, store.user),
                 disconnect(),

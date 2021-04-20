@@ -1,5 +1,4 @@
 // Models
-import { snackbarReducer } from "./snackbarReducer";
 import { authReducer } from "./authReducer";
 import { userReducer } from "./userReducer";
 import { globalReducer } from "./globalReducer";
@@ -13,5 +12,4 @@ export const easyStore = {
     globalReducer,
     adminReducer,
     componentReducer,
-    snackbarReducer,
 };

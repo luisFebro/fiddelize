@@ -6,7 +6,7 @@ import {
     readUser,
     readPurchaseHistory,
 } from "../../../redux/actions/userActions";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import Title from "../../../components/Title";
 import animateNumber, {
     getAnimationDuration,
@@ -239,7 +239,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     body: historyObj,
                 });
 
-                showSnackbar(dispatch, "Pontuação Registrada!", "success");
+                showToast("Pontuação Registrada!", { type: "success" });
 
                 if (userBeatChallenge) {
                     const options = {
@@ -337,14 +337,10 @@ function AsyncClientScoresPanel({ history, location }) {
 
         setHideCurrScore(true);
         if (!ratingData.nps && type === "nps")
-            return showSnackbar(
-                dispatch,
-                "Clique em uma carinha para continuar",
-                "warning"
-            );
+            return showToast("Clique em uma carinha para continuar");
 
         await setVar({ doneNPS: true });
-        showSnackbar(dispatch, "Salvando e finalizando...", "warning");
+        showToast("Salvando e finalizando...");
 
         // For future improvem: The update is happening in every component now by BuyRating
         // update user with new rating

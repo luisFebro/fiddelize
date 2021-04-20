@@ -4,8 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import { useStoreDispatch } from "easy-peasy";
-import { showSnackbar } from "../../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../../components/toasts";
 import handleChange from "../../../../../../utils/form/use-state/handleChange";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, {
@@ -40,26 +39,21 @@ export default function NewTransactionForm({
     const { desc, value } = data;
 
     const styles = getStyles();
-    const dispatch = useStoreDispatch();
     const isExpense = type === "out";
 
     const formattedValue = moneyMaskBr(value);
 
     const handleNewTransaction = () => {
         if (!desc) {
-            return showSnackbar(dispatch, "Faltando descrição!", "error");
+            return showToast("Faltando descrição!", { type: "error" });
         }
 
         if (!value) {
-            return showSnackbar(dispatch, "Faltando valor!", "error");
+            return showToast("Faltando valor!", { type: "error" });
         }
 
         (async () => {
-            showSnackbar(
-                dispatch,
-                `Registrando agora!<br />Um momento...`,
-                "warning"
-            );
+            showToast(`Registrando agora! Um momento...`);
 
             const newTransactionCard = {
                 type,
@@ -85,7 +79,7 @@ export default function NewTransactionForm({
             const confirmedMsg = isExpense
                 ? "Despesa registrada"
                 : "Ganho registrado";
-            showSnackbar(dispatch, `${confirmedMsg}!`, "success");
+            showToast(`${confirmedMsg}!`, { type: "success" });
         })();
     };
 

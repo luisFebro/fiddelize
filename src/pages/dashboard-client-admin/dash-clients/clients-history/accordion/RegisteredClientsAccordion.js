@@ -16,7 +16,7 @@ import {
     removeField,
     readUser,
 } from "../../../../../redux/actions/userActions";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
 
 import { setRun } from "../../../../../hooks/useRunComp";
@@ -96,28 +96,25 @@ export default function RegisteredClientsAccordion({
     const styles = getStyles({ color, backgroundColor });
 
     const handleEraseTestCard = (cardId) => {
-        showSnackbar(dispatch, "Apagando card de teste...");
+        showToast("Apagando card de teste...");
         setTimeout(() => {
             removeField(cardId, "clientUserData").then((res) => {
-                showSnackbar(dispatch, "Atualizando app...", "warning", 5500);
+                showToast("Atualizando app...");
                 readUser(dispatch, businessId, { role: "cliente-admin" }).then(
                     (res) => {
                         if (res.status !== 200)
-                            return showSnackbar(
-                                dispatch,
+                            return showToast(
                                 "Não foi possível atualizar. Reinicie app.",
-                                "error"
+                                { type: "error" }
                             );
                         window.location.href = "/mobile-app?client-admin=1";
                     }
                 );
                 if (res.status !== 200)
                     return console.log("smt wrong while updating");
-                showSnackbar(
-                    dispatch,
+                showToast(
                     "APAGADO! Para mostrar o card de teste de novo, adicione pontos no MODO APP CLIENTE.",
-                    "success",
-                    7000
+                    { type: "success" }
                 );
                 setRun(dispatch, "RecordedClientsList");
             });

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { GoldBtn, SilverBtn } from "../ProBtns";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import MainTitle, { CircleBack } from "./comps/MainTitle";
@@ -10,7 +9,7 @@ import {
     TotalInvest,
     PeriodSelection,
 } from "./comps/MainComps";
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import useDetectScrollSingle from "../../../hooks/scroll/useDetectScrollSingle";
 import useDetectScrollUp from "../../../hooks/scroll/useDetectScrollUp";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
@@ -49,8 +48,6 @@ export default function BronzePlan({ setCurrPlan }) {
     });
     const { totalInvest, totalServices, period, orders } = data;
     // console.table(data); // for objects without the necessary of using JSON.stringify(obj)
-    const dispatch = useStoreDispatch();
-
     const showMainUpperOpts = useDetectScrollSingle(".period-selection");
     useScrollUp();
     const isScrollingUpward = useDetectScrollUp();
@@ -133,10 +130,7 @@ export default function BronzePlan({ setCurrPlan }) {
 
     const handleNextPage = () => {
         if (!totalInvest)
-            return showSnackbar(
-                dispatch,
-                "Carrinho Vazio! Selecione algum serviço."
-            );
+            return showToast("Carrinho Vazio! Selecione algum serviço.");
         setNextPage(true);
     };
 

@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../useRunComp";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 import isObjEmpty from "../../utils/objects/isObjEmpty";
 import { chooseHeader } from "../../utils/server/getHeaders";
 import { useToken } from "../useRoleData";
 import { useOfflineData } from "../storage/useOfflineListData";
 import { disconnect } from "../useAuthUser";
+import showToast from "../../components/toasts";
 
 export * from "./requestsLib.js";
 export * from "./trigger.js";
@@ -85,7 +85,7 @@ export default function useAPI({
         if (status === "pending" && timePending) time = timePending;
         if (status === "success" && timeSuccess) time = timeSuccess;
 
-        showSnackbar(dispatch, msg, type, time);
+        showToast(msg, { type, dur: time });
         return true;
     };
 
@@ -121,7 +121,7 @@ export default function useAPI({
         if (gotExpiredToken) {
             (async () => {
                 await disconnect();
-                showSnackbar(dispatch, "Sua sessão terminou.", "warning");
+                showToast("Sua sessão terminou.");
             })();
         }
     }

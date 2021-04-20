@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import OrdersTable from "./OrdersTable";
 import PayArea from "./PayArea";
 import useGetVar, { setVar, removeVar } from "../../../hooks/storage/useVar";
 import useBackColor from "../../../hooks/useBackColor";
 
-import { showSnackbar } from "../../../redux/actions/snackbarActions";
+import showToast from "../../../components/toasts";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 
 export default function OrdersAndPay({
@@ -32,8 +31,6 @@ export default function OrdersAndPay({
     const handleServicesData = (payload) => {
         setDataSer({ ...dataSer, ...payload });
     };
-
-    const dispatch = useStoreDispatch();
 
     useBackColor("var(--mainWhite)");
 
@@ -100,8 +97,7 @@ export default function OrdersAndPay({
 
     const handleCancel = (type) => {
         const explicitCancel = type === "explicit";
-        explicitCancel &&
-            showSnackbar(dispatch, "Seu pedido atual foi cancelado.");
+        explicitCancel && showToast("Seu pedido atual foi cancelado.");
         removeVar("orders_clientAdmin");
         removeVar("totalServices_clientAdmin");
         removeVar("totalMoney_clientAdmin");

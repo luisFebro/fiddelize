@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { useStoreDispatch, useStoreState } from "easy-peasy";
-import { showSnackbar } from "../../../../../redux/actions/snackbarActions";
+import showToast from "../../../../../components/toasts";
 import { readAllDbFromModels } from "../../../../../redux/actions/adminActions";
 import Img from "../../../../../components/Img";
 import useData from "../../../../../hooks/useData";
@@ -60,17 +60,14 @@ export default function BackUpToExcel() {
         switchLoading(true);
         readAllDbFromModels(dispatch, securityObj, dbModelName).then((res) => {
             if (res.status === 404) {
-                showSnackbar(dispatch, res.data.error, "error", 6000);
+                showToast(res.data.error, { type: "error" });
                 switchLoading(false);
                 return;
             }
             if (res.status !== 200) {
-                showSnackbar(
-                    dispatch,
-                    "Ocorreu um erro ao carregar dados de clientes",
-                    "error",
-                    9000
-                );
+                showToast("Ocorreu um erro ao carregar dados de clientes", {
+                    type: "error",
+                });
                 switchLoading(false);
                 return;
             }

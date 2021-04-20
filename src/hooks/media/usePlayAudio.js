@@ -28,49 +28,42 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
     const getSingleElem = (audio) => {
         const mediaBtn = document.querySelector(mediaElem);
         console.log(`audio set on ${mediaElem}`);
-        mediaBtn && mediaBtn.addEventListener("click", () => audio.play());
+        if (mediaBtn) mediaBtn.addEventListener("click", () => audio.play());
     };
 
     const getMultiElems = (audio) => {
         const groupElems = document.querySelectorAll(mediaElem);
         console.log(`audio set as MULTI on ${mediaElem}`);
         if (groupElems) {
-            groupElems.forEach((elem) =>
-                elem.addEventListener("click", () => audio.play())
-            );
+            groupElems.forEach((elem) => {
+                elem.addEventListener("click", () => audio.play());
+            });
         }
     };
 
     useEffect(() => {
         const audio = new Audio();
+        audio.src = url;
 
-        if (!autoplay) {
-            if (trigger) {
-                multi ? getMultiElems(audio) : getSingleElem(audio);
-
-                fetch(url)
-                    .then((response) => response.blob())
-                    .catch((err) => console.log(err));
-            }
+        if (!autoplay && trigger) {
+            if (multi) getMultiElems(audio);
+            else getSingleElem(audio);
         }
 
         // In order to use autoplay and to have the audio playing instantly, first we need to prerender the audio in the page or component
         // before setting the name when the data will be stored on indexedDB
         // usePlayAudio("/sounds/audio.mp3", ".class-name-audio", { prerender: true })
-        if (autoplay) {
-            if (trigger) {
-                // audio.volume = "0.2"
-
-                (async () => {
-                    const audioSrc = await getVar(mediaElem, store.audios);
-                    if (!audioSrc)
-                        return console.log(
-                            `ISSUE: the media ${mediaElem.toUpperCase()} was not found in indexedDB. Check if you prerender the audio first in string64 format before using the audio.`
-                        );
-                    audio.src = audioSrc;
-                    setTimeout(() => audio.play(), delay);
-                })();
-            }
+        if (autoplay && trigger) {
+            // audio.volume = "0.2"
+            (async () => {
+                const audioSrc = await getVar(mediaElem, store.audios);
+                if (!audioSrc)
+                    return console.log(
+                        `ISSUE: the media ${mediaElem.toUpperCase()} was not found in indexedDB. Check if you prerender the audio first in string64 format before using the audio.`
+                    );
+                audio.src = audioSrc;
+                setTimeout(() => audio.play(), delay);
+            })();
         }
 
         if (typeof onendedCallback === "function") {

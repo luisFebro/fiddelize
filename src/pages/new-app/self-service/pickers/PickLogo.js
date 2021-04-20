@@ -9,7 +9,7 @@ import ButtonMulti, {
 import CheckBoxForm from "../../../../components/CheckBoxForm";
 import RadioGroupForm from "../../../../components/RadioGroupForm";
 import { CLIENT_URL } from "../../../../config/clientUrl";
-import { showSnackbar } from "../../../../redux/actions/snackbarActions";
+import showToast from "../../../../components/toasts";
 import {
     readClientAdmin,
     uploadImages,
@@ -68,13 +68,13 @@ export default function PickLogo({
         const thisBizId = isFromDash ? bizId : undefined;
         updateImages(thisBizId, data).then((res) => {
             if (res.status !== 200)
-                return showSnackbar(dispatch, res.data.msg, "error");
+                return showToast(res.data.msg, { type: "error" });
             setTempImgUrl(res.data);
             if (isFromDash) {
                 readClientAdmin(dispatch, bizId).then((res) => {
                     if (res.status !== 200)
-                        return showSnackbar(dispatch, res.data.msg, "error");
-                    showSnackbar(dispatch, "Formato Atualizado!", "success");
+                        return showToast(res.data.msg, { type: "error" });
+                    showToast("Formato Atualizado!", { type: "success" });
                 });
             }
             if (!isFromDash) {
@@ -92,13 +92,13 @@ export default function PickLogo({
         let dataToUpdate = { lastUrl: tempImgUrl };
         if (sizeSquare) {
             dataToUpdate = { ...dataToUpdate, paramArray: ["sizeSquare"] };
-            showSnackbar(dispatch, "Fazendo alteração no formato da imagem...");
+            showToast("Fazendo alteração no formato da imagem...");
             updateThisImg(dataToUpdate);
             setData({ sizeRect: false });
         }
         if (sizeRect) {
             dataToUpdate = { ...dataToUpdate, paramArray: ["sizeRect"] };
-            showSnackbar(dispatch, "Fazendo alteração no formato da imagem...");
+            showToast("Fazendo alteração no formato da imagem...");
             updateThisImg(dataToUpdate);
             setData({ sizeSquare: false });
         }
@@ -138,11 +138,9 @@ export default function PickLogo({
             return console.log("Nenhuma imagem encontrada. Tente novamente.");
         // Size Reference: 1mb = 1.000.000 / 1kb 1.000
         if (fileValue.size > 1000000)
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 `A imagem ${fileValue.name.cap()} possui mais de 1 MB permitido. Por favor, escolha arquivo menor.`,
-                "error",
-                8000
+                { type: "error" }
             );
 
         const allowedTypes = [
@@ -154,10 +152,9 @@ export default function PickLogo({
             "image/ai",
         ];
         if (allowedTypes.every((type) => fileValue.type !== type)) {
-            return showSnackbar(
-                dispatch,
+            return showToast(
                 ` Formato '${fileValue.type.cap()}' não é suportado.`,
-                "error"
+                { type: "error" }
             );
         }
         // End Validation
@@ -173,11 +170,9 @@ export default function PickLogo({
         uploadImages(formData, options).then((res) => {
             if (res.status !== 200) {
                 setIsLoadingPic(false);
-                showSnackbar(
-                    dispatch,
-                    "Algo deu errado. Verifique sua conexão.",
-                    "error"
-                );
+                showToast("Algo deu errado. Verifique sua conexão.", {
+                    type: "error",
+                });
                 return;
             }
             const generatedImg = res.data;
@@ -199,17 +194,10 @@ export default function PickLogo({
                 deleteImage("logos", "app_biz_logo").then((res) => {
                     readClientAdmin(dispatch, bizId).then((res) => {
                         if (res.status !== 200)
-                            return showSnackbar(
-                                dispatch,
-                                res.data.msg,
-                                "error"
-                            );
-                        showSnackbar(
-                            dispatch,
-                            "Nova logo salva. Alterando no app...",
-                            "success",
-                            6000
-                        );
+                            return showToast(res.data.msg, { type: "error" });
+                        showToast("Nova logo salva. Alterando no app...", {
+                            type: "success",
+                        });
                         setNeedUpdateBtn(true);
                         commonActions();
                     });
@@ -407,12 +395,12 @@ let whichFormat;
         console.log("whichFormat", whichFormat);
         if(effectShadow) {
             dataToUpdate = {  ...dataToUpdate, paramArray: [whichFormat, "effectShadow"] }
-            showSnackbar(dispatch, "Adicionando sombra na imagem...");
+            showToast(dispatch, "Adicionando sombra na imagem...");
             updateThisImg(dataToUpdate);
         }
         if(effectBgRemoval) {
             dataToUpdate = {  ...dataToUpdate, paramArray: [whichFormat, "effectBgRemoval"] }
-            showSnackbar(dispatch, "Removendo fundo da imagem...");
+            showToast(dispatch, "Removendo fundo da imagem...");
             updateThisImg(dataToUpdate);
         }
 <div className="container-center-col m-0" style={{backgroundColor: 'var(--lightGrey)'}}>
