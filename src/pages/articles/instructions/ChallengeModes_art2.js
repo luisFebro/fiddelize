@@ -77,8 +77,8 @@ const Body = () => {
             <br />
             <p>
                 O cliente que finalizar um desafio, tem sua pontuação atual
-                (apelidado na Fiddelize de fidelidômetro) zerado, porém no seu
-                histórico de compras é acumulativo e sempre registrado.
+                zerada, porém no seu histórico de compras é acumulativo e sempre
+                registrado.
             </p>
 
             <p>

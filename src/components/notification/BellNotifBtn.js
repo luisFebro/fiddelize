@@ -1,7 +1,12 @@
 import { useState, Fragment } from "react";
 import BadaloBell from "../buttons/bells/badalo/BadaloBell";
 import ModalFullContent from "../modals/ModalFullContent";
-import Notification from "./Notification";
+import LoadableVisible from "../code-splitting/LoadableVisible";
+
+const AsyncNotification = LoadableVisible({
+    loader: () =>
+        import("./Notification" /* webpackChunkName: "notif-full-page-lazy" */),
+});
 
 export default function BellNotifBtn({
     position = "relative",
@@ -16,9 +21,11 @@ export default function BellNotifBtn({
     bizId,
 }) {
     const [fullOpen, setFullOpen] = useState(false);
+    const [needEmptyBadge, setNeedEmptyBadge] = useState(false);
 
     const handleFullOpen = () => {
         setFullOpen(true);
+        setNeedEmptyBadge(true);
     };
 
     const handleFullClose = () => {
@@ -26,10 +33,11 @@ export default function BellNotifBtn({
     };
 
     const Comp = (
-        <Notification
+        <AsyncNotification
             forceCliUser={forceCliUser}
             totalNotif={badgeValue}
             bizId={bizId}
+            closeNotifModal={handleFullClose}
         />
     );
 
@@ -43,7 +51,7 @@ export default function BellNotifBtn({
                 right={right}
                 notifBorderColor={notifBorderColor}
                 notifBackColor={notifBackColor}
-                badgeValue={badgeValue}
+                badgeValue={needEmptyBadge ? 0 : badgeValue}
             />
             <ModalFullContent
                 contentComp={Comp}

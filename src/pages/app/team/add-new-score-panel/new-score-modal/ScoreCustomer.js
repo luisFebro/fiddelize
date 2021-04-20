@@ -111,7 +111,7 @@ export default function ScoreCustomer({
     const [score, setScore] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
 
-    const [memberName, memberId] = useData(["name", "userId"]);
+    const [memberName, memberId, role] = useData(["name", "userId", "role"]);
     const { selfBizLogoImg: bizLogo, bizName } = useClientAdmin();
 
     const cliUserName = getFirstName(customerName && customerName.cap(), {
@@ -159,7 +159,7 @@ export default function ScoreCustomer({
             );
         }
 
-        showToast("Adicionando...", { dur: 6000 });
+        showToast("Adicionando...", { dur: 3000 });
         (async () => {
             const ultimateData = {
                 clientId,
@@ -170,7 +170,23 @@ export default function ScoreCustomer({
                 bizName,
                 bizLogo,
             };
-            await setUltimateData(ultimateData);
+            const resNewScore = await setUltimateData(ultimateData).catch(
+                (e) => {
+                    if (e.error && e.error.includes("pontuação pendente")) {
+                        showToast(e.error, { dur: 10000, type: "error" });
+                        setTimeout(() => {
+                            showToast("Reiniciando...");
+                            const isCliAdmin = role === "cliente-admin";
+                            if (isCliAdmin)
+                                window.location.href = "/mobile-app";
+                            else window.location.href = "/t/app/equipe";
+                        }, 11000);
+                    }
+
+                    return false;
+                }
+            );
+            if (!resNewScore) return;
 
             setCurr((prev) => ({
                 ...prev,

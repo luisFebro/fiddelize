@@ -16,11 +16,12 @@ export default function InstructionBtn({
     text,
     onClick,
     mode = "none",
-    blurEffect = false,
     article = "SomeArticle_art1",
+    animated = false,
+    // blurEffect = false,
 }) {
-    const [closeBtn, setShowCloseBtn] = useState(false);
     const [needOpen, setNeedOpen] = useState(false);
+    // const [closeBtn, setShowCloseBtn] = useState(false);
 
     const [fullOpen, setFullOpen] = useState(false);
 
@@ -44,7 +45,11 @@ export default function InstructionBtn({
     );
 
     const TooltipBtn = ( // LESSON: Do not fucking pass a React Element without a html wrapper such as DIV cuz it is gives ref errors...
-        <div className="animated zoomIn delay-2s disable-blur">
+        <div
+            className={`${
+                animated ? "animated zoomIn delay-2s" : ""
+            } disable-blur`}
+        >
             <ButtonFab
                 position="relative"
                 color="var(--themePLight)"

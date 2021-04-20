@@ -7,7 +7,7 @@ import { fromNow } from "../../utils/dates/dateFns";
 import getCardTypeData from "./helpers/getCardTypeData";
 import CardActionBtn from "./card-type-pages/CardActionBtn";
 import useData from "../../hooks/useData";
-import { getVar } from "../../hooks/storage/useVar";
+import { useGenderLetter } from "../../utils/biz/getGenderLetter";
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -45,34 +45,19 @@ const getStyles = ({ clicked, backColor, grayScaleReady }) => ({
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();
 
-const useGenderLetter = () => {
-    const [genderLetter, setGenderLetter] = useState(null);
+function NotifCard(props) {
+    const {
+        forceCliUser,
+        updatedBy,
+        clicked,
+        backColor,
+        content,
+        subtype,
+        cardType,
+        createdAt,
+        isCardNew,
+    } = props;
 
-    useEffect(() => {
-        (async () => {
-            const gender = await getVar("gender");
-            const whichLetter = gender === "Ela" ? "a" : "o";
-            setGenderLetter(whichLetter);
-        })();
-    }, []);
-
-    return genderLetter;
-};
-
-function NotifCard({
-    cardId,
-    senderId,
-    cardType = "system",
-    subtype,
-    backColor = "default",
-    isCardNew,
-    createdAt,
-    content,
-    clicked,
-    forceCliUser = false,
-    bizId,
-    updatedBy,
-}) {
     const [ultimateRole, ultimateName, ultimateUserId] = useData([
         "role",
         "firstName",
@@ -94,7 +79,7 @@ function NotifCard({
 
     const styles = getStyles({ clicked, backColor, grayScaleReady });
 
-    const isCliMember = updatedBy;
+    const isCliMember = updatedBy && updatedBy.role === "cliente-membro";
 
     const showDate = () => (
         <div className="time-stamp text-small text-white font-weight-bold">
@@ -110,7 +95,7 @@ function NotifCard({
     );
 
     const cardBrief = brief && brief.replace(/§/gi, "");
-    const showCardDesc = (cardType) => (
+    const showCardDesc = () => (
         <section className="desc text-left text-white font-weight-bold">
             <p className="brief my-2 text-small">
                 {truncate(cardBrief, isSmall ? 52 : 75)}
@@ -119,24 +104,16 @@ function NotifCard({
         </section>
     );
 
-    const showActionBtn = () => (
-        <CardActionBtn
-            userId={userId}
-            senderId={senderId}
-            cardId={cardId}
-            cardType={cardType}
-            clicked={clicked}
-            backColor={backColor}
-            content={content}
-            subtype={subtype}
-            brief={brief}
-            circularImg={circularImg}
-            role={role}
-            forceCliUser={forceCliUser}
-            bizId={bizId}
-            updatedBy={updatedBy}
-        />
-    );
+    const ctaProps = {
+        ...props,
+        userName,
+        userId,
+        role,
+        brief,
+        circularImg,
+    };
+
+    const showActionBtn = () => <CardActionBtn {...ctaProps} />;
 
     const showNewCardBadge = () =>
         !isCliMember &&
@@ -184,5 +161,3 @@ function NotifCard({
 }
 
 export default React.memo(NotifCard);
-
-NotifCard.whyDidYouRender = false;

@@ -109,6 +109,8 @@ export const useClientAdmin = () => {
         clientAdmin: state.userReducer.cases.clientAdmin,
     }));
 
+    const REWARD_DEADLINE = 30;
+
     const maxScore = clientAdmin && clientAdmin.rewardScore;
     const mainReward =
         clientAdmin && clientAdmin.mainReward && clientAdmin.mainReward.cap();
@@ -118,7 +120,7 @@ export const useClientAdmin = () => {
     const bizCodeName = clientAdmin && clientAdmin.bizCodeName;
     const bizPlan = clientAdmin && clientAdmin.bizPlan;
     const bizWhatsapp = clientAdmin && clientAdmin.bizWhatsapp;
-    const rewardDeadline = clientAdmin && clientAdmin.rewardDeadline;
+    const rewardDeadline = REWARD_DEADLINE;
     const totalClientUserActiveScores =
         clientAdmin && clientAdmin.totalClientUserActiveScores;
     const totalClientUserScores =

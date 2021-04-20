@@ -4,8 +4,9 @@ import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCar
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useData from "../../../hooks/useData";
 import useAPI, { readTempScoreList } from "../../../hooks/api/useAPI";
+import getAPI, { readUser } from "../../../utils/promises/getAPI";
 import ReturnBtn from "../../../components/buttons/ReturnBtn";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useClientAdmin, useClientUser } from "../../../hooks/useRoleData";
 import useBackColor from "../../../hooks/useBackColor";
 import { setVar, store } from "../../../hooks/storage/useVar";
 import usePlayAudio, {
@@ -129,6 +130,14 @@ function VirtualCard({ history }) {
     const loadingAll = name === "..." || loading;
     const cond3dCard = !loadingAll && !error && !showNoCardMsg;
 
+    const triggerAccess = !loadingAll && !showNoCardMsg;
+    const { totalPurchasePrize } = useClientUser();
+    const { blockAccess, loadingAccess } = useAccessChecker(
+        userId,
+        totalPurchasePrize,
+        triggerAccess
+    );
+
     useEffect(() => {
         if (cardsData === false) {
             setData({
@@ -168,7 +177,13 @@ function VirtualCard({ history }) {
                 />
             </main>
             <div className="animated fadeIn delay-3s mt-5">
+                {blockAccess && !loadingAccess && (
+                    <p className="text-center text-normal mx-3 my-3">
+                        {name}, reinicie seu app para atualizar sua pontuação.
+                    </p>
+                )}
                 <ButtonFab
+                    disabled={blockAccess}
                     title="Aplicar pontos"
                     backgroundColor={`var(--themeSDark--${sColor})`}
                     onClick={handlePathAndData}
@@ -224,4 +239,44 @@ function VirtualCard({ history }) {
             )}
         </Fragment>
     );
+}
+
+// if user does not have the same quantity of prize in the db and thus not updateed
+// then, block access to user's score panel to avoid registration of accumulative score from the last challenge.
+function useAccessChecker(userId, totalPrize, trigger) {
+    const [blockAccess, setBlockAccess] = useState(false); // null
+    const [loadingAccess, setLoadingAccess] = useState(true);
+
+    useEffect(() => {
+        let cancel;
+        if (cancel || !trigger) return;
+
+        (async () => {
+            const res = await getAPI({
+                url: readUser(userId, "cliente", false),
+                params: {
+                    select: "clientUserData.totalPurchasePrize",
+                },
+            });
+
+            if (res.status !== 200) {
+                console.log(
+                    "smt wrong with readUser from block access checker"
+                );
+                return;
+            }
+            const totaldBPrizes =
+                res.data.clientUserData &&
+                res.data.clientUserData.totalPurchasePrize;
+            if (totaldBPrizes !== totalPrize) setBlockAccess(true);
+            else setBlockAccess(false);
+
+            setLoadingAccess(false);
+            return;
+        })();
+
+        return () => (cancel = true);
+    }, [trigger, userId, totalPrize]);
+
+    return { blockAccess, loadingAccess };
 }

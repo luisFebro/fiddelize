@@ -5,15 +5,19 @@ import useAPIList, { readNotifications } from "../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../hooks/api/useElemDetection";
+import { useClientAdmin } from "../../hooks/useRoleData";
 
 export default function NotifList({
     _id,
     userName,
     forceCliUser = false,
     bizId,
+    closeNotifModal,
 }) {
     const [skip, setSkip] = useState(0);
     const [firstChunkLoaded, setFirstChunkLoaded] = useState(false);
+
+    const { selfBizLogoImg: bizLogo } = useClientAdmin();
 
     const params = {
         forceCliUser,
@@ -25,7 +29,7 @@ export default function NotifList({
         params, // LESSON: skip is automatically included in the params
         listName: "notifList",
         trigger: _id !== "...",
-        // forceTrigger: true,
+        forceTrigger: true,
     };
 
     const {
@@ -52,30 +56,21 @@ export default function NotifList({
 
     const showCard = (props) => <NotifCard {...props} />;
     const renderedList = list.map((notif, ind) => {
-        const {
-            _id,
-            senderId,
-            cardType,
-            subtype,
-            isCardNew,
-            createdAt,
-            clicked,
-            content,
-            updatedBy,
-        } = notif;
-
         const props = {
-            cardId: _id,
-            cardType,
-            subtype,
-            senderId,
+            cardId: notif._id,
+            senderId: notif.senderId,
+            cardType: notif.cardType,
+            subtype: notif.subtype,
+            isCardNew: notif.isCardNew,
+            clicked: notif.clicked,
+            createdAt: notif.createdAt,
+            content: notif.content,
+            updatedBy: notif.updatedBy,
             forceCliUser,
             bizId,
-            isCardNew,
-            createdAt,
-            clicked,
-            content,
-            updatedBy,
+            backColor: "default",
+            closeNotifModal,
+            bizLogo,
         };
 
         return checkDetectedElem({ list, ind, indFromLast: 3 }) ? (

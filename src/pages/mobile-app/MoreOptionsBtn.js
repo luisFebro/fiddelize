@@ -1,6 +1,5 @@
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
@@ -12,11 +11,8 @@ import SpeedDialButton from "../../components/buttons/SpeedDialButton";
 import { useClientUser, useProfile } from "../../hooks/useRoleData";
 import { CLIENT_URL } from "../../config/clientUrl";
 import WhatsappBtn from "../../components/buttons/WhatsappBtn";
-import { readUser } from "../../redux/actions/userActions";
-import { showSnackbar } from "../../redux/actions/snackbarActions";
 // SpeedDial and Icons
 import ModalFullContent from "../../components/modals/ModalFullContent";
-import getFirstName from "../../utils/string/getFirstName";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import { disconnect } from "../../hooks/useAuthUser";
 // import lStorage from "../../utils/storage/lStorage";
@@ -62,7 +58,6 @@ function MoreOptionsBtn({
     colorS,
     // animaClass,
 }) {
-    const [blockAccess, setBlockAccess] = useState(false);
     const [purchaseModal, setPurchaseModal] = useState(false);
     const [contactModal, setContactModal] = useState(false);
     const [reviewModal, setReviewModal] = useState(false);
@@ -70,7 +65,6 @@ function MoreOptionsBtn({
     const styles = getStyles();
 
     const { _id } = useProfile();
-    const dispatch = useStoreDispatch();
 
     const {
         currScore,
@@ -78,25 +72,6 @@ function MoreOptionsBtn({
         totalPurchasePrize,
         // purchaseHistory,
     } = useClientUser();
-
-    useEffect(() => {
-        let cancel;
-        if (cancel) return;
-        readUser(dispatch, _id, {
-            select: "clientUserData.totalPurchasePrize",
-            role: "cliente",
-        }).then((res) => {
-            // if user does not have the same quantity of prize in the db and thus not updateed
-            // then, block access to loyalty score page to avoid registration of accumulative score from the last challenge.
-            if (res.status !== 200)
-                return console.log("smt wrong with readUser from morebtn");
-            const totaldBPrizes =
-                res.data.clientUserData &&
-                res.data.clientUserData.totalPurchasePrize;
-            if (totaldBPrizes !== totalPurchasePrize) setBlockAccess(true);
-        });
-        return () => (cancel = true);
-    }, [_id, totalPurchasePrize]);
 
     const showPurchaseHistory = () => {
         const handlePurchaseClose = () => {
@@ -180,15 +155,7 @@ function MoreOptionsBtn({
         ],
     };
 
-    const handleAddScoreClick = () => {
-        if (blockAccess)
-            return showSnackbar(
-                dispatch,
-                `${getFirstName(
-                    userName.cap()
-                )}, parece que sua pontuação está desatualizada. Verifique sua notificação de confirmação para começar novo desafio.`,
-                9000
-            );
+    const handleOpenVirtualCard = () => {
         const path = needAppForCliAdmin
             ? "/cartao-virtual?client-admin=1"
             : "/cartao-virtual";
@@ -231,7 +198,7 @@ function MoreOptionsBtn({
                     style={styles.fabTooltip}
                     className="floatdsa-it-5"
                     size="medium"
-                    onClick={handleAddScoreClick}
+                    onClick={handleOpenVirtualCard}
                 >
                     <LoyaltyIcon />
                 </Fab>

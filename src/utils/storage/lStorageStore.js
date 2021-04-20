@@ -35,7 +35,6 @@ const defaultClientAdmin = {
             rewardDesc: "desc. prêmio",
         },
     ],
-    regulation: { text: "...", updatedAt: "..." },
     rewardDeadline: 0,
     totalClientUserActiveScores: 0, // not used,fetched from db in recordeduserslist, but can be useful to display in home all results so far for instance,,,
     totalClientUserScores: 0, // not used,fetched from db in recordeduserslist

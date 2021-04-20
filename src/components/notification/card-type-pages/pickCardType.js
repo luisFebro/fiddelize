@@ -1,11 +1,11 @@
-import LoadableVisible from "../../../components/code-splitting/LoadableVisible";
+import LoadableVisible from "../../code-splitting/LoadableVisible";
 // CARD TYPES
 // import BirthdaysInWeek from "./types/BirthdaysInWeek";
 // import FiddelizeSystem from "./types/FiddelizeSystem";
 const AsyncChallenge = LoadableVisible({
     loader: () =>
         import(
-            "./types/Challenge" /* webpackChunkName: "challenge-picked-notif-page-lazy" */
+            "./types/challenge-and-benefit/Challenge" /* webpackChunkName: "challenge-picked-notif-page-lazy" */
         ),
 });
 const AsyncBirthdayGreeting = LoadableVisible({
@@ -42,29 +42,40 @@ const AsyncScore = LoadableVisible({
 
 export default function pickCardType(cardType, options = {}) {
     const {
+        cardId,
         content,
         subtype,
         role,
         brief,
         circularImg: mainImg,
-        selfBizLogoImg: bizLogo,
+        bizLogo,
         bizName,
         userName,
         senderId,
         updatedBy,
+        handleFullClose,
+        closeNotifModal,
     } = options;
 
     const defaultProps = { brief, role, mainImg, bizName, userName };
+
+    const handleModalsClose = () => {
+        handleFullClose();
+        closeNotifModal();
+    };
 
     const typeList = {
         welcome: <AsyncWelcome {...defaultProps} bizLogo={bizLogo} />,
         challenge: (
             <AsyncChallenge
                 {...defaultProps}
+                bizLogo={bizLogo}
+                cardId={cardId}
                 senderId={senderId}
                 subtype={subtype}
                 content={content}
                 updatedBy={updatedBy}
+                handleFullClose={handleModalsClose}
             />
         ),
         system: null,

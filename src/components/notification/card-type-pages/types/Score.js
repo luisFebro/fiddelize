@@ -16,13 +16,13 @@ function Score({
     role,
     mainImg,
     bizLogo,
-    bizName,
-    userName,
-    isWelcome = false,
     subtype,
-    content,
+    // bizName,
+    // userName,
+    // isWelcome = false,
+    // content,
 }) {
-    const isNewScore = subtype === "scorePlus   ";
+    const isNewScore = subtype === "scorePlus";
 
     // const contentData = content && extractStrData(content);
 

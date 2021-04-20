@@ -43,6 +43,7 @@ export const removeTaskAndExpireCliPrize = () =>
 export const readNotifications = (userId) =>
     `${API}/notification/read/${userId}`; // GET
 
+export const setNotifAuthor = () => `${API}/notification/set-notif-author`; // POST
 // SMS
 export const readContacts = (userId) =>
     `${API}/sms/read/contacts?userId=${userId}`;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { sendNotification } from "../../../../redux/actions/notificationActions";
 import useGetVar, { setVar } from "../../../../hooks/storage/useVar";
+import getGenderLetter from "../../../../utils/biz/getGenderLetter";
 
 export default function useNotifyCliWonChall(recipientId, data = {}) {
     const [sent, setSent] = useState(false);
@@ -15,7 +16,6 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
         lastPrizeId,
         maxScore,
         totalPurchasePrize,
-        phone,
         senderId,
         // trigger
         userIdLoading,
@@ -36,6 +36,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
             userId: businessId,
             payload: {
                 role: "cliente-admin",
+                rewardScore: maxScore,
                 prize: mainReward,
                 customerName: fullName,
                 currChallN: currChall,
@@ -46,13 +47,12 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
                 cardType: "challenge",
                 subtype: "clientWonChall",
                 lastPrizeId,
-                maxScore,
+                rewardScore: maxScore,
                 currScore,
                 totalPurchasePrize,
                 currChall,
                 fullName,
                 mainReward,
-                phone,
             },
         }),
         // eslint-disable-next-line
@@ -72,16 +72,21 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
         if (trigger && !hasVersion && !loadingVar && !sent) {
             if (cancel || !pushNotifData) return;
 
-            sendNotification(recipientId, cardType, pushNotifData).then(
-                (res) => {
-                    if (res.status !== 200)
-                        return console.log(
-                            "Something wrong with useCountNotif"
-                        );
-                    setSent(true);
-                    if (key) setVar({ [key]: value });
-                }
-            );
+            (async () => {
+                const gender = await getGenderLetter();
+
+                const finalNotifData = {
+                    ...pushNotifData,
+                    notifCard: {
+                        ...pushNotifData.notifCard,
+                        gender,
+                    },
+                };
+
+                await sendNotification(recipientId, cardType, finalNotifData);
+                setSent(true);
+                if (key) setVar({ [key]: value });
+            })();
         }
         return () => {
             cancel = true;

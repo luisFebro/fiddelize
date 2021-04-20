@@ -22,7 +22,7 @@ import {
 } from "../../../hooks/useRoleData";
 import getFirstName from "../../../utils/string/getFirstName";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
-import usePlayAudio from "../../../hooks/media/usePlayAudio";
+import { prerenderAudio } from "../../../hooks/media/usePlayAudio";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
 import getAPI, {
     setLastScoreAsDone,
@@ -80,9 +80,9 @@ function AsyncClientScoresPanel({ history, location }) {
     let {
         maxScore,
         selfMilestoneIcon,
-        bizName,
         rewardList,
-        bizCodeName,
+        // bizName,
+        // bizCodeName,
         selfThemeBackColor: colorBack,
         selfThemePColor: colorP,
         selfThemeSColor: colorS,
@@ -105,9 +105,6 @@ function AsyncClientScoresPanel({ history, location }) {
     // USE HOOKS
     const dispatch = useStoreDispatch();
     const animatedNumber = useRef(null);
-    usePlayAudio("/sounds/cornet-and-applauses.mp3", ".win-challenge--audio", {
-        prerender: true,
-    });
     useBackColor(`var(--themeBackground--${colorBack})`);
     // useCount("ClientScoresPanel"); // RT = 46
     useEffect(() => {
@@ -191,6 +188,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     totalGeneralScore + Number(cashCurrScore),
                 "clientUserData.filterLastPurchase": new Date(),
                 "clientUserData.filterHighestPurchase": newHighestScore,
+                "clientUserData.needStaffDiscount": true,
             };
 
             // This is for cli-admin test client mode which does not have a totalPurchasePrize when it is updated.
@@ -330,6 +328,13 @@ function AsyncClientScoresPanel({ history, location }) {
     );
 
     const handleHomeBtnClick = async () => {
+        if (userBeatChallenge) {
+            await prerenderAudio(
+                "/sounds/cornet-and-applauses.mp3",
+                "audio-client-won-prize"
+            );
+        }
+
         setHideCurrScore(true);
         if (!ratingData.nps && type === "nps")
             return showSnackbar(
@@ -337,6 +342,7 @@ function AsyncClientScoresPanel({ history, location }) {
                 "Clique em uma carinha para continuar",
                 "warning"
             );
+
         await setVar({ doneNPS: true });
         showSnackbar(dispatch, "Salvando e finalizando...", "warning");
 
@@ -389,7 +395,7 @@ function AsyncClientScoresPanel({ history, location }) {
             <section className="container-center">
                 <button
                     disabled={!finishedWork}
-                    className="win-challenge--audio text-shadow my-5 pressed-to-left"
+                    className="text-shadow my-5 pressed-to-left"
                     style={styles.finishButton}
                     onClick={handleHomeBtnClick}
                     onMouseOver={(e) =>
@@ -406,7 +412,7 @@ function AsyncClientScoresPanel({ history, location }) {
     };
 
     return (
-        <section className="container-center-col mt-5 animated slideInLeft fast">
+        <section className="mt-5 animated slideInLeft fast">
             <div
                 style={{
                     maxWidth: !isSmall && 630,

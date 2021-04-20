@@ -39,7 +39,7 @@ const handleSecHeading = (data, styles) => (
             style={styles.dateBadge}
         >
             <span className="text-small text-shadow font-weight-bold">
-                Ganho em: {calendar(data.createdAt)}.
+                {calendar(data.createdAt)}.
             </span>
         </p>
     </section>

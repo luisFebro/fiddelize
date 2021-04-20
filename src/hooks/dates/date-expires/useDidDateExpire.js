@@ -1,26 +1,19 @@
 import { useEffect, useState } from "react";
-import useAPI, { readPrizes } from "../../api/useAPI";
 import didDateExpire from "./didDateExpire";
 
 export default function useDidDateExpire({
     deadline = 30,
-    userId,
+    dateToExpire,
     trigger = true,
 }) {
     const [didExpire, setDidExpire] = useState(false);
 
-    const { data: lastPrizeDate, loading } = useAPI({
-        url: readPrizes(userId),
-        params: { lastPrizeDate: true, thisRole: "cliente" },
-        trigger,
-    });
-
     useEffect(() => {
-        if (!loading && lastPrizeDate) {
-            const res = didDateExpire(lastPrizeDate, { afterDay: deadline });
+        if (dateToExpire && trigger) {
+            const res = didDateExpire(dateToExpire, { afterDay: deadline });
             setDidExpire(res);
         }
-    }, [loading, lastPrizeDate]);
+    }, [dateToExpire, trigger, deadline]);
 
     return didExpire;
 }

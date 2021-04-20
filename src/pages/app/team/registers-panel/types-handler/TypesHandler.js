@@ -86,7 +86,11 @@ export default function TypesHandler({ isNewMember = false }) {
                         className="position-absolute"
                         style={styles.infoBtn}
                     >
-                        <InstructionBtn text={thisInfo} mode="tooltip" />
+                        <InstructionBtn
+                            text={thisInfo}
+                            mode="tooltip"
+                            animated
+                        />
                     </section>
                 )}
             </section>

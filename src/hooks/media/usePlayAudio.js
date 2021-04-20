@@ -1,7 +1,5 @@
 import { useEffect } from "react";
-import convertBlobToData, {
-    convertBlobToDataAsync,
-} from "../../utils/media/convertBlobToData";
+import convertBlobToData from "../../utils/media/convertBlobToData";
 import { getVar, store } from "../storage/useVar";
 
 // For prerender audio when we need to use the mediaElem name twice, one to prerender the audio and to actually play it.
@@ -9,12 +7,11 @@ import { getVar, store } from "../storage/useVar";
 //     "cli-member"
 // };
 // to use programmatically.
-export const prerenderAudio = async (url, mediaName, options = {}) => {
+export const prerenderAudio = async (url, mediaName) => {
     const response = await fetch(url);
     const blob = await response.blob();
 
-    return await convertBlobToDataAsync(blob, {
-        prerender: true,
+    return await convertBlobToData(blob, {
         mediaName,
     }).catch((err) => console.log(err));
 };
@@ -22,16 +19,8 @@ export const prerenderAudio = async (url, mediaName, options = {}) => {
 // cache and play audio easily and surely after loading a page.
 // mediaElem should be prefix (# id or . class) + componentName + mediaType to avoid conflicts...
 // trigger (bool) condition to play audio
-// if prerender and autoplay, mediaElem will be a name instead of an element
 export default function usePlayAudio(url, mediaElem, options = {}) {
-    let {
-        prerender,
-        delay,
-        trigger,
-        multi,
-        autoplay = false,
-        onendedCallback,
-    } = options;
+    let { delay, trigger, multi, autoplay = false, onendedCallback } = options;
 
     if (!delay) delay = 0;
     if (typeof trigger !== "boolean") trigger = true;
@@ -61,17 +50,6 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
 
                 fetch(url)
                     .then((response) => response.blob())
-                    .then((blob) =>
-                        setTimeout(
-                            () =>
-                                convertBlobToData(blob, {
-                                    prerender,
-                                    audio,
-                                    mediaName: mediaElem,
-                                }),
-                            delay
-                        )
-                    )
                     .catch((err) => console.log(err));
             }
         }

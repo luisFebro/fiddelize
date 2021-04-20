@@ -13,6 +13,7 @@ export default function Notification({
     forceCliUser = false,
     bizId,
     totalNotif,
+    closeNotifModal,
 }) {
     const [loading, setLoading] = useState(false);
     const [btnTitle, setBtnTitle] = useState("Marcar todas ✔️");
@@ -110,6 +111,7 @@ export default function Notification({
                 runList={null}
                 forceCliUser={forceCliUser}
                 bizId={bizId}
+                closeNotifModal={closeNotifModal}
             />
         </Fragment>
     );

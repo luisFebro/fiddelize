@@ -14,7 +14,6 @@ export default function sendSMS({
     smsId = "", // for automatic only
     serviceType = "confirmedChall",
     contactList,
-    dispatch,
     customMsg,
     isAutomatic = true,
     trigger = true,

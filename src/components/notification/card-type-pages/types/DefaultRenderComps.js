@@ -20,11 +20,7 @@ export const ShowTitle = ({ text }) => (
     </div>
 );
 
-export const ShowIllustration = ({
-    role,
-    mainImg,
-    bizLogo = "https://res.cloudinary.com/fiddelize/image/upload/h_100,w_100/v1593518018/cli-admin-consultoria-cldmh38.png",
-}) => {
+export const ShowIllustration = ({ role, mainImg, bizLogo }) => {
     const { isSquared, width, height, newImg: thisBizLogo } = removeImgFormat(
         bizLogo
     );
@@ -38,7 +34,7 @@ export const ShowIllustration = ({
                 width={150}
                 height="auto"
             />
-            {(role === "cliente" || role === "cliente-membro") && (
+            {role && (
                 <div
                     className="position-absolute"
                     style={{

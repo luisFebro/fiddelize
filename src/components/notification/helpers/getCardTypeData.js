@@ -38,11 +38,12 @@ export default function getCardTypeData(cardType, options = {}) {
                 currChall: thisCurrChall,
                 prizeDesc,
                 clientFullName,
+                rewardScore,
             } = extractStrData(content);
 
             if (subtype === "clientWonChall") {
                 title = "Desafio Concluído";
-                brief = `Cliente §${clientFullName}§ concluiu desafio de §N.° ${thisCurrChall}§ e ganhou prêmio: §${prizeDesc}§.`;
+                brief = `Cliente §${clientFullName}§ concluiu desafio N.° ${thisCurrChall} com meta de §${rewardScore} pontos§ e ganhou prêmio: §${prizeDesc}§.`;
             }
             if (subtype === "confirmedChall") {
                 title = "Desafio Confirmado";

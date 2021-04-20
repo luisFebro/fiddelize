@@ -37,7 +37,7 @@ import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import useData from "../../hooks/useData";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
-import showToast from "../../components/toasts";
+import showToast from "../toasts";
 
 const filter = getFilterDate();
 

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreState } from "easy-peasy";
 import { default as YesNoModalBtn } from "./modal/modal-conf-yes-no/ModalBtn";
 import { default as FullModalBtn } from "./modal/modal-full-screen/ModalBtn";
-// import { default as DiscountModalBtn } from "./modal/modal-text-field/ModalBtn";
 import ClientProfile from "./modal-content-pages/ClientProfile";
 import PurchaseHistoryBtn from "../../../../mobile-app/history-purchase-btn/PurchaseHistoryBtn";
 
@@ -130,48 +129,3 @@ const showDeleteBtn = (data, needBadgeForTestMode) =>
             />
         </div>
     );
-
-/*
-const showDiscountBtn = (data, clientAdminData) => {
-    const currScore = data.clientUserData && data.clientUserData.currScore;
-    const totalPrizes = data.clientUserData && data.clientUserData.totalPurchasePrize;
-    let totalActiveScore = data.clientUserData && data.clientUserData.totalActiveScore;
-    const totalGeneralScore = data.clientUserData && data.clientUserData.totalGeneralScore;
-    if(!totalActiveScore) { totalActiveScore = totalGeneralScore };
-    const rewardScore = clientAdminData.rewardScore;
-    return(
-        <div>
-            <DiscountModalBtn
-                button={{
-                    iconFontAwesome: <FontAwesomeIcon icon="minus-circle" />,
-                    backgroundColor: 'var(--themeSDark)',
-                    title: "Descontar Pontos",
-                    variant: 'extended',
-                    position: 'relative',
-                    size: "large",
-                }}
-                modalData={{
-                    title: "Desconto de Pontos<br />do Cliente",
-                    subTitle: null,
-                    labelTxtField: "Valor para ser descontado:",
-                    txtBtn: "Descontar",
-                    iconBtn: <FontAwesomeIcon icon="minus-circle" />,
-                    userCurrScore: currScore,
-                    name: data.name.cap(),
-                    rewardScore: rewardScore,
-                    userId: data._id,
-                    totalPrizes,
-                    totalActiveScore,
-                }}
-            />
-        </div>
-    );
-};
-
-<div className="blob-action-btn--root position-relative">
-    <p className="star position-absolute">
-        <FontAwesomeIcon icon="star" className="star-blob-medium animated rotateIn fast delay-4s" />
-    </p>
-    {showDiscountBtn(data, clientAdminData)}
-</div>
- */

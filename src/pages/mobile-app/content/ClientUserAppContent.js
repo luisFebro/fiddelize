@@ -62,11 +62,11 @@ export default function ClientUserAppContent({
     if (!colorS) {
         colorS = "default";
     }
-    const { role, phone } = useProfile();
+    const { role } = useProfile();
     // eslint-disable-next-line
     let [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
     firstName = clientNameTest || firstName;
-    const userIdLoading = Boolean(_id === "...");
+    const userIdLoading = _id === "...";
 
     const totalNotifications = useCountNotif(_id, {
         role,
@@ -82,17 +82,16 @@ export default function ClientUserAppContent({
     } = useClientUser();
     const currChall = defineCurrChallenge(totalPurchasePrize);
 
-    let {
-        maxScore,
+    const {
         rewardList,
         rewardDeadline,
-        selfMilestoneIcon,
         selfThemeBackColor,
         arePrizesVisible,
         bizWhatsapp,
-        bizName,
+        // bizName,
         selfBizLogoImg,
     } = useClientAdmin();
+    let { maxScore, selfMilestoneIcon } = useClientAdmin();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
@@ -161,11 +160,14 @@ export default function ClientUserAppContent({
 
     const { isAuthUser } = useAuthUser();
     // useCount("ClientUserAppContent.js"); // RT = 3 before = /
-    const { data: lastPrizeId } = useAPI({
+    const { data } = useAPI({
         url: readPrizes(_id),
-        params: { lastPrizeId: true, thisRole: "cliente" },
+        params: { lastPrizeDateAndId: true, thisRole: "cliente" },
         trigger: !needAppForPreview && !userIdLoading,
     });
+
+    const lastPrizeId = data && data.id;
+    const lastPrizeDate = data && data.date;
 
     useNotifyCliWonChall(businessId, {
         businessId,
@@ -177,7 +179,6 @@ export default function ClientUserAppContent({
         lastPrizeId,
         maxScore,
         totalPurchasePrize,
-        phone,
         senderId: _id,
         // trigger
         userIdLoading,
@@ -185,9 +186,12 @@ export default function ClientUserAppContent({
     });
 
     const needMissingMsg = useDidDateExpire({
+        dateToExpire: lastPrizeDate,
         userId: _id,
-        trigger: !needAppForPreview && !userIdLoading,
+        trigger: !needAppForPreview && !userIdLoading && lastPrizeDate,
     });
+
+    // this can be soon depracated with a push notification.
     const autoSMSMissingPurchase = getAutoSMSObj({
         needMissingMsg,
         businessId,
@@ -195,16 +199,6 @@ export default function ClientUserAppContent({
         bizWhatsapp,
     });
     useSendSMS(autoSMSMissingPurchase);
-
-    const autoSMSObj = getAutoSMSObj({
-        userBeatChallenge,
-        lastPrizeId,
-        businessId,
-        firstName,
-        currChall,
-        bizWhatsapp,
-    });
-    useSendSMS(autoSMSObj);
 
     const confettiOptions = React.useCallback(
         () => ({ trigger: userBeatChallenge, showMoreComps }),
@@ -276,7 +270,9 @@ export default function ClientUserAppContent({
             >
                 {greeting},
                 <br />
-                <span className="text-title">{`${firstName}!`}</span>
+                <span className="text-title">{`${
+                    !firstName ? "..." : firstName
+                }!`}</span>
             </div>
         </section>
     );
@@ -474,20 +470,14 @@ function getAutoSMSObj(data) {
     const { needMissingMsg } = data;
 
     return {
-        trigger:
-            needMissingMsg ||
-            Boolean(data.userBeatChallenge && data.lastPrizeId),
-        serviceType: needMissingMsg ? "missingPurchase" : "finishedChall",
+        trigger: needMissingMsg,
+        serviceType: "missingPurchase",
         userId: data.businessId,
-        smsId: needMissingMsg ? now.getMonth() : data.lastPrizeId,
-        customMsg: needMissingMsg
-            ? ""
-            : `CONCLUSÃO DE DESAFIO - ${data.firstName}, {
-                  addSurname: true,
-              })} acabou de concluir desafio N.º ${data.currChall}.`,
+        smsId: now.getMonth(),
+        customMsg: "",
         contactList: [
             {
-                name: needMissingMsg ? data.firstName : "Você",
+                name: data.firstName,
                 phone: data.bizWhatsapp,
             },
         ],

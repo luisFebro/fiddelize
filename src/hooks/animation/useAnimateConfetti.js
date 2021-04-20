@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import useAutoPlay from '../media/useAutoPlay';
+import usePlayAudio from "../../hooks/media/usePlayAudio";
 import lStorage, { confettiPlayOp } from "../../utils/storage/lStorage";
 
 const loadConfetti = async (command) => {
@@ -19,7 +19,10 @@ export default function useAnimateConfetti(options = {}) {
 
     const [runSound, setRunSound] = useState(false);
 
-    // useAutoPlay("win-challenge--audio", { trigger: runSound, delay: 2500 })
+    usePlayAudio(null, "audio-client-won-prize", {
+        autoplay: true,
+        trigger: trigger && runSound,
+    });
 
     useEffect(() => {
         let cancel;

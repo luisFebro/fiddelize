@@ -1,5 +1,4 @@
 import { convertDotToComma } from "../../utils/numbers/convertDotComma";
-import PurchaseHistoryBtn from "./history-purchase-btn/PurchaseHistoryBtn";
 
 const AllScores = ({
     currScoreRef,
@@ -29,13 +28,11 @@ const AllScores = ({
 
     return (
         <section className="text-subtitle my-3 text-white text-center">
-            <span className={`text-title ${selectedTxtStyle}`}>
-                Fidelidômetro:
-            </span>
+            <span className={`text-title ${selectedTxtStyle}`}>Seu Saldo:</span>
             <br />
             <div className="d-flex justify-content-center">
                 <p
-                    className={`text-title ${selectedTxtStyle}`}
+                    className={`text-hero ${selectedTxtStyle}`}
                     ref={currScoreRef}
                 >
                     ...
@@ -44,7 +41,7 @@ const AllScores = ({
             </div>
             {/* LAST SCORE */}
             {currScore === 0 || !currScore || !showPercentage ? null : (
-                <section className="text-normal position-relative animated slideInLeft slow">
+                <section className="text-normal position-relative animated fadeIn">
                     <section>
                         <div
                             className="all-scores--ellipse"
@@ -55,12 +52,6 @@ const AllScores = ({
                             <div
                                 className="body"
                                 style={{ left: needAppForPreview && "160px" }}
-                            />
-                            <PurchaseHistoryBtn
-                                bottom={-15}
-                                right={-5}
-                                colorS={colorS}
-                                modalData={modalData}
                             />
                         </div>
                     </section>
@@ -79,7 +70,7 @@ const AllScores = ({
                         <br />
                         última pontuação:
                         <br />
-                        <span className="text-em-1-3">{lastScore}</span>
+                        <span className="text-em-1-3">{lastScore} pts</span>
                     </div>
                 </section>
             )}

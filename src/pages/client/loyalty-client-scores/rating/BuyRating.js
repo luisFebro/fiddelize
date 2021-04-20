@@ -36,7 +36,7 @@ const handleText = ({ isNPS, grade, scale }) => {
 
 export default function BuyRating({
     type = "stars",
-    colorP,
+    // colorP,
     handleBuyRating,
     defaultScale,
     defaultGrade,
@@ -124,7 +124,7 @@ export default function BuyRating({
     const MAX_LEN = 300;
     return (
         <section
-            className="nps-rating--root my-5 mx-2"
+            className="nps-rating--root my-5"
             style={{ backgroundColor: "var(--themePLight--default)" }}
         >
             {!onlyReportField && (

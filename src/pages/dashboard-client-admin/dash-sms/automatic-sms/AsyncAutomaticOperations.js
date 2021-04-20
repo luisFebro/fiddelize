@@ -21,25 +21,6 @@ const serviceOptions = ({ bizName }) => [
         usage: 0,
         msg: `Sentimos sua falta. Estamos aqui ao seu dispor para te atender novamente. Faça nos uma visita da saudade. Fechado? ;) Abçs - ${bizName.toUpperCase()}`,
     },
-    {
-        serviceId: 2,
-        service: "confirmedChall",
-        title: "Confimação de desafio",
-        subtitle:
-            "Aviso automático para o cliente quando você confirma/desconta um desafio concluído para resgate de prêmio",
-        usage: 0,
-        msg: `DESAFIO CONFIRMADO DA ${bizName.toUpperCase()} - Opa! Seu desafio foi confirmado. Abra seu app e confira: https://fiddelize.com.br/mobile-app?abrir=1`,
-    },
-    {
-        serviceId: 3,
-        service: "finishedChall",
-        title: "Conclusão de desafio",
-        subtitle:
-            "Saiba em tempo real quando seu cliente bater a meta em pontos e concluir um desafio.",
-        usage: 0,
-        msg:
-            "CONCLUSÃO DE DESAFIO - [Nome Cliente] acabou de concluir desafio N.º [Número Desafio].",
-    },
 ];
 
 export default function AutomaticOperations() {
@@ -133,3 +114,27 @@ export default function AutomaticOperations() {
         </section>
     );
 }
+
+/* ARCHIVE
+these services are depracated since there's push notification sending automatically with firebase and free of costs.
+{
+    serviceId: 2,
+    service: "confirmedChall",
+    title: "Confimação de desafio",
+    subtitle:
+        "Aviso automático para o cliente quando você confirma/desconta um desafio concluído para resgate de prêmio",
+    usage: 0,
+    msg: `DESAFIO CONFIRMADO DA ${bizName.toUpperCase()} - Opa! Seu desafio foi confirmado. Abra seu app e confira: https://fiddelize.com.br/mobile-app?abrir=1`,
+},
+{
+    serviceId: 3,
+    service: "finishedChall",
+    title: "Conclusão de desafio",
+    subtitle:
+        "Saiba em tempo real quando seu cliente bater a meta em pontos e concluir um desafio.",
+    usage: 0,
+    msg:
+        "CONCLUSÃO DE DESAFIO - [Nome Cliente] acabou de concluir desafio N.º [Número Desafio].",
+},
+
+ */

@@ -14,7 +14,6 @@ const isApp = isThisApp();
 
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => (history) => {
-    console.log("==USER LOADING==");
     axios
         .get(`${API}/auth/user`, tokenConfig(getState))
         .then((res) => {
