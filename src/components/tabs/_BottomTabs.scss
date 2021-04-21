@@ -1,27 +1,39 @@
-#bottom-tabs--root {
+.bottom-tabs--root {
+    border-radius: 20px;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+
     .MuiTab-root {
-        padding: 0px;
-        line-height: 1.00;
+        padding: 5px 0 10px;
+        line-height: 0.80;
         outline: none;
     }
 
-    .MuiTab-labelIcon {
-        min-height: 35px;
+    .MuiTab-wrapper {
+        margin: 0 15px;
     }
 
-    .PrivateTabIndicator-root-13 {
-        height: 4px;
+    .MuiTab-labelIcon {
+        min-height: 0px;
+        font-weight: bold;
+        text-transform: lowercase;
+    }
+
+    .MuiTabs-indicator {
+        height: 4px !important;
     }
 
     .MuiAppBar-positionFixed {
         top: auto;
         position: fixed;
         right: 0;
-        bottom: 0;
+        bottom: -1px;
         left: auto;
     }
 
     .MuiTab-labelIcon .MuiTab-wrapper > *:first-child {
-      margin-bottom: 1px;
+      margin-top: 2px;
+      margin-bottom: 4px;
     }
 }

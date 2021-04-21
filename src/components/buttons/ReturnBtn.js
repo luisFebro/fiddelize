@@ -16,6 +16,7 @@ function ReturnBtn({
     toAdminDash,
     btnColor = "default",
     toTab,
+    style = { top: 15, left: 15 },
 }) {
     const { bizCodeName } = useClientAdmin();
 
@@ -44,7 +45,7 @@ function ReturnBtn({
     }
 
     return (
-        <div className="position-absolute" style={{ top: 15, left: 15 }}>
+        <div className="position-fixed" style={style}>
             {isFunc && (
                 <ButtonFab
                     onClick={onClick}

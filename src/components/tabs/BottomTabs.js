@@ -7,11 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import { getVar, removeVar } from "../../hooks/storage/useVar";
+import scrollIntoView from "../../utils/document/scrollIntoView";
 import "./_BottomTabs.scss";
-import clsx from "clsx";
-// import { setRun } from '../redux/actions/globalActions';
-
-const isSmall = window.Helper.isSmallScreen();
 
 function TabPanel(props) {
     const { children, value, index, boxPadding, ...other } = props;
@@ -38,18 +35,12 @@ function a11yProps(index) {
 }
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        backgroundColor: "var(--mainWhite)",
-        borderRadius: "20px",
-        width: "100%",
-        margin: "auto",
-        overflow: "hidden",
-    },
     selected: {
         fontFamily: "var(--mainFont)",
         fontWeight: "bold",
-        color: "var(--themePLight) !important",
-        fontSize: "0.95rem !important",
+        color: ({ color }) =>
+            color ? `${color} !important` : "var(--themePLight) !important",
+        fontSize: "1rem !important",
     },
 }));
 
@@ -65,7 +56,11 @@ BottomTabs.propTypes = {
 };
 
 export default function BottomTabs({ data, needTabFullWidth = false }) {
-    const classes = useStyles();
+    const props = {
+        color: "red",
+    };
+
+    const classes = useStyles(props);
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
@@ -83,14 +78,24 @@ export default function BottomTabs({ data, needTabFullWidth = false }) {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+
+        // handle click actions
+        const allowedScrollViewList = data.map((tab) => tab.scrollView);
+        if (allowedScrollViewList[newValue])
+            scrollIntoView("#bottomTabContentView", { duration: 3000 });
+        else {
+            const { onClick } = data[newValue];
+            if (typeof onClick === "function") onClick();
+        }
     };
 
-    // const handleChangeIndex = index => {
-    //     setValue(index);
-    // };
-
     return (
-        <div id="bottom-tabs--root" className={classes.root}>
+        <div
+            className="bottom-tabs--root"
+            style={{
+                backgroundColor: "var(--mainWhite)",
+            }}
+        >
             {data &&
                 data.map((tab, ind) => (
                     <TabPanel
@@ -108,16 +113,9 @@ export default function BottomTabs({ data, needTabFullWidth = false }) {
                 <Tabs
                     value={value}
                     onChange={handleChange}
-                    variant={
-                        needTabFullWidth
-                            ? "fullWidth"
-                            : isSmall
-                            ? "scrollable"
-                            : "fullWidth"
-                    }
-                    indicatorColor="primary"
-                    textColor="primary"
-                    aria-label="scrollable force with icon"
+                    variant={needTabFullWidth ? "fullWidth" : "scrollable"}
+                    aria-label="bottom tabs"
+                    className="animated fadeInUp"
                 >
                     {data &&
                         data.map((tab, ind) => (

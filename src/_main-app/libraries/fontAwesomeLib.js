@@ -61,6 +61,7 @@ import { faSms } from "@fortawesome/free-solid-svg-icons/faSms";
 import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons/faSortAmountDown";
 import { faSortAmountDownAlt } from "@fortawesome/free-solid-svg-icons/faSortAmountDownAlt";
 import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons/faMapMarkedAlt";
+import { faFileContract } from "@fortawesome/free-solid-svg-icons/faFileContract";
 // services
 import { faFilter } from "@fortawesome/free-solid-svg-icons/faFilter";
 import { faMagic } from "@fortawesome/free-solid-svg-icons/faMagic";
@@ -165,6 +166,7 @@ library.add(
     faStore,
     faCreditCard,
     faPhoneSquareAlt,
+    faFileContract,
     // services
     faFilter,
     faMagic,

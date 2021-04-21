@@ -34,8 +34,6 @@ export default function NumericKeypad({
 
     const [display, setDisplay] = useState(defaultValue[keyboardType]);
 
-    const dispatch = useStoreDispatch();
-
     const handleClose = () => {
         setDisplay(defaultValue[keyboardType]);
         onClose();

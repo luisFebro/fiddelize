@@ -12,7 +12,7 @@ export default function Cabin({ history }) {
             <h1 className="text-subtitle text-white text-center font-weight-bold">
                 Cabine Fiddelize
             </h1>
-            <h1
+            <h2
                 className="text-normal text-white text-center"
                 style={{
                     lineHeight: "25px",
@@ -21,7 +21,7 @@ export default function Cabin({ history }) {
                 Análise e Performance
                 <br />
                 do Negócio
-            </h1>
+            </h2>
         </div>
     );
 

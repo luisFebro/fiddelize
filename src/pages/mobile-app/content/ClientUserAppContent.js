@@ -390,23 +390,14 @@ export default function ClientUserAppContent({
             </div>
         );
 
-    const showMoreOptionsBtn = () => (
-        <AsyncMoreOptionsBtn
-            playBeep={playBeep}
-            showMoreBtn={showMoreBtn}
-            userName={firstName}
-            needAppForCliAdmin={needAppForCliAdmin}
-            needAppForPreview={needAppForPreview}
-            colorS={colorS}
-        />
-    );
-
     const backBtnForCliAdmin = () => (
         <BtnBackTestMode
             isActive={!!needAppForCliAdmin}
             btnBackColor={backColorSelect}
         />
     );
+
+    const appBarData = React.useMemo(() => ({}), []);
 
     return (
         <section
@@ -419,13 +410,16 @@ export default function ClientUserAppContent({
             {showPercCircleAndGift()}
             {showRatingIcons()}
             {showSkipIconsBtn()}
-            {showMoreOptionsBtn()}
             {backBtnForCliAdmin()}
-            {showMoreComps && <GroupedAppBar />}
-            <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
+            {showMoreComps && <GroupedAppBar appBarData={appBarData} />}
             <NotifPermissionBanner
                 title="Receba notificações sobre seus benefícios!"
                 subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
+            />
+            <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
+            <div
+                style={{ position: "absolute", bottom: 0, left: "auto" }}
+                id="bottomTabContentView"
             />
         </section>
     );
@@ -458,6 +452,17 @@ b) When user log in, RT is 36
 */
 
 /* ARCHIVES
+ const showMoreOptionsBtn = () => (
+    <AsyncMoreOptionsBtn
+        playBeep={playBeep}
+        showMoreBtn={showMoreBtn}
+        userName={firstName}
+        needAppForCliAdmin={needAppForCliAdmin}
+        needAppForPreview={needAppForPreview}
+        colorS={colorS}
+    />
+);
+
 const showRules = () =>
     showMoreComps && (
         <div className="mb-4">

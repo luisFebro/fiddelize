@@ -12,36 +12,35 @@ import usePlayAudio, {
     prerenderAudio,
 } from "../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../utils/arrays/getRandomArray";
-// import getAPI, { readUser } from "../../../utils/promises/getAPI";
-
 import Img from "../../../components/Img";
-// import FlipCreditCard from "../../../components/cards/flip-credit-card/FlipCreditCard";
-// Use the 3D card with the flip animation from flipCreditCard.
-/*
-<FlipCreditCard />
- */
+import getDayGreetingBr from "../../../utils/getDayGreetingBr";
+
 export default withRouter(VirtualCard);
-const isSmall = window.Helper.isSmallScreen();
 
 // text-to-speech
 const defaultPath = "/sounds/tts/cli-user-app";
-const getTtsStore = ({ isShe, isSmall }) => ({
+const getTtsStore = ({ isShe }) => ({
     newCard: [
         {
-            audio: `${defaultPath}/new-card/${
-                isSmall ? "mobile" : "desktop"
-            }-novos-pontos-exclusivos.mp3`,
-            text: isSmall
-                ? "Aqui está seus novos pontos do seu cartão virtual exclusivo de fidelidade. Experimente tocar no cartão para interagir"
-                : "Aqui está seus novos pontos do seu cartão virtual de fidelidade. Experimente passar o mouse sobre o cartão para interagir",
+            audio: `${defaultPath}/new-card/${getDayGreeting()}-oba-novo-cartao-de-compra-exclusivo-com-pontos.mp3`,
+            text:
+                "Oba! Aqui está seu novo cartão de compra exclusivo com pontos. Tenha um bom dia e volte sempre!",
         },
         {
             audio: `${defaultPath}/new-card/${
                 isShe ? "s" : ""
-            }he-olha-ai-seu-novo-cartao-d-amig73r.mp3`,
+            }he-olha-ai-seu-novo-cartao-d-amig.mp3`,
             text: `Olha ai seu novo cartão de fidelidade. E você já pode usar, amig${
                 isShe ? "a" : "o"
             }`,
+        },
+        {
+            audio: `${defaultPath}/new-card/${
+                isShe ? "s" : ""
+            }he-novo-cartao-preferencia.mp3`,
+            text: `${
+                isShe ? "Querida, " : "Meu caro, "
+            } aqui está seu novo cartão de compra. Obrigada por sua preferência!`,
         },
     ],
     noCard: [
@@ -51,11 +50,11 @@ const getTtsStore = ({ isShe, isSmall }) => ({
             }he-cartao-voando-pousa-proxima-compra.mp3`,
             text: `${
                 isShe ? "Moça" : "Rapaz"
-            }, parece que seu novo cartão de fidelidade está voando por aí. Mas ele vai pousar na sua próxima compra!`,
+            }, parece que seu novo cartão está voando por aí. Mas ele vai pousar na sua próxima compra!`,
         },
         {
             audio: `${defaultPath}/no-card/no-card-at-moment.mp3`,
-            text: "Nenhum cartão com pontos no momento.",
+            text: "Nenhum cartão de compra com pontos no momento.",
         },
     ],
 });
@@ -91,7 +90,7 @@ function VirtualCard({ history }) {
                 noCard: showNoCardMsg,
             });
 
-            const selectedArray = getTtsStore({ isShe, isSmall })[typeMsg];
+            const selectedArray = getTtsStore({ isShe })[typeMsg];
             const { audio, text } = getRandomArray(selectedArray);
 
             await setVar({ "text_cli-user_virtual-card": text }, store.audios);
@@ -107,6 +106,20 @@ function VirtualCard({ history }) {
         storeName: "audios",
         trigger: !loading && audioPrerender,
     });
+
+    const showTitle = () => (
+        <div className="mt-3 text-center text-purple mx-3">
+            <h1 className="text-subtitle font-weight-bold">Cartão</h1>
+            <h2
+                className="text-normal"
+                style={{
+                    lineHeight: "25px",
+                }}
+            >
+                A cada compra, você ganha um novo cartão com pontos.
+            </h2>
+        </div>
+    );
 
     const handleFinishedAudio = () => {
         // console.log("the audio ended!!!");
@@ -160,7 +173,7 @@ function VirtualCard({ history }) {
     };
 
     const showCard = () => (
-        <section className="container-center-col px-2 full-height">
+        <section className="container-center-col px-2 mt-5">
             <main className="animated fadeInUp">
                 <ThreeDFlipCard
                     name={name}
@@ -200,32 +213,59 @@ function VirtualCard({ history }) {
 
     return (
         <Fragment>
-            <ReturnBtn
-                onClick={handleReturnBtn}
-                icon="arrow-left"
-                btnColor={sColor}
-            />
+            {showTitle()}
             {error && (
-                <h2 className="mx-3 text-center full-height container-center text-subtitle font-weight-bold text-black">
+                <h2
+                    className="mx-3 text-center container-center text-subtitle font-weight-bold text-purple"
+                    style={{
+                        marginTop: 150,
+                    }}
+                >
                     Ocorreu um problema de conexão. Tente novamente!
                 </h2>
             )}
             {loadingAll && (
-                <h2 className="mx-3 text-center full-height container-center text-subtitle font-weight-bold text-black">
+                <h2
+                    className="mx-3 text-center container-center text-subtitle font-weight-bold text-purple"
+                    style={{
+                        marginTop: 150,
+                    }}
+                >
                     Carregando cartão...
                 </h2>
             )}
             {cond3dCard && showCard()}
             {!loadingAll && showNoCardMsg && (
-                <section className="full-page mx-3">
+                <section className="mt-4 mx-3">
                     {showIllustra()}
-                    <h1 className="mt-3 text-left text-subtitle font-weight-bold text-black">
+                    <h1 className="mt-3 text-left text-purple text-normal font-weight-bold">
                         {failureMsg}
                     </h1>
                 </section>
             )}
+            <ReturnBtn
+                onClick={handleReturnBtn}
+                icon="arrow-left"
+                btnColor={sColor}
+                style={{
+                    bottom: 55,
+                    left: 15,
+                }}
+            />
         </Fragment>
     );
+}
+
+// HELPERS
+function getDayGreeting() {
+    const greeting = getDayGreetingBr();
+    if (!greeting) return;
+
+    if (greeting.includes("tarde")) return "tarde";
+    if (greeting.includes("noite")) return "noite";
+    if (greeting.includes("madru")) return "madrugada";
+
+    return "dia";
 }
 
 /* ARCHIVES

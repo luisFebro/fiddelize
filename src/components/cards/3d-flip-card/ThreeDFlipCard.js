@@ -111,7 +111,7 @@ export default function ThreeDFlipCard({ name, score, createdAt }) {
                             className="text-subtitle font-weight-bold text-white"
                             style={{ lineHeight: "35px" }}
                         >
-                            Cartão Fidelidade
+                            Cartão de Compra
                         </p>
                     </div>
                 </div>
