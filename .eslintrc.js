@@ -73,6 +73,14 @@ module.exports = {
             version: "detect", // React
         },
     },
+    SublimeLinter: {
+        // read absolute path and avoid spaghetti paths - https://github.com/benmosher/eslint-plugin-import/blob/master/README.md#sublimelinter-eslint
+        linters: {
+            eslint: {
+                args: ["--stdin-filename", "@"],
+            },
+        },
+    },
 };
 
 /*

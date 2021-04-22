@@ -3,10 +3,12 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.16.0-30"; // PRÓXIMO:
+const latestVersion = "4.16.0-10"; // PRÓXIMO:
 
-const updateDescription = "new virtual buy card | cronjob new tests";
+const updateDescription =
+    "new cli-user design with fixed bottom tabs pt 2 | cronjob new tests";
 /* HISTORY
+"new virtual buy card"
 "implementação novos snackbars"
 "implementação do novo sistema de adição de pontos - pt 2"
 "push notification implementation - pt14"

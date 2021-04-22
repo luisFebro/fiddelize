@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import useContext from "global/Context";
 import { disconnect } from "../../../../hooks/useAuthUser";
 
 const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
@@ -14,6 +15,7 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
         icon: "file-contract",
         title: "regulamento",
         onClick: () => {
+            if (needAppForPreview) return;
             if (needAppForCliAdmin) history.push("/regulamento?client-admin=1");
             else history.push("/regulamento");
         },
@@ -28,19 +30,13 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
     },
 ];
 
-export default function MoreOptionsMenu({
-    history,
-    // showMoreBtn,
-    userName,
-    needAppForCliAdmin,
-    needAppForPreview,
-    colorS,
-    playBeep,
-}) {
+export default function MoreOptionsMenu({ history }) {
+    const { needAppForCliAdmin, needAppForPreview } = useContext();
     const payload = {
         history,
         needAppForCliAdmin,
         needAppForPreview,
+        // colorS,
     };
 
     const menuList = allMenuList(payload).map((item) => (

@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
+import { Provider } from "global/Context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useGlobal from "./useGlobal";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import selectTxtStyle, {
@@ -9,7 +11,6 @@ import "../ellipse.scss";
 import AsyncBellNotifBtn from "../../../components/notification/AsyncBellNotifBtn";
 
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-// import useElemShowOnScroll from "../../../hooks/scroll/useElemShowOnScroll";
 import CompLoader from "../../../components/CompLoader";
 import useAnimateConfetti from "../../../hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "../../../hooks/animation/useAnimateNumber";
@@ -26,12 +27,9 @@ import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
 import useData from "../../../hooks/useData";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 import GroupedAppBar from "./GroupedAppBar";
-// import useCount from "../../../hooks/useCount";
-
 // APP COMPONENTS
 import RatingIcons from "../RatingIcons";
 import AsyncProgressMsg from "../AsyncProgressMsg";
-import AsyncMoreOptionsBtn from "../AsyncMoreOptionsBtn";
 import AllScores from "../AllScores";
 import AsyncPercCircleAndGift from "../AsyncPercCircleAndGift";
 // END APP COMPONENTS
@@ -214,22 +212,7 @@ export default function ClientUserAppContent({
         callback: setShowMoreComps,
     };
     useAnimateNumber(currScoreRef.current, currScore, numberOptions);
-    const showMoreBtn = true;
-    // useElemShowOnScroll(".target--rules-page", {
-    //     tSpan: 20,
-    // });
 
-    // UTILS
-    function playBeep() {
-        const elem = document.querySelector("#appBtn");
-        elem.play();
-    }
-
-    const handlePreload = () => {
-        // if user mouse over the "mostrar mais" btn
-        AsyncPercCircleAndGift.preload();
-    };
-    // END UTILS
     const backColorSelect = colorBack || selfThemeBackColor || colorP;
     const selectedTxtStyle = selectTxtStyle(backColorSelect, { bold: true });
 
@@ -397,35 +380,53 @@ export default function ClientUserAppContent({
         />
     );
 
-    const appBarData = React.useMemo(() => ({}), []);
+    const store = useGlobal({
+        colorP,
+        needAppForCliAdmin,
+        needAppForPreview,
+        userName: firstName,
+    });
 
     return (
-        <section
-            className={`${
-                needAppForPreview && "disabledLink"
-            } client-user-app-content`}
-        >
-            {showGreetingAndNotific()}
-            {showAllScores()}
-            {showPercCircleAndGift()}
-            {showRatingIcons()}
-            {showSkipIconsBtn()}
-            {backBtnForCliAdmin()}
-            {showMoreComps && <GroupedAppBar appBarData={appBarData} />}
-            <NotifPermissionBanner
-                title="Receba notificações sobre seus benefícios!"
-                subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
-            />
-            <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
-            <div
-                style={{ position: "absolute", bottom: 0, left: "auto" }}
-                id="bottomTabContentView"
-            />
-        </section>
+        <Provider store={store}>
+            <section
+                className={`${
+                    needAppForPreview && "disabledLink"
+                } client-user-app-content`}
+            >
+                {showGreetingAndNotific()}
+                {showAllScores()}
+                {showPercCircleAndGift()}
+                {showRatingIcons()}
+                {showSkipIconsBtn()}
+                {backBtnForCliAdmin()}
+                {showMoreComps && <GroupedAppBar />}
+                <NotifPermissionBanner
+                    title="Receba notificações sobre seus benefícios!"
+                    subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
+                />
+                <audio id="appBtn" src="/sounds/app-btn-sound.wav" />
+                <div
+                    style={{ position: "absolute", bottom: 0, left: "auto" }}
+                    id="bottomTabContentView"
+                />
+            </section>
+        </Provider>
     );
 }
 
 // HELPERS
+// UTILS
+function playBeep() {
+    const elem = document.querySelector("#appBtn");
+    elem.play();
+}
+
+function handlePreload() {
+    // if user mouse over the "mostrar mais" btn
+    AsyncPercCircleAndGift.preload();
+}
+
 function getAutoSMSObj(data) {
     const { needMissingMsg } = data;
 
@@ -452,17 +453,6 @@ b) When user log in, RT is 36
 */
 
 /* ARCHIVES
- const showMoreOptionsBtn = () => (
-    <AsyncMoreOptionsBtn
-        playBeep={playBeep}
-        showMoreBtn={showMoreBtn}
-        userName={firstName}
-        needAppForCliAdmin={needAppForCliAdmin}
-        needAppForPreview={needAppForPreview}
-        colorS={colorS}
-    />
-);
-
 const showRules = () =>
     showMoreComps && (
         <div className="mb-4">

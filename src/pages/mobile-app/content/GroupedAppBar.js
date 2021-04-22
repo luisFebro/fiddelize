@@ -1,3 +1,4 @@
+import { withRouter } from "react-router-dom";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import StarsIcon from "@material-ui/icons/Stars";
 // import HomeIcon from "@material-ui/icons/Home";
@@ -6,10 +7,9 @@ import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
+import useContext from "global/Context";
 import BottomTabs from "../../../components/tabs/BottomTabs";
-// import SessionOut from "./session-out/SessionOut";
 import LoadableVisible from "../../../components/code-splitting/LoadableComp";
-import { withRouter } from "react-router-dom";
 
 const AsyncMoreOptionsMenu = LoadableVisible({
     loading: false,
@@ -20,6 +20,11 @@ const AsyncMoreOptionsMenu = LoadableVisible({
 });
 
 function GroupedAppBar({ history }) {
+    const {
+        needAppForCliAdmin,
+        // needAppForPreview
+    } = useContext();
+
     const data = [
         {
             tabLabel: "Jogo",
@@ -32,7 +37,12 @@ function GroupedAppBar({ history }) {
             tabIcon: <CardGiftcardIcon />,
             tabContentPanel: undefined,
             scrollView: false,
-            onClick: () => history.push("/cartao-virtual"),
+            onClick: () => {
+                const path = needAppForCliAdmin
+                    ? "/cartao-virtual?client-admin=1"
+                    : "/cartao-virtual";
+                history.push(path);
+            },
         },
         {
             tabLabel: "Compras",
