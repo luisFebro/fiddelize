@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -39,8 +39,17 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: "var(--mainFont)",
         fontWeight: "bold",
         color: ({ color }) =>
-            color ? `${color} !important` : "var(--themePLight) !important",
+            color
+                ? `var(--themePDark--${color}) !important`
+                : "var(--themePLight) !important",
         fontSize: "1rem !important",
+    },
+    indicator: {
+        backgroundColor: ({ color }) =>
+            color
+                ? `var(--themePDark--${color}) !important`
+                : "var(--themePLight) !important",
+        height: "5px !important",
     },
 }));
 
@@ -55,9 +64,14 @@ BottomTabs.propTypes = {
     needTabFullWidth: PropTypes.bool,
 };
 
-export default function BottomTabs({ data, needTabFullWidth = false }) {
+export default function BottomTabs({
+    data,
+    colorP,
+    colorBack,
+    needTabFullWidth = false,
+}) {
     const props = {
-        color: "red",
+        color: colorP,
     };
 
     const classes = useStyles(props);
@@ -90,47 +104,56 @@ export default function BottomTabs({ data, needTabFullWidth = false }) {
     };
 
     return (
-        <div
-            className="bottom-tabs--root"
-            style={{
-                backgroundColor: "var(--mainWhite)",
-            }}
-        >
+        <Fragment>
             {data &&
                 data.map((tab, ind) => (
-                    <TabPanel
-                        style={{ overflow: "hidden", minHeight: "500px" }}
+                    <section
                         key={ind}
-                        value={value}
-                        index={ind}
-                        dir={theme.direction}
-                        boxPadding={tab.boxPadding}
+                        className="bottom-tabs--root"
+                        style={{
+                            backgroundColor: tab.colorBack
+                                ? `var(--themePDark--${tab.colorBack})`
+                                : "var(--mainWhite)",
+                        }}
                     >
-                        {ind === value && tab.tabContentPanel}
-                    </TabPanel>
+                        <TabPanel
+                            style={{ minHeight: "500px" }}
+                            value={value}
+                            index={ind}
+                            dir={theme.direction}
+                            boxPadding={tab.boxPadding}
+                        >
+                            {ind === value && tab.tabContentPanel}
+                        </TabPanel>
+                    </section>
                 ))}
-            <AppBar position="fixed" color="default">
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    variant={needTabFullWidth ? "fullWidth" : "scrollable"}
-                    aria-label="bottom tabs"
-                    className="animated fadeInUp"
-                >
-                    {data &&
-                        data.map((tab, ind) => (
-                            <Tab
-                                key={ind}
-                                label={tab.tabLabel}
-                                icon={tab.tabIcon}
-                                {...a11yProps(ind)}
-                                classes={{
-                                    selected: classes.selected,
-                                }}
-                            />
-                        ))}
-                </Tabs>
-            </AppBar>
-        </div>
+            <section className="bottom-tabs--root">
+                <AppBar position="fixed" color="default">
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        variant={needTabFullWidth ? "fullWidth" : "scrollable"}
+                        aria-label="bottom tabs"
+                        className="animated fadeInUp"
+                        classes={{
+                            indicator: classes.indicator,
+                        }}
+                    >
+                        {data &&
+                            data.map((tab, ind) => (
+                                <Tab
+                                    key={ind}
+                                    label={tab.tabLabel}
+                                    icon={tab.tabIcon}
+                                    {...a11yProps(ind)}
+                                    classes={{
+                                        selected: classes.selected,
+                                    }}
+                                />
+                            ))}
+                    </Tabs>
+                </AppBar>
+            </section>
+        </Fragment>
     );
 }

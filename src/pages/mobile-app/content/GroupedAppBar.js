@@ -7,9 +7,10 @@ import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
 import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
-import useContext from "global/Context";
+import useContext from "context";
 import BottomTabs from "../../../components/tabs/BottomTabs";
 import LoadableVisible from "../../../components/code-splitting/LoadableComp";
+import Games from "./bottom-menu-contents/all-games/Games";
 
 const AsyncMoreOptionsMenu = LoadableVisible({
     loading: false,
@@ -22,6 +23,8 @@ const AsyncMoreOptionsMenu = LoadableVisible({
 function GroupedAppBar({ history }) {
     const {
         needAppForCliAdmin,
+        colorP,
+        colorBack,
         // needAppForPreview
     } = useContext();
 
@@ -29,8 +32,9 @@ function GroupedAppBar({ history }) {
         {
             tabLabel: "Jogo",
             tabIcon: <SportsEsportsIcon />,
-            tabContentPanel: undefined,
+            tabContentPanel: <Games />,
             scrollView: true,
+            colorBack,
         },
         {
             tabLabel: "Cartão",
@@ -73,6 +77,8 @@ function GroupedAppBar({ history }) {
             tabIcon: <ControlPointIcon />,
             tabContentPanel: <AsyncMoreOptionsMenu history={history} />,
             scrollView: true,
+            colorP,
+            colorBack,
         },
     ];
 

@@ -1,21 +1,16 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from "prop-types";
 import ButtonFab from "./material-ui/ButtonFab";
 import Tooltip from "../tooltips/Tooltip";
-import CloseButton from "./CloseButton";
+// import CloseButton from "./CloseButton";
 import ModalFullContent from "../modals/ModalFullContent";
 import pickArticle from "../../pages/articles/pickArticle";
-
-InstructionBtn.propTypes = {
-    mode: PropTypes.oneOf(["none", "tooltip", "modal"]),
-};
 
 // a question instruction button for some functionalities explanations...
 export default function InstructionBtn({
     text,
     onClick,
-    mode = "none",
+    mode = "none", // "none", "tooltip", "modal"
     article = "SomeArticle_art1",
     animated = false,
     // blurEffect = false,
@@ -93,26 +88,13 @@ export default function InstructionBtn({
                         padding="10px"
                         arrowBottom="4px !important"
                         whiteSpace
+                        width={325}
                         needArrow
                         needOpen={!!needOpen}
                         color="var(--mainWhite)"
                         backgroundColor="var(--mainDark)"
-                        width={325}
                         element={TooltipBtn}
                     />
-                    {false && (
-                        <CloseButton
-                            delay={0}
-                            color="var(--mainDark)"
-                            position="absolute"
-                            onClick={() => {
-                                setNeedOpen(false);
-                            }}
-                            top={-20}
-                            right={-25}
-                            size="1.4em"
-                        />
-                    )}
                 </section>
             )}
 
@@ -138,6 +120,20 @@ export default function InstructionBtn({
     );
 }
 
-/*
+/* ARCHIVES
 <div className={(closeBtn && blurEffect) ? "blur-back" : undefined}></div>
+
+{false && (
+    <CloseButton
+        delay={0}
+        color="var(--mainDark)"
+        position="absolute"
+        onClick={() => {
+            setNeedOpen(false);
+        }}
+        top={-20}
+        right={-25}
+        size="1.4em"
+    />
+)}
  */

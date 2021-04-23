@@ -5,12 +5,14 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
 
-const styles = require("./style.css");
+require("./style.css");
 
 class ReactjsPercentageCircle extends Component {
     constructor(props) {
         super(props);
-        const { percent } = props;
+        let { percent } = props;
+        percent = percent || this.props.percent;
+
         let leftTransformerDegree = "0deg";
         let rightTransformerDegree = "0deg";
         if (percent >= 50) {
@@ -104,9 +106,24 @@ class ReactjsPercentageCircle extends Component {
                     {this.props.children ? (
                         this.props.children
                     ) : (
-                        <span style={this.props.textStyle}>
+                        <p
+                            className="m-0 position-relative"
+                            style={{
+                                ...this.props.textStyle,
+                                textShadow: "none",
+                                top: 10,
+                            }}
+                        >
                             {this.props.percent}%
-                        </span>
+                            <span
+                                className="d-block position-relative text-small font-weight-bold"
+                                style={{
+                                    top: -20,
+                                }}
+                            >
+                                concluído
+                            </span>
+                        </p>
                     )}
                 </div>
             </div>

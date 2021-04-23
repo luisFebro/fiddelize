@@ -1,37 +1,50 @@
 import { Fragment, useState } from "react";
-import ReactjsPercentageCircle from "../../components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle";
-import getPercentage from "../../utils/numbers/getPercentage";
-import Tooltip from "../../components/tooltips/Tooltip";
+import useContext from "context";
+import Tooltip from "components/tooltips/Tooltip";
+import useDatesCountdown from "hooks/dates/useDatesCountdown";
+import usePlayAudio from "hooks/media/usePlayAudio";
 import GiftBox from "./gift-box/GiftBox";
-import useDatesCountdown from "../../hooks/dates/useDatesCountdown";
-import usePlayAudio from "../../hooks/media/usePlayAudio";
 
-// import Tilt from 'react-tilt';
+const getStyles = (props) => ({
+    deadlineBoard: {
+        borderRadius: "30px",
+        backgroundColor: props.didPrizeExpired
+            ? "var(--expenseRed)"
+            : `var(--themeSDark--${props.colorS})`,
+        border: "3px solid white",
+    },
+    timerIcon: {
+        top: "-25px",
+        left: "-25px",
+    },
+    deadlineTitle: {
+        top: "-25px",
+        left: "15px",
+    },
+});
 
-export default function PercCircleAndGift({
-    currScore,
-    maxScore,
+export default function Gift({
     rewardDeadline,
-    showPercentage,
-    playBeep,
-    colorS,
-    colorP,
-    colorBack,
-    classNamePerc,
-    userName,
+    showMoreComps = true,
     prizeDesc,
     arePrizesVisible,
-    currChall,
     userId,
 }) {
+    const {
+        currScore,
+        currChall,
+        maxScore,
+        colorS,
+        colorP,
+        colorBack,
+        userName,
+        // playBeep,
+    } = useContext();
+
     const [isGiftOpen, setIsGiftOpen] = useState(false);
 
     usePlayAudio("/sounds/gift-box-opening.mp3", ".gift-box--sound");
 
-    const percentageAchieved = getPercentage(maxScore, currScore);
-    const needResizeFont = percentageAchieved.toString().includes(".");
-    if (currScore === undefined) currScore = 0;
-    const leftScore = currScore >= maxScore ? 0 : maxScore - currScore;
     const userBeatedChall = currScore >= maxScore;
 
     const { finalDeadline } = useDatesCountdown({
@@ -41,44 +54,10 @@ export default function PercCircleAndGift({
     });
     const didPrizeExpired = finalDeadline === 0;
 
-    const handleColorSelection = () => {
-        if (colorS === "white") {
-            return `var(--themePLight--${colorP})`;
-        }
-        if (colorBack === "black" && colorS === "black") {
-            return `var(--themeP--${colorP})`;
-        }
-        return `var(--themeS--${colorS})`;
-    };
-
-    const percentageColor =
-        colorS === "white"
-            ? `var(--themePLight--${colorP})`
-            : `var(--themeSDark--${colorS})`;
-    const indicatorBarColor = handleColorSelection();
-
-    const styles = {
-        percentageCircle: {
-            fontFamily: "var(--mainFont)",
-            fontSize: needResizeFont ? "1.0em" : "text-em-1-3",
-            color: percentageColor,
-        },
-        deadlineBoard: {
-            borderRadius: "30px",
-            backgroundColor: didPrizeExpired
-                ? "var(--expenseRed)"
-                : `var(--themeSDark--${colorS})`,
-            border: "3px solid white",
-        },
-        timerIcon: {
-            top: "-25px",
-            left: "-25px",
-        },
-        deadlineTitle: {
-            top: "-25px",
-            left: "15px",
-        },
-    };
+    const styles = getStyles({
+        didPrizeExpired,
+        colorS,
+    });
 
     const visibleTxt = `
         <p class="text-center">PRÊMIO DO DESAFIO N.º ${currChall}</p>
@@ -137,37 +116,6 @@ export default function PercCircleAndGift({
         </section>
     );
 
-    const showCircularProgress = () => (
-        <section className={classNamePerc} onClick={playBeep}>
-            <Tooltip
-                needArrow
-                text={`
-                    Você já alcançou
-                    <br />
-                    <strong>
-                        ${percentageAchieved}% ${
-                    !currScore ? "(nenhum ponto)" : `(${currScore} pontos)`
-                }
-                    </strong> do
-                    <br />
-                    desafio até agora. <strong>Faltam ${leftScore} pontos.</strong>`}
-                element={
-                    <div className="zoom-it container-center text-em-2-5 animated zoomIn">
-                        <ReactjsPercentageCircle
-                            percent={percentageAchieved}
-                            radius={75} /* circle size */
-                            borderWidth={20}
-                            color={indicatorBarColor} /* external line color */
-                            textStyle={styles.percentageCircle}
-                        />
-                    </div>
-                }
-                backgroundColor={`var(--themeSDark--${colorS})`}
-                colorS={colorS}
-            />
-        </section>
-    );
-
     const showGift = () => {
         const displayGiftBox = ({
             needSmallBox,
@@ -188,7 +136,7 @@ export default function PercCircleAndGift({
 
         const challengeInProgress = () => (
             <section className={!arePrizesVisible ? "shake-it pt-5" : "pt-5"}>
-                <div className="position-relative mt-5">
+                <div className="position-relative">
                     <Tooltip
                         needArrow
                         whiteSpace
@@ -216,8 +164,8 @@ export default function PercCircleAndGift({
                                 fontSize: 80,
                                 position: "absolute",
                                 top: "-10%",
-                                left: "55%",
-                                transform: "translateX(-55%)",
+                                left: "60%",
+                                transform: "translateX(-60%)",
                             }}
                         >
                             ?
@@ -242,20 +190,15 @@ export default function PercCircleAndGift({
         );
 
         return (
-            <Fragment>
+            <section className="container-center">
                 {userBeatedChall ? beatedChallenge() : challengeInProgress()}
-            </Fragment>
+            </section>
         );
     };
 
     return (
-        <div className="my-3 text-white text-center">
-            {showPercentage ? (
-                <Fragment>
-                    {showCircularProgress()}
-                    {showGift()}
-                </Fragment>
-            ) : null}
+        <div className="text-white text-center">
+            {showMoreComps && showGift()}
         </div>
     );
 }

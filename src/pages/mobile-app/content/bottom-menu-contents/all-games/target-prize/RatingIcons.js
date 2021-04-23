@@ -1,31 +1,21 @@
 // reference: https://codepen.io/kanduvisla/pen/NqdbZP
 import { useEffect } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Tooltip from "../../components/tooltips/Tooltip";
-import animateCSS from "../../utils/animateCSS";
-import {
-    milestoneIcons,
-    iconNamesOnly,
-} from "../../global-data/milestoneIcons";
-import gotArrayThisItem from "../../utils/arrays/gotArrayThisItem";
-import usePlayAudio from "../../hooks/media/usePlayAudio";
-
-RatingIcons.propTypes = {
-    score: PropTypes.number,
-    maxScore: PropTypes.number,
-};
+import Tooltip from "components/tooltips/Tooltip";
+import animateCSS from "utils/animateCSS";
+import { milestoneIcons, iconNamesOnly } from "global-data/milestoneIcons";
+import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
+import usePlayAudio from "hooks/media/usePlayAudio";
 
 export default function RatingIcons({
-    score,
+    currScore,
     maxScore,
     selfMilestoneIcon,
     runName,
     selectTxtStyle,
     colorBack,
     colorS,
-    colorP,
 }) {
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,
@@ -38,9 +28,9 @@ export default function RatingIcons({
     const eachMilestone = Number(maxScore / 5);
     const needDark = selectTxtStyle(colorBack, { needDarkBool: true });
 
-    const paintStarsForScore = (score) => {
+    const paintStarsForScore = () => {
         let indScore;
-        if (!score) {
+        if (!currScore) {
             indScore = -1;
         }
 
@@ -54,23 +44,18 @@ export default function RatingIcons({
         const toLevel4 = level4 - 0.05;
         const toLevel5 = level5 - 0.05;
 
-        if (score >= level1 && score <= toLevel2) {
+        if (currScore >= level1 && currScore <= toLevel2) {
             indScore = 0;
         } // L
-        else if (score >= level2 && score <= toLevel3) {
+        else if (currScore >= level2 && currScore <= toLevel3) {
             indScore = 1;
-        } else if (score >= level3 && score <= toLevel4) {
+        } else if (currScore >= level3 && currScore <= toLevel4) {
             indScore = 2;
-        } else if (score >= level4 && score <= toLevel5) {
+        } else if (currScore >= level4 && currScore <= toLevel5) {
             indScore = 3;
-        } else if (score >= toLevel5) {
+        } else if (currScore >= toLevel5) {
             indScore = 4;
         }
-
-        // forces the first star to arises in the self-service area because it does not work in phone app demo.
-        // if(appPreviewIcon) {
-        //     indScore = 0;
-        // }
 
         const arrayIconIds = [
             "icon-100",
@@ -100,7 +85,7 @@ export default function RatingIcons({
     };
 
     useEffect(() => {
-        paintStarsForScore(score);
+        paintStarsForScore();
     }, []);
 
     const levels = [100, 200, 300, 400, 500];
@@ -116,12 +101,9 @@ export default function RatingIcons({
     return (
         <RatingDiv>
             {levels.map((level, ind) => (
-                <section
-                    className="position-relative"
-                    style={{ top: "-25px", marginTop: 10 }}
-                    key={level}
-                >
+                <section className="position-relative" key={level}>
                     <Tooltip
+                        textAlign="center"
                         text={`NÍVEL ${level
                             .toString()
                             .charAt(0)}<br />• Meta: ${
@@ -146,7 +128,7 @@ export default function RatingIcons({
                         backgroundColor={`var(--themeSDark--${colorS})`}
                         colorS={colorS}
                         needArrow
-                        margin="60px 0"
+                        padding="10px"
                     />
                 </section>
             ))}

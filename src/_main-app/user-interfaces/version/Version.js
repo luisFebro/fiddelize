@@ -3,7 +3,7 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.16.0-10"; // PRÓXIMO:
+const latestVersion = "4.16.0-20"; // PRÓXIMO:
 
 const updateDescription =
     "new cli-user design with fixed bottom tabs pt 2 | cronjob new tests";

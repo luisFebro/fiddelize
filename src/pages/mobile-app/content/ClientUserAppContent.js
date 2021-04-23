@@ -1,17 +1,14 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Provider } from "global/Context";
+import { Provider } from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useGlobal from "./useGlobal";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import { useAuthUser } from "../../../hooks/useAuthUser";
-import selectTxtStyle, {
-    currTxtColor,
-} from "../../../utils/biz/selectTxtStyle";
+import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import "../ellipse.scss";
 import AsyncBellNotifBtn from "../../../components/notification/AsyncBellNotifBtn";
 
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import CompLoader from "../../../components/CompLoader";
 import useAnimateConfetti from "../../../hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "../../../hooks/animation/useAnimateNumber";
 import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
@@ -19,19 +16,16 @@ import defineCurrChallenge from "../../../utils/biz/defineCurrChallenge";
 import useCountNotif from "../../../hooks/notification/useCountNotif";
 import useNotifyCliWonChall from "./hooks/useNotifyCliWonChall";
 import useAPI, { readPrizes } from "../../../hooks/api/useAPI";
-import { getVar, removeVar, setVar } from "../../../hooks/storage/useVar";
-import { readPurchaseHistory } from "../../../redux/actions/userActions";
+import { getVar, removeVar } from "../../../hooks/storage/useVar";
 import useSendSMS from "../../../hooks/sms/useSendSMS";
 import useDidDateExpire from "../../../hooks/dates/date-expires/useDidDateExpire";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
 import useData from "../../../hooks/useData";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 import GroupedAppBar from "./GroupedAppBar";
+// import { readPurchaseHistory } from "../../../redux/actions/userActions";
 // APP COMPONENTS
-import RatingIcons from "../RatingIcons";
-import AsyncProgressMsg from "../AsyncProgressMsg";
 import AllScores from "../AllScores";
-import AsyncPercCircleAndGift from "../AsyncPercCircleAndGift";
 // END APP COMPONENTS
 
 const now = new Date();
@@ -44,8 +38,8 @@ export default function ClientUserAppContent({
     needAppForCliAdmin,
     needAppForPreview,
     runName,
-    colorP,
-    colorS,
+    colorP = "default",
+    colorS = "default",
     colorBack,
     businessId,
     rewardScoreTest,
@@ -54,26 +48,24 @@ export default function ClientUserAppContent({
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currScoreRef = useRef(null);
 
-    if (!colorP) {
-        colorP = "default";
-    }
-    if (!colorS) {
-        colorS = "default";
-    }
     const { role } = useProfile();
     // eslint-disable-next-line
-    let [_id, fullName, firstName] = useData(["userId", "name", "firstName"]);
+    let [userId, fullName, firstName] = useData([
+        "userId",
+        "name",
+        "firstName",
+    ]);
     firstName = clientNameTest || firstName;
-    const userIdLoading = _id === "...";
+    const userIdLoading = userId === "...";
 
-    const totalNotifications = useCountNotif(_id, {
+    const totalNotifications = useCountNotif(userId, {
         role,
         forceCliUser: true,
         trigger: !userIdLoading,
     });
 
     const {
-        currScore,
+        currScore = 0,
         lastScore,
         totalPurchasePrize,
         totalGeneralScore,
@@ -82,18 +74,17 @@ export default function ClientUserAppContent({
 
     const {
         rewardList,
-        rewardDeadline,
         selfThemeBackColor,
         arePrizesVisible,
         bizWhatsapp,
-        // bizName,
         selfBizLogoImg,
     } = useClientAdmin();
-    let { maxScore, selfMilestoneIcon } = useClientAdmin();
+    let { maxScore = 0, selfMilestoneIcon } = useClientAdmin();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
     const { mainReward } = pickedObj;
+
     selfMilestoneIcon = pickedObj.selfMilestoneIcon;
     if (rewardScoreTest) {
         maxScore = Number(rewardScoreTest);
@@ -101,65 +92,11 @@ export default function ClientUserAppContent({
 
     const userBeatChallenge = currScore >= maxScore;
 
-    const totalChallengesWon = Math.floor(currScore / maxScore);
-    const pickedObjForPending = React.useMemo(
-        () => pickCurrChallData(rewardList, totalPurchasePrize + 1),
-        []
-    ); // do not include params to run the first right result.
-    useEffect(() => {
-        // read client user data to make sure prizes are generated if user has multiple prizes won in the row...
-        const key = "challengesWon";
-
-        if (totalChallengesWon >= 2) {
-            setVar({ [key]: totalChallengesWon });
-        }
-
-        if (userIdLoading) return;
-
-        getVar(key).then((gotValue) => {
-            const options = {
-                trigger: gotValue,
-                noResponse: true,
-                prizeDesc: mainReward,
-                trophyIcon: selfMilestoneIcon,
-                thisRole: role || "cliente",
-            };
-            getVar("pendingChall").then((resPending) => {
-                let thisMaxScore = maxScore;
-                if (resPending) {
-                    thisMaxScore = pickedObjForPending.rewardScore;
-                }
-                readPurchaseHistory(_id, thisMaxScore, options);
-            });
-
-            if (gotValue && !userBeatChallenge) {
-                removeVar(key);
-            }
-        });
-    }, [
-        userIdLoading,
-        _id,
-        userBeatChallenge,
-        totalChallengesWon,
-        pickedObjForPending,
-    ]);
-
-    useEffect(() => {
-        if (!currScore) {
-            getVar("alreadyAlertChallenge").then((gotValue) => {
-                if (gotValue) {
-                    removeVar("alreadyAlertChallenge").then((res) => {
-                        removeVar("pendingChall");
-                    });
-                }
-            });
-        }
-    }, [currScore]);
+    useAlreadyAlertChallenge(currScore);
 
     const { isAuthUser } = useAuthUser();
-    // useCount("ClientUserAppContent.js"); // RT = 3 before = /
     const { data } = useAPI({
-        url: readPrizes(_id),
+        url: readPrizes(userId),
         params: { lastPrizeDateAndId: true, thisRole: "cliente" },
         trigger: !needAppForPreview && !userIdLoading,
     });
@@ -171,21 +108,22 @@ export default function ClientUserAppContent({
         businessId,
         mainReward,
         fullName,
+        maxScore,
         currChall,
         currScore,
         selfBizLogoImg,
         lastPrizeId,
-        maxScore,
         totalPurchasePrize,
-        senderId: _id,
+        senderId: userId,
         // trigger
         userIdLoading,
         userBeatChallenge,
+        playBeep,
     });
 
     const needMissingMsg = useDidDateExpire({
         dateToExpire: lastPrizeDate,
-        userId: _id,
+        userId,
         trigger: !needAppForPreview && !userIdLoading && lastPrizeDate,
     });
 
@@ -264,7 +202,7 @@ export default function ClientUserAppContent({
     const showAllScores = () => (
         <AllScores
             userName={firstName}
-            userId={_id}
+            userId={userId}
             currScoreRef={currScoreRef}
             currScore={currScore}
             showPercentage={showMoreComps}
@@ -278,101 +216,6 @@ export default function ClientUserAppContent({
         />
     );
 
-    const showPercCircleAndGift = () =>
-        showMoreComps && (
-            <section id="target---perc-gift">
-                <CompLoader
-                    comp={
-                        <div className="animated zoomIn">
-                            <AsyncPercCircleAndGift
-                                currScore={currScore}
-                                prizeDesc={mainReward}
-                                currChall={currChall}
-                                userId={_id}
-                                arePrizesVisible={arePrizesVisible}
-                                rewardDeadline={rewardDeadline}
-                                userName={firstName}
-                                classNamePerc={`${
-                                    needAppForPreview && "enabledLink"
-                                }`}
-                                maxScore={maxScore}
-                                showPercentage={showMoreComps}
-                                playBeep={playBeep}
-                                colorS={colorS}
-                                colorP={colorP}
-                                colorBack={backColorSelect}
-                            />
-                        </div>
-                    }
-                    marginY={10}
-                    size="small"
-                />
-            </section>
-        );
-
-    const showRatingIcons = () => (
-        <div
-            style={{ margin: `40px ${needAppForPreview ? "-10px" : "0"} 80px` }}
-            className={`${needAppForPreview && "enabledLink"}`}
-        >
-            <RatingIcons
-                score={currScore}
-                maxScore={maxScore || 0}
-                selfMilestoneIcon={selfMilestoneIcon}
-                runName={runName}
-                selectTxtStyle={selectTxtStyle}
-                colorS={colorS}
-                colorBack={backColorSelect}
-                colorP={colorP}
-            />
-            {showMoreComps && (
-                <AsyncProgressMsg
-                    currScore={currScore || 0}
-                    currChall={currChall}
-                    maxScore={maxScore || 0}
-                    playBeep={playBeep}
-                    colorBack={backColorSelect}
-                    colorS={colorS}
-                    selectTxtStyle={selectTxtStyle}
-                />
-            )}
-        </div>
-    );
-
-    const handleMoreComps = () => {
-        setShowMoreComps(true);
-    };
-
-    const thisCurrTxtColor = currTxtColor(colorS);
-    const showSkipIconsBtn = () =>
-        currScore >= 30 &&
-        !showMoreComps && (
-            <div
-                className={`${
-                    needAppForPreview && "enabledLink"
-                } position-relative container-center animated zoomIn delay-2s`}
-                style={{ top: "-55px" }}
-            >
-                <ButtonFab
-                    position="relative"
-                    onClick={handleMoreComps}
-                    title="ver mais"
-                    iconFontAwesome={<FontAwesomeIcon icon="plus" />}
-                    iconFontSize="25px"
-                    variant="extended"
-                    fontWeight="bolder"
-                    onMouseOver={handlePreload}
-                    fontSize=".9em"
-                    size="large"
-                    color={thisCurrTxtColor}
-                    backgroundColor={`var(--themeSDark--${colorS})`}
-                    shadowColor={
-                        selfThemeBackColor === "black" ? "white" : "black"
-                    }
-                />
-            </div>
-        );
-
     const backBtnForCliAdmin = () => (
         <BtnBackTestMode
             isActive={!!needAppForCliAdmin}
@@ -382,9 +225,23 @@ export default function ClientUserAppContent({
 
     const store = useGlobal({
         colorP,
+        colorS,
+        colorBack: backColorSelect,
         needAppForCliAdmin,
         needAppForPreview,
         userName: firstName,
+        userId,
+        selectedTxtStyle,
+        selectTxtStyle,
+        maxScore,
+        currChall,
+        currScore,
+        playBeep,
+        showMoreComps,
+        arePrizesVisible,
+        prizeDesc: mainReward,
+        selfMilestoneIcon,
+        runName,
     });
 
     return (
@@ -396,11 +253,8 @@ export default function ClientUserAppContent({
             >
                 {showGreetingAndNotific()}
                 {showAllScores()}
-                {showPercCircleAndGift()}
-                {showRatingIcons()}
-                {showSkipIconsBtn()}
+                <GroupedAppBar />
                 {backBtnForCliAdmin()}
-                {showMoreComps && <GroupedAppBar />}
                 <NotifPermissionBanner
                     title="Receba notificações sobre seus benefícios!"
                     subtitle="fique por dentro quando ganhar pontos, descontos e prêmios em tempo real"
@@ -416,15 +270,9 @@ export default function ClientUserAppContent({
 }
 
 // HELPERS
-// UTILS
 function playBeep() {
     const elem = document.querySelector("#appBtn");
     elem.play();
-}
-
-function handlePreload() {
-    // if user mouse over the "mostrar mais" btn
-    AsyncPercCircleAndGift.preload();
 }
 
 function getAutoSMSObj(data) {
@@ -446,6 +294,23 @@ function getAutoSMSObj(data) {
 }
 // END HELPERS
 
+// HOOKS
+function useAlreadyAlertChallenge(currScore) {
+    useEffect(() => {
+        if (!currScore) {
+            (async () => {
+                const gotValue = await getVar("alreadyAlertChallenge");
+                if (!gotValue) return;
+
+                await removeVar("alreadyAlertChallenge");
+                await removeVar("pendingChall");
+            })();
+        }
+    }, [currScore]);
+}
+
+// END HOOKS
+
 /* COMMENTS
 n1:
 a) React.useCallback is essential to avoid to render + 15 times at start
@@ -453,6 +318,84 @@ b) When user log in, RT is 36
 */
 
 /* ARCHIVES
+const handleMoreComps = () => {
+    setShowMoreComps(true);
+};
+
+const thisCurrTxtColor = currTxtColor(colorS);
+const showSkipIconsBtn = () =>
+    currScore >= 30 &&
+    !showMoreComps && (
+        <div
+            className={`${
+                needAppForPreview && "enabledLink"
+            } position-relative container-center`}
+            style={{ top: "-55px" }}
+        >
+            <ButtonFab
+                position="relative"
+                onClick={handleMoreComps}
+                title="ver mais"
+                iconFontAwesome={<FontAwesomeIcon icon="plus" />}
+                iconFontSize="25px"
+                variant="extended"
+                fontWeight="bolder"
+                onMouseOver={null}
+                fontSize=".9em"
+                size="large"
+                color={thisCurrTxtColor}
+                backgroundColor={`var(--themeSDark--${colorS})`}
+                shadowColor={
+                    selfThemeBackColor === "black" ? "white" : "black"
+                }
+            />
+        </div>
+    );
+
+const totalChallengesWon = Math.floor(currScore / maxScore);
+const pickedObjForPending = React.useMemo(
+    () => pickCurrChallData(rewardList, totalPurchasePrize + 1),
+    []
+); // do not include params to run the first right result.
+// read client user data to make sure prizes are generated if user has multiple prizes won in the row...
+useEffect(() => {
+    const key = "challengesWon";
+
+    if (totalChallengesWon >= 2) {
+        setVar({ [key]: totalChallengesWon });
+    }
+
+    if (userIdLoading) return;
+
+    getVar(key).then((gotValue) => {
+        const options = {
+            trigger: gotValue,
+            noResponse: true,
+            prizeDesc: mainReward,
+            trophyIcon: selfMilestoneIcon,
+            thisRole: role || "cliente",
+        };
+        getVar("pendingChall").then((resPending) => {
+            let thisMaxScore = maxScore;
+            if (resPending) {
+                thisMaxScore = pickedObjForPending.rewardScore;
+            }
+            readPurchaseHistory(userId, thisMaxScore, options);
+        });
+
+        if (gotValue && !userBeatChallenge) {
+            removeVar(key);
+        }
+    });
+}, [
+    userIdLoading,
+    userId,
+    userBeatChallenge,
+    totalChallengesWon,
+    pickedObjForPending,
+]);
+
+
 const showRules = () =>
     showMoreComps && (
         <div className="mb-4">

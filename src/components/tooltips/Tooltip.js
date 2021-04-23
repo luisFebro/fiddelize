@@ -34,10 +34,11 @@ element={
 */
 export default function Tooltip({
     text,
-    color,
+    textAlign,
+    // color,
     colorS,
     backgroundColor,
-    borderShadow,
+    // borderShadow,
     className,
     needArrow,
     element,
@@ -83,7 +84,10 @@ export default function Tooltip({
 
     const radiusTooltipStyle = makeStyles((theme) => ({
         tooltip: {
+            textAlign: textAlign || "left",
             fontSize: "15px",
+            lineHeight: "20px",
+            fontFamily: "var(--mainFont)",
             backgroundColor: backgroundColor || "var(--themeSDark)",
             fontWeight: "bold",
             borderRadius: "15px 15px",
@@ -100,7 +104,7 @@ export default function Tooltip({
             // top: 20,
         },
         popper: {
-            zIndex: 4000,
+            zIndex: 20000,
         },
         arrow: {
             fontSize: 25,

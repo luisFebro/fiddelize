@@ -30,7 +30,7 @@ function PanelHiddenContent({ history, data }) {
                     <span className="d-block main-font text-em-1-2 font-weight-bold">
                         {data.clientScore
                             ? `${data.clientScore} Pontos.`
-                            : "Nenhum Ponto."}
+                            : "0 Pontos."}
                     </span>
                 </p>
             )}

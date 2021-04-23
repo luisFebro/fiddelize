@@ -53,6 +53,8 @@ module.exports = {
         "react-hooks/exhaustive-deps": "warn", // React (if using hooks)
         "react/prop-types": "off",
         "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }], // (error  JSX not allowed in files with extension '.js') You can add the following to your config to allow .js extensions for JSX.
+        "import/no-unresolved": "off", // absolute paths with baseUrl is being flagged incorrectly and no solution found so far. Using React's console for check it alternatively
+        "import/extensions": "off", // suddently file extensions were flagged...
         "import/no-extraneous-dependencies": "off", // alerts for "@material-ui/core/Card", "react"
         "import/no-named-as-default": "off",
         "import/no-named-as-default-member": "off",
@@ -71,14 +73,6 @@ module.exports = {
     settings: {
         react: {
             version: "detect", // React
-        },
-    },
-    SublimeLinter: {
-        // read absolute path and avoid spaghetti paths - https://github.com/benmosher/eslint-plugin-import/blob/master/README.md#sublimelinter-eslint
-        linters: {
-            eslint: {
-                args: ["--stdin-filename", "@"],
-            },
         },
     },
 };

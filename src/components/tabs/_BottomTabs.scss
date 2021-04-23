@@ -1,8 +1,9 @@
 .bottom-tabs--root {
     border-radius: 20px;
     width: 100%;
-    margin: auto;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
 
     .MuiTab-root {
         padding: 5px 0 10px;
@@ -19,10 +20,6 @@
         min-height: 0px;
         font-weight: bold;
         text-transform: lowercase;
-    }
-
-    .MuiTabs-indicator {
-        height: 4px !important;
     }
 
     .MuiAppBar-positionFixed {

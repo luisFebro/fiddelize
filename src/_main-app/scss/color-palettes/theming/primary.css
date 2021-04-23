@@ -18,7 +18,7 @@
     /*default*/
     --themeP--default: #4a148c;
     --themePLight--default: #7c43bd;
-    --themePDark--default: #12005e;
+    --themePDark--default: #4a148c;
     --themeBackground--default: #4a148c;
     /*pink*/
     --themeP--pink: #e84393;
@@ -33,7 +33,7 @@
     /*purple*/
     --themeP--purple: #4a148c;
     --themePLight--purple: #7c43bd;
-    --themePDark--purple: #12005e;
+    --themePDark--purple: #4a148c; /* prior #12005e */
     --themeBackground--purple: #4a148c;
     /*orange*/
     --themeP--orange: #ffb300;

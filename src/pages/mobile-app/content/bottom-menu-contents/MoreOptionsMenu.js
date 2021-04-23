@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import useContext from "global/Context";
+import useContext from "context";
 import { disconnect } from "../../../../hooks/useAuthUser";
 
 const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
@@ -21,7 +21,9 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
         },
     },
     {
-        icon: <ExitToAppIcon style={{ fontSize: 50 }} />,
+        icon: (
+            <ExitToAppIcon className="icon-shadow" style={{ fontSize: 50 }} />
+        ),
         title: "sair",
         onClick: () => {
             if (needAppForPreview) return;
@@ -31,7 +33,13 @@ const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
 ];
 
 export default function MoreOptionsMenu({ history }) {
-    const { needAppForCliAdmin, needAppForPreview } = useContext();
+    const {
+        selectedTxtStyle,
+        colorBack,
+        needAppForCliAdmin,
+        needAppForPreview,
+    } = useContext();
+
     const payload = {
         history,
         needAppForCliAdmin,
@@ -45,10 +53,14 @@ export default function MoreOptionsMenu({ history }) {
             key={item.title}
             className="cursor-pointer py-3 shadow-babadoo col-6 mb-4 container-center-col"
             onClick={item.onClick}
+            style={{
+                background: `var(--themePLight--${colorBack})`,
+            }}
         >
             {typeof item.icon === "string" ? (
                 <FontAwesomeIcon
                     icon={item.icon}
+                    className="icon-shadow"
                     style={{
                         fontSize: 50,
                     }}
@@ -63,12 +75,12 @@ export default function MoreOptionsMenu({ history }) {
     ));
 
     return (
-        <section className="text-normal text-purple">
-            <h2 className="animated fadeInUp text-subtitle font-weight-bold text-center">
+        <section className={`text-normal ${selectedTxtStyle}`}>
+            <h2 className="mb-4 animated fadeInUp text-subtitle font-weight-bold text-center">
                 Mais opções
             </h2>
-            <section className="animated fadeInUp container my-3">
-                <div className="row">{menuList}</div>
+            <section className="animated fadeInUp container mb-5">
+                <div className="row justify-content-around">{menuList}</div>
             </section>
         </section>
     );
