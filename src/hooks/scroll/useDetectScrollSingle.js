@@ -5,10 +5,11 @@ export default function useDetectScrollSingle(elemQuery) {
     const [isIntersected, setIntersected] = useState(false);
 
     useEffect(() => {
-        elemQuery &&
-            detectSingleElemScroll(elemQuery, {
-                callback: (isShown) => setIntersected(isShown),
-            });
+        if (!elemQuery) return;
+
+        detectSingleElemScroll(elemQuery, {
+            callback: (isShown) => setIntersected(isShown),
+        });
     }, [elemQuery]);
 
     return isIntersected;

@@ -7,23 +7,30 @@ export default function useDatesCountdown({
     deadline = 0,
     userId,
     trigger = true,
+    date,
 }) {
     const [finalDeadline, setFinalDeadline] = useState(null);
 
-    const { data: lastPrizeDate, loading } = useAPI({
+    const { data, loading } = useAPI({
         url: readPrizes(userId),
-        params: { lastPrizeDate: true, thisRole: "cliente" },
-        trigger,
+        params: { lastPrizeDateAndId: true, thisRole: "cliente" },
+        trigger: trigger && !date,
     });
 
+    const lastPrizeDate = data && data.date;
+
     useEffect(() => {
-        if (!loading && lastPrizeDate) {
-            const targetDate = addDays(new Date(lastPrizeDate), deadline);
+        if ((!loading && lastPrizeDate) || date) {
+            const targetDate = addDays(
+                new Date(date || lastPrizeDate),
+                deadline
+            );
             const res = getDiffDays(targetDate);
+            console.log("resLAst date", res);
 
             setFinalDeadline(res);
         }
-    }, [loading, lastPrizeDate, deadline]);
+    }, [date, loading, lastPrizeDate, deadline]);
 
-    return { finalDeadline };
+    return { finalDeadline, loading };
 }

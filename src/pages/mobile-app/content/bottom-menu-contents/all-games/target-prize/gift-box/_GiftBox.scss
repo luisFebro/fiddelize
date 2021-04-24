@@ -21,10 +21,11 @@
 
 .gift-card--root {
     position: relative;
-    overflow: visible;
+    overflow: visible !important;
     background: var(--mainWhite);
     width: 110px;
     height: 130px;
+    padding: 5px 10px;
     z-index: 2000;
 
     & .desc {

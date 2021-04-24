@@ -3,10 +3,9 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.16.0-20"; // PRÓXIMO:
+const latestVersion = "4.16.0-51"; // PRÓXIMO:
 
-const updateDescription =
-    "new cli-user design with fixed bottom tabs pt 2 | cronjob new tests";
+const updateDescription = "new cli-user design with fixed bottom tabs pt 3";
 /* HISTORY
 "new virtual buy card"
 "implementação novos snackbars"

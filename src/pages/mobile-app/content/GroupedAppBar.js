@@ -25,6 +25,7 @@ function GroupedAppBar({ history }) {
         needAppForCliAdmin,
         colorP,
         colorBack,
+        didUserScroll,
         // needAppForPreview
     } = useContext();
 
@@ -37,18 +38,6 @@ function GroupedAppBar({ history }) {
             colorBack,
         },
         {
-            tabLabel: "Cartão",
-            tabIcon: <CardGiftcardIcon />,
-            tabContentPanel: undefined,
-            scrollView: false,
-            onClick: () => {
-                const path = needAppForCliAdmin
-                    ? "/cartao-virtual?client-admin=1"
-                    : "/cartao-virtual";
-                history.push(path);
-            },
-        },
-        {
             tabLabel: "Compras",
             tabIcon: <LocalMallIcon />,
             tabContentPanel: undefined,
@@ -59,6 +48,18 @@ function GroupedAppBar({ history }) {
             tabIcon: <BarChartIcon />,
             tabContentPanel: undefined,
             scrollView: true,
+        },
+        {
+            tabLabel: "Cartão",
+            tabIcon: <CardGiftcardIcon />,
+            tabContentPanel: undefined,
+            scrollView: false,
+            onClick: () => {
+                const path = needAppForCliAdmin
+                    ? "/cartao-virtual?client-admin=1"
+                    : "/cartao-virtual";
+                history.push(path);
+            },
         },
         {
             tabLabel: "Avalie",
@@ -82,7 +83,7 @@ function GroupedAppBar({ history }) {
         },
     ];
 
-    return <BottomTabs data={data} />;
+    return <BottomTabs data={data} showAppBar={didUserScroll} />;
 }
 
 export default withRouter(GroupedAppBar);

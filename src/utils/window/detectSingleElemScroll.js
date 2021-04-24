@@ -14,10 +14,16 @@ export default function detectSingleElemScroll(elemQuery, options = {}) {
     ) {
         const observer = new IntersectionObserver((entries) => {
             const { isIntersecting } = entries[0];
+            // console.log(`Detected elem: ${elemQuery}`);
             callback(isIntersecting);
         });
-        observer.observe(finalElem);
+
+        if (finalElem) {
+            observer.observe(finalElem);
+        }
     }
+
+    return "";
 }
 
 /*

@@ -79,7 +79,6 @@ const userProfileColl = {
 // PROPERTIES
 // sequentials
 const tooltip1 = combine(collVal1, { property: "tooltipState" });
-const yellowBtn2 = combine(collVal1, { property: "yellowBtnState" });
 
 // non-sequentials
 const confettiPlayOp = combine(collVal1, { property: "confettiPlay" });
@@ -105,7 +104,6 @@ const setSystemOp = (role, id) => {
 // OPTIONS - collection, properties, values
 export {
     tooltip1,
-    yellowBtn2,
     confettiPlayOp,
     appSystemColl,
     userProfileColl,

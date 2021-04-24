@@ -20,7 +20,8 @@ import getPercentage from "utils/numbers/getPercentage";
 // };
 
 const options = tooltip1;
-const attentionBtnChecked = lStorage("getItem", options);
+const needFlagWaves = lStorage("getItem", options);
+console.log("needFlagWaves", needFlagWaves);
 
 const getStyles = () => ({
     confettiIcon: {
@@ -56,24 +57,17 @@ export default function ProgressFragTracker() {
     }
 
     const showProgressFragTracker = () => (
-        <span
-            onClick={() => {
-                lStorage("setItem", options);
-                playBeep();
-            }}
-        >
-            <ProgressFrag
-                needAppForPreview={needAppForPreview}
-                selectTxtStyle={selectTxtStyle}
-                playBeep={playBeep}
-                maxScore={maxScore}
-                currScore={currScore}
-                colorBack={colorBack}
-                colorS={colorS}
-                colorP={colorP}
-                eachMilestone={eachMilestone}
-            />
-        </span>
+        <ProgressFrag
+            needAppForPreview={needAppForPreview}
+            selectTxtStyle={selectTxtStyle}
+            playBeep={playBeep}
+            maxScore={maxScore}
+            currScore={currScore}
+            colorBack={colorBack}
+            colorS={colorS}
+            colorP={colorP}
+            eachMilestone={eachMilestone}
+        />
     );
 
     const showMsg = () => (
@@ -116,7 +110,7 @@ export default function ProgressFragTracker() {
 
     return (
         <div className="text-normal text-white text-center">
-            <div className="container-center">
+            <div className="container-center-col">
                 {showProgressFragTracker()}
                 {showMsg()}
             </div>
@@ -127,7 +121,7 @@ export default function ProgressFragTracker() {
 const getStylesProgress = (props) => ({
     percentageCircle: {
         fontFamily: "var(--mainFont)",
-        fontSize: props.needResizeFont ? "0.9em" : "text-em-1-3",
+        fontSize: props.needResizeFont ? "37px" : "text-em-1-3",
         color: props.percentageColor,
     },
     flagIcon: {
@@ -151,7 +145,9 @@ function ProgressFrag({
     eachMilestone,
 }) {
     const percentageAchieved = getPercentage(maxScore, currScore);
-    const needResizeFont = percentageAchieved >= 100;
+    const needResizeFont =
+        percentageAchieved >= 100 ||
+        percentageAchieved.toString().includes("."); // for fractional numbers like 85.45%
 
     const leftScore = currScore >= maxScore ? 0 : maxScore - currScore;
 
@@ -194,17 +190,20 @@ function ProgressFrag({
 
     return (
         <section
-            className={`position-relative ${
+            className={`animated fadeInUp delay-2s position-relative ${
                 needAppForPreview && "enabledLink"
             }`}
-            onClick={playBeep}
+            onClick={() => {
+                lStorage("setItem", options);
+                playBeep();
+            }}
         >
             <Tooltip
                 needArrow
                 padding="10px"
                 whiteSpace
                 width={325}
-                needAttentionWaves={!attentionBtnChecked}
+                needAttentionWaves={!needFlagWaves}
                 text={`
                     <p class="text-center">DESAFIO DO JOGO</p>
                     Alcançar <strong>${maxScore} Pontos<strong/> com 5 níveis (ícones acima) com ${eachMilestone} pontos cada.

@@ -198,27 +198,3 @@ function MoreOptionsBtn({
 }
 
 export default withRouter(MoreOptionsBtn);
-
-/* ARCHIVES
-const lastOption = tooltip1;
-const currOption = yellowBtn2;
-
-const lastChecked = lStorage("getItem", lastOption);
-const currChecked = lStorage("getItem", currOption);
-
-<Tooltip
-    needArrow
-    needOpen={needSetTrueLocalKey(lastChecked, currChecked)}
-    text={`♦ Sugestão: ${userName.cap()}, <br />adicione seus pontos facilmente<br/>clicando neste botão amarelo<br/>a cada nova compra.`}
-    backgroundColor={"var(--themeSDark--" + colorS + ")"}
-    element={
-
-    }
-/>
-
-// const { run, runName } = useStoreState(state => ({
-//     run: state.globalReducer.cases.run,
-//     runName: state.globalReducer.cases.runName,
-// }))
-// const needRun = run && runName === "appIntro";
-*/

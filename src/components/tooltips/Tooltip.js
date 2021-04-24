@@ -123,7 +123,7 @@ export default function Tooltip({
             >
                 {needAttentionWaves ? (
                     <div className={`${stopWave ? "" : "pulse-waves"}`}>
-                        <span style={{ visibility: "hidden" }}>.</span>
+                        <span style={{ visibility: "hidden" }} />
                     </div>
                 ) : null}
 

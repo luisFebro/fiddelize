@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import useContext from "context";
 import Tooltip from "components/tooltips/Tooltip";
 import useDatesCountdown from "hooks/dates/useDatesCountdown";
@@ -25,7 +25,6 @@ const getStyles = (props) => ({
 
 export default function Gift({
     rewardDeadline,
-    showMoreComps = true,
     prizeDesc,
     arePrizesVisible,
     userId,
@@ -38,6 +37,7 @@ export default function Gift({
         colorP,
         colorBack,
         userName,
+        lastPrizeDate,
         // playBeep,
     } = useContext();
 
@@ -50,7 +50,7 @@ export default function Gift({
     const { finalDeadline } = useDatesCountdown({
         deadline: rewardDeadline,
         userId,
-        trigger: userId !== "...",
+        date: lastPrizeDate,
     });
     const didPrizeExpired = finalDeadline === 0;
 
@@ -75,7 +75,7 @@ export default function Gift({
     const plural = finalDeadline > 1 ? "s" : "";
     const showPrizeDeadline = () => (
         <section
-            className="position-absolute animated zoomIn delay-3s"
+            className="position-absolute animated zoomIn delay-2s"
             style={{
                 zIndex: 2000,
                 bottom: "5%",
@@ -85,11 +85,13 @@ export default function Gift({
         >
             <div className="position-relative">
                 <div style={styles.deadlineBoard}>
-                    {!finalDeadline && !didPrizeExpired ? (
+                    {!finalDeadline && !didPrizeExpired && (
                         <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
-                            ... dias
+                            30 dias
                         </p>
-                    ) : (
+                    )}
+
+                    {finalDeadline && (
                         <p className="m-0 mx-3 text-subtitle text-white text-shadow text-center text-nowrap">
                             {didPrizeExpired
                                 ? "expirou"
@@ -123,7 +125,11 @@ export default function Gift({
             opacity,
         }) => (
             <GiftBox
-                className="gift-box--sound"
+                className={`animated ${
+                    userBeatedChall
+                        ? "bounce repeat-2 delay-3s"
+                        : "fadeInUp delay-2s"
+                }`}
                 boxPColor={colorP}
                 backColor={colorBack}
                 callback={setIsGiftOpen}
@@ -159,7 +165,7 @@ export default function Gift({
                     />
                     {!arePrizesVisible && (
                         <p
-                            className="text-hero"
+                            className="text-hero animated fadeIn delay-3s"
                             style={{
                                 fontSize: 80,
                                 position: "absolute",
@@ -177,12 +183,12 @@ export default function Gift({
 
         const beatedChallenge = () => (
             <section>
-                <p className="text-title text-shadow my-4 mb-5">
+                <p className="animated fadeInUp delay-2s pb-2 text-title text-shadow text-subtitle font-weight-bold">
                     Parabéns, {userName}!
                     <br />
-                    <span style={{ fontSize: "28px" }}>Abra seu prêmio.</span>
+                    <p className="text-normal">Abra seu prêmio.</p>
                 </p>
-                <section className="d-block animated bounce repeat-2 delay-1s position-relative pt-5">
+                <section className="pt-5 d-block position-relative">
                     {displayGiftBox({ needSmallBox: false })}
                     {showPrizeDeadline()}
                 </section>
@@ -197,8 +203,8 @@ export default function Gift({
     };
 
     return (
-        <div className="text-white text-center">
-            {showMoreComps && showGift()}
+        <div className="text-white text-center gift-box--sound">
+            {showGift()}
         </div>
     );
 }

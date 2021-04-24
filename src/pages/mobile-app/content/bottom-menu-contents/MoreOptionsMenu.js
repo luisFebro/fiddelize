@@ -75,8 +75,8 @@ export default function MoreOptionsMenu({ history }) {
     ));
 
     return (
-        <section className={`text-normal ${selectedTxtStyle}`}>
-            <h2 className="mb-4 animated fadeInUp text-subtitle font-weight-bold text-center">
+        <section className={`mx-3 text-normal ${selectedTxtStyle}`}>
+            <h2 className="py-4 animated fadeIn text-subtitle font-weight-bold text-center">
                 Mais opções
             </h2>
             <section className="animated fadeInUp container mb-5">

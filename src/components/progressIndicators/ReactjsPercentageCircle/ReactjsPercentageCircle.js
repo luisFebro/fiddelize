@@ -10,18 +10,13 @@ require("./style.css");
 class ReactjsPercentageCircle extends Component {
     constructor(props) {
         super(props);
-        let { percent } = props;
-        percent = percent || this.props.percent;
+        const { percent } = props;
 
-        let leftTransformerDegree = "0deg";
-        let rightTransformerDegree = "0deg";
-        if (percent >= 50) {
-            rightTransformerDegree = "180deg";
-            leftTransformerDegree = `${(percent - 50) * 3.6}deg`;
-        } else {
-            rightTransformerDegree = `${percent * 3.6}deg`;
-            leftTransformerDegree = "0deg";
-        }
+        const {
+            leftTransformerDegree,
+            rightTransformerDegree,
+        } = handleProgressColor(percent);
+
         this.state = {
             percent: this.props.percent,
             borderWidth:
@@ -31,6 +26,26 @@ class ReactjsPercentageCircle extends Component {
             leftTransformerDegree,
             rightTransformerDegree,
         };
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        // prevProps === current updated value
+        if (prevProps.percent !== prevState.percent) {
+            this.updateProgressColor(prevProps.percent);
+        }
+    }
+
+    updateProgressColor(perc) {
+        const {
+            leftTransformerDegree: newLeft,
+            rightTransformerDegree: newRight,
+        } = handleProgressColor(perc);
+
+        this.setState({
+            percent: perc,
+            leftTransformerDegree: newLeft,
+            rightTransformerDegree: newRight,
+        });
     }
 
     render() {
@@ -118,7 +133,7 @@ class ReactjsPercentageCircle extends Component {
                             <span
                                 className="d-block position-relative text-small font-weight-bold"
                                 style={{
-                                    top: -20,
+                                    top: -15,
                                 }}
                             >
                                 concluído
@@ -151,5 +166,24 @@ ReactjsPercentageCircle.defaultProps = {
     disabled: false,
     textStyle: "",
 };
+
+// HELPERS
+function handleProgressColor(percent) {
+    let leftTransformerDegree = "0deg";
+    let rightTransformerDegree = "0deg";
+    if (percent >= 50) {
+        rightTransformerDegree = "180deg";
+        leftTransformerDegree = `${(percent - 50) * 3.6}deg`;
+    } else {
+        rightTransformerDegree = `${percent * 3.6}deg`;
+        leftTransformerDegree = "0deg";
+    }
+
+    return {
+        leftTransformerDegree,
+        rightTransformerDegree,
+    };
+}
+// END HELPERS
 
 export default ReactjsPercentageCircle;

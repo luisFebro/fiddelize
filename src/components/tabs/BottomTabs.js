@@ -67,8 +67,8 @@ BottomTabs.propTypes = {
 export default function BottomTabs({
     data,
     colorP,
-    colorBack,
     needTabFullWidth = false,
+    showAppBar,
 }) {
     const props = {
         color: colorP,
@@ -117,43 +117,50 @@ export default function BottomTabs({
                         }}
                     >
                         <TabPanel
-                            style={{ minHeight: "500px" }}
+                            style={{
+                                minHeight: "500px",
+                                paddingBottom: "50px",
+                            }}
                             value={value}
                             index={ind}
                             dir={theme.direction}
-                            boxPadding={tab.boxPadding}
+                            boxPadding={tab.boxPadding || " "}
                         >
                             {ind === value && tab.tabContentPanel}
                         </TabPanel>
                     </section>
                 ))}
-            <section className="bottom-tabs--root">
-                <AppBar position="fixed" color="default">
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        variant={needTabFullWidth ? "fullWidth" : "scrollable"}
-                        aria-label="bottom tabs"
-                        className="animated fadeInUp"
-                        classes={{
-                            indicator: classes.indicator,
-                        }}
-                    >
-                        {data &&
-                            data.map((tab, ind) => (
-                                <Tab
-                                    key={ind}
-                                    label={tab.tabLabel}
-                                    icon={tab.tabIcon}
-                                    {...a11yProps(ind)}
-                                    classes={{
-                                        selected: classes.selected,
-                                    }}
-                                />
-                            ))}
-                    </Tabs>
-                </AppBar>
-            </section>
+            {showAppBar && (
+                <section className="bottom-tabs--root">
+                    <AppBar position="fixed" color="default">
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            variant={
+                                needTabFullWidth ? "fullWidth" : "scrollable"
+                            }
+                            aria-label="bottom tabs"
+                            className="animated fadeInUp delay-1s"
+                            classes={{
+                                indicator: classes.indicator,
+                            }}
+                        >
+                            {data &&
+                                data.map((tab, ind) => (
+                                    <Tab
+                                        key={ind}
+                                        label={tab.tabLabel}
+                                        icon={tab.tabIcon}
+                                        {...a11yProps(ind)}
+                                        classes={{
+                                            selected: classes.selected,
+                                        }}
+                                    />
+                                ))}
+                        </Tabs>
+                    </AppBar>
+                </section>
+            )}
         </Fragment>
     );
 }

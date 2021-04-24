@@ -1,26 +1,11 @@
-import { useState } from "react";
-// Redux
-import { useStoreDispatch } from "easy-peasy";
 import parse from "html-react-parser";
-import PropTypes from "prop-types";
-// CUSTOM DATA
-import CartRace from "./cart-race/CartRace";
 import CardsList from "./cards-list/CardsList";
 import { useProfile } from "../../../hooks/useRoleData";
 import getFirstName from "../../../utils/string/getFirstName";
 
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
-// END CUSTOM DATA
-
-AsyncPurchaseHistory.propTypes = {
-    modalData: PropTypes.object,
-};
-
 export default function AsyncPurchaseHistory({ modalData }) {
-    const [hideRaceCart, setHideRaceCart] = useState(false);
-
-    const dispatch = useStoreDispatch();
     const { role } = useProfile();
     const isAdmin = role === "cliente-admin";
 
@@ -63,21 +48,9 @@ export default function AsyncPurchaseHistory({ modalData }) {
         </div>
     );
 
-    const showCartRace = () =>
-        !hideRaceCart &&
-        isEvenSmall &&
-        !isCartEmpty && (
-            <CartRace
-                className="animated zoomIn faster"
-                currUserScore={currUserScore}
-                userName={cliUserName}
-            />
-        );
-
     return (
         <section onScroll={null}>
             {showTitle()}
-            {showCartRace()}
             <div style={{ padding: "8px 10px", overflowX: "hidden" }}>
                 <span id="raceCartSwitch" />
                 <CardsList data={cardsListData} />

@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./CartRace.scss";
 import PropTypes from "prop-types";
 import animateCartByScore, { options } from "./animateCartByScore";
-import { useClientAdmin, useClientUser } from "../../../../hooks/useRoleData";
-import defineCurrChallenge from "../../../../utils/biz/defineCurrChallenge";
-import pickCurrChallData from "../../../../utils/biz/pickCurrChallData";
+import { useClientAdmin, useClientUser } from "hooks/useRoleData";
+import defineCurrChallenge from "utils/biz/defineCurrChallenge";
+import pickCurrChallData from "utils/biz/pickCurrChallData";
 
 const isEvenSmall = window.Helper.isSmallScreen(415);
 

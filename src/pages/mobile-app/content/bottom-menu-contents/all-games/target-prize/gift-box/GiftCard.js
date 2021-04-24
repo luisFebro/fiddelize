@@ -22,7 +22,7 @@ export default function GiftCard({ prizeDesc, colorS }) {
     return (
         <Card
             raised
-            className="gift-card--root p-2 text-center text-normal font-weight-bold"
+            className="gift-card--root text-center text-normal font-weight-bold"
         >
             <div className="ribbon">
                 <span

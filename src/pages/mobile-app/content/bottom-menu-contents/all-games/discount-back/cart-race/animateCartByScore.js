@@ -1,6 +1,6 @@
-import { getNewRemainder } from "../../../../utils/numbers/getRemainder";
-import getFirstName from "../../../../utils/string/getFirstName";
-import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
+import { getNewRemainder } from "utils/numbers/getRemainder";
+import getFirstName from "utils/string/getFirstName";
+import { convertDotToComma } from "utils/numbers/convertDotComma";
 
 export default function animateCartByScore(
     currUserScore,

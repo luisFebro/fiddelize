@@ -48,6 +48,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes"; // keypad c
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons/faTimesCircle"; // closing btn
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt"; // delete btn
 import { faTrophy } from "@fortawesome/free-solid-svg-icons/faTrophy";
+import { faGift } from "@fortawesome/free-solid-svg-icons/faGift";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 import { faHandHolding } from "@fortawesome/free-solid-svg-icons/faHandHolding";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons/faThumbsUp";
@@ -147,6 +148,7 @@ library.add(
     faTimesCircle,
     faTrashAlt,
     faTrophy,
+    faGift,
     faUser,
     faHandHolding,
     faThumbsUp,

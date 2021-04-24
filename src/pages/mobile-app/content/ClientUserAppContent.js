@@ -1,32 +1,27 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Provider } from "context";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useGlobal from "./useGlobal";
-import getDayGreetingBr from "../../../utils/getDayGreetingBr";
-import { useAuthUser } from "../../../hooks/useAuthUser";
-import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
+import getDayGreetingBr from "utils/getDayGreetingBr";
+import { useAuthUser } from "hooks/useAuthUser";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
+import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import "../ellipse.scss";
-import AsyncBellNotifBtn from "../../../components/notification/AsyncBellNotifBtn";
-
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import useAnimateConfetti from "../../../hooks/animation/useAnimateConfetti";
-import useAnimateNumber from "../../../hooks/animation/useAnimateNumber";
-import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
-import defineCurrChallenge from "../../../utils/biz/defineCurrChallenge";
-import useCountNotif from "../../../hooks/notification/useCountNotif";
+import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
+import useAnimateNumber from "hooks/animation/useAnimateNumber";
+import pickCurrChallData from "utils/biz/pickCurrChallData";
+import defineCurrChallenge from "utils/biz/defineCurrChallenge";
+import useCountNotif from "hooks/notification/useCountNotif";
+import useAPI, { readPrizes } from "hooks/api/useAPI";
+import { getVar, removeVar } from "hooks/storage/useVar";
+import useSendSMS from "hooks/sms/useSendSMS";
+import useDidDateExpire from "hooks/dates/date-expires/useDidDateExpire";
+import useData from "hooks/useData";
+import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
+import useDidScroll from "hooks/scroll/useDidScroll";
+import useGlobal from "./useGlobal";
 import useNotifyCliWonChall from "./hooks/useNotifyCliWonChall";
-import useAPI, { readPrizes } from "../../../hooks/api/useAPI";
-import { getVar, removeVar } from "../../../hooks/storage/useVar";
-import useSendSMS from "../../../hooks/sms/useSendSMS";
-import useDidDateExpire from "../../../hooks/dates/date-expires/useDidDateExpire";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
-import useData from "../../../hooks/useData";
-import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 import GroupedAppBar from "./GroupedAppBar";
-// import { readPurchaseHistory } from "../../../redux/actions/userActions";
-// APP COMPONENTS
 import AllScores from "../AllScores";
-// END APP COMPONENTS
 
 const now = new Date();
 const greeting = getDayGreetingBr();
@@ -93,6 +88,7 @@ export default function ClientUserAppContent({
     const userBeatChallenge = currScore >= maxScore;
 
     useAlreadyAlertChallenge(currScore);
+    const didUserScroll = useDidScroll();
 
     const { isAuthUser } = useAuthUser();
     const { data } = useAPI({
@@ -237,11 +233,12 @@ export default function ClientUserAppContent({
         currChall,
         currScore,
         playBeep,
-        showMoreComps,
         arePrizesVisible,
         prizeDesc: mainReward,
         selfMilestoneIcon,
         runName,
+        lastPrizeDate,
+        didUserScroll,
     });
 
     return (

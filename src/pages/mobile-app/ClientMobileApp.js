@@ -6,8 +6,8 @@ import AsyncLogin from "../../components/auth/AsyncLogin";
 import {
     useProfile,
     useClientAdmin,
-    useClientUser,
     useAppSystem,
+    useClientUser,
 } from "../../hooks/useRoleData";
 import { countField } from "../../redux/actions/userActions";
 import { useAuthUser } from "../../hooks/useAuthUser";
@@ -22,17 +22,17 @@ import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
 import useDelay from "../../hooks/useDelay";
 import CompLoader from "../../components/CompLoader";
 import useBackColor from "../../hooks/useBackColor";
-import useCountNotif from "../../hooks/notification/useCountNotif";
-import useImg, { Img } from "../../hooks/media/useImg";
-import useData from "../../hooks/useData";
-import useScrollUp from "../../hooks/scroll/useScrollUp";
+import useCountNotif from "hooks/notification/useCountNotif";
+import useData from "hooks/useData";
+import useScrollUp from "hooks/scroll/useScrollUp";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
-import { Load } from "../../components/code-splitting/LoadableComp";
-import usePersistentStorage from "../../hooks/storage/usePersistentStorage";
-import removeImgFormat from "../../utils/biz/removeImgFormat";
+import { Load } from "components/code-splitting/LoadableComp";
+import usePersistentStorage from "hooks/storage/usePersistentStorage";
+import removeImgFormat from "utils/biz/removeImgFormat";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
 // import useCount from "../../hooks/useCount";
+// import useImg, { Img } from "../../hooks/media/useImg";
 
 const AsyncAdminQuickActions = Load({
     loading: false,
@@ -79,10 +79,6 @@ const isApp = isThisApp();
 
 function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
-    const [url, setUrl] = useState({
-        logoBiz: "",
-        logoFid: "",
-    });
 
     usePersistentStorage();
     useScrollUp();
@@ -161,20 +157,7 @@ function ClientMobileApp({ location, history }) {
         selfThemeSColor,
         selfThemeBackColor,
     } = useClientAdmin();
-    const { currScore } = useClientUser();
-
-    const logoBiz = useImg(url.logoBiz, {
-        trigger: url.logoBiz,
-        coll: "logos",
-        key: "app_biz_logo",
-    });
-    const logoFid = useImg(url.logoFid, {
-        trigger: url.logoFid,
-        coll: "logos",
-        key: "app_fiddelize_logo",
-    });
-
-    const logoSrc = logoBiz && !isBizTeam ? logoBiz : logoFid;
+    // const { currScore } = useClientUser();
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
@@ -199,21 +182,6 @@ function ClientMobileApp({ location, history }) {
         }
     }, [runName]);
 
-    const needClientLogo =
-        (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
-    const handleLogoSrc = () => {
-        if (needClientLogo) {
-            const { newImg: thisSelfBizLogoImg } = removeImgFormat(
-                selfBizLogoImg
-            );
-            return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
-        }
-        return setUrl({ ...url, logoFid: "/img/official-logo-name.png" });
-    };
-    useEffect(() => {
-        handleLogoSrc();
-    }, [selfBizLogoImg]);
-
     if (isCliMember) {
         // this var is removed when making login
         // userId to check if data still persists or user device
@@ -234,29 +202,30 @@ function ClientMobileApp({ location, history }) {
         }
     }
 
-    const showLogo = () => {
-        const isSquared =
-            isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+    const needClientLogo =
+        (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
 
+    const { newImg: thisSelfBizLogoImg, width, height } = removeImgFormat(
+        selfBizLogoImg
+    );
+    const logoSrc =
+        !isBizTeam || needClientLogo
+            ? thisSelfBizLogoImg
+            : "/img/official-logo-name.png";
+
+    // const isSquared =
+    //     isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+
+    const showLogo = () => {
         return (
             <div className="container-center">
-                {isBizTeam ? (
-                    <img
-                        src="/img/official-logo-name.png"
-                        style={{ position: "relative", margin: "15px 0" }}
-                        width={190}
-                        height={85}
-                        alt="logo fiddelize"
-                    />
-                ) : (
-                    <Img
-                        src={logoSrc}
-                        className="animated zoomIn slow"
-                        style={{ position: "relative", margin: "15px 0" }}
-                        width={isSquared ? 100 : 190}
-                        height={isSquared ? 100 : 85}
-                    />
-                )}
+                <img
+                    src={logoSrc}
+                    className="animated fadeInUp slow delay-2s"
+                    style={{ position: "relative", margin: "15px 0" }}
+                    width={width}
+                    height={height}
+                />
             </div>
         );
     };
@@ -359,7 +328,7 @@ function ClientMobileApp({ location, history }) {
             {isInstantApp && !isAuthUser ? (
                 <section className="container-center mx-3 text-normal">
                     <Card
-                        className="animated fadeInDown delay-2s"
+                        className="animated fadeInUp slow"
                         style={{
                             backgroundColor: "var(--mainWhite)",
                             borderRadius: "0 0 50px 50px",
@@ -466,8 +435,33 @@ function ClientMobileApp({ location, history }) {
 
 export default withRouter(ClientMobileApp);
 
-ClientMobileApp.whyDidYouRender = false;
-
 /* COMMENTS
 n1: LESSON: Do not use Fragment inside session since Fragment can hide inner elements...
+*/
+
+/* ARCHIVES
+const logoBiz = useImg(url.logoBiz, {
+    trigger: url.logoBiz,
+    coll: "logos",
+    key: "app_biz_logo",
+});
+const logoFid = useImg(url.logoFid, {
+    trigger: url.logoFid,
+    coll: "logos",
+    key: "app_fiddelize_logo",
+});
+
+const handleLogoSrc = () => {
+    if (needClientLogo) {
+        const { newImg: thisSelfBizLogoImg } = removeImgFormat(
+            selfBizLogoImg
+        );
+        return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
+    }
+    return setUrl({ ...url, logoFid: "/img/official-logo-name.png" });
+};
+useEffect(() => {
+    handleLogoSrc();
+}, [selfBizLogoImg]);
+
 */

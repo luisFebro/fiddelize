@@ -6,11 +6,11 @@ export default function userScrolled(callback) {
     const watchScroll = () => {
         const movedScroll = window.scrollY;
 
-        if (movedScroll) {
-            window.onscroll = null;
-            if (typeof callback === "function") {
-                return callback();
-            }
+        if (!movedScroll) return false;
+
+        window.onscroll = null;
+        if (typeof callback === "function") {
+            return callback();
         }
     };
 

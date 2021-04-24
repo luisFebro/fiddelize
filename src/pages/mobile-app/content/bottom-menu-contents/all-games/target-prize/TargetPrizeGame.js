@@ -1,9 +1,20 @@
+import { Fragment } from "react";
 import useContext from "context";
+import { Load } from "components/code-splitting/LoadableComp";
+import { currTxtColor } from "utils/biz/selectTxtStyle";
 import RatingIcons from "./RatingIcons";
-import ProgressFragTracker from "./ProgressFragTracker";
 import Gift from "./Gift";
+import GamesGalleryBtn from "../games-gallery-btn/GamesGalleryBtn";
+// All component pages which are using both in website and mobile app goes here in next updates...
 
-export default function TargetPrizeGame() {
+export const AsyncProgressFragTracker = Load({
+    loader: () =>
+        import(
+            "./ProgressFragTracker" /* webpackChunkName: "progress-frag-tracker-comp-lazy" */
+        ),
+});
+
+export default function TargetPrizeGame({ didUserScroll }) {
     const {
         userId,
         needAppForPreview,
@@ -13,10 +24,9 @@ export default function TargetPrizeGame() {
         runName,
         currScore,
         maxScore,
-        backColorSelect,
+        colorBack,
         colorS,
         selectTxtStyle,
-        showMoreComps,
     } = useContext();
 
     const showRatingIcons = () => (
@@ -28,7 +38,7 @@ export default function TargetPrizeGame() {
             <RatingIcons
                 currScore={currScore}
                 maxScore={maxScore}
-                colorBack={backColorSelect}
+                colorBack={colorBack}
                 colorS={colorS}
                 selectTxtStyle={selectTxtStyle}
                 selfMilestoneIcon={selfMilestoneIcon}
@@ -37,21 +47,43 @@ export default function TargetPrizeGame() {
         </div>
     );
 
+    const thisCurrTxtColor = currTxtColor(colorBack);
+    const showGamesGalleryBtn = () => (
+        <GamesGalleryBtn
+            thisCurrTxtColor={thisCurrTxtColor}
+            colorS={colorS}
+            colorBack={colorBack}
+        />
+    );
+
     return (
-        <section className="text-hero text-center text-white">
-            <div className="mb-5" />
-            <Gift
-                prizeDesc={prizeDesc}
-                userId={userId}
-                arePrizesVisible={arePrizesVisible}
-                rewardDeadline={30}
-                showMoreComps={showMoreComps}
-            />
+        <section className="text-center">
+            {didUserScroll && (
+                <Fragment>
+                    <div className="mb-5" />
+                    <Gift
+                        prizeDesc={prizeDesc}
+                        userId={userId}
+                        arePrizesVisible={arePrizesVisible}
+                        rewardDeadline={30}
+                    />
+                </Fragment>
+            )}
             <div className="mb-3" />
             {showRatingIcons()}
             <div style={{ marginBottom: 100 }} />
-            <ProgressFragTracker />
-            <div style={{ marginBottom: 100 }} />
+            {didUserScroll && (
+                <Fragment>
+                    <AsyncProgressFragTracker />
+                    <div style={{ marginBottom: 100 }} />
+                </Fragment>
+            )}
+            {didUserScroll && (
+                <section className="my-5 container-center">
+                    {showGamesGalleryBtn()}
+                </section>
+            )}
+            <div className="showMoreCompsByScroll" />
         </section>
     );
 }
