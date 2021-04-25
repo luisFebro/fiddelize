@@ -18,19 +18,19 @@ import isThisApp from "../../utils/window/isThisApp";
 import AsyncBellNotifBtn from "../../components/notification/AsyncBellNotifBtn";
 // import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
 // import ImageLogo from '../../components/ImageLogo';
-import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
-import useDelay from "../../hooks/useDelay";
-import CompLoader from "../../components/CompLoader";
-import useBackColor from "../../hooks/useBackColor";
+import useDelay from "hooks/useDelay";
+import CompLoader from "components/CompLoader";
+import useBackColor from "hooks/useBackColor";
 import useCountNotif from "hooks/notification/useCountNotif";
 import useData from "hooks/useData";
 import useScrollUp from "hooks/scroll/useScrollUp";
-import AppTypeBubble from "./start-comps/AppTypeBubble";
-import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import { Load } from "components/code-splitting/LoadableComp";
 import usePersistentStorage from "hooks/storage/usePersistentStorage";
 import removeImgFormat from "utils/biz/removeImgFormat";
+import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
+import AppTypeBubble from "./start-comps/AppTypeBubble";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
+import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
 // import useCount from "../../hooks/useCount";
 // import useImg, { Img } from "../../hooks/media/useImg";
 
@@ -209,12 +209,9 @@ function ClientMobileApp({ location, history }) {
         selfBizLogoImg
     );
     const logoSrc =
-        !isBizTeam || needClientLogo
-            ? thisSelfBizLogoImg
-            : "/img/official-logo-name.png";
-
-    // const isSquared =
-    //     isApp && selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        isBizTeam || !needClientLogo
+            ? "/img/official-logo-name.png"
+            : thisSelfBizLogoImg;
 
     const showLogo = () => {
         return (

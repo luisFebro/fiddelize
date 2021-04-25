@@ -1,5 +1,5 @@
 import { useState, forwardRef } from "react";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import "./_AppCard.scss";
 // icons
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";

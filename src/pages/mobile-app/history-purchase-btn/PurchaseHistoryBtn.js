@@ -1,8 +1,8 @@
 import { useState } from "react";
 import LocalMallIcon from "@material-ui/icons/LocalMall";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import ModalFullContent from "../../../components/modals/ModalFullContent";
-import { Load } from "../../../components/code-splitting/LoadableComp";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
 
 const Async = Load({
     loader: () =>
@@ -11,7 +11,7 @@ const Async = Load({
         ),
 });
 
-const getStyles = (props) => ({
+const getStyles = () => ({
     muStyle: {
         transform: "scale(1.2)",
         filter: "drop-shadow(.5px .5px 1.5px black)",

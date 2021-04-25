@@ -12,7 +12,7 @@ export default function AsyncPurchaseHistory({ modalData }) {
     const {
         cliUserName,
         cliUserId,
-        currUserScore,
+        // currUserScore,
         totalGeneralScore,
         totalPurchasePrize,
         isFromDashboard = false,
@@ -52,7 +52,6 @@ export default function AsyncPurchaseHistory({ modalData }) {
         <section onScroll={null}>
             {showTitle()}
             <div style={{ padding: "8px 10px", overflowX: "hidden" }}>
-                <span id="raceCartSwitch" />
                 <CardsList data={cardsListData} />
             </div>
         </section>

@@ -21,7 +21,6 @@ import getPercentage from "utils/numbers/getPercentage";
 
 const options = tooltip1;
 const needFlagWaves = lStorage("getItem", options);
-console.log("needFlagWaves", needFlagWaves);
 
 const getStyles = () => ({
     confettiIcon: {
@@ -235,7 +234,7 @@ function ProgressFrag({
                         />
                     </div>
                 }
-                backgroundColor={`var(--themeSDark--${colorS})`}
+                backgroundColor={`var(--themeS--${colorS})`}
                 colorS={colorS}
             />
         </section>

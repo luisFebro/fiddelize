@@ -2,6 +2,7 @@ import { useState } from "react";
 import ButtonFab from "components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "components/modals/ModalFullContent";
 import { Load } from "components/code-splitting/LoadableComp";
+import { currTxtColor } from "utils/biz/selectTxtStyle";
 
 const AsyncGamesGalleryContent = Load({
     loader: () =>
@@ -10,11 +11,7 @@ const AsyncGamesGalleryContent = Load({
         ),
 });
 
-export default function GamesGalleryBtn({
-    thisCurrTxtColor,
-    colorS,
-    colorBack,
-}) {
+export default function GamesGalleryBtn({ colorS, colorBack }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const handleFullOpen = () => {
@@ -24,6 +21,8 @@ export default function GamesGalleryBtn({
     const handleFullClose = () => {
         setFullOpen(false);
     };
+
+    const thisCurrTxtColor = currTxtColor(colorBack);
 
     return (
         <section>

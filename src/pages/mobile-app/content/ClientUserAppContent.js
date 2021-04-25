@@ -72,6 +72,7 @@ export default function ClientUserAppContent({
         selfThemeBackColor,
         arePrizesVisible,
         bizWhatsapp,
+        bizName,
         selfBizLogoImg,
     } = useClientAdmin();
     let { maxScore = 0, selfMilestoneIcon } = useClientAdmin();
@@ -94,7 +95,7 @@ export default function ClientUserAppContent({
     const { data } = useAPI({
         url: readPrizes(userId),
         params: { lastPrizeDateAndId: true, thisRole: "cliente" },
-        trigger: !needAppForPreview && !userIdLoading,
+        trigger: !needAppForPreview && userId !== "...",
     });
 
     const lastPrizeId = data && data.id;
@@ -239,6 +240,7 @@ export default function ClientUserAppContent({
         runName,
         lastPrizeDate,
         didUserScroll,
+        bizName,
     });
 
     return (

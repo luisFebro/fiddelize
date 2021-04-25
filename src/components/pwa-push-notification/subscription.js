@@ -1,4 +1,5 @@
 import getAPI, { subscribePushNotif } from "../../utils/promises/getAPI";
+import { setVar } from "../../hooks/storage/useVar";
 
 const convertedVapidKey = urlBase64ToUint8Array(
     process.env.REACT_APP_PUBLIC_PUSH_NOTIF_KEY
@@ -18,25 +19,23 @@ export default async function subscribeUser({ role, userId }) {
     // Lesson: if no response from here, it means there's no service worker installed in the browser.
     const registration = await navigator.serviceWorker.ready;
 
-    // for now, this did not work during test. So probably will create another subscription here and save it.
-    const existedSubscription = await registration.pushManager.getSubscription();
-
-    const gotAlreadySubscripted = existedSubscription !== null;
-    if (gotAlreadySubscripted) {
-        sendSubscription(existedSubscription, { role, userId, deviceType });
-        return "ok";
-    }
-
     const newSubscription = await registration.pushManager.subscribe({
         applicationServerKey: convertedVapidKey, // n2
         userVisibleOnly: true,
     });
 
-    sendSubscription(newSubscription, { role, userId, deviceType });
+    sendAndStoreSubscribe(newSubscription, { role, userId, deviceType });
     return "ok";
 }
 
 // HELPERS
+async function sendAndStoreSubscribe(subscription, params = {}) {
+    return await Promise.all([
+        sendSubscription(subscription, params),
+        setVar({ "subscription-renewal": JSON.stringify(subscription) }),
+    ]);
+}
+
 async function sendSubscription(subscription, params = {}) {
     // n1
     return await getAPI({
@@ -80,4 +79,17 @@ e.g payload:
 
 n3: example first payload received:
 {"endpoint":"https://fcm.googleapis.com/fcm/send/ffU2enuOhCE:APA91bGkYoa4OOUYK7oh33iHav36wDkvqeH2cjoTY2qk_88hPjJdzA15D62t25c2MmY9Lv7EYizGKHGCqCB4eWEWbvJ9GyC2OK2xqJ_V0Rr4uvG2fH0shS8cJfrOFg5_WS8k08E2s285","expirationTime":null,"keys":{"p256dh":"BG4T7_CZ76nK3inw1t8WexxoGLECPdZdc7Xp5-BDKpGlmqkfLWPyyN_zc56R9UrDigs9ijK2dSu_gszHCsc9_TU","auth":"rr1brQJN0Qr0_bp_ZNQNfQ"}}
+*/
+
+/* ARCHIVES
+// LESSON: this is handled by pushsubscriptionchange event handler in service-worker
+// for now, this did not work during test. So probably will create another subscription here and save it.
+const existedSubscription = await registration.pushManager.getSubscription();
+
+const gotAlreadySubscripted = existedSubscription !== null;
+if (gotAlreadySubscripted) {
+    sendSubscription(existedSubscription, { role, userId, deviceType });
+    return "ok";
+}
+
 */

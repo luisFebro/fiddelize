@@ -53,6 +53,7 @@ export default function Tooltip({
     hover = false,
     needClickAway = true,
     arrowBottom,
+    disabled = false,
 }) {
     const [open, setOpen] = React.useState(false);
     const [stopWave, setStopWave] = React.useState(false);
@@ -138,7 +139,7 @@ export default function Tooltip({
                     disableTouchListener
                     interactive
                     onClose={handleTooltipClose}
-                    open={hover && !isSmall ? undefined : open}
+                    open={disabled || (hover && !isSmall) ? undefined : open}
                     placement={placement || "top"}
                     TransitionComponent={Zoom}
                     TransitionProps={{ timeout: 200 }}

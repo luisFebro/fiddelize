@@ -28,11 +28,8 @@ export const readUser = async (dispatch, _userId, options = {}) => {
 };
 
 export const readClientAdmin = async (dispatch, _userId) => {
-    const select =
-        "clientAdminData.bizName clientAdminData.bizCodeName clientAdminData.bizPlan clientAdminData.bizWhatsapp clientAdminData.rewardScore clientAdminData.mainReward clientAdminData.rewardList clientAdminData.rewardDeadline clientAdminData.totalClientUserActiveScores clientAdminData.totalClientUserScores clientAdminData.totalClientUsers clientAdminData.selfBizLogoImg clientAdminData.selfMilestoneIcon clientAdminData.selfThemePColor clientAdminData.selfThemeSColor clientAdminData.selfThemeBackColor clientAdminData.arePrizesVisible";
-
     const res = await axios.get(
-        `${API}/user/${_userId}?clientAdminRequest=true&thisRole=cliente-admin&select=${select}`,
+        `${API}/user/${_userId}?clientAdminRequest=true&thisRole=cliente-admin&select=cliAdminSelect`,
         getHeaderJson
     );
     dispatch({

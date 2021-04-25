@@ -20,6 +20,14 @@ const AsyncMoreOptionsMenu = LoadableVisible({
         ),
 });
 
+const AsyncPurchaseHistory = LoadableVisible({
+    loading: true,
+    loader: () =>
+        import(
+            "./bottom-menu-contents/purchase-history/PurchaseHistory" /* webpackChunkName: "purchase-history-content-lazy" */
+        ),
+});
+
 function GroupedAppBar({ history }) {
     const {
         needAppForCliAdmin,
@@ -40,7 +48,7 @@ function GroupedAppBar({ history }) {
         {
             tabLabel: "Compras",
             tabIcon: <LocalMallIcon />,
-            tabContentPanel: undefined,
+            tabContentPanel: <AsyncPurchaseHistory />,
             scrollView: true,
         },
         {

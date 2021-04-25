@@ -10,29 +10,16 @@ export const AsyncTargetPrizeGame = Load({
         ),
 });
 
-export const AsyncDiscountBack = Load({
+export const AsyncDiscountBackGame = Load({
     loader: () =>
         import(
-            "./discount-back/DiscountBack" /* webpackChunkName: "discount-back-game-comp-lazy" */
+            "./discount-back/DiscountBackGame" /* webpackChunkName: "discount-back-game-comp-lazy" */
         ),
 });
 // end games
 
 export default function Games() {
     const { selectedTxtStyle, currChall, didUserScroll } = useContext();
-
-    // for cli-admin
-    // const games = [
-    //     {
-    //         active: true,
-    //         name: "targetPrize"
-    //     },
-    //     {
-    //         active: true,
-    //         name: "discountBack",
-    //         data: "discountGoal:30.50;discountPerc:5;"
-    //     }
-    // ];
 
     // for cli-user
     const games = {
@@ -45,8 +32,10 @@ export default function Games() {
         raffleTicket: {},
     };
 
-    const gameType = "discountBack"; // targetPrize, discountBack, raffleTicket
-    const { icon, title, challN } = getGameBrTitle(gameType, games);
+    // last selected game from user or according to this order of priority:
+    // targetPrize, discountBack, raffleTicket
+    const gameType = "targetPrize";
+    const { icon, nameBr, challN } = getGameData(gameType, games);
 
     const showTitle = () => (
         <section className="animated fadeIn py-4">
@@ -54,7 +43,7 @@ export default function Games() {
                 className={`text-subtitle font-weight-bold text-center ${selectedTxtStyle}`}
             >
                 {icon}
-                {title}
+                {nameBr}
                 <br />
                 <span className="text-title">n.º {challN || currChall}</span>
             </h2>
@@ -75,7 +64,7 @@ export default function Games() {
                 <AsyncTargetPrizeGame didUserScroll={didUserScroll} />
             )}
             {gameType === "discountBack" && (
-                <AsyncDiscountBack didUserScroll={didUserScroll} />
+                <AsyncDiscountBackGame didUserScroll={didUserScroll} />
             )}
             {gameType === "raffleTicket" && null}
         </section>
@@ -83,10 +72,10 @@ export default function Games() {
 }
 
 // HELPERS
-function getGameBrTitle(gameType, games) {
+function getGameData(gameType, games) {
     if (gameType === "targetPrize") {
         return {
-            title: "Prêmio Alvo",
+            nameBr: "Prêmio Alvo",
             icon: (
                 <FontAwesomeIcon
                     icon="gift"
@@ -100,7 +89,7 @@ function getGameBrTitle(gameType, games) {
 
     if (gameType === "discountBack") {
         return {
-            title: "Desconto Retornado",
+            nameBr: "Desconto Retornado",
             icon: <LoyaltyIcon className="mr-3" style={{ fontSize: 35 }} />,
             challN: games ? games.discountBack.challN : "...",
         };
@@ -108,7 +97,7 @@ function getGameBrTitle(gameType, games) {
 
     if (gameType === "raffleTicket") {
         return {
-            title: "Bilhete Premiado",
+            nameBr: "Bilhete Premiado",
             icon: null,
             challN: games ? games.raffleTicket.challN : "...",
         };

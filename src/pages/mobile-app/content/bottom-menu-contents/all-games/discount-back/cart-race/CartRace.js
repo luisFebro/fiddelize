@@ -21,7 +21,7 @@ const faStyle = {
 
 export default function CartRace({
     currUserScore,
-    challengeN,
+    // challengeN,
     userName,
     className,
     id,
@@ -33,6 +33,8 @@ export default function CartRace({
         selfThemeSColor,
         rewardList,
     } = useClientAdmin();
+
+    // const isCartEmpty = !totalGeneralScore;
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;

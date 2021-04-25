@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import useContext from "context";
 import { Load } from "components/code-splitting/LoadableComp";
-import { currTxtColor } from "utils/biz/selectTxtStyle";
 import RatingIcons from "./RatingIcons";
 import Gift from "./Gift";
 import GamesGalleryBtn from "../games-gallery-btn/GamesGalleryBtn";
@@ -47,15 +46,6 @@ export default function TargetPrizeGame({ didUserScroll }) {
         </div>
     );
 
-    const thisCurrTxtColor = currTxtColor(colorBack);
-    const showGamesGalleryBtn = () => (
-        <GamesGalleryBtn
-            thisCurrTxtColor={thisCurrTxtColor}
-            colorS={colorS}
-            colorBack={colorBack}
-        />
-    );
-
     return (
         <section className="text-center">
             {didUserScroll && (
@@ -80,10 +70,9 @@ export default function TargetPrizeGame({ didUserScroll }) {
             )}
             {didUserScroll && (
                 <section className="my-5 container-center">
-                    {showGamesGalleryBtn()}
+                    <GamesGalleryBtn colorS={colorS} colorBack={colorBack} />
                 </section>
             )}
-            <div className="showMoreCompsByScroll" />
         </section>
     );
 }

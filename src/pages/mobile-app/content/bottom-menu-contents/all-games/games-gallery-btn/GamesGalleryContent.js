@@ -1,4 +1,9 @@
+import useContext from "context";
+import GameList from "./games-list/GameList";
+
 export default function GamesGalleryContent() {
+    const { currScore } = useContext();
+
     const showTitle = () => (
         <div className="mt-3 text-center text-purple mx-3">
             <h1 className="text-subtitle font-weight-bold">Jogos de Compra</h1>
@@ -14,5 +19,20 @@ export default function GamesGalleryContent() {
         </div>
     );
 
-    return <section>{showTitle()}</section>;
+    const showBalance = () => (
+        <h2 className="mt-4 mb-3 text-center text-purple text-normal font-weight-bold">
+            Saldo Atual:
+            <div className="container-center">
+                <span className="d-block text-pill">{currScore} pontos</span>
+            </div>
+        </h2>
+    );
+
+    return (
+        <section className="mx-3">
+            {showTitle()}
+            {showBalance()}
+            <GameList />
+        </section>
+    );
 }
