@@ -4,10 +4,6 @@ import { setLoadingProgress } from "./globalActions";
 import { API } from "../../config/api";
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 
-/// /////////////////////////////////////////////////////////////////
-// readAdmin moved to userActions userActions as readCentralAdmin //
-/// /////////////////////////////////////////////////////////////////
-
 export const updateAdmin = async (dispatch, bodyToSend) => {
     try {
         return await axios.put(`${API}/admin`, bodyToSend, getHeaderJson);

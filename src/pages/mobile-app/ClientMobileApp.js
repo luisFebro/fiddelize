@@ -2,22 +2,13 @@
 import { useEffect, useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
-import AsyncLogin from "../../components/auth/AsyncLogin";
-import {
-    useProfile,
-    useClientAdmin,
-    useAppSystem,
-    useClientUser,
-} from "../../hooks/useRoleData";
-import { countField } from "../../redux/actions/userActions";
-import { useAuthUser } from "../../hooks/useAuthUser";
+import AsyncLogin from "components/auth/AsyncLogin";
+import { useClientAdmin, useAppSystem, useClientUser } from "hooks/useRoleData";
+import { useAuthUser } from "hooks/useAuthUser";
 
-import { useRunComp } from "../../hooks/useRunComp";
-import ClientUserAppContent from "./content/ClientUserAppContent";
-import isThisApp from "../../utils/window/isThisApp";
-import AsyncBellNotifBtn from "../../components/notification/AsyncBellNotifBtn";
-// import LoadingThreeDots from '../../components/loadingIndicators/LoadingThreeDots';
-// import ImageLogo from '../../components/ImageLogo';
+import { useRunComp } from "hooks/useRunComp";
+import isThisApp from "utils/window/isThisApp";
+import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import useDelay from "hooks/useDelay";
 import CompLoader from "components/CompLoader";
 import useBackColor from "hooks/useBackColor";
@@ -31,8 +22,7 @@ import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
 import useLoginOrRegister from "./helpers/useLoginOrRegister";
 import AsyncVersion from "../../_main-app/user-interfaces/version/AsyncVersion";
-// import useCount from "../../hooks/useCount";
-// import useImg, { Img } from "../../hooks/media/useImg";
+import ClientUserAppContent from "./content/ClientUserAppContent";
 
 const AsyncAdminQuickActions = Load({
     loading: false,
@@ -95,6 +85,7 @@ function ClientMobileApp({ location, history }) {
         instantBizImg,
         instantBizName,
         needAppRegister,
+        firstName,
     ] = useData([
         "userId",
         "rememberAccess",
@@ -107,6 +98,7 @@ function ClientMobileApp({ location, history }) {
         "instantBizImg",
         "instantBizName",
         "needAppRegister",
+        "firstName",
     ]);
 
     useLoginOrRegister({
@@ -163,18 +155,13 @@ function ClientMobileApp({ location, history }) {
     const versionReady = useDelay(2000);
     const totalNotifications = useCountNotif(userId, {
         role,
+        forceCliUser: role === "cliente",
         trigger: !loadingData,
     });
     // useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(
         `var(--themeBackground--${isBizTeam ? "default" : selfThemeBackColor})`
     );
-
-    useEffect(() => {
-        if (isCliUser && !loadingData) {
-            countField(userId, { field: "clientUserData.totalVisits" });
-        }
-    }, [userId, loadingData, isCliUser]);
 
     useEffect(() => {
         if (runName === "logout") {
@@ -388,12 +375,17 @@ function ClientMobileApp({ location, history }) {
                     {isCliUser && (
                         <ClientUserAppContent
                             businessId={businessId}
-                            useProfile={useProfile}
+                            loadingData={loadingData}
                             useClientUser={useClientUser}
                             useClientAdmin={useClientAdmin}
                             needAppForCliAdmin={needAppForCliAdmin}
                             colorP={selfThemePColor}
                             colorS={selfThemeSColor}
+                            totalNotifications={totalNotifications}
+                            role={role}
+                            firstName={firstName}
+                            fullName={fullName}
+                            userId={userId}
                         />
                     )}
 

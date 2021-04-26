@@ -88,6 +88,7 @@ export default async function handleOpenApp({
         // IMPORTANT: userId is used as the current id to be authorized by system. the clickedAppUserId, of course, it is clicked app id.
         await renewAccessToken({
             userId,
+            bizId,
             clickedAppUserId,
             role: appRole,
         });
@@ -197,7 +198,7 @@ export default async function handleOpenApp({
         }
     }
 
-    return alert("error");
+    console.log("error in appAccessAlgorithm.js");
 }
 
 async function dontRememberAccess({ role = "team-apps" }) {

@@ -4,7 +4,6 @@ import { useStoreState } from "easy-peasy";
 import lStorage, {
     clientAdminColl,
     userProfileColl,
-    centralAdminColl,
 } from "../../utils/storage/lStorage";
 import setDataIfOnline from "../../utils/storage/setDataIfOnline";
 import useRecoverSysData from "./useRecoverSysData";
@@ -13,7 +12,6 @@ import {
     useProfile,
     useClientAdmin,
     useClientUser,
-    useCentralAdmin,
     useAppSystem,
 } from "../useRoleData";
 
@@ -40,12 +38,10 @@ export const useRecoveryAndDataOffline = () => {
     bizId = bizSysId || businessId || bizId; // businessId and bizId returns "0" when user is in the download page...
 
     // data
-    const centralAdminNewObj = useCentralAdmin();
     const clientAdminNewObj = useClientAdmin();
     const userProfileNewObj = { ...profileValues, ...clientUserValues };
 
     setDataIfOnline(userProfileColl, userProfileNewObj, isUserOnline);
     setDataIfOnline(clientAdminColl, clientAdminNewObj, isUserOnline);
-    setDataIfOnline(centralAdminColl, centralAdminNewObj, isUserOnline);
     useRecoverSysData(role, _id, { bizId, isUserOnline, didUserLogout });
 };

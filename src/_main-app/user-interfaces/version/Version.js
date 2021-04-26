@@ -3,10 +3,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.16.0-61";
+const latestVersion = "4.17.0";
 
 const updateDescription =
-    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs";
+    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs | new init to fetch rest API at once pt 1";
 /* HISTORY
 "new virtual buy card"
 "implementação novos snackbars"

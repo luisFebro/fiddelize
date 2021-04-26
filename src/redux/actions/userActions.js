@@ -22,7 +22,7 @@ export const readUser = async (dispatch, _userId, options = {}) => {
         getHeaderJson
     );
     console.log("===CURRENT USER LOADED===");
-    !select && dispatch({ type: "USER_READ", payload: res.data });
+    if (!select) dispatch({ type: "USER_READ", payload: res.data });
 
     return res;
 };
@@ -37,19 +37,6 @@ export const readClientAdmin = async (dispatch, _userId) => {
         payload: res.data,
     });
     return res;
-};
-
-export const readCentralAdmin = async (dispatch) => {
-    try {
-        // setLoadingOn(dispatch);
-        const res = await axios.get(`${API}/admin`, getHeaderJson);
-        console.log("==CENTRAL ADMIN LOADED==");
-        dispatch({ type: "CENTRAL_ADMIN_READ", payload: res.data });
-        return res;
-        // setLoadingOff(dispatch);
-    } catch (err) {
-        return err.response;
-    }
 };
 // END MAIN DATA LOADING
 

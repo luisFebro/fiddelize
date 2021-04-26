@@ -67,7 +67,7 @@ function Website({ location, history }) {
 
     useEffect(() => {
         // loadReCaptcha();
-        dispatch(loadUser(dispatch))(history);
+        loadUser(dispatch, history);
     }, [dispatch]);
 
     return (

@@ -66,8 +66,7 @@ function Mobile({ location, history }) {
     const dispatch = useStoreDispatch();
 
     useEffect(() => {
-        // loadReCaptcha();
-        dispatch(loadUser(dispatch))(history);
+        loadUser(dispatch, history);
     }, [dispatch]);
 
     return (

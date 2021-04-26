@@ -9,12 +9,10 @@ import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
 import defineCurrChallenge from "utils/biz/defineCurrChallenge";
-import useCountNotif from "hooks/notification/useCountNotif";
 import useAPI, { readPrizes } from "hooks/api/useAPI";
 import { getVar, removeVar } from "hooks/storage/useVar";
 import useSendSMS from "hooks/sms/useSendSMS";
 import useDidDateExpire from "hooks/dates/date-expires/useDidDateExpire";
-import useData from "hooks/useData";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useDidScroll from "hooks/scroll/useDidScroll";
 import useGlobal from "./useGlobal";
@@ -27,7 +25,6 @@ const now = new Date();
 const greeting = getDayGreetingBr();
 
 export default function ClientUserAppContent({
-    useProfile,
     useClientUser,
     useClientAdmin,
     needAppForCliAdmin,
@@ -39,25 +36,17 @@ export default function ClientUserAppContent({
     businessId,
     rewardScoreTest,
     clientNameTest,
+    totalNotifications,
+    loadingData, // all data from indexDB user
+    role,
+    fullName,
+    firstName,
+    userId,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currScoreRef = useRef(null);
 
-    const { role } = useProfile();
-    // eslint-disable-next-line
-    let [userId, fullName, firstName] = useData([
-        "userId",
-        "name",
-        "firstName",
-    ]);
     firstName = clientNameTest || firstName;
-    const userIdLoading = userId === "...";
-
-    const totalNotifications = useCountNotif(userId, {
-        role,
-        forceCliUser: true,
-        trigger: !userIdLoading,
-    });
 
     const {
         currScore = 0,
@@ -113,7 +102,7 @@ export default function ClientUserAppContent({
         totalPurchasePrize,
         senderId: userId,
         // trigger
-        userIdLoading,
+        userIdLoading: loadingData,
         userBeatChallenge,
         playBeep,
     });
@@ -121,7 +110,7 @@ export default function ClientUserAppContent({
     const needMissingMsg = useDidDateExpire({
         dateToExpire: lastPrizeDate,
         userId,
-        trigger: !needAppForPreview && !userIdLoading && lastPrizeDate,
+        trigger: !needAppForPreview && !loadingData && lastPrizeDate,
     });
 
     // this can be soon depracated with a push notification.
@@ -364,7 +353,7 @@ useEffect(() => {
         setVar({ [key]: totalChallengesWon });
     }
 
-    if (userIdLoading) return;
+    if (loadingData) return;
 
     getVar(key).then((gotValue) => {
         const options = {
@@ -387,7 +376,7 @@ useEffect(() => {
         }
     });
 }, [
-    userIdLoading,
+    loadingData,
     userId,
     userBeatChallenge,
     totalChallengesWon,

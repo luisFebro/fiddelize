@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Title from "../Title";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import { loginEmail } from "../../redux/actions/authActions";
-import { readUser } from "../../redux/actions/userActions";
 import KeypadButton from "../modals/keypad";
 import isThisApp from "../../utils/window/isThisApp";
 import RadiusBtn from "../buttons/RadiusBtn";
@@ -140,7 +139,7 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     const {
-        msg,
+        // msg,
         role,
         name,
         authUserId,
@@ -192,7 +191,6 @@ export async function signInUserData(cpfValue, options = {}) {
         ];
 
         await setMultiVar(storeElems, store.user);
-        await readUser(dispatch, authUserId, { role }); // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
 
         if (!verificationPass) {
             await sendWelcomeNotif({
@@ -203,10 +201,11 @@ export async function signInUserData(cpfValue, options = {}) {
             setTimeout(() => showToast("Redirecionando..."), 2900);
 
             whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${authUserId}&name=${name}`;
-            !appPanelUserId && setTimeout(() => history.push(whichRoute), 5000);
-        } else {
-            !appPanelUserId && history.push("/senha-de-acesso");
+            if (!appPanelUserId)
+                setTimeout(() => history.push(whichRoute), 5000);
         }
+
+        if (!appPanelUserId) history.push("/senha-de-acesso");
     }
 
     if (role === "cliente-membro") {
@@ -271,20 +270,17 @@ export async function signInUserData(cpfValue, options = {}) {
                 return console.log("smt wrong with sendNotification");
 
             if (needAccountPanel) {
-                history.push("/painel-de-apps");
-                return;
+                return history.push("/painel-de-apps");
             }
 
-            !appPanelUserId &&
-                handleCliUserPath({ authUserId, dispatch, history });
-        } else {
-            !appPanelUserId &&
-                handleCliUserPath({ authUserId, dispatch, history });
+            if (!appPanelUserId) handleCliUserPath(history);
         }
+
+        if (!appPanelUserId) handleCliUserPath(history);
     }
 
     if (role === "nucleo-equipe") {
-        !appPanelUserId && showToast("Iniciando...", { dur: 5000 });
+        if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
         await removeVar("disconnectAgent", store.user);
         // Pre login store data
         const storeElems = [
@@ -316,7 +312,7 @@ export async function signInUserData(cpfValue, options = {}) {
             return history.push("/t/app/nucleo-equipe/cadastro/pagseguro");
         }
 
-        !appPanelUserId && history.push("/t/app/nucleo-equipe/acesso");
+        if (!appPanelUserId) history.push("/t/app/nucleo-equipe/acesso");
     }
 }
 
@@ -347,18 +343,10 @@ async function removeInstantAppAndRegisterData() {
     );
 }
 
-function handleCliUserPath({ authUserId, dispatch, history }) {
-    readUser(dispatch, authUserId, { role: "cliente" }) // this is moved from authActions because avoid reading only user rather admin data or vice-versa...
-        .then((res) => {
-            if (isThisApp()) {
-                if (res.status !== 200)
-                    return showToast(res.data.msg, { type: "error" });
-                showToast("Iniciando...", { dur: 5000 });
-                history.push("/mobile-app");
-            } else {
-                window.location.href = "/mobile-app?abrir=1";
-            }
-        });
+function handleCliUserPath(history) {
+    if (isApp) return history.push("/mobile-app");
+
+    window.location.href = "/mobile-app?abrir=1";
 }
 
 // END HELPERS

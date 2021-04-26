@@ -7,7 +7,7 @@ import { checkVerificationPass } from "../../../redux/actions/adminActions";
 import useData from "../../../hooks/useData";
 import { useAppSystem, useClientAdmin } from "../../../hooks/useRoleData";
 import showToast from "../../../components/toasts";
-import getAPI, { getAuthTk } from "../../../utils/promises/getAPI";
+import getAPI, { createTk } from "../../../utils/promises/getAPI";
 import authenticate from "../../../components/auth/helpers/authenticate";
 import useBackColor from "../../../hooks/useBackColor";
 
@@ -33,7 +33,7 @@ export default function TeamPassword({ history }) {
     });
     const { pass } = data;
 
-    const [bizId, role, userId, firstName, success] = useData([
+    const [role, userId, firstName, success] = useData([
         "lastRegisterBizId",
         "role",
         "userId",
@@ -53,7 +53,7 @@ export default function TeamPassword({ history }) {
 
         const bodyToSend = {
             pass,
-            bizId: bizId || businessId,
+            bizId: businessId,
         };
 
         const res = await checkVerificationPass(dispatch, bodyToSend);
@@ -69,13 +69,14 @@ export default function TeamPassword({ history }) {
             // authorize user first
             const body = {
                 _id: userId,
+                bizId: businessId,
                 role,
                 nT: getId(),
             };
 
             const { data: token } = await getAPI({
                 method: "post",
-                url: getAuthTk(),
+                url: createTk(),
                 body,
             });
 

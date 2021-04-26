@@ -1,5 +1,19 @@
 import { API } from "../../config/api";
-// URLs ONLY
+/*
+ URLs ONLY
+*/
+
+// AUTH AND PASSWORD
+export const login = () => `${API}/auth/login`; // POST
+export const loadUserInit = () => `${API}/auth/load-user/init`; // POST
+export const checkPassword = () => `${API}/auth/pswd/check`;
+export const createTk = () => `${API}/auth/pswd/create-tk`; // POST - directly fetch token on successful login
+export const forgotPasswordRequest = () => `${API}/auth/pswd/forgot`;
+export const recoverPassword = () => `${API}/auth/pswd/recover`;
+export const changePassword = () => `${API}/auth/pswd/change`;
+export const createPassword = () => `${API}/auth/pswd/create`;
+// export const makeGoogleLogin = () => `${API}/auth/google`; // POST
+
 // USER
 export const readUser = (userId, role, noResponse = true) =>
     `${API}/user/${userId}?noResponse=${noResponse}&thisRole=${role}`;
@@ -76,17 +90,6 @@ export const getProData = (userId) =>
     `${API}/pro/pro-member-data?userId=${userId}`; // POST
 export const removeServices = (userId) =>
     `${API}/pro/service/remove?userId=${userId}`; // DELETE
-
-// PASSWORD AND AUTH
-export const checkPassword = () => `${API}/auth/pswd/check`;
-export const getDecryptedToken = () => `${API}/auth/pswd/decrypt-token`;
-export const getAuthTk = () => `${API}/auth/pswd/auth-tk`; // POST - directly fetch token on successful login
-export const getToken = () => `${API}/auth/pswd/token`;
-export const forgotPasswordRequest = () => `${API}/auth/pswd/forgot`;
-export const recoverPassword = () => `${API}/auth/pswd/recover`;
-export const changePassword = () => `${API}/auth/pswd/change`;
-export const createPassword = () => `${API}/auth/pswd/create`;
-// export const makeGoogleLogin = () => `${API}/auth/google`; // POST
 
 // TEAM
 export const readTeamMemberList = () => `${API}/user/team/list`;

@@ -11,16 +11,12 @@ import useScrollUp from "../../hooks/scroll/useScrollUp";
 import ProtectionMsg from "./ProtectionMsg";
 import useData from "../../hooks/useData";
 import showToast from "../../components/toasts";
-import getAPI, {
-    checkPassword,
-    getDecryptedToken,
-    getToken,
-} from "../../utils/promises/getAPI";
-import { getVar, setVar, store } from "../../hooks/storage/useVar";
+import getAPI, { checkPassword, createTk } from "../../utils/promises/getAPI";
 import authenticate from "../../components/auth/helpers/authenticate";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import PasswordCircleFields from "../../components/fields/PasswordCircleFields";
 import { Load } from "../../components/code-splitting/LoadableComp";
+import { useAppSystem } from "../../hooks/useRoleData";
 
 export const AsyncBlocked = Load({
     loader: () =>
@@ -59,6 +55,8 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         selfThemePColor: colorP,
     } = useClientAdmin();
 
+    const { businessId } = useAppSystem();
+
     const styles = getStyles();
 
     const needDark = selectTxtStyle(backColor, { needDarkBool: true });
@@ -70,41 +68,33 @@ export default function AccessPassword({ history, isBizTeam = false }) {
     const [userId] = useData(["userId"], { dots: false });
 
     useEffect(() => {
-        if (userId) {
-            async function checkIfLocked() {
-                return await getAPI({
-                    method: "post",
-                    url: checkPassword(),
-                    body: {
-                        userId,
-                        checkIfLocked: true,
-                        role,
-                    },
-                });
-            }
-            async function runToken() {
-                const body = { _id: userId, role };
-                const { data: encryptedToken } = await getAPI({
-                    method: "post",
-                    url: getToken(),
-                    body,
-                });
-                setVar({ token: encryptedToken }, store.user);
-            }
-            Promise.all([checkIfLocked(), runToken()]).then((res) => {
-                const [lockedRes] = res;
-                if (lockedRes) {
-                    const { blocked, lockMin } = lockedRes.data;
-                    if (blocked) {
-                        setData((prev) => ({
-                            ...prev,
-                            isBlocked: true,
-                            lockMin,
-                        }));
-                    }
-                }
+        if (!userId) return;
+
+        async function checkIfLocked() {
+            return await getAPI({
+                method: "post",
+                url: checkPassword(),
+                body: {
+                    userId,
+                    checkIfLocked: true,
+                    role,
+                },
             });
         }
+
+        Promise.all([checkIfLocked()]).then((res) => {
+            const [lockedRes] = res;
+            if (lockedRes) {
+                const { blocked, lockMin } = lockedRes.data;
+                if (blocked) {
+                    setData((prev) => ({
+                        ...prev,
+                        isBlocked: true,
+                        lockMin,
+                    }));
+                }
+            }
+        });
     }, [userId]);
 
     // PASS FIELD'S HANDLERS
@@ -176,14 +166,17 @@ export default function AccessPassword({ history, isBizTeam = false }) {
             runCheckPassword();
         }
 
-        if (completedFill && success) {
+        const allIds = userId && businessId;
+        if (allIds && completedFill && success) {
             (async () => {
-                const token = await getVar("token", store.user);
-
-                const body = { token };
+                const body = {
+                    _id: userId,
+                    bizId: businessId,
+                    role,
+                };
                 const { data: newToken } = await getAPI({
                     method: "post",
-                    url: getDecryptedToken(),
+                    url: createTk(),
                     body,
                 });
 
@@ -193,7 +186,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
                 }, 1000);
             })();
         }
-    }, [userId, completedFill, passOk]);
+    }, [userId, businessId, completedFill, passOk]);
 
     const showInterativeLock = () => (
         <Lock

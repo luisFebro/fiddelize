@@ -1,97 +1,86 @@
 import axios from "axios";
-import { readCentralAdmin } from "./userActions";
+import showToast from "components/toasts";
+import { getHeaderJson } from "utils/server/getHeaders";
+import isThisApp from "utils/window/isThisApp";
+import { setVar, store } from "hooks/storage/useVar";
+import { API } from "config/api";
+import getAPI, { login, loadUserInit } from "utils/promises/getAPI";
 import { setLoadingProgress, setRun } from "./globalActions";
-import showToast from "../../components/toasts";
-import { getHeaderJson } from "../../utils/server/getHeaders";
-import { readCliAdmin } from "../../hooks/roles-storage-and-data-recovery/useRecoverSysData";
-import isThisApp from "../../utils/window/isThisApp";
-import { setVar, store } from "../../hooks/storage/useVar";
-import { API } from "../../config/api";
 // import lStorage from '../../utils/storage/lStorage';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 const isApp = isThisApp();
 
 // Check token & load user
-export const loadUser = () => (dispatch, getState) => (history) => {
-    axios
-        .get(`${API}/auth/user`, tokenConfig(getState))
-        .then((res) => {
-            // this is redirect to home even redirect links page...
-            // that's why there is "isApp" to check if is not website
-            // const gotError = isApp && res.data && res.data.error;
-            // if (gotError) logout(dispatch, { history });
+export const loadUser = async (dispatch, history) => {
+    const res = await getAPI({
+        method: "post",
+        url: loadUserInit(),
+        fullCatch: true,
+    }).catch((err) => {
+        const gotObj = err.response && err.response.data;
+        const gotMsg =
+            gotObj &&
+            err.response.data.msg &&
+            err.response.data.msg.length !== 0;
 
-            const { role } = res.data.profile;
-            const userId = res.data.profile._id;
-            const userDataPath = res.data.profile.clientUserData;
-            const bizId = userDataPath && userDataPath.bizId;
-            readCliAdmin(dispatch, role, {
-                userId,
-                bizId: bizId || "0",
-            });
+        // to avoid infinite request loop
+        const isUnavailablePage =
+            window.location.href.indexOf("temporariamente-indisponivel-503") >=
+            0;
+        if (err.response && err.response.status === 503 && !isUnavailablePage) {
+            window.location.href = "/temporariamente-indisponivel-503";
+        }
+        if (gotObj && err.response.status === 401 && gotMsg) {
+            logout(dispatch, { history });
+        }
+    });
 
-            dispatch({ type: "AUTHENTICATE_USER_ONLY" });
-            dispatch({ type: "USER_READ", payload: res.data.profile });
-        })
-        .catch((err) => {
-            const gotObj = err.response && err.response.data;
-            const gotMsg =
-                gotObj &&
-                err.response.data.msg &&
-                err.response.data.msg.length !== 0;
+    if (!res) return;
 
-            // to avoid infinite request loop
-            const isUnavailablePage =
-                window.location.href.indexOf(
-                    "temporariamente-indisponivel-503"
-                ) >= 0;
-            if (
-                err.response &&
-                err.response.status === 503 &&
-                !isUnavailablePage
-            ) {
-                window.location.href = "/temporariamente-indisponivel-503";
-            }
-            if (gotObj && err.response.status === 401 && gotMsg) {
-                logout(dispatch, { history });
-            }
-        });
+    dispatch({ type: "AUTHENTICATE_USER_ONLY" });
+    dispatch({ type: "USER_READ", payload: res.data.profile });
+    dispatch({
+        type: "CLIENT_ADMIN_READ",
+        payload: res.data.cliAdmin,
+    });
 };
 
 // login Email
 // loginEMail with Async/Await
 export const loginEmail = async (dispatch, objToSend) => {
     setLoadingProgress(dispatch, true);
-    try {
-        const res = await axios.post(
-            `${API}/auth/login`,
-            objToSend,
-            getHeaderJson
-        );
 
-        readCliAdmin(dispatch, res.data.role, {
-            userId: res.data.authUserId,
-            bizId: res.data.bizId,
-        });
-        readCentralAdmin(dispatch);
-        // readUser(dispatch, res.data.authUserId) // moved to login
-
-        dispatch({
-            type: "LOGIN_EMAIL",
-            payload: { token: res.data.token, role: res.data.role },
-        });
-        setLoadingProgress(dispatch, false);
-
-        return res;
-    } catch (err) {
+    const res = await getAPI({
+        method: "post",
+        url: login(),
+        body: objToSend,
+    }).catch((err) => {
         console.log(`err${err}`);
         dispatch({
             type: "LOGIN_ERROR",
         });
         setLoadingProgress(dispatch, false);
         return err.response;
-    }
+    });
+
+    if (!res) return;
+    // readUser(dispatch, res.data.authUserId) // moved to login
+
+    console.log("resCLILOGIN", res);
+    dispatch({
+        type: "CLIENT_ADMIN_READ",
+        payload: res.data.cliAdmin,
+    });
+    dispatch({
+        type: "LOGIN_EMAIL",
+        payload: { token: res.data.token, role: res.data.role },
+    });
+    dispatch({ type: "USER_READ", payload: res.data.profile });
+
+    setLoadingProgress(dispatch, false);
+
+    return res;
 };
 
 // Register User
@@ -124,7 +113,8 @@ export const logout = async (dispatch, opts = {}) => {
     setRun(dispatch, "logout");
 
     if (history) {
-        isApp ? history.push("/mobile-app") : history.push("/");
+        if (isApp) history.push("/mobile-app");
+        else history.push("/");
     }
 
     if (needReload) {
@@ -153,7 +143,20 @@ export const changePassword = async (dispatch, bodyPass, userId) => {
     }
 };
 
-// Setup config/headers and token
+/* COMMENTS
+n1: eg when user authenticated
+{
+    headers: {
+        Content-type: "application/json"
+        x-auth-token: "eyJhbGciOiJIUzI1NiIsInR5..."
+    }
+}
+
+n2: getState need to be wrapped inside redux dispatch function in order to work properly. eg dispatch(loadUser(getState))
+*/
+
+/* ARCHIVES
+Setup config/headers and token
 export const tokenConfig = (getState) => {
     // n2
     // getState method accesses redux store outside of a react component
@@ -174,14 +177,4 @@ export const tokenConfig = (getState) => {
     return config;
 };
 
-/* COMMENTS
-n1: eg when user authenticated
-{
-    headers: {
-        Content-type: "application/json"
-        x-auth-token: "eyJhbGciOiJIUzI1NiIsInR5..."
-    }
-}
-
-n2: getState need to be wrapped inside redux dispatch function in order to work properly. eg dispatch(loadUser(getState))
 */

@@ -2,7 +2,6 @@ import lStorage, {
     userProfileColl,
     clientAdminColl,
     setInitialStateOp,
-    centralAdminColl,
 } from "./lStorage";
 
 // options argument should be depracated after changing setItemsByArray for setItems (obj)
@@ -22,7 +21,6 @@ export default function setDataIfOnline(
     if (!lStorage("getItem", setInitialStateOp)) {
         lStorage("setItems", userProfileColl);
         lStorage("setItems", clientAdminColl);
-        lStorage("setItems", centralAdminColl);
 
         lStorage("setItem", { ...setInitialStateOp, value: true });
     }

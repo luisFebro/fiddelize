@@ -1,14 +1,15 @@
-import getAPI, { getAuthTk } from "../../../utils/promises/getAPI";
+import getAPI, { createTk } from "../../../utils/promises/getAPI";
 import { setVar, store } from "../../../hooks/storage/useVar";
 
 export default async function renewAccessToken(options = {}) {
-    const { role, userId, clickedAppUserId } = options;
+    const { role, userId, bizId, clickedAppUserId } = options;
 
     if (!role || !userId)
         return Promise.reject({ error: "missing role and userId in a obj" });
 
     const body = {
         userId,
+        bizId,
         _id: clickedAppUserId,
         role,
     };
@@ -16,12 +17,12 @@ export default async function renewAccessToken(options = {}) {
     // LESSON: remember that res here receives both data or failure catch
     const res = await getAPI({
         method: "post",
-        url: getAuthTk(),
+        url: createTk(),
         body,
     }).catch((e) => {
         console.log(e);
     });
-    if (!res) return;
+    if (!res) return false;
 
     const newToken = res.data;
 

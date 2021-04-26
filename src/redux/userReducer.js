@@ -3,12 +3,10 @@ import updateKeyWithId from "./helpers/updateKeyWithId";
 import lStorage, {
     userProfileColl,
     clientAdminColl,
-    centralAdminColl,
 } from "../utils/storage/lStorage";
 
 const userData = lStorage("getItems", userProfileColl); // n1
 const clientAdminData = lStorage("getItems", clientAdminColl);
-const centralAdminData = lStorage("getItems", centralAdminColl);
 
 const currUserData = {
     _id: userData && userData._id,
@@ -51,11 +49,12 @@ const currClientAdminData = {
     arePrizesVisible: clientAdminData && clientAdminData.arePrizesVisible,
 };
 
+const LIMIT_FREE_PLAN_NEW_USERS = 10;
+const MAIN_TECH_WHATSAPP = "(92) 99281-7363";
 const currCentralAdminData = {
-    limitFreePlanNewUsers:
-        centralAdminData && centralAdminData.limitFreePlanNewUsers,
-    mainSalesWhatsapp: centralAdminData && centralAdminData.mainSalesWhatsapp,
-    mainTechWhatsapp: centralAdminData && centralAdminData.mainTechWhatsapp,
+    limitFreePlanNewUsers: LIMIT_FREE_PLAN_NEW_USERS,
+    mainTechWhatsapp: MAIN_TECH_WHATSAPP,
+    mainSalesWhatsapp: undefined,
 };
 
 // REDUCERS

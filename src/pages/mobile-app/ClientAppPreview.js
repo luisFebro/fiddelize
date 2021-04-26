@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useClientAdmin } from "hooks/useRoleData";
+import getQueryByName from "utils/string/getQueryByName";
+import Img from "components/Img";
+import removeImgFormat from "utils/biz/removeImgFormat";
+import useData from "hooks/useData";
 import ClientUserAppContent from "./content/ClientUserAppContent";
-import getQueryByName from "../../utils/string/getQueryByName";
-import Img from "../../components/Img";
-import removeImgFormat from "../../utils/biz/removeImgFormat";
-// import useCount from '../../hooks/useCount';
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -55,11 +55,17 @@ function ClientAppPreview({ location }) {
         </div>
     );
 
+    const [userId, role, fullName, firstName] = useData([
+        "userId",
+        "role",
+        "name",
+        "firstName",
+    ]);
+
     const mainContent = () => (
         <Fragment>
             {showLogo()}
             <ClientUserAppContent
-                useProfile={useProfile}
                 useClientUser={useClientUser}
                 useClientAdmin={useClientAdmin}
                 needAppForPreview
@@ -69,6 +75,10 @@ function ClientAppPreview({ location }) {
                 colorP={colorP}
                 colorS={colorS}
                 colorBack={colorBack}
+                role={role}
+                firstName={firstName}
+                fullName={fullName}
+                userId={userId}
             />
         </Fragment>
     );

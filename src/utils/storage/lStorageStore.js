@@ -7,18 +7,6 @@ const collVal1 = { collection: "onceChecked", value: true };
 const coll3 = { collection: "appSystem" };
 // new way without separated keys and values in an array:
 // LESSON: this name is what will be also used as variable throughtout the app declared in "useRoleData"
-// central admin
-const defaultCentralAdmin = {
-    limitFreePlanNewUsers: 0,
-    mainSalesWhatsapp: "(97) 99999-9999",
-    mainTechWhatsapp: "(97) 99999-9999",
-};
-const centralAdminColl = {
-    collection: "centralAdmin",
-    newObj: defaultCentralAdmin,
-};
-// end central admin
-
 // client Admin
 const defaultClientAdmin = {
     bizName: "...",
@@ -110,7 +98,6 @@ export {
     clientAdminColl,
     setInitialStateOp,
     setSystemOp,
-    centralAdminColl,
 };
 
 export const needSetTrueLocalKey = (lastChecked, currChecked) =>
