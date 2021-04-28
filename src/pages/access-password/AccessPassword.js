@@ -123,7 +123,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
         };
 
         setData((prev) => ({ ...prev, loading: true }));
-        const data = await getAPI({
+        const checkRes = await getAPI({
             method: "post",
             url: checkPassword(),
             body,
@@ -154,7 +154,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
             setDisplay("");
         });
 
-        if (data) {
+        if (checkRes && checkRes.data) {
             setData((prev) => ({ ...prev, loading: false, passOk: true }));
         }
     };
@@ -166,8 +166,11 @@ export default function AccessPassword({ history, isBizTeam = false }) {
             runCheckPassword();
         }
 
-        const allIds = userId && businessId;
-        if (allIds && completedFill && success) {
+        console.log("businessId", businessId);
+        console.log("userId", userId);
+        const allIdsOn = userId && businessId;
+
+        if (allIdsOn && completedFill && success) {
             (async () => {
                 const body = {
                     _id: userId,

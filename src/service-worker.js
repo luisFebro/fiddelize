@@ -220,62 +220,60 @@ self.addEventListener("notificationclose", (event) => {
 });
 
 // detect subscription was refreshed by the browser, revoked or lost.
-async function saveSub(newSubscription) {
-    await setVar({ "subscription-renewal": newSubscription });
-}
+// async function saveSub(newSubscription) {
+//     await setVar({ "subscription-renewal": newSubscription });
+// }
 
-function getAPI() {
-    return process.env.NODE_ENV === "production"
-        ? "https://fiddelize.herokuapp.com/api"
-        : "http://localhost:5000/api";
-}
+// function getAPI() {
+//     return process.env.NODE_ENV === "production"
+//         ? "https://fiddelize.herokuapp.com/api"
+//         : "http://localhost:5000/api";
+// }
 
 // subscription renewal - reference: https://pushpad.xyz/service-worker.js | https://medium.com/@madridserginho/how-to-handle-webpush-api-pushsubscriptionchange-event-in-modern-browsers-6e47840d756f
-async function handleSubscriptionRenewal({ event }) {
-    // const newSubscription = await self.registration.pushManager.getSubscription();
-    // console.log("newSubscription", newSubscription);
-    // const oldSubscription = await getVar('subscription-renewal');
-    // console.log("oldSubscription", oldSubscription);
+// async function handleSubscriptionRenewal({ event }) {
+// const newSubscription = await self.registration.pushManager.getSubscription();
+// console.log("newSubscription", newSubscription);
+// const oldSubscription = await getVar('subscription-renewal');
+// console.log("oldSubscription", oldSubscription);
 
-    const req = new Request(
-        `${getAPI()}/push-notification/subscription-renewal`,
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                old_endpoint: event.oldSubscription
-                    ? event.oldSubscription.endpoint
-                    : null,
-                new_endpoint: event.newSubscription
-                    ? event.newSubscription.endpoint
-                    : null,
-                new_p256dh: event.newSubscription
-                    ? event.newSubscription.toJSON().keys.p256dh
-                    : null,
-                new_auth: event.newSubscription
-                    ? event.newSubscription.toJSON().keys.auth
-                    : null,
-            }),
-        }
-    );
+// if(newSubscription.endpoint !== oldSubscription.endpoint) {
+// await saveSub(newSubscription);
+// const req = new Request(`${getAPI()}/push-notification/push-subscription-change`, {
+// method: 'POST',
+// headers: { 'Content-Type': 'application/json' },
+// body: JSON.stringify(
+//     { oldSubscription, newSubscription })
+// });
 
-    await self.fetch(req);
-
-    // if(newSubscription.endpoint !== oldSubscription.endpoint) {
-    // await saveSub(newSubscription);
-    // const req = new Request(`${getAPI()}/push-notification/push-subscription-change`, {
-    // method: 'POST',
-    // headers: { 'Content-Type': 'application/json' },
-    // body: JSON.stringify(
-    //     { oldSubscription, newSubscription })
-    // });
-
-    // await self.fetch(req);
-    // }
-}
+// await self.fetch(req);
+// }
+// }
 self.addEventListener("pushsubscriptionchange", (event) => {
-    console.log("event pushsubscriptionchange", event);
-    event.waitUntil(handleSubscriptionRenewal({ event }));
+    console.log("pushsubscriptionchange", event);
+    event.waitUntil(
+        fetch(
+            `https://fiddelize.herokuapp.com/api/push-notification/subscription-renewal`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    old_endpoint: event.oldSubscription
+                        ? event.oldSubscription.endpoint
+                        : null,
+                    new_endpoint: event.newSubscription
+                        ? event.newSubscription.endpoint
+                        : null,
+                    new_p256dh: event.newSubscription
+                        ? event.newSubscription.toJSON().keys.p256dh
+                        : null,
+                    new_auth: event.newSubscription
+                        ? event.newSubscription.toJSON().keys.auth
+                        : null,
+                }),
+            }
+        )
+    );
 });
 
 // Listen messages from browser and wait for the first subscription to save it for

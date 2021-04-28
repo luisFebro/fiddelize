@@ -24,7 +24,8 @@ const currUserData = {
         totalPurchasePrize: userData && userData.totalPurchasePrize,
     },
     updatedAt: userData && userData.updatedAt,
-    createdAt: userData && userData.updatedAt,
+    createdAt: userData && userData.createdAt,
+    notifCount: 0, // do not need to get the prior amount to avoid display again the prior quantity
 };
 
 const currClientAdminData = {
@@ -68,11 +69,6 @@ const initialState = {
 export const userReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
-            case "CENTRAL_ADMIN_READ":
-                return {
-                    ...state,
-                    centralAdmin: action.payload,
-                };
             case "CLIENT_ADMIN_READ":
                 return {
                     ...state,

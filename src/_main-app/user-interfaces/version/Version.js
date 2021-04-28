@@ -3,11 +3,12 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.17.0";
+const latestVersion = "4.17.0-50";
 
 const updateDescription =
-    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs | new init to fetch rest API at once pt 1";
+    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs |  new init data handling for frontend pt 1";
 /* HISTORY
+"new init to fetch rest API at once"
 "new virtual buy card"
 "implementação novos snackbars"
 "implementação do novo sistema de adição de pontos - pt 2"

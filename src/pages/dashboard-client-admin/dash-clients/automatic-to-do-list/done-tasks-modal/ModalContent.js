@@ -32,7 +32,7 @@ export default function ModalContent({ isOffline }) {
     } = useAPIList({
         url: readTasks(userId, true),
         forceTrigger: true,
-        trigger: trigger || true,
+        trigger: trigger || userId !== "...",
         skip,
         listName: "automaticTaskListDone",
     });

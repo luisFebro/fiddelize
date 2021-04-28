@@ -47,7 +47,7 @@ export default function Gift({
 
     const userBeatedChall = currScore >= maxScore;
 
-    const { finalDeadline } = useDatesCountdown({
+    const finalDeadline = useDatesCountdown({
         deadline: rewardDeadline,
         userId,
         date: lastPrizeDate,

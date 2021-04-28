@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useClientAdmin, useProfile } from "../../../hooks/useRoleData";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import useData from "../../../hooks/useData";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
@@ -12,7 +12,6 @@ import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "../../../hooks/useAuthUser";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
-import useCountNotif from "../../../hooks/notification/useCountNotif";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 // import ReturnBtn from '../../../components/buttons/ReturnBtn';
 
@@ -48,11 +47,7 @@ export default function TeamApp({
     // redirect if not auth
     useAuth({ history, roles: "nucleo-equipe, cliente-membro, cliente-admin" });
 
-    const allMemberNotif = useCountNotif(userId, {
-        role: "cliente-membro",
-        trigger: !isPreviewMode && bizId !== "...",
-        bizId,
-    });
+    const { notifCount } = useProfile();
 
     const needAdminDefaultTheme = isCliAdmin && !isPreviewMode;
 
@@ -87,7 +82,7 @@ export default function TeamApp({
             />
         );
 
-        const totalNotifications = isPreviewMode ? 0 : allMemberNotif;
+        const totalNotifications = isPreviewMode ? 0 : notifCount;
         const displayBell = () => (
             <section
                 style={{

@@ -90,7 +90,7 @@ export const setVar = (obj, options = {}) => {
 // objArray like [{ key1: value1 }, { key2: value2}]
 export const setMultiVar = async (objArray, options = {}) => {
     const { storeName } = options;
-    if (!objArray || (objArray && !objArray.length)) return;
+    if (!objArray || (objArray && !objArray.length)) return null;
 
     const promises = objArray.map((obj) => {
         const [key] = Object.keys(obj);
@@ -106,7 +106,8 @@ export const setMultiVar = async (objArray, options = {}) => {
             );
     });
 
-    return await Promise.all(promises);
+    await Promise.all(promises);
+    return `set all ${objArray.length} variables in ${storeName}'s store`;
 };
 
 export const removeVar = async (key, options = {}) => {

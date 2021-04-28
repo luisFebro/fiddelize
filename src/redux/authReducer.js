@@ -9,17 +9,11 @@ import { setVar, store } from "../hooks/storage/useVar";
 const initialState = {
     token: localStorage.getItem("token"), // n1 n3
     tokenWhenLogin: false, // n2
-    isUserAuthenticated: false,
 };
 
 export const authReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
-            case "AUTHENTICATE_USER_ONLY":
-                return {
-                    ...state,
-                    isUserAuthenticated: true,
-                };
             case "LOGIN_EMAIL":
             case "REGISTER_EMAIL":
                 const { role } = action.payload;
@@ -37,22 +31,13 @@ export const authReducer = {
 
                 return {
                     ...state,
-                    isUserAuthenticated: true,
                     tokenWhenLogin: action.payload.token,
-                };
-            case "LOGIN_GOOGLE":
-            case "LOGIN_FACEBOOK":
-                // localStorage.setItem("token", action.payload);
-                return {
-                    ...state,
-                    isUserAuthenticated: true,
                 };
             case "LOGIN_ERROR":
             case "LOGOUT_SUCCESS":
                 localStorage.removeItem("token");
                 return {
                     ...state,
-                    isUserAuthenticated: false,
                     tokenWhenLogin: false,
                     token: null,
                 };

@@ -9,12 +9,12 @@ import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
 import defineCurrChallenge from "utils/biz/defineCurrChallenge";
-import useAPI, { readPrizes } from "hooks/api/useAPI";
 import { getVar, removeVar } from "hooks/storage/useVar";
 import useSendSMS from "hooks/sms/useSendSMS";
 import useDidDateExpire from "hooks/dates/date-expires/useDidDateExpire";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useDidScroll from "hooks/scroll/useDidScroll";
+import useData from "hooks/useData";
 import useGlobal from "./useGlobal";
 import useNotifyCliWonChall from "./hooks/useNotifyCliWonChall";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
@@ -37,16 +37,28 @@ export default function ClientUserAppContent({
     rewardScoreTest,
     clientNameTest,
     totalNotifications,
-    loadingData, // all data from indexDB user
-    role,
-    fullName,
-    firstName,
-    userId,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currScoreRef = useRef(null);
 
-    firstName = clientNameTest || firstName;
+    // LESSON: these data are being used here since in the parent useData returns null in the first boot up for cli-user
+    const [
+        userId,
+        role,
+        firstUserName,
+        fullName,
+        lastPrizeId,
+        lastPrizeDate,
+    ] = useData([
+        "userId",
+        "role",
+        "firstName",
+        "name",
+        "lastPrizeId",
+        "lastPrizeDate",
+    ]);
+    const loadingData = userId === "...";
+    const firstName = clientNameTest || firstUserName;
 
     const {
         currScore = 0,
@@ -81,14 +93,6 @@ export default function ClientUserAppContent({
     const didUserScroll = useDidScroll();
 
     const { isAuthUser } = useAuthUser();
-    const { data } = useAPI({
-        url: readPrizes(userId),
-        params: { lastPrizeDateAndId: true, thisRole: "cliente" },
-        trigger: !needAppForPreview && userId !== "...",
-    });
-
-    const lastPrizeId = data && data.id;
-    const lastPrizeDate = data && data.date;
 
     useNotifyCliWonChall(businessId, {
         businessId,

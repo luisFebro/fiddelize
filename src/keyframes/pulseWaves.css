@@ -2,10 +2,10 @@
 .pulse-waves {
     width: 20px;
     height: 20px;
-    top: 40px;
+    top: 50%;
     left: 50%;
     position: absolute;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     padding: 1px;
     /*origin: center;*/
     border-radius: 50%;

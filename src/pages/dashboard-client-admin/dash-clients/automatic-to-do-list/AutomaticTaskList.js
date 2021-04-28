@@ -19,7 +19,8 @@ export default function AutomaticTaskList() {
     const trigger = getTrigger(runName, "TaskCard");
     const apiKeys = {
         url: readTasks(userId, false),
-        trigger,
+        forceTrigger: true,
+        trigger: trigger || userId !== "...",
         skip,
         listName: "automaticTaskList",
     };

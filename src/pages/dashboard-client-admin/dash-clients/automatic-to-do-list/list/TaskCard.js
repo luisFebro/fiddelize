@@ -84,9 +84,9 @@ function TaskCard(props, ref) {
         trigger,
     });
 
-    const { finalDeadline } = useDatesCountdown({
+    const finalDeadline = useDatesCountdown({
         deadline: rewardDeadline,
-        userId: cliUserId,
+        date: deadline,
     });
     const didPrizeExpired = finalDeadline === 0;
 

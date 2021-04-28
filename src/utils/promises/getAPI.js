@@ -13,7 +13,7 @@ export default function getAPI({
     body, // obj
     params, // obj
     needAuth = true,
-    timeout = 10000,
+    timeout = 20000,
     trigger = true,
     isSearch = false,
     fullCatch = false, // return full catch obj to handle
@@ -42,22 +42,15 @@ export default function getAPI({
             cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
         };
 
-        try {
-            if (!trigger) {
-                clearTimeout(stopRequest);
-                return resolve("Request not ready to trigger");
-            }
-            const response = await axios(config);
-
+        if (!trigger) {
             clearTimeout(stopRequest);
-
-            resolve(response);
-        } catch (error) {
-            if (fullCatch) return error;
+            return resolve("Request not ready to trigger");
+        }
+        const response = await axios(config).catch((error) => {
+            if (fullCatch) return reject(error.response);
             if (axios.isCancel(error)) {
                 // if it is search and cancel is need as a defendor against multiple request, then isSearch is true.
-                isSearch && reject({ error: "canceled" });
-                return;
+                return isSearch && reject({ error: "canceled" });
             }
             if (error.response) {
                 console.log(
@@ -73,12 +66,13 @@ export default function getAPI({
                         await disconnect();
                     })();
                 }
-
-                reject(error.response && error.response.data);
             }
 
-            reject(error.response && error.response.data);
-        }
+            return reject(error.response && error.response.data);
+        });
+
+        clearTimeout(stopRequest);
+        return resolve(response);
     };
 
     return new Promise(axiosPromise);

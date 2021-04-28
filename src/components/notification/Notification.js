@@ -1,8 +1,8 @@
 import { Fragment, useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
+import { useProfile } from "hooks/useRoleData";
 import NotifList from "./NotifList";
 import RadiusBtn from "../buttons/RadiusBtn";
-import useCountNotif from "../../hooks/notification/useCountNotif";
 import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
 import { setRun } from "../../hooks/useRunComp";
@@ -12,7 +12,6 @@ import useData from "../../hooks/useData";
 export default function Notification({
     forceCliUser = false,
     bizId,
-    totalNotif,
     closeNotifModal,
 }) {
     const [loading, setLoading] = useState(false);
@@ -25,12 +24,7 @@ export default function Notification({
 
     const dispatch = useStoreDispatch();
 
-    let totalNotifications = useCountNotif(userId, {
-        role,
-        forceCliUser,
-        trigger: !totalNotif && userId !== "...",
-    });
-    totalNotifications = totalNotif || totalNotifications;
+    const { notifCount } = useProfile();
 
     const showTitle = () => (
         <div className="mt-4">
@@ -54,20 +48,20 @@ export default function Notification({
         });
     };
 
-    const plural = totalNotifications <= 1 ? "" : "s";
+    const plural = notifCount <= 1 ? "" : "s";
 
-    const condMarkAll = !isCliMember && totalNotifications >= 2;
+    const condMarkAll = !isCliMember && notifCount >= 2;
     const showNotifStatus = () => (
         <section>
             <div className="text-subtitle text-purple ml-3">
                 <p className="text-normal">
                     <strong>Status: </strong>
                     <br />
-                    {totalNotifications === null && (
+                    {notifCount === null && (
                         <strong className="text-normal">analisando...</strong>
                     )}
 
-                    {totalNotifications === 0 && (
+                    {notifCount === 0 && (
                         <Fragment>
                             {isCliMember ? null : (
                                 <strong className="text-normal">
@@ -77,10 +71,10 @@ export default function Notification({
                         </Fragment>
                     )}
 
-                    {totalNotifications > 0 && (
+                    {notifCount > 0 && (
                         <Fragment>
                             <strong className="text-subtitle">
-                                • {totalNotifications}
+                                • {notifCount}
                             </strong>{" "}
                             novidade{plural} não vista{plural}.
                         </Fragment>

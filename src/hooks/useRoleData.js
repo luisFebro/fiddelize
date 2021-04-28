@@ -59,16 +59,22 @@ export const useProfile = () => {
         (state) => state.userReducer.cases.currentUser
     );
 
-    const [firstName] = useData(["firstName"]);
+    const [firstName, userId] = useData(["firstName", "userId"]);
 
-    const _id = currentUser && currentUser._id;
+    // LESSON: this is verbose like this, otherwise all data from profile will be written here
+    const _id = userId || (currentUser && currentUser._id);
     const role = currentUser && currentUser.role;
-    const name = firstName; // currentUser && currentUser.name && currentUser.name.cap() || returning an array like ["Nome"]
+    const name =
+        firstName ||
+        (currentUser &&
+            currentUser.name &&
+            getFirstName(currentUser.name.cap())); //currentUser && currentUser.name && currentUser.name.cap();
     const phone = currentUser && currentUser.phone;
     const email = currentUser && currentUser.email;
     const birthday = currentUser && currentUser.birthday;
     const updatedAt = currentUser && currentUser.updatedAt;
     const createdAt = currentUser && currentUser.createdAt;
+    const notifCount = currentUser && currentUser.notifCount;
 
     return {
         _id,
@@ -79,6 +85,7 @@ export const useProfile = () => {
         birthday,
         updatedAt,
         createdAt,
+        notifCount,
     };
 };
 

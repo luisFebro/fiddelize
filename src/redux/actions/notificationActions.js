@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getHeaderJson, getHeaderToken } from "../../utils/server/getHeaders";
 import { API } from "../../config/api"; // ${API}
-// OK sometimes can not load (localhost, production is okay)
+
 export const countPendingNotif = async (userId, options = {}) => {
     if (!userId) return;
 

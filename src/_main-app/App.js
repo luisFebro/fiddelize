@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import ReactGA from "react-ga"; // google analytics
-import isThisApp from "../utils/window/isThisApp";
-import isWebpSupported from "../utils/media/isWebpSupported";
-import deferJsOnload from "../utils/performance/deferJsOnload";
-import useOffline from "../hooks/useOffline";
-import { useRecoveryAndDataOffline } from "../hooks/roles-storage-and-data-recovery";
-import { IS_PROD } from "../config/clientUrl";
-import switchConsoleLogs from "../utils/security/switchConsoleLogs";
-import "../utils/globalHelpers";
+import isThisApp from "utils/window/isThisApp";
+// import isWebpSupported from "../utils/media/isWebpSupported";
+import deferJsOnload from "utils/performance/deferJsOnload";
+import useOffline from "hooks/useOffline";
+import { IS_PROD } from "config/clientUrl";
+import switchConsoleLogs from "utils/security/switchConsoleLogs";
+import showToast from "components/toasts";
+import checkValidSession from "components/auth/helpers/checkValidSession";
+import "utils/globalHelpers";
 // STYLING
 import "./scss/App.scss";
 // I inlined all critical bootstrap classes on critical css... OMG!!
@@ -20,31 +21,14 @@ import "./libraries/fontAwesomeLib";
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // END UIs
-import showToast from "../components/toasts";
 // import ScrollToTop from 'react-router-scroll-top';
 
 export default function App() {
     useOffline();
-    useRecoveryAndDataOffline();
 
     useEffect(() => {
         switchConsoleLogs();
-
-        // https://web.dev/nfc/ - Web NFC is available on Android in Chrome 89.
-        if ("NDEFReader" in window) {
-            console.log("Scan and write NFC tags");
-        }
-
-        // To experiment with the Notification Triggers API locally, without an origin trial token, enable the #enable-experimental-web-platform-features flag in chrome://flags
-        if ("showTrigger" in Notification.prototype) {
-            console.log("Notification Triggers supported");
-        }
-
-        isWebpSupported(
-            "lossy",
-            (lossy, res) =>
-                res && console.log(`This browser suppors webp image: ${res}`)
-        );
+        checkValidSession();
 
         const runGoogleAnalytics = () => {
             const opts = { testMode: false };
@@ -122,3 +106,23 @@ entry.responseEnd - entry.requestStart
 
 https://www.freecodecamp.org/news/performance-and-user-tracking-in-react-with-google-analytics/
 */
+
+/* ARCHIVES
+
+// https://web.dev/nfc/ - Web NFC is available on Android in Chrome 89.
+if ("NDEFReader" in window) {
+    console.log("Scan and write NFC tags");
+}
+
+// To experiment with the Notification Triggers API locally, without an origin trial token, enable the #enable-experimental-web-platform-features flag in chrome://flags
+if ("showTrigger" in Notification.prototype) {
+    console.log("Notification Triggers supported");
+}
+
+isWebpSupported(
+    "lossy",
+    (lossy, res) =>
+        res && console.log(`This browser suppors webp image: ${res}`)
+);
+
+ */

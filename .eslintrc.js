@@ -69,6 +69,7 @@ module.exports = {
         "react/jsx-props-no-spreading": "off",
         "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
         "consistent-return": ["error", { treatUndefinedAsUnspecified: true }],
+        "prefer-promise-reject-errors": "off",
     },
     settings: {
         react: {

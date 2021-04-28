@@ -5,6 +5,7 @@ import isThisApp from "utils/window/isThisApp";
 import { setVar, store } from "hooks/storage/useVar";
 import { API } from "config/api";
 import getAPI, { login, loadUserInit } from "utils/promises/getAPI";
+import setDataRecovery from "init-data/setDataRecovery";
 import { setLoadingProgress, setRun } from "./globalActions";
 // import lStorage from '../../utils/storage/lStorage';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
@@ -18,32 +19,27 @@ export const loadUser = async (dispatch, history) => {
         url: loadUserInit(),
         fullCatch: true,
     }).catch((err) => {
-        const gotObj = err.response && err.response.data;
-        const gotMsg =
-            gotObj &&
-            err.response.data.msg &&
-            err.response.data.msg.length !== 0;
+        if (!err) return;
+
+        const errorMsg = err.data && err.data.error;
 
         // to avoid infinite request loop
         const isUnavailablePage =
             window.location.href.indexOf("temporariamente-indisponivel-503") >=
             0;
-        if (err.response && err.response.status === 503 && !isUnavailablePage) {
+        if (err.status === 503 && !isUnavailablePage) {
             window.location.href = "/temporariamente-indisponivel-503";
         }
-        if (gotObj && err.response.status === 401 && gotMsg) {
+        if (err.status === 401 && errorMsg === "A sua sessão terminou") {
             logout(dispatch, { history });
         }
     });
 
     if (!res) return;
 
-    dispatch({ type: "AUTHENTICATE_USER_ONLY" });
-    dispatch({ type: "USER_READ", payload: res.data.profile });
-    dispatch({
-        type: "CLIENT_ADMIN_READ",
-        payload: res.data.cliAdmin,
-    });
+    await setDataRecovery();
+
+    triggerInitDispatch(dispatch, res);
 };
 
 // login Email
@@ -55,6 +51,7 @@ export const loginEmail = async (dispatch, objToSend) => {
         method: "post",
         url: login(),
         body: objToSend,
+        timeout: 30000,
     }).catch((err) => {
         console.log(`err${err}`);
         dispatch({
@@ -64,21 +61,11 @@ export const loginEmail = async (dispatch, objToSend) => {
         return err.response;
     });
 
-    if (!res) return;
-    // readUser(dispatch, res.data.authUserId) // moved to login
-
-    console.log("resCLILOGIN", res);
-    dispatch({
-        type: "CLIENT_ADMIN_READ",
-        payload: res.data.cliAdmin,
-    });
-    dispatch({
-        type: "LOGIN_EMAIL",
-        payload: { token: res.data.token, role: res.data.role },
-    });
-    dispatch({ type: "USER_READ", payload: res.data.profile });
+    if (!res) return {};
 
     setLoadingProgress(dispatch, false);
+
+    triggerInitDispatch(dispatch, res, true);
 
     return res;
 };
@@ -107,7 +94,7 @@ export const registerEmail = async (dispatch, objToSend) => {
     }
 };
 
-export const logout = async (dispatch, opts = {}) => {
+export async function logout(dispatch, opts = {}) {
     const { needReload = false, history } = opts;
 
     setRun(dispatch, "logout");
@@ -125,7 +112,7 @@ export const logout = async (dispatch, opts = {}) => {
     dispatch({ type: "ALL_COMPONENTS_CLEARED" });
 
     await setVar({ success: false }, store.user);
-};
+}
 
 export const changePassword = async (dispatch, bodyPass, userId) => {
     setLoadingProgress(dispatch, true);
@@ -142,6 +129,26 @@ export const changePassword = async (dispatch, bodyPass, userId) => {
         return err.response;
     }
 };
+
+// HELPERS
+function triggerInitDispatch(dispatch, res, isLogin) {
+    dispatch({
+        type: "CLIENT_ADMIN_READ",
+        payload: res.data.cliAdmin,
+    });
+
+    if (isLogin) {
+        dispatch({
+            type: "LOGIN_EMAIL",
+            payload: { token: res.data.token, role: res.data.role },
+        });
+    } else {
+        // USER_READ is being dispatch in the login so that indexDB data can be updated in the login boot up.
+        // IMPORTANT LESSON: if you dispatch again an action, it will have no affect and no update.
+        dispatch({ type: "USER_READ", payload: res.data.currUser });
+    }
+}
+// END HELPERS
 
 /* COMMENTS
 n1: eg when user authenticated

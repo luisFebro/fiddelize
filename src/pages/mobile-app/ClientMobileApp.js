@@ -3,7 +3,12 @@ import { useEffect, useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import AsyncLogin from "components/auth/AsyncLogin";
-import { useClientAdmin, useAppSystem, useClientUser } from "hooks/useRoleData";
+import {
+    useClientAdmin,
+    useAppSystem,
+    useClientUser,
+    useProfile,
+} from "hooks/useRoleData";
 import { useAuthUser } from "hooks/useAuthUser";
 
 import { useRunComp } from "hooks/useRunComp";
@@ -12,7 +17,6 @@ import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import useDelay from "hooks/useDelay";
 import CompLoader from "components/CompLoader";
 import useBackColor from "hooks/useBackColor";
-import useCountNotif from "hooks/notification/useCountNotif";
 import useData from "hooks/useData";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
@@ -75,9 +79,9 @@ function ClientMobileApp({ location, history }) {
 
     const [
         userId,
+        role,
         rememberAccess,
         success,
-        role,
         fullName,
         disconnectCliMember,
         disconnectAgent,
@@ -85,12 +89,11 @@ function ClientMobileApp({ location, history }) {
         instantBizImg,
         instantBizName,
         needAppRegister,
-        firstName,
     ] = useData([
         "userId",
+        "role",
         "rememberAccess",
         "success",
-        "role",
         "name",
         "disconnectCliMember",
         "disconnectAgent",
@@ -98,8 +101,11 @@ function ClientMobileApp({ location, history }) {
         "instantBizImg",
         "instantBizName",
         "needAppRegister",
-        "firstName",
     ]);
+
+    const loadingData = Boolean(userId === "...");
+
+    const { notifCount } = useProfile();
 
     useLoginOrRegister({
         setLoginOrRegister,
@@ -107,8 +113,6 @@ function ClientMobileApp({ location, history }) {
         role,
         isInstantApp,
     });
-
-    const loadingData = Boolean(rememberAccess === "...");
 
     let { isAuthUser } = useAuthUser();
     isAuthUser = isAuthUser || (success !== "..." && success);
@@ -149,15 +153,10 @@ function ClientMobileApp({ location, history }) {
         selfThemeSColor,
         selfThemeBackColor,
     } = useClientAdmin();
-    // const { currScore } = useClientUser();
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
-    const totalNotifications = useCountNotif(userId, {
-        role,
-        forceCliUser: role === "cliente",
-        trigger: !loadingData,
-    });
+
     // useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(
         `var(--themeBackground--${isBizTeam ? "default" : selfThemeBackColor})`
@@ -287,7 +286,7 @@ function ClientMobileApp({ location, history }) {
                         ? "var(--themePLight--black)"
                         : "var(--expenseRed)"
                 }
-                badgeValue={totalNotifications}
+                badgeValue={notifCount}
             />
         </div>
     );
@@ -381,11 +380,7 @@ function ClientMobileApp({ location, history }) {
                             needAppForCliAdmin={needAppForCliAdmin}
                             colorP={selfThemePColor}
                             colorS={selfThemeSColor}
-                            totalNotifications={totalNotifications}
-                            role={role}
-                            firstName={firstName}
-                            fullName={fullName}
-                            userId={userId}
+                            totalNotifications={notifCount}
                         />
                     )}
 

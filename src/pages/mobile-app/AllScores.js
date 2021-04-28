@@ -9,21 +9,12 @@ const AllScores = ({
     needAppForPreview,
     selectTxtStyle,
     colorBack,
-    colorS,
+    // colorS,
     totalGeneralScore,
     totalPurchasePrize,
     userName,
 }) => {
-    const getModalData = () => ({
-        cliUserName: userName,
-        cliUserId: userId,
-        currUserScore: currScore,
-        totalGeneralScore,
-        totalPurchasePrize,
-    });
-
     lastScore = convertDotToComma(lastScore);
-    const modalData = getModalData();
     const selectedTxtStyle = selectTxtStyle(colorBack, { bold: true });
 
     return (

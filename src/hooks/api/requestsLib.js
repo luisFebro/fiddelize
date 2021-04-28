@@ -6,6 +6,7 @@ import { API } from "../../config/api";
 // AUTH AND PASSWORD
 export const login = () => `${API}/auth/login`; // POST
 export const loadUserInit = () => `${API}/auth/load-user/init`; // POST
+export const checkValidSession = () => `${API}/auth/session-check`;
 export const checkPassword = () => `${API}/auth/pswd/check`;
 export const createTk = () => `${API}/auth/pswd/create-tk`; // POST - directly fetch token on successful login
 export const forgotPasswordRequest = () => `${API}/auth/pswd/forgot`;

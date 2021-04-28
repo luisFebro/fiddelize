@@ -254,6 +254,7 @@ function useMainReviewData() {
         const runAnalysis = async () => {
             const thisMainData = await getAPI({
                 url: getMainReviewData(userId),
+                timeout: 30000,
             });
 
             setData((prev) => ({
