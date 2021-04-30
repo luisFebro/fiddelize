@@ -7,12 +7,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
+import { removeCollection } from "init/lStorage";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
+import { useBizData } from "init";
 import Title from "../Title";
 import autoPhoneMask from "../../utils/validation/masks/autoPhoneMask";
 import autoCpfMaskBr from "../../utils/validation/masks/autoCpfMaskBr";
@@ -22,8 +24,6 @@ import RadiusBtn from "../buttons/RadiusBtn";
 import { registerEmail } from "../../redux/actions/authActions";
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
-import lStorage from "../../utils/storage/lStorage";
-import { useClientAdmin } from "../../hooks/useRoleData";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getDateCode from "../../utils/dates/getDateCode";
 // import { setRun } from '../../hooks/useRunComp';
@@ -71,7 +71,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
         selfBizLogoImg,
         bizName,
         // bizCodeName,
-    } = useClientAdmin();
+    } = useBizData();
 
     const [data, setData] = useState({
         role: "nucleo-equipe",
@@ -218,8 +218,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                 transport: "beacon",
             });
 
-            lStorage("removeCol", { collection: "onceChecked" });
-
+            removeCollection("onceChecked");
             clearData();
 
             setLoginOrRegister("login");

@@ -17,7 +17,8 @@ import {
     readUser,
 } from "../../../../../redux/actions/userActions";
 import showToast from "../../../../../components/toasts";
-import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 
 import { setRun } from "../../../../../hooks/useRunComp";
 import PrizesBtn from "../../../../mobile-app/history-purchase-btn/prizes-gallery/PrizesBtn";
@@ -86,7 +87,7 @@ export default function RegisteredClientsAccordion({
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
     const { businessId } = useAppSystem();
 
     const { runArray } = useStoreState((state) => ({

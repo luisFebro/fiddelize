@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useBizData } from "init";
 import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
 import { setRun } from "../../../../hooks/useRunComp";
-import { useClientAdmin, useProfile } from "../../../../hooks/useRoleData";
+import { useProfile } from "init";
 import Img from "../../../Img";
 import applyTextStyle from "../../../../utils/string/applyTextStyle";
 import { readUser } from "../../../../redux/actions/userActions";
@@ -81,8 +82,8 @@ export const ShowActionBtn = ({
 }) => {
     const [loading, setLoading] = useState(null);
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useClientAdmin();
-    const { role: loggedUserRole, _id } = useProfile();
+    const { bizCodeName } = useBizData();
+    const { role: loggedUserRole, userId } = useProfile();
 
     if (loading) titleCliUser = "processando...";
     if (loading === false) titleCliUser = "reiniciando...";
@@ -93,7 +94,7 @@ export const ShowActionBtn = ({
             window.location.href = "/t/app/equipe";
         }
         if (typeof callback === "function") callback(true);
-        readUser(dispatch, _id, { role: loggedUserRole }).then((res) => {
+        readUser(dispatch, userId, { role: loggedUserRole }).then((res) => {
             if (res.status !== 200)
                 return showToast("Não foi possível atualizar. Reinicie app.", {
                     type: "error",

@@ -4,7 +4,8 @@ import SearchCustomer from "./SearchCustomer";
 import ScoreCustomer from "./ScoreCustomer";
 import SuccessMsg from "./SuccessMsg";
 import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
-import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
     setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
@@ -64,7 +65,7 @@ function FieldsHandler({
     const {
         selfThemeBackColor: backColor,
         selfThemePColor: colorP,
-    } = useClientAdmin();
+    } = useBizData();
 
     const textColor = selectTxtStyle(backColor);
     const needDark = selectTxtStyle(backColor, { needDarkBool: true }); // for icons

@@ -5,13 +5,13 @@ import ButtonMulti, { faStyle } from "./material-ui/ButtonMulti";
 import { showComponent } from "../../redux/actions/componentActions";
 import { logout } from "../../redux/actions/authActions";
 import isThisApp from "../../utils/window/isThisApp";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 
 function HomeButton({ location }) {
     const isClientAdmin = location.search.includes("admin=1");
     const dispatch = useStoreDispatch();
 
-    const { selfThemeSColor, selfThemeBackColor } = useClientAdmin();
+    const { selfThemeSColor, selfThemeBackColor } = useBizData();
 
     const handleLink = () => {
         if (isThisApp()) {

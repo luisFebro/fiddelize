@@ -104,7 +104,10 @@ function GoalForm({ history, bizCodeName, bizName }) {
             mainReward,
         };
         await setMultiVar(
-            [{ clientAdminData: newData }, { doneRewardPlanner: true }],
+            {
+                clientAdminData: newData,
+                doneRewardPlanner: true,
+            },
             store.pre_register
         );
 

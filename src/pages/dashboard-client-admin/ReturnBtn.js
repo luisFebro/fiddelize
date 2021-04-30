@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab, {
     faStyle,
 } from "../../components/buttons/material-ui/ButtonFab";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import { setRun } from "../../redux/actions/globalActions";
 
 function ReturnBtn({ location, icon = "home", onClick }) {
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const isCliAdmin = location.search === "?cliente-admin=1";
 

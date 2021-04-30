@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import convertPhoneStrToInt from "../../utils/numbers/convertPhoneStrToInt";
 import ButtonMulti, { faStyle } from "./material-ui/ButtonMulti";
 import showToast from "../toasts";
@@ -10,7 +10,7 @@ WhatsappBtn.propTypes = {
 };
 
 export default function WhatsappBtn({ elsePhone, supportName, isDisabled }) {
-    const { bizWhatsapp, bizName, selfThemeSColor } = useClientAdmin();
+    const { bizWhatsapp, bizName, selfThemeSColor } = useBizData();
 
     const targetedNumber = elsePhone || bizWhatsapp;
     const convertedWhatsapp = convertPhoneStrToInt(targetedNumber);

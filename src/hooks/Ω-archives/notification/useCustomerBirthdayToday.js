@@ -1,21 +1,17 @@
 import { useEffect } from "react";
+import { useBizData } from "init";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
-import lStorage from "../../utils/storage/lStorage";
 import { getVar, removeVar, setVar } from "../storage/useVar";
 import needAlertBirthday from "./birthday/needAlertBirthday";
-import { useClientAdmin } from "../useRoleData";
 import useData from "../useData";
 
 export default function useCustomerBirthDayToday() {
     const today = getDayMonthBr(new Date());
-    const userBirthDate = lStorage("getItem", {
-        collection: "userProfile",
-        property: "birthday",
-    });
+    const userBirthDate = null;
     // const userBirthDate = "11 de Abril de 1994";
 
-    const { selfBizLogoImg } = useClientAdmin();
+    const { selfBizLogoImg } = useBizData();
     const [firstName, userId, role] = useData(["firstName", "userId", "role"]);
 
     useEffect(() => {

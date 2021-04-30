@@ -5,7 +5,7 @@ import useAPIList, { readNotifications } from "../../hooks/api/useAPIList";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../hooks/api/useElemDetection";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 
 export default function NotifList({
     _id,
@@ -17,7 +17,7 @@ export default function NotifList({
     const [skip, setSkip] = useState(0);
     const [firstChunkLoaded, setFirstChunkLoaded] = useState(false);
 
-    const { selfBizLogoImg: bizLogo } = useClientAdmin();
+    const { selfBizLogoImg: bizLogo } = useBizData();
 
     const params = {
         forceCliUser,

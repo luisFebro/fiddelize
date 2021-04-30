@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useBizData } from "init";
 // import parse from "html-react-parser";
 import InstructionBtn from "../../../../buttons/InstructionBtn";
 import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
@@ -8,7 +9,7 @@ import {
     changePrizeStatus,
 } from "../../../../../redux/actions/userActions";
 import { convertDotToComma } from "../../../../../utils/numbers/convertDotComma";
-import { useAppSystem, useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { sendNotification } from "../../../../../redux/actions/notificationActions";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import { addDays, calendar } from "../../../../../utils/dates/dateFns";
@@ -23,7 +24,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
     const [disableCTA, setDisableCTA] = useState(false);
 
     const { businessId } = useAppSystem();
-    const { selfBizLogoImg, bizName, rewardDeadline = 30 } = useClientAdmin();
+    const { selfBizLogoImg, bizName, rewardDeadline = 30 } = useBizData();
     const [staffName, role, firstStaffName] = useData([
         "name",
         "role",

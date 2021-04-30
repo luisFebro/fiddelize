@@ -7,7 +7,7 @@ import { removeVersion, removeVar } from "../../../../../hooks/storage/useVar";
 import useData from "../../../../../hooks/useData";
 import showToast from "../../../../toasts";
 import { readUser } from "../../../../../redux/actions/userActions";
-import { useClientUser } from "../../../../../hooks/useRoleData";
+import { useProfile } from "init";
 import defineCurrChallenge from "../../../../../utils/biz/defineCurrChallenge";
 
 export default function CliUserConfirmedChall({
@@ -22,7 +22,7 @@ export default function CliUserConfirmedChall({
 
     const dispatch = useStoreDispatch();
 
-    const { totalPurchasePrize } = useClientUser();
+    const { totalPurchasePrize } = useProfile();
     const updatedCurrChall = defineCurrChallenge(totalPurchasePrize);
 
     const handleCTA = (res) => {

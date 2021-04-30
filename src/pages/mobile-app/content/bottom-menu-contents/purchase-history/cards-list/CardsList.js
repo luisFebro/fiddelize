@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
 import Illustration from "components/Illustration";
 import { convertDotToComma } from "utils/numbers/convertDotComma";
-import { useClientAdmin, useProfile } from "hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import defineCurrChallenge from "utils/biz/defineCurrChallenge";
 import getFirstName from "utils/string/getFirstName";
 import { formatDMY, fromNow } from "utils/dates/dateFns";
@@ -74,7 +75,7 @@ export default function CardsList({ data }) {
         selfThemeBackColor,
         selfThemePColor,
         selfThemeSColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const txtClass = selectTxtStyle(selfThemeBackColor);
 

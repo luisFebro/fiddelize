@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OptionCard from "./OptionCard";
-import { useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import { useAuthUser } from "../../../../../hooks/useAuthUser";
 import "./style.scss";
 import { translateColorToPtBr } from "../../../../../global-data/uiColors";
@@ -15,7 +15,7 @@ export default function ShowCards({ setOpenComp }) {
         selfThemeSColor,
         selfThemeBackColor,
         selfMilestoneIcon,
-    } = useClientAdmin();
+    } = useBizData();
     const { isAuthUser } = useAuthUser();
 
     const [url, setUrl] = useState({

@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
 import parse from "html-react-parser";
 import getId from "../../../utils/getId";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 export { treatBoolStatus } from "../../../hooks/api/trigger";
 
@@ -57,7 +57,7 @@ export default function SwitchBtn({
 
     const switchData = useRef(data);
 
-    const { selfThemeSColor: sColor } = useClientAdmin();
+    const { selfThemeSColor: sColor } = useBizData();
 
     const styles = getStyles({ pillStyle, pillBack });
     const classes = useStyles({

@@ -1,3 +1,4 @@
+import { setItems } from "init/lStorage";
 import { setRun } from "../../../../redux/actions/globalActions";
 import {
     removeVar,
@@ -7,7 +8,6 @@ import {
     store,
 } from "../../../../hooks/storage/useVar";
 import renewAccessToken from "../../../../components/auth/helpers/renewAccessToken";
-import lStorage from "../../../../utils/storage/lStorage";
 import { signInUserData } from "../../../../components/auth/Login";
 import getAPI, { setDefaultAccess } from "../../../../utils/promises/getAPI";
 
@@ -16,7 +16,7 @@ const handleCliAdmin = ({ bizId, dispatch, history, bizCodeName }) => {
         roleWhichDownloaded: "cliente-admin",
         businessId: bizId,
     };
-    lStorage("setItems", { collection: "appSystem", newObj: updatedValues });
+    setItems("appSystem", updatedValues);
 
     setRun(dispatch, "goDash");
 
@@ -33,7 +33,7 @@ const handleCliAdmin = ({ bizId, dispatch, history, bizCodeName }) => {
 
 const handleCliUser = ({ bizId, history }) => {
     const updatedValues = { roleWhichDownloaded: "cliente", businessId: bizId };
-    lStorage("setItems", { collection: "appSystem", newObj: updatedValues });
+    setItems("appSystem", updatedValues);
     // need to reload so that some variables in the local storage can be loaded properly.
     return (window.location.href = "/mobile-app");
 };
@@ -215,17 +215,3 @@ async function dontRememberAccess({ role = "team-apps" }) {
         return await setVar({ disconnectAgent: true }, store.user);
     }
 }
-
-/* ARCHIVES
-// if (role === "team-apps") {
-//     if (role_loggedIn === "cliente-admin") {
-//         // disable remember access page to show login for the new toggled app.
-//         await setVar({ rememberAccess: false }, store.user);
-//     }
-
-//     return await setMultiVar(
-//         [{ disconnectCliMember: true }, { disconnectAgent: true }],
-//         store.user
-//     );
-// }
-*/

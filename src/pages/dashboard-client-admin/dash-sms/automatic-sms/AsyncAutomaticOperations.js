@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Operation from "./Operation";
-import { useAppSystem, useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../hooks/useRoleData";
 import useAPI, { readAutoService } from "../../../../hooks/api/useAPI";
 
 const getStyles = () => ({
@@ -28,7 +29,7 @@ export default function AutomaticOperations() {
     const styles = getStyles();
 
     const { businessId: userId } = useAppSystem();
-    const { bizName } = useClientAdmin();
+    const { bizName } = useBizData();
 
     const { data, gotData, loading } = useAPI({
         url: readAutoService(userId),

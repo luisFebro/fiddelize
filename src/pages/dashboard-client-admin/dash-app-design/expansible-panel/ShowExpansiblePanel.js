@@ -1,6 +1,5 @@
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreState } from "easy-peasy";
 import ConfigExpansiblePanel from "./ConfigExpansiblePanel";
 import HiddenDesignApp from "../card-hidden-content/design/HiddenDesignApp";
 import HiddenChallengesAndPrize from "../card-hidden-content/challenges-prizes/HiddenChallengesAndPrize";
@@ -12,11 +11,6 @@ const faStyle = {
 };
 
 export default function ShowExpansiblePanel() {
-    const { userData, clientAdmin } = useStoreState((state) => ({
-        userData: state.userReducer.cases.currentUser,
-        clientAdmin: state.userReducer.cases.clientAdmin,
-    }));
-
     const configList = [
         {
             id: 0,

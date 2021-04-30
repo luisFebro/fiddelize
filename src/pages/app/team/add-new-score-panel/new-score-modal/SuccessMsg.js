@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePlayAudio from "../../../../../hooks/media/usePlayAudio";
 import useData from "../../../../../hooks/useData";
-import { useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import removeImgFormat from "../../../../../utils/biz/removeImgFormat";
 
 export default function SuccessMsg({
@@ -28,7 +28,7 @@ export default function SuccessMsg({
         onendedCallback: handleFinishedAudio,
     });
 
-    const { selfBizLogoImg: bizLogo } = useClientAdmin();
+    const { selfBizLogoImg: bizLogo } = useBizData();
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
     return (

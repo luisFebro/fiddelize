@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
 import { loginEmail } from "redux/actions/authActions";
 import isThisApp from "utils/window/isThisApp";
-import { useClientAdmin } from "hooks/useRoleData";
+import { useBizData } from "init";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { deleteImage } from "utils/storage/lForage";
 import { sendNotification } from "redux/actions/notificationActions";
@@ -15,8 +15,7 @@ import {
     removeMultiVar,
     store,
 } from "hooks/storage/useVar";
-import getFirstName from "utils/string/getFirstName";
-import setInitData from "init-data/setInitData";
+import setInitData from "init/setInitData";
 import RadiusBtn from "../buttons/RadiusBtn";
 import KeypadButton from "../modals/keypad";
 import Title from "../Title";
@@ -38,7 +37,7 @@ function Login({
         selfThemeSColor,
         // selfThemePColor,
         selfThemeBackColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const dispatch = useStoreDispatch();
 
@@ -139,7 +138,7 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     const initData = res.data;
-    const currUser = res.data.currUser;
+    const { currUser } = res.data;
 
     const {
         bizCodeName,
@@ -152,6 +151,7 @@ export async function signInUserData(cpfValue, options = {}) {
     } = initData;
 
     const { role, name, userId } = currUser;
+    console.log("role", role);
 
     // clean up whatever logo from prior login to set new one (especially another account)
     deleteImage("logos", "app_biz_logo");

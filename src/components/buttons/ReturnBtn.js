@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonFab, { faStyle } from "./material-ui/ButtonFab";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import { setRun } from "../../redux/actions/globalActions";
 import RedirectLink from "../RedirectLink";
 
@@ -18,7 +18,7 @@ function ReturnBtn({
     toTab,
     style = { top: 15, left: 15 },
 }) {
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const isCliAdmin = toAdminDash || location.search === "?cliente-admin=1";
 

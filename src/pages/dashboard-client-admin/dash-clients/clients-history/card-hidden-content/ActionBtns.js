@@ -18,13 +18,9 @@ const Div = styled.div`
 `;
 
 export default function ActionBtns({ data, needBadgeForTestMode }) {
-    const { clientAdminData } = useStoreState((state) => ({
-        clientAdminData: state.userReducer.cases.clientAdmin,
-    }));
-
     return (
         <Div cssProps={{ compName: null }}>
-            {showBlobActionBtns(data, clientAdminData)}
+            {showBlobActionBtns(data)}
             {showDeleteBtn(data, needBadgeForTestMode)}
         </Div>
     );
@@ -76,7 +72,7 @@ const showProfileBtn = (data) => (
     </div>
 );
 
-const showBlobActionBtns = (data, clientAdminData) => (
+const showBlobActionBtns = (data) => (
     <main className="text-white container-center flex-column blob-action-btns--root">
         <p
             className="mb-5 position-relative text-center text-title text-shadow"

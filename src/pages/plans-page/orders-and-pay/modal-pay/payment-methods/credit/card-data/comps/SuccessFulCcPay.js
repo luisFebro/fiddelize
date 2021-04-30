@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { withRouter } from "react-router-dom";
+import { useBizData } from "init";
 import Img from "../../../../../../../../components/Img";
 import ButtonFab from "../../../../../../../../components/buttons/material-ui/ButtonFab";
 import isThisApp from "../../../../../../../../utils/window/isThisApp";
-import { useClientAdmin } from "../../../../../../../../hooks/useRoleData";
 import useScrollUp from "../../../../../../../../hooks/scroll/useScrollUp";
 
 const isApp = isThisApp();
@@ -20,7 +20,7 @@ function SuccessFulCcPay({ history, setMainData }) {
         }));
     }, []);
 
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const handleFinish = () => {
         const path = isApp

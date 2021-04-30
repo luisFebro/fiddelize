@@ -4,7 +4,7 @@ import GroupedDashSessions from "./GroupedDashSessions";
 import getDayGreetingBr from "../../utils/getDayGreetingBr";
 import "./mainLayout.scss";
 import getFirstName from "../../utils/string/getFirstName";
-import { useProfile } from "../../hooks/useRoleData";
+import { useProfile } from "init";
 import MoreOptionsMenu from "./MoreOptionsMenu";
 import PlanBadges from "./PlanBadges";
 import useBackColor from "../../hooks/useBackColor";

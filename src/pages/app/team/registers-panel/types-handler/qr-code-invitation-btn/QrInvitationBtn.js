@@ -2,7 +2,7 @@ import { useState } from "react";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import ModalFullContent from "../../../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../../../components/code-splitting/LoadableComp";
-import { useClientAdmin } from "../../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 const Async = Load({
     loading: true,
@@ -21,7 +21,7 @@ export default function QrInvitationBtn({ qrValue, cliName, isNewMember }) {
         selfThemePColor: fgColor,
         selfThemeSColor: sColor,
         bizName,
-    } = useClientAdmin();
+    } = useBizData();
 
     const handleFullOpen = () => {
         setFullOpen(true);

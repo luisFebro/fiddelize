@@ -6,14 +6,14 @@ import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import WhatsappBtn from "../../../components/buttons/WhatsappBtn";
-import { useCentralAdmin } from "../../../hooks/useRoleData";
+import { useFiddelizeAdmin } from "init";
 import animateCSS from "../../../utils/animateCSS";
 import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
 export default function FiddelizeContact() {
-    const { mainSalesWhatsapp, mainTechWhatsapp } = useCentralAdmin();
+    const { mainTechWhatsapp } = useFiddelizeAdmin();
     const [openThisComp, setOpenThisComp] = useState("");
     const [hideMain, setHideMain] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
@@ -145,9 +145,9 @@ export default function FiddelizeContact() {
                 </p>
                 {showConfirmBox()}
                 <WhatsappBtn
-                    isDisabled={!isChecked}
-                    elsePhone={mainSalesWhatsapp}
-                    supportName="Fabiano"
+                    isDisabled={true}
+                    elsePhone={null}
+                    supportName=""
                 />
             </div>
         );

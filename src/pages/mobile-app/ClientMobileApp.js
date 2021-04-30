@@ -3,12 +3,9 @@ import { useEffect, useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import AsyncLogin from "components/auth/AsyncLogin";
-import {
-    useClientAdmin,
-    useAppSystem,
-    useClientUser,
-    useProfile,
-} from "hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
+import { useAppSystem } from "hooks/useRoleData";
 import { useAuthUser } from "hooks/useAuthUser";
 
 import { useRunComp } from "hooks/useRunComp";
@@ -20,7 +17,6 @@ import useBackColor from "hooks/useBackColor";
 import useData from "hooks/useData";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
-import usePersistentStorage from "hooks/storage/usePersistentStorage";
 import removeImgFormat from "utils/biz/removeImgFormat";
 import GatewayAndCTAs from "./start-comps/GatewayAndCTAs";
 import AppTypeBubble from "./start-comps/AppTypeBubble";
@@ -74,7 +70,6 @@ const isApp = isThisApp();
 function ClientMobileApp({ location, history }) {
     const [loginOrRegister, setLoginOrRegister] = useState("login");
 
-    usePersistentStorage();
     useScrollUp();
 
     const [
@@ -152,7 +147,7 @@ function ClientMobileApp({ location, history }) {
         selfThemePColor,
         selfThemeSColor,
         selfThemeBackColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
@@ -375,8 +370,8 @@ function ClientMobileApp({ location, history }) {
                         <ClientUserAppContent
                             businessId={businessId}
                             loadingData={loadingData}
-                            useClientUser={useClientUser}
-                            useClientAdmin={useClientAdmin}
+                            useProfile={useProfile}
+                            useBizData={useBizData}
                             needAppForCliAdmin={needAppForCliAdmin}
                             colorP={selfThemePColor}
                             colorS={selfThemeSColor}

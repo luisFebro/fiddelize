@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getMultiVar, store as st } from "./storage/useVar";
+import { useStoreState } from "easy-peasy";
+import { getMultiVar, store as st } from "hooks/storage/useVar";
 import repeat from "utils/arrays/repeat";
 
 export const sto = {
@@ -37,4 +38,31 @@ export default function useData(data, options = {}) {
     }
 
     return store;
+}
+
+export function useBizData() {
+    const bizData = useStoreState((state) => state.userReducer.cases.bizData);
+
+    return {
+        ...bizData,
+        selfThemePColor: bizData.selfThemePColor || "default",
+        selfThemeSColor: bizData.selfThemeSColor || "default",
+        selfThemeBackColor: bizData.selfThemeBackColor || "default",
+    };
+}
+
+export function useProfile() {
+    const currUser = useStoreState((state) => state.userReducer.cases.currUser);
+
+    return currUser;
+}
+
+export function useFiddelizeAdmin() {
+    const LIMIT_FREE_PLAN_NEW_USERS = 10;
+    const MAIN_TECH_WHATSAPP = "(92) 99281-7363";
+
+    return {
+        limitFreePlanNewUsers: LIMIT_FREE_PLAN_NEW_USERS,
+        mainTechWhatsapp: MAIN_TECH_WHATSAPP,
+    };
 }

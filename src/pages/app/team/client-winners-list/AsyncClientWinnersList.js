@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import useAPIList, { readTasks } from "../../../../hooks/api/useAPIList";
 import "./_AsyncClientWinnersList.scss";
 import CliWinnersList from "./list/CliWinnersList";
@@ -8,7 +8,7 @@ import Illustration from "../../../../components/Illustration";
 
 export default function AsyncClientWinnersList() {
     const [skip, setSkip] = useState(0);
-    const { rewardDeadline } = useClientAdmin();
+    const { rewardDeadline } = useBizData();
     const [bizId] = useData(["bizId"]);
 
     const apiKeys = {

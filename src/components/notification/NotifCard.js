@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import PropTypes from "prop-types";
-import { useProfile, useClientAdmin } from "../../hooks/useRoleData";
+import useSexLetter from "hooks/biz/useSexLetter";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import useDelay from "../../hooks/useDelay";
 import { fromNow } from "../../utils/dates/dateFns";
 import getCardTypeData from "./helpers/getCardTypeData";
 import CardActionBtn from "./card-type-pages/CardActionBtn";
 import useData from "../../hooks/useData";
-import { useGenderLetter } from "../../utils/biz/getGenderLetter";
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -63,17 +64,17 @@ function NotifCard(props) {
         "firstName",
         "userId",
     ]);
-    let { name: userName, _id: userId } = useProfile();
+    let { name: userName, userId } = useProfile();
     userName = ultimateName !== "..." ? ultimateName : userName;
     userId = ultimateUserId !== "..." ? ultimateUserId : userId;
 
-    const genderLetter = useGenderLetter();
+    const genderLetter = useSexLetter();
 
     let { role } = useProfile();
     role = ultimateRole !== "..." ? ultimateRole : role;
     if (forceCliUser) role = "cliente";
 
-    const { bizName } = useClientAdmin();
+    const { bizName } = useBizData();
 
     const grayScaleReady = useDelay(3000);
 

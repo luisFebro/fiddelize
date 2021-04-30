@@ -6,7 +6,7 @@ import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import useDelay from "../../../hooks/useDelay";
 import convertToReal from "../../../utils/numbers/convertToReal";
 import { setRun } from "../../../redux/actions/globalActions";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 import getOrderTableList from "./helpers/getOrderTableList";
 import OrdersTableContent from "./OrdersTableContent";
 
@@ -28,7 +28,7 @@ export default function OrdersTable({
     const loading = false;
 
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const { data: totalMoney, loading: loadMoney } = useGetVar(
         "totalMoney_clientAdmin"

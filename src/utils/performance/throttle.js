@@ -1,5 +1,5 @@
 import debounce from "./debounce";
-import isRealObj from "../isRealObj";
+import isObj from "../isObj";
 /*
 LEading and trailing egdes
 One gotcha here is if you specify leading and trailing set to false, the callback does not fire. Setting the leading to true will begin callback execution immediately and then throttle. When you set both leading and trailing to true, this guarantees execution per interval.
@@ -56,7 +56,7 @@ export default function throttle(func, wait, options) {
     if (typeof func !== "function") {
         throw new TypeError(FUNC_ERROR_TEXT);
     }
-    if (isRealObj(options)) {
+    if (isObj(options)) {
         leading = "leading" in options ? !!options.leading : leading;
         trailing = "trailing" in options ? !!options.trailing : trailing;
     }

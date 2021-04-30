@@ -1,9 +1,9 @@
-import { useProfile, getFirstName } from "../../../../../hooks/useRoleData";
+import { useProfile } from "init";
 import AddSMSBtn from "../../credits-balance/add-sms-btn/AddSMSBtn";
 import usePro from "../../../../../hooks/pro/usePro";
 
 export default function AsyncNoCredits() {
-    const { name } = useProfile();
+    const { firstName } = useProfile();
 
     const showTitle = () => (
         <div className="mt-5">
@@ -25,9 +25,8 @@ export default function AsyncNoCredits() {
 
     const showMsg = () => (
         <section className="mb-5 text-purple text-normal mx-3">
-            Ei, parece que seu saldo está parado para envios.{" "}
-            {getFirstName(name)}, invista e traga a{" "}
-            <strong>força dos SMS</strong> para seu projeto.
+            Ei, parece que seu saldo está parado para envios. {firstName},
+            invista e traga a <strong>força dos SMS</strong> para seu projeto.
         </section>
     );
 

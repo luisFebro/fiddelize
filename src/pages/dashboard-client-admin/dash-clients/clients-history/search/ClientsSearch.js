@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
-import { useProfile } from "../../../../../hooks/useRoleData";
+import { useProfile } from "init";
 import { API } from "../../../../../config/api.js";
 // import SearchFilter from "../../../../../components/search/SearchFilter";
 
@@ -16,7 +16,7 @@ export default function ClientsSearch({ handleSearch }) {
         }
     }, [selectedValue]);
 
-    const { _id: adminId } = useProfile();
+    const { userId: adminId } = useProfile();
 
     const showSearchBar = () => {
         // sms but it works for this since we need only the names of the clients which it is exactly this is requesting.

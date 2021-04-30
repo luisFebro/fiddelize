@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
+import showToast from "components/toasts";
 import { treatBoolStatus } from "../../../hooks/api/trigger";
 import { setVar, store } from "../../../hooks/storage/useVar";
 import SwitchBtn from "../../buttons/material-ui/SwitchBtn";
 import { logout } from "../../../redux/actions/authActions";
 import { Load } from "../../code-splitting/LoadableComp";
-import showToast from "../../../components/toasts";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
-// import { useClientAdmin } from '../../../hooks/useRoleData';
 
 const AsyncModalYesNo = Load({
     loader: () =>

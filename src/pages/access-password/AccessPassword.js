@@ -5,12 +5,12 @@ import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 import isThisApp from "../../utils/window/isThisApp";
 import Lock from "./interative-lock/Lock";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import ProtectionMsg from "./ProtectionMsg";
 import useData from "../../hooks/useData";
-import showToast from "../../components/toasts";
+import showToast from "components/toasts";
 import getAPI, { checkPassword, createTk } from "../../utils/promises/getAPI";
 import authenticate from "../../components/auth/helpers/authenticate";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
@@ -53,7 +53,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
     const {
         selfThemeBackColor: backColor,
         selfThemePColor: colorP,
-    } = useClientAdmin();
+    } = useBizData();
 
     const { businessId } = useAppSystem();
 
@@ -166,8 +166,6 @@ export default function AccessPassword({ history, isBizTeam = false }) {
             runCheckPassword();
         }
 
-        console.log("businessId", businessId);
-        console.log("userId", userId);
         const allIdsOn = userId && businessId;
 
         if (allIdsOn && completedFill && success) {

@@ -9,7 +9,7 @@ import { showComponent } from "../../../../redux/actions/componentActions";
 import { showSnackbar } from "../../../../redux/actions/snackbarActions";
 import KeypadButton from "../../../../components/modals/keypad";
 import isMoneyBrValidAndAlert from "../../../../utils/numbers/isMoneyBrValidAndAlert";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 // import AddOrSearch from '../../../../components/search/AddOrSearch';
 
 InsertValue.propTypes = {
@@ -30,7 +30,7 @@ export default function InsertValue({ success, setValuePaid }) {
     //     buyDesc: '',
     // })
 
-    const { selfThemePColor, selfThemeSColor } = useClientAdmin();
+    const { selfThemePColor, selfThemeSColor } = useBizData();
 
     const classes = useStyles();
     const dispatch = useStoreDispatch();

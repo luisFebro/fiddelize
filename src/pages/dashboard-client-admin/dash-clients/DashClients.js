@@ -1,6 +1,7 @@
 import DashSectionTitle from "../../DashSectionTitle";
 import Title from "../../../components/Title";
-import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import LoadableVisible from "../../../components/code-splitting/LoadableVisible";
 import ClientReviews from "./clients-reviews/ClientsReviews";
 import ClientsBirthdayMsgBtn from "./clients-birthday-msg/ClientsBirthdayMsgBtn";
@@ -37,7 +38,7 @@ const getTitle = (bizName) => (
 );
 
 export default function DashClients() {
-    const { bizName } = useClientAdmin();
+    const { bizName } = useBizData();
     const { name } = useProfile();
 
     const SectionTitle = getTitle(bizName);

@@ -10,7 +10,8 @@ import ButtonMulti, {
 } from "../../../../../components/buttons/material-ui/ButtonMulti";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import handleChange from "../../../../../utils/form/use-state/handleChange";
-import { useAppSystem, useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { regulationText as generatedRegTxt } from "../../../regulationText";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import { handleEnterPress } from "../../../../../utils/event/isKeyPressed";
@@ -21,7 +22,7 @@ let temp = "";
 
 // NEXT UPDATE: using debouncing and throttling technique to save in real time without any further action like currently as clicking outside the box.
 function RegulationText({ generateRegulation }) {
-    const { rewardDeadline, regulation, bizCodeName } = useClientAdmin();
+    const { rewardDeadline, regulation, bizCodeName } = useBizData();
 
     const [msgStatus, setMsgStatus] = useState("atualizado.");
     const [disabledBtn, setDisabledBtn] = useState(false);

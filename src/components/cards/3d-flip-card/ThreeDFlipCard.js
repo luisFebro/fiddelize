@@ -1,7 +1,7 @@
 // reference: https://codepen.io/kivanfan/pen/BGxXKR
 import { Fragment, useEffect } from "react";
 import "./_ThreeDFlipCard.scss";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 import { formatSlashDMY } from "../../../utils/dates/dateFns";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 
@@ -46,10 +46,7 @@ function handleMouseMove(event) {
 }
 
 export default function ThreeDFlipCard({ name, score, createdAt }) {
-    const {
-        selfBizLogoImg: bizLogo,
-        selfThemePColor: colorP,
-    } = useClientAdmin();
+    const { selfBizLogoImg: bizLogo, selfThemePColor: colorP } = useBizData();
 
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
     const cardColor = `linear-gradient(145deg, var(--themePLight--${colorP}), var(--themePDark--${colorP}))`;

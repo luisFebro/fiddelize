@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import { removeCollection } from "init/lStorage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
 import TextField from "@material-ui/core/TextField";
@@ -23,8 +24,7 @@ import { registerEmail } from "../../redux/actions/authActions";
 // Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
-import lStorage from "../../utils/storage/lStorage";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import getDateCode from "../../utils/dates/getDateCode";
 // import { setRun } from '../../hooks/useRunComp';
@@ -74,7 +74,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
         selfBizLogoImg,
         bizName,
         bizCodeName,
-    } = useClientAdmin();
+    } = useBizData();
 
     const [data, setData] = useState({
         role: "cliente-membro",
@@ -212,7 +212,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                 transport: "beacon",
             });
 
-            !isStaff && lStorage("removeCol", { collection: "onceChecked" });
+            if (!isStaff) removeCollection("onceChecked");
 
             clearData();
 

@@ -1,11 +1,10 @@
+import isObj from "../isObj";
 // n1
 // DEFINITION
 // TRAILING EDGE - when we are only interested on the final value, after user stops an action.
 // LEADING FLAG on. We want to wait to the last letter typed.
 // for searching bar timing: _.debounce(function, 1300));
 // from lodash
-
-import isRealObj from "../isRealObj";
 
 const { now } = Date;
 
@@ -81,7 +80,7 @@ export default function debounce(func, wait, options) {
         throw new TypeError(FUNC_ERROR_TEXT);
     }
     wait = Number(wait) || 0;
-    if (isRealObj(options)) {
+    if (isObj(options)) {
         leading = !!options.leading;
         maxWait =
             "maxWait" in options &&

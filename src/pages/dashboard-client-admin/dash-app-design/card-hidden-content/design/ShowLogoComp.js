@@ -1,11 +1,12 @@
 import { Fragment } from "react";
 import PickLogo from "../../../../new-app/self-service/pickers/PickLogo";
-import { useAppSystem, useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import BackButton from "../../../../../components/buttons/BackButton";
 
 export default function ShowLogoComp({ openComp, onBackBtnClick }) {
     const { businessId } = useAppSystem();
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">

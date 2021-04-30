@@ -1,4 +1,4 @@
-import isRealObj from "./isRealObj";
+import isObj from "./isObj";
 import isSmallScreen from "./isSmallScreen";
 import truncateWords from "./string/truncateWords";
 
@@ -48,7 +48,7 @@ String.prototype.cap = function () {
 
 // These functions will be available in any part of the app because they can be useful for any component
 window.Helper = {};
-window.Helper.isRealObj = isRealObj;
+window.Helper.isObj = isObj;
 window.Helper.isSmallScreen = isSmallScreen;
 window.Helper.truncate = truncateWords;
 

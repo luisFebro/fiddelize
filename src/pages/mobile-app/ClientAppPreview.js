@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import { useClientAdmin } from "hooks/useRoleData";
+import { useBizData } from "init";
 import getQueryByName from "utils/string/getQueryByName";
 import Img from "components/Img";
 import removeImgFormat from "utils/biz/removeImgFormat";
@@ -22,11 +22,6 @@ function ClientAppPreview({ location }) {
     const currScore = getQueryByName("currScore", location.search);
 
     const useProfile = () => ({
-        role: "cliente",
-        name: `${clientName} (T)`,
-    });
-
-    const useClientUser = () => ({
         currScore: Number(currScore) || 100,
         lastScore: 20,
     });
@@ -66,8 +61,8 @@ function ClientAppPreview({ location }) {
         <Fragment>
             {showLogo()}
             <ClientUserAppContent
-                useClientUser={useClientUser}
-                useClientAdmin={useClientAdmin}
+                useProfile={useProfile}
+                useBizData={useBizData}
                 needAppForPreview
                 runName={runName}
                 rewardScoreTest={rewardScore}

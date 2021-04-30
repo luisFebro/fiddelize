@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import localforage from "localforage";
+import isObj from "utils/isObj";
 
 // LESSON: if not working correctly, check if store has already been declared.
 const getObj = (name) => ({ storeName: name });
@@ -81,33 +82,37 @@ export const setVar = (obj, options = {}) => {
 
     return variablesStore(storeName)
         .setItem(key, value)
-        .then((res) => null) // console.log(`key ${key} was set in local DB`)
         .catch((err) =>
             console.log(`the was an error setting key ${key}. Details: ${err}`)
         );
 };
 
-// objArray like [{ key1: value1 }, { key2: value2}]
-export const setMultiVar = async (objArray, options = {}) => {
+// dataObj like { key1: value1, key2: value2 }
+export const setMultiVar = async (dataObj, options = {}) => {
     const { storeName } = options;
-    if (!objArray || (objArray && !objArray.length)) return null;
+    if (!isObj(dataObj, { noArrays: true }))
+        throw new Error("only object is allowed");
+    if (!dataObj) return null;
 
-    const promises = objArray.map((obj) => {
-        const [key] = Object.keys(obj);
-        const [value] = Object.values(obj);
+    const promises = [];
+    // https://stackoverflow.com/questions/43807515/eslint-doesnt-allow-for-in
+    Object.keys(dataObj).forEach((key) => {
+        const value = dataObj[key];
+        if (!value) promises.push(null);
 
-        return variablesStore(storeName)
-            .setItem(key, value)
-            .then((res) => null)
-            .catch((err) =>
-                console.log(
-                    `the was an error setting key ${key}. Details: ${err}`
+        promises.push(
+            variablesStore(storeName)
+                .setItem(key, value)
+                .catch((err) =>
+                    console.log(
+                        `the was an error setting key ${key}. Details: ${err}`
+                    )
                 )
-            );
+        );
     });
 
     await Promise.all(promises);
-    return `set all ${objArray.length} variables in ${storeName}'s store`;
+    return `all variables in ${storeName}'s store was set`;
 };
 
 export const removeVar = async (key, options = {}) => {
@@ -144,15 +149,6 @@ export const removeCollection = async (storeName) =>
         name: `fiddelize-${storeName}`,
         // storeName: storeName, // if this is specified, only the store inside collection is removed.
     });
-
-function getStrVersion(str) {
-    if (!str) return;
-    const underscoreInd = str.indexOf("_");
-    let version = str.slice(underscoreInd + 1);
-    version = Number(version);
-
-    return version;
-}
 
 // handle the variable version to be removed - challenge_1 - always insert _1 to get the version.
 export const removeVersion = ({ key, value }) => {

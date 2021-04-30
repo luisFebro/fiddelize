@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAppSystem, useClientAdmin } from "../useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../useRoleData";
 import useAPI, { getProData } from "../api/useAPI";
 import { getVar, store } from "../storage/useVar";
 import getDatesCountdown from "../dates/getDatesCountdown";
@@ -36,7 +37,7 @@ export default function usePro(options = {}) {
     } = data;
 
     const { businessId } = useAppSystem();
-    const { bizPlan } = useClientAdmin();
+    const { bizPlan } = useBizData();
 
     const { data: backData, loading } = useAPI({
         url: getProData(businessId || userId), // userId used if user not logged in.

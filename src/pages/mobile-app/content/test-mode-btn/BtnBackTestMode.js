@@ -1,7 +1,7 @@
 import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../../../../hooks/useRunComp";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import "./_BtnBackTesteMode.scss";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 
@@ -16,7 +16,7 @@ function BtnBackTestMode({
     const isCliUser = mode === "Cliente";
 
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const handleBackBtnClick = () => {
         setRun(dispatch, "goDash");

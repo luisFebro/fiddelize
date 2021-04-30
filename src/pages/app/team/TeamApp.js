@@ -1,5 +1,6 @@
 import { Fragment } from "react";
-import { useClientAdmin, useProfile } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import useData from "../../../hooks/useData";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
@@ -56,7 +57,7 @@ export default function TeamApp({
         selfThemeBackColor: backColor,
         selfThemeSColor: sColor,
         selfThemePColor: pColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 

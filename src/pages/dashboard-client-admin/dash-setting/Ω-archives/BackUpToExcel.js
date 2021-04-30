@@ -36,7 +36,7 @@ export default function BackUpToExcel() {
 
     const { adminId, token } = useStoreState((state) => ({
         token: state.authReducer.cases.tokenWhenLogin,
-        adminId: state.userReducer.cases.currentUser._id,
+        adminId: state.userReducer.cases.currentUser.userId,
     }));
 
     const dispatch = useStoreDispatch();

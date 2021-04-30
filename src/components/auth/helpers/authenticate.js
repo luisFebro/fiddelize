@@ -32,7 +32,7 @@ export default async function authenticate(newToken, options = {}) {
     // these variables are set and avaiable after CPF login.
     localStorage.setItem("token", newToken);
 
-    await setMultiVar([{ success: true }, { token: newToken }], store.user);
+    await setMultiVar({ success: true, token: newToken }, store.user);
 
     const [bizCodeName] = await getMultiVar(["bizCodeName"], store.user);
 

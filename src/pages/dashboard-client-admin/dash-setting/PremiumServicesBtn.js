@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
 import getFirstName from "../../../utils/string/getFirstName";
-import { useProfile } from "../../../hooks/useRoleData";
+import { useProfile } from "init";
 import ButtonFab, {
     faStyleSmall,
 } from "../../../components/buttons/material-ui/ButtonFab";

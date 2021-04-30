@@ -5,11 +5,9 @@ import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import { updateUser } from "../../../../redux/actions/userActions";
-import {
-    useAppSystem,
-    useProfile,
-    useClientAdmin,
-} from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
+import { useAppSystem } from "../../../../hooks/useRoleData";
 import useAPIList, {
     readUserList,
     getTrigger,
@@ -177,7 +175,7 @@ export default function AsyncRecordedClientsList() {
     const [isFiltering, setIsFiltering] = useState(false);
     const { businessId } = useAppSystem();
     const { name } = useProfile();
-    const { bizPlan } = useClientAdmin();
+    const { bizPlan } = useBizData();
 
     const dispatch = useStoreDispatch();
 

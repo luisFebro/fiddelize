@@ -1,5 +1,5 @@
-import lStorage, { setSystemOp } from "../../../utils/storage/lStorage";
-import { setMultiVar, store } from "../../../hooks/storage/useVar";
+import { setMultiVar, store } from "hooks/storage/useVar";
+import { setItems } from "init/lStorage";
 
 export default function handleRoleStorage({
     userScore,
@@ -9,7 +9,6 @@ export default function handleRoleStorage({
     memberJob,
     primaryAgent,
 }) {
-    // n1
     const isBizTeam = whichRole === "nucleo-equipe";
     const isCliAdmin = whichRole === "cliente-admin";
     const isCliMember = whichRole === "cliente-membro";
@@ -18,69 +17,58 @@ export default function handleRoleStorage({
     let userPayload;
 
     if (isCliAdmin) {
-        userPayload = [{ role: whichRole }];
+        userPayload = { role: whichRole };
     }
 
     if (isCliUser) {
-        userPayload = [
-            { role: whichRole },
-            { lastRegisterBizId: bizId },
-            { memberId },
-            { memberRole: memberJob ? "cliente-membro" : "cliente-admin" },
-            { memberJob: memberJob || "admin" },
-            { userScore },
-        ];
+        userPayload = {
+            role: whichRole,
+            lastRegisterBizId: bizId,
+            memberId,
+            memberRole: memberJob ? "cliente-membro" : "cliente-admin",
+            memberJob: memberJob || "admin",
+            userScore,
+        };
     }
 
     if (isCliMember) {
-        userPayload = [
-            { role: whichRole },
-            { lastRegisterBizId: bizId },
-            { memberJob: memberJob || "admin" },
-            { disconnectCliMember: true },
-        ];
+        userPayload = {
+            disconnectCliMember: true,
+            role: whichRole,
+            lastRegisterBizId: bizId,
+            memberJob: memberJob || "admin",
+        };
     }
 
     if (isBizTeam) {
-        userPayload = [
-            { role: whichRole },
-            { primaryAgent },
-            { disconnectAgent: true },
-        ];
+        userPayload = {
+            disconnectAgent: true,
+            role: whichRole,
+            primaryAgent,
+        };
     }
 
     (async () => {
         await setMultiVar(userPayload, store.user);
         await setMultiVar(
-            [
-                { rememberAccess: false },
-                { success: false },
-                { verifPass: false },
-                { needAppRegister: true },
-            ],
+            {
+                rememberAccess: false,
+                success: false,
+                verifPass: false,
+                needAppRegister: true,
+            },
             store.user
         );
 
         const needSysOp = whichRole && bizId;
-        if (needSysOp) {
-            lStorage("setItems", setSystemOp(whichRole, bizId));
-        }
+        if (needSysOp)
+            setItems("appSystem", {
+                roleWhichDownloaded: whichRole,
+                businessId: bizId,
+            });
 
         // for garantee that the current app is logged out.
         // Otherwise, the app will be displayed with wrong and mingled app's pages.
         localStorage.removeItem("token");
     })();
 }
-
-/* COMMENTS
-n1: LESSON: lStorage does not work with useEffect. just declare in the function body normally...
-If you see an error in JSON position, also check local storage for missing comma while editing...
-*/
-
-/* ARCHIVES
-const appSystem = lStorage("getItems", { collection: "appSystem" });
-
-const isAdminLoggedIn = // ?
-        appSystem && appSystem.roleWhichDownloaded === "cliente-admin";
-
- */

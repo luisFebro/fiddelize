@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import MuSelectTable from "../../../../../components/tables/MuSelectTable";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 import useAPI, { readContacts } from "../../../../../hooks/api/useAPI";
-import { useProfile } from "../../../../../hooks/useRoleData";
+import { useProfile } from "init";
 
 const headCells = [
     {
@@ -19,7 +19,7 @@ export default function AsyncAllCustomers({ handleList, handleShowMessage }) {
     const [emptySelection, setEmptySelection] = useState(false);
     const [init, setInit] = useState(true);
 
-    const { _id: userId } = useProfile();
+    const { userId } = useProfile();
     let { data: list, loading } = useAPI({
         url: readContacts(userId),
         needAuth: true,

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
-import { useClientAdmin } from "../hooks/useRoleData";
+import { useBizData } from "init";
 // for dashboard redirection
 import { setRun } from "../redux/actions/globalActions";
 import { setVar } from "../hooks/storage/useVar";
@@ -15,7 +15,7 @@ export default function RedirectLink({
     goDash = true,
 }) {
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const handleClick = () => {
         if (toDashTab) {

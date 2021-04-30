@@ -14,8 +14,16 @@
  * // => false
  */
 
-export default function isRealObj(value) {
+export default function isObj(value, options = {}) {
+    const { noArrays = false } = options;
+
     const type = typeof value;
-    return !!value && (type == "object" || type == "function");
-    // return obj && obj !== 'null' && obj !== 'undefined';
+    const generalRes = !!value && (type === "object" || type === "function");
+
+    if (noArrays) {
+        const isArrayObj = Array.isArray(value);
+        return !isArrayObj && generalRes;
+    }
+
+    return generalRes;
 }

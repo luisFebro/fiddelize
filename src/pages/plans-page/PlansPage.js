@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
-import {
-    useClientAdmin,
-    useProfile,
-    getFirstName,
-} from "../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import StartPage from "./StartPage";
 import HandlePlan from "./plan-modes/HandlePlan";
 import ReturnBtn from "../dashboard-client-admin/ReturnBtn";
@@ -17,9 +14,8 @@ export default function PlansPage() {
         if (isPro) setCurrPlan("bronze");
     }, [isPro]);
 
-    const { bizName, selfBizLogoImg: bizLogo } = useClientAdmin();
-    let { name: adminName } = useProfile();
-    adminName = getFirstName(adminName);
+    const { bizName, selfBizLogoImg: bizLogo } = useBizData();
+    let { firstName: adminName } = useProfile();
 
     const startPageProps = {
         bizLogo,

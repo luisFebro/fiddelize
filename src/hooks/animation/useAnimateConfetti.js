@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import usePlayAudio from "../../hooks/media/usePlayAudio";
-import lStorage, { confettiPlayOp } from "../../utils/storage/lStorage";
+import { setItems, getItems, removeItems } from "init/lStorage";
+
+const localCollection = "onceChecked";
 
 const loadConfetti = async (command) => {
     const { getConfetti } = await import(
@@ -26,13 +28,13 @@ export default function useAnimateConfetti(options = {}) {
 
     useEffect(() => {
         let cancel;
-        const playConfettiAgain = lStorage("getItem", confettiPlayOp);
+        const [playConfettiAgain] = getItems(localCollection, ["confettiPlay"]);
 
         const runConfetti = () => {
             if (!playConfettiAgain && trigger) {
                 setRunSound(true);
                 loadConfetti("start");
-                lStorage("setItem", confettiPlayOp);
+                setItems(localCollection, { confettiPlay: true });
             } else {
                 const condToStopConfetti =
                     loadConfetti("isRunning") && showMoreComps;
@@ -46,7 +48,7 @@ export default function useAnimateConfetti(options = {}) {
         runConfetti();
 
         if (playConfettiAgain && !trigger) {
-            lStorage("removeItem", confettiPlayOp); // returns null if no keys were found.
+            removeItems(localCollection, ["confettiPlay"]);
         }
 
         return () => {

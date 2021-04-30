@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "flickity/dist/flickity.css";
 // jquery module is required to run this path
 import Flickity from "flickity";
+import { useBizData } from "init";
 import "./CarouselFlickity.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
@@ -9,7 +10,7 @@ import { setRun } from "../../redux/actions/globalActions";
 import ShowActionBtns from "../../pages/new-app/self-service/pickers/ShowActionBtns";
 import { getIconIndex } from "../../global-data/milestoneIconsSorted.js";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import { useClientAdmin, useAppSystem } from "../../hooks/useRoleData";
+import { useAppSystem } from "../../hooks/useRoleData";
 import findAndReplaceObjInArray from "../../utils/arrays/findAndReplaceObjInArray";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -33,7 +34,7 @@ export default function CarouselFlickity({
         mainReward,
         maxScore,
         rewardList,
-    } = useClientAdmin();
+    } = useBizData();
 
     const [carouselElem2, setCarouselElem2] = useState("");
     useEffect(() => {

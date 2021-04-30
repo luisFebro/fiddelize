@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
-import { useProfile } from "hooks/useRoleData";
+import { useProfile } from "init";
 import NotifList from "./NotifList";
 import RadiusBtn from "../buttons/RadiusBtn";
 import { markAllAsClicked } from "../../redux/actions/notificationActions";

@@ -7,7 +7,7 @@ import getAPI, {
 import isThisApp from "../../utils/window/isThisApp";
 import showToast from "../../components/toasts";
 import useBackColor from "../../hooks/useBackColor";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import PasswordCircleFields from "../../components/fields/PasswordCircleFields.js";
 import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
@@ -54,7 +54,7 @@ export default function NewPassword({ location, match, history }) {
         selfThemeBackColor: backColor,
         selfThemePColor: colorP,
         selfThemeSColor: colorS,
-    } = useClientAdmin();
+    } = useBizData();
 
     useBackColor(`var(--themeBackground--${backColor})`);
 

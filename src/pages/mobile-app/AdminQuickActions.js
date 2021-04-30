@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
-import { useProfile, useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 // SpeedDial and Icons
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
@@ -57,8 +58,8 @@ function MoreOptionsBtn({
 
     const styles = getStyles();
 
-    const { _id } = useProfile();
-    const { selfThemeBackColor: backColor } = useClientAdmin();
+    const { userId } = useProfile();
+    const { selfThemeBackColor: backColor } = useBizData();
 
     const speedDial = {
         actions: [

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import "./_BirthdayMsgContent.scss";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import showToast from "../../../../components/toasts";
 import useData from "../../../../hooks/useData";
@@ -21,7 +21,7 @@ const getStyles = () => ({
 export default function BirthdayMsgContent() {
     const [edit, setEdit] = useState(false);
 
-    const { bizName } = useClientAdmin();
+    const { bizName } = useBizData();
     const [birthdayMsg, setBirthdayMsg] = useState(
         `a ${bizName} está passando aqui neste dia especial para te desejar um feliz aniversário com mais saúde e conquistas!`
     );

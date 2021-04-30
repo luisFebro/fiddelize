@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
 import Simulator from "./Simulator";
-import { useProfile } from "../../../../../hooks/useRoleData";
+import { useProfile } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../components/Img";

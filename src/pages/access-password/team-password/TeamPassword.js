@@ -5,7 +5,8 @@ import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleEnterPress } from "../../../utils/event/isKeyPressed";
 import { checkVerificationPass } from "../../../redux/actions/adminActions";
 import useData from "../../../hooks/useData";
-import { useAppSystem, useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../hooks/useRoleData";
 import showToast from "../../../components/toasts";
 import getAPI, { createTk } from "../../../utils/promises/getAPI";
 import authenticate from "../../../components/auth/helpers/authenticate";
@@ -37,7 +38,7 @@ export default function TeamPassword({ history }) {
     const { businessId } = useAppSystem();
     const dispatch = useStoreDispatch();
 
-    const { selfThemeBackColor: backColor } = useClientAdmin();
+    const { selfThemeBackColor: backColor } = useBizData();
     useBackColor(`var(--themeBackground--${backColor})`);
 
     const styles = getStyles();

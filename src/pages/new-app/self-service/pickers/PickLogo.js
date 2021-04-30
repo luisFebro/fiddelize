@@ -17,7 +17,7 @@ import {
 } from "../../../../redux/actions/userActions";
 import ShowActionBtns from "./ShowActionBtns";
 import { deleteImage } from "../../../../utils/storage/lForage";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import { getVar, setMultiVar, store } from "../../../../hooks/storage/useVar";
 // import useCount from '../../../../hooks/useCount';
 
@@ -29,7 +29,10 @@ const setLogo = async ({ generatedImg, setLogoUrlPreview }) => {
     const priorAdminData = await getVar("clientAdminData", store.pre_register);
     const newAdminData = { ...priorAdminData, selfBizLogoImg: generatedImg };
     await setMultiVar(
-        [{ clientAdminData: newAdminData }, { doneSSLogo: true }],
+        {
+            clientAdminData: newAdminData,
+            doneSSLogo: true,
+        },
         store.pre_register
     );
     setLogoUrlPreview && setLogoUrlPreview(generatedImg);
@@ -58,7 +61,7 @@ export default function PickLogo({
     const { sizeSquare, sizeRect } = data;
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
 
-    const { selfBizLogoImg } = useClientAdmin();
+    const { selfBizLogoImg } = useBizData();
 
     const dispatch = useStoreDispatch();
 

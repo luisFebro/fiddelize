@@ -1,6 +1,6 @@
 import parse from "html-react-parser";
 import CardsList from "./cards-list/CardsList";
-import { useProfile } from "../../../hooks/useRoleData";
+import { useProfile } from "init";
 import getFirstName from "../../../utils/string/getFirstName";
 
 const isEvenSmall = window.Helper.isSmallScreen(415);

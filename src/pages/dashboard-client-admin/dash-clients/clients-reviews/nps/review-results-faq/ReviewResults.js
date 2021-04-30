@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { useClientAdmin } from "../../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import FaqAccordion from "../../../../../../components/expansion-panels/faq/FaqAccordion";
 import "./_ReviewResults.scss";
 import AddCustomersBtn from "../../../../../plans-page/plan-modes/sessions/customer-packages/customer-btn/AddCustomersBtn";
@@ -157,7 +157,7 @@ export default function ReviewResults({ mainData = {}, isBizAdmin }) {
         },
     ];
 
-    const { bizName } = useClientAdmin();
+    const { bizName } = useBizData();
 
     const totalPromoters = promoters ? promoters.total : "...";
     const totalPassives = passives ? passives.total : "...";

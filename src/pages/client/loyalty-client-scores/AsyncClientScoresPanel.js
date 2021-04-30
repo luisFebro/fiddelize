@@ -14,12 +14,9 @@ import animateNumber, {
 import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
 import isThisApp from "../../../utils/window/isThisApp";
 import { logout } from "../../../redux/actions/authActions";
-import {
-    useProfile,
-    useClientUser,
-    useClientAdmin,
-    useAppSystem,
-} from "../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
+import { useAppSystem } from "../../../hooks/useRoleData";
 import getFirstName from "../../../utils/string/getFirstName";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import { prerenderAudio } from "../../../hooks/media/usePlayAudio";
@@ -67,14 +64,16 @@ function AsyncClientScoresPanel({ history, location }) {
 
     // ROLES
     const { businessId } = useAppSystem();
-    const { role, name, _id: cliUserId } = useProfile(); // cliUserId is essencial here to read cli-users data
     let {
+        role,
+        name,
+        _id: cliUserId, // cliUserId is essencial here to read cli-users data
         currScore: currentScore,
         lastScore: lastCurrScore,
         totalGeneralScore,
         totalActiveScore,
         totalPurchasePrize = 0,
-    } = useClientUser();
+    } = useProfile();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
 
     let {
@@ -86,7 +85,7 @@ function AsyncClientScoresPanel({ history, location }) {
         selfThemeBackColor: colorBack,
         selfThemePColor: colorP,
         selfThemeSColor: colorS,
-    } = useClientAdmin();
+    } = useBizData();
     // END ROLES
 
     // STYLES

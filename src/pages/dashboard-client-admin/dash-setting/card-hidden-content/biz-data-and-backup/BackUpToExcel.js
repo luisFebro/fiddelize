@@ -6,7 +6,7 @@ import { readAllDbFromModels } from "../../../../../redux/actions/adminActions";
 import Img from "../../../../../components/Img";
 import useData from "../../../../../hooks/useData";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import { useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import CheckBoxForm from "../../../../../components/CheckBoxForm";
 // import ButtonDropdown from "../../../../../components/buttons/material-ui/ButtonDropdown";
 
@@ -40,7 +40,7 @@ export default function BackUpToExcel() {
         token: state.authReducer.cases.tokenWhenLogin,
     }));
     const [adminId] = useData(["userId"]);
-    const { bizCodeName } = useClientAdmin();
+    const { bizCodeName } = useBizData();
 
     const dispatch = useStoreDispatch();
 

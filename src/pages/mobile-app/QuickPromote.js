@@ -1,5 +1,5 @@
+import { useBizData } from "init";
 import QrInvitationModal from "../app/team/registers-panel/types-handler/qr-code-invitation-btn/QrInvitationModal";
-import { useClientAdmin } from "../../hooks/useRoleData";
 import { CLIENT_URL } from "../../config/clientUrl";
 import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
 import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaButtons";
@@ -9,7 +9,7 @@ export default function QuickPromote({ handleFullClose }) {
         selfBizLogoImg: bizLogo,
         bizCodeName,
         selfThemeSColor: sColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const indLastSlash = bizCodeName.lastIndexOf("-");
     const onlyBizCode = bizCodeName.slice(indLastSlash + 1);

@@ -142,10 +142,10 @@ export default function BizForm() {
             return showToast("Informe ramo de atividade.", { type: "error" });
         }
 
-        const data = [
-            { doneBizInfo: true },
-            { clientAdminData: { bizName, bizCodeName, bizField: field } },
-        ];
+        const data = {
+            doneBizInfo: true,
+            clientAdminData: { bizName, bizCodeName, bizField: field },
+        };
         await setMultiVar(data, store.pre_register);
 
         // need to be reloaded since the other fields are prevented to be opened somehow.

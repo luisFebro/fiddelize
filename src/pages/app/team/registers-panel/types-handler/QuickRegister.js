@@ -4,11 +4,9 @@ import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import EmailIcon from "@material-ui/icons/Email";
 import AsyncShowNewContactForm from "../../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
-import {
-    useProfile,
-    useClientAdmin,
-    useAppSystem,
-} from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import validatePhone from "../../../../../utils/validation/validatePhone";
 import validateEmail from "../../../../../utils/validation/validateEmail";
 import showToast from "../../../../../components/toasts";
@@ -95,7 +93,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const [linkId] = useData(["linkId"]);
 
     const { businessId } = useAppSystem();
-    const { bizName, bizCodeName } = useClientAdmin();
+    const { bizName, bizCodeName } = useBizData();
     const { name: userName } = useProfile();
 
     const smsBalance = useCheckBalance();

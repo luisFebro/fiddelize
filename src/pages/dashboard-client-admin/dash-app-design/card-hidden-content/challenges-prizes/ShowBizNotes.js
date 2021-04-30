@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
-import { useProfile } from "../../../../../hooks/useRoleData";
+import { useProfile } from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 
 ShowBizNotes.propTypes = {

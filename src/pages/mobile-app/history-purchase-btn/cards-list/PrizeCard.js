@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "@material-ui/core/Card";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
 import pickCurrChallData from "../../../../utils/biz/pickCurrChallData";
 import PrizesBtn from "../prizes-gallery/PrizesBtn";
@@ -17,7 +17,7 @@ export default function PrizeCard({ historyData, colorP, colorS }) {
     const { isPrizeReceived } = historyData;
     const { isPrizeExpired } = historyData;
 
-    let { mainReward, rewardList } = useClientAdmin();
+    let { mainReward, rewardList } = useBizData();
 
     const pickedObj = pickCurrChallData(rewardList, currChallengeN - 1);
     mainReward = pickedObj.mainReward;

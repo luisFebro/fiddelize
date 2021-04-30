@@ -1,13 +1,13 @@
 import { Fragment, useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useBizData } from "init";
 import styled from "styled-components";
 
 import gaEvent from "../../../utils/analytics/gaEvent";
 import RadiusBtn from "../../buttons/RadiusBtn";
 import isThisApp from "../../../utils/window/isThisApp";
 import "./NavbarLayout.scss";
-import { useClientAdmin } from "../../../hooks/useRoleData";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import useImg, { Img } from "../../../hooks/media/useImg";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
@@ -37,7 +37,7 @@ function Navbar({ history, location }) {
     const logoSrc = logoBiz || logoFid;
 
     const { isAuthUser } = useAuthUser();
-    const { selfBizLogoImg, selfThemePColor } = useClientAdmin();
+    const { selfBizLogoImg, selfThemePColor } = useBizData();
 
     // const dispatch = useStoreDispatch();
 

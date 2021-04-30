@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import CarouselCard from "../../../../components/carousels/CarouselCard";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 import generateAppDownloadLink from "../../../../utils/biz/generateAppDownloadLink";
 
 // todo: automation of scores with SMS optionally.
@@ -85,7 +85,7 @@ export default function AsyncSMSSuggestions({
     handleSuggestionMsg,
     contactList,
 }) {
-    const { bizName, bizCodeName } = useClientAdmin();
+    const { bizName, bizCodeName } = useBizData();
     // const [selectedCard, setSelectedCard] = useState(null);
     const isSingleContact = contactList.length === 1;
     const singleName = contactList.length && contactList[0].name;

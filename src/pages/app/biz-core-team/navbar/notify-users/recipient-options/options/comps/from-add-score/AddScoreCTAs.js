@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { useBizData } from "init";
 import AddNewScoreBtn from "../../../../../../../../app/team/add-new-score-panel/AddNewScoreBtn";
 import useData from "../../../../../../../../../hooks/useData";
-import { useClientAdmin } from "../../../../../../../../../hooks/useRoleData";
 import { convertBrToDollar } from "../../../../../../../../../utils/numbers/convertDotComma";
 
 export default function AddScoreCTAs({ clientName, handleScoreToLink }) {
@@ -15,7 +15,7 @@ export default function AddScoreCTAs({ clientName, handleScoreToLink }) {
     const {
         selfThemeSColor: sColor,
         selfThemeBackColor: backColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const showScoreMsg = () => (
         <p className="text-purple text-normal mt-3 mx-3">

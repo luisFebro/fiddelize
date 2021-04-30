@@ -26,7 +26,7 @@ import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import useData, { sto } from "../../hooks/useData";
 import { removeCollection } from "../../hooks/storage/useVar";
 import getFirstName from "../../utils/string/getFirstName";
@@ -140,7 +140,7 @@ function RegisterClientAdmin({ logo }) {
     const errorPhone = fieldError && fieldError.phone;
     // end detecting field errors
 
-    const { selfBizLogoImg } = useClientAdmin();
+    const { selfBizLogoImg } = useBizData();
 
     useEffect(() => {
         setData({ ...data, bizImg: selfBizLogoImg });

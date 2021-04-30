@@ -1,9 +1,9 @@
-import { useProfile, getFirstName } from "../../../../../hooks/useRoleData";
+import { useProfile } from "init";
 import AddSMSBtn from "../../credits-balance/add-sms-btn/AddSMSBtn";
 import usePro from "../../../../../hooks/pro/usePro";
 
 export default function AsyncChargeCredits({ currBalance, totalRecipients }) {
-    const { name } = useProfile();
+    const { firstName } = useProfile();
 
     const showTitle = () => (
         <div className="mt-5">
@@ -25,7 +25,7 @@ export default function AsyncChargeCredits({ currBalance, totalRecipients }) {
 
     const showMsg = () => (
         <section className="mb-5 text-purple text-normal mx-3">
-            Poxa, {getFirstName(name)}! Seu{" "}
+            Poxa, {firstName}! Seu{" "}
             <strong>saldo de {currBalance} créditos</strong> não é suficiente
             para {totalRecipients} envios.
             <br />

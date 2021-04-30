@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import ChallComp from "./ChallComp";
-import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import {
     readClientAdmin,
     updateUser,
@@ -17,7 +18,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
         maxScore,
         rewardList,
         bizPlan,
-    } = useClientAdmin();
+    } = useBizData();
 
     // jsut in case user by any change does not pass throu self-service and decide to log in withot data recorded...
     const firstMainData = {

@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useStoreState } from "easy-peasy";
 import isThisApp from "utils/window/isThisApp";
+import { removeCollection } from "init/lStorage";
+import { removeCollection as removeIndexedColl } from "hooks/storage/useVar";
 import showToast from "components/toasts";
 import useData from "./useData";
-import { getVar, setMultiVar, removeVar, store } from "./storage/useVar";
+import { getVar, setMultiVar, store } from "./storage/useVar";
 
 const isApp = isThisApp();
 const gotToken = localStorage.getItem("token");
@@ -11,24 +13,25 @@ const gotToken = localStorage.getItem("token");
 // the new logout without the need of dispatch or history.
 // the logout from authActions will be depracated cuz is so depedent pf dispatch to work...
 export const disconnect = async (options = {}) => {
-    showToast("Sua sessão terminou. Reiniciando...");
-    const { needRedirect = true } = options;
+    const { needRedirect = true, msg = true } = options;
+
+    if (msg) showToast("Finalizando sessão...");
 
     const role = await getVar("role", store.user);
     const isCliAdmin = role === "cliente-admin";
 
-    await Promise.all([
-        setMultiVar(
-            [{ success: false }, { rememberAccess: !!isCliAdmin }],
-            store.user
-        ),
-        removeVar("token", store.user),
-    ]);
+    const setRememberAccess = async () => {
+        if (!isCliAdmin) return null;
+        return await setMultiVar({ rememberAccess: true }, store.user);
+    };
+
+    await Promise.all([setRememberAccess(), removeIndexedColl("user")]);
 
     localStorage.removeItem("token");
+    removeCollection("currUser");
 
     if (!needRedirect) return;
-    const destiny = isApp ? "/mobile-app" : "/acesso/verificacao";
+    const destiny = isApp ? "/mobile-app?abrir=1" : "/acesso/verificacao";
     window.location.href = destiny;
 };
 

@@ -7,7 +7,7 @@ import getAPI, { makeGoogleLogin } from "../../utils/promises/getAPI";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
 import { getVar, store } from "../../hooks/storage/useVar";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 
 const awesomeStyle = {
     fontSize: "30px",
@@ -23,7 +23,7 @@ function GoogleLogin({ history }) {
     const [testFront, setTestFront] = useState("");
     const [testBack, setTestBack] = useState("");
     const dispatch = useStoreDispatch();
-    const { selfThemeBackColor: backColor } = useClientAdmin();
+    const { selfThemeBackColor: backColor } = useBizData();
 
     const handleSuccess = async (response) => {
         showSnackbar(dispatch, "Conectando... Um momento.");

@@ -16,7 +16,8 @@ import handleChange from "../../../../utils/form/use-state/handleChange";
 import { handleEnterPress } from "../../../../utils/event/isKeyPressed";
 import clearForm from "../../../../utils/form/use-state/clearForm";
 import { checkVerificationPass } from "../../../../redux/actions/adminActions";
-import { useAppSystem, useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../hooks/useRoleData";
 import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
 
 StaffConf.propTypes = {
@@ -42,7 +43,7 @@ export default function StaffConf({
         selfThemePColor,
         selfThemeSColor,
         selfThemeBackColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const { pass } = data;
     const [fieldError, setFieldError] = useState(null);

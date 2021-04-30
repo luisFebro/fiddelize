@@ -8,7 +8,7 @@ import { IS_PROD } from "../../config/clientUrl";
 import didRunOnce from "../../utils/storage/didRunOnce";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import usePro from "./usePro";
-import { useClientAdmin } from "../useRoleData";
+import { useBizData } from "init";
 // import useData from "../useData";
 
 const getPeriod = (ref) => {
@@ -26,7 +26,7 @@ export default function useManageProServices() {
         isExpired: false,
     });
     const { isToday, userId, isExpired } = data;
-    const { bizPlan } = useClientAdmin();
+    const { bizPlan } = useBizData();
 
     const proData = usePro({
         userId,

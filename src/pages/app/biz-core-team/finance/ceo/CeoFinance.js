@@ -64,14 +64,10 @@ export default function CeoFinance() {
     const handleNewCostValue = async (cost) => {
         // allow setVar only if thereis no transaction in the current day.
         if (!firstBalance) {
-            await setMultiVar([
-                {
-                    finTodayDate: new Date(),
-                },
-                {
-                    firstTodayBalance: ceoBalance,
-                },
-            ]);
+            await setMultiVar({
+                finTodayDate: new Date(),
+                firstTodayBalance: ceoBalance,
+            });
 
             await setDataFreeze((prev) => ({
                 ...prev,
@@ -80,11 +76,9 @@ export default function CeoFinance() {
         }
 
         // HANDLE COSTS
-        await setMultiVar([
-            {
-                todayCosts: todayCosts + cost,
-            },
-        ]);
+        await setMultiVar({
+            todayCosts: todayCosts + cost,
+        });
         await setDataFreeze((prev) => ({
             ...prev,
             todayCosts: todayCosts + cost,

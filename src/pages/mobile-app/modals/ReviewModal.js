@@ -1,7 +1,7 @@
 import { useEffect, useState, Fragment } from "react";
 import getAPI, { readUser } from "../../../utils/promises/getAPI";
 import useData from "../../../hooks/useData";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 
@@ -65,7 +65,7 @@ export default function ReviewModal() {
         })();
     }, [userId, role]);
 
-    const { selfBizLogoImg: bizLogo, bizName } = useClientAdmin();
+    const { selfBizLogoImg: bizLogo, bizName } = useBizData();
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
 
     const showTitle = () => (

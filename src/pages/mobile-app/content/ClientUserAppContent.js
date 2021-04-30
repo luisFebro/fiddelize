@@ -25,8 +25,8 @@ const now = new Date();
 const greeting = getDayGreetingBr();
 
 export default function ClientUserAppContent({
-    useClientUser,
-    useClientAdmin,
+    useProfile,
+    useBizData,
     needAppForCliAdmin,
     needAppForPreview,
     runName,
@@ -65,7 +65,7 @@ export default function ClientUserAppContent({
         lastScore,
         totalPurchasePrize,
         totalGeneralScore,
-    } = useClientUser();
+    } = useProfile();
     const currChall = defineCurrChallenge(totalPurchasePrize);
 
     const {
@@ -75,8 +75,8 @@ export default function ClientUserAppContent({
         bizWhatsapp,
         bizName,
         selfBizLogoImg,
-    } = useClientAdmin();
-    let { maxScore = 0, selfMilestoneIcon } = useClientAdmin();
+    } = useBizData();
+    let { maxScore = 0, selfMilestoneIcon } = useBizData();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;

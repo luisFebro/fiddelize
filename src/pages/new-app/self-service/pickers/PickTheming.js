@@ -13,7 +13,7 @@ import {
 import gotArrayThisItem from "../../../../utils/arrays/gotArrayThisItem";
 
 import ShowActionBtns from "./ShowActionBtns";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 PickTheming.propTypes = {
     step: PropTypes.number,
@@ -61,7 +61,7 @@ export default function PickTheming({
         selfThemePColor,
         selfThemeSColor,
         selfThemeBackColor,
-    } = useClientAdmin();
+    } = useBizData();
     useEffect(() => {
         if (isFromDash) {
             const primaryCond =

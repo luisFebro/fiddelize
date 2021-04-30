@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./CartRace.scss";
 import PropTypes from "prop-types";
 import animateCartByScore, { options } from "./animateCartByScore";
-import { useClientAdmin, useClientUser } from "hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import defineCurrChallenge from "utils/biz/defineCurrChallenge";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
 
@@ -26,13 +27,13 @@ export default function CartRace({
     className,
     id,
 }) {
-    const { totalPurchasePrize } = useClientUser();
+    const { totalPurchasePrize } = useProfile();
     let {
         maxScore,
         selfThemePColor,
         selfThemeSColor,
         rewardList,
-    } = useClientAdmin();
+    } = useBizData();
 
     // const isCartEmpty = !totalGeneralScore;
 

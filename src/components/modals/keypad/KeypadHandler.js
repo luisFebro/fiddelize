@@ -5,7 +5,7 @@ import Display from "./Display";
 import IconAndTitle from "./IconAndTitle";
 import Keyboard from "./Keyboard";
 import showToast from "../../toasts";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 import "./_KeypadHandler.scss";
 
 NumericKeypad.propTypes = {
@@ -30,7 +30,7 @@ export default function NumericKeypad({
     confirmFunction,
     confirmPayload,
 }) {
-    const { selfThemePColor } = useClientAdmin();
+    const { selfThemePColor } = useBizData();
 
     const [display, setDisplay] = useState(defaultValue[keyboardType]);
 

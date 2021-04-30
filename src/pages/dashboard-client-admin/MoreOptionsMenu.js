@@ -2,11 +2,9 @@ import { Fragment, useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import {
-    useClientAdmin,
-    useAppSystem,
-    useProfile,
-} from "../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
+import { useAppSystem } from "../../hooks/useRoleData";
 import { logout } from "../../redux/actions/authActions";
 import isThisApp from "../../utils/window/isThisApp";
 import ButtonMenu from "../../components/buttons/material-ui/button-menu/ButtonMenu";
@@ -48,7 +46,7 @@ export default function MoreOptionsMenu({ location, history }) {
     const [fullOpen, setFullOpen] = useState(false);
     const { businessId } = useAppSystem();
     const { role, name } = useProfile();
-    const { bizCodeName, bizName, bizPlan } = useClientAdmin();
+    const { bizCodeName, bizName, bizPlan } = useBizData();
 
     const handleFullOpen = (modalName) => {
         setCurrModal(modalName);

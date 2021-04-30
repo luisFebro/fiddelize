@@ -117,11 +117,11 @@ export default function InstantAccount({
             }
 
             // prevent register page to be shown. Display login page instead with the new account panel
-            const storeElems = [
-                { isInstantApp: true },
-                { instantBizImg: bizImg },
-                { instantBizName: bizName },
-            ];
+            const storeElems = {
+                isInstantApp: true,
+                instantBizImg: bizImg,
+                instantBizName: bizName,
+            };
 
             // remove variables at the login access
             await Promise.all([

@@ -11,7 +11,8 @@ import useData from "../../../../hooks/useData";
 import "./_BuyRating.css";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
-import { useAppSystem, useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../hooks/useRoleData";
 import showToast from "../../../../components/toasts";
 
 const getStyles = () => ({
@@ -58,7 +59,7 @@ export default function BuyRating({
         "role",
     ]);
 
-    const { bizName, selfBizLogoImg } = useClientAdmin();
+    const { bizName, selfBizLogoImg } = useBizData();
     const { businessId } = useAppSystem();
 
     useEffect(() => {

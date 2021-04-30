@@ -5,7 +5,7 @@ import {
     milestoneIconsSorted,
     getIconIndex,
 } from "../../../../global-data/milestoneIconsSorted";
-import { useClientAdmin } from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 PickRatingIcon.propTypes = {
     step: PropTypes.number,
@@ -23,7 +23,7 @@ export default function PickRatingIcon({
         : milestoneIcons.filter((iconObj) => iconObj.appPreview === true);
     const showCondition = isFromDash ? true : step === 3;
 
-    const { selfMilestoneIcon } = useClientAdmin();
+    const { selfMilestoneIcon } = useBizData();
     const currIconInd = getIconIndex(selfMilestoneIcon);
     // n1
     return (

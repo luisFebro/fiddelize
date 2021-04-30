@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
 import ImportantDevicesIcon from "@material-ui/icons/ImportantDevices";
+import { useBizData } from "init";
 import getQueryByName from "../../utils/string/getQueryByName";
 import ButtonMulti, {
     faStyle,
@@ -19,11 +20,8 @@ import { handleFocus } from "../../utils/form/handleFocus";
 import copyText from "../../utils/document/copyText";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 import showToast from "../../components/toasts";
-import {
-    useClientAdmin,
-    useAppSystem,
-    useProfile,
-} from "../../hooks/useRoleData";
+import { useProfile } from "init";
+import { useAppSystem } from "../../hooks/useRoleData";
 import downloadImg from "../../utils/media/download-img/downloadImg";
 import QrCode from "../../components/QrCode";
 import "../app/team/registers-panel/types-handler/qr-code-invitation-btn/_QrInvitationModal.scss";
@@ -95,7 +93,7 @@ export default function AppSharer({ location, match }) {
         bizName: businessName,
         selfBizLogoImg: bizLogo,
         selfThemePColor: pColor,
-    } = useClientAdmin();
+    } = useBizData();
     const { name: cliName } = useProfile();
     const { businessId } = useAppSystem();
 

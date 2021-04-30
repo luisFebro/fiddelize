@@ -3,7 +3,8 @@ import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NotificationBadge from "../../components/NotificationBadge";
 import useGetVar from "../../hooks/storage/useVar";
-import { useClientAdmin, useProfile } from "../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 
 export default withRouter(PlanBadges);
@@ -11,7 +12,7 @@ export default withRouter(PlanBadges);
 function PlanBadges({ history }) {
     // this export is required because this overrides the title in mobile testing...
     const { role } = useProfile();
-    const { bizPlan } = useClientAdmin();
+    const { bizPlan } = useBizData();
 
     const isFree = bizPlan === "gratis";
 

@@ -5,7 +5,8 @@ import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import InstructionBtn from "../../../../../components/buttons/InstructionBtn";
 import List from "./List.js";
 import SwitchBtn from "../../../../../components/buttons/material-ui/SwitchBtn";
-import { useClientAdmin, useAppSystem } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useAppSystem } from "../../../../../hooks/useRoleData";
 import useAPI, {
     updateUser,
     treatBoolStatus,
@@ -21,7 +22,7 @@ export default function HiddenGoalsAndRewards() {
     const [visibleToggleBtn, setVisibleToggleBtn] = useState(undefined);
 
     const { businessId } = useAppSystem();
-    const { arePrizesVisible } = useClientAdmin();
+    const { arePrizesVisible } = useBizData();
 
     const [currRole] = useData(["role"]);
 

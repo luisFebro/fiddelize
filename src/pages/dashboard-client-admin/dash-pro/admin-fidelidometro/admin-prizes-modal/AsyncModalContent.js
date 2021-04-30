@@ -3,8 +3,6 @@ import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import RedirectLink from "../../../../../components/RedirectLink";
 
 export default function AsyncModalContent() {
-    // const { _id: userId } = useProfile();
-
     const showTitle = () => (
         <div className="mt-4">
             <p className="text-subtitle text-purple text-center font-weight-bold">

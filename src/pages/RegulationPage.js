@@ -8,7 +8,7 @@ import isThisApp from "../utils/window/isThisApp";
 import replaceVariablesInTxt from "../utils/string/replaceVariablesInTxt";
 import DateWithIcon from "../components/date-time/DateWithIcon";
 import getQueryByName from "../utils/string/getQueryByName";
-import { useClientAdmin } from "../hooks/useRoleData";
+import { useBizData } from "init";
 import { currTxtColor } from "../utils/biz/selectTxtStyle";
 import pickCurrChallData from "../utils/biz/pickCurrChallData";
 import defineCurrChallenge from "../utils/biz/defineCurrChallenge";
@@ -38,7 +38,7 @@ export default function RegulationPage({ location }) {
         selfThemeBackColor,
         rewardList,
         totalPurchasePrize,
-    } = useClientAdmin();
+    } = useBizData();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;

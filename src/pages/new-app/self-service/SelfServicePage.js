@@ -7,15 +7,12 @@ import Spinner from "../../../components/loadingIndicators/Spinner";
 import useData, { sto } from "../../../hooks/useData";
 // import useCount from '../../../hooks/useCount';
 import "./style.scss";
-import lStorage from "../../../utils/storage/lStorage";
+import { removeItems } from "init/lStorage";
 import { getVar, setMultiVar, store } from "../../../hooks/storage/useVar";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
-lStorage("removeItem", {
-    collection: "clientAdmin",
-    property: "selfMilestoneIcon",
-});
+removeItems("bizData", ["selfMilestoneIcon"]);
 
 const setLocalData = async ({ type = "theming", colors, iconsData }) => {
     const priorAdminData = await getVar("clientAdminData", store.pre_register);
@@ -31,7 +28,10 @@ const setLocalData = async ({ type = "theming", colors, iconsData }) => {
     const newAdminData = newObj;
 
     return await setMultiVar(
-        [{ clientAdminData: newAdminData }, stepObj],
+        {
+            clientAdminData: newAdminData,
+            stepObj,
+        },
         store.pre_register
     );
 };

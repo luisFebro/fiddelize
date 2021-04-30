@@ -4,7 +4,7 @@ import PurchaseValue from "./PurchaseValue";
 import StaffConfirmation from "./StaffConfirmation";
 import AsyncClientScoresPanel from "./AsyncClientScoresPanel";
 import HomeButton from "../../../components/buttons/HomeButton";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 export default function LoyaltyScoreHandler() {
     const [valuePaid, setValuePaid] = useState("0");
@@ -14,7 +14,7 @@ export default function LoyaltyScoreHandler() {
         selfThemeBackColor,
         selfThemePColor,
         selfThemeSColor,
-    } = useClientAdmin();
+    } = useBizData();
 
     const dispatch = useStoreDispatch();
 

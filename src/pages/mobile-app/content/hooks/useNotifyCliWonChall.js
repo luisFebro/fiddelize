@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { sendNotification } from "../../../../redux/actions/notificationActions";
-import useGetVar, { setVar } from "../../../../hooks/storage/useVar";
-import getGenderLetter from "../../../../utils/biz/getGenderLetter";
+import useGetVar, {
+    setVar,
+    getVar,
+    store,
+} from "../../../../hooks/storage/useVar";
 
 export default function useNotifyCliWonChall(recipientId, data = {}) {
     const [sent, setSent] = useState(false);
@@ -73,13 +76,13 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
             if (cancel || !pushNotifData) return;
 
             (async () => {
-                const gender = await getGenderLetter();
+                const sexLetter = await getVar("sexLetter", store.user);
 
                 const finalNotifData = {
                     ...pushNotifData,
                     notifCard: {
                         ...pushNotifData.notifCard,
-                        gender,
+                        gender: sexLetter,
                     },
                 };
 

@@ -1,10 +1,8 @@
 import { useState, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    useProfile,
-    useClientAdmin,
-    useCentralAdmin,
-} from "../../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
+import { useFiddelizeAdmin } from "init";
 import getFirstName from "../../../../utils/string/getFirstName";
 import usePro from "../../../../hooks/pro/usePro";
 
@@ -103,8 +101,8 @@ const expiredMsg = ({
 export default function AsyncFreeAccountsLimitMsg() {
     const [openModal, setOpenModal] = useState(false);
     const { name } = useProfile();
-    const { totalClientUsers } = useClientAdmin();
-    const { limitFreePlanNewUsers } = useCentralAdmin();
+    const { totalClientUsers } = useBizData();
+    const { limitFreePlanNewUsers } = useFiddelizeAdmin();
 
     const { plan: currPlan, usageTimeEnd, credits } = usePro({
         service: "Novvos Clientes",

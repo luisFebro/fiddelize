@@ -5,9 +5,8 @@ import isThisApp from "utils/window/isThisApp";
 import { setVar, store } from "hooks/storage/useVar";
 import { API } from "config/api";
 import getAPI, { login, loadUserInit } from "utils/promises/getAPI";
-import setDataRecovery from "init-data/setDataRecovery";
+import setInitData from "init/setInitData";
 import { setLoadingProgress, setRun } from "./globalActions";
-// import lStorage from '../../utils/storage/lStorage';
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 const isApp = isThisApp();
@@ -37,7 +36,10 @@ export const loadUser = async (dispatch, history) => {
 
     if (!res) return;
 
-    await setDataRecovery();
+    const initData = res.data;
+    const { role } = initData.currUser;
+
+    await setInitData(role, { initData, dispatch });
 
     triggerInitDispatch(dispatch, res);
 };
@@ -108,7 +110,6 @@ export async function logout(dispatch, opts = {}) {
         window.location.href = isApp ? "/mobile-app" : "/";
     }
     dispatch({ type: "LOGOUT_SUCCESS" });
-    dispatch({ type: "USER_CLEARED" });
     dispatch({ type: "ALL_COMPONENTS_CLEARED" });
 
     await setVar({ success: false }, store.user);
@@ -134,13 +135,13 @@ export const changePassword = async (dispatch, bodyPass, userId) => {
 function triggerInitDispatch(dispatch, res, isLogin) {
     dispatch({
         type: "CLIENT_ADMIN_READ",
-        payload: res.data.cliAdmin,
+        payload: res.data.bizData,
     });
 
     if (isLogin) {
         dispatch({
             type: "LOGIN_EMAIL",
-            payload: { token: res.data.token, role: res.data.role },
+            payload: { token: res.data.token, role: res.data.currUser.role },
         });
     } else {
         // USER_READ is being dispatch in the login so that indexDB data can be updated in the login boot up.

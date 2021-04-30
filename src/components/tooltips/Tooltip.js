@@ -9,7 +9,7 @@ import Zoom from "@material-ui/core/Zoom";
 import parse from "html-react-parser";
 import "../../keyframes/pulseWaves.css";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -59,7 +59,7 @@ export default function Tooltip({
     const [stopWave, setStopWave] = React.useState(false);
     // this useEffect solves the problem with uncontrolled vs controlled components handling.
 
-    const { selfThemeBackColor } = useClientAdmin();
+    const { selfThemeBackColor } = useBizData();
 
     useEffect(() => {
         if (needOpen) {

@@ -15,7 +15,7 @@ const faStyle = {
 
 export default function ShowExpansiblePanel() {
     const { userData } = useStoreState((state) => ({
-        userData: state.userReducer.cases.currentUser,
+        userData: state.userReducer.cases.currUser,
     }));
 
     const configList = [

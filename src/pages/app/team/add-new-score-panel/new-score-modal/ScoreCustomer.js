@@ -12,7 +12,7 @@ import getAPI, {
     setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
 import showToast from "../../../../../components/toasts";
-import { useClientAdmin } from "../../../../../hooks/useRoleData";
+import { useBizData } from "init";
 
 const getStyles = () => ({
     fieldFormValue: {
@@ -112,7 +112,7 @@ export default function ScoreCustomer({
     const [fullOpen, setFullOpen] = useState(false);
 
     const [memberName, memberId, role] = useData(["name", "userId", "role"]);
-    const { selfBizLogoImg: bizLogo, bizName } = useClientAdmin();
+    const { selfBizLogoImg: bizLogo, bizName } = useBizData();
 
     const cliUserName = getFirstName(customerName && customerName.cap(), {
         addSurname: true,

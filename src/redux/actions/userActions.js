@@ -56,23 +56,11 @@ export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
             objToSend,
             getHeaderJson
         );
-        // dispatch({ type: 'USER_UPDATED', payload: needDispatch ? updateObj : null });
         return res;
     } catch (err) {
         return err;
     }
 };
-
-// export const deleteUser = async (dispatch, _idUser) => { // n1
-//     try {
-//         const res = await axios.delete(`/api/user/${_idUser}`, getHeaderJson);
-//         dispatch({ type: 'USER_DELETED', payload: _idUser });
-//         return res;
-//     } catch(err) {
-//         return err.response;
-//     }
-// };
-// END RUD
 
 // PURCHASE HISTORY
 // addPurchaseHistory is on requestLib
@@ -152,42 +140,6 @@ export const addAutomaticTask = async (userId, options = {}) => {
     }
 };
 // END TASKS
-
-// LISTS
-// note: requires JWT token
-// export const readUserList = async (dispatch, bizId, options = {}) => {
-//     let { role, skip, search, token } = options;
-//     if(!bizId) return console.log("You should specify the bizId argument");
-//     if(!skip) skip = 0;
-//     bizId = `&bizId=${bizId}`;
-
-//     const searchQuery = search ? `&search=${search}` : "";
-//     const roleQuery = role ? `&role=${role}` : "";
-//     // This Loading is activated because is required to
-//     // display the current status of loading in RecordedClientsList...
-//     setLoadingProgress(dispatch, true);
-//     try {
-//         const res = await axios.get(`/api/user/list/all?skip=${skip}${roleQuery}${searchQuery}${bizId}`, getHeaderToken(token));
-//         setLoadingProgress(dispatch, false);
-//         console.log('==ALL USERS UPDATED==');
-//         dispatch({ type: 'USER_READ_LIST', payload: res.data.list });
-//         return res;
-//     } catch (err) {
-//         // setLoadingProgress(dispatch, false);
-//         return err;
-//     }
-// };
-
-// export const readHighestScores = async (dispatch, bizId) => {
-//     try {
-//         const res = await axios.get(`/api/user/list/highest-scores?bizId=${bizId}`, getHeaderJson);
-//         dispatch({ type: "HIGHEST_SCORES_READ", payload: res.data})
-//     } catch (err) {
-//         return err;
-//     }
-// };
-
-// END LIST
 
 export const countField = async (_id, objToSend) => {
     try {

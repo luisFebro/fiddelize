@@ -8,7 +8,7 @@ import NotifDropDown from "./notification/NotifDropDown";
 import { logout } from "../../../../redux/actions/authActions";
 // End Redux
 // Utils
-import isRealObj from "../../../../utils/isRealObj";
+import isObj from "../../../../utils/isObj";
 import truncateWords from "../../../../utils/string/truncateWords";
 // End Utils
 // import { bizWhatsapp } from '../../../../data/dataBiz';
@@ -44,7 +44,7 @@ export default function MenuLogin() {
         const navElement = document.querySelector("#mainNav");
         const logo = document.querySelector("#logo-login-wrapper");
         const logoImg = document.querySelector("#logo-login-img");
-        if (isRealObj(navElement)) {
+        if (isObj(navElement)) {
             if (window.scrollY > 50) {
                 // transition and animaiton not working at all
                 navElement.className += " shadow-elevation-soft";

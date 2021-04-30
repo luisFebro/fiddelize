@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import { setRun } from "../../../redux/actions/globalActions";
-import { useProfile, useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
+import { useProfile } from "init";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
 import { addDays } from "../../../utils/dates/dateFns";
@@ -57,12 +58,12 @@ export default function PayArea({
         referrer,
     } = data;
 
-    const { bizCodeName, bizName } = useClientAdmin();
-    const { _id, phone, name: userName, email: senderEmail } = useProfile();
+    const { bizCodeName, bizName } = useBizData();
+    const { userId, phone, name: userName, email: senderEmail } = useProfile();
 
     const startedPagseguro = useStartPagseguro();
     const { loading, error, ShowError } = useStartCheckout({
-        userId: _id,
+        userId,
         trigger: SKU && servicesTotal && servicesAmount,
     });
 
@@ -76,7 +77,7 @@ export default function PayArea({
 
     useEffect(() => {
         if (alreadyReadUser) return;
-        readUser(dispatch, _id, {
+        readUser(dispatch, userId, {
             select: "cpf birthday referrer -_id",
             role: "cliente-admin",
         }).then((res) => {

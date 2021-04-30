@@ -4,6 +4,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreDispatch } from "easy-peasy";
+import { removeCollection } from "init/lStorage";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
@@ -26,8 +27,7 @@ import { registerEmail } from "../../redux/actions/authActions";
 // Helpers
 import detectErrorField from "../../utils/validation/detectErrorField";
 import handleChange from "../../utils/form/use-state/handleChange";
-import lStorage from "../../utils/storage/lStorage";
-import { useClientAdmin } from "../../hooks/useRoleData";
+import { useBizData } from "init";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import setValObjWithStr from "../../utils/objects/setValObjWithStr";
 import getDateCode from "../../utils/dates/getDateCode";
@@ -104,7 +104,7 @@ function ASyncRegisterCliUser({
         selfThemeBackColor,
         selfBizLogoImg,
         bizName,
-    } = useClientAdmin();
+    } = useBizData();
 
     const [
         staffId,
@@ -245,7 +245,7 @@ function ASyncRegisterCliUser({
                 transport: "beacon",
             });
 
-            !isStaff && lStorage("removeCol", { collection: "onceChecked" });
+            if (!isStaff) removeCollection("onceChecked");
 
             clearData();
 

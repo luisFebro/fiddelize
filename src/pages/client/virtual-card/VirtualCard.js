@@ -5,7 +5,7 @@ import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useData from "../../../hooks/useData";
 import useAPI, { readTempScoreList } from "../../../hooks/api/useAPI";
 import ReturnBtn from "../../../components/buttons/ReturnBtn";
-import { useClientAdmin } from "../../../hooks/useRoleData";
+import { useBizData } from "init";
 import useBackColor from "../../../hooks/useBackColor";
 import { setVar, store } from "../../../hooks/storage/useVar";
 import usePlayAudio, {
@@ -75,13 +75,13 @@ function VirtualCard({ history }) {
         audioPrerender: false,
     });
     const { score, createdAt, loading, showNoCardMsg, audioPrerender } = data;
-    const [name, userId, role, gender] = useData([
+    const [name, userId, role, sexLetter] = useData([
         "name",
         "userId",
         "role",
-        "gender",
+        "sexLetter",
     ]);
-    const isShe = gender === "Ela";
+    const isShe = sexLetter === "a";
     const isCliAdmin = role === "cliente-admin";
 
     useEffect(() => {
@@ -131,7 +131,7 @@ function VirtualCard({ history }) {
         trigger: !loading && audioPrerender,
     });
 
-    const { selfThemeSColor: sColor } = useClientAdmin();
+    const { selfThemeSColor: sColor } = useBizData();
 
     const { data: cardsData, error } = useAPI({
         url: readTempScoreList(userId),
@@ -277,7 +277,6 @@ function getDayGreeting() {
 
 
 const triggerAccess = !loadingAll && !showNoCardMsg;
-const { totalPurchasePrize } = useClientUser();
 const { blockAccess, loadingAccess } = useAccessChecker(
     userId,
     totalPurchasePrize,

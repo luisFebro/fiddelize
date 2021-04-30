@@ -8,7 +8,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Fab from "@material-ui/core/Fab";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
-import { useClientUser, useProfile } from "../../hooks/useRoleData";
+import { useProfile } from "init";
 import { CLIENT_URL } from "../../config/clientUrl";
 import WhatsappBtn from "../../components/buttons/WhatsappBtn";
 // SpeedDial and Icons
@@ -64,14 +64,13 @@ function MoreOptionsBtn({
 
     const styles = getStyles();
 
-    const { _id } = useProfile();
-
     const {
+        _id,
         currScore,
         totalGeneralScore,
         totalPurchasePrize,
         // purchaseHistory,
-    } = useClientUser();
+    } = useProfile();
 
     const showPurchaseHistory = () => {
         const handlePurchaseClose = () => {

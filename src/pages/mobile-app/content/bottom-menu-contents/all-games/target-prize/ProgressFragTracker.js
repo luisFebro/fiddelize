@@ -3,7 +3,7 @@ import useContext from "context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getRemainder from "utils/numbers/getRemainder";
 import Tooltip from "components/tooltips/Tooltip";
-import lStorage, { tooltip1 } from "utils/storage/lStorage";
+import { getItems, setItems } from "init/lStorage";
 import { convertDotToComma } from "utils/numbers/convertDotComma";
 // circular percentage
 import ReactjsPercentageCircle from "components/progressIndicators/ReactjsPercentageCircle/ReactjsPercentageCircle";
@@ -19,8 +19,8 @@ import getPercentage from "utils/numbers/getPercentage";
 //     playBeep: PropTypes.func,
 // };
 
-const options = tooltip1;
-const needFlagWaves = lStorage("getItem", options);
+const collection = "onceChecked";
+const [needFlagWaves] = getItems(collection, ["tooltipState"]);
 
 const getStyles = () => ({
     confettiIcon: {
@@ -193,7 +193,7 @@ function ProgressFrag({
                 needAppForPreview && "enabledLink"
             }`}
             onClick={() => {
-                lStorage("setItem", options);
+                setItems(collection, { tooltipState: true });
                 playBeep();
             }}
         >

@@ -17,7 +17,7 @@ export default function AsyncTeam() {
 
 function Title() {
     const bizName = useStoreState(
-        (state) => state.userReducer.cases.clientAdmin.bizName
+        (state) => state.userReducer.cases.bizData.bizName
     );
 
     return (
