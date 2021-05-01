@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import ProtectionMsg from "../../access-password/ProtectionMsg";
 import AccessSwitcher from "../../../components/auth/password/AccessSwitcher";
-import { getMultiVar, store } from "../../../hooks/storage/useVar";
+import { getVars } from "init/var";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 
 const awesomeStyle = {
@@ -25,7 +25,7 @@ export default function AccessGateKeeper({
     const { twoLastCpfDigits, rememberAccess } = data;
 
     useEffect(() => {
-        getMultiVar(["twoLastCpfDigits", "rememberAccess"], store.user).then(
+        getVars(["twoLastCpfDigits", "rememberAccess"], "user").then(
             (dataList) => {
                 const [cpfDigits, rememberAccess] = dataList;
                 setData((prev) => ({

@@ -1,4 +1,4 @@
-import { setVar, store } from "../../hooks/storage/useVar";
+import { setVar } from "init/var";
 // preload, cache multimedia.
 export default async function convertBlobToData(blob, options = {}) {
     const { mediaName } = options;
@@ -16,7 +16,7 @@ export default async function convertBlobToData(blob, options = {}) {
 
         reader.onloadend = async function () {
             const str64Data = reader.result;
-            await setVar({ [mediaName]: str64Data }, store.audios);
+            await setVar({ [mediaName]: str64Data }, "audios");
             resolve(`card set to ${mediaName} successfully`);
         };
     };

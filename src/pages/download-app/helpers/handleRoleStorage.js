@@ -1,4 +1,4 @@
-import { setMultiVar, store } from "hooks/storage/useVar";
+import { setVars } from "init/var";
 import { setItems } from "init/lStorage";
 
 export default function handleRoleStorage({
@@ -49,15 +49,15 @@ export default function handleRoleStorage({
     }
 
     (async () => {
-        await setMultiVar(userPayload, store.user);
-        await setMultiVar(
+        await setVars(userPayload, "user");
+        await setVars(
             {
                 rememberAccess: false,
                 success: false,
                 verifPass: false,
                 needAppRegister: true,
             },
-            store.user
+            "user"
         );
 
         const needSysOp = whichRole && bizId;

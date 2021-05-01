@@ -1,7 +1,7 @@
 import { Fragment } from "react";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import { getVar, setVar } from "../../../../hooks/storage/useVar";
+import getVar, { setVar } from "init/var";
 import useBackColor from "../../../../hooks/useBackColor";
 // import isThisApp from "../../../../utils/window/isThisApp";
 

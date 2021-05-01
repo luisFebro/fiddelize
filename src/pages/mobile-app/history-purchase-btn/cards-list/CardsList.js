@@ -6,6 +6,7 @@ import { convertDotToComma } from "../../../../utils/numbers/convertDotComma";
 import PrizeCard from "./PrizeCard";
 import { useBizData } from "init";
 import { useProfile } from "init";
+import useData from "init";
 import defineCurrChallenge from "../../../../utils/biz/defineCurrChallenge";
 import getFirstName from "../../../../utils/string/getFirstName";
 import { formatDMY, fromNow } from "../../../../utils/dates/dateFns";
@@ -20,7 +21,7 @@ import useElemDetection, {
 } from "../../../../hooks/api/useElemDetection";
 import extractStrData from "../../../../utils/string/extractStrData";
 import selectTxtStyle from "../../../../utils/biz/selectTxtStyle";
-import useGetVar, { setVar } from "../../../../hooks/storage/useVar";
+import { setVar } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -60,9 +61,9 @@ const WonChallengeBrief = ({ historyData }) => (
 
 export default function CardsList({ data }) {
     const [skip, setSkip] = useState(0);
-    const { data: hasPendingChall, loading: loadingGetVar } = useGetVar(
-        "pendingChall"
-    );
+    const [hasPendingChall] = useData("pendingChall");
+    const loadingGetVar = hasPendingChall !== "...";
+
     const [challScore, setChallScore] = useState(0);
 
     const { _id, name, totalPurchasePrize, isFromDashboard } = data;
@@ -74,12 +75,12 @@ export default function CardsList({ data }) {
     let {
         maxScore,
         rewardList,
-        selfThemeBackColor,
-        selfThemePColor,
-        selfThemeSColor,
+        themeBackColor,
+        themePColor,
+        themeSColor,
     } = useBizData();
 
-    const txtClass = selectTxtStyle(selfThemeBackColor);
+    const txtClass = selectTxtStyle(themeBackColor);
 
     const { role } = useProfile();
     const isAdmin = role === "cliente-admin";
@@ -251,7 +252,7 @@ export default function CardsList({ data }) {
                 </Card>
                 {showTotalBadge && !loading ? (
                     <div
-                        className={`badge-total-scores theme-back--${selfThemeBackColor}`}
+                        className={`badge-total-scores theme-back--${themeBackColor}`}
                     >
                         <div
                             className={`text text-normal ${txtClass} text-nowrap`}
@@ -305,7 +306,7 @@ export default function CardsList({ data }) {
         );
 
     const showDesc = (historyData, isRemainder, embodyRemainderCard) => {
-        const { selfMilestoneIcon: cardIcon } = pickCurrChallData(
+        const { milestoneIcon: cardIcon } = pickCurrChallData(
             rewardList,
             historyData.challengeN - 1
         );
@@ -407,8 +408,8 @@ export default function CardsList({ data }) {
                     <hr className="lazer-purple my-4" />
                     <PrizeCard
                         historyData={historyData}
-                        colorS={selfThemeSColor}
-                        colorP={selfThemePColor}
+                        colorS={themeSColor}
+                        colorP={themePColor}
                     />
                 </Fragment>
             )}
@@ -424,7 +425,7 @@ export default function CardsList({ data }) {
                         style={{
                             backgroundColor:
                                 !isRemainder || embodyRemainderCard(historyData)
-                                    ? `var(--themePDark--${selfThemeBackColor})`
+                                    ? `var(--themePDark--${themeBackColor})`
                                     : "var(--themePLight--black)",
                         }}
                     >

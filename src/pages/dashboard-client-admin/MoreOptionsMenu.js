@@ -4,13 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useBizData } from "init";
 import { useProfile } from "init";
+import { disconnect } from "hooks/useAuthUser";
 import { useAppSystem } from "../../hooks/useRoleData";
-import { logout } from "../../redux/actions/authActions";
 import isThisApp from "../../utils/window/isThisApp";
 import ButtonMenu from "../../components/buttons/material-ui/button-menu/ButtonMenu";
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
-import { setVar, store } from "../../hooks/storage/useVar";
 // ICONS
 // END ICONS
 
@@ -46,7 +45,7 @@ export default function MoreOptionsMenu({ location, history }) {
     const [fullOpen, setFullOpen] = useState(false);
     const { businessId } = useAppSystem();
     const { role, name } = useProfile();
-    const { bizCodeName, bizName, bizPlan } = useBizData();
+    const { bizLinkName, bizName, bizPlan } = useBizData();
 
     const handleFullOpen = (modalName) => {
         setCurrModal(modalName);
@@ -64,7 +63,7 @@ export default function MoreOptionsMenu({ location, history }) {
             text: "compartilhar apps",
             callback: () =>
                 history.push(
-                    `/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}&adminName=${name}`
+                    `/${bizLinkName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}&adminName=${name}`
                 ),
         },
         {
@@ -87,8 +86,7 @@ export default function MoreOptionsMenu({ location, history }) {
             text: "sair",
             callback: () => {
                 (async () => {
-                    await setVar({ success: false }, store.user);
-                    logout(dispatch, { needReload: true });
+                    await disconnect();
                 })();
             },
         },
@@ -122,6 +120,6 @@ export default function MoreOptionsMenu({ location, history }) {
 
 /* COMMENTS
 n1: LESSON: don not forget the curly braces when declaring React props;
-(bizCodeName, bizName, role) this will produces crazy results.crazy
-({ bizCodeName, bizName, role }) OKAY
+(bizLinkName, bizName, role) this will produces crazy results.crazy
+({ bizLinkName, bizName, role }) OKAY
 */

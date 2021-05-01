@@ -2,12 +2,12 @@ import { useEffect, useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCard";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import useData from "../../../hooks/useData";
+import useData from "init";
 import useAPI, { readTempScoreList } from "../../../hooks/api/useAPI";
 import ReturnBtn from "../../../components/buttons/ReturnBtn";
 import { useBizData } from "init";
 import useBackColor from "../../../hooks/useBackColor";
-import { setVar, store } from "../../../hooks/storage/useVar";
+import { setVar } from "init/var";
 import usePlayAudio, {
     prerenderAudio,
 } from "../../../hooks/media/usePlayAudio";
@@ -93,7 +93,7 @@ function VirtualCard({ history }) {
             const selectedArray = getTtsStore({ isShe })[typeMsg];
             const { audio, text } = getRandomArray(selectedArray);
 
-            await setVar({ "text_cli-user_virtual-card": text }, store.audios);
+            await setVar({ "text_cli-user_virtual-card": text }, "audios");
 
             await prerenderAudio(audio, "audio_cli-user_virtual-card");
             setData((prev) => ({ ...prev, audioPrerender: true }));
@@ -131,7 +131,7 @@ function VirtualCard({ history }) {
         trigger: !loading && audioPrerender,
     });
 
-    const { selfThemeSColor: sColor } = useBizData();
+    const { themeSColor: sColor } = useBizData();
 
     const { data: cardsData, error } = useAPI({
         url: readTempScoreList(userId),

@@ -9,12 +9,7 @@ import { useBizData } from "init";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { deleteImage } from "utils/storage/lForage";
 import { sendNotification } from "redux/actions/notificationActions";
-import {
-    removeVar,
-    getMultiVar,
-    removeMultiVar,
-    store,
-} from "hooks/storage/useVar";
+import { removeVar, getVars, removeVars } from "init/var";
 import setInitData from "init/setInitData";
 import RadiusBtn from "../buttons/RadiusBtn";
 import KeypadButton from "../modals/keypad";
@@ -34,9 +29,9 @@ function Login({
     needAppRegister = needAppRegister === "..." ? false : needAppRegister;
 
     const {
-        selfThemeSColor,
-        // selfThemePColor,
-        selfThemeBackColor,
+        themeSColor,
+        // themePColor,
+        themeBackColor,
     } = useBizData();
 
     const dispatch = useStoreDispatch();
@@ -48,7 +43,7 @@ function Login({
             padding="py-2 px-2"
             needShadow
             backgroundColor={`var(--themePDark--${
-                isBizTeam ? "default" : selfThemeSColor
+                isBizTeam ? "default" : themeSColor
             })`}
         />
     );
@@ -62,7 +57,7 @@ function Login({
                 confirmFunction={signInUserData}
                 confirmPayload={{ history, dispatch }}
                 backgroundColor={`var(--themeSDark--${
-                    isBizTeam ? "default" : selfThemeSColor
+                    isBizTeam ? "default" : themeSColor
                 })`}
             />
         </div>
@@ -76,7 +71,7 @@ function Login({
         <div className="animated zoomIn delay-2s p-2 mt-3">
             <p
                 className={`${selectTxtStyle(
-                    isBizTeam ? "default" : selfThemeBackColor || "default"
+                    isBizTeam ? "default" : themeBackColor || "default"
                 )} d-flex justify-content-center text-small`}
             >
                 <span style={{ fontWeight: "bolder" }}>
@@ -92,7 +87,7 @@ function Login({
                         backgroundColor={
                             `var(--themeSDark--${isBizTeam}`
                                 ? "default"
-                                : `${selfThemeSColor})`
+                                : `${themeSColor})`
                         }
                     />
                 </div>
@@ -141,7 +136,7 @@ export async function signInUserData(cpfValue, options = {}) {
     const { currUser } = res.data;
 
     const {
-        bizCodeName,
+        bizLinkName,
         verificationPass,
         needCliUserWelcomeNotif,
         needAccountPanel,
@@ -151,7 +146,6 @@ export async function signInUserData(cpfValue, options = {}) {
     } = initData;
 
     const { role, name, userId } = currUser;
-    console.log("role", role);
 
     // clean up whatever logo from prior login to set new one (especially another account)
     deleteImage("logos", "app_biz_logo");
@@ -159,7 +153,7 @@ export async function signInUserData(cpfValue, options = {}) {
 
     if (role === "nucleo-equipe") {
         if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
-        await removeVar("disconnectAgent", store.user);
+        await removeVar("disconnectAgent", "user");
 
         await setInitData("nucleo-equipe", { initData, dispatch });
 
@@ -190,7 +184,7 @@ export async function signInUserData(cpfValue, options = {}) {
             showToast("Verificando...", { dur: 5000 });
             setTimeout(() => showToast("Redirecionando..."), 2900);
 
-            whichRoute = `/${bizCodeName}/nova-senha-verificacao?id=${userId}&name=${name}`;
+            whichRoute = `/${bizLinkName}/nova-senha-verificacao?id=${userId}&name=${name}`;
             if (!appPanelUserId)
                 setTimeout(() => history.push(whichRoute), 5000);
         }
@@ -200,7 +194,7 @@ export async function signInUserData(cpfValue, options = {}) {
 
     if (role === "cliente-membro") {
         if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
-        await removeVar("disconnectCliMember", store.user);
+        await removeVar("disconnectCliMember", "user");
 
         await setInitData("cliente-membro", { initData, dispatch });
 
@@ -247,18 +241,18 @@ async function sendWelcomeNotif({ userId, role = "cliente-admin" }) {
 
 async function removeInstantAppAndRegisterData() {
     // make sure that only when there is a pending registration is triggered to remove data
-    const [isInstantApp, needAppRegister] = await getMultiVar(
+    const [isInstantApp, needAppRegister] = await getVars(
         ["isInstantApp", "needAppRegister"],
-        store.user
+        "user"
     );
 
     if (!needAppRegister) return;
     await setStorageRegisterDone();
 
     if (!isInstantApp) return;
-    await removeMultiVar(
+    await removeVars(
         ["isInstantApp", "instantBizImg", "instantBizName"],
-        store.user
+        "user"
     );
 }
 
@@ -339,8 +333,8 @@ if(role === "colaborador") {
     setTimeout(() => showToast(dispatch, msg, 'success', 9000), 7000);
 }
 
-else if(!selfMilestoneIcon) {
-        whichRoute = `/${bizCodeName}/novo-app/self-service/${userId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
+else if(!milestoneIcon) {
+        whichRoute = `/${bizLinkName}/novo-app/self-service/${userId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
         showToast(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
         setTimeout(() => window.location.href = whichRoute, 2900);
 

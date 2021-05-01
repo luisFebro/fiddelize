@@ -14,10 +14,10 @@ const AsyncAccessGateKeeper = Load({
 
 export default function GatewayAndCTAs({
     isSessionOver,
-    selfThemeBackColor,
-    selfThemeSColor,
+    themeBackColor,
+    themeSColor,
     fullName,
-    bizCodeName,
+    bizLinkName,
     loadingAccess,
 }) {
     const dispatch = useStoreDispatch();
@@ -33,9 +33,7 @@ export default function GatewayAndCTAs({
             } container-center-col text-white text-normal text-center`}
         >
             <span
-                className={`${selectTxtStyle(
-                    selfThemeBackColor
-                )} font-weight-bold`}
+                className={`${selectTxtStyle(themeBackColor)} font-weight-bold`}
             >
                 {!isSessionOver && "Conectado por"}
                 {!isSessionOver && <br />}
@@ -48,11 +46,11 @@ export default function GatewayAndCTAs({
                 <section className="container-center mt-4">
                     <RedirectLink
                         className="mr-3"
-                        to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                        to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
                     >
                         <RadiusBtn
                             title="painel"
-                            backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                            backgroundColor={`var(--themeSDark--${themeSColor})`}
                         />
                     </RedirectLink>
                     <span>
@@ -66,8 +64,8 @@ export default function GatewayAndCTAs({
             )}
             {isSessionOver && !loadingAccess && (
                 <AsyncAccessGateKeeper
-                    backColor={selfThemeBackColor}
-                    sColor={selfThemeSColor}
+                    backColor={themeBackColor}
+                    sColor={themeSColor}
                 />
             )}
         </section>

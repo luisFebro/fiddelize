@@ -13,7 +13,7 @@ import ShowBizNotes from "./ShowBizNotes";
 export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     const { businessId } = useAppSystem();
     const {
-        selfMilestoneIcon,
+        milestoneIcon,
         mainReward,
         maxScore,
         rewardList,
@@ -23,7 +23,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     // jsut in case user by any change does not pass throu self-service and decide to log in withot data recorded...
     const firstMainData = {
         id: businessId,
-        icon: selfMilestoneIcon,
+        icon: milestoneIcon,
         rewardScore: maxScore,
         rewardDesc: mainReward,
     };
@@ -60,7 +60,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     const updateThisUser = (needMsg = true, opts = {}) => {
         const { deleteThisId, addThisId } = opts;
         const constObj = {
-            "clientAdminData.selfMilestoneIcon": challengesArray[0].icon,
+            "clientAdminData.milestoneIcon": challengesArray[0].icon,
             "clientAdminData.rewardScore": challengesArray[0].rewardScore,
             "clientAdminData.mainReward": challengesArray[0].rewardDesc,
         };
@@ -144,7 +144,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
                         icon={chall.icon}
                         rewardScore={chall.rewardScore}
                         rewardDesc={chall.rewardDesc}
-                        milestoneIcon={selfMilestoneIcon}
+                        milestoneIcon={milestoneIcon}
                         updateThisUser={updateThisUser}
                     />
                 </div>

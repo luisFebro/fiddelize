@@ -6,6 +6,7 @@ import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import useDelay from "../../../hooks/useDelay";
 import convertToReal from "../../../utils/numbers/convertToReal";
 import { setRun } from "../../../redux/actions/globalActions";
+import useData from "init";
 import { useBizData } from "init";
 import getOrderTableList from "./helpers/getOrderTableList";
 import OrdersTableContent from "./OrdersTableContent";
@@ -20,7 +21,6 @@ export default function OrdersTable({
     setVar,
     handleCancel,
     handleServicesData,
-    useGetVar,
     notesColor,
 }) {
     const [list, setList] = useState([]);
@@ -28,11 +28,11 @@ export default function OrdersTable({
     const loading = false;
 
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
-    const { data: totalMoney, loading: loadMoney } = useGetVar(
-        "totalMoney_clientAdmin"
-    );
+    const [totalMoney] = useData("totalMoney_clientAdmin");
+    const loadMoney = totalMoney !== "...";
+
     orderTotal = !orderTotal ? totalMoney : orderTotal;
     const rawOrderTotal = orderTotal; // because it receives R$ and becames string in the first run
 
@@ -95,7 +95,7 @@ export default function OrdersTable({
                     style={{ color: "var(--themeP)", fontSize: "20px" }}
                 />
                 <Link
-                    to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                    to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}
                 >
                     <ButtonMulti

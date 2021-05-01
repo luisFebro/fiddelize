@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import isOffline from "../utils/server/isOffline";
-import { setVar, removeVar, getVar } from "./storage/useVar";
+import getVar, { setVar, removeVar } from "init/var";
 import showToast from "../components/toasts";
-import useData from "./useData";
+import useData from "init";
 
 const isConexionOff = isOffline();
 

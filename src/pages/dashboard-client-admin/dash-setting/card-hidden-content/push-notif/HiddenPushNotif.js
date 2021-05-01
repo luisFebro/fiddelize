@@ -8,7 +8,7 @@ import useAPI, {
     readOrUpdateNotifStatus,
 } from "../../../../../hooks/api/useAPI";
 import getAPI from "../../../../../utils/promises/getAPI";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 import subscribeUser from "../../../../../components/pwa-push-notification/subscription";
 
 export default function HiddenPushNotif() {

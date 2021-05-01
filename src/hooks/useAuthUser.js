@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useStoreState } from "easy-peasy";
 import isThisApp from "utils/window/isThisApp";
 import { removeCollection } from "init/lStorage";
-import { removeCollection as removeIndexedColl } from "hooks/storage/useVar";
+import { removeCollection as removeIndexedColl } from "init/var";
 import showToast from "components/toasts";
-import useData from "./useData";
-import { getVar, setMultiVar, store } from "./storage/useVar";
+import useData from "init";
+import getVar, { setVars } from "init/var";
 
 const isApp = isThisApp();
 const gotToken = localStorage.getItem("token");
@@ -17,12 +17,12 @@ export const disconnect = async (options = {}) => {
 
     if (msg) showToast("Finalizando sessão...");
 
-    const role = await getVar("role", store.user);
+    const role = await getVar("role", "user");
     const isCliAdmin = role === "cliente-admin";
 
     const setRememberAccess = async () => {
         if (!isCliAdmin) return null;
-        return await setMultiVar({ rememberAccess: true }, store.user);
+        return await setVars({ rememberAccess: true }, "user");
     };
 
     await Promise.all([setRememberAccess(), removeIndexedColl("user")]);

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { sendNotification } from "../../../../redux/actions/notificationActions";
-import useGetVar, {
-    setVar,
-    getVar,
-    store,
-} from "../../../../hooks/storage/useVar";
+import useData from "init";
+import getVar, { setVar } from "init/var";
 
 export default function useNotifyCliWonChall(recipientId, data = {}) {
     const [sent, setSent] = useState(false);
@@ -15,7 +12,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
         fullName,
         currChall,
         currScore,
-        selfBizLogoImg,
+        bizLogo,
         lastPrizeId,
         maxScore,
         totalPurchasePrize,
@@ -43,7 +40,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
                 prize: mainReward,
                 customerName: fullName,
                 currChallN: currChall,
-                bizLogo: selfBizLogoImg,
+                bizLogo,
             },
             notifCard: {
                 senderId,
@@ -62,12 +59,10 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
         [fullName, lastPrizeId]
     );
 
-    const { data: notifVersion, loading: loadingVar } = useGetVar(key);
+    const [notifVersion] = useData([key]);
+    const loadingVar = notifVersion !== "...";
 
     const hasVersion = key && notifVersion;
-
-    // removeVersion now is integrated in a useEffect in the Challenge's confirmation modal when user
-    // check for the notification. Then the system remove the version allowing sending notifcation to clli-admin again..
 
     useEffect(() => {
         let cancel;
@@ -76,7 +71,7 @@ export default function useNotifyCliWonChall(recipientId, data = {}) {
             if (cancel || !pushNotifData) return;
 
             (async () => {
-                const sexLetter = await getVar("sexLetter", store.user);
+                const sexLetter = await getVar("sexLetter", "user");
 
                 const finalNotifData = {
                     ...pushNotifData,

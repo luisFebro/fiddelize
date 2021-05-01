@@ -40,7 +40,7 @@ function AppCard({ data, payload, loading }, ref) {
         history,
         dispatch,
         role_loggedIn,
-        bizCodeName,
+        bizLinkName,
         userId,
     } = payload;
 
@@ -71,7 +71,7 @@ function AppCard({ data, payload, loading }, ref) {
         role_loggedIn,
         appId_loggedIn,
         dispatch,
-        bizCodeName,
+        bizLinkName,
         bizId: businessId,
         clickedAppUserId,
         userId,

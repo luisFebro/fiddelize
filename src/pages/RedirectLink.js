@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getUrlLink } from "../redux/actions/userActions";
-import { setVar, store } from "../hooks/storage/useVar";
+import { setVar } from "init/var";
 
 // linkCode example: alan_yvs493z0
 export default function RedirectLink({ match }) {
@@ -14,7 +14,7 @@ export default function RedirectLink({ match }) {
             if (res.status !== 200) return setError("Link Inválido!");
 
             (async () => {
-                await setVar({ linkCode: code }, store.user);
+                await setVar({ linkCode: code }, "user");
                 window.location.href = res.data;
             })();
         });

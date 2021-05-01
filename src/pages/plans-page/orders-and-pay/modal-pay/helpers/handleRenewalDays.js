@@ -1,4 +1,4 @@
-import { getVar, store } from "../../../../../hooks/storage/useVar";
+import getVar from "init/var";
 import getDatesCountdown from "../../../../../hooks/dates/getDatesCountdown";
 
 const checkUltimateRenewal = ({ ordersStatement, bizPlanList }) => {
@@ -41,7 +41,7 @@ export default function handleRenewalDays({
     isSingleRenewal,
     reference,
 }) {
-    getVar("proData", store.request_api_data).then((proData) => {
+    getVar("proData", "request_api_data").then((proData) => {
         const bizPlanList = proData && proData.bizPlanList;
         // for cases when client-admin buys something from the service store and not pass by the front-end system handled by isSingleRenewal or isRenewal
         // Here checkes if the current order statement includes some priorly bought service. This is critical to apply the correct date.

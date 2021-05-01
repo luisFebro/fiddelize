@@ -2,7 +2,7 @@ import axios from "axios";
 import showToast from "components/toasts";
 import { getHeaderJson } from "utils/server/getHeaders";
 import isThisApp from "utils/window/isThisApp";
-import { setVar, store } from "hooks/storage/useVar";
+import { setVar } from "init/var";
 import { API } from "config/api";
 import getAPI, { login, loadUserInit } from "utils/promises/getAPI";
 import setInitData from "init/setInitData";
@@ -112,7 +112,7 @@ export async function logout(dispatch, opts = {}) {
     dispatch({ type: "LOGOUT_SUCCESS" });
     dispatch({ type: "ALL_COMPONENTS_CLEARED" });
 
-    await setVar({ success: false }, store.user);
+    await setVar({ success: false }, "user");
 }
 
 export const changePassword = async (dispatch, bodyPass, userId) => {

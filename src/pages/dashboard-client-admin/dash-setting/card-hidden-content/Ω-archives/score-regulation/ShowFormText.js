@@ -22,7 +22,7 @@ let temp = "";
 
 // NEXT UPDATE: using debouncing and throttling technique to save in real time without any further action like currently as clicking outside the box.
 function RegulationText({ generateRegulation }) {
-    const { rewardDeadline, regulation, bizCodeName } = useBizData();
+    const { rewardDeadline, regulation, bizLinkName } = useBizData();
 
     const [msgStatus, setMsgStatus] = useState("atualizado.");
     const [disabledBtn, setDisabledBtn] = useState(false);
@@ -156,7 +156,7 @@ function RegulationText({ generateRegulation }) {
             )}
             <Link
                 className={`${disabledBtn && "disabledLink"} no-outline`}
-                to={`/regulamento?cliAdmin=1&bizCodeName=${bizCodeName}`}
+                to={`/regulamento?cliAdmin=1&bizLinkName=${bizLinkName}`}
             >
                 <ButtonMulti
                     disabled={!!disabledBtn}

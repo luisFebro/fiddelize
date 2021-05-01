@@ -16,10 +16,10 @@ export default function QrInvitationBtn({ qrValue, cliName, isNewMember }) {
     const [fullOpen, setFullOpen] = useState(false);
 
     const {
-        selfBizLogoImg: img,
-        selfThemeBackColor: backColor,
-        selfThemePColor: fgColor,
-        selfThemeSColor: sColor,
+        bizLogo: img,
+        themeBackColor: backColor,
+        themePColor: fgColor,
+        themeSColor: sColor,
         bizName,
     } = useBizData();
 

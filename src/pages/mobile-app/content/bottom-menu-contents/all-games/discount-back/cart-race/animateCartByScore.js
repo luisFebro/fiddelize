@@ -14,7 +14,7 @@ export default function animateCartByScore(
         challengeMsg,
         currChallenge,
         userName,
-        selfThemeSColor,
+        themeSColor,
         msgRef,
     } = options;
 
@@ -58,9 +58,7 @@ export default function animateCartByScore(
             const dotIcon = document.querySelector(`#${iconInArray}`);
             setTimeout(
                 () =>
-                    dotIcon.classList.add(
-                        `${dots.className}--${selfThemeSColor}`
-                    ),
+                    dotIcon.classList.add(`${dots.className}--${themeSColor}`),
                 delayToAnimated
             );
         }

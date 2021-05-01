@@ -2,7 +2,7 @@ import useImg, { Img } from "../../../hooks/media/useImg";
 
 const handleAppType = ({
     role,
-    selfThemePColor,
+    themePColor,
     needAppForCliAdmin,
     roleWhichDownloaded,
     isAuthUser,
@@ -15,8 +15,7 @@ const handleAppType = ({
         return true;
     if (roleWhichDownloaded === "cliente") return false;
 
-    const gotEmptyData =
-        typeof role === "object" && selfThemePColor === "default";
+    const gotEmptyData = typeof role === "object" && themePColor === "default";
 
     return (
         (roleWhichDownloaded && !isClientUser && !needAppForCliAdmin) ||
@@ -30,14 +29,14 @@ export default function AppTypeBubble({
     loadingAccess,
     isUrlAdmin,
     needAppForCliAdmin,
-    selfThemePColor,
+    themePColor,
     roleWhichDownloaded,
     isAuthUser,
 }) {
-    const shapeSrc = useImg(
-        `/img/shapes/blob-app-start--${selfThemePColor}.svg`,
-        { coll: "shapes", key: `app_start_shape_${selfThemePColor}` }
-    );
+    const shapeSrc = useImg(`/img/shapes/blob-app-start--${themePColor}.svg`, {
+        coll: "shapes",
+        key: `app_start_shape_${themePColor}`,
+    });
 
     const isBizTeam = role === "nucleo-equipe";
 
@@ -52,7 +51,7 @@ export default function AppTypeBubble({
 
     const showAppType = handleAppType({
         role,
-        selfThemePColor,
+        themePColor,
         needAppForCliAdmin,
         roleWhichDownloaded,
         isAuthUser,

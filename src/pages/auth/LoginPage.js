@@ -3,7 +3,7 @@ import { useStoreState } from "easy-peasy";
 import AsyncLogin from "../../components/auth/AsyncLogin";
 import AsyncLoyaltyScoreHandler from "../client/loyalty-client-scores";
 import CompLoader from "../../components/CompLoader";
-import useData from "../../hooks/useData";
+import useData from "init";
 import { Load } from "../../components/code-splitting/LoadableComp";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";

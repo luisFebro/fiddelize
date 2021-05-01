@@ -46,7 +46,7 @@ function handleMouseMove(event) {
 }
 
 export default function ThreeDFlipCard({ name, score, createdAt }) {
-    const { selfBizLogoImg: bizLogo, selfThemePColor: colorP } = useBizData();
+    const { bizLogo, themePColor: colorP } = useBizData();
 
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
     const cardColor = `linear-gradient(145deg, var(--themePLight--${colorP}), var(--themePDark--${colorP}))`;

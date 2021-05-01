@@ -100,27 +100,27 @@ function Website({ location, history }) {
                     component={AsyncBizInfo}
                 />
                 <Route
-                    path="/:bizCodeName/novo-app/metas"
+                    path="/:bizLinkName/novo-app/metas"
                     exact
                     component={AsyncRewardPlanner}
                 />
                 <Route
-                    path="/:bizCodeName/novo-app/self-service"
+                    path="/:bizLinkName/novo-app/self-service"
                     exact
                     component={AsyncSelfService}
                 />
                 <Route
-                    path="/:bizCodeName/novo-app/cadastro-admin"
+                    path="/:bizLinkName/novo-app/cadastro-admin"
                     exact
                     component={AsyncAdminRegister}
                 />
                 <Route
-                    path="/:bizCodeName/nova-senha-verificacao"
+                    path="/:bizLinkName/nova-senha-verificacao"
                     exact
                     component={AsyncPasswordPage}
                 />
                 <Route
-                    path="/:bizCodeName/compartilhar-app"
+                    path="/:bizLinkName/compartilhar-app"
                     exact
                     component={AsyncAppSharer}
                 />
@@ -130,7 +130,7 @@ function Website({ location, history }) {
                 />
                 <Route path="/app/:nameAndCode" component={RedirectLink} />
                 <PrivateRouteClientAdm
-                    path="/:bizCodeName/cliente-admin/painel-de-controle"
+                    path="/:bizLinkName/cliente-admin/painel-de-controle"
                     exact
                     component={AsyncDashboardClientAdmin}
                 />

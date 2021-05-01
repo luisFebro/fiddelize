@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { useBizData } from "init";
 import { useProfile } from "init";
 import { Load } from "../../../components/code-splitting/LoadableComp";
-import useData from "../../../hooks/useData";
+import useData from "init";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
 import "./_TeamApp.scss";
@@ -53,10 +53,10 @@ export default function TeamApp({
     const needAdminDefaultTheme = isCliAdmin && !isPreviewMode;
 
     const {
-        selfBizLogoImg: bizLogo,
-        selfThemeBackColor: backColor,
-        selfThemeSColor: sColor,
-        selfThemePColor: pColor,
+        bizLogo,
+        themeBackColor: backColor,
+        themeSColor: sColor,
+        themePColor: pColor,
     } = useBizData();
 
     const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);

@@ -89,12 +89,12 @@ function Mobile({ location, history }) {
                 />
                 <Route path="/regulamento/" exact component={RegulationPage} />
                 <Route
-                    path="/:bizCodeName/nova-senha-verificacao"
+                    path="/:bizLinkName/nova-senha-verificacao"
                     exact
                     component={AsyncPasswordPage}
                 />
                 <Route
-                    path="/:bizCodeName/compartilhar-app"
+                    path="/:bizLinkName/compartilhar-app"
                     exact
                     component={AsyncAppSharer}
                 />
@@ -106,7 +106,7 @@ function Mobile({ location, history }) {
                 />
                 <Route path="/planos" exact component={AsyncPlansPage} />
                 <PrivateRouteClientAdm
-                    path="/:bizCodeName/cliente-admin/painel-de-controle"
+                    path="/:bizLinkName/cliente-admin/painel-de-controle"
                     exact
                     component={AsyncDashboardClientAdmin}
                 />

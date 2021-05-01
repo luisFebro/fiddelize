@@ -6,10 +6,10 @@ import BuyReviewsBtn from "./buy-reviews/BuyReviewsBtn";
 import colorsHandler from "./helpers/colorsHandler";
 import { getTextStatus } from "../../../../components/charts/speedometer-gauge/helpers";
 import getAPI, { getMainReviewData } from "../../../../utils/promises/getAPI";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 import { getGradeText, getColorGrade } from "./xp-score/helpers";
 import "./_ClientsReviews.scss";
-import { getVar, setVar } from "../../../../hooks/storage/useVar";
+import getVar, { setVar } from "init/var";
 
 export default function ClientsReviews() {
     const [dataScore, setDataScore] = useState({

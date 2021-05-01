@@ -8,7 +8,7 @@ import { handleNextField } from "../../../utils/form/kit";
 import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
-import { setMultiVar, store } from "../../../hooks/storage/useVar";
+import { setVars } from "init/var";
 import generateBizCodeName from "../../download-app/instant-app/helpers/generateBizCodeName";
 import showToast from "../../../components/toasts";
 import AutoCompleteSearch from "../../../components/search/AutoCompleteSearch";
@@ -39,11 +39,11 @@ const getStyles = () => ({
 export default function BizForm() {
     const [data, setData] = useState({
         bizName: "",
-        bizCodeName: "",
+        bizLinkName: "",
         field: "",
         selectedValue: "", // field in the autoselect
     });
-    const { bizCodeName, field, bizName, selectedValue } = data;
+    const { bizLinkName, field, bizName, selectedValue } = data;
 
     useEffect(() => {
         if (selectedValue) {
@@ -62,7 +62,7 @@ export default function BizForm() {
             const finalDashedName = generateBizCodeName(ultimateBizName);
             setData({
                 ...data,
-                bizCodeName: finalDashedName,
+                bizLinkName: finalDashedName,
             });
         }
     };
@@ -144,12 +144,12 @@ export default function BizForm() {
 
         const data = {
             doneBizInfo: true,
-            clientAdminData: { bizName, bizCodeName, bizField: field },
+            clientAdminData: { bizName, bizLinkName, bizField: field },
         };
-        await setMultiVar(data, store.pre_register);
+        await setVars(data, "pre_register");
 
         // need to be reloaded since the other fields are prevented to be opened somehow.
-        window.location.href = `/${bizCodeName}/novo-app/metas`;
+        window.location.href = `/${bizLinkName}/novo-app/metas`;
     };
 
     const showButtonActions = () => (

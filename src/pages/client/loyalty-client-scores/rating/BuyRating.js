@@ -7,7 +7,7 @@ import FacesPromotersScore, {
     getScaleText,
 } from "./faces-promoters-score/FacesPromotersScore";
 import handleChange from "../../../../utils/form/use-state/handleChange";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 import "./_BuyRating.css";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
@@ -59,7 +59,7 @@ export default function BuyRating({
         "role",
     ]);
 
-    const { bizName, selfBizLogoImg } = useBizData();
+    const { bizName, bizLogo } = useBizData();
     const { businessId } = useAppSystem();
 
     useEffect(() => {
@@ -110,7 +110,7 @@ export default function BuyRating({
                 "clientUserData.review.buyReport": buyReport,
                 "clientUserData.review.reportUpdatedAt": new Date(),
                 customerName,
-                bizLogo: selfBizLogoImg,
+                bizLogo,
                 businessId,
                 report: buyReport,
             },

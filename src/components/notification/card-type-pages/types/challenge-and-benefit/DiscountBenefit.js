@@ -13,7 +13,7 @@ import { useAppSystem } from "../../../../../hooks/useRoleData";
 import { sendNotification } from "../../../../../redux/actions/notificationActions";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import { addDays, calendar } from "../../../../../utils/dates/dateFns";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 import showToast from "../../../../toasts";
 import getAPI, {
     updateUser,
@@ -24,7 +24,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
     const [disableCTA, setDisableCTA] = useState(false);
 
     const { businessId } = useAppSystem();
-    const { selfBizLogoImg, bizName, rewardDeadline = 30 } = useBizData();
+    const { bizLogo, bizName, rewardDeadline = 30 } = useBizData();
     const [staffName, role, firstStaffName] = useData([
         "name",
         "role",
@@ -82,7 +82,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
                 customerName: getFirstName(name && name.cap()),
                 bizName,
                 currChall,
-                bizLogo: selfBizLogoImg,
+                bizLogo,
             },
             notifCard: {
                 cardType: "challenge",

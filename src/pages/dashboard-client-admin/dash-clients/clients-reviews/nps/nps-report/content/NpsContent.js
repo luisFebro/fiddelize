@@ -7,7 +7,7 @@ import LoadableVisible from "../../../../../../../components/code-splitting/Load
 import getAPI, {
     getNpsChartData,
 } from "../../../../../../../utils/promises/getAPI";
-import useData from "../../../../../../../hooks/useData";
+import useData from "init";
 import getWeekDayBr from "../../../../../../../utils/dates/getWeekDayBr";
 
 const isSmall = window.Helper.isSmallScreen();

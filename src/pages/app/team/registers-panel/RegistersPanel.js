@@ -19,10 +19,8 @@ const getStyles = () => ({
 export default withRouter(RegistersPanel);
 
 function RegistersPanel({ history, isNewMember = false }) {
-    const { selfBizLogoImg, bizCodeName } = useBizData();
-    const { newImg: thisBizLogo, width, height } = removeImgFormat(
-        selfBizLogoImg
-    );
+    const { bizLogo, bizLinkName } = useBizData();
+    const { newImg: thisBizLogo, width, height } = removeImgFormat(bizLogo);
     useAuth({ history, roles: "cliente-membro, cliente-admin" });
 
     const styles = getStyles();
@@ -51,7 +49,7 @@ function RegistersPanel({ history, isNewMember = false }) {
         !isNewMember && (
             <section className="my-3 text-right mr-3">
                 <Link
-                    to={`/${bizCodeName}/compartilhar-app`}
+                    to={`/${bizLinkName}/compartilhar-app`}
                     className="text-link text-small"
                 >
                     Mais opções de divulgação

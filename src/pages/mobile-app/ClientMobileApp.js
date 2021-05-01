@@ -14,7 +14,7 @@ import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import useDelay from "hooks/useDelay";
 import CompLoader from "components/CompLoader";
 import useBackColor from "hooks/useBackColor";
-import useData from "hooks/useData";
+import useData from "init";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
 import removeImgFormat from "utils/biz/removeImgFormat";
@@ -84,6 +84,7 @@ function ClientMobileApp({ location, history }) {
         instantBizImg,
         instantBizName,
         needAppRegister,
+        loadingData,
     ] = useData([
         "userId",
         "role",
@@ -97,8 +98,6 @@ function ClientMobileApp({ location, history }) {
         "instantBizName",
         "needAppRegister",
     ]);
-
-    const loadingData = Boolean(userId === "...");
 
     const { notifCount } = useProfile();
 
@@ -142,11 +141,11 @@ function ClientMobileApp({ location, history }) {
     // END MAIN VARIABLES
 
     const {
-        bizCodeName,
-        selfBizLogoImg,
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
+        bizLinkName,
+        bizLogo,
+        themePColor,
+        themeSColor,
+        themeBackColor,
     } = useBizData();
 
     const { runName } = useRunComp();
@@ -154,7 +153,7 @@ function ClientMobileApp({ location, history }) {
 
     // useCount("ClientMobileApp.js"); // RT= 72 after login cli-use
     useBackColor(
-        `var(--themeBackground--${isBizTeam ? "default" : selfThemeBackColor})`
+        `var(--themeBackground--${isBizTeam ? "default" : themeBackColor})`
     );
 
     useEffect(() => {
@@ -183,16 +182,13 @@ function ClientMobileApp({ location, history }) {
         }
     }
 
-    const needClientLogo =
-        (isApp && selfBizLogoImg) || (isAuthUser && selfBizLogoImg);
+    const needClientLogo = (isApp && bizLogo) || (isAuthUser && bizLogo);
 
-    const { newImg: thisSelfBizLogoImg, width, height } = removeImgFormat(
-        selfBizLogoImg
-    );
+    const { newImg: thisbizLogo, width, height } = removeImgFormat(bizLogo);
     const logoSrc =
         isBizTeam || !needClientLogo
             ? "/img/official-logo-name.png"
-            : thisSelfBizLogoImg;
+            : thisbizLogo;
 
     const showLogo = () => {
         return (
@@ -275,9 +271,9 @@ function ClientMobileApp({ location, history }) {
                 position="relative"
                 top={15}
                 left={0}
-                notifBorderColor={`var(--themeBackground--${selfThemeBackColor})`}
+                notifBorderColor={`var(--themeBackground--${themeBackColor})`}
                 notifBackColor={
-                    selfThemeBackColor === "red"
+                    themeBackColor === "red"
                         ? "var(--themePLight--black)"
                         : "var(--expenseRed)"
                 }
@@ -341,7 +337,7 @@ function ClientMobileApp({ location, history }) {
                         roleWhichDownloaded={roleWhichDownloaded}
                         isUrlAdmin={isUrlAdmin}
                         needAppForCliAdmin={needAppForCliAdmin}
-                        selfThemePColor={selfThemePColor}
+                        themePColor={themePColor}
                         isAuthUser={isAuthUser}
                     />
                 </Fragment>
@@ -352,10 +348,10 @@ function ClientMobileApp({ location, history }) {
                     {needStaffLogout && (
                         <GatewayAndCTAs
                             isSessionOver={isSessionOver}
-                            selfThemeBackColor={selfThemeBackColor}
-                            selfThemeSColor={selfThemeSColor}
+                            themeBackColor={themeBackColor}
+                            themeSColor={themeSColor}
                             fullName={fullName}
-                            bizCodeName={bizCodeName}
+                            bizLinkName={bizLinkName}
                             loadingAccess={loadingData}
                         />
                     )}
@@ -373,8 +369,8 @@ function ClientMobileApp({ location, history }) {
                             useProfile={useProfile}
                             useBizData={useBizData}
                             needAppForCliAdmin={needAppForCliAdmin}
-                            colorP={selfThemePColor}
-                            colorS={selfThemeSColor}
+                            colorP={themePColor}
+                            colorS={themeSColor}
                             totalNotifications={notifCount}
                         />
                     )}
@@ -384,16 +380,16 @@ function ClientMobileApp({ location, history }) {
                         <Fragment>
                             <GatewayAndCTAs
                                 isSessionOver={isSessionOver}
-                                selfThemeBackColor={selfThemeBackColor}
-                                selfThemeSColor={selfThemeSColor}
+                                themeBackColor={themeBackColor}
+                                themeSColor={themeSColor}
                                 fullName={fullName}
-                                bizCodeName={bizCodeName}
+                                bizLinkName={bizLinkName}
                                 loadingAccess={loadingData}
                             />
                             <AsyncAdminQuickActions
                                 playBeep={undefined}
                                 showMoreBtn={!isSessionOver}
-                                colorS={selfThemeSColor}
+                                colorS={themeSColor}
                             />
                         </Fragment>
                     )}
@@ -432,15 +428,15 @@ const logoFid = useImg(url.logoFid, {
 
 const handleLogoSrc = () => {
     if (needClientLogo) {
-        const { newImg: thisSelfBizLogoImg } = removeImgFormat(
-            selfBizLogoImg
+        const { newImg: thisbizLogo } = removeImgFormat(
+            bizLogo
         );
-        return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
+        return setUrl({ ...url, logoBiz: thisbizLogo });
     }
     return setUrl({ ...url, logoFid: "/img/official-logo-name.png" });
 };
 useEffect(() => {
     handleLogoSrc();
-}, [selfBizLogoImg]);
+}, [bizLogo]);
 
 */

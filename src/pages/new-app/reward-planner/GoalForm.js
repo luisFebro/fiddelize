@@ -11,7 +11,7 @@ import ButtonMulti, {
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import showToast from "../../../components/toasts";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
-import { setMultiVar, getVar, store } from "../../../hooks/storage/useVar";
+import getVar, { setVars } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -65,7 +65,7 @@ const styles = {
     },
 };
 
-function GoalForm({ history, bizCodeName, bizName }) {
+function GoalForm({ history, bizLinkName, bizName }) {
     const [error, setError] = useState("");
     const [data, setData] = useState({
         rewardScore: undefined,
@@ -97,22 +97,22 @@ function GoalForm({ history, bizCodeName, bizName }) {
             });
         }
 
-        const priorData = await getVar("clientAdminData", store.pre_register);
+        const priorData = await getVar("clientAdminData", "pre_register");
         const newData = {
             ...priorData,
             rewardScore: Number(rewardScore),
             mainReward,
         };
-        await setMultiVar(
+        await setVars(
             {
                 clientAdminData: newData,
                 doneRewardPlanner: true,
             },
-            store.pre_register
+            "pre_register"
         );
 
         history.push(
-            `/${bizCodeName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}&nome-cliente=Ana`
+            `/${bizLinkName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${score}&premio-desc=${prize}&nome-cliente=Ana`
         );
     };
 

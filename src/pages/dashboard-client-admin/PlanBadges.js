@@ -2,22 +2,22 @@ import { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NotificationBadge from "../../components/NotificationBadge";
-import useGetVar from "../../hooks/storage/useVar";
+import useData from "init";
 import { useBizData } from "init";
-import { useProfile } from "init";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 
 export default withRouter(PlanBadges);
 
 function PlanBadges({ history }) {
     // this export is required because this overrides the title in mobile testing...
-    const { role } = useProfile();
     const { bizPlan } = useBizData();
 
     const isFree = bizPlan === "gratis";
 
-    const { data } = useGetVar("orders_clientAdmin");
-    const { data: totalServs } = useGetVar("totalServices_clientAdmin");
+    const [data, totalServs] = useData([
+        "orders_clientAdmin",
+        "totalServices_clientAdmin",
+    ]);
 
     const destiny = data ? "/pedidos/admin" : "/planos?cliente-admin=1";
 

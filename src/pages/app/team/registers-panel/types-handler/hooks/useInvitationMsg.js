@@ -9,7 +9,7 @@ export default function useInvitationMsg({
     bizName,
     verifPass,
     payload,
-    bizCodeName,
+    bizLinkName,
     linkId,
     trigger,
 }) {
@@ -21,7 +21,7 @@ export default function useInvitationMsg({
         if (linkId === "..." || !trigger) return;
 
         downloadLink.current = generateAppDownloadLink({
-            bizCodeName,
+            bizLinkName,
             name,
             payload,
             linkScore,

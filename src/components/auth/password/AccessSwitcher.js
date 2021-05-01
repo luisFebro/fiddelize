@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import showToast from "components/toasts";
 import { treatBoolStatus } from "../../../hooks/api/trigger";
-import { setVar, store } from "../../../hooks/storage/useVar";
+import { setVar } from "init/var";
 import SwitchBtn from "../../buttons/material-ui/SwitchBtn";
 import { logout } from "../../../redux/actions/authActions";
 import { Load } from "../../code-splitting/LoadableComp";
@@ -35,7 +35,7 @@ export default function AccessSwitcher({
 
     const getModalCallback = async () => {
         showToast("Desconectando...");
-        await setVar({ rememberAccess: false }, store.user);
+        await setVar({ rememberAccess: false }, "user");
         logout(dispatch, { needReload: true });
     };
 

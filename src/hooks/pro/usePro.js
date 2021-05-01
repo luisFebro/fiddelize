@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useBizData } from "init";
 import { useAppSystem } from "../useRoleData";
 import useAPI, { getProData } from "../api/useAPI";
-import { getVar, store } from "../storage/useVar";
+import getVar from "init/var";
 import getDatesCountdown from "../dates/getDatesCountdown";
 
 const setAllData = (thisData, setData, bizPlan) =>
@@ -47,7 +47,7 @@ export default function usePro(options = {}) {
 
     // if some error happens, then fetch from most recent offline data storage
     useEffect(() => {
-        getVar("proData", store.request_api_data).then((proData) => {
+        getVar("proData", "request_api_data").then((proData) => {
             setAllData(proData, setData, bizPlan);
         });
 

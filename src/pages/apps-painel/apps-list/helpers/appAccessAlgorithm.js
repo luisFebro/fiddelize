@@ -1,17 +1,11 @@
 import { setItems } from "init/lStorage";
 import { setRun } from "../../../../redux/actions/globalActions";
-import {
-    removeVar,
-    setVar,
-    getVar,
-    removeMultiVar,
-    store,
-} from "../../../../hooks/storage/useVar";
+import getVar, { removeVar, setVar, removeVars } from "init/var";
 import renewAccessToken from "../../../../components/auth/helpers/renewAccessToken";
 import { signInUserData } from "../../../../components/auth/Login";
 import getAPI, { setDefaultAccess } from "../../../../utils/promises/getAPI";
 
-const handleCliAdmin = ({ bizId, dispatch, history, bizCodeName }) => {
+const handleCliAdmin = ({ bizId, dispatch, history, bizLinkName }) => {
     const updatedValues = {
         roleWhichDownloaded: "cliente-admin",
         businessId: bizId,
@@ -20,15 +14,15 @@ const handleCliAdmin = ({ bizId, dispatch, history, bizCodeName }) => {
 
     setRun(dispatch, "goDash");
 
-    if (!bizCodeName) {
+    if (!bizLinkName) {
         (async () => {
-            const thisBizCodeName = await getVar("bizCodeName", store.user);
+            const thisBizCodeName = await getVar("bizLinkName", "user");
             return history.push(
                 `/${thisBizCodeName}/cliente-admin/painel-de-controle`
             );
         })();
     }
-    return history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);
+    return history.push(`/${bizLinkName}/cliente-admin/painel-de-controle`);
 };
 
 const handleCliUser = ({ bizId, history }) => {
@@ -45,7 +39,7 @@ export default async function handleOpenApp({
     appId,
     appId_loggedIn,
     dispatch,
-    bizCodeName,
+    bizLinkName,
     clickedAppUserId,
     userId,
     bizId,
@@ -110,7 +104,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliAdmin) {
-            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
+            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -124,7 +118,7 @@ export default async function handleOpenApp({
 
     if (isBizTeam) {
         if (isCliAdminApp) {
-            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
+            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -143,7 +137,7 @@ export default async function handleOpenApp({
 
         // cli-admin apps can be multiple
         if (isCliAdminApp) {
-            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
+            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
         }
 
         if (isCliMemberApp) {
@@ -161,7 +155,7 @@ export default async function handleOpenApp({
         }
 
         if (isCliAdminApp) {
-            return handleCliAdmin({ bizId, dispatch, history, bizCodeName });
+            return handleCliAdmin({ bizId, dispatch, history, bizLinkName });
         }
 
         if (isCliUserApp) {
@@ -173,7 +167,7 @@ export default async function handleOpenApp({
     if (isCliUser) {
         const removeSession = async () => {
             // NOTE: sometimes, token is not removed. This is not an issue just yet since this token is simply informative so far.
-            await removeMultiVar(["success", "token"], store.user);
+            await removeVars(["success", "token"], "user");
             localStorage.removeItem("token");
         };
 
@@ -203,15 +197,15 @@ export default async function handleOpenApp({
 
 async function dontRememberAccess({ role = "team-apps" }) {
     if (role === "cliente-admin") {
-        return await removeVar("rememberAccess", store.user);
+        return await removeVar("rememberAccess", "user");
     }
 
     // if there is no disconnect, then it will load in the password page. Login component removes it to redirect directly to this pass page.
     if (role === "cliente-membro") {
-        return await setVar({ disconnectCliMember: true }, store.user);
+        return await setVar({ disconnectCliMember: true }, "user");
     }
 
     if (role === "nucleo-equipe") {
-        return await setVar({ disconnectAgent: true }, store.user);
+        return await setVar({ disconnectAgent: true }, "user");
     }
 }

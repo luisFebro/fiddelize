@@ -1,11 +1,8 @@
 import { useEffect } from "react";
 import convertBlobToData from "../../utils/media/convertBlobToData";
-import { getVar, store } from "../storage/useVar";
+import getVar from "init/var";
 
 // For prerender audio when we need to use the mediaElem name twice, one to prerender the audio and to actually play it.
-// export const store = {
-//     "cli-member"
-// };
 // to use programmatically.
 export const prerenderAudio = async (url, mediaName) => {
     const response = await fetch(url);
@@ -56,7 +53,7 @@ export default function usePlayAudio(url, mediaElem, options = {}) {
         if (autoplay && trigger) {
             // audio.volume = "0.2"
             (async () => {
-                const audioSrc = await getVar(mediaElem, store.audios);
+                const audioSrc = await getVar(mediaElem, "audios");
                 if (!audioSrc)
                     return console.log(
                         `ISSUE: the media ${mediaElem.toUpperCase()} was not found in indexedDB. Check if you prerender the audio first in string64 format before using the audio.`

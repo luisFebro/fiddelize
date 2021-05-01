@@ -9,12 +9,12 @@ import useAnimateConfetti from "hooks/animation/useAnimateConfetti";
 import useAnimateNumber from "hooks/animation/useAnimateNumber";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
 import defineCurrChallenge from "utils/biz/defineCurrChallenge";
-import { getVar, removeVar } from "hooks/storage/useVar";
+import getVar, { removeVar } from "init/var";
 import useSendSMS from "hooks/sms/useSendSMS";
 import useDidDateExpire from "hooks/dates/date-expires/useDidDateExpire";
 import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import useDidScroll from "hooks/scroll/useDidScroll";
-import useData from "hooks/useData";
+import useData from "init";
 import useGlobal from "./useGlobal";
 import useNotifyCliWonChall from "./hooks/useNotifyCliWonChall";
 import BtnBackTestMode from "./test-mode-btn/BtnBackTestMode";
@@ -49,6 +49,7 @@ export default function ClientUserAppContent({
         fullName,
         lastPrizeId,
         lastPrizeDate,
+        loadingData,
     ] = useData([
         "userId",
         "role",
@@ -57,7 +58,6 @@ export default function ClientUserAppContent({
         "lastPrizeId",
         "lastPrizeDate",
     ]);
-    const loadingData = userId === "...";
     const firstName = clientNameTest || firstUserName;
 
     const {
@@ -70,19 +70,19 @@ export default function ClientUserAppContent({
 
     const {
         rewardList,
-        selfThemeBackColor,
+        themeBackColor,
         arePrizesVisible,
         bizWhatsapp,
         bizName,
-        selfBizLogoImg,
+        bizLogo,
     } = useBizData();
-    let { maxScore = 0, selfMilestoneIcon } = useBizData();
+    let { maxScore = 0, milestoneIcon } = useBizData();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
     const { mainReward } = pickedObj;
 
-    selfMilestoneIcon = pickedObj.selfMilestoneIcon;
+    milestoneIcon = pickedObj.milestoneIcon;
     if (rewardScoreTest) {
         maxScore = Number(rewardScoreTest);
     }
@@ -101,7 +101,7 @@ export default function ClientUserAppContent({
         maxScore,
         currChall,
         currScore,
-        selfBizLogoImg,
+        bizLogo,
         lastPrizeId,
         totalPurchasePrize,
         senderId: userId,
@@ -141,7 +141,7 @@ export default function ClientUserAppContent({
     };
     useAnimateNumber(currScoreRef.current, currScore, numberOptions);
 
-    const backColorSelect = colorBack || selfThemeBackColor || colorP;
+    const backColorSelect = colorBack || themeBackColor || colorP;
     const selectedTxtStyle = selectTxtStyle(backColorSelect, { bold: true });
 
     const showGreetingAndNotific = () => (
@@ -229,7 +229,7 @@ export default function ClientUserAppContent({
         playBeep,
         arePrizesVisible,
         prizeDesc: mainReward,
-        selfMilestoneIcon,
+        milestoneIcon,
         runName,
         lastPrizeDate,
         didUserScroll,
@@ -338,7 +338,7 @@ const showSkipIconsBtn = () =>
                 color={thisCurrTxtColor}
                 backgroundColor={`var(--themeSDark--${colorS})`}
                 shadowColor={
-                    selfThemeBackColor === "black" ? "white" : "black"
+                    themeBackColor === "black" ? "white" : "black"
                 }
             />
         </div>
@@ -364,7 +364,7 @@ useEffect(() => {
             trigger: gotValue,
             noResponse: true,
             prizeDesc: mainReward,
-            trophyIcon: selfMilestoneIcon,
+            trophyIcon: milestoneIcon,
             thisRole: role || "cliente",
         };
         getVar("pendingChall").then((resPending) => {

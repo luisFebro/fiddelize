@@ -27,8 +27,8 @@ import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { useBizData } from "init";
-import useData, { sto } from "../../hooks/useData";
-import { removeCollection } from "../../hooks/storage/useVar";
+import useData from "init";
+import { removeCollection } from "init/var";
 import getFirstName from "../../utils/string/getFirstName";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
@@ -110,7 +110,7 @@ function RegisterClientAdmin({ logo }) {
 
     const [preRegisterCliAdminData, bizTeamReferrer] = useData(
         ["clientAdminData", "referrer"],
-        sto.re.pre_register
+        "pre_register"
     );
 
     useEffect(() => {
@@ -140,11 +140,11 @@ function RegisterClientAdmin({ logo }) {
     const errorPhone = fieldError && fieldError.phone;
     // end detecting field errors
 
-    const { selfBizLogoImg } = useBizData();
+    const { bizLogo } = useBizData();
 
     useEffect(() => {
-        setData({ ...data, bizImg: selfBizLogoImg });
-    }, [selfBizLogoImg]);
+        setData({ ...data, bizImg: bizLogo });
+    }, [bizLogo]);
 
     const dispatch = useStoreDispatch();
 

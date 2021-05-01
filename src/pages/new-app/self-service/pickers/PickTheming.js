@@ -57,36 +57,30 @@ export default function PickTheming({
 
     const goNext = () => setNextDisabled(false);
 
-    const {
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-    } = useBizData();
+    const { themePColor, themeSColor, themeBackColor } = useBizData();
     useEffect(() => {
         if (isFromDash) {
             const primaryCond =
-                selfThemePColor === "default" ? "purple" : selfThemePColor;
+                themePColor === "default" ? "purple" : themePColor;
             const secondaryCond =
-                selfThemeSColor === "default" ? "defaultS" : selfThemeSColor;
+                themeSColor === "default" ? "defaultS" : themeSColor;
             const backCond =
-                selfThemeBackColor === "default"
-                    ? "purple"
-                    : selfThemeBackColor;
+                themeBackColor === "default" ? "purple" : themeBackColor;
 
             setData({
                 ...data,
                 primaryColorBr: translateColorToPtBr(primaryCond),
                 secondaryColorBr: translateColorToPtBr(secondaryCond),
                 backColorBr: translateColorToPtBr(backCond),
-                hexValuePrimary: `var(--themeP--${selfThemePColor})`,
-                hexValueSecondary: `var(--themeS--${selfThemeSColor})`,
+                hexValuePrimary: `var(--themeP--${themePColor})`,
+                hexValueSecondary: `var(--themeS--${themeSColor})`,
                 hexBackValue:
-                    selfThemeBackColor === ""
+                    themeBackColor === ""
                         ? "var(--themeP--default)"
-                        : `var(--themeP--${selfThemeBackColor})`,
+                        : `var(--themeP--${themeBackColor})`,
             });
         }
-    }, [isFromDash, selfThemePColor, selfThemeSColor, selfThemeBackColor]);
+    }, [isFromDash, themePColor, themeSColor, themeBackColor]);
 
     useEffect(() => {
         if (!isFromDash) {
@@ -286,13 +280,13 @@ export default function PickTheming({
                     <ShowActionBtns
                         needUpdateBtn={needUpdateBtn}
                         objToSend={{
-                            "clientAdminData.selfThemePColor": translateColorToEng(
+                            "clientAdminData.themePColor": translateColorToEng(
                                 primaryColorBr
                             ),
-                            "clientAdminData.selfThemeSColor": translateColorToEng(
+                            "clientAdminData.themeSColor": translateColorToEng(
                                 secondaryColorBr
                             ),
-                            "clientAdminData.selfThemeBackColor": translateColorToEng(
+                            "clientAdminData.themeBackColor": translateColorToEng(
                                 backColorBr
                             ),
                         }}

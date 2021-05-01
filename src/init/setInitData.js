@@ -1,4 +1,4 @@
-import { setMultiVar, store } from "hooks/storage/useVar";
+import { setVars } from "init/var";
 import { setItems, getItems } from "init/lStorage";
 
 // for both indexDB and localstorage in one place
@@ -40,7 +40,7 @@ const getDataByRole = (role, initData) => {
     const cliAdmin = {
         rememberAccess: true,
         linkId: 0,
-        bizCodeName: initData.bizCodeName,
+        bizLinkName: initData.bizLinkName,
         twoLastCpfDigits: initData.twoLastCpfDigits,
         verifPass: initData.verificationPass,
         memberJob: initData.memberJob,
@@ -56,7 +56,7 @@ const getDataByRole = (role, initData) => {
         rememberAccess: true,
         success: true, // other apps are authenticated on password page.
         token: initData.token,
-        bizCodeName: initData.bizData.bizCodeName,
+        bizLinkName: initData.bizData.bizLinkName,
         lastPrizeId: initData.currUser && initData.currUser.lastPrizeId,
         lastPrizeDate: initData.currUser && initData.currUser.lastPrizeDate,
     };
@@ -80,7 +80,7 @@ async function setIndexedDbData(role, initData) {
         ...dataByRole,
     };
 
-    return await setMultiVar(indexedPayload, store.user);
+    return await setVars(indexedPayload, "user");
 }
 
 // LOCAL STORAGE

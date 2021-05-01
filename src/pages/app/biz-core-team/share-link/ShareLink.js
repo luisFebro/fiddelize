@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
+import getVar from "init/var";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 import copyText from "../../../../utils/document/copyText";
 import showToast from "../../../../components/toasts";
-import { getVar, store } from "../../../../hooks/storage/useVar";
 
 export default function ShareLink() {
     const [link, setLink] = useState("fiddelize.com.br/de/...");
 
     useEffect(() => {
         (async () => {
-            const memberId = await getVar("uniqueLinkId", store.user);
+            const memberId = await getVar("uniqueLinkId", "user");
             const thisLink = `fiddelize.com.br/de/${memberId}`;
             setLink(thisLink);
         })();

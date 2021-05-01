@@ -6,7 +6,7 @@ import ButtonMulti, {
 import "../style.scss";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import getId from "../../../../utils/getId";
-import { getMultiVar, store } from "../../../../hooks/storage/useVar";
+import { getVars } from "init/var";
 // pickers
 import PickLogo from "./PickLogo";
 import AsyncPickRatingIcon from "./AsyncPickRatingIcon";
@@ -17,7 +17,7 @@ const id = getId();
 
 export default function AppPickersHandler({
     bizId,
-    bizCodeName,
+    bizLinkName,
     bizName,
     clientName,
     setLogoUrlPreview,
@@ -35,9 +35,9 @@ export default function AppPickersHandler({
     // useCount(); // RT 3 (OK)
     useEffect(() => {
         (async () => {
-            const [doneSSLogo, doneSSTheming] = await getMultiVar(
+            const [doneSSLogo, doneSSTheming] = await getVars(
                 ["doneSSLogo", "doneSSTheming"],
-                store.pre_register
+                "pre_register"
             );
             if (doneSSLogo) handleNextStep(1);
             if (doneSSTheming) handleNextStep(2);
@@ -54,9 +54,9 @@ export default function AppPickersHandler({
                 break;
             case 2:
                 const colors = {
-                    selfThemePColor: theme.colorP,
-                    selfThemeSColor: theme.colorS,
-                    selfThemeBackColor: theme.colorBack
+                    themePColor: theme.colorP,
+                    themeSColor: theme.colorS,
+                    themeBackColor: theme.colorBack
                         ? theme.colorBack
                         : theme.colorP,
                 };
@@ -71,7 +71,7 @@ export default function AppPickersHandler({
                 break;
             case 3:
                 const iconsData = {
-                    selfMilestoneIcon: runName || "star",
+                    milestoneIcon: runName || "star",
                     rewardList: [
                         {
                             id,
@@ -86,7 +86,7 @@ export default function AppPickersHandler({
                     iconsData,
                 }).then((res) => {
                     // need to be reloaded since the other fields are prevented to be opened somehow.
-                    window.location.href = `/${bizCodeName}/novo-app/cadastro-admin`;
+                    window.location.href = `/${bizLinkName}/novo-app/cadastro-admin`;
                 });
                 break;
             default:
@@ -122,7 +122,7 @@ export default function AppPickersHandler({
                 setNextDisabled={setNextDisabled}
                 bizId={bizId}
                 bizName={bizName}
-                bizCodeName={bizCodeName}
+                bizLinkName={bizLinkName}
                 setLogoUrlPreview={setLogoUrlPreview}
             />
             {currNumber === 2 && (

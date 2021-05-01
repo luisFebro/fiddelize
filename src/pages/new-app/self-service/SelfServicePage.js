@@ -4,18 +4,17 @@ import AppPickersHandler from "./pickers/AppPickersHandler";
 import getQueryByName from "../../../utils/string/getQueryByName";
 import useDelay from "../../../hooks/useDelay";
 import Spinner from "../../../components/loadingIndicators/Spinner";
-import useData, { sto } from "../../../hooks/useData";
-// import useCount from '../../../hooks/useCount';
+import useData from "init";
 import "./style.scss";
 import { removeItems } from "init/lStorage";
-import { getVar, setMultiVar, store } from "../../../hooks/storage/useVar";
+import getVar, { setVars } from "init/var";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
-removeItems("bizData", ["selfMilestoneIcon"]);
+removeItems("bizData", ["milestoneIcon"]);
 
 const setLocalData = async ({ type = "theming", colors, iconsData }) => {
-    const priorAdminData = await getVar("clientAdminData", store.pre_register);
+    const priorAdminData = await getVar("clientAdminData", "pre_register");
 
     let newObj = { ...priorAdminData, ...colors };
 
@@ -27,12 +26,12 @@ const setLocalData = async ({ type = "theming", colors, iconsData }) => {
 
     const newAdminData = newObj;
 
-    return await setMultiVar(
+    return await setVars(
         {
             clientAdminData: newAdminData,
             stepObj,
         },
-        store.pre_register
+        "pre_register"
     );
 };
 
@@ -51,8 +50,8 @@ function SelfServicePage({ location, history }) {
     useScrollUp();
     useNeedRedirectPage({ history, priorPageId: "doneRewardPlanner" });
 
-    const [clientAdminData] = useData(["clientAdminData"], sto.re.pre_register);
-    const { bizName, bizCodeName } = clientAdminData;
+    const [clientAdminData] = useData(["clientAdminData"], "pre_register");
+    const { bizName, bizLinkName } = clientAdminData;
     // API
     const clientName = getQueryByName("nome-cliente", location.search);
     let rewardScore = getQueryByName("ponto-premio", location.search);
@@ -86,7 +85,7 @@ function SelfServicePage({ location, history }) {
                         App dos clientes da {!bizName ? "..." : bizName}
                     </p>
                     <AppPickersHandler
-                        bizCodeName={bizCodeName}
+                        bizLinkName={bizLinkName}
                         bizName={bizName}
                         history={history}
                         clientName={clientName}

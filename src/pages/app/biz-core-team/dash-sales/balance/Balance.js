@@ -3,11 +3,11 @@ import "./_Balance.scss";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
-import { setVar, getVar } from "../../../../../hooks/storage/useVar";
+import getVar, { setVar } from "init/var";
 import useAPI, {
     readAgentIncomeHistory,
 } from "../../../../../hooks/api/useAPI";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 
 const muStyle = {
     fontSize: "35px",

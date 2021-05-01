@@ -1,4 +1,4 @@
-import { getVar } from "../../hooks/storage/useVar";
+import getVar from "init/var";
 import { getServiceSKU } from "../string/getSKUCode.js";
 
 export default function setProRef({ setData, planBr, period }) {

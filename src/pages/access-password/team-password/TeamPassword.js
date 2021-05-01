@@ -4,7 +4,7 @@ import ToggleVisibilityPassword from "../../../components/forms/fields/ToggleVis
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleEnterPress } from "../../../utils/event/isKeyPressed";
 import { checkVerificationPass } from "../../../redux/actions/adminActions";
-import useData from "../../../hooks/useData";
+import useData from "init";
 import { useBizData } from "init";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import showToast from "../../../components/toasts";
@@ -13,7 +13,7 @@ import authenticate from "../../../components/auth/helpers/authenticate";
 import useBackColor from "../../../hooks/useBackColor";
 
 import RadiusBtn from "../../../components/buttons/RadiusBtn";
-import { setVar, store } from "../../../hooks/storage/useVar";
+import { setVar } from "init/var";
 import { disconnect } from "../../../hooks/useAuthUser";
 import getId from "../../../utils/getId";
 
@@ -38,7 +38,7 @@ export default function TeamPassword({ history }) {
     const { businessId } = useAppSystem();
     const dispatch = useStoreDispatch();
 
-    const { selfThemeBackColor: backColor } = useBizData();
+    const { themeBackColor: backColor } = useBizData();
     useBackColor(`var(--themeBackground--${backColor})`);
 
     const styles = getStyles();
@@ -93,7 +93,7 @@ export default function TeamPassword({ history }) {
         (async () => {
             showToast("Saindo da conta...");
             await Promise.all([
-                setVar({ disconnectCliMember: true }, store.user),
+                setVar({ disconnectCliMember: true }, "user"),
                 disconnect(),
             ]);
         })();

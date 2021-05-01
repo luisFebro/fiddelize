@@ -59,7 +59,7 @@ export default function Tooltip({
     const [stopWave, setStopWave] = React.useState(false);
     // this useEffect solves the problem with uncontrolled vs controlled components handling.
 
-    const { selfThemeBackColor } = useBizData();
+    const { themeBackColor } = useBizData();
 
     useEffect(() => {
         if (needOpen) {
@@ -99,7 +99,7 @@ export default function Tooltip({
             width: width || "100%",
             color: txtColor,
             filter:
-                selfThemeBackColor === "black" || colorS === "black"
+                themeBackColor === "black" || colorS === "black"
                     ? "drop-shadow(.001em .1em .1em var(--mainWhite))"
                     : "drop-shadow(.001em .1em .1em var(--mainDark))",
             // top: 20,

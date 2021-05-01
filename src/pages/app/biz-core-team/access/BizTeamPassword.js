@@ -2,7 +2,7 @@ import { Fragment, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import AccessPassword from "../../../access-password/AccessPassword";
 import showToast from "../../../../components/toasts";
-import { getVar, setVar, store } from "../../../../hooks/storage/useVar";
+import getVar, { setVar } from "init/var";
 import { disconnect } from "../../../../hooks/useAuthUser";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 
@@ -11,7 +11,7 @@ export default withRouter(BizTeamPassword);
 function BizTeamPassword({ history }) {
     useEffect(() => {
         (async () => {
-            const isAuth = await getVar("success", store.user);
+            const isAuth = await getVar("success", "user");
             if (isAuth) history.push("/t/app/nucleo-equipe");
         })();
     }, []);
@@ -20,7 +20,7 @@ function BizTeamPassword({ history }) {
         (async () => {
             showToast("Saindo da conta...");
             await Promise.all([
-                setVar({ disconnectAgent: true }, store.user),
+                setVar({ disconnectAgent: true }, "user"),
                 disconnect(),
             ]);
         })();

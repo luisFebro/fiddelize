@@ -10,11 +10,11 @@ import removeImgFormat from "../../../../../utils/biz/removeImgFormat";
 
 export default function ShowCards({ setOpenComp }) {
     const {
-        selfBizLogoImg,
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-        selfMilestoneIcon,
+        bizLogo,
+        themePColor,
+        themeSColor,
+        themeBackColor,
+        milestoneIcon,
     } = useBizData();
     const { isAuthUser } = useAuthUser();
 
@@ -35,14 +35,12 @@ export default function ShowCards({ setOpenComp }) {
     });
     const logoSrc = logoBiz || logoFid;
 
-    const needClientLogo = selfBizLogoImg || isAuthUser;
+    const needClientLogo = bizLogo || isAuthUser;
 
     const handleLogoSrc = () => {
         if (needClientLogo) {
-            const { newImg: thisSelfBizLogoImg } = removeImgFormat(
-                selfBizLogoImg
-            );
-            return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
+            const { newImg: thisbizLogo } = removeImgFormat(bizLogo);
+            return setUrl({ ...url, logoBiz: thisbizLogo });
         }
         return setUrl({ ...url, logoFid: "/img/official-logo-name.png" });
     };
@@ -52,12 +50,11 @@ export default function ShowCards({ setOpenComp }) {
     }, [needClientLogo]);
 
     const logoContent = () => {
-        const isSquared =
-            selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
 
         return (
             <div className="container-center">
-                {selfBizLogoImg ? (
+                {bizLogo ? (
                     <Img
                         src={logoSrc}
                         alt="logo negócio"
@@ -80,9 +77,9 @@ export default function ShowCards({ setOpenComp }) {
     };
 
     const colorContent = React.useCallback(() => {
-        const colorP = selfThemePColor;
-        const colorS = selfThemeSColor;
-        const colorBack = selfThemeBackColor || "default";
+        const colorP = themePColor;
+        const colorS = themeSColor;
+        const colorBack = themeBackColor || "default";
 
         const translatedColorP = translateColorToPtBr(
             colorP === "default" ? "purple" : colorP
@@ -152,7 +149,7 @@ export default function ShowCards({ setOpenComp }) {
     }, []);
 
     const iconContent = React.useCallback(() => {
-        const icon = selfMilestoneIcon || "star";
+        const icon = milestoneIcon || "star";
         return (
             <section className="container-center icon--root">
                 <div

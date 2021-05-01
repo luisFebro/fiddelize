@@ -14,7 +14,7 @@ export default function PlansPage() {
         if (isPro) setCurrPlan("bronze");
     }, [isPro]);
 
-    const { bizName, selfBizLogoImg: bizLogo } = useBizData();
+    const { bizName, bizLogo } = useBizData();
     let { firstName: adminName } = useProfile();
 
     const startPageProps = {

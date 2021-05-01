@@ -1,10 +1,10 @@
 import { useStoreDispatch } from "easy-peasy";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import getVar, { removeVar } from "init/var";
 import { textStyle } from "../DefaultRenderComps";
 import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
-import { removeVersion, removeVar } from "../../../../../hooks/storage/useVar";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 import showToast from "../../../../toasts";
 import { readUser } from "../../../../../redux/actions/userActions";
 import { useProfile } from "init";
@@ -84,3 +84,17 @@ export default function CliUserConfirmedChall({
         </section>
     );
 }
+
+// HELPERS
+// handle the variable version to be removed - challenge_1 - always insert _1 to get the version.
+function removeVersion({ key, value }) {
+    if (!key || !value) return null;
+
+    return getVar(key).then((storedVersion) => {
+        const currVersion = Number(value);
+        if (currVersion >= Number(storedVersion)) {
+            removeVar(key);
+        }
+    });
+}
+// END HELPERS

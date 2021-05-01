@@ -19,7 +19,7 @@ export default function TargetPrizeGame({ didUserScroll }) {
         needAppForPreview,
         arePrizesVisible,
         prizeDesc,
-        selfMilestoneIcon,
+        milestoneIcon,
         runName,
         currScore,
         maxScore,
@@ -40,7 +40,7 @@ export default function TargetPrizeGame({ didUserScroll }) {
                 colorBack={colorBack}
                 colorS={colorS}
                 selectTxtStyle={selectTxtStyle}
-                selfMilestoneIcon={selfMilestoneIcon}
+                milestoneIcon={milestoneIcon}
                 runName={runName}
             />
         </div>

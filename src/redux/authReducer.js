@@ -1,5 +1,5 @@
 import { reducer } from "easy-peasy";
-import { setVar, store } from "../hooks/storage/useVar";
+import { setVar } from "init/var";
 // actions are used with the usestoredispatch hook inside the wanting functional component
 // copy and paste the type of actions below
 // You can use only one isntance of object like 'cases' for each object.
@@ -21,10 +21,7 @@ export const authReducer = {
 
                 if (allowTokenWhen) {
                     (async () => {
-                        await setVar(
-                            { token: action.payload.token },
-                            store.user
-                        );
+                        await setVar({ token: action.payload.token }, "user");
                         localStorage.setItem("token", action.payload.token);
                     })();
                 }

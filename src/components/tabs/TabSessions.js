@@ -8,8 +8,7 @@ import green from "@material-ui/core/colors/green";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import { useStoreDispatch } from "easy-peasy";
-import { getVar, removeVar } from "../../hooks/storage/useVar";
-// import { setRun } from '../redux/actions/globalActions';
+import getVar, { removeVar } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
 

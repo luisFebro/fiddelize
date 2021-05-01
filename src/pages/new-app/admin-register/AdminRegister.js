@@ -1,17 +1,17 @@
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import RegisterClientAdmin from "../../../components/auth/RegisterClientAdmin";
 import RadiusBtn from "../../../components/buttons/RadiusBtn";
-import useData, { sto } from "../../../hooks/useData";
+import useData from "init";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 export default function AdminRegister({ history }) {
     useScrollUp();
     useNeedRedirectPage({ history, priorPageId: "doneSSRatingIcon" });
 
-    const [clientAdminData] = useData(["clientAdminData"], sto.re.pre_register);
+    const [clientAdminData] = useData(["clientAdminData"], "pre_register");
 
     const bizName = clientAdminData && clientAdminData.bizName;
-    const logo = clientAdminData && clientAdminData.selfBizLogoImg;
+    const logo = clientAdminData && clientAdminData.bizLogo;
 
     const showTitle = () => (
         <div className="text-center text-white my-4">

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import ReturnBtn from "../../dashboard-client-admin/ReturnBtn";
 import OrdersTable from "./OrdersTable";
 import PayArea from "./PayArea";
-import useGetVar, { setVar, removeVar } from "../../../hooks/storage/useVar";
+import useData from "init";
+import { setVar, removeVar } from "init/var";
 import useBackColor from "../../../hooks/useBackColor";
 
 import showToast from "../../../components/toasts";
@@ -36,50 +37,45 @@ export default function OrdersAndPay({
 
     useScrollUp();
 
-    const { data, loading } = useGetVar("orders_clientAdmin");
-    const { data: dataPlan, loading: loadPlan } = useGetVar(
-        "ordersPlan_clientAdmin"
-    );
-    const { data: dataPeriod, loading: loadPeriod } = useGetVar(
-        "planPeriod_clientAdmin"
-    );
-    const { data: dataMoney, loading: loadMoney } = useGetVar(
-        "totalMoney_clientAdmin"
-    );
+    const [
+        data,
+        dataPlan,
+        dataPeriod,
+        dataMoney,
+        daysLeftData,
+        refData,
+        isSingleRenewal,
+    ] = useData([
+        "orders_clientAdmin",
+        "ordersPlan_clientAdmin",
+        "planPeriod_clientAdmin",
+        "totalMoney_clientAdmin",
+        "renewalDaysLeft_clientAdmin",
+        "renewalRef_clientAdmin",
+        "isSingleRenewal_clientAdmin",
+    ]);
+    const loading = data !== "...";
+
     orders = !orders ? data : orders;
     plan = !plan ? dataPlan || "bronze" : plan;
     period = !period ? dataPeriod || "yearly" : period;
     orderTotal = !orderTotal ? dataMoney : orderTotal;
 
     useEffect(() => {
-        if (!loading) orders && setVar({ orders_clientAdmin: orders });
-        if (!loadPlan) plan && setVar({ ordersPlan_clientAdmin: plan });
-        if (!loadPeriod) period && setVar({ planPeriod_clientAdmin: period });
-        if (!loadMoney)
-            orderTotal && setVar({ totalMoney_clientAdmin: orderTotal });
-    }, [loading, loadPlan, loadPeriod, loadMoney]);
+        if (!loading) return;
+        if (orders) setVar({ orders_clientAdmin: orders });
+        if (plan) setVar({ ordersPlan_clientAdmin: plan });
+        if (period) setVar({ planPeriod_clientAdmin: period });
+        if (orderTotal) setVar({ totalMoney_clientAdmin: orderTotal });
 
-    const { data: daysLeftData, loading: loadDaysLeft } = useGetVar(
-        "renewalDaysLeft_clientAdmin"
-    );
-
-    const { data: refData, loading: loadRef } = useGetVar(
-        "renewalRef_clientAdmin"
-    );
-
-    const { data: isSingleRenewal } = useGetVar("isSingleRenewal_clientAdmin");
-
-    useEffect(() => {
-        if (!loadDaysLeft)
-            daysLeftData &&
-                setDataSer({ ...dataSer, renewalDaysLeft: daysLeftData });
-        if (!loadRef)
-            refData &&
-                setDataSer({
-                    ...dataSer,
-                    renewalReference: refData || undefined,
-                });
-    }, [loadDaysLeft, loadRef]);
+        if (daysLeftData)
+            setDataSer({ ...dataSer, renewalDaysLeft: daysLeftData });
+        if (refData)
+            setDataSer({
+                ...dataSer,
+                renewalReference: refData || undefined,
+            });
+    }, [loading, daysLeftData, refData]);
 
     const showTitle = () => (
         <div className="my-3">
@@ -97,7 +93,7 @@ export default function OrdersAndPay({
 
     const handleCancel = (type) => {
         const explicitCancel = type === "explicit";
-        explicitCancel && showToast("Seu pedido atual foi cancelado.");
+        if (explicitCancel) showToast("Seu pedido atual foi cancelado.");
         removeVar("orders_clientAdmin");
         removeVar("totalServices_clientAdmin");
         removeVar("totalMoney_clientAdmin");
@@ -122,7 +118,6 @@ export default function OrdersAndPay({
                 orderTotal={orderTotal}
                 setVar={setVar}
                 removeVar={removeVar}
-                useGetVar={useGetVar}
                 setNextPage={setNextPage}
                 handleCancel={handleCancel}
                 handleServicesData={handleServicesData}

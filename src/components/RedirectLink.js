@@ -3,7 +3,7 @@ import { useStoreDispatch } from "easy-peasy";
 import { useBizData } from "init";
 // for dashboard redirection
 import { setRun } from "../redux/actions/globalActions";
-import { setVar } from "../hooks/storage/useVar";
+import { setVar } from "init/var";
 
 export default function RedirectLink({
     children,
@@ -15,7 +15,7 @@ export default function RedirectLink({
     goDash = true,
 }) {
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const handleClick = () => {
         if (toDashTab) {
@@ -29,7 +29,7 @@ export default function RedirectLink({
     return (
         <Link
             className={`${className} no-text-decoration`}
-            to={to || `/${bizCodeName}/cliente-admin/painel-de-controle`}
+            to={to || `/${bizLinkName}/cliente-admin/painel-de-controle`}
             onClick={onClick || (() => handleClick())}
         >
             {children}

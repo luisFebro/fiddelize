@@ -195,11 +195,10 @@ export default function DownloadApp({ match, location, history }) {
     }
     // admin app config
     const {
-        selfBizLogoImg,
-        selfMilestoneIcon,
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
+        milestoneIcon,
+        themePColor,
+        themeSColor,
+        themeBackColor,
     } = useBizData();
 
     useEffect(() => {
@@ -216,11 +215,11 @@ export default function DownloadApp({ match, location, history }) {
 
     if (needSelfServiceData) {
         const newBizData = {
-            selfBizLogoImg,
-            selfMilestoneIcon,
-            selfThemePColor,
-            selfThemeSColor,
-            selfThemeBackColor,
+            bizLogo,
+            milestoneIcon,
+            themePColor,
+            themeSColor,
+            themeBackColor,
         };
         setItems("bizData", newBizData);
     }

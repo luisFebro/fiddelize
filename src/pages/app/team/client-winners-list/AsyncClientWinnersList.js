@@ -3,7 +3,7 @@ import { useBizData } from "init";
 import useAPIList, { readTasks } from "../../../../hooks/api/useAPIList";
 import "./_AsyncClientWinnersList.scss";
 import CliWinnersList from "./list/CliWinnersList";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 import Illustration from "../../../../components/Illustration";
 
 export default function AsyncClientWinnersList() {

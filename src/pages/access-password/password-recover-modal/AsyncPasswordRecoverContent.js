@@ -11,7 +11,7 @@ import ButtonMulti, {
     faStyle,
 } from "../../../components/buttons/material-ui/ButtonMulti";
 import getAPI, { forgotPasswordRequest } from "../../../utils/promises/getAPI";
-import useData from "../../../hooks/useData";
+import useData from "init";
 import showToast from "../../../components/toasts";
 
 const isSmall = window.Helper.isSmallScreen();

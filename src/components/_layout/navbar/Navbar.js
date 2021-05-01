@@ -37,7 +37,7 @@ function Navbar({ history, location }) {
     const logoSrc = logoBiz || logoFid;
 
     const { isAuthUser } = useAuthUser();
-    const { selfBizLogoImg, selfThemePColor } = useBizData();
+    const { bizLogo, themePColor } = useBizData();
 
     // const dispatch = useStoreDispatch();
 
@@ -146,15 +146,12 @@ function Navbar({ history, location }) {
 
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo =
-        (isAdminDash && selfBizLogoImg) ||
-        (isAuthUser && selfBizLogoImg && isApp); // isApp &&
+        (isAdminDash && bizLogo) || (isAuthUser && bizLogo && isApp); // isApp &&
     const fiddelizeLogo = "/img/official-logo-name.png";
     const handleLogoSrc = () => {
         if (needClientLogo) {
-            const { newImg: thisSelfBizLogoImg } = removeImgFormat(
-                selfBizLogoImg
-            );
-            return setUrl({ ...url, logoBiz: thisSelfBizLogoImg });
+            const { newImg: thisbizLogo } = removeImgFormat(bizLogo);
+            return setUrl({ ...url, logoBiz: thisbizLogo });
         }
         return setUrl({ ...url, logoFid: fiddelizeLogo });
     };
@@ -164,8 +161,7 @@ function Navbar({ history, location }) {
     }, [needClientLogo]);
 
     const showLogo = () => {
-        const imgFormatRaw =
-            selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+        const imgFormatRaw = bizLogo && bizLogo.includes("h_100,w_100");
         const webCond = locationNow !== "/" && isAdminDash && imgFormatRaw;
 
         const appCond = isApp && imgFormatRaw;
@@ -175,12 +171,12 @@ function Navbar({ history, location }) {
         const handleSize = (side) => {
             let size;
             if (side === "width") {
-                if (selfBizLogoImg) {
+                if (bizLogo) {
                     isSquared ? (size = 85) : (size = 150);
                 } else {
                     size = 200;
                 }
-            } else if (selfBizLogoImg) {
+            } else if (bizLogo) {
                 isSquared ? (size = 85) : (size = 67);
             } else {
                 size = 90;
@@ -241,7 +237,7 @@ function Navbar({ history, location }) {
                     backgroundColor:
                         !isApp || locationNow.includes("/painel-de-controle")
                             ? "var(--themePDark--default)"
-                            : `var(--themePDark--${selfThemePColor})`,
+                            : `var(--themePDark--${themePColor})`,
                 }}
             >
                 {showLogo()}

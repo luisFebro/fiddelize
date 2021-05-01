@@ -39,11 +39,7 @@ export default function StaffConf({
 
     const { businessId } = useAppSystem();
 
-    const {
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-    } = useBizData();
+    const { themePColor, themeSColor, themeBackColor } = useBizData();
 
     const { pass } = data;
     const [fieldError, setFieldError] = useState(null);
@@ -80,7 +76,7 @@ export default function StaffConf({
         <div className="d-flex align-content-start ml-3">
             <p
                 className={`${selectTxtStyle(
-                    selfThemeBackColor
+                    themeBackColor
                 )} font-weight-bold text-subtitle`}
             >
                 &#187; <strong>Conferir:</strong>
@@ -107,7 +103,7 @@ export default function StaffConf({
             title="Insira a senha de verificação"
             color="var(--mainWhite)"
             needShadow
-            backgroundColor={`var(--themePDark--${selfThemePColor})`}
+            backgroundColor={`var(--themePDark--${themePColor})`}
         />
     );
 
@@ -151,8 +147,8 @@ export default function StaffConf({
                 onClick={checkAccess}
                 color="var(--mainWhite)"
                 shadowColor="white"
-                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
-                backColorOnHover={`var(--themeSDark--${selfThemeSColor})`}
+                backgroundColor={`var(--themeSDark--${themeSColor})`}
+                backColorOnHover={`var(--themeSDark--${themeSColor})`}
                 iconFontAwesome={
                     <FontAwesomeIcon icon="check" style={faStyle} />
                 }
@@ -168,7 +164,7 @@ export default function StaffConf({
                 className="animated slideInLeft fast text-normal align-self-center"
                 style={{
                     maxWidth: 330,
-                    backgroundColor: `var(--themePDark--${selfThemePColor})`,
+                    backgroundColor: `var(--themePDark--${themePColor})`,
                 }}
             >
                 {showTitle()}

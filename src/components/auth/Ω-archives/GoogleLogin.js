@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import getAPI, { makeGoogleLogin } from "../../utils/promises/getAPI";
 import ButtonFab from "../buttons/material-ui/ButtonFab";
-import { getVar, store } from "../../hooks/storage/useVar";
+import getVar from "init/var";
 import { showSnackbar } from "../../redux/actions/snackbarActions";
 import { useBizData } from "init";
 
@@ -23,12 +23,12 @@ function GoogleLogin({ history }) {
     const [testFront, setTestFront] = useState("");
     const [testBack, setTestBack] = useState("");
     const dispatch = useStoreDispatch();
-    const { selfThemeBackColor: backColor } = useBizData();
+    const { themeBackColor: backColor } = useBizData();
 
     const handleSuccess = async (response) => {
         showSnackbar(dispatch, "Conectando... Um momento.");
 
-        const userId = await getVar("userId", store.user);
+        const userId = await getVar("userId", "user");
 
         const { tokenId } = response;
         const body = { userId, tokenId };

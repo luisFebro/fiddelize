@@ -23,8 +23,8 @@ export default function PickRatingIcon({
         : milestoneIcons.filter((iconObj) => iconObj.appPreview === true);
     const showCondition = isFromDash ? true : step === 3;
 
-    const { selfMilestoneIcon } = useBizData();
-    const currIconInd = getIconIndex(selfMilestoneIcon);
+    const { milestoneIcon } = useBizData();
+    const currIconInd = getIconIndex(milestoneIcon);
     // n1
     return (
         <div

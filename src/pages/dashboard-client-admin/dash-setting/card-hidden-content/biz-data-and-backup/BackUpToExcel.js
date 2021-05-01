@@ -4,7 +4,7 @@ import { useStoreDispatch, useStoreState } from "easy-peasy";
 import showToast from "../../../../../components/toasts";
 import { readAllDbFromModels } from "../../../../../redux/actions/adminActions";
 import Img from "../../../../../components/Img";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import { useBizData } from "init";
 import CheckBoxForm from "../../../../../components/CheckBoxForm";
@@ -40,7 +40,7 @@ export default function BackUpToExcel() {
         token: state.authReducer.cases.tokenWhenLogin,
     }));
     const [adminId] = useData(["userId"]);
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const dispatch = useStoreDispatch();
 
@@ -134,7 +134,7 @@ export default function BackUpToExcel() {
             setData({
                 ...data,
                 selectedButton: value,
-                brDbName: `clientes-da-${bizCodeName}`,
+                brDbName: `clientes-da-${bizLinkName}`,
                 dbModelName: dbData[model].dbModelName,
             });
         }

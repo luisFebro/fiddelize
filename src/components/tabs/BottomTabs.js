@@ -6,7 +6,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
-import { getVar, removeVar } from "../../hooks/storage/useVar";
+import getVar, { removeVar } from "init/var";
 import scrollIntoView from "../../utils/document/scrollIntoView";
 import "./_BottomTabs.scss";
 

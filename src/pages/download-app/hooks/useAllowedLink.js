@@ -1,5 +1,5 @@
+import useData from "init";
 import useAPI, { isLinkAllowed } from "../../../hooks/api/useAPI";
-import useGetVar from "../../../hooks/storage/useVar";
 
 export default function useAllowedLink({
     bizId,
@@ -7,10 +7,10 @@ export default function useAllowedLink({
     isCliAdmin,
     userScore,
 }) {
-    const { data: linkCode } = useGetVar("linkCode", { storeName: "user" });
+    const [linkCode] = useData(["linkCode"]);
 
     const blackList =
-        linkCode &&
+        linkCode !== "..." &&
         (linkCode.includes("nucleo") || linkCode.includes("equipe"));
 
     const { data: isAllowed, loading } = useAPI({
@@ -19,7 +19,7 @@ export default function useAllowedLink({
             linkCode,
             bizId,
         },
-        trigger: linkCode && !blackList,
+        trigger: linkCode !== "..." && !blackList,
     });
 
     if (loading) return true;

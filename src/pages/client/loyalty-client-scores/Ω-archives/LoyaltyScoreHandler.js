@@ -10,11 +10,7 @@ export default function LoyaltyScoreHandler() {
     const [valuePaid, setValuePaid] = useState("0");
     const [verification, setVerification] = useState(false);
 
-    const {
-        selfThemeBackColor,
-        selfThemePColor,
-        selfThemeSColor,
-    } = useBizData();
+    const { themeBackColor, themePColor, themeSColor } = useBizData();
 
     const dispatch = useStoreDispatch();
 
@@ -44,7 +40,7 @@ export default function LoyaltyScoreHandler() {
         <div
             style={{
                 color: "white",
-                backgroundColor: `var(--themeBackground--${selfThemeBackColor})`,
+                backgroundColor: `var(--themeBackground--${themeBackColor})`,
             }}
             className="container-center"
         >
@@ -61,9 +57,9 @@ export default function LoyaltyScoreHandler() {
                 success={clientScoresPanel}
                 valuePaid={valuePaid}
                 verification={verification}
-                colorP={selfThemePColor}
-                colorS={selfThemeSColor}
-                colorBack={selfThemeBackColor}
+                colorP={themePColor}
+                colorS={themeSColor}
+                colorBack={themeBackColor}
             />
             <Fragment>
                 {!purchaseValue && !staffConfirmation && !clientScoresPanel && (

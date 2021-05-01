@@ -2,12 +2,13 @@ import isObj from "utils/isObj";
 // only for crucial and essencial variables which requires a bootup value right away like background color and important user's data. The performance can be an issue if localstorage is huge in size since is syncronous.
 // all secondary data should use indexedDB.
 
-// const store = {
-//     currUser: "",
-//     bizData: "",
-// };
+const allowedCollections = ["currUser", "bizData", "appSystem", "onceChecked"];
 
 function setItems(collectionName, dataObj) {
+    if (!allowedCollections.includes(collectionName))
+        throw new Error(
+            `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
+        );
     if (!isObj(dataObj, { noArrays: true }))
         throw new Error("only object is allowed");
     if (!collectionName)
@@ -25,6 +26,10 @@ function setItems(collectionName, dataObj) {
 }
 
 function getItems(collectionName, namesArray = null) {
+    if (!allowedCollections.includes(collectionName))
+        throw new Error(
+            `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
+        );
     if (!collectionName)
         throw new Error("missing collection name as the first argument");
     if (!Array.isArray(namesArray) && namesArray !== null)
@@ -44,6 +49,10 @@ function getItems(collectionName, namesArray = null) {
 }
 
 function removeItems(collectionName, namesArray) {
+    if (!allowedCollections.includes(collectionName))
+        throw new Error(
+            `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
+        );
     if (!collectionName)
         throw new Error("missing collection name as the first argument");
     if (!Array.isArray(namesArray))
@@ -66,6 +75,10 @@ function removeItems(collectionName, namesArray) {
 }
 
 function removeCollection(collectionName) {
+    if (!allowedCollections.includes(collectionName))
+        throw new Error(
+            `the collection ${collectionName.toUpperCase()} is not allowed. Only: ${allowedCollections}`
+        );
     if (!collectionName)
         throw new Error("missing collection name as the first argument");
 

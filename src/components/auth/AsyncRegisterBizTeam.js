@@ -33,7 +33,7 @@ import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
-import useData from "../../hooks/useData";
+import useData from "init";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
 import showToast from "../toasts";
@@ -65,12 +65,12 @@ function Register({ isStaff = false, setLoginOrRegister }) {
     const [switchNumToText, setSwitchNumToText] = useState(false); // n1
 
     const {
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-        selfBizLogoImg,
+        themePColor,
+        themeSColor,
+        themeBackColor,
+        bizLogo,
         bizName,
-        // bizCodeName,
+        // bizLinkName,
     } = useBizData();
 
     const [data, setData] = useState({
@@ -114,7 +114,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
 
     const [primaryAgent] = useData(["primaryAgent"]);
 
-    const isReady = selfBizLogoImg && bizName && primaryAgent !== "...";
+    const isReady = bizLogo && bizName && primaryAgent !== "...";
 
     useEffect(() => {
         if (isReady) {
@@ -234,7 +234,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
         <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
             <p
                 className={`${selectTxtStyle(
-                    selfThemeBackColor
+                    themeBackColor
                 )} m-0 font-weight-bold text-small`}
                 style={{ whiteSpace: "nowrap" }}
             >
@@ -248,7 +248,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                         // setStorageRegisterDone runs when there is a success login. If not successful login, back to registration form
                         setLoginOrRegister("login");
                     }}
-                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                    backgroundColor={`var(--themeSDark--${themeSColor})`}
                 />
             </div>
         </div>
@@ -261,7 +261,7 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                 subTitle=""
                 color="var(--mainWhite)"
                 needShadow
-                backgroundColor={`var(--themePDark--${selfThemePColor})`}
+                backgroundColor={`var(--themePDark--${themePColor})`}
             />
         </div>
     );
@@ -552,8 +552,8 @@ function Register({ isStaff = false, setLoginOrRegister }) {
                 disabled={!!actionBtnDisabled}
                 title="Registrar"
                 color="var(--mainWhite)"
-                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
-                backColorOnHover={`var(--themeSDark--${selfThemeSColor})`}
+                backgroundColor={`var(--themeSDark--${themeSColor})`}
+                backColorOnHover={`var(--themeSDark--${themeSColor})`}
                 iconFontAwesome={
                     <FontAwesomeIcon icon="save" style={faStyle} />
                 }

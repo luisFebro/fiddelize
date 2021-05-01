@@ -9,7 +9,7 @@ import { useBizData } from "init";
 import { setRun } from "../../redux/actions/globalActions";
 
 function ReturnBtn({ location, icon = "home", onClick }) {
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const isCliAdmin = location.search === "?cliente-admin=1";
 
@@ -39,7 +39,7 @@ function ReturnBtn({ location, icon = "home", onClick }) {
             {isCliAdmin && !isFunc && (
                 <Link
                     className="no-text-decoration"
-                    to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                    to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}
                 >
                     <ButtonFab

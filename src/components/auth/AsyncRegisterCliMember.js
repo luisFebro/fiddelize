@@ -38,7 +38,7 @@ import ReactGA from "react-ga";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
-import useData from "../../hooks/useData";
+import useData from "init";
 import showToast from "../toasts";
 
 const filter = getFilterDate();
@@ -68,12 +68,12 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
     const [switchNumToText, setSwitchNumToText] = useState(false); // n1
 
     const {
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-        selfBizLogoImg,
+        themePColor,
+        themeSColor,
+        themeBackColor,
+        bizLogo,
         bizName,
-        bizCodeName,
+        bizLinkName,
     } = useBizData();
 
     const [data, setData] = useState({
@@ -112,7 +112,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
         "memberJob",
     ]);
 
-    const isReady = selfBizLogoImg && bizName && lastRegisterBizId !== "...";
+    const isReady = bizLogo && bizName && lastRegisterBizId !== "...";
 
     useEffect(() => {
         if (isReady) {
@@ -120,7 +120,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                 // this timeout is used because the data is not set otherwise. The reason is unknown.
                 setData((prev) => ({
                     ...prev,
-                    bizImg: selfBizLogoImg,
+                    bizImg: bizLogo,
                     bizName,
                     clientMemberData: {
                         ...data.clientMemberData,
@@ -130,7 +130,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                 }));
             }, 4000);
         }
-    }, [isReady, selfBizLogoImg, bizName, lastRegisterBizId, memberJob]);
+    }, [isReady, bizLogo, bizName, lastRegisterBizId, memberJob]);
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
     // }));
@@ -234,7 +234,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
         <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
             <p
                 className={`${selectTxtStyle(
-                    selfThemeBackColor
+                    themeBackColor
                 )} m-0 font-weight-bold text-small`}
                 style={{ whiteSpace: "nowrap" }}
             >
@@ -248,7 +248,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                         // setStorageRegisterDone runs when there is a success login. If not successful login, back to registration form
                         setLoginOrRegister("login");
                     }}
-                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                    backgroundColor={`var(--themeSDark--${themeSColor})`}
                 />
             </div>
         </div>
@@ -261,7 +261,7 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                 subTitle={isStaff ? "Novo Membro" : ""}
                 color="var(--mainWhite)"
                 needShadow
-                backgroundColor={`var(--themePDark--${selfThemePColor})`}
+                backgroundColor={`var(--themePDark--${themePColor})`}
             />
         </div>
     );
@@ -516,8 +516,8 @@ function Register({ isStaff = false, callback, setLoginOrRegister }) {
                 disabled={!!actionBtnDisabled}
                 title="Registrar"
                 color="var(--mainWhite)"
-                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
-                backColorOnHover={`var(--themeSDark--${selfThemeSColor})`}
+                backgroundColor={`var(--themeSDark--${themeSColor})`}
+                backColorOnHover={`var(--themeSDark--${themeSColor})`}
                 iconFontAwesome={
                     <FontAwesomeIcon icon="save" style={faStyle} />
                 }

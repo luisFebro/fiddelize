@@ -16,6 +16,7 @@ import isThisApp from "../../../utils/window/isThisApp";
 import { logout } from "../../../redux/actions/authActions";
 import { useBizData } from "init";
 import { useProfile } from "init";
+import useData from "init";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import getFirstName from "../../../utils/string/getFirstName";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
@@ -26,11 +27,7 @@ import getAPI, {
     updateUser,
     addPurchaseHistory,
 } from "../../../utils/promises/getAPI";
-import useGetVar, {
-    getVar,
-    setVar,
-    removeVar,
-} from "../../../hooks/storage/useVar";
+import getVar, { setVar, removeVar } from "init/var";
 import useBackColor from "../../../hooks/useBackColor";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
@@ -58,9 +55,8 @@ function AsyncClientScoresPanel({ history, location }) {
         });
     };
 
-    const { data: paidValue, loading: paidValueLoading } = useGetVar(
-        "paidValue"
-    );
+    const [paidValue] = useData(["paidValue"], "global_vars");
+    const paidValueLoading = paidValue !== "...";
 
     // ROLES
     const { businessId } = useAppSystem();
@@ -78,13 +74,13 @@ function AsyncClientScoresPanel({ history, location }) {
 
     let {
         maxScore,
-        selfMilestoneIcon,
+        milestoneIcon,
         rewardList,
         // bizName,
-        // bizCodeName,
-        selfThemeBackColor: colorBack,
-        selfThemePColor: colorP,
-        selfThemeSColor: colorS,
+        // bizLinkName,
+        themeBackColor: colorBack,
+        themePColor: colorP,
+        themeSColor: colorS,
     } = useBizData();
     // END ROLES
 
@@ -147,7 +143,7 @@ function AsyncClientScoresPanel({ history, location }) {
     // MAIN VARIABLES
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
     maxScore = pickedObj.rewardScore;
-    selfMilestoneIcon = pickedObj.selfMilestoneIcon;
+    milestoneIcon = pickedObj.milestoneIcon;
     const prizeDesc = pickedObj.mainReward;
 
     const { currScoreBefore, cashCurrScore, currScoreNow } = getScoreData({
@@ -228,7 +224,7 @@ function AsyncClientScoresPanel({ history, location }) {
 
                 const historyObj = {
                     rewardScore: maxScore,
-                    icon: selfMilestoneIcon,
+                    icon: milestoneIcon,
                     value: cashCurrScore,
                 };
 
@@ -245,7 +241,7 @@ function AsyncClientScoresPanel({ history, location }) {
                         noResponse: true,
                         thisRole: whichRole,
                         prizeDesc,
-                        trophyIcon: selfMilestoneIcon,
+                        trophyIcon: milestoneIcon,
                     };
                     await readPurchaseHistory(cliUserId, maxScore, options);
                     setFinishedWork(true);
@@ -432,7 +428,7 @@ export default withRouter(AsyncClientScoresPanel);
 /* ARCHIVES
 const showSharingBtn = () => (
     <Link
-        to={`/${bizCodeName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}
+        to={`/${bizLinkName}/compartilhar-app?negocio=${bizName}&id=${businessId}&role=${role}`}
     >
         <ButtonFab
             position="relative"

@@ -6,7 +6,7 @@ import useAPIList, {
     getXpReviewList,
     getTrigger,
 } from "../../../../../../hooks/api/useAPIList";
-import useData from "../../../../../../hooks/useData";
+import useData from "init";
 import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../../hooks/api/useElemDetection";

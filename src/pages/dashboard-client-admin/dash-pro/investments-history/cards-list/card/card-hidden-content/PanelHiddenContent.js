@@ -8,7 +8,7 @@ import { Load } from "../../../../../../../components/code-splitting/LoadableCom
 import copyTextToClipboard from "../../../../../../../utils/document/copyTextToClipboard";
 
 import showToast from "../../../../../../../components/toasts";
-import { setVar } from "../../../../../../../hooks/storage/useVar";
+import { setVar } from "init/var";
 import getDatesCountdown from "../../../../../../../hooks/dates/getDatesCountdown";
 import { isScheduledDate } from "../../../../../../../utils/dates/dateFns";
 import extractStrData from "../../../../../../../utils/string/extractStrData";

@@ -1,4 +1,4 @@
-import { setVar } from "../../hooks/storage/useVar";
+import { setVar } from "init/var";
 import getDatesCountdown from "../../hooks/dates/getDatesCountdown";
 
 export default async function setProRenewal({

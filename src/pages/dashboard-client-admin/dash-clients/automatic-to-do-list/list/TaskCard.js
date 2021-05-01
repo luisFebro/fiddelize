@@ -9,7 +9,7 @@ import useAPI, {
 import ActionBtn from "./ActionBtn";
 import extractStrData from "../../../../../utils/string/extractStrData";
 import useDatesCountdown from "../../../../../hooks/dates/useDatesCountdown";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 
 const truncate = (name, leng) => window.Helper.truncate(name, leng);
 const isSmall = window.Helper.isSmallScreen();

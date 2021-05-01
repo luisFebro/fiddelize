@@ -85,13 +85,13 @@ export default function AsyncSMSSuggestions({
     handleSuggestionMsg,
     contactList,
 }) {
-    const { bizName, bizCodeName } = useBizData();
+    const { bizName, bizLinkName } = useBizData();
     // const [selectedCard, setSelectedCard] = useState(null);
     const isSingleContact = contactList.length === 1;
     const singleName = contactList.length && contactList[0].name;
 
     const downloadLink = generateAppDownloadLink({
-        bizCodeName,
+        bizLinkName,
         name: isSingleContact ? singleName : "",
     });
     const thisData = data({ bizName, downloadLink });

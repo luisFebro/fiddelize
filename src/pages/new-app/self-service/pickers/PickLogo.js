@@ -18,7 +18,7 @@ import {
 import ShowActionBtns from "./ShowActionBtns";
 import { deleteImage } from "../../../../utils/storage/lForage";
 import { useBizData } from "init";
-import { getVar, setMultiVar, store } from "../../../../hooks/storage/useVar";
+import getVar, { setVars } from "init/var";
 // import useCount from '../../../../hooks/useCount';
 
 PickLogo.propTypes = {
@@ -26,14 +26,14 @@ PickLogo.propTypes = {
 };
 
 const setLogo = async ({ generatedImg, setLogoUrlPreview }) => {
-    const priorAdminData = await getVar("clientAdminData", store.pre_register);
-    const newAdminData = { ...priorAdminData, selfBizLogoImg: generatedImg };
-    await setMultiVar(
+    const priorAdminData = await getVar("clientAdminData", "pre_register");
+    const newAdminData = { ...priorAdminData, bizLogo: generatedImg };
+    await setVars(
         {
             clientAdminData: newAdminData,
             doneSSLogo: true,
         },
-        store.pre_register
+        "pre_register"
     );
     setLogoUrlPreview && setLogoUrlPreview(generatedImg);
 };
@@ -42,7 +42,7 @@ export default function PickLogo({
     step,
     setNextDisabled,
     bizId,
-    bizCodeName,
+    bizLinkName,
     setLogoUrlPreview,
     isFromDash = false,
 }) {
@@ -61,7 +61,7 @@ export default function PickLogo({
     const { sizeSquare, sizeRect } = data;
     const [needUpdateBtn, setNeedUpdateBtn] = useState(false);
 
-    const { selfBizLogoImg } = useBizData();
+    const { bizLogo } = useBizData();
 
     const dispatch = useStoreDispatch();
 
@@ -165,7 +165,7 @@ export default function PickLogo({
         formData.set(name, fileValue); // n1 - set and append diff
         setUploadedPic(fileValue);
 
-        const options = { fileName: bizCodeName };
+        const options = { fileName: bizLinkName };
         setIsLoadingPic(true);
 
         setEditArea(false);
@@ -292,13 +292,13 @@ export default function PickLogo({
             </div>
         );
 
-    const isSquared = selfBizLogoImg && selfBizLogoImg.includes("h_100,w_100");
+    const isSquared = bizLogo && bizLogo.includes("h_100,w_100");
     const showCurrLogoForDash = () =>
         isFromDash && (
             <div className="container-center my-3">
                 <img
                     className="animated zoomIn slow shadow-elevation"
-                    src={selfBizLogoImg}
+                    src={bizLogo}
                     style={{
                         position: "relative",
                         margin: "15px 0",

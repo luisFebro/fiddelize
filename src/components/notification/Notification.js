@@ -7,7 +7,7 @@ import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
 import { setRun } from "../../hooks/useRunComp";
 import getId from "../../utils/getId";
-import useData from "../../hooks/useData";
+import useData from "init";
 
 export default function Notification({
     forceCliUser = false,

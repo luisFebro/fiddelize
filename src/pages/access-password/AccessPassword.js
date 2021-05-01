@@ -9,7 +9,7 @@ import { useBizData } from "init";
 import useBackColor from "../../hooks/useBackColor";
 import useScrollUp from "../../hooks/scroll/useScrollUp";
 import ProtectionMsg from "./ProtectionMsg";
-import useData from "../../hooks/useData";
+import useData from "init";
 import showToast from "components/toasts";
 import getAPI, { checkPassword, createTk } from "../../utils/promises/getAPI";
 import authenticate from "../../components/auth/helpers/authenticate";
@@ -50,10 +50,7 @@ export default function AccessPassword({ history, isBizTeam = false }) {
 
     const role = isBizTeam ? "nucleo-equipe" : "cliente-admin";
 
-    const {
-        selfThemeBackColor: backColor,
-        selfThemePColor: colorP,
-    } = useBizData();
+    const { themeBackColor: backColor, themePColor: colorP } = useBizData();
 
     const { businessId } = useAppSystem();
 

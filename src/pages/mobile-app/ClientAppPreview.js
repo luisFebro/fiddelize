@@ -4,7 +4,7 @@ import { useBizData } from "init";
 import getQueryByName from "utils/string/getQueryByName";
 import Img from "components/Img";
 import removeImgFormat from "utils/biz/removeImgFormat";
-import useData from "hooks/useData";
+import useData from "init";
 import ClientUserAppContent from "./content/ClientUserAppContent";
 
 const isSmall = window.Helper.isSmallScreen();

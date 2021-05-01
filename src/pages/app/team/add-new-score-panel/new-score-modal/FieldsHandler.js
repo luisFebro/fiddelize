@@ -9,7 +9,7 @@ import { useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
     setTempScoreAndMemberData,
 } from "../../../../../utils/promises/getAPI";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 
 const setCustomerId = async (clientName, bizId, memberId) => {
     const body = {
@@ -62,10 +62,7 @@ function FieldsHandler({
         }
     }, [customerName, bizId, memberId]);
 
-    const {
-        selfThemeBackColor: backColor,
-        selfThemePColor: colorP,
-    } = useBizData();
+    const { themeBackColor: backColor, themePColor: colorP } = useBizData();
 
     const textColor = selectTxtStyle(backColor);
     const needDark = selectTxtStyle(backColor, { needDarkBool: true }); // for icons

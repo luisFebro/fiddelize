@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 import getBizSplitProportion from "../../../../utils/biz/getBizSplitProportion";
 
 export default function IncomeExplanation() {

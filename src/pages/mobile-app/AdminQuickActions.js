@@ -59,7 +59,7 @@ function MoreOptionsBtn({
     const styles = getStyles();
 
     const { userId } = useProfile();
-    const { selfThemeBackColor: backColor } = useBizData();
+    const { themeBackColor: backColor } = useBizData();
 
     const speedDial = {
         actions: [

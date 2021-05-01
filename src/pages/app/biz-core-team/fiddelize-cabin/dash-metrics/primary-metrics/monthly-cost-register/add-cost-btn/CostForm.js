@@ -11,7 +11,7 @@ import getAPI, {
     addFiddelizeCosts,
 } from "../../../../../../../../utils/promises/getAPI";
 import moneyMaskBr from "../../../../../../../../utils/validation/masks/moneyMaskBr";
-import useData from "../../../../../../../../hooks/useData";
+import useData from "init";
 import converToReal, {
     convertToDollar,
 } from "../../../../../../../../utils/numbers/convertToReal";

@@ -3,10 +3,10 @@ import Img from "../../../components/Img";
 
 const isSmall = window.Helper.isSmallScreen();
 
-const latestVersion = "4.17.0-75";
+const latestVersion = "4.17.0-85";
 
 const updateDescription =
-    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs |  new init data handling for frontend pt 2";
+    "new cli-user design with fixed bottom tabs pt 3 | tests with push notifs |  new init data handling for frontend pt 3";
 /* HISTORY
 "new init to fetch rest API at once"
 "new virtual buy card"

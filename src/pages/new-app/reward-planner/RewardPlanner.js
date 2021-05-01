@@ -3,7 +3,7 @@ import { CLIENT_URL } from "../../../config/clientUrl";
 import GoalForm from "./GoalForm";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
-import useData, { sto } from "../../../hooks/useData";
+import useData from "init";
 import { useNeedRedirectPage } from "../helpers/handleRedirectPages";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -17,8 +17,8 @@ const styles = {
 };
 
 export default function RewardPlanner({ history }) {
-    const [clientAdminData] = useData(["clientAdminData"], sto.re.pre_register);
-    const { bizName, bizCodeName } = clientAdminData;
+    const [clientAdminData] = useData(["clientAdminData"], "pre_register");
+    const { bizName, bizLinkName } = clientAdminData;
 
     useScrollUp();
     useNeedRedirectPage({ history, priorPageId: "doneBizInfo" });
@@ -141,7 +141,7 @@ export default function RewardPlanner({ history }) {
     const showGoalForm = () => (
         <GoalForm
             history={history}
-            bizCodeName={bizCodeName}
+            bizLinkName={bizLinkName}
             bizName={bizName}
         />
     );

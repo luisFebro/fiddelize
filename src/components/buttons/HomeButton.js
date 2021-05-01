@@ -11,7 +11,7 @@ function HomeButton({ location }) {
     const isClientAdmin = location.search.includes("admin=1");
     const dispatch = useStoreDispatch();
 
-    const { selfThemeSColor, selfThemeBackColor } = useBizData();
+    const { themeSColor, themeBackColor } = useBizData();
 
     const handleLink = () => {
         if (isThisApp()) {
@@ -29,7 +29,7 @@ function HomeButton({ location }) {
                         !isThisApp() && logout(dispatch);
                     }}
                     color="var(--mainWhite)"
-                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                    backgroundColor={`var(--themeSDark--${themeSColor})`}
                     iconFontAwesome={
                         isThisApp() ? (
                             <FontAwesomeIcon icon="home" style={faStyle} />
@@ -37,9 +37,7 @@ function HomeButton({ location }) {
                             ""
                         )
                     }
-                    shadowColor={
-                        selfThemeBackColor === "black" ? "white" : "black"
-                    }
+                    shadowColor={themeBackColor === "black" ? "white" : "black"}
                 >
                     Voltar
                 </ButtonMulti>

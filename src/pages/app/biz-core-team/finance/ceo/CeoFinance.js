@@ -3,11 +3,7 @@ import Card from "@material-ui/core/Card";
 import convertToReal from "../../../../../utils/numbers/convertToReal";
 import getDiffDays from "../../../../../utils/dates/getDiffDays";
 import GroupedAppBar from "./GroupedAppBar";
-import {
-    getMultiVar,
-    setMultiVar,
-    removeMultiVar,
-} from "../../../../../hooks/storage/useVar";
+import { getVars, setVars, removeVars } from "init/var";
 import { checkToday, endMonth } from "../../../../../utils/dates/dateFns";
 
 const isSmall = window.Helper.isSmallScreen();
@@ -37,7 +33,7 @@ export default function CeoFinance() {
                 thisFirstDate,
                 thisFirstBalance,
                 thisTodayCosts,
-            ] = await getMultiVar([
+            ] = await getVars([
                 "finTodayDate",
                 "firstTodayBalance",
                 "todayCosts",
@@ -58,13 +54,13 @@ export default function CeoFinance() {
         if (!firstDate) return;
         const isToday = checkToday(firstDate);
         if (isToday) return;
-        removeMultiVar(["finTodayDate", "firstTodayBalance", "todayCosts"]);
+        removeVars(["finTodayDate", "firstTodayBalance", "todayCosts"]);
     }, [firstDate]);
 
     const handleNewCostValue = async (cost) => {
         // allow setVar only if thereis no transaction in the current day.
         if (!firstBalance) {
-            await setMultiVar({
+            await setVars({
                 finTodayDate: new Date(),
                 firstTodayBalance: ceoBalance,
             });
@@ -76,7 +72,7 @@ export default function CeoFinance() {
         }
 
         // HANDLE COSTS
-        await setMultiVar({
+        await setVars({
             todayCosts: todayCosts + cost,
         });
         await setDataFreeze((prev) => ({

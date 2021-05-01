@@ -7,7 +7,7 @@ import handleChange from "../../../../utils/form/use-state/handleChange";
 import FacesPromotersScore, {
     getScaleText,
 } from "./faces-promoters-score/FacesPromotersScore";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import "./faces-promoters-score/_FacesPromotersScore.css";
 import getAPI, {

@@ -2,13 +2,7 @@ import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import createInstantApp from "./helpers/createInstantApp";
 import getFilterDate from "../../../utils/dates/getFilterDate";
-import {
-    removeMultiVar,
-    setMultiVar,
-    getVar,
-    store,
-    removeCollection,
-} from "../../../hooks/storage/useVar";
+import getVar, { removeVars, setVars, removeCollection } from "init/var";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import showToast from "../../../components/toasts";
@@ -86,14 +80,14 @@ export default function InstantAccount({
         showToast("Criando app instantâneo. Um momento...");
         (async () => {
             if (isCliUser) {
-                const thisLinkCode = await getVar("linkCode", store.user);
+                const thisLinkCode = await getVar("linkCode", "user");
                 body = { ...body, linkCode: thisLinkCode };
             }
 
             if (isCliAdmin) {
                 const thisClientAdminData = await getVar(
                     "clientAdminData",
-                    store.pre_register
+                    "pre_register"
                 );
                 body = { ...body, clientAdminData: thisClientAdminData };
             }
@@ -125,11 +119,8 @@ export default function InstantAccount({
 
             // remove variables at the login access
             await Promise.all([
-                removeMultiVar(
-                    ["success", "memberId", "needAppRegister"],
-                    store.user
-                ),
-                setMultiVar(storeElems, store.user),
+                removeVars(["success", "memberId", "needAppRegister"], "user"),
+                setVars(storeElems, "user"),
                 isCliAdmin ? removeCollection("pre_register") : undefined,
             ]).then((res) => {
                 setSuccess(true);

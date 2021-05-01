@@ -1,43 +1,60 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStoreState } from "easy-peasy";
-import { getMultiVar, store as st } from "hooks/storage/useVar";
+import { getVars } from "init/var";
+import { getItems } from "init/lStorage";
 import repeat from "utils/arrays/repeat";
 
-export const sto = {
-    re: st,
-};
+export default function useData(dataArray = [], options) {
+    let storeName = options || "user";
+    let trigger = true;
+    let dots = "...";
+    let local = false; // fetch data from localstorage
 
-export default function useData(data, options = {}) {
-    const { trigger = true, dots = true, storeName = "user" } = options;
+    if (typeof options === "object") {
+        storeName = options.storeName;
+        trigger = options.trigger === undefined ? true : options.trigger;
+        dots = options.dots === false ? null : dots;
+        local = options.local;
+    }
 
-    const [store, setStore] = useState([]);
+    const [finalData, setFinalData] = useState([]);
 
-    if (!Array.isArray(data)) throw new Error("Requires an array data format");
+    if (!Array.isArray(dataArray))
+        throw new Error("Requires an array data format");
+
+    // eslint-disable-next-line
+    const thisArray = React.useMemo(() => dataArray, []);
 
     useEffect(() => {
         let unmounted;
-        if (data && trigger && !unmounted) {
-            (async () => {
-                const dataArray = await getMultiVar(data, st[storeName]).catch(
-                    (err) => {
-                        console.log(`ERROR: ${err}`);
-                    }
-                );
-                if (dataArray) setStore(dataArray);
-            })();
+        if (!thisArray.length || !trigger || unmounted) return null;
+
+        if (local) {
+            const localRes = getItems("currUser", thisArray);
+            return setFinalData(localRes);
         }
+
+        (async () => {
+            const indexedRes = await getVars(thisArray, storeName).catch(
+                (err) => {
+                    throw new Error(`${err}`);
+                }
+            );
+
+            if (indexedRes) setFinalData(indexedRes);
+        })();
 
         return () => {
             unmounted = true;
         };
-    }, [trigger, storeName]);
+    }, [thisArray, trigger, storeName, local]);
 
-    // this will automatically set a ... for data loading
-    if (dots && trigger && !store.length) {
-        return repeat(data.length, { placeholder: "..." });
-    }
+    // this will automatically set a ... for dataArray loading
+    const isLoading = !finalData.length;
+    const arrayPattern = repeat(dataArray.length, { placeholder: dots });
 
-    return store;
+    // the last value is always the loading status.
+    return isLoading ? [...arrayPattern, true] : [...finalData, false];
 }
 
 export function useBizData() {
@@ -45,9 +62,9 @@ export function useBizData() {
 
     return {
         ...bizData,
-        selfThemePColor: bizData.selfThemePColor || "default",
-        selfThemeSColor: bizData.selfThemeSColor || "default",
-        selfThemeBackColor: bizData.selfThemeBackColor || "default",
+        themePColor: bizData.themePColor || "default",
+        themeSColor: bizData.themeSColor || "default",
+        themeBackColor: bizData.themeBackColor || "default",
     };
 }
 

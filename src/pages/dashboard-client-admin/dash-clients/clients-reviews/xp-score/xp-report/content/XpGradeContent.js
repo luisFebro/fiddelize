@@ -3,7 +3,7 @@ import parse from "html-react-parser";
 import getAPI, {
     getXpScoreChartData,
 } from "../../../../../../../utils/promises/getAPI";
-import useData from "../../../../../../../hooks/useData";
+import useData from "init";
 import { getGradeText, getColorGrade } from "../../helpers";
 import "../../../_ClientsReviews.scss";
 import FaqXpScore from "./FaqXpScore";

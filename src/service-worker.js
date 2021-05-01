@@ -20,7 +20,6 @@ import {
     StaleWhileRevalidate,
 } from "workbox-strategies";
 import { BackgroundSyncPlugin } from "workbox-background-sync";
-// import { setVar, getVar } from "hooks/storage/useVar";
 // import isThisApp from "./utils/window/isThisApp";
 
 // const isApp = isThisApp();

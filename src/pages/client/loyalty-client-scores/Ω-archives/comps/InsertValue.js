@@ -30,7 +30,7 @@ export default function InsertValue({ success, setValuePaid }) {
     //     buyDesc: '',
     // })
 
-    const { selfThemePColor, selfThemeSColor } = useBizData();
+    const { themePColor, themeSColor } = useBizData();
 
     const classes = useStyles();
     const dispatch = useStoreDispatch();
@@ -50,7 +50,7 @@ export default function InsertValue({ success, setValuePaid }) {
             title="Informações da compra"
             color="var(--mainWhite)"
             needShadow
-            backgroundColor={`var(--themePDark--${selfThemePColor})`}
+            backgroundColor={`var(--themePDark--${themePColor})`}
         />
     );
 
@@ -61,7 +61,7 @@ export default function InsertValue({ success, setValuePaid }) {
                 titleIcon={<FontAwesomeIcon icon="money-bill-alt" />}
                 setSelectedValue={setData}
                 confirmFunction={handleSwitch}
-                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                backgroundColor={`var(--themeSDark--${themeSColor})`}
             />
         </div>
     );

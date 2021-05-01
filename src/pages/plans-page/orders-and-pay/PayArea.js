@@ -58,7 +58,7 @@ export default function PayArea({
         referrer,
     } = data;
 
-    const { bizCodeName, bizName } = useBizData();
+    const { bizLinkName, bizName } = useBizData();
     const { userId, phone, name: userName, email: senderEmail } = useProfile();
 
     const startedPagseguro = useStartPagseguro();
@@ -156,7 +156,7 @@ export default function PayArea({
         startedPagseguro && (
             <section className="container-center-col">
                 <Link
-                    to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                    to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}
                 >
                     <ButtonMulti

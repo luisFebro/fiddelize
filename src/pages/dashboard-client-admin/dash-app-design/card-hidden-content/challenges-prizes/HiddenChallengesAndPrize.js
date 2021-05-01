@@ -13,7 +13,7 @@ import useAPI, {
 } from "../../../../../hooks/api/useAPI";
 import PremiumButton from "../../../../../components/buttons/premium/PremiumButton";
 import getId from "../../../../../utils/getId";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 
 export default function HiddenGoalsAndRewards() {
     const [mode, setMode] = useState("Constante");

@@ -12,7 +12,7 @@ import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import PasswordCircleFields from "../../components/fields/PasswordCircleFields.js";
 import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
 import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
-import useData from "../../hooks/useData";
+import useData from "init";
 import RedirectLink from "../../components/RedirectLink";
 
 const isApp = isThisApp();
@@ -51,9 +51,9 @@ export default function NewPassword({ location, match, history }) {
     const styles = getStyles();
 
     const {
-        selfThemeBackColor: backColor,
-        selfThemePColor: colorP,
-        selfThemeSColor: colorS,
+        themeBackColor: backColor,
+        themePColor: colorP,
+        themeSColor: colorS,
     } = useBizData();
 
     useBackColor(`var(--themeBackground--${backColor})`);

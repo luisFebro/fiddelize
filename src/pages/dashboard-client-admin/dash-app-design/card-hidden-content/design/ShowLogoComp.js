@@ -6,7 +6,7 @@ import BackButton from "../../../../../components/buttons/BackButton";
 
 export default function ShowLogoComp({ openComp, onBackBtnClick }) {
     const { businessId } = useAppSystem();
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const showBackBtn = () => (
         <div className="d-flex justify-content-start">
@@ -25,7 +25,7 @@ export default function ShowLogoComp({ openComp, onBackBtnClick }) {
                     >
                         <PickLogo
                             bizId={businessId}
-                            bizCodeName={bizCodeName}
+                            bizLinkName={bizLinkName}
                             isFromDash
                         />
                     </div>

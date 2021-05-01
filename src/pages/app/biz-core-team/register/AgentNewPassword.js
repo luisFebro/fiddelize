@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import useData from "../../../../hooks/useData";
+import useData from "init";
+import getVar from "init/var";
 import AccessPassCreation from "../../../dashboard-client-admin/pass-page/AccessPassCreation";
-import { getVar } from "../../../../hooks/storage/useVar";
 import isThisApp from "../../../../utils/window/isThisApp";
 import useBackColor from "../../../../hooks/useBackColor";
 

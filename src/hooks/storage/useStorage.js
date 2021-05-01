@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setVar, getVar, store } from "./useVar";
+import getVar, { setVar } from "init/var";
 
 // Useful for actions which require only one action in the app like instructions and so on...
 export default function useStorage({
@@ -21,7 +21,7 @@ export default function useStorage({
         setStorageData({ ...storageData, loading: true });
 
         if (!already) {
-            getVar(key, store[storeName]).then((thisData) => {
+            getVar(key, storeName).then((thisData) => {
                 if (!thisData) {
                     setStorageData({
                         ...storageData,
@@ -41,7 +41,7 @@ export default function useStorage({
         }
 
         if (trigger) {
-            setVar({ [key]: value }, store[storeName]);
+            setVar({ [key]: value }, storeName);
         }
 
         return () => null;

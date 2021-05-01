@@ -10,7 +10,7 @@ import getAPI, {
     updateUser,
     readUser,
 } from "../../../../../utils/promises/getAPI";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 import useAPI from "../../../../../hooks/api/useAPI";
 
 const isSmall = window.Helper.isSmallScreen();

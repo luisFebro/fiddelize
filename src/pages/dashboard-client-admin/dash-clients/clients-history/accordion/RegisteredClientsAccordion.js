@@ -87,7 +87,7 @@ export default function RegisteredClientsAccordion({
     const classes = useStyles();
 
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
     const { businessId } = useAppSystem();
 
     const { runArray } = useStoreState((state) => ({

@@ -11,7 +11,7 @@ import useElemDetection, {
     checkDetectedElem,
 } from "../../../../../../hooks/api/useElemDetection";
 import convertToReal from "../../../../../../utils/numbers/convertToReal";
-import useData from "../../../../../../hooks/useData";
+import useData from "init";
 import extractStrData from "../../../../../../utils/string/extractStrData";
 import getDatesCountdown from "../../../../../../hooks/dates/getDatesCountdown";
 

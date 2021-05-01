@@ -4,17 +4,17 @@ import getFirstName from "../string/getFirstName";
 export default function generateAppDownloadLink({
     role = "cliente",
     name = "",
-    bizCodeName,
+    bizLinkName,
     payload,
     linkScore,
     linkId,
 }) {
     let link;
 
-    const indLastSlash = bizCodeName.lastIndexOf("-");
-    const onlyBizCode = bizCodeName.slice(indLastSlash + 1);
+    const indLastSlash = bizLinkName.lastIndexOf("-");
+    const onlyBizCode = bizLinkName.slice(indLastSlash + 1);
 
-    if (!bizCodeName) return console.log("the param bizCodeName is required");
+    if (!bizLinkName) return console.log("the param bizLinkName is required");
 
     if (payload && payload.appType === "member") {
         const handleJobRole = () => {

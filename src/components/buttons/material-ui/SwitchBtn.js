@@ -57,7 +57,7 @@ export default function SwitchBtn({
 
     const switchData = useRef(data);
 
-    const { selfThemeSColor: sColor } = useBizData();
+    const { themeSColor: sColor } = useBizData();
 
     const styles = getStyles({ pillStyle, pillBack });
     const classes = useStyles({

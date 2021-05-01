@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getVar, store } from "../storage/useVar";
+import getVar from "init/var";
 
 export default function useSexLetter(options = {}) {
     const { trigger = true } = options;
@@ -9,7 +9,7 @@ export default function useSexLetter(options = {}) {
     useEffect(() => {
         if (!trigger) return;
         (async () => {
-            const letter = await getVar("sexLetter", store.user);
+            const letter = await getVar("sexLetter", "user");
             setSexLetter(letter);
         })();
     }, [trigger]);

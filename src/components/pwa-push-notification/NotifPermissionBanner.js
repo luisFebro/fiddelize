@@ -4,7 +4,7 @@ import "./_NotifPermissionBanner.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMulti from "../buttons/material-ui/ButtonMulti";
 import requestPermission, { showPermissionBanner } from "./pushNotifPermission";
-import useData from "../../hooks/useData";
+import useData from "init";
 import isOffline from "../../utils/server/isOffline";
 
 const isOnline = !isOffline();

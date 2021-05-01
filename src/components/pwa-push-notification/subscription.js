@@ -1,5 +1,5 @@
 import getAPI, { subscribePushNotif } from "../../utils/promises/getAPI";
-import { setVar } from "../../hooks/storage/useVar";
+import { setVar } from "init/var";
 
 const convertedVapidKey = urlBase64ToUint8Array(
     process.env.REACT_APP_PUBLIC_PUSH_NOTIF_KEY

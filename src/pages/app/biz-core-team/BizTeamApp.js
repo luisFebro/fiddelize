@@ -6,7 +6,7 @@ import BizTeamNavbar from "./navbar/BizTeamNavbar";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import useBackColor from "../../../hooks/useBackColor";
 import useAuth from "../../../hooks/useAuthUser";
-import useData from "../../../hooks/useData";
+import useData from "init";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 

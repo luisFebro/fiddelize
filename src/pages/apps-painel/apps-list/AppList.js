@@ -6,15 +6,15 @@ import useElemDetection, {
     checkDetectedElem,
 } from "../../../hooks/api/useElemDetection";
 import repeat from "../../../utils/arrays/repeat";
-import useData from "../../../hooks/useData";
+import useData from "init";
 
 export default function AppList({ history }) {
     const [skip, setSkip] = useState(0);
 
-    const [userId, role, bizCodeName, appId] = useData([
+    const [userId, role, bizLinkName, appId] = useData([
         "userId",
         "role",
-        "bizCodeName",
+        "bizLinkName",
         "appId",
     ]);
 
@@ -73,7 +73,7 @@ export default function AppList({ history }) {
         role_loggedIn: role,
         appId_loggedIn: appId,
         dispatch,
-        bizCodeName,
+        bizLinkName,
         userId,
     };
 

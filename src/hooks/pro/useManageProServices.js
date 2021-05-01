@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { default as checkToday } from "date-fns/isToday";
 import getAccurateDate from "../../utils/dates/getAccurateDate";
 import useAPI, { removeServices } from "../api/useAPI";
-import { getVar, store } from "../storage/useVar";
+import getVar from "init/var";
 import { isScheduledDate, addDays } from "../../utils/dates/dateFns";
 import { IS_PROD } from "../../config/clientUrl";
 import didRunOnce from "../../utils/storage/didRunOnce";
 import { sendNotification } from "../../redux/actions/notificationActions";
 import usePro from "./usePro";
 import { useBizData } from "init";
-// import useData from "../useData";
 
 const getPeriod = (ref) => {
     if (!ref) return false;
@@ -52,7 +51,7 @@ export default function useManageProServices() {
     });
 
     useEffect(() => {
-        Promise.all([getVar("userId", store.user), getAccurateDate()]).then(
+        Promise.all([getVar("userId", "user"), getAccurateDate()]).then(
             (values) => {
                 const [thisUserId, date] = values;
 

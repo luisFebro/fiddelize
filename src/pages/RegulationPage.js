@@ -16,14 +16,14 @@ import regulationText, {
     updatedAt,
 } from "./dashboard-client-admin/regulationText";
 import useBackColor from "../hooks/useBackColor";
-import useData from "../hooks/useData";
+import useData from "init";
 import useScrollUp from "../hooks/scroll/useScrollUp";
 
 const isApp = isThisApp();
 
 export default function RegulationPage({ location }) {
     const needAppForCliAdmin = location.search.includes("client-admin=1");
-    const bizCodeName = getQueryByName("bizCodeName", location.search);
+    const bizLinkName = getQueryByName("bizLinkName", location.search);
 
     useScrollUp();
     const [cliFirstName] = useData(["firstName"]);
@@ -33,9 +33,9 @@ export default function RegulationPage({ location }) {
         mainReward,
         maxScore,
         rewardDeadline,
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
+        themePColor,
+        themeSColor,
+        themeBackColor,
         rewardList,
         totalPurchasePrize,
     } = useBizData();
@@ -49,7 +49,7 @@ export default function RegulationPage({ location }) {
     const rewardScore = maxScore;
     const levelScore = rewardScore && rewardScore / 5;
 
-    useBackColor(`var(--themeBackground--${selfThemeBackColor})`);
+    useBackColor(`var(--themeBackground--${themeBackColor})`);
 
     const variablesObj = {
         "nome-empresa": bizName || " ",
@@ -101,18 +101,16 @@ export default function RegulationPage({ location }) {
             <Link to={handlePath()}>
                 <ButtonMulti
                     title="voltar"
-                    color={currTxtColor(selfThemePColor || "default")}
-                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                    color={currTxtColor(themePColor || "default")}
+                    backgroundColor={`var(--themeSDark--${themeSColor})`}
                     iconFontAwesome={
                         <FontAwesomeIcon icon="home" style={faStyle} />
                     }
-                    shadowColor={
-                        selfThemeBackColor === "black" ? "white" : "black"
-                    }
+                    shadowColor={themeBackColor === "black" ? "white" : "black"}
                 />
             </Link>
             <DateWithIcon
-                style={{ color: currTxtColor(selfThemeBackColor || "default") }}
+                style={{ color: currTxtColor(themeBackColor || "default") }}
                 date={updatedAt}
                 msgIfNotValidDate="Nenhuma alteração."
                 marginTop={0}
@@ -122,7 +120,7 @@ export default function RegulationPage({ location }) {
     );
 
     return (
-        <div className={`theme-back--${selfThemeBackColor} margin-auto-95`}>
+        <div className={`theme-back--${themeBackColor} margin-auto-95`}>
             {showTitle()}
             {showText()}
             {showBackBtnAndTimeStamp()}
@@ -133,10 +131,10 @@ export default function RegulationPage({ location }) {
 /*
 useEffect(() => {
     if(!defaultColor) { // Not changing back to default color in dashboard....
-        document.body.style.setProperty('background', `var(--themeBackground--${selfThemeBackColor})`, 'important')
+        document.body.style.setProperty('background', `var(--themeBackground--${themeBackColor})`, 'important')
     } else {
         document.body.style.setProperty('background', `var(--themeBackground--default)`, 'important')
         setDefaultColor(true);
     }
-}, [selfThemeBackColor, defaultColor]);
+}, [themeBackColor, defaultColor]);
  */

@@ -82,7 +82,7 @@ export const ShowActionBtn = ({
 }) => {
     const [loading, setLoading] = useState(null);
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
     const { role: loggedUserRole, userId } = useProfile();
 
     if (loading) titleCliUser = "processando...";
@@ -112,7 +112,7 @@ export const ShowActionBtn = ({
     const handleBtnPath = () => {
         if (role === "cliente") return null;
         if (role === "cliente-admin")
-            return `/${bizCodeName}/cliente-admin/painel-de-controle`;
+            return `/${bizLinkName}/cliente-admin/painel-de-controle`;
     };
 
     function handleBtnTitle() {

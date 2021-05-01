@@ -18,7 +18,7 @@ function ReturnBtn({
     toTab,
     style = { top: 15, left: 15 },
 }) {
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const isCliAdmin = toAdminDash || location.search === "?cliente-admin=1";
 
@@ -67,7 +67,7 @@ function ReturnBtn({
             {isCliAdmin && !isFunc && (
                 <Link
                     className="no-text-decoration"
-                    to={`/${bizCodeName}/cliente-admin/painel-de-controle`}
+                    to={`/${bizLinkName}/cliente-admin/painel-de-controle`}
                     onClick={() => setRun(dispatch, "goDash")}
                 >
                     <ButtonFab

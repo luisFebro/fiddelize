@@ -17,7 +17,7 @@ export default function NotifList({
     const [skip, setSkip] = useState(0);
     const [firstChunkLoaded, setFirstChunkLoaded] = useState(false);
 
-    const { selfBizLogoImg: bizLogo } = useBizData();
+    const { bizLogo } = useBizData();
 
     const params = {
         forceCliUser,

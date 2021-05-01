@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setVar, getVar, store } from "./useVar";
+import getVar, { setVar } from "init/var";
 import isOffline from "../../utils/server/isOffline";
 
 const isOnline = !isOffline();
@@ -18,11 +18,11 @@ export const useOfflineData = ({ dataName, data, trigger }) => {
         setDataOff({ ...dataOff, loading: true });
 
         if (data && isOnline) {
-            setVar({ [dataName]: data }, store.request_api_data);
+            setVar({ [dataName]: data }, "request_api_data");
         }
 
         if ((!isOnline || trigger) && !already) {
-            getVar(dataName, store.request_api_data).then((offData) => {
+            getVar(dataName, "request_api_data").then((offData) => {
                 setDataOff({
                     ...dataOff,
                     offlineData: offData,
@@ -49,11 +49,11 @@ export default function useOfflineListData({ listName, list, trigger }) {
 
         const gotItemsList = list && list.length;
         if (gotItemsList && isOnline) {
-            setVar({ [listName]: list }, store.offline_lists);
+            setVar({ [listName]: list }, "offline_lists");
         }
 
         if ((!isOnline || trigger) && !already) {
-            getVar(listName, store.offline_lists).then((offList) => {
+            getVar(listName, "offline_lists").then((offList) => {
                 setOfflineList(offList);
                 setAlready(true);
             });

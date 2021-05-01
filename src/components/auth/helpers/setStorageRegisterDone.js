@@ -1,7 +1,7 @@
-import { removeMultiVar, store } from "../../../hooks/storage/useVar";
+import { removeVars } from "init/var";
 
 export default function setStorageRegisterDone() {
-    removeMultiVar(
+    removeVars(
         [
             "memberId",
             "needAppRegister",
@@ -11,6 +11,6 @@ export default function setStorageRegisterDone() {
             "linkCode",
             "primaryAgent",
         ],
-        store.user
+        "user"
     );
 }

@@ -1,4 +1,4 @@
-import { getVar, store } from "../../hooks/storage/useVar";
+import getVar from "init/var";
 // Headers to send to server / Type JSON
 export const getHeaderJson = {
     headers: {
@@ -21,7 +21,7 @@ export const chooseHeader = ({ token, needAuth = true }) => {
 export const chooseHeaderAsync = async ({ token, needAuth = true }) => {
     if (needAuth) {
         if (!token) {
-            const forageToken = await getVar("token", store.user);
+            const forageToken = await getVar("token", "user");
             return {
                 "Content-type": "application/json",
                 Authorization: `Bearer ${forageToken}`,

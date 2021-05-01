@@ -30,7 +30,7 @@ export default function NumericKeypad({
     confirmFunction,
     confirmPayload,
 }) {
-    const { selfThemePColor } = useBizData();
+    const { themePColor } = useBizData();
 
     const [display, setDisplay] = useState(defaultValue[keyboardType]);
 
@@ -61,12 +61,12 @@ export default function NumericKeypad({
             <IconAndTitle
                 title={title}
                 titleIcon={titleIcon}
-                colorP={selfThemePColor}
+                colorP={themePColor}
             />
             <Display
                 display={display}
                 keyboardType={keyboardType}
-                colorP={selfThemePColor}
+                colorP={themePColor}
             />
             <Keyboard
                 setDisplay={setDisplay}
@@ -74,7 +74,7 @@ export default function NumericKeypad({
                 handleConfirm={handleConfirm}
                 handleClose={handleClose}
                 keyboardType={keyboardType}
-                colorP={selfThemePColor}
+                colorP={themePColor}
             />
         </Dialog>
     );

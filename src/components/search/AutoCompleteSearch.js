@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getVar, setVar } from "../../hooks/storage/useVar";
+import getVar, { setVar } from "init/var";
 import isKeyPressed from "../../utils/event/isKeyPressed";
 import { useProfile } from "init";
 import { useToken } from "../../hooks/useRoleData";

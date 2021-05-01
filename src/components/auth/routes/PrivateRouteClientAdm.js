@@ -4,7 +4,7 @@ import { useAppSystem } from "../../../hooks/useRoleData";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import isThisApp from "../../../utils/window/isThisApp";
 import { useRunComp } from "../../../hooks/useRunComp";
-import { getMultiVar, store } from "../../../hooks/storage/useVar";
+import { getVars } from "init/var";
 
 const isApp = isThisApp();
 
@@ -41,7 +41,7 @@ export default function PrivateRouteClientAdm({
     isAuthUser = isAuthUser || success;
 
     useEffect(() => {
-        getMultiVar(["success", "role"], store.user).then((res) => {
+        getVars(["success", "role"], "user").then((res) => {
             const [success, role] = res;
 
             setLogin({

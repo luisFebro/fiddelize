@@ -13,7 +13,7 @@ import { readVerificationPass } from "../../../redux/actions/adminActions";
 import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
-import { setVar, store } from "../../../hooks/storage/useVar";
+import { setVar } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();
 
@@ -61,7 +61,7 @@ export default function ShowPasswordForm({
 
     const { history } = dataFromPassPage;
     const { clientAdminName } = dataFromPassPage;
-    const { bizCodeName } = dataFromPassPage;
+    const { bizLinkName } = dataFromPassPage;
 
     const dispatch = useStoreDispatch();
 
@@ -103,7 +103,7 @@ export default function ShowPasswordForm({
 
             setVar(
                 { verifPass: clientAdminData.verificationPass },
-                store.user
+                "user"
             ).then((res) => {
                 if (isFromCliAdminDash) {
                     showToast("Senha foi alterada!", { type: "success" });

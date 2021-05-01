@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getVar, getMultiVar, store } from "../../../hooks/storage/useVar";
+import { getVars } from "init/var";
 
 export const useNeedRedirectPage = ({ history, priorPageId }) => {
     if (!history || !priorPageId)
@@ -7,7 +7,7 @@ export const useNeedRedirectPage = ({ history, priorPageId }) => {
 
     useEffect(() => {
         (async () => {
-            const gotPriorPage = await getVar(priorPageId, store.pre_register);
+            const [gotPriorPage] = await getVars([priorPageId], "pre_register");
             if (!gotPriorPage) history.push("/");
         })();
     }, []);
@@ -19,25 +19,25 @@ export const getNewAppPage = async () => {
         doneBizInfo,
         doneRewardPlanner,
         doneSSRatingIcon,
-    ] = await getMultiVar(
+    ] = await getVars(
         [
             "clientAdminData",
             "doneBizInfo",
             "doneRewardPlanner",
             "doneSSRatingIcon",
         ],
-        store.pre_register
+        "pre_register"
     );
 
     if (!clientAdminData) return "/novo-app/info-negocio";
 
     const { bizName } = clientAdminData;
-    const { bizCodeName } = clientAdminData;
+    const { bizLinkName } = clientAdminData;
     const { mainReward } = clientAdminData;
     const { rewardScore } = clientAdminData;
 
-    if (doneSSRatingIcon) return `/${bizCodeName}/novo-app/cadastro-admin`;
+    if (doneSSRatingIcon) return `/${bizLinkName}/novo-app/cadastro-admin`;
     if (doneRewardPlanner)
-        return `/${bizCodeName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${rewardScore}&premio-desc=${mainReward}&nome-cliente=Ana`;
-    if (doneBizInfo) return `/${bizCodeName}/novo-app/metas`;
+        return `/${bizLinkName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${rewardScore}&premio-desc=${mainReward}&nome-cliente=Ana`;
+    if (doneBizInfo) return `/${bizLinkName}/novo-app/metas`;
 };

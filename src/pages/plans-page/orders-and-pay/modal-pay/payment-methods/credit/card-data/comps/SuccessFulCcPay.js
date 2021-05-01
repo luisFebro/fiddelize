@@ -20,12 +20,12 @@ function SuccessFulCcPay({ history, setMainData }) {
         }));
     }, []);
 
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const handleFinish = () => {
         const path = isApp
             ? "/mobile-app"
-            : `/${bizCodeName}/cliente-admin/painel-de-controle`;
+            : `/${bizLinkName}/cliente-admin/painel-de-controle`;
         history.push(path);
     };
 

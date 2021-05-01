@@ -16,11 +16,11 @@ function BtnBackTestMode({
     const isCliUser = mode === "Cliente";
 
     const dispatch = useStoreDispatch();
-    const { bizCodeName } = useBizData();
+    const { bizLinkName } = useBizData();
 
     const handleBackBtnClick = () => {
         setRun(dispatch, "goDash");
-        history.push(`/${bizCodeName}/cliente-admin/painel-de-controle`);
+        history.push(`/${bizLinkName}/cliente-admin/painel-de-controle`);
     };
 
     const handleChangeApp = () => {

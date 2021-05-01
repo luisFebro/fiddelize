@@ -5,14 +5,10 @@ import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
 import ShareSocialMediaButtons from "../../components/buttons/ShareSocialMediaButtons";
 
 export default function QuickPromote({ handleFullClose }) {
-    const {
-        selfBizLogoImg: bizLogo,
-        bizCodeName,
-        selfThemeSColor: sColor,
-    } = useBizData();
+    const { bizLogo, bizLinkName, themeSColor: sColor } = useBizData();
 
-    const indLastSlash = bizCodeName.lastIndexOf("-");
-    const onlyBizCode = bizCodeName.slice(indLastSlash + 1);
+    const indLastSlash = bizLinkName.lastIndexOf("-");
+    const onlyBizCode = bizLinkName.slice(indLastSlash + 1);
     const officialAdminLink = `${CLIENT_URL}/app/${onlyBizCode}`;
 
     const showSharingOpts = () => {

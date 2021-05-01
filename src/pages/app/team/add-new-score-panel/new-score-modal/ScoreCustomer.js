@@ -4,8 +4,8 @@ import getFirstName from "../../../../../utils/string/getFirstName";
 import MoneyKeyboard from "../../../../../components/keyboards/MoneyKeyboard";
 import { convertBrToDollar } from "../../../../../utils/numbers/convertDotComma";
 import ModalConfirmation from "../../../../../components/modals/ModalConfirmation";
-import useData from "../../../../../hooks/useData";
-import { setVar, store } from "../../../../../hooks/storage/useVar";
+import useData from "init";
+import { setVar } from "init/var";
 import { prerenderAudio } from "../../../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../../../utils/arrays/getRandomArray";
 import getAPI, {
@@ -112,7 +112,7 @@ export default function ScoreCustomer({
     const [fullOpen, setFullOpen] = useState(false);
 
     const [memberName, memberId, role] = useData(["name", "userId", "role"]);
-    const { selfBizLogoImg: bizLogo, bizName } = useBizData();
+    const { bizLogo, bizName } = useBizData();
 
     const cliUserName = getFirstName(customerName && customerName.cap(), {
         addSurname: true,
@@ -132,7 +132,7 @@ export default function ScoreCustomer({
             const selectedTTS = getRandomArray(ttsStore);
             const { audio, text } = selectedTTS;
 
-            await setVar({ "text_cli-member_msg-score": text }, store.audios);
+            await setVar({ "text_cli-member_msg-score": text }, "audios");
 
             prerenderAudio(audio, "audio_cli-member_msg-score");
             setFullOpen(true);

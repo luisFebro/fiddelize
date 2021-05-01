@@ -5,7 +5,7 @@ import NumericKeyboard from "../../../components/keyboards/NumericKeyboard";
 import getAPI, { createPassword } from "../../../utils/promises/getAPI";
 import getFirstName from "../../../utils/string/getFirstName";
 import showToast from "../../../components/toasts";
-import { setVar } from "../../../hooks/storage/useVar";
+import { setVar } from "init/var";
 
 export default withRouter(AccessPassCreation);
 

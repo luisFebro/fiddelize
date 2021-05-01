@@ -4,14 +4,14 @@ import { sendNotification } from "../../redux/actions/notificationActions";
 import getDayMonthBr from "../../utils/dates/getDayMonthBr";
 import { getVar, removeVar, setVar } from "../storage/useVar";
 import needAlertBirthday from "./birthday/needAlertBirthday";
-import useData from "../useData";
+import useData from "init";
 
 export default function useCustomerBirthDayToday() {
     const today = getDayMonthBr(new Date());
     const userBirthDate = null;
     // const userBirthDate = "11 de Abril de 1994";
 
-    const { selfBizLogoImg } = useBizData();
+    const { bizLogo } = useBizData();
     const [firstName, userId, role] = useData(["firstName", "userId", "role"]);
 
     useEffect(() => {
@@ -48,7 +48,7 @@ export default function useCustomerBirthDayToday() {
                     role,
                     userName: firstName,
                     birthdayMsg,
-                    bizLogo: selfBizLogoImg,
+                    bizLogo,
                 },
                 notifCard: {
                     cardType: "birthday",
@@ -73,5 +73,5 @@ export default function useCustomerBirthDayToday() {
 
             return false;
         })();
-    }, [today, role, userId, firstName, selfBizLogoImg, userBirthDate]);
+    }, [today, role, userId, firstName, bizLogo, userBirthDate]);
 }

@@ -11,7 +11,7 @@ import usePlayAudio from "hooks/media/usePlayAudio";
 export default function RatingIcons({
     currScore,
     maxScore,
-    selfMilestoneIcon,
+    milestoneIcon,
     runName,
     selectTxtStyle,
     colorBack,
@@ -23,7 +23,7 @@ export default function RatingIcons({
     const appPreviewIcon = gotArrayThisItem(iconNamesOnly, runName)
         ? runName
         : false;
-    const selectedIcon = appPreviewIcon || selfMilestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
+    const selectedIcon = appPreviewIcon || milestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
     const eachMilestone = Number(maxScore / 5);
     const needDark = selectTxtStyle(colorBack, { needDarkBool: true });

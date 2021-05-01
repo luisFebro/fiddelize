@@ -5,7 +5,7 @@ import PayCategories from "./payment-methods/PayCategories";
 import { useAppSystem } from "../../../../hooks/useRoleData";
 import { ShowPayWatermarks } from "./comps/GlobalComps";
 import handleRenewalDays from "./helpers/handleRenewalDays";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 
 export default function AsyncPayContent({ modalData }) {
     const {

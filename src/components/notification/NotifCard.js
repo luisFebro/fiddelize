@@ -8,7 +8,7 @@ import useDelay from "../../hooks/useDelay";
 import { fromNow } from "../../utils/dates/dateFns";
 import getCardTypeData from "./helpers/getCardTypeData";
 import CardActionBtn from "./card-type-pages/CardActionBtn";
-import useData from "../../hooks/useData";
+import useData from "init";
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([

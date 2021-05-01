@@ -29,12 +29,7 @@ export default function CarouselFlickity({
     const dispatch = useStoreDispatch();
 
     const { businessId } = useAppSystem();
-    const {
-        selfMilestoneIcon,
-        mainReward,
-        maxScore,
-        rewardList,
-    } = useBizData();
+    const { milestoneIcon, mainReward, maxScore, rewardList } = useBizData();
 
     const [carouselElem2, setCarouselElem2] = useState("");
     useEffect(() => {
@@ -135,7 +130,7 @@ export default function CarouselFlickity({
                 <ShowActionBtns
                     needUpdateBtn={needUpdateBtn}
                     objToSend={{
-                        "clientAdminData.selfMilestoneIcon": iconSelected,
+                        "clientAdminData.milestoneIcon": iconSelected,
                         "clientAdminData.rewardList": findAndReplaceObjInArray(
                             rewardList,
                             updatedArray,

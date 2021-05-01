@@ -35,7 +35,7 @@ import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { dateFnsUtils, ptBRLocale } from "../../utils/dates/dateFns";
 import { handleNextField } from "../../utils/form/kit";
 import getFilterDate from "../../utils/dates/getFilterDate";
-import useData from "../../hooks/useData";
+import useData from "init";
 import setStorageRegisterDone from "./helpers/setStorageRegisterDone";
 import showToast from "../toasts";
 
@@ -99,10 +99,10 @@ function ASyncRegisterCliUser({
     const phoneValue = autoPhoneMask(phone);
 
     const {
-        selfThemePColor,
-        selfThemeSColor,
-        selfThemeBackColor,
-        selfBizLogoImg,
+        themePColor,
+        themeSColor,
+        themeBackColor,
+        bizLogo,
         bizName,
     } = useBizData();
 
@@ -126,14 +126,14 @@ function ASyncRegisterCliUser({
         "linkCode",
     ]);
 
-    const isReady = selfBizLogoImg && bizName && memberId !== "...";
+    const isReady = bizLogo && bizName && memberId !== "...";
     useEffect(() => {
         if (isReady) {
             setTimeout(() => {
                 // this timeout is used because the data is not set otherwise. The reason is unknown.
                 setData((prev) => ({
                     ...prev,
-                    bizImg: selfBizLogoImg,
+                    bizImg: bizLogo,
                     bizName,
                     register: {
                         id: memberId || staffId,
@@ -149,15 +149,7 @@ function ASyncRegisterCliUser({
                 }));
             }, 4000);
         }
-    }, [
-        isReady,
-        selfBizLogoImg,
-        bizName,
-        memberRole,
-        memberId,
-        memberJob,
-        userScore,
-    ]);
+    }, [isReady, bizLogo, bizName, memberRole, memberId, memberJob, userScore]);
 
     // const { bizInfo } = useStoreState(state => ({
     //     bizInfo: state.adminReducer.cases.businessInfo,
@@ -267,7 +259,7 @@ function ASyncRegisterCliUser({
         <div className="container-center animated zoomIn delay-2s position-relative p-2 mt-3">
             <p
                 className={`${selectTxtStyle(
-                    selfThemeBackColor
+                    themeBackColor
                 )} m-0 font-weight-bold text-small`}
                 style={{ whiteSpace: "nowrap" }}
             >
@@ -281,7 +273,7 @@ function ASyncRegisterCliUser({
                         // setStorageRegisterDone runs when there is a success login. If not successful login, back to registration form
                         setLoginOrRegister("login");
                     }}
-                    backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
+                    backgroundColor={`var(--themeSDark--${themeSColor})`}
                 />
             </div>
         </div>
@@ -294,7 +286,7 @@ function ASyncRegisterCliUser({
                 subTitle={isStaff ? "Novo Cliente" : "É rápido e fácil."}
                 color="var(--mainWhite)"
                 needShadow
-                backgroundColor={`var(--themePDark--${selfThemePColor})`}
+                backgroundColor={`var(--themePDark--${themePColor})`}
             />
         </div>
     );
@@ -549,8 +541,8 @@ function ASyncRegisterCliUser({
                 disabled={!!actionBtnDisabled}
                 title="Registrar"
                 color="var(--mainWhite)"
-                backgroundColor={`var(--themeSDark--${selfThemeSColor})`}
-                backColorOnHover={`var(--themeSDark--${selfThemeSColor})`}
+                backgroundColor={`var(--themeSDark--${themeSColor})`}
+                backColorOnHover={`var(--themeSDark--${themeSColor})`}
                 iconFontAwesome={
                     <FontAwesomeIcon icon="save" style={faStyle} />
                 }

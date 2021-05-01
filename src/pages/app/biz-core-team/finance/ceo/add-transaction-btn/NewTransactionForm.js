@@ -12,7 +12,7 @@ import getAPI, {
 } from "../../../../../../utils/promises/getAPI";
 import moneyMaskBr from "../../../../../../utils/validation/masks/moneyMaskBr";
 import { convertToDollar } from "../../../../../../utils/numbers/convertToReal";
-// import useData from "../../../../../../hooks/useData";
+// import useData from "init";
 // const isSmall = window.Helper.isSmallScreen();
 
 const getStyles = () => ({

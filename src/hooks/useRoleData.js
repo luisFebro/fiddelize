@@ -1,10 +1,6 @@
-// WARNING: This will be replaced by useData hook
 import { useStoreState } from "easy-peasy";
 import { getItems } from "init/lStorage";
-import getFirstName from "utils/string/getFirstName";
-import useData from "./useData";
-
-export { getFirstName };
+import useData from "init";
 
 const [systemRole, systemBizId] = getItems("appSystem", [
     "roleWhichDownloaded",

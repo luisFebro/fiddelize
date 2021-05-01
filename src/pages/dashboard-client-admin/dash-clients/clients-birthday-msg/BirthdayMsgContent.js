@@ -4,7 +4,7 @@ import "./_BirthdayMsgContent.scss";
 import { useBizData } from "init";
 import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
 import showToast from "../../../../components/toasts";
-import useData from "../../../../hooks/useData";
+import useData from "init";
 import handleChange from "../../../../utils/form/use-state/handleChange";
 import getAPI, { updateUser } from "../../../../utils/promises/getAPI";
 import useAPI, { readUser } from "../../../../hooks/api/useAPI";

@@ -1,20 +1,15 @@
-import {
-    getMultiVar,
-    setMultiVar,
-    setVar,
-    store,
-} from "../../../hooks/storage/useVar";
+import { getVars, setVars, setVar } from "init/var";
 import isThisApp from "../../../utils/window/isThisApp";
 
 const isApp = isThisApp();
 
-const handleDestiny = ({ role, bizCodeName }) => {
+const handleDestiny = ({ role, bizLinkName }) => {
     if (role === "nucleo-equipe") return "/t/app/nucleo-equipe";
     if (role === "cliente-membro") return "/t/app/equipe";
     if (role === "cliente-admin")
         return isApp
             ? "/mobile-app"
-            : `${bizCodeName}/cliente-admin/painel-de-controle?abrir=1`;
+            : `${bizLinkName}/cliente-admin/painel-de-controle?abrir=1`;
 };
 
 const handleRedirect = ({ role, destiny, history }) => {
@@ -32,15 +27,15 @@ export default async function authenticate(newToken, options = {}) {
     // these variables are set and avaiable after CPF login.
     localStorage.setItem("token", newToken);
 
-    await setMultiVar({ success: true, token: newToken }, store.user);
+    await setVars({ success: true, token: newToken }, "user");
 
-    const [bizCodeName] = await getMultiVar(["bizCodeName"], store.user);
+    const [bizLinkName] = await getVars(["bizLinkName"], "user");
 
     if (role === "cliente-admin") {
         await setVar({ welcomeMsg: true });
     }
 
-    const destiny = handleDestiny({ role, bizCodeName });
+    const destiny = handleDestiny({ role, bizLinkName });
 
     handleRedirect({ role, destiny, history });
 

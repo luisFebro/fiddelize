@@ -19,7 +19,7 @@ import { getUniqueId } from "../../../../../hooks/api/useAPI";
 import SuccessOp from "./SuccessOp";
 import { handleFocus } from "../../../../../utils/form/handleFocus";
 import usePro from "../../../../../hooks/pro/usePro";
-import useData from "../../../../../hooks/useData";
+import useData from "init";
 import getAPI, { encryptLinkScore } from "../../../../../utils/promises/getAPI";
 import useInvitationMsg from "./hooks/useInvitationMsg";
 import copyText from "../../../../../utils/document/copyText";
@@ -93,7 +93,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     const [linkId] = useData(["linkId"]);
 
     const { businessId } = useAppSystem();
-    const { bizName, bizCodeName } = useBizData();
+    const { bizName, bizLinkName } = useBizData();
     const { name: userName } = useProfile();
 
     const smsBalance = useCheckBalance();
@@ -104,9 +104,9 @@ export default function QuickRegister({ formPayload, isNewMember }) {
     };
 
     const handleScoreToLink = (dbScore, cliFirstName) => {
-        if (linkId === "..." || !bizCodeName) return;
-        const indLastSlash = bizCodeName.lastIndexOf("-");
-        let bizCode = bizCodeName.slice(indLastSlash + 1);
+        if (linkId === "..." || !bizLinkName) return;
+        const indLastSlash = bizLinkName.lastIndexOf("-");
+        let bizCode = bizLinkName.slice(indLastSlash + 1);
         bizCode = `${bizCode}${linkId}`;
 
         (async () => {
@@ -155,7 +155,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
         bizName,
         verifPass,
         payload,
-        bizCodeName,
+        bizLinkName,
         linkId,
         trigger: linkId !== "...",
     });

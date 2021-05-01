@@ -89,29 +89,29 @@ export default function AppSharer({ location, match }) {
 
     const styles = getStyles();
     const {
-        bizCodeName: thisBizCode,
+        bizLinkName: thisBizCode,
         bizName: businessName,
-        selfBizLogoImg: bizLogo,
-        selfThemePColor: pColor,
+        bizLogo,
+        themePColor: pColor,
     } = useBizData();
     const { name: cliName } = useProfile();
     const { businessId } = useAppSystem();
 
     const role = getQueryByName("role", location.search) || "cliente-admin";
-    const bizCodeName = match.params.bizCodeName || thisBizCode;
+    const bizLinkName = match.params.bizLinkName || thisBizCode;
     const bizName = getQueryByName("negocio", location.search) || businessName;
     const cliAdminName =
         getQueryByName("adminName", location.search) || cliName;
     const bizId = getQueryByName("id", location.search) || businessId;
 
-    const indLastSlash = bizCodeName.lastIndexOf("-");
-    const onlyBizCode = bizCodeName.slice(indLastSlash + 1);
+    const indLastSlash = bizLinkName.lastIndexOf("-");
+    const onlyBizCode = bizLinkName.slice(indLastSlash + 1);
     const officialAdminLink = `${CLIENT_URL}/app/${onlyBizCode}`;
 
     const handleQrDownload = async () => {
         await downloadImg({
             imgContainer: ".qr-container",
-            fileName: `codigo-qr-convite-da-${bizCodeName}`,
+            fileName: `codigo-qr-convite-da-${bizLinkName}`,
         });
     };
 
@@ -121,7 +121,7 @@ export default function AppSharer({ location, match }) {
                 to={
                     role !== "cliente-admin"
                         ? "/mobile-app"
-                        : `/${bizCodeName}/cliente-admin/painel-de-controle`
+                        : `/${bizLinkName}/cliente-admin/painel-de-controle`
                 }
                 className="text-decoration-none"
             >

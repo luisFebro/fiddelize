@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import { ShowPayWatermarks } from "../../comps/GlobalComps";
 import useSendEmail from "../../../../../../hooks/email/useSendEmail";
-import useData from "../../../../../../hooks/useData";
+import useData from "init";
 import "./_Pix.scss";
 import QrCode from "../../../../../../components/QrCode";
 import copyText from "../../../../../../utils/document/copyText";

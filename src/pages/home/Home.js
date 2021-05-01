@@ -4,7 +4,7 @@ import "./_Home.scss";
 import FeaturesSection from "./sections/features/FeaturesSection";
 import CtaSection from "./sections/CtaSection";
 import preloadMedia from "../../utils/media/preloadMedia";
-import { setVar, store } from "../../hooks/storage/useVar";
+import { setVar } from "init/var";
 // import CompLoader from "../../components/CompLoader";
 // import AppShowCase from "./AppShowCase";
 // import { Link } from 'react-router-dom';
@@ -23,7 +23,7 @@ export default function Home({ match }) {
 
         const gotReferrer = match.params.associateId;
         if (gotReferrer) {
-            setVar({ referrer: gotReferrer }, store.pre_register);
+            setVar({ referrer: gotReferrer }, "pre_register");
         }
     }, [match]);
     // const [viewPhone, setViewPhone] = useState(false);

@@ -21,7 +21,7 @@ export default function PasswordPage({ location, match, history }) {
 
     const clientAdminId = getQueryByName("id", location.search);
     const clientAdminName = getQueryByName("name", location.search).cap();
-    const { bizCodeName } = match.params;
+    const { bizLinkName } = match.params;
 
     useAnimateElem(".password-page--img", {
         animaIn: "fadeInTopLeft",
@@ -35,7 +35,7 @@ export default function PasswordPage({ location, match, history }) {
     const dataFromPassPage = {
         clientAdminId,
         clientAdminName,
-        bizCodeName,
+        bizLinkName,
         history,
     };
 
