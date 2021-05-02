@@ -1,9 +1,9 @@
 import PrizeList from "./PrizeList";
 import "./_PrizesGallery.scss";
-import { useProfile } from "init";
+import useData from "init";
 
 export default function PrizesGallery({ targetId = undefined }) {
-    let { userId } = useProfile();
+    let { userId } = useData();
     if (targetId) userId = targetId;
 
     const showTitle = () => (

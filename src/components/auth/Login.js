@@ -1,16 +1,16 @@
 import { withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
+import useContext from "context";
 import Card from "@material-ui/core/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import SafeEnvironmentMsg from '../SafeEnvironmentMsg';
-import { loginEmail } from "redux/actions/authActions";
+import { doLogin } from "redux/actions/authActions";
 import isThisApp from "utils/window/isThisApp";
 import { useBizData } from "init";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import { deleteImage } from "utils/storage/lForage";
 import { sendNotification } from "redux/actions/notificationActions";
 import { removeVar, getVars, removeVars } from "init/var";
-import setInitData from "init/setInitData";
+import authenticate from "auth/authenticate";
 import RadiusBtn from "../buttons/RadiusBtn";
 import KeypadButton from "../modals/keypad";
 import Title from "../Title";
@@ -28,13 +28,13 @@ function Login({
 }) {
     needAppRegister = needAppRegister === "..." ? false : needAppRegister;
 
+    const { uify } = useContext();
+
     const {
         themeSColor,
         // themePColor,
         themeBackColor,
     } = useBizData();
-
-    const dispatch = useStoreDispatch();
 
     const showTitle = () => (
         <Title
@@ -55,7 +55,7 @@ function Login({
                 titleIcon={<FontAwesomeIcon icon="list-ol" />}
                 keyboardType="cpf"
                 confirmFunction={signInUserData}
-                confirmPayload={{ history, dispatch }}
+                confirmPayload={{ history, uify }}
                 backgroundColor={`var(--themeSDark--${
                     isBizTeam ? "default" : themeSColor
                 })`}
@@ -113,7 +113,7 @@ export default withRouter(Login);
 
 export async function signInUserData(cpfValue, options = {}) {
     const {
-        dispatch,
+        uify,
         history,
         appPanelUserId = undefined,
         appPanelRole = undefined,
@@ -125,12 +125,8 @@ export async function signInUserData(cpfValue, options = {}) {
         appPanelRole,
     };
 
-    const res = await loginEmail(dispatch, objToSend);
-
-    if (res.status !== 200) {
-        showToast(res.data.msg || res.data.error, { type: "error" });
-        return null;
-    }
+    const res = await doLogin(uify, objToSend);
+    if (!res) return null;
 
     const initData = res.data;
     const { currUser } = res.data;
@@ -140,6 +136,7 @@ export async function signInUserData(cpfValue, options = {}) {
         verificationPass,
         needCliUserWelcomeNotif,
         needAccountPanel,
+        token, // only for cli-user
         // nucleo-equipe data
         pswd, // only verification to redirect to password page
         publicKey, // only verification to redirect to password page
@@ -154,8 +151,6 @@ export async function signInUserData(cpfValue, options = {}) {
     if (role === "nucleo-equipe") {
         if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
         await removeVar("disconnectAgent", "user");
-
-        await setInitData("nucleo-equipe", { initData, dispatch });
 
         if (!pswd) {
             // redirect user to password page
@@ -173,8 +168,6 @@ export async function signInUserData(cpfValue, options = {}) {
         let whichRoute;
 
         if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
-
-        await setInitData("cliente-admin", { initData, dispatch });
 
         if (!verificationPass) {
             await sendWelcomeNotif({
@@ -196,8 +189,6 @@ export async function signInUserData(cpfValue, options = {}) {
         if (!appPanelUserId) showToast("Iniciando...", { dur: 5000 });
         await removeVar("disconnectCliMember", "user");
 
-        await setInitData("cliente-membro", { initData, dispatch });
-
         if (needAccountPanel) {
             if (!appPanelUserId) history.push("/painel-de-apps");
             return null;
@@ -207,10 +198,9 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "cliente") {
-        await setInitData("cliente", { initData, dispatch });
-
         if (needCliUserWelcomeNotif) {
             showToast("Preparando App...");
+            await authenticate(token);
 
             const cliNotifRes = await sendNotification(userId, "welcome", {
                 role,
@@ -227,6 +217,8 @@ export async function signInUserData(cpfValue, options = {}) {
 
         if (!appPanelUserId) handleCliUserPath(history);
     }
+
+    return null;
 }
 
 // HELPERS
@@ -263,85 +255,6 @@ async function handleCliUserPath(history) {
     return false;
 }
 // END HELPERS
-
-/* ARCHIVES
-
-
-
-showToast(
-    dispatch,
-    "Analisando Credenciais...",
-    "warning",
-    3000
-);
-setTimeout(
-    () =>
-        showToast(
-            dispatch,
-            "Redirecionando...",
-            "warning",
-            4000
-        ),
-    2900
-);
-setTimeout(
-    () => history.push(whichRoute),
-    5000
-);
-setTimeout(
-    () =>
-        showToast(
-            dispatch,
-            msg,
-            "success",
-            3000
-        ),
-    7000
-);
-
-if (role === "admin") {
-    showToast(
-        dispatch,
-        "Analisando Credenciais...",
-        "warning",
-        3000
-    );
-    setTimeout(
-        () =>
-            showToast(
-                dispatch,
-                "Redirecionando...",
-                "warning",
-                4000
-            ),
-        2900
-    );
-    setTimeout(
-        () => history.push("/admin/painel-de-controle"),
-        5000
-    );
-    setTimeout(
-        () => showToast(dispatch, msg, "success", 9000),
-        7000
-    );
-}
-
-if(role === "colaborador") {
-    showToast(dispatch, "Analisando Credenciais...", 'warning', 3000);
-    setTimeout(() => showToast(dispatch, "Redirecionando...", 'warning', 4000), 2900);
-    setTimeout(() => history.push(`/colaborador/quadro-administrativo/${userId}`), 5000);
-    setTimeout(() => showToast(dispatch, msg, 'success', 9000), 7000);
-}
-
-else if(!milestoneIcon) {
-        whichRoute = `/${bizLinkName}/novo-app/self-service/${userId}?nome-cliente=${name}&negocio=${"App dos clientes"}&ponto-premio=500`
-        showToast(dispatch, "Conclua o app dos seus clientes", 'warning', 3000);
-        setTimeout(() => window.location.href = whichRoute, 2900);
-
-<div className="mx-2 mb-4 text-left">
-    <SafeEnvironmentMsg />
-</div>
-
 
 /* COMMENTS
 n1: LESSON: autoComplete is "off" to not allow the browser to autocomplete with suggestions of other searches.other

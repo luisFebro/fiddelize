@@ -8,13 +8,12 @@ import gaEvent from "../../../utils/analytics/gaEvent";
 import RadiusBtn from "../../buttons/RadiusBtn";
 import isThisApp from "../../../utils/window/isThisApp";
 import "./NavbarLayout.scss";
-import { useAuthUser } from "../../../hooks/useAuthUser";
+import useAuth from "../../../hooks/useAuth";
 import useImg, { Img } from "../../../hooks/media/useImg";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 import { getNewAppPage } from "../../../pages/new-app/helpers/handleRedirectPages";
 // import useCount from '../../../hooks/useCount';
 
-// const gotToken = localStorage.getItem("token");
 const isApp = isThisApp();
 const isSmall = window.Helper.isSmallScreen();
 
@@ -36,7 +35,7 @@ function Navbar({ history, location }) {
     });
     const logoSrc = logoBiz || logoFid;
 
-    const { isAuthUser } = useAuthUser();
+    const isAuth = useAuth();
     const { bizLogo, themePColor } = useBizData();
 
     // const dispatch = useStoreDispatch();
@@ -146,7 +145,7 @@ function Navbar({ history, location }) {
 
     // const forceFiddelizeLogo = locationNow.indexOf('temporariamente-indisponivel-503') >= 0
     const needClientLogo =
-        (isAdminDash && bizLogo) || (isAuthUser && bizLogo && isApp); // isApp &&
+        (isAdminDash && bizLogo) || (isAuth && bizLogo && isApp); // isApp &&
     const fiddelizeLogo = "/img/official-logo-name.png";
     const handleLogoSrc = () => {
         if (needClientLogo) {

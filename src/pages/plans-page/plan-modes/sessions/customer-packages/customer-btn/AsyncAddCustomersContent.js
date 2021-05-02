@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
 import Simulator from "./Simulator";
-import { useProfile } from "init";
+import useData from "init";
 import getFirstName from "../../../../../../utils/string/getFirstName";
 import ButtonFab from "../../../../../../components/buttons/material-ui/ButtonFab";
 import Img from "../../../../../../components/Img";
@@ -53,7 +53,7 @@ function AsyncAddCustomersContent({
         });
     };
 
-    let { name: userName } = useProfile();
+    let { name: userName } = useData();
     userName = getFirstName(userName);
 
     const handlePeriodName = () => {

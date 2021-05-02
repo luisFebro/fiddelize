@@ -4,7 +4,7 @@ import GroupedDashSessions from "./GroupedDashSessions";
 import getDayGreetingBr from "../../utils/getDayGreetingBr";
 import "./mainLayout.scss";
 import getFirstName from "../../utils/string/getFirstName";
-import { useProfile } from "init";
+import useData from "init";
 import MoreOptionsMenu from "./MoreOptionsMenu";
 import PlanBadges from "./PlanBadges";
 import useBackColor from "../../hooks/useBackColor";
@@ -13,7 +13,7 @@ import useManageProServices from "../../hooks/pro/useManageProServices";
 import NotifPermissionBanner from "../../components/pwa-push-notification/NotifPermissionBanner";
 
 function DashboardClientAdmin({ location, history }) {
-    const { name } = useProfile();
+    const { name } = useData();
     useBackColor("var(--themeBackground--default)");
     useScrollUp();
     useManageProServices();

@@ -1,19 +1,17 @@
-import { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
-import { loadUser } from "../../redux/actions/authActions";
+import useContext from "context";
+import { loadUser } from "redux/actions/authActions";
 // LAYOUT
-import Navbar from "../../components/_layout/navbar";
-
+import Navbar from "components/_layout/navbar";
 // COMPONENTS
-import LinearProgress from "../../components/loadingIndicators/LinearProgress";
-import PrivateRouteClientAdm from "../../components/auth/routes/PrivateRouteClientAdm";
-
+import LinearProgress from "components/loadingIndicators/LinearProgress";
+import PrivateRouteClientAdm from "components/auth/routes/PrivateRouteClientAdm";
 // PAGES
-import ClientMobileApp from "../../pages/mobile-app/ClientMobileApp";
-import RegulationPage from "../../pages/RegulationPage";
-import Default from "../../pages/Default";
-import UnavailableService from "../../pages/UnavailableService";
+import ClientMobileApp from "pages/mobile-app/ClientMobileApp";
+import RegulationPage from "pages/RegulationPage";
+import Default from "pages/Default";
+import UnavailableService from "pages/UnavailableService";
 import {
     AsyncLoginPage,
     // cli-admin
@@ -63,11 +61,15 @@ const InstallMsg = () => (
 function Mobile({ location, history }) {
     const locationNow = location.pathname;
 
-    const dispatch = useStoreDispatch();
+    const { uify } = useContext();
+
+    // eslint-disable-next-line
+    const setUify = React.useMemo(() => uify, []);
 
     useEffect(() => {
-        loadUser(dispatch, history);
-    }, [dispatch]);
+        loadUser(setUify, history);
+        // eslint-disable-next-line
+    }, [setUify]);
 
     return (
         <Fragment>
@@ -207,7 +209,7 @@ function Mobile({ location, history }) {
 export default withRouter(Mobile);
 
 /* ARCHIVES
-import ChangePassword from '../../pages/client/ChangePassword';
-import InsertNewPassword from '../../pages/client/InsertNewPassword';
-import ConfirmAccount from '../../pages/client/ConfirmAccount';
+import ChangePassword from 'pages/client/ChangePassword';
+import InsertNewPassword from 'pages/client/InsertNewPassword';
+import ConfirmAccount from 'pages/client/ConfirmAccount';
  */

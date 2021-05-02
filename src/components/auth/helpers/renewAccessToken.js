@@ -1,4 +1,5 @@
-import getAPI, { createTk } from "../../../utils/promises/getAPI";
+import getAPI, { createTk } from "utils/promises/getAPI";
+import { setItems } from "init/lStorage";
 import { setVar } from "init/var";
 
 export default async function renewAccessToken(options = {}) {
@@ -28,7 +29,9 @@ export default async function renewAccessToken(options = {}) {
 
     // this will be handled by localforage for other projects.
     await setVar({ token: newToken }, "user");
-    localStorage.setItem("token", newToken);
+    setItems("currUser", {
+        token: newToken,
+    });
 
     return "done";
 }

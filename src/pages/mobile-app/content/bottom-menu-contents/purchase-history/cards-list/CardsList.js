@@ -4,7 +4,6 @@ import Card from "@material-ui/core/Card";
 import Illustration from "components/Illustration";
 import { convertDotToComma } from "utils/numbers/convertDotComma";
 import { useBizData } from "init";
-import { useProfile } from "init";
 import useData from "init";
 import defineCurrChallenge from "utils/biz/defineCurrChallenge";
 import getFirstName from "utils/string/getFirstName";
@@ -80,7 +79,7 @@ export default function CardsList({ data }) {
 
     const txtClass = selectTxtStyle(themeBackColor);
 
-    const { role } = useProfile();
+    const { role } = useData();
     const isAdmin = role === "cliente-admin";
 
     const totalPrizes = hasPendingChall

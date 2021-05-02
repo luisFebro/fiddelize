@@ -5,7 +5,7 @@ import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 // SpeedDial and Icons
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
@@ -58,7 +58,7 @@ function MoreOptionsBtn({
 
     const styles = getStyles();
 
-    const { userId } = useProfile();
+    const { userId } = useData();
     const { themeBackColor: backColor } = useBizData();
 
     const speedDial = {

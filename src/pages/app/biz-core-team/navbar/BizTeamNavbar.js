@@ -5,7 +5,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { withRouter } from "react-router-dom";
 import Img from "../../../../components/Img";
 import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";
-import { disconnect } from "../../../../hooks/useAuthUser";
+import { disconnect } from "../../../../hooks/useAuth";
 import useData from "init";
 import ModalFullContent from "../../../../components/modals/ModalFullContent";
 import { Load } from "../../../../components/code-splitting/LoadableComp";

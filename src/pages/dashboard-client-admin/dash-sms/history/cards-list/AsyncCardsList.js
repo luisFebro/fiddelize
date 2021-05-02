@@ -4,7 +4,7 @@ import SmsCard from "./card/accordion/SmsCard";
 import PanelHiddenContent from "./card/card-hidden-content/PanelHiddenContent";
 // import SearchFilter from "../../../../../components/search/SearchFilter";
 import { calendar, isScheduledDate } from "../../../../../utils/dates/dateFns";
-import { useProfile } from "init";
+import useData from "init";
 import { useAppSystem } from "../../../../../hooks/useRoleData";
 import getFirstName from "../../../../../utils/string/getFirstName";
 import { useRunComp } from "../../../../../hooks/useRunComp";
@@ -72,7 +72,7 @@ export default function AsyncCardsList() {
     const [skip, setSkip] = useState(0);
     const [forceCancel, setForceCancel] = useState(false); // solve real time update after calling off a scheduled date.
     const { businessId } = useAppSystem();
-    const { name } = useProfile();
+    const { name } = useData();
 
     const styles = getStyles();
 

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Provider } from "context";
 import getDayGreetingBr from "utils/getDayGreetingBr";
-import { useAuthUser } from "hooks/useAuthUser";
+import useAuth from "hooks/useAuth";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import "../ellipse.scss";
@@ -25,7 +25,7 @@ const now = new Date();
 const greeting = getDayGreetingBr();
 
 export default function ClientUserAppContent({
-    useProfile,
+    useThisData,
     useBizData,
     needAppForCliAdmin,
     needAppForPreview,
@@ -41,23 +41,15 @@ export default function ClientUserAppContent({
     const [showMoreComps, setShowMoreComps] = useState(false);
     const currScoreRef = useRef(null);
 
-    // LESSON: these data are being used here since in the parent useData returns null in the first boot up for cli-user
-    const [
+    const {
         userId,
         role,
-        firstUserName,
-        fullName,
+        firstName: firstUserName,
+        name: fullName,
         lastPrizeId,
         lastPrizeDate,
         loadingData,
-    ] = useData([
-        "userId",
-        "role",
-        "firstName",
-        "name",
-        "lastPrizeId",
-        "lastPrizeDate",
-    ]);
+    } = useData();
     const firstName = clientNameTest || firstUserName;
 
     const {
@@ -65,7 +57,7 @@ export default function ClientUserAppContent({
         lastScore,
         totalPurchasePrize,
         totalGeneralScore,
-    } = useProfile();
+    } = useThisData();
     const currChall = defineCurrChallenge(totalPurchasePrize);
 
     const {
@@ -92,7 +84,7 @@ export default function ClientUserAppContent({
     useAlreadyAlertChallenge(currScore);
     const didUserScroll = useDidScroll();
 
-    const { isAuthUser } = useAuthUser();
+    const isAuth = useAuth();
 
     useNotifyCliWonChall(businessId, {
         businessId,
@@ -132,7 +124,7 @@ export default function ClientUserAppContent({
     );
     useAnimateConfetti(confettiOptions());
     const triggerNumberAnima =
-        (isAuthUser && role === "cliente") ||
+        (isAuth && role === "cliente") ||
         needAppForCliAdmin ||
         needAppForPreview;
     const numberOptions = {

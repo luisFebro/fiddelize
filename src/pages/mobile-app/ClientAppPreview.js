@@ -21,7 +21,7 @@ function ClientAppPreview({ location }) {
     const rewardScore = getQueryByName("rewardScore", location.search);
     const currScore = getQueryByName("currScore", location.search);
 
-    const useProfile = () => ({
+    const useThisData = () => ({
         currScore: Number(currScore) || 100,
         lastScore: 20,
     });
@@ -61,7 +61,7 @@ function ClientAppPreview({ location }) {
         <Fragment>
             {showLogo()}
             <ClientUserAppContent
-                useProfile={useProfile}
+                useThisData={useThisData}
                 useBizData={useBizData}
                 needAppForPreview
                 runName={runName}

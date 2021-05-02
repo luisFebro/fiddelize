@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Title from "../../../../components/Title";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 import { useRunComp } from "../../../../hooks/useRunComp";
 import useAPIList, {
     readTasks,
@@ -13,7 +13,7 @@ import DoneTasksBtn from "./done-tasks-modal/DoneTasksBtn";
 
 export default function AutomaticTaskList() {
     const [skip, setSkip] = useState(0);
-    const { userId } = useProfile();
+    const { userId } = useData();
     const { rewardDeadline } = useBizData();
     const { runName } = useRunComp();
 

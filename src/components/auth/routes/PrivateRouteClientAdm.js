@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useAppSystem } from "../../../hooks/useRoleData";
-import { useAuthUser } from "../../../hooks/useAuthUser";
+import useAuth from "../../../hooks/useAuth";
 import isThisApp from "../../../utils/window/isThisApp";
 import { useRunComp } from "../../../hooks/useRunComp";
 import { getVars } from "init/var";
@@ -26,7 +26,7 @@ export default function PrivateRouteClientAdm({
 }) {
     const { runName } = useRunComp();
     const [goHome, setGoHome] = useState(checkPath(runName));
-    let { isAuthUser } = useAuthUser();
+    let isAuth = useAuth();
     let { roleWhichDownloaded } = useAppSystem();
     // const dispatch = useStoreDispatch();
 

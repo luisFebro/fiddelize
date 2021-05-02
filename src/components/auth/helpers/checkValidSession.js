@@ -1,6 +1,6 @@
 import getAPI, { checkValidSession as check } from "utils/promises/getAPI";
 import getVar from "init/var";
-import { disconnect } from "hooks/useAuthUser";
+import { disconnect } from "hooks/useAuth";
 
 export default async function checkValidSession() {
     window.addEventListener("focus", async () => {

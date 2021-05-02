@@ -7,8 +7,8 @@ import { ShowLoadingComp } from "./Comps";
 import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
 import useOfflineListData from "../storage/useOfflineListData";
 import getFirstName from "../../utils/string/getFirstName";
-import { useProfile } from "init";
-import { useToken } from "../useRoleData";
+import useData from "init";
+import useToken from "auth/useToken";
 import showToast from "../../components/toasts";
 import { logout } from "../../redux/actions/authActions";
 import { chooseHeader } from "../../utils/server/getHeaders";
@@ -89,7 +89,7 @@ export default function useAPIList({
 
     const dispatch = useStoreDispatch();
     const token = useToken();
-    let { name: userName } = useProfile();
+    let { name: userName } = useData();
     userName = getFirstName(userName);
 
     // IMPORTABLE VARIABLES

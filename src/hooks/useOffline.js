@@ -1,47 +1,62 @@
 import { useEffect } from "react";
-import isOffline from "../utils/server/isOffline";
-import getVar, { setVar, removeVar } from "init/var";
-import showToast from "../components/toasts";
+import isOffline from "utils/server/isOffline";
+import showToast from "components/toasts";
 import useData from "init";
+import getVar, { setVar, removeVar } from "init/var";
 
 const isConexionOff = isOffline();
+console.log("isConexionOff", isConexionOff);
 
 export default function useOffline() {
-    const [firstName] = useData(["firstName"]);
+    const [firstName, loading] = useData(["firstName"]);
 
     useEffect(() => {
-        if (firstName === "...") return;
+        if (loading) return;
 
-        if (isConexionOff) {
-            getVar("offlineApp").then((res) => {
-                if (!res)
-                    showToast(
-                        `MODO OFFLINE ATIVADO! ${
-                            `${firstName}, algumas` || "Algumas"
-                        } funcionalidades estão temporariamente desativadas.`,
-                        { dur: 20000 }
-                    );
-            });
-            setVar({ offlineApp: true });
-        } else {
-            getVar("offlineApp")
-                .then((res) => {
-                    if (res) {
-                        removeVar("offlineApp");
-                        const internetBackTxt = firstName
-                            ? `Legal! A internet voltou, ${firstName}!`
-                            : `Legal! A internet voltou. Tenha uma ótima navegação!`;
-                        showToast(internetBackTxt, {
-                            type: "success",
-                            dur: 15000,
-                        });
-                    }
-                })
-                .catch((e) =>
-                    console.log(`smg wrong with offlineApp. Details: ${e}`)
-                );
-        }
-    }, [firstName]);
+        handleConectionMsg(firstName);
+
+        // check conection every time see the screen
+        window.addEventListener("focus", async () => {
+            await handleConectionMsg(firstName);
+        });
+    }, [firstName, loading]);
 
     return { isOffline: isConexionOff };
 }
+
+// HELPERS
+async function handleConectionMsg(firstName) {
+    // need to recheck the connection again.
+    const isOff = isOffline();
+
+    if (isOff) {
+        return await getVar("offlineApp").then(async (gotOfflineMsg) => {
+            if (gotOfflineMsg) return null;
+
+            showToast(
+                `MODO OFFLINE ATIVADO! ${
+                    firstName ? `${firstName}, algumas` : "Algumas"
+                } funcionalidades estão temporariamente desativadas.`,
+                { dur: 20000 }
+            );
+
+            return await setVar({ offlineApp: true });
+        });
+    }
+
+    return await getVar("offlineApp").then(async (gotOfflineMsg) => {
+        if (!gotOfflineMsg) return null;
+
+        const internetBackTxt = firstName
+            ? `Legal! A internet voltou, ${firstName}!`
+            : `Legal! A internet voltou. Tenha uma ótima navegação!`;
+
+        showToast(internetBackTxt, {
+            type: "success",
+            dur: 15000,
+        });
+
+        return await removeVar("offlineApp");
+    });
+}
+// END HELPERS

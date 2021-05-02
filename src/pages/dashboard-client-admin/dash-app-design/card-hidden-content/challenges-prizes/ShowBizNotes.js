@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
-import { useProfile } from "init";
+import useData from "init";
 import getFirstName from "../../../../../utils/string/getFirstName";
 
 ShowBizNotes.propTypes = {
@@ -13,7 +13,7 @@ ShowBizNotes.propTypes = {
 export default function ShowBizNotes({ limitFree }) {
     const [openNote, setOpenNote] = useState(false);
 
-    let { name } = useProfile();
+    let { name } = useData();
     name = getFirstName(name);
 
     return (

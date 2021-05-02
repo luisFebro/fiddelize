@@ -1,14 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router-dom";
 import getFirstName from "../../../utils/string/getFirstName";
-import { useProfile } from "init";
+import useData from "init";
 import ButtonFab, {
     faStyleSmall,
 } from "../../../components/buttons/material-ui/ButtonFab";
 import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
 
 function PremiumServicesBtn({ history }) {
-    const { name } = useProfile();
+    const { name } = useData();
     useAnimateElem(".bottom-action-btn--biz", {
         animaIn: "backInRight",
         speed: "slow",

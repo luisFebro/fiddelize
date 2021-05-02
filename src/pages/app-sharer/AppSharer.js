@@ -20,7 +20,7 @@ import { handleFocus } from "../../utils/form/handleFocus";
 import copyText from "../../utils/document/copyText";
 import RadiusBtn from "../../components/buttons/RadiusBtn";
 import showToast from "../../components/toasts";
-import { useProfile } from "init";
+import useData from "init";
 import { useAppSystem } from "../../hooks/useRoleData";
 import downloadImg from "../../utils/media/download-img/downloadImg";
 import QrCode from "../../components/QrCode";
@@ -94,7 +94,7 @@ export default function AppSharer({ location, match }) {
         bizLogo,
         themePColor: pColor,
     } = useBizData();
-    const { name: cliName } = useProfile();
+    const { name: cliName } = useData();
     const { businessId } = useAppSystem();
 
     const role = getQueryByName("role", location.search) || "cliente-admin";

@@ -1,6 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import authenticate from "auth/authenticate";
 import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 import isThisApp from "../../utils/window/isThisApp";
@@ -12,7 +13,6 @@ import ProtectionMsg from "./ProtectionMsg";
 import useData from "init";
 import showToast from "components/toasts";
 import getAPI, { checkPassword, createTk } from "../../utils/promises/getAPI";
-import authenticate from "../../components/auth/helpers/authenticate";
 import selectTxtStyle from "../../utils/biz/selectTxtStyle";
 import PasswordCircleFields from "../../components/fields/PasswordCircleFields";
 import { Load } from "../../components/code-splitting/LoadableComp";

@@ -1,13 +1,13 @@
 import React from "react";
 import parse from "html-react-parser";
-import { useProfile } from "init";
+import useData from "init";
 import getFirstName from "utils/string/getFirstName";
 import CardsList from "./cards-list/CardsList";
 
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
 export default function PurchaseHistory({ modalData = {} }) {
-    const { role } = useProfile();
+    const { role } = useData();
     const isAdmin = role === "cliente-admin";
 
     const {

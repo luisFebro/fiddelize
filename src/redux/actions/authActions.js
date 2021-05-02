@@ -6,13 +6,13 @@ import { setVar } from "init/var";
 import { API } from "config/api";
 import getAPI, { login, loadUserInit } from "utils/promises/getAPI";
 import setInitData from "init/setInitData";
-import { setLoadingProgress, setRun } from "./globalActions";
+import { setLoadingProgress } from "./globalActions";
 // naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
 // import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
 const isApp = isThisApp();
 
 // Check token & load user
-export const loadUser = async (dispatch, history) => {
+export const loadUser = async (uify, history) => {
     const res = await getAPI({
         method: "post",
         url: loadUserInit(),
@@ -30,24 +30,18 @@ export const loadUser = async (dispatch, history) => {
             window.location.href = "/temporariamente-indisponivel-503";
         }
         if (err.status === 401 && errorMsg === "A sua sessão terminou") {
-            logout(dispatch, { history });
+            logout(uify, { history });
         }
     });
 
     if (!res) return;
 
-    const initData = res.data;
-    const { role } = initData.currUser;
-
-    await setInitData(role, { initData, dispatch });
-
-    triggerInitDispatch(dispatch, res);
+    await setInitData(res.data, { uify });
 };
 
 // login Email
-// loginEMail with Async/Await
-export const loginEmail = async (dispatch, objToSend) => {
-    setLoadingProgress(dispatch, true);
+export const doLogin = async (uify, objToSend) => {
+    // setLoadingProgress(dispatch, true);
 
     const res = await getAPI({
         method: "post",
@@ -55,19 +49,21 @@ export const loginEmail = async (dispatch, objToSend) => {
         body: objToSend,
         timeout: 30000,
     }).catch((err) => {
-        console.log(`err${err}`);
-        dispatch({
-            type: "LOGIN_ERROR",
-        });
-        setLoadingProgress(dispatch, false);
-        return err.response;
+        showToast(
+            "Não foi possível conectar. Verifique sua conexão e tente novamente.",
+            {
+                type: "error",
+            }
+        );
+        console.log(`ERROR: ${err.response}`);
+        return null;
+        // setLoadingProgress(dispatch, false);
     });
 
-    if (!res) return {};
+    if (!res) return null;
 
-    setLoadingProgress(dispatch, false);
-
-    triggerInitDispatch(dispatch, res, true);
+    await setInitData(res.data, { uify, isLogin: true });
+    // setLoadingProgress(dispatch, false);
 
     return res;
 };
@@ -99,8 +95,6 @@ export const registerEmail = async (dispatch, objToSend) => {
 export async function logout(dispatch, opts = {}) {
     const { needReload = false, history } = opts;
 
-    setRun(dispatch, "logout");
-
     if (history) {
         if (isApp) history.push("/mobile-app");
         else history.push("/");
@@ -109,8 +103,7 @@ export async function logout(dispatch, opts = {}) {
     if (needReload) {
         window.location.href = isApp ? "/mobile-app" : "/";
     }
-    dispatch({ type: "LOGOUT_SUCCESS" });
-    dispatch({ type: "ALL_COMPONENTS_CLEARED" });
+    // dispatch({ type: "LOGOUT_SUCCESS" });
 
     await setVar({ success: false }, "user");
 }
@@ -130,26 +123,6 @@ export const changePassword = async (dispatch, bodyPass, userId) => {
         return err.response;
     }
 };
-
-// HELPERS
-function triggerInitDispatch(dispatch, res, isLogin) {
-    dispatch({
-        type: "CLIENT_ADMIN_READ",
-        payload: res.data.bizData,
-    });
-
-    if (isLogin) {
-        dispatch({
-            type: "LOGIN_EMAIL",
-            payload: { token: res.data.token, role: res.data.currUser.role },
-        });
-    } else {
-        // USER_READ is being dispatch in the login so that indexDB data can be updated in the login boot up.
-        // IMPORTANT LESSON: if you dispatch again an action, it will have no affect and no update.
-        dispatch({ type: "USER_READ", payload: res.data.currUser });
-    }
-}
-// END HELPERS
 
 /* COMMENTS
 n1: eg when user authenticated

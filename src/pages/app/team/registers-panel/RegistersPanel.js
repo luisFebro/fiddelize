@@ -3,7 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import { useBizData } from "init";
 import useDelay from "../../../../hooks/useDelay";
 import TypesHandler from "./types-handler/TypesHandler";
-import useAuth from "../../../../hooks/useAuthUser";
+import useAuth from "../../../../hooks/useAuth";
 import removeImgFormat from "../../../../utils/biz/removeImgFormat";
 
 const getStyles = () => ({

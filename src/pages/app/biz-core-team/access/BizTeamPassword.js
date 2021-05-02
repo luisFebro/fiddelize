@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import AccessPassword from "../../../access-password/AccessPassword";
 import showToast from "../../../../components/toasts";
 import getVar, { setVar } from "init/var";
-import { disconnect } from "../../../../hooks/useAuthUser";
+import { disconnect } from "../../../../hooks/useAuth";
 import RadiusBtn from "../../../../components/buttons/RadiusBtn";
 
 export default withRouter(BizTeamPassword);

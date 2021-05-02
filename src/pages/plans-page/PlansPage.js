@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 import StartPage from "./StartPage";
 import HandlePlan from "./plan-modes/HandlePlan";
 import ReturnBtn from "../dashboard-client-admin/ReturnBtn";
@@ -15,7 +15,7 @@ export default function PlansPage() {
     }, [isPro]);
 
     const { bizName, bizLogo } = useBizData();
-    let { firstName: adminName } = useProfile();
+    let { firstName: adminName } = useData();
 
     const startPageProps = {
         bizLogo,

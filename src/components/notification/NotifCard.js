@@ -3,12 +3,11 @@ import Card from "@material-ui/core/Card";
 import PropTypes from "prop-types";
 import useSexLetter from "hooks/biz/useSexLetter";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 import useDelay from "../../hooks/useDelay";
 import { fromNow } from "../../utils/dates/dateFns";
 import getCardTypeData from "./helpers/getCardTypeData";
 import CardActionBtn from "./card-type-pages/CardActionBtn";
-import useData from "init";
 
 NotifCard.propTypes = {
     cardType: PropTypes.oneOf([
@@ -64,13 +63,13 @@ function NotifCard(props) {
         "firstName",
         "userId",
     ]);
-    let { name: userName, userId } = useProfile();
+    let { name: userName, userId } = useData();
     userName = ultimateName !== "..." ? ultimateName : userName;
     userId = ultimateUserId !== "..." ? ultimateUserId : userId;
 
     const genderLetter = useSexLetter();
 
-    let { role } = useProfile();
+    let { role } = useData();
     role = ultimateRole !== "..." ? ultimateRole : role;
     if (forceCliUser) role = "cliente";
 

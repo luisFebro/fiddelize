@@ -7,22 +7,6 @@ const [systemRole, systemBizId] = getItems("appSystem", [
     "businessId",
 ]);
 
-// appSystem will be depracated since it is not reliable with starting valueswith nulll from local storage...
-// useAppSystem is compelte..
-export const appSystem = {
-    roleWhichDownloaded: systemRole,
-    businessId: systemBizId,
-};
-
-export const useToken = () => {
-    const { tokenWhenLogin } = useStoreState((state) => ({
-        tokenWhenLogin: state.authReducer.cases.tokenWhenLogin,
-    }));
-    const storageToken = localStorage.getItem("token");
-
-    return tokenWhenLogin || storageToken;
-};
-
 export const useAppSystem = () => {
     const { clientUser, currUser, role } = useStoreState((state) => ({
         role: state.userReducer.cases.currUser.role,

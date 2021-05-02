@@ -6,7 +6,7 @@ import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import { updateUser } from "../../../../redux/actions/userActions";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 import { useAppSystem } from "../../../../hooks/useRoleData";
 import useAPIList, {
     readUserList,
@@ -174,7 +174,7 @@ export default function AsyncRecordedClientsList() {
     const [skip, setSkip] = useState(0);
     const [isFiltering, setIsFiltering] = useState(false);
     const { businessId } = useAppSystem();
-    const { name } = useProfile();
+    const { name } = useData();
     const { bizPlan } = useBizData();
 
     const dispatch = useStoreDispatch();

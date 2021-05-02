@@ -1,6 +1,6 @@
 import useBackColor from "../../hooks/useBackColor";
 import AppList from "./apps-list/AppList";
-import useAuth from "../../hooks/useAuthUser";
+import useAuth from "../../hooks/useAuth";
 
 export default function AppsPanel({ history }) {
     useBackColor("var(--mainWhite)");

@@ -3,8 +3,8 @@ import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useBizData } from "init";
-import { useProfile } from "init";
-import { disconnect } from "hooks/useAuthUser";
+import useData from "init";
+import { disconnect } from "hooks/useAuth";
 import { useAppSystem } from "../../hooks/useRoleData";
 import isThisApp from "../../utils/window/isThisApp";
 import ButtonMenu from "../../components/buttons/material-ui/button-menu/ButtonMenu";
@@ -44,7 +44,7 @@ export default function MoreOptionsMenu({ location, history }) {
     const [currModal, setCurrModal] = useState("");
     const [fullOpen, setFullOpen] = useState(false);
     const { businessId } = useAppSystem();
-    const { role, name } = useProfile();
+    const { role, name } = useData();
     const { bizLinkName, bizName, bizPlan } = useBizData();
 
     const handleFullOpen = (modalName) => {

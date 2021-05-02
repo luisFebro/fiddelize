@@ -3,17 +3,18 @@ import { setItems, getItems } from "init/lStorage";
 
 // for both indexDB and localstorage in one place
 // also for bootup Login.js data and recurring access with loadUserInit rest API
-export default async function setInitData(role, options = {}) {
-    const { initData, dispatch } = options;
-    if (!role || !initData || !dispatch)
-        return Promise.reject("missing role or initData");
+export default async function setInitData(data, options = {}) {
+    const { uify, isLogin } = options;
+    if (!data || !uify) return Promise.reject("missing role, uify or data");
 
-    await Promise.all([
-        setIndexedDbData(role, initData),
-        setLstorageData(initData),
-    ]);
+    const { role } = data.currUser;
+
+    // update app's UI
+    uify(["bizData", data.bizData]);
+    uify(["currUser", data.currUser]);
+
+    await Promise.all([setIndexedDbData(role, data), setLstorageData(data)]);
     // dispatch here used to update all indexDB variables. otherwise, null in the bootup. So it is extremely important to update UI with the new variables in indexedDB
-    dispatch({ type: "USER_READ", payload: initData.currUser });
 
     return "done setting init data";
 }

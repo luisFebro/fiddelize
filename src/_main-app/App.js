@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Provider } from "context";
 import { BrowserRouter } from "react-router-dom";
 import ReactGA from "react-ga"; // google analytics
 import isThisApp from "utils/window/isThisApp";
@@ -9,6 +10,7 @@ import { IS_PROD } from "config/clientUrl";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";
 import showToast from "components/toasts";
 import checkValidSession from "components/auth/helpers/checkValidSession";
+import useGlobalApp from "./useGlobalApp.js";
 import "utils/globalHelpers";
 // STYLING
 import "./scss/App.scss";
@@ -22,9 +24,14 @@ import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // END UIs
 // import ScrollToTop from 'react-router-scroll-top';
+import useData from "init";
 
 export default function App() {
     useOffline();
+    // !!!!FIX NULL WHEN IT IS OBJ LIEK BELOW::
+    const [userID, loading] = useData(["userId"], { dots: true });
+    // console.log("loading", loading);
+    // console.log("userID", userID);
 
     useEffect(() => {
         switchConsoleLogs();
@@ -64,9 +71,13 @@ export default function App() {
         });
     }, []);
 
+    const store = useGlobalApp();
+
     return (
         <BrowserRouter>
-            {isThisApp() ? <AsyncMobileApp /> : <AsyncWebsite />}
+            <Provider store={store}>
+                {isThisApp() ? <AsyncMobileApp /> : <AsyncWebsite />}
+            </Provider>
         </BrowserRouter>
     );
 }

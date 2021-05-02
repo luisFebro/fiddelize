@@ -7,7 +7,7 @@ import showToast from "../../../components/toasts";
 import SpeedDialButton from "../../../components/buttons/SpeedDialButton";
 import ModalFullContent from "../../../components/modals/ModalFullContent";
 import { Load } from "../../../components/code-splitting/LoadableComp";
-import { disconnect } from "../../../hooks/useAuthUser";
+import { disconnect } from "../../../hooks/useAuth";
 
 export const AsyncMemberTasksHistory = Load({
     loader: () =>

@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import { useBizData } from "init";
-import { useProfile } from "init";
 import { Load } from "../../../components/code-splitting/LoadableComp";
 import useData from "init";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
@@ -10,7 +9,7 @@ import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-
 import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
-import useAuth from "../../../hooks/useAuthUser";
+import useAuth from "../../../hooks/useAuth";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
@@ -48,7 +47,7 @@ export default function TeamApp({
     // redirect if not auth
     useAuth({ history, roles: "nucleo-equipe, cliente-membro, cliente-admin" });
 
-    const { notifCount } = useProfile();
+    const { notifCount } = useData();
 
     const needAdminDefaultTheme = isCliAdmin && !isPreviewMode;
 

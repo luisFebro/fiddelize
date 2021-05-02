@@ -3,18 +3,15 @@ import { useEffect, useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import AsyncLogin from "components/auth/AsyncLogin";
-import { useBizData } from "init";
-import { useProfile } from "init";
+import useData, { useBizData } from "init";
 import { useAppSystem } from "hooks/useRoleData";
-import { useAuthUser } from "hooks/useAuthUser";
-
+import useAuth from "hooks/useAuth";
 import { useRunComp } from "hooks/useRunComp";
 import isThisApp from "utils/window/isThisApp";
 import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import useDelay from "hooks/useDelay";
 import CompLoader from "components/CompLoader";
 import useBackColor from "hooks/useBackColor";
-import useData from "init";
 import useScrollUp from "hooks/scroll/useScrollUp";
 import { Load } from "components/code-splitting/LoadableComp";
 import removeImgFormat from "utils/biz/removeImgFormat";
@@ -98,8 +95,9 @@ function ClientMobileApp({ location, history }) {
         "instantBizName",
         "needAppRegister",
     ]);
+    console.log("role INDEXED DB", role);
 
-    const { notifCount } = useProfile();
+    const { notifCount } = useData();
 
     useLoginOrRegister({
         setLoginOrRegister,
@@ -108,7 +106,8 @@ function ClientMobileApp({ location, history }) {
         isInstantApp,
     });
 
-    let { isAuthUser } = useAuthUser();
+    let isAuthUser = useAuth();
+    console.log("isAuthUser", isAuthUser);
     isAuthUser = isAuthUser || (success !== "..." && success);
 
     const { roleWhichDownloaded, businessId } = useAppSystem();
@@ -362,11 +361,11 @@ function ClientMobileApp({ location, history }) {
 
             {isAuthUser && (
                 <section>
-                    {isCliUser && (
+                    {true && (
                         <ClientUserAppContent
                             businessId={businessId}
                             loadingData={loadingData}
-                            useProfile={useProfile}
+                            useThisData={useData}
                             useBizData={useBizData}
                             needAppForCliAdmin={needAppForCliAdmin}
                             colorP={themePColor}

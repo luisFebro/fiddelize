@@ -1,13 +1,12 @@
 import { Fragment, useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
-import { useProfile } from "init";
+import useData from "init";
 import NotifList from "./NotifList";
 import RadiusBtn from "../buttons/RadiusBtn";
 import { markAllAsClicked } from "../../redux/actions/notificationActions";
 import "./_Notification.scss";
 import { setRun } from "../../hooks/useRunComp";
 import getId from "../../utils/getId";
-import useData from "init";
 
 export default function Notification({
     forceCliUser = false,
@@ -24,7 +23,7 @@ export default function Notification({
 
     const dispatch = useStoreDispatch();
 
-    const { notifCount } = useProfile();
+    const { notifCount } = useData();
 
     const showTitle = () => (
         <div className="mt-4">

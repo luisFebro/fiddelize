@@ -15,7 +15,6 @@ import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
 import isThisApp from "../../../utils/window/isThisApp";
 import { logout } from "../../../redux/actions/authActions";
 import { useBizData } from "init";
-import { useProfile } from "init";
 import useData from "init";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import getFirstName from "../../../utils/string/getFirstName";
@@ -69,7 +68,7 @@ function AsyncClientScoresPanel({ history, location }) {
         totalGeneralScore,
         totalActiveScore,
         totalPurchasePrize = 0,
-    } = useProfile();
+    } = useData();
     totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
 
     let {

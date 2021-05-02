@@ -12,9 +12,7 @@ export default function SuccessMsg({
 }) {
     const [closeMsg, setCloseMsg] = useState(false);
 
-    const [succMsg] = useData(["text_cli-member_msg-score"], {
-        storeName: "audios",
-    });
+    const [succMsg] = useData(["text_cli-member_msg-score"], "audios");
 
     const handleFinishedAudio = () => {
         setCloseMsg(true);

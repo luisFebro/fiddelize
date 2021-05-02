@@ -2,7 +2,7 @@
 // Use it only for specific rich props components (do not boot up with App because perf can suffer and unnecessary data can be initialized...)
 // if a prop requires to pass to more than or equal to 3 diff components down the three.
 // Context is primarily used when some data needs to be accessible by many components at different nesting levels. Apply it sparingly because it makes component reuse more difficult.
-import { useContext as useContextMain, createContext } from "react";
+import { useContext as useContextMain, createContext, useReducer } from "react";
 
 const Context = createContext();
 
@@ -15,6 +15,15 @@ export default function useContext() {
 export const Provider = ({ children, store }) => (
     <Context.Provider value={store}>{children}</Context.Provider>
 );
+
+export function useUify(...data) {
+    const [state, uify] = useReducer(...data);
+
+    return {
+        ...state,
+        uify,
+    };
+}
 
 /* n1 create a file "useGlobal.js" in the root of the target component to store all global variables.
 this file should be import to the target file and be assigned to store like:

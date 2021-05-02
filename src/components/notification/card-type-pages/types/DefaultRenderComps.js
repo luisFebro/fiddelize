@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti from "../../../buttons/material-ui/ButtonMulti";
 import { setRun } from "../../../../hooks/useRunComp";
-import { useProfile } from "init";
+import useData from "init";
 import Img from "../../../Img";
 import applyTextStyle from "../../../../utils/string/applyTextStyle";
 import { readUser } from "../../../../redux/actions/userActions";
@@ -83,7 +83,7 @@ export const ShowActionBtn = ({
     const [loading, setLoading] = useState(null);
     const dispatch = useStoreDispatch();
     const { bizLinkName } = useBizData();
-    const { role: loggedUserRole, userId } = useProfile();
+    const { role: loggedUserRole, userId } = useData();
 
     if (loading) titleCliUser = "processando...";
     if (loading === false) titleCliUser = "reiniciando...";

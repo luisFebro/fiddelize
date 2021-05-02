@@ -1,53 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { useStoreState } from "easy-peasy";
 import { getVars } from "init/var";
 import { getItems } from "init/lStorage";
 import repeat from "utils/arrays/repeat";
+import useContext from "context";
 
-export default function useData(dataArray = [], options) {
-    let storeName = options || "user";
-    let trigger = true;
-    let dots = "...";
-    let local = false; // fetch data from localstorage
-
-    if (typeof options === "object") {
-        storeName = options.storeName;
-        trigger = options.trigger === undefined ? true : options.trigger;
-        dots = options.dots === false ? null : dots;
-        local = options.local;
-    }
+// USAGE
+// localStorage = simply use an empty function. e.g const { role } = useData();
+// indexedDB = use an array of strings = const [userRole] = useData(["role"]);
+export default function useData(dataArray, options) {
+    const { store, trigger, dots, local } = handleOptions(dataArray, options);
 
     const [finalData, setFinalData] = useState([]);
-
-    if (!Array.isArray(dataArray))
-        throw new Error("Requires an array data format");
 
     // eslint-disable-next-line
     const thisArray = React.useMemo(() => dataArray, []);
 
-    useEffect(() => {
-        let unmounted;
-        if (!thisArray.length || !trigger || unmounted) return null;
+    useIndexedLoader({
+        thisArray,
+        trigger,
+        store,
+        local,
+        setFinalData,
+    });
 
-        if (local) {
-            const localRes = getItems("currUser", thisArray);
-            return setFinalData(localRes);
-        }
-
-        (async () => {
-            const indexedRes = await getVars(thisArray, storeName).catch(
-                (err) => {
-                    throw new Error(`${err}`);
-                }
-            );
-
-            if (indexedRes) setFinalData(indexedRes);
-        })();
-
-        return () => {
-            unmounted = true;
-        };
-    }, [thisArray, trigger, storeName, local]);
+    if (local) return handleLocalStorage();
 
     // this will automatically set a ... for dataArray loading
     const isLoading = !finalData.length;
@@ -58,20 +34,17 @@ export default function useData(dataArray = [], options) {
 }
 
 export function useBizData() {
-    const bizData = useStoreState((state) => state.userReducer.cases.bizData);
+    const { bizData = {} } = useContext();
+    const [priorBizData] = getItems("bizData");
+
+    const updatedBizData = { ...priorBizData, ...bizData };
 
     return {
-        ...bizData,
-        themePColor: bizData.themePColor || "default",
-        themeSColor: bizData.themeSColor || "default",
-        themeBackColor: bizData.themeBackColor || "default",
+        ...updatedBizData,
+        themePColor: updatedBizData.themePColor || "default",
+        themeSColor: updatedBizData.themeSColor || "default",
+        themeBackColor: updatedBizData.themeBackColor || "default",
     };
-}
-
-export function useProfile() {
-    const currUser = useStoreState((state) => state.userReducer.cases.currUser);
-
-    return currUser;
 }
 
 export function useFiddelizeAdmin() {
@@ -83,3 +56,55 @@ export function useFiddelizeAdmin() {
         mainTechWhatsapp: MAIN_TECH_WHATSAPP,
     };
 }
+
+// HOOKS
+function useIndexedLoader({ thisArray, trigger, store, local, setFinalData }) {
+    useEffect(() => {
+        let unmounted;
+        if (local || (thisArray && !thisArray.length) || !trigger || unmounted)
+            return null;
+
+        (async () => {
+            const indexedRes = await getVars(thisArray, store).catch((err) => {
+                throw new Error(`${err}`);
+            });
+
+            if (indexedRes) setFinalData(indexedRes);
+        })();
+
+        return () => {
+            unmounted = true;
+        };
+    }, [thisArray, trigger, store, local]);
+}
+// END HOOKS
+
+// HELPERS
+function handleOptions(dataArray, options) {
+    if (!Array.isArray(dataArray) && dataArray !== undefined)
+        throw new Error("Requires an array data format");
+
+    let store = options || "user";
+    let trigger = true;
+    let dots = "...";
+    const local = dataArray === undefined; // fetch data from localstorage
+
+    if (typeof options === "object") {
+        store = options.store;
+        trigger = options.trigger === undefined ? true : options.trigger;
+        dots = options.dots === false ? null : dots;
+    }
+
+    return {
+        store,
+        trigger,
+        dots,
+        local,
+    };
+}
+
+function handleLocalStorage() {
+    const [localRes] = getItems("currUser");
+    return !localRes ? {} : localRes;
+}
+// END HELPERS

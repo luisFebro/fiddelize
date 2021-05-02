@@ -1,9 +1,9 @@
-import { useProfile } from "init";
+import useData from "init";
 import AddSMSBtn from "../../credits-balance/add-sms-btn/AddSMSBtn";
 import usePro from "../../../../../hooks/pro/usePro";
 
 export default function AsyncNoCredits() {
-    const { firstName } = useProfile();
+    const { firstName } = useData();
 
     const showTitle = () => (
         <div className="mt-5">

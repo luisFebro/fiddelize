@@ -8,13 +8,13 @@ import ChatIcon from "@material-ui/icons/Chat";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Fab from "@material-ui/core/Fab";
 import SpeedDialButton from "../../components/buttons/SpeedDialButton";
-import { useProfile } from "init";
+import useData from "init";
 import { CLIENT_URL } from "../../config/clientUrl";
 import WhatsappBtn from "../../components/buttons/WhatsappBtn";
 // SpeedDial and Icons
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
-import { disconnect } from "../../hooks/useAuthUser";
+import { disconnect } from "../../hooks/useAuth";
 // import lStorage from "../../utils/storage/lStorage";
 
 const AsyncHistory = Load({
@@ -70,7 +70,7 @@ function MoreOptionsBtn({
         totalGeneralScore,
         totalPurchasePrize,
         // purchaseHistory,
-    } = useProfile();
+    } = useData();
 
     const showPurchaseHistory = () => {
         const handlePurchaseClose = () => {

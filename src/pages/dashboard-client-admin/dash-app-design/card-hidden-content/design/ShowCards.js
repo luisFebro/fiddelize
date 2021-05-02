@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OptionCard from "./OptionCard";
 import { useBizData } from "init";
-import { useAuthUser } from "../../../../../hooks/useAuthUser";
+import useAuth from "hooks/useAuth";
 import "./style.scss";
 import { translateColorToPtBr } from "../../../../../global-data/uiColors";
 import useImg, { Img } from "../../../../../hooks/media/useImg";
@@ -16,7 +16,7 @@ export default function ShowCards({ setOpenComp }) {
         themeBackColor,
         milestoneIcon,
     } = useBizData();
-    const { isAuthUser } = useAuthUser();
+    const isAuth = useAuth();
 
     const [url, setUrl] = useState({
         logoBiz: "",
@@ -35,7 +35,7 @@ export default function ShowCards({ setOpenComp }) {
     });
     const logoSrc = logoBiz || logoFid;
 
-    const needClientLogo = bizLogo || isAuthUser;
+    const needClientLogo = bizLogo || isAuth;
 
     const handleLogoSrc = () => {
         if (needClientLogo) {

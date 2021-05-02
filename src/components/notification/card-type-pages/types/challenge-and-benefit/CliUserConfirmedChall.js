@@ -7,7 +7,6 @@ import ButtonFab from "../../../../buttons/material-ui/ButtonFab";
 import useData from "init";
 import showToast from "../../../../toasts";
 import { readUser } from "../../../../../redux/actions/userActions";
-import { useProfile } from "init";
 import defineCurrChallenge from "../../../../../utils/biz/defineCurrChallenge";
 
 export default function CliUserConfirmedChall({
@@ -22,7 +21,7 @@ export default function CliUserConfirmedChall({
 
     const dispatch = useStoreDispatch();
 
-    const { totalPurchasePrize } = useProfile();
+    const { totalPurchasePrize } = useData();
     const updatedCurrChall = defineCurrChallenge(totalPurchasePrize);
 
     const handleCTA = (res) => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Illustration from "../../../../../components/Illustration";
-import { useProfile } from "init";
+import useData from "init";
 import { useRunComp } from "../../../../../hooks/useRunComp";
 import TaskCard from "../list/TaskCard";
 import useAPIList, {
@@ -13,7 +13,7 @@ import useElemDetection, {
 
 export default function ModalContent({ isOffline }) {
     const [skip, setSkip] = useState(0);
-    const { userId } = useProfile();
+    const { userId } = useData();
     const { runName } = useRunComp();
 
     const trigger = getTrigger(runName, "TaskCard");

@@ -1,12 +1,12 @@
 import parse from "html-react-parser";
 import CardsList from "./cards-list/CardsList";
-import { useProfile } from "init";
+import useData from "init";
 import getFirstName from "../../../utils/string/getFirstName";
 
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
 export default function AsyncPurchaseHistory({ modalData }) {
-    const { role } = useProfile();
+    const { role } = useData();
     const isAdmin = role === "cliente-admin";
 
     const {

@@ -14,23 +14,6 @@ const initialState = {
 export const authReducer = {
     cases: reducer((state = initialState, action) => {
         switch (action.type) {
-            case "LOGIN_EMAIL":
-            case "REGISTER_EMAIL":
-                const { role } = action.payload;
-                const allowTokenWhen = role === "cliente"; // ther apps are handled in access password page.
-
-                if (allowTokenWhen) {
-                    (async () => {
-                        await setVar({ token: action.payload.token }, "user");
-                        localStorage.setItem("token", action.payload.token);
-                    })();
-                }
-
-                return {
-                    ...state,
-                    tokenWhenLogin: action.payload.token,
-                };
-            case "LOGIN_ERROR":
             case "LOGOUT_SUCCESS":
                 localStorage.removeItem("token");
                 return {

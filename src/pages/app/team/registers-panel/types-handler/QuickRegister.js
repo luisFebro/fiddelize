@@ -5,7 +5,7 @@ import EmailIcon from "@material-ui/icons/Email";
 import AsyncShowNewContactForm from "../../../../dashboard-client-admin/dash-sms/recipient-options/options/comps/AsyncShowNewContactForm";
 import ButtonFab from "../../../../../components/buttons/material-ui/ButtonFab";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 import { useAppSystem } from "../../../../../hooks/useRoleData";
 import validatePhone from "../../../../../utils/validation/validatePhone";
 import validateEmail from "../../../../../utils/validation/validateEmail";
@@ -19,7 +19,6 @@ import { getUniqueId } from "../../../../../hooks/api/useAPI";
 import SuccessOp from "./SuccessOp";
 import { handleFocus } from "../../../../../utils/form/handleFocus";
 import usePro from "../../../../../hooks/pro/usePro";
-import useData from "init";
 import getAPI, { encryptLinkScore } from "../../../../../utils/promises/getAPI";
 import useInvitationMsg from "./hooks/useInvitationMsg";
 import copyText from "../../../../../utils/document/copyText";
@@ -94,7 +93,7 @@ export default function QuickRegister({ formPayload, isNewMember }) {
 
     const { businessId } = useAppSystem();
     const { bizName, bizLinkName } = useBizData();
-    const { name: userName } = useProfile();
+    const { name: userName } = useData();
 
     const smsBalance = useCheckBalance();
 

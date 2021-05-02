@@ -1,6 +1,6 @@
 import axios from "axios";
 import { chooseHeaderAsync } from "../server/getHeaders";
-import { disconnect } from "../../hooks/useAuthUser";
+import { disconnect } from "../../hooks/useAuth";
 
 export * from "../../hooks/api/requestsLib";
 
@@ -27,7 +27,7 @@ export default function getAPI({
             if (typeof cancel === "function") cancel();
             // LESSON: do not use Promise.reject inside a pure promise like this where there is reject method already. the request will fail
             return reject({
-                error: "Tempo de espera terminou. Tente novamente",
+                response: "Tempo de espera terminou. Tente novamente",
             });
         }, timeout);
 
@@ -53,12 +53,6 @@ export default function getAPI({
                 return isSearch && reject({ error: "canceled" });
             }
             if (error.response) {
-                console.log(
-                    `${JSON.stringify(error.response.data)}. STATUS: ${
-                        error.response.status
-                    }`
-                );
-
                 const { status } = error.response;
                 const gotExpiredToken = status === 401;
                 if (gotExpiredToken) {
@@ -68,7 +62,9 @@ export default function getAPI({
                 }
             }
 
-            return reject(error.response && error.response.data);
+            return reject({
+                response: error.response && error.response.data,
+            });
         });
 
         clearTimeout(stopRequest);

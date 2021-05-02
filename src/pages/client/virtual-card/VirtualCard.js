@@ -103,7 +103,7 @@ function VirtualCard({ history }) {
     }, [loading, showNoCardMsg, isShe]);
 
     const [failureMsg] = useData(["text_cli-user_virtual-card"], {
-        storeName: "audios",
+        store: "audios",
         trigger: !loading && audioPrerender,
     });
 

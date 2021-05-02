@@ -5,7 +5,7 @@ import ShareLink from "./share-link/ShareLink";
 import BizTeamNavbar from "./navbar/BizTeamNavbar";
 import useScrollUp from "../../../hooks/scroll/useScrollUp";
 import useBackColor from "../../../hooks/useBackColor";
-import useAuth from "../../../hooks/useAuthUser";
+import useAuth from "../../../hooks/useAuth";
 import useData from "init";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
+import authenticate from "auth/authenticate";
 import ToggleVisibilityPassword from "../../../components/forms/fields/ToggleVisibilityPassword";
 import handleChange from "../../../utils/form/use-state/handleChange";
 import { handleEnterPress } from "../../../utils/event/isKeyPressed";
@@ -9,12 +10,11 @@ import { useBizData } from "init";
 import { useAppSystem } from "../../../hooks/useRoleData";
 import showToast from "../../../components/toasts";
 import getAPI, { createTk } from "../../../utils/promises/getAPI";
-import authenticate from "../../../components/auth/helpers/authenticate";
 import useBackColor from "../../../hooks/useBackColor";
 
 import RadiusBtn from "../../../components/buttons/RadiusBtn";
 import { setVar } from "init/var";
-import { disconnect } from "../../../hooks/useAuthUser";
+import { disconnect } from "../../../hooks/useAuth";
 import getId from "../../../utils/getId";
 
 const getStyles = () => ({

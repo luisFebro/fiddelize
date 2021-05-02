@@ -4,7 +4,7 @@ import { useStoreDispatch } from "easy-peasy";
 import ButtonMulti from "../../../components/buttons/material-ui/ButtonMulti";
 import { setRun } from "../../../redux/actions/globalActions";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 import getOnlyNumbersFromStr from "../../../utils/numbers/getOnlyNumbersFromStr";
 import convertPhoneStrToInt from "../../../utils/numbers/convertPhoneStrToInt";
 import { addDays } from "../../../utils/dates/dateFns";
@@ -59,7 +59,7 @@ export default function PayArea({
     } = data;
 
     const { bizLinkName, bizName } = useBizData();
-    const { userId, phone, name: userName, email: senderEmail } = useProfile();
+    const { userId, phone, name: userName, email: senderEmail } = useData();
 
     const startedPagseguro = useStartPagseguro();
     const { loading, error, ShowError } = useStartCheckout({

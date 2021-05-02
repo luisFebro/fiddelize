@@ -1,6 +1,6 @@
 import { useState, Fragment, useEffect } from "react";
 import AutoCompleteSearch from "../../../../../components/search/AutoCompleteSearch";
-import { useProfile } from "init";
+import useData from "init";
 import RadiusBtn from "../../../../../components/buttons/RadiusBtn";
 import { Load } from "../../../../../components/code-splitting/LoadableComp";
 import ShowSelectionArea from "./comps/ShowSelectionArea";
@@ -27,7 +27,7 @@ export default function AsyncSpecificCustomer({
     const { selectedValue } = data;
 
     const { runName, runOneArray } = useRunComp();
-    const { userId } = useProfile();
+    const { userId } = useData();
 
     const params = { contactFrom: selectedValue };
     const trigger = selectedValue;

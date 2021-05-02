@@ -4,7 +4,7 @@ import "./CartRace.scss";
 import PropTypes from "prop-types";
 import animateCartByScore, { options } from "./animateCartByScore";
 import { useBizData } from "init";
-import { useProfile } from "init";
+import useData from "init";
 import defineCurrChallenge from "utils/biz/defineCurrChallenge";
 import pickCurrChallData from "utils/biz/pickCurrChallData";
 
@@ -27,7 +27,7 @@ export default function CartRace({
     className,
     id,
 }) {
-    const { totalPurchasePrize } = useProfile();
+    const { totalPurchasePrize } = useData();
     let { maxScore, themePColor, themeSColor, rewardList } = useBizData();
 
     // const isCartEmpty = !totalGeneralScore;

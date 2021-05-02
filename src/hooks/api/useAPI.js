@@ -7,9 +7,9 @@ import { useStoreDispatch } from "easy-peasy";
 import { setRun } from "../useRunComp";
 import isObjEmpty from "../../utils/objects/isObjEmpty";
 import { chooseHeader } from "../../utils/server/getHeaders";
-import { useToken } from "../useRoleData";
+import useToken from "auth/useToken";
 import { useOfflineData } from "../storage/useOfflineListData";
-import { disconnect } from "../useAuthUser";
+import { disconnect } from "../useAuth";
 import showToast from "../../components/toasts";
 
 export * from "./requestsLib.js";

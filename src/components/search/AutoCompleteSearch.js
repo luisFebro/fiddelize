@@ -11,11 +11,10 @@ import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getVar, { setVar } from "init/var";
 import isKeyPressed from "../../utils/event/isKeyPressed";
-import { useProfile } from "init";
-import { useToken } from "../../hooks/useRoleData";
+import useData from "init";
+import useToken from "auth/useToken";
 import { chooseHeader } from "../../utils/server/getHeaders";
-import getFirstName from "../../utils/string/getFirstName";
-import { disconnect } from "../../hooks/useAuthUser";
+import { disconnect } from "../../hooks/useAuth";
 // 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
 AutoCompleteSearch.propTypes = {
@@ -110,8 +109,7 @@ export default function AutoCompleteSearch({
     const didUserStartTyping = Boolean(searchChange.length);
 
     const token = useToken();
-    let { name } = useProfile();
-    name = getFirstName(name);
+    let { firstName: name } = useData();
 
     const styles = getStyles({ fieldBack, themeColor, txtFont });
 
