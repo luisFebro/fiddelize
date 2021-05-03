@@ -71,7 +71,10 @@ export const setVars = async (dataObj, options = {}) => {
     // https://stackoverflow.com/questions/43807515/eslint-doesnt-allow-for-in
     Object.keys(dataObj).forEach((key) => {
         const value = dataObj[key];
-        if (!value) promises.push(null);
+        if (!value) {
+            promises.push(null);
+            return;
+        }
 
         promises.push(
             variablesStore(storeName)
@@ -107,7 +110,7 @@ export const removeVars = async (strArray, options = {}) => {
     return await Promise.all(promises);
 };
 
-export const removeCollection = async (store) => {
+export const removeStore = async (store) => {
     const storeName = handleStoreName(store);
 
     return await localforage.dropInstance({

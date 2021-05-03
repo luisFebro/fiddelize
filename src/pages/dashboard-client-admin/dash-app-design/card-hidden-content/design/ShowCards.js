@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OptionCard from "./OptionCard";
 import { useBizData } from "init";
-import useAuth from "hooks/useAuth";
+import useAuth from "auth/useAuth";
 import "./style.scss";
 import { translateColorToPtBr } from "../../../../../global-data/uiColors";
 import useImg, { Img } from "../../../../../hooks/media/useImg";
@@ -16,6 +16,7 @@ export default function ShowCards({ setOpenComp }) {
         themeBackColor,
         milestoneIcon,
     } = useBizData();
+
     const isAuth = useAuth();
 
     const [url, setUrl] = useState({

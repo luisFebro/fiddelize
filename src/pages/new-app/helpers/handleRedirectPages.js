@@ -34,10 +34,10 @@ export const getNewAppPage = async () => {
     const { bizName } = clientAdminData;
     const { bizLinkName } = clientAdminData;
     const { mainReward } = clientAdminData;
-    const { rewardScore } = clientAdminData;
+    const { targetPoints } = clientAdminData;
 
     if (doneSSRatingIcon) return `/${bizLinkName}/novo-app/cadastro-admin`;
     if (doneRewardPlanner)
-        return `/${bizLinkName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${rewardScore}&premio-desc=${mainReward}&nome-cliente=Ana`;
+        return `/${bizLinkName}/novo-app/self-service?negocio=${bizName}&ponto-premio=${targetPoints}&premio-desc=${mainReward}&nome-cliente=Ana`;
     if (doneBizInfo) return `/${bizLinkName}/novo-app/metas`;
 };

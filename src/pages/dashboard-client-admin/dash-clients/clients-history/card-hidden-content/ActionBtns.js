@@ -28,13 +28,17 @@ export default function ActionBtns({ data, needBadgeForTestMode }) {
 
 const ShowHistoryBtn = ({ data, isFromDashboard = true }) => {
     const { name, _id, clientUserData } = data;
-    const { totalGeneralScore, totalPurchasePrize, currScore } = clientUserData;
+    const {
+        totalGeneralPoints,
+        totalPurchasePrize,
+        currPoints,
+    } = clientUserData;
 
     const getModalData = () => ({
         cliUserName: name,
         cliUserId: _id,
-        currUserScore: currScore,
-        totalGeneralScore,
+        currUserScore: currPoints,
+        totalGeneralPoints,
         totalPurchasePrize,
         isFromDashboard,
     });

@@ -5,8 +5,7 @@ import RegisteredClientsAccordion from "./accordion/RegisteredClientsAccordion";
 import PanelHiddenContent from "./card-hidden-content/PanelHiddenContent";
 import convertToReal from "../../../../utils/numbers/convertToReal";
 import { updateUser } from "../../../../redux/actions/userActions";
-import { useBizData } from "init";
-import useData from "init";
+import useData, { useBizData } from "init";
 import { useAppSystem } from "../../../../hooks/useRoleData";
 import useAPIList, {
     readUserList,
@@ -110,9 +109,9 @@ const getInfoElem = (target, options = {}) => {
 
     if (target === "buyMoreCustomers") {
         const condition =
-            user.clientUserData && user.clientUserData.totalGeneralScore;
+            user.clientUserData && user.clientUserData.totalGeneralPoints;
         const value = convertToReal(
-            condition && user.clientUserData.totalGeneralScore
+            condition && user.clientUserData.totalGeneralPoints
         );
         const emptyMsg = "R$ 0.00";
         return getElemMaker(condition, `R$ ${value}`, emptyMsg, true);
@@ -183,11 +182,11 @@ export default function AsyncRecordedClientsList() {
 
     const [data, setData] = useState({
         totalCliUserScores: 0,
-        totalActiveScores: 0,
+        totalActivePoints: 0,
         search: "",
         cleared: "",
     });
-    const { totalCliUserScores, totalActiveScores, search, cleared } = data;
+    const { totalCliUserScores, totalActivePoints, search, cleared } = data;
 
     const [filter, setFilter] = useState({
         filterName: "newCustomers",
@@ -235,13 +234,13 @@ export default function AsyncRecordedClientsList() {
     // useful for central admin to know the general scores from all cli-admins
     useEffect(() => {
         const objToSend = {
-            "clientAdminData.totalClientUserScores": totalCliUserScores,
-            "clientAdminData.totalActiveScores": totalActiveScores,
+            "clientAdminData.totalClientUserPoints": totalCliUserScores,
+            "clientAdminData.totalActivePoints": totalActivePoints,
         };
         updateUser(dispatch, objToSend, businessId, {
             thisRole: "cliente-admin",
         });
-    }, [totalCliUserScores, totalActiveScores]);
+    }, [totalCliUserScores, totalActivePoints]);
 
     const params = handleParams({ search, filterName, period, getFilterDate });
 
@@ -281,10 +280,10 @@ export default function AsyncRecordedClientsList() {
 
     useEffect(() => {
         if (content) {
-            const { totalCliUserScores, totalActiveScores } = extractStrData(
+            const { totalCliUserScores, totalActivePoints } = extractStrData(
                 content
             );
-            setData({ ...data, totalCliUserScores, totalActiveScores });
+            setData({ ...data, totalCliUserScores, totalActivePoints });
         }
     }, [content]);
 
@@ -362,10 +361,10 @@ export default function AsyncRecordedClientsList() {
                         } text-subtitle text-shadow font-weight-bold m-0 mt-4`}
                         style={{ lineHeight: "19px" }}
                     >
-                        {!user.clientUserData.currScore
+                        {!user.clientUserData.currPoints
                             ? "• 0 Pontos"
                             : ` • ${convertToReal(
-                                  user.clientUserData.currScore
+                                  user.clientUserData.currPoints
                               )} Pontos`}
                         {Boolean(user.clientUserData.totalPurchasePrize) && (
                             <Fragment>
@@ -401,13 +400,13 @@ export default function AsyncRecordedClientsList() {
                 return !!cliUser.filterBirthday;
             }
             if (filterName === "buyLessCustomers") {
-                return !!cliUser.totalGeneralScore;
+                return !!cliUser.totalGeneralPoints;
             }
             if (filterName === "firstPurchases") {
                 return !!cliUser.filterLastPurchase;
             }
             if (filterName === "lowestActiveScores") {
-                return !!cliUser.currScore;
+                return !!cliUser.currPoints;
             }
             if (filterName === "lowestSinglePurchases") {
                 return !!cliUser.filterHighestPurchase;
@@ -538,7 +537,7 @@ export default function AsyncRecordedClientsList() {
                     <Totals
                         loading={loading}
                         allUsersLength={listTotal}
-                        totalActiveScores={totalActiveScores}
+                        totalActivePoints={totalActivePoints}
                         totalCliUserScores={totalCliUserScores}
                         period={period}
                     />

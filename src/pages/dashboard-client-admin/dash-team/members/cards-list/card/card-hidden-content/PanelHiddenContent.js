@@ -21,7 +21,7 @@ function PanelHiddenContent({ history, data }) {
 
     const styles = getStyles();
 
-    const { newClientTotal, newScoreTotal } = data;
+    const { newClientTotal, newPointsTotal } = data;
 
     const name = getFirstName(data.name && data.name.cap(), {
         addSurname: true,
@@ -53,7 +53,7 @@ function PanelHiddenContent({ history, data }) {
                         icon="check"
                         className="mr-2 shadow-elevation-black"
                     />
-                    {newScoreTotal} Pontos de clientes.
+                    {newPointsTotal} Pontos de clientes.
                 </span>
             </p>
             {data.job !== "admin" && (

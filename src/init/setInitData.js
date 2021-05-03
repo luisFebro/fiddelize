@@ -4,7 +4,7 @@ import { setItems, getItems } from "init/lStorage";
 // for both indexDB and localstorage in one place
 // also for bootup Login.js data and recurring access with loadUserInit rest API
 export default async function setInitData(data, options = {}) {
-    const { uify, isLogin } = options;
+    const { uify } = options;
     if (!data || !uify) return Promise.reject("missing role, uify or data");
 
     const { role } = data.currUser;

@@ -2,32 +2,28 @@ import { useEffect, useRef, useState } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    readUser,
-    readPurchaseHistory,
-} from "../../../redux/actions/userActions";
-import showToast from "../../../components/toasts";
-import Title from "../../../components/Title";
+import { readUser, readPurchaseHistory } from "redux/actions/userActions";
+import showToast from "components/toasts";
+import Title from "components/Title";
 import animateNumber, {
     getAnimationDuration,
-} from "../../../utils/numbers/animateNumber";
-import { convertDotToComma } from "../../../utils/numbers/convertDotComma";
-import isThisApp from "../../../utils/window/isThisApp";
-import { logout } from "../../../redux/actions/authActions";
-import { useBizData } from "init";
-import useData from "init";
-import { useAppSystem } from "../../../hooks/useRoleData";
-import getFirstName from "../../../utils/string/getFirstName";
-import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
-import { prerenderAudio } from "../../../hooks/media/usePlayAudio";
-import pickCurrChallData from "../../../utils/biz/pickCurrChallData";
+} from "utils/numbers/animateNumber";
+import { convertDotToComma } from "utils/numbers/convertDotComma";
+import isThisApp from "utils/window/isThisApp";
+import disconnect from "auth/disconnect";
+import useData, { useBizData } from "init";
+import { useAppSystem } from "hooks/useRoleData";
+import getFirstName from "utils/string/getFirstName";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
+import { prerenderAudio } from "hooks/media/usePlayAudio";
+import pickCurrChallData from "utils/biz/pickCurrChallData";
 import getAPI, {
-    setLastScoreAsDone,
+    setLastPointsAsDone,
     updateUser,
     addPurchaseHistory,
-} from "../../../utils/promises/getAPI";
+} from "utils/promises/getAPI";
 import getVar, { setVar, removeVar } from "init/var";
-import useBackColor from "../../../hooks/useBackColor";
+import useBackColor from "hooks/useBackColor";
 import { getScoreData, getStyles } from "./helpers";
 import BuyRating from "./rating/BuyRating";
 
@@ -37,7 +33,7 @@ const isApp = isThisApp();
 function AsyncClientScoresPanel({ history, location }) {
     const [showTotalPoints, setShowTotalPoints] = useState(false);
     const [finishedWork, setFinishedWork] = useState(false);
-    const [hideCurrScore, setHideCurrScore] = useState(false); // with updating, the currScore double when click on finish button. Then ofuscate it with "...".
+    const [hideCurrScore, setHideCurrScore] = useState(false); // with updating, the currPoints double when click on finish button. Then ofuscate it with "...".
     const [ratingData, setRatingData] = useState({
         type: "nps",
         nps: "", // for nps
@@ -63,16 +59,16 @@ function AsyncClientScoresPanel({ history, location }) {
         role,
         name,
         _id: cliUserId, // cliUserId is essencial here to read cli-users data
-        currScore: currentScore,
-        lastScore: lastCurrScore,
-        totalGeneralScore,
-        totalActiveScore,
+        currPoints: currentScore,
+        lastPoints: lastCurrScore,
+        totalGeneralPoints,
+        totalActivePoints,
         totalPurchasePrize = 0,
     } = useData();
-    totalGeneralScore = !totalGeneralScore ? 0 : totalGeneralScore;
+    totalGeneralPoints = !totalGeneralPoints ? 0 : totalGeneralPoints;
 
     let {
-        maxScore,
+        targetPoints,
         milestoneIcon,
         rewardList,
         // bizName,
@@ -141,18 +137,18 @@ function AsyncClientScoresPanel({ history, location }) {
 
     // MAIN VARIABLES
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    maxScore = pickedObj.rewardScore;
+    targetPoints = pickedObj.targetPoints;
     milestoneIcon = pickedObj.milestoneIcon;
     const prizeDesc = pickedObj.mainReward;
 
-    const { currScoreBefore, cashCurrScore, currScoreNow } = getScoreData({
+    const { currPointsBefore, lastPoints, currPointsNow } = getScoreData({
         currentScore,
         paidValue,
     });
 
     const firstName = getFirstName(name) || "Olá";
     const currChallenge = totalPurchasePrize + 1;
-    const userBeatChallenge = currScoreNow >= maxScore;
+    const userBeatChallenge = currPointsNow >= targetPoints;
 
     const isCliAdminApp = location.search.includes("client-admin=1");
     const path = isCliAdminApp ? "/mobile-app?client-admin=1" : "/mobile-app";
@@ -160,26 +156,26 @@ function AsyncClientScoresPanel({ history, location }) {
     // END MAIN VARIABLES
 
     useEffect(() => {
-        if (!finishedWork && cashCurrScore) {
+        if (!finishedWork && lastPoints) {
             animateNumber(
                 animatedNumber.current,
                 0,
-                cashCurrScore,
-                getAnimationDuration(Number(cashCurrScore)),
+                lastPoints,
+                getAnimationDuration(Number(lastPoints)),
                 setShowTotalPoints
             );
 
             const newHighestScore =
-                parseFloat(cashCurrScore) >= parseFloat(lastCurrScore)
-                    ? parseFloat(cashCurrScore)
+                parseFloat(lastPoints) >= parseFloat(lastCurrScore)
+                    ? parseFloat(lastPoints)
                     : parseFloat(lastCurrScore);
             let objToSend = {
                 "clientUserData.bizId": businessId, // for cli-admin or if not it will not override <again className=""></again>
-                "clientUserData.cashCurrScore": cashCurrScore,
-                "clientUserData.currScore": currScoreNow, // need to be Number to ranking in DB properly
-                "clientUserData.totalActiveScore": currScoreNow, // the same as currScore | active is passive to be discounted and general it is accumulative without discount.
-                "clientUserData.totalGeneralScore":
-                    totalGeneralScore + Number(cashCurrScore),
+                "clientUserData.lastPoints": lastPoints,
+                "clientUserData.currPoints": currPointsNow, // need to be Number to ranking in DB properly
+                "clientUserData.totalActivePoints": currPointsNow, // the same as currPoints | active is passive to be discounted and general it is accumulative without discount.
+                "clientUserData.totalGeneralPoints":
+                    totalGeneralPoints + Number(lastPoints),
                 "clientUserData.filterLastPurchase": new Date(),
                 "clientUserData.filterHighestPurchase": newHighestScore,
                 "clientUserData.needStaffDiscount": true,
@@ -198,12 +194,12 @@ function AsyncClientScoresPanel({ history, location }) {
                 await removeVar("paidValue");
                 if (!paidValue) return;
                 // avoid user to restart page and end up adding more scores
-                const alreadySetScore = await getVar("alreadySetTempScore");
+                const alreadySetScore = await getVar("alreadySetTempPoints");
                 if (alreadySetScore) {
-                    setVar({ alreadySetTempScore: false });
+                    setVar({ alreadySetTempPoints: false });
                     return history.push(path);
                 }
-                await setVar({ alreadySetTempScore: true });
+                await setVar({ alreadySetTempPoints: true });
 
                 await getAPI({
                     method: "put",
@@ -216,15 +212,15 @@ function AsyncClientScoresPanel({ history, location }) {
                 if (role === "cliente") {
                     await getAPI({
                         method: "post",
-                        url: setLastScoreAsDone(cliUserId),
+                        url: setLastPointsAsDone(cliUserId),
                         needAuth: true,
                     });
                 }
 
                 const historyObj = {
-                    rewardScore: maxScore,
+                    targetPoints: targetPoints,
                     icon: milestoneIcon,
-                    value: cashCurrScore,
+                    value: lastPoints,
                 };
 
                 await getAPI({
@@ -242,14 +238,14 @@ function AsyncClientScoresPanel({ history, location }) {
                         prizeDesc,
                         trophyIcon: milestoneIcon,
                     };
-                    await readPurchaseHistory(cliUserId, maxScore, options);
+                    await readPurchaseHistory(cliUserId, targetPoints, options);
                     setFinishedWork(true);
                 } else {
                     setFinishedWork(true);
                 }
             })();
         }
-    }, [finishedWork, cashCurrScore]);
+    }, [finishedWork, lastPoints]);
 
     const showHeader = () => (
         <div className="position-relative">
@@ -287,7 +283,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     &#187; Pontuação Anterior:
                 </p>
                 <p className="text-center text-hero">
-                    {convertDotToComma(currScoreBefore)}
+                    {convertDotToComma(currPointsBefore)}
                 </p>
             </section>
             <section>
@@ -307,7 +303,7 @@ function AsyncClientScoresPanel({ history, location }) {
                     <p className="text-center text-hero">
                         {hideCurrScore
                             ? "..."
-                            : convertDotToComma(currScoreNow)}
+                            : convertDotToComma(currPointsNow)}
                     </p>
                 </div>
                 <section
@@ -368,12 +364,12 @@ function AsyncClientScoresPanel({ history, location }) {
                 role: whichRole,
             });
 
-            await setVar({ alreadySetTempScore: false });
+            await setVar({ alreadySetTempPoints: false });
 
             history.push(path);
         } else {
             window.location.href = "/acesso/verificacao";
-            logout(dispatch);
+            disconnect();
         }
     };
 

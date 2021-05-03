@@ -1,14 +1,13 @@
-import { useStoreDispatch } from "easy-peasy";
-import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
-import RedirectLink from "../../../components/RedirectLink";
-import RadiusBtn from "../../../components/buttons/RadiusBtn";
-import { logout } from "../../../redux/actions/authActions";
-import { Load } from "../../../components/code-splitting/LoadableComp";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
+import RedirectLink from "components/RedirectLink";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import { Load } from "components/code-splitting/LoadableComp";
+import disconnect from "auth/disconnect";
 
 const AsyncAccessGateKeeper = Load({
     loader: () =>
         import(
-            "../password/AccessGateKeeper" /* webpackChunkName: "gate-keeper-comp-lazy" */
+            "auth/pages/access-password/mobile-app/AccessGateKeeper" /* webpackChunkName: "gate-keeper-comp-lazy" */
         ),
 });
 
@@ -20,11 +19,7 @@ export default function GatewayAndCTAs({
     bizLinkName,
     loadingAccess,
 }) {
-    const dispatch = useStoreDispatch();
-
-    const handleLogout = () => {
-        logout(dispatch);
-    };
+    const handleLogout = () => disconnect();
 
     return (
         <section

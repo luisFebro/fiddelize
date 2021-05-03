@@ -56,14 +56,14 @@ function RegulationText({ generateRegulation }) {
     // const userName = currentUser && currentUser.name.cap();
     // const bizName = clientAdmin && clientAdmin.bizName.cap();
     // const mainReward = clientAdmin && clientAdmin.mainReward.cap();
-    // const rewardScore = clientAdmin && clientAdmin.rewardScore;
-    // const levelScore = clientAdmin && clientAdmin.rewardScore / 5;
+    // const targetPoints = clientAdmin && clientAdmin.targetPoints;
+    // const levelScore = clientAdmin && clientAdmin.targetPoints / 5;
 
     // const variablesObj = {
     //     "nome-empresa": bizName,
     //     "nome-cliente": userName,
     //     "nome-premio": mainReward,
-    //     "ponto-premio": `${rewardScore} pontos`,
+    //     "ponto-premio": `${targetPoints} pontos`,
     //     "ponto-nivel": `${levelScore} pontos`,
     // }
 

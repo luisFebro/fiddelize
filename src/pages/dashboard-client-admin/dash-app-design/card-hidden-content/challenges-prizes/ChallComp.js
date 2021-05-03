@@ -16,7 +16,7 @@ const truncate = (text, leng) => window.Helper.truncate(text, leng);
 ChallComp.propTypes = {
     id: PropTypes.string,
     icon: PropTypes.string,
-    rewardScore: PropTypes.number,
+    targetPoints: PropTypes.number,
     rewardDesc: PropTypes.string,
     isFirst: PropTypes.bool,
     currChallNumber: PropTypes.number,
@@ -25,7 +25,7 @@ ChallComp.propTypes = {
 export default function ChallComp({
     id,
     icon,
-    rewardScore,
+    targetPoints,
     rewardDesc,
     isFirst,
     setNeedUpdateData,
@@ -40,7 +40,7 @@ export default function ChallComp({
         currChallNumber,
         id,
         icon,
-        rewardScore,
+        targetPoints,
         rewardDesc,
     });
 
@@ -91,7 +91,7 @@ export default function ChallComp({
             {
                 id: data.id,
                 icon: isFirst ? milestoneIcon : data.icon,
-                rewardScore: Number(data.rewardScore),
+                targetPoints: Number(data.targetPoints),
                 rewardDesc: data.rewardDesc && data.rewardDesc.toLowerCase(),
             },
         ];
@@ -141,7 +141,7 @@ export default function ChallComp({
         </div>
     );
 
-    const showRewardScore = () => (
+    const showtargetPoints = () => (
         <div
             className="container-center flex-row flex-md-column"
             style={{ flexBasis: "20%" }}
@@ -149,7 +149,7 @@ export default function ChallComp({
             <p className={txtStyle}>Ponto-Prêmio:</p>
             {!edit ? (
                 <p className="text-subtitle font-weight-bold text-center m-0 ml-md-0 ml-3">
-                    {data.rewardScore}
+                    {data.targetPoints}
                 </p>
             ) : (
                 <div className="animated zoomIn ml-md-0 ml-3">
@@ -163,8 +163,8 @@ export default function ChallComp({
                             handleChange(setData, data)(e);
                             setSaveChangeBtn(true);
                         }}
-                        name="rewardScore"
-                        value={data.rewardScore}
+                        name="targetPoints"
+                        value={data.targetPoints}
                         autoComplete="off"
                         fullWidth
                     />
@@ -220,19 +220,19 @@ export default function ChallComp({
                     <ButtonFab
                         position="relative"
                         onClick={() => {
-                            const lastButOneRewardScore = isFirst
+                            const lastButOnetargetPoints = isFirst
                                 ? 0
                                 : challengesArray[challengesArray.length - 2]
-                                      .rewardScore;
+                                      .targetPoints;
                             if (
                                 !isFirst &&
-                                data.rewardScore < lastButOneRewardScore
+                                data.targetPoints < lastButOnetargetPoints
                             )
                                 return showToast(
                                     "O ponto-prêmio do desafio atual deve ser maior que o anterior",
                                     { type: "error" }
                                 );
-                            if (!Number(data.rewardScore)) {
+                            if (!Number(data.targetPoints)) {
                                 showToast(
                                     "Em ponto-prêmio, insira apenas números.",
                                     { type: "error" }
@@ -275,7 +275,7 @@ export default function ChallComp({
             <section className="position-relative">
                 <section className="d-flex flex-column align-items-start flex-md-row text-white">
                     {showIcon()}
-                    {showRewardScore()}
+                    {showtargetPoints()}
                     {showPrizeDesc()}
                 </section>
                 <div className="position-absolute" style={styles.actionBtns}>

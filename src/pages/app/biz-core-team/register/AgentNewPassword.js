@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import useData from "init";
 import getVar from "init/var";
-import AccessPassCreation from "../../../dashboard-client-admin/pass-page/AccessPassCreation";
+import AccessPassCreation from "auth/pages/access-password/dashboard-client-admin/AccessPassCreation";
 import isThisApp from "../../../../utils/window/isThisApp";
 import useBackColor from "../../../../hooks/useBackColor";
 

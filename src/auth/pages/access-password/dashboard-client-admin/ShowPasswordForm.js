@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CLIENT_URL } from "../../../config/clientUrl";
-import ToggleVisibilityPassword from "../../../components/forms/fields/ToggleVisibilityPassword";
-import handleChange from "../../../utils/form/use-state/handleChange";
+import { CLIENT_URL } from "config/clientUrl";
+import ToggleVisibilityPassword from "components/forms/fields/ToggleVisibilityPassword";
+import handleChange from "utils/form/use-state/handleChange";
 import ButtonMulti, {
     faStyle,
-} from "../../../components/buttons/material-ui/ButtonMulti";
-import showToast from "../../../components/toasts";
-import { updateUser } from "../../../redux/actions/userActions";
-import { readVerificationPass } from "../../../redux/actions/adminActions";
-import setValObjWithStr from "../../../utils/objects/setValObjWithStr";
-import { useAppSystem } from "../../../hooks/useRoleData";
-import useAnimateElem from "../../../hooks/scroll/useAnimateElem";
+} from "components/buttons/material-ui/ButtonMulti";
+import showToast from "components/toasts";
+import { updateUser } from "redux/actions/userActions";
+import { readVerificationPass } from "redux/actions/adminActions";
+import setValObjWithStr from "utils/objects/setValObjWithStr";
+import { useAppSystem } from "hooks/useRoleData";
+import useAnimateElem from "hooks/scroll/useAnimateElem";
 import { setVar } from "init/var";
 
 const isSmall = window.Helper.isSmallScreen();

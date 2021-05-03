@@ -22,7 +22,7 @@ function Score({
     // isWelcome = false,
     // content,
 }) {
-    const isNewScore = subtype === "scorePlus";
+    const isNewPoints = subtype === "pointPlus";
 
     // const contentData = content && extractStrData(content);
 
@@ -37,7 +37,7 @@ function Score({
     );
 
     const handleTitle = () => {
-        if (isNewScore) return "Nova pontuação";
+        if (isNewPoints) return "Nova pontuação";
     };
 
     const ChildrenBtn = () => (

@@ -65,12 +65,12 @@ export default function CardsList({ data }) {
 
     const { _id, name, totalPurchasePrize, isFromDashboard } = data;
 
-    let { totalGeneralScore } = data;
-    totalGeneralScore = convertDotToComma(totalGeneralScore);
-    const totalGeneralForIllustra = data.totalGeneralScore;
+    let { totalGeneralPoints } = data;
+    totalGeneralPoints = convertDotToComma(totalGeneralPoints);
+    const totalGeneralForIllustra = data.totalGeneralPoints;
 
     let {
-        maxScore,
+        targetPoints,
         rewardList,
         themeBackColor,
         themePColor,
@@ -88,8 +88,7 @@ export default function CardsList({ data }) {
         ? "..."
         : totalPurchasePrize;
     const pickedObj = pickCurrChallData(rewardList, totalPrizes);
-    const { rewardScore } = pickedObj;
-    maxScore = convertDotToComma(pickedObj.rewardScore);
+    targetPoints = convertDotToComma(pickedObj.targetPoints);
 
     const isAfterFirstChall = totalPurchasePrize >= 1 || hasPendingChall;
     const confirmedChallenges = totalPurchasePrize || 0;
@@ -103,10 +102,10 @@ export default function CardsList({ data }) {
     const params = React.useMemo(
         () => ({
             challengeN,
-            rewardScore,
+            targetPoints,
             isFromDashboard,
         }),
-        [challengeN, rewardScore, isFromDashboard]
+        [challengeN, targetPoints, isFromDashboard]
     );
 
     const {
@@ -181,13 +180,13 @@ export default function CardsList({ data }) {
         const showTotalBadge = isAfterFirstChall || hasPendingChall;
 
         const handleChallScore = (challScore, options = {}) => {
-            const { totalGeneralScore, isAfterFirstChall } = options;
-            if (!isAfterFirstChall) return totalGeneralScore || 0;
+            const { totalGeneralPoints, isAfterFirstChall } = options;
+            if (!isAfterFirstChall) return totalGeneralPoints || 0;
             return challScore;
         };
 
         let currChallScore = handleChallScore(challScore, {
-            totalGeneralScore,
+            totalGeneralPoints,
             isAfterFirstChall,
         });
         currChallScore = isSmall
@@ -255,7 +254,7 @@ export default function CardsList({ data }) {
                             className={`text text-normal ${txtClass} text-nowrap`}
                         >
                             <p className="text-center m-0 mt-2">
-                                {totalGeneralScore}
+                                {totalGeneralPoints}
                             </p>
                             <br />
                             Pontos Gerais
@@ -297,7 +296,9 @@ export default function CardsList({ data }) {
                 >
                     Nova Meta Final:
                     <br />
-                    <span style={{ fontSize: "28px" }}>{maxScore} pontos</span>
+                    <span style={{ fontSize: "28px" }}>
+                        {targetPoints} pontos
+                    </span>
                 </p>
             </section>
         );

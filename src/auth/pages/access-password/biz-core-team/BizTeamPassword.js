@@ -1,20 +1,20 @@
 import { Fragment, useEffect } from "react";
+import disconnect from "auth/disconnect";
 import { withRouter } from "react-router-dom";
-import AccessPassword from "../../../access-password/AccessPassword";
-import showToast from "../../../../components/toasts";
-import getVar, { setVar } from "init/var";
-import { disconnect } from "../../../../hooks/useAuth";
-import RadiusBtn from "../../../../components/buttons/RadiusBtn";
+import AccessPassword from "auth/pages/access-password/AccessPassword";
+import showToast from "components/toasts";
+import RadiusBtn from "components/buttons/RadiusBtn";
+import useAuth from "auth/useAuth";
+import { setVar } from "init/var";
 
 export default withRouter(BizTeamPassword);
 
 function BizTeamPassword({ history }) {
+    const isAuth = useAuth();
+
     useEffect(() => {
-        (async () => {
-            const isAuth = await getVar("success", "user");
-            if (isAuth) history.push("/t/app/nucleo-equipe");
-        })();
-    }, []);
+        if (isAuth) history.push("/t/app/nucleo-equipe");
+    }, [isAuth]);
 
     const handleLogout = () => {
         (async () => {

@@ -36,7 +36,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
         cardId,
         totalPrizes,
         userCurrScore,
-        rewardScore,
+        targetPoints,
         name,
         prizeId,
         updatedBy,
@@ -44,11 +44,11 @@ export default function DiscountBenefit({ onClose, modalData }) {
         gender,
     } = modalData;
 
-    const userBeatScore = userCurrScore >= rewardScore;
+    const userBeatScore = userCurrScore >= targetPoints;
     const currChall = totalPrizes + 1;
 
     const currCustomerScore = Number(userCurrScore);
-    const leftCustomerScore = Number(userCurrScore) - Number(rewardScore);
+    const leftCustomerScore = Number(userCurrScore) - Number(targetPoints);
 
     const handleDiscount = async () => {
         if (staffName === "...") return false;
@@ -56,10 +56,10 @@ export default function DiscountBenefit({ onClose, modalData }) {
 
         const updateUserBody = {
             "clientUserData.needStaffDiscount": false,
-            "clientUserData.currScore": leftCustomerScore,
-            "clientUserData.totalActiveScore": parseFloat(
-                userCurrScore - rewardScore
-            ), // the same as currScore, this is only used to differentiate from totalGeneralScore.
+            "clientUserData.currPoints": leftCustomerScore,
+            "clientUserData.totalActivePoints": parseFloat(
+                userCurrScore - targetPoints
+            ), // the same as currPoints, this is only used to differentiate from totalGeneralPoints.
         };
 
         const notifAuthorBody = {
@@ -188,7 +188,7 @@ export default function DiscountBenefit({ onClose, modalData }) {
                     <p className="m-0">✔ Desafio Concluído:</p>
                     <p>
                         <strong>
-                            • N.º {currChall} ({rewardScore} pontos)
+                            • N.º {currChall} ({targetPoints} pontos)
                         </strong>
                     </p>
                 </div>

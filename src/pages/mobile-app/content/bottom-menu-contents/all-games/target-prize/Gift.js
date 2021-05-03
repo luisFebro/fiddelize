@@ -30,9 +30,9 @@ export default function Gift({
     userId,
 }) {
     const {
-        currScore,
+        currPoints,
         currChall,
-        maxScore,
+        targetPoints,
         colorS,
         colorP,
         colorBack,
@@ -45,7 +45,7 @@ export default function Gift({
 
     usePlayAudio("/sounds/gift-box-opening.mp3", ".gift-box--sound");
 
-    const userBeatedChall = currScore >= maxScore;
+    const userBeatedChall = currPoints >= targetPoints;
 
     const finalDeadline = useDatesCountdown({
         deadline: rewardDeadline,

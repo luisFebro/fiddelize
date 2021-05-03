@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import PasswordCircleFields from "../../../components/fields/PasswordCircleFields.js";
-import NumericKeyboard from "../../../components/keyboards/NumericKeyboard";
-import getAPI, { createPassword } from "../../../utils/promises/getAPI";
-import getFirstName from "../../../utils/string/getFirstName";
-import showToast from "../../../components/toasts";
 import { setVar } from "init/var";
+import PasswordCircleFields from "components/fields/PasswordCircleFields.js";
+import NumericKeyboard from "components/keyboards/NumericKeyboard";
+import getAPI, { createPassword } from "utils/promises/getAPI";
+import getFirstName from "utils/string/getFirstName";
+import showToast from "components/toasts";
 
 export default withRouter(AccessPassCreation);
 

@@ -1,9 +1,9 @@
 import { setItems } from "init/lStorage";
-import { setRun } from "../../../../redux/actions/globalActions";
 import getVar, { removeVar, setVar, removeVars } from "init/var";
-import renewAccessToken from "../../../../components/auth/helpers/renewAccessToken";
-import { signInUserData } from "../../../../components/auth/Login";
-import getAPI, { setDefaultAccess } from "../../../../utils/promises/getAPI";
+import renewToken from "auth/renewToken";
+import { signInUserData } from "components/auth/Login";
+import getAPI, { setDefaultAccess } from "utils/promises/getAPI";
+import { setRun } from "redux/actions/globalActions";
 
 const handleCliAdmin = ({ bizId, dispatch, history, bizLinkName }) => {
     const updatedValues = {
@@ -80,7 +80,7 @@ export default async function handleOpenApp({
 
         await signInUserData(null, userData);
         // IMPORTANT: userId is used as the current id to be authorized by system. the clickedAppUserId, of course, it is clicked app id.
-        await renewAccessToken({
+        await renewToken({
             userId,
             bizId,
             clickedAppUserId,

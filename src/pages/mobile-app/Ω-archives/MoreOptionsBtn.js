@@ -14,7 +14,7 @@ import WhatsappBtn from "../../components/buttons/WhatsappBtn";
 // SpeedDial and Icons
 import ModalFullContent from "../../components/modals/ModalFullContent";
 import { Load } from "../../components/code-splitting/LoadableComp";
-import { disconnect } from "../../hooks/useAuth";
+import disconnect from "init/disconnect";
 // import lStorage from "../../utils/storage/lStorage";
 
 const AsyncHistory = Load({
@@ -66,8 +66,8 @@ function MoreOptionsBtn({
 
     const {
         _id,
-        currScore,
-        totalGeneralScore,
+        currPoints,
+        totalGeneralPoints,
         totalPurchasePrize,
         // purchaseHistory,
     } = useData();
@@ -80,8 +80,8 @@ function MoreOptionsBtn({
         const getModalData = () => ({
             cliUserName: userName,
             cliUserId: _id,
-            currUserScore: currScore,
-            totalGeneralScore,
+            currUserScore: currPoints,
+            totalGeneralPoints,
             totalPurchasePrize,
         });
 

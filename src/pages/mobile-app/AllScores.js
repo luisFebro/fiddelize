@@ -1,20 +1,20 @@
 import { convertDotToComma } from "../../utils/numbers/convertDotComma";
 
 const AllScores = ({
-    currScoreRef,
-    currScore,
+    currPointsRef,
+    currPoints,
     userId,
     showPercentage,
-    lastScore,
+    lastPoints,
     needAppForPreview,
     selectTxtStyle,
     colorBack,
     // colorS,
-    totalGeneralScore,
+    totalGeneralPoints,
     totalPurchasePrize,
     userName,
 }) => {
-    lastScore = convertDotToComma(lastScore);
+    lastPoints = convertDotToComma(lastPoints);
     const selectedTxtStyle = selectTxtStyle(colorBack, { bold: true });
 
     return (
@@ -24,14 +24,14 @@ const AllScores = ({
             <div className="d-flex justify-content-center">
                 <p
                     className={`text-hero ${selectedTxtStyle}`}
-                    ref={currScoreRef}
+                    ref={currPointsRef}
                 >
                     ...
                 </p>
                 <span className={`ml-2 ${selectedTxtStyle}`}>Pontos</span>
             </div>
             {/* LAST SCORE */}
-            {currScore === 0 || !currScore || !showPercentage ? null : (
+            {currPoints === 0 || !currPoints || !showPercentage ? null : (
                 <section className="text-normal position-relative animated fadeIn">
                     <section>
                         <div
@@ -61,7 +61,7 @@ const AllScores = ({
                         <br />
                         última pontuação:
                         <br />
-                        <span className="text-em-1-3">{lastScore} pts</span>
+                        <span className="text-em-1-3">{lastPoints} pts</span>
                     </div>
                 </section>
             )}

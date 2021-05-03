@@ -29,7 +29,12 @@ export default function CarouselFlickity({
     const dispatch = useStoreDispatch();
 
     const { businessId } = useAppSystem();
-    const { milestoneIcon, mainReward, maxScore, rewardList } = useBizData();
+    const {
+        milestoneIcon,
+        mainReward,
+        targetPoints,
+        rewardList,
+    } = useBizData();
 
     const [carouselElem2, setCarouselElem2] = useState("");
     useEffect(() => {
@@ -100,7 +105,7 @@ export default function CarouselFlickity({
             {
                 id: businessId,
                 icon: iconSelected,
-                rewardScore: maxScore,
+                targetPoints,
                 rewardDesc: mainReward,
             },
         ];

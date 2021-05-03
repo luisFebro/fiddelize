@@ -8,6 +8,7 @@ import useContext from "context";
 // localStorage = simply use an empty function. e.g const { role } = useData();
 // indexedDB = use an array of strings = const [userRole] = useData(["role"]);
 export default function useData(dataArray, options) {
+    // const { currUser = {} } = useContext();
     const { store, trigger, dots, local } = handleOptions(dataArray, options);
 
     const [finalData, setFinalData] = useState([]);

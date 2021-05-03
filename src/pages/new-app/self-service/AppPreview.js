@@ -18,8 +18,8 @@ function AppPreview({
     colorP,
     colorS,
     colorBack,
-    rewardScore,
-    currScore,
+    targetPoints,
+    currPoints,
 }) {
     const { runName } = useRunComp();
     // useCount("AppPreview"); // RT = 2 (OK) || Interation RT = 3 Before = 6
@@ -27,13 +27,13 @@ function AppPreview({
     // LESSON: do not break in new lines because can arise issues with the values and adding spaces between valeus
     const iframeUrl = React.useCallback(
         () =>
-            `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&rewardScore=${rewardScore}&currScore=${currScore}`,
+            `/mobile-app/preview?runName=${runName}&clientName=${clientName}&logoUrlPreview=${logoUrlPreview}&colorP=${colorP}&colorS=${colorS}&colorBack=${colorBack}&targetPoints=${targetPoints}&currPoints=${currPoints}`,
         [
             runName,
             clientName,
             logoUrlPreview,
-            currScore,
-            rewardScore,
+            currPoints,
+            targetPoints,
             colorBack,
             colorS,
             colorP,

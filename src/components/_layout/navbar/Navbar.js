@@ -2,17 +2,15 @@ import { Fragment, useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useBizData } from "init";
+import useAuth from "auth/useAuth";
 import styled from "styled-components";
-
-import gaEvent from "../../../utils/analytics/gaEvent";
-import RadiusBtn from "../../buttons/RadiusBtn";
-import isThisApp from "../../../utils/window/isThisApp";
+import gaEvent from "utils/analytics/gaEvent";
+import isThisApp from "utils/window/isThisApp";
 import "./NavbarLayout.scss";
-import useAuth from "../../../hooks/useAuth";
-import useImg, { Img } from "../../../hooks/media/useImg";
-import removeImgFormat from "../../../utils/biz/removeImgFormat";
-import { getNewAppPage } from "../../../pages/new-app/helpers/handleRedirectPages";
-// import useCount from '../../../hooks/useCount';
+import useImg, { Img } from "hooks/media/useImg";
+import removeImgFormat from "utils/biz/removeImgFormat";
+import { getNewAppPage } from "pages/new-app/helpers/handleRedirectPages";
+import RadiusBtn from "../../buttons/RadiusBtn";
 
 const isApp = isThisApp();
 const isSmall = window.Helper.isSmallScreen();

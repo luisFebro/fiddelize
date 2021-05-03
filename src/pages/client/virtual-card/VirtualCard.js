@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import ThreeDFlipCard from "../../../components/cards/3d-flip-card/ThreeDFlipCard";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import useData from "init";
-import useAPI, { readTempScoreList } from "../../../hooks/api/useAPI";
+import useAPI, { readTempPointsList } from "../../../hooks/api/useAPI";
 import ReturnBtn from "../../../components/buttons/ReturnBtn";
 import { useBizData } from "init";
 import useBackColor from "../../../hooks/useBackColor";
@@ -134,7 +134,7 @@ function VirtualCard({ history }) {
     const { themeSColor: sColor } = useBizData();
 
     const { data: cardsData, error } = useAPI({
-        url: readTempScoreList(userId),
+        url: readTempPointsList(userId),
         needAuth: true,
         params: { onlyLastAvailable: true, isAdmin: isCliAdmin },
         trigger: userId !== "...",
@@ -152,11 +152,11 @@ function VirtualCard({ history }) {
             });
         }
 
-        if (cardsData && cardsData.tempScore) {
+        if (cardsData && cardsData.tempPoints) {
             setData({
                 ...data,
                 loading: false,
-                score: cardsData.tempScore,
+                score: cardsData.tempPoints,
                 createdAt: new Date(cardsData.createdAt),
             });
         }

@@ -5,21 +5,16 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
-import PropTypes from "prop-types";
 import axios from "axios";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import getVar, { setVar } from "init/var";
-import isKeyPressed from "../../utils/event/isKeyPressed";
+import isKeyPressed from "utils/event/isKeyPressed";
 import useData from "init";
-import useToken from "auth/useToken";
-import { chooseHeader } from "../../utils/server/getHeaders";
-import { disconnect } from "../../hooks/useAuth";
+import useToken, { chooseHeader } from "auth/useToken";
+import disconnect from "auth/disconnect";
 // 1. Allow enter key to select the first result and filter it after that.
 // Ideally, this first result needs to be highlighted.
-AutoCompleteSearch.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.string),
-};
 
 const getStyles = ({ fieldBack, themeColor, txtFont, formWidth }) => ({
     asyncAutoSearch: {

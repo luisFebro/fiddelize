@@ -29,7 +29,7 @@ export default function SearchResult({
     allUsersLength,
     searchTerm,
     mainSubject = "usuário",
-    totalActiveScores,
+    totalActivePoints,
     totalCliUserScores,
 }) {
     const pluralizeBr = (word) => {
@@ -114,7 +114,7 @@ export default function SearchResult({
                                             <p className="m-0 mr-2">
                                                 <strong>
                                                     •{" "}
-                                                    {`${totalActiveScores} Pontos Ativos`}
+                                                    {`${totalActivePoints} Pontos Ativos`}
                                                 </strong>
                                             </p>
                                             <div>

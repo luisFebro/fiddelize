@@ -1,25 +1,19 @@
 import { Fragment } from "react";
-import { useStoreState } from "easy-peasy";
-import AsyncLogin from "../../components/auth/AsyncLogin";
-import AsyncLoyaltyScoreHandler from "../client/loyalty-client-scores";
-import CompLoader from "../../components/CompLoader";
+import AsyncLogin from "components/auth/AsyncLogin";
+import CompLoader from "components/CompLoader";
+import { Load } from "components/code-splitting/LoadableComp";
+import useBackColor from "hooks/useBackColor";
+import useScrollUp from "hooks/scroll/useScrollUp";
 import useData from "init";
-import { Load } from "../../components/code-splitting/LoadableComp";
-import useBackColor from "../../hooks/useBackColor";
-import useScrollUp from "../../hooks/scroll/useScrollUp";
 
 export const AsyncAccessGateKeeper = Load({
     loader: () =>
         import(
-            "../mobile-app/password/AccessGateKeeper" /* webpackChunkName: "remember-access-cómp-lazy" */
+            "auth/pages/access-password/mobile-app/AccessGateKeeper" /* webpackChunkName: "remember-access-cómp-lazy" */
         ),
 });
 
 export default function LoginPage() {
-    const { currentComp } = useStoreState((state) => ({
-        currentComp: state.componentReducer.cases.currentComp,
-    }));
-
     useScrollUp();
     useBackColor("var(--themeP)");
 
@@ -57,7 +51,7 @@ export default function LoginPage() {
                         </section>
                     )}
                     <div>
-                        {currentComp === "login" && !needGateKeeper && (
+                        {!needGateKeeper && (
                             <div>
                                 <CompLoader
                                     comp={<AsyncLogin rootClassname="mb-5" />}
@@ -67,15 +61,17 @@ export default function LoginPage() {
                                 />
                             </div>
                         )}
-
-                        {currentComp !== "login" && rememberAccess !== true && (
-                            <div style={{ margin: "70px 0" }}>
-                                <AsyncLoyaltyScoreHandler />
-                            </div>
-                        )}
                     </div>
                 </section>
             )}
         </Fragment>
     );
 }
+
+/*
+{rememberAccess !== true && (
+    <div style={{ margin: "70px 0" }}>
+        <AsyncLoyaltyScoreHandler />
+    </div>
+)}
+ */

@@ -31,7 +31,7 @@ export default function RegulationPage({ location }) {
     let {
         bizName,
         mainReward,
-        maxScore,
+        targetPoints,
         rewardDeadline,
         themePColor,
         themeSColor,
@@ -41,13 +41,12 @@ export default function RegulationPage({ location }) {
     } = useBizData();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    maxScore = pickedObj.rewardScore;
+    targetPoints = pickedObj.targetPoints;
     mainReward = pickedObj.mainReward;
 
     const currChall = defineCurrChallenge(totalPurchasePrize);
 
-    const rewardScore = maxScore;
-    const levelScore = rewardScore && rewardScore / 5;
+    const levelScore = targetPoints && targetPoints / 5;
 
     useBackColor(`var(--themeBackground--${themeBackColor})`);
 
@@ -56,7 +55,7 @@ export default function RegulationPage({ location }) {
         "nome-cliente": cliFirstName || " ",
         "nome-premio": mainReward || " ",
         "prazo-premio": `${rewardDeadline} dias`,
-        "ponto-premio": `${rewardScore} pontos`,
+        "ponto-premio": `${targetPoints} pontos`,
         "ponto-nivel": `${levelScore} pontos`,
         "desafio-atual": `${currChall}`,
     };

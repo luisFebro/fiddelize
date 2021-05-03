@@ -1,15 +1,13 @@
 import { Fragment, useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { useBizData } from "init";
-import useData from "init";
-import { disconnect } from "hooks/useAuth";
-import { useAppSystem } from "../../hooks/useRoleData";
-import isThisApp from "../../utils/window/isThisApp";
-import ButtonMenu from "../../components/buttons/material-ui/button-menu/ButtonMenu";
-import ModalFullContent from "../../components/modals/ModalFullContent";
-import { Load } from "../../components/code-splitting/LoadableComp";
+import useData, { useBizData } from "init";
+import disconnect from "auth/disconnect";
+import { useAppSystem } from "hooks/useRoleData";
+import isThisApp from "utils/window/isThisApp";
+import ButtonMenu from "components/buttons/material-ui/button-menu/ButtonMenu";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
 // ICONS
 // END ICONS
 
@@ -84,18 +82,13 @@ export default function MoreOptionsMenu({ location, history }) {
         {
             icon: <ExitToAppIcon style={menuIconStyle} />,
             text: "sair",
-            callback: () => {
-                (async () => {
-                    await disconnect();
-                })();
-            },
+            callback: () => disconnect(),
         },
     ];
 
     if (!isApp) optArray.splice(1, 1); // remove testar apps for larger devices...
 
     const locationNow = location.pathname;
-    const dispatch = useStoreDispatch();
     if (locationNow.includes("/cliente-admin/painel-de-controle")) {
         return (
             <Fragment>

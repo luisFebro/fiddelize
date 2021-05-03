@@ -18,12 +18,12 @@ function ClientAppPreview({ location }) {
     const colorP = getQueryByName("colorP", location.search);
     const colorS = getQueryByName("colorS", location.search);
     const colorBack = getQueryByName("colorBack", location.search);
-    const rewardScore = getQueryByName("rewardScore", location.search);
-    const currScore = getQueryByName("currScore", location.search);
+    const targetPoints = getQueryByName("targetPoints", location.search);
+    const currPoints = getQueryByName("currPoints", location.search);
 
     const useThisData = () => ({
-        currScore: Number(currScore) || 100,
-        lastScore: 20,
+        currPoints: Number(currPoints) || 100,
+        lastPoints: 20,
     });
 
     const { newImg: formattedImg, isSquared } = removeImgFormat(logoUrlPreview);
@@ -65,7 +65,7 @@ function ClientAppPreview({ location }) {
                 useBizData={useBizData}
                 needAppForPreview
                 runName={runName}
-                rewardScoreTest={rewardScore}
+                targetPointsTest={targetPoints}
                 clientNameTest={clientName}
                 colorP={colorP}
                 colorS={colorS}

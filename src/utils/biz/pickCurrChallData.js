@@ -2,7 +2,7 @@ export default function pickCurrChallData(rewardList, totalPrizesInd) {
     if (!rewardList)
         return {
             milestoneIcon: "star",
-            rewardScore: 800,
+            targetPoints: 800,
             mainReward: "smt",
         };
 
@@ -11,7 +11,7 @@ export default function pickCurrChallData(rewardList, totalPrizesInd) {
     // change the original names to respectively rewardList ones...
     const keyAvalaible = {
         milestoneIcon: "icon",
-        rewardScore: "rewardScore",
+        targetPoints: "targetPoints",
         mainReward: "rewardDesc",
     };
 
@@ -20,7 +20,7 @@ export default function pickCurrChallData(rewardList, totalPrizesInd) {
     const getValues = (selectedObj) => {
         const values = {
             milestoneIcon: selectedObj[keyAvalaible.milestoneIcon],
-            rewardScore: selectedObj[keyAvalaible.rewardScore],
+            targetPoints: selectedObj[keyAvalaible.targetPoints],
             mainReward: selectedObj[keyAvalaible.mainReward],
         };
 
@@ -44,18 +44,18 @@ export default function pickCurrChallData(rewardList, totalPrizesInd) {
 EXEMPLE>
 const rewardList = [{
     icon: 'star',
-    rewardScore: 500,
+    targetPoints: 500,
     rewardDesc: "presentinho",
 },
 {
     icon: 'dragon',
-    rewardScore: 700,
+    targetPoints: 700,
     rewardDesc: "celualr",
 },];
 
 
-let rewardScore = 500;
+let targetPoints = 500;
 const pickedObj = pickCurrChallData(rewardList, 0);
-rewardScore = pickedObj["rewardScore"];
-console.log("rewardScore", rewardScore); // 700
+targetPoints = pickedObj["targetPoints"];
+console.log("targetPoints", targetPoints); // 700
  */

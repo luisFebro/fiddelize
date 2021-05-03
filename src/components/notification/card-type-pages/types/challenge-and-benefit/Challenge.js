@@ -31,8 +31,8 @@ export default function Challenge({
     if (confirmedChall) role = "cliente";
 
     const {
-        currScore,
-        rewardScore,
+        currPoints,
+        targetPoints,
         totalPrizes,
         currChall,
         clientFullName,
@@ -51,11 +51,11 @@ export default function Challenge({
 
     const showDiscountBenefit = () => {
         const modalData = {
-            rewardScore,
+            targetPoints,
             senderId,
             cardId,
             name: clientFullName,
-            userCurrScore: Number(currScore),
+            userCurrScore: Number(currPoints),
             totalPrizes: Number(totalPrizes),
             prizeId,
             prizeDesc,

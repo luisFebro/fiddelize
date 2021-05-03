@@ -1,14 +1,14 @@
 import { Fragment } from "react";
-import getDayGreetingBr from "../../../utils/getDayGreetingBr";
+import getDayGreetingBr from "utils/getDayGreetingBr";
+import useScrollUp from "hooks/scroll/useScrollUp";
+import useBackColor from "hooks/useBackColor";
+import useAuth from "auth/useAuth";
+import useData from "init";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import NotifPermissionBanner from "components/pwa-push-notification/NotifPermissionBanner";
 import GroupedDashSessions from "./GroupedDashSessions";
 import ShareLink from "./share-link/ShareLink";
 import BizTeamNavbar from "./navbar/BizTeamNavbar";
-import useScrollUp from "../../../hooks/scroll/useScrollUp";
-import useBackColor from "../../../hooks/useBackColor";
-import useAuth from "../../../hooks/useAuth";
-import useData from "init";
-import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
-import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";
 
 export default function BizTeamApp({ history }) {
     const [userFirstName, agentJob] = useData(["firstName", "agentJob"]);

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
 
 const getStyles = (needDark) => ({
     rootProtectionMsg: {

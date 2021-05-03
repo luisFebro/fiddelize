@@ -97,15 +97,15 @@ export const readTeamMemberList = () => `${API}/user/team/list`;
 export const readTeamTaskList = () => `${API}/user/team/tasks/list`;
 export const readOneMemberTasksList = () =>
     `${API}/user/team/member-history/list`;
-export const setTempScoreAndMemberData = () =>
+export const setTempPointsAndMemberData = () =>
     `${API}/user/team/temp-user-score-member`;
 export const getMembersPodium = (bizId) =>
     `${API}/user/team/members/podium?bizId=${bizId}`;
 
 // TEMP SCORE
-export const readTempScoreList = (userId) =>
+export const readTempPointsList = (userId) =>
     `${API}/user/cli-user/temp-score/list?userId=${userId}`;
-export const setLastScoreAsDone = (userId) =>
+export const setLastPointsAsDone = (userId) =>
     `${API}/user/cli-user/temp-score/set-last-done?userId=${userId}`; // POST
 export const encryptLinkScore = () => `${API}/user/cli-user/temp-score/encrypt`; // POST
 export const isLinkAllowed = () =>

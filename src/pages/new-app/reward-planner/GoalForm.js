@@ -68,10 +68,10 @@ const styles = {
 function GoalForm({ history, bizLinkName, bizName }) {
     const [error, setError] = useState("");
     const [data, setData] = useState({
-        rewardScore: undefined,
+        targetPoints: undefined,
         mainReward: "",
     });
-    const { rewardScore, mainReward } = data;
+    const { targetPoints, mainReward } = data;
 
     useAnimateElem(".goal-form--comp", {
         animaIn: "bounceInUp",
@@ -81,11 +81,11 @@ function GoalForm({ history, bizLinkName, bizName }) {
     const classes = useStyles();
 
     const saveData = async () => {
-        const score = rewardScore;
+        const score = targetPoints;
         const prize = mainReward;
 
         if (!score) {
-            setError("rewardScore");
+            setError("targetPoints");
             return showToast("Você precisa inserir o ponto de prêmio", {
                 type: "error",
             });
@@ -100,7 +100,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
         const priorData = await getVar("clientAdminData", "pre_register");
         const newData = {
             ...priorData,
-            rewardScore: Number(rewardScore),
+            targetPoints: Number(targetPoints),
             mainReward,
         };
         await setVars(
@@ -164,8 +164,8 @@ function GoalForm({ history, bizLinkName, bizName }) {
                             FormHelperTextProps={{
                                 style: styles.helperFromField,
                             }}
-                            name="rewardScore"
-                            value={rewardScore}
+                            name="targetPoints"
+                            value={targetPoints}
                             onChange={handleChange(setData, data)}
                             onKeyPress={(e) => {
                                 handleNextField(e, "field1");
@@ -176,7 +176,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
                                 })
                             }
                             variant="outlined"
-                            error={error === "rewardScore"}
+                            error={error === "targetPoints"}
                             autoComplete="off"
                         />
                         <div
@@ -255,7 +255,7 @@ function GoalForm({ history, bizLinkName, bizName }) {
                         seu painel de controle na sessão de app. 👍
                     </p>
                 )}
-                {rewardScore && showButtonAction()}
+                {targetPoints && showButtonAction()}
             </form>
         </div>
     );

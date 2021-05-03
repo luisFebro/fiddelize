@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useStoreDispatch } from "easy-peasy";
 import showToast from "components/toasts";
-import { treatBoolStatus } from "../../../hooks/api/trigger";
-import { setVar } from "init/var";
-import SwitchBtn from "../../buttons/material-ui/SwitchBtn";
-import { logout } from "../../../redux/actions/authActions";
-import { Load } from "../../code-splitting/LoadableComp";
-import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
+import { treatBoolStatus } from "hooks/api/trigger";
+import SwitchBtn from "components/buttons/material-ui/SwitchBtn";
+import { Load } from "components/code-splitting/LoadableComp";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
+import disconnect from "auth/disconnect";
 
 const AsyncModalYesNo = Load({
     loader: () =>
@@ -23,8 +21,6 @@ export default function AccessSwitcher({
 }) {
     const [fullOpen, setFullOpen] = useState(false);
 
-    const dispatch = useStoreDispatch();
-
     const handleAccessSwitcher = (res) => {
         const status = treatBoolStatus(res);
 
@@ -35,8 +31,7 @@ export default function AccessSwitcher({
 
     const getModalCallback = async () => {
         showToast("Desconectando...");
-        await setVar({ rememberAccess: false }, "user");
-        logout(dispatch, { needReload: true });
+        await disconnect({ rememberAccess: false });
     };
 
     return (

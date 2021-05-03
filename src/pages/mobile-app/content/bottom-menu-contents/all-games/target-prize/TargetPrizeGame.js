@@ -21,8 +21,8 @@ export default function TargetPrizeGame({ didUserScroll }) {
         prizeDesc,
         milestoneIcon,
         runName,
-        currScore,
-        maxScore,
+        currPoints,
+        targetPoints,
         colorBack,
         colorS,
         selectTxtStyle,
@@ -35,8 +35,8 @@ export default function TargetPrizeGame({ didUserScroll }) {
             }`}
         >
             <RatingIcons
-                currScore={currScore}
-                maxScore={maxScore}
+                currPoints={currPoints}
+                targetPoints={targetPoints}
                 colorBack={colorBack}
                 colorS={colorS}
                 selectTxtStyle={selectTxtStyle}

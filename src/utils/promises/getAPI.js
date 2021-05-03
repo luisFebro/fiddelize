@@ -1,6 +1,6 @@
 import axios from "axios";
-import { chooseHeaderAsync } from "../server/getHeaders";
-import { disconnect } from "../../hooks/useAuth";
+import disconnect from "auth/disconnect";
+import { chooseHeaderAsync } from "auth/useToken";
 
 export * from "../../hooks/api/requestsLib";
 
@@ -39,7 +39,9 @@ export default function getAPI({
             data: body,
             params,
             headers,
-            cancelToken: new axios.CancelToken((c) => (cancel = c)), // n1
+            cancelToken: new axios.CancelToken((c) => {
+                cancel = c;
+            }), // n1
         };
 
         if (!trigger) {
@@ -55,11 +57,7 @@ export default function getAPI({
             if (error.response) {
                 const { status } = error.response;
                 const gotExpiredToken = status === 401;
-                if (gotExpiredToken) {
-                    (async () => {
-                        await disconnect();
-                    })();
-                }
+                if (gotExpiredToken) disconnect();
             }
 
             return reject({

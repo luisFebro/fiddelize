@@ -4,13 +4,13 @@ import CartRace from "./cart-race/CartRace";
 const isEvenSmall = window.Helper.isSmallScreen(415);
 
 export default function DiscountBackGame({ didUserScroll }) {
-    const { colorS, colorBack, userName, currScore } = useContext();
+    const { colorS, colorBack, userName, currPoints } = useContext();
 
     const showCartRace = () =>
         isEvenSmall && (
             <CartRace
                 className="animated fadeInUp faster"
-                currUserScore={currScore}
+                currUserScore={currPoints}
                 userName={userName}
             />
         );

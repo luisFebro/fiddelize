@@ -25,7 +25,7 @@ export default function AppPickersHandler({
     setTheme,
     setLocalData,
     rewardDesc,
-    rewardScore,
+    targetPoints,
     history,
 }) {
     const { runName } = useRunComp();
@@ -76,7 +76,7 @@ export default function AppPickersHandler({
                         {
                             id,
                             icon: runName,
-                            rewardScore,
+                            targetPoints,
                             rewardDesc: rewardDesc || "Sem Descrição",
                         },
                     ],

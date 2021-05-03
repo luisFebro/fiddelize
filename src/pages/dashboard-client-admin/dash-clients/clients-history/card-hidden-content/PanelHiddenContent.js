@@ -21,9 +21,9 @@ export default function PanelHiddenContent({ data, needBadgeForTestMode }) {
 
     const showInfos = () => {
         const infos = {
-            "Última Pontuação": data && data.clientUserData.cashCurrScore,
+            "Última Pontuação": data && data.clientUserData.lastPoints,
             "Pontuação Acumulada":
-                data && data.clientUserData.totalGeneralScore,
+                data && data.clientUserData.totalGeneralPoints,
             "Feito por":
                 data &&
                 data.register &&

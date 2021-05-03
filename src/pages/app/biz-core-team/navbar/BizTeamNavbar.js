@@ -1,14 +1,14 @@
 import { useState } from "react";
-import "./_BizTeamNavbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { withRouter } from "react-router-dom";
-import Img from "../../../../components/Img";
-import ButtonMenu from "../../../../components/buttons/material-ui/button-menu/ButtonMenu";
-import { disconnect } from "../../../../hooks/useAuth";
+import Img from "components/Img";
+import ButtonMenu from "components/buttons/material-ui/button-menu/ButtonMenu";
+import disconnect from "auth/disconnect";
 import useData from "init";
-import ModalFullContent from "../../../../components/modals/ModalFullContent";
-import { Load } from "../../../../components/code-splitting/LoadableComp";
+import ModalFullContent from "components/modals/ModalFullContent";
+import { Load } from "components/code-splitting/LoadableComp";
+import "./_BizTeamNavbar.scss";
 
 const AsyncNotifyUsersContent = Load({
     loader: () =>
@@ -56,11 +56,7 @@ function BizTeamNavbar({ history }) {
             {
                 icon: <ExitToAppIcon style={menuIconStyle} />,
                 text: "sair",
-                callback: () => {
-                    (async () => {
-                        await disconnect();
-                    })();
-                },
+                callback: () => disconnect(),
             },
         ];
 

@@ -1,11 +1,11 @@
 // 75% of screen and 360 x 588 is the nearest screen size resolution of a common mobile
-import { useEffect, useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import AsyncLogin from "components/auth/AsyncLogin";
 import useData, { useBizData } from "init";
 import { useAppSystem } from "hooks/useRoleData";
-import useAuth from "hooks/useAuth";
+import useAuth from "auth/useAuth";
 import { useRunComp } from "hooks/useRunComp";
 import isThisApp from "utils/window/isThisApp";
 import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
@@ -71,9 +71,7 @@ function ClientMobileApp({ location, history }) {
 
     const [
         userId,
-        role,
         rememberAccess,
-        success,
         fullName,
         disconnectCliMember,
         disconnectAgent,
@@ -84,9 +82,7 @@ function ClientMobileApp({ location, history }) {
         loadingData,
     ] = useData([
         "userId",
-        "role",
         "rememberAccess",
-        "success",
         "name",
         "disconnectCliMember",
         "disconnectAgent",
@@ -95,7 +91,16 @@ function ClientMobileApp({ location, history }) {
         "instantBizName",
         "needAppRegister",
     ]);
-    console.log("role INDEXED DB", role);
+
+    const { role } = useData();
+
+    const {
+        bizLinkName,
+        bizLogo,
+        themePColor,
+        themeSColor,
+        themeBackColor,
+    } = useBizData();
 
     const { notifCount } = useData();
 
@@ -106,9 +111,7 @@ function ClientMobileApp({ location, history }) {
         isInstantApp,
     });
 
-    let isAuthUser = useAuth();
-    console.log("isAuthUser", isAuthUser);
-    isAuthUser = isAuthUser || (success !== "..." && success);
+    const isAuthUser = useAuth();
 
     const { roleWhichDownloaded, businessId } = useAppSystem();
 
@@ -128,8 +131,7 @@ function ClientMobileApp({ location, history }) {
         role === "cliente-membro" || roleWhichDownloaded === "cliente-membro";
     let isCliUser = role === "cliente" || roleWhichDownloaded === "cliente";
 
-    // # auth
-    const isSessionOver = !success || !localStorage.getItem("token");
+    const isSessionOver = isAuthUser;
     const needStaffLogout = isStaff && isSessionOver && rememberAccess;
 
     if (needAppForCliAdmin) {
@@ -139,14 +141,6 @@ function ClientMobileApp({ location, history }) {
     const accessCheck = !isStaff || (!loadingData && !rememberAccess);
     // END MAIN VARIABLES
 
-    const {
-        bizLinkName,
-        bizLogo,
-        themePColor,
-        themeSColor,
-        themeBackColor,
-    } = useBizData();
-
     const { runName } = useRunComp();
     const versionReady = useDelay(2000);
 
@@ -154,12 +148,6 @@ function ClientMobileApp({ location, history }) {
     useBackColor(
         `var(--themeBackground--${isBizTeam ? "default" : themeBackColor})`
     );
-
-    useEffect(() => {
-        if (runName === "logout") {
-            history.push("/mobile-app");
-        }
-    }, [runName]);
 
     if (isCliMember) {
         // this var is removed when making login
@@ -361,7 +349,7 @@ function ClientMobileApp({ location, history }) {
 
             {isAuthUser && (
                 <section>
-                    {true && (
+                    {isCliUser && (
                         <ClientUserAppContent
                             businessId={businessId}
                             loadingData={loadingData}

@@ -198,9 +198,10 @@ export async function signInUserData(cpfValue, options = {}) {
     }
 
     if (role === "cliente") {
+        await authenticate(token);
+
         if (needCliUserWelcomeNotif) {
             showToast("Preparando App...");
-            await authenticate(token);
 
             const cliNotifRes = await sendNotification(userId, "welcome", {
                 role,

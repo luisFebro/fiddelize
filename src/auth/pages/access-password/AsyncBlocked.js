@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, Fragment } from "react";
-import getCountdownTimer from "../../utils/numbers/getCountdownTimer";
+import getCountdownTimer from "utils/numbers/getCountdownTimer";
 import PasswordRecoverBtn from "./password-recover-modal/PasswordRecoverBtn";
 
 export default function AsyncBlocked({ lockMin, textColor, setLock }) {

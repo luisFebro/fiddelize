@@ -16,6 +16,7 @@ export const Provider = ({ children, store }) => (
     <Context.Provider value={store}>{children}</Context.Provider>
 );
 
+// REDUCER
 export function useUify(...data) {
     const [state, uify] = useReducer(...data);
 
@@ -24,6 +25,17 @@ export function useUify(...data) {
         uify,
     };
 }
+
+export function handleAction(action = [], state) {
+    const allowedTypes = Object.keys(state);
+
+    const [type] = action;
+    if (!allowedTypes.includes(type))
+        throw new Error(`the action ${type.toUpperCase()} is not allowed`);
+
+    return [type, action.payload];
+}
+// END REDUCER
 
 /* n1 create a file "useGlobal.js" in the root of the target component to store all global variables.
 this file should be import to the target file and be assigned to store like:

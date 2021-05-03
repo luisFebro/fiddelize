@@ -4,7 +4,7 @@ import { convertDotToComma } from "utils/numbers/convertDotComma";
 
 export default function animateCartByScore(
     currUserScore,
-    rewardScore,
+    targetPoints,
     options
 ) {
     const {
@@ -23,7 +23,7 @@ export default function animateCartByScore(
         indScore = -1;
     }
 
-    const eachMilestone = rewardScore / 5;
+    const eachMilestone = targetPoints / 5;
     const level1 = eachMilestone;
     const level2 = eachMilestone * 2;
     const level3 = eachMilestone * 3;
@@ -43,7 +43,7 @@ export default function animateCartByScore(
         indScore = 2;
     } else if (currUserScore >= level4 && currUserScore <= toLevel5) {
         indScore = 3;
-    } else if (currUserScore >= rewardScore) {
+    } else if (currUserScore >= targetPoints) {
         indScore = 4;
     }
 
@@ -75,7 +75,7 @@ export default function animateCartByScore(
 
     // FLAG
     const delayToAnimated = 4000;
-    if (currUserScore >= rewardScore) {
+    if (currUserScore >= targetPoints) {
         const flagIcon = document.querySelector(`#${flag.idsArray[0]}`);
         setTimeout(
             () => flagIcon.classList.add(flag.className),

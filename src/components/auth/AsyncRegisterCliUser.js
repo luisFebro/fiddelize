@@ -81,7 +81,7 @@ function ASyncRegisterCliUser({
         bizImg: "", // for account panel...
         bizName: "", // for account panel...
         register: {},
-        tempScore: "", // for member tasks newClient Record
+        tempPoints: "", // for member tasks newClient Record
         memberRole: "", // for member tasks newClient Record
         linkCode: "",
     });
@@ -139,7 +139,7 @@ function ASyncRegisterCliUser({
                         id: memberId || staffId,
                         job: memberJob || "admin",
                     },
-                    tempScore: userScore,
+                    tempPoints: userScore,
                     memberRole: memberRole || memberRoleAlt, // if not found memberRole, it means it is a complete register before sending link invitation.
                     clientUserData: {
                         ...data.clientUserData,

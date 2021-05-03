@@ -85,8 +85,8 @@ function removeCollection(collectionName) {
     const collectionData = getCurrCollectionData(collectionName);
     const isValidCollection = Boolean(collectionData);
     if (!isValidCollection)
-        throw new Error(
-            `the collection ${collectionName.toUpperCase()} does not exist`
+        console.log(
+            `ERROR: the collection ${collectionName.toUpperCase()} does not exist or already removed`
         );
 
     if ("localStorage" in window) {

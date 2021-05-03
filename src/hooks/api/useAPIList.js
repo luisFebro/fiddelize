@@ -2,21 +2,18 @@
 import axios from "axios";
 import { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
-import { useStoreDispatch } from "easy-peasy";
-import { ShowLoadingComp } from "./Comps";
-import ButtonMulti from "../../components/buttons/material-ui/ButtonMulti";
-import useOfflineListData from "../storage/useOfflineListData";
-import getFirstName from "../../utils/string/getFirstName";
+import ButtonMulti from "components/buttons/material-ui/ButtonMulti";
+import useOfflineListData from "hooks/storage/useOfflineListData";
+import getFirstName from "utils/string/getFirstName";
 import useData from "init";
-import useToken from "auth/useToken";
-import showToast from "../../components/toasts";
-import { logout } from "../../redux/actions/authActions";
-import { chooseHeader } from "../../utils/server/getHeaders";
+import useToken, { chooseHeader } from "auth/useToken";
+import disconnect from "auth/disconnect";
+import { ShowLoadingComp } from "./Comps";
 
-import Skeleton from "../../components/multimedia/Skeleton";
-import { IS_DEV } from "../../config/clientUrl";
-import extractStrData from "../../utils/string/extractStrData";
-import isThisApp from "../../utils/window/isThisApp";
+import Skeleton from "components/multimedia/Skeleton";
+import { IS_DEV } from "config/clientUrl";
+import extractStrData from "utils/string/extractStrData";
+import isThisApp from "utils/window/isThisApp";
 
 const isApp = isThisApp();
 
@@ -59,17 +56,6 @@ export default function useAPIList({
     needAuth = true,
     isFiltering = false,
 }) {
-    // Warning: if using filter, isFiltering is required like:
-    /*
-        const handlePeriodFilter = (dataFilter) => {
-            setSkip(0);
-            setData({ filterBy: dataFilter.selected, isFiltering: true });
-            setTimeout(() => {
-                setData(prev => ({ ...prev, isFiltering: false }));
-            }, 4000);
-        }
-     */
-
     const [data, setData] = useState({
         list: [],
         listTotal: 0,
@@ -87,7 +73,6 @@ export default function useAPIList({
     const [offlineBtn, setOfflineBtn] = useState(false);
     const [ignore, setIgnore] = useState(false);
 
-    const dispatch = useStoreDispatch();
     const token = useToken();
     let { name: userName } = useData();
     userName = getFirstName(userName);
@@ -175,8 +160,7 @@ export default function useAPIList({
             window.location.href = isApp
                 ? "/mobile-app"
                 : "/acesso/verificacao";
-            showToast("Sua sessão terminou.");
-            logout(dispatch, { needSnackbar: false });
+            disconnect();
         }
     }
 

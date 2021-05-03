@@ -9,7 +9,7 @@ import useOffline from "hooks/useOffline";
 import { IS_PROD } from "config/clientUrl";
 import switchConsoleLogs from "utils/security/switchConsoleLogs";
 import showToast from "components/toasts";
-import checkValidSession from "components/auth/helpers/checkValidSession";
+import checkValidSession from "auth/checkValidSession";
 import useGlobalApp from "./useGlobalApp.js";
 import "utils/globalHelpers";
 // STYLING
@@ -19,7 +19,6 @@ import "./scss/App.scss";
 import "./styles/bootstrap.selected.css";
 import "./libraries/fontAwesomeLib";
 // END STYLING
-// import { loadReCaptcha } from 'react-recaptcha-google';
 import AsyncWebsite from "./user-interfaces/AsyncWebsite";
 import AsyncMobileApp from "./user-interfaces/AsyncMobileApp";
 // END UIs

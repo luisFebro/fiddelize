@@ -67,7 +67,7 @@ export const updateUser = async (dispatch, objToSend, _idUser, opts = {}) => {
 
 export const readPurchaseHistory = async (
     _idUser,
-    rewardScore,
+    targetPoints,
     options = {}
 ) => {
     // n1
@@ -101,7 +101,7 @@ export const readPurchaseHistory = async (
 
     try {
         return await axios.get(
-            `${API}/user/list/purchase-history/${_idUser}?rewardScore=${rewardScore}&thisRole=${thisRole}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`,
+            `${API}/user/list/purchase-history/${_idUser}?targetPoints=${targetPoints}&thisRole=${thisRole}${noResponseQuery}${skipQuery}${limitQuery}${scoreQuery}${prizeDescQuery}${trophyIconQuery}`,
             getHeaderJson
         );
     } catch (err) {

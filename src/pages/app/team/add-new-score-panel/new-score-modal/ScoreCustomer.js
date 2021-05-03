@@ -9,7 +9,7 @@ import { setVar } from "init/var";
 import { prerenderAudio } from "../../../../../hooks/media/usePlayAudio";
 import getRandomArray from "../../../../../utils/arrays/getRandomArray";
 import getAPI, {
-    setTempScoreAndMemberData,
+    setTempPointsAndMemberData,
 } from "../../../../../utils/promises/getAPI";
 import showToast from "../../../../../components/toasts";
 import { useBizData } from "init";
@@ -87,12 +87,12 @@ const setUltimateData = async (data) => {
         clientId: data.clientId,
         clientName: data.clientName,
         memberId: data.memberId,
-        tempScore: data.tempScore,
+        tempPoints: data.tempPoints,
     };
 
     return await getAPI({
         method: "post",
-        url: setTempScoreAndMemberData(),
+        url: setTempPointsAndMemberData(),
         body,
     });
 };
@@ -164,7 +164,7 @@ export default function ScoreCustomer({
             const ultimateData = {
                 clientId,
                 clientName: customerName,
-                tempScore: convertBrToDollar(score),
+                tempPoints: convertBrToDollar(score),
                 memberId,
                 bizId,
                 bizName,

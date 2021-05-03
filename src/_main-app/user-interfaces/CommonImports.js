@@ -4,7 +4,7 @@ import { Load } from "../../components/code-splitting/LoadableComp";
 export const AsyncLoginPage = Load({
     loader: () =>
         import(
-            "../../pages/auth/LoginPage" /* webpackChunkName: "login-page-lazy" */
+            "auth/pages/LoginPage" /* webpackChunkName: "login-page-lazy" */
         ),
 });
 
@@ -42,21 +42,21 @@ export const AsyncPlansPage = Load({
 export const AsyncAccessPassword = Load({
     loader: () =>
         import(
-            "../../pages/access-password/AccessPassword" /* webpackChunkName: "cli-admin-access-password-page-lazy" */
+            "auth/pages/access-password/AccessPassword" /* webpackChunkName: "cli-admin-access-password-page-lazy" */
         ),
 });
 // recover and change
 export const AsyncNewPassword = Load({
     loader: () =>
         import(
-            "../../pages/access-password/NewPassword" /* webpackChunkName: "new-pass-page-lazy" */
+            "auth/pages/access-password/NewPassword" /* webpackChunkName: "new-pass-page-lazy" */
         ),
 });
 
 export const AsyncTeamPassword = Load({
     loader: () =>
         import(
-            "../../pages/access-password/team-password/TeamPassword" /* webpackChunkName: "team-password-page-lazy" */
+            "auth/pages/access-password/team-password/TeamPassword" /* webpackChunkName: "team-password-page-lazy" */
         ),
 });
 
@@ -64,7 +64,7 @@ export const AsyncTeamPassword = Load({
 export const AsyncPasswordPage = Load({
     loader: () =>
         import(
-            "../../pages/dashboard-client-admin/pass-page/AsyncPasswordPage" /* webpackChunkName: "create-pass-page-lazy" */
+            "auth/pages/access-password/dashboard-client-admin/AsyncPasswordPage" /* webpackChunkName: "create-pass-page-lazy" */
         ),
 });
 // END PASSWORDS
@@ -130,7 +130,7 @@ export const AsyncPayGatewayRegister = Load({
 export const AsyncBizTeamPassword = Load({
     loader: () =>
         import(
-            "../../pages/app/biz-core-team/access/BizTeamPassword" /* webpackChunkName: "biz-core-team-access-lazy" */
+            "auth/pages/access-password/biz-core-team/BizTeamPassword" /* webpackChunkName: "biz-core-team-access-lazy" */
         ),
 });
 

@@ -28,12 +28,12 @@ export default function CartRace({
     id,
 }) {
     const { totalPurchasePrize } = useData();
-    let { maxScore, themePColor, themeSColor, rewardList } = useBizData();
+    let { targetPoints, themePColor, themeSColor, rewardList } = useBizData();
 
-    // const isCartEmpty = !totalGeneralScore;
+    // const isCartEmpty = !totalGeneralPoints;
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    maxScore = pickedObj.rewardScore;
+    targetPoints = pickedObj.targetPoints;
 
     const currChallenge = defineCurrChallenge(totalPurchasePrize);
 
@@ -43,14 +43,14 @@ export default function CartRace({
 
     const msgRef = React.useRef(null);
     useEffect(() => {
-        animateCartByScore(currUserScore, maxScore, {
+        animateCartByScore(currUserScore, targetPoints, {
             ...options,
             currChallenge,
             userName,
             themeSColor,
             msgRef: msgRef.current,
         });
-    }, [maxScore, currUserScore, currChallenge, themeSColor, msgRef]);
+    }, [targetPoints, currUserScore, currChallenge, themeSColor, msgRef]);
 
     const showLineRoad = () => (
         <div className="line" style={backColor}>

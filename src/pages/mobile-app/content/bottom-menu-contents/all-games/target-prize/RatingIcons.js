@@ -9,14 +9,16 @@ import gotArrayThisItem from "utils/arrays/gotArrayThisItem";
 import usePlayAudio from "hooks/media/usePlayAudio";
 
 export default function RatingIcons({
-    currScore,
-    maxScore,
+    currPoints,
+    targetPoints,
     milestoneIcon,
     runName,
     selectTxtStyle,
     colorBack,
     colorS,
 }) {
+    console.log("currPoints", currPoints);
+    console.log("targetPoints", targetPoints);
     usePlayAudio("/sounds/reward-icons-pop-drip.wav", ".rating-icon--audio", {
         multi: true,
     });
@@ -25,12 +27,13 @@ export default function RatingIcons({
         : false;
     const selectedIcon = appPreviewIcon || milestoneIcon || "star"; // star is temporary since selfMilestonsIcon is not declared on DB yet.
 
-    const eachMilestone = Number(maxScore / 5);
+    const eachMilestone = Number(targetPoints / 5);
+    console.log("eachMilestone", eachMilestone);
     const needDark = selectTxtStyle(colorBack, { needDarkBool: true });
 
     const paintStarsForScore = () => {
         let indScore;
-        if (!currScore) {
+        if (!currPoints) {
             indScore = -1;
         }
 
@@ -44,16 +47,16 @@ export default function RatingIcons({
         const toLevel4 = level4 - 0.05;
         const toLevel5 = level5 - 0.05;
 
-        if (currScore >= level1 && currScore <= toLevel2) {
+        if (currPoints >= level1 && currPoints <= toLevel2) {
             indScore = 0;
         } // L
-        else if (currScore >= level2 && currScore <= toLevel3) {
+        else if (currPoints >= level2 && currPoints <= toLevel3) {
             indScore = 1;
-        } else if (currScore >= level3 && currScore <= toLevel4) {
+        } else if (currPoints >= level3 && currPoints <= toLevel4) {
             indScore = 2;
-        } else if (currScore >= level4 && currScore <= toLevel5) {
+        } else if (currPoints >= level4 && currPoints <= toLevel5) {
             indScore = 3;
-        } else if (currScore >= toLevel5) {
+        } else if (currPoints >= toLevel5) {
             indScore = 4;
         }
 

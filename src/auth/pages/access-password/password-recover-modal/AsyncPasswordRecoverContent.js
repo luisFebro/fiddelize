@@ -4,15 +4,15 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import EmailIcon from "@material-ui/icons/Email";
 import MoneyIcon from "@material-ui/icons/Money";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import handleChange from "../../../utils/form/use-state/handleChange";
-import { handleNextField } from "../../../utils/form/kit";
-import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
+import handleChange from "utils/form/use-state/handleChange";
+import { handleNextField } from "utils/form/kit";
+import autoCpfMaskBr from "utils/validation/masks/autoCpfMaskBr";
 import ButtonMulti, {
     faStyle,
-} from "../../../components/buttons/material-ui/ButtonMulti";
-import getAPI, { forgotPasswordRequest } from "../../../utils/promises/getAPI";
+} from "components/buttons/material-ui/ButtonMulti";
+import getAPI, { forgotPasswordRequest } from "utils/promises/getAPI";
 import useData from "init";
-import showToast from "../../../components/toasts";
+import showToast from "components/toasts";
 
 const isSmall = window.Helper.isSmallScreen();
 

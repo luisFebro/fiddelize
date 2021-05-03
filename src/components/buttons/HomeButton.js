@@ -1,15 +1,12 @@
 import { Link, withRouter } from "react-router-dom";
-import { useStoreDispatch } from "easy-peasy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ButtonMulti, { faStyle } from "./material-ui/ButtonMulti";
-import { showComponent } from "../../redux/actions/componentActions";
-import { logout } from "../../redux/actions/authActions";
-import isThisApp from "../../utils/window/isThisApp";
+import disconnect from "init/disconnect";
+import isThisApp from "utils/window/isThisApp";
 import { useBizData } from "init";
+import ButtonMulti, { faStyle } from "./material-ui/ButtonMulti";
 
 function HomeButton({ location }) {
     const isClientAdmin = location.search.includes("admin=1");
-    const dispatch = useStoreDispatch();
 
     const { themeSColor, themeBackColor } = useBizData();
 
@@ -25,8 +22,7 @@ function HomeButton({ location }) {
             <Link to={handleLink()} style={{ textDecoration: "none" }}>
                 <ButtonMulti
                     onClick={() => {
-                        showComponent(dispatch, "login");
-                        !isThisApp() && logout(dispatch);
+                        if (!isThisApp()) disconnect();
                     }}
                     color="var(--mainWhite)"
                     backgroundColor={`var(--themeSDark--${themeSColor})`}

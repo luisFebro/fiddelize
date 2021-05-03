@@ -1,7 +1,6 @@
 import { Fragment } from "react";
-import { useBizData } from "init";
+import useData, { useBizData } from "init";
 import { Load } from "../../../components/code-splitting/LoadableComp";
-import useData from "init";
 import getDayGreetingBr from "../../../utils/getDayGreetingBr";
 import TeamSpeedDialBtn from "./TeamSpeedDialBtn";
 import "./_TeamApp.scss";
@@ -9,7 +8,7 @@ import RegisterPanelBtn from "../../dashboard-client-admin/dash-clients/clients-
 import AddNewScoreBtn from "./add-new-score-panel/AddNewScoreBtn";
 import selectTxtStyle from "../../../utils/biz/selectTxtStyle";
 import useBackColor from "../../../hooks/useBackColor";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "auth/useAuth";
 import BtnBackTestMode from "../../mobile-app/content/test-mode-btn/BtnBackTestMode";
 import removeImgFormat from "../../../utils/biz/removeImgFormat";
 import NotifPermissionBanner from "../../../components/pwa-push-notification/NotifPermissionBanner";

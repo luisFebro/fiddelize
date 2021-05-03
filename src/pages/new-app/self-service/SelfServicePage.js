@@ -54,14 +54,14 @@ function SelfServicePage({ location, history }) {
     const { bizName, bizLinkName } = clientAdminData;
     // API
     const clientName = getQueryByName("nome-cliente", location.search);
-    let rewardScore = getQueryByName("ponto-premio", location.search);
+    let targetPoints = getQueryByName("ponto-premio", location.search);
     const rewardDesc = getQueryByName("premio-desc", location.search);
-    let currScore = getQueryByName("ponto-atual", location.search);
-    if (typeof rewardScore === "object") {
-        rewardScore = 500;
+    let currPoints = getQueryByName("ponto-atual", location.search);
+    if (typeof targetPoints === "object") {
+        targetPoints = 500;
     } // if it is null
-    if (typeof currScore === "object") {
-        currScore = 100;
+    if (typeof currPoints === "object") {
+        currPoints = 100;
     }
     // END API
 
@@ -93,7 +93,7 @@ function SelfServicePage({ location, history }) {
                         theme={theme}
                         setLocalData={setLocalData}
                         setTheme={setTheme}
-                        rewardScore={rewardScore}
+                        targetPoints={targetPoints}
                         rewardDesc={rewardDesc}
                     />
                 </section>
@@ -103,8 +103,8 @@ function SelfServicePage({ location, history }) {
                     colorP={colorP}
                     colorS={colorS}
                     colorBack={colorBack}
-                    currScore={currScore}
-                    rewardScore={rewardScore}
+                    currPoints={currPoints}
+                    targetPoints={targetPoints}
                 />
             </div>
         </div>

@@ -2,7 +2,7 @@ import getAPI, { createTk } from "utils/promises/getAPI";
 import { setItems } from "init/lStorage";
 import { setVar } from "init/var";
 
-export default async function renewAccessToken(options = {}) {
+export default async function renewToken(options = {}) {
     const { role, userId, bizId, clickedAppUserId } = options;
 
     if (!role || !userId)

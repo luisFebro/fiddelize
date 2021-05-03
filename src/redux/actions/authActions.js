@@ -1,15 +1,11 @@
 import axios from "axios";
 import showToast from "components/toasts";
 import { getHeaderJson } from "utils/server/getHeaders";
-import isThisApp from "utils/window/isThisApp";
-import { setVar } from "init/var";
 import { API } from "config/api";
 import getAPI, { login, loadUserInit } from "utils/promises/getAPI";
 import setInitData from "init/setInitData";
+import disconnect from "auth/disconnect";
 import { setLoadingProgress } from "./globalActions";
-// naming structure: action > type > speficification e.g action: GET_MODAL_BLUE / func: getModalBlue
-// import { postDataWithJsonObj } from '../../utils/promises/postDataWithJsonObj.js'
-const isApp = isThisApp();
 
 // Check token & load user
 export const loadUser = async (uify, history) => {
@@ -30,7 +26,7 @@ export const loadUser = async (uify, history) => {
             window.location.href = "/temporariamente-indisponivel-503";
         }
         if (err.status === 401 && errorMsg === "A sua sessão terminou") {
-            logout(uify, { history });
+            disconnect({ history, msg: false, needRedirect: false });
         }
     });
 
@@ -62,7 +58,7 @@ export const doLogin = async (uify, objToSend) => {
 
     if (!res) return null;
 
-    await setInitData(res.data, { uify, isLogin: true });
+    await setInitData(res.data, { uify });
     // setLoadingProgress(dispatch, false);
 
     return res;
@@ -91,22 +87,6 @@ export const registerEmail = async (dispatch, objToSend) => {
         return err.response;
     }
 };
-
-export async function logout(dispatch, opts = {}) {
-    const { needReload = false, history } = opts;
-
-    if (history) {
-        if (isApp) history.push("/mobile-app");
-        else history.push("/");
-    }
-
-    if (needReload) {
-        window.location.href = isApp ? "/mobile-app" : "/";
-    }
-    // dispatch({ type: "LOGOUT_SUCCESS" });
-
-    await setVar({ success: false }, "user");
-}
 
 export const changePassword = async (dispatch, bodyPass, userId) => {
     setLoadingProgress(dispatch, true);

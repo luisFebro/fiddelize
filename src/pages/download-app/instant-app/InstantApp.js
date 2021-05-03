@@ -2,7 +2,7 @@ import { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import createInstantApp from "./helpers/createInstantApp";
 import getFilterDate from "../../../utils/dates/getFilterDate";
-import getVar, { removeVars, setVars, removeCollection } from "init/var";
+import getVar, { removeVars, setVars, removeStore } from "init/var";
 import autoCpfMaskBr from "../../../utils/validation/masks/autoCpfMaskBr";
 import ButtonFab from "../../../components/buttons/material-ui/ButtonFab";
 import showToast from "../../../components/toasts";
@@ -67,7 +67,7 @@ export default function InstantAccount({
             id: memberId || bizId,
             job: memberJob || "admin",
         },
-        tempScore: userScore, // for member tasks newClient Record
+        tempPoints: userScore, // for member tasks newClient Record
         memberRole: !isCliUser
             ? undefined
             : memberJob
@@ -121,7 +121,7 @@ export default function InstantAccount({
             await Promise.all([
                 removeVars(["success", "memberId", "needAppRegister"], "user"),
                 setVars(storeElems, "user"),
-                isCliAdmin ? removeCollection("pre_register") : undefined,
+                isCliAdmin ? removeStore("pre_register") : undefined,
             ]).then((res) => {
                 setSuccess(true);
                 setData((prev) => ({

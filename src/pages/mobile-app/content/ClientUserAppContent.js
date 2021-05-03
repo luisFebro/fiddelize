@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Provider } from "context";
 import getDayGreetingBr from "utils/getDayGreetingBr";
-import useAuth from "hooks/useAuth";
+import useAuth from "auth/useAuth";
 import selectTxtStyle from "utils/biz/selectTxtStyle";
 import AsyncBellNotifBtn from "components/notification/AsyncBellNotifBtn";
 import "../ellipse.scss";
@@ -34,12 +34,12 @@ export default function ClientUserAppContent({
     colorS = "default",
     colorBack,
     businessId,
-    rewardScoreTest,
+    targetPointsTest,
     clientNameTest,
     totalNotifications,
 }) {
     const [showMoreComps, setShowMoreComps] = useState(false);
-    const currScoreRef = useRef(null);
+    const currPointsRef = useRef(null);
 
     const {
         userId,
@@ -53,10 +53,10 @@ export default function ClientUserAppContent({
     const firstName = clientNameTest || firstUserName;
 
     const {
-        currScore = 0,
-        lastScore,
+        currPoints = 0,
+        lastPoints,
         totalPurchasePrize,
-        totalGeneralScore,
+        totalGeneralPoints,
     } = useThisData();
     const currChall = defineCurrChallenge(totalPurchasePrize);
 
@@ -68,20 +68,20 @@ export default function ClientUserAppContent({
         bizName,
         bizLogo,
     } = useBizData();
-    let { maxScore = 0, milestoneIcon } = useBizData();
+    let { targetPoints = 0, milestoneIcon } = useBizData();
 
     const pickedObj = pickCurrChallData(rewardList, totalPurchasePrize);
-    maxScore = pickedObj.rewardScore;
+    targetPoints = pickedObj.targetPoints;
     const { mainReward } = pickedObj;
 
     milestoneIcon = pickedObj.milestoneIcon;
-    if (rewardScoreTest) {
-        maxScore = Number(rewardScoreTest);
+    if (targetPointsTest) {
+        targetPoints = Number(targetPointsTest);
     }
 
-    const userBeatChallenge = currScore >= maxScore;
+    const userBeatChallenge = currPoints >= targetPoints;
 
-    useAlreadyAlertChallenge(currScore);
+    useAlreadyAlertChallenge(currPoints);
     const didUserScroll = useDidScroll();
 
     const isAuth = useAuth();
@@ -90,9 +90,9 @@ export default function ClientUserAppContent({
         businessId,
         mainReward,
         fullName,
-        maxScore,
+        targetPoints,
         currChall,
-        currScore,
+        currPoints,
         bizLogo,
         lastPrizeId,
         totalPurchasePrize,
@@ -131,7 +131,7 @@ export default function ClientUserAppContent({
         trigger: triggerNumberAnima,
         callback: setShowMoreComps,
     };
-    useAnimateNumber(currScoreRef.current, currScore, numberOptions);
+    useAnimateNumber(currPointsRef.current, currPoints, numberOptions);
 
     const backColorSelect = colorBack || themeBackColor || colorP;
     const selectedTxtStyle = selectTxtStyle(backColorSelect, { bold: true });
@@ -185,15 +185,15 @@ export default function ClientUserAppContent({
         <AllScores
             userName={firstName}
             userId={userId}
-            currScoreRef={currScoreRef}
-            currScore={currScore}
+            currPointsRef={currPointsRef}
+            currPoints={currPoints}
             showPercentage={showMoreComps}
-            lastScore={lastScore}
+            lastPoints={lastPoints}
             needAppForPreview={needAppForPreview}
             selectTxtStyle={selectTxtStyle}
             colorBack={backColorSelect}
             colorS={colorS}
-            totalGeneralScore={totalGeneralScore}
+            totalGeneralPoints={totalGeneralPoints}
             totalPurchasePrize={totalPurchasePrize}
         />
     );
@@ -215,9 +215,9 @@ export default function ClientUserAppContent({
         userId,
         selectedTxtStyle,
         selectTxtStyle,
-        maxScore,
+        targetPoints,
         currChall,
-        currScore,
+        currPoints,
         playBeep,
         arePrizesVisible,
         prizeDesc: mainReward,
@@ -279,9 +279,9 @@ function getAutoSMSObj(data) {
 // END HELPERS
 
 // HOOKS
-function useAlreadyAlertChallenge(currScore) {
+function useAlreadyAlertChallenge(currPoints) {
     useEffect(() => {
-        if (!currScore) {
+        if (!currPoints) {
             (async () => {
                 const gotValue = await getVar("alreadyAlertChallenge");
                 if (!gotValue) return;
@@ -290,7 +290,7 @@ function useAlreadyAlertChallenge(currScore) {
                 await removeVar("pendingChall");
             })();
         }
-    }, [currScore]);
+    }, [currPoints]);
 }
 
 // END HOOKS
@@ -308,7 +308,7 @@ const handleMoreComps = () => {
 
 const thisCurrTxtColor = currTxtColor(colorS);
 const showSkipIconsBtn = () =>
-    currScore >= 30 &&
+    currPoints >= 30 &&
     !showMoreComps && (
         <div
             className={`${
@@ -336,7 +336,7 @@ const showSkipIconsBtn = () =>
         </div>
     );
 
-const totalChallengesWon = Math.floor(currScore / maxScore);
+const totalChallengesWon = Math.floor(currPoints / targetPoints);
 const pickedObjForPending = React.useMemo(
     () => pickCurrChallData(rewardList, totalPurchasePrize + 1),
     []
@@ -360,11 +360,11 @@ useEffect(() => {
             thisRole: role || "cliente",
         };
         getVar("pendingChall").then((resPending) => {
-            let thisMaxScore = maxScore;
+            let thisTargetPoints = targetPoints;
             if (resPending) {
-                thisMaxScore = pickedObjForPending.rewardScore;
+                thisTargetPoints = pickedObjForPending.targetPoints;
             }
-            readPurchaseHistory(userId, thisMaxScore, options);
+            readPurchaseHistory(userId, thisTargetPoints, options);
         });
 
         if (gotValue && !userBeatChallenge) {

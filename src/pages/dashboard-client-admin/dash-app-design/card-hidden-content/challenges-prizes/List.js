@@ -15,7 +15,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     const {
         milestoneIcon,
         mainReward,
-        maxScore,
+        targetPoints,
         rewardList,
         bizPlan,
     } = useBizData();
@@ -24,7 +24,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
     const firstMainData = {
         id: businessId,
         icon: milestoneIcon,
-        rewardScore: maxScore,
+        targetPoints: targetPoints,
         rewardDesc: mainReward,
     };
     if (!rewardList.length) {
@@ -61,7 +61,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
         const { deleteThisId, addThisId } = opts;
         const constObj = {
             "clientAdminData.milestoneIcon": challengesArray[0].icon,
-            "clientAdminData.rewardScore": challengesArray[0].rewardScore,
+            "clientAdminData.targetPoints": challengesArray[0].targetPoints,
             "clientAdminData.mainReward": challengesArray[0].rewardDesc,
         };
 
@@ -79,13 +79,13 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
             setChallengesArray(newModifiedArray);
         }
         if (addThisId) {
-            let lastRewardScore =
-                challengesArray[challengesArray.length - 1].rewardScore;
+            let lasttargetPoints =
+                challengesArray[challengesArray.length - 1].targetPoints;
             const lastIcon = challengesArray[challengesArray.length - 1].icon;
             const addedObj = {
                 id: needAdd,
                 icon: lastIcon,
-                rewardScore: ++lastRewardScore,
+                targetPoints: ++lasttargetPoints,
                 rewardDesc: "Sem Descrição",
             };
             newModifiedArray = [...challengesArray, addedObj];
@@ -142,7 +142,7 @@ export default function List({ setMode, mode, needAdd, setHideAddBtn }) {
                         showToast={showToast}
                         id={chall.id}
                         icon={chall.icon}
-                        rewardScore={chall.rewardScore}
+                        targetPoints={chall.targetPoints}
                         rewardDesc={chall.rewardDesc}
                         milestoneIcon={milestoneIcon}
                         updateThisUser={updateThisUser}

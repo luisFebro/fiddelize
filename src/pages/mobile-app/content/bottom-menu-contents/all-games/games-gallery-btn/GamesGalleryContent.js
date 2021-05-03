@@ -2,7 +2,7 @@ import useContext from "context";
 import GameList from "./games-list/GameList";
 
 export default function GamesGalleryContent() {
-    const { currScore } = useContext();
+    const { currPoints } = useContext();
 
     const showTitle = () => (
         <div className="mt-3 text-center text-purple mx-3">
@@ -23,7 +23,7 @@ export default function GamesGalleryContent() {
         <h2 className="mt-4 mb-3 text-center text-purple text-normal font-weight-bold">
             Saldo Atual:
             <div className="container-center">
-                <span className="d-block text-pill">{currScore} pontos</span>
+                <span className="d-block text-pill">{currPoints} pontos</span>
             </div>
         </h2>
     );

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import useContext from "context";
-import { disconnect } from "../../../../hooks/useAuth";
+import disconnect from "auth/disconnect";
 
 const allMenuList = ({ needAppForPreview, needAppForCliAdmin, history }) => [
     {

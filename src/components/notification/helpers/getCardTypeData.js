@@ -38,12 +38,12 @@ export default function getCardTypeData(cardType, options = {}) {
                 currChall: thisCurrChall,
                 prizeDesc,
                 clientFullName,
-                rewardScore,
+                targetPoints,
             } = extractStrData(content);
 
             if (subtype === "clientWonChall") {
                 title = "Desafio Concluído";
-                brief = `Cliente §${clientFullName}§ concluiu desafio N.° ${thisCurrChall} com meta de §${rewardScore} pontos§ e ganhou prêmio: §${prizeDesc}§.`;
+                brief = `Cliente §${clientFullName}§ concluiu desafio N.° ${thisCurrChall} com meta de §${targetPoints} pontos§ e ganhou prêmio: §${prizeDesc}§.`;
             }
             if (subtype === "confirmedChall") {
                 title = "Desafio Confirmado";
@@ -105,13 +105,13 @@ export default function getCardTypeData(cardType, options = {}) {
             break;
         }
         case "score": {
-            const { tempScore } = extractStrData(content);
+            const { tempPoints } = extractStrData(content);
 
-            if (subtype === "scorePlus") {
+            if (subtype === "pointPlus") {
                 title = "Nova Pontuação";
                 brief = `Opa! ${getFirstName(
                     userName
-                )}, você recebeu §${tempScore} pontos§ no seu novo cartão de compra virtual da ${bizName}.`;
+                )}, você recebeu §${tempPoints} pontos§ no seu novo cartão de compra virtual da ${bizName}.`;
                 circularImg = "/img/icons/notif/fidelity-card.svg";
             }
             break;

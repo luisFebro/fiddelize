@@ -14,8 +14,8 @@ import getPercentage from "utils/numbers/getPercentage";
 // probably is the propTypes which is being called in the former or wrong component.
 // check if the component has the same name
 // ProgressFragTracker.propTypes = {
-//     currScore: PropTypes.number,
-//     maxScore: PropTypes.number,
+//     currPoints: PropTypes.number,
+//     targetPoints: PropTypes.number,
 //     playBeep: PropTypes.func,
 // };
 
@@ -34,20 +34,20 @@ export default function ProgressFragTracker() {
         colorS,
         colorP,
         colorBack,
-        currScore,
+        currPoints,
         // currChall,
         selectTxtStyle,
-        maxScore,
+        targetPoints,
         playBeep,
         needAppForPreview,
     } = useContext();
 
-    const eachMilestone = maxScore / 5;
-    const currMilestone = getRemainder("tens", currScore, eachMilestone);
+    const eachMilestone = targetPoints / 5;
+    const currMilestone = getRemainder("tens", currPoints, eachMilestone);
     const milestoneLeft = convertDotToComma(eachMilestone - currMilestone);
 
-    const maxLevel = Math.floor(maxScore / eachMilestone);
-    let nextLevel = Math.floor(currScore / eachMilestone) + 1;
+    const maxLevel = Math.floor(targetPoints / eachMilestone);
+    let nextLevel = Math.floor(currPoints / eachMilestone) + 1;
 
     const styles = getStyles();
 
@@ -60,8 +60,8 @@ export default function ProgressFragTracker() {
             needAppForPreview={needAppForPreview}
             selectTxtStyle={selectTxtStyle}
             playBeep={playBeep}
-            maxScore={maxScore}
-            currScore={currScore}
+            targetPoints={targetPoints}
+            currPoints={currPoints}
             colorBack={colorBack}
             colorS={colorS}
             colorP={colorP}
@@ -71,9 +71,9 @@ export default function ProgressFragTracker() {
 
     const showMsg = () => (
         <div className="text-center">
-            {!currScore ? null : (
+            {!currPoints ? null : (
                 <Fragment>
-                    {currScore >= maxScore ? (
+                    {currPoints >= targetPoints ? (
                         <p
                             className={`m-0 mt-5 ${selectTxtStyle(colorBack, {
                                 bold: true,
@@ -136,19 +136,20 @@ function ProgressFrag({
     needAppForPreview,
     selectTxtStyle,
     playBeep,
-    maxScore,
-    currScore,
+    targetPoints,
+    currPoints,
     colorBack,
     colorS,
     colorP,
     eachMilestone,
 }) {
-    const percentageAchieved = getPercentage(maxScore, currScore);
+    const percentageAchieved = getPercentage(targetPoints, currPoints);
     const needResizeFont =
         percentageAchieved >= 100 ||
         percentageAchieved.toString().includes("."); // for fractional numbers like 85.45%
 
-    const leftScore = currScore >= maxScore ? 0 : maxScore - currScore;
+    const leftScore =
+        currPoints >= targetPoints ? 0 : targetPoints - currPoints;
 
     const percentageColor =
         colorS === "white"
@@ -205,7 +206,7 @@ function ProgressFrag({
                 needAttentionWaves={!needFlagWaves}
                 text={`
                     <p class="text-center">DESAFIO DO JOGO</p>
-                    Alcançar <strong>${maxScore} Pontos<strong/> com 5 níveis (ícones acima) com ${eachMilestone} pontos cada.
+                    Alcançar <strong>${targetPoints} Pontos<strong/> com 5 níveis (ícones acima) com ${eachMilestone} pontos cada.
                 `}
                 element={showFlag()}
                 backgroundColor={`var(--themeSDark--${colorS})`}
@@ -220,7 +221,7 @@ function ProgressFrag({
                     <p class="text-center">PROGRESSO</p>
                     Você já alcançou <strong>
                         ${percentageAchieved}% ${
-                    !currScore ? "(0 pontos)" : `(${currScore} pontos)`
+                    !currPoints ? "(0 pontos)" : `(${currPoints} pontos)`
                 }
                     </strong> do desafio até agora. <span class="text-em-1-1"><br /><br />Faltam ${leftScore} pontos.</span>`}
                 element={

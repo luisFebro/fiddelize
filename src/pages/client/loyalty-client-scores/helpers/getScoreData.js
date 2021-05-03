@@ -4,18 +4,18 @@ import { convertCommaToDot } from "../../../../utils/numbers/convertDotComma";
 export default function getScoreData({ currentScore, paidValue }) {
     if (!paidValue) return {};
 
-    let currScoreBefore = currentScore || 0;
-    currScoreBefore = getIntOrFloat(currScoreBefore);
+    let currPointsBefore = currentScore || 0;
+    currPointsBefore = getIntOrFloat(currPointsBefore);
 
-    let cashCurrScore = convertCommaToDot(paidValue);
-    cashCurrScore = getIntOrFloat(cashCurrScore);
+    let lastPoints = convertCommaToDot(paidValue);
+    lastPoints = getIntOrFloat(lastPoints);
 
-    let currScoreNow = parseFloat(currScoreBefore) + parseFloat(cashCurrScore);
-    currScoreNow = getIntOrFloat(currScoreNow);
+    let currPointsNow = parseFloat(currPointsBefore) + parseFloat(lastPoints);
+    currPointsNow = getIntOrFloat(currPointsNow);
 
     return {
-        currScoreBefore,
-        cashCurrScore,
-        currScoreNow,
+        currPointsBefore,
+        lastPoints,
+        currPointsNow,
     };
 }

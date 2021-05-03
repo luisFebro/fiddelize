@@ -1,19 +1,15 @@
 import { useEffect, useState, Fragment, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import getAPI, {
-    recoverPassword,
-    changePassword,
-} from "../../utils/promises/getAPI";
-import isThisApp from "../../utils/window/isThisApp";
-import showToast from "../../components/toasts";
-import useBackColor from "../../hooks/useBackColor";
-import { useBizData } from "init";
-import selectTxtStyle from "../../utils/biz/selectTxtStyle";
-import PasswordCircleFields from "../../components/fields/PasswordCircleFields.js";
-import NumericKeyboard from "../../components/keyboards/NumericKeyboard";
-import ButtonFab from "../../components/buttons/material-ui/ButtonFab";
-import useData from "init";
-import RedirectLink from "../../components/RedirectLink";
+import getAPI, { recoverPassword, changePassword } from "utils/promises/getAPI";
+import isThisApp from "utils/window/isThisApp";
+import showToast from "components/toasts";
+import useBackColor from "hooks/useBackColor";
+import useData, { useBizData } from "init";
+import selectTxtStyle from "utils/biz/selectTxtStyle";
+import PasswordCircleFields from "components/fields/PasswordCircleFields.js";
+import NumericKeyboard from "components/keyboards/NumericKeyboard";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
+import RedirectLink from "components/RedirectLink";
 
 const isApp = isThisApp();
 const whichPath = isApp ? "/mobile-app" : "/";

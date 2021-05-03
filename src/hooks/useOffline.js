@@ -5,7 +5,6 @@ import useData from "init";
 import getVar, { setVar, removeVar } from "init/var";
 
 const isConexionOff = isOffline();
-console.log("isConexionOff", isConexionOff);
 
 export default function useOffline() {
     const [firstName, loading] = useData(["firstName"]);

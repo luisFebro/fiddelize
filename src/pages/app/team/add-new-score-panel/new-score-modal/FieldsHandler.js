@@ -7,7 +7,7 @@ import selectTxtStyle from "../../../../../utils/biz/selectTxtStyle";
 import { useBizData } from "init";
 import { useAppSystem } from "../../../../../hooks/useRoleData";
 import getAPI, {
-    setTempScoreAndMemberData,
+    setTempPointsAndMemberData,
 } from "../../../../../utils/promises/getAPI";
 import useData from "init";
 
@@ -21,7 +21,7 @@ const setCustomerId = async (clientName, bizId, memberId) => {
 
     return await getAPI({
         method: "post",
-        url: setTempScoreAndMemberData(),
+        url: setTempPointsAndMemberData(),
         body,
     });
 };
@@ -44,8 +44,6 @@ function FieldsHandler({
 
     const { businessId: bizId } = useAppSystem();
     const [memberId] = useData(["userId"]);
-
-    // useAuth({ history, roles: "cliente-membro, cliente-admin" });
 
     useEffect(() => {
         if (memberId === "...") return;

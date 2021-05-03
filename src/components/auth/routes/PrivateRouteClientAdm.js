@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { useAppSystem } from "../../../hooks/useRoleData";
-import useAuth from "../../../hooks/useAuth";
-import isThisApp from "../../../utils/window/isThisApp";
-import { useRunComp } from "../../../hooks/useRunComp";
+import { useAppSystem } from "hooks/useRoleData";
 import { getVars } from "init/var";
+import useAuth from "auth/useAuth";
+import isThisApp from "utils/window/isThisApp";
+import { useRunComp } from "hooks/useRunComp";
 
 const isApp = isThisApp();
 

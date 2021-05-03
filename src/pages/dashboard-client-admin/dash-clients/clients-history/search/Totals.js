@@ -18,12 +18,12 @@ export default function Totals({
     loading,
     allUsersLength,
     mainSubject = "cliente",
-    totalActiveScores,
+    totalActivePoints,
     totalCliUserScores,
 }) {
     const styles = getStyles();
 
-    totalActiveScores = convertToReal(totalActiveScores);
+    totalActivePoints = convertToReal(totalActivePoints);
     totalCliUserScores = convertToReal(totalCliUserScores);
     allUsersLength = convertToReal(allUsersLength);
 
@@ -32,7 +32,7 @@ export default function Totals({
     const showActiveScores = () => (
         <div className="m-0 d-flex">
             <p className="text-normal font-weight-bold m-0 mr-2">
-                • {`${loading ? "..." : totalActiveScores} Pontos Ativos`}
+                • {`${loading ? "..." : totalActivePoints} Pontos Ativos`}
             </p>
             <div>
                 <InstructionBtn text={textInstru} mode="tooltip" />
@@ -87,7 +87,7 @@ export default function Totals({
 //     isLoading={loading}
 //     filteredUsersLength={totalSize}
 //     totalCliUserScores={totalCliUserScores}
-//     totalActiveScores={totalActiveScores}
+//     totalActivePoints={totalActivePoints}
 //     allUsersLength={totalSize}
 //     searchTerm={searchTerm}
 //     mainSubject="cliente"

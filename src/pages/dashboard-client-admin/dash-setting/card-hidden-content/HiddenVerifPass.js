@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import ShowPasswordForm from "../../pass-page/ShowPasswordForm";
-import ButtonFab from "../../../../components/buttons/material-ui/ButtonFab";
-// import DateWithIcon from '../../../../components/date-time/DateWithIcon';
+import ShowPasswordForm from "auth/pages/access-password/dashboard-client-admin/ShowPasswordForm";
+import ButtonFab from "components/buttons/material-ui/ButtonFab";
 
 // TEST
 // let date = new Date();

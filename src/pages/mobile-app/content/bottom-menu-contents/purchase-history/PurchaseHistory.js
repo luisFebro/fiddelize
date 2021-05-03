@@ -13,7 +13,7 @@ export default function PurchaseHistory({ modalData = {} }) {
     const {
         cliUserName = "Febro",
         cliUserId = "601df6b42be9a28986c2a821",
-        totalGeneralScore = 200,
+        totalGeneralPoints = 200,
         totalPurchasePrize = 6,
         isFromDashboard = false,
         // currUserScore,
@@ -23,14 +23,14 @@ export default function PurchaseHistory({ modalData = {} }) {
         () => ({
             _id: cliUserId,
             name: cliUserName,
-            totalGeneralScore,
+            totalGeneralPoints,
             totalPurchasePrize,
             isFromDashboard,
         }),
         [
             cliUserId,
             cliUserName,
-            totalGeneralScore,
+            totalGeneralPoints,
             totalPurchasePrize,
             isFromDashboard,
         ]

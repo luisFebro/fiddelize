@@ -1,39 +1,8 @@
-import getVar from "init/var";
-// Headers to send to server / Type JSON
+// BOTH getHeaderJson and getHeaderToken will be DEPRACATED
 export const getHeaderJson = {
     headers: {
         "Content-Type": "application/json",
     },
-};
-
-// for axios http request
-// need be the value of headers: { returnedValue };
-export const chooseHeader = ({ token, needAuth = true }) => {
-    if (needAuth) {
-        return {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        };
-    }
-    return undefined; // { 'Content-type': 'application/json' }
-};
-
-export const chooseHeaderAsync = async ({ token, needAuth = true }) => {
-    if (needAuth) {
-        if (!token) {
-            const forageToken = await getVar("token", "user");
-            return {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${forageToken}`,
-            };
-        }
-
-        return {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        };
-    }
-    return undefined; // { 'Content-type': 'application/json' }
 };
 
 export const getHeaderToken = (token) => {

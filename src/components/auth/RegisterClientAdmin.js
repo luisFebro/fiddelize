@@ -28,7 +28,7 @@ import getFilterDate from "../../utils/dates/getFilterDate";
 import ButtonMulti, { faStyle } from "../buttons/material-ui/ButtonMulti";
 import { useBizData } from "init";
 import useData from "init";
-import { removeCollection } from "init/var";
+import { removeStore } from "init/var";
 import getFirstName from "../../utils/string/getFirstName";
 import CheckBoxForm from "../CheckBoxForm";
 import { CLIENT_URL } from "../../config/clientUrl";
@@ -230,7 +230,7 @@ function RegisterClientAdmin({ logo }) {
         clearData();
         window.location.href = `/baixe-app/${cliAdminName}?negocio=${bizName}&logo=${logo}&admin=1&bc=default&pc=default&sc=default`;
         // Lesson: this await was preventing a tablet to redirect properly to the next page.
-        await removeCollection("pre_register");
+        await removeStore("pre_register");
     };
 
     const showTitle = () => (
